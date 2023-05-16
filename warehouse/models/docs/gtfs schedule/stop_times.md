@@ -125,17 +125,11 @@ Conditionally Required:
 {% docs gtfs_stop_times__mean_duration_factor %}
 Together, mean_duration_factor and mean_duration_offset allow an estimation of the duration a rider’s trip will take, in minutes, using the on-demand service in a GeoJSON location or stop area.
 
-Data consumers are expected to use mean_duration_factor and mean_duration_offset to make the following calculation:
+Data consumers are expected to use mean_duration_factor and mean_duration_offset to make the following calculation: MeanTravelDuration = mean_duration_factor × DrivingDuration + mean_duration_offset where DrivingDuration is the time it would take in a car to travel the distance being calculated for the on-demand service, and MeanTravelDuration is the calculated average time one expects to travel the same trip using the on-demand service.
 
-MeanTravelDuration = mean_duration_factor × DrivingDuration + mean_duration_offset
+See https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md for full details.
 
-Where DrivingDuration is the time it would take in a car to travel the distance being calculated for the on-demand service, and MeanTravelDuration is the calculated average time one expects to travel the same trip using the on-demand service.
-
-The MeanTravelDuration may be calculated for the time and the day of the trip to take into account traffic; in other words the consumer is expected to know that DrivingDuration is dynamic. Producers should thus provide values that reflect increases in DrivingDuration due to additional pickups and drop offs beyond that of the passenger. A downtown TNC will likely always have a mean_duration_factor of 1, with or without traffic, since it goes with the flow. But a shared service can have a factor of 2 or more if many additional pickups and drop offs are expected. mean_duration_offset can be utilized to increase travel times of shorter trips relatively more than times for longer trips.
-
-While traveling through undefined space between GeoJSON locations or stop areas, it is assumed that:
-
-MeanTravelDuration = DrivingDuration
+While traveling through undefined space between GeoJSON locations or stop areas, it is assumed that: MeanTravelDuration = DrivingDuration
 
 Conditionally Forbidden:
 - Forbidden if stop_times.stop_id does not refer to a stop_areas.area_id or an id from locations.geojson.
@@ -145,17 +139,11 @@ Conditionally Forbidden:
 {% docs gtfs_stop_times__mean_duration_offset %}
 Together, mean_duration_factor and mean_duration_offset allow an estimation of the duration a rider’s trip will take, in minutes, using the on-demand service in a GeoJSON location or stop area.
 
-Data consumers are expected to use mean_duration_factor and mean_duration_offset to make the following calculation:
+Data consumers are expected to use mean_duration_factor and mean_duration_offset to make the following calculation: MeanTravelDuration = mean_duration_factor × DrivingDuration + mean_duration_offset where DrivingDuration is the time it would take in a car to travel the distance being calculated for the on-demand service, and MeanTravelDuration is the calculated average time one expects to travel the same trip using the on-demand service.
 
-MeanTravelDuration = mean_duration_factor × DrivingDuration + mean_duration_offset
+See https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md for full details.
 
-Where DrivingDuration is the time it would take in a car to travel the distance being calculated for the on-demand service, and MeanTravelDuration is the calculated average time one expects to travel the same trip using the on-demand service.
-
-The MeanTravelDuration may be calculated for the time and the day of the trip to take into account traffic; in other words the consumer is expected to know that DrivingDuration is dynamic. Producers should thus provide values that reflect increases in DrivingDuration due to additional pickups and drop offs beyond that of the passenger. A downtown TNC will likely always have a mean_duration_factor of 1, with or without traffic, since it goes with the flow. But a shared service can have a factor of 2 or more if many additional pickups and drop offs are expected. mean_duration_offset can be utilized to increase travel times of shorter trips relatively more than times for longer trips.
-
-While traveling through undefined space between GeoJSON locations or stop areas, it is assumed that:
-
-MeanTravelDuration = DrivingDuration
+While traveling through undefined space between GeoJSON locations or stop areas, it is assumed that: MeanTravelDuration = DrivingDuration
 
 Conditionally Forbidden:
 - Forbidden if stop_times.stop_id does not refer to a stop_areas.area_id or an id from locations.geojson.
@@ -188,4 +176,16 @@ Where DrivingDuration is the time it would take in a car to travel the distance 
 Conditionally Forbidden:
 - Forbidden if stop_times.stop_id does not refer to a stop_areas.area_id or an id from locations.geojson.
 - Optional otherwise.
+{% enddocs %}
+
+{% docs gtfs_stop_times__pickup_booking_rule_id %}
+Identifies the boarding booking rule at this stop time.
+
+Recommended when pickup_type=2.
+{% enddocs %}
+
+{% docs gtfs_stop_times__drop_off_booking_rule_id %}
+Identifies the alighting booking rule at this stop time.
+
+Recommended when drop_off_type=2.
 {% enddocs %}

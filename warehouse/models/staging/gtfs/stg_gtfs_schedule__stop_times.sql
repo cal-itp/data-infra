@@ -30,6 +30,8 @@ stg_gtfs_schedule__stop_times AS (
         SAFE_CAST({{ trim_make_empty_string_null('mean_duration_offset') }} AS NUMERIC) AS mean_duration_offset,
         SAFE_CAST({{ trim_make_empty_string_null('safe_duration_factor') }} AS NUMERIC) AS safe_duration_factor,
         SAFE_CAST({{ trim_make_empty_string_null('safe_duration_offset') }} AS NUMERIC) AS safe_duration_offset,
+        {{ trim_make_empty_string_null('pickup_booking_rule_id') }} AS pickup_booking_rule_id,
+        {{ trim_make_empty_string_null('drop_off_booking_rule_id') }} AS drop_off_booking_rule_id
     FROM external_stop_times
 )
 
