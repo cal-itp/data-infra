@@ -5,6 +5,7 @@ import os
 import re
 import shutil
 import subprocess
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -20,6 +21,7 @@ from dbt_artifacts import (
     RunResults,
     RunResultStatus,
 )
+from metabase_api import Metabase_API
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
 
@@ -284,6 +286,28 @@ def run(
     if sync_metabase:
         if target and (target.startswith("prod") or target.startswith("staging")):
             typer.secho("syncing documentation to metabase", fg=typer.colors.MAGENTA)
+
+            # get serets
+            mb_user = os.getenv("MB_USER")
+            mb_pass = os.getenv("MB_PASSWORD")
+
+            # initialize session
+            mb = Metabase_API("https://dashboards.calitp.org", mb_user, mb_pass)
+
+            # get database ids (does this need prod / staging handling?)
+            databases = mb.get("/api/database/")
+
+            db_ids = []
+            for db in databases["data"]:
+                db_ids.append(db["id"])
+
+            # sync database contents
+            for id in db_ids:
+                mb.post(f"/api/database/{id}/sync")
+
+            # wait to call dbt-metabase
+            time.sleep(180)
+
             # Use a subprocess here so we can just parse the stdout/stderr
             p = subprocess.run(
                 [
