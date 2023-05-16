@@ -1,5 +1,4 @@
-{{ config(materialized='incremental',
-   unique_key = dbt_utils.generate_surrogate_key(['feed_key', 'trip_id', 'trip_first_departure_sec'])) }}
+{{ config(materialized='incremental', unique_key = 'key') }}
 
 WITH
 
@@ -50,7 +49,7 @@ stops_times_with_tz AS (
         USING (feed_key, trip_id, stop_id)
 ),
 
-int_gtfs_schedule__stop_times_grouped AS (
+int_gtfs_schedule__stop_times_grouped_without_key AS (
     SELECT
         trip_id,
         feed_key,
@@ -80,6 +79,13 @@ int_gtfs_schedule__stop_times_grouped AS (
 
     FROM stops_times_with_tz
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
+),
+
+int_gtfs_schedule__stop_times_grouped AS (
+    SELECT
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id', 'trip_first_departure_sec']) }} AS key,
+        *
+        FROM int_gtfs_schedule__stop_times_grouped_without_key
 )
 
 SELECT * FROM int_gtfs_schedule__stop_times_grouped
