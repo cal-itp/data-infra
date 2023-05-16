@@ -7,7 +7,6 @@
             'data_type': 'date',
             'granularity': 'day',
         },
-        partitions=['current_date()'],
         cluster_by='job_type',
     )
 }}
@@ -21,13 +20,15 @@ WITH latest AS (
     FROM cal-itp-data-infra.audit.cloudaudit_googleapis_com_data_access_{{ yesterday.strftime('%Y%m%d') }}
 ),
 
-everything AS (
-    {% set start_date = modules.datetime.date(year=2022, month=4, day=11) %}
-    {% set days = (modules.datetime.date.today() - start_date).days + 1 %}
+everything AS ( -- noqa: ST03
+    -- without this limited lookback, we'd eventually exhaust query resources on full refreshes
+    -- since we might end up unioning hundreds of tables
+    -- technically we have data back to 2022-04-11
+    {% set days = 90 %}
 
-    {% for add in range(days) %}
+    {% for day in range(days) %}
 
-    {% set current = start_date + modules.datetime.timedelta(days=add) %}
+    {% set current = modules.datetime.date.today() - modules.datetime.timedelta(days=day) %}
 
     SELECT *
     FROM cal-itp-data-infra.audit.cloudaudit_googleapis_com_data_access_{{ current.strftime('%Y%m%d') }}
@@ -79,9 +80,9 @@ stg_audit__cloudaudit_googleapis_com_data_access AS (
             SECOND
         ) AS duration_in_seconds,
         JSON_VALUE_ARRAY(job, '$.jobStats.queryStats.referencedTables') as referenced_tables,
-        CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS INT64) AS total_billed_bytes,
-        5.0 * CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS INT64) / POWER(2, 40) AS estimated_cost_usd, -- $5/TB
-        CAST(JSON_VALUE(job, '$.jobStats.totalSlotMs') AS INT64) / 1000 AS total_slots_seconds,
+        CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS int64) AS total_billed_bytes,
+        5.0 * CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS int64) / POWER(2, 40) AS estimated_cost_usd, -- $5/TB
+        CAST(JSON_VALUE(job, '$.jobStats.totalSlotMs') AS int64) / 1000 AS total_slots_seconds,
 
         JSON_VALUE(metadata, '$.tableDataRead.jobName') as table_data_read_job_name,
 
