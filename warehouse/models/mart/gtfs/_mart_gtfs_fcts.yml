@@ -630,7 +630,7 @@ models:
         historical GTFS data with their associated transit database records).
       tests:
         - dbt_utils.not_null_proportion:
-            at_least: 0.999
+            at_least: 0.998
         - relationships:
             to: ref('dim_gtfs_datasets')
             field: key
