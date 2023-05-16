@@ -65,6 +65,10 @@ jobs:
         id: changed-files-warehouse
         with:
           files: 'warehouse/models/**/*.sql'
+      # install a specific version of node before cml https://github.com/iterative/cml/issues/1377
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '16'
       - uses: iterative/setup-cml@v1
         if: steps.changed-files-warehouse.outputs.any_changed == 'true'
       - name: Create GitHub comment
@@ -77,8 +81,8 @@ jobs:
           echo "Warehouse report 📦" >> report.md
           echo "### New models 🌱" >> report.md
           poetry run dbt --no-use-colors ls --resource-type model --select state:new --state ./latest | grep "^calitp_warehouse\." | sed "s/calitp_warehouse\.//g" >> report.md
-          echo "### Changed models 🔀" >> report.md
-          poetry run dbt --no-use-colors ls --resource-type model --select state:modified --exclude state:new --state ./latest | grep "^calitp_warehouse\." | sed "s/calitp_warehouse\.//g" >> report.md
+          echo "### Changed incremental models 🔀" >> report.md
+          poetry run dbt --no-use-colors ls --resource-type model --select state:modified,config.materialized:incremental --exclude state:new --state ./latest | grep "^calitp_warehouse\." | sed "s/calitp_warehouse\.//g" >> report.md
           echo "### DAG" >> report.md
           poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | grep "^calitp_warehouse\." | sed 's/^/--include /g' | xargs poetry run python scripts/visualize.py man --output=target/dag.png
           echo "" >> report.md
