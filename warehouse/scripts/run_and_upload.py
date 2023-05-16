@@ -91,7 +91,7 @@ def report_failures_to_sentry(
     ]
     for failure in failures:
         node = manifest.nodes[failure.unique_id]
-        fingerprint = [failure.status, failure.unique_id]
+        fingerprint = [str(failure.status), failure.unique_id]
         # this is awkward and manual; maybe could do dynamically
         exc_types = {
             (SeedNode, RunResultStatus.error): DbtSeedError,
