@@ -4,7 +4,8 @@ Super useful with https://www.convertjson.com/html-table-to-json.htm
 
 Originally used to produce dbt docs from https://gtfs.org/reference/static#field-definitions
 
-This won't work without updates as the artifacts have changed.
+NOTE: This won't work without updates as the artifacts have changed in https://github.com/cal-itp/data-infra/pull/2598.
+You will need to re-create missing functionality on top of the new generated types.
 """
 import json
 import sys
