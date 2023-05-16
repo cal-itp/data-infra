@@ -37,7 +37,7 @@ Similarly, the primary key for `mart_gtfs.dim_trips` is called `key`. The unvers
 | ------------- |------------- |------------- |
 | Downloaded GTFS feed | `base64_url`| `mart_gtfs.dim_schedule_feeds.key` or (when foreign key) `feed_key`, constructed from `base64_url + _valid_from` |
 | Individual record within a downloaded GTFS feed (ex. an individual route, trip, or stop) |  `base64_url + <natural primary key within GTFS spec, ex. route_id or trip_id>`| `mart_gtfs.dim_*.key`, constructed from `mart_gtfs.dim_*.<natural primary key within GTFS spec, ex. route_id or trip_id> + feed_key` |
-| Airtable records (ex. organizations, services, or GTFS datasets) | `source_record_id` | `mart_transit_database.dim_*.key`, constructed from `mart_gtfs.dim_*.<natural primary key within GTFS spec, ex. route_id or trip_id> + feed_key` |
+| Airtable records (ex. organizations, services, or GTFS datasets) | `source_record_id` | `mart_transit_database.dim_*.key`, constructed from `source_record_id + _valid_from` |
 
 ## Key questions
 
