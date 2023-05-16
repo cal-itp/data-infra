@@ -87,6 +87,7 @@ jobs:
           poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | grep "^calitp_warehouse\." | sed 's/^/--include /g' | xargs poetry run python scripts/visualize.py man --output=target/dag.png
           echo "" >> report.md
           echo '![](./target/dag.png "Changed models")' >> report.md
+          echo "> Note: if you have changed any incremental models, you will need to run a full refresh on them at some point, regardless of how `on_schema_change` is configured."
           cml comment update report.md
 
   build_push:
