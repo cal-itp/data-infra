@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='incremental', unique_key = 'key') }}
 
 WITH fct_daily_scheduled_trips AS (
 
@@ -109,7 +109,8 @@ pivot_to_route_type AS (
             stop_id,
             stop_events_count_by_route
 
-        FROM stops_by_day_by_route)
+        FROM stops_by_day_by_route
+        WHERE service_date < DATE_ADD(CURRENT_DATE(), INTERVAL 1 DAY))
     PIVOT(
         SUM(stop_events_count_by_route) AS route_type
         FOR route_type IN
