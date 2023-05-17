@@ -226,29 +226,22 @@ models:
             - trip_id
             - iteration_num
       - dbt_utils.expression_is_true:
-          expression: "ct_regularly_scheduled_pickup_stops + ct_no_pickup_stops + ct_phone_call_required_for_pickup_stops + ct_coordinate_pickup_with_driver_stops = n_stop_times"
+          expression: "num_regularly_scheduled_pickup_stop_times + num_no_pickup_stop_times + num_phone_call_required_for_pickup_stop_times + num_coordinate_pickup_with_driver_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
-          expression: "ct_regularly_scheduled_drop_off_stops + ct_no_drop_off_stops + ct_phone_call_required_for_drop_off_stops + ct_coordinate_drop_off_with_driver_stops = n_stop_times"
+          expression: "num_regularly_scheduled_drop_off_stop_times + num_no_drop_off_stop_times + num_phone_call_required_for_drop_off_stop_times + num_coordinate_drop_off_with_driver_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
-          expression: "ct_continuous_pickup_stops + ct_no_continuous_pickup_stops + ct_phone_call_required_for_continuous_pickup_stops + ct_coordinate_continuous_pickup_with_driver_stops = n_stop_times"
+          expression: "num_continuous_pickup_stop_times + num_no_continuous_pickup_stop_times + num_phone_call_required_for_continuous_pickup_stop_times + num_coordinate_continuous_pickup_with_driver_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
-          expression: "ct_continuous_drop_off_stops + ct_no_continuous_drop_off_stops + ct_phone_call_required_for_continuous_drop_off_stops + ct_coordinate_continuous_drop_off_with_driver_stops = n_stop_times"
+          expression: "num_continuous_drop_off_stop_times + num_no_continuous_drop_off_stop_times + num_phone_call_required_for_continuous_drop_off_stop_times + num_coordinate_continuous_drop_off_with_driver_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
-          expression: "ct_approximate_timepoint_stops + ct_exact_timepoint_stops = n_stop_times"
+          expression: "num_approximate_timepoint_stop_times + num_exact_timepoint_stop_times = num_stop_times"
     columns:
       - *feed_key
       - name: trip_id
       - name: num_distinct_stops_served
-        description: |
-          Count of distinct stop_ids with stop times specified for this trip.
-          If a trip visits a given stop multiple times (for example, a loop trip that ends where it started),
-          that stop will only be counted once here.
-      - name: num_stop_events
-        description: |
-          Count of rows in `stop_times.txt` for this trip, which
-          translates to the number of scheduled stop events.
-          If a trip visits a given stop multiple times (for example, a loop trip that ends where it started),
-          the trip will have multiple stop events counted in this column.
+        description: '{{ doc("column_num_distinct_stops_served") }}'
+      - name: num_stop_times
+        description: '{{ doc("column_num_stop_times") }}'
       - name: trip_first_departure_sec
       - name: trip_last_arrival_sec
       - name: service_hours
@@ -297,52 +290,52 @@ models:
         description: '{{ doc("column_flexible_trip") }}'
       - name: fully_flexible_trip
         description: '{{ doc("column_fully_flexible_trip") }}'
-      - name: num_flexible_stop_events
-        description: '{{ doc("column_num_flexible_stop_events") }}'
+      - name: num_flexible_stop_times
+        description: '{{ doc("column_num_flexible_stop_times") }}'
       - name: first_start_pickup_drop_off_window_sec
         description: '{{ doc("column_first_start_pickup_drop_off_window_sec") }}'
       - name: last_end_pickup_drop_off_window_sec
         description: '{{ doc("column_last_end_pickup_drop_off_window_sec") }}'
-      - name: num_regularly_scheduled_pickup_stops
-        description: '{{ doc("column_num_regularly_scheduled_pickup_stop_events") }}'
-      - name: num_no_pickup_stops
-        description: '{{ doc("column_num_no_pickup_stop_events") }}'
-      - name: num_phone_call_required_for_pickup_stops
-        description: '{{ doc("column_num_phone_call_required_for_pickup_stop_events") }}'
-      - name: num_coordinate_pickup_with_driver_stops
-        description: '{{ doc("column_num_coordinate_pickup_with_driver_stop_events") }}'
-      - name: num_regularly_scheduled_drop_off_stops
-        description: '{{ doc("column_num_regularly_scheduled_drop_off_stop_events") }}'
-      - name: num_no_drop_off_stops
-        description: '{{ doc("column_num_no_drop_off_stop_events") }}'
-      - name: num_phone_call_required_for_drop_off_stops
-        description: '{{ doc("column_num_phone_call_required_for_drop_off_stop_events") }}'
-      - name: num_coordinate_drop_off_with_driver_stops
-        description: '{{ doc("column_num_coordinate_drop_off_with_driver_stop_events") }}'
-      - name: num_continuous_pickup_stops
-        description: '{{ doc("column_num_continuous_pickup_stop_events") }}'
-      - name: num_no_continuous_pickup_stops
-        description: '{{ doc("column_num_no_continuous_pickup_stop_events") }}'
-      - name: num_phone_call_required_for_continuous_pickup_stops
-        description: '{{ doc("column_num_phone_call_required_for_continuous_pickup_stop_events") }}'
-      - name: num_coordinate_continuous_pickup_with_driver_stops
-        description: '{{ doc("column_num_coordinate_continuous_pickup_with_driver_stop_events") }}'
-      - name: num_continuous_drop_off_stops
-        description: '{{ doc("column_num_continuous_drop_off_stop_events") }}'
-      - name: num_no_drop_off_stops
-        description: '{{ doc("column_num_no_drop_off_stop_events") }}'
-      - name: num_phone_call_required_for_continuous_drop_off_stops
-        description: '{{ doc("column_num_phone_call_required_for_continuous_drop_off_stop_events") }}'
-      - name: num_coordinate_continuous_drop_off_with_driver_stops
-        description: '{{ doc("column_num_coordinate_continuous_drop_off_with_driver_stop_events") }}'
-      - name: num_approximate_timepoint_stops
-        description: '{{ doc("column_num_approximate_timepoint_stop_events") }}'
-      - name: num_exact_timepoint_stops
-        description: '{{ doc("column_num_exact_timepoint_stop_events") }}'
+      - name: num_regularly_scheduled_pickup_stop_times
+        description: '{{ doc("column_num_regularly_scheduled_pickup_stop_times") }}'
+      - name: num_no_pickup_stop_times
+        description: '{{ doc("column_num_no_pickup_stop_times") }}'
+      - name: num_phone_call_required_for_pickup_stop_times
+        description: '{{ doc("column_num_phone_call_required_for_pickup_stop_times") }}'
+      - name: num_coordinate_pickup_with_driver_stop_times
+        description: '{{ doc("column_num_coordinate_pickup_with_driver_stop_times") }}'
+      - name: num_regularly_scheduled_drop_off_stop_times
+        description: '{{ doc("column_num_regularly_scheduled_drop_off_stop_times") }}'
+      - name: num_no_drop_off_stop_times
+        description: '{{ doc("column_num_no_drop_off_stop_times") }}'
+      - name: num_phone_call_required_for_drop_off_stop_times
+        description: '{{ doc("column_num_phone_call_required_for_drop_off_stop_times") }}'
+      - name: num_coordinate_drop_off_with_driver_stop_times
+        description: '{{ doc("column_num_coordinate_drop_off_with_driver_stop_times") }}'
+      - name: num_continuous_pickup_stop_times
+        description: '{{ doc("column_num_continuous_pickup_stop_times") }}'
+      - name: num_no_continuous_pickup_stop_times
+        description: '{{ doc("column_num_no_continuous_pickup_stop_times") }}'
+      - name: num_phone_call_required_for_continuous_pickup_stop_times
+        description: '{{ doc("column_num_phone_call_required_for_continuous_pickup_stop_times") }}'
+      - name: num_coordinate_continuous_pickup_with_driver_stop_times
+        description: '{{ doc("column_num_coordinate_continuous_pickup_with_driver_stop_times") }}'
+      - name: num_continuous_drop_off_stop_times
+        description: '{{ doc("column_num_continuous_drop_off_stop_times") }}'
+      - name: num_no_drop_off_stop_times
+        description: '{{ doc("column_num_no_drop_off_stop_times") }}'
+      - name: num_phone_call_required_for_continuous_drop_off_stop_times
+        description: '{{ doc("column_num_phone_call_required_for_continuous_drop_off_stop_times") }}'
+      - name: num_coordinate_continuous_drop_off_with_driver_stop_times
+        description: '{{ doc("column_num_coordinate_continuous_drop_off_with_driver_stop_times") }}'
+      - name: num_approximate_timepoint_stop_times
+        description: '{{ doc("column_num_approximate_timepoint_stop_times") }}'
+      - name: num_exact_timepoint_stop_times
+        description: '{{ doc("column_num_exact_timepoint_stop_times") }}'
       - name: num_arrival_times_populated
-        description: '{{ doc("column_num_arrival_times_populated_stop_events") }}'
+        description: '{{ doc("column_num_arrival_times_populated_stop_times") }}'
       - name: num_departure_times_populated
-        description: '{{ doc("column_num_departure_times_populated_stop_events") }}'
+        description: '{{ doc("column_num_departure_times_populated_stop_times") }}'
   - name: int_gtfs_rt__distinct_download_configs
     description: |
       Distinct `dt`, `_config_extract_ts` pairs indicating
