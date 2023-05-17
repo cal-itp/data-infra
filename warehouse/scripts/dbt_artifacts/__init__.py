@@ -170,11 +170,14 @@ class ModelNode(BaseModelNode, NodeModelMixin):
 
     @property
     def gvattrs(self) -> Dict[str, Any]:
-        assert self.config is not None
-        assert self.catalog_entry is not None
+        assert self.config is not None, self.unique_id
         fillcolor = super(ModelNode, self).gvattrs["fillcolor"]
 
-        more_than_100gb = self.catalog_entry.num_bytes and self.catalog_entry.num_bytes > 100_000_000_000  # type: ignore[attr-defined]
+        more_than_100gb = (
+            self.catalog_entry
+            and self.catalog_entry.num_bytes  # type: ignore[attr-defined]
+            and self.catalog_entry.num_bytes > 100_000_000_000  # type: ignore[attr-defined]
+        )
 
         if self.config.materialized in ("table", "incremental"):
             fillcolor = "aquamarine"
@@ -184,6 +187,7 @@ class ModelNode(BaseModelNode, NodeModelMixin):
 
         elif (
             more_than_100gb
+            and self.catalog_entry
             and "clustering_fields" not in self.catalog_entry.stats
             and "partitioning_type" not in self.catalog_entry.stats
         ):
@@ -193,7 +197,7 @@ class ModelNode(BaseModelNode, NodeModelMixin):
             fillcolor = "yellow"
 
         label = super(ModelNode, self).gvattrs["label"]
-        if self.catalog_entry.num_bytes:  # type: ignore[attr-defined]
+        if self.catalog_entry and self.catalog_entry.num_bytes:  # type: ignore[attr-defined]
             label += f"\nStorage: {humanize.naturalsize(self.catalog_entry.num_bytes)}"  # type: ignore[attr-defined]
 
         return {
