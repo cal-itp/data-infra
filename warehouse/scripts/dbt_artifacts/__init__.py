@@ -8,7 +8,6 @@ from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Unio
 
 import humanize
 import pendulum
-from palettable.scientific.sequential import LaJolla_6  # type: ignore
 from pydantic import BaseModel, Field, constr, root_validator
 from slugify import slugify
 from sqlalchemy import MetaData, Table, create_engine, select
@@ -431,21 +430,17 @@ class RunResultOutput(BaseRunResultOutput):
         """
         Returns a string representation intended for graphviz labels
         """
+        color = "white"
         assert self.node is not None
-        # TODO: do an actual linear transform on this
-        # the top colors are too dark to use as a background
-        white, yellow, orange, red, _, _ = LaJolla_6.hex_colors
+        # TODO: use palettable
         if self.bytes_processed > 500_000_000_000:
-            color = red
+            color = "red"
         elif self.bytes_processed > 300_000_000_000:
-            color = orange
+            color = "orange"
         elif self.bytes_processed > 100_000_000_000:
-            color = yellow
-        else:
-            color = white
+            color = "yellow"
 
         return {
-            **self.node.gvattrs,
             "fillcolor": color,
             "label": "\n".join(
                 [
