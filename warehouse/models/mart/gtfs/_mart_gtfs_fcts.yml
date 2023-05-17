@@ -462,8 +462,8 @@ models:
         description: '{{ doc("column_num_stop_times") }}'
       - name: trip_first_departure_sec
         description: |
-          The number of seconds after midnight on `service_day` in `feed_timezone` at
-          which this trip's first stop departure occurred.
+          The number of seconds after 12 hours before noon (usually midnight) on `service_date`
+          in `feed_timezone` at which this trip's first stop departure occurred.
 
           This field is used upstream of this table to make generic service determinations
           in tables where we don't have a specific date assigned yet (for example, within
@@ -479,33 +479,17 @@ models:
           stop_times.) Downstream of this table, now that specific dates are associated
           with the trips, this field should not be used.
       - name: service_hours
-        description: |
-          A trip's total hours of service, calculated by subtracting `trip_last_arrival_sec` from
-          `trip_first_departure_sec` and converting to hours.
+        description: '{{ doc("column_service_hours") }}'
+      - name: flex_service_hours
+        description: '{{ doc("column_flex_service_hours") }}'
       - name: contains_warning_duplicate_stop_times_primary_key
-        description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
-          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
-
-          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
-          in the input data. This indicates that data quality issues were present in the stop times data
-          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+        description: '{{ doc("column_contains_warning_duplicate_stop_times_primary_key") }}'
       - name: contains_warning_missing_foreign_key_stop_id
-        description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
-          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
-
-          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
-          in the input data. This indicates that data quality issues were present in the stop times data
-          that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+        description: '{{ doc("column_contains_warning_missing_foreign_key_stop_id") }}'
       - name: trip_start_timezone
-        description: |
-          The time zone of the first stop in this trip.
+        description: '{{ doc("column_trip_start_timezone") }}'
       - name: trip_end_timezone
-        description: |
-          The time zone of the final stop in this trip.
+        description: '{{ doc("column_trip_end_timezone") }}'
       - name: trip_first_departure_ts
         description: |
           The timestamp (non-localized, absolute) at which this trip's first departure occurred.
@@ -579,15 +563,9 @@ models:
           it may be preferable to use this rather than trip_last_arrival_datetime_pacific.
       - *feed_timezone_no_tests
       - name: frequencies_defined_trip
-        description: |
-          Rows with `true` are trips defined in `frequencies.txt`, where they are defined as a
-          repeating trip. This means the underlying data structure is different for these trips;
-          see https://gtfs.org/schedule/reference/#frequenciestxt for more information.
+        description: '{{ doc("column_frequencies_defined_trip") }}'
       - name: iteration_num
-        description: |
-          For frequencies-defined trips, the iteration number (starting from 0) for this trip within its
-          defined window. So the first iteration of the trip will have `iteration_num = 0`, and the next
-          trip will have `iteration_num = 1`, and so on.
+        description: '{{ doc("column_st_iteration_num") }}'
         tests:
           - not_null:
               config:

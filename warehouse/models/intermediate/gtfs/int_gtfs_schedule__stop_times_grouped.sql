@@ -67,6 +67,7 @@ int_gtfs_schedule__stop_times_grouped AS (
         COALESCE(MIN(trip_start_time_sec), MIN(trip_stop_departure_sec)) AS trip_first_departure_sec,
         MAX(trip_stop_arrival_sec) AS trip_last_arrival_sec,
         (MAX(trip_stop_arrival_sec) - COALESCE(MIN(trip_start_time_sec), MIN(trip_stop_departure_sec))) / 3600 AS service_hours,
+        (MAX(end_pickup_drop_off_window_sec) -  MIN(start_pickup_drop_off_window_sec)) / 3600 AS flex_service_hours,
         LOGICAL_OR(
             warning_duplicate_primary_key
         ) AS contains_warning_duplicate_primary_key,
