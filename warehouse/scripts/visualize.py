@@ -185,6 +185,8 @@ def viz(
     output: Optional[Path] = None,
     display: bool = False,
     ratio: float = 0.3,
+    dbt_selector: Optional[str] = None,
+    latest_dir: str = "./latest",
 ):
     manifest, catalog, run_results = read_artifacts_folder(
         artifacts_path, verbose=verbose
@@ -200,6 +202,19 @@ def viz(
             output = Path("./target/run_results.pdf")
     else:
         raise ValueError(f"unknown artifact {artifact} provided")
+
+    if dbt_selector:
+        dbt = dbtRunner()
+        include = dbt.invoke(
+            [
+                "ls",
+                "--resource-type",
+                "model",
+                "--select",
+                dbt_selector,
+                latest_dir,
+            ]
+        ).result
 
     G = build_graph(
         actual_artifact,
