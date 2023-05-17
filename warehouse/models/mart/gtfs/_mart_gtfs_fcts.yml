@@ -630,7 +630,9 @@ models:
         historical GTFS data with their associated transit database records).
       tests:
         - dbt_utils.not_null_proportion:
-            at_least: 0.999
+            # TODO: raise back to .999 after some time getting new data - was .998 because
+            # old data pipeline produced more nulls
+            at_least: 0.998
         - relationships:
             to: ref('dim_gtfs_datasets')
             field: key

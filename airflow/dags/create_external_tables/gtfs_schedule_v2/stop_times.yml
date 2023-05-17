@@ -36,3 +36,19 @@ schema_fields:
     type: STRING
   - name: timepoint
     type: STRING
+  - name: start_pickup_drop_off_window
+    type: STRING
+  - name: end_pickup_drop_off_window
+    type: STRING
+  - name: mean_duration_factor
+    type: STRING
+  - name: mean_duration_offset
+    type: STRING
+  - name: safe_duration_factor
+    type: STRING
+  - name: safe_duration_offset
+    type: STRING
+  - name: pickup_booking_rule_id
+    type: STRING
+  - name: drop_off_booking_rule_id
+    type: STRING

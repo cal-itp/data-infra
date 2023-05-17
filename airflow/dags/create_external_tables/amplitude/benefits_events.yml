@@ -60,6 +60,8 @@ schema_fields:
     type: STRING
   - name: dma
     type: STRING
+  - name: group_properties
+    type: JSON
   - name: event_properties
     type: JSON
   - name: user_properties
