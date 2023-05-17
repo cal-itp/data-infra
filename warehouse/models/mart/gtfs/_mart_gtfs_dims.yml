@@ -851,7 +851,11 @@ models:
   - name: dim_stop_times
     description: |
       Cleaned GTFS schedule stop_times data.
-      See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
+      See https://gtfs.org/schedule/reference/#stop_timestxt for specification.
+      Note that fields associated with GTFS-Flex v2 are only partially supported;
+      see https://github.com/cal-itp/data-infra/issues/2574 for implementation status in the
+      Cal-ITP data warehouse and https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md
+      for the Flex v2 specification.
     tests:
       - dbt_utils.expression_is_true:
           expression: "EXTRACT(DAY FROM arrival_time_interval) = 0"
