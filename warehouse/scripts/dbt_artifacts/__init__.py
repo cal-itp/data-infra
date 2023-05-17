@@ -114,8 +114,7 @@ class NodeModelMixin(BaseModel):
             for c in self.sqlalchemy_table(engine).columns
             if not self.columns
             or c.name not in self.columns
-            or self.columns[c.name].publish
-            # type: ignore[attr-defined]
+            or self.columns[c.name].publish  # type: ignore[attr-defined]
         ]
         return select(columns=columns)
 
@@ -161,6 +160,7 @@ class ModelNode(BaseModelNode, NodeModelMixin):
         for unique_id, node in NodeModelMixin._instances.items():
             if (
                 isinstance(node, ModelNode)
+                and node.depends_on
                 and node.depends_on.nodes
                 and self.unique_id in node.depends_on.nodes
             ):
@@ -170,19 +170,17 @@ class ModelNode(BaseModelNode, NodeModelMixin):
 
     @property
     def gvattrs(self) -> Dict[str, Any]:
+        assert self.config is not None
+        assert self.catalog_entry is not None
         fillcolor = super(ModelNode, self).gvattrs["fillcolor"]
 
-        if self.config and self.config.materialized in ("table", "incremental"):
+        more_than_100gb = self.catalog_entry.num_bytes and self.catalog_entry.num_bytes > 100_000_000_000  # type: ignore[attr-defined]
+
+        if self.config.materialized in ("table", "incremental"):
             fillcolor = "aquamarine"
 
-        more_than_100gb = (
-            self.catalog_entry
-            and self.catalog_entry.num_bytes  # type: ignore[attr-defined]
-            and self.catalog_entry.num_bytes > 100_000_000_000  # type: ignore[attr-defined]
-        )
-
-        if more_than_100gb and self.config.materialized == "table":
-            fillcolor = "red"
+            if more_than_100gb:
+                fillcolor = "red"
 
         elif (
             more_than_100gb
@@ -195,11 +193,7 @@ class ModelNode(BaseModelNode, NodeModelMixin):
             fillcolor = "yellow"
 
         label = super(ModelNode, self).gvattrs["label"]
-        if (
-            self.config
-            and self.catalog_entry
-            and self.catalog_entry.num_bytes  # type: ignore[attr-defined]
-        ):
+        if self.catalog_entry.num_bytes:  # type: ignore[attr-defined]
             label += f"\nStorage: {humanize.naturalsize(self.catalog_entry.num_bytes)}"  # type: ignore[attr-defined]
 
         return {
