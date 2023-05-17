@@ -79,7 +79,7 @@ jobs:
           cd warehouse
           gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
           poetry run python scripts/visualize.py ci-report
-          cml comment update report.md
+          cml comment update target/report.md
 
   build_push:
     name: package warehouse image
