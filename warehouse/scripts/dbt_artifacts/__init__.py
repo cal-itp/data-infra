@@ -182,8 +182,8 @@ class ModelNode(BaseModelNode, NodeModelMixin):
         if self.config.materialized in ("table", "incremental"):
             fillcolor = "aquamarine"
 
-            if more_than_100gb:
-                fillcolor = "red"
+        if self.config.materialized == "table" and more_than_100gb:
+            fillcolor = "red"
 
         elif (
             more_than_100gb
