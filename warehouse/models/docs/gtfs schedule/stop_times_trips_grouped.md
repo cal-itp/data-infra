@@ -150,7 +150,7 @@ Latest value of `end_pickup_drop_off_window_sec` for this trip. Only populated f
 Represents the number of seconds after 12 hours before noon (usually midnight) at which flexible pickups/drop offs end for final flexible stop on this trip.
 {% enddocs %}
 
-{% docs column_num_distinct_stop_times_served %}
+{% docs column_num_distinct_stops_served %}
 Count of distinct `stop_id` values with stop times specified for this trip.
 If a trip visits a given stop multiple times (for example, a loop trip that ends where it started), that stop will only be counted once here.
 Note that `stop_id` here may also refer to area or location IDs for flexible trips. See https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md for more details on the handling of `stop_id` for flexible trips.
