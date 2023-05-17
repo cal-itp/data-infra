@@ -80,8 +80,6 @@ models:
         description: string
       - name: device_brand
         description: string
-      - name: groups
-        description: dict
       - name: event_properties
         description: dict
       - name: data
