@@ -268,6 +268,7 @@ def ci_report(
             latest_dir,
         ]
     ).result
+    assert isinstance(modified_models, list)
     viz(
         "man",
         include=modified_models,
