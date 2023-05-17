@@ -341,7 +341,7 @@ models:
 
   - name: fct_daily_scheduled_trips
     description: |
-      A daily table showing all trips that were scheduled on a given date, with at least one scheduled stop time at at least one `stop_id`.
+      A daily table showing all trips that were scheduled on a given date.
       If a `service_date`, `trip_key` pair is present in this table,
       it means that that `trip_key` was scheduled to occur on that `service_date`.
       Specifically, it means that the associated `service_id` was active and had service
