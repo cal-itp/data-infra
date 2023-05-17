@@ -24,7 +24,7 @@ from dbt_artifacts import (
     RunResultStatus,
     SeedNode,
 )
-from metabase_api import Metabase_API
+from metabase_api import Metabase_API  # type: ignore
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
 
