@@ -179,12 +179,9 @@ class ModelNode(BaseModelNode, NodeModelMixin):
         )
 
         if self.config.materialized in ("table", "incremental"):
-            fillcolor = "aquamarine"
+            fillcolor = "darkseagreen"
 
-        if self.config.materialized == "table" and more_than_100gb:
-            fillcolor = "red"
-
-        elif (
+        if (
             more_than_100gb
             and self.catalog_entry
             and "clustering_fields" not in self.catalog_entry.stats
