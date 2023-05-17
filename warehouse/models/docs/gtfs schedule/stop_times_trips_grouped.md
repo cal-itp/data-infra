@@ -152,7 +152,9 @@ Represents the number of seconds after 12 hours before noon (usually midnight) a
 
 {% docs column_num_distinct_stops_served %}
 Count of distinct `stop_id` values with stop times specified for this trip.
-If a trip visits a given stop multiple times (for example, a loop trip that ends where it started), that stop will only be counted once here.
+If a trip visits a given stop multiple times (for example, a loop trip that ends where it started), that stop will only be counted once here. Because this represents a count of distinct values per trip it is not
+appropriate to sum across trips (because if Trip A and Trip B both visit Stop X, that stop will be
+included in both their counts, so summing both trips' values will double-count Stop X.)
 Note that `stop_id` here may also refer to area or location IDs for flexible trips. See https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md for more details on the handling of `stop_id` for flexible trips.
 {% enddocs %}
 
