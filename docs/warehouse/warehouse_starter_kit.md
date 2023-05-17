@@ -1,6 +1,6 @@
 (warehouse-starter-kit-page)=
 # Warehouse: Where to Begin
-[There is a large selection of data available in the warehouse.](https://console.cloud.google.com/bigquery?project=cal-itp-data-infra&ws=!1m0) Consider  a short guide to the most commonly used tables in our work.
+[There is a large selection of data available in the warehouse.](https://console.cloud.google.com/bigquery?project=cal-itp-data-infra&ws=!1m0) Consider this a short guide to the most commonly used tables in our work.
 
 * [Important Links](#links)
 * [Trips](#trips)
@@ -53,5 +53,5 @@ For a given day:
     * Not every operator is required to report their data to the NTD, so this is not a comprehensive dataset.
 
 * [fct_daily_organization_combined_guideline_checks](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_organization_combined_guideline_checks)
-    * Understand GTFS quality - how well an operator's GTFS data conforms to [California's Transit Data Guidelines](https://dot.ca.gov/cal-itp/california-transit-data-guidelines).
-    * Each operator has 74 rows. Each row details how well an operator's GTFS data conforms to a certain guideline (availability on website, accurate accessibility data, etc).
+    * Understand GTFS quality - how well a transit provider's GTFS data conforms to [California's Transit Data Guidelines](https://dot.ca.gov/cal-itp/california-transit-data-guidelines).
+    * Each provider [has one row per guideline check](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.int_gtfs_quality__guideline_checks_long). Each row details how well a provider's GTFS data conforms to a certain guideline (availability on website, accurate accessibility data, etc).
