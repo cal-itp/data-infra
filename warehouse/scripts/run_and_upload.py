@@ -287,12 +287,13 @@ def run(
         if target and (target.startswith("prod") or target.startswith("staging")):
             typer.secho("syncing documentation to metabase", fg=typer.colors.MAGENTA)
 
-            # get serets
+            # get secrets
             mb_user = os.getenv("MB_USER")
             mb_pass = os.getenv("MB_PASSWORD")
+            mb_host = os.getenv("MB_HOST")
 
             # initialize session
-            mb = Metabase_API("https://dashboards.calitp.org", mb_user, mb_pass)
+            mb = Metabase_API(mb_host, mb_user, mb_pass)
 
             # get database ids (does this need prod / staging handling?)
             databases = mb.get("/api/database/")
@@ -303,7 +304,9 @@ def run(
 
             # sync database contents
             for id in db_ids:
-                mb.post(f"/api/database/{id}/sync")
+                # print(f'Syncing database: {db["name"]}')
+                response_dict = mb.post(f"/api/database/{id}/sync")
+                assert response_dict, str(response_dict)
 
             # wait to call dbt-metabase
             time.sleep(180)
