@@ -120,3 +120,32 @@ Count of stop events on this trip where `departure_time` is populated.
 
 See https://gtfs.org/reference/static#stop_timestxt for the raw data definitions.
 {% enddocs %}
+
+{% docs column_flexible_trip %}
+Boolean indicator for whether this is a flexible trip defined using GTFS-Flex.
+GTFS-Flex flexible trips are indicated by using the fields `start_pickup_drop_off_window`and `end_pickup_drop_off_window` for at least some of their stop events.
+This means there is some flexible service without fixed schedules and this is not an entirely fixed-route trip.
+
+Note that there may be some demand-responsive behavior on trips where this column is `false`; for example, there can be stops where a phone call to the agency is required to arrange pickup/drop off, which will be indicated in pickup/drop off type columns even if they are not included as "flexible" in this column.
+{% enddocs %}
+
+{% docs column_fully_flexible_trip %}
+This is the same as `flexible_trip` except that the boolean here indicates that all (rather than just some) of the stop events had `start_pickup_drop_off_window` and `end_pickup_drop_off_window` populated, indicating that this is an entirely flexible/demand-responsive trip.
+{% enddocs %}
+
+{% docs column_num_flexible_stop_events %}
+Count of stop events for this trip with  `start_pickup_drop_off_window` and `end_pickup_drop_off_window` populated indicating flexible behavior.
+See `flexible_trip` for more information.
+{% enddocs %}
+
+{% docs column_first_start_pickup_drop_off_window_sec %}
+Earliest value of `start_pickup_drop_off_window_sec` for this trip. Only populated for flexible trips.
+
+Represents the number of seconds after 12 hours before noon (usually midnight) at which flexible pickups/drop offs begin for the earliest flexible stop on this trip.
+{% enddocs %}
+
+{% docs column_last_end_pickup_drop_off_window_sec %}
+Latest value of `end_pickup_drop_off_window_sec` for this trip. Only populated for flexible trips.
+
+Represents the number of seconds after 12 hours before noon (usually midnight) at which flexible pickups/drop offs end for final flexible stop on this trip.
+{% enddocs %}
