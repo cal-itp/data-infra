@@ -4,24 +4,36 @@ Original definitions from https://gtfs.org/reference/static#stop_timestxt
 Identifies a trip.
 {% enddocs %}
 
+Note 5/17/23: Arrival and departure time docs are a mashup of the current content on gtfs.org and the Flex docs from https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md
 {% docs gtfs_stop_times__arrival_time %}
-Arrival time at a specific stop for a specific trip on a route. If there are not separate times for arrival and departure at a stop, enter the same value for arrival_time and departure_time.
+Arrival time at the stop (defined by stop_times.stop_id) for a specific trip (defined by stop_times.trip_id).
 
-Scheduled stops where the vehicle strictly adheres to the specified arrival and departure times are timepoints. If this stop is not a timepoint, it is recommended to provide an estimated or interpolated time. If this is not available, arrival_time can be left empty. Further, indicate that interpolated times are provided with timepoint=0. If interpolated times are indicated with timepoint=0, then time points must be indicated with timepoint=1. Provide arrival times for all stops that are timepoints.
+If there are not separate times for arrival and departure at a stop, arrival_time and departure_time should be the same.
+
+For times occurring after midnight on the service day, enter the time as a value greater than 24:00:00 in HH:MM:SS local time for the day on which the trip schedule begins.
+
+If exact arrival and departure times (timepoint=1 or empty) are not available, estimated or interpolated arrival and departure times (timepoint=0) should be provided.
 
 Conditionally Required:
 - Required for the first and the last stop in a trip.
+- Required for timepoint=1.
 - Forbidden when stop_times.start_pickup_drop_off_window or stop_times.end_pickup_drop_off_window are defined.
+- Optional otherwise.
 {% enddocs %}
 
 {% docs gtfs_stop_times__departure_time %}
-Departure time from a specific stop for a specific trip on a route. If there are not separate times for arrival and departure at a stop, enter the same value for arrival_time and departure_time. See the arrival_time description for more details about using timepoints correctly.
+Departure time from the stop (defined by stop_times.stop_id) for a specific trip (defined by stop_times.trip_id).
 
-The departure_time field should specify time values whenever possible, including non-binding estimated or interpolated times between timepoints.
+If there are not separate times for arrival and departure at a stop, arrival_time and departure_time should be the same.
 
-Conditionally Required:
-- Required for the first and the last stop in a trip.
+For times occurring after midnight on the service day, enter the time as a value greater than 24:00:00 in HH:MM:SS local time for the day on which the trip schedule begins.
+
+If exact arrival and departure times (timepoint=1 or empty) are not available, estimated or interpolated arrival and departure times (timepoint=0) should be provided.
+
+Conditionally required:
+- Required for timepoint=1.
 - Forbidden when stop_times.start_pickup_drop_off_window or stop_times.end_pickup_drop_off_window are defined.
+- Optional otherwise.
 {% enddocs %}
 
 {% docs gtfs_stop_times__stop_id %}

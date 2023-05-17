@@ -232,6 +232,9 @@ fct_daily_scheduled_trips AS (
         AND gtfs_joins.service_date = daily_feeds.date
     LEFT JOIN dim_gtfs_datasets
         ON daily_feeds.gtfs_dataset_key = dim_gtfs_datasets.key
+    -- we have at least one trip where there are no stops because no stop_id is listed
+    -- treat this as analogous to not scheduled, so drop it
+    WHERE num_distinct_stops_served > 0
 )
 
 SELECT * FROM fct_daily_scheduled_trips

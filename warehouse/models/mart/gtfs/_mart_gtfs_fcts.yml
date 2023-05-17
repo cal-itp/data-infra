@@ -341,7 +341,7 @@ models:
 
   - name: fct_daily_scheduled_trips
     description: |
-      A daily table showing all trips that were scheduled on a given date.
+      A daily table showing all trips that were scheduled on a given date, with at least one scheduled stop time at at least one `stop_id`.
       If a `service_date`, `trip_key` pair is present in this table,
       it means that that `trip_key` was scheduled to occur on that `service_date`.
       Specifically, it means that the associated `service_id` was active and had service
@@ -357,7 +357,6 @@ models:
       For this reason, this table contains multiple date and time labels associated with a given trip.
       Please consult each individual column's definition for guidance on which field is
       most appropriate for your use case.
-
     columns:
       - name: key
         tests:
