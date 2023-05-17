@@ -91,7 +91,7 @@ def report_failures_to_sentry(
     ]
     for failure in failures:
         node = manifest.nodes[failure.unique_id]
-        fingerprint = [str(failure.status), failure.unique_id]
+        fingerprint = [failure.status.value, failure.unique_id]
         # this is awkward and manual; maybe could do dynamically
         exc_types = {
             (SeedNode, RunResultStatus.error): DbtSeedError,
@@ -112,18 +112,31 @@ def report_failures_to_sentry(
             sentry_sdk.capture_exception(
                 error=exc_type(f"{failure.unique_id} - {failure.message}"),
             )
+    else:
+        typer.secho("WARNING: no failures found to report", fg=typer.colors.YELLOW)
 
 
 @app.command()
 def report_failures(
-    run_results_path: Path = Path("./target/run_results.json"),
-    manifest_path: Path = Path("./target/manifest.json"),
+    run_results_path: str = "./target/run_results.json",
+    manifest_path: str = "./target/manifest.json",
     verbose: bool = False,
 ):
-    with open(run_results_path) as f:
+    fs = gcsfs.GCSFileSystem(
+        project="cal-itp-data-infra",
+        token=os.getenv("BIGQUERY_KEYFILE_LOCATION"),
+    )
+
+    openf = fs.open if run_results_path.startswith("gs://") else open
+    typer.secho(f"Reading manifest from {manifest_path}", fg=typer.colors.MAGENTA)
+    with openf(run_results_path) as f:
         run_results = RunResults(**json.load(f))
-    with open(manifest_path) as f:
+
+    openf = fs.open if manifest_path.startswith("gs://") else open
+    typer.secho(f"Reading run results from {run_results_path}", fg=typer.colors.MAGENTA)
+    with openf(manifest_path) as f:
         manifest = Manifest(**json.load(f))
+
     report_failures_to_sentry(run_results, manifest, verbose=verbose)
 
 
