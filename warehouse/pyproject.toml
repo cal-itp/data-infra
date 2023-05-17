@@ -31,6 +31,10 @@ networkx = {version = "<3", extras = ["default"]}
 pygraphviz = "^1.10"
 palettable = "^3.3.0"
 dbt-bigquery = "1.6.0b1"
+metabase-api = "^0.3.0"
+# fiona 1.9 requires gdal 3 which ubuntu does not install yet
+# from https://gis.stackexchange.com/questions/375685/how-to-install-or-build-gdal-3-on-debian-buster
+fiona = "~1.8"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"
