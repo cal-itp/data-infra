@@ -600,20 +600,36 @@ models:
           publish.ignore: true
       - name: start_pickup_drop_off_window
         description: '{{ doc("gtfs_stop_times__start_pickup_drop_off_window") }}'
+        meta:
+          publish.ignore: true
       - name: end_pickup_drop_off_window
         description: '{{ doc("gtfs_stop_times__end_pickup_drop_off_window") }}'
+        meta:
+          publish.ignore: true
       - name: mean_duration_factor
         description: '{{ doc("gtfs_stop_times__mean_duration_factor") }}'
+        meta:
+          publish.ignore: true
       - name: mean_duration_offset
         description: '{{ doc("gtfs_stop_times__mean_duration_offset") }}'
+        meta:
+          publish.ignore: true
       - name: safe_duration_factor
         description: '{{ doc("gtfs_stop_times__safe_duration_factor") }}'
+        meta:
+          publish.ignore: true
       - name: safe_duration_offset
         description: '{{ doc("gtfs_stop_times__safe_duration_offset") }}'
+        meta:
+          publish.ignore: true
       - name: pickup_booking_rule_id
         description: '{{ doc("gtfs_stop_times__pickup_booking_rule_id") }}'
+        meta:
+          publish.ignore: true
       - name: drop_off_booking_rule_id
         description: '{{ doc("gtfs_stop_times__drop_off_booking_rule_id") }}'
+        meta:
+          publish.ignore: true
       - name: start_pickup_drop_off_window_sec
         description: |
           This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
