@@ -571,8 +571,8 @@ models:
           - not_null:
               config:
                 where: "frequencies_defined_trip"
-      - name: flexible_trip
-        description: '{{ doc("column_flexible_trip") }}'
+      - name: gtfs_flex_trip
+        description: '{{ doc("column_gtfs_flex_trip") }}'
       - name: fully_flexible_trip
         description: '{{ doc("column_fully_flexible_trip") }}'
       - name: num_flexible_stop_times

@@ -47,7 +47,7 @@ A trip's total hours of service, calculated by subtracting `trip_first_departure
 {% enddocs %}
 
 {% docs column_flex_service_hours %}
-A trip's total possible hours of flexible service, calculated by subtracting `trip_last_arrival_sec` from `trip_first_departure_sec` and converting to hours (dividing by 3,600).
+A trip's total possible hours of flexible service, calculated by subtracting `first_start_pickup_drop_off_window_sec` from `last_end_pickup_drop_off_window_sec` and converting to hours (dividing by 3,600).
 {% enddocs %}
 
 {% docs column_num_arrival_times_populated_stop_times %}
@@ -62,21 +62,12 @@ Count of stop times on this trip where `departure_time` is populated.
 See https://gtfs.org/reference/static#stop_timestxt for the raw data definitions.
 {% enddocs %}
 
-{% docs column_flexible_trip %}
+{% docs column_gtfs_flex_trip %}
 Boolean indicator for whether this is a flexible trip defined using GTFS-Flex.
-GTFS-Flex flexible trips are indicated by using the fields `start_pickup_drop_off_window`and `end_pickup_drop_off_window` for at least some of their stop times.
-This means there is some flexible service without fixed schedules and this is not an entirely fixed-route trip.
+GTFS-Flex flexible trips are indicated by using the fields `start_pickup_drop_off_window`and `end_pickup_drop_off_window` for their stop times.
+This means this is not a fixed-route trip.
 
 Note that there may be some demand-responsive behavior on trips where this column is `false`; for example, there can be stops where a phone call to the agency is required to arrange pickup/drop off, which will be indicated in pickup/drop off type columns even if they are not included as "flexible" in this column.
-{% enddocs %}
-
-{% docs column_fully_flexible_trip %}
-This is the same as `flexible_trip` except that the boolean here indicates that all (rather than just some) of the stop times had `start_pickup_drop_off_window` and `end_pickup_drop_off_window` populated, indicating that this is an entirely flexible/demand-responsive trip.
-{% enddocs %}
-
-{% docs column_num_flexible_stop_times %}
-Count of stop times for this trip with  `start_pickup_drop_off_window` and `end_pickup_drop_off_window` populated indicating flexible behavior.
-See `flexible_trip` for more information.
 {% enddocs %}
 
 {% docs column_first_start_pickup_drop_off_window_sec %}
