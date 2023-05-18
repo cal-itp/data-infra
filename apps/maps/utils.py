@@ -5,6 +5,7 @@ import sys
 from enum import Enum
 from typing import Optional, Union
 
+import requests
 import typer
 import urllib3
 from calitp_data.storage import get_fs
@@ -50,17 +51,26 @@ ANALYSIS_FEATURE_TYPES = {
 }
 
 
-@app.command()
-def validate_geojson(path: str, analysis: Optional[Analysis] = None):
+def _validate_geojson(path: str, analysis: Optional[Analysis] = None):
     typer.secho(f"Validating {path}...", fg=typer.colors.MAGENTA)
-    fs = get_fs()
-    openf = fs.open if path.startswith("gs://") else open
+
     is_compressed = path.endswith(".gz")
 
-    with openf(path, "rb" if is_compressed else "r") as f:
-        if is_compressed:
-            f = gzip.GzipFile(fileobj=f)
-        collection = FeatureCollection(**json.load(f))
+    if path.startswith("https://"):
+        resp = requests.get(path)
+        resp.raise_for_status()
+        d = json.loads(
+            gzip.decompress(resp.content).decode() if is_compressed else resp.text
+        )
+    else:
+        openf = get_fs().open if path.startswith("gs://") else open
+
+        with openf(path, "rb" if is_compressed else "r") as f:
+            if is_compressed:
+                f = gzip.GzipFile(fileobj=f)
+            d = json.load(f)
+
+    collection = FeatureCollection(**d)
 
     if analysis:
         analysis_class = ANALYSIS_FEATURE_TYPES[analysis]
@@ -79,10 +89,16 @@ def validate_geojson(path: str, analysis: Optional[Analysis] = None):
 
 
 @app.command()
+def validate_geojson(path: str, analysis: Optional[Analysis] = None):
+    _validate_geojson(path, analysis)
+
+
+@app.command()
 def validate_state(
     infile: Optional[str] = None,
     base64url: bool = False,
     compressed: bool = False,
+    analysis: Optional[Analysis] = None,
 ):
     if infile:
         typer.secho(f"Reading {infile}.", fg=typer.colors.MAGENTA)
@@ -108,6 +124,9 @@ def validate_state(
     if resp.status != 200:
         typer.secho(f"Failed to find file at {state.url}.", fg=typer.colors.RED)
         raise typer.Exit(1)
+
+    if analysis:
+        _validate_geojson(state.url, analysis)
 
     typer.secho("Validation successful!", fg=typer.colors.GREEN)
 
