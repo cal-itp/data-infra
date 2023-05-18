@@ -250,8 +250,8 @@
             </span>
             <span>Loading...</span>
           </div>
-        {:else if (state && state.url)}
-          <span>Viewing {state.url}</span>
+        {:else if (state)}
+          <span>{state.name} (<a href="{state.url}">download GeoJSON</a>)</span>
         {:else}
           <span>No state found in URL.</span>
         {/if}

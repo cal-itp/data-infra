@@ -17,6 +17,7 @@ app = typer.Typer()
 
 
 class State(BaseModel):
+    name: str
     url: HttpUrl
 
 
