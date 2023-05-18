@@ -1,16 +1,15 @@
 Warehouse report 📦
 
+{% if new_models or changed_incremental_models %}
 ### Checks/potential follow-ups
 
-{% if new_models %}
-
-* All new models have a surrogate primary key that is tested to be not-null and unique
-
-{% endif %}
-{% if changed_incremental_models %}
-
-* Full refresh as a follow-up action item
-
+ Checks indicate the following action items may be necessary.
+{% if new_models -%}
+- [ ] For new models, do they all have a surrogate primary key that is tested to be not-null and unique?
+{%- endif %}
+{% if changed_incremental_models -%}
+- [ ] For changed incremental models, does the PR description identify whether a full refresh is needed for these tables?
+{%- endif %}
 {% endif %}
 
 
