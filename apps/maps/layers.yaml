@@ -1,8 +1,0 @@
-- name: LA Metro Bus Speed Maps AM Peak
-  url: https://storage.googleapis.com/calitp-map-tiles/metro_am.geojson.gz
-- name: California High Quality Transit Areas - Areas
-  url: https://storage.googleapis.com/calitp-map-tiles/ca_hq_transit_areas.geojson.gz
-- name: California High Quality Transit Areas - Stops
-  url: https://storage.googleapis.com/calitp-map-tiles/ca_hq_transit_stops.geojson.gz
-#- name: GTFS Shapes (pmtiles)
-#  url: https://storage.googleapis.com/calitp-map-tiles/shapes.pmtiles

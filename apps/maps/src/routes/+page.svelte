@@ -6,23 +6,21 @@
     import L from 'leaflet';
     import colormap from 'colormap';
     import {leafletLayer, LineSymbolizer} from 'protomaps';
-    import {strFromU8, decompress} from 'fflate';
-    import M from 'maplibre-gl';
+    import {strFromU8, decompress, decompressSync, strToU8} from 'fflate';
     import {LeafletLayer} from 'deck.gl-leaflet';
     import {MapView} from '@deck.gl/core';
     import {GeoJsonLayer} from '@deck.gl/layers';
     import '@fortawesome/fontawesome-free/css/all.css'
-    import * as turf from '@turf/turf'
+    import * as turf from '@turf/turf';
+    import { Base64 } from 'js-base64';
 
-    const USE_LEAFLET = true;
-    const USE_LEAFLET_DECKGL = true;
-    const SOURCE = "https://storage.googleapis.com/calitp-map-tiles/metro_am.geojson.gz";
+    const STATE_QUERY_PARAM = "state";
     const START_LAT_LON = [34.05, -118.25];
     const LEAFLET_START_ZOOM = 12;
     let mapElement;
     let map;
     let jsonData;
-    let selected;
+    let state;
     let options = [];
     let layer;
     let loading = false;
@@ -133,24 +131,34 @@
       }
     }
 
-    async function updateMap() {
-        console.log(selected);
+    onMount(async () => {
+        let encoded = $page.url.searchParams.get(STATE_QUERY_PARAM);
 
-        if (layer) {
-            map.removeLayer(layer);
-            layer = null;
-        }
-
-        if (!selected.url) {
-            $page.url.searchParams.delete("selected");
-            goto(`?${$page.url.searchParams.toString()}`);
+        if (!encoded) {
             return
         }
 
-        loading = true;
-        $page.url.searchParams.set("selected", selected.name);
-        goto(`?${$page.url.searchParams.toString()}`);
-        const url = selected.url;
+        // inspired by https://www.scottantipa.com/store-app-state-in-urls
+
+        try {
+          // this library handles base64url
+          state = JSON.parse(Base64.decode(encoded));
+          console.log("Loaded uncompressed state from URL.");
+        } catch (error) {
+          console.log("Failed to parse state, checking if compressed.");
+          state = JSON.parse(strFromU8(decompressSync(Base64.toUint8Array(encoded))));
+          console.log("Loaded compressed state from URL.");
+        }
+
+        const url = state.url;
+
+        map = L.map(mapElement, {
+            preferCanvas: true
+        }).setView(START_LAT_LON, LEAFLET_START_ZOOM);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
         if (url.endsWith(".pmtiles")) {
             layer = leafletLayer({
@@ -158,7 +166,7 @@
                 paint_rules: PAINT_RULES,
             }).addTo(map);
             loading = false;
-        } else if (USE_LEAFLET_DECKGL) {
+        } else {
             // NOTE: When defining interaction callbacks, I think they use https://deck.gl/docs/developer-guide/interactivity#the-picking-info-object
             fetchGeoJSON(url, (json) => {
                 layer = new LeafletLayer({
@@ -191,161 +199,6 @@
                 }
                 loading = false;
             })
-        } else {
-            layer = L.geoJSON(false, {
-                style: (feature) => {
-                    return {
-                        color: speedFeatureColor(feature, hexColorMap),
-                        opacity: 0.8,
-                    }
-                },
-                onEachFeature: (feature, layer) => {
-                    if (feature.properties) {
-                        layer.bindTooltip(speedFeatureHTML(feature));
-                    }
-                }
-            }).addTo(map);
-            fetchGeoJSON(url, (json) => {
-                layer.addData(json);
-                loading = false;
-            });
-        }
-    }
-
-    onMount(async () => {
-        console.log("Loading map.");
-
-        if (USE_LEAFLET) {
-            map = L.map(mapElement, {
-                preferCanvas: true
-            }).setView(START_LAT_LON, LEAFLET_START_ZOOM);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-        } else {
-            map = new M.Map({
-                container: 'map',
-                style: 'https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
-                // style: 'https://openmaptiles.github.io/osm-bright-gl-style/style-cdn.json',
-                // style: {
-                //     'version': 8,
-                //     'sources': {
-                //         'raster-tiles': {
-                //             'type': 'raster',
-                //             'tiles': [
-                //                 'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg'
-                //             ],
-                //             'tileSize': 256,
-                //             'attribution':
-                //                 'Map tiles by <a target="_top" rel="noopener" href="http://stamen.com">Stamen Design</a>, under <a target="_top" rel="noopener" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_top" rel="noopener" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_top" rel="noopener" href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>'
-                //         }
-                //     },
-                //     'layers': [
-                //         {
-                //             'id': 'simple-tiles',
-                //             'type': 'raster',
-                //             'source': 'raster-tiles',
-                //             'minzoom': 0,
-                //             'maxzoom': 22
-                //         }
-                //     ]
-                // },
-                center: START_LAT_LON.toReversed(),
-                zoom: 9
-            });
-
-            if (jsonData) {
-                // https://maplibre.org/maplibre-gl-js-docs/example/data-driven-lines/
-                jsonData.features.forEach((feature) => {
-                    feature.properties.color = speedFeatureColor(feature, hexColorMap);
-                });
-
-                map.on('load', () => {
-                    map.addSource(SOURCE, {
-                        'type': 'geojson',
-                        'data': jsonData // this could be a URL if we had the color in properties already
-                    });
-                    map.addLayer({
-                        'id': 'speeds',
-                        'type': 'fill',
-                        'source': SOURCE,
-                        'paint': {
-                            'fill-color': ['get', 'color'],
-                            'fill-opacity': 0.4
-                        },
-                        'filter': ['==', '$type', 'Polygon']
-                    });
-                });
-
-                // https://maplibre.org/maplibre-gl-js-docs/example/popup-on-hover/
-                // Create a popup, but don't add it to the map yet.
-                // let popup = new M.Popup({
-                //     closeButton: false,
-                //     closeOnClick: false
-                // });
-                //
-                // map.on('mouseenter', 'speeds', function (e) {
-                //     // Change the cursor style as a UI indicator.
-                //     map.getCanvas().style.cursor = 'pointer';
-                //
-                //     // TODO: figure out what's going on here
-                //     let coordinates = e.features[0].geometry.coordinates.slice()[0][0];
-                //     console.log(coordinates);
-                //
-                //     // Ensure that if the map is zoomed out such that multiple
-                //     // copies of the feature are visible, the popup appears
-                //     // over the copy being pointed to.
-                //     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                //         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                //     }
-                //
-                //     // Populate the popup and set its coordinates
-                //     // based on the feature found.
-                //     // popup.setLngLat(coordinates).setHTML(speedFeatureHTML(e.features[0])).addTo(map);
-                //     console.log(e.lngLat);
-                //     popup.setLngLat(e.lngLat).setHTML("test test 123").addTo(map);
-                //     console.log(popup);
-                // });
-                //
-                // map.on('mouseleave', 'speeds', function () {
-                //     map.getCanvas().style.cursor = '';
-                //     popup.remove();
-                // });
-
-                // https://maplibre.org/maplibre-gl-js-docs/example/polygon-popup-on-click/
-                // When a click event occurs on a feature in the states layer, open a popup at the
-                // location of the click, with description HTML from its properties.
-                map.on('click', 'speeds', function (e) {
-                    new M.Popup()
-                        .setLngLat(e.lngLat)
-                        .setHTML(e.features[0].properties.stop_name)
-                        .addTo(map);
-                });
-
-                // Change the cursor to a pointer when the mouse is over the states layer.
-                map.on('mouseenter', 'speeds', function () {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-
-                // Change it back to a pointer when it leaves.
-                map.on('mouseleave', 'speeds', function () {
-                    map.getCanvas().style.cursor = '';
-                });
-            }
-        }
-
-        console.log("Loading layer options.");
-        const layersResponse = await fetch("layers.json");
-        const json = await layersResponse.json();
-        options = [{"name": "", "url": ""}].concat(json);
-        const selectedName = $page.url.searchParams.get("selected");
-        if (selectedName) {
-          const possible = options.find(option => option.name === selectedName);
-          if (possible) {
-            selected = possible;
-            updateMap();
-          }
         }
     })
     ;
@@ -380,9 +233,6 @@
     <a class="navbar-item" href="https://www.calitp.org/">
       <img src="https://reports.calitp.org/images/calitp-logo.svg" alt="Cal-ITP logo">
     </a>
-    <div class="navbar-item">
-      California Transit Speed Maps
-    </div>
     <button class="button navbar-burger">
       <span></span>
       <span></span>
@@ -393,26 +243,6 @@
   <div class="navbar-menu">
     <div class="navbar-start">
       <div class="navbar-item">
-        <label>
-          <input type=checkbox bind:checked={zoomOnSelect}>
-          Zoom when selected
-        </label>
-      </div>
-      <div class="navbar-item">
-        <label for="select">Dataset:</label>
-      </div>
-      <div class="navbar-item">
-        <div class="select">
-          <select id="select" bind:value={selected} on:change="{updateMap}">
-            {#each options as option}
-              <option value={option}>
-                {option.name}
-              </option>
-            {/each}
-          </select>
-        </div>
-      </div>
-      <div class="navbar-item">
         {#if loading}
           <div class="icon-text">
             <span class="icon">
@@ -420,8 +250,10 @@
             </span>
             <span>Loading...</span>
           </div>
-        {:else if (selected && selected.url)}
-          <span>Viewing {selected.url}</span>
+        {:else if (state && state.url)}
+          <span>Viewing {state.url}</span>
+        {:else}
+          <span>No state found in URL.</span>
         {/if}
       </div>
     </div>
