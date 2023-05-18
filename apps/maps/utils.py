@@ -1,12 +1,12 @@
+import base64
 import gzip
 import json
+import sys
 from enum import Enum
-from pathlib import Path
-from typing import Annotated, List, Optional, Union
+from typing import Optional, Union
 
 import typer
 import urllib3
-import yaml
 from calitp_data.storage import get_fs
 from geojson_pydantic import Feature, FeatureCollection, MultiPolygon, Point, Polygon
 from pydantic import BaseModel, HttpUrl, ValidationError, root_validator
@@ -15,13 +15,8 @@ from tqdm import tqdm
 app = typer.Typer()
 
 
-class Layer(BaseModel):
-    name: str
+class State(BaseModel):
     url: HttpUrl
-
-
-class LayerList(BaseModel):
-    __root__: List[Layer]
 
 
 class Speedmap(BaseModel):
@@ -84,42 +79,37 @@ def validate_geojson(path: str, analysis: Optional[Analysis] = None):
 
 
 @app.command()
-def validate_site(
-    index: Annotated[
-        Path,
-        typer.Option(
-            ...,
-            exists=True,
-            file_okay=True,
-            dir_okay=False,
-        ),
-    ],
-    geojson_root: str,
+def validate_state(
+    infile: Optional[str] = None,
+    base64url: bool = False,
+    compressed: bool = False,
 ):
-    typer.secho(f"Validating index at {index}.")
+    if infile:
+        typer.secho(f"Reading {infile}.", fg=typer.colors.MAGENTA)
+        with open(infile) as f:
+            contents = f.read()
+    else:
+        typer.secho("Reading from stdin...", fg=typer.colors.MAGENTA)
+        contents = sys.stdin.read()
 
-    typer.secho(f"Validating GeoJSON data starting at {geojson_root}.")
+    if base64url:
+        typer.secho("Decoding base64 contents...", fg=typer.colors.MAGENTA)
+        contents = base64.urlsafe_b64decode(contents.encode())
 
+        if compressed:
+            contents = gzip.decompress(contents)
 
-@app.command()
-def build_index(
-    infile: str = "layers.yaml",
-    outfile: str = "static/layers.json",
-):
-    typer.secho(f"Reading {infile}.")
-    with open(infile) as inf:
-        layers = LayerList.parse_obj(yaml.safe_load(inf.read()))
+        contents = contents.decode()
 
-    typer.secho("Checking that URLs exist.")
-    for layer in tqdm(layers.__root__):
-        # use urllib3 because requests hangs?
-        resp = urllib3.request("HEAD", layer.url)
-        assert resp.status == 200
+    state = State(**json.loads(contents))
+    typer.secho(f"Checking that {state.url} exists...", fg=typer.colors.MAGENTA)
+    resp = urllib3.request("HEAD", state.url)
 
-    with open(outfile, "w") as outf:
-        outf.write(layers.json())
+    if resp.status != 200:
+        typer.secho(f"Failed to find file at {state.url}.", fg=typer.colors.RED)
+        raise typer.Exit(1)
 
-    typer.secho(f"Layers written to {outfile}.")
+    typer.secho("Validation successful!", fg=typer.colors.GREEN)
 
 
 if __name__ == "__main__":
