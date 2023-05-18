@@ -83,7 +83,7 @@ int_gtfs_schedule__stop_times_grouped AS (
             start_pickup_drop_off_window IS NOT NULL
             AND end_pickup_drop_off_window IS NOT NULL) AS gtfs_flex_trip,
         COUNTIF(start_pickup_drop_off_window IS NOT NULL
-            AND end_pickup_drop_off_window IS NOT NULL) AS num_flexible_stop_times,
+            AND end_pickup_drop_off_window IS NOT NULL) AS num_gtfs_flex_stop_times,
         MIN(start_pickup_drop_off_window_sec) AS first_start_pickup_drop_off_window_sec,
         MAX(end_pickup_drop_off_window_sec) AS last_end_pickup_drop_off_window_sec,
 

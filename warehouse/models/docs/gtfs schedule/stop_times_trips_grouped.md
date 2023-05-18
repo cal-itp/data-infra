@@ -97,6 +97,10 @@ the trip will have multiple stop times counted in this column.
 Note that for flexible or demand responsive trips this column will not necessarily reflect actual trip activity, because the number of stop times is not known in advance and for flexible trips in particular a single row in `stop_times.txt` can represent activity throughout an entire service area rather than at an individual stop. See https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md for more details on the handling of `stop_id` for flexible trips.
 {% enddocs %}
 
+{% docs column_num_gtfs_flex_stop_times %}
+Count of rows in `stop_times.txt` for this trip where the fields `start_pickup_drop_off_window`and `end_pickup_drop_off_window` are populated, indicating use of the GTFS-Flex v2 specification.
+{% enddocs %}
+
 
 
 --- ENUMS ---

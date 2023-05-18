@@ -268,7 +268,7 @@ models:
       - name: gtfs_flex_trip
         description: '{{ doc("column_gtfs_flex_trip") }}'
       - name: num_flexible_stop_times
-        description: '{{ doc("column_num_flexible_stop_times") }}'
+        description: '{{ doc("column_num_gtfs_flex_stop_times") }}'
       - name: first_start_pickup_drop_off_window_sec
         description: '{{ doc("column_first_start_pickup_drop_off_window_sec") }}'
       - name: last_end_pickup_drop_off_window_sec
