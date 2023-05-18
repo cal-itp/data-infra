@@ -236,7 +236,7 @@ models:
       - dbt_utils.expression_is_true:
           expression: "num_approximate_timepoint_stop_times + num_exact_timepoint_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
-          expression: "(num_flexible_stop_times IS NOT NULL) = gtfs_flex_trip"
+          expression: "(num_gtfs_flex_stop_times > 0) = gtfs_flex_trip"
     columns:
       - *feed_key
       - name: trip_id
