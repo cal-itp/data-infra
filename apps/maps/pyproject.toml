@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "calitp_map_utils"
-version = "0.1.0"
+version = "2023.5.19"
 description = ""
 authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
 readme = "README.md"
