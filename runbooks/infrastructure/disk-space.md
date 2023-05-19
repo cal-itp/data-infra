@@ -21,8 +21,8 @@ The [Kafka](https://kafka.apache.org/) pods themselves can also have unbound dis
 1. Check if there are any failing consumer pods in [Workloads](https://console.cloud.google.com/kubernetes/workload?project=cal-itp-data-infra); you can use the logs to identify the topic and potentially the consumer group.
 2. Check the consumer groups and/or topics, and reset the offsets to the latest as appropriate. This [GitHub issue](https://github.com/getsentry/self-hosted/issues/478#issuecomment-666254392) contains very helpful information. For example, to reset the `snuba-events-subscriptions-consumers` consumer that is failing to handle the `snuba-commit-log` topic:
    * `kubectl exec --stdin --tty sentry-kafka-0 -n sentry -- bash`
-   * `/opt/bitnami/kafka/bin/kafka-consumer-groups.s --bootstrap-server 127.0.0.1:9092 --list`
-   * `/opt/bitnami/kafka/bin/kafka-consumer-groups.s --bootstrap-server 127.0.0.1:9092 --group snuba-events-subscriptions-consumers -describe`
+   * `/opt/bitnami/kafka/bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --list`
+   * `/opt/bitnami/kafka/bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --group snuba-events-subscriptions-consumers -describe`
    * `/opt/bitnami/kafka/bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --group snuba-events-subscriptions-consumers --topic snuba-commit-log --reset-offsets --to-latest --execute`
    * If you hit `Error: Assignments can only be reset if the group 'snuba-post-processor' is inactive, but the current state is Stable.`, you need to stop the consumers on the topic (by deleting the pods and/or deployment), resetting the offset, and starting the pods again (via `helm upgrade sentry apps/charts/sentry -n sentry -f apps/values/sentry_sensitive.yaml -f apps/charts/sentry/values.yaml --debug` if you deleted the deployment).
 3. (Optional) If disk space is still maxed out and the consumers fail to recover even after increasing the disk space, stop the failing Kafka pod and delete its underlying PV, then repeat the steps again. **This will lose the in-flight data** but is preferable to the worker continuing to exist in a bad state.
