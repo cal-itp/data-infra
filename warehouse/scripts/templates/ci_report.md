@@ -1,14 +1,14 @@
 Warehouse report 📦
 
-{% if new_models or changed_incremental_models %}
+{% if new_models or changed_or_downstream_incremental_models %}
 ### Checks/potential follow-ups
 
 Checks indicate the following action items may be necessary.
 {% if new_models -%}
 - [ ] For new models, do they all have a surrogate primary key that is tested to be not-null and unique?
 {%- endif %}
-{% if changed_incremental_models -%}
-- [ ] For changed incremental models, does the PR description identify whether a full refresh is needed for these tables?
+{% if changed_or_downstream_incremental_models -%}
+- [ ] For modified incremental models (or incremental models whose parents are modified), does the PR description identify whether a full refresh is needed for these tables?
 {%- endif %}
 {% endif %}
 
@@ -22,11 +22,11 @@ Checks indicate the following action items may be necessary.
 {% endfor %}
 {% endif %}
 
-{% if changed_incremental_models %}
+{% if changed_or_downstream_incremental_models %}
 
 ### Changed incremental models 🔀
 
-{% for model in changed_incremental_models %}
+{% for model in changed_or_downstream_incremental_models %}
 {{ model }}
 {% endfor %}
 {% endif %}

@@ -256,13 +256,13 @@ def ci_report(
         ]
     ).result
 
-    changed_incremental_models = dbt.invoke(
+    changed_or_downstream_incremental_models = dbt.invoke(
         [
             "ls",
             "--resource-type",
             "model",
             "--select",
-            "state:modified,config.materialized:incremental",
+            "state:modified+,config.materialized:incremental",
             "--exclude",
             "state:new",
             "--state",
@@ -298,7 +298,7 @@ def ci_report(
     template = env.get_template("ci_report.md")
     report = template.render(
         new_models=new_models,
-        changed_incremental_models=changed_incremental_models,
+        changed_or_downstream_incremental_models=changed_or_downstream_incremental_models,
     )
     typer.secho(f"Writing to {output}", fg=typer.colors.GREEN)
     with open(output, "w") as f:
