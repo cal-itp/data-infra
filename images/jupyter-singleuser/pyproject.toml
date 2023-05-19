@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2023.4.28"
+version = "2023.5.19"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
@@ -59,7 +59,7 @@ mapclassify = "^2.5.0"
 [tool.poetry.group.portfolio.dependencies]
 pydantic = ">=1.9.1"
 humanize = "^4.6.0"
-typer = "^0.7.0"
+typer = "^0.9.0"
 nbformat = "^5.8.0"
 papermill = "^2.4.0"
 python-slugify = "^6.1.1"
