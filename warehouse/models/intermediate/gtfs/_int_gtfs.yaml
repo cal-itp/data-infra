@@ -372,8 +372,7 @@ models:
       consult `int_gtfs_schedule__daily_scheduled_service_index`.**
       Lists date, feed, and `service_id` combinations for which service was scheduled (i.e.,
       the `service_id` is "in effect" and says that service occurred).
-      Essentially, it takes `calendar` and `calendar_dates` for a given feed, takes the dates for which that
-      feed was "in effect", and combines those into a long list of all service_ids that were in effect for a given
+      Essentially, it takes `calendar` and `calendar_dates` for a given feed and combines those into a long list of all service_ids that were in effect for a given
       date, then filters down to only those where service was actually scheduled on that date.
       For example, a row in this table with `feed_key = A`, `service_date = 2022-10-01`, `service_id = 1` indicates
       that:
