@@ -1,7 +1,5 @@
-import base64
 import gzip
 import json
-import sys
 from enum import Enum
 from typing import Optional, Tuple, Union
 
@@ -15,13 +13,10 @@ from pydantic import BaseModel, HttpUrl, ValidationError, root_validator
 from tqdm import tqdm
 
 
-# Any positions in this are flipped;
-class State(BaseModel):
-    name: str
-    url: HttpUrl
-    lat_lon: Optional[Position]
-    zoom: Optional[int]
-    bbox: Optional[Tuple[Position, Position]]
+class Analysis(str, Enum):
+    speedmaps = "speedmap"
+    hqta_areas = "hqta_areas"
+    hqta_stops = "hqta_stops"
 
 
 class Speedmap(BaseModel):
@@ -41,12 +36,6 @@ class HQTA(BaseModel):
     agency_name_secondary: Optional[str]
 
 
-class Analysis(str, Enum):
-    speedmaps = "speedmap"
-    hqta_areas = "hqta_areas"
-    hqta_stops = "hqta_stops"
-
-
 # Dict Props just mean properties are an arbitrary dictionary
 ANALYSIS_FEATURE_TYPES = {
     Analysis.speedmaps: Feature[Polygon, Speedmap],
@@ -55,8 +44,11 @@ ANALYSIS_FEATURE_TYPES = {
 }
 
 
-def validate_geojson(path: str, analysis: Optional[Analysis] = None):
-    typer.secho(f"Validating {path}...", fg=typer.colors.MAGENTA)
+def validate_geojson(
+    path: str, analysis: Optional[Analysis] = None, verbose=False
+) -> FeatureCollection:
+    if verbose:
+        typer.secho(f"Validating {path}...", fg=typer.colors.MAGENTA)
 
     is_compressed = path.endswith(".gz")
 
@@ -78,7 +70,8 @@ def validate_geojson(path: str, analysis: Optional[Analysis] = None):
 
     if analysis:
         analysis_class = ANALYSIS_FEATURE_TYPES[analysis]
-        typer.secho(f"Validating that features are {analysis_class}...")
+        if verbose:
+            typer.secho(f"Validating that features are {analysis_class}...")
         for feature in tqdm(collection.features):
             try:
                 analysis_class(**feature.dict())
@@ -86,44 +79,34 @@ def validate_geojson(path: str, analysis: Optional[Analysis] = None):
                 typer.secho(feature.json(), fg=typer.colors.RED)
                 raise
 
-    typer.secho(
-        f"Success! Validated {len(collection.features)} features.",
-        fg=typer.colors.GREEN,
-    )
+    return collection
 
 
-def validate_state(
-    infile: Optional[str] = None,
-    base64url: bool = False,
-    compressed: bool = False,
-    analysis: Optional[Analysis] = None,
-):
-    if infile:
-        typer.secho(f"Reading {infile}.", fg=typer.colors.MAGENTA)
-        with open(infile) as f:
-            contents = f.read()
-    else:
-        typer.secho("Reading from stdin...", fg=typer.colors.MAGENTA)
-        contents = sys.stdin.read()
+# Any positions in this are flipped from typical geojson
+# leaflet wants lat/lon
+class State(BaseModel):
+    name: str
+    url: HttpUrl
+    lat_lon: Optional[Position]
+    zoom: Optional[int]
+    bbox: Optional[Tuple[Position, Position]]
+    analysis: Optional[Analysis]
 
-    if base64url:
-        typer.secho("Decoding base64 contents...", fg=typer.colors.MAGENTA)
-        byts = base64.urlsafe_b64decode(contents.encode())
+    def validate_url(
+        self,
+        data: bool = False,
+        verbose: bool = False,
+        analysis: Optional[Analysis] = None,
+    ):
+        if verbose:
+            typer.secho(f"Checking that {self.url} exists...", fg=typer.colors.MAGENTA)
+        resp = urllib3.request("HEAD", self.url)  # type: ignore[operator]
 
-        if compressed:
-            byts = gzip.decompress(byts)
+        if resp.status != 200:
+            msg = f"Failed to find file at {self.url}"
+            if verbose:
+                typer.secho(msg, fg=typer.colors.RED)
+            raise FileNotFoundError(msg)
 
-        contents = byts.decode()
-
-    state = State(**json.loads(contents))
-    typer.secho(f"Checking that {state.url} exists...", fg=typer.colors.MAGENTA)
-    resp = urllib3.request("HEAD", state.url)  # type: ignore[operator]
-
-    if resp.status != 200:
-        typer.secho(f"Failed to find file at {state.url}.", fg=typer.colors.RED)
-        raise typer.Exit(1)
-
-    if analysis:
-        validate_geojson(state.url, analysis)
-
-    typer.secho("Validation successful!", fg=typer.colors.GREEN)
+        if data:
+            validate_geojson(self.url, analysis or self.analysis)
