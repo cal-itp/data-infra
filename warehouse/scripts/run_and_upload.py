@@ -6,23 +6,13 @@ import re
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 import gcsfs  # type: ignore
 import pendulum
 import sentry_sdk
 import typer
-from dbt_artifacts import (
-    DbtNode,
-    DependsOn,
-    GenericTestNode,
-    Manifest,
-    ModelNode,
-    RunResultOutput,
-    RunResults,
-    RunResultStatus,
-    SeedNode,
-)
+from dbt_artifacts import Manifest, RunResults, RunResultStatus
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
 
@@ -63,17 +53,6 @@ class DbtMetabaseSyncFailure(Exception):
     pass
 
 
-def get_failure_context(failure: RunResultOutput, node: DbtNode) -> Dict[str, Any]:
-    context: Dict[str, Any] = {
-        "unique_id": failure.unique_id,
-        "path": str(node.original_file_path),
-    }
-    if failure.unique_id.startswith("test"):
-        assert isinstance(node.depends_on, DependsOn)
-        context["models"] = node.depends_on.nodes
-    return context
-
-
 def report_failures_to_sentry(
     run_results: RunResults,
     manifest: Manifest,
@@ -89,26 +68,42 @@ def report_failures_to_sentry(
             RunResultStatus.warn,
         )
     ]
+
+    if not failures:
+        typer.secho("WARNING: no failures found to report", fg=typer.colors.YELLOW)
+        return
+
     for failure in failures:
         node = manifest.nodes[failure.unique_id]
-        fingerprint = [str(failure.status), failure.unique_id]
-        # this is awkward and manual; maybe could do dynamically
+        fingerprint = [failure.status.value, failure.unique_id]
+
+        # this is awkward; we need to do string comparisons because the artifact schemas use a single-value enum _per artifact type_
+        key_tup = (node.resource_type.value, failure.status)
         exc_types = {
-            (SeedNode, RunResultStatus.error): DbtSeedError,
-            (ModelNode, RunResultStatus.error): DbtModelError,
-            (GenericTestNode, RunResultStatus.error): DbtTestError,
-            (GenericTestNode, RunResultStatus.fail): DbtTestFail,
-            (GenericTestNode, RunResultStatus.warn): DbtTestWarn,
+            ("seed", RunResultStatus.error): DbtSeedError,
+            ("model", RunResultStatus.error): DbtModelError,
+            ("test", RunResultStatus.error): DbtTestError,
+            ("test", RunResultStatus.fail): DbtTestFail,
+            ("test", RunResultStatus.warn): DbtTestWarn,
         }
-        exc_type = exc_types.get((type(node), failure.status), DbtException)
+        try:
+            exc_type = exc_types[key_tup]
+        except KeyError:
+            typer.secho(
+                f"WARNING: failed to look up exception type for {key_tup}",
+                fg=typer.colors.YELLOW,
+            )
+            exc_type = DbtException
+
         if verbose:
             typer.secho(
-                f"reporting failure of {node.resource_type} with fingerprint {fingerprint}",
+                f"reporting {exc_type} for {node.unique_id} with fingerprint {fingerprint}",
                 fg=typer.colors.YELLOW,
             )
         with sentry_sdk.push_scope() as scope:
             scope.fingerprint = fingerprint
-            scope.set_context("dbt", get_failure_context(failure, node))
+            scope.set_context("dbt_failure", failure.dict())
+            scope.set_context("dbt_node", node.dict())
             sentry_sdk.capture_exception(
                 error=exc_type(f"{failure.unique_id} - {failure.message}"),
             )
@@ -116,14 +111,25 @@ def report_failures_to_sentry(
 
 @app.command()
 def report_failures(
-    run_results_path: Path = Path("./target/run_results.json"),
-    manifest_path: Path = Path("./target/manifest.json"),
+    run_results_path: str = "./target/run_results.json",
+    manifest_path: str = "./target/manifest.json",
     verbose: bool = False,
 ):
-    with open(run_results_path) as f:
+    fs = gcsfs.GCSFileSystem(
+        project="cal-itp-data-infra",
+        token=os.getenv("BIGQUERY_KEYFILE_LOCATION"),
+    )
+
+    openf = fs.open if run_results_path.startswith("gs://") else open
+    typer.secho(f"Reading manifest from {manifest_path}", fg=typer.colors.MAGENTA)
+    with openf(run_results_path) as f:
         run_results = RunResults(**json.load(f))
-    with open(manifest_path) as f:
+
+    openf = fs.open if manifest_path.startswith("gs://") else open
+    typer.secho(f"Reading run results from {run_results_path}", fg=typer.colors.MAGENTA)
+    with openf(manifest_path) as f:
         manifest = Manifest(**json.load(f))
+
     report_failures_to_sentry(run_results, manifest, verbose=verbose)
 
 
