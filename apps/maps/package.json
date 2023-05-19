@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite dev",
-    "types": "poetry run pydantic2ts --module utils.py --output ./src/state.ts",
+    "types": "poetry run pydantic2ts --module calitp_map_utils.__init__ --output ./src/state.ts",
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",

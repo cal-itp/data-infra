@@ -5,6 +5,8 @@
 /* Do not modify it by hand - just update the pydantic models and then re-run the script
 */
 
+export type Analysis = "speedmap" | "hqta_areas" | "hqta_stops";
+
 /**
  * Feature Model
  */
@@ -91,4 +93,5 @@ export interface State {
    * @maxItems 2
    */
   bbox?: [[number, number] | [number, number, number], [number, number] | [number, number, number]];
+  analysis?: Analysis;
 }
