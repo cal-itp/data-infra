@@ -936,6 +936,24 @@ dotenv = ["python-dotenv (>=0.10.4)"]
 email = ["email-validator (>=1.0.3)"]
 
 [[package]]
+name = "pydantic-to-typescript"
+version = "1.0.10"
+description = "Convert pydantic models to typescript interfaces"
+category = "dev"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pydantic-to-typescript-1.0.10.tar.gz", hash = "sha256:c0d030f213b9b225381fc59a5ad7544a0e20bfb6856323f324fd3cf73e4fd447"},
+    {file = "pydantic_to_typescript-1.0.10-py3-none-any.whl", hash = "sha256:b2b3954fd4aa55f367aa0513ee3c21cd327221936c0cfbeb8d46b51542eceea7"},
+]
+
+[package.dependencies]
+pydantic = "*"
+
+[package.extras]
+dev = ["coverage", "pytest", "pytest-cov"]
+
+[[package]]
 name = "pyyaml"
 version = "6.0"
 description = "YAML parser and emitter for Python"
@@ -1217,4 +1235,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "8310249946173445b4df4b43238113083f6943fd66eff5323c41028a09664a14"
+content-hash = "32e454a7ed792654c144a707f7bb63ac4a3b65127d61f2b74d5cb806b2a64eed"

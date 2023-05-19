@@ -1,3 +1,5 @@
+test_states/
+
 .DS_Store
 node_modules
 /build

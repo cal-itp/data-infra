@@ -1,12 +1,11 @@
 <!-- from https://dev.to/khromov/using-leaflet-with-sveltekit-3jn1 -->
 <script>
     import {onMount, onDestroy} from 'svelte';
-    import { goto } from '$app/navigation'
     import { page } from '$app/stores';
     import L from 'leaflet';
     import colormap from 'colormap';
     import {leafletLayer, LineSymbolizer} from 'protomaps';
-    import {strFromU8, decompress, decompressSync, strToU8} from 'fflate';
+    import {strFromU8, decompress, decompressSync} from 'fflate';
     import {LeafletLayer} from 'deck.gl-leaflet';
     import {MapView} from '@deck.gl/core';
     import {GeoJsonLayer} from '@deck.gl/layers';
@@ -16,42 +15,24 @@
 
     const STATE_QUERY_PARAM = "state";
     const START_LAT_LON = [34.05, -118.25];
-    const LEAFLET_START_ZOOM = 12;
+    const LEAFLET_START_ZOOM = 13;
     let mapElement;
     let map;
     let jsonData;
+    /** @type {State} */
     let state;
     let options = [];
     let layer;
     let loading = false;
-    let zoomOnSelect = true;
 
     const NSHADES = 10;
     const MAX_MPH = 50;
-
-    const hexColorMap = colormap({
-        colormap: 'RdBu',
-        nshades: NSHADES,
-        format: 'hex',
-    }).reverse();
 
     const rgbaColorMap = colormap({
         colormap: 'RdBu',
         nshades: NSHADES,
         format: 'rgba',
     }).reverse();
-
-    let PAINT_RULES = [
-        {
-            dataLayer: "BusSpeeds",
-            symbolizer: new LineSymbolizer({
-                // https://gist.github.com/makella/950a7baee78157bf1c315a7c2ea191e7
-                color: (p) => {
-                    return "black"
-                }
-            })
-        }
-    ];
 
     function fetchGeoJSON(url, callback) {
         fetch(url).then((response) => {
@@ -163,7 +144,17 @@
         if (url.endsWith(".pmtiles")) {
             layer = leafletLayer({
                 url: url,
-                paint_rules: PAINT_RULES,
+                paint_rules: [
+                  {
+                      dataLayer: "BusSpeeds",
+                      symbolizer: new LineSymbolizer({
+                          // https://gist.github.com/makella/950a7baee78157bf1c315a7c2ea191e7
+                          color: (p) => {
+                              return "black"
+                          }
+                      })
+                  }
+              ],
             }).addTo(map);
             loading = false;
         } else {
@@ -191,8 +182,17 @@
                     getTooltip: ({ object }) => object && getTooltip(object),
                 });
                 map.addLayer(layer);
-                if (zoomOnSelect) {
+
+                if (state.bbox) {
+                  console.log("zooming to", state.bbox);
+                  map.flyToBounds(state.bbox, {maxZoom: 20});
+                } else if (state.lat_lon && state.zoom) {
+                  console.log("zooming to", state.lat_lon, state.zoom);
+                    map.flyTo(state.lat_lon, state.zoom);
+                } else {
                   const bbox = turf.bbox(json);
+                  // have to flip; turf gives us back lon/lat
+                  // leaflet always wants [lat, lng]
                   const latLngLike = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
                   console.log("zooming to", latLngLike);
                   map.flyToBounds(latLngLike, {maxZoom: 20});

@@ -18,6 +18,9 @@ geojson-pydantic = "^0.6.1"
 calitp-data = "2023.2.15.1"
 
 
+[tool.poetry.group.dev.dependencies]
+pydantic-to-typescript = "^1.0.10"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

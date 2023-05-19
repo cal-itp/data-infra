@@ -3,22 +3,27 @@ import gzip
 import json
 import sys
 from enum import Enum
-from typing import Optional, Union
+from typing import Optional, Tuple, Union
 
 import requests
 import typer
 import urllib3
 from calitp_data.storage import get_fs
 from geojson_pydantic import Feature, FeatureCollection, MultiPolygon, Point, Polygon
+from geojson_pydantic.types import Position
 from pydantic import BaseModel, HttpUrl, ValidationError, root_validator
 from tqdm import tqdm
 
 app = typer.Typer()
 
 
+# Any positions in this are flipped;
 class State(BaseModel):
     name: str
     url: HttpUrl
+    lat_lon: Optional[Position]
+    zoom: Optional[int]
+    bbox: Optional[Tuple[Position, Position]]
 
 
 class Speedmap(BaseModel):
