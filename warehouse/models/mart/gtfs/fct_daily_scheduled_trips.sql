@@ -76,7 +76,7 @@ gtfs_joins AS (
         stop_times_grouped.contains_warning_missing_foreign_key_stop_id,
         stop_times_grouped.trip_start_timezone,
         stop_times_grouped.trip_end_timezone,
-        stop_times_grouped.gtfs_flex_trip,
+        stop_times_grouped.is_gtfs_flex_trip,
         stop_times_grouped.num_gtfs_flex_stop_times,
         stop_times_grouped.first_start_pickup_drop_off_window_sec,
         stop_times_grouped.last_end_pickup_drop_off_window_sec,
@@ -177,7 +177,7 @@ fct_daily_scheduled_trips AS (
         gtfs_joins.trip_last_arrival_ts,
         gtfs_joins.first_start_pickup_drop_off_window_sec,
         gtfs_joins.last_end_pickup_drop_off_window_sec,
-        gtfs_joins.gtfs_flex_trip,
+        gtfs_joins.is_gtfs_flex_trip,
         gtfs_joins.num_gtfs_flex_stop_times,
         gtfs_joins.has_rider_service,
         gtfs_joins.num_approximate_timepoint_stop_times,
@@ -204,6 +204,8 @@ fct_daily_scheduled_trips AS (
         AND gtfs_joins.service_date = daily_feeds.date
     LEFT JOIN dim_gtfs_datasets
         ON daily_feeds.gtfs_dataset_key = dim_gtfs_datasets.key
+    -- drop trips that no one can actually ride
+    WHERE has_rider_service
 )
 
 SELECT * FROM fct_daily_scheduled_trips

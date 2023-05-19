@@ -81,7 +81,7 @@ int_gtfs_schedule__stop_times_grouped AS (
         -- determine flex usage by presence of these two fields for any row in stop times
         LOGICAL_AND(
             start_pickup_drop_off_window IS NOT NULL
-            AND end_pickup_drop_off_window IS NOT NULL) AS gtfs_flex_trip,
+            AND end_pickup_drop_off_window IS NOT NULL) AS is_gtfs_flex_trip,
         COUNTIF(start_pickup_drop_off_window IS NOT NULL
             AND end_pickup_drop_off_window IS NOT NULL) AS num_gtfs_flex_stop_times,
         MIN(start_pickup_drop_off_window_sec) AS first_start_pickup_drop_off_window_sec,

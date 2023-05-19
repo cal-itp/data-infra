@@ -571,8 +571,8 @@ models:
           - not_null:
               config:
                 where: "frequencies_defined_trip"
-      - name: gtfs_flex_trip
-        description: '{{ doc("column_gtfs_flex_trip") }}'
+      - name: is_gtfs_flex_trip
+        description: '{{ doc("column_is_gtfs_flex_trip") }}'
       - name: num_flexible_stop_times
         description: '{{ doc("column_num_gtfs_flex_stop_times") }}'
       - name: first_start_pickup_drop_off_window_sec

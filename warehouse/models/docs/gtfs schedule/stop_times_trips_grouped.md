@@ -62,7 +62,7 @@ Count of stop times on this trip where `departure_time` is populated.
 See https://gtfs.org/reference/static#stop_timestxt for the raw data definitions.
 {% enddocs %}
 
-{% docs column_gtfs_flex_trip %}
+{% docs column_is_gtfs_flex_trip %}
 Boolean indicator for whether this is a flexible trip defined using GTFS-Flex.
 GTFS-Flex flexible trips are indicated by using the fields `start_pickup_drop_off_window`and `end_pickup_drop_off_window` for their stop times.
 This means this is not a fixed-route trip.

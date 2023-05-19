@@ -236,7 +236,7 @@ models:
       - dbt_utils.expression_is_true:
           expression: "num_approximate_timepoint_stop_times + num_exact_timepoint_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
-          expression: "(num_gtfs_flex_stop_times > 0) = gtfs_flex_trip"
+          expression: "(num_gtfs_flex_stop_times > 0) = is_gtfs_flex_trip"
     columns:
       - *feed_key
       - name: trip_id
@@ -265,8 +265,8 @@ models:
         description: '{{ doc("column_trip_start_timezone") }}'
       - name: trip_end_timezone
         description: '{{ doc("column_trip_end_timezone") }}'
-      - name: gtfs_flex_trip
-        description: '{{ doc("column_gtfs_flex_trip") }}'
+      - name: is_gtfs_flex_trip
+        description: '{{ doc("column_is_gtfs_flex_trip") }}'
       - name: num_flexible_stop_times
         description: '{{ doc("column_num_gtfs_flex_stop_times") }}'
       - name: first_start_pickup_drop_off_window_sec
