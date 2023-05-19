@@ -28,18 +28,19 @@ def validate_state(
     base64url: bool = False,
     compressed: bool = False,
     data: bool = False,
+    verbose: bool = False,
     analysis: Optional[Analysis] = None,
 ):
     if infile:
-        typer.secho(f"Reading {infile}.", fg=typer.colors.MAGENTA)
+        typer.secho(f"Reading {infile}.")
         with open(infile) as f:
             contents = f.read()
     else:
-        typer.secho("Reading from stdin...", fg=typer.colors.MAGENTA)
+        typer.secho("Reading from stdin...")
         contents = sys.stdin.read()
 
     if base64url:
-        typer.secho("Decoding base64 contents...", fg=typer.colors.MAGENTA)
+        typer.secho("Decoding base64 contents...")
         byts = base64.urlsafe_b64decode(contents.encode())
 
         if compressed:
@@ -48,5 +49,5 @@ def validate_state(
         contents = byts.decode()
 
     state = State(**json.loads(contents))
-    state.validate_url(verbose=True, data=data, analysis=analysis)
+    state.validate_url(verbose=verbose, data=data, analysis=analysis)
     typer.secho("Validation successful!", fg=typer.colors.GREEN)

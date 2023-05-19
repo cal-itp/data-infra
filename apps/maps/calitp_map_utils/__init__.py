@@ -48,7 +48,7 @@ def validate_geojson(
     path: str, analysis: Optional[Analysis] = None, verbose=False
 ) -> FeatureCollection:
     if verbose:
-        typer.secho(f"Validating {path}...", fg=typer.colors.MAGENTA)
+        typer.secho(f"Validating {typer.style(path, fg=typer.colors.CYAN)} contents...")
 
     is_compressed = path.endswith(".gz")
 
@@ -71,7 +71,9 @@ def validate_geojson(
     if analysis:
         analysis_class = ANALYSIS_FEATURE_TYPES[analysis]
         if verbose:
-            typer.secho(f"Validating that features are {analysis_class}...")
+            typer.secho(
+                f"Validating that features are {typer.style(str(analysis_class), fg=typer.colors.YELLOW)}..."
+            )
         for feature in tqdm(collection.features):
             try:
                 analysis_class(**feature.dict())
@@ -99,7 +101,9 @@ class State(BaseModel):
         analysis: Optional[Analysis] = None,
     ):
         if verbose:
-            typer.secho(f"Checking that {self.url} exists...", fg=typer.colors.MAGENTA)
+            typer.secho(
+                f"Checking that {typer.style(self.url, fg=typer.colors.CYAN)} exists..."
+            )
         resp = urllib3.request("HEAD", self.url)  # type: ignore[operator]
 
         if resp.status != 200:
@@ -109,4 +113,4 @@ class State(BaseModel):
             raise FileNotFoundError(msg)
 
         if data:
-            validate_geojson(self.url, analysis or self.analysis)
+            validate_geojson(self.url, analysis or self.analysis, verbose=verbose)
