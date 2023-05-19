@@ -357,6 +357,8 @@ models:
       For this reason, this table contains multiple date and time labels associated with a given trip.
       Please consult each individual column's definition for guidance on which field is
       most appropriate for your use case.
+
+      This table only contains service through the date (UTC) on which the table was most recently run.
     # TODO: a test that one of trip_first_departure_sec and trip_start_pickup_drop_off_window_sec is populated
     # as of May 2023 this test would fail because we have Flex feeds that use incorrect column names so both fields are null
     columns:

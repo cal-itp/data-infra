@@ -202,7 +202,7 @@ fct_daily_scheduled_trips AS (
     LEFT JOIN dim_gtfs_datasets
         ON daily_feeds.gtfs_dataset_key = dim_gtfs_datasets.key
     -- drop trips that no one can actually ride
-    WHERE has_rider_service
+    WHERE has_rider_service AND service_date <= CURRENT_DATE()
 )
 
 SELECT * FROM fct_daily_scheduled_trips
