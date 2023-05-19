@@ -184,17 +184,18 @@
                 map.addLayer(layer);
 
                 if (state.bbox) {
-                  console.log("zooming to", state.bbox);
+                  console.log("flyToBounds", state.bbox);
                   map.flyToBounds(state.bbox, {maxZoom: 20});
-                } else if (state.lat_lon && state.zoom) {
-                  console.log("zooming to", state.lat_lon, state.zoom);
-                    map.flyTo(state.lat_lon, state.zoom);
+                } else if (state.lat_lon) {
+                  const zoom = state.zoom ? state.zoom : 13;
+                  console.log("flyTo", state.lat_lon, zoom);
+                    map.flyTo(state.lat_lon, zoom);
                 } else {
                   const bbox = turf.bbox(json);
                   // have to flip; turf gives us back lon/lat
                   // leaflet always wants [lat, lng]
                   const latLngLike = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
-                  console.log("zooming to", latLngLike);
+                  console.log("flyToBounds", latLngLike);
                   map.flyToBounds(latLngLike, {maxZoom: 20});
                 }
                 loading = false;
