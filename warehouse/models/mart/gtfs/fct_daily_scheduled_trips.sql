@@ -82,10 +82,6 @@ gtfs_joins AS (
         stop_times_grouped.has_rider_service,
         stop_times_grouped.first_start_pickup_drop_off_window_sec,
         stop_times_grouped.last_end_pickup_drop_off_window_sec,
-        stop_times_grouped.is_gtfs_flex_trip OR (
-            stop_times_grouped.num_phone_call_required_for_pickup_stop_times = stop_times_grouped.num_stop_times
-            AND stop_times_grouped.num_phone_call_required_for_drop_off_stop_times = stop_times_grouped.num_stop_times
-        ) AS is_entirely_demand_responsive_trip,
         stop_times_grouped.num_approximate_timepoint_stop_times,
         stop_times_grouped.num_exact_timepoint_stop_times,
         stop_times_grouped.num_arrival_times_populated_stop_times,

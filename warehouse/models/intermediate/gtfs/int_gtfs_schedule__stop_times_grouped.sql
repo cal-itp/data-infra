@@ -173,7 +173,9 @@ int_gtfs_schedule__stop_times_grouped AS (
         num_coordinate_continuous_drop_off_with_driver_stop_times,
 
         num_approximate_timepoint_stop_times,
-        num_exact_timepoint_stop_times
+        num_exact_timepoint_stop_times,
+        num_arrival_times_populated_stop_times,
+        num_departure_times_populated_stop_times
     FROM grouped
 )
 
