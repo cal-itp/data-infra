@@ -724,27 +724,6 @@ siuba = ">=0.4.2,<0.5.0"
 sqlalchemy-bigquery = ">=1.6.1,<2.0.0"
 
 [[package]]
-name = "calitp-map-utils"
-version = "2023.5.19.5"
-description = ""
-category = "main"
-optional = false
-python-versions = ">=3.9,<3.10"
-files = [
-    {file = "calitp_map_utils-2023.5.19.5-py3-none-any.whl", hash = "sha256:9b386c1998d15b7f6f052df509a95d1a65e7edb36b2a8c1bad307731058365ac"},
-    {file = "calitp_map_utils-2023.5.19.5.tar.gz", hash = "sha256:47f2958803a80b9cb355aef65308e76331ae733e156cf262d8c7fee090beca04"},
-]
-
-[package.dependencies]
-calitp-data = "2023.2.13.1"
-geojson-pydantic = ">=0.6.1,<0.7.0"
-pydantic = ">=1.10.7,<2.0.0"
-pyyaml = ">=6.0,<7.0"
-requests = ">=2.24.0,<3.0.0"
-tqdm = ">=4.64.0,<5.0.0"
-typer = ">=0.9.0,<0.10.0"
-
-[[package]]
 name = "certifi"
 version = "2022.12.7"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -1839,25 +1818,6 @@ requests = "*"
 [package.extras]
 crc = ["crcmod"]
 gcsfuse = ["fusepy"]
-
-[[package]]
-name = "geojson-pydantic"
-version = "0.6.2"
-description = "Pydantic data models for the GeoJSON spec."
-category = "main"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "geojson_pydantic-0.6.2-py3-none-any.whl", hash = "sha256:23a6bfc0a998f9263bc5b3dcfdefef211bf795641905aa423599079bc49db5f3"},
-    {file = "geojson_pydantic-0.6.2.tar.gz", hash = "sha256:8ce2eba12d7144afce7d20b2ebeec9434c54a52d102bf8c400f01de50cf6ff45"},
-]
-
-[package.dependencies]
-pydantic = "*"
-
-[package.extras]
-dev = ["pre-commit"]
-test = ["pytest", "pytest-cov", "shapely"]
 
 [[package]]
 name = "geopandas"
@@ -7107,7 +7067,7 @@ test = ["mypy", "pytest", "typing-extensions"]
 name = "typer"
 version = "0.9.0"
 description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -7745,4 +7705,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "5503e85ecdad9126b912b1a5e29856e8bbb9b30a0cfd7f589a8ad27d6d0e6643"
+content-hash = "71e05aaa2bb51b71082f1c78401132d7359310dac6d80bdd6f68bfc7e9f0cc07"

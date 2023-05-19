@@ -1,5 +1,6 @@
 import pytest
 from calitp_map_utils import State
+from requests.exceptions import HTTPError
 
 TEST_STATES = [
     {
@@ -29,7 +30,7 @@ def test_validate_good_states():
 
 
 def test_validate_invalid_state_url():
-    with pytest.raises(FileNotFoundError):
+    with pytest.raises(HTTPError):
         State(
             name="something",
             url="https://storage.googleapis.com/calitp-map-tiles/THIS_DOES_NOT_EXIST",

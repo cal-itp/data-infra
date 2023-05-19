@@ -5,7 +5,6 @@ from typing import Optional, Tuple, Union
 
 import requests
 import typer
-import urllib3
 from calitp_data.storage import get_fs  # type: ignore
 from geojson_pydantic import Feature, FeatureCollection, MultiPolygon, Point, Polygon
 from geojson_pydantic.types import Position
@@ -104,13 +103,13 @@ class State(BaseModel):
             typer.secho(
                 f"Checking that {typer.style(self.url, fg=typer.colors.CYAN)} exists..."
             )
-        resp = urllib3.request("HEAD", self.url)  # type: ignore[operator]
+        resp = requests.head(self.url)
 
-        if resp.status != 200:
-            msg = f"Failed to find file at {self.url}"
-            if verbose:
-                typer.secho(msg, fg=typer.colors.RED)
-            raise FileNotFoundError(msg)
+        try:
+            resp.raise_for_status()
+        except requests.exceptions.HTTPError:
+            typer.secho(f"Failed to find file at {self.url}", fg=typer.colors.RED)
+            raise
 
         if data:
             validate_geojson(self.url, analysis or self.analysis, verbose=verbose)
