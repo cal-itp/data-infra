@@ -1,4 +1,4 @@
-Original definitions from https://gtfs.org/reference/static#stop_timestxt
+Original definitions from https://gtfs.org/reference/static#stop_timestxt and/or https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md
 
 {% docs gtfs_stop_times__trip_id %}
 Identifies a trip.
