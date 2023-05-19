@@ -50,11 +50,6 @@ models:
                 # this will work without exception once the Airtable dim is historical;
                 # this threshold may need to increase if the backfill occurs prior to that
                 error_if: ">20"
-      - name: is_future
-        description: |
-          Boolean indicating whether this date is in the future relative to the last time that the table
-          was run. If this is a future date (if is_future is true), any coverage is prospective and
-          subject to change.
       - &feed_timezone_no_tests
         name: feed_timezone
         description: '{{ doc("gtfs_schedule_feed_timezone") }}'
@@ -775,7 +770,7 @@ models:
         description: Time of first departure on date; null when no trips scheduled
       - name: last_arrival_sec
         description: Time of last departure on date; null when no trips scheduled
-      - name: n_stop_times
+      - name: num_stop_times
         description: |
           Total number of stop events observed; can be 0 if not scheduled trips
       - name: n_routes
@@ -784,7 +779,7 @@ models:
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          stop times data (`n_stops`, `num_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
           and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
 
           I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
@@ -798,7 +793,7 @@ models:
       - name: contains_warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          stop times data (`n_stops`, `num_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
           and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
 
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing

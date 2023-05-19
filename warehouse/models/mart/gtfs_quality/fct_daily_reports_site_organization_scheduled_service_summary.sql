@@ -32,7 +32,7 @@ fct_daily_reports_site_organization_scheduled_service_summary AS (
         SUM(n_trips) AS n_trips,
         MIN(first_departure_sec) AS first_departure_sec,
         MAX(last_arrival_sec) AS last_arrival_sec,
-        SUM(n_stop_times) AS n_stop_times,
+        SUM(num_stop_times) AS num_stop_times,
         SUM(n_routes) AS n_routes,
         COUNT(feed_key) AS feed_key_ct,
         LOGICAL_OR(

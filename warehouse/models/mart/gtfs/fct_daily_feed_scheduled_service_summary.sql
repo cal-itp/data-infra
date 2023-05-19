@@ -25,7 +25,7 @@ summarize_service AS (
         COUNT(DISTINCT trip_id) AS n_trips,
         MIN(trip_first_departure_sec) AS first_departure_sec,
         MAX(trip_last_arrival_sec) AS last_arrival_sec,
-        SUM(n_stop_times) AS n_stop_times,
+        SUM(num_stop_times) AS num_stop_times,
         COUNT(DISTINCT route_id) AS n_routes,
         LOGICAL_OR(
             contains_warning_duplicate_stop_times_primary_key
@@ -53,7 +53,7 @@ fct_daily_feed_scheduled_service_summary AS (
         COALESCE(service.n_trips, 0) AS n_trips,
         service.first_departure_sec,
         service.last_arrival_sec,
-        COALESCE(service.n_stop_times, 0) AS n_stop_times,
+        COALESCE(service.num_stop_times, 0) AS num_stop_times,
         COALESCE(service.n_routes, 0) AS n_routes,
         service.contains_warning_duplicate_stop_times_primary_key,
         service.contains_warning_duplicate_trip_primary_key,
