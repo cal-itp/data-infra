@@ -49,7 +49,7 @@ stops_times_with_tz AS (
         USING (feed_key, trip_id, stop_id)
 ),
 
-int_gtfs_schedule__stop_times_grouped AS (
+grouped AS (
     SELECT
         trip_id,
         feed_key,
@@ -120,6 +120,61 @@ int_gtfs_schedule__stop_times_grouped AS (
 
     FROM stops_times_with_tz
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
+),
+
+int_gtfs_schedule__stop_times_grouped AS (
+    SELECT
+        trip_id,
+        feed_key,
+        base64_url,
+        feed_timezone,
+        trip_start_timezone,
+        trip_end_timezone,
+        iteration_num,
+        exact_times,
+        num_distinct_stops_served,
+        num_stop_times,
+        trip_first_departure_sec,
+        trip_last_arrival_sec,
+        service_hours,
+        flex_service_hours,
+        contains_warning_duplicate_primary_key,
+        contains_warning_missing_foreign_key_stop_id,
+        frequencies_defined_trip,
+        is_gtfs_flex_trip,
+        NOT(num_no_pickup_stop_times = num_stop_times
+                AND num_no_drop_off_stop_times = num_stop_times
+                AND num_no_continuous_pickup_stop_times = num_stop_times
+                AND num_no_continuous_drop_off_stop_times = num_stop_times)
+            AS has_rider_service,
+        is_gtfs_flex_trip OR (
+            num_phone_call_required_for_pickup_stop_times = num_stop_times
+            AND num_phone_call_required_for_drop_off_stop_times = num_stop_times
+            ) AS is_entirely_demand_responsive_trip,
+        num_gtfs_flex_stop_times,
+        first_start_pickup_drop_off_window_sec,
+        last_end_pickup_drop_off_window_sec,
+        num_regularly_scheduled_pickup_stop_times,
+        num_no_pickup_stop_times,
+        num_phone_call_required_for_pickup_stop_times,
+        num_coordinate_pickup_with_driver_stop_times,
+        num_regularly_scheduled_drop_off_stop_times,
+        num_no_drop_off_stop_times,
+        num_phone_call_required_for_drop_off_stop_times,
+        num_coordinate_drop_off_with_driver_stop_times,
+
+        num_continuous_pickup_stop_times,
+        num_no_continuous_pickup_stop_times,
+        num_phone_call_required_for_continuous_pickup_stop_times,
+        num_coordinate_continuous_pickup_with_driver_stop_times,
+        num_continuous_drop_off_stop_times,
+        num_no_continuous_drop_off_stop_times,
+        num_phone_call_required_for_continuous_drop_off_stop_times,
+        num_coordinate_continuous_drop_off_with_driver_stop_times,
+
+        num_approximate_timepoint_stop_times,
+        num_exact_timepoint_stop_times
+    FROM grouped
 )
 
 SELECT * FROM int_gtfs_schedule__stop_times_grouped

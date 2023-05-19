@@ -101,7 +101,20 @@ Note that for flexible or demand responsive trips this column will not necessari
 Count of rows in `stop_times.txt` for this trip where the fields `start_pickup_drop_off_window`and `end_pickup_drop_off_window` are populated, indicating use of the GTFS-Flex v2 specification.
 {% enddocs %}
 
+{% docs column_is_entirely_demand_responsive_trip %}
+This field is experimental and may be subject to change as we improve our methods to identify
+demand-responsive trips.
 
+This column is `true` when a trip `is_gtfs_flex_trip` or if all stop times on the trip have pickup type and drop off type `2`, indicating that a phone call to the agency is required to arrange pickup/drop off at all stops.
+
+There will be trips with some demand-responsive behavior (including deviated fixed-route) that are not captured here. This field only captures trips that indicate that they have no guaranteed fixed-route behavior and are exclusively demand-responsive.
+
+Consider filtering these trips out of analyses that are only concerned with fixed-route activity.
+{% enddocs %}
+
+{% docs column_has_rider_service %}
+A `false` in this column indicates that all stops on this trip have `pickup_type = drop_off_type = continuous_pickup_type = continuous_drop_off_type = 1`, i.e., there is no pickup or drop off behavior anywhere on this trip. These trips are presumed deadheads / non revenue service.
+{% enddocs %}
 
 --- ENUMS ---
 Original field definitions provided in https://gtfs.org/reference/static#stop_timestxt
