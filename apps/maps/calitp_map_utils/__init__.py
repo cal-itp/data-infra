@@ -8,13 +8,11 @@ from typing import Optional, Tuple, Union
 import requests
 import typer
 import urllib3
-from calitp_data.storage import get_fs
+from calitp_data.storage import get_fs  # type: ignore
 from geojson_pydantic import Feature, FeatureCollection, MultiPolygon, Point, Polygon
 from geojson_pydantic.types import Position
 from pydantic import BaseModel, HttpUrl, ValidationError, root_validator
 from tqdm import tqdm
-
-app = typer.Typer()
 
 
 # Any positions in this are flipped;
@@ -57,7 +55,7 @@ ANALYSIS_FEATURE_TYPES = {
 }
 
 
-def _validate_geojson(path: str, analysis: Optional[Analysis] = None):
+def validate_geojson(path: str, analysis: Optional[Analysis] = None):
     typer.secho(f"Validating {path}...", fg=typer.colors.MAGENTA)
 
     is_compressed = path.endswith(".gz")
@@ -94,12 +92,6 @@ def _validate_geojson(path: str, analysis: Optional[Analysis] = None):
     )
 
 
-@app.command()
-def validate_geojson(path: str, analysis: Optional[Analysis] = None):
-    _validate_geojson(path, analysis)
-
-
-@app.command()
 def validate_state(
     infile: Optional[str] = None,
     base64url: bool = False,
@@ -116,26 +108,22 @@ def validate_state(
 
     if base64url:
         typer.secho("Decoding base64 contents...", fg=typer.colors.MAGENTA)
-        contents = base64.urlsafe_b64decode(contents.encode())
+        byts = base64.urlsafe_b64decode(contents.encode())
 
         if compressed:
-            contents = gzip.decompress(contents)
+            byts = gzip.decompress(byts)
 
-        contents = contents.decode()
+        contents = byts.decode()
 
     state = State(**json.loads(contents))
     typer.secho(f"Checking that {state.url} exists...", fg=typer.colors.MAGENTA)
-    resp = urllib3.request("HEAD", state.url)
+    resp = urllib3.request("HEAD", state.url)  # type: ignore[operator]
 
     if resp.status != 200:
         typer.secho(f"Failed to find file at {state.url}.", fg=typer.colors.RED)
         raise typer.Exit(1)
 
     if analysis:
-        _validate_geojson(state.url, analysis)
+        validate_geojson(state.url, analysis)
 
     typer.secho("Validation successful!", fg=typer.colors.GREEN)
-
-
-if __name__ == "__main__":
-    app()

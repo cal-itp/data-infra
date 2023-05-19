@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "maps"
+name = "calitp_map_utils"
 version = "0.1.0"
 description = ""
 authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
@@ -20,6 +20,9 @@ calitp-data = "2023.2.15.1"
 
 [tool.poetry.group.dev.dependencies]
 pydantic-to-typescript = "^1.0.10"
+mypy = "^1.3.0"
+types-tqdm = "^4.65.0.1"
+types-requests = "^2.30.0.0"
 
 [build-system]
 requires = ["poetry-core"]
