@@ -283,10 +283,10 @@ def ci_report(
             latest_dir,
         ]
     ).result
-    assert isinstance(modified_models, list)
+    include = set(changed_or_downstream_incremental_models + modified_models)
     viz(
         "man",
-        include=modified_models,
+        include=list(include),  # this is List typed
         output=Path("./target/dag.png"),
     )
 
