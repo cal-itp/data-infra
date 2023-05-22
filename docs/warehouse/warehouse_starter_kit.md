@@ -9,16 +9,15 @@
 * [Other](#other)
 
 ## Important Links
-* [DBT Docs Cal-ITP](https://dbt-docs.calitp.org/#!/overview) - information on all the tables in the warehouse.
+* [DBT Docs Cal-ITP](https://dbt-docs.calitp.org/#!/overview) contains information on all the tables in the warehouse.
 * [Example notebook](https://github.com/cal-itp/data-analyses/blob/main/starter_kit/gtfs_utils_v2_examples.ipynb)
- using functions in `shared_utils.gtfs_utils_v2` that query some of the tables below.
+ uses functions in `shared_utils.gtfs_utils_v2` that query some of the tables below.
 
 ## Trips
 On a given day:
 * [fct_daily_scheduled_trips](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_scheduled_trips)
     * Use `gtfs_utils_v2.get_trips()`.
-    * Answer how many trips is an operator scheduled to run? How many trips did a particular route make?
-
+    * Answer how many trips a provider is scheduled to run and how many trips a particular route may make?
 * [fct_observed_trips](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_observed_trips)
     * Realtime observations of trips to get a full picture of what occurred.
     * Find a trip's start time, where it went, and which route it is associated with.
@@ -26,7 +25,7 @@ On a given day:
 ## Shapes
 * [fct_daily_scheduled_shapes](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_scheduled_shapes)
     * Use `gtfs_utils_v2.get_shapes()`.
-    * Contains `point` geometry, so you can see the length and location of a route an operator can run on a given date.
+    * Contains `point` geometry, so you can see the length and location of a route a provider can run on a given date.
     * Each shape has its own `shape_id` and `shape_array_key`.
     * An express version and the regular version of a route are considered two different shapes.
 
@@ -35,7 +34,7 @@ For a given day:
 * [fct_daily_scheduled_stops](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_scheduled_stops)
     * Use `gtfs_utils_v2.get_stops()`.
     * Contains `point` geometry.
-    * How many stops did an operator make? Where did they stop?
+    * How many stops did a provider make? Where did they stop?
     * How many stops did a particular transit type (streetcar, rail, ferry...)?
     * Detailed information such as how passengers embark/disembark (ex: on a stop/at a station) onto a vehicle.
 
@@ -47,7 +46,7 @@ For a given day:
     * View some of the data produced by the [US Department of Transportation](https://www.transit.dot.gov/ntd) for the National Transit Database.
     * Information from 2018-2021 are available.
     * Includes information such as reporter type, organization type, website, and address.
-    * Not every operator is required to report their data to the NTD, so this is not a comprehensive dataset.
+    * Not every provider is required to report their data to the NTD, so this is not a comprehensive dataset.
 
 * [fct_daily_organization_combined_guideline_checks](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_organization_combined_guideline_checks)
     * Understand GTFS quality - how well a transit provider's GTFS data conforms to [California's Transit Data Guidelines](https://dot.ca.gov/cal-itp/california-transit-data-guidelines).
