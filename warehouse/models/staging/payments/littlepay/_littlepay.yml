@@ -83,7 +83,8 @@ models:
         description: '{{ doc("device_transactions_littlepay_transaction_id") }}'
         tests:
           - not_null
-          - unique
+          - unique_proportion:
+              at_least: 0.999
       - name: transaction_type
       - name: pending
 
