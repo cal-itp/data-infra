@@ -1,4 +1,6 @@
 {{ config(materialized='table') }}
+-- NOTE: we cannot make this table incremental without adding a mechanism to pick up all future service
+-- current logic excludes service more than a year out and if we make this incremental we'd need to account for that
 
 -- TODO: make an intermediate calendar and use that instead of the dimension
 WITH dim_calendar AS (
