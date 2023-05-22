@@ -58,21 +58,34 @@ gtfs_joins AS (
         routes.route_desc,
         routes.agency_id AS agency_id,
         routes.network_id AS network_id,
+        routes.continuous_pickup AS route_continuous_pickup,
+        routes.continuous_drop_off AS route_continuous_drop_off,
 
         shapes.key AS shape_array_key,
 
         trips.shape_id,
         trips.warning_duplicate_primary_key AS contains_warning_duplicate_trip_primary_key,
 
-        stop_times_grouped.n_stops,
-        stop_times_grouped.n_stop_times,
+        stop_times_grouped.num_distinct_stops_served,
+        stop_times_grouped.num_stop_times,
         stop_times_grouped.trip_first_departure_sec,
         stop_times_grouped.trip_last_arrival_sec,
         stop_times_grouped.service_hours,
+        stop_times_grouped.flex_service_hours,
         stop_times_grouped.contains_warning_duplicate_primary_key AS contains_warning_duplicate_stop_times_primary_key,
         stop_times_grouped.contains_warning_missing_foreign_key_stop_id,
         stop_times_grouped.trip_start_timezone,
         stop_times_grouped.trip_end_timezone,
+        stop_times_grouped.is_gtfs_flex_trip,
+        stop_times_grouped.num_gtfs_flex_stop_times,
+        stop_times_grouped.is_entirely_demand_responsive_trip,
+        stop_times_grouped.has_rider_service,
+        stop_times_grouped.first_start_pickup_drop_off_window_sec,
+        stop_times_grouped.last_end_pickup_drop_off_window_sec,
+        stop_times_grouped.num_approximate_timepoint_stop_times,
+        stop_times_grouped.num_exact_timepoint_stop_times,
+        stop_times_grouped.num_arrival_times_populated_stop_times,
+        stop_times_grouped.num_departure_times_populated_stop_times,
         -- spec is explicit: all stop times are relative to midnight in the feed time zone (from agency.txt)
         -- see: https://gtfs.org/schedule/reference/#stopstxt
         -- so to make a timestamp, we use the feed timezone from agency.txt
@@ -85,6 +98,16 @@ gtfs_joins AS (
             {{ gtfs_noon_minus_twelve_hours('service_date', 'service_index.feed_timezone') }},
             INTERVAL stop_times_grouped.trip_last_arrival_sec SECOND
             ) AS trip_last_arrival_ts,
+
+        TIMESTAMP_ADD(
+            {{ gtfs_noon_minus_twelve_hours('service_date', 'service_index.feed_timezone') }},
+            INTERVAL stop_times_grouped.first_start_pickup_drop_off_window_sec SECOND
+            ) AS trip_first_start_pickup_drop_off_window_ts,
+
+        TIMESTAMP_ADD(
+            {{ gtfs_noon_minus_twelve_hours('service_date', 'service_index.feed_timezone') }},
+            INTERVAL stop_times_grouped.last_end_pickup_drop_off_window_sec SECOND
+            ) AS trip_last_end_pickup_drop_off_window_ts,
 
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
     INNER JOIN dim_trips AS trips
@@ -129,35 +152,57 @@ fct_daily_scheduled_trips AS (
         gtfs_joins.route_type,
         gtfs_joins.route_short_name,
         gtfs_joins.route_long_name,
+        gtfs_joins.route_continuous_pickup,
+        gtfs_joins.route_continuous_drop_off,
         gtfs_joins.route_desc,
         gtfs_joins.agency_id,
         gtfs_joins.network_id,
         gtfs_joins.shape_array_key,
         gtfs_joins.shape_id,
         gtfs_joins.contains_warning_duplicate_trip_primary_key,
-        gtfs_joins.n_stops,
-        gtfs_joins.n_stop_times,
+        gtfs_joins.num_distinct_stops_served,
+        gtfs_joins.num_stop_times,
         gtfs_joins.trip_first_departure_sec,
         gtfs_joins.trip_last_arrival_sec,
         gtfs_joins.trip_start_timezone,
         gtfs_joins.trip_end_timezone,
         gtfs_joins.service_hours,
+        gtfs_joins.flex_service_hours,
         gtfs_joins.contains_warning_duplicate_stop_times_primary_key,
         gtfs_joins.contains_warning_missing_foreign_key_stop_id,
         gtfs_joins.trip_first_departure_ts,
         gtfs_joins.trip_last_arrival_ts,
+        gtfs_joins.first_start_pickup_drop_off_window_sec,
+        gtfs_joins.last_end_pickup_drop_off_window_sec,
+        gtfs_joins.is_gtfs_flex_trip,
+        gtfs_joins.is_entirely_demand_responsive_trip,
+        gtfs_joins.num_gtfs_flex_stop_times,
+        gtfs_joins.num_approximate_timepoint_stop_times,
+        gtfs_joins.num_exact_timepoint_stop_times,
+        gtfs_joins.num_arrival_times_populated_stop_times,
+        gtfs_joins.num_departure_times_populated_stop_times,
+        gtfs_joins.trip_first_start_pickup_drop_off_window_ts,
+        gtfs_joins.trip_last_end_pickup_drop_off_window_ts,
         DATE(trip_first_departure_ts, "America/Los_Angeles") AS trip_start_date_pacific,
         DATETIME(trip_first_departure_ts, "America/Los_Angeles") AS trip_first_departure_datetime_pacific,
         DATETIME(trip_last_arrival_ts, "America/Los_Angeles") AS trip_last_arrival_datetime_pacific,
         DATE(trip_first_departure_ts, trip_start_timezone) AS trip_start_date_local_tz,
         DATETIME(trip_first_departure_ts, trip_start_timezone) AS trip_first_departure_datetime_local_tz,
         DATETIME(trip_last_arrival_ts, trip_end_timezone) AS trip_last_arrival_datetime_local_tz,
+        DATE(trip_first_start_pickup_drop_off_window_ts, "America/Los_Angeles") AS trip_first_start_pickup_drop_off_window_date_pacific,
+        DATETIME(trip_first_start_pickup_drop_off_window_ts, "America/Los_Angeles") AS trip_first_start_pickup_drop_off_window_datetime_pacific,
+        DATETIME(trip_last_end_pickup_drop_off_window_ts, "America/Los_Angeles") AS trip_last_end_pickup_drop_off_window_pacific,
+        DATE(trip_first_start_pickup_drop_off_window_ts, trip_start_timezone) AS trip_first_start_pickup_drop_off_window_date_local_tz,
+        DATETIME(trip_first_start_pickup_drop_off_window_ts, trip_start_timezone) AS trip_first_start_pickup_drop_off_window_datetime_local_tz,
+        DATETIME(trip_last_end_pickup_drop_off_window_ts, trip_end_timezone) AS trip_last_end_pickup_drop_off_window_datetime_local_tz,
     FROM gtfs_joins
     LEFT JOIN fct_daily_schedule_feeds AS daily_feeds
         ON gtfs_joins.feed_key = daily_feeds.feed_key
         AND gtfs_joins.service_date = daily_feeds.date
     LEFT JOIN dim_gtfs_datasets
         ON daily_feeds.gtfs_dataset_key = dim_gtfs_datasets.key
+    -- drop trips that no one can actually ride
+    WHERE has_rider_service
 )
 
 SELECT * FROM fct_daily_scheduled_trips

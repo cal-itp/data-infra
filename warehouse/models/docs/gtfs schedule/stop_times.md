@@ -1,27 +1,55 @@
-Original definitions from https://gtfs.org/reference/static#stop_timestxt
+Original definitions from https://gtfs.org/reference/static#stop_timestxt and/or https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md
 
 {% docs gtfs_stop_times__trip_id %}
 Identifies a trip.
 {% enddocs %}
 
+Note 5/17/23: Arrival and departure time docs are a mashup of the current content on gtfs.org and the Flex docs from https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md
 {% docs gtfs_stop_times__arrival_time %}
-HH:MM:SS format. Arrival time at a specific stop for a specific trip on a route. If there are not separate times for arrival and departure at a stop, enter the same value for arrival_time and departure_time. For times occurring after midnight on the service day, enter the time as a value greater than 24:00:00 in HH:MM:SS local time for the day on which the trip schedule begins.
+Arrival time at the stop (defined by stop_times.stop_id) for a specific trip (defined by stop_times.trip_id).
 
-Scheduled stops where the vehicle strictly adheres to the specified arrival and departure times are timepoints. If this stop is not a timepoint, it is recommended to provide an estimated or interpolated time. If this is not available, arrival_time can be left empty. Further, indicate that interpolated times are provided with timepoint=0. If interpolated times are indicated with timepoint=0, then time points must be indicated with timepoint=1. Provide arrival times for all stops that are time points. An arrival time must be specified for the first and the last stop in a trip.
+If there are not separate times for arrival and departure at a stop, arrival_time and departure_time should be the same.
+
+For times occurring after midnight on the service day, enter the time as a value greater than 24:00:00 in HH:MM:SS local time for the day on which the trip schedule begins.
+
+If exact arrival and departure times (timepoint=1 or empty) are not available, estimated or interpolated arrival and departure times (timepoint=0) should be provided.
+
+Conditionally Required:
+- Required for the first and the last stop in a trip.
+- Required for timepoint=1.
+- Forbidden when stop_times.start_pickup_drop_off_window or stop_times.end_pickup_drop_off_window are defined.
+- Optional otherwise.
 {% enddocs %}
 
 {% docs gtfs_stop_times__departure_time %}
-HH:MM:SS format. Departure time from a specific stop for a specific trip on a route. For times occurring after midnight on the service day, enter the time as a value greater than 24:00:00 in HH:MM:SS local time for the day on which the trip schedule begins. If there are not separate times for arrival and departure at a stop, enter the same value for arrival_time and departure_time. See the arrival_time description for more details about using timepoints correctly.
+Departure time from the stop (defined by stop_times.stop_id) for a specific trip (defined by stop_times.trip_id).
 
- The departure_time field should specify time values whenever possible, including non-binding estimated or interpolated times between timepoints.
+If there are not separate times for arrival and departure at a stop, arrival_time and departure_time should be the same.
+
+For times occurring after midnight on the service day, enter the time as a value greater than 24:00:00 in HH:MM:SS local time for the day on which the trip schedule begins.
+
+If exact arrival and departure times (timepoint=1 or empty) are not available, estimated or interpolated arrival and departure times (timepoint=0) should be provided.
+
+Conditionally required:
+- Required for timepoint=1.
+- Forbidden when stop_times.start_pickup_drop_off_window or stop_times.end_pickup_drop_off_window are defined.
+- Optional otherwise.
 {% enddocs %}
 
 {% docs gtfs_stop_times__stop_id %}
 Identifies the serviced stop. All stops serviced during a trip must have a record in stop_times.txt. Referenced locations must be stops, not stations or station entrances. A stop may be serviced multiple times in the same trip, and multiple trips and routes may service the same stop.
+
+If service is on demand, a GeoJSON location or stop area can be referenced:
+- id from locations.geojson
+- stop_areas.area_id
 {% enddocs %}
 
 {% docs gtfs_stop_times__stop_sequence %}
-Order of stops for a particular trip. The values must increase along the trip but do not need to be consecutive.Example: The first location on the trip could have a stop_sequence=1, the second location on the trip could have a stop_sequence=23, the third location could have a stop_sequence=40, and so on.
+Order of stops for a particular trip. The values must increase along the trip but do not need to be consecutive.
+
+Example: The first location on the trip could have a stop_sequence=1, the second location on the trip could have a stop_sequence=23, the third location could have a stop_sequence=40, and so on.
+
+Travel within the same stop area or GeoJSON location requires two records in stop_times.txt with the same stop_id and consecutive values of stop_sequence.
 {% enddocs %}
 
 {% docs gtfs_stop_times__stop_headsign %}
@@ -37,6 +65,11 @@ Indicates pickup method. Valid options are:
 1 - No pickup available.
 2 - Must phone agency to arrange pickup.
 3 - Must coordinate with driver to arrange pickup.
+
+Conditionally Forbidden:
+- pickup_type=0 forbidden for stop_times.stop_id referring to stop_areas.area_id or id from locations.geojson.
+- pickup_type=3 forbidden for stop_areas.area_id or locations.geojson.
+- Optional otherwise.
 {% enddocs %}
 
 {% docs gtfs_stop_times__drop_off_type %}
@@ -46,6 +79,10 @@ Indicates drop off method. Valid options are:
 1 - No drop off available.
 2 - Must phone agency to arrange drop off.
 3 - Must coordinate with driver to arrange drop off.
+
+Conditionally Forbidden:
+- drop_off_type=0 forbidden for stop_times.stop_id referring to stop_areas.area_id or id from locations.geojson.
+- Optional otherwise.
 {% enddocs %}
 
 {% docs gtfs_stop_times__continuous_pickup %}
@@ -79,4 +116,88 @@ Indicates if arrival and departure times for a stop are strictly adhered to by t
 
 0 - Times are considered approximate.
 1 or empty - Times are considered exact.
+{% enddocs %}
+
+{% docs gtfs_stop_times__start_pickup_drop_off_window %}
+Time that on-demand service becomes available in a GeoJSON location, stop area or stop.
+
+Conditionally Required:
+- Required if stop_times.stop_id refers to stop_areas.area_id or id from locations.geojson.
+- Forbidden if stop_times.arrival_time or stop_times.departure_time are defined.
+{% enddocs %}
+
+{% docs gtfs_stop_times__end_pickup_drop_off_window %}
+Time that on-demand service ends in a GeoJSON location, stop area or stop.
+
+Conditionally Required:
+- Required if stop_times.stop_id refers to stop_areas.area_id or id from locations.geojson.
+- Forbidden if stop_times.arrival_time or stop_times.departure_time are defined.
+{% enddocs %}
+
+{% docs gtfs_stop_times__mean_duration_factor %}
+Together, mean_duration_factor and mean_duration_offset allow an estimation of the duration a rider’s trip will take, in minutes, using the on-demand service in a GeoJSON location or stop area.
+
+Data consumers are expected to use mean_duration_factor and mean_duration_offset to make the following calculation: MeanTravelDuration = mean_duration_factor × DrivingDuration + mean_duration_offset where DrivingDuration is the time it would take in a car to travel the distance being calculated for the on-demand service, and MeanTravelDuration is the calculated average time one expects to travel the same trip using the on-demand service.
+
+See https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md for full details.
+
+While traveling through undefined space between GeoJSON locations or stop areas, it is assumed that: MeanTravelDuration = DrivingDuration
+
+Conditionally Forbidden:
+- Forbidden if stop_times.stop_id does not refer to a stop_areas.area_id or an id from locations.geojson.
+- Optional otherwise.
+{% enddocs %}
+
+{% docs gtfs_stop_times__mean_duration_offset %}
+Together, mean_duration_factor and mean_duration_offset allow an estimation of the duration a rider’s trip will take, in minutes, using the on-demand service in a GeoJSON location or stop area.
+
+Data consumers are expected to use mean_duration_factor and mean_duration_offset to make the following calculation: MeanTravelDuration = mean_duration_factor × DrivingDuration + mean_duration_offset where DrivingDuration is the time it would take in a car to travel the distance being calculated for the on-demand service, and MeanTravelDuration is the calculated average time one expects to travel the same trip using the on-demand service.
+
+See https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md for full details.
+
+While traveling through undefined space between GeoJSON locations or stop areas, it is assumed that: MeanTravelDuration = DrivingDuration
+
+Conditionally Forbidden:
+- Forbidden if stop_times.stop_id does not refer to a stop_areas.area_id or an id from locations.geojson.
+- Optional otherwise.
+{% enddocs %}
+
+{% docs gtfs_stop_times__safe_duration_factor %}
+Together, safe_duration_factor and safe_duration_offset allow an estimation of the longest amount of time a rider can expect the on-demand service in a GeoJSON location or stop areas may require, in minutes, for 95% of trips.
+
+Data consumers are expected to use safe_duration_factor and safe_duration_offset to make the following calculation:
+
+SafeTravelDuration = safe_duration_factor × DrivingDuration + safe_duration_offset
+
+Where DrivingDuration is the time it would take in a car to travel the distance being calculated for the on-demand service, and SafeTravelDuration is the longest amount of time a rider can expect the on-demand service in a GeoJSON location or stop area may require.
+
+Conditionally Forbidden:
+- Forbidden if stop_times.stop_id does not refer to a stop_areas.area_id or an id from locations.geojson.
+- Optional otherwise.
+{% enddocs %}
+
+{% docs gtfs_stop_times__safe_duration_offset %}
+Together, safe_duration_factor and safe_duration_offset allow an estimation of the longest amount of time a rider can expect the on-demand service in a GeoJSON location or stop areas may require, in minutes, for 95% of trips.
+
+Data consumers are expected to use safe_duration_factor and safe_duration_offset to make the following calculation:
+
+SafeTravelDuration = safe_duration_factor × DrivingDuration + safe_duration_offset
+
+Where DrivingDuration is the time it would take in a car to travel the distance being calculated for the on-demand service, and SafeTravelDuration is the longest amount of time a rider can expect the on-demand service in a GeoJSON location or stop area may require.
+
+Conditionally Forbidden:
+- Forbidden if stop_times.stop_id does not refer to a stop_areas.area_id or an id from locations.geojson.
+- Optional otherwise.
+{% enddocs %}
+
+{% docs gtfs_stop_times__pickup_booking_rule_id %}
+Identifies the boarding booking rule at this stop time.
+
+Recommended when pickup_type=2.
+{% enddocs %}
+
+{% docs gtfs_stop_times__drop_off_booking_rule_id %}
+Identifies the alighting booking rule at this stop time.
+
+Recommended when drop_off_type=2.
 {% enddocs %}
