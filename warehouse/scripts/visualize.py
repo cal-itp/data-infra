@@ -283,11 +283,13 @@ def ci_report(
             latest_dir,
         ]
     ).result
+    assert isinstance(modified_models, list)
+    assert isinstance(changed_or_downstream_incremental_models, list)
     include = set(changed_or_downstream_incremental_models + modified_models)
     typer.secho(f"Visualizing the following models: {include}")
     viz(
         "man",
-        include=list(include),  # this is List typed
+        include=list(include),
         output=Path("./target/dag.png"),
     )
 
