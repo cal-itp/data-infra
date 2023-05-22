@@ -26,7 +26,7 @@ vars:
   GTFS_SCHEDULE_START: '2021-04-16'
   PROD_GTFS_RT_START: '2022-09-15'
   'dbt_date:time_zone': 'America/Los_Angeles'
-  DEFAULT_SOURCE_DATABASE: cal-itp-data-infra
+  SOURCE_DATABASE: cal-itp-data-infra # you can override with DBT_SOURCE_DATABASE env var rather than constantly using --vars
 
 models:
   calitp_warehouse:

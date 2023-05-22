@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED') }}"
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY') }}"
 source_objects:
   - "unzipping_results/*.jsonl"
 destination_project_dataset_table: "external_gtfs_schedule.unzip_outcomes"
@@ -8,7 +8,7 @@ use_bq_client: true
 hive_options:
   mode: CUSTOM
   require_partition_filter: false
-  source_uri_prefix: "unzipping_results/{dt:DATE}/"
+  source_uri_prefix: "unzipping_results/{dt:DATE}/{ts:TIMESTAMP}/"
 schema_fields:
   - name: success
     type: BOOLEAN
