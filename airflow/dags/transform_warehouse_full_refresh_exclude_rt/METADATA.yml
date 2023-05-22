@@ -1,5 +1,5 @@
 description: "Runs dbt with --full-refresh; use this to refresh/rebuild/backfill incremental models."
-schedule_interval: Null
+schedule_interval: "0 12 * * 0"
 tags:
   - all_gusty_features
 default_args:
@@ -9,6 +9,7 @@ default_args:
     email:
       - "andrew.v@jarv.us"
       - "jameelah.y@jarv.us"
+      - "laurie.m@jarv.us"
     email_on_failure: True
     email_on_retry: False
     retries: 0
