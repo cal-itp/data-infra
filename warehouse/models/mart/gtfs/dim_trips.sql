@@ -7,7 +7,7 @@ WITH make_dim AS (
 
 dim_trips AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
         base64_url,
         feed_key,
         route_id,

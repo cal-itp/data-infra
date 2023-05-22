@@ -18,7 +18,7 @@ bad_rows AS (
 
 dim_attributions AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'make_dim.attribution_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
         feed_key,
         organization_name,
         make_dim.attribution_id,

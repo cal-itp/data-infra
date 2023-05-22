@@ -6,9 +6,8 @@ WITH make_dim AS (
 ),
 
 dim_calendar_dates AS (
-    -- some full duplicate rows
-    SELECT DISTINCT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'service_id', 'date']) }} AS key,
+    SELECT
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
         feed_key,
         service_id,
         date,
@@ -19,6 +18,20 @@ dim_calendar_dates AS (
         _line_number,
         feed_timezone,
     FROM make_dim
+    -- some full duplicate rows
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY
+            feed_key,
+            service_id,
+            date,
+            exception_type,
+            base64_url,
+            _dt,
+            _feed_valid_from,
+            _line_number,
+            feed_timezone
+         ORDER BY _line_number
+    ) = 1
 )
 
 SELECT * FROM dim_calendar_dates

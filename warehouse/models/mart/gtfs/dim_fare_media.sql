@@ -7,7 +7,7 @@ WITH make_dim AS (
 
 dim_fare_media AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'fare_media_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
         feed_key,
         base64_url,
         fare_media_id,

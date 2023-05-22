@@ -7,7 +7,7 @@ WITH make_dim AS (
 
 dim_stop_areas AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'area_id', 'stop_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
         feed_key,
         area_id,
         stop_id,

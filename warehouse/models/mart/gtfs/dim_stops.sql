@@ -38,7 +38,7 @@ fill_in_tz AS (
 
 dim_stops AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['fill_in_tz.feed_key', 'fill_in_tz.stop_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['fill_in_tz.feed_key', 'fill_in_tz._line_number']) }} AS key,
         base64_url,
         fill_in_tz.feed_key,
         fill_in_tz.stop_id,

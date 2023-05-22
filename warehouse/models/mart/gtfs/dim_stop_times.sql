@@ -17,7 +17,7 @@ make_intervals AS (
 
 dim_stop_times AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id', 'stop_sequence']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
         base64_url,
         feed_key,
         trip_id,

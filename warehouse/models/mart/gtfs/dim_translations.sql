@@ -7,7 +7,7 @@ WITH make_dim AS (
 
 dim_translations AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'table_name', 'field_name', 'language', 'record_id', 'record_sub_id', 'field_value']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
         feed_key,
         table_name,
         field_name,

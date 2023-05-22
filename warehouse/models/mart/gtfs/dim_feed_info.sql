@@ -24,7 +24,7 @@ bad_rows AS (
 
 dim_feed_info AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'feed_publisher_name', 'feed_publisher_url', 'feed_lang', 'default_lang', 'feed_version', 'feed_contact_email', 'feed_contact_url', 'feed_start_date', 'feed_end_date']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
         feed_key,
         feed_publisher_name,
         feed_publisher_url,

@@ -24,7 +24,7 @@ bad_rows AS (
 
 dim_fare_rules AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'fare_id', 'route_id', 'origin_id', 'destination_id', 'contains_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
         feed_key,
         fare_id,
         route_id,
