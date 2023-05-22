@@ -284,13 +284,13 @@ def ci_report(
         ]
     ).result
     include = set(changed_or_downstream_incremental_models + modified_models)
+    typer.secho(f"Visualizing the following models: {include}")
     viz(
         "man",
         include=list(include),  # this is List typed
         output=Path("./target/dag.png"),
     )
 
-    print(os.path.join(__file__, "templates"))
     env = Environment(
         loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")),
         autoescape=select_autoescape(),
