@@ -53,6 +53,8 @@ models:
       This table transforms the raw GTFS calendar.txt format (where each row corresponds to a `service_id` and
       each day of the week is a column and service indicators are entered in a "wide" fashion)
       into a long format, where a row is identified by `feed_key`, `service_id`, and `date`.
+      Rows are dropped if they have start_date > end_date (which is not valid) or if they have
+      start_date more than a year in the future relative to the date the table is run.
     columns:
       - &schedule_key
         name: key
