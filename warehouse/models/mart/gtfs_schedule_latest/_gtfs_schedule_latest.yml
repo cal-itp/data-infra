@@ -11,10 +11,16 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#agencytxt
     columns:
-      - name: key
+      - &primary_key
+        name: key
         description: |
-          Synthetic primary key constructed from `feed_key` and `agency_id`.
-        meta: &pk_meta
+          Synthetic primary key constructed from `feed_key` and `_line_number`.
+        tests:
+          - unique:
+              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+          - not_null
+        meta:
           publish.ignore: true
       - &feed_key
         name: feed_key
@@ -61,10 +67,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#areastxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `area_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: area_id
@@ -84,10 +87,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#attributionstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `attribution_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: attribution_id
@@ -131,10 +131,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#calendartxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `service_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: service_id
@@ -169,10 +166,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#calendar_datestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `service_id`, and `date`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: service_id
@@ -193,10 +187,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#fare_attributestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `fare_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: fare_id
@@ -227,10 +218,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_leg_rulestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `network_id`, `from_area_id`, `to_area_id`, and `fare_product_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: leg_group_id
@@ -256,10 +244,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_mediatxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `fare_media_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: fare_media_id
@@ -281,10 +266,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_productstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `fare_product_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: fare_product_id
@@ -310,10 +292,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#fare_rulestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: fare_id
@@ -339,10 +318,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_transfer_rulestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, 'from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', and 'duration_limit'.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: from_leg_group_id
@@ -372,10 +348,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#feed_infotxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: feed_publisher_name
@@ -409,10 +382,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#frequenciestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `trip_id`, and `start_time`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: trip_id
@@ -451,10 +421,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#levelstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `level_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: level_id
@@ -475,10 +442,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#pathwaystxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `pathway_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: pathway_id
@@ -523,10 +487,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#routestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `route_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: route_id
@@ -567,10 +528,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#shapestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `shape_id`, and `shape_pt_sequence`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: shape_id
@@ -605,10 +563,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#stop_areastxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `area_id` and `stop_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: area_id
@@ -629,12 +584,9 @@ models:
       ckan.authority: https://gtfs.org/reference/static#stop_timestxt
       publish.gis_coordinate_system_epsg: WGS84
     columns:
+      - *primary_key
       - *feed_key
       - *base64_url
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `trip_id`, and `stop_sequence`.
-        meta: *pk_meta
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
       - name: arrival_time
@@ -778,10 +730,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#stopstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `stop_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: stop_id
@@ -844,10 +793,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#transferstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: from_stop_id
@@ -881,10 +827,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#translationstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `table_name`, `field_name`, `language`, `record_id`, `record_sub_id`, and `field_value`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: table_name
@@ -913,10 +856,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#tripstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `trip_id`.
-        meta: *pk_meta
+      - *primary_key
       - *feed_key
       - *base64_url
       - name: route_id

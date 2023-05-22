@@ -14,7 +14,9 @@ WITH dim_calendar AS (
 int_gtfs_schedule__long_calendar AS (
     SELECT
         feed_key,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
         {{ dbt_utils.generate_surrogate_key(['feed_key', 'service_id', 'dt']) }} AS key,
         service_id,

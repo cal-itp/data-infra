@@ -12,6 +12,7 @@ stg_gtfs_schedule__fare_transfer_rules AS (
         base64_url,
         ts,
         dt AS _dt,
+        _line_number,
         {{ trim_make_empty_string_null('from_leg_group_id') }} AS from_leg_group_id,
         {{ trim_make_empty_string_null('to_leg_group_id') }} AS to_leg_group_id,
         SAFE_CAST({{ trim_make_empty_string_null('transfer_count') }} AS INTEGER) AS transfer_count,

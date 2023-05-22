@@ -2,6 +2,7 @@
 {{
     config(
         materialized='incremental',
+        unique_key='key',
         cluster_by='feed_key',
     )
 }}

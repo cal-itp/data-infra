@@ -63,7 +63,9 @@ dim_stops AS (
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
         fill_in_tz.stop_id IS NULL AS warning_missing_primary_key,
         stop_timezone_coalesced,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM fill_in_tz
     LEFT JOIN bad_rows

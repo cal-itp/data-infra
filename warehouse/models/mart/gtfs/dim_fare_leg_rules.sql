@@ -33,7 +33,9 @@ dim_fare_leg_rules AS (
         to_area_id,
         fare_product_id,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM with_identifier
     LEFT JOIN bad_rows

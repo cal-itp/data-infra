@@ -27,7 +27,9 @@ dim_fare_products AS (
         amount,
         currency,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
     LEFT JOIN bad_rows

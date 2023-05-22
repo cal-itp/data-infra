@@ -22,7 +22,9 @@ lat_long AS (
             shape_pt_lon,
             shape_pt_lat
         ) AS pt_geom,
+        _dt,
         _feed_valid_from,
+        _line_number,
     FROM dim_shapes
 ),
 
@@ -32,7 +34,9 @@ initial_pt_array AS (
         feed_key,
         base64_url,
         shape_id,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
         -- don't try to make LINESTRING because of this issue:
         -- https://stackoverflow.com/questions/58234223/st-makeline-discarding-duplicate-points-even-if-not-consecutive
@@ -56,7 +60,9 @@ dim_shapes_arrays AS (
         shape_id,
         pt_array,
         base64_url,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM initial_pt_array
     -- drop shapes that had nulls

@@ -13,7 +13,9 @@ dim_fare_media AS (
         fare_media_id,
         fare_media_name,
         fare_media_type,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
 )

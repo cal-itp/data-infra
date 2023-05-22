@@ -20,7 +20,9 @@ dim_calendar AS (
         start_date,
         end_date,
         base64_url,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
 )

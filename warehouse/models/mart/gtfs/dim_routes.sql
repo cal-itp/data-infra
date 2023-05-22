@@ -23,7 +23,9 @@ dim_routes AS (
         continuous_drop_off,
         network_id,
         base64_url,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
 )

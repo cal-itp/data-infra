@@ -13,7 +13,9 @@ dim_levels AS (
         level_index,
         level_name,
         base64_url,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
 )

@@ -12,7 +12,9 @@ dim_stop_areas AS (
         area_id,
         stop_id,
         base64_url,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
 )

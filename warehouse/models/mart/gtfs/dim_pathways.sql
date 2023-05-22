@@ -22,7 +22,9 @@ dim_pathways AS (
         signposted_as,
         reversed_signposted_as,
         base64_url,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
 )

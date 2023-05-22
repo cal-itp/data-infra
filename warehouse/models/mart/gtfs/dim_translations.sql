@@ -17,7 +17,9 @@ dim_translations AS (
         record_sub_id,
         field_value,
         base64_url,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
 )
