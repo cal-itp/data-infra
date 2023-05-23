@@ -28,16 +28,13 @@ class Speedmap(BaseModel):
     stop_name: Optional[str]
     route_id: Optional[str]
     tooltip: Tooltip
-    color: List[int]
+    color: conlist(int, min_items=3, max_items=3)  # we add alpha in the JS
     highlight_color: Optional[List[int]]
 
     @root_validator
     def some_identifier_exists(cls, values):
         assert any(key in values for key in ["stop_id", "stop_name", "route_id"])
         return values
-
-    # TODO: add color validator; check length 3, add alpha 127 for fill color
-    # and then highlight color
 
 
 class HQTA(BaseModel):
