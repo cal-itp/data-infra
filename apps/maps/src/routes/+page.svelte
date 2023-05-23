@@ -77,7 +77,7 @@
 
     const alphaBase = 255;
 
-    function getColor(feature, alphaMultiplier = 0.5) {
+    function getColor(feature, alphaMultiplier = 1) {
       let color = [100, 100, 100]; // if no color, just return grey
 
       if (feature.properties.color) {
@@ -167,8 +167,8 @@
                             pickable: true,
                             autoHighlight: true,
                             getPointRadius: 10,
-                            getFillColor: (feature) => getColor(feature, 127),
-                            highlightColor: ({ object }) => getColor(object, 255),
+                            getFillColor: (feature) => getColor(feature, 0.5),
+                            highlightColor: ({ object }) => getColor(object),
                         }),
                     ],
                     // these have to be called object if destructured like this
