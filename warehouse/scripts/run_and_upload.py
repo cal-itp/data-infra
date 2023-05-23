@@ -348,7 +348,7 @@ def run(
                     },
                     capture_output=True,
                 )
-            except subprocess.CalledProcessError as e:
+            except p.CalledProcessError as e:
                 print(e.stderr)
                 raise
 
