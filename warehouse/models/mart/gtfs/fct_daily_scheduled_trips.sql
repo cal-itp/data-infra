@@ -1,4 +1,6 @@
-{{ config(materialized='table') }}
+{{ config(
+    materialized='table',
+    cluster_by='base64_url') }}
 
 WITH int_gtfs_schedule__daily_scheduled_service_index AS (
     SELECT *
