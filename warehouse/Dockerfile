@@ -1,4 +1,4 @@
-FROM python:3.9-buster
+FROM  --platform=linux/amd64 python:3.9-buster as build
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
