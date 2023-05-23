@@ -59,7 +59,7 @@ import geopandas as gpd
 import gcsfs
 import pandas as pd
 
-from calitp_data_infra.storage import get_fs
+from calitp_data.storage import get_fs
 fs = get_fs()
 ```
 ### Tabular Data

@@ -10,7 +10,6 @@ The section below outlines our team's primary meetings and their purposes, as we
 | **Technical Onboarding** | Week 1 <br/> 40 Mins | To ensure access to tools and go over best practices. |
 | **Data Services All-Hands** | Every other Monday <br/> 1 Hour | A team-wide data services sync. |
 | **Analyst Roundtable** | Tues & Thurs <br/> 45 Mins | An opportunity to share your screen and discuss what you've been working on. |
-| **Lunch n' Learn** | Every other Tuesday <br/> 1 Hour | A weekly opportunity to cover a specific topic, learn something new, and gain visibility into projects and across teams. <br/> Access recordings of **previous Lunch n' Learns** [at this link](https://youtube.com/playlist?list=PLJA3syyg1ijm36JFZ95v79zAuv-5c8hfZ). |
 
 (slack-intro)=
 ## Communication Channels
@@ -20,7 +19,6 @@ The section below outlines our team's primary meetings and their purposes, as we
 | #**data-analysis** | Discussion | For sharing and collaborating on Cal-ITP data analyses. |
 | #**data-office-hours** | Discussion | A place to bring questions, issues, and observations for team discussion. |
 | #**data-warehouse-devs** | Discussion | For people building dbt models - focused on data warehouse performance considerations, etc. |
-| #**lunch-n-learn** | Discussion | A channel for discussions around our weekly Lunch n' Learns. |
 
 ## Collaboration Tools
 

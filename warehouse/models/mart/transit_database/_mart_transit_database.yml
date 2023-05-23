@@ -176,7 +176,7 @@ models:
           **Note: This field is manually entered in the Transit Database,
           so it may be subject to some gaps in coverage and it is not updated automatically.
           Data in this field may not align with validations data from the
-          GTFS pipeline, for example in `mart_gtfs.fct_daily_rt_feed_files`,
+          GTFS pipeline, for example in `mart_gtfs_quality.fct_daily_schedule_feed_validation_notices`,
           or GTFS guidelines checks implemented in `mart_gtfs_guidelines.fact_daily_guideline_checks`.
           Use those tables directly for the most up-to-date information on individual GTFS feeds'
           validation and guideline statuses.**

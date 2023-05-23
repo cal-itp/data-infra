@@ -83,7 +83,7 @@ from calitp_data_analysis.sql import query_sql
 ```
 
 ```{code-cell}
-df_dim_feeds = query_sql("""
+df_dim_agency = query_sql("""
 SELECT
     *
 FROM `mart_gtfs.dim_agency`
@@ -91,7 +91,7 @@ LIMIT 10""", as_df=True)
 ```
 
 ```{code-cell}
-df_dim_feeds.head()
+df_dim_agency.head()
 ```
 (siuba)=
 ## siuba
@@ -107,8 +107,8 @@ and showing SQL test queries that siuba code generates.
 from calitp_data_analysis.tables import tbls
 from siuba import _, filter, count, collect, show_query
 
-# query lastest validation notices, then filter for a single gtfs feed,
-# and then count how often each code occurs
+# query agency information, then filter for a single gtfs feed,
+# and then count how often each feed key occurs
 (tbls.mart_gtfs.dim_agency()
     >> filter(_.agency_id == 'BA', _.base64_url == 'aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1SRw==')
     >> count(_.feed_key)
