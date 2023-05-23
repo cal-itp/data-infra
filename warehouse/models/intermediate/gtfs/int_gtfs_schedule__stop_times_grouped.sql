@@ -122,7 +122,7 @@ grouped AS (
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 ),
 
-int_gtfs_schedule__stop_times_grouped AS (
+int_gtfs_schedule__stop_times_grouped_without_key AS (
     SELECT
         trip_id,
         feed_key,
@@ -177,6 +177,13 @@ int_gtfs_schedule__stop_times_grouped AS (
         num_arrival_times_populated_stop_times,
         num_departure_times_populated_stop_times
     FROM grouped
+),
+
+int_gtfs_schedule__stop_times_grouped AS (
+    SELECT
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id', 'trip_first_departure_sec']) }} AS key,
+        *
+        FROM int_gtfs_schedule__stop_times_grouped_without_key
 )
 
 SELECT * FROM int_gtfs_schedule__stop_times_grouped
