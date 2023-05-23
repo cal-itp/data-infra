@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY') }}"
 source_objects:
   - "stop_times/*.jsonl.gz"
 destination_project_dataset_table: "external_gtfs_schedule.stop_times"
