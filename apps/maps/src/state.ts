@@ -7,6 +7,12 @@
 
 export type Analysis = "speedmap" | "hqta_areas" | "hqta_stops";
 
+export interface BasemapConfig {
+  url: string;
+  options: {
+    [k: string]: unknown;
+  };
+}
 /**
  * Feature Model
  */
@@ -58,6 +64,15 @@ export interface Speedmap {
   stop_id?: string;
   stop_name?: string;
   route_id?: string;
+  tooltip: Tooltip;
+  color: number[];
+  highlight_color?: number[];
+}
+export interface Tooltip {
+  html: string;
+  style?: {
+    [k: string]: unknown;
+  };
 }
 /**
  * Feature Model
@@ -83,9 +98,17 @@ export interface MultiPolygon {
   ][][];
   bbox?: [number, number, number, number] | [number, number, number, number, number, number];
 }
-export interface State {
+export interface Layer {
   name: string;
   url: string;
+  analysis?: Analysis;
+}
+export interface State {
+  name?: string;
+  /**
+   * @minItems 1
+   */
+  layers: [Layer, ...Layer[]];
   lat_lon?: [number, number] | [number, number, number];
   zoom?: number;
   /**
@@ -93,5 +116,5 @@ export interface State {
    * @maxItems 2
    */
   bbox?: [[number, number] | [number, number, number], [number, number] | [number, number, number]];
-  analysis?: Analysis;
+  basemap_config?: BasemapConfig;
 }

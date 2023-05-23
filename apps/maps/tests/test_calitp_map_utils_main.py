@@ -10,8 +10,12 @@ runner = CliRunner()
 
 def test_validate_state_cli():
     state_dict = {
-        "name": "LA Metro Bus Speed Maps AM Peak",
-        "url": "https://storage.googleapis.com/calitp-map-tiles/metro_am.geojson.gz",
+        "layers": [
+            {
+                "name": "LA Metro Bus Speed Maps AM Peak",
+                "url": "https://storage.googleapis.com/calitp-map-tiles/metro_am.geojson.gz",
+            }
+        ]
     }
     compressed_encoded = base64.urlsafe_b64encode(
         gzip.compress(json.dumps(state_dict).encode())
@@ -23,7 +27,6 @@ def test_validate_state_cli():
             "--base64url",
             "--compressed",
             "--data",
-            "--analysis=speedmap",
         ],
         input=compressed_encoded,
     )

@@ -16,6 +16,15 @@
     const STATE_QUERY_PARAM = "state";
     const START_LAT_LON = [34.05, -118.25];
     const LEAFLET_START_ZOOM = 13;
+    const DEFAULT_BASEMAP_CONFIG = {
+      "url": 'https://{s}.basemaps.cartocdn.com/{variant}/{z}/{x}/{y}{r}.png',
+      "options": {
+        'attribution': '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        'subdomains': 'abcd',
+        'maxZoom': 20,
+        'variant': 'light_all',
+      }
+    };
     let mapElement;
     let map;
     let jsonData;
@@ -43,7 +52,6 @@
                             if (err) {
                                 console.error(err);
                             } else {
-                                console.log("adding data to layer");
                                 callback(JSON.parse(strFromU8(data)));
                             }
                         }
@@ -51,7 +59,6 @@
                 });
             } else {
                 jsonData = response.json().then((json) => {
-                    console.log("adding data to layer");
                     callback(json);
                 });
             }
@@ -68,48 +75,127 @@
         return colorMap[Math.floor(avg_mph / (MAX_MPH / NSHADES))];
     }
 
-    function getColor(feature, colorMap, alpha = 255) {
-        if (feature && feature.properties.avg_mph) {
-          const rgba = speedFeatureColor(feature, rgbaColorMap);
-          const converted = rgba.slice(0, -1);
-          converted.push(alpha);
-          return converted;
-        }
+    const alphaBase = 255;
 
-        // everything but speedmaps
-        return [93, 106, 166, alpha];
+    function getColor(feature, alphaMultiplier = 0.5) {
+      let color = [100, 100, 100]; // if no color, just return grey
+
+      if (feature.properties.color) {
+        color = [...feature.properties.color];
+      } else if (feature.properties.avg_mph) {
+        // LEGACY: support speedmaps testing
+        const rgba = speedFeatureColor(feature, rgbaColorMap);
+        color = rgba.slice(0, -1);
+      }
+
+      color.push(Math.floor(alphaBase * alphaMultiplier));
+      return color;
     }
 
+    const DEFAULT_TOOLTIP_STYLE = {
+          backgroundColor: "white",
+          color: "black",
+          fontSize: '1.2em',
+      };
+
     function getTooltip(feature) {
-      let html;
+      if (feature.properties.tooltip) {
+        return {
+          html: feature.properties.tooltip.html,
+          style: feature.properties.tooltip.style || DEFAULT_TOOLTIP_STYLE,
+        }
+      }
+
       if (feature.properties.hqta_type) {
         let lines = [
-            `Agency (Primary): ${feature.properties.agency_name_primary}`,
-            `Agency (Secondary): ${feature.properties.agency_name_secondary}`,
-            `HQTA Type: ${feature.properties.hqta_type}`,
+          `Agency (Primary): ${feature.properties.agency_name_primary}`,
+          `Agency (Secondary): ${feature.properties.agency_name_secondary}`,
+          `HQTA Type: ${feature.properties.hqta_type}`,
         ];
         if (feature.properties.stop_id) {
           lines.push(`Stop ID: ${feature.properties.stop_id}`);
         }
-          html = lines.join("<br>");
-      } else {
-        // hopefully a speedmap
-        html = [
-            `Stop name: ${feature.properties.stop_name}`,
-            `Stop ID: ${feature.properties.stop_id}`,
-            `Route ID: ${feature.properties.route_id}`,
-            `Average MPH: ${feature.properties.avg_mph}`,
-        ].join("<br>");
+
+        return {
+          html: lines.join("<br>"),
+          style: DEFAULT_TOOLTIP_STYLE,
+        }
       }
 
       return {
-        html: html,
-        style: {
-          backgroundColor: "white",
-          color: "black",
-          fontSize: '1.2em',
-        }
+        html: JSON.stringify(feature.properties),
+        style: DEFAULT_TOOLTIP_STYLE,
       }
+    }
+
+    /**
+   * @param {Layer} layer
+   */
+    function addLayer(layer) {
+      const url = layer.url;
+        if (url.endsWith(".pmtiles")) {
+            console.error("PMTiles not officially supported yet.");
+            layer = leafletLayer({
+                url: url,
+                paint_rules: [
+                  {
+                      dataLayer: layer.name,
+                      symbolizer: new LineSymbolizer({
+                          // https://gist.github.com/makella/950a7baee78157bf1c315a7c2ea191e7
+                          color: (p) => {
+                              return "black"
+                          }
+                      })
+                  }
+              ],
+            }).addTo(map);
+            loading = false;
+        } else {
+            // NOTE: When defining interaction callbacks, I think they use https://deck.gl/docs/developer-guide/interactivity#the-picking-info-object
+            fetchGeoJSON(url, (json) => {
+                console.log("Creating layer", layer.name);
+                layer = new LeafletLayer({
+                    views: [
+                        new MapView({
+                            repeat: true
+                        })
+                    ],
+                    layers: [
+                        new GeoJsonLayer({
+                            id: "geojson",
+                            data: json,
+                            pickable: true,
+                            autoHighlight: true,
+                            getPointRadius: 10,
+                            getFillColor: (feature) => getColor(feature, 127),
+                            highlightColor: ({ object }) => getColor(object, 255),
+                        }),
+                    ],
+                    // these have to be called object if destructured like this
+                    // onHover: ({ object }) => object && console.log(object),
+                    getTooltip: ({ object }) => object && getTooltip(object),
+                });
+                map.addLayer(layer);
+
+              // only zoom to bbox of the last layer
+                if (state.bbox) {
+                  console.log("flyToBounds", state.bbox);
+                  map.flyToBounds(state.bbox, {maxZoom: 20});
+                } else if (state.lat_lon) {
+                  const zoom = state.zoom ? state.zoom : 13;
+                  console.log("flyTo", state.lat_lon, zoom);
+                    map.flyTo(state.lat_lon, zoom);
+                } else {
+                  const bbox = turf.bbox(json);
+                  // have to flip; turf gives us back lon/lat
+                  // leaflet always wants [lat, lng]
+                  const latLngLike = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
+                  console.log("flyToBounds", latLngLike);
+                  map.flyToBounds(latLngLike, {maxZoom: 20});
+                }
+                loading = false;
+            })
+        }
     }
 
     onMount(async () => {
@@ -131,76 +217,19 @@
           console.log("Loaded compressed state from URL.");
         }
 
-        const url = state.url;
-
         map = L.map(mapElement, {
             preferCanvas: true
         }).setView(START_LAT_LON, LEAFLET_START_ZOOM);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        const basemapConfig = state.basemap_config || DEFAULT_BASEMAP_CONFIG;
+        L.tileLayer(basemapConfig.url, basemapConfig.options).addTo(map);
 
-        if (url.endsWith(".pmtiles")) {
-            layer = leafletLayer({
-                url: url,
-                paint_rules: [
-                  {
-                      dataLayer: "BusSpeeds",
-                      symbolizer: new LineSymbolizer({
-                          // https://gist.github.com/makella/950a7baee78157bf1c315a7c2ea191e7
-                          color: (p) => {
-                              return "black"
-                          }
-                      })
-                  }
-              ],
-            }).addTo(map);
-            loading = false;
-        } else {
-            // NOTE: When defining interaction callbacks, I think they use https://deck.gl/docs/developer-guide/interactivity#the-picking-info-object
-            fetchGeoJSON(url, (json) => {
-                layer = new LeafletLayer({
-                    views: [
-                        new MapView({
-                            repeat: true
-                        })
-                    ],
-                    layers: [
-                        new GeoJsonLayer({
-                            id: "geojson",
-                            data: json,
-                            pickable: true,
-                            autoHighlight: true,
-                            getPointRadius: 10,
-                            getFillColor: (feature) => getColor(feature, rgbaColorMap, 127),
-                            highlightColor: ({ object }) => getColor(object, rgbaColorMap, 255),
-                        }),
-                    ],
-                    // these have to be called object if destructured like this
-                    // onHover: ({ object }) => object && console.log(object),
-                    getTooltip: ({ object }) => object && getTooltip(object),
-                });
-                map.addLayer(layer);
+        // TODO: figure out how we can use multiple layers with LeafletLayer
+        // for (const [idx, layer] of state.layers.entries()) {
+        //   console.log(index, element);
+        // }
+        addLayer(state.layers[0]);
 
-                if (state.bbox) {
-                  console.log("flyToBounds", state.bbox);
-                  map.flyToBounds(state.bbox, {maxZoom: 20});
-                } else if (state.lat_lon) {
-                  const zoom = state.zoom ? state.zoom : 13;
-                  console.log("flyTo", state.lat_lon, zoom);
-                    map.flyTo(state.lat_lon, zoom);
-                } else {
-                  const bbox = turf.bbox(json);
-                  // have to flip; turf gives us back lon/lat
-                  // leaflet always wants [lat, lng]
-                  const latLngLike = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
-                  console.log("flyToBounds", latLngLike);
-                  map.flyToBounds(latLngLike, {maxZoom: 20});
-                }
-                loading = false;
-            })
-        }
     })
     ;
 
@@ -252,7 +281,7 @@
             <span>Loading...</span>
           </div>
         {:else if (state)}
-          <span>{state.name} (<a href="{state.url}">download GeoJSON</a>)</span>
+          <span>{state.layers.slice(-1)[0].name} (<a href="{state.layers.slice(-1)[0].url}">download GeoJSON</a>)</span>
         {:else}
           <span>No state found in URL.</span>
         {/if}
