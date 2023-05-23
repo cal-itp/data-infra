@@ -849,7 +849,7 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 <div class="section" id="increasing-the-query-limit">
 <h3>Increasing the Query Limit<a class="headerlink" href="#increasing-the-query-limit" title="Permalink to this headline">¶</a></h3>
 <p>By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into <code class="docutils literal notranslate"><span class="pre">DatabaseError:</span> <span class="pre">500</span> <span class="pre">Query</span> <span class="pre">exceeded</span> <span class="pre">limit</span> <span class="pre">for</span> <span class="pre">bytes</span> <span class="pre">billed</span></code> should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit, add and execute the following in your notebook:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CALITP_BQ_MAX_BYTES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">20_000_000_000</span><span class="p">)</span>
@@ -862,7 +862,7 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 <span id="querying-sql-jupyterhub"></span><h3>Querying with SQL in JupyterHub<a class="headerlink" href="#querying-with-sql-in-jupyterhub" title="Permalink to this headline">¶</a></h3>
 <p>JupyterHub makes it easy to query SQL in the notebooks.</p>
 <p>To query SQL, simply import the below at the top of your notebook:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">calitp.magics</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">calitp_data_analysis.magics</span>
 </pre></div>
 </div>
 <p>And add the following to the top of any cell block that you would like to query SQL in:</p>
@@ -870,16 +870,16 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 </pre></div>
 </div>
 <p>Example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">calitp.magics</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">calitp_data_analysis.magics</span>
 </pre></div>
 </div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">sql</span>
 
 <span class="k">SELECT</span>
 <span class="w">    </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
-<span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="o">`</span>
+<span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">mart_gtfs</span><span class="p">.</span><span class="n">dim_schedule_feeds</span><span class="o">`</span>
 <span class="k">WHERE</span>
-<span class="w">    </span><span class="n">calitp_feed_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;AC Transit (0)&quot;</span>
+<span class="w">    </span><span class="k">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;db58891de4281f965b4e7745675415ab&quot;</span>
 <span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span>
 </pre></div>
 </div>

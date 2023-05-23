@@ -35,7 +35,8 @@ The tools that we can use to answer them are:
 * [**SQL**](querying-sql-jupyterhub) - using JupyterHub cloud notebooks
 * [**Python**](jupyterhub-intro) - using JupyterHub cloud notebooks
     * *siuba* - a Cal-ITP recommended data analysis library in Python
-    * *calitp* - Cal-ITP's internal Python library
+    * *calitp-data-analysis* - Cal-ITP's internal Python library for analysis
+        * Two other Cal-ITP packages (calitp-data and calitp-data-infra) exist for other purposes
 
 ```{code-cell}
 :tags: [remove-cell]
@@ -122,7 +123,7 @@ glue("siuba_routes_output", siuba_routes)
 ```python
 # Allows us to query SQL in the JupyterLab notebook
 # Use this in combination with '%%sql', as seen below
-import calitp.magics
+import calitp_data_analysis.magics
 ```
 ```sql
 %%sql
@@ -236,7 +237,7 @@ glue("siuba_stops_output", siuba_stops)
 ```python
 # Allows us to query SQL in the JupyterLab notebook
 # Use this in combination with '%%sql', as seen below
-import calitp.magics
+import calitp_data_analysis.magics
 ```
 ```sql
 %%sql
@@ -348,7 +349,7 @@ glue("siuba_feed_expires_output", siuba_feed_expires)
 ```python
 # Allows us to query SQL in the JupyterLab notebook
 # Use this in combination with '%%sql', as seen below
-import calitp.magics
+import calitp_data_analysis.magics
 ```
 ```sql
 %%sql
@@ -464,7 +465,7 @@ glue("siuba_stops_trips_output", siuba_stops_trips)
 ```python
 # Allows us to query SQL in the JupyterLab notebook
 # Use this in combination with '%%sql', as seen below
-import calitp.magics
+import calitp_data_analysis.magics
 ```
 ```sql
 %%sql
@@ -581,7 +582,7 @@ glue("siuba_max_stops_output", siuba_max_stops)
 ```python
 # Allows us to query SQL in the JupyterLab notebook
 # Use this in combination with '%%sql', as seen below
-import calitp.magics
+import calitp_data_analysis.magics
 ```
 ```sql
 %%sql

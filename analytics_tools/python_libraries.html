@@ -695,8 +695,8 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#calitp">
-   calitp
+  <a class="reference internal nav-link" href="#calitp-data-analysis">
+   calitp-data-analysis
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
@@ -791,8 +791,8 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#calitp">
-   calitp
+  <a class="reference internal nav-link" href="#calitp-data-analysis">
+   calitp-data-analysis
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
@@ -860,7 +860,7 @@
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <ol class="simple">
 <li><p><a class="reference external" href="#shared-utils">shared utils</a></p></li>
-<li><p><a class="reference external" href="#calitp">calitp</a></p></li>
+<li><p><a class="reference external" href="#calitp-data-analysis">calitp-data-analysis</a></p></li>
 <li><p><a class="reference external" href="#siuba">siuba</a>
 <br> - <a class="reference external" href="#basic-query">Basic Query</a>
 <br> - <a class="reference external" href="#collect-query-results">Collect Query Results</a>
@@ -904,9 +904,9 @@
 <p>See <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/example_report">data-analyses/example_reports</a> for examples on how to use <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> for general functions, charts, and maps.</p>
 </div>
 </div>
-<div class="section" id="calitp">
-<span id="id2"></span><h2>calitp<a class="headerlink" href="#calitp" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">calitp</span></code> is an internal library of utility functions used to access our warehouse data.</p>
+<div class="section" id="calitp-data-analysis">
+<span id="id2"></span><h2>calitp-data-analysis<a class="headerlink" href="#calitp-data-analysis" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> is an internal library of utility functions used to access our warehouse data for analysis purposes.</p>
 <div class="section" id="import-tbls">
 <h3>import tbls<a class="headerlink" href="#import-tbls" title="Permalink to this headline">¶</a></h3>
 <p>Most notably, you can include <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">tbls</span></code> at the top of your notebook to import a table from the warehouse in the form of a <code class="docutils literal notranslate"><span class="pre">tbls</span></code>:</p>
@@ -918,7 +918,7 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
 
-<span class="n">tbls</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feed_routes</span><span class="p">()</span>
+<span class="n">tbls</span><span class="o">.</span><span class="n">mart_gtfs</span><span class="o">.</span><span class="n">dim_agency</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -944,53 +944,101 @@
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>key</th>
       <th>feed_key</th>
-      <th>route_key</th>
-      <th>date</th>
-      <th>calitp_extracted_at</th>
-      <th>calitp_deleted_at</th>
+      <th>agency_id</th>
+      <th>agency_name</th>
+      <th>agency_url</th>
+      <th>agency_timezone</th>
+      <th>agency_lang</th>
+      <th>agency_phone</th>
+      <th>agency_fare_url</th>
+      <th>agency_email</th>
+      <th>base64_url</th>
+      <th>_feed_valid_from</th>
+      <th>feed_timezone</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>2830641244896201423</td>
-      <td>-1195686209074309801</td>
-      <td>2021-10-25</td>
-      <td>2021-09-06</td>
-      <td>2021-10-27</td>
+      <td>323ff99feb3b3044e0cdaec49ef6545b</td>
+      <td>2206b7c801ab674767c2f5c8d329d379</td>
+      <td>139</td>
+      <td>Gold Coast Transit District</td>
+      <td>http://www.goldcoasttransit.org/</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
+      <td>(805) 487-4222</td>
+      <td>https://www.gctd.org/fares-rider-guide/</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2023-05-23 03:00:33.896861+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-3313272383092544529</td>
-      <td>3151363844570513554</td>
-      <td>2021-08-29</td>
-      <td>2021-06-27</td>
-      <td>2021-09-11</td>
+      <td>aca898ef7339d88b2f50deb6f5ff2a1d</td>
+      <td>2206b7c801ab674767c2f5c8d329d379</td>
+      <td>142</td>
+      <td>Thousand Oaks Transit</td>
+      <td>https://www.toaks.org/departments/public-works...</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
+      <td>(805) 375-5473</td>
+      <td>https://www.toaks.org/departments/public-works...</td>
+      <td>TOTransit@toaks.org</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2023-05-23 03:00:33.896861+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-5733704886496791540</td>
-      <td>-2609389342486491447</td>
-      <td>2022-07-24</td>
-      <td>2022-07-07</td>
-      <td>2022-08-01</td>
+      <td>1e327c2b6f77784866d08701c71bc9d7</td>
+      <td>2206b7c801ab674767c2f5c8d329d379</td>
+      <td>143</td>
+      <td>VCTC Intercity</td>
+      <td>https://www.goventura.org/</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
+      <td>800.438.1112</td>
+      <td>https://www.goventura.org/</td>
+      <td>ridercomments@goventura.org</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2023-05-23 03:00:33.896861+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>1043903650796920080</td>
-      <td>3627770924270891240</td>
-      <td>2022-01-21</td>
-      <td>2021-12-29</td>
-      <td>2022-01-27</td>
+      <td>3cbe6d09312bb2989258bf3974c23b4b</td>
+      <td>2206b7c801ab674767c2f5c8d329d379</td>
+      <td>144</td>
+      <td>Kanan Shuttle</td>
+      <td>https://www.toaks.org/departments/public-works...</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2023-05-23 03:00:33.896861+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-4088050027624896437</td>
-      <td>5720816555867075687</td>
-      <td>2022-04-14</td>
-      <td>2022-04-14</td>
-      <td>2022-05-05</td>
+      <td>8df055482dc146c5774630d86850eb6c</td>
+      <td>2206b7c801ab674767c2f5c8d329d379</td>
+      <td>147</td>
+      <td>Moorpark City Transit</td>
+      <td>https://www.moorparkca.gov/227/Bus-Ride-Guide</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2023-05-23 03:00:33.896861+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
   </tbody>
 </table>
@@ -1010,10 +1058,10 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_dim_feeds</span> <span class="o">=</span> <span class="n">query_sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_dim_agency</span> <span class="o">=</span> <span class="n">query_sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">SELECT</span>
 <span class="s2">    *</span>
-<span class="s2">FROM `views.gtfs_schedule_dim_feeds`</span>
+<span class="s2">FROM `mart_gtfs.dim_agency`</span>
 <span class="s2">LIMIT 10&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">as_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1021,7 +1069,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_dim_feeds</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_dim_agency</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1044,153 +1092,104 @@
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>key</th>
       <th>feed_key</th>
-      <th>calitp_itp_id</th>
-      <th>calitp_url_number</th>
-      <th>calitp_agency_name</th>
-      <th>raw_gtfs_schedule_url</th>
-      <th>calitp_id_in_latest</th>
-      <th>calitp_feed_id</th>
-      <th>calitp_feed_name</th>
-      <th>feed_publisher_name</th>
-      <th>feed_publisher_url</th>
-      <th>...</th>
-      <th>default_lang</th>
-      <th>feed_version</th>
-      <th>feed_contact_email</th>
-      <th>feed_contact_url</th>
-      <th>feed_start_date</th>
-      <th>feed_end_date</th>
-      <th>rank</th>
-      <th>is_composite_feed</th>
-      <th>calitp_extracted_at</th>
-      <th>calitp_deleted_at</th>
+      <th>agency_id</th>
+      <th>agency_name</th>
+      <th>agency_url</th>
+      <th>agency_timezone</th>
+      <th>agency_lang</th>
+      <th>agency_phone</th>
+      <th>agency_fare_url</th>
+      <th>agency_email</th>
+      <th>base64_url</th>
+      <th>_feed_valid_from</th>
+      <th>feed_timezone</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>18414309913382105</td>
-      <td>1</td>
-      <td>2</td>
-      <td>Glendale Beeline</td>
-      <td>http://glendaleca.gov/Home/ShowDocument?id=29549</td>
-      <td>False</td>
-      <td>1__2</td>
-      <td>Glendale Beeline (2)</td>
-      <td>None</td>
-      <td>None</td>
-      <td>...</td>
+      <td>bf4db6c7641e8730d408f439c02e9a2b</td>
+      <td>d8c64fa93c64e79e5fe98a15158fafbf</td>
+      <td>148</td>
+      <td>Ojai Trolley</td>
+      <td>https://ojaitrolley.com/</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>False</td>
-      <td>2021-04-15</td>
-      <td>2021-04-16</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2022-12-01 03:00:18.078034+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-5674234595782173143</td>
-      <td>2</td>
-      <td>0</td>
-      <td>Beach Cities Transit</td>
-      <td>https://www.redondo.org/civicax/filebank/blobd...</td>
-      <td>False</td>
-      <td>2__0</td>
-      <td>Beach Cities Transit (0)</td>
-      <td>None</td>
-      <td>None</td>
-      <td>...</td>
+      <td>2834655cc5f39097ce19be03997d1a3e</td>
+      <td>afce6c3a0a20fb1c7f208f3d409e23f6</td>
+      <td>148</td>
+      <td>Ojai Trolley</td>
+      <td>https://ojaitrolley.com/</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>False</td>
-      <td>2021-04-15</td>
-      <td>2021-05-13</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2021-09-08 00:18:30+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>6604405555889056708</td>
-      <td>2</td>
-      <td>5</td>
-      <td>SamTrans</td>
-      <td>http://www.samtrans.com/Assets/GTFS/samtrans/S...</td>
-      <td>False</td>
-      <td>2__5</td>
-      <td>SamTrans (5)</td>
-      <td>None</td>
-      <td>None</td>
-      <td>...</td>
+      <td>d1c6e8e5b51d83268fa487cff02a1b39</td>
+      <td>69d80cd8544d3e64df5786f363a732d9</td>
+      <td>148</td>
+      <td>Ojai Trolley</td>
+      <td>https://ojaitrolley.com/</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>False</td>
-      <td>2021-04-15</td>
-      <td>2021-04-16</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2023-02-04 03:00:25.207981+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-5403103044674130453</td>
-      <td>3</td>
-      <td>0</td>
-      <td>Commuter Express</td>
-      <td>http://lacitydot.com/gtfs/administrator/gtfszi...</td>
-      <td>False</td>
-      <td>3__0</td>
-      <td>Commuter Express (0)</td>
-      <td>None</td>
-      <td>None</td>
-      <td>...</td>
+      <td>dd5b1f2606a5eb98e25c87d7e627030c</td>
+      <td>3db48769762ceb7d8844f3c76556f351</td>
+      <td>148</td>
+      <td>Ojai Trolley</td>
+      <td>https://ojaitrolley.com/</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>False</td>
-      <td>2021-04-15</td>
-      <td>2021-05-13</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2022-05-22 00:00:48+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-6200903198154079414</td>
-      <td>5</td>
-      <td>0</td>
-      <td>e-Tran</td>
-      <td>https://share.elkgrovecity.org/messages/tpLyue...</td>
-      <td>False</td>
-      <td>5__0</td>
-      <td>e-Tran (0)</td>
-      <td>None</td>
-      <td>None</td>
-      <td>...</td>
+      <td>5931967af296e3a7bd37b2e9bdd81b5f</td>
+      <td>616e8acf589dd9d45bee5d31c0ebec70</td>
+      <td>148</td>
+      <td>Ojai Trolley</td>
+      <td>https://ojaitrolley.com/</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>False</td>
-      <td>2021-04-15</td>
-      <td>2021-05-13</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2022-07-18 00:00:58+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
   </tbody>
 </table>
-<p>5 rows × 21 columns</p>
 </div></div></div>
 </div>
 </div>
@@ -1209,10 +1208,10 @@ and showing SQL test queries that siuba code generates.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
 <span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="nb">filter</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">collect</span><span class="p">,</span> <span class="n">show_query</span>
 
-<span class="c1"># query lastest validation notices, then filter for a single gtfs feed,</span>
-<span class="c1"># and then count how often each code occurs</span>
-<span class="p">(</span><span class="n">tbls</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="p">()</span>
-    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span> <span class="o">==</span> <span class="mi">10</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_url_number</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># query agency information, then filter for a single gtfs feed,</span>
+<span class="c1"># and then count how often each feed key occurs</span>
+<span class="p">(</span><span class="n">tbls</span><span class="o">.</span><span class="n">mart_gtfs</span><span class="o">.</span><span class="n">dim_agency</span><span class="p">()</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">agency_id</span> <span class="o">==</span> <span class="s1">&#39;BA&#39;</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">base64_url</span> <span class="o">==</span> <span class="s1">&#39;aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1SRw==&#39;</span><span class="p">)</span>
     <span class="o">&gt;&gt;</span> <span class="n">count</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">feed_key</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
@@ -1247,27 +1246,27 @@ and showing SQL test queries that siuba code generates.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>4353298498747921001</td>
+      <td>c0b96681751ce30a7bda9c5d168e0012</td>
       <td>1</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-5768367084319898193</td>
+      <td>c03e392e71c9e3cca7a435e203360137</td>
       <td>1</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2200762960394821566</td>
+      <td>f7225a06a395ae2ad82fe131173c6217</td>
       <td>1</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-5013919702465349414</td>
+      <td>2ada39f5f43c038d81eaec84dd94f039</td>
       <td>1</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2570854701378106641</td>
+      <td>76c11e566ba97e3a393b9af2baeae87c</td>
       <td>1</td>
     </tr>
   </tbody>
@@ -1281,7 +1280,7 @@ and showing SQL test queries that siuba code generates.</p>
 In order to fetch the results of the query as a pandas DataFrame, run <code class="docutils literal notranslate"><span class="pre">collect()</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tbl_agency_names</span> <span class="o">=</span> <span class="n">tbls</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tbl_agency_names</span> <span class="o">=</span> <span class="n">tbls</span><span class="o">.</span><span class="n">mart_gtfs</span><span class="o">.</span><span class="n">dim_agency</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
 
 <span class="c1"># Use pandas .head() method to show first 5 rows of data</span>
 <span class="n">tbl_agency_names</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -1307,153 +1306,104 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>key</th>
       <th>feed_key</th>
-      <th>calitp_itp_id</th>
-      <th>calitp_url_number</th>
-      <th>calitp_agency_name</th>
-      <th>raw_gtfs_schedule_url</th>
-      <th>calitp_id_in_latest</th>
-      <th>calitp_feed_id</th>
-      <th>calitp_feed_name</th>
-      <th>feed_publisher_name</th>
-      <th>feed_publisher_url</th>
-      <th>...</th>
-      <th>default_lang</th>
-      <th>feed_version</th>
-      <th>feed_contact_email</th>
-      <th>feed_contact_url</th>
-      <th>feed_start_date</th>
-      <th>feed_end_date</th>
-      <th>rank</th>
-      <th>is_composite_feed</th>
-      <th>calitp_extracted_at</th>
-      <th>calitp_deleted_at</th>
+      <th>agency_id</th>
+      <th>agency_name</th>
+      <th>agency_url</th>
+      <th>agency_timezone</th>
+      <th>agency_lang</th>
+      <th>agency_phone</th>
+      <th>agency_fare_url</th>
+      <th>agency_email</th>
+      <th>base64_url</th>
+      <th>_feed_valid_from</th>
+      <th>feed_timezone</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>18414309913382105</td>
-      <td>1</td>
-      <td>2</td>
-      <td>Glendale Beeline</td>
-      <td>http://glendaleca.gov/Home/ShowDocument?id=29549</td>
-      <td>False</td>
-      <td>1__2</td>
-      <td>Glendale Beeline (2)</td>
+      <td>323ff99feb3b3044e0cdaec49ef6545b</td>
+      <td>2206b7c801ab674767c2f5c8d329d379</td>
+      <td>139</td>
+      <td>Gold Coast Transit District</td>
+      <td>http://www.goldcoasttransit.org/</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
+      <td>(805) 487-4222</td>
+      <td>https://www.gctd.org/fares-rider-guide/</td>
       <td>None</td>
-      <td>None</td>
-      <td>...</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>2021-04-15</td>
-      <td>2021-04-16</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2023-05-23 03:00:33.896861+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-5674234595782173143</td>
-      <td>2</td>
-      <td>0</td>
-      <td>Beach Cities Transit</td>
-      <td>https://www.redondo.org/civicax/filebank/blobd...</td>
-      <td>False</td>
-      <td>2__0</td>
-      <td>Beach Cities Transit (0)</td>
-      <td>None</td>
-      <td>None</td>
-      <td>...</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>2021-04-15</td>
-      <td>2021-05-13</td>
+      <td>aca898ef7339d88b2f50deb6f5ff2a1d</td>
+      <td>2206b7c801ab674767c2f5c8d329d379</td>
+      <td>142</td>
+      <td>Thousand Oaks Transit</td>
+      <td>https://www.toaks.org/departments/public-works...</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
+      <td>(805) 375-5473</td>
+      <td>https://www.toaks.org/departments/public-works...</td>
+      <td>TOTransit@toaks.org</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2023-05-23 03:00:33.896861+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>6604405555889056708</td>
-      <td>2</td>
-      <td>5</td>
-      <td>SamTrans</td>
-      <td>http://www.samtrans.com/Assets/GTFS/samtrans/S...</td>
-      <td>False</td>
-      <td>2__5</td>
-      <td>SamTrans (5)</td>
-      <td>None</td>
-      <td>None</td>
-      <td>...</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>2021-04-15</td>
-      <td>2021-04-16</td>
+      <td>1e327c2b6f77784866d08701c71bc9d7</td>
+      <td>2206b7c801ab674767c2f5c8d329d379</td>
+      <td>143</td>
+      <td>VCTC Intercity</td>
+      <td>https://www.goventura.org/</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
+      <td>800.438.1112</td>
+      <td>https://www.goventura.org/</td>
+      <td>ridercomments@goventura.org</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2023-05-23 03:00:33.896861+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-5403103044674130453</td>
-      <td>3</td>
-      <td>0</td>
-      <td>Commuter Express</td>
-      <td>http://lacitydot.com/gtfs/administrator/gtfszi...</td>
-      <td>False</td>
-      <td>3__0</td>
-      <td>Commuter Express (0)</td>
-      <td>None</td>
-      <td>None</td>
-      <td>...</td>
+      <td>3cbe6d09312bb2989258bf3974c23b4b</td>
+      <td>2206b7c801ab674767c2f5c8d329d379</td>
+      <td>144</td>
+      <td>Kanan Shuttle</td>
+      <td>https://www.toaks.org/departments/public-works...</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>2021-04-15</td>
-      <td>2021-05-13</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2023-05-23 03:00:33.896861+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-6200903198154079414</td>
-      <td>5</td>
-      <td>0</td>
-      <td>e-Tran</td>
-      <td>https://share.elkgrovecity.org/messages/tpLyue...</td>
-      <td>False</td>
-      <td>5__0</td>
-      <td>e-Tran (0)</td>
-      <td>None</td>
-      <td>None</td>
-      <td>...</td>
+      <td>8df055482dc146c5774630d86850eb6c</td>
+      <td>2206b7c801ab674767c2f5c8d329d379</td>
+      <td>147</td>
+      <td>Moorpark City Transit</td>
+      <td>https://www.moorparkca.gov/227/Bus-Ride-Guide</td>
+      <td>America/Los_Angeles</td>
+      <td>en-US</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>2021-04-15</td>
-      <td>2021-05-13</td>
+      <td>aHR0cHM6Ly9nb3ZjYnVzLmNvbS9ndGZz</td>
+      <td>2023-05-23 03:00:33.896861+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
   </tbody>
 </table>
-<p>5 rows × 21 columns</p>
 </div></div></div>
 </div>
 </div>
@@ -1462,8 +1412,8 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 <p>While <code class="docutils literal notranslate"><span class="pre">collect()</span></code> fetches query results, <code class="docutils literal notranslate"><span class="pre">show_query()</span></code> prints out the SQL code that siuba generates.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">tbls</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="p">()</span>
-  <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_agency_name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;Metro&quot;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">tbls</span><span class="o">.</span><span class="n">mart_gtfs</span><span class="o">.</span><span class="n">dim_agency</span><span class="p">()</span>
+  <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">agency_name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;Metro&quot;</span><span class="p">))</span>
   <span class="o">&gt;&gt;</span> <span class="n">show_query</span><span class="p">(</span><span class="n">simplify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
@@ -1471,8 +1421,8 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SELECT * 
-FROM `views.gtfs_schedule_dim_feeds` AS `views.gtfs_schedule_dim_feeds_1` 
-WHERE regexp_contains(`views.gtfs_schedule_dim_feeds_1`.`calitp_agency_name`, &#39;Metro&#39;)
+FROM `mart_gtfs.dim_agency` AS `mart_gtfs.dim_agency_1` 
+WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
 </pre></div>
 </div>
 <div class="output text_html"><div><pre># Source: lazy query
@@ -1496,153 +1446,104 @@ WHERE regexp_contains(`views.gtfs_schedule_dim_feeds_1`.`calitp_agency_name`, &#
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>key</th>
       <th>feed_key</th>
-      <th>calitp_itp_id</th>
-      <th>calitp_url_number</th>
-      <th>calitp_agency_name</th>
-      <th>raw_gtfs_schedule_url</th>
-      <th>calitp_id_in_latest</th>
-      <th>calitp_feed_id</th>
-      <th>calitp_feed_name</th>
-      <th>feed_publisher_name</th>
-      <th>feed_publisher_url</th>
-      <th>...</th>
-      <th>default_lang</th>
-      <th>feed_version</th>
-      <th>feed_contact_email</th>
-      <th>feed_contact_url</th>
-      <th>feed_start_date</th>
-      <th>feed_end_date</th>
-      <th>rank</th>
-      <th>is_composite_feed</th>
-      <th>calitp_extracted_at</th>
-      <th>calitp_deleted_at</th>
+      <th>agency_id</th>
+      <th>agency_name</th>
+      <th>agency_url</th>
+      <th>agency_timezone</th>
+      <th>agency_lang</th>
+      <th>agency_phone</th>
+      <th>agency_fare_url</th>
+      <th>agency_email</th>
+      <th>base64_url</th>
+      <th>_feed_valid_from</th>
+      <th>feed_timezone</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>8654575366107518227</td>
-      <td>278</td>
-      <td>0</td>
-      <td>San Diego Metropolitan Transit System</td>
-      <td>https://www.sdmts.com/google_transit_files/goo...</td>
-      <td>True</td>
-      <td>278__0</td>
-      <td>San Diego Metropolitan Transit System (0)</td>
-      <td>MTS</td>
-      <td>http://www.sdmts.com</td>
-      <td>...</td>
-      <td>None</td>
-      <td>v1 - Nov 21 2021 svc change merged Sept 5 2021 v4</td>
+      <td>af421322f617b9548ae28186e5ba49dc</td>
+      <td>0b907dea17910cbb1d54e5f5f8c96a51</td>
+      <td>Metrolink</td>
+      <td>Metrolink Trains</td>
+      <td>http://www.metrolinktrains.com</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(800) 371-LINK</td>
       <td>None</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>1</td>
-      <td>False</td>
-      <td>2021-11-03</td>
-      <td>2021-11-21</td>
+      <td>aHR0cHM6Ly93d3cubWV0cm9saW5rdHJhaW5zLmNvbS9nbG...</td>
+      <td>2023-05-23 03:00:33.896861+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>8795779120208877258</td>
-      <td>278</td>
-      <td>0</td>
-      <td>San Diego Metropolitan Transit System</td>
-      <td>https://www.sdmts.com/google_transit_files/goo...</td>
-      <td>True</td>
-      <td>278__0</td>
-      <td>San Diego Metropolitan Transit System (0)</td>
-      <td>MTS</td>
-      <td>http://www.sdmts.com</td>
-      <td>...</td>
+      <td>b11be9ba641dfec413c9a8832f27231d</td>
+      <td>f0f0bd46e4dda08fd6b626313117fb6e</td>
       <td>None</td>
-      <td>v1 merged - 2206v2 &amp; 2209v1.2</td>
+      <td>Santa Cruz Metro</td>
+      <td>http://www.scmtd.com</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(831)425-8600</td>
+      <td>http://www.scmtd.com/fares</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>1</td>
-      <td>False</td>
-      <td>2022-08-16</td>
-      <td>2022-08-25</td>
+      <td>aHR0cDovL3NjbXRkLmNvbS9nb29nbGVfdHJhbnNpdC9nb2...</td>
+      <td>2022-03-09 00:11:38+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-5216492229531861956</td>
-      <td>278</td>
-      <td>0</td>
-      <td>San Diego Metropolitan Transit System</td>
-      <td>https://www.sdmts.com/google_transit_files/goo...</td>
-      <td>True</td>
-      <td>278__0</td>
-      <td>San Diego Metropolitan Transit System (0)</td>
-      <td>MTS</td>
-      <td>http://www.sdmts.com</td>
-      <td>...</td>
+      <td>f0b36129e328bd211eb26b2f09ebd46e</td>
+      <td>f0c46ac3e17145702b7591f3d6b01562</td>
       <td>None</td>
-      <td>v1 merged 2201 &amp; 2111(v5)</td>
+      <td>Santa Cruz Metro</td>
+      <td>http://www.scmtd.com</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(831)425-8600</td>
+      <td>http://www.scmtd.com/fares</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>1</td>
-      <td>False</td>
-      <td>2022-01-13</td>
-      <td>2022-01-30</td>
+      <td>aHR0cDovL3NjbXRkLmNvbS9nb29nbGVfdHJhbnNpdC9nb2...</td>
+      <td>2022-03-02 00:10:47+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>6592067446191147968</td>
-      <td>278</td>
-      <td>0</td>
-      <td>San Diego Metropolitan Transit System</td>
-      <td>https://www.sdmts.com/google_transit_files/goo...</td>
-      <td>True</td>
-      <td>278__0</td>
-      <td>San Diego Metropolitan Transit System (0)</td>
-      <td>MTS</td>
-      <td>http://www.sdmts.com</td>
-      <td>...</td>
+      <td>74ec0eadba16cfb47ab6c75ab515c80f</td>
+      <td>7e5c436680b8a29ad04b84fe6a01a1b3</td>
       <td>None</td>
-      <td>v1.1 Effective Jan 30 2022</td>
+      <td>Santa Cruz Metro</td>
+      <td>http://www.scmtd.com</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(831)425-8600</td>
+      <td>http://www.scmtd.com/fares</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>1</td>
-      <td>False</td>
-      <td>2022-01-30</td>
-      <td>2022-02-08</td>
+      <td>aHR0cDovL3NjbXRkLmNvbS9nb29nbGVfdHJhbnNpdC9nb2...</td>
+      <td>2021-06-02 00:01:35+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>3077664894694920933</td>
-      <td>278</td>
-      <td>0</td>
-      <td>San Diego Metropolitan Transit System</td>
-      <td>https://www.sdmts.com/google_transit_files/goo...</td>
-      <td>True</td>
-      <td>278__0</td>
-      <td>San Diego Metropolitan Transit System (0)</td>
-      <td>MTS</td>
-      <td>http://www.sdmts.com</td>
-      <td>...</td>
+      <td>b33a6dfe2708469621f32f071c53b00c</td>
+      <td>26cb80eaa0f7dc367ed56125c1d596df</td>
       <td>None</td>
-      <td>v1.3.1: 1.2 pathways + GTFS Fares v2 rev 1</td>
+      <td>Santa Cruz Metro</td>
+      <td>http://www.scmtd.com</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(831)425-8600</td>
+      <td>http://www.scmtd.com/fares</td>
       <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>1</td>
-      <td>False</td>
-      <td>2022-07-25</td>
-      <td>2022-08-15</td>
+      <td>aHR0cDovL3NjbXRkLmNvbS9nb29nbGVfdHJhbnNpdC9nb2...</td>
+      <td>2021-04-16 00:01:13+00:00</td>
+      <td>America/Los_Angeles</td>
     </tr>
   </tbody>
 </table>
-<p>5 rows × 21 columns</p>
 </div><p># .. may have more rows</p></div></div></div>
 </div>
 <p>Note that here the pandas Series method <code class="docutils literal notranslate"><span class="pre">str.contains</span></code> corresponds to <code class="docutils literal notranslate"><span class="pre">regexp_contains</span></code> in Google BigQuery.</p>

@@ -28,7 +28,7 @@
 
 **Python Libraries:**
 
-- [ ]  **calitp** - Cal-ITP's internal Python library | ([Docs](calitp))
+- [ ]  **calitp-data-analysis** - Cal-ITP's internal Python library for analysis | ([Docs](calitp-data-analysis))
 - [ ]  **siuba** - Recommended data analysis library | ([Docs](siuba))
 - [ ]  [**shared_utils**](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) - A shared utilities library for the analytics team | ([Docs](shared-utils))
 
