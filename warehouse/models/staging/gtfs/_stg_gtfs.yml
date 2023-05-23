@@ -657,6 +657,22 @@ models:
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
+      - name: start_pickup_drop_off_window
+        description: '{{ doc("gtfs_stop_times__start_pickup_drop_off_window") }}'
+      - name: end_pickup_drop_off_window
+        description: '{{ doc("gtfs_stop_times__end_pickup_drop_off_window") }}'
+      - name: mean_duration_factor
+        description: '{{ doc("gtfs_stop_times__mean_duration_factor") }}'
+      - name: mean_duration_offset
+        description: '{{ doc("gtfs_stop_times__mean_duration_offset") }}'
+      - name: safe_duration_factor
+        description: '{{ doc("gtfs_stop_times__safe_duration_factor") }}'
+      - name: safe_duration_offset
+        description: '{{ doc("gtfs_stop_times__safe_duration_offset") }}'
+      - name: pickup_booking_rule_id
+        description: '{{ doc("gtfs_stop_times__pickup_booking_rule_id") }}'
+      - name: drop_off_booking_rule_id
+        description: '{{ doc("gtfs_stop_times__drop_off_booking_rule_id") }}'
     meta:
       publish.gis_coordinate_system_epsg: WGS84
 

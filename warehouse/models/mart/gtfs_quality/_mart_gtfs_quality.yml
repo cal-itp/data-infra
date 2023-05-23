@@ -406,7 +406,7 @@ models:
       - name: last_arrival_sec
         description: |
           Time of last trip arrival on date across all reports-assessed feeds for this organization
-      - name: n_stop_times
+      - name: num_stop_times
         description: |
           Count of scheduled stop events on date across all reports-assessed feeds for this organization
       - name: n_routes
@@ -419,7 +419,7 @@ models:
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `first_departure_sec`, `last_arrival_sec`,
+          stop times data (`n_stops`, `num_stop_times`,  `first_departure_sec`, `last_arrival_sec`,
           and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
 
           I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
@@ -434,7 +434,7 @@ models:
       - name: contains_warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `first_departure_sec`, `last_arrival_sec`,
+          stop times data (`n_stops`, `num_stop_times`,  `first_departure_sec`, `last_arrival_sec`,
           and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
 
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing

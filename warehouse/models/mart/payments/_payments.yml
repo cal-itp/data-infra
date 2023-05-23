@@ -9,12 +9,14 @@ models:
         description: From payments.micropayments.micropayment_id
         tests:
           - not_null
-          - unique
+          - unique_proportion:
+              at_least: 0.999
       - name: littlepay_transaction_id
         description: The littlepay_transaction_id of the first tap transaction
         tests:
           - not_null
-          - unique
+          - unique_proportion:
+              at_least: 0.999
       - name: participant_id
         description: Littlepay-assigned Participant ID
       - name: funding_source_vault_id

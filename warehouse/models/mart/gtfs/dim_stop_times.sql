@@ -9,7 +9,9 @@ make_intervals AS (
     SELECT
         *,
         {{ gtfs_time_string_to_interval('arrival_time') }} AS arrival_time_interval,
-        {{ gtfs_time_string_to_interval('departure_time') }} AS departure_time_interval
+        {{ gtfs_time_string_to_interval('departure_time') }} AS departure_time_interval,
+        {{ gtfs_time_string_to_interval('start_pickup_drop_off_window') }} AS start_pickup_drop_off_window_interval,
+        {{ gtfs_time_string_to_interval('end_pickup_drop_off_window') }} AS end_pickup_drop_off_window_interval,
     FROM make_dim
 ),
 
@@ -44,6 +46,18 @@ dim_stop_times AS (
         feed_timezone,
         {{ gtfs_interval_to_seconds('arrival_time_interval') }} AS arrival_sec,
         {{ gtfs_interval_to_seconds('departure_time_interval') }} AS departure_sec,
+        start_pickup_drop_off_window,
+        end_pickup_drop_off_window,
+        start_pickup_drop_off_window_interval,
+        end_pickup_drop_off_window_interval,
+        {{ gtfs_interval_to_seconds('start_pickup_drop_off_window_interval') }} AS start_pickup_drop_off_window_sec,
+        {{ gtfs_interval_to_seconds('end_pickup_drop_off_window_interval') }} AS end_pickup_drop_off_window_sec,
+        mean_duration_factor,
+        mean_duration_offset,
+        safe_duration_factor,
+        safe_duration_offset,
+        pickup_booking_rule_id,
+        drop_off_booking_rule_id
     FROM make_intervals
 )
 

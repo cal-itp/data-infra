@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY') }}"
 source_objects:
   - "stop_times/*.jsonl.gz"
 destination_project_dataset_table: "external_gtfs_schedule.stop_times"
@@ -35,4 +35,20 @@ schema_fields:
   - name: shape_dist_traveled
     type: STRING
   - name: timepoint
+    type: STRING
+  - name: start_pickup_drop_off_window
+    type: STRING
+  - name: end_pickup_drop_off_window
+    type: STRING
+  - name: mean_duration_factor
+    type: STRING
+  - name: mean_duration_offset
+    type: STRING
+  - name: safe_duration_factor
+    type: STRING
+  - name: safe_duration_offset
+    type: STRING
+  - name: pickup_booking_rule_id
+    type: STRING
+  - name: drop_off_booking_rule_id
     type: STRING

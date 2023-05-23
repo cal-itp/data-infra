@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: amplitude
     description: Data exported from Amplitude's Data Destination.
-    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
+    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
     schema: external_amplitude
     tables:
       - name: benefits_events
@@ -12,101 +12,101 @@ models:
   - name: stg_amplitude__benefits_events
     description: Benefits application events data from Amplitude.
     columns:
-      - name: server_received_time
-        description: UTC ISO-8601 timestamp
       - name: app
         description: int
-      - name: device_carrier
-        description: string
-      - name: $schema
-        description: int
-      - name: city
+      - name: device_id
         description: string
       - name: user_id
         description: string
-      - name: uuid
-        description: UUID
-      - name: event_time
+      - name: client_event_time
         description: UTC ISO-8601 timestamp
+      - name: event_id
+        description: int
+      - name: session_id
+        description: long
+      - name: event_type
+        description: string
+      - name: amplitude_event_type
+        description: string
+      - name: version_name
+        description: string
       - name: platform
+        description: string
+      - name: os_name
         description: string
       - name: os_version
         description: string
-      - name: amplitude_id
-        description: long
-      - name: processed_time
-        description: UTC ISO-8601 timestamp
-      - name: user_creation_time
-        description: UTC ISO-8601 timestamp
-      - name: version_name
+      - name: device_brand
         description: string
+      - name: device_manufacturer
+        description: string
+      - name: device_model
+        description: string
+      - name: device_family
+        description: string
+      - name: device_type
+        description: string
+      - name: device_carrier
+        description: string
+      - name: location_lat
+        description: float
+      - name: location_lng
+        description: float
       - name: ip_address
         description: string
-      - name: paying
-        description: boolean
+      - name: country
+        description: string
+      - name: language
+        description: string
+      - name: library
+        description: string
+      - name: city
+        description: string
+      - name: region
+        description: string
       - name: dma
         description: string
       - name: group_properties
         description: dict
-      - name: user_properties
-        description: dict
-      - name: client_upload_time
-        description: UTC ISO-8601 timestamp
-      - name: $insert_id
-        description: string
-      - name: event_type
-        description: string
-      - name: library
-        description: string
-      - name: amplitude_attribution_ids
-        description: string
-      - name: device_type
-        description: string
-      - name: device_manufacturer
-        description: string
-      - name: start_version
-        description: string
-      - name: location_lng
-        description: float
-      - name: server_upload_time
-        description: UTC ISO-8601 timestamp
-      - name: event_id
-        description: int
-      - name: location_lat
-        description: float
-      - name: os_name
-        description: string
-      - name: amplitude_event_type
-        description: string
-      - name: device_brand
-        description: string
-      - name: groups
-        description: dict
       - name: event_properties
         description: dict
-      - name: data
+      - name: user_properties
         description: dict
-      - name: device_id
+      - name: event_time
+        description: UTC ISO-8601 timestamp
+      - name: client_upload_time
+        description: UTC ISO-8601 timestamp
+      - name: server_upload_time
+        description: UTC ISO-8601 timestamp
+      - name: server_received_time
+        description: UTC ISO-8601 timestamp
+      - name: amplitude_id
+        description: long
+      - name: idfa
         description: string
-      - name: language
+      - name: adid
         description: string
-      - name: device_model
+      - name: paying
+        description: boolean
+      - name: start_version
         description: string
-      - name: country
+      - name: user_creation_time
+        description: UTC ISO-8601 timestamp
+      - name: uuid
+        description: UUID
+      - name: sample_rate
+        description: ""
+      - name: $insert_id
         description: string
-      - name: region
+      - name: insert_key
         description: string
       - name: is_attribution_event
         description: bool
-      - name: adid
+      - name: amplitude_attribution_ids
         description: string
-      - name: session_id
-        description: long
-      - name: device_family
+      - name: partner_id
         description: string
-      - name: sample_rate
-        description: ""
-      - name: idfa
-        description: string
-      - name: client_event_time
+      - name: $schema
+        description: int
+      - name: processed_time
         description: UTC ISO-8601 timestamp
