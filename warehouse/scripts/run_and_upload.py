@@ -321,32 +321,36 @@ def run(
             time.sleep(180)
 
             # Use a subprocess here so we can just parse the stdout/stderr
-            p = subprocess.run(
-                [
-                    "dbt-metabase",
-                    "models",
-                    "--metabase_exclude_sources",
-                    "--dbt_manifest_path",
-                    "./target/manifest.json",
-                    "--dbt_docs_url",
-                    "https://dbt-docs.calitp.org",
-                    "--metabase_database",
-                    (
-                        "Data Marts (formerly Warehouse Views)"
-                        if target.startswith("prod")
-                        else "(Internal) Staging Warehouse Views"
-                    ),
-                    "--dbt_schema_excludes",
-                    "staging",
-                    "payments",
-                    "--metabase_sync_skip",
-                ],
-                env={
-                    **os.environ,
-                    "COLUMNS": "300",  # we have to make this wide enough to avoid splitting log lines
-                },
-                capture_output=True,
-            )
+            try:
+                p = subprocess.run(
+                    [
+                        "dbt-metabase",
+                        "models",
+                        "--metabase_exclude_sources",
+                        "--dbt_manifest_path",
+                        "./target/manifest.json",
+                        "--dbt_docs_url",
+                        "https://dbt-docs.calitp.org",
+                        "--metabase_database",
+                        (
+                            "Data Marts (formerly Warehouse Views)"
+                            if target.startswith("prod")
+                            else "(Internal) Staging Warehouse Views"
+                        ),
+                        "--dbt_schema_excludes",
+                        "staging",
+                        "payments",
+                        "--metabase_sync_skip",
+                    ],
+                    env={
+                        **os.environ,
+                        "COLUMNS": "300",  # we have to make this wide enough to avoid splitting log lines
+                    },
+                    capture_output=True,
+                )
+            except subprocess.CalledProcessError as e:
+                print(e.stderr)
+                raise
 
             if check_sync_metabase:
                 results_to_check.append(p)
