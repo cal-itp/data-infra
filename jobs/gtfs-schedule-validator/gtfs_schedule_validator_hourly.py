@@ -102,7 +102,7 @@ class ScheduleValidationJobResult(PartitionedGCSArtifact):
 
     @property
     def dt(self) -> pendulum.Date:
-        return self.ts
+        return self.ts.date()
 
     @validator("filename", allow_reuse=True)
     def is_jsonl(cls, v):
