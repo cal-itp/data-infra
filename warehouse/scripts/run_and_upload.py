@@ -397,8 +397,8 @@ def run(
     try:
         for result in results_to_check:
             result.check_returncode()
-    except result.CalledProcessError as e:
-        print(e.stderr)
+    except result.stderr as e:
+        print(e)
         raise
 
 
