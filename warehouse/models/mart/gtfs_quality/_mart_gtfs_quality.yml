@@ -406,7 +406,7 @@ models:
       - name: last_arrival_sec
         description: |
           Time of last trip arrival on date across all reports-assessed feeds for this organization
-      - name: num_stop_times
+      - name: n_stop_times
         description: |
           Count of scheduled stop events on date across all reports-assessed feeds for this organization
       - name: n_routes
