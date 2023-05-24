@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: legacy_amplitude
     description: Data exported from Amplitude, using an Airflow DAG.
-    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
+    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
     schema: amplitude
     tables:
       - name: benefits_events

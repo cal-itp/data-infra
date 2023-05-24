@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: gtfs_type2
     description: Data in the gtfs_schedule_type2 dataset in BigQuery
-    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
+    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
     schema: gtfs_schedule_type2
     loaded_at_field: CAST(calitp_extracted_at AS TIMESTAMP)
     freshness:

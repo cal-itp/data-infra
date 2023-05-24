@@ -53,6 +53,8 @@ models:
       This table transforms the raw GTFS calendar.txt format (where each row corresponds to a `service_id` and
       each day of the week is a column and service indicators are entered in a "wide" fashion)
       into a long format, where a row is identified by `feed_key`, `service_id`, and `date`.
+      Rows are dropped if they have start_date > end_date (which is not valid) or if they have
+      start_date more than a year in the future relative to the date the table is run.
     columns:
       - &schedule_key
         name: key
@@ -225,55 +227,98 @@ models:
             - feed_key
             - trip_id
             - iteration_num
+      - dbt_utils.expression_is_true:
+          expression: "num_regularly_scheduled_pickup_stop_times + num_no_pickup_stop_times + num_phone_call_required_for_pickup_stop_times + num_coordinate_pickup_with_driver_stop_times = num_stop_times"
+      - dbt_utils.expression_is_true:
+          expression: "num_regularly_scheduled_drop_off_stop_times + num_no_drop_off_stop_times + num_phone_call_required_for_drop_off_stop_times + num_coordinate_drop_off_with_driver_stop_times = num_stop_times"
+      - dbt_utils.expression_is_true:
+          expression: "num_continuous_pickup_stop_times + num_no_continuous_pickup_stop_times + num_phone_call_required_for_continuous_pickup_stop_times + num_coordinate_continuous_pickup_with_driver_stop_times = num_stop_times"
+      - dbt_utils.expression_is_true:
+          expression: "num_continuous_drop_off_stop_times + num_no_continuous_drop_off_stop_times + num_phone_call_required_for_continuous_drop_off_stop_times + num_coordinate_continuous_drop_off_with_driver_stop_times = num_stop_times"
+      - dbt_utils.expression_is_true:
+          expression: "num_approximate_timepoint_stop_times + num_exact_timepoint_stop_times = num_stop_times"
+      - dbt_utils.expression_is_true:
+          expression: "(num_gtfs_flex_stop_times > 0) = is_gtfs_flex_trip"
     columns:
       - *feed_key
       - name: trip_id
-      - name: n_stops
-      - name: n_stop_times
+      - name: num_distinct_stops_served
+        description: '{{ doc("column_num_distinct_stops_served") }}'
+      - name: num_stop_times
+        description: '{{ doc("column_num_stop_times") }}'
       - name: trip_first_departure_sec
       - name: trip_last_arrival_sec
       - name: service_hours
+        description: '{{ doc("column_service_hours") }}'
+      - name: flex_service_hours
+        description: '{{ doc("column_flex_service_hours") }}'
       - name: contains_warning_duplicate_stop_times_primary_key
-        description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_ts`, `trip_last_arrival_ts`,
-          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
-
-          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
-          in the input data. This indicates that data quality issues were present in the stop times data
-          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+        description: '{{ doc("column_contains_warning_duplicate_stop_times_primary_key") }}'
       - name: contains_warning_missing_foreign_key_stop_id
-        description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_ts`, `trip_last_arrival_ts`,
-          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
-
-          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
-          in the input data. This indicates that data quality issues were present in the stop times data
-          that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+        description: '{{ doc("column_contains_warning_missing_foreign_key_stop_id") }}'
       - name: frequencies_defined_trip
-        description: |
-          Rows with `true` are trips defined in `frequencies.txt`, where they are defined as a
-          repeating trip. This means the underlying data structure is different for these trips;
-          see https://gtfs.org/schedule/reference/#frequenciestxt for more information.
+        description: '{{ doc("column_frequencies_defined_trip") }}'
       - name: exact_times
         description: |
           Only populated for frequencies-defined trips; see dim_frequencies.exact_times.
       - name: iteration_num
-        description: |
-          For frequencies-defined trips, the iteration number (starting from 0) for this trip within its
-          defined window. So the first iteration of the trip will have `iteration_num = 0`, and the next
-          trip will have `iteration_num = 1`, and so on.
+        description: '{{ doc("column_st_iteration_num") }}'
       - name: trip_start_timezone
-        description: |
-          The time zone of the first stop in this trip, pulled from dim_stops.
-          For time of day categorization purposes, it is recommended to use this time zone to
-          categorize the trip.
+        description: '{{ doc("column_trip_start_timezone") }}'
       - name: trip_end_timezone
-        description: |
-          The time zone of the final stop in this trip, pulled from dim_stops.
-          For time of day categorization purposes, it is recommended to use `trip_start_timezone`
-          rather than this.
+        description: '{{ doc("column_trip_end_timezone") }}'
+      - name: is_gtfs_flex_trip
+        description: '{{ doc("column_is_gtfs_flex_trip") }}'
+      - name: is_entirely_demand_responsive_trip
+        description: '{{ doc("column_is_entirely_demand_responsive_trip") }}'
+      - name: has_rider_service
+        description: '{{ doc("column_has_rider_service") }}'
+      - name: num_gtfs_flex_stop_times
+        description: '{{ doc("column_num_gtfs_flex_stop_times") }}'
+      - name: first_start_pickup_drop_off_window_sec
+        description: '{{ doc("column_first_start_pickup_drop_off_window_sec") }}'
+      - name: last_end_pickup_drop_off_window_sec
+        description: '{{ doc("column_last_end_pickup_drop_off_window_sec") }}'
+      - name: num_regularly_scheduled_pickup_stop_times
+        description: '{{ doc("column_num_regularly_scheduled_pickup_stop_times") }}'
+      - name: num_no_pickup_stop_times
+        description: '{{ doc("column_num_no_pickup_stop_times") }}'
+      - name: num_phone_call_required_for_pickup_stop_times
+        description: '{{ doc("column_num_phone_call_required_for_pickup_stop_times") }}'
+      - name: num_coordinate_pickup_with_driver_stop_times
+        description: '{{ doc("column_num_coordinate_pickup_with_driver_stop_times") }}'
+      - name: num_regularly_scheduled_drop_off_stop_times
+        description: '{{ doc("column_num_regularly_scheduled_drop_off_stop_times") }}'
+      - name: num_no_drop_off_stop_times
+        description: '{{ doc("column_num_no_drop_off_stop_times") }}'
+      - name: num_phone_call_required_for_drop_off_stop_times
+        description: '{{ doc("column_num_phone_call_required_for_drop_off_stop_times") }}'
+      - name: num_coordinate_drop_off_with_driver_stop_times
+        description: '{{ doc("column_num_coordinate_drop_off_with_driver_stop_times") }}'
+      - name: num_continuous_pickup_stop_times
+        description: '{{ doc("column_num_continuous_pickup_stop_times") }}'
+      - name: num_no_continuous_pickup_stop_times
+        description: '{{ doc("column_num_no_continuous_pickup_stop_times") }}'
+      - name: num_phone_call_required_for_continuous_pickup_stop_times
+        description: '{{ doc("column_num_phone_call_required_for_continuous_pickup_stop_times") }}'
+      - name: num_coordinate_continuous_pickup_with_driver_stop_times
+        description: '{{ doc("column_num_coordinate_continuous_pickup_with_driver_stop_times") }}'
+      - name: num_continuous_drop_off_stop_times
+        description: '{{ doc("column_num_continuous_drop_off_stop_times") }}'
+      - name: num_no_drop_off_stop_times
+        description: '{{ doc("column_num_no_drop_off_stop_times") }}'
+      - name: num_phone_call_required_for_continuous_drop_off_stop_times
+        description: '{{ doc("column_num_phone_call_required_for_continuous_drop_off_stop_times") }}'
+      - name: num_coordinate_continuous_drop_off_with_driver_stop_times
+        description: '{{ doc("column_num_coordinate_continuous_drop_off_with_driver_stop_times") }}'
+      - name: num_approximate_timepoint_stop_times
+        description: '{{ doc("column_num_approximate_timepoint_stop_times") }}'
+      - name: num_exact_timepoint_stop_times
+        description: '{{ doc("column_num_exact_timepoint_stop_times") }}'
+      - name: num_arrival_times_populated_stop_times
+        description: '{{ doc("column_num_arrival_times_populated_stop_times") }}'
+      - name: num_departure_times_populated_stop_times
+        description: '{{ doc("column_num_departure_times_populated_stop_times") }}'
   - name: int_gtfs_rt__distinct_download_configs
     description: |
       Distinct `dt`, `_config_extract_ts` pairs indicating
@@ -329,8 +374,7 @@ models:
       consult `int_gtfs_schedule__daily_scheduled_service_index`.**
       Lists date, feed, and `service_id` combinations for which service was scheduled (i.e.,
       the `service_id` is "in effect" and says that service occurred).
-      Essentially, it takes `calendar` and `calendar_dates` for a given feed, takes the dates for which that
-      feed was "in effect", and combines those into a long list of all service_ids that were in effect for a given
+      Essentially, it takes `calendar` and `calendar_dates` for a given feed and combines those into a long list of all service_ids that were in effect for a given
       date, then filters down to only those where service was actually scheduled on that date.
       For example, a row in this table with `feed_key = A`, `service_date = 2022-10-01`, `service_id = 1` indicates
       that:

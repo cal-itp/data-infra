@@ -490,6 +490,7 @@ def _publish_exposure(
                             f"would be {publish_msg} if --publish",
                             fg=typer.colors.YELLOW,
                         )
+                    del df
 
             elif isinstance(destination, TilesDestination):
                 layer_geojson_paths: Dict[str, Path] = {}

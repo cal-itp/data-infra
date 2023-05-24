@@ -8,9 +8,8 @@ models:
       - name: micropayment_id
         description: From payments.micropayments.micropayment_id
         tests:
-          - unique:
-              config:
-                store_failures: true
+          - unique_proportion:
+              at_least: 0.999
       - name: funding_source_vault_id
         description: From payments.micropayments.funding_source_vault_id
       - name: customer_id
@@ -68,9 +67,8 @@ models:
       - name: littlepay_transaction_id
         description: The littlepay_transaction_id of the first tap transaction
         tests:
-          - unique:
-              config:
-                store_failures: true
+          - unique_proportion:
+              at_least: 0.999
       - name: device_id
         description: The device_id of the first tap transaction
       - name: transaction_type

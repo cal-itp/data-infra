@@ -18,6 +18,7 @@ COPY ./pyproject.toml /app/pyproject.toml
 COPY ./poetry.lock /app/poetry.lock
 RUN poetry export -f requirements.txt --without-hashes --output requirements.txt \
     && pip install -r requirements.txt
+RUN pip install memray
 
 COPY ./dbt_project.yml /app/dbt_project.yml
 COPY ./packages.yml /app/packages.yml

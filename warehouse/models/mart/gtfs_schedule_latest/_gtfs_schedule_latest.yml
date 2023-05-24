@@ -598,6 +598,80 @@ models:
       - name: departure_time_interval
         meta:
           publish.ignore: true
+      - name: start_pickup_drop_off_window
+        description: '{{ doc("gtfs_stop_times__start_pickup_drop_off_window") }}'
+        meta:
+          publish.ignore: true
+      - name: end_pickup_drop_off_window
+        description: '{{ doc("gtfs_stop_times__end_pickup_drop_off_window") }}'
+        meta:
+          publish.ignore: true
+      - name: mean_duration_factor
+        description: '{{ doc("gtfs_stop_times__mean_duration_factor") }}'
+        meta:
+          publish.ignore: true
+      - name: mean_duration_offset
+        description: '{{ doc("gtfs_stop_times__mean_duration_offset") }}'
+        meta:
+          publish.ignore: true
+      - name: safe_duration_factor
+        description: '{{ doc("gtfs_stop_times__safe_duration_factor") }}'
+        meta:
+          publish.ignore: true
+      - name: safe_duration_offset
+        description: '{{ doc("gtfs_stop_times__safe_duration_offset") }}'
+        meta:
+          publish.ignore: true
+      - name: pickup_booking_rule_id
+        description: '{{ doc("gtfs_stop_times__pickup_booking_rule_id") }}'
+        meta:
+          publish.ignore: true
+      - name: drop_off_booking_rule_id
+        description: '{{ doc("gtfs_stop_times__drop_off_booking_rule_id") }}'
+        meta:
+          publish.ignore: true
+      - name: start_pickup_drop_off_window_sec
+        description: |
+          This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents `start_pickup_drop_off_window` as a total number of seconds after twelve hours before noon (usually midnight) on the first day of the given trip.
+          For example, `start_pickup_drop_off_window = 21:30:45` would lead to `start_pickup_drop_off_window_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+        meta:
+          publish.ignore: true
+      - name: end_pickup_drop_off_window_sec
+        description: |
+          This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents `end_pickup_drop_off_window` as a total number of seconds after twelve hours before noon (usually midnight) on the first day of the given trip.
+          For example, `end_pickup_drop_off_window = 21:30:45` would lead to `end_pickup_drop_off_window_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+        meta:
+          publish.ignore: true
+      - name: start_pickup_drop_off_window_interval
+        description: |
+          This is a calculated field that does not appear directly in GTFS. It converts `start_pickup_drop_off_window`
+          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
+          and thus handle times past the following midnight (like `25:40:00`).
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+        meta:
+          publish.ignore: true
+      - name: end_pickup_drop_off_window_interval
+        description: |
+          This is a calculated field that does not appear directly in GTFS. It converts `end_pickup_drop_off_window`
+          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
+          and thus handle times past the following midnight (like `25:40:00`).
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+        meta:
+          publish.ignore: true
 
   - name: dim_stops_latest
     description: |

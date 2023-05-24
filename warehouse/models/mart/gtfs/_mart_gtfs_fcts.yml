@@ -50,11 +50,6 @@ models:
                 # this will work without exception once the Airtable dim is historical;
                 # this threshold may need to increase if the backfill occurs prior to that
                 error_if: ">20"
-      - name: is_future
-        description: |
-          Boolean indicating whether this date is in the future relative to the last time that the table
-          was run. If this is a future date (if is_future is true), any coverage is prospective and
-          subject to change.
       - &feed_timezone_no_tests
         name: feed_timezone
         description: '{{ doc("gtfs_schedule_feed_timezone") }}'
@@ -358,6 +353,9 @@ models:
       Please consult each individual column's definition for guidance on which field is
       most appropriate for your use case.
 
+      This table only contains service through the date (UTC) on which the table was most recently run.
+    # TODO: a test that one of trip_first_departure_sec and trip_start_pickup_drop_off_window_sec is populated
+    # as of May 2023 this test would fail because we have Flex feeds that use incorrect column names so both fields are null
     columns:
       - name: key
         tests:
@@ -427,6 +425,10 @@ models:
         description: '{{ doc("gtfs_routes__agency_id") }}'
       - name: network_id
         description: '{{ doc("gtfs_routes__network_id") }}'
+      - name: route_continuous_pickup
+        description: '{{ doc("gtfs_routes__continuous_pickup") }}'
+      - name: route_continuous_drop_off
+        description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
         tests:
@@ -452,17 +454,14 @@ models:
           Rows with `true` in this column have a duplicate primary key in dim_trips;
           i.e., `trip_id` is duplicated within an individual feed instance.
           Treat these rows with caution.
-      - name: n_stops
-        description: |
-          A distinct count of stop_id by trip
-          Because this represents distinct stop_id values, it is not appropriate to sum across different trips.
-      - name: n_stop_times
-        description: |
-          A count of stop events by trip
+      - name: num_distinct_stops_served
+        description: '{{ doc("column_num_distinct_stops_served") }}'
+      - name: num_stop_times
+        description: '{{ doc("column_num_stop_times") }}'
       - name: trip_first_departure_sec
         description: |
-          The number of seconds after midnight on `service_day` in `feed_timezone` at
-          which this trip's first stop departure occurred.
+          The number of seconds after 12 hours before noon (usually midnight) on `service_date`
+          in `feed_timezone` at which this trip's first stop departure occurred.
 
           This field is used upstream of this table to make generic service determinations
           in tables where we don't have a specific date assigned yet (for example, within
@@ -478,33 +477,17 @@ models:
           stop_times.) Downstream of this table, now that specific dates are associated
           with the trips, this field should not be used.
       - name: service_hours
-        description: |
-          A trip's total hours of service, calculated by subtracting `trip_last_arrival_sec` from
-          `trip_first_departure_sec` and converting to hours.
+        description: '{{ doc("column_service_hours") }}'
+      - name: flex_service_hours
+        description: '{{ doc("column_flex_service_hours") }}'
       - name: contains_warning_duplicate_stop_times_primary_key
-        description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
-          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
-
-          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
-          in the input data. This indicates that data quality issues were present in the stop times data
-          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+        description: '{{ doc("column_contains_warning_duplicate_stop_times_primary_key") }}'
       - name: contains_warning_missing_foreign_key_stop_id
-        description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
-          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
-
-          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
-          in the input data. This indicates that data quality issues were present in the stop times data
-          that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+        description: '{{ doc("column_contains_warning_missing_foreign_key_stop_id") }}'
       - name: trip_start_timezone
-        description: |
-          The time zone of the first stop in this trip.
+        description: '{{ doc("column_trip_start_timezone") }}'
       - name: trip_end_timezone
-        description: |
-          The time zone of the final stop in this trip.
+        description: '{{ doc("column_trip_end_timezone") }}'
       - name: trip_first_departure_ts
         description: |
           The timestamp (non-localized, absolute) at which this trip's first departure occurred.
@@ -578,20 +561,110 @@ models:
           it may be preferable to use this rather than trip_last_arrival_datetime_pacific.
       - *feed_timezone_no_tests
       - name: frequencies_defined_trip
-        description: |
-          Rows with `true` are trips defined in `frequencies.txt`, where they are defined as a
-          repeating trip. This means the underlying data structure is different for these trips;
-          see https://gtfs.org/schedule/reference/#frequenciestxt for more information.
+        description: '{{ doc("column_frequencies_defined_trip") }}'
       - name: iteration_num
-        description: |
-          For frequencies-defined trips, the iteration number (starting from 0) for this trip within its
-          defined window. So the first iteration of the trip will have `iteration_num = 0`, and the next
-          trip will have `iteration_num = 1`, and so on.
+        description: '{{ doc("column_st_iteration_num") }}'
         tests:
           - not_null:
               config:
                 where: "frequencies_defined_trip"
+      - name: is_gtfs_flex_trip
+        description: '{{ doc("column_is_gtfs_flex_trip") }}'
+      - name: is_entirely_demand_responsive_trip
+        description: '{{ doc("column_is_entirely_demand_responsive_trip") }}'
+      - name: num_gtfs_flex_stop_times
+        description: '{{ doc("column_num_gtfs_flex_stop_times") }}'
+      - name: first_start_pickup_drop_off_window_sec
+        description: '{{ doc("column_first_start_pickup_drop_off_window_sec") }}'
+      - name: last_end_pickup_drop_off_window_sec
+        description: '{{ doc("column_last_end_pickup_drop_off_window_sec") }}'
+      - name: num_approximate_timepoint_stop_times
+        description: '{{ doc("column_num_approximate_timepoint_stop_times") }}'
+      - name: num_exact_timepoint_stop_times
+        description: '{{ doc("column_num_exact_timepoint_stop_times") }}'
+      - name: num_arrival_times_populated_stop_times
+        description: '{{ doc("column_num_arrival_times_populated_stop_times") }}'
+      - name: num_departure_times_populated_stop_times
+        description: '{{ doc("column_num_departure_times_populated_stop_times") }}'
+      - name: trip_first_start_pickup_drop_off_window_ts
+        description: |
+          The timestamp (non-localized, absolute) at which this trip's first pickup/drop off window started.
+          Only populated for flexible trips.
 
+          This field should be used to:
+          * Identify all activity that was happening at a specific instant in time
+          * Calculate durations or identify relative ordering of events
+
+          This field should not be used to:
+          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+      - name: trip_last_end_pickup_drop_off_window_ts
+        description: |
+          The timestamp (non-localized, absolute) at which this trip's last pickup/drop off window ended.
+          Only populated for flexible trips.
+
+          This field should be used to:
+          * Identify all activity that was happening at a specific instant in time
+          * Calculate durations or identify relative ordering of events
+
+          This field should not be used to:
+          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+      - name: trip_first_start_pickup_drop_off_window_date_pacific
+        description: |
+          The "America/Los_Angeles" time zone date on which this trip's first pickup/drop off window started.
+          Only populated for flexible trips.
+          There are some feeds with activity that does not occur within this time zone,
+          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+
+          This field should be used to:
+          * Filter trip activity by date
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+
+      - name: trip_first_start_pickup_drop_off_window_datetime_pacific
+        description: |
+          The "America/Los_Angeles" time zone date and time of the beginning of this trip's first pickup/drop off window.
+          Only populated for flexible trips.
+          There are some feeds with activity that does not occur within this time zone,
+          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+
+          This field should be used to:
+          * Filter trip activity by date and time
+          * Bucket trips by time of day
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+
+      - name: trip_last_end_pickup_drop_off_window_pacific
+        description: |
+          The "America/Los_Angeles" time zone date and time at which this trip's last pickup/drop off window ended.
+          Only populated for flexible trips.
+          See trip_first_start_pickup_drop_off_window_datetime_pacific for usage notes.
+      - name: trip_first_start_pickup_drop_off_window_date_local_tz
+        description: |
+          The local (`trip_start_timezone`) date of the beginning of this trip's first pickup/drop off window.
+          Only populated for flexible trips.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_first_start_pickup_drop_off_window_date_pacific.
+      - name: trip_first_start_pickup_drop_off_window_datetime_local_tz
+        description: |
+          The local (`trip_start_timezone`) datetime of this trip's first pickup/drop off window.
+          Only populated for flexible trips.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_first_departure_datetime_pacific.
+
+      - name: trip_last_end_pickup_drop_off_window_datetime_local_tz
+        description: |
+          The local (`trip_end_timezone`) datetime at which this trip's last pickup/drop off window ended.
+          Only populated for flexible trips.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_last_end_pickup_drop_off_window_datetime_pacific.
   - name: fct_daily_rt_feed_files
     description: |
       Each row is a date / URL pair with a summary of data aggregation outcomes.
@@ -697,7 +770,7 @@ models:
         description: Time of first departure on date; null when no trips scheduled
       - name: last_arrival_sec
         description: Time of last departure on date; null when no trips scheduled
-      - name: n_stop_times
+      - name: num_stop_times
         description: |
           Total number of stop events observed; can be 0 if not scheduled trips
       - name: n_routes
@@ -706,7 +779,7 @@ models:
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          stop times data (`n_stops`, `num_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
           and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
 
           I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
@@ -720,7 +793,7 @@ models:
       - name: contains_warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          stop times data (`n_stops`, `num_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
           and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
 
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
@@ -1393,6 +1466,13 @@ models:
       Summarizes trips observed in trip update messages.
     columns:
       - *rt_trip_summary_key
+      - name: dt
+      - name: base64_url
+      - name: trip_id
+      - name: trip_route_id
+      - name: trip_direction_id
+      - name: trip_start_time
+      - name: trip_start_date
       - *num_distinct_message_ids
       - *num_distinct_header_timestamps
       - name: num_distinct_trip_update_timestamps
@@ -1417,6 +1497,13 @@ models:
       Summarizes trips observed in vehicle position messages.
     columns:
       - *rt_trip_summary_key
+      - name: dt
+      - name: base64_url
+      - name: trip_id
+      - name: trip_route_id
+      - name: trip_direction_id
+      - name: trip_start_time
+      - name: trip_start_date
       - *num_distinct_message_ids
       - *num_distinct_header_timestamps
       - name: num_distinct_vehicle_timestamps

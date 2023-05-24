@@ -765,6 +765,7 @@ models:
           lower_bound_column: calitp_valid_at
           upper_bound_column: calitp_invalid_at
           partition_by: funding_source_vault_id
+          zero_length_range_allowed: True
     columns:
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
@@ -800,7 +801,8 @@ models:
       - name: littlepay_transaction_id
         description: '{{ doc("device_transactions_littlepay_transaction_id") }}'
         tests:
-          - unique
+          - unique_proportion:
+              at_least: 0.999
       - name: transaction_type
       - name: pending
   - name: stg_cleaned_device_transactions

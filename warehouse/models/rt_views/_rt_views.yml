@@ -4,7 +4,7 @@ sources:
     # note: these tables should probably be moved at some point
   - name: gtfs_rt_raw
     description: Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs.
-    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
+    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
     schema: gtfs_rt
     tables:
       - name: calitp_files
@@ -18,7 +18,7 @@ sources:
 
   - name: gtfs_rt_logs
     description: Data in the gtfs_rt_logs dataset in BigQuery, from logs sink.
-    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
+    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
     schema: gtfs_rt_logs
     tables:
       - name: stdout
