@@ -582,9 +582,9 @@ models:
         description: '{{ doc("column_num_approximate_timepoint_stop_times") }}'
       - name: num_exact_timepoint_stop_times
         description: '{{ doc("column_num_exact_timepoint_stop_times") }}'
-      - name: num_arrival_times_populated
+      - name: num_arrival_times_populated_stop_times
         description: '{{ doc("column_num_arrival_times_populated_stop_times") }}'
-      - name: num_departure_times_populated
+      - name: num_departure_times_populated_stop_times
         description: '{{ doc("column_num_departure_times_populated_stop_times") }}'
       - name: trip_first_start_pickup_drop_off_window_ts
         description: |
