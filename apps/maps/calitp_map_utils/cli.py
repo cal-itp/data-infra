@@ -51,3 +51,5 @@ def validate_state(
     state = State(**json.loads(contents))
     state.validate_layers(verbose=verbose, data=data)
     typer.secho("Validation successful!", fg=typer.colors.GREEN)
+    typer.secho(f"Creating URL from state {state.json()}...")
+    typer.secho(f"URL: {state.iframe_url}")

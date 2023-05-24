@@ -2,13 +2,15 @@ import base64
 import gzip
 import json
 
+import pytest
 from calitp_map_utils.cli import app
 from typer.testing import CliRunner
 
 runner = CliRunner()
 
 
-def test_validate_state_cli():
+@pytest.mark.slow
+def test_validate_state_cli_executes():
     state_dict = {
         "layers": [
             {

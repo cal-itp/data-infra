@@ -1,15 +1,21 @@
+import base64
 import gzip
 import json
+import os
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import requests
 import typer
 from calitp_data.storage import get_fs  # type: ignore
+from furl import furl
 from geojson_pydantic import Feature, FeatureCollection, MultiPolygon, Point, Polygon
 from geojson_pydantic.types import Position
 from pydantic import BaseModel, HttpUrl, ValidationError, conlist, root_validator
 from tqdm import tqdm
+
+MAP_APP_URL_ENV_VAR = "CALITP_MAP_APP_URL"
+MAP_APP_URL = os.getenv(MAP_APP_URL_ENV_VAR)
 
 
 class Analysis(str, Enum):
@@ -132,3 +138,14 @@ class State(BaseModel):
 
             if data:
                 validate_geojson(layer.url, layer.analysis, verbose=verbose)
+
+    @property
+    def iframe_url(self) -> str:
+        if not MAP_APP_URL:
+            raise RuntimeError("Must provide MAP_APP_URL environment variable.")
+
+        return (
+            furl(MAP_APP_URL)
+            .add({"state": base64.urlsafe_b64encode(self.json().encode()).decode()})
+            .url
+        )

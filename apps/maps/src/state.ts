@@ -65,7 +65,11 @@ export interface Speedmap {
   stop_name?: string;
   route_id?: string;
   tooltip: Tooltip;
-  color: number[];
+  /**
+   * @minItems 3
+   * @maxItems 3
+   */
+  color: [number, number, number];
   highlight_color?: number[];
 }
 export interface Tooltip {

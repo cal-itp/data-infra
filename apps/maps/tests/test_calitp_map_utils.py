@@ -1,3 +1,7 @@
+"""
+This file imports within each test so we can test with different environment variables.
+"""
+
 import pytest
 from calitp_map_utils import Layer, State
 from requests.exceptions import HTTPError
@@ -53,13 +57,14 @@ TEST_STATES = [
 ]
 
 
-def test_validate_good_states():
+@pytest.mark.slow
+def test_good_states_validate_layers():
     for state_dict in TEST_STATES:
         state = State(**state_dict)
         state.validate_layers(data=True)
 
 
-def test_validate_invalid_state_url():
+def test_invalid_layers_throw_exception():
     with pytest.raises(HTTPError):
         State(
             layers=[
@@ -69,3 +74,15 @@ def test_validate_invalid_state_url():
                 )
             ]
         ).validate_layers()
+
+
+def test_iframe_url_works_with_env_var():
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr("calitp_map_utils.MAP_APP_URL", "https://some.domain")
+
+        assert "some.domain" in State(**TEST_STATES[0]).iframe_url
+
+
+def test_iframe_url_missing_env_throws_exception(monkeypatch):
+    with pytest.raises(RuntimeError):
+        _ = State(**TEST_STATES[0]).iframe_url
