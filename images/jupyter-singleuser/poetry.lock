@@ -725,18 +725,19 @@ sqlalchemy-bigquery = ">=1.6.1,<2.0.0"
 
 [[package]]
 name = "calitp-map-utils"
-version = "2023.5.19.7"
+version = "2023.5.24"
 description = ""
 category = "main"
 optional = false
 python-versions = ">=3.9,<3.10"
 files = [
-    {file = "calitp_map_utils-2023.5.19.7-py3-none-any.whl", hash = "sha256:9fdfc9b561fba03472905a957b7314aa8693d0cf469b4ee7a14e1313295419b3"},
-    {file = "calitp_map_utils-2023.5.19.7.tar.gz", hash = "sha256:fbd758a6082d4334987ad786e888b38c50161ae4eccbb2469431bfb2ae9e9ae0"},
+    {file = "calitp_map_utils-2023.5.24-py3-none-any.whl", hash = "sha256:fb655e64a0ecf34ba3509b7e5548851bf3204c66f018c5ea012abb14c8cf876f"},
+    {file = "calitp_map_utils-2023.5.24.tar.gz", hash = "sha256:b1cba5d379a0bfd2a192d361e328501e89198bf2e35759e6cd2e51f0691dae2e"},
 ]
 
 [package.dependencies]
 calitp-data = "2023.2.13.1"
+furl = ">=2.1.3,<3.0.0"
 geojson-pydantic = ">=0.6.1,<0.7.0"
 pydantic = ">=1.10.7,<2.0.0"
 pyyaml = ">=6.0,<7.0"
@@ -1803,6 +1804,22 @@ sftp = ["paramiko"]
 smb = ["smbprotocol"]
 ssh = ["paramiko"]
 tqdm = ["tqdm"]
+
+[[package]]
+name = "furl"
+version = "2.1.3"
+description = "URL manipulation made simple."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "furl-2.1.3-py2.py3-none-any.whl", hash = "sha256:9ab425062c4217f9802508e45feb4a83e54324273ac4b202f1850363309666c0"},
+    {file = "furl-2.1.3.tar.gz", hash = "sha256:5a6188fe2666c484a12159c18be97a1977a71d632ef5bb867ef15f54af39cc4e"},
+]
+
+[package.dependencies]
+orderedmultidict = ">=1.0.1"
+six = ">=1.8.0"
 
 [[package]]
 name = "future"
@@ -4372,6 +4389,21 @@ files = [
 
 [package.dependencies]
 et-xmlfile = "*"
+
+[[package]]
+name = "orderedmultidict"
+version = "1.0.1"
+description = "Ordered Multivalue Dictionary"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "orderedmultidict-1.0.1-py2.py3-none-any.whl", hash = "sha256:43c839a17ee3cdd62234c47deca1a8508a3f2ca1d0678a3bf791c87cf84adbf3"},
+    {file = "orderedmultidict-1.0.1.tar.gz", hash = "sha256:04070bbb5e87291cc9bfa51df413677faf2141c73c61d2a5f7b26bea3cd882ad"},
+]
+
+[package.dependencies]
+six = ">=1.8.0"
 
 [[package]]
 name = "outcome"
@@ -7745,4 +7777,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "ce3d94a183bffce775d952b6bc99caf5f7cf1a377586f937beb83b0ae0ec36a7"
+content-hash = "4d7d86229a2e3c5908a0b23fb554fab42042752885b23a4f67899e8e2b15fee3"
