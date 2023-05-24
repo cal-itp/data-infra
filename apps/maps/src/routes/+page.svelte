@@ -12,6 +12,8 @@
     import '@fortawesome/fontawesome-free/css/all.css'
     import * as turf from '@turf/turf';
     import { Base64 } from 'js-base64';
+    import {GZipCompression} from "@loaders.gl/compression";
+    import {_GeoJSONLoader as GeoJSONLoader} from '@loaders.gl/json';
 
     const STATE_QUERY_PARAM = "state";
     const START_LAT_LON = [34.05, -118.25];
@@ -27,11 +29,9 @@
     };
     let mapElement;
     let map;
-    let jsonData;
     /** @type {State} */
     let state;
-    let options = [];
-    let layer;
+    let outerLayer;
     let loading = false;
 
     const NSHADES = 10;
@@ -43,26 +43,33 @@
         format: 'rgba',
     }).reverse();
 
-    function fetchGeoJSON(url, callback) {
-        fetch(url).then((response) => {
-            if (url.endsWith(".gz") || response.headers.get("content-type") === "application/x-gzip") {
-                console.log("decompressing gzipped data");
-                response.arrayBuffer().then((raw) => {
-                    decompress(new Uint8Array(raw), (err, data) => {
-                            if (err) {
-                                console.error(err);
-                            } else {
-                                callback(JSON.parse(strFromU8(data)));
-                            }
-                        }
-                    )
-                });
-            } else {
-                jsonData = response.json().then((json) => {
-                    callback(json);
-                });
-            }
-        })
+    // https://github.com/101arrowz/fflate/wiki/FAQ
+    const promisify = (func) => {
+      return (...args) => {
+        return new Promise((resolve, reject) => {
+          func(...args, (err, res) => err
+                  ? reject(err)
+                  : resolve(res)
+          );
+        });
+      }
+    }
+
+    function fetchGeoJSON(url, context) {
+      console.log("Fetching", url);
+      return fetch(url).then((response) => {
+        if (url.endsWith(".gz") || response.headers.get("content-type") === "application/x-gzip") {
+          console.log("decompressing gzipped data");
+
+          return response.arrayBuffer().then((raw) => {
+            return promisify(decompress)(new Uint8Array(raw)).then((data) => {
+              return JSON.parse(strFromU8(data));
+            });
+          });
+        }
+
+        return response.json();
+      });
     }
 
     function speedFeatureColor(feature, colorMap) {
@@ -129,13 +136,12 @@
     }
 
     /**
-   * @param {Layer} layer
+   * @param {Layer[]} layers
    */
-    function addLayer(layer) {
-      const url = layer.url;
-        if (url.endsWith(".pmtiles")) {
+    function createLeafletLayer(layers) {
+        if (layers[0].url.endsWith(".pmtiles")) {
             console.error("PMTiles not officially supported yet.");
-            layer = leafletLayer({
+            outerLayer = leafletLayer({
                 url: url,
                 paint_rules: [
                   {
@@ -152,49 +158,52 @@
             loading = false;
         } else {
             // NOTE: When defining interaction callbacks, I think they use https://deck.gl/docs/developer-guide/interactivity#the-picking-info-object
-            fetchGeoJSON(url, (json) => {
-                console.log("Creating layer", layer.name);
-                layer = new LeafletLayer({
-                    views: [
-                        new MapView({
-                            repeat: true
-                        })
-                    ],
-                    layers: [
-                        new GeoJsonLayer({
-                            id: "geojson",
-                            data: json,
-                            pickable: true,
-                            autoHighlight: true,
-                            getPointRadius: 10,
-                            getFillColor: (feature) => getColor(feature, 0.5),
-                            highlightColor: ({ object }) => getColor(object),
-                        }),
-                    ],
-                    // these have to be called object if destructured like this
-                    // onHover: ({ object }) => object && console.log(object),
-                    getTooltip: ({ object }) => object && getTooltip(object),
-                });
-                map.addLayer(layer);
+            console.log("Creating layers.");
+            outerLayer = new LeafletLayer({
+                views: [
+                    new MapView({
+                        repeat: true
+                    })
+                ],
+                layers: state.layers.map((layer, idx) => {
+                  return new GeoJsonLayer({
+                    id: layer.name,
+                    data: fetchGeoJSON(layer.url),
+                    pickable: true,
+                    autoHighlight: true,
+                    getPointRadius: 10,
+                    getFillColor: (feature) => getColor(feature, 0.5),
+                    highlightColor: ({object}) => getColor(object),
+                    onDataLoad: (data) => {
+                      console.log("Finished loading", layer);
 
-              // only zoom to bbox of the last layer
-                if (state.bbox) {
-                  console.log("flyToBounds", state.bbox);
-                  map.flyToBounds(state.bbox, {maxZoom: 20});
-                } else if (state.lat_lon) {
-                  const zoom = state.zoom ? state.zoom : 13;
-                  console.log("flyTo", state.lat_lon, zoom);
-                    map.flyTo(state.lat_lon, zoom);
-                } else {
-                  const bbox = turf.bbox(json);
-                  // have to flip; turf gives us back lon/lat
-                  // leaflet always wants [lat, lng]
-                  const latLngLike = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
-                  console.log("flyToBounds", latLngLike);
-                  map.flyToBounds(latLngLike, {maxZoom: 20});
-                }
-                loading = false;
-            })
+                      if (idx === state.layers.length - 1) {
+                        if (state.bbox) {
+                          console.log("flyToBounds", state.bbox);
+                          map.flyToBounds(state.bbox, {maxZoom: 20});
+                        } else if (state.lat_lon) {
+                          const zoom = state.zoom ? state.zoom : 13;
+                          console.log("flyTo", state.lat_lon, zoom);
+                          map.flyTo(state.lat_lon, zoom);
+                        } else {
+                          const bbox = turf.bbox(data);
+                          // have to flip; turf gives us back lon/lat
+                          // leaflet always wants [lat, lng]
+                          const latLngLike = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
+                          console.log("flyToBounds", latLngLike);
+                          map.flyToBounds(latLngLike, {maxZoom: 20});
+                        }
+                      }
+
+                    },
+                  });
+                }),
+                // these have to be called object if destructured like this
+                // onHover: ({ object }) => object && console.log(object),
+                getTooltip: ({ object }) => object && getTooltip(object),
+            });
+            map.addLayer(outerLayer);
+            loading = false;
         }
     }
 
@@ -223,15 +232,8 @@
 
         const basemapConfig = state.basemap_config || DEFAULT_BASEMAP_CONFIG;
         L.tileLayer(basemapConfig.url, basemapConfig.options).addTo(map);
-
-        // TODO: figure out how we can use multiple layers with LeafletLayer
-        // for (const [idx, layer] of state.layers.entries()) {
-        //   console.log(index, element);
-        // }
-        addLayer(state.layers[0]);
-
-    })
-    ;
+        createLeafletLayer(state.layers);
+    });
 
     onDestroy(async () => {
         if (map) {
