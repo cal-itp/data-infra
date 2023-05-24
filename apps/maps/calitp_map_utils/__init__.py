@@ -146,6 +146,12 @@ class State(BaseModel):
 
         return (
             furl(MAP_APP_URL)
-            .add({"state": base64.urlsafe_b64encode(self.json().encode()).decode()})
+            .add(
+                {
+                    "state": base64.urlsafe_b64encode(
+                        gzip.compress(self.json().encode())
+                    ).decode()
+                }
+            )
             .url
         )
