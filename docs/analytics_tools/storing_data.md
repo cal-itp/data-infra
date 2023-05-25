@@ -113,8 +113,8 @@ Or, use the `shared_utils` package.
 import shared_utils
 
 shared_utils.utils.geoparquet_gcs_export(
-    gdf, 
-    GCS_FOLDER, 
+    gdf,
+    GCS_FOLDER,
     "my-geoparquet"
 )
 ```
@@ -135,14 +135,14 @@ import shared_utils
 GCS_FOLDER = "gs://calitp-analytics-data/data-analyses/task-subfolder/"
 
 gdf = shared_utils.utils.read_geojson(
-    GCS_FOLDER, 
+    GCS_FOLDER,
     "my-geojson.geojson",
     geojson_type = "geojson",
     save_locally = True
 )
 
 shared_utils.utils.geojson_gcs_export(
-    gdf, 
+    gdf,
     GCS_FOLDER,
     "my-geojson.geojson",
     geojson_type = "geojson",
