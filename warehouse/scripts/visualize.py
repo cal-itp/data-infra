@@ -4,6 +4,7 @@ Provide more visualizations than what dbt provides.
 import json
 import os
 import webbrowser
+from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Tuple, Type, Union
 
@@ -24,6 +25,11 @@ from dbt_artifacts import (
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 app = typer.Typer(pretty_exceptions_enable=False)
+
+
+class ArtifactType(str, Enum):
+    manifest = "manifest"
+    run_results = "run_results"
 
 
 def read_artifact(path: Path, artifact_type: Type, verbose: bool = False) -> Any:
@@ -170,7 +176,7 @@ def build_graph(
 
 @app.command()
 def viz(
-    artifact: str,
+    artifact_type: ArtifactType,
     artifacts_path: Path = Path("./target"),
     graph_path: Path = Path("./target/graph.gpickle"),
     analyses: bool = False,
@@ -191,17 +197,17 @@ def viz(
     manifest, catalog, run_results = read_artifacts_folder(
         artifacts_path, verbose=verbose
     )
-    actual_artifact: Union[Manifest, RunResults]
-    if artifact == "man":
-        actual_artifact = manifest
+    artifact: Union[Manifest, RunResults]
+    if artifact_type == ArtifactType.manifest:
+        artifact = manifest
         if not output:
             output = Path("./target/manifest.pdf")
-    elif artifact == "run":
-        actual_artifact = run_results
+    elif artifact_type == "run":
+        artifact = run_results
         if not output:
             output = Path("./target/run_results.pdf")
     else:
-        raise ValueError(f"unknown artifact {artifact} provided")
+        raise ValueError(f"unknown artifact {artifact_type} provided")
 
     if dbt_selector:
         dbt = dbtRunner()
@@ -217,7 +223,7 @@ def viz(
         ).result
 
     G = build_graph(
-        actual_artifact,
+        artifact,
         analyses,
         models,
         seeds,
@@ -283,12 +289,14 @@ def ci_report(
             latest_dir,
         ]
     ).result
+
     assert isinstance(modified_models, list)
     assert isinstance(changed_or_downstream_incremental_models, list)
     include = set(changed_or_downstream_incremental_models + modified_models)
     typer.secho(f"Visualizing the following models: {include}")
+
     viz(
-        "man",
+        ArtifactType.manifest,
         include=list(include),
         output=Path("./target/dag.png"),
     )
