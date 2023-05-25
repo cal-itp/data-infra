@@ -178,8 +178,10 @@ class ModelNode(BaseModelNode, NodeModelMixin):
             and self.catalog_entry.num_bytes > 100_000_000_000  # type: ignore[attr-defined]
         )
 
-        if self.config.materialized in ("table", "incremental"):
+        if self.config.materialized == "table":
             fillcolor = "darkseagreen"
+        elif self.config.materialized == "incremental":
+            fillcolor = "darkseagreen1"
 
         if (
             more_than_100gb

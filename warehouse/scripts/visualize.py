@@ -262,7 +262,21 @@ def ci_report(
         ]
     ).result
 
-    changed_or_downstream_incremental_models = dbt.invoke(
+    modified_models = dbt.invoke(
+        [
+            "ls",
+            "--resource-type",
+            "model",
+            "--select",
+            "state:modified+",
+            "--exclude",
+            "state:new",
+            "--state",
+            latest_dir,
+        ]
+    ).result
+
+    modified_or_downstream_incremental_models = dbt.invoke(
         [
             "ls",
             "--resource-type",
@@ -276,28 +290,11 @@ def ci_report(
         ]
     ).result
 
-    modified_models = dbt.invoke(
-        [
-            "ls",
-            "--resource-type",
-            "model",
-            "--select",
-            "state:modified",
-            "--exclude",
-            "state:new",
-            "--state",
-            latest_dir,
-        ]
-    ).result
-
+    typer.secho(f"Visualizing the following models: {modified_models}")
     assert isinstance(modified_models, list)
-    assert isinstance(changed_or_downstream_incremental_models, list)
-    include = set(changed_or_downstream_incremental_models + modified_models)
-    typer.secho(f"Visualizing the following models: {include}")
-
     viz(
         ArtifactType.manifest,
-        include=list(include),
+        include=modified_models,
         output=Path("./target/dag.png"),
     )
 
@@ -308,7 +305,7 @@ def ci_report(
     template = env.get_template("ci_report.md")
     report = template.render(
         new_models=new_models,
-        changed_or_downstream_incremental_models=changed_or_downstream_incremental_models,
+        modified_or_downstream_incremental_models=modified_or_downstream_incremental_models,
     )
     typer.secho(f"Writing to {output}", fg=typer.colors.GREEN)
     with open(output, "w") as f:
