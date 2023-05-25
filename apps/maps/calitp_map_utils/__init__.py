@@ -101,6 +101,7 @@ class Layer(BaseModel):
     name: str
     url: HttpUrl
     analysis: Optional[Analysis]
+    properties: Optional[Dict[str, Any]]
 
 
 class BasemapConfig(BaseModel):
@@ -117,6 +118,7 @@ class State(BaseModel):
     zoom: Optional[int]
     bbox: Optional[Tuple[Position, Position]]
     basemap_config: Optional[BasemapConfig]
+    legend_url: HttpUrl
 
     def validate_layers(
         self,

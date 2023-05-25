@@ -106,6 +106,9 @@ export interface Layer {
   name: string;
   url: string;
   analysis?: Analysis;
+  properties?: {
+    [k: string]: unknown;
+  };
 }
 export interface State {
   name?: string;
@@ -121,4 +124,5 @@ export interface State {
    */
   bbox?: [[number, number] | [number, number, number], [number, number] | [number, number, number]];
   basemap_config?: BasemapConfig;
+  legend_url: string;
 }

@@ -38,6 +38,7 @@
     "@loaders.gl/compression": "^3.4.3",
     "@loaders.gl/core": "^3.4.3",
     "@loaders.gl/json": "^3.4.3",
+    "@svgdotjs/svg.js": "^3.1.2",
     "@turf/turf": "^6.5.0",
     "@types/colormap": "^2.3.1",
     "deck.gl": "^8.9.14",

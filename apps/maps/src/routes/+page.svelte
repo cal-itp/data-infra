@@ -12,8 +12,6 @@
     import '@fortawesome/fontawesome-free/css/all.css'
     import * as turf from '@turf/turf';
     import { Base64 } from 'js-base64';
-    import {GZipCompression} from "@loaders.gl/compression";
-    import {_GeoJSONLoader as GeoJSONLoader} from '@loaders.gl/json';
 
     const STATE_QUERY_PARAM = "state";
     const START_LAT_LON = [34.05, -118.25];
@@ -166,12 +164,14 @@
                     })
                 ],
                 layers: state.layers.map((layer, idx) => {
+                  const layerProperties = layer.properties || {};
                   return new GeoJsonLayer({
                     id: layer.name,
                     data: fetchGeoJSON(layer.url),
                     pickable: true,
                     autoHighlight: true,
                     getPointRadius: 10,
+                    ...layerProperties,
                     getFillColor: (feature) => getColor(feature, 0.5),
                     highlightColor: ({object}) => getColor(object),
                     onDataLoad: (data) => {
@@ -232,7 +232,24 @@
 
         const basemapConfig = state.basemap_config || DEFAULT_BASEMAP_CONFIG;
         L.tileLayer(basemapConfig.url, basemapConfig.options).addTo(map);
+
+        L.control.scale().addTo(map);
+
         createLeafletLayer(state.layers);
+
+        if (state.legend_url) {
+          console.log("Adding legend to map", state.legend_url);
+          let legend = L.control({position: "topright"});
+          legend.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'legend');
+            return this._div;
+          };
+          fetch(state.legend_url).then((resp) => resp.text().then((data) => {
+            legend._div.innerHTML = data;
+          }));
+          legend.addTo(map);
+        }
+
     });
 
     onDestroy(async () => {
@@ -251,10 +268,31 @@
         height: 800px;
     }
 
+    /* Use :global to prevent namespacing of CSS for elements that are created dynamically */
+    /* TODO: maybe we can define some of these things up front? For example create the legend div in HTML. */
     :global(.maplibregl-popup) {
         max-width: 400px;
         font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     }
+
+    :global(.legend > svg) {
+      height: auto;
+      width: 128px;
+    }
+
+    :global(.legend) {
+      padding: 6px 8px;
+      font: 14px/16px Arial, Helvetica, sans-serif;
+      background: white;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 5px;
+  }
+
+  :global(.legend h4) {
+      margin: 0 0 5px;
+      color: #777;
+  }
 </style>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
