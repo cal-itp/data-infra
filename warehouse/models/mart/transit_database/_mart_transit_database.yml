@@ -163,7 +163,7 @@ models:
           for example in `mart_gtfs.dim_schedule_feeds`.**
       - name: gtfs_schedule_quality
         description: |
-          Status of overall GTFS quality for a given transit service. Options are:
+          Status of overall GTFS quality for a given transit service. Options:
           `0 - Does not have GTFS Schedule`;
           `1 - Has URL for GTFS downloading`;
           `2 - GTFS data has active service`;
@@ -174,8 +174,8 @@ models:
           This field can also be empty (null). Sometimes this field is null (missing) even
           for services that **do** have GTFS schedule data.
           **Note: This field is manually entered in the Transit Database,
-          so it may be subject to some gaps in coverage and it is not updated automatically.
-          Data in this field may not align with validations data from the
+          so it may be subject to gaps in coverage and it is not updated automatically.
+          Data in this field may not align with validations from the
           GTFS pipeline, for example in `mart_gtfs_quality.fct_daily_schedule_feed_validation_notices`,
           or GTFS guidelines checks implemented in `mart_gtfs_guidelines.fact_daily_guideline_checks`.
           Use those tables directly for the most up-to-date information on individual GTFS feeds'
