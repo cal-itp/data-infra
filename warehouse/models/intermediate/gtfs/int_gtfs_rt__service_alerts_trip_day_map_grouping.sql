@@ -50,6 +50,8 @@ int_gtfs_rt__service_alerts_trip_day_map_grouping AS (
         trip_start_date,
         trip_schedule_relationship,
         schedule_feeds.feed_timezone,
+        -- what we really want here is an array of the distinct structs, but you can't DISTINCT structs
+        -- so we turn them into JSON strings which we can turn back into structs later
         ARRAY_AGG(DISTINCT
             TO_JSON_STRING(
                 STRUCT<message_id string, cause string, effect string, header string, description string >
