@@ -16,6 +16,7 @@ Doing work locally and pushing directly from the command line is a similar workf
     * [Committing in the Github User Interface](#pushing-drag-drop)
 
 
+(committing-from-jupyterhub)=
 ## Project Workflow
 
 It is best practice to do have a dedicated branch for your task. A commit in GitHub is similar to saving your work. It allows the system to capture the changes you have made and offers checkpoints through IDs that both show the progress of your work and can be referenced for particular tasks.

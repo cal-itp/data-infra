@@ -1,7 +1,7 @@
 (pandas-intermediate)=
 # Data Analysis: Intermediate
 
-After polishing off the [intro tutorial](./data-analysis-intro.md), you're ready to devour some more techniques to simplify your life as a data analyst.
+After polishing off the [intro tutorial](pandas-intro), you're ready to devour some more techniques to simplify your life as a data analyst.
 
 * [Create a new column using a dictionary to map the values](#create-a-new-column-using-a-dictionary-to-map-the-values)
 * [Loop over columns with a dictionary](#loop-over-columns-with-a-dictionary)
@@ -30,7 +30,7 @@ Sometimes, you want to create a new column by converting one set of values into 
 
 
 ### Write a Function
-[Quick refresher on functions](./data-analysis-intro.md)
+[Quick refresher on functions](pandas-intro)
 
 ```
 # Create a function called state_abbrev.
