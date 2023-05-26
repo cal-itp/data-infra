@@ -999,6 +999,7 @@ models:
         tests:
           - not_null
           - unique
+      - *schedule_dim_dt
       - *feed_key
       - *base64_url
       - name: shape_id
