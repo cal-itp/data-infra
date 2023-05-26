@@ -394,12 +394,12 @@ def run(
                 fg=typer.colors.YELLOW,
             )
 
-    try:
-        for result in results_to_check:
+    for result in results_to_check:
+        try:
             result.check_returncode()
-    except result.stderr as e:
-        print(e)
-        raise
+        except subprocess.CalledProcessError as e:
+            print(e.stderr, flush=True)
+            raise
 
 
 if __name__ == "__main__":
