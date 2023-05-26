@@ -60,9 +60,7 @@ int_gtfs_schedule__frequencies_stop_times AS (
         warning_duplicate_primary_key AS warning_duplicate_stop_times_primary_key,
         warning_missing_foreign_key_stop_id,
         base64_url,
-        _dt,
         _feed_valid_from,
-        _line_number,
     FROM frequencies_stop_times
     LEFT JOIN UNNEST(GENERATE_ARRAY(start_time_sec, end_time_sec, headway_secs))
         AS iterations
