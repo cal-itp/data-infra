@@ -26,6 +26,7 @@ Each task sub-folder within the `data-analyses` repo should come with its own da
 1. Data Catalogs with [Intake](#intake)
 1. [Open Data Portals](#open-data-portals)
 1. [Google Cloud Storage](#google-cloud-storage) (GCS) Buckets
+1. [Sample Data Catalog](#sample-data-catalog)
 
 ### Intake
 
@@ -116,4 +117,10 @@ df2 = catalog.test_csv.read()
 gdf1 = catalog.test_zipped_shapefile.read()
 
 gdf2 = catalog.test_geoparquet.read()
+```
+
+(sample-catalog)=
+# Sample Data Catalog
+
+```{literalinclude} sample-catalog.yml
 ```
