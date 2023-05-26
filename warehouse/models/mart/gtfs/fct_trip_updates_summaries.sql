@@ -18,6 +18,47 @@ WITH trip_updates_grouped AS (
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
 ),
 
+window_functions AS (
+    SELECT *,
+        FIRST_VALUE(trip_schedule_relationship)
+        OVER (
+            PARTITION BY key
+            ORDER BY min_trip_update_timestamp
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS starting_schedule_relationship,
+    LAST_VALUE(trip_schedule_relationship)
+        OVER (
+            PARTITION BY key
+            ORDER BY max_trip_update_timestamp
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS ending_schedule_relationship,
+    FIRST_VALUE(trip_route_id)
+        OVER (
+            PARTITION BY key
+            ORDER BY min_trip_update_timestamp
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS starting_route_id,
+    LAST_VALUE(trip_route_id)
+        OVER (
+            PARTITION BY key
+            ORDER BY max_trip_update_timestamp
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS ending_route_id,
+    FIRST_VALUE(trip_direction_id)
+        OVER (
+            PARTITION BY key
+            ORDER BY min_trip_update_timestamp
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS starting_direction_id,
+    LAST_VALUE(trip_direction_id)
+        OVER (
+            PARTITION BY key
+            ORDER BY max_trip_update_timestamp
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS ending_direction_id,
+    FROM trip_updates_grouped
+),
+
 message_ids AS (
     {{ gtfs_rt_unnest_column_count_distinct(table = 'trip_updates_grouped',
     key_col = 'key',
@@ -81,12 +122,15 @@ non_array_agg AS(
         calculated_service_date,
         base64_url,
         trip_id,
-        trip_route_id,
-        trip_direction_id,
         trip_start_time,
         trip_start_date,
-        trip_schedule_relationship,
         feed_timezone,
+        starting_schedule_relationship,
+        ending_schedule_relationship,
+        starting_route_id,
+        ending_route_id,
+        starting_direction_id,
+        ending_direction_id,
         MIN(min_extract_ts) AS min_extract_ts,
         MAX(max_extract_ts) AS max_extract_ts,
         MIN(min_header_timestamp) AS min_header_timestamp,
@@ -94,8 +138,8 @@ non_array_agg AS(
         MIN(min_trip_update_timestamp) AS min_trip_update_timestamp,
         MAX(max_trip_update_timestamp) AS max_trip_update_timestamp,
         MAX(max_delay) AS max_delay,
-    FROM trip_updates_grouped
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    FROM window_functions
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 ),
 
 fct_trip_updates_summaries AS (
@@ -105,11 +149,14 @@ fct_trip_updates_summaries AS (
         calculated_service_date,
         base64_url,
         trip_id,
-        trip_route_id,
-        trip_direction_id,
         trip_start_time,
         trip_start_date,
-        trip_schedule_relationship,
+        starting_schedule_relationship,
+        ending_schedule_relationship,
+        starting_route_id,
+        ending_route_id,
+        starting_direction_id,
+        ending_direction_id,
         feed_timezone,
         num_distinct_message_ids,
         num_distinct_header_timestamps,
