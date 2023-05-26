@@ -38,7 +38,7 @@ df = pd.read_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.cs
 df.to_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.csv')
 ```
 
-Refer to the [Data Management best practices](data-management-page) and [Basics of Working with Geospatial Data](./spatial-analysis-basics.md) for additional information on importing various file types.
+Refer to the [Data Management best practices](data-management-page) and [Basics of Working with Geospatial Data](geo-intro) for additional information on importing various file types.
 
 
 ## Merge Tabular and Geospatial Data
@@ -66,7 +66,7 @@ Dataframe #2: `paunch_locations` (geospatial)
 | 7 | Indianapolis  | $7 | | (x7, y7)
 
 
-If `paunch_locations` did not come with the council district information, use a spatial join to attach the council district within which the store falls. More on spatial joins [here](./spatial-analysis-intro.md).
+If `paunch_locations` did not come with the council district information, use a spatial join to attach the council district within which the store falls. More on spatial joins [here](geo-intro).
 
 
 Dataframe #3: `council_boundaries` (geospatial)

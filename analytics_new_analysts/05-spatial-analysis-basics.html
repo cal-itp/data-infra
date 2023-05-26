@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sample Data Catalog &#8212; Cal-ITP Data Services</title>
+    <title>Working with Geospatial Data: Basics &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -57,8 +57,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Where can I publish data?" href="../publishing/overview.html" />
-    <link rel="prev" title="More Complex Queries" href="new_tutorial.html" />
+    <link rel="next" title="Working with Geospatial Data: Intro" href="06-spatial-analysis-intro.html" />
+    <link rel="prev" title="Working with Jupyter notebooks" href="04-notebooks.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -179,6 +179,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/scripts.html">
+     Scripts
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/rt_analysis.html">
      RT Analysis Module
     </a>
@@ -205,53 +210,53 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_new_analysts/overview.html">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
    Tutorials for New Python Users
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
   <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
+  <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/data-analysis-intro.html">
+    <a class="reference internal" href="01-data-analysis-intro.html">
      Data Analysis: Intro
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/data-analysis-intermediate.html">
+    <a class="reference internal" href="02-data-analysis-intermediate.html">
      Data Analysis: Intermediate
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/data-management.html">
+    <a class="reference internal" href="03-data-management.html">
      Data Management
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/notebooks.html">
+    <a class="reference internal" href="04-notebooks.html">
      Working with Jupyter notebooks
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/spatial-analysis-basics.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      Working with Geospatial Data: Basics
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/spatial-analysis-intro.html">
+    <a class="reference internal" href="06-spatial-analysis-intro.html">
      Working with Geospatial Data: Intro
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/spatial-analysis-intermediate.html">
+    <a class="reference internal" href="07-spatial-analysis-intermediate.html">
      Working with Geospatial Data: Intermediate
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/spatial-analysis-advanced.html">
+    <a class="reference internal" href="08-spatial-analysis-advanced.html">
      Working with Geospatial Data: Advanced
     </a>
    </li>
@@ -295,39 +300,12 @@
    Navigating the dbt Docs
   </a>
  </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
-   Analysis Tutorials
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="warehouse_tutorial.html">
-     Querying GTFS in the Data Warehouse
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="new_tutorial.html">
-     More Complex Queries
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Sample Data Catalog
-    </a>
-   </li>
-  </ul>
- </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../publishing/overview.html">
    Where can I publish data?
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -373,8 +351,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/9_map_tiles.html">
-     Map tiles
+    <a class="reference internal" href="../publishing/sections/9_geoportal.html">
+     Publishing data to California State Geoportal
     </a>
    </li>
   </ul>
@@ -395,8 +373,8 @@
   <a class="reference internal" href="../airflow/overview.html">
    Airflow
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -412,8 +390,8 @@
   <a class="reference internal" href="../kubernetes/README.html">
    Kubernetes
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-  <label for="toctree-checkbox-8">
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -439,8 +417,8 @@
   <a class="reference internal" href="../ci/README.html">
    CI
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-  <label for="toctree-checkbox-9">
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -511,8 +489,8 @@
   <a class="reference internal" href="../services/overview.html">
    Services
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
-  <label for="toctree-checkbox-10">
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -540,8 +518,8 @@
   <a class="reference internal" href="../contribute/overview.html">
    Getting Started
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
-  <label for="toctree-checkbox-11">
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -604,7 +582,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/analytics_examples/sample-catalog-viewer.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/analytics_new_analysts/05-spatial-analysis-basics.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -624,10 +602,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_examples/sample-catalog-viewer.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_new_analysts/05-spatial-analysis-basics.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_examples/sample-catalog-viewer.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_new_analysts/05-spatial-analysis-basics.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -647,6 +625,45 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#getting-started">
+   Getting Started
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#import-and-export-data-in-python">
+   Import and Export Data in Python
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#local-files">
+     <strong>
+      Local files
+     </strong>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#gcs">
+     <strong>
+      GCS
+     </strong>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-and-projecting-coordinate-reference-system">
+   Setting and Projecting Coordinate Reference System
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -654,72 +671,170 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Sample Data Catalog</h1>
+                <h1>Working with Geospatial Data: Basics</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#getting-started">
+   Getting Started
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#import-and-export-data-in-python">
+   Import and Export Data in Python
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#local-files">
+     <strong>
+      Local files
+     </strong>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#gcs">
+     <strong>
+      GCS
+     </strong>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-and-projecting-coordinate-reference-system">
+   Setting and Projecting Coordinate Reference System
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="sample-data-catalog">
-<span id="sample-catalog"></span><h1>Sample Data Catalog<a class="headerlink" href="#sample-data-catalog" title="Permalink to this headline">¶</a></h1>
-<p>This sample catalogue is used as an example for the <a class="reference internal" href="../analytics_tools/data_catalogs.html#data-catalogs"><span class="std std-ref">Using Data Catalogues</span></a> section of the <a class="reference internal" href="../analytics_tools/overview.html#intro-analytics-tools"><span class="std std-ref">Introduction to Analytics Tools</span></a> chapter.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metadata</span><span class="p">:</span>
-  <span class="n">version</span><span class="p">:</span> <span class="mi">1</span>
-<span class="n">sources</span><span class="p">:</span>
-  <span class="c1"># Open Data Portals</span>
-  <span class="n">la_geohub</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">dcat</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">url</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">geohub</span><span class="o">.</span><span class="n">lacity</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">json</span>
-      <span class="n">items</span><span class="p">:</span>
-        <span class="n">city_boundary</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">geohub</span><span class="o">.</span><span class="n">lacity</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="mi">09</span><span class="n">f503229d37414a8e67a7b6ceb9ec43_7</span>
-  <span class="n">ca_open_data</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">dcat</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">url</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">data</span><span class="o">.</span><span class="n">ca</span><span class="o">.</span><span class="n">gov</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">json</span>
-      <span class="n">items</span><span class="p">:</span>
-          <span class="n">cdcr_population_covid_tracking</span><span class="p">:</span> <span class="mi">4</span><span class="n">a9a896a</span><span class="o">-</span><span class="n">e64e</span><span class="o">-</span><span class="mi">48</span><span class="n">c2</span><span class="o">-</span><span class="n">bb35</span><span class="o">-</span><span class="mi">5589</span><span class="n">f80e7c52</span>
-  <span class="n">ca_geoportal</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">dcat</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">url</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">gis</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ca</span><span class="o">.</span><span class="n">gov</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">json</span>
-      <span class="n">items</span><span class="p">:</span>
-          <span class="n">calenviroscreen</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">gis</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ca</span><span class="o">.</span><span class="n">gov</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="mi">9</span><span class="n">ad42487196c4ea8aa2dce707a3f986b_0</span>
-  <span class="c1"># General</span>
-  <span class="n">lehd_federal_jobs_by_tract</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">parquet</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">LEHD</span> <span class="n">Workplace</span> <span class="n">Area</span> <span class="n">Characteristics</span> <span class="p">(</span><span class="n">WAC</span><span class="p">)</span> <span class="n">federal</span> <span class="n">jobs</span> <span class="n">by</span> <span class="n">census</span> <span class="n">tract</span><span class="o">.</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">urlpath</span><span class="p">:</span> <span class="n">gs</span><span class="p">:</span><span class="o">//</span><span class="n">calitp</span><span class="o">-</span><span class="n">analytics</span><span class="o">-</span><span class="n">data</span><span class="o">/</span><span class="n">data</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">bus_service_increase</span><span class="o">/</span><span class="n">wac_fed_tract</span><span class="o">.</span><span class="n">parquet</span>
-      <span class="n">engine</span><span class="p">:</span> <span class="n">pyarrow</span>
-  <span class="n">test_zipped_shapefile</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">shapefile</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">LA</span> <span class="n">Metro</span> <span class="n">rail</span> <span class="n">lines</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">urlpath</span><span class="p">:</span> <span class="n">gs</span><span class="p">:</span><span class="o">//</span><span class="n">calitp</span><span class="o">-</span><span class="n">analytics</span><span class="o">-</span><span class="n">data</span><span class="o">/</span><span class="n">test_zipped_shapefile</span><span class="o">.</span><span class="n">zip</span>
-      <span class="n">use_fsspec</span><span class="p">:</span> <span class="n">true</span>
-  <span class="n">test_geojson</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">geojson</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">Description</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">urlpath</span><span class="p">:</span> <span class="n">gs</span><span class="p">:</span><span class="o">//</span><span class="n">calitp</span><span class="o">-</span><span class="n">analytics</span><span class="o">-</span><span class="n">data</span><span class="o">/</span><span class="n">test_geojson_file</span><span class="o">.</span><span class="n">geojson</span>
-      <span class="n">use_fsspec</span><span class="p">:</span> <span class="n">true</span>
-  <span class="n">test_csv</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">csv</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">Description</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">urlpath</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">CityOfLosAngeles</span><span class="o">/</span><span class="n">covid19</span><span class="o">-</span><span class="n">indicators</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">ca_county_pop_crosswalk</span><span class="o">.</span><span class="n">csv</span>
-  <span class="n">test_geoparquet</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">geoparquet</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">Description</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">urlpath</span><span class="p">:</span> <span class="n">gs</span><span class="p">:</span><span class="o">//</span><span class="n">calitp</span><span class="o">-</span><span class="n">analytics</span><span class="o">-</span><span class="n">data</span><span class="o">/</span><span class="n">test_geoparquet</span><span class="o">.</span><span class="n">parquet</span>
+  <div class="tex2jax_ignore mathjax_ignore section" id="working-with-geospatial-data-basics">
+<span id="geo-basics"></span><h1>Working with Geospatial Data: Basics<a class="headerlink" href="#working-with-geospatial-data-basics" title="Permalink to this headline">¶</a></h1>
+<p>Place matters. That’s why data analysis often includes a geospatial or geographic component. Before we wrangle with our data, let’s go over the basics and make sure we’re properly set up.</p>
+<p>Below are short demos for getting started:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#import-and-export-data-in-python">Import and export data in Python</a></p></li>
+<li><p><a class="reference external" href="#setting-and-projecting-coordinate-reference-system">Setting and projecting coordinate reference system</a></p></li>
+</ul>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import Python packages</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="import-and-export-data-in-python">
+<h2>Import and Export Data in Python<a class="headerlink" href="#import-and-export-data-in-python" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="local-files">
+<h3><strong>Local files</strong><a class="headerlink" href="#local-files" title="Permalink to this headline">¶</a></h3>
+<p>We import a tabular dataframe <code class="docutils literal notranslate"><span class="pre">my_csv.csv</span></code> and a geodataframe <code class="docutils literal notranslate"><span class="pre">my_geojson.geojson</span></code> or <code class="docutils literal notranslate"><span class="pre">my_shapefile.shp</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../folder/my_csv.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># GeoJSON</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;../folder/my_geojson.geojson&#39;</span><span class="p">)</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">driver</span> <span class="o">=</span> <span class="s1">&#39;GeoJSON&#39;</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;../folder/my_geojson.geojson&#39;</span> <span class="p">)</span>
+
+
+<span class="c1"># Shapefile (collection of files: .shx, .shp, .prj, .dbf, etc)</span>
+<span class="c1"># The collection files must be put into a folder before importing</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;../folder/my_shapefile/&#39;</span><span class="p">)</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">driver</span> <span class="o">=</span> <span class="s1">&#39;ESRI Shapefile&#39;</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;../folder/my_shapefile.shp&#39;</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gcs">
+<h3><strong>GCS</strong><a class="headerlink" href="#gcs" title="Permalink to this headline">¶</a></h3>
+<p>To read in our dataframe (df) and geodataframe (gdf) from GCS:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-csv.csv&#39;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-geojson.geojson&#39;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-geoparquet.parquet&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span> <span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-shapefile.zip&#39;</span><span class="p">)</span>
+
+<span class="c1"># Write a file to GCS</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-geojson.geojson&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
+
+<span class="c1">#Using shared utils</span>
+<span class="n">GCS_FILE_PATH</span> <span class="o">=</span> <span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&quot;</span>
+<span class="n">FILE_NAME</span> <span class="o">=</span> <span class="s2">&quot;test_geoparquet&quot;</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">geoparquet_gcs_export</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">GCS_FILE_PATH</span><span class="p">,</span> <span class="n">FILE_NAME</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p>Additional general information about various file types can be found in the <a class="reference internal" href="03-data-management.html#data-management-page"><span class="std std-ref">Data Management section</span></a>.</p>
+</div>
+</div>
+<div class="section" id="setting-and-projecting-coordinate-reference-system">
+<h2>Setting and Projecting Coordinate Reference System<a class="headerlink" href="#setting-and-projecting-coordinate-reference-system" title="Permalink to this headline">¶</a></h2>
+<p>A coordinate reference system (CRS) tells geopandas how to plot the coordinates on the Earth. Starting with a shapefile usually means that the CRS is already set. In that case, we are interested in re-projecting the gdf to a different CRS. The CRS is chosen specific to a region (i.e., USA, Southern California, New York, etc) or for its map units (i.e., decimal degrees, US feet, meters, etc). Map units that are US feet or meters are easier to work when it comes to defining distances (100 ft buffer, etc).</p>
+<p>In Python, there are 2 related concepts:</p>
+<ol class="simple">
+<li><p>Setting the CRS &lt;–&gt; corresponds to geographic coordinate system in ArcGIS</p></li>
+<li><p>Re-projecting the CRS &lt;–&gt; corresponds to datum transformation and projected coordinated system in ArcGIS</p></li>
+</ol>
+<p>The ArcGIS equivalent of this is in <a class="reference external" href="https://pro.arcgis.com/en/pro-app/help/mapping/properties/coordinate-systems-and-projections.htm">3 related concepts</a>:</p>
+<ol class="simple">
+<li><p>geographic coordinate system</p></li>
+<li><p>datum transformation</p></li>
+<li><p>projected coordinate system</p></li>
+</ol>
+<p>The <strong>geographic coordinate system</strong> is the coordinate system of the latitude and longitude points. Common ones are WGS84, NAD83, and NAD27.</p>
+<p><strong>Datum transformation</strong> is needed when the geographic coordinate systems of two layers do not match. A datum transformation is needed to convert NAD1983 into WGS84.</p>
+<p>The <strong>projected coordinate system</strong> projects the coordinates onto the map. ArcGIS projects “on the fly”, and applies the first layer’s projection to all subsequent layers. The projection does not change the coordinates from WGS84, but displays the points from a 3D sphere onto a 2D map. The projection determines how the Earth’s sphere is unfolded and flattened.</p>
+<p>In ArcGIS, layers must have the same geographic coordinate system and projected coordinate system before spatial analysis can occur. Since ArcGIS allows you to choose the map units (i.e., feet, miles, meters) for proximity analysis, projections are chosen primarily for the region to be mapped.</p>
+<p>In Python, the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column holds information about the geographic coordinate system and its projection. All gdfs must be set to the same CRS before performing any spatial operations between them. Changing <code class="docutils literal notranslate"><span class="pre">geometry</span></code> from WGS84 to CA State Plane is a datum transformation (WGS84 to NAD83) and projection to CA State Plane Zone 5.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check to see what the CRS is</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">crs</span>
+
+<span class="c1"># If there is a CRS set, you can change the projection</span>
+<span class="c1"># Here, change to CA State Plane (units = US feet)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">&#39;EPSG:2229&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Sometimes, the gdf does not have a CRS set and you will need to be manually set it. This might occur if you create the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column from latitude and longitude points. More on this in the <a class="reference internal" href="07-spatial-analysis-intermediate.html#geo-intermediate"><span class="std std-ref">intermediate tutorial</span></a>:</p>
+<p>There are <a class="reference external" href="https://epsg.io">lots of different CRS available</a>. The most common ones used for California are:</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>EPSG</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Map Units</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>4326</p></td>
+<td><p>WGS84</p></td>
+<td><p>decimal degrees</p></td>
+</tr>
+<tr class="row-odd"><td><p>2229</p></td>
+<td><p>CA State Plane Zone 5</p></td>
+<td><p>US feet</p></td>
+</tr>
+<tr class="row-even"><td><p>3310</p></td>
+<td><p>CA Albers</p></td>
+<td><p>meters</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># If the CRS is not set after checking it with gdf.crs</span>
+
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="s1">&#39;EPSG:WGS84&#39;</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<br>
 </div>
 </div>
 
@@ -736,7 +851,7 @@
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./analytics_examples"
+            path: "./analytics_new_analysts"
         },
         predefinedOutput: true
     }
@@ -748,17 +863,17 @@
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="new_tutorial.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="04-notebooks.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">More Complex Queries</p>
+            <p class="prev-next-title">Working with Jupyter notebooks</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../publishing/overview.html" title="next page">
+    <a class='right-next' id="next-link" href="06-spatial-analysis-intro.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Where can I publish data?</p>
+        <p class="prev-next-title">Working with Geospatial Data: Intro</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Working with Jupyter notebooks &#8212; Cal-ITP Data Services</title>
+    <title>Working with Geospatial Data: Advanced &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -57,8 +57,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Working with Geospatial Data: Basics" href="spatial-analysis-basics.html" />
-    <link rel="prev" title="Data Management" href="data-management.html" />
+    <link rel="next" title="Introduction to the Warehouse" href="../warehouse/overview.html" />
+    <link rel="prev" title="Working with Geospatial Data: Intermediate" href="07-spatial-analysis-intermediate.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -179,6 +179,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/scripts.html">
+     Scripts
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/rt_analysis.html">
      RT Analysis Module
     </a>
@@ -216,42 +221,42 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="data-analysis-intro.html">
+    <a class="reference internal" href="01-data-analysis-intro.html">
      Data Analysis: Intro
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="data-analysis-intermediate.html">
+    <a class="reference internal" href="02-data-analysis-intermediate.html">
      Data Analysis: Intermediate
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="data-management.html">
+    <a class="reference internal" href="03-data-management.html">
      Data Management
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+   <li class="toctree-l2">
+    <a class="reference internal" href="04-notebooks.html">
      Working with Jupyter notebooks
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="spatial-analysis-basics.html">
+    <a class="reference internal" href="05-spatial-analysis-basics.html">
      Working with Geospatial Data: Basics
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="spatial-analysis-intro.html">
+    <a class="reference internal" href="06-spatial-analysis-intro.html">
      Working with Geospatial Data: Intro
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="spatial-analysis-intermediate.html">
+    <a class="reference internal" href="07-spatial-analysis-intermediate.html">
      Working with Geospatial Data: Intermediate
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="spatial-analysis-advanced.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      Working with Geospatial Data: Advanced
     </a>
    </li>
@@ -296,38 +301,11 @@
   </a>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_examples/overview.html">
-   Analysis Tutorials
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_examples/warehouse_tutorial.html">
-     Querying GTFS in the Data Warehouse
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_examples/new_tutorial.html">
-     More Complex Queries
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_examples/sample-catalog-viewer.html">
-     Sample Data Catalog
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
   <a class="reference internal" href="../publishing/overview.html">
    Where can I publish data?
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -373,8 +351,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/9_map_tiles.html">
-     Map tiles
+    <a class="reference internal" href="../publishing/sections/9_geoportal.html">
+     Publishing data to California State Geoportal
     </a>
    </li>
   </ul>
@@ -395,8 +373,8 @@
   <a class="reference internal" href="../airflow/overview.html">
    Airflow
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -412,8 +390,8 @@
   <a class="reference internal" href="../kubernetes/README.html">
    Kubernetes
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-  <label for="toctree-checkbox-8">
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -439,8 +417,8 @@
   <a class="reference internal" href="../ci/README.html">
    CI
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-  <label for="toctree-checkbox-9">
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -511,8 +489,8 @@
   <a class="reference internal" href="../services/overview.html">
    Services
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
-  <label for="toctree-checkbox-10">
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -540,8 +518,8 @@
   <a class="reference internal" href="../contribute/overview.html">
    Getting Started
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
-  <label for="toctree-checkbox-11">
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -604,7 +582,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/analytics_new_analysts/notebooks.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/analytics_new_analysts/08-spatial-analysis-advanced.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -624,10 +602,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_new_analysts/notebooks.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_new_analysts/08-spatial-analysis-advanced.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_new_analysts/notebooks.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_new_analysts/08-spatial-analysis-advanced.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -653,23 +631,18 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#notebooks-and-reproducibility">
-   Notebooks and Reproducibility
+  <a class="reference internal nav-link" href="#getting-started">
+   Getting Started
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#notebooks-and-version-control">
-   Notebooks and Version Control
+  <a class="reference internal nav-link" href="#types-of-geometric-shapes">
+   Types of Geometric Shapes
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#prose-and-documentation">
-   Prose and Documentation
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data-access">
-   Data Access
+  <a class="reference internal nav-link" href="#geometry-in-memory-and-in-databases">
+   Geometry In-Memory and in Databases
   </a>
  </li>
 </ul>
@@ -682,7 +655,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Working with Jupyter notebooks</h1>
+                <h1>Working with Geospatial Data: Advanced</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -693,23 +666,18 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#notebooks-and-reproducibility">
-   Notebooks and Reproducibility
+  <a class="reference internal nav-link" href="#getting-started">
+   Getting Started
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#notebooks-and-version-control">
-   Notebooks and Version Control
+  <a class="reference internal nav-link" href="#types-of-geometric-shapes">
+   Types of Geometric Shapes
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#prose-and-documentation">
-   Prose and Documentation
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data-access">
-   Data Access
+  <a class="reference internal nav-link" href="#geometry-in-memory-and-in-databases">
+   Geometry In-Memory and in Databases
   </a>
  </li>
 </ul>
@@ -721,114 +689,73 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="working-with-jupyter-notebooks">
-<span id="nb-best-practices"></span><h1>Working with Jupyter notebooks<a class="headerlink" href="#working-with-jupyter-notebooks" title="Permalink to this headline">¶</a></h1>
-<p>Jupyter notebooks are ubiquitous in the fields of data analysis, data science, and education.
-There are a number of reasons for their popularity, some of which are (in no particular order):</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="working-with-geospatial-data-advanced">
+<span id="geo-advanced"></span><h1>Working with Geospatial Data: Advanced<a class="headerlink" href="#working-with-geospatial-data-advanced" title="Permalink to this headline">¶</a></h1>
+<p>Place matters. After covering the <a class="reference internal" href="07-spatial-analysis-intermediate.html#geo-intermediate"><span class="std std-ref">intermediate tutorial</span></a>, you’re ready to cover some advanced spatial analysis topics.</p>
+<p>Below are more detailed explanations for dealing with geometry in Python.</p>
 <ul class="simple">
-<li><p>They are user-friendly.</p></li>
-<li><p>They allow for richer outputs than plain code (e.g, images, equations, HTML, and prose).</p></li>
-<li><p>They allow for interactive, human-in-the-loop computing.</p></li>
-<li><p>They provide an easy route to publishing papers, technical documents, and blog posts that involve computation.</p></li>
-<li><p>They can be served over the internet, and can live in the cloud.</p></li>
+<li><p><a class="reference external" href="#types-of-geometric-shapes">Types of geometric shapes</a></p></li>
+<li><p><a class="reference external" href="#geometry-in-memory-and-in-databases">Geometry in-memory and in databases</a></p></li>
 </ul>
-<p>However, the popularity of the format has also revealed some of its drawbacks,
-and prompted criticism of how notebooks are used.
-In particular, version control and reproducibility remain major problems for notebook users.
-For a cogent and entertaining summary of some of these criticisms,
-see <a class="reference external" href="https://www.youtube.com/watch?v=7jiPeIFXb6U">this</a> talk from Joel Grus.</p>
-<p>This document is meant to outline some recommendations for how to best use notebooks.</p>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import Python packages</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">from</span> <span class="nn">geoalchemy2</span> <span class="kn">import</span> <span class="n">WKTElement</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="types-of-geometric-shapes">
+<h2>Types of Geometric Shapes<a class="headerlink" href="#types-of-geometric-shapes" title="Permalink to this headline">¶</a></h2>
+<p>There are six possible geometric shapes that are represented in geospatial data. <a class="reference external" href="http://postgis.net/workshops/postgis-intro/geometries.html#representing-real-world-objects">More description here.</a></p>
 <ul class="simple">
-<li><p><a class="reference external" href="#notebooks-and-reproducibility">Notebooks and Reproducibility</a></p></li>
-<li><p><a class="reference external" href="#notebooks-and-version-control">Notebooks and Version Control</a></p></li>
-<li><p><a class="reference external" href="#prose-and-documentation">Prose and Documentation</a></p></li>
-<li><p><a class="reference external" href="#data-access">Data Access</a></p></li>
+<li><p>Point</p></li>
+<li><p>MultiPoint: collection of points</p></li>
+<li><p>LineString</p></li>
+<li><p>MultiLineString: collection of linestrings, which are disconnected from each other</p></li>
+<li><p>Polygon</p></li>
+<li><p>MultiPolygon: collection of polygons, which can be disconnected or overlapping from each other</p></li>
 </ul>
-<div class="section" id="notebooks-and-reproducibility">
-<h2>Notebooks and Reproducibility<a class="headerlink" href="#notebooks-and-reproducibility" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://arxiv.org/abs/1605.04339">Scientific</a>
-<a class="reference external" href="http://gael-varoquaux.info/programming/software-for-reproducible-science-lets-not-have-a-misunderstanding.html">software</a>
-has a <a class="reference external" href="https://www.nature.com/articles/d41586-018-05256-0">problem</a>
-with reproducibility.</p>
-<p>Notebooks, in particular, introduce some extra problems for reproducibility.
-Because they are highly dynamic, interactive documents,
-they encourage out-of-order execution, re-executing cells many times,
-and frequent kernel restarts.
-This is often useful.
-You can tweak the results of a plot without rerunning an expensive analysis.
-You can load data once in an introductory cell,
-then perform a number of exploratory analyses without having to reload it every time.</p>
-<p>However, this execution style commonly ends with results that are not reproducible.
-Another analyst running the same notebook will come up with a completely different result,
-or the notebook may not even run.</p>
-<p>For these reasons, it is a good idea to make sure that a notebook runs from start to finish without any intervention.
-This should be a habit for everyone before committing changes to a notebook.</p>
-<p>It may also be useful to parameterize execution of a notebook using a tool like
-<a class="reference external" href="https://github.com/nteract/papermill">papermill</a>.
-This will allow you to run notebooks via a command line.
-This can be driven via automation tools like Makefiles,
-and can keep us honest about exactly how reproducible our analyses are:
-if a notebook analysis cannot be run without human intervention, it is not reproducible.</p>
-<p>This all can be summarized as “restart and run all, or it didn’t happen.”</p>
+<p>The ArcGIS equivalent of these are just points, lines, and polygons.</p>
 </div>
-<div class="section" id="notebooks-and-version-control">
-<h2>Notebooks and Version Control<a class="headerlink" href="#notebooks-and-version-control" title="Permalink to this headline">¶</a></h2>
-<p>Jupyter notebooks are stored as JSON documents.
-While this is a rich format for storing things like
-metadata and code outputs,
-it is not particularly human readable.
-This makes diffs to notebooks difficult to read,
-and using them with most version control tools is painful.</p>
-<p>There are a few things that can be done to mitigate this:</p>
-<ol class="simple">
-<li><p>Don’t commit changes to a notebook unless you intend to.
-Often opening and running a notebook can result in different metadata,
-slightly different results, or produce errors.
-In general, these differences are not worth committing to a code repository,
-and such commits will mostly read as noise in your version history.</p></li>
-<li><p>Use a tool like <a class="reference external" href="https://nbdime.readthedocs.io/en/latest"><code class="docutils literal notranslate"><span class="pre">nbdime</span></code></a>.
-This provides command-line tools for diffing and merging notebooks.
-It provides git integration and a small web app for viewing differences between notebooks.
-It is also available as a JupyterLab extension.</p></li>
-<li><p>Move some code into scripts. There will often be large code blocks in notebooks.
-Sometimes these code blocks are duplicated among many notebooks within a project repository.
-Examples include code for cleaning and preprocessing data.
-Often such code is best removed from the interactive notebook environment and put in plain-text scripts,
-where it can be more easily automated and tracked.</p></li>
-</ol>
+<div class="section" id="geometry-in-memory-and-in-databases">
+<h2>Geometry In-Memory and in Databases<a class="headerlink" href="#geometry-in-memory-and-in-databases" title="Permalink to this headline">¶</a></h2>
+<p>If you’re loading a GeoDataFrame (gdf), having the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column is necessary to do spatial operations in your Python session. The <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column is composed of Shapely objects, such as Point or MultiPoint, LineString or MultiLineString, and Polygon or MultiPolygon.</p>
+<p>Databases often store geospatial information as well-known text (WKT) or its binary equivalent, well-known binary (WKB). These are well-specified interchange formats for the importing and exporting of geospatial data. Often, querying a database (PostGIS, SpatiaLite, etc) or writing data to the database requires converting the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column to/from WKT/WKB.</p>
+<p>The spatial referencing system identifier (SRID) is the <strong>geographic coordinate system</strong> of the latitude and longitude coordinates. As you are writing the coordinates into WKT/WKB, don’t forget to set the SRID. WGS84 is a commonly used geographic coordinate system; it provides latitude and longitude in decimal degrees. The SRID for WGS84 is 4326. <a class="reference internal" href="05-spatial-analysis-basics.html#geo-basics"><span class="std std-ref">Refresher on geographic coordinated system vs projected coordinated system.</span></a></p>
+<p><em>Shapely</em> is the Python package used to create the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column when you’re working with the gdf in-memory. <em>Geoalchemy</em> is the Python package used to write the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column into geospatial databases. Unless you’re writing the geospatial data into a database, you’re most likely sticking with <em>shapely</em> rather than <em>geoalchemy</em>.</p>
+<p>To summarize:</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Data is used / sourced from…</p></th>
+<th class="head"><p>Python Package</p></th>
+<th class="head"><p>Geometry column</p></th>
+<th class="head"><p>SRID/EPSG</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Local Python session, in-memory</p></td>
+<td><p>shapely</p></td>
+<td><p>shapely object: Point, LineString, Polygon and Multi equivalents</p></td>
+<td><p>CRS is usually set, but most likely will still need to re-project your CRS using EPSG</p></td>
+</tr>
+<tr class="row-odd"><td><p>Database (PostGIS, SpatiaLite, etc)</p></td>
+<td><p>geoalchemy</p></td>
+<td><p>WKT or WKB</p></td>
+<td><p>define the SRID</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the SRID</span>
+<span class="n">srid</span> <span class="o">=</span> <span class="mi">4326</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">WKTElement</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span><span class="o">.</span><span class="n">wkt</span><span class="p">,</span> <span class="n">srid</span><span class="o">=</span><span class="n">srid</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="prose-and-documentation">
-<h2>Prose and Documentation<a class="headerlink" href="#prose-and-documentation" title="Permalink to this headline">¶</a></h2>
-<p>One of the best features about notebooks is that they allow for richer content than normal scripts.
-In addition to code comments, they allow for images, equations, and markdown cells.
-You should use those!</p>
-<p>Markdown cells allow for especially good documentation of what a notebook is doing.
-They allow for nested headings, lists, links, and references.
-Such documentation can make a huge difference when sharing notebooks within and between teams.</p>
-<p><a class="reference external" href="https://www.adamrule.com">Adam Rule</a> performed a study of all  the Jupyter notebooks publicly available on GitHub.
-One of the most remarkable findings of this study was just how many notebooks include no markdown cells at all, as seen in the third panel:
-<img alt="nbstats" src="https://cdn-images-1.medium.com/max/1600/1*0O1x_D0FTRUwX-6qdo1whA.png" /></p>
-<p>Over a quarter of notebooks include no prose.
-We should endeavor to <em>not</em> be in that first bin.</p>
-</div>
-<div class="section" id="data-access">
-<h2>Data Access<a class="headerlink" href="#data-access" title="Permalink to this headline">¶</a></h2>
-<p>Many attempts to reproduce data analyses fail quickly.</p>
-<p>This is because the original analyst referred to datasets that are not accessible to others.
-This may be because it relied on a file that doesn’t exist on other systems,
-or because they hard-coded a file path specific to their laptop’s file system,
-or because it relied on login credentials that others do not use.</p>
-<p>These problems are not specific to notebooks, but often arise in a notebook environment.
-A few strategies to mitigate these issues:</p>
-<ol class="simple">
-<li><p>Small datasets (less than a few megabytes) may be included in the code repositories for analyses.</p></li>
-<li><p>Larger datasets may be stored elsewhere (S3, GCS, data portals, databases).
-However, instructions to access them should be given in the repository.
-Tools like <a class="reference external" href="https://intake.readthedocs.io/en/latest/">intake</a> can help here.</p></li>
-<li><p>Credentials to access private data sources should be read from environment variables,
-and never stored in code repositories or saved to notebooks.
-The environment variables needed to access the data for an analysis should be documented in the project <code class="docutils literal notranslate"><span class="pre">README</span></code>.</p></li>
-</ol>
+<br>
 </div>
 </div>
 
@@ -857,17 +784,17 @@ The environment variables needed to access the data for an analysis should be do
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="data-management.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="07-spatial-analysis-intermediate.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Data Management</p>
+            <p class="prev-next-title">Working with Geospatial Data: Intermediate</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="spatial-analysis-basics.html" title="next page">
+    <a class='right-next' id="next-link" href="../warehouse/overview.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Working with Geospatial Data: Basics</p>
+        <p class="prev-next-title">Introduction to the Warehouse</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

@@ -6,27 +6,25 @@ Most Cal-ITP analysts should opt for working and committing code directly from J
 Doing work locally and pushing directly from the command line is a similar workflow, but replace the JupyterHub terminal with your local terminal.
 
 ## Table of Contents
-1. [Committing from JupyterHub](#pushing-from-jupyterhub)
-    * What's a typical [project workflow](#project-workflow)?
-    * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
+1. What's a typical [project workflow](#project-workflow)?
+1. Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
     * The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
+    * [Rebase](#rebase) or [merge](#merge)
     * Options to [Resolve Merge Conflicts](resolve-merge-conflicts)
-    * [Helpful Hints](#helpful-hints)
+1. [Other Common GitHub Commands](#other-common-github-commands)
     * [External Git Resources](external-git-resources)
-1. [Committing in the Github User Interface](#pushing-drag-drop)
+    * [Committing in the Github User Interface](#pushing-drag-drop)
 
 
 (committing-from-jupyterhub)=
-## Committing from JupyterHub
-
-### Project Workflow
+## Project Workflow
 
 It is best practice to do have a dedicated branch for your task. A commit in GitHub is similar to saving your work. It allows the system to capture the changes you have made and offers checkpoints through IDs that both show the progress of your work and can be referenced for particular tasks.
 
 In the `data-analyses` repo, separate analysis tasks live in their own directories, such as `data-analyses/gtfs_report_emails`.
 
 1. Start from the `main` branch: `git pull origin main`
-1. Check out a new branch to do your work: `git checkout -b my-new-branch`
+1. Check out a new branch to do your work: `git switch -c my-new-branch`
 1. Do some work...add, delete, rename files, etc
 1. See all the status changes to your files: `git status`
 1. When you're ready to save some of that work, stage the files you want to commit with `git add foldername/notebook1.ipynb foldername/script1.py`. To stage all the files, use `git add .`.
@@ -34,11 +32,11 @@ In the `data-analyses` repo, separate analysis tasks live in their own directori
 1. Push those changes from local to remote branch (note: branch is `my-new-branch` and not `main`): `git push origin my-new-branch`.
 1. To review a log of past commits: `git log`
 1. When you are ready to merge all the commits into `main`, open a pull request (PR) on the remote repository, and merge it in!
-1. Go back to `main` and update your local to match the remote: `git checkout main`, `git pull origin main`
+1. Go back to `main` and update your local to match the remote: `git switch main`, `git pull origin main`
 1. Once you've merged your branch into `main` and deleted it from the remote, you can delete your branch locally: `git branch -d my-new-branch`. You can reuse the branch name later.
 
 
-### Pulling and Pushing Changes
+## Pulling and Pushing Changes
 
 Especially when you have a collaborator working on the same branch, you want to regularly sync your work with what's been committed by your collaborator. Doing this frequently allows you to stay in sync, and avoid unnecessary merge conflicts.
 
@@ -69,9 +67,9 @@ Rebasing is an important tool to be familiar with and introduce into your workfl
 A rebase might be preferred, especially if all your work is contained on your branch, within your task's folder, and lots of activity is happening on `main`. You'd like to plop all your commits onto the most recent `main` branch, and have it appear as if all your work took place *after* those PRs were merged in.
 
 1. At this point, you've either stashed or added commits on `my-new-branch`.
-1. Check out the `main` branch: `git checkout main`
+1. Check out the `main` branch: `git switch main`
 1. Pull from origin: `git pull origin main`
-1. Check out your current branch: `git checkout my-new-branch`
+1. Check out your current branch: `git switch my-new-branch`
 1. Rebase and rewrite history so that your commits come *after* everything on main: `git rebase main`
 1. At this point, the rebase may be successful, or you will have to address any conflicts! If you want to abort, use `git rebase --abort`. Changes in scripts will be easy to resolve, but notebook conflicts are difficult. If conflicts are easily resolved, open the file, make the changes, then `git add` the file(s), and `git rebase --continue`.
 1. Make any commits you want (from step 1) with `git add`, `git commit -m "commit message"`
@@ -81,8 +79,8 @@ A rebase might be preferred, especially if all your work is contained on your br
 Note: Merging with [fast-forward](https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---ff) behaves similarly to a rebase.
 
 1. At this point, you've either stashed or added commits on `my-new-branch`.
-1. Pull from origin: `git checkout main` and `git pull origin main`
-1. Go back to your branch: `git checkout my-new-branch`
+1. Pull from origin: `git switch main` and `git pull origin main`
+1. Go back to your branch: `git switch my-new-branch`
 1. Complete the merge of `my-new-branch` with `main` and create a new commit: `git merge my-new-branch main`
 1. A merge commit window opens up. Type `:wq` to exit and complete the merge.
 1. Type `git log` to see that the merge commit was created.
@@ -98,13 +96,13 @@ If you discover merge conflicts and they are within a single notebook that only 
 `git checkout --theirs path/to/notebook.ipynb`
 * From here, just add the file and commit with a message as you normally would and the conflict should be fixed in your Pull Request.
 
-### Helpful Hints
+## Other Common GitHub Commands
 
 These are helpful Git commands an analyst might need, listed in no particular order.
 
 * During collaboration, if another analyst already created a remote branch, and you want to work off of the same branch: `git fetch origin`, `git checkout -b our-project-branch origin/our-project-branch`
 * To discard the changes you made to a file, `git checkout my-notebook.ipynb`, and you can revert back to the version that was last committed.
-* Temporarily stash changes, move to a different branch, and come back and retain those changes: `git stash`, `git checkout some-other-branch`, do stuff on the other branch, `git checkout original-branch`, `git stash pop`
+* Temporarily stash changes, move to a different branch, and come back and retain those changes: `git stash`, `git switch some-other-branch`, do stuff on the other branch, `git switch original-branch`, `git stash pop`
 * Rename files and retain the version history associated (`mv` is move, and renaming is moving the file path): `git mv old-notebook.ipynb new-notebook.ipynb`
 * Set your local `main` branch to be the same as the remote branch: `git fetch origin
 git reset --hard origin/main`
@@ -117,7 +115,7 @@ git reset --hard origin/main`
 * [Git Decision Tree - 'So you have a mess on your hands'](http://justinhileman.info/article/git-pretty/full/)
 
 (pushing-drag-drop)=
-## Committing in the Github User Interface
+###  Committing in the Github User Interface
 
 If you would like to commit directly from the Github User Interface:
 

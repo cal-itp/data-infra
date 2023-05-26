@@ -20,5 +20,5 @@ listed in increasing order of complexity and therefore capability.
   which supports interactivity and notebook paramterization.
 * Interactive dashboards should be hosted in [Metabase](publishing-metabase) to
   share with external stakeholders.
-* Structured data may be published to [CKAN](publishing-ckan) to facilitate
-  usage by analysts, researchers, or other stakeholders.
+* Structured tabular data may be published to [CKAN](publishing-ckan) to facilitate usage by analysts, researchers, or other stakeholders. These will be hosted at [https://data.ca.gov](https://data.ca.gov).
+* Structured geospatial data may be published to the Caltrans [Geoportal](publishing-geoportal). These will be hosted at [https://https://gis.data.ca.gov](https://gis.data.ca.gov).
