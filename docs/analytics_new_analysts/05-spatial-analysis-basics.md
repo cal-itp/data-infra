@@ -51,7 +51,7 @@ utils.geoparquet_gcs_export(gdf, GCS_FILE_PATH, FILE_NAME)
 
 ```
 
-Additional general information about various file types can be found in the [Data Management section](./data-management.md).
+Additional general information about various file types can be found in the [Data Management section](data-management-page).
 
 ## Setting and Projecting Coordinate Reference System
 A coordinate reference system (CRS) tells geopandas how to plot the coordinates on the Earth. Starting with a shapefile usually means that the CRS is already set. In that case, we are interested in re-projecting the gdf to a different CRS. The CRS is chosen specific to a region (i.e., USA, Southern California, New York, etc) or for its map units (i.e., decimal degrees, US feet, meters, etc). Map units that are US feet or meters are easier to work when it comes to defining distances (100 ft buffer, etc).
@@ -86,7 +86,7 @@ gdf.crs
 gdf = gdf.to_crs('EPSG:2229')
 ```
 
-Sometimes, the gdf does not have a CRS set and you will need to be manually set it. This might occur if you create the `geometry` column from latitude and longitude points. More on this in the [intermediate tutorial](./spatial-analysis-intermediate.md):
+Sometimes, the gdf does not have a CRS set and you will need to be manually set it. This might occur if you create the `geometry` column from latitude and longitude points. More on this in the [intermediate tutorial](geo-intermediate):
 
 There are [lots of different CRS available](https://epsg.io). The most common ones used for California are:
 

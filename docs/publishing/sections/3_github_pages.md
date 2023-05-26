@@ -45,11 +45,11 @@ A single notebook can be converted to HTML using `nbconvert`. If it's a quick an
 
 
 ## Use GitHub pages to display these HTML pages
+
+Analysts should use this only in case of emergencies (missing `netlify` credentials or analysts working outside of our `data-analyses` repo). We prefer launching through our portfolio, which can take single, unparameterized notebooks as well.
+
 1. Go to the repo's [settings](https://github.com/cal-itp/data-analyses/settings)
 1. Navigate to `Pages` on the left
 1. Change the branch GH pages is sourcing from: `main` to `my-current-branch`
 1. Embed the URL into the slides. Example URL: https://docs.calitp.org/data-analyses/PROJECT-FOLDER/MY-VISUALIZATION.html
 1. Once a PR is ready and merged, the GH pages can be changed back to source from `main`. The URL is preserved within the slide deck.
-1. Note: If analysts working on different branches want to display GH pages, one of them needs to merge in `main`, the other needs to do a `git rebase`, and then can choose `my-other-branch` as the GH pages source.
-
-Ex:  [Service Density Map](https://docs.calitp.org/data-analyses/bus_service_increase/img/arrivals_pc_high.html)
