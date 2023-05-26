@@ -17,6 +17,7 @@ fct_daily_organization_combined_guideline_checks AS (
         feature,
         check,
         {{ guidelines_aggregation_logic() }} as status,
+        {{ guidelines_aggregation_logic_reports }} as reports_status,
         organization_key,
         organization_source_record_id,
         ARRAY_AGG(DISTINCT service_name IGNORE NULLS ORDER BY service_name) AS service_names_included_array,

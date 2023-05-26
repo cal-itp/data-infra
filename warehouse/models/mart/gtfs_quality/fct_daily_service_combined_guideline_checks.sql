@@ -17,6 +17,7 @@ fct_daily_service_combined_guideline_checks AS (
         feature,
         check,
         {{ guidelines_aggregation_logic() }} as status,
+        {{ guidelines_aggregation_logic_reports }} as reports_status,
         service_key,
         ARRAY_AGG(DISTINCT organization_name IGNORE NULLS ORDER BY organization_name) AS organization_names_included_array,
         ARRAY_AGG(DISTINCT gtfs_dataset_name IGNORE NULLS ORDER BY gtfs_dataset_name) AS gtfs_dataset_names_included_array,
