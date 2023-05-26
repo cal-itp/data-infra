@@ -55,10 +55,10 @@ sentry:
       replicas: 2
     cleanup:
       days: 30
-
-  snuba:
     postProcessForwardTransactions:
       replicas: 2
+
+  snuba:
     subscriptionConsumerTransactions:
       replicas: 3
     subscriptionConsumerEvents:
