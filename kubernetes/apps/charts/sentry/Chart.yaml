@@ -7,4 +7,4 @@ appVersion: "1.4.2"
 dependencies:
   - name: sentry
     version: 18.0.0
-    repository: https://github.com/sentry-kubernetes/charts
+    repository: https://sentry-kubernetes.github.io/charts

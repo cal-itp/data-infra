@@ -53,6 +53,8 @@ sentry:
           memory: 1Gi
     ingestConsumer:
       replicas: 2
+    cleanup:
+      days: 30
 
   snuba:
     postProcessForwardTransactions:
