@@ -11,14 +11,24 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#agencytxt
     columns:
-      - &primary_key
+      - &schedule_dim_pk
         name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `_line_number`.
         tests:
-          - unique:
-              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+          - not_null
+          - unique
+        meta:
+          publish.ignore: true
+      - &schedule_dim_dt
+        name: _dt
+        tests:
+          - not_null
+        meta:
+          publish.ignore: true
+      - &schedule_dim_line_number
+        name: _line_number
+        tests:
           - not_null
         meta:
           publish.ignore: true
@@ -87,7 +97,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#attributionstxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: attribution_id
@@ -131,7 +143,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#calendartxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: service_id
@@ -166,7 +180,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#calendar_datestxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: service_id
@@ -187,7 +203,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#fare_attributestxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: fare_id
@@ -292,7 +310,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#fare_rulestxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: fare_id
@@ -348,7 +368,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#feed_infotxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: feed_publisher_name
@@ -382,7 +404,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#frequenciestxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: trip_id
@@ -421,7 +445,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#levelstxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: level_id
@@ -442,7 +468,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#pathwaystxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: pathway_id
@@ -487,7 +515,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#routestxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: route_id
@@ -528,7 +558,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#shapestxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: shape_id
@@ -584,7 +616,9 @@ models:
       ckan.authority: https://gtfs.org/reference/static#stop_timestxt
       publish.gis_coordinate_system_epsg: WGS84
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: trip_id
@@ -730,7 +764,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#stopstxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: stop_id
@@ -793,7 +829,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#transferstxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: from_stop_id
@@ -827,7 +865,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#translationstxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: table_name
@@ -856,7 +896,9 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#tripstxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: route_id
