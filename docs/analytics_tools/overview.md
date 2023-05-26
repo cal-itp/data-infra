@@ -9,7 +9,7 @@ Welcome to the Analytics Tools section! If you're here, you're ready to begin co
 * [How to query the warehouse with SQL](querying-sql-jupyterhub)
 * [What Python libraries are suggested](python-libraries)
 * [Where code is kept](saving-code)
-* [How to store new data](storing-new-data), and [best practices](data-catalogs).
+* [How to store new data](storing-new-data), and best practices for [data catalogs](data-catalogs).
 * [Useful Python resources compiled by our team](knowledge-sharing)
 
 When used in combination with the [Introduction to the Warehouse](intro-warehouse) and [How to Publish Analyses](publish-analyses) sections you should be prepared to conduct an analysis from end-to-end.

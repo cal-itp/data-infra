@@ -15,7 +15,7 @@ kernelspec:
 (storing-new-data)=
 # Storing Data During Analysis
 
-Our team uses Google Cloud Storage (GCS) buckets, specifically the `calitp-analytics-data` bucket, to store other datasets for analyses. GCS can store anything, of arbitrary object size and shape. It’s like a giant folder in the cloud. You can use it to store CSVs, parquets, pickles, videos, etc. Within the bucket, the `data-analyses` folder with its sub-folders corresponds to the `data-analyses` GitHub repo with its sub-folders. Versioned data for a task should live within the correct folders.
+Our team uses Google Cloud Storage (GCS) buckets, specifically the `calitp-analytics-data` bucket, to store other datasets for analyses. GCS can store anything, of arbitrary object size and shape. It’s like a giant folder in the cloud. You can use it to store CSVs, parquets, pickles, videos, etc. **Within the bucket, the `data-analyses` folder with its sub-folders corresponds to the `data-analyses` GitHub repo with its sub-folders. Versioned data for a task should live within the correct folders.**
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -96,13 +96,15 @@ Importing geoparquets directly from GCS works with `geopandas`, but exporting ge
 
 ```python
 
-gdf = gpd.read_parquet("gs://calitp-analytics-data/data-analyses/task-subfolder/my-geoparquet.parquet")
+GCS_FOLDER = "gs://calitp-analytics-data/data-analyses/task-subfolder/"
+
+gdf = gpd.read_parquet(f"{GCS_FOLDER}.parquet")
 
 # Save the geodataframe to your local filesystem
 gdf.to_parquet("./my-geoparqet.parquet")
 
 # Put the local file into the GCS bucket
-fs.put("./my-geoparquet.parquet", "gs://calitp-analytics-data/data-analyses/task-subfolder/my-geoparquet.parquet")
+fs.put("./my-geoparquet.parquet", f"{GCS_FOLDER}my-geoparquet.parquet")
 ```
 
 Or, use the `shared_utils` package.
@@ -110,7 +112,11 @@ Or, use the `shared_utils` package.
 ```python
 import shared_utils
 
-shared_utils.utils.geoparquet_gcs_export(gdf, "my-geoparquet")
+shared_utils.utils.geoparquet_gcs_export(
+    gdf,
+    GCS_FOLDER,
+    "my-geoparquet"
+)
 ```
 
 #### Zipped Shapefile
@@ -120,6 +126,28 @@ Refer to the [data catalogs doc](catalogue-cloud-storage) to list a zipped shape
 #### GeoJSON
 
 Refer to the [data catalogs doc](catalogue-cloud-storage) to list a GeoJSON, and read in the GeoJSON with the `intake` method. GeoJSONs saved in GCS cannot be read in directly using `geopandas`.
+
+Use the `shared_utils` package to read in or export geojsons.
+
+```python
+import shared_utils
+
+GCS_FOLDER = "gs://calitp-analytics-data/data-analyses/task-subfolder/"
+
+gdf = shared_utils.utils.read_geojson(
+    GCS_FOLDER,
+    "my-geojson.geojson",
+    geojson_type = "geojson",
+    save_locally = True
+)
+
+shared_utils.utils.geojson_gcs_export(
+    gdf,
+    GCS_FOLDER,
+    "my-geojson.geojson",
+    geojson_type = "geojson",
+)
+```
 
 (in-gcs)=
 ## Uploading data in Google Cloud Storage

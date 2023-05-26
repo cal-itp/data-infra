@@ -6,7 +6,7 @@ Jupyterhub is a web application that allows users to analyze and create reports 
 
 Analyses on JupyterHub are accomplished using notebooks, which allow users to mix narrative with analysis code.
 
-**You can access JuypterHub using this link:[notebooks.calitp.org](https://notebooks.calitp.org/)**.
+**You can access JuypterHub using this link: [notebooks.calitp.org](https://notebooks.calitp.org/)**.
 
 ## Table of Contents
 1. [Using JupyterHub](#using-jupyterhub)
