@@ -3,7 +3,7 @@
         materialized='incremental',
         incremental_strategy='insert_overwrite',
         partition_by={
-            'field': 'calculated_service_date_pacific',
+            'field': 'calculated_service_date',
             'data_type': 'date',
             'granularity': 'day',
         },
@@ -42,7 +42,7 @@ int_gtfs_rt__trip_updates_trip_day_map_grouping AS (
             PARSE_DATE("%Y%m%d", trip_start_date),
             DATE(header_timestamp, schedule_feeds.feed_timezone),
             DATE(_extract_ts, schedule_feeds.feed_timezone)) AS calculated_service_date,
-        base64_url,
+        stop_time_updates.base64_url,
         trip_id,
         trip_route_id,
         trip_direction_id,
@@ -52,7 +52,8 @@ int_gtfs_rt__trip_updates_trip_day_map_grouping AS (
         schedule_feeds.feed_timezone,
         ARRAY_AGG(DISTINCT id) AS message_ids_array,
         ARRAY_AGG(DISTINCT header_timestamp) AS header_timestamps_array,
-        ARRAY_AGG(DISTINCT trip_update_timestamp) AS trip_update_timestamps_array,
+        ARRAY_AGG(DISTINCT trip_update_timestamp IGNORE NULLS) AS trip_update_timestamps_array,
+        ARRAY_AGG(DISTINCT _trip_updates_message_key) AS message_keys_array,
         MIN(_extract_ts) AS min_extract_ts,
         MAX(_extract_ts) AS max_extract_ts,
         MIN(header_timestamp) AS min_header_timestamp,
@@ -60,10 +61,10 @@ int_gtfs_rt__trip_updates_trip_day_map_grouping AS (
         MIN(trip_update_timestamp) AS min_trip_update_timestamp,
         MAX(trip_update_timestamp) AS max_trip_update_timestamp,
         MAX(trip_update_delay) AS max_delay,
-        ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'SKIPPED' THEN stop_id END) AS skipped_stops_array,
-        ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'SCHEDULED' THEN stop_id END) AS scheduled_stops_array,
-        ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'CANCELED' THEN stop_id END) AS canceled_stops_array,
-        ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'ADDED' THEN stop_id END) AS added_stops_array,
+        ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'SKIPPED' THEN stop_id END IGNORE NULLS) AS skipped_stops_array,
+        ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'SCHEDULED' THEN stop_id END IGNORE NULLS) AS scheduled_stops_array,
+        ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'CANCELED' THEN stop_id END IGNORE NULLS) AS canceled_stops_array,
+        ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'ADDED' THEN stop_id END IGNORE NULLS) AS added_stops_array,
     FROM stop_time_updates
     LEFT JOIN rt_feeds
         ON stop_time_updates.base64_url = rt_feeds.base64_url
