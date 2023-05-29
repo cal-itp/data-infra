@@ -53,10 +53,12 @@ sentry:
           memory: 1Gi
     ingestConsumer:
       replicas: 2
-
-  snuba:
+    cleanup:
+      days: 30
     postProcessForwardTransactions:
       replicas: 2
+
+  snuba:
     subscriptionConsumerTransactions:
       replicas: 3
     subscriptionConsumerEvents:

@@ -1,7 +1,7 @@
 (geo-intermediate)=
 # Working with Geospatial Data: Intermediate
 
-After breezing through the [intro tutorial](./spatial-analysis-intro.md), you're ready to take your spatial analysis to the next level.
+After breezing through the [intro tutorial](geo-intro), you're ready to take your spatial analysis to the next level.
 
 Below are short demos of other common manipulations of geospatial data.
 * [Create geometry column from latitude and longitude coordinates](#create-geometry-column-from-latitude-and-longitude-coordinates)
