@@ -569,6 +569,8 @@ CASE
 END
 {% endmacro %}
 
+-- Logic (and comments) is recycled from guidelines_aggregation_logic() macro,
+-- but all NA values are replaced with the "general NA" value used for the reports site
 {% macro guidelines_aggregation_logic_reports() %}
 CASE
     -- order of evaluation matters here!
