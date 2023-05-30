@@ -117,4 +117,3 @@ seeds:
       - name: organization_name
         tests:
           - unique
-

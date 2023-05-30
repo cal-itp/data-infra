@@ -44,7 +44,7 @@ fct_monthly_reports_site_organization_guideline_checks AS (
         checks.feature,
         checks.check,
         checks.reports_status,
-        checks.is_manual 
+        checks.is_manual
     FROM idx_monthly_reports_site AS idx
     LEFT JOIN generate_biweekly_dates AS dates
         USING (publish_date)
