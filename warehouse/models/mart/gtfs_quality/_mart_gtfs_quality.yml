@@ -185,6 +185,10 @@ models:
         tests:
           - not_null
       - name: feature
+      - &is_manual
+        name: is_manual
+        tests:
+          - not_null
   - name: fct_daily_service_combined_guideline_checks
     description: |
       **Documentation coming soon**
@@ -222,6 +226,7 @@ models:
       - *check
       - *status
       - name: feature
+      - *is_manual
   - name: fct_schedule_feed_files
     description: |
       All files found in zipfiles downloaded in the GTFS schedule v2 pipeline.

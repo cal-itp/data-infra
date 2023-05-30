@@ -118,11 +118,3 @@ seeds:
         tests:
           - unique
 
-  - name: guideline_manual_checks
-    description: |
-      A list of the manually (and periodically) performed guideline checks.
-    columns:
-      - name: check
-        tests:
-          - not_null
-          - unique

@@ -68,6 +68,9 @@ models:
         tests:
           - not_null
       - name: feature
+      - name: is_manual
+        tests:
+          - not_null
 
   # Index tables
 

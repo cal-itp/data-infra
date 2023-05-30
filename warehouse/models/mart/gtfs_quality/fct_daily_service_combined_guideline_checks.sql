@@ -16,6 +16,7 @@ fct_daily_service_combined_guideline_checks AS (
         service_name,
         feature,
         check,
+        is_manual,
         {{ guidelines_aggregation_logic() }} as status,
         {{ guidelines_aggregation_logic_reports }} as reports_status,
         service_key,
@@ -27,7 +28,7 @@ fct_daily_service_combined_guideline_checks AS (
         ARRAY_AGG(DISTINCT gtfs_dataset_key IGNORE NULLS ORDER BY gtfs_dataset_key) AS gtfs_dataset_keys_included_array,
         ARRAY_AGG(DISTINCT schedule_feed_key IGNORE NULLS ORDER BY schedule_feed_key) AS schedule_feed_keys_included_array
     FROM int_gtfs_quality__guideline_checks_long
-    GROUP BY date, service_key, service_name, feature, check
+    GROUP BY date, service_key, service_name, feature, check, is_manual
 )
 
 SELECT * FROM fct_daily_service_combined_guideline_checks
