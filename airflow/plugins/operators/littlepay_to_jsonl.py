@@ -6,11 +6,11 @@ from io import StringIO
 from typing import ClassVar, List
 
 import pendulum
+from calitp_data.storage import get_fs
 from calitp_data_infra.storage import (
     PartitionedGCSArtifact,
     ProcessingOutcome,
     fetch_all_in_partition,
-    get_fs,
 )
 from operators.littlepay_raw_sync import RawLittlepayFileExtract
 from tqdm import tqdm

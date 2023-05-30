@@ -8,12 +8,12 @@ from typing import ClassVar, Dict, List, Optional
 
 import boto3
 import pendulum
+from calitp_data.storage import get_fs
 from calitp_data_infra.auth import get_secret_by_name
 from calitp_data_infra.storage import (
     PARTITIONED_ARTIFACT_METADATA_KEY,
     PartitionedGCSArtifact,
     ProcessingOutcome,
-    get_fs,
     get_latest_file,
 )
 from pydantic.class_validators import validator
