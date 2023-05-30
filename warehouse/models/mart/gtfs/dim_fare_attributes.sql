@@ -8,6 +8,7 @@ WITH make_dim AS (
 dim_fare_attributes AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'fare_id']) }} AS _gtfs_key,
         feed_key,
         fare_id,
         price,

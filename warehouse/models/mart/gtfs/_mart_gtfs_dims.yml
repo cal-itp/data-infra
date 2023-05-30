@@ -54,7 +54,16 @@ models:
       - &schedule_dim_pk
         name: key
         description: |
-          Synthetic primary key constructed from `feed_key` and `_line_number`.
+          Synthetic primary key constructed from `feed_key` and `_line_number`. This key is intended to identify
+          an actual _row_ in the GTFS source data, rather than a GTFS entity described in that row. See
+          _gtfs_key as a single key derived from the "natural" key of the entity.
+        tests:
+          - not_null
+          - unique
+      - &schedule_dim_gtfs_key
+        name: _gtfs_key
+        description:
+          Synthetic primary natural key constructed from the model's GTFS specification uniqueness.
         tests:
           - not_null
           - unique
@@ -63,15 +72,11 @@ models:
         description: Date of the feed version; used for upstream partition elimination.
         tests:
           - not_null
-        meta:
-          publish.ignore: true
       - &schedule_dim_line_number
         name: _line_number
         description: Line number of this record in the original Schedule file; used for incremental materialization.
         tests:
           - not_null
-        meta:
-          publish.ignore: true
       - &feed_key
         name: feed_key
         description: |
@@ -123,8 +128,19 @@ models:
       https://gtfs.org/schedule/reference/#areastxt.
     columns:
       - *schedule_dim_pk
+      - &schedule_dim_gtfs_key_with_dupe_flag
+        <<: *schedule_dim_gtfs_key
+        tests:
+          - not_null
+          - unique:
+              where: NOT warning_duplicate_primary_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary natural key; i.e., `area_id` is duplicated within an individual feed
+          instance and `_natural_key` will also be duplicated as a result. Treat these rows with caution as they can cause fanout when
+          joining on natural (i.e. GTFS) keys.
       - *feed_key
       - *base64_url
       - name: area_id
@@ -145,6 +161,7 @@ models:
       https://gtfs.org/reference/static#attributionstxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -182,6 +199,7 @@ models:
       https://gtfs.org/reference/static#fare_attributestxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -214,6 +232,7 @@ models:
       https://gtfs.org/schedule/reference/#fare_leg_rulestxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -238,6 +257,7 @@ models:
       https://gtfs.org/schedule/reference/#fare_mediatxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -258,6 +278,7 @@ models:
       https://gtfs.org/schedule/reference/#fare_productstxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -285,6 +306,7 @@ models:
       https://gtfs.org/reference/static#fare_rulestxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -310,6 +332,7 @@ models:
       https://gtfs.org/schedule/reference/#fare_transfer_rulestxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -339,6 +362,7 @@ models:
       https://gtfs.org/reference/static#feed_infotxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -374,6 +398,7 @@ models:
       https://gtfs.org/reference/static#frequenciestxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -422,6 +447,7 @@ models:
           For example, `end_time = 21:30:45` would lead to `end_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
+
   - name: dim_levels
     description: |
       Each row is a cleaned row from a levels.txt file.
@@ -429,6 +455,7 @@ models:
       https://gtfs.org/reference/static#levelstxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -451,6 +478,7 @@ models:
       https://gtfs.org/reference/static#pathwaystxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -494,6 +522,7 @@ models:
       https://gtfs.org/reference/static#routestxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -536,6 +565,7 @@ models:
       https://gtfs.org/reference/static#shapestxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -574,6 +604,7 @@ models:
       https://gtfs.org/schedule/reference/#stop_areastxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -594,6 +625,7 @@ models:
       https://gtfs.org/reference/static#stopstxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -643,10 +675,6 @@ models:
         description: '{{ doc("gtfs_stops__platform_code") }}'
       - name: pt_geom
         description: GEOGPOINT created by the stop latitute and longitude
-      - name: warning_duplicate_primary_key
-        description: |
-          Rows with `true` in this column have a duplicate primary key; i.e., `stop_id` is duplicated within an individual feed
-          instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
       - name: warning_missing_primary_key
         description: |
           Rows with `true` in this column are missing a `stop_id`, the primary key for this table (i.e., `stop_id` was not provided in the raw data).
@@ -665,6 +693,7 @@ models:
       https://gtfs.org/reference/static#transferstxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -702,6 +731,7 @@ models:
       https://gtfs.org/reference/static#translationstxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -734,6 +764,7 @@ models:
       https://gtfs.org/reference/static#tripstxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -777,6 +808,7 @@ models:
       https://gtfs.org/reference/static#calendartxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -821,6 +853,7 @@ models:
       https://gtfs.org/reference/static#calendar_datestxt.
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -854,6 +887,7 @@ models:
           where: "TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), _feed_valid_from, DAY) <= 3"
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key

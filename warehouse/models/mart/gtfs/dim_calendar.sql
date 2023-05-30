@@ -8,6 +8,7 @@ WITH make_dim AS (
 dim_calendar AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'service_id']) }} AS _gtfs_key,
         feed_key,
         service_id,
         monday,

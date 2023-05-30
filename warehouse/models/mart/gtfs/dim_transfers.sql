@@ -25,6 +25,7 @@ bad_rows AS (
 dim_transfers AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'from_stop_id', 'to_stop_id', 'from_trip_id', 'to_trip_id', 'from_route_id',' to_route_id']) }} AS _gtfs_key,
         feed_key,
         from_stop_id,
         to_stop_id,

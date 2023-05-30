@@ -8,6 +8,7 @@ WITH make_dim AS (
 dim_levels AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'level_id']) }} AS _gtfs_key,
         feed_key,
         level_id,
         level_index,

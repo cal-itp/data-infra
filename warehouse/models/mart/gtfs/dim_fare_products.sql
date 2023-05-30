@@ -19,6 +19,7 @@ bad_rows AS (
 dim_fare_products AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'fare_product_id']) }} AS _gtfs_key,
         base64_url,
         feed_key,
         fare_product_id,

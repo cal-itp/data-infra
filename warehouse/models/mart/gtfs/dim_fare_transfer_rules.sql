@@ -25,6 +25,7 @@ bad_rows AS (
 dim_fare_transfer_rules AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', 'duration_limit']) }} AS _gtfs_key,
         base64_url,
         feed_key,
         from_leg_group_id,
