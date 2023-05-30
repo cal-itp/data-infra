@@ -1,154 +1,154 @@
 {{ config(materialized='ephemeral') }}
 
 WITH stg_gtfs_quality__intended_checks AS (
-    SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance_schedule() }} AS feature, {{ schedule_url() }} AS entity, 0 AS is_manual
+    SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance_schedule() }} AS feature, {{ schedule_url() }} AS entity, false AS is_manual
     UNION ALL
-    SELECT {{ no_validation_errors() }}, {{ compliance_schedule() }}, {{ schedule_feed() }}, 0
+    SELECT {{ no_validation_errors() }}, {{ compliance_schedule() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ shapes_file_present() }}, {{ accurate_service_data() }}, {{ schedule_feed() }}, 0
+    SELECT {{ shapes_file_present() }}, {{ accurate_service_data() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ complete_wheelchair_accessibility_data() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, 0
+    SELECT {{ complete_wheelchair_accessibility_data() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ shapes_for_all_trips() }}, {{ accurate_service_data() }}, {{ schedule_feed() }}, 0
+    SELECT {{ shapes_for_all_trips() }}, {{ accurate_service_data() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ include_tts() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, 0
+    SELECT {{ include_tts() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ shapes_valid() }}, {{ accurate_service_data() }}, {{ schedule_feed() }}, 0
+    SELECT {{ shapes_valid() }}, {{ accurate_service_data() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ pathways_valid() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, 0
+    SELECT {{ pathways_valid() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ technical_contact_listed() }}, {{ technical_contact_availability() }}, {{ schedule_feed() }}, 0
+    SELECT {{ technical_contact_listed() }}, {{ technical_contact_availability() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ no_expired_services() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}, 0
+    SELECT {{ no_expired_services() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ no_rt_validation_errors_vp() }}, {{ compliance_rt() }}, {{ rt_feed_vp() }}, 0
+    SELECT {{ no_rt_validation_errors_vp() }}, {{ compliance_rt() }}, {{ rt_feed_vp() }}, false
     UNION ALL
-    SELECT {{ no_rt_validation_errors_tu() }}, {{ compliance_rt() }}, {{ rt_feed_tu() }}, 0
+    SELECT {{ no_rt_validation_errors_tu() }}, {{ compliance_rt() }}, {{ rt_feed_tu() }}, false
     UNION ALL
-    SELECT {{ no_rt_validation_errors_sa() }}, {{ compliance_rt() }}, {{ rt_feed_sa() }}, 0
+    SELECT {{ no_rt_validation_errors_sa() }}, {{ compliance_rt() }}, {{ rt_feed_sa() }}, false
     UNION ALL
-    SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}, {{ rt_feed() }}, 0
+    SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}, {{ rt_feed() }}, false
     UNION ALL
-    SELECT {{ feed_present_vehicle_positions() }}, {{ compliance_rt() }}, {{ rt_url_vp() }}, 0
+    SELECT {{ feed_present_vehicle_positions() }}, {{ compliance_rt() }}, {{ rt_url_vp() }}, false
     UNION ALL
-    SELECT {{ feed_present_trip_updates() }}, {{ compliance_rt() }}, {{ rt_url_tu() }}, 0
+    SELECT {{ feed_present_trip_updates() }}, {{ compliance_rt() }}, {{ rt_url_tu() }}, false
     UNION ALL
-    SELECT {{ feed_present_service_alerts() }}, {{ compliance_rt() }}, {{ rt_url_sa() }}, 0
+    SELECT {{ feed_present_service_alerts() }}, {{ compliance_rt() }}, {{ rt_url_sa() }}, false
     UNION ALL
-    SELECT {{ rt_https_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_tu() }}, 0
+    SELECT {{ rt_https_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_tu() }}, false
     UNION ALL
-    SELECT {{ rt_https_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_vp() }}, 0
+    SELECT {{ rt_https_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_vp() }}, false
     UNION ALL
-    SELECT {{ rt_https_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_sa() }}, 0
+    SELECT {{ rt_https_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_sa() }}, false
     UNION ALL
-    SELECT {{ no_pb_error_tu() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_tu() }}, 0
+    SELECT {{ no_pb_error_tu() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_tu() }}, false
     UNION ALL
-    SELECT {{ no_pb_error_vp() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_vp() }}, 0
+    SELECT {{ no_pb_error_vp() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_vp() }}, false
     UNION ALL
-    SELECT {{ no_pb_error_sa() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_sa() }}, 0
+    SELECT {{ no_pb_error_sa() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_sa() }}, false
     UNION ALL
-    SELECT {{ no_7_day_feed_expiration() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}, 0
+    SELECT {{ no_7_day_feed_expiration() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ no_30_day_feed_expiration() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}, 0
+    SELECT {{ no_30_day_feed_expiration() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ passes_fares_validator() }}, {{ fare_completeness() }}, {{ schedule_feed() }}, 0
+    SELECT {{ passes_fares_validator() }}, {{ fare_completeness() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ rt_20sec_vp() }}, {{ accurate_service_data() }}, {{ rt_feed_vp() }}, 0
+    SELECT {{ rt_20sec_vp() }}, {{ accurate_service_data() }}, {{ rt_feed_vp() }}, false
     UNION ALL
-    SELECT {{ rt_20sec_tu() }}, {{ accurate_service_data() }}, {{ rt_feed_tu() }}, 0
+    SELECT {{ rt_20sec_tu() }}, {{ accurate_service_data() }}, {{ rt_feed_tu() }}, false
     UNION ALL
-    SELECT {{ persistent_ids_schedule() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}, 0
+    SELECT {{ persistent_ids_schedule() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ lead_time() }}, {{ up_to_dateness() }}, {{ schedule_feed() }}, 0
+    SELECT {{ lead_time() }}, {{ up_to_dateness() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ no_stale_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_vp() }}, 0
+    SELECT {{ no_stale_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_vp() }}, false
     UNION ALL
-    SELECT {{ no_stale_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_tu() }}, 0
+    SELECT {{ no_stale_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_tu() }}, false
     UNION ALL
-    SELECT {{ no_stale_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_sa() }}, 0
+    SELECT {{ no_stale_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_sa() }}, false
     UNION ALL
-    SELECT {{ modification_date_present() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}, 0
+    SELECT {{ modification_date_present() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}, false
     UNION ALL
-    SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability_schedule() }}, {{ schedule_url() }}, 0
+    SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability_schedule() }}, {{ schedule_url() }}, false
     UNION ALL
-    SELECT {{ vehicle_positions_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_vp() }}, 0
+    SELECT {{ vehicle_positions_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_vp() }}, false
     UNION ALL
-    SELECT {{ trip_updates_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_tu() }}, 0
+    SELECT {{ trip_updates_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_tu() }}, false
     UNION ALL
-    SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_sa() }}, 0
+    SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_sa() }}, false
     UNION ALL
-    SELECT {{ schedule_feed_on_mobility_database() }}, {{ feed_aggregator_availability_schedule() }}, {{ schedule_url() }}, 0
+    SELECT {{ schedule_feed_on_mobility_database() }}, {{ feed_aggregator_availability_schedule() }}, {{ schedule_url() }}, false
     UNION ALL
-    SELECT {{ vehicle_positions_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_vp() }}, 0
+    SELECT {{ vehicle_positions_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_vp() }}, false
     UNION ALL
-    SELECT {{ trip_updates_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_tu() }}, 0
+    SELECT {{ trip_updates_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_tu() }}, false
     UNION ALL
-    SELECT {{ service_alerts_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_sa() }}, 0
+    SELECT {{ service_alerts_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_sa() }}, false
     UNION ALL
-    SELECT {{ modification_date_present_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_sa() }}, 0
+    SELECT {{ modification_date_present_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_sa() }}, false
     UNION ALL
-    SELECT {{ modification_date_present_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_vp() }}, 0
+    SELECT {{ modification_date_present_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_vp() }}, false
     UNION ALL
-    SELECT {{ modification_date_present_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_tu() }}, 0
+    SELECT {{ modification_date_present_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_tu() }}, false
     UNION ALL
-    SELECT {{ scheduled_trips_in_tu_feed() }}, {{ fixed_route_completeness() }}, {{ service() }}, 0
+    SELECT {{ scheduled_trips_in_tu_feed() }}, {{ fixed_route_completeness() }}, {{ service() }}, false
     UNION ALL
-    SELECT {{ all_tu_in_vp() }}, {{ fixed_route_completeness() }}, {{ service() }}, 0
+    SELECT {{ all_tu_in_vp() }}, {{ fixed_route_completeness() }}, {{ service() }}, false
     UNION ALL
-    SELECT {{ feed_listed_schedule() }}, {{ compliance_schedule() }}, {{ service() }}, 0
+    SELECT {{ feed_listed_schedule() }}, {{ compliance_schedule() }}, {{ service() }}, false
     UNION ALL
-    SELECT {{ feed_listed_vp() }}, {{ compliance_rt() }}, {{ service() }}, 0
+    SELECT {{ feed_listed_vp() }}, {{ compliance_rt() }}, {{ service() }}, false
     UNION ALL
-    SELECT {{ feed_listed_tu() }}, {{ compliance_rt() }}, {{ service() }}, 0
+    SELECT {{ feed_listed_tu() }}, {{ compliance_rt() }}, {{ service() }}, false
     UNION ALL
-    SELECT {{ feed_listed_sa() }}, {{ compliance_rt() }}, {{ service() }}, 0
+    SELECT {{ feed_listed_sa() }}, {{ compliance_rt() }}, {{ service() }}, false
     -- MANUAL CHECKS
     UNION ALL
-    SELECT {{ organization_has_contact_info() }}, {{ technical_contact_availability() }}, {{ organization() }}, 1
+    SELECT {{ organization_has_contact_info() }}, {{ technical_contact_availability() }}, {{ organization() }}, true
     UNION ALL
-    SELECT {{ shapes_accurate() }}, {{ accurate_service_data() }}, {{ gtfs_dataset_schedule() }}, 1
+    SELECT {{ shapes_accurate() }}, {{ accurate_service_data() }}, {{ gtfs_dataset_schedule() }}, true
     UNION ALL
-    SELECT {{ data_license_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset_schedule() }}, 1
+    SELECT {{ data_license_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset_schedule() }}, true
     UNION ALL
-    SELECT {{ data_license_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset_vp() }}, 1
+    SELECT {{ data_license_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset_vp() }}, true
     UNION ALL
-    SELECT {{ data_license_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset_tu() }}, 1
+    SELECT {{ data_license_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset_tu() }}, true
     UNION ALL
-    SELECT {{ data_license_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset_sa() }}, 1
+    SELECT {{ data_license_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset_sa() }}, true
     UNION ALL
-    SELECT {{ authentication_acceptable_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset_schedule() }}, 1
+    SELECT {{ authentication_acceptable_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset_schedule() }}, true
     UNION ALL
-    SELECT {{ authentication_acceptable_vp() }}, {{ availability_on_website() }}, {{ gtfs_dataset_vp() }}, 1
+    SELECT {{ authentication_acceptable_vp() }}, {{ availability_on_website() }}, {{ gtfs_dataset_vp() }}, true
     UNION ALL
-    SELECT {{ authentication_acceptable_tu() }}, {{ availability_on_website() }}, {{ gtfs_dataset_tu() }}, 1
+    SELECT {{ authentication_acceptable_tu() }}, {{ availability_on_website() }}, {{ gtfs_dataset_tu() }}, true
     UNION ALL
-    SELECT {{ authentication_acceptable_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset_sa() }}, 1
+    SELECT {{ authentication_acceptable_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset_sa() }}, true
     UNION ALL
-    SELECT {{ stable_url_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset_schedule() }}, 1
+    SELECT {{ stable_url_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset_schedule() }}, true
     UNION ALL
-    SELECT {{ stable_url_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset_vp() }}, 1
+    SELECT {{ stable_url_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset_vp() }}, true
     UNION ALL
-    SELECT {{ stable_url_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset_tu() }}, 1
+    SELECT {{ stable_url_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset_tu() }}, true
     UNION ALL
-    SELECT {{ stable_url_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset_sa() }}, 1
+    SELECT {{ stable_url_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset_sa() }}, true
     UNION ALL
-    SELECT {{ grading_scheme_v1() }}, {{ accurate_service_data() }}, {{ gtfs_dataset_schedule() }}, 1
+    SELECT {{ grading_scheme_v1() }}, {{ accurate_service_data() }}, {{ gtfs_dataset_schedule() }}, true
     UNION ALL
-    SELECT {{ link_to_dataset_on_website_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset_schedule() }}, 1
+    SELECT {{ link_to_dataset_on_website_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset_schedule() }}, true
     UNION ALL
-    SELECT {{ link_to_dataset_on_website_vp() }}, {{ availability_on_website() }}, {{ gtfs_dataset_vp() }}, 1
+    SELECT {{ link_to_dataset_on_website_vp() }}, {{ availability_on_website() }}, {{ gtfs_dataset_vp() }}, true
     UNION ALL
-    SELECT {{ link_to_dataset_on_website_tu() }}, {{ availability_on_website() }}, {{ gtfs_dataset_tu() }}, 1
+    SELECT {{ link_to_dataset_on_website_tu() }}, {{ availability_on_website() }}, {{ gtfs_dataset_tu() }}, true
     UNION ALL
-    SELECT {{ link_to_dataset_on_website_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset_sa() }}, 1
+    SELECT {{ link_to_dataset_on_website_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset_sa() }}, true
     UNION ALL
-    SELECT {{ trip_planner_schedule() }}, {{ compliance_schedule() }}, {{ service() }}, 1
+    SELECT {{ trip_planner_schedule() }}, {{ compliance_schedule() }}, {{ service() }}, true
     UNION ALL
-    SELECT {{ trip_planner_rt() }}, {{ compliance_rt() }}, {{ service() }}, 1
+    SELECT {{ trip_planner_rt() }}, {{ compliance_rt() }}, {{ service() }}, true
     UNION ALL
-    SELECT {{ fixed_routes_match() }}, {{ fixed_route_completeness() }}, {{ gtfs_service_data_schedule() }}, 1
+    SELECT {{ fixed_routes_match() }}, {{ fixed_route_completeness() }}, {{ gtfs_service_data_schedule() }}, true
     UNION ALL
-    SELECT {{ demand_responsive_routes_match() }}, {{ demand_responsive_completeness() }}, {{ gtfs_service_data_schedule() }}, 1
+    SELECT {{ demand_responsive_routes_match() }}, {{ demand_responsive_completeness() }}, {{ gtfs_service_data_schedule() }}, true
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks

@@ -187,6 +187,8 @@ models:
       - name: feature
       - &is_manual
         name: is_manual
+        description: |
+          Boolean flag for whether the associated check was performed by hand (via Airtable) or automatically.
         tests:
           - not_null
   - name: fct_daily_service_combined_guideline_checks

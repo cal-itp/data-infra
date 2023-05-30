@@ -69,6 +69,8 @@ models:
           - not_null
       - name: feature
       - name: is_manual
+        description: |
+          Boolean flag for whether the associated check was performed by hand (via Airtable) or automatically.
         tests:
           - not_null
 
