@@ -133,14 +133,23 @@ models:
         tests:
           - not_null
           - unique:
-              where: NOT warning_duplicate_primary_key
+              where: NOT warning_duplicate_gtfs_key
+      - &warning_duplicate_gtfs_key
+        name: warning_duplicate_gtfs_key
+        description: |
+          Flags rows with a duplicate _gtfs_key; e.g. area_id duplicates would result in _gtfs_key duplicates within a feed version.
+          Treat these rows with caution as they can cause fanout when joining on natural (i.e. GTFS) keys.
+        tests:
+          - accepted_values:
+              values: [true, false]
+              quote: false
+          - dbt_expectations.expect_column_most_common_value_to_be_in_set:
+              value_set: [false]
+              top_n: 1
+              quote_values: false
+              data_type: "boolean"
       - *schedule_dim_dt
       - *schedule_dim_line_number
-      - name: warning_duplicate_primary_key
-        description: |
-          Rows with `true` in this column have a duplicate primary natural key; i.e., `area_id` is duplicated within an individual feed
-          instance and `_natural_key` will also be duplicated as a result. Treat these rows with caution as they can cause fanout when
-          joining on natural (i.e. GTFS) keys.
       - *feed_key
       - *base64_url
       - name: area_id
@@ -162,6 +171,7 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -233,6 +243,7 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -279,6 +290,7 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -307,6 +319,7 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -333,6 +346,7 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -363,6 +377,7 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -626,6 +641,7 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -694,6 +710,7 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -765,6 +782,7 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -796,7 +814,7 @@ models:
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
       - *_feed_valid_from
       - *feed_timezone_no_tests
-      - name: warning_duplicate_primary_key
+      - name: warning_duplicate_gtfs_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
           instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
@@ -888,6 +906,7 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -921,7 +940,7 @@ models:
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
-      - name: warning_duplicate_primary_key
+      - name: warning_duplicate_gtfs_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., the given `trip_id`
           / `stop_sequence` pair is duplicated within an individual feed instance and `key` will
