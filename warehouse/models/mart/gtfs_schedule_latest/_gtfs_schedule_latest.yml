@@ -125,8 +125,8 @@ models:
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
       - *feed_timezone
-      - &warning_duplicate_primary_key
-        name: warning_duplicate_primary_key
+      - &warning_duplicate_gtfs_key
+        name: warning_duplicate_gtfs_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., the attribute(s) that is meant to
           uniquely identify a row are duplicated within an individual feed instance and `key` will
@@ -326,7 +326,7 @@ models:
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
       - *feed_timezone
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
 
   - name: dim_fare_transfer_rules_latest
     description: |
@@ -392,7 +392,7 @@ models:
       - name: feed_contact_url
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
       - *feed_timezone
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
 
   - name: dim_frequencies_latest
     description: |
@@ -645,7 +645,7 @@ models:
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
       - name: warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column are missing the required `stop_id` value.
@@ -817,7 +817,7 @@ models:
       - name: stop_timezone_coalesced
         meta:
           publish.ignore: true
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
 
   - name: dim_transfers_latest
     description: |
@@ -853,7 +853,7 @@ models:
       - name: to_trip_id
         description: '{{ doc("gtfs_transfers__to_trip_id") }}'
       - *feed_timezone
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
 
   - name: dim_translations_latest
     description: |
@@ -921,7 +921,7 @@ models:
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
       - *feed_timezone
 
 exposures:

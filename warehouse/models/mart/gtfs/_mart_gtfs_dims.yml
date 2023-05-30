@@ -140,9 +140,7 @@ models:
           Flags rows with a duplicate _gtfs_key; e.g. area_id duplicates would result in _gtfs_key duplicates within a feed version.
           Treat these rows with caution as they can cause fanout when joining on natural (i.e. GTFS) keys.
         tests:
-          - accepted_values:
-              values: [true, false]
-              quote: false
+          - not_null
           - dbt_expectations.expect_column_most_common_value_to_be_in_set:
               value_set: [false]
               top_n: 1
@@ -171,7 +169,10 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
-      - *warning_duplicate_gtfs_key
+      # attribution_id is optional in the GTFS spec, so the flag is present on most/all rows
+      - <<: *warning_duplicate_gtfs_key
+        tests:
+          - not_null
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key

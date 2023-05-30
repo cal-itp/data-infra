@@ -16,7 +16,7 @@ bad_rows AS (
         base64_url,
         ts,
         {{ dbt_utils.generate_surrogate_key(['from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', 'duration_limit']) }} AS fare_transfer_rule_identifier,
-        TRUE AS warning_duplicate_primary_key
+        TRUE AS warning_duplicate_gtfs_key
     FROM make_dim
     GROUP BY 1, 2, 3
     HAVING COUNT(*) > 1
@@ -35,7 +35,7 @@ dim_fare_transfer_rules AS (
         duration_limit_type,
         fare_transfer_type,
         fare_product_id,
-        COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        COALESCE(warning_duplicate_gtfs_key, FALSE) AS warning_duplicate_gtfs_key,
         _dt,
         _feed_valid_from,
         _line_number,

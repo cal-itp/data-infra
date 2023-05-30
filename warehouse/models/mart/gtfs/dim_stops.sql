@@ -20,7 +20,7 @@ bad_rows AS (
         ts,
         stop_id,
         non_null_stop_id,
-        TRUE AS warning_duplicate_primary_key
+        TRUE AS warning_duplicate_gtfs_key
     FROM coalesce_missing_ids
     GROUP BY base64_url, ts, stop_id, non_null_stop_id
     HAVING COUNT(*) > 1
@@ -61,7 +61,7 @@ dim_stops AS (
         wheelchair_boarding,
         level_id,
         platform_code,
-        COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        COALESCE(warning_duplicate_gtfs_key, FALSE) AS warning_duplicate_gtfs_key,
         fill_in_tz.stop_id IS NULL AS warning_missing_primary_key,
         stop_timezone_coalesced,
         _dt,

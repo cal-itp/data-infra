@@ -557,7 +557,7 @@ models:
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
-      - name: warning_duplicate_primary_key
+      - name: warning_duplicate_gtfs_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., the given `trip_id`
           / `stop_sequence` pair is duplicated within an individual feed instance and `key` will

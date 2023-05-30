@@ -10,7 +10,7 @@ bad_rows AS (
         base64_url,
         ts,
         fare_product_id,
-        TRUE AS warning_duplicate_primary_key
+        TRUE AS warning_duplicate_gtfs_key
     FROM make_dim
     GROUP BY base64_url, ts, fare_product_id
     HAVING COUNT(*) > 1
@@ -27,7 +27,7 @@ dim_fare_products AS (
         fare_media_id,
         amount,
         currency,
-        COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        COALESCE(warning_duplicate_gtfs_key, FALSE) AS warning_duplicate_gtfs_key,
         _dt,
         _feed_valid_from,
         _line_number,

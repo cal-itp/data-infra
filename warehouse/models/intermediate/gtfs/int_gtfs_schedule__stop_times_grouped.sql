@@ -69,8 +69,8 @@ grouped AS (
         (MAX(trip_stop_arrival_sec) - COALESCE(MIN(trip_start_time_sec), MIN(trip_stop_departure_sec))) / 3600 AS service_hours,
         (MAX(end_pickup_drop_off_window_sec) -  MIN(start_pickup_drop_off_window_sec)) / 3600 AS flex_service_hours,
         LOGICAL_OR(
-            warning_duplicate_primary_key
-        ) AS contains_warning_duplicate_primary_key,
+            warning_duplicate_gtfs_key
+        ) AS contains_warning_duplicate_gtfs_key,
         LOGICAL_OR(
             warning_missing_foreign_key_stop_id
         ) AS contains_warning_missing_foreign_key_stop_id,
@@ -138,7 +138,7 @@ int_gtfs_schedule__stop_times_grouped AS (
         trip_last_arrival_sec,
         service_hours,
         flex_service_hours,
-        contains_warning_duplicate_primary_key,
+        contains_warning_duplicate_gtfs_key,
         contains_warning_missing_foreign_key_stop_id,
         frequencies_defined_trip,
         is_gtfs_flex_trip,

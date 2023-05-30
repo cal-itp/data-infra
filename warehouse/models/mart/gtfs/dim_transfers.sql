@@ -16,7 +16,7 @@ bad_rows AS (
         base64_url,
         ts,
         {{ dbt_utils.generate_surrogate_key(['from_stop_id', 'to_stop_id', 'from_trip_id', 'to_trip_id', 'from_route_id',' to_route_id']) }} AS transfer_identifier,
-        TRUE AS warning_duplicate_primary_key
+        TRUE AS warning_duplicate_gtfs_key
     FROM make_dim
     GROUP BY 1, 2, 3
     HAVING COUNT(*) > 1
@@ -36,7 +36,7 @@ dim_transfers AS (
         to_trip_id,
         min_transfer_time,
         base64_url,
-        COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        COALESCE(warning_duplicate_gtfs_key, FALSE) AS warning_duplicate_gtfs_key,
         _dt,
         _feed_valid_from,
         _line_number,
