@@ -61,39 +61,25 @@ jobs:
           destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/target/'
       # Only do visualization if we actually changed models and we are merging against main
       - uses: tj-actions/changed-files@v35
-        if: github.event.pull_request.base.ref == 'main'
+        if: ${{ github.event_name == 'pull_request' }}
         id: changed-files-warehouse
         with:
           files: 'warehouse/models/**/*.sql'
-      - name: Create report.md
+      # install a specific version of node before cml https://github.com/iterative/cml/issues/1377
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+      - uses: iterative/setup-cml@v1
         if: steps.changed-files-warehouse.outputs.any_changed == 'true'
+      - name: Create GitHub comment
+        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd warehouse
           gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
-          echo "Warehouse report 📦" >> report.md
-          echo "### New models 🌱" >> report.md
-          poetry run dbt --no-use-colors ls --resource-type model --select state:new --state ./latest | grep "^calitp_warehouse\." | sed "s/calitp_warehouse\.//g" >> report.md
-          echo "### Changed models 🔀" >> report.md
-          poetry run dbt --no-use-colors ls --resource-type model --select state:modified --exclude state:new --state ./latest | grep "^calitp_warehouse\." | sed "s/calitp_warehouse\.//g" >> report.md
-#          echo "### DAG" >> report.md
-#          poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | grep "^calitp_warehouse\." | sed 's/^/--include /g' | xargs poetry run python scripts/visualize.py man --output=target/dag.png
-# TODO: add these back
-#          echo "" >> report.md
-#          echo '![](./target/dag.png "Changed models")' >> report.md
-      - uses: peter-evans/find-comment@v2
-        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Warehouse report
-      - uses: peter-evans/create-or-update-comment@v3
-        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body-path: warehouse/report.md
-          edit-mode: replace
+          poetry run python scripts/visualize.py ci-report
+          cml comment update target/report.md
 
   build_push:
     name: package warehouse image
