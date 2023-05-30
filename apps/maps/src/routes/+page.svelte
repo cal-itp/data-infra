@@ -99,14 +99,42 @@
 
     const DEFAULT_TOOLTIP_STYLE = {
           backgroundColor: "white",
+          borderRadius: '.25rem',
+          boxShadow: "0 0 0 1px rgb(0 0 0 / 10%), .75em .75em .75em -.75em rgb(0 0 0 / 30%)",
           color: "black",
           fontSize: '1.2em',
       };
 
     function getTooltip(feature) {
       if (feature.properties.tooltip) {
+        const { stop_name, stop_id, route_short_name, route_id, avg_mph } = feature.properties;
+
         return {
-          html: feature.properties.tooltip.html,
+          html: `
+            <h2 class="has-text-weight-bold has-text-teal-bold">
+              ${stop_name ?? '(Stop name unavailable)'}
+              <span class="tag ml-2">
+                <i class="fas fa-circle mr-2" style="color: rgb(${getColor(feature)})"></i>
+                ${avg_mph}&nbsp;
+                <span class="has-text-weight-normal">mph</span>
+              </span>
+            </h2>
+
+            <ul class="tooltip-meta-list has-text-slate-bold">
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Route</div>
+                <div class="tooltip-meta-value">${route_short_name ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Stop ID</div>
+                <div class="tooltip-meta-value">${stop_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Route ID</div>
+                <div class="tooltip-meta-value">${route_id ?? '\u2014'}</div>
+              </li>
+            </ul>
+          `,
           style: feature.properties.tooltip.style || DEFAULT_TOOLTIP_STYLE,
         }
       }
@@ -127,8 +155,12 @@
         }
       }
 
+      const { Route, County, District, RouteType } = feature.properties;
+
       return {
-        html: JSON.stringify(feature.properties),
+        html: `
+          <div class="has-text-weight-bold has-text-teal-bold">${RouteType} Route ${Route}</div>
+          <div class="has-text-slate-bold">${County} County, District ${District}</div>`,
         style: DEFAULT_TOOLTIP_STYLE,
       }
     }
@@ -263,13 +295,36 @@
 <style>
     @import 'leaflet/dist/leaflet.css';
 
+    .navbar {
+      box-shadow: 0 0 1em rgba(0, 0, 0, .2);
+      z-index: 999;
+    }
+
     #map {
-        margin: 10px;
         height: 800px;
     }
 
     /* Use :global to prevent namespacing of CSS for elements that are created dynamically */
     /* TODO: maybe we can define some of these things up front? For example create the legend div in HTML. */
+    :global(.tooltip-meta-list) {
+      display: flex;
+      line-height: calc(4 / 3);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    :global(.tooltip-meta-item + .tooltip-meta-item) {
+      border-left: 1px solid #eee;
+      margin-left: .5rem;
+      padding-left: .5rem;
+    }
+
+    :global(.tooltip-meta-key) {
+      color: #aaa;
+      font-size: smaller;
+    }
+
     :global(.maplibregl-popup) {
         max-width: 400px;
         font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -298,7 +353,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
       integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
       crossorigin=""/>
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="https://www.calitp.org/">
       <img src="https://reports.calitp.org/images/calitp-logo.svg" alt="Cal-ITP logo">
@@ -312,20 +367,30 @@
 
   <div class="navbar-menu">
     <div class="navbar-start">
-      <div class="navbar-item">
+      <div class="navbar-item has-text-teal-bold">
         {#if loading}
           <div class="icon-text">
             <span class="icon">
               <i class="fas fa-circle-notch fa-spin"></i>
             </span>
-            <span>Loading...</span>
+            <span>Loading&hellip;</span>
           </div>
         {:else if (state)}
-          <span>{state.layers.slice(-1)[0].name} (<a href="{state.layers.slice(-1)[0].url}">download GeoJSON</a>)</span>
+          <h1 class="has-text-weight-bold">{state.layers.slice(-1)[0].name}</h1>
         {:else}
-          <span>No state found in URL.</span>
+          No state found in URL
         {/if}
       </div>
+      {#if (state)}
+        <a class="navbar-item has-text-teal" href="{state.layers.slice(-1)[0].url}">
+          <div class="icon-text">
+            <span class="icon">
+              <i class="fas fa-file-arrow-down"></i>
+            </span>
+            <span>Download GeoJSON</span>
+          </div>
+        </a>
+      {/if}
     </div>
   </div>
 </nav>
@@ -333,9 +398,9 @@
 <div id="map" class="map" bind:this={mapElement}></div>
 
 <footer>
-  <div class="content has-text-centered">
+  <div class="content has-text-centered p-2">
     <p>
-      &copy; Cal-ITP 2023. All rights reserved.
+      &copy; Cal-ITP {new Date().getFullYear()}. All rights reserved.
     </p>
   </div>
 </footer>
