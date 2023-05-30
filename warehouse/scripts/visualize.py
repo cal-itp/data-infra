@@ -2,16 +2,13 @@
 Provide more visualizations than what dbt provides.
 """
 import json
-import os
 import webbrowser
-from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Tuple, Type, Union
 
 import gcsfs  # type: ignore
 import networkx as nx  # type: ignore
 import typer
-from dbt.cli.main import dbtRunner
 from dbt_artifacts import (
     Catalog,
     DbtNode,
@@ -22,14 +19,8 @@ from dbt_artifacts import (
     SeedNode,
     SourceDefinition,
 )
-from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 app = typer.Typer(pretty_exceptions_enable=False)
-
-
-class ArtifactType(str, Enum):
-    manifest = "manifest"
-    run_results = "run_results"
 
 
 def read_artifact(path: Path, artifact_type: Type, verbose: bool = False) -> Any:
@@ -131,11 +122,7 @@ def build_graph(
         G.add_node(node_or_result.gvrepr, **node_or_result.gvattrs, style="filled")
 
     for node_or_result in nodes:
-        node = (
-            node_or_result.node
-            if isinstance(node_or_result, RunResultOutput)
-            else node_or_result
-        )
+        node: DbtNode = node_or_result.node if isinstance(node_or_result, RunResultOutput) else node_or_result  # type: ignore[no-redef]
         if not should_display(
             node,
             analyses,
@@ -176,7 +163,7 @@ def build_graph(
 
 @app.command()
 def viz(
-    artifact_type: ArtifactType,
+    artifact: str,
     artifacts_path: Path = Path("./target"),
     graph_path: Path = Path("./target/graph.gpickle"),
     analyses: bool = False,
@@ -191,39 +178,24 @@ def viz(
     output: Optional[Path] = None,
     display: bool = False,
     ratio: float = 0.3,
-    dbt_selector: Optional[str] = None,
-    latest_dir: str = "./latest",
 ):
     manifest, catalog, run_results = read_artifacts_folder(
         artifacts_path, verbose=verbose
     )
-    artifact: Union[Manifest, RunResults]
-    if artifact_type == ArtifactType.manifest:
-        artifact = manifest
+    actual_artifact: Union[Manifest, RunResults]
+    if artifact == "man":
+        actual_artifact = manifest
         if not output:
             output = Path("./target/manifest.pdf")
-    elif artifact_type == "run":
-        artifact = run_results
+    elif artifact == "run":
+        actual_artifact = run_results
         if not output:
             output = Path("./target/run_results.pdf")
     else:
-        raise ValueError(f"unknown artifact {artifact_type} provided")
-
-    if dbt_selector:
-        dbt = dbtRunner()
-        include = dbt.invoke(
-            [
-                "ls",
-                "--resource-type",
-                "model",
-                "--select",
-                dbt_selector,
-                latest_dir,
-            ]
-        ).result
+        raise ValueError(f"unknown artifact {artifact} provided")
 
     G = build_graph(
-        artifact,
+        actual_artifact,
         analyses,
         models,
         seeds,
@@ -242,74 +214,6 @@ def viz(
     if display:
         url = f"file://{output.resolve()}"
         webbrowser.open(url, new=2)  # open in new tab
-
-
-@app.command()
-def ci_report(
-    latest_dir: str = "./latest",
-    output: str = "target/report.md",
-):
-    dbt = dbtRunner()
-    new_models = dbt.invoke(
-        [
-            "ls",
-            "--resource-type",
-            "model",
-            "--select",
-            "state:new",
-            "--state",
-            latest_dir,
-        ]
-    ).result
-
-    modified_models = dbt.invoke(
-        [
-            "ls",
-            "--resource-type",
-            "model",
-            "--select",
-            "state:modified+",
-            "--exclude",
-            "state:new",
-            "--state",
-            latest_dir,
-        ]
-    ).result
-
-    modified_or_downstream_incremental_models = dbt.invoke(
-        [
-            "ls",
-            "--resource-type",
-            "model",
-            "--select",
-            "state:modified+,config.materialized:incremental",
-            "--exclude",
-            "state:new",
-            "--state",
-            latest_dir,
-        ]
-    ).result
-
-    typer.secho(f"Visualizing the following models: {modified_models}")
-    assert isinstance(modified_models, list)
-    viz(
-        ArtifactType.manifest,
-        include=modified_models,
-        output=Path("./target/dag.png"),
-    )
-
-    env = Environment(
-        loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")),
-        autoescape=select_autoescape(),
-    )
-    template = env.get_template("ci_report.md")
-    report = template.render(
-        new_models=new_models,
-        modified_or_downstream_incremental_models=modified_or_downstream_incremental_models,
-    )
-    typer.secho(f"Writing to {output}", fg=typer.colors.GREEN)
-    with open(output, "w") as f:
-        f.write(report)
 
 
 if __name__ == "__main__":
