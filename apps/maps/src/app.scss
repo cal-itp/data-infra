@@ -1,4 +1,29 @@
+$custom-colors: (
+    'teal': #2ea8ce,
+    'teal-bold': #136c97,
+    'teal-light': #dff2f2,
+    'yellow': #f4d837,
+    'yellow-bold': #f6bf16,
+    'yellow-light': #f7eccf,
+    'slate': #8cbccb,
+    'slate-bold': #7790a3,
+    'slate-light': #dee1e6,
+    'purple': #9487c0,
+    'purple-bold': #5b559c,
+    'purple-light': #e3e0f0,
+    'orange': #eb9f3c,
+    'orange-bold': #e16b26,
+    'orange-light': #fae7d0,
+    'green': #51bf9d,
+    'green-bold': #00896b,
+    'green-light': #dcefe7,
+    'red': #dd1c1a,
+);
+
+$link: map-get($custom-colors, 'teal');
+
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */ /* Import only what you need from Bulma */
+
 @import "bulma/sass/utilities/_all";
 @import "bulma/sass/base/_all";
 @import "bulma/sass/elements/_all";
