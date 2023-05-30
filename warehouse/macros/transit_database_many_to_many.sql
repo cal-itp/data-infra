@@ -52,5 +52,6 @@
         AND unnested_table_b.table_b_unversioned_key = unnested_table_a.table_b_unversioned_key
         AND unnested_table_a.{{ shared_start_date_name }} < unnested_table_b.{{ shared_end_date_name }}
         AND unnested_table_a.{{ shared_end_date_name }} > unnested_table_b.{{ shared_start_date_name }}
+    WHERE unnested_table_a.{{ table_a['key_col_name'] }} IS NOT NULL AND unnested_table_b.{{ table_b['key_col_name'] }} IS NOT NULL
 
 {% endmacro %}

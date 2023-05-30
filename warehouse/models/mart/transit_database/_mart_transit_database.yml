@@ -649,6 +649,9 @@ models:
       This is a partially versioned, many-to-many relationship.
       Because organization records are versioned and funding programs are current-only this represents relationships between
       versioned organization records and unversioned funding program records.
+
+      Organizations that have been deleted will not have their funding programs present in
+      this table.
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -772,6 +775,10 @@ models:
       Because organization records are versioned and headquarters county geography records
       are current-only this represents relationships between versioned organization
       records and unversioned headquarters county geography records.
+
+      Organizations that have been deleted will not have their headquarters county geographies present in
+      this table.
+
       Joins via this table can result in fanout.
   - name: bridge_services_x_operating_county_geographies
     description: |
