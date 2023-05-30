@@ -670,7 +670,13 @@ models:
     description: |
       Mapping table between fare systems and services.
       Relationship indicates that service utilizes the given fare system.
-      This is a versioned, many-to-many relationship.
+      This is a partially versioned, many-to-many relationship.
+      Because service records are versioned and fare systems records
+      are current-only this represents relationships between versioned service
+      records and unversioned fare systems records.
+
+      Services that have been deleted will not have their fare systems present in
+      this table.
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
