@@ -10,7 +10,7 @@ services AS ( -- noqa
     FROM {{ ref('int_transit_database__services_dim') }}
 ),
 
-naive_bridge AS (
+bridge_fare_systems_x_services AS (
  {{ transit_database_many_to_many_versioned(
     shared_start_date_name = '_valid_from',
     shared_end_date_name = '_valid_to',
@@ -35,14 +35,6 @@ naive_bridge AS (
         'start_date_col': '_valid_from',
         'end_date_col': '_valid_to'}
     ) }}
-),
-
--- TODO: can remove this once fare systems is made historical
-bridge_fare_systems_x_services AS (
-    SELECT *
-    FROM naive_bridge
-    WHERE fare_system_key IS NOT NULL
 )
-
 
 SELECT * FROM bridge_fare_systems_x_services
