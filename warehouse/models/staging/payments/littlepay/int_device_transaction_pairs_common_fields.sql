@@ -1,11 +1,3 @@
-{{ config(store_failures = true) }}
-
--- dst_table_name: "payments.invalid_cleaned_device_transaction_common_fields"
--- Ensure that fields that are expected to be consistent across tap on/off
--- transactions are actually consistent. Invalid records are any that differ on
--- the device_id, device_id_issuer, route_id, mode, direction, of vehicle_id
--- fields.
-
 WITH initial_transactions AS (
     SELECT *
     FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
@@ -55,7 +47,7 @@ joined_transactions AS (
     INNER JOIN second_transactions AS t2 USING (participant_id, micropayment_id)
 ),
 
-validate_cleaned_device_transaction_pairs_common_fields AS (
+int_device_transaction_pairs_common_fields AS (
 
     SELECT *
     FROM joined_transactions
@@ -68,4 +60,4 @@ validate_cleaned_device_transaction_pairs_common_fields AS (
         OR has_mismatched_vehicle_id
 )
 
-SELECT * FROM validate_cleaned_device_transaction_pairs_common_fields
+SELECT * FROM int_device_transaction_pairs_common_fields
