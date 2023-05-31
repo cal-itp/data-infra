@@ -178,14 +178,14 @@
 
       // just try to render properties as key-value mapping
       const lines = Object.entries(feature.properties).map(([key, value], idx) => {
-        return `<li className="tooltip-meta-item">
-          <div className="tooltip-meta-key">${key}</div>
-          <div className="tooltip-meta-value">${value}</div>
+        return `<li class="tooltip-meta-item">
+          <div class="tooltip-meta-key">${key}</div>
+          <div class="tooltip-meta-value">${value}</div>
         </li>`;
       });
       return {
         html: `
-              <ul className="tooltip-meta-list has-text-slate-bold">
+              <ul class="tooltip-meta-list has-text-slate-bold">
               ${lines.join("")}
               </ul>
         `,
