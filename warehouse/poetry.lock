@@ -2213,6 +2213,21 @@ files = [
 ]
 
 [[package]]
+name = "metabase-api"
+version = "0.3.0"
+description = "A Python Wrapper for Metabase API"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "metabase-api-0.3.0.tar.gz", hash = "sha256:ba666ac31e6a8591422fd43099d6a0a4c42103a3e095dddf21802863285679ee"},
+    {file = "metabase_api-0.3.0-py3-none-any.whl", hash = "sha256:118ed8faf7555f51b060258896bc94c151230623e5b88fd72becc9b68afd2255"},
+]
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
 name = "minimal-snowplow-tracker"
 version = "0.0.2"
 description = "A minimal snowplow event tracker for Python. Add analytics to your Python and Django apps, webapps and games"
@@ -4482,4 +4497,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "fbf80146c81bf712c06a0b110158226c4315e44f20aa060d1a57c3023fe6cf0b"
+content-hash = "e54048011983894c4fb723e8e68e956e4d707a8d1f8e3fbb75f14f778369fa81"
