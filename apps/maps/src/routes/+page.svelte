@@ -12,6 +12,7 @@
     import '@fortawesome/fontawesome-free/css/all.css'
     import * as turf from '@turf/turf';
     import { Base64 } from 'js-base64';
+    import { titleCase } from "title-case";
 
     const STATE_QUERY_PARAM = "state";
     const START_LAT_LON = [34.05, -118.25];
@@ -179,7 +180,7 @@
       // just try to render properties as key-value mapping
       const lines = Object.entries(feature.properties).map(([key, value], idx) => {
         return `<li class="tooltip-meta-item">
-          <div class="tooltip-meta-key">${key}</div>
+          <div class="tooltip-meta-key">${titleCase(key.replaceAll("_", " "))}</div>
           <div class="tooltip-meta-value">${value}</div>
         </li>`;
       });
