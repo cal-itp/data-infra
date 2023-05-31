@@ -242,3 +242,15 @@ schema_fields:
   - name: hq_county_geography
     type: STRING
     mode: REPEATED
+  - name: public_currently_operating
+    type: STRING
+    mode: NULLABLE
+  - name: public_currently_operating_fixed_route
+    type: STRING
+    mode: NULLABLE
+  - name: is_public_entity
+    type: STRING
+    mode: NULLABLE
+  - name: raw_ntd_id
+    type: STRING
+    mode: NULLABLE
