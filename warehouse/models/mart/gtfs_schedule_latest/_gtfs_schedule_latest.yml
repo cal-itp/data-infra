@@ -329,7 +329,7 @@ models:
       - *feed_timezone
       - *warning_duplicate_primary_key
 
-  - name: dim_fare_transfer_rules
+  - name: dim_fare_transfer_rules_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
