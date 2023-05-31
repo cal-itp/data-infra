@@ -11,14 +11,14 @@ from calitp_data.storage import get_fs  # type: ignore
 from furl import furl
 from geojson_pydantic import Feature, FeatureCollection, MultiPolygon, Point, Polygon
 from geojson_pydantic.types import Position
-from pydantic import BaseModel, HttpUrl, ValidationError, conlist, root_validator
+from pydantic import BaseModel, Field, HttpUrl, ValidationError, conlist, root_validator
 from tqdm import tqdm
 
 MAP_APP_URL_ENV_VAR = "CALITP_MAP_APP_URL"
 MAP_APP_URL = os.getenv(MAP_APP_URL_ENV_VAR)
 
 
-class Kind(str, Enum):  # name?
+class LayerType(str, Enum):  # name?
     speedmaps = "speedmap"
     hqta_areas = "hqta_areas"
     hqta_stops = "hqta_stops"
@@ -53,15 +53,15 @@ class HQTA(BaseModel):
 
 
 # Dict Props just mean properties are an arbitrary dictionary
-KIND_FEATURE_TYPES = {
-    Kind.speedmaps: Feature[Polygon, Speedmap],
-    Kind.hqta_areas: Feature[Union[Polygon, MultiPolygon], HQTA],
-    Kind.hqta_stops: Feature[Point, HQTA],
+LAYER_FEATURE_TYPES = {
+    LayerType.speedmaps: Feature[Polygon, Speedmap],
+    LayerType.hqta_areas: Feature[Union[Polygon, MultiPolygon], HQTA],
+    LayerType.hqta_stops: Feature[Point, HQTA],
 }
 
 
 def validate_geojson(
-    path: str, kind: Optional[Kind] = None, verbose=False
+    path: str, layer_type: Optional[LayerType] = None, verbose=False
 ) -> FeatureCollection:
     if verbose:
         typer.secho(f"Validating {typer.style(path, fg=typer.colors.CYAN)} contents...")
@@ -84,15 +84,15 @@ def validate_geojson(
 
     collection = FeatureCollection(**d)
 
-    if kind:
-        kind_class = KIND_FEATURE_TYPES[kind]
+    if layer_type:
+        layer_type_class = LAYER_FEATURE_TYPES[layer_type]
         if verbose:
             typer.secho(
-                f"Validating that features are {typer.style(str(kind_class), fg=typer.colors.YELLOW)}..."
+                f"Validating that features are {typer.style(str(layer_type_class), fg=typer.colors.YELLOW)}..."
             )
         for feature in tqdm(collection.features):
             try:
-                kind_class(**feature.dict())
+                layer_type_class(**feature.dict())
             except ValidationError:
                 typer.secho(feature.json(), fg=typer.colors.RED)
                 raise
@@ -103,7 +103,7 @@ def validate_geojson(
 class Layer(BaseModel):
     name: str
     url: HttpUrl
-    kind: Optional[Kind]
+    typ: Optional[LayerType] = Field(alias="type")
     properties: Optional[Dict[str, Any]]
 
 
@@ -144,7 +144,7 @@ class State(BaseModel):
                 raise
 
             if data:
-                validate_geojson(layer.url, layer.kind, verbose=verbose)
+                validate_geojson(layer.url, layer.typ, verbose=verbose)
 
     @property
     def iframe_url(self) -> str:

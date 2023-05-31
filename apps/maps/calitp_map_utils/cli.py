@@ -6,14 +6,14 @@ from typing import Optional
 
 import typer
 
-from . import Kind, State
+from . import LayerType, State
 from . import validate_geojson as validate_geojson_func
 
 app = typer.Typer()
 
 
 @app.command()
-def validate_geojson(path: str, kind: Optional[Kind] = None):
+def validate_geojson(path: str, kind: Optional[LayerType] = None):
     collection = validate_geojson_func(path, kind, verbose=True)
 
     typer.secho(

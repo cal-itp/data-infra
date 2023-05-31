@@ -5,7 +5,7 @@
 /* Do not modify it by hand - just update the pydantic models and then re-run the script
 */
 
-export type Kind = "speedmap" | "hqta_areas" | "hqta_stops";
+export type LayerType = "speedmap" | "hqta_areas" | "hqta_stops" | "state_highway_network";
 
 export interface BasemapConfig {
   url: string;
@@ -105,7 +105,7 @@ export interface MultiPolygon {
 export interface Layer {
   name: string;
   url: string;
-  kind?: Kind;
+  type?: LayerType;
   properties?: {
     [k: string]: unknown;
   };
