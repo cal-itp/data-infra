@@ -41,10 +41,12 @@ TEST_STATES = [
             {
                 "name": "D7 State Highway Network",
                 "url": "https://storage.googleapis.com/calitp-map-tiles/d7_shn.geojson.gz",
+                "type": "state_highway_network",
             },
             {
                 "name": "LA Metro Bus Speed Maps AM Peak",
                 "url": "https://storage.googleapis.com/calitp-map-tiles/metro_am.geojson.gz",
+                "type": "speedmaps",
             },
         ],
         "bbox": [[34.1, -118.5], [33.9, -118]],

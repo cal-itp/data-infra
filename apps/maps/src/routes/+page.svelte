@@ -119,7 +119,11 @@
      * @returns {{html: string, style: {boxShadow: string, backgroundColor: string, borderRadius: string, color: string, fontSize: string}}}
      */
     function getTooltip(feature, layer) {
-      if (layer.kind === "speedmap") {
+      const style = feature.properties.tooltip ? (feature.properties.tooltip.style || DEFAULT_TOOLTIP_STYLE) : DEFAULT_TOOLTIP_STYLE;
+      const layerType = layer.props.type;
+
+      // TODO: this should probably be a map of functions?
+      if (layerType === "speedmap") {
         const { stop_name, stop_id, route_short_name, route_id, avg_mph } = feature.properties;
 
         return {
@@ -148,35 +152,52 @@
               </li>
             </ul>
           `,
-          style: feature.properties.tooltip.style || DEFAULT_TOOLTIP_STYLE,
+          style: style,
         }
       }
 
-      if
-
-      if (layer.) {
+      if (layerType === "hqta_stops" || layerType === "hqta_areas") {
+        const { agency_name_primary, agency_name_secondary, hqta_type, stop_id } = feature.properties;
         let lines = [
-          `Agency (Primary): ${feature.properties.agency_name_primary}`,
-          `Agency (Secondary): ${feature.properties.agency_name_secondary}`,
-          `HQTA Type: ${feature.properties.hqta_type}`,
+          `Agency (Primary): ${agency_name_primary}`,
+          `Agency (Secondary): ${agency_name_secondary}`,
+          `HQTA Type: ${hqta_type}`,
         ];
-        if (feature.properties.stop_id) {
-          lines.push(`Stop ID: ${feature.properties.stop_id}`);
+        if (stop_id) {
+          lines.push(`Stop ID: ${stop_id}`);
         }
 
         return {
           html: lines.join("<br>"),
-          style: DEFAULT_TOOLTIP_STYLE,
+          style: style,
         }
       }
 
-      const { Route, County, District, RouteType } = feature.properties;
+      if (layerType === "state_highway_network") {
+        const { Route, County, District, RouteType } = feature.properties;
 
+        return {
+          html: `
+            <div class="has-text-weight-bold has-text-teal-bold">${RouteType} Route ${Route}</div>
+            <div class="has-text-slate-bold">${County} County, District ${District}</div>`,
+          style: style,
+        }
+      }
+
+      // just try to render properties as key-value mapping
+      const lines = Object.entries(feature.properties).map(([key, value], idx) => {
+        return `<li className="tooltip-meta-item">
+          <div className="tooltip-meta-key">${key}</div>
+          <div className="tooltip-meta-value">${value}</div>
+        </li>`;
+      });
       return {
         html: `
-          <div class="has-text-weight-bold has-text-teal-bold">${RouteType} Route ${Route}</div>
-          <div class="has-text-slate-bold">${County} County, District ${District}</div>`,
-        style: DEFAULT_TOOLTIP_STYLE,
+              <ul className="tooltip-meta-list has-text-slate-bold">
+              ${lines.join("")}
+              </ul>
+        `,
+        style: style,
       }
     }
 
@@ -211,7 +232,13 @@
                     })
                 ],
                 layers: state.layers.map((layer, idx) => {
-                  const layerProperties = layer.properties || {};
+                  // deckgl saves all unknown properties on layer.props
+                  // so we can just stick the type here
+                  const layerProperties = {
+                    type: layer.type,
+                    ...(layer.properties || {})
+                  };
+
                   return new GeoJsonLayer({
                     id: layer.name,
                     data: fetchGeoJSON(layer.url),

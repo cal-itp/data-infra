@@ -3,7 +3,7 @@ import gzip
 import json
 import os
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Tuple, Union
 
 import requests
 import typer
@@ -34,11 +34,10 @@ class Speedmap(BaseModel):
     stop_id: Optional[str]
     stop_name: Optional[str]
     route_id: Optional[str]
-    tooltip: Tooltip
-    color: conlist(
-        int, min_items=3, max_items=4
-    )  # we add alpha in the JS if only 3 colors are passed
-    highlight_color: Optional[List[int]]
+    tooltip: Optional[Tooltip]
+    # we add alpha in the JS if only 3 colors are passed
+    color: Optional[conlist(int, min_items=3, max_items=4)]
+    highlight_color: Optional[conlist(int, min_items=3, max_items=4)]
 
     @root_validator
     def some_identifier_exists(cls, values):
@@ -57,6 +56,7 @@ LAYER_FEATURE_TYPES = {
     LayerType.speedmaps: Feature[Polygon, Speedmap],
     LayerType.hqta_areas: Feature[Union[Polygon, MultiPolygon], HQTA],
     LayerType.hqta_stops: Feature[Point, HQTA],
+    LayerType.state_highway_network: Feature[Union[Polygon, MultiPolygon], Dict],
 }
 
 
@@ -123,7 +123,7 @@ class State(BaseModel):
     zoom: Optional[int]
     bbox: Optional[Tuple[Position, Position]]
     basemap_config: Optional[BasemapConfig]
-    legend_url: HttpUrl
+    legend_url: Optional[HttpUrl]
 
     def validate_layers(
         self,
@@ -146,17 +146,19 @@ class State(BaseModel):
             if data:
                 validate_geojson(layer.url, layer.typ, verbose=verbose)
 
-    @property
-    def iframe_url(self) -> str:
-        if not MAP_APP_URL:
-            raise RuntimeError("Must provide MAP_APP_URL environment variable.")
+    def iframe_url(self, host: str = None) -> str:
+        host = host or MAP_APP_URL
+        if not host:
+            raise RuntimeError(
+                "Must provide host parameter or MAP_APP_URL environment variable."
+            )
 
         return (
-            furl(MAP_APP_URL)
+            furl(host)
             .add(
                 {
                     "state": base64.urlsafe_b64encode(
-                        gzip.compress(self.json().encode())
+                        gzip.compress(self.json(by_alias=True).encode())
                     ).decode()
                 }
             )

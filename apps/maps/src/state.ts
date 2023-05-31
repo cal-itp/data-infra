@@ -64,13 +64,17 @@ export interface Speedmap {
   stop_id?: string;
   stop_name?: string;
   route_id?: string;
-  tooltip: Tooltip;
+  tooltip?: Tooltip;
   /**
    * @minItems 3
    * @maxItems 4
    */
-  color: [number, number, number] | [number, number, number, number];
-  highlight_color?: number[];
+  color?: [number, number, number] | [number, number, number, number];
+  /**
+   * @minItems 3
+   * @maxItems 4
+   */
+  highlight_color?: [number, number, number] | [number, number, number, number];
 }
 export interface Tooltip {
   html: string;
@@ -124,5 +128,5 @@ export interface State {
    */
   bbox?: [[number, number] | [number, number, number], [number, number] | [number, number, number]];
   basemap_config?: BasemapConfig;
-  legend_url: string;
+  legend_url?: string;
 }

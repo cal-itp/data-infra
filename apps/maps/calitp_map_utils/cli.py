@@ -29,6 +29,7 @@ def validate_state(
     compressed: bool = False,
     data: bool = False,
     verbose: bool = False,
+    host: Optional[str] = None,
 ):
     if infile:
         typer.secho(f"Reading {infile}.")
@@ -52,4 +53,4 @@ def validate_state(
     state.validate_layers(verbose=verbose, data=data)
     typer.secho("Validation successful!", fg=typer.colors.GREEN)
     typer.secho(f"Creating URL from state {state.json()}...")
-    typer.secho(f"URL: {state.iframe_url}")
+    typer.secho(f"URL: {state.iframe_url(host)}")
