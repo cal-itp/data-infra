@@ -373,7 +373,7 @@
 
     :global(.legend > svg) {
       height: auto;
-      width: 128px;
+      width: 256px;
     }
 
     :global(.legend) {
