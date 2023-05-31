@@ -67,9 +67,9 @@ export interface Speedmap {
   tooltip: Tooltip;
   /**
    * @minItems 3
-   * @maxItems 3
+   * @maxItems 4
    */
-  color: [number, number, number];
+  color: [number, number, number] | [number, number, number, number];
   highlight_color?: number[];
 }
 export interface Tooltip {

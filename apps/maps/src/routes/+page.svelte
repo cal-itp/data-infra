@@ -82,19 +82,26 @@
 
     const alphaBase = 255;
 
-    function getColor(feature, alphaMultiplier = 1) {
-      let color = [100, 100, 100]; // if no color, just return grey
+    function getColor(feature, layer, alphaMultiplier = 1) {
+      const alpha = Math.floor(alphaBase * alphaMultiplier);
 
       if (feature.properties.color) {
-        color = [...feature.properties.color];
-      } else if (feature.properties.avg_mph) {
-        // LEGACY: support speedmaps testing
-        const rgba = speedFeatureColor(feature, rgbaColorMap);
-        color = rgba.slice(0, -1);
+        if (feature.properties.color.length === 4) {
+          return feature.properties.color;
+        }
+
+        if (feature.properties.color.length === 3) {
+          return [...feature.properties.color, alpha];
+        }
       }
 
-      color.push(Math.floor(alphaBase * alphaMultiplier));
-      return color;
+      if (feature.properties.avg_mph) {
+        // LEGACY: support speedmaps testing
+        const rgba = speedFeatureColor(feature, rgbaColorMap);
+        return [...rgba.slice(0, -1), alpha];
+      }
+
+      return [100, 100, 100, alpha];
     }
 
     const DEFAULT_TOOLTIP_STYLE = {
@@ -187,7 +194,7 @@
             }).addTo(map);
             loading = false;
         } else {
-            // NOTE: When defining interaction callbacks, I think they use https://deck.gl/docs/developer-guide/interactivity#the-picking-info-object
+            // NOTE: Most interaction callbacks use https://deck.gl/docs/developer-guide/interactivity#the-picking-info-object
             console.log("Creating layers.");
             outerLayer = new LeafletLayer({
                 views: [
@@ -204,8 +211,8 @@
                     autoHighlight: true,
                     getPointRadius: 10,
                     ...layerProperties,
-                    getFillColor: (feature) => getColor(feature, 0.5),
-                    highlightColor: ({object}) => getColor(object),
+                    getFillColor: (feature) => getColor(feature, layer, 0.5),
+                    highlightColor: ({ object, layer }) => getColor(object, layer),
                     onDataLoad: (data) => {
                       console.log("Finished loading", layer);
 
@@ -230,7 +237,6 @@
                     },
                   });
                 }),
-                // these have to be called object if destructured like this
                 // onHover: ({ object }) => object && console.log(object),
                 getTooltip: ({ object }) => object && getTooltip(object),
             });

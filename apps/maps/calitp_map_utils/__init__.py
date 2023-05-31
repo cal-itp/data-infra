@@ -34,7 +34,9 @@ class Speedmap(BaseModel):
     stop_name: Optional[str]
     route_id: Optional[str]
     tooltip: Tooltip
-    color: conlist(int, min_items=3, max_items=3)  # we add alpha in the JS
+    color: conlist(
+        int, min_items=3, max_items=4
+    )  # we add alpha in the JS if only 3 colors are passed
     highlight_color: Optional[List[int]]
 
     @root_validator
