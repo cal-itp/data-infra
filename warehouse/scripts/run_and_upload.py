@@ -14,6 +14,7 @@ import pendulum
 import sentry_sdk
 import typer
 from dbt_artifacts import Manifest, RunResults, RunResultStatus
+from dbtmetabase.models.interface import DbtInterface, MetabaseInterface
 from metabase_api import Metabase_API  # type: ignore
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
@@ -300,6 +301,14 @@ def run(
             mb_user = os.getenv("MB_USER")
             mb_pass = os.getenv("MB_PASSWORD")
             mb_host = os.getenv("MB_HOST")
+            dbt_database = os.getenv("DBT_DATABASE")
+            # dbt_path = os.getenv("DBT_PROJECT_DIR")
+            metabase_use_http = True
+            metabase_database = (
+                "Data Marts (formerly Warehouse Views)"
+                if target.startswith("prod")
+                else "(Internal) Staging Warehouse Views"
+            )
 
             # initialize session
             mb = Metabase_API(mb_host, mb_user, mb_pass)
@@ -321,31 +330,77 @@ def run(
             time.sleep(180)
 
             # Use a subprocess here so we can just parse the stdout/stderr
-            p = subprocess.run(
-                [
-                    "dbt-metabase",
-                    "models",
-                    "--metabase_exclude_sources",
-                    "--dbt_manifest_path",
-                    "./target/manifest.json",
-                    "--dbt_docs_url",
-                    "https://dbt-docs.calitp.org",
-                    "--metabase_database",
-                    (
-                        "Data Marts (formerly Warehouse Views)"
-                        if target.startswith("prod")
-                        else "(Internal) Staging Warehouse Views"
-                    ),
-                    "--dbt_schema_excludes",
-                    "staging",
-                    "payments",
-                    "--metabase_sync_skip",
-                ],
-                env={
-                    **os.environ,
-                    "COLUMNS": "300",  # we have to make this wide enough to avoid splitting log lines
-                },
-                capture_output=True,
+            # p = subprocess.run(
+            #     [
+            #         "dbt-metabase",
+            #         "models",
+            #         "--metabase_exclude_sources",
+            #         "--dbt_manifest_path",
+            #         "./target/manifest.json",
+            #         "--dbt_docs_url",
+            #         "https://dbt-docs.calitp.org",
+            #         "--metabase_database",
+            #         (
+            #             "Data Marts (formerly Warehouse Views)"
+            #             if target.startswith("prod")
+            #             else "(Internal) Staging Warehouse Views"
+            #         ),
+            #         "--dbt_schema_excludes",
+            #         "staging",
+            #         "payments",
+            #         "--metabase_sync_skip",
+            #     ],
+            #     env={
+            #         **os.environ,
+            #         "COLUMNS": "300",  # we have to make this wide enough to avoid splitting log lines
+            #     },
+            #     capture_output=True,
+            # )
+
+            # use programmatic invocation
+            # Instantiate dbt interface
+            dbt = DbtInterface(
+                # path=dbt_path,
+                manifest_path="./target/manifest.json",
+                database=dbt_database,
+                schema="mart_payments",
+                schema_excludes=["staging", "payments"],
+                # includes=dbt_includes,
+                # excludes=dbt_excludes,
+            )
+
+            # Load models
+            dbt_models, aliases = dbt.read_models(
+                # include_tags=dbt_include_tags,
+                docs_url="https://dbt-docs.calitp.org",
+            )
+
+            # Instantiate Metabase interface
+            metabase = MetabaseInterface(
+                host=mb_host,
+                user=mb_user,
+                password=mb_pass,
+                use_http=metabase_use_http,
+                # verify=metabase_verify,
+                database=metabase_database,
+                # sync=metabase_sync,
+                # sync_timeout=metabase_sync_timeout,
+            )
+
+            # Propagate models to Metabase
+            p = metabase.client.export_models(
+                database=metabase.database,
+                models=dbt_models,
+                aliases=aliases,
+            )
+
+            # Parse exposures from Metabase into dbt schema yml
+            metabase.client.extract_exposures(
+                models=dbt_models,
+                # output_path=output_path,
+                # output_name=output_name,
+                # include_personal_collections=include_personal_collections,
+                # collection_excludes=collection_excludes,
             )
 
             if check_sync_metabase:
@@ -395,11 +450,11 @@ def run(
             )
 
     for result in results_to_check:
-        try:
-            result.check_returncode()
-        except subprocess.CalledProcessError as e:
-            print(e.stderr, flush=True)
-            raise
+        # try:
+        result.check_returncode()
+        # except subprocess.CalledProcessError as e:
+        #    print(e.stderr, flush=True)
+        #    raise
 
 
 if __name__ == "__main__":
