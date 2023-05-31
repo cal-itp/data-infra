@@ -595,7 +595,7 @@ models:
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
       - *feed_timezone
 
-  - name: dim_stop_areas
+  - name: dim_stop_areas_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
