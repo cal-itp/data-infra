@@ -6,15 +6,15 @@ from typing import Optional
 
 import typer
 
-from . import Analysis, State
+from . import Kind, State
 from . import validate_geojson as validate_geojson_func
 
 app = typer.Typer()
 
 
 @app.command()
-def validate_geojson(path: str, analysis: Optional[Analysis] = None):
-    collection = validate_geojson_func(path, analysis, verbose=True)
+def validate_geojson(path: str, kind: Optional[Kind] = None):
+    collection = validate_geojson_func(path, kind, verbose=True)
 
     typer.secho(
         f"Success! Validated {len(collection.features)} features.",

@@ -112,8 +112,14 @@
           fontSize: '1.2em',
       };
 
-    function getTooltip(feature) {
-      if (feature.properties.tooltip) {
+    /**
+     *
+     * @param feature
+     * @param layer: Layer
+     * @returns {{html: string, style: {boxShadow: string, backgroundColor: string, borderRadius: string, color: string, fontSize: string}}}
+     */
+    function getTooltip(feature, layer) {
+      if (layer.kind === "speedmap") {
         const { stop_name, stop_id, route_short_name, route_id, avg_mph } = feature.properties;
 
         return {
@@ -146,7 +152,9 @@
         }
       }
 
-      if (feature.properties.hqta_type) {
+      if
+
+      if (layer.) {
         let lines = [
           `Agency (Primary): ${feature.properties.agency_name_primary}`,
           `Agency (Secondary): ${feature.properties.agency_name_secondary}`,
@@ -238,7 +246,7 @@
                   });
                 }),
                 // onHover: ({ object }) => object && console.log(object),
-                getTooltip: ({ object }) => object && getTooltip(object),
+                getTooltip: ({ object, layer }) => object && getTooltip(object, layer),
             });
             map.addLayer(outerLayer);
             loading = false;

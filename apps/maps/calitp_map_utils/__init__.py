@@ -18,10 +18,11 @@ MAP_APP_URL_ENV_VAR = "CALITP_MAP_APP_URL"
 MAP_APP_URL = os.getenv(MAP_APP_URL_ENV_VAR)
 
 
-class Analysis(str, Enum):
+class Kind(str, Enum):  # name?
     speedmaps = "speedmap"
     hqta_areas = "hqta_areas"
     hqta_stops = "hqta_stops"
+    state_highway_network = "state_highway_network"
 
 
 class Tooltip(BaseModel):
@@ -52,15 +53,15 @@ class HQTA(BaseModel):
 
 
 # Dict Props just mean properties are an arbitrary dictionary
-ANALYSIS_FEATURE_TYPES = {
-    Analysis.speedmaps: Feature[Polygon, Speedmap],
-    Analysis.hqta_areas: Feature[Union[Polygon, MultiPolygon], HQTA],
-    Analysis.hqta_stops: Feature[Point, HQTA],
+KIND_FEATURE_TYPES = {
+    Kind.speedmaps: Feature[Polygon, Speedmap],
+    Kind.hqta_areas: Feature[Union[Polygon, MultiPolygon], HQTA],
+    Kind.hqta_stops: Feature[Point, HQTA],
 }
 
 
 def validate_geojson(
-    path: str, analysis: Optional[Analysis] = None, verbose=False
+    path: str, kind: Optional[Kind] = None, verbose=False
 ) -> FeatureCollection:
     if verbose:
         typer.secho(f"Validating {typer.style(path, fg=typer.colors.CYAN)} contents...")
@@ -83,15 +84,15 @@ def validate_geojson(
 
     collection = FeatureCollection(**d)
 
-    if analysis:
-        analysis_class = ANALYSIS_FEATURE_TYPES[analysis]
+    if kind:
+        kind_class = KIND_FEATURE_TYPES[kind]
         if verbose:
             typer.secho(
-                f"Validating that features are {typer.style(str(analysis_class), fg=typer.colors.YELLOW)}..."
+                f"Validating that features are {typer.style(str(kind_class), fg=typer.colors.YELLOW)}..."
             )
         for feature in tqdm(collection.features):
             try:
-                analysis_class(**feature.dict())
+                kind_class(**feature.dict())
             except ValidationError:
                 typer.secho(feature.json(), fg=typer.colors.RED)
                 raise
@@ -102,7 +103,7 @@ def validate_geojson(
 class Layer(BaseModel):
     name: str
     url: HttpUrl
-    analysis: Optional[Analysis]
+    kind: Optional[Kind]
     properties: Optional[Dict[str, Any]]
 
 
@@ -115,7 +116,9 @@ class BasemapConfig(BaseModel):
 # leaflet wants lat/lon
 class State(BaseModel):
     name: Optional[str]
-    layers: conlist(Layer, min_items=1)
+    layers: conlist(
+        Layer, min_items=1
+    )  # this will not render in erdantic; needs to be List[Layer] but then pydantic2ts will not set min_items
     lat_lon: Optional[Position]
     zoom: Optional[int]
     bbox: Optional[Tuple[Position, Position]]
@@ -141,7 +144,7 @@ class State(BaseModel):
                 raise
 
             if data:
-                validate_geojson(layer.url, layer.analysis, verbose=verbose)
+                validate_geojson(layer.url, layer.kind, verbose=verbose)
 
     @property
     def iframe_url(self) -> str:
