@@ -320,6 +320,24 @@ files = [
 ]
 
 [[package]]
+name = "erdantic"
+version = "0.5.0"
+description = "Entity relationship diagrams for Python data model classes like Pydantic."
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "erdantic-0.5.0-py3-none-any.whl", hash = "sha256:43fbe1787d272958991d3b16ffa217b595957e66b394f79be76b4b6dd72dc773"},
+    {file = "erdantic-0.5.0.tar.gz", hash = "sha256:475389523b37b1ac06a96837d782a41b889fb27d099a1576183f1721a6a38e23"},
+]
+
+[package.dependencies]
+pydantic = "*"
+pygraphviz = "*"
+typer = "*"
+typing-extensions = "*"
+
+[[package]]
 name = "exceptiongroup"
 version = "1.1.1"
 description = "Backport of PEP 654 (exception groups)"
@@ -1088,6 +1106,17 @@ pydantic = "*"
 dev = ["coverage", "pytest", "pytest-cov"]
 
 [[package]]
+name = "pygraphviz"
+version = "1.10"
+description = "Python interface to Graphviz"
+category = "dev"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pygraphviz-1.10.zip", hash = "sha256:457e093a888128903251a266a8cc16b4ba93f3f6334b3ebfed92c7471a74d867"},
+]
+
+[[package]]
 name = "pytest"
 version = "7.3.1"
 description = "pytest: simple powerful testing with Python"
@@ -1458,4 +1487,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "ca29b3d667c0f635c679c72676bdce49df35f52d868d8959e23b423d3226acb7"
+content-hash = "e9f61aad67261554bc7085e0f8fa7897b5b11a3874e0d3bbd09c8d4775033f60"

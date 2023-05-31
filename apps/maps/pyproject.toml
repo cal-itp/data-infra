@@ -24,6 +24,7 @@ types-tqdm = "^4.65.0.1"
 types-requests = "^2.30.0.0"
 pytest = "^7.3.1"
 pytest-spec = "^3.2.0"
+erdantic = "^0.5.0"
 
 [build-system]
 requires = ["poetry-core"]
