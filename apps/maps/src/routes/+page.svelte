@@ -119,7 +119,16 @@
      * @returns {{html: string, style: {boxShadow: string, backgroundColor: string, borderRadius: string, color: string, fontSize: string}}}
      */
     function getTooltip(feature, layer) {
+      const html = feature.properties.tooltip ? feature.properties.tooltip.html : null;
       const style = feature.properties.tooltip ? (feature.properties.tooltip.style || DEFAULT_TOOLTIP_STYLE) : DEFAULT_TOOLTIP_STYLE;
+
+      if (html) {
+        return {
+          html: html,
+          style: style,
+        }
+      }
+
       const layerType = layer.props.type;
 
       // TODO: this should probably be a map of functions?
@@ -152,23 +161,6 @@
               </li>
             </ul>
           `,
-          style: style,
-        }
-      }
-
-      if (layerType === "hqta_stops" || layerType === "hqta_areas") {
-        const { agency_name_primary, agency_name_secondary, hqta_type, stop_id } = feature.properties;
-        let lines = [
-          `Agency (Primary): ${agency_name_primary}`,
-          `Agency (Secondary): ${agency_name_secondary}`,
-          `HQTA Type: ${hqta_type}`,
-        ];
-        if (stop_id) {
-          lines.push(`Stop ID: ${stop_id}`);
-        }
-
-        return {
-          html: lines.join("<br>"),
           style: style,
         }
       }
@@ -373,7 +365,7 @@
 
     :global(.legend > svg) {
       height: auto;
-      width: 256px;
+      max-width: 512px;
     }
 
     :global(.legend) {

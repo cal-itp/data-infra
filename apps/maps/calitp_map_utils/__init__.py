@@ -10,6 +10,7 @@ import typer
 from calitp_data.storage import get_fs  # type: ignore
 from furl import furl
 from geojson_pydantic import Feature, FeatureCollection, MultiPolygon, Point, Polygon
+from geojson_pydantic.geometries import Geometry
 from geojson_pydantic.types import Position
 from pydantic import BaseModel, Field, HttpUrl, ValidationError, conlist, root_validator
 from tqdm import tqdm
@@ -84,18 +85,18 @@ def validate_geojson(
 
     collection = FeatureCollection(**d)
 
-    if layer_type:
-        layer_type_class = LAYER_FEATURE_TYPES[layer_type]
-        if verbose:
-            typer.secho(
-                f"Validating that features are {typer.style(str(layer_type_class), fg=typer.colors.YELLOW)}..."
-            )
-        for feature in tqdm(collection.features):
-            try:
-                layer_type_class(**feature.dict())
-            except ValidationError:
-                typer.secho(feature.json(), fg=typer.colors.RED)
-                raise
+    layer_type_class = LAYER_FEATURE_TYPES.get(layer_type, Feature[Geometry, Dict])
+
+    if verbose:
+        typer.secho(
+            f"Validating that features are {typer.style(str(layer_type_class), fg=typer.colors.YELLOW)}..."
+        )
+    for feature in tqdm(collection.features):
+        try:
+            layer_type_class(**feature.dict())
+        except ValidationError:
+            typer.secho(feature.json(), fg=typer.colors.RED)
+            raise
 
     return collection
 
