@@ -66,7 +66,11 @@ models:
           Synthetic primary natural key constructed from the model's GTFS specification uniqueness.
         tests:
           - not_null
-          - unique
+          - unique:
+              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+              # and at that point can move the &primary_key_tests anchor up to here
+              # (until exclusion is dropped, this exclusion condition is different because it's for key instead of feed_key)
+              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - &schedule_dim_dt
         name: _dt
         description: Date of the feed version; used for upstream partition elimination.
@@ -133,7 +137,7 @@ models:
         tests:
           - not_null
           - unique:
-              where: NOT warning_duplicate_gtfs_key
+              where: "NOT warning_duplicate_gtfs_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - &warning_duplicate_gtfs_key
         name: warning_duplicate_gtfs_key
         description: |
@@ -146,6 +150,7 @@ models:
               top_n: 1
               quote_values: false
               data_type: "boolean"
+              row_condition: "base64_url != 'aHR0cDovL2FwaS41MTEub3JnL3RyYW5zaXQvZGF0YWZlZWRzP29wZXJhdG9yX2lkPVJH' AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -291,7 +296,10 @@ models:
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
-      - *warning_duplicate_gtfs_key
+      # some very large feeds have many duplicates, so row-level counts on this violate our test
+      - <<: *warning_duplicate_gtfs_key
+        tests:
+          - not_null
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
