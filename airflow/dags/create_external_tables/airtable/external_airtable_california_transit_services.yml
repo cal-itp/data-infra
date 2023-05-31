@@ -270,3 +270,21 @@ schema_fields:
   - name: operating_county_geographies
     type: STRING
     mode: REPEATED
+  - name: fixed_route
+    type: STRING
+    mode: NULLABLE
+  - name: is_public
+    type: STRING
+    mode: NULLABLE
+  - name: start_date
+    type: STRING
+    mode: NULLABLE
+  - name: operational_status
+    type: STRING
+    mode: NULLABLE
+  - name: public_currently_operating
+    type: STRING
+    mode: NULLABLE
+  - name: public_currently_operating_fixed_route
+    type: STRING
+    mode: NULLABLE
