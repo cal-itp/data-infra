@@ -304,6 +304,7 @@ def run(
             dbt_database = os.getenv("DBT_DATABASE")
             # dbt_path = os.getenv("DBT_PROJECT_DIR")
             metabase_use_http = True
+            metabase_export_exception = None
             metabase_database = (
                 "Data Marts (formerly Warehouse Views)"
                 if target.startswith("prod")
@@ -328,6 +329,8 @@ def run(
 
             # wait to call dbt-metabase
             time.sleep(180)
+
+            raise metabase_export_exception
 
             # Use a subprocess here so we can just parse the stdout/stderr
             # p = subprocess.run(
@@ -363,7 +366,8 @@ def run(
                 # path=dbt_path,
                 manifest_path="./target/manifest.json",
                 database=dbt_database,
-                schema="mart_payments",
+                # dont't need
+                # schema="mart_payments",
                 schema_excludes=["staging", "payments"],
                 # includes=dbt_includes,
                 # excludes=dbt_excludes,
@@ -388,23 +392,14 @@ def run(
             )
 
             # Propagate models to Metabase
-            p = metabase.client.export_models(
-                database=metabase.database,
-                models=dbt_models,
-                aliases=aliases,
-            )
-
-            # Parse exposures from Metabase into dbt schema yml
-            metabase.client.extract_exposures(
-                models=dbt_models,
-                # output_path=output_path,
-                # output_name=output_name,
-                # include_personal_collections=include_personal_collections,
-                # collection_excludes=collection_excludes,
-            )
-
-            if check_sync_metabase:
-                results_to_check.append(p)
+            try:
+                metabase.client.export_models(
+                    database=metabase.database,
+                    models=dbt_models,
+                    aliases=aliases,
+                )
+            except Exception as e:
+                raise RuntimeError from e
 
             with open("./target/manifest.json") as f:
                 manifest = Manifest(**json.load(f))
@@ -450,11 +445,10 @@ def run(
             )
 
     for result in results_to_check:
-        # try:
         result.check_returncode()
-        # except subprocess.CalledProcessError as e:
-        #    print(e.stderr, flush=True)
-        #    raise
+
+    if check_sync_metabase and metabase_export_exception:
+        raise metabase_export_exception
 
 
 if __name__ == "__main__":
