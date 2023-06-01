@@ -143,8 +143,9 @@ models:
         description: |
           Flags rows with a duplicate _gtfs_key; e.g. area_id duplicates would result in _gtfs_key duplicates within a feed version.
           Treat these rows with caution as they can cause fanout when joining on natural (i.e. GTFS) keys.
-          This test excludes the regional MTC feed because it's a large feed that often violates GTFS uniqueness
-          (because it's combined) and it will dominate row-level tests that test counts/proportions.
+          This test excludes the regional MTC feed prior to 2022-08-26; prior to this, their areas used a greater_area_id
+          concept which meant that area_id was not required to be a primary key. We think this may have been
+          an early concept in fares v2 that changed.
         tests:
           - not_null
           - dbt_expectations.expect_column_most_common_value_to_be_in_set:
@@ -152,7 +153,7 @@ models:
               top_n: 1
               quote_values: false
               data_type: "boolean"
-              row_condition: "base64_url != 'aHR0cDovL2FwaS41MTEub3JnL3RyYW5zaXQvZGF0YWZlZWRzP29wZXJhdG9yX2lkPVJH' AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+              row_condition: "(base64_url != 'aHR0cDovL2FwaS41MTEub3JnL3RyYW5zaXQvZGF0YWZlZWRzP29wZXJhdG9yX2lkPVJH' OR _dt >= '2022-08-26') AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
