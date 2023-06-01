@@ -41,6 +41,7 @@ dim_fare_transfer_rules AS (
         _line_number,
         feed_timezone,
     FROM with_identifier
+    QUALIFY
     LEFT JOIN bad_rows
         USING (base64_url, ts, fare_transfer_rule_identifier)
 )

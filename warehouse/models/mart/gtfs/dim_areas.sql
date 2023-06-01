@@ -13,16 +13,14 @@ dim_areas AS (
         area_id,
         area_name,
         base64_url,
-        COUNT(
-            *
-        ) OVER (
-            PARTITION BY feed_key, area_id
-        ) > 1 AS warning_duplicate_gtfs_key,
         _dt,
         _feed_valid_from,
         _line_number,
         feed_timezone,
     FROM make_dim
+    -- the MTC region feed prior to 2022-08-26 had many full duplicates because of a greater_are_id
+    -- concept that was removed
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY feed_key, area_id, area_name) = 1
 )
 
 SELECT * FROM dim_areas

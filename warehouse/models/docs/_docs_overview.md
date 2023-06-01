@@ -33,11 +33,11 @@ The primary key for `mart_transit_database.dim_gtfs_datasets` is called `key`. T
 
 Similarly, the primary key for `mart_gtfs.dim_trips` is called `key`. The unversioned natural key is `trip_id`, which is assigned in the original GTFS feed (this means `trip_id` is only unique within a given feed, so within our warehouse you would only expect the `trip_id + feed_key` combination to be unique). Because some GTFS feeds erroneously contain duplicate `trip_id` values, there is an additional column called `warning_duplicate_gtfs_key`, which flags cases where `trip_id + feed_key`, and thus the synthetic `key` column, are not unique.  Then in the `mart_gtfs.fct_daily_scheduled_trips` table, the foreign key referencing `mart_gtfs.dim_trips.key` is called `trip_key` and the `warning_duplicate_gtfs_key` column is also provided to flag the duplicates.
 
-| Entity | Unversioned natural key | Versioned key |
-| ------------- |------------- |------------- |
-| Downloaded GTFS feed | `base64_url`| `mart_gtfs.dim_schedule_feeds.key` or (when foreign key) `feed_key`, constructed from `base64_url + _valid_from` |
-| Individual record within a downloaded GTFS feed (ex. an individual route, trip, or stop) |  `base64_url + <natural primary key within GTFS spec, ex. route_id or trip_id>`| `mart_gtfs.dim_*.key`, constructed from `mart_gtfs.dim_*.<natural primary key within GTFS spec, ex. route_id or trip_id> + feed_key` |
-| Airtable records (ex. organizations, services, or GTFS datasets) | `source_record_id` | `mart_transit_database.dim_*.key`, constructed from `source_record_id + _valid_from` |
+| Entity                                                                                   | Unversioned natural key                                                        | Versioned key                                                                                                                        |
+|------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| Downloaded GTFS feed                                                                     | `base64_url`                                                                   | `mart_gtfs.dim_schedule_feeds.key` or (when foreign key) `feed_key`, constructed from `base64_url + _valid_from`                     |
+| Individual record within a downloaded GTFS feed (ex. an individual route, trip, or stop) | `base64_url + _line_number` | `mart_gtfs.dim_*.key`, constructed from `mart_gtfs.dim_*._line_number + feed_key` |
+| Airtable records (ex. organizations, services, or GTFS datasets)                         | `source_record_id`                                                             | `mart_transit_database.dim_*.key`, constructed from `source_record_id + _valid_from`                                                 |
 
 ## Key questions
 

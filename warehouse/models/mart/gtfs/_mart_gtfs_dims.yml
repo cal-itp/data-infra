@@ -132,29 +132,7 @@ models:
       https://gtfs.org/schedule/reference/#areastxt.
     columns:
       - *schedule_dim_pk
-      - &schedule_dim_gtfs_key_with_dupe_flag
-        <<: *schedule_dim_gtfs_key
-        tests:
-          - not_null
-          - unique:
-              where: "NOT warning_duplicate_gtfs_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
-      - &warning_duplicate_gtfs_key
-        name: warning_duplicate_gtfs_key
-        description: |
-          Flags rows with a duplicate _gtfs_key; e.g. area_id duplicates would result in _gtfs_key duplicates within a feed version.
-          Treat these rows with caution as they can cause fanout when joining on natural (i.e. GTFS) keys.
-          This column is tested to be majority false (i.e. sanity-check that most records are unique),
-          but this test excludes the regional MTC feed prior to 2022-08-26; prior to this, their areas used a greater_area_id
-          concept which meant that area_id was not required to be a primary key. We think this may have been
-          an early concept in fares v2 that changed.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_most_common_value_to_be_in_set:
-              value_set: [false]
-              top_n: 1
-              quote_values: false
-              data_type: "boolean"
-              row_condition: "(base64_url != 'aHR0cDovL2FwaS41MTEub3JnL3RyYW5zaXQvZGF0YWZlZWRzP29wZXJhdG9yX2lkPVJH' OR _dt >= '2022-08-26') AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -252,8 +230,7 @@ models:
       https://gtfs.org/schedule/reference/#fare_leg_rulestxt.
     columns:
       - *schedule_dim_pk
-      - *schedule_dim_gtfs_key_with_dupe_flag
-      - *warning_duplicate_gtfs_key
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -299,11 +276,7 @@ models:
       https://gtfs.org/schedule/reference/#fare_productstxt.
     columns:
       - *schedule_dim_pk
-      - *schedule_dim_gtfs_key_with_dupe_flag
-      - <<: *warning_duplicate_gtfs_key
-        # some very large feeds have many duplicates, so row-level counts on this violate our test
-        tests:
-          - not_null
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -331,8 +304,7 @@ models:
       https://gtfs.org/reference/static#fare_rulestxt.
     columns:
       - *schedule_dim_pk
-      - *schedule_dim_gtfs_key_with_dupe_flag
-      - *warning_duplicate_gtfs_key
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -358,8 +330,7 @@ models:
       https://gtfs.org/schedule/reference/#fare_transfer_rulestxt.
     columns:
       - *schedule_dim_pk
-      - *schedule_dim_gtfs_key_with_dupe_flag
-      - *warning_duplicate_gtfs_key
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -389,8 +360,26 @@ models:
       https://gtfs.org/reference/static#feed_infotxt.
     columns:
       - *schedule_dim_pk
-      - *schedule_dim_gtfs_key_with_dupe_flag
-      - *warning_duplicate_gtfs_key
+      - &schedule_dim_gtfs_key_with_dupe_flag
+        <<: *schedule_dim_gtfs_key
+        tests:
+          - not_null
+          - unique:
+              where: "NOT warning_duplicate_gtfs_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+      - &warning_duplicate_gtfs_key
+        name: warning_duplicate_gtfs_key
+        description: |
+          Flags rows with a duplicate _gtfs_key; e.g. area_id duplicates would result in _gtfs_key duplicates within a feed version.
+          Treat these rows with caution as they can cause fanout when joining on natural (i.e. GTFS) keys.
+          This column is tested to be majority false (i.e. sanity-check that most records are unique).
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_most_common_value_to_be_in_set:
+              value_set: [false]
+              top_n: 1
+              quote_values: false
+              data_type: "boolean"
+              row_condition: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
