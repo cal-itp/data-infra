@@ -193,7 +193,7 @@ If you prefer to install dbt locally and use your own development environment, y
 [dbt docs](https://docs.getdbt.com/docs/build/python-models) exist for setting up Python models in general, as well as the specific steps required to configure BigQuery/Dataproc.
 
 The default profile template specifies `gcr.io/cal-itp-data-infra/dbt-spark:<date_tag>` as the custom image for
-Dataproc batch jobs. This image is built and pushed via the following (note that the image is hosted on Google
+Dataproc batch jobs. This image is built and pushed via the following; note that the image is hosted on Google
 Container Registry (`gcr.io`) not GitHub Container Registry (`ghcr.io`). This will need to be migrated to Google Artifact Repository
 at some point in the future, as it is replacing GCR.
 
