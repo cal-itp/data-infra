@@ -19,6 +19,10 @@ dim_calendar_dates AS (
         _line_number,
         feed_timezone,
     FROM make_dim
+    -- filter rather than flag; lots of downstream models expect uniqueness
+    -- we could remove if we handled it everywhere but these are mostly full duplicates
+    -- and they occur on many feeds
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY feed_key, service_id, date ORDER BY _line_number) = 1
 )
 
 SELECT * FROM dim_calendar_dates
