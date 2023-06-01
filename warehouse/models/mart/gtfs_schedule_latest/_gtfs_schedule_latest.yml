@@ -20,6 +20,15 @@ models:
           - unique
         meta:
           publish.ignore: true
+      - &schedule_dim_gtfs_key
+        name: _gtfs_key
+        description:
+          Synthetic primary natural key constructed from the model's GTFS specification uniqueness.
+        tests:
+          - not_null
+          - unique
+        meta:
+          publish.ignore: true
       - &schedule_dim_dt
         name: _dt
         tests:
@@ -98,6 +107,7 @@ models:
       ckan.authority: https://gtfs.org/schedule/reference/#attributionstxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -144,6 +154,7 @@ models:
       ckan.authority: https://gtfs.org/schedule/reference/#calendartxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -181,6 +192,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#calendar_datestxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -204,6 +216,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#fare_attributestxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -311,6 +324,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#fare_rulestxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -369,6 +383,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#feed_infotxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -405,6 +420,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#frequenciestxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -446,6 +462,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#levelstxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -469,6 +486,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#pathwaystxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -516,6 +534,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#routestxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -559,6 +578,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#shapestxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -617,6 +637,7 @@ models:
       publish.gis_coordinate_system_epsg: WGS84
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -765,6 +786,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#stopstxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -830,6 +852,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#transferstxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -866,6 +889,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#translationstxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
@@ -897,6 +921,7 @@ models:
       ckan.authority: https://gtfs.org/reference/static#tripstxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
       - *feed_key
