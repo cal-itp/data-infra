@@ -149,8 +149,9 @@ models:
         description: |
           Array of categorical choices; example
           values "bus, car/van"; "ferry"
-      - name: currently_operating
+      - name: _deprecated__currently_operating
         description: |
+          *Deprecated in favor of `operational_status`*
           Boolean for whether service is currently active
       - name: gtfs_schedule_status
         description: |
@@ -180,11 +181,45 @@ models:
           or GTFS guidelines checks implemented in `mart_gtfs_guidelines.fact_daily_guideline_checks`.
           Use those tables directly for the most up-to-date information on individual GTFS feeds'
           validation and guideline statuses.**
-      - name: assessment_status
+      - name: _deprecated__assessment_status
         description: |
+          *Deprecated in favor of `public_currently_operating`*
           Is either "Yes" or "No" and indicates whether this Service qualifies as
           being an assessed service
       - name: deprecated_date
+        description: |
+          The approximate date that the service was terminated, is expected to end, or temporarily suspended.
+      - name: start_date
+        description: |
+          The approximate date that the service is expected to begin or resume service if it was temporarily suspended.
+      - name: fixed_route
+        description: |
+          This will be set to true for services that have the following:
+          - Have a published schedule
+          - Run along a predetermined route.
+      - name: is_public
+        description: |
+          Formula in source system returns "Yes" value if the rider requirement of "Public" has been set in the `rider_requirements` column.
+      - name: public_currently_operating
+        description: |
+          Formula in source system returns true value if the service has all of the following:
+
+            1. “Operating” value has been set in `operational_status` column
+            2. Rideable by the general public
+            3. Provider is either an NTD reporter (indicated by non-empty `raw_ntd_id`) or is a public entity.
+      - name: public_currently_operating_fixed_route
+        description: |
+          Formula in source system returns true value under same conditions as `public_currently_operating`
+          plus additional requirement that `fixed_route` is true.
+      - name: operational_status
+        description: |
+          Formula in source system automatically calculates the operational status based on the following criteria:
+
+            A. Status is "Planned" when the service “Start Date” is in the future.
+
+            B. Status is "Operating" when the current date is not before the start date and not after the deprecated date or both start date and deprecated date are empty
+
+            C. Status is "Deprecated" when the service "Deprecated Date" is in the past.
       - *valid_from_actual
       - *valid_to_actual
       - *is_current_actual
