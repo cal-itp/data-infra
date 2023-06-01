@@ -186,6 +186,29 @@ If you prefer to install dbt locally and use your own development environment, y
    3. `brew link python@3.9`
    4. After restarting the terminal, confirm with `python3 --version` and retry `poetry install`
 
+### Dataproc configuration
+
+> If you are not using Python models or are just using the existing Dataproc configuration, you can ignore this section.
+
+[dbt docs](https://docs.getdbt.com/docs/build/python-models) exist for setting up Python models in general, as well as the specific steps required to configure BigQuery/Dataproc.
+
+The default profile template specifies `gcr.io/cal-itp-data-infra/dbt-spark:<date_tag>` as the custom image for
+Dataproc batch jobs. This image is built and pushed via the following (note that the image is hosted on Google
+Container Registry (`gcr.io`) not GitHub Container Registry (`ghcr.io`). This will need to be migrated to Google Artifact Repository
+at some point in the future, as it is replacing GCR.
+
+```bash
+docker build -f Dockerfile.spark -t gcr.io/cal-itp/data-infra/dbt-spark:2023.3.28
+docker push gcr.io/cal-itp-data-infra/dbt-spark:2023.3.28
+```
+
+Dockerfile.spark is based on the [example provided by Google in their Dataproc Serverless documentation](https://cloud.google.com/dataproc-serverless/docs/guides/custom-containers#example_custom_container_image_build).
+It references two files that are copied from local into the image; links are provided as comments for downloading these if the image needs to be re-built.
+
+In addition to the steps specified in the dbt docs, [Google Private Access was enabled on our default VPC](https://cloud.google.com/vpc/docs/configure-private-google-access#enabling-pga)
+and the cal-itp-data-infra-staging project's default service account (`473674835135-compute@developer.gserviceaccount.com`) was granted access to the production project
+since the buckets for compiled Python models (`gs://calitp-dbt-python-models` and `gs://test-calitp-dbt-python-models`)
+as well as external tables exist in the production project.
 
 ### Troubleshooting
 
