@@ -363,7 +363,7 @@ def _generate_exposure_documentation(
                     field_type=column.meta.get("ckan.type", "STRING"),
                     field_length=column.meta.get("ckan.length", 1024),
                     field_precision=column.meta.get("ckan.precision"),
-                    units=None,
+                    units=column.meta.get("ckan.units", None),
                     domain_type="Unrepresented",
                     allowable_min_value=None,
                     allowable_max_value=None,
