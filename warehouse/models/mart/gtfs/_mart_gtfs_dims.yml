@@ -73,7 +73,7 @@ models:
               where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - &schedule_dim_dt
         name: _dt
-        description: Date of the feed version (in UTC); used for upstream partition elimination.
+        description: Date of the feed version (i.e. date from _feed_valid_from in UTC); used for upstream partition elimination.
         tests:
           - not_null
       - &schedule_dim_line_number
