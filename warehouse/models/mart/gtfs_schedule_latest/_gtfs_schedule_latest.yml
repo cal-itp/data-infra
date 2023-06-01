@@ -86,7 +86,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#areastxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: area_id
@@ -249,7 +249,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_leg_rulestxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: leg_group_id
@@ -275,7 +275,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_mediatxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: fare_media_id
@@ -297,7 +297,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_productstxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: fare_product_id
@@ -352,7 +352,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_transfer_rulestxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: from_leg_group_id
@@ -615,7 +615,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#stop_areastxt
     columns:
-      - *primary_key
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: area_id
@@ -833,7 +833,7 @@ models:
         description: '{{ doc("gtfs_stops__platform_code") }}'
       - *feed_timezone
         # TODO: would be good to actually publish this, with appropriate documentation, next time we are ready to make a round of updates
-      - name: warning_missing_primary_key
+      - name: warning_missing_schedule_dim_pk
         meta:
           publish.ignore: true
       - name: stop_timezone_coalesced
