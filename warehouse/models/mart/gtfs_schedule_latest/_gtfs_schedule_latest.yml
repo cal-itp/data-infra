@@ -735,6 +735,8 @@ models:
           `25:40:00`, which are allowed in GTFS.
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+        meta:
+          publish.ignore: true
       - name: end_pickup_drop_off_window_sec
         description: |
           This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
@@ -745,6 +747,8 @@ models:
           `25:40:00`, which are allowed in GTFS.
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+        meta:
+          publish.ignore: true
       - name: start_pickup_drop_off_window_interval
         description: |
           This is a calculated field that does not appear directly in GTFS. It converts `start_pickup_drop_off_window`
