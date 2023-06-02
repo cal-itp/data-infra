@@ -60,7 +60,7 @@ Some tasks have unique considerations, beyond the requirements of their overall 
 
 From time-to-time some DAGs may need to be re-ran in order to populate new data.
 
-Subject to the considerations outlined abov, backfilling can be performed by clearing historical runs in the web interface, or via the CLI:
+Subject to the considerations outlined above, backfilling can be performed by clearing historical runs in the web interface, or via the CLI:
 ```shell
 gcloud composer environments run calitp-airflow-prod --location=us-west2 backfill -- --start_date 2021-04-18 --end_date 2021-11-03 -x --reset_dagruns -y -t "gtfs_schedule_history_load" -i gtfs_loader
 ```

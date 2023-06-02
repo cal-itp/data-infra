@@ -28,7 +28,7 @@ This section includes detailed information about the data model and processing s
 
 All of the above are sourced from the v2 warehouse. Note that all components must be present and consistently keyed in order to successfully analyze. This module works at the organization level in order to match the reports site and maintain the structure of the speedmap site.
 
-For each organization, this module will combine and analyze all related GTFS Schedule and GTFS Realtime datasets that are `public_customer_facing_or_regional_subfeed_fixed_route` in [`dim_provider_gtfs_data`](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_provider_gtfs_data). Some organizations share GTFS datasets (Sacramento RT and City of Rancho Cordova, San Diego Airport and San Diego MTS...), in those cases the module can generate seperate analysis for each organization but they might duplicate each other. These are based on the underlying organization/dataset relationships in the Transit Database (Airtable).
+For each organization, this module will combine and analyze all related GTFS Schedule and GTFS Realtime datasets that are `public_customer_facing_or_regional_subfeed_fixed_route` in [`dim_provider_gtfs_data`](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_provider_gtfs_data). Some organizations share GTFS datasets (Sacramento RT and City of Rancho Cordova, San Diego Airport and San Diego MTS...), in those cases the module can generate separate analysis for each organization but they might duplicate each other. These are based on the underlying organization/dataset relationships in the Transit Database (Airtable).
 
 ### How is it structured?
 
@@ -332,7 +332,7 @@ The `describe_slow_routes` method lists out the routes in the current filter exp
 
 It's often useful to measure transit delay on a specific corridor to support technical metric generation for the Solutions for Congested Corridors Program, Local Partnership Program, and other analyses.
 
-If you've recieved a corridor from an SCCP/LPP applicant or elsewhere, load it as a geodataframe and add it using the `add_corridor` method. If you're already looking at a speed map and want to measure delay for a portion of the map, you can use the `autocorridor` method to specify a corridor using a shape_id and two stop_sequences. This saves time by avoiding the need to generate the polygon elsewhere.
+If you've received a corridor from an SCCP/LPP applicant or elsewhere, load it as a geodataframe and add it using the `add_corridor` method. If you're already looking at a speed map and want to measure delay for a portion of the map, you can use the `autocorridor` method to specify a corridor using a shape_id and two stop_sequences. This saves time by avoiding the need to generate the polygon elsewhere.
 
 The corridor must be a single polygon, and in order to generate metrics it must include at least one transit stop.
 
@@ -356,7 +356,7 @@ See [`data_analyses/ca_transit_speed_maps/technical_notes.md`](https://github.co
 
 ```{mermaid}
 flowchart TD
-    rcv_corr[/recieve corridor from applicant/] -->
+    rcv_corr[/receive corridor from applicant/] -->
     ver_corr[/verify corridor is polygon/] -->
     gen_data[generate analysis data for timeframe*]
     subgraph fm[RtFilterMapper]
