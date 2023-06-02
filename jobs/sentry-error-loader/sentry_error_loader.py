@@ -7,7 +7,7 @@ import clickhouse_connect  # type: ignore
 import pandas as pd
 import pendulum
 import typer
-from calitp_data.storage import get_fs
+from calitp_data.storage import get_fs  # type: ignore
 from calitp_data_infra.storage import (  # type: ignore
     PartitionedGCSArtifact,
     make_name_bq_safe,

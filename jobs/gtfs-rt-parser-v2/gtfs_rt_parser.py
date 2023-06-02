@@ -30,7 +30,7 @@ from aiohttp.client_exceptions import (
     ClientResponseError,
     ServerDisconnectedError,
 )
-from calitp_data.storage import get_fs
+from calitp_data.storage import get_fs  # type: ignore
 from calitp_data_infra.storage import (  # type: ignore
     JSONL_GZIP_EXTENSION,
     GTFSDownloadConfig,

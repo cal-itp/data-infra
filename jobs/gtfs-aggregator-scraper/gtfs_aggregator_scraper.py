@@ -13,7 +13,7 @@ import humanize
 import pendulum
 import requests
 import typer
-from calitp_data.storage import get_fs
+from calitp_data.storage import get_fs  # type: ignore
 from calitp_data_infra.storage import (  # type: ignore
     GTFSFeedType,
     PartitionedGCSArtifact,
