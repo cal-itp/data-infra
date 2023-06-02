@@ -21,7 +21,7 @@ dim_trips AS (
         block_id,
         wheelchair_accessible,
         bikes_allowed,
-        COUNT(*) OVER (PARTITION BY base64_url, ts, trip_id) > 1 AS warning_duplicate_gtfs_key,
+        COUNT(*) OVER (PARTITION BY feed_key, trip_id) > 1 AS warning_duplicate_gtfs_key,
         _dt,
         _feed_valid_from,
         _line_number,

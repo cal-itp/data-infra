@@ -5,27 +5,16 @@ WITH make_dim AS (
     ) }}
 ),
 
--- typical pattern for letting us join on nulls
+-- let us reference twice
 with_identifier AS (
     SELECT *, {{ dbt_utils.generate_surrogate_key(['from_stop_id', 'to_stop_id', 'from_trip_id', 'to_trip_id', 'from_route_id',' to_route_id']) }} AS transfer_identifier,
     FROM make_dim
 ),
 
-bad_rows AS (
-    SELECT
-        base64_url,
-        ts,
-        {{ dbt_utils.generate_surrogate_key(['from_stop_id', 'to_stop_id', 'from_trip_id', 'to_trip_id', 'from_route_id',' to_route_id']) }} AS transfer_identifier,
-        TRUE AS warning_duplicate_gtfs_key
-    FROM make_dim
-    GROUP BY 1, 2, 3
-    HAVING COUNT(*) > 1
-),
-
 dim_transfers AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'from_stop_id', 'to_stop_id', 'from_trip_id', 'to_trip_id', 'from_route_id',' to_route_id']) }} AS _gtfs_key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'transfer_identifier']) }} AS _gtfs_key,
         feed_key,
         from_stop_id,
         to_stop_id,
@@ -36,14 +25,12 @@ dim_transfers AS (
         to_trip_id,
         min_transfer_time,
         base64_url,
-        COALESCE(warning_duplicate_gtfs_key, FALSE) AS warning_duplicate_gtfs_key,
+        COUNT(*) OVER (PARTITION BY feed_key, transfer_identifier) > 1 AS warning_duplicate_gtfs_key,
         _dt,
         _feed_valid_from,
         _line_number,
         feed_timezone,
     FROM with_identifier
-    LEFT JOIN bad_rows
-        USING (base64_url, ts, transfer_identifier)
 )
 
 SELECT * FROM dim_transfers

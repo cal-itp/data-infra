@@ -5,27 +5,16 @@ WITH make_dim AS (
     ) }}
 ),
 
--- typical pattern for letting us join on nulls
+-- so we can reference this in two places
 with_identifier AS (
     SELECT *, {{ dbt_utils.generate_surrogate_key(['network_id', 'from_area_id', 'to_area_id', 'fare_product_id']) }} AS fare_leg_rule_identifier,
     FROM make_dim
 ),
 
-bad_rows AS (
-    SELECT
-        base64_url,
-        ts,
-        {{ dbt_utils.generate_surrogate_key(['network_id', 'from_area_id', 'to_area_id', 'fare_product_id']) }} AS fare_leg_rule_identifier,
-        TRUE AS warning_duplicate_gtfs_key
-    FROM make_dim
-    GROUP BY 1, 2, 3
-    HAVING COUNT(*) > 1
-),
-
 dim_fare_leg_rules AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'network_id', 'from_area_id', 'to_area_id', 'fare_product_id']) }} AS _gtfs_key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'fare_leg_rule_identifier']) }} AS _gtfs_key,
         base64_url,
         feed_key,
         leg_group_id,
@@ -33,14 +22,12 @@ dim_fare_leg_rules AS (
         from_area_id,
         to_area_id,
         fare_product_id,
-        COALESCE(warning_duplicate_gtfs_key, FALSE) AS warning_duplicate_gtfs_key,
         _dt,
         _feed_valid_from,
         _line_number,
         feed_timezone,
     FROM with_identifier
-    LEFT JOIN bad_rows
-        USING (base64_url, ts, fare_leg_rule_identifier)
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY feed_key, fare_leg_rule_identifier ORDER BY _line_number) = 1
 )
 
 SELECT * FROM dim_fare_leg_rules

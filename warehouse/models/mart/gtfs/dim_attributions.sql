@@ -22,11 +22,7 @@ dim_attributions AS (
         attribution_email,
         attribution_phone,
         make_dim.base64_url,
-        COUNT(
-            *
-        ) OVER (
-            PARTITION BY feed_key, attribution_id
-        ) > 1 AS warning_duplicate_gtfs_key,
+        COUNT(*) OVER (PARTITION BY feed_key, attribution_id) > 1 AS warning_duplicate_gtfs_key,
         _dt,
         _feed_valid_from,
         _line_number,

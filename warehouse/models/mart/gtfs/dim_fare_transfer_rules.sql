@@ -5,27 +5,16 @@ WITH make_dim AS (
     ) }}
 ),
 
--- typical pattern for letting us join on nulls
+-- so we can reference twice
 with_identifier AS (
     SELECT *, {{ dbt_utils.generate_surrogate_key(['from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', 'duration_limit']) }} AS fare_transfer_rule_identifier,
     FROM make_dim
 ),
 
-bad_rows AS (
-    SELECT
-        base64_url,
-        ts,
-        {{ dbt_utils.generate_surrogate_key(['from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', 'duration_limit']) }} AS fare_transfer_rule_identifier,
-        TRUE AS warning_duplicate_gtfs_key
-    FROM make_dim
-    GROUP BY 1, 2, 3
-    HAVING COUNT(*) > 1
-),
-
 dim_fare_transfer_rules AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', 'duration_limit']) }} AS _gtfs_key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'fare_transfer_rule_identifier']) }} AS _gtfs_key,
         base64_url,
         feed_key,
         from_leg_group_id,
@@ -35,15 +24,14 @@ dim_fare_transfer_rules AS (
         duration_limit_type,
         fare_transfer_type,
         fare_product_id,
-        COALESCE(warning_duplicate_gtfs_key, FALSE) AS warning_duplicate_gtfs_key,
+        COUNT(*) OVER (PARTITION BY feed_key, fare_transfer_rule_identifier) > 1 AS warning_duplicate_gtfs_key,
         _dt,
         _feed_valid_from,
         _line_number,
         feed_timezone,
     FROM with_identifier
-    QUALIFY
-    LEFT JOIN bad_rows
-        USING (base64_url, ts, fare_transfer_rule_identifier)
+    -- also remove full duplicates (early fares data)
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY feed_key, fare_transfer_rule_identifier, duration_limit_type, fare_transfer_type, fare_product_id ORDER BY _line_number) = 1
 )
 
 SELECT * FROM dim_fare_transfer_rules
