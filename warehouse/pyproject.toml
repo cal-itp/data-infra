@@ -50,6 +50,8 @@ sqlfluff = "^2.0.2"
 sqlfluff-templater-dbt = "^2.0.2"
 ipdb = "^0.13.13"
 mypy = "^1.2.0"
+pyspark = "~3.0" # pin this low because of stubs
+pyspark-stubs = "^3.0.0.post3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

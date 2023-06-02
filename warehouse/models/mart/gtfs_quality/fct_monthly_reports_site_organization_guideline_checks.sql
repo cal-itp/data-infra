@@ -10,7 +10,8 @@ checks AS (
            organization_source_record_id,
            feature,
            check,
-           status
+           reports_status,
+           is_manual,
     FROM {{ ref('fct_daily_organization_combined_guideline_checks') }}
     -- This filtering is temporary, and could also be done further downstream:
     WHERE feature = {{ compliance_schedule() }}
@@ -42,11 +43,13 @@ fct_monthly_reports_site_organization_guideline_checks AS (
         idx.publish_date,
         checks.feature,
         checks.check,
-        checks.status
+        checks.reports_status,
+        checks.is_manual
     FROM idx_monthly_reports_site AS idx
     LEFT JOIN generate_biweekly_dates AS dates
         USING (publish_date)
-    LEFT JOIN checks
+    -- Exclude organization + date combos that have no checks
+    INNER JOIN checks
         ON idx.organization_source_record_id = checks.organization_source_record_id
         AND dates.sample_dates = checks.date
 )

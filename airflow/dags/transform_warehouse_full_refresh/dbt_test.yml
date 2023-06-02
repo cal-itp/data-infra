@@ -7,11 +7,14 @@ cmds:
 arguments:
   - '/app/scripts/run_and_upload.py'
   - 'run'
+  - '--full-refresh'
   - '--no-dbt-seed'
   - '--no-dbt-run'
   - '--dbt-test'
   - '--select'
-  - "{{ dag_run.conf.get('dbt_select_statement', '') }}"
+  - "{{ dag_run.conf.get('dbt_select', '') }}"
+  - '--dbt-vars'
+  - "{{ dag_run.conf.get('dbt_vars', '') }}"
 
 dependencies:
   - dbt_run_and_upload_artifacts

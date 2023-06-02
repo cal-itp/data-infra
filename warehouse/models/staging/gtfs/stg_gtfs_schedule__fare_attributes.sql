@@ -12,6 +12,7 @@ stg_gtfs_schedule__fare_attributes AS (
         base64_url,
         ts,
         dt AS _dt,
+        _line_number,
         {{ trim_make_empty_string_null('fare_id') }} AS fare_id,
         {{ trim_make_empty_string_null('price') }} AS price,
         {{ trim_make_empty_string_null('currency_type') }} AS currency_type,

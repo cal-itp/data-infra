@@ -1,5 +1,8 @@
 .user.yml
 
+Miniconda3-py39_4.10.3-Linux-x86_64.sh
+spark-bigquery-with-dependencies_2.12-0.22.2.jar
+
 target/
 dbt_packages/
 logs/

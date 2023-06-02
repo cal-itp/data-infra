@@ -22,6 +22,7 @@ lat_long AS (
             shape_pt_lon,
             shape_pt_lat
         ) AS pt_geom,
+        _dt,
         _feed_valid_from,
     FROM dim_shapes
 ),
@@ -32,6 +33,7 @@ initial_pt_array AS (
         feed_key,
         base64_url,
         shape_id,
+        _dt,
         _feed_valid_from,
         feed_timezone,
         -- don't try to make LINESTRING because of this issue:
@@ -46,7 +48,7 @@ initial_pt_array AS (
         -- count number of rows so we can check for nulls (drops) later
         COUNT(*) AS ct
     FROM lat_long
-    GROUP BY feed_key, base64_url, shape_id, _feed_valid_from, feed_timezone
+    GROUP BY feed_key, base64_url, shape_id, _dt, _feed_valid_from, feed_timezone
 ),
 
 dim_shapes_arrays AS (
@@ -56,6 +58,7 @@ dim_shapes_arrays AS (
         shape_id,
         pt_array,
         base64_url,
+        _dt,
         _feed_valid_from,
         feed_timezone,
     FROM initial_pt_array

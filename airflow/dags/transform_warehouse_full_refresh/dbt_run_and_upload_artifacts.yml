@@ -13,7 +13,9 @@ arguments:
   - '--deploy-docs'
   - '--sync-metabase'
   - '--select'
-  - "{{ dag_run.conf.get('dbt_select_statement', '') }}"
+  - "{{ dag_run.conf.get('dbt_select', '') }}"
+  - '--dbt-vars'
+  - "{{ dag_run.conf.get('dbt_vars', '') }}"
 
 is_delete_operator_pod: true
 get_logs: true

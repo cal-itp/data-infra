@@ -6,7 +6,7 @@ int_gtfs_rt__daily_url_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__daily_url_index') }}
     WHERE data_quality_pipeline
-        AND {{ gtfs_rt_dt_where() }}
+        AND {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 fct_daily_rt_feed_files AS (
@@ -17,7 +17,7 @@ fct_daily_rt_feed_files AS (
 parse_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 daily_totals AS (

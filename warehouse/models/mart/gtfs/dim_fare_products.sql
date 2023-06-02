@@ -5,20 +5,10 @@ WITH make_dim AS (
     ) }}
 ),
 
-bad_rows AS (
-    SELECT
-        base64_url,
-        ts,
-        fare_product_id,
-        TRUE AS warning_duplicate_primary_key
-    FROM make_dim
-    GROUP BY base64_url, ts, fare_product_id
-    HAVING COUNT(*) > 1
-),
-
 dim_fare_products AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'fare_product_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'fare_product_id']) }} AS _gtfs_key,
         base64_url,
         feed_key,
         fare_product_id,
@@ -26,12 +16,12 @@ dim_fare_products AS (
         fare_media_id,
         amount,
         currency,
-        COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
-    LEFT JOIN bad_rows
-        USING (base64_url, ts, fare_product_id)
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY feed_key, fare_product_id ORDER BY _line_number) = 1
 )
 
 SELECT * FROM dim_fare_products

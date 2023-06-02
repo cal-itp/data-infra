@@ -13,19 +13,6 @@ coalesce_missing_ids AS (
     FROM make_dim
 ),
 
-bad_rows AS (
-    SELECT
-        -- TODO: this could use feed_key instead of URL + ts (equivalent but maybe cleaner)
-        base64_url,
-        ts,
-        stop_id,
-        non_null_stop_id,
-        TRUE AS warning_duplicate_primary_key
-    FROM coalesce_missing_ids
-    GROUP BY base64_url, ts, stop_id, non_null_stop_id
-    HAVING COUNT(*) > 1
-),
-
 fill_in_tz AS (
     SELECT
         stops.*,
@@ -38,7 +25,8 @@ fill_in_tz AS (
 
 dim_stops AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['fill_in_tz.feed_key', 'fill_in_tz.stop_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'stop_id']) }} AS _gtfs_key,
         base64_url,
         fill_in_tz.feed_key,
         fill_in_tz.stop_id,
@@ -60,14 +48,14 @@ dim_stops AS (
         wheelchair_boarding,
         level_id,
         platform_code,
-        COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        COUNT(*) OVER (PARTITION BY feed_key, stop_id) > 1 AS warning_duplicate_gtfs_key,
         fill_in_tz.stop_id IS NULL AS warning_missing_primary_key,
         stop_timezone_coalesced,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM fill_in_tz
-    LEFT JOIN bad_rows
-        USING (base64_url, ts, non_null_stop_id)
 )
 
 SELECT * FROM dim_stops
