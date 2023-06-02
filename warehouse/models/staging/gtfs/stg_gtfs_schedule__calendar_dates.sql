@@ -12,6 +12,7 @@ stg_gtfs_schedule__calendar_dates AS (
         base64_url,
         ts,
         dt AS _dt,
+        _line_number,
         {{ trim_make_empty_string_null('service_id') }} AS service_id,
         PARSE_DATE("%Y%m%d", {{ trim_make_empty_string_null('date') }}) AS date,
         SAFE_CAST({{ trim_make_empty_string_null('exception_type') }} AS INTEGER) AS exception_type

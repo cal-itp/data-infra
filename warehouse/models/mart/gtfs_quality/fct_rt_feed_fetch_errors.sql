@@ -72,7 +72,7 @@ WITH fct_rt_feed_fetch_errors AS (
         dt,
         execution_ts
     FROM {{ ref('stg_rt__feed_fetch_errors') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
     AND message LIKE '%RTFetchException%'
 )
 

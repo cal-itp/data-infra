@@ -16,7 +16,7 @@ WITH vehicle_positions_ages AS (
         _vehicle_message_age,
         _vehicle_message_age_vs_header,
     FROM {{ ref('fct_vehicle_positions_messages') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 -- these values are repeated because one row in the source table is one vehicle message so the header is identical for all messages on a given request

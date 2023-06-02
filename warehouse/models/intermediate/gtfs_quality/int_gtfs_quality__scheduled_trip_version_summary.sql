@@ -8,21 +8,12 @@
     },
 ) }}
 
-{% if is_incremental() %}
-    {% set timestamps = dbt_utils.get_column_values(table=this, column='_feed_valid_from', order_by = '_feed_valid_from DESC', max_records = 1) %}
-    {% set max_ts = timestamps[0] %}
-{% endif %}
-
 WITH dim_stop_times AS (
     SELECT
         *,
         CONCAT(arrival_time, "-", departure_time) AS time_pair,
     FROM {{ ref('dim_stop_times') }}
-    {% if is_incremental() %}
-    WHERE _feed_valid_from >= '{{ max_ts }}'
-    {% else %}
-    WHERE _feed_valid_from >= CAST('{{ var('GTFS_SCHEDULE_START') }}' AS TIMESTAMP)
-    {% endif %}
+    WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START', this_dt_column='_feed_valid_from', filter_dt_column='_feed_valid_from', dev_lookback_days = None) }}
 ),
 
 dim_stops AS (
@@ -30,21 +21,13 @@ dim_stops AS (
         *,
         CONCAT(stop_lat, "-", stop_lon) AS stop_location
     FROM {{ ref('dim_stops') }}
-    {% if is_incremental() %}
-    WHERE _feed_valid_from >= '{{ max_ts }}'
-    {% else %}
-    WHERE _feed_valid_from >= CAST('{{ var('GTFS_SCHEDULE_START') }}' AS TIMESTAMP)
-    {% endif %}
+    WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START', this_dt_column='_feed_valid_from', filter_dt_column='_feed_valid_from', dev_lookback_days = None) }}
 ),
 
 dim_trips AS (
     SELECT *
     FROM {{ ref('dim_trips') }}
-    {% if is_incremental() %}
-    WHERE _feed_valid_from >= '{{ max_ts }}'
-    {% else %}
-    WHERE _feed_valid_from >= CAST('{{ var('GTFS_SCHEDULE_START') }}' AS TIMESTAMP)
-    {% endif %}
+    WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START', this_dt_column='_feed_valid_from', filter_dt_column='_feed_valid_from', dev_lookback_days = None) }}
 ),
 
 -- Aggregate information about each trip, including stops & stop times

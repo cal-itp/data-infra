@@ -5,30 +5,22 @@ WITH make_dim AS (
     ) }}
 ),
 
-bad_rows AS (
-    SELECT
-        base64_url,
-        ts,
-        area_id,
-        TRUE AS warning_duplicate_primary_key
-    FROM make_dim
-    GROUP BY base64_url, ts, area_id
-    HAVING COUNT(*) > 1
-),
-
 dim_areas AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'area_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'area_id']) }} AS _gtfs_key,
         feed_key,
         area_id,
         area_name,
         base64_url,
-        COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
-    LEFT JOIN bad_rows
-        USING (base64_url, ts, area_id)
+    -- the MTC region feed prior to 2022-08-26 had many full duplicates because of a greater_are_id
+    -- concept that was removed; remove those full dupes
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY feed_key, area_id, area_name ORDER BY _line_number) = 1
 )
 
 SELECT * FROM dim_areas

@@ -12,6 +12,7 @@ stg_gtfs_schedule__frequencies AS (
         base64_url,
         ts,
         dt AS _dt,
+        _line_number,
         {{ trim_make_empty_string_null('trip_id') }} AS trip_id,
         {{ trim_make_empty_string_null('start_time') }} AS start_time,
         {{ trim_make_empty_string_null('end_time') }} AS end_time,

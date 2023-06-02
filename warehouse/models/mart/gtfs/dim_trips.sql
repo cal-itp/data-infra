@@ -7,7 +7,8 @@ WITH make_dim AS (
 
 dim_trips AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id']) }} AS _gtfs_key,
         base64_url,
         feed_key,
         route_id,
@@ -20,8 +21,10 @@ dim_trips AS (
         block_id,
         wheelchair_accessible,
         bikes_allowed,
-        COUNT(*) OVER (PARTITION BY base64_url, ts, trip_id) > 1 AS warning_duplicate_primary_key,
+        COUNT(*) OVER (PARTITION BY feed_key, trip_id) > 1 AS warning_duplicate_gtfs_key,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
 )

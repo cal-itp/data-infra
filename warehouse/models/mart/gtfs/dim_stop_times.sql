@@ -17,7 +17,8 @@ make_intervals AS (
 
 dim_stop_times AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id', 'stop_sequence']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id', 'stop_sequence']) }} AS _gtfs_key,
         base64_url,
         feed_key,
         trip_id,
@@ -40,9 +41,11 @@ dim_stop_times AS (
             *
         ) OVER (
             PARTITION BY base64_url, ts, trip_id, stop_sequence
-        ) > 1 AS warning_duplicate_primary_key,
+        ) > 1 AS warning_duplicate_gtfs_key,
         stop_id IS NULL AS warning_missing_foreign_key_stop_id,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
         {{ gtfs_interval_to_seconds('arrival_time_interval') }} AS arrival_sec,
         {{ gtfs_interval_to_seconds('departure_time_interval') }} AS departure_sec,
