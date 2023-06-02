@@ -32,6 +32,10 @@ dim_organizations AS (
         assessment_status,
         manual_check__contact_on_website,
         alias,
+        is_public_entity,
+        raw_ntd_id,
+        public_currently_operating,
+        public_currently_operating_fixed_route,
 
         dim._is_current,
         dim._valid_from,

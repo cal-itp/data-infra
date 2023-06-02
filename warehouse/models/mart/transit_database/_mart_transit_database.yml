@@ -76,6 +76,7 @@ models:
       - *key
       - name: ntd_id
         description: |
+          *To be deprecated in favor of raw_ntd_id*
           The organization's ID in the National Transit Database
       - name: name
         description: Organization name
@@ -134,6 +135,33 @@ models:
         description: |
           Flag indicating whether this is the most recent version of
           this record.
+      - &public_currently_operating
+        name: public_currently_operating
+        description: |
+          Formula in source system returns true value if the following criteria are met:
+
+            1. Service has “Operating” value in `operational_status` column (for organizations, only at least one managed service must meet this criterion)
+            2. Service is rideable by the general public (for organizations, only at least one managed service must meet this criterion)
+            3. Provider is either an NTD reporter (indicated by non-empty `raw_ntd_id`) or is a public entity.
+      - &public_currently_operating_fixed_route
+        name: public_currently_operating_fixed_route
+        description: |
+          Formula in source system returns true value under same conditions as `public_currently_operating`
+          plus additional requirement that service has `fixed_route = true` (for organizations, only at least one managed service must meet this criterion).
+      - name: is_public_entity
+        description: |
+          Formula in source system returns true if the `organization_type` column has been set to one of the following:
+            City/Town,
+            Independent Agency,
+            MPO/RTPA,
+            County,
+            Tribe,
+            Federal Government,
+            Joint Powers Agency, or
+            Council of Governments
+      - name: raw_ntd_id
+        description: |
+          FTA agency ID number.
   - name: dim_services
     description: '{{ doc("services_table") }}'
     tests: *mutually_exclusive_ranges
@@ -200,25 +228,13 @@ models:
       - name: is_public
         description: |
           Formula in source system returns "Yes" value if the rider requirement of "Public" has been set in the `rider_requirements` column.
-      - name: public_currently_operating
-        description: |
-          Formula in source system returns true value if the service has all of the following:
-
-            1. “Operating” value has been set in `operational_status` column
-            2. Rideable by the general public
-            3. Provider is either an NTD reporter (indicated by non-empty `raw_ntd_id`) or is a public entity.
-      - name: public_currently_operating_fixed_route
-        description: |
-          Formula in source system returns true value under same conditions as `public_currently_operating`
-          plus additional requirement that `fixed_route` is true.
+      - *public_currently_operating
+      - *public_currently_operating_fixed_route
       - name: operational_status
         description: |
           Formula in source system automatically calculates the operational status based on the following criteria:
-
             A. Status is "Planned" when the service “Start Date” is in the future.
-
             B. Status is "Operating" when the current date is not before the start date and not after the deprecated date or both start date and deprecated date are empty
-
             C. Status is "Deprecated" when the service "Deprecated Date" is in the past.
       - *valid_from_actual
       - *valid_to_actual
