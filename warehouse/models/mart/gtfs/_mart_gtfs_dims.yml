@@ -367,7 +367,7 @@ models:
       https://gtfs.org/schedule/reference/#fare_transfer_rulestxt.
     columns:
       - *schedule_dim_pk
-
+      - *schedule_dim_gtfs_key_with_dupe_flag
       - *warning_duplicate_gtfs_key
       - *schedule_dim_dt
       - *schedule_dim_line_number
