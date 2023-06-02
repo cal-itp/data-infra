@@ -31,7 +31,7 @@ WITH stg_cleaned_customer_funding_source_vaults AS (
     WINDOW unique_ids AS (
         PARTITION BY funding_source_vault_id
         ORDER BY calitp_customer_id_rank, calitp_funding_source_vault_id_rank)
-ORDER BY funding_source_vault_id, calitp_valid_at DESC
+    ORDER BY funding_source_vault_id ASC, calitp_valid_at DESC
 )
 
 SELECT * FROM stg_cleaned_customer_funding_source_vaults
