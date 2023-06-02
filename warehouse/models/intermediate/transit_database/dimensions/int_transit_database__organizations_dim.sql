@@ -34,6 +34,7 @@ int_transit_database__organizations_dim AS (
         assessment_status,
         manual_check__contact_on_website,
         hq_county_geography,
+        raw_ntd_id,
         _is_current,
         _valid_from,
         _valid_to
