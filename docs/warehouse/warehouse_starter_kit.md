@@ -39,7 +39,8 @@ For a given day:
     * Detailed information such as how passengers embark/disembark (ex: on a stop/at a station) onto a vehicle.
 
 * [fct_daily_schedule_feeds](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_schedule_feeds)
-    * Use `gtfs_utils_v2.schedule_daily_feed_to_organization()` to find regional feed type, gtfs dataset key, and feed type for an organization.
+    * Use `gtfs_utils_v2.schedule_daily_feed_to_organization()` to find feed names, regional feed type, and gtfs dataset key.
+    * Please note,the `name` column returned from the function above refers to a name of the feed, not to a provider.
 
 ### Other
 * [dim_annual_ntd_agency_information](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_annual_database_agency_information)
