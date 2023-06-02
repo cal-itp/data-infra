@@ -69,7 +69,7 @@ Relevant Fields:
 
 #### Update a GTFS Dataset's URL
 
-Navigate to the record for ths dataset in `California Transit.gtfs datasets` and update the field `URI`.  If there is an interesting story or issue behind the update, you can add a comment to the record by [expanding the record](https://support.airtable.com/hc/en-us/articles/202576579-Expanding-records).
+Navigate to the record for the dataset in `California Transit.gtfs datasets` and update the field `URI`.  If there is an interesting story or issue behind the update, you can add a comment to the record by [expanding the record](https://support.airtable.com/hc/en-us/articles/202576579-Expanding-records).
 
 #### Add an additional GTFS Dataset
 
