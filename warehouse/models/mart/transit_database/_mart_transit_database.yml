@@ -118,9 +118,10 @@ models:
       - name: hubspot_company_record_id
         description: |
           Organization's ID in Hubspot CRM.
-      - name: assessment_status
+      - name: _deprecated__assessment_status
         description: |
-          Is either "Yes" or "No" and indicates whether this Organization
+          *Deprecated May 2023 in favor of `public_currently_operating`*
+          Boolean indicating whether this organization
           manages qualifying assessed services
       - &valid_from_actual
         name: _valid_from
@@ -179,7 +180,7 @@ models:
           values "bus, car/van"; "ferry"
       - name: _deprecated__currently_operating
         description: |
-          *Deprecated in favor of `operational_status`*
+          *Deprecated May 2023 in favor of `operational_status`*
           Boolean for whether service is currently active
       - name: gtfs_schedule_status
         description: |
@@ -211,7 +212,7 @@ models:
           validation and guideline statuses.**
       - name: _deprecated__assessment_status
         description: |
-          *Deprecated in favor of `public_currently_operating`*
+          *Deprecated May 2023 in favor of `public_currently_operating`*
           Is either "Yes" or "No" and indicates whether this Service qualifies as
           being an assessed service
       - name: deprecated_date

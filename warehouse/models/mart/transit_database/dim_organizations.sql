@@ -29,7 +29,7 @@ dim_organizations AS (
         hubspot_company_record_id,
         gtfs_static_status,
         gtfs_realtime_status,
-        assessment_status,
+        assessment_status AS _deprecated__assessment_status,
         manual_check__contact_on_website,
         alias,
         is_public_entity,
