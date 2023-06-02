@@ -1,3 +1,4 @@
+-- noqa: disable=AL03
 {{ config(materialized='ephemeral') }}
 
 WITH stg_gtfs_quality__intended_checks AS (
