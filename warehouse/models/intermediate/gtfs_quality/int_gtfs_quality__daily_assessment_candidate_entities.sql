@@ -3,18 +3,28 @@
 WITH full_join AS (
     SELECT
         *,
-        COALESCE(
-            organization_raw_assessment_status,
-            (reporting_category = "Core") OR (reporting_category = "Other Public Transit"),
-            FALSE
-        ) AS organization_assessed,
+        -- on May 23, 2023 we transitioned from using Airtable "assessment status" field
+        -- to using public_currently_operating_fixed_route
+        CASE
+            WHEN date >= '2023-05-23' THEN organization_public_currently_operating_fixed_route
+            ELSE
+                COALESCE(
+                    _deprecated__organization_raw_assessment_status,
+                    (reporting_category = "Core") OR (reporting_category = "Other Public Transit"),
+                    FALSE)
+        END AS organization_assessed,
 
-        COALESCE(
-            services_raw_assessment_status,
-            service_currently_operating
-                AND CONTAINS_SUBSTR(service_type_str, "fixed-route"),
-            FALSE
-        ) AS service_assessed,
+        -- on May 23, 2023 we transitioned from using Airtable "assessment status" field
+        -- to using public_currently_operating_fixed_route
+        CASE
+            WHEN date >= '2023-05-23' THEN service_public_currently_operating_fixed_route
+            ELSE
+                COALESCE(
+                    _deprecated__services_raw_assessment_status,
+                    _deprecated__service_currently_operating
+                        AND CONTAINS_SUBSTR(service_type_str, "fixed-route"),
+                    FALSE)
+        END AS service_assessed,
 
         COALESCE(
             gtfs_service_data_customer_facing,
