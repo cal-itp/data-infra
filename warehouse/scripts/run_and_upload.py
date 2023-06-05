@@ -22,7 +22,7 @@ artifacts = map(
 
 sentry_sdk.init()
 
-app = typer.Typer(pretty_exceptions_enable=False)
+app = typer.Typer()
 
 
 class DbtException(Exception):

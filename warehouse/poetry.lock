@@ -710,33 +710,33 @@ pyarrow = ">=3.0.0"
 
 [[package]]
 name = "dbt-bigquery"
-version = "1.6.0b1"
+version = "1.5.1"
 description = "The Bigquery adapter plugin for dbt"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "dbt-bigquery-1.6.0b1.tar.gz", hash = "sha256:1481fc4489cb068ac9f021c5b4be7599272c82c64597d5f5d5b2a872dd8beaec"},
-    {file = "dbt_bigquery-1.6.0b1-py3-none-any.whl", hash = "sha256:ded7abdd617b46f6e81f50227c50e8e09a18ca01af655ac7c88e60680421c519"},
+    {file = "dbt-bigquery-1.5.1.tar.gz", hash = "sha256:93fe836a77d08738edf6d11c4446cc851767bfc3a2ecdf72cb31a600876d9150"},
+    {file = "dbt_bigquery-1.5.1-py3-none-any.whl", hash = "sha256:1e93a084fa8631966076381b7b8261c0d4fdae4619cd0452f87b09c9c2ba98f3"},
 ]
 
 [package.dependencies]
 agate = ">=1.6.3,<1.7.0"
-dbt-core = ">=1.6.0b1,<1.7.0"
+dbt-core = ">=1.5.0,<1.6.0"
 google-cloud-bigquery = ">=3.0,<4.0"
 google-cloud-dataproc = ">=5.0,<6.0"
 google-cloud-storage = ">=2.4,<3.0"
 
 [[package]]
 name = "dbt-core"
-version = "1.6.0b2"
+version = "1.5.1"
 description = "With dbt, data analysts and engineers can build analytics the way engineers build applications."
 category = "main"
 optional = false
 python-versions = ">=3.7.2"
 files = [
-    {file = "dbt-core-1.6.0b2.tar.gz", hash = "sha256:aaea395897aaf0aeea4d39a4d937dc5fa864171c6717ac003d1ae02f972ed8cb"},
-    {file = "dbt_core-1.6.0b2-py3-none-any.whl", hash = "sha256:bb81190a184b159417e937c15a0b927f14daa4c941fb11737a0c68e7178b68a0"},
+    {file = "dbt-core-1.5.1.tar.gz", hash = "sha256:d645ebdc1098ad0fad19f0871022d16ce77bec6b00d2b6b078db792c8917b8be"},
+    {file = "dbt_core-1.5.1-py3-none-any.whl", hash = "sha256:abc685e4149d523e719b3a687705c2885f986e1ba0f984c048fb696c39ea8958"},
 ]
 
 [package.dependencies]
@@ -757,12 +757,26 @@ packaging = ">20.9"
 pathspec = ">=0.9,<0.12"
 protobuf = ">=4.0.0"
 pytz = ">=2015.7"
-pyyaml = ">=5.3"
+pyyaml = ">=6.0"
 requests = "<3.0.0"
 sqlparse = ">=0.2.3,<0.4.4"
 typing-extensions = ">=3.7.4"
-urllib3 = ">=1.0,<2.0"
 werkzeug = ">=1,<3"
+
+[[package]]
+name = "dbt-coverage"
+version = "0.3.4"
+description = "One-stop-shop for docs and test coverage of dbt projects"
+category = "dev"
+optional = false
+python-versions = ">=3.6,<4.0"
+files = [
+    {file = "dbt_coverage-0.3.4-py3-none-any.whl", hash = "sha256:bfb0a064978149e666406c98a1683d390846c8c1ba756626a01013c45a32311d"},
+    {file = "dbt_coverage-0.3.4.tar.gz", hash = "sha256:4f550965a552bc485d255a3027da1d787d38ab6e408aef3f571f3fb876fff3b7"},
+]
+
+[package.dependencies]
+typer = ">=0.4.0,<0.5.0"
 
 [[package]]
 name = "dbt-extractor"
@@ -4237,24 +4251,24 @@ files = [
 
 [[package]]
 name = "typer"
-version = "0.7.0"
+version = "0.4.2"
 description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
 category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "typer-0.7.0-py3-none-any.whl", hash = "sha256:b5e704f4e48ec263de1c0b3a2387cd405a13767d2f907f44c1a08cbad96f606d"},
-    {file = "typer-0.7.0.tar.gz", hash = "sha256:ff797846578a9f2a201b53442aedeb543319466870fbe1c701eab66dd7681165"},
+    {file = "typer-0.4.2-py3-none-any.whl", hash = "sha256:023bae00d1baf358a6cc7cea45851639360bb716de687b42b0a4641cd99173f1"},
+    {file = "typer-0.4.2.tar.gz", hash = "sha256:b8261c6c0152dd73478b5ba96ba677e5d6948c715c310f7c91079f311f62ec03"},
 ]
 
 [package.dependencies]
 click = ">=7.1.1,<9.0.0"
 
 [package.extras]
-all = ["colorama (>=0.4.3,<0.5.0)", "rich (>=10.11.0,<13.0.0)", "shellingham (>=1.3.0,<2.0.0)"]
+all = ["colorama (>=0.4.3,<0.5.0)", "shellingham (>=1.3.0,<2.0.0)"]
 dev = ["autoflake (>=1.3.1,<2.0.0)", "flake8 (>=3.8.3,<4.0.0)", "pre-commit (>=2.17.0,<3.0.0)"]
-doc = ["cairosvg (>=2.5.2,<3.0.0)", "mdx-include (>=1.4.1,<2.0.0)", "mkdocs (>=1.1.2,<2.0.0)", "mkdocs-material (>=8.1.4,<9.0.0)", "pillow (>=9.3.0,<10.0.0)"]
-test = ["black (>=22.3.0,<23.0.0)", "coverage (>=6.2,<7.0)", "isort (>=5.0.6,<6.0.0)", "mypy (==0.910)", "pytest (>=4.4.0,<8.0.0)", "pytest-cov (>=2.10.0,<5.0.0)", "pytest-sugar (>=0.9.4,<0.10.0)", "pytest-xdist (>=1.32.0,<4.0.0)", "rich (>=10.11.0,<13.0.0)", "shellingham (>=1.3.0,<2.0.0)"]
+doc = ["mdx-include (>=1.4.1,<2.0.0)", "mkdocs (>=1.1.2,<2.0.0)", "mkdocs-material (>=8.1.4,<9.0.0)"]
+test = ["black (>=22.3.0,<23.0.0)", "coverage (>=5.2,<6.0)", "isort (>=5.0.6,<6.0.0)", "mypy (==0.910)", "pytest (>=4.4.0,<5.4.0)", "pytest-cov (>=2.10.0,<3.0.0)", "pytest-sugar (>=0.9.4,<0.10.0)", "pytest-xdist (>=1.32.0,<2.0.0)", "shellingham (>=1.3.0,<2.0.0)"]
 
 [[package]]
 name = "types-python-slugify"
@@ -4497,4 +4511,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "e54048011983894c4fb723e8e68e956e4d707a8d1f8e3fbb75f14f778369fa81"
+content-hash = "156d6d8c40ef9ffb8b43c91fb2f1b77d7c97a6f2482d29580713b4efead529bc"

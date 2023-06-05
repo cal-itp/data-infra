@@ -192,6 +192,6 @@ Pipeline variables may be changed/redeclared in between steps, but evaluation of
 logic between steps is generally discouraged. E.g., conditional execution should
 be avoidable in most cases where steps are properly idempotent and explicitly
 listing multiple instances of a step should be preferred in cases where a step
-will be re-executed a determinitic number of times. Where there is good reason
+will be re-executed a deterministic number of times. Where there is good reason
 to do so however, the full power of bash logic and evaluation may be employed to
 wrap step execution.

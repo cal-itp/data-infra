@@ -24,7 +24,7 @@ from dbt_artifacts import (
 )
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-app = typer.Typer(pretty_exceptions_enable=False)
+app = typer.Typer()
 
 
 class ArtifactType(str, Enum):

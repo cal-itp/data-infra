@@ -20,7 +20,7 @@ Within the kubernetes engine on GCE, go to the sidebar of `Secrets and Config Ma
 
 The preferred method is to use the Lens Kubernetes IDE https://k8slens.dev/. Once Lens desktop is set up, sync the following cluster `gke_cal-itp-data-infra_us-west1_data-infra-apps`. Within the configuration sidebar, navigate to `Secrets`. Select the `database-backup` secret where you will see the `RESTIC_PASSWORD`. Click the eye icon to unencrypt the password.
 
-Navigate to the Workloads parent folder and select `CronJobs`. Select the cronjob `postgressql-backup`. If you click the edit button you can look at it in YAML form. There you will obtain the Restic repository info.
+Navigate to the Workloads parent folder and select `CronJobs`. Select the cronjob `postgresql-backup`. If you click the edit button you can look at it in YAML form. There you will obtain the Restic repository info.
 
 ```shell
 name: RESTIC_REPOSITORY

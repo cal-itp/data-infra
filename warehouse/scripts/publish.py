@@ -45,7 +45,7 @@ DBT_ARTIFACTS_BUCKET = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
 MANIFEST_DEFAULT = f"{DBT_ARTIFACTS_BUCKET}/latest/manifest.json"
 PUBLISH_BUCKET = os.environ["CALITP_BUCKET__PUBLISH"]
 
-app = typer.Typer(pretty_exceptions_enable=False)
+app = typer.Typer()
 
 WGS84 = "EPSG:4326"  # "standard" lat/lon coordinate system
 CHUNK_SIZE = (
