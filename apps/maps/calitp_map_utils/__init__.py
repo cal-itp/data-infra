@@ -36,6 +36,8 @@ class Speedmap(BaseModel):
     stop_name: Optional[str]
     route_id: Optional[str]
     tooltip: Optional[Tooltip]
+    avg_mph: Optional[float]
+    p20_mph: Optional[float] = Field(alias="_20p_mph")
     # we add alpha in the JS if only 3 colors are passed
     color: Optional[conlist(int, min_items=3, max_items=4)]
     highlight_color: Optional[conlist(int, min_items=3, max_items=4)]
@@ -106,8 +108,6 @@ class Layer(BaseModel):
     url: HttpUrl
     typ: Optional[LayerType] = Field(alias="type")
     properties: Optional[Dict[str, Any]]
-    highlight_saturation_multiplier: Optional[float]
-    tooltip_speed_key: Optional[str]
 
 
 class BasemapConfig(BaseModel):

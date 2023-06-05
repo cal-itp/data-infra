@@ -136,13 +136,15 @@
 
       // TODO: this should probably be a map of functions?
       if (layerType === "speedmap") {
-        // TODO: lookup from layer props
-        // console.log(layer.props);
-        // const { tooltip_speed_key } = layer.props;
-        // console.log(tooltip_speed_key);
+        const { tooltip_speed_key } = layer.props;
         const { stop_name, stop_id, route_short_name, route_id, avg_mph, trips_per_hour, shape_id, stop_sequence } = feature.properties;
 
-        const speed = feature.properties._20p_mph || avg_mph;
+        let speed = avg_mph;
+
+        if (tooltip_speed_key && feature.properties[tooltip_speed_key]) {
+          speed = feature.properties[tooltip_speed_key];
+          console.log(speed);
+        }
 
         return {
           html: `
@@ -251,7 +253,6 @@
                     type: layer.type,
                     ...(layer.properties || {})
                   };
-                  console.log(layer.highlight_saturation_multiplier);
                   return new GeoJsonLayer({
                     id: layer.name,
                     data: fetchGeoJSON(layer.url),
@@ -260,7 +261,7 @@
                     getPointRadius: 10,
                     ...layerProperties,
                     getFillColor: (feature) => getColor(feature, layer),
-                    highlightColor: ({ object, layer }) => getColor(object, layer, layer.highlight_saturation_multiplier || 0.7),
+                    highlightColor: ({ object, layer }) => getColor(object, layer, layerProperties.highlight_saturation_multiplier || 0.7),
                     onDataLoad: (data) => {
                       console.log("Finished loading", layer);
 

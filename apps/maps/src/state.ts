@@ -65,6 +65,8 @@ export interface Speedmap {
   stop_name?: string;
   route_id?: string;
   tooltip?: Tooltip;
+  avg_mph?: number;
+  _20p_mph?: number;
   /**
    * @minItems 3
    * @maxItems 4
@@ -113,8 +115,6 @@ export interface Layer {
   properties?: {
     [k: string]: unknown;
   };
-  highlight_saturation_multiplier?: number;
-  tooltip_speed_key?: string;
 }
 export interface State {
   name?: string;
