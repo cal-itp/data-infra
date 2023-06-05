@@ -980,7 +980,7 @@ exposures:
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#agencytxt.
             dim_areas_latest:
-              id: TODO01
+              id: e6b684c0-5af1-4012-b7ef-0166808831a6
               description: |
                 Each row is a cleaned row from an areas.txt file.
                 Definitions for the original GTFS fields are available at:
@@ -1010,19 +1010,19 @@ exposures:
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_attributestxt.
             dim_fare_leg_rules_latest:
-              id: TODO02
+              id: ea5040fb-de2d-4011-a21e-fcf4a96fa80a
               description: |
                 Each row is a cleaned row from an fare_leg_rules.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_leg_rulestxt.
             dim_fare_media_latest:
-              id: TODO03
+              id: 7342e023-5855-4923-a3a9-0450eaf8fd17
               description: |
                 Each row is a cleaned row from an fare_media.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_mediatxt.
             dim_fare_products_latest:
-              id: TODO04
+              id: 060d905b-eda4-476f-98c9-ac5e712e13f6
               description: |
                 Each row is a cleaned row from an fare_products.txt file.
                 Definitions for the original GTFS fields are available at:
@@ -1034,7 +1034,7 @@ exposures:
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_rulestxt.
             dim_fare_transfer_rules_latest:
-              id: TODO05
+              id: a1002670-235c-41b2-be63-35f7a643ed92
               description: |
                 Each row is a cleaned row from an fare_transfer_rules.txt file.
                 Definitions for the original GTFS fields are available at:
@@ -1081,7 +1081,7 @@ exposures:
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#shapestxt.
             dim_stop_areas_latest:
-              id: TODO06
+              id: ebd6109c-3ebb-4d3f-96ba-8d4c20961363
               description: |
                 Each row is a cleaned row from an stop_areas.txt file.
                 Definitions for the original GTFS fields are available at:
