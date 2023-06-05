@@ -844,7 +844,7 @@ against the RT files and writes the validation notices as JSONL to GCS for query
 <div class="section" id="backfilling-from-the-command-line">
 <h2>Backfilling from the command line<a class="headerlink" href="#backfilling-from-the-command-line" title="Permalink to this headline">¶</a></h2>
 <p>From time-to-time some DAGs may need to be re-ran in order to populate new data.</p>
-<p>Subject to the considerations outlined abov, backfilling can be performed by clearing historical runs in the web interface, or via the CLI:</p>
+<p>Subject to the considerations outlined above, backfilling can be performed by clearing historical runs in the web interface, or via the CLI:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>gcloud<span class="w"> </span>composer<span class="w"> </span>environments<span class="w"> </span>run<span class="w"> </span>calitp-airflow-prod<span class="w"> </span>--location<span class="o">=</span>us-west2<span class="w"> </span>backfill<span class="w"> </span>--<span class="w"> </span>--start_date<span class="w"> </span><span class="m">2021</span>-04-18<span class="w"> </span>--end_date<span class="w"> </span><span class="m">2021</span>-11-03<span class="w"> </span>-x<span class="w"> </span>--reset_dagruns<span class="w"> </span>-y<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;gtfs_schedule_history_load&quot;</span><span class="w"> </span>-i<span class="w"> </span>gtfs_loader
 </pre></div>
 </div>

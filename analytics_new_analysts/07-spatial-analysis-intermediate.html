@@ -861,15 +861,15 @@
 </pre></div>
 </div>
 <p>Then, extract our X, Y components. Put lat, lon into a Shapely object as demonstrated <a class="reference external" href="#create-geometry-column-from-latitude-and-longitude-coordinates">in the prior section.</a></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure only numbers, not parantheses, are captured. Cast it as float.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure only numbers, not parentheses, are captured. Cast it as float.</span>
 
 <span class="c1"># 0 corresponds to the portion before the comma. [1:] means starting from</span>
-<span class="c1"># the 2nd character, right after the opening paranthesis, to the comma.</span>
+<span class="c1"># the 2nd character, right after the opening parenthesis, to the comma.</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
 <span class="c1"># 1 corresponds to the portion after the comma. [:-1] means starting from</span>
 <span class="c1"># right after the comma to the 2nd to last character from the end, which</span>
-<span class="c1"># is right before the closing paranthesis.</span>
+<span class="c1"># is right before the closing parenthesis.</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 </pre></div>
 </div>

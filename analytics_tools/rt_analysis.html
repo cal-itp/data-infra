@@ -1025,7 +1025,7 @@
 <li><p>GTFS Schedule Shapes</p></li>
 </ul>
 <p>All of the above are sourced from the v2 warehouse. Note that all components must be present and consistently keyed in order to successfully analyze. This module works at the organization level in order to match the reports site and maintain the structure of the speedmap site.</p>
-<p>For each organization, this module will combine and analyze all related GTFS Schedule and GTFS Realtime datasets that are <code class="docutils literal notranslate"><span class="pre">public_customer_facing_or_regional_subfeed_fixed_route</span></code> in <a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.dim_provider_gtfs_data"><code class="docutils literal notranslate"><span class="pre">dim_provider_gtfs_data</span></code></a>. Some organizations share GTFS datasets (Sacramento RT and City of Rancho Cordova, San Diego Airport and San Diego MTS…), in those cases the module can generate seperate analysis for each organization but they might duplicate each other. These are based on the underlying organization/dataset relationships in the Transit Database (Airtable).</p>
+<p>For each organization, this module will combine and analyze all related GTFS Schedule and GTFS Realtime datasets that are <code class="docutils literal notranslate"><span class="pre">public_customer_facing_or_regional_subfeed_fixed_route</span></code> in <a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.dim_provider_gtfs_data"><code class="docutils literal notranslate"><span class="pre">dim_provider_gtfs_data</span></code></a>. Some organizations share GTFS datasets (Sacramento RT and City of Rancho Cordova, San Diego Airport and San Diego MTS…), in those cases the module can generate separate analysis for each organization but they might duplicate each other. These are based on the underlying organization/dataset relationships in the Transit Database (Airtable).</p>
 </div>
 <div class="section" id="how-is-it-structured">
 <h3>How is it structured?<a class="headerlink" href="#how-is-it-structured" title="Permalink to this headline">¶</a></h3>
@@ -1518,7 +1518,7 @@
 <div class="section" id="corridor-analysis">
 <h4>Corridor Analysis<a class="headerlink" href="#corridor-analysis" title="Permalink to this headline">¶</a></h4>
 <p>It’s often useful to measure transit delay on a specific corridor to support technical metric generation for the Solutions for Congested Corridors Program, Local Partnership Program, and other analyses.</p>
-<p>If you’ve recieved a corridor from an SCCP/LPP applicant or elsewhere, load it as a geodataframe and add it using the <code class="docutils literal notranslate"><span class="pre">add_corridor</span></code> method. If you’re already looking at a speed map and want to measure delay for a portion of the map, you can use the <code class="docutils literal notranslate"><span class="pre">autocorridor</span></code> method to specify a corridor using a shape_id and two stop_sequences. This saves time by avoiding the need to generate the polygon elsewhere.</p>
+<p>If you’ve received a corridor from an SCCP/LPP applicant or elsewhere, load it as a geodataframe and add it using the <code class="docutils literal notranslate"><span class="pre">add_corridor</span></code> method. If you’re already looking at a speed map and want to measure delay for a portion of the map, you can use the <code class="docutils literal notranslate"><span class="pre">autocorridor</span></code> method to specify a corridor using a shape_id and two stop_sequences. This saves time by avoiding the need to generate the polygon elsewhere.</p>
 <p>The corridor must be a single polygon, and in order to generate metrics it must include at least one transit stop.</p>
 <p>Once the corridor is attached, the <code class="docutils literal notranslate"><span class="pre">quick_map_corridor</span></code> method is available to generate an overview map of the corridor, including the transit stops just before, within, and just after the corridor. The <code class="docutils literal notranslate"><span class="pre">corridor_metrics</span></code> method will generate both a speed-based and schedule-based transit delay metric.</p>
 <p>The speed-based metric is a daily average of the sum of delays for each trip traversing the corridor as compared to a reference speed of 16 miles per hour. To further explain, we take each corridor trip that we have data for and calculate the hypothetical time it would take for that trip to traverse the corridor at a speed of 16 mph. The difference between the actual time it took for the trip to traverse the corridor and that hypothetical time is the speed-based delay for that trip, and we sum those delays to create the metric. This metric is intended to provide a more consistent basis for comparison independent of scheduling practices.</p>
@@ -1537,7 +1537,7 @@
 <h2>Example Workflow: SCCP<a class="headerlink" href="#example-workflow-sccp" title="Permalink to this headline">¶</a></h2>
 <div class="mermaid">
             flowchart TD
-    rcv_corr[/recieve corridor from applicant/] --&gt;
+    rcv_corr[/receive corridor from applicant/] --&gt;
     ver_corr[/verify corridor is polygon/] --&gt;
     gen_data[generate analysis data for timeframe*]
     subgraph fm[RtFilterMapper]

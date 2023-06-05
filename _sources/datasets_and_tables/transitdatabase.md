@@ -22,7 +22,7 @@ For the sake of this documentation, we've noted the [`Primary Field`](https://su
 
 ### Full Documentation of Fields
 
-AirTable does not currently have an effective mechanism to programmaticaly download your data schema (they have currently paused issuing keys to their metadata API). Rather than manually type-out and export each individual field definition from AirTable, please see the [AirTable-based documentation of fields](https://airtable.com/appPnJWrQ7ui4UmIl/api/docs) which is produced as a part of their API documentation. Note that you must be authenticated with access to the base to reach this link.
+AirTable does not currently have an effective mechanism to programmatically download your data schema (they have currently paused issuing keys to their metadata API). Rather than manually type-out and export each individual field definition from AirTable, please see the [AirTable-based documentation of fields](https://airtable.com/appPnJWrQ7ui4UmIl/api/docs) which is produced as a part of their API documentation. Note that you must be authenticated with access to the base to reach this link.
 
 ## California Transit
 
@@ -69,7 +69,7 @@ Relevant Fields:
 
 #### Update a GTFS Dataset's URL
 
-Navigate to the record for ths dataset in `California Transit.gtfs datasets` and update the field `URI`.  If there is an interesting story or issue behind the update, you can add a comment to the record by [expanding the record](https://support.airtable.com/hc/en-us/articles/202576579-Expanding-records).
+Navigate to the record for the dataset in `California Transit.gtfs datasets` and update the field `URI`.  If there is an interesting story or issue behind the update, you can add a comment to the record by [expanding the record](https://support.airtable.com/hc/en-us/articles/202576579-Expanding-records).
 
 #### Add an additional GTFS Dataset
 
