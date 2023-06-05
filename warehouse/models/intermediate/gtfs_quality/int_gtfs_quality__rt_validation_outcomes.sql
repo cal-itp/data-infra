@@ -13,17 +13,17 @@ WITH
 int_gtfs_quality__rt_validation_outcomes AS (
     -- predicate pushdown does not seem to work through UNIONs so list these all out
     SELECT * FROM {{ ref('stg_gtfs_rt__service_alerts_validation_outcomes') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 
     UNION ALL
 
     SELECT * FROM {{ ref('stg_gtfs_rt__trip_updates_validation_outcomes') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 
     UNION ALL
 
     SELECT * FROM {{ ref('stg_gtfs_rt__vehicle_positions_validation_outcomes') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 )
 
 SELECT * FROM int_gtfs_quality__rt_validation_outcomes

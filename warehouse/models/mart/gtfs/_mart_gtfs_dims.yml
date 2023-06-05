@@ -1,5 +1,73 @@
 version: 2
 
+x-common-fields:
+  - &base64_url
+    name: base64_url
+    description: |
+      Base 64 encoded URL from which this data was scraped.
+  - &warning_duplicate_gtfs_key
+    name: warning_duplicate_gtfs_key
+    description: |
+      Flags rows with a duplicate _gtfs_key; e.g. area_id duplicates would result in _gtfs_key duplicates within a feed version.
+      Treat these rows with caution as they can cause fanout when joining on natural (i.e. GTFS) keys.
+      This column is tested to be majority false (i.e. sanity-check that most records are unique).
+    tests:
+      - not_null
+      - dbt_expectations.expect_column_most_common_value_to_be_in_set:
+          value_set: [false]
+          top_n: 1
+          quote_values: false
+          data_type: "boolean"
+          # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+          row_condition: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+  - &schedule_dim_pk
+    name: key
+    description: |
+      Synthetic primary key constructed from `feed_key` and `_line_number`. This key is intended to identify
+      an actual _row_ in the GTFS source data, rather than a GTFS entity described in that row. See
+      _gtfs_key as a single key derived from the "natural" key of the entity.
+    tests:
+      - not_null
+      - unique
+  - &schedule_dim_gtfs_key
+    name: _gtfs_key
+    description:
+      Synthetic primary natural key constructed from the model's GTFS specification uniqueness.
+    tests:
+      - not_null
+      - unique:
+          # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+          # and at that point can move the &primary_key_tests anchor up to here
+          # (until exclusion is dropped, this exclusion condition is different because it's for key instead of feed_key)
+          where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+  - &schedule_dim_gtfs_key_with_dupe_flag
+    <<: *schedule_dim_gtfs_key
+    tests:
+      - not_null
+      - unique:
+          # TODO: remove feed_key filter once we deal with Auburn feed that has tab-delimited files
+          where: "NOT warning_duplicate_gtfs_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+  - &schedule_dim_dt
+    name: _dt
+    description: Date of the feed version (i.e. date from _feed_valid_from in UTC); used for upstream partition elimination.
+    tests:
+      - not_null
+  - &schedule_dim_line_number
+    name: _line_number
+    description: Line number of this record in the original Schedule file; used for incremental materialization.
+    tests:
+      - not_null
+  - &feed_key
+    name: feed_key
+    description: |
+      Foreign key to the `dim_schedule_feeds` table.
+    tests:
+      - not_null
+      - relationships:
+          to: ref('dim_schedule_feeds')
+          field: key
+
+
 models:
   - name: dim_schedule_feeds
     description: |
@@ -31,10 +99,7 @@ models:
               # (until exclusion is dropped, this exclusion condition is different because it's for key instead of feed_key)
               where: "key != '6368fe701bdd68c4f521751a9a222a10'"
           - not_null
-      - &base64_url
-        name: base64_url
-        description: |
-          Base 64 encoded URL from which this data was scraped.
+      - *base64_url
       - name: _valid_from
         description: '{{ doc("column_valid_from") }}'
       - name: _valid_to
@@ -45,29 +110,18 @@ models:
         description: '{{ doc("gtfs_schedule_feed_timezone") }}'
         tests:
           - not_null
+
   - name: dim_agency
     description: |
       Each row is a cleaned row from an agency.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#agencytxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `agency_id`.
-        tests: &primary_key_tests
-          - unique:
-              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
-          - not_null
-      - &feed_key
-        name: feed_key
-        description: |
-          Foreign key to the `dim_schedule_feeds` table.
-        tests:
-          - not_null
-          - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
+      - *feed_key
       - *base64_url
       - name: agency_id
         description: '{{ doc("gtfs_agency__agency_id") }}'
@@ -109,12 +163,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#areastxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `area_id`.
-        tests: &pk_tests_with_dups
-          - unique:
-              where: "not warning_duplicate_primary_key"
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: area_id
@@ -134,10 +186,18 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#attributionstxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `attribution_id`.
-        tests: *pk_tests_with_dups
+      - *schedule_dim_pk
+      - <<: *schedule_dim_gtfs_key
+        tests:
+          - not_null
+          - unique:
+              where: "NOT warning_duplicate_gtfs_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+      # attribution_id is optional in the GTFS spec, so the flag is present on most/all rows
+      - <<: *warning_duplicate_gtfs_key
+        tests:
+          - not_null
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: attribution_id
@@ -172,12 +232,11 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_attributestxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `fare_id`.
-        tests: *primary_key_tests
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
-      - *base64_url
       - name: fare_id
         description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
         tests: *not_null_error
@@ -206,10 +265,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#fare_leg_rulestxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `network_id`, `from_area_id`, `to_area_id`, and `fare_product_id`.
-        tests: *pk_tests_with_dups
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: leg_group_id
@@ -231,10 +290,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#fare_mediatxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `fare_media_id`.
-        tests: *primary_key_tests
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: fare_media_id
@@ -252,10 +311,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#fare_productstxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `fare_product_id`.
-        tests: *pk_tests_with_dups
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: fare_product_id
@@ -280,10 +339,11 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_rulestxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id`.
-        tests: *pk_tests_with_dups
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: fare_id
@@ -306,10 +366,11 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#fare_transfer_rulestxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, 'from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', and 'duration_limit'.
-        tests: *pk_tests_with_dups
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: from_leg_group_id
@@ -336,10 +397,11 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#feed_infotxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
-        tests: *pk_tests_with_dups
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: feed_publisher_name
@@ -372,10 +434,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#frequenciestxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `trip_id`, and `start_time`.
-        tests: *primary_key_tests
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: trip_id
@@ -422,16 +484,17 @@ models:
           For example, `end_time = 21:30:45` would lead to `end_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
+
   - name: dim_levels
     description: |
       Each row is a cleaned row from a levels.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#levelstxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `level_id`.
-        tests: *primary_key_tests
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: level_id
@@ -451,10 +514,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#pathwaystxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `pathway_id`.
-        tests: *primary_key_tests
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: pathway_id
@@ -495,10 +558,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#routestxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `route_id`.
-        tests: *primary_key_tests
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: route_id
@@ -538,10 +601,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#shapestxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `shape_id`, and `shape_pt_sequence`.
-        tests: *primary_key_tests
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: shape_id
@@ -577,10 +640,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#stop_areastxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `area_id` and `stop_id`.
-        tests: *primary_key_tests
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: area_id
@@ -598,10 +661,11 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#stopstxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `stop_id`.
-        tests: *pk_tests_with_dups
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: stop_id
@@ -649,10 +713,6 @@ models:
         description: '{{ doc("gtfs_stops__platform_code") }}'
       - name: pt_geom
         description: GEOGPOINT created by the stop latitute and longitude
-      - name: warning_duplicate_primary_key
-        description: |
-          Rows with `true` in this column have a duplicate primary key; i.e., `stop_id` is duplicated within an individual feed
-          instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
       - name: warning_missing_primary_key
         description: |
           Rows with `true` in this column are missing a `stop_id`, the primary key for this table (i.e., `stop_id` was not provided in the raw data).
@@ -670,10 +730,11 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#transferstxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`.
-        tests: *pk_tests_with_dups
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: from_stop_id
@@ -708,10 +769,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#translationstxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `table_name`, `field_name`, `language`, `record_id`, `record_sub_id`, and `field_value`.
-        tests: *primary_key_tests
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: table_name
@@ -741,10 +802,11 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#tripstxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `trip_id`.
-        tests: *pk_tests_with_dups
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: route_id
@@ -774,7 +836,7 @@ models:
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
       - *_feed_valid_from
       - *feed_timezone_no_tests
-      - name: warning_duplicate_primary_key
+      - name: warning_duplicate_gtfs_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
           instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
@@ -785,10 +847,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendartxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `service_id`.
-        tests: *primary_key_tests
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: service_id
@@ -830,10 +892,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendar_datestxt.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `service_id`, and `date`.
-        tests: *primary_key_tests
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: service_id
@@ -864,12 +926,13 @@ models:
           expression: "EXTRACT(DAY FROM departure_time_interval) = 0"
           where: "TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), _feed_valid_from, DAY) <= 3"
     columns:
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key_with_dupe_flag
+      - *warning_duplicate_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `trip_id`, and `stop_sequence`.
-        tests: *pk_tests_with_dups
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
         tests: *not_null_error
@@ -899,7 +962,7 @@ models:
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
-      - name: warning_duplicate_primary_key
+      - name: warning_duplicate_gtfs_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., the given `trip_id`
           / `stop_sequence` pair is duplicated within an individual feed instance and `key` will
@@ -1008,7 +1071,10 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `shape_id`.
-        tests: *primary_key_tests
+        tests:
+          - not_null
+          - unique
+      - *schedule_dim_dt
       - *feed_key
       - *base64_url
       - name: shape_id

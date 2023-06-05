@@ -146,7 +146,7 @@ fct_daily_scheduled_stops AS (
         stops_by_day.contains_warning_duplicate_stop_times_primary_key,
         stops_by_day.contains_warning_duplicate_trip_primary_key,
 
-        stops.warning_duplicate_primary_key AS contains_warning_duplicate_stop_primary_key,
+        stops.warning_duplicate_gtfs_key AS contains_warning_duplicate_stop_primary_key,
 
         stops.key AS stop_key,
         stops.tts_stop_name,

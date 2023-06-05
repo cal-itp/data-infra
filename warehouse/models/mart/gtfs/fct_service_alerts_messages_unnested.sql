@@ -11,7 +11,7 @@
 
 WITH int_gtfs_rt__service_alerts_fully_unnested AS (
     SELECT * FROM {{ ref('int_gtfs_rt__service_alerts_fully_unnested') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 select_english AS (

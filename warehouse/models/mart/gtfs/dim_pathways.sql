@@ -7,7 +7,8 @@ WITH make_dim AS (
 
 dim_pathways AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'pathway_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'pathway_id']) }} AS _gtfs_key,
         feed_key,
         pathway_id,
         from_stop_id,
@@ -22,7 +23,9 @@ dim_pathways AS (
         signposted_as,
         reversed_signposted_as,
         base64_url,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
 )

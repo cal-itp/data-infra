@@ -57,7 +57,7 @@ int_gtfs_schedule__frequencies_stop_times AS (
         drop_off_type,
         shape_dist_traveled,
         timepoint,
-        warning_duplicate_primary_key AS warning_duplicate_stop_times_primary_key,
+        warning_duplicate_gtfs_key AS warning_duplicate_stop_times_primary_key,
         warning_missing_foreign_key_stop_id,
         base64_url,
         _feed_valid_from,

@@ -11,10 +11,35 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#agencytxt
     columns:
-      - name: key
+      - &schedule_dim_pk
+        name: key
         description: |
-          Synthetic primary key constructed from `feed_key` and `agency_id`.
-        meta: &pk_meta
+          Synthetic primary key constructed from `feed_key` and `_line_number`.
+        tests:
+          - not_null
+          - unique
+        meta:
+          publish.ignore: true
+      - &schedule_dim_gtfs_key
+        name: _gtfs_key
+        description:
+          Synthetic primary natural key constructed from the model's GTFS specification uniqueness.
+        tests:
+          - not_null
+          - unique
+        meta:
+          publish.ignore: true
+      - &schedule_dim_dt
+        name: _dt
+        tests:
+          - not_null
+        meta:
+          publish.ignore: true
+      - &schedule_dim_line_number
+        name: _line_number
+        tests:
+          - not_null
+        meta:
           publish.ignore: true
       - &feed_key
         name: feed_key
@@ -61,10 +86,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#areastxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `area_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: area_id
@@ -84,10 +106,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#attributionstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `attribution_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: attribution_id
@@ -113,8 +135,8 @@ models:
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
       - *feed_timezone
-      - &warning_duplicate_primary_key
-        name: warning_duplicate_primary_key
+      - &warning_duplicate_gtfs_key
+        name: warning_duplicate_gtfs_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., the attribute(s) that is meant to
           uniquely identify a row are duplicated within an individual feed instance and `key` will
@@ -131,10 +153,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#calendartxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `service_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: service_id
@@ -169,10 +191,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#calendar_datestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `service_id`, and `date`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: service_id
@@ -193,10 +215,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#fare_attributestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `fare_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: fare_id
@@ -227,10 +249,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_leg_rulestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `network_id`, `from_area_id`, `to_area_id`, and `fare_product_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: leg_group_id
@@ -256,10 +275,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_mediatxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `fare_media_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: fare_media_id
@@ -281,10 +297,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_productstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `fare_product_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: fare_product_id
@@ -310,10 +323,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#fare_rulestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: fare_id
@@ -327,7 +340,7 @@ models:
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
       - *feed_timezone
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
 
   - name: dim_fare_transfer_rules_latest
     description: |
@@ -339,10 +352,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_transfer_rulestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, 'from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', and 'duration_limit'.
-        meta: *pk_meta
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: from_leg_group_id
@@ -372,10 +382,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#feed_infotxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: feed_publisher_name
@@ -397,7 +407,7 @@ models:
       - name: feed_contact_url
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
       - *feed_timezone
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
 
   - name: dim_frequencies_latest
     description: |
@@ -409,10 +419,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#frequenciestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `trip_id`, and `start_time`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: trip_id
@@ -451,10 +461,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#levelstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `level_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: level_id
@@ -475,10 +485,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#pathwaystxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `pathway_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: pathway_id
@@ -523,10 +533,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#routestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `route_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: route_id
@@ -567,10 +577,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#shapestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `shape_id`, and `shape_pt_sequence`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: shape_id
@@ -605,10 +615,7 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#stop_areastxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `area_id` and `stop_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
       - *feed_key
       - *base64_url
       - name: area_id
@@ -629,12 +636,12 @@ models:
       ckan.authority: https://gtfs.org/reference/static#stop_timestxt
       publish.gis_coordinate_system_epsg: WGS84
     columns:
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `trip_id`, and `stop_sequence`.
-        meta: *pk_meta
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
       - name: arrival_time
@@ -659,7 +666,7 @@ models:
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
       - name: warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column are missing the required `stop_id` value.
@@ -762,10 +769,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#stopstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `stop_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: stop_id
@@ -810,13 +817,13 @@ models:
         description: '{{ doc("gtfs_stops__platform_code") }}'
       - *feed_timezone
         # TODO: would be good to actually publish this, with appropriate documentation, next time we are ready to make a round of updates
-      - name: warning_missing_primary_key
+      - name: warning_missing_schedule_dim_pk
         meta:
           publish.ignore: true
       - name: stop_timezone_coalesced
         meta:
           publish.ignore: true
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
 
   - name: dim_transfers_latest
     description: |
@@ -828,10 +835,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#transferstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: from_stop_id
@@ -853,7 +860,7 @@ models:
       - name: to_trip_id
         description: '{{ doc("gtfs_transfers__to_trip_id") }}'
       - *feed_timezone
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
 
   - name: dim_translations_latest
     description: |
@@ -865,10 +872,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#translationstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `table_name`, `field_name`, `language`, `record_id`, `record_sub_id`, and `field_value`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: table_name
@@ -897,10 +904,10 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#tripstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `trip_id`.
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: route_id
@@ -923,7 +930,7 @@ models:
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
       - *feed_timezone
 
 exposures:

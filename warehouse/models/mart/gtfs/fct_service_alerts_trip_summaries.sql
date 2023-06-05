@@ -13,7 +13,7 @@
 
 WITH service_alerts AS (
     SELECT * FROM {{ ref('fct_service_alerts_messages_unnested') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 fct_service_alerts_trip_summaries AS (
