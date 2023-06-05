@@ -38,7 +38,11 @@ stg_transit_database__organizations AS (
         assessment_status = "Yes" AS assessment_status,
         manual_check__contact_on_website,
         dt,
-        hq_county_geography
+        hq_county_geography,
+        is_public_entity = "Yes" AS is_public_entity,
+        raw_ntd_id,
+        public_currently_operating = "Yes" AS public_currently_operating,
+        public_currently_operating_fixed_route = "Yes" AS public_currently_operating_fixed_route,
     FROM once_daily_organizations
     LEFT JOIN UNNEST(once_daily_organizations.ntd_id) as unnested_ntd_records
 )
