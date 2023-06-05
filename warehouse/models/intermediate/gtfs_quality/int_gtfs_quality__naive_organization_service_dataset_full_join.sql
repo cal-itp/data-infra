@@ -104,7 +104,6 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
         orgs.is_public_entity AS organization_is_public_entity,
         orgs.public_currently_operating AS organization_public_currently_operating,
         orgs.public_currently_operating_fixed_route AS organization_public_currently_operating_fixed_route,
-        orgs.raw_ntd_id AS organization_raw_ntd_id,
         orgs.reporting_category AS reporting_category,
         orgs.itp_id AS organization_itp_id,
         orgs.source_record_id AS organization_source_record_id,

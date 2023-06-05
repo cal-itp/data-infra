@@ -5,7 +5,7 @@ WITH dim AS (
 ),
 
 ntd_agency_to_organization AS (
-    SELECT * FROM {{ ref('ntd_agency_to_organization') }}
+    SELECT * FROM {{ ref('_deprecated__ntd_agency_to_organization') }}
 ),
 
 dim_organizations AS (
@@ -14,8 +14,6 @@ dim_organizations AS (
         -- key
         dim.key,
         dim.source_record_id,
-
-        ntd_to_org.ntd_id,
 
         -- attributes
         name,
@@ -33,7 +31,11 @@ dim_organizations AS (
         manual_check__contact_on_website,
         alias,
         is_public_entity,
-        raw_ntd_id,
+        -- use same cutover date as public currently operating logic for assessment status
+        CASE
+            WHEN dim._valid_from >= '2023-05-23' THEN raw_ntd_id
+            ELSE ntd_to_org.ntd_id
+        END AS ntd_id,
         public_currently_operating,
         public_currently_operating_fixed_route,
 

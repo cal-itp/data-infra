@@ -76,8 +76,12 @@ models:
       - *key
       - name: ntd_id
         description: |
-          *To be deprecated in favor of raw_ntd_id*
-          The organization's ID in the National Transit Database
+          The organization's ID in the National Transit Database / FTA agency ID number.
+          Data entry processes / sources of truth for this field have changed over time.
+          As of May 2023, the source is the `raw_ntd_id` field in the Airtable `organizations` table;
+          for records before May 2023, sources were some combination of the `NTD agency info` table in
+          Airtable and the `ntd_agency_to_organizations` CSV seed file in this dbt project (now
+          renamed to `_deprecated__ntd_agency_to_organizations`).
       - name: name
         description: Organization name
       - name: organization_type
@@ -160,9 +164,6 @@ models:
             Federal Government,
             Joint Powers Agency, or
             Council of Governments
-      - name: raw_ntd_id
-        description: |
-          FTA agency ID number.
   - name: dim_services
     description: '{{ doc("services_table") }}'
     tests: *mutually_exclusive_ranges
