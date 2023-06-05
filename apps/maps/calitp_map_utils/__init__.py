@@ -106,6 +106,8 @@ class Layer(BaseModel):
     url: HttpUrl
     typ: Optional[LayerType] = Field(alias="type")
     properties: Optional[Dict[str, Any]]
+    highlight_saturation_multiplier: Optional[float]
+    tooltip_speed_key: Optional[str]
 
 
 class BasemapConfig(BaseModel):

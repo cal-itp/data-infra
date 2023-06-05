@@ -113,6 +113,8 @@ export interface Layer {
   properties?: {
     [k: string]: unknown;
   };
+  highlight_saturation_multiplier?: number;
+  tooltip_speed_key?: string;
 }
 export interface State {
   name?: string;

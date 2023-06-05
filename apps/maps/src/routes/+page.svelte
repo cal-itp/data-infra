@@ -13,6 +13,7 @@
     import * as turf from '@turf/turf';
     import { Base64 } from 'js-base64';
     import { titleCase } from "title-case";
+    import * as convert from 'color-convert';
 
     const STATE_QUERY_PARAM = "state";
     const START_LAT_LON = [34.05, -118.25];
@@ -83,26 +84,27 @@
 
     const alphaBase = 255;
 
-    function getColor(feature, layer, alphaMultiplier = 1) {
-      const alpha = Math.floor(alphaBase * alphaMultiplier);
-
+    function getColor(feature, layer, saturationMultiplier = 1) {
       if (feature.properties.color) {
         if (feature.properties.color.length === 4) {
           return feature.properties.color;
         }
 
         if (feature.properties.color.length === 3) {
-          return [...feature.properties.color, alpha];
+          const hsv = convert.rgb.hsv(feature.properties.color);
+          hsv[1] = hsv[1] * saturationMultiplier;
+          const rgb = convert.hsv.rgb(hsv);
+          return [...rgb, 255];
         }
       }
 
       if (feature.properties.avg_mph) {
         // LEGACY: support speedmaps testing
         const rgba = speedFeatureColor(feature, rgbaColorMap);
-        return [...rgba.slice(0, -1), alpha];
+        return [...rgba.slice(0, -1), 255];
       }
 
-      return [100, 100, 100, alpha];
+      return [100, 100, 100, 127];
     }
 
     const DEFAULT_TOOLTIP_STYLE = {
@@ -134,7 +136,13 @@
 
       // TODO: this should probably be a map of functions?
       if (layerType === "speedmap") {
-        const { stop_name, stop_id, route_short_name, route_id, avg_mph } = feature.properties;
+        // TODO: lookup from layer props
+        // console.log(layer.props);
+        // const { tooltip_speed_key } = layer.props;
+        // console.log(tooltip_speed_key);
+        const { stop_name, stop_id, route_short_name, route_id, avg_mph, trips_per_hour, shape_id, stop_sequence } = feature.properties;
+
+        const speed = feature.properties._20p_mph || avg_mph;
 
         return {
           html: `
@@ -142,7 +150,7 @@
               ${stop_name ?? '(Stop name unavailable)'}
               <span class="tag ml-2">
                 <i class="fas fa-circle mr-2" style="color: rgb(${getColor(feature)})"></i>
-                ${avg_mph}&nbsp;
+                ${speed}&nbsp;
                 <span class="has-text-weight-normal">mph</span>
               </span>
             </h2>
@@ -159,6 +167,18 @@
               <li class="tooltip-meta-item">
                 <div class="tooltip-meta-key">Route ID</div>
                 <div class="tooltip-meta-value">${route_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Trips/Hour</div>
+                <div class="tooltip-meta-value">${trips_per_hour ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">GTFS Shape ID</div>
+                <div class="tooltip-meta-value">${shape_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">GTFS Stop Sequence</div>
+                <div class="tooltip-meta-value">${stop_sequence ?? '\u2014'}</div>
               </li>
             </ul>
           `,
@@ -231,7 +251,7 @@
                     type: layer.type,
                     ...(layer.properties || {})
                   };
-
+                  console.log(layer.highlight_saturation_multiplier);
                   return new GeoJsonLayer({
                     id: layer.name,
                     data: fetchGeoJSON(layer.url),
@@ -239,8 +259,8 @@
                     autoHighlight: true,
                     getPointRadius: 10,
                     ...layerProperties,
-                    getFillColor: (feature) => getColor(feature, layer, 0.5),
-                    highlightColor: ({ object, layer }) => getColor(object, layer),
+                    getFillColor: (feature) => getColor(feature, layer),
+                    highlightColor: ({ object, layer }) => getColor(object, layer, layer.highlight_saturation_multiplier || 0.7),
                     onDataLoad: (data) => {
                       console.log("Finished loading", layer);
 
@@ -335,7 +355,7 @@
     }
 
     #map {
-        height: 800px;
+      height: 550px;
     }
 
     /* Use :global to prevent namespacing of CSS for elements that are created dynamically */

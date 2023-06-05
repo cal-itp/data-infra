@@ -42,6 +42,7 @@
     "@turf/turf": "^6.5.0",
     "@types/colormap": "^2.3.1",
     "change-case": "^4.1.2",
+    "color-convert": "^2.0.1",
     "deck.gl": "^8.9.14",
     "deck.gl-leaflet": "^1.2.1",
     "fflate": "^0.7.4",
