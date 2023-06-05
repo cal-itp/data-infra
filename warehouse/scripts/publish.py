@@ -119,7 +119,7 @@ class DictionaryRow(BaseModel):
     field_type: str
     field_length: int
     field_precision: Optional[int]
-    units: None
+    units: Optional[str]
     domain_type: Literal["Unrepresented"]
     allowable_min_value: None
     allowable_max_value: None

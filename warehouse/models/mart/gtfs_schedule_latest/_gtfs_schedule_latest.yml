@@ -702,36 +702,20 @@ models:
           publish.ignore: true
       - name: start_pickup_drop_off_window
         description: '{{ doc("gtfs_stop_times__start_pickup_drop_off_window") }}'
-        meta:
-          publish.ignore: true
       - name: end_pickup_drop_off_window
         description: '{{ doc("gtfs_stop_times__end_pickup_drop_off_window") }}'
-        meta:
-          publish.ignore: true
       - name: mean_duration_factor
         description: '{{ doc("gtfs_stop_times__mean_duration_factor") }}'
-        meta:
-          publish.ignore: true
       - name: mean_duration_offset
         description: '{{ doc("gtfs_stop_times__mean_duration_offset") }}'
-        meta:
-          publish.ignore: true
       - name: safe_duration_factor
         description: '{{ doc("gtfs_stop_times__safe_duration_factor") }}'
-        meta:
-          publish.ignore: true
       - name: safe_duration_offset
         description: '{{ doc("gtfs_stop_times__safe_duration_offset") }}'
-        meta:
-          publish.ignore: true
       - name: pickup_booking_rule_id
         description: '{{ doc("gtfs_stop_times__pickup_booking_rule_id") }}'
-        meta:
-          publish.ignore: true
       - name: drop_off_booking_rule_id
         description: '{{ doc("gtfs_stop_times__drop_off_booking_rule_id") }}'
-        meta:
-          publish.ignore: true
       - name: start_pickup_drop_off_window_sec
         description: |
           This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
@@ -958,11 +942,16 @@ exposures:
 
     depends_on:
       - ref("dim_agency_latest")
+      - ref("dim_areas_latest")
       - ref("dim_attributions_latest")
       - ref("dim_calendar_latest")
       - ref("dim_calendar_dates_latest")
       - ref("dim_fare_attributes_latest")
+      - ref("dim_fare_leg_rules_latest")
+      - ref("dim_fare_media_latest")
+      - ref("dim_fare_products_latest")
       - ref("dim_fare_rules_latest")
+      - ref("dim_fare_transfer_rules_latest")
       - ref("dim_feed_info_latest")
       - ref("dim_frequencies_latest")
       - ref("dim_gtfs_datasets_latest")
@@ -970,6 +959,7 @@ exposures:
       - ref("dim_pathways_latest")
       - ref("dim_routes_latest")
       - ref("dim_shapes_latest")
+      - ref("dim_stop_areas_latest")
       - ref("dim_stop_times_latest")
       - ref("dim_stops_latest")
       - ref("dim_transfers_latest")
@@ -996,6 +986,12 @@ exposures:
                 Each row is a cleaned row from an agency.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#agencytxt.
+            dim_areas_latest:
+              id: e6b684c0-5af1-4012-b7ef-0166808831a6
+              description: |
+                Each row is a cleaned row from an areas.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#areastxt.
             dim_attributions_latest:
               id: 038b7354-06e8-4082-a4a1-40debd3110d5
               description: |
@@ -1020,12 +1016,36 @@ exposures:
                 Each row is a cleaned row from a fare_attributes.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_attributestxt.
+            dim_fare_leg_rules_latest:
+              id: ea5040fb-de2d-4011-a21e-fcf4a96fa80a
+              description: |
+                Each row is a cleaned row from an fare_leg_rules.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#fare_leg_rulestxt.
+            dim_fare_media_latest:
+              id: 7342e023-5855-4923-a3a9-0450eaf8fd17
+              description: |
+                Each row is a cleaned row from an fare_media.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#fare_mediatxt.
+            dim_fare_products_latest:
+              id: 060d905b-eda4-476f-98c9-ac5e712e13f6
+              description: |
+                Each row is a cleaned row from an fare_products.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#fare_productstxt.
             dim_fare_rules_latest:
               id: 4fb1fa39-0ef9-457d-97b1-bb7e9e848312
               description: |
                 Each row is a cleaned row from a fare_rules.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_rulestxt.
+            dim_fare_transfer_rules_latest:
+              id: a1002670-235c-41b2-be63-35f7a643ed92
+              description: |
+                Each row is a cleaned row from an fare_transfer_rules.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#fare_transfer_rulestxt.
             dim_feed_info_latest:
               id: 50d12559-635e-4222-ac25-3706c066902d
               description: |
@@ -1067,6 +1087,12 @@ exposures:
                 Each row is a cleaned row from a shapes.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#shapestxt.
+            dim_stop_areas_latest:
+              id: ebd6109c-3ebb-4d3f-96ba-8d4c20961363
+              description: |
+                Each row is a cleaned row from an stop_areas.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#stop_areastxt.
             dim_stop_times_latest:
               id: d31eef2f-e223-4ca4-a86b-170acc6b2590
               description: |
