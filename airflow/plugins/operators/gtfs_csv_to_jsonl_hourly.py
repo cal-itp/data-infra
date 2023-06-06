@@ -3,6 +3,7 @@ import gzip
 import json
 import logging
 import os
+from io import StringIO
 from typing import ClassVar, List, Optional
 
 import pendulum
@@ -79,6 +80,28 @@ class ScheduleParseResult(PartitionedGCSArtifact):
         )
 
 
+def parse_csv_str(contents: str):
+    lines = []
+    reader = csv.DictReader(StringIO(contents), restkey="calitp_unknown_fields")
+    field_names = reader.fieldnames
+
+    if len(field_names) == 1:
+        # we probably have a tab-delimited file; check that, but proceed with default
+        tab_reader = csv.DictReader(
+            StringIO(contents), dialect="excel-tab", restkey="calitp_unknown_fields"
+        )
+
+        if len(tab_reader.fieldnames) > 1:
+            reader = tab_reader
+            field_names = tab_reader.fieldnames
+
+    for line_number, row in enumerate(reader, start=1):
+        row["_line_number"] = line_number
+        lines.append(row)
+
+    return lines, field_names
+
+
 def parse_individual_file(
     fs,
     input_file: GTFSScheduleFeedFileHourly,
@@ -86,14 +109,11 @@ def parse_individual_file(
 ) -> GTFSScheduleParseOutcome:
     logging.info(f"Processing {input_file.path}")
     field_names = None
-    lines = []
     try:
         with fs.open(input_file.path, newline="", mode="r", encoding="utf-8-sig") as f:
-            reader = csv.DictReader(f, restkey="calitp_unknown_fields")
-            field_names = reader.fieldnames
-            for line_number, row in enumerate(reader, start=1):
-                row["_line_number"] = line_number
-                lines.append(row)
+            contents = f.read()
+
+        lines, field_names = parse_csv_str(contents)
 
         jsonl_content = gzip.compress(
             "\n".join(json.dumps(line) for line in lines).encode()
@@ -191,10 +211,6 @@ class GtfsGcsToJsonlOperatorHourly(BaseOperator):
 
 
 if __name__ == "__main__":
-    lines = []
     with open("/Users/laurie/Downloads/bad_routes.txt", newline="") as f:
-        for row in csv.DictReader(f):
-            lines.append(row)
-
-    content = "\n".join(json.dumps(o) for o in lines).encode()
+        content = "\n".join(json.dumps(o) for o in csv.DictReader(f)).encode()
     print(content)
