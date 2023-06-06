@@ -193,7 +193,7 @@
 
         return {
           html: `
-            <div class="has-text-weight-bold has-text-teal-bold">${RouteType} Route ${Route}</div>
+            <div class="has-text-weight-bold has-text-teal-bold">${RouteType} ${Route}</div>
             <div class="has-text-slate-bold">${County} County, District ${District}</div>`,
           style: style,
         }
