@@ -191,9 +191,11 @@
       if (layerType === "state_highway_network") {
         const { Route, County, District, RouteType } = feature.properties;
 
+        const routeLabel = (RouteType === "Interstate") ? `${RouteType} ${Route}` : `${RouteType} Route ${Route}`;
+
         return {
           html: `
-            <div class="has-text-weight-bold has-text-teal-bold">${RouteType} ${Route}</div>
+            <div class="has-text-weight-bold has-text-teal-bold">${routeLabel}</div>
             <div class="has-text-slate-bold">${County} County, District ${District}</div>`,
           style: style,
         }
