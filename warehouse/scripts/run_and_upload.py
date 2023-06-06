@@ -303,8 +303,7 @@ def run(
             mb_host = os.getenv("MB_HOST")
             dbt_database = os.getenv("DBT_DATABASE")
             # dbt_path = os.getenv("DBT_PROJECT_DIR")
-            metabase_use_http = True
-            metabase_export_exception = None
+            # metabase_use_http = True
             metabase_database = (
                 "Data Marts (formerly Warehouse Views)"
                 if target.startswith("prod")
@@ -315,6 +314,7 @@ def run(
             mb = Metabase_API(mb_host, mb_user, mb_pass)
 
             # get database ids (does this need prod / staging handling?)
+            print("getting database ids", flush=True)
             databases = mb.get("/api/database/")
 
             db_ids = []
@@ -323,14 +323,13 @@ def run(
 
             # sync database contents
             for id in db_ids:
-                # print(f'Syncing database: {db["name"]}')
+                print(f'Syncing database: {db["name"]}', flush=True)
                 response_dict = mb.post(f"/api/database/{id}/sync")
                 assert response_dict, str(response_dict)
 
             # wait to call dbt-metabase
+            print("Hey, I'm about to go to sleep!", flush=True)
             time.sleep(180)
-
-            raise metabase_export_exception
 
             # Use a subprocess here so we can just parse the stdout/stderr
             # p = subprocess.run(
@@ -374,17 +373,19 @@ def run(
             )
 
             # Load models
+            print("reading dbt models", flush=True)
             dbt_models, aliases = dbt.read_models(
                 # include_tags=dbt_include_tags,
                 docs_url="https://dbt-docs.calitp.org",
             )
 
             # Instantiate Metabase interface
+            print("instantiating metabase interface", flush=True)
             metabase = MetabaseInterface(
-                host=mb_host,
+                host=mb_host.lstrip("https://"),
                 user=mb_user,
                 password=mb_pass,
-                use_http=metabase_use_http,
+                use_http=True,
                 # verify=metabase_verify,
                 database=metabase_database,
                 # sync=metabase_sync,
@@ -392,6 +393,8 @@ def run(
             )
 
             # Propagate models to Metabase
+            print("propagating models to metabase", flush=True)
+            metabase_export_exception: Optional[Exception] = None
             try:
                 metabase.client.export_models(
                     database=metabase.database,
@@ -399,45 +402,55 @@ def run(
                     aliases=aliases,
                 )
             except Exception as e:
-                raise RuntimeError from e
+                metabase_export_exception = e
+                print(
+                    "Metabase export models failed with exception "
+                    + str(metabase_export_exception),
+                    flush=True,
+                )
+                # raise RuntimeError from e
 
-            with open("./target/manifest.json") as f:
-                manifest = Manifest(**json.load(f))
-            matches = {}
-            for line in p.stdout.decode().splitlines():
-                print(line)
-                for pattern in (
-                    r"WARNING\s+Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)",
-                    r"WARNING\s+Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)",
-                ):
-                    match = re.search(pattern, line)
-                    if match and match.group("model") not in matches:
-                        matches[match.group("model")] = (match, line)
-            for model, (first_match, line) in matches.items():
-                # Just use a single exception type for now, regardless of whether the model is missing entirely
-                # or just a column
-                exc = DbtMetabaseSyncFailure(first_match.group())
-                with sentry_sdk.push_scope() as scope:
-                    scope.fingerprint = [type(exc), model]
-                    scope.set_context(
-                        "log",
-                        {
-                            "match": str(first_match),
-                            "line": line,
-                        },
-                    )
-                    node = next(
-                        node
-                        for node in manifest.nodes.values()
-                        if node.name == model.lower()
-                    )
-                    scope.set_context(
-                        "dbt",
-                        {
-                            "path": str(node.original_file_path),
-                        },
-                    )
-                    sentry_sdk.capture_exception(exc, scope=scope)
+        # with redirect_stdout(io.StringIO()) as f:
+        #     help(pow)
+        # s = f.getvalue()
+
+        #     with open("./target/manifest.json") as f:
+        #         manifest = Manifest(**json.load(f))
+        #     matches = {}
+        #     for line in p.stdout.decode().splitlines():
+        #         print(line)
+        #         for pattern in (
+        #             r"WARNING\s+Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)",
+        #             r"WARNING\s+Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)",
+        #         ):
+        #             match = re.search(pattern, line)
+        #             if match and match.group("model") not in matches:
+        #                 matches[match.group("model")] = (match, line)
+        #     for model, (first_match, line) in matches.items():
+        #         # Just use a single exception type for now, regardless of whether the model is missing entirely
+        #         # or just a column
+        #         exc = DbtMetabaseSyncFailure(first_match.group())
+        #         with sentry_sdk.push_scope() as scope:
+        #             scope.fingerprint = [type(exc), model]
+        #             scope.set_context(
+        #                 "log",
+        #                 {
+        #                     "match": str(first_match),
+        #                     "line": line,
+        #                 },
+        #             )
+        #             node = next(
+        #                 node
+        #                 for node in manifest.nodes.values()
+        #                 if node.name == model.lower()
+        #             )
+        #             scope.set_context(
+        #                 "dbt",
+        #                 {
+        #                     "path": str(node.original_file_path),
+        #                 },
+        #             )
+        #             sentry_sdk.capture_exception(exc, scope=scope)
         else:
             typer.secho(
                 f"WARNING: running with non-prod target {target} so skipping metabase sync",
