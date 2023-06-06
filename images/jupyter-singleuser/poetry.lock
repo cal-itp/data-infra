@@ -725,14 +725,14 @@ sqlalchemy-bigquery = ">=1.6.1,<2.0.0"
 
 [[package]]
 name = "calitp-map-utils"
-version = "2023.5.24"
+version = "2023.6.6"
 description = ""
 category = "main"
 optional = false
 python-versions = ">=3.9,<3.10"
 files = [
-    {file = "calitp_map_utils-2023.5.24-py3-none-any.whl", hash = "sha256:fb655e64a0ecf34ba3509b7e5548851bf3204c66f018c5ea012abb14c8cf876f"},
-    {file = "calitp_map_utils-2023.5.24.tar.gz", hash = "sha256:b1cba5d379a0bfd2a192d361e328501e89198bf2e35759e6cd2e51f0691dae2e"},
+    {file = "calitp_map_utils-2023.6.6-py3-none-any.whl", hash = "sha256:c62e2d6b735d4bac2a6f450be3b25dc25e598cef3f47e9249efda17cc3d950b3"},
+    {file = "calitp_map_utils-2023.6.6.tar.gz", hash = "sha256:6f2bb4329c19bf70f997c90b19637b3c3748ef5be379044a96398604866201ec"},
 ]
 
 [package.dependencies]
@@ -7777,4 +7777,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "4d7d86229a2e3c5908a0b23fb554fab42042752885b23a4f67899e8e2b15fee3"
+content-hash = "e6e6cca92cfef0df994e82458c772689a5017ca4dda9ac8dc3f50ca08a48d5c7"
