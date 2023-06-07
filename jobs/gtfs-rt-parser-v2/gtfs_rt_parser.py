@@ -226,6 +226,13 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
         # schedules = set(extract.schedule_extract for extract in v)
         return v
 
+    # this is kinda weird living on the hour, but the hour is basically our processing context
+    def local_paths_to_extract(self, root) -> Dict[str, GTFSRTFeedExtract]:
+        return {
+            os.path.join(root, extract.timestamped_filename): extract
+            for extract in self.extracts
+        }
+
 
 class RTFileProcessingOutcome(ProcessingOutcome):
     # an extract is technically optional if we have a blob missing metadata
@@ -399,16 +406,14 @@ def validate_and_upload(
 
     records_to_upload = []
     outcomes = []
-    for extract in hour.extracts:
-        results_path = os.path.join(
-            dst_path_rt, extract.timestamped_filename + ".results.json"
-        )
+    for local_path, extract in hour.local_paths_to_extract(dst_path_rt).items():
+        results_path = local_path + ".results.json"
         try:
             with open(results_path) as f:
                 records = json.load(f)
         except FileNotFoundError as e:
             # TODO: does this mean no errors?
-            msg = f"WARNING: no validation output file found in {results_path}"
+            msg = f"WARNING: no validation output file found in {results_path} for {extract.path}"
             if verbose:
                 log(
                     msg,
@@ -599,11 +604,11 @@ def parse_and_validate(
     dst_path_rt = f"{tmp_dir}/rt_{hour.name_hash}/"
     get_with_retry(
         fs,
-        rpath=[file.path for file in hour.extracts],
-        lpath=[
-            os.path.join(dst_path_rt, file.timestamped_filename)
-            for file in hour.extracts
+        rpath=[
+            extract.path
+            for extract in hour.local_paths_to_extract(dst_path_rt).values()
         ],
+        lpath=list(hour.local_paths_to_extract(dst_path_rt).keys()),
     )
 
     if hour.step == RTProcessingStep.validate:
