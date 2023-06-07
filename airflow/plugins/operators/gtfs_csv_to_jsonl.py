@@ -96,6 +96,8 @@ def parse_individual_file(
             "\n".join(json.dumps(line) for line in lines).encode()
         )
 
+        del lines
+
         jsonl_file = GTFSScheduleFeedJSONL(
             ts=input_file.ts,
             extract_config=input_file.extract_config,
@@ -104,6 +106,8 @@ def parse_individual_file(
         )
 
         jsonl_file.save_content(content=jsonl_content, fs=fs)
+
+        del jsonl_content
 
     except Exception as e:
         logging.warn(f"Can't process {input_file.path}: {e}")
