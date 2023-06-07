@@ -175,10 +175,20 @@ def get_schedule_extracts_for_day(
 class RTHourlyAggregation(PartitionedGCSArtifact):
     partition_names: ClassVar[List[str]] = ["dt", "hour", "base64_url"]
     step: RTProcessingStep
-    feed_type: GTFSFeedType
-    hour: pendulum.DateTime
-    base64_url: str
+    first_extract: GTFSRTFeedExtract
     extracts: List[GTFSRTFeedExtract] = Field(..., exclude=True)
+
+    @property
+    def feed_type(self) -> GTFSFeedType:
+        return self.first_extract.feed_type
+
+    @property
+    def hour(self) -> pendulum.DateTime:
+        return self.first_extract.hour
+
+    @property
+    def base64_url(self) -> str:
+        return self.first_extract.base64_url
 
     @property
     def bucket(self) -> str:
@@ -187,15 +197,6 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
         if self.step == RTProcessingStep.validate:
             return RT_VALIDATION_BUCKET
         raise RuntimeError("we should not be here")
-
-    @validator("extracts", allow_reuse=True)
-    def extracts_have_same_hour_and_url_and_schedule(cls, v: List[GTFSRTFeedExtract]):
-        hours = set(extract.hour for extract in v)
-        urls = set(extract.base64_url for extract in v)
-        # schedules = set(extract.schedule_extract for extract in v)
-        # assert len(hours) == len(urls) == len(schedules) == 1
-        assert len(hours) == len(urls) == 1
-        return v
 
     @property
     def table(self):
@@ -218,6 +219,13 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
         """Used for on-disk handling."""
         return f"{self.name_hash}{JSONL_GZIP_EXTENSION}"
 
+    @validator("extracts", allow_reuse=True)
+    def extracts_have_the_same_signature(cls, v: List[GTFSRTFeedExtract]):
+        for attr in ("feed_type", "hour", "base64_url"):
+            assert len(set(getattr(extract, attr) for extract in v)) == 1
+        # schedules = set(extract.schedule_extract for extract in v)
+        return v
+
 
 class RTFileProcessingOutcome(ProcessingOutcome):
     # an extract is technically optional if we have a blob missing metadata
@@ -226,6 +234,7 @@ class RTFileProcessingOutcome(ProcessingOutcome):
     header: Optional[Dict[Any, Any]]
     aggregation: Optional[RTHourlyAggregation]
     blob_path: Optional[str]
+    process_stderr: Optional[str]
 
     @validator("aggregation", allow_reuse=True, always=True)
     def aggregation_exists_if_success(cls, v, values):
@@ -244,6 +253,12 @@ class RTFileProcessingOutcome(ProcessingOutcome):
     @validator("header", allow_reuse=True)
     def header_must_exist_for_successful_parses(cls, v, values):
         if values["success"] and values["step"] == RTProcessingStep.parse:
+            assert v
+        return v
+
+    @validator("process_stderr", allow_reuse=True)
+    def stderr_must_exist_if_subprocess_error(cls, v, values):
+        if isinstance(values.get("exception"), subprocess.CalledProcessError):
             assert v
         return v
 
@@ -642,8 +657,14 @@ def parse_and_validate(
                 pbar=pbar,
             )
         except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
+            stderr = None
+
             with sentry_sdk.push_scope() as scope:
+                scope.set_tag("config_feed_type", hour.first_extract.config.feed_type)
+                scope.set_tag("config_name", hour.first_extract.config.name)
+                scope.set_tag("config_url", hour.first_extract.config.url)
                 scope.set_context("RT Hourly Aggregation", json.loads(hour.json()))
+
                 fingerprint: List[Any] = [
                     type(e),
                     # convert back to url manually, I don't want to mess around with the hourly class
@@ -651,9 +672,7 @@ def parse_and_validate(
                 ]
                 if isinstance(e, subprocess.CalledProcessError):
                     fingerprint.append(e.returncode)
-                    scope.set_context(
-                        "First RT Extract in Hour", json.loads(hour.extracts[0].json())
-                    )
+                    stderr = e.stderr.decode("utf-8")
                     scope.set_context(
                         "Schedule Extract", json.loads(schedule_extract.json())
                     )
@@ -661,6 +680,7 @@ def parse_and_validate(
                     scope.set_context(
                         "Process", {"stderr": e.stderr.decode("utf-8")[-2000:]}
                     )
+
                 scope.fingerprint = fingerprint
                 sentry_sdk.capture_exception(e, scope=scope)
             if verbose:
@@ -682,6 +702,7 @@ def parse_and_validate(
                     success=False,
                     extract=extract,
                     exception=e,
+                    process_stderr=stderr,
                 )
                 for extract in hour.extracts
             ]
@@ -755,9 +776,7 @@ def main(
         RTHourlyAggregation(
             step=step,
             filename=f"{feed_type}{JSONL_GZIP_EXTENSION}",
-            feed_type=feed_type,
-            hour=hour,
-            base64_url=base64url,
+            first_extract=files[0],
             extracts=files,
         )
         for (hour, base64url), files in rt_aggs.items()
