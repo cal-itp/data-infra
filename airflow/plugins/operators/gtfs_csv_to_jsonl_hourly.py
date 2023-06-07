@@ -3,6 +3,7 @@ import gzip
 import json
 import logging
 import os
+import traceback
 from io import StringIO
 from typing import ClassVar, List, Optional
 
@@ -28,6 +29,8 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     ts: pendulum.DateTime
     extract_config: GTFSDownloadConfig
     gtfs_filename: str
+    dialect: Optional[str]
+    num_lines: Optional[int]
 
     # if you try to set table directly, you get an error because it "shadows a BaseModel attribute"
     # so set as a property instead
@@ -99,7 +102,7 @@ def parse_csv_str(contents: str):
         row["_line_number"] = line_number
         lines.append(row)
 
-    return lines, field_names
+    return lines, field_names, reader.dialect
 
 
 def parse_individual_file(
@@ -113,7 +116,9 @@ def parse_individual_file(
         with fs.open(input_file.path, newline="", mode="r", encoding="utf-8-sig") as f:
             contents = f.read()
 
-        lines, field_names = parse_csv_str(contents)
+        lines, field_names, dialect = parse_csv_str(contents)
+
+        num_lines = len(lines)
 
         jsonl_content = gzip.compress(
             "\n".join(json.dumps(line) for line in lines).encode()
@@ -126,6 +131,8 @@ def parse_individual_file(
             extract_config=input_file.extract_config,
             filename=gtfs_filename + ".jsonl.gz",
             gtfs_filename=gtfs_filename,
+            dialect=dialect,
+            num_lines=num_lines,
         )
 
         jsonl_file.save_content(content=jsonl_content, fs=fs)
@@ -133,13 +140,14 @@ def parse_individual_file(
         del jsonl_content
 
     except Exception as e:
-        logging.warn(f"Can't process {input_file.path}: {e}")
+        logging.warn(f"Failed to process {input_file.path}: {traceback.format_exc()}")
         return GTFSScheduleParseOutcome(
             success=False,
             exception=e,
             feed_file=input_file,
             fields=field_names,
         )
+
     logging.info(f"Parsed {input_file.path}")
     return GTFSScheduleParseOutcome(
         success=True,
