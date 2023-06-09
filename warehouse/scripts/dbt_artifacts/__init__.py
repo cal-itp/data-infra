@@ -68,7 +68,7 @@ DependsOn.resolved_nodes = property(  # type: ignore[attr-defined]
     if self.nodes
     else []
 )
-ColumnInfo.publish = property(lambda self: not self.meta.get("publish.ignore", False))  # type: ignore[attr-defined]
+ColumnInfo.publish = property(lambda self: self.meta.get("publish.include", False))  # type: ignore[attr-defined]
 
 
 # End monkey patches

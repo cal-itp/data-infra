@@ -18,8 +18,6 @@ models:
         tests:
           - not_null
           - unique
-        meta:
-          publish.ignore: true
       - &schedule_dim_gtfs_key
         name: _gtfs_key
         description:
@@ -27,54 +25,60 @@ models:
         tests:
           - not_null
           - unique
-        meta:
-          publish.ignore: true
       - &schedule_dim_dt
         name: _dt
         tests:
           - not_null
-        meta:
-          publish.ignore: true
       - &schedule_dim_line_number
         name: _line_number
         tests:
           - not_null
-        meta:
-          publish.ignore: true
       - &feed_key
         name: feed_key
         description: |
           Foreign key to the `schedule_feeds` table.
-        meta:
-          publish.ignore: true
       - &base64_url
         name: base64_url
         description: |
           Base 64 encoded URL from which this data was scraped.
+        meta:
+          publish.include: true
       - name: agency_id
         description: '{{ doc("gtfs_agency__agency_id") }}'
+        meta:
+          publish.include: true
       - name: agency_name
         description: '{{ doc("gtfs_agency__agency_name") }}'
+        meta:
+          publish.include: true
       - name: agency_url
         description: '{{ doc("gtfs_agency__agency_url") }}'
+        meta:
+          publish.include: true
       - name: agency_timezone
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
+        meta:
+          publish.include: true
       - name: agency_lang
         description: '{{ doc("gtfs_agency__agency_lang") }}'
+        meta:
+          publish.include: true
       - name: agency_phone
         description: '{{ doc("gtfs_agency__agency_phone") }}'
+        meta:
+          publish.include: true
       - name: agency_fare_url
         description: '{{ doc("gtfs_agency__agency_fare_url") }}'
+        meta:
+          publish.include: true
       - name: agency_email
         description: '{{ doc("gtfs_agency__agency_email") }}'
+        meta:
+          publish.include: true
       - &_feed_valid_from
         name: _feed_valid_from
-        meta:
-          publish.ignore: true
       - &feed_timezone
         name: feed_timezone
-        meta:
-          publish.ignore: true
 
   - name: dim_areas_latest
     description: |
@@ -91,8 +95,12 @@ models:
       - *base64_url
       - name: area_id
         description: '{{ doc("gtfs_areas__area_id") }}'
+        meta:
+          publish.include: true
       - name: area_name
         description: '{{ doc("gtfs_areas__area_name") }}'
+        meta:
+          publish.include: true
       - *_feed_valid_from
       - *feed_timezone
 
@@ -114,26 +122,48 @@ models:
       - *base64_url
       - name: attribution_id
         description: '{{ doc("gtfs_attributions__attribution_id") }}'
+        meta:
+          publish.include: true
       - name: agency_id
         description: '{{ doc("gtfs_attributions__agency_id") }}'
+        meta:
+          publish.include: true
       - name: route_id
         description: '{{ doc("gtfs_attributions__route_id") }}'
+        meta:
+          publish.include: true
       - name: trip_id
         description: '{{ doc("gtfs_attributions__trip_id") }}'
+        meta:
+          publish.include: true
       - name: organization_name
         description: '{{ doc("gtfs_attributions__organization_name") }}'
+        meta:
+          publish.include: true
       - name: is_producer
         description: '{{ doc("gtfs_attributions__is_producer") }}'
+        meta:
+          publish.include: true
       - name: is_operator
         description: '{{ doc("gtfs_attributions__is_operator") }}'
+        meta:
+          publish.include: true
       - name: is_authority
         description: '{{ doc("gtfs_attributions__is_authority") }}'
+        meta:
+          publish.include: true
       - name: attribution_url
         description: '{{ doc("gtfs_attributions__attribution_url") }}'
+        meta:
+          publish.include: true
       - name: attribution_email
         description: '{{ doc("gtfs_attributions__attribution_email") }}'
+        meta:
+          publish.include: true
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
       - &warning_duplicate_gtfs_key
         name: warning_duplicate_gtfs_key
@@ -141,8 +171,6 @@ models:
           Rows with `true` in this column have a duplicate primary key; i.e., the attribute(s) that is meant to
           uniquely identify a row are duplicated within an individual feed instance and `key` will
           also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
-        meta:
-          publish.ignore: true
   - name: dim_calendar_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
@@ -161,24 +189,44 @@ models:
       - *base64_url
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
+        meta:
+          publish.include: true
       - name: monday
         description: '{{ doc("gtfs_calendar__monday") }}'
+        meta:
+          publish.include: true
       - name: tuesday
         description: '{{ doc("gtfs_calendar__tuesday") }}'
+        meta:
+          publish.include: true
       - name: wednesday
         description: '{{ doc("gtfs_calendar__wednesday") }}'
+        meta:
+          publish.include: true
       - name: thursday
         description: '{{ doc("gtfs_calendar__thursday") }}'
+        meta:
+          publish.include: true
       - name: friday
         description: '{{ doc("gtfs_calendar__friday") }}'
+        meta:
+          publish.include: true
       - name: saturday
         description: '{{ doc("gtfs_calendar__saturday") }}'
+        meta:
+          publish.include: true
       - name: sunday
         description: '{{ doc("gtfs_calendar__sunday") }}'
+        meta:
+          publish.include: true
       - name: start_date
         description: '{{ doc("gtfs_calendar__start_date") }}'
+        meta:
+          publish.include: true
       - name: end_date
         description: '{{ doc("gtfs_calendar__end_date") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_calendar_dates_latest
@@ -199,10 +247,16 @@ models:
       - *base64_url
       - name: service_id
         description: '{{ doc("gtfs_calendar_dates__service_id") }}'
+        meta:
+          publish.include: true
       - name: date
         description: '{{ doc("gtfs_calendar_dates__date") }}'
+        meta:
+          publish.include: true
       - name: exception_type
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_fare_attributes_latest
@@ -223,20 +277,33 @@ models:
       - *base64_url
       - name: fare_id
         description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
+        meta:
+          publish.include: true
       - name: price
         description: '{{ doc("gtfs_fare_attributes__price") }}'
+        meta:
+          publish.include: true
       - name: currency_type
         description: '{{ doc("gtfs_fare_attributes__currency_type") }}'
+        meta:
+          publish.include: true
       - name: payment_method
         description: '{{ doc("gtfs_fare_attributes__payment_method") }}'
+        meta:
+          publish.include: true
       - name: transfers
         description: '{{ doc("gtfs_fare_attributes__transfers") }}'
+        meta:
+          publish.include: true
       - name: agency_id
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
+        meta:
+          publish.include: true
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
         meta:
           ckan.units: SECONDS
+          publish.include: true
       - *feed_timezone
 
   - name: dim_fare_leg_rules_latest
@@ -254,14 +321,24 @@ models:
       - *base64_url
       - name: leg_group_id
         description: '{{ doc("gtfs_fare_leg_rules__leg_group_id") }}'
+        meta:
+          publish.include: true
       - name: network_id
         description: '{{ doc("gtfs_fare_leg_rules__network_id") }}'
+        meta:
+          publish.include: true
       - name: from_area_id
         description: '{{ doc("gtfs_fare_leg_rules__from_area_id") }}'
+        meta:
+          publish.include: true
       - name: to_area_id
         description: '{{ doc("gtfs_fare_leg_rules__to_area_id") }}'
+        meta:
+          publish.include: true
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
+        meta:
+          publish.include: true
       - *_feed_valid_from
       - *feed_timezone
 
@@ -280,10 +357,16 @@ models:
       - *base64_url
       - name: fare_media_id
         description: '{{ doc("gtfs_fare_media__fare_media_id") }}'
+        meta:
+          publish.include: true
       - name: fare_media_name
         description: '{{ doc("gtfs_fare_media__fare_media_name") }}'
+        meta:
+          publish.include: true
       - name: fare_media_type
         description: '{{ doc("gtfs_fare_media__fare_media_type") }}'
+        meta:
+          publish.include: true
       - *_feed_valid_from
       - *feed_timezone
 
@@ -302,14 +385,24 @@ models:
       - *base64_url
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
+        meta:
+          publish.include: true
       - name: fare_product_name
         description: '{{ doc("gtfs_fare_products__fare_product_name") }}'
+        meta:
+          publish.include: true
       - name: fare_media_id
         description: '{{ doc("gtfs_fare_products__fare_media_id") }}'
+        meta:
+          publish.include: true
       - name: amount
         description: '{{ doc("gtfs_fare_products__amount") }}'
+        meta:
+          publish.include: true
       - name: currency
         description: '{{ doc("gtfs_fare_products__currency") }}'
+        meta:
+          publish.include: true
       - *_feed_valid_from
       - *feed_timezone
 
@@ -331,14 +424,24 @@ models:
       - *base64_url
       - name: fare_id
         description: '{{ doc("gtfs_fare_rules__fare_id") }}'
+        meta:
+          publish.include: true
       - name: route_id
         description: '{{ doc("gtfs_fare_rules__route_id") }}'
+        meta:
+          publish.include: true
       - name: origin_id
         description: '{{ doc("gtfs_fare_rules__origin_id") }}'
+        meta:
+          publish.include: true
       - name: destination_id
         description: '{{ doc("gtfs_fare_rules__destination_id") }}'
+        meta:
+          publish.include: true
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
       - *warning_duplicate_gtfs_key
 
@@ -357,18 +460,32 @@ models:
       - *base64_url
       - name: from_leg_group_id
         description: '{{ doc("gtfs_fare_transfer_rules__from_leg_group_id") }}'
+        meta:
+          publish.include: true
       - name: to_leg_group_id
         description: '{{ doc("gtfs_fare_transfer_rules__to_leg_group_id") }}'
+        meta:
+          publish.include: true
       - name: transfer_count
         description: '{{ doc("gtfs_fare_transfer_rules__transfer_count") }}'
+        meta:
+          publish.include: true
       - name: duration_limit
         description: '{{ doc("gtfs_fare_transfer_rules__duration_limit") }}'
+        meta:
+          publish.include: true
       - name: duration_limit_type
         description: '{{ doc("gtfs_fare_transfer_rules__duration_limit_type") }}'
+        meta:
+          publish.include: true
       - name: fare_transfer_type
         description: '{{ doc("gtfs_fare_transfer_rules__fare_transfer_type") }}'
+        meta:
+          publish.include: true
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
+        meta:
+          publish.include: true
       - *_feed_valid_from
       - *feed_timezone
 
@@ -390,22 +507,40 @@ models:
       - *base64_url
       - name: feed_publisher_name
         description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
+        meta:
+          publish.include: true
       - name: feed_publisher_url
         description: '{{ doc("gtfs_feed_info__feed_publisher_url") }}'
+        meta:
+          publish.include: true
       - name: feed_lang
         description: '{{ doc("gtfs_feed_info__feed_lang") }}'
+        meta:
+          publish.include: true
       - name: default_lang
         description: '{{ doc("gtfs_feed_info__default_lang") }}'
+        meta:
+          publish.include: true
       - name: feed_start_date
         description: '{{ doc("gtfs_feed_info__feed_start_date") }}'
+        meta:
+          publish.include: true
       - name: feed_end_date
         description: '{{ doc("gtfs_feed_info__feed_end_date") }}'
+        meta:
+          publish.include: true
       - name: feed_version
         description: '{{ doc("gtfs_feed_info__feed_version") }}'
+        meta:
+          publish.include: true
       - name: feed_contact_email
         description: '{{ doc("gtfs_feed_info__feed_contact_email") }}'
+        meta:
+          publish.include: true
       - name: feed_contact_url
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
       - *warning_duplicate_gtfs_key
 
@@ -427,29 +562,30 @@ models:
       - *base64_url
       - name: trip_id
         description: '{{ doc("gtfs_frequencies__trip_id") }}'
+        meta:
+          publish.include: true
       - name: start_time
         description: '{{ doc("gtfs_frequencies__start_time") }}'
+        meta:
+          publish.include: true
       - name: end_time
         description: '{{ doc("gtfs_frequencies__end_time") }}'
+        meta:
+          publish.include: true
       - name: headway_secs
         description: '{{ doc("gtfs_frequencies__headway_secs") }}'
         meta:
           ckan.units: SECONDS
+          publish.include: true
       - name: exact_times
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
       - name: start_time_interval
-        meta:
-          publish.ignore: true
       - name: end_time_interval
-        meta:
-          publish.ignore: true
       - name: start_time_sec
-        meta:
-          publish.ignore: true
       - name: end_time_sec
-        meta:
-          publish.ignore: true
 
   - name: dim_levels_latest
     description: |
@@ -469,10 +605,16 @@ models:
       - *base64_url
       - name: level_id
         description: '{{ doc("gtfs_levels__level_id") }}'
+        meta:
+          publish.include: true
       - name: level_index
         description: '{{ doc("gtfs_levels__level_index") }}'
+        meta:
+          publish.include: true
       - name: level_name
         description: '{{ doc("gtfs_levels__level_name") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_pathways_latest
@@ -493,34 +635,55 @@ models:
       - *base64_url
       - name: pathway_id
         description: '{{ doc("gtfs_pathways__pathway_id") }}'
+        meta:
+          publish.include: true
       - name: from_stop_id
         description: '{{ doc("gtfs_pathways__from_stop_id") }}'
+        meta:
+          publish.include: true
       - name: to_stop_id
         description: '{{ doc("gtfs_pathways__to_stop_id") }}'
+        meta:
+          publish.include: true
       - name: pathway_mode
         description: '{{ doc("gtfs_pathways__pathway_mode") }}'
+        meta:
+          publish.include: true
       - name: is_bidirectional
         description: '{{ doc("gtfs_pathways__is_bidirectional") }}'
+        meta:
+          publish.include: true
       - name: length
         description: '{{ doc("gtfs_pathways__length") }}'
         meta:
           ckan.units: METERS
+          publish.include: true
       - name: traversal_time
         description: '{{ doc("gtfs_pathways__traversal_time") }}'
         meta:
           ckan.units: SECONDS
+          publish.include: true
       - name: stair_count
         description: '{{ doc("gtfs_pathways__stair_count") }}'
+        meta:
+          publish.include: true
       - name: max_slope
         description: '{{ doc("gtfs_pathways__max_slope") }}'
+        meta:
+          publish.include: true
       - name: min_width
         description: '{{ doc("gtfs_pathways__min_width") }}'
         meta:
           ckan.units: METERS
+          publish.include: true
       - name: signposted_as
         description: '{{ doc("gtfs_pathways__signposted_as") }}'
+        meta:
+          publish.include: true
       - name: reversed_signposted_as
         description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_routes_latest
@@ -541,30 +704,56 @@ models:
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_routes__route_id") }}'
+        meta:
+          publish.include: true
       - name: agency_id
         description: '{{ doc("gtfs_routes__agency_id") }}'
+        meta:
+          publish.include: true
       - name: route_short_name
         description: '{{ doc("gtfs_routes__route_short_name") }}'
+        meta:
+          publish.include: true
       - name: route_long_name
         description: '{{ doc("gtfs_routes__route_long_name") }}'
+        meta:
+          publish.include: true
       - name: route_desc
         description: '{{ doc("gtfs_routes__route_desc") }}'
+        meta:
+          publish.include: true
       - name: route_type
         description: '{{ doc("gtfs_routes__route_type") }}'
+        meta:
+          publish.include: true
       - name: route_url
         description: '{{ doc("gtfs_routes__route_url") }}'
+        meta:
+          publish.include: true
       - name: route_color
         description: '{{ doc("gtfs_routes__route_color") }}'
+        meta:
+          publish.include: true
       - name: route_text_color
         description: '{{ doc("gtfs_routes__route_text_color") }}'
+        meta:
+          publish.include: true
       - name: route_sort_order
         description: '{{ doc("gtfs_routes__route_sort_order") }}'
+        meta:
+          publish.include: true
       - name: continuous_pickup
         description: '{{ doc("gtfs_routes__continuous_pickup") }}'
+        meta:
+          publish.include: true
       - name: continuous_drop_off
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
+        meta:
+          publish.include: true
       - name: network_id
         description: '{{ doc("gtfs_routes__network_id") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_shapes_latest
@@ -585,6 +774,8 @@ models:
       - *base64_url
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
+        meta:
+          publish.include: true
       - name: shape_pt_lat
         description: '{{ doc("gtfs_shapes__shape_pt_lat") }}'
         meta:
@@ -592,6 +783,7 @@ models:
           ckan.type: FLOAT
           ckan.length: 6
           ckan.precision: 3
+          publish.include: true
       - name: shape_pt_lon
         description: '{{ doc("gtfs_shapes__shape_pt_lon") }}'
         meta:
@@ -599,10 +791,15 @@ models:
           ckan.type: FLOAT
           ckan.length: 7
           ckan.precision: 3
+          publish.include: true
       - name: shape_pt_sequence
         description: '{{ doc("gtfs_shapes__shape_pt_sequence") }}'
+        meta:
+          publish.include: true
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_stop_areas_latest
@@ -620,8 +817,12 @@ models:
       - *base64_url
       - name: area_id
         description: '{{ doc("gtfs_stop_areas__area_id") }}'
+        meta:
+          publish.include: true
       - name: stop_id
         description: '{{ doc("gtfs_stop_areas__stop_id") }}'
+        meta:
+          publish.include: true
       - *_feed_valid_from
       - *feed_timezone
 
@@ -644,35 +845,57 @@ models:
       - *base64_url
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
+        meta:
+          publish.include: true
       - name: arrival_time
         description: '{{ doc("gtfs_stop_times__arrival_time") }}'
+        meta:
+          publish.include: true
       - name: departure_time
         description: '{{ doc("gtfs_stop_times__departure_time") }}'
+        meta:
+          publish.include: true
       - name: stop_id
         description: '{{ doc("gtfs_stop_times__stop_id") }}'
+        meta:
+          publish.include: true
       - name: stop_sequence
         description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
+        meta:
+          publish.include: true
       - name: stop_headsign
         description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
+        meta:
+          publish.include: true
       - name: pickup_type
         description: '{{ doc("gtfs_stop_times__pickup_type") }}'
+        meta:
+          publish.include: true
       - name: drop_off_type
         description: '{{ doc("gtfs_stop_times__drop_off_type") }}'
+        meta:
+          publish.include: true
       - name: continuous_pickup
         description: '{{ doc("gtfs_stop_times__continuous_pickup") }}'
+        meta:
+          publish.include: true
       - name: continuous_drop_off
         description: '{{ doc("gtfs_stop_times__continuous_drop_off") }}'
+        meta:
+          publish.include: true
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
+        meta:
+          publish.include: true
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
+        meta:
+          publish.include: true
       - *warning_duplicate_gtfs_key
       - name: warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column are missing the required `stop_id` value.
           This means they will fail to join with `stop` related information.
-        meta:
-          publish.ignore: true
       - name: arrival_sec
         description: |
           This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
@@ -683,6 +906,7 @@ models:
           `25:40:00`, which are allowed in GTFS.
         meta:
           ckan.units: SECONDS
+          publish.include: true
       - name: departure_sec
         description: |
           This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
@@ -693,29 +917,42 @@ models:
           `25:40:00`, which are allowed in GTFS.
         meta:
           ckan.units: SECONDS
+          publish.include: true
       - *feed_timezone
       - name: arrival_time_interval
-        meta:
-          publish.ignore: true
       - name: departure_time_interval
-        meta:
-          publish.ignore: true
       - name: start_pickup_drop_off_window
         description: '{{ doc("gtfs_stop_times__start_pickup_drop_off_window") }}'
+        meta:
+          publish.include: true
       - name: end_pickup_drop_off_window
         description: '{{ doc("gtfs_stop_times__end_pickup_drop_off_window") }}'
+        meta:
+          publish.include: true
       - name: mean_duration_factor
         description: '{{ doc("gtfs_stop_times__mean_duration_factor") }}'
+        meta:
+          publish.include: true
       - name: mean_duration_offset
         description: '{{ doc("gtfs_stop_times__mean_duration_offset") }}'
+        meta:
+          publish.include: true
       - name: safe_duration_factor
         description: '{{ doc("gtfs_stop_times__safe_duration_factor") }}'
+        meta:
+          publish.include: true
       - name: safe_duration_offset
         description: '{{ doc("gtfs_stop_times__safe_duration_offset") }}'
+        meta:
+          publish.include: true
       - name: pickup_booking_rule_id
         description: '{{ doc("gtfs_stop_times__pickup_booking_rule_id") }}'
+        meta:
+          publish.include: true
       - name: drop_off_booking_rule_id
         description: '{{ doc("gtfs_stop_times__drop_off_booking_rule_id") }}'
+        meta:
+          publish.include: true
       - name: start_pickup_drop_off_window_sec
         description: |
           This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
@@ -726,8 +963,6 @@ models:
           `25:40:00`, which are allowed in GTFS.
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
-        meta:
-          publish.ignore: true
       - name: end_pickup_drop_off_window_sec
         description: |
           This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
@@ -738,8 +973,6 @@ models:
           `25:40:00`, which are allowed in GTFS.
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
-        meta:
-          publish.ignore: true
       - name: start_pickup_drop_off_window_interval
         description: |
           This is a calculated field that does not appear directly in GTFS. It converts `start_pickup_drop_off_window`
@@ -747,8 +980,6 @@ models:
           and thus handle times past the following midnight (like `25:40:00`).
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
-        meta:
-          publish.ignore: true
       - name: end_pickup_drop_off_window_interval
         description: |
           This is a calculated field that does not appear directly in GTFS. It converts `end_pickup_drop_off_window`
@@ -756,8 +987,6 @@ models:
           and thus handle times past the following midnight (like `25:40:00`).
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
-        meta:
-          publish.ignore: true
 
   - name: dim_stops_latest
     description: |
@@ -777,14 +1006,24 @@ models:
       - *base64_url
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
+        meta:
+          publish.include: true
       - name: stop_code
         description: '{{ doc("gtfs_stops__stop_code") }}'
+        meta:
+          publish.include: true
       - name: stop_name
         description: '{{ doc("gtfs_stops__stop_name") }}'
+        meta:
+          publish.include: true
       - name: tts_stop_name
         description: '{{ doc("gtfs_stops__tts_stop_name") }}'
+        meta:
+          publish.include: true
       - name: stop_desc
         description: '{{ doc("gtfs_stops__stop_desc") }}'
+        meta:
+          publish.include: true
       - name: stop_lat
         description: '{{ doc("gtfs_stops__stop_lat") }}'
         meta:
@@ -792,6 +1031,7 @@ models:
           ckan.type: FLOAT
           ckan.length: 6
           ckan.precision: 3
+          publish.include: true
       - name: stop_lon
         description: '{{ doc("gtfs_stops__stop_lon") }}'
         meta:
@@ -799,30 +1039,43 @@ models:
           ckan.type: FLOAT
           ckan.length: 7
           ckan.precision: 3
+          publish.include: true
       - name: zone_id
         description: '{{ doc("gtfs_stops__zone_id") }}'
+        meta:
+          publish.include: true
       - name: stop_url
         description: '{{ doc("gtfs_stops__stop_url") }}'
+        meta:
+          publish.include: true
       - name: location_type
         description: '{{ doc("gtfs_stops__location_type") }}'
+        meta:
+          publish.include: true
       - name: parent_station
         description: '{{ doc("gtfs_stops__parent_station") }}'
+        meta:
+          publish.include: true
       - name: stop_timezone
         description: '{{ doc("gtfs_stops__stop_timezone") }}'
+        meta:
+          publish.include: true
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+        meta:
+          publish.include: true
       - name: level_id
         description: '{{ doc("gtfs_stops__level_id") }}'
+        meta:
+          publish.include: true
       - name: platform_code
         description: '{{ doc("gtfs_stops__platform_code") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
         # TODO: would be good to actually publish this, with appropriate documentation, next time we are ready to make a round of updates
       - name: warning_missing_schedule_dim_pk
-        meta:
-          publish.ignore: true
       - name: stop_timezone_coalesced
-        meta:
-          publish.ignore: true
       - *warning_duplicate_gtfs_key
 
   - name: dim_transfers_latest
@@ -843,22 +1096,37 @@ models:
       - *base64_url
       - name: from_stop_id
         description: '{{ doc("gtfs_transfers__from_stop_id") }}'
+        meta:
+          publish.include: true
       - name: to_stop_id
         description: '{{ doc("gtfs_transfers__to_stop_id") }}'
+        meta:
+          publish.include: true
       - name: transfer_type
         description: '{{ doc("gtfs_transfers__transfer_type") }}'
+        meta:
+          publish.include: true
       - name: min_transfer_time
         description: '{{ doc("gtfs_transfers__min_transfer_time") }}'
         meta:
           ckan.units: SECONDS
+          publish.include: true
       - name: from_route_id
         description: '{{ doc("gtfs_transfers__from_route_id") }}'
+        meta:
+          publish.include: true
       - name: to_route_id
         description: '{{ doc("gtfs_transfers__to_route_id") }}'
+        meta:
+          publish.include: true
       - name: from_trip_id
         description: '{{ doc("gtfs_transfers__from_trip_id") }}'
+        meta:
+          publish.include: true
       - name: to_trip_id
         description: '{{ doc("gtfs_transfers__to_trip_id") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
       - *warning_duplicate_gtfs_key
 
@@ -880,18 +1148,32 @@ models:
       - *base64_url
       - name: table_name
         description: '{{ doc("gtfs_translations__table_name") }}'
+        meta:
+          publish.include: true
       - name: field_name
         description: '{{ doc("gtfs_translations__field_name") }}'
+        meta:
+          publish.include: true
       - name: language
         description: '{{ doc("gtfs_translations__language") }}'
+        meta:
+          publish.include: true
       - name: translation
         description: '{{ doc("gtfs_translations__translation") }}'
+        meta:
+          publish.include: true
       - name: record_id
         description: '{{ doc("gtfs_translations__record_id") }}'
+        meta:
+          publish.include: true
       - name: record_sub_id
         description: '{{ doc("gtfs_translations__record_sub_id") }}'
+        meta:
+          publish.include: true
       - name: field_value
         description: '{{ doc("gtfs_translations__field_value") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_trips_latest
@@ -912,24 +1194,44 @@ models:
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'
+        meta:
+          publish.include: true
       - name: service_id
         description: '{{ doc("gtfs_trips__service_id") }}'
+        meta:
+          publish.include: true
       - name: trip_id
         description: '{{ doc("gtfs_trips__trip_id") }}'
+        meta:
+          publish.include: true
       - name: trip_headsign
         description: '{{ doc("gtfs_trips__trip_headsign") }}'
+        meta:
+          publish.include: true
       - name: trip_short_name
         description: '{{ doc("gtfs_trips__trip_short_name") }}'
+        meta:
+          publish.include: true
       - name: direction_id
         description: '{{ doc("gtfs_trips__direction_id") }}'
+        meta:
+          publish.include: true
       - name: block_id
         description: '{{ doc("gtfs_trips__block_id") }}'
+        meta:
+          publish.include: true
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
+        meta:
+          publish.include: true
       - name: wheelchair_accessible
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
+        meta:
+          publish.include: true
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
+        meta:
+          publish.include: true
       - *warning_duplicate_gtfs_key
       - *feed_timezone
 

@@ -344,7 +344,7 @@ def _generate_exposure_documentation(
         )
 
         for name, column in node.columns.items():
-            if not column.meta.get("publish.ignore", False):
+            if column.meta.get("publish.include", False):
                 field_description_authority = column.meta.get(
                     "ckan.authority", node.meta.get("ckan.authority")
                 )
