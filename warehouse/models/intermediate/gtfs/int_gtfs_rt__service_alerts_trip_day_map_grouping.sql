@@ -58,6 +58,7 @@ int_gtfs_rt__service_alerts_trip_day_map_grouping AS (
                 (id, cause, effect, header_text_text, description_text_text)
                 )) AS alert_content_array,
         ARRAY_AGG(DISTINCT id) AS message_ids_array,
+        ARRAY_AGG(DISTINCT _extract_ts) AS extract_ts_array,
         ARRAY_AGG(DISTINCT header_timestamp) AS header_timestamps_array,
         ARRAY_AGG(DISTINCT service_alert_message_key) AS message_keys_array,
         MIN(_extract_ts) AS min_extract_ts,

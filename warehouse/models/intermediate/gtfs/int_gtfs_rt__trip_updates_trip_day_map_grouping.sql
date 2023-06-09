@@ -14,7 +14,7 @@
 WITH stop_time_updates AS (
     SELECT *
     FROM {{ ref('fct_stop_time_updates') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 rt_feeds AS (

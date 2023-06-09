@@ -1146,6 +1146,7 @@ models:
           - unique:
               config:
                 where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+      - *feed_timezone_no_tests
       - &num_distinct_message_ids
         name: num_distinct_message_ids
         description: Distinct count of top-level ids (https://gtfs.org/realtime/reference/#message-feedentity).
@@ -1164,12 +1165,60 @@ models:
           Timestamp of the last extract (i.e. the time at which
           we downloaded this feed extract) on this day referencing this trip.
           For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
+      - &extract_duration_minutes
+        name: extract_duration_minutes
+        description: |
+          The difference between `max_extract_ts` and `min_extract_ts` in minutes,
+          representing the duration of time for which this trip was present in message responses we received from the agency.
+          Note that the trip may not have been present in every message between the minimum and maximum
+          timestamps, and therefore may not have been present continuously for the
+          duration listed here.
+      - &header_duration_minutes
+        name: header_duration_minutes
+        description: |
+          The difference between `max_header_timestamp` and `min_header_timestamp` in minutes,
+          representing the duration of time for which this trip was present in the messages produced by the agency.
+          Note that the trip may not have been present in every message between the minimum and maximum
+          timestamps, and therefore may not have been present continuously for the
+          duration listed here.
+      - &min_extract_ts_local_tz
+        name: min_extract_datetime_local_tz
+        description: |
+          `min_extract_ts` converted to a DATETIME type in `feed_timezone`.
+      - &max_extract_ts_local_tz
+        name: max_extract_datetime_local_tz
+        description: |
+          `max_extract_ts` converted to a DATETIME type in `feed_timezone`.
+      - &min_extract_ts_pacific
+        name: min_extract_datetime_pacific
+        description: |
+          `min_extract_ts` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+      - &max_extract_ts_pacific
+        name: max_extract_datetime_pacific
+        description: |
+          `max_extract_ts` converted to a DATETIME type in the "America/Los_Angeles" time zone.
       - &min_header_timestamp
         name: min_header_timestamp
         description: Earliest header timestamp of a message referencing this trip.
       - &max_header_timestamp
         name: max_header_timestamp
         description: Latest header timestamp of a message referencing this trip.
+      - &min_header_local_tz
+        name: min_header_datetime_local_tz
+        description: |
+          `min_header_timestamp` converted to a DATETIME type in `feed_timezone`.
+      - &max_header_local_tz
+        name: max_header_datetime_local_tz
+        description: |
+          `max_header_timestamp` converted to a DATETIME type in `feed_timezone`.
+      - &min_header_pacific
+        name: min_header_datetime_pacific
+        description: |
+          `min_header_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+      - &max_header_pacific
+        name: max_header_datetime_pacific
+        description: |
+          `max_header_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
       - name: service_alert_message_keys
         description: Keys of the service alert messages that referenced this trip.
 
@@ -1510,6 +1559,7 @@ models:
       Summarizes trips observed in trip update messages.
     columns:
       - *rt_trip_summary_key
+      - *feed_timezone_no_tests
       - name: dt
       - name: base64_url
       - name: trip_id
@@ -1523,12 +1573,41 @@ models:
         description: Distinct count of trip update timestamps from the feed (https://gtfs.org/realtime/reference/#message-tripupdate).
       - *min_extract_ts
       - *max_extract_ts
+      - *extract_duration_minutes
+      - *min_extract_ts_local_tz
+      - *max_extract_ts_local_tz
+      - *min_extract_ts_pacific
+      - *max_extract_ts_pacific
       - *min_header_timestamp
       - *max_header_timestamp
+      - *header_duration_minutes
+      - *min_header_local_tz
+      - *max_header_local_tz
+      - *min_header_pacific
+      - *max_header_pacific
       - name: min_trip_update_timestamp
         description: Earliest trip update timestamp of a message referencing this trip.
       - name: max_trip_update_timestamp
         description: Latest trip update timestamp of a message referencing this trip.
+      - name: trip_update_duration_minutes
+        description: |
+          The difference between `max_trip_update_timestamp` and `min_trip_update_timestamp` in minutes,
+          representing the duration of time for which this trip was present in the trip-specific messages produced by the agency.
+          Note that the trip may not have been present in every message between the minimum and maximum
+          timestamps, and therefore may not have been present continuously for the
+          duration listed here.
+      - name: min_trip_update_datetime_local_tz
+        description: |
+          `min_trip_update_timestamp` converted to a DATETIME type in `feed_timezone`.
+      - name: max_trip_update_datetime_local_tz
+        description: |
+          `max_trip_update_timestamp` converted to a DATETIME type in `feed_timezone`.
+      - name: min_trip_update_datetime_pacific
+        description: |
+          `min_trip_update_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+      - name: max_trip_update_datetime_pacific
+        description: |
+          `max_trip_update_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
       - name: max_delay
         description: Maximium observed delay for this trip during this day.
       - name: num_skipped_stops
