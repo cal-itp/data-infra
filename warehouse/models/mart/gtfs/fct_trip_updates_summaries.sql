@@ -80,6 +80,13 @@ trip_update_timestamps AS (
     output_column_name = 'num_distinct_trip_update_timestamps') }}
 ),
 
+extract_ts AS (
+    {{ gtfs_rt_unnest_column_count_distinct(table = 'trip_updates_grouped',
+    key_col = 'key',
+    array_col = 'extract_ts_array',
+    output_column_name = 'num_distinct_extract_ts') }}
+),
+
 message_keys AS (
     {{ gtfs_rt_unnest_column_count_distinct(table = 'trip_updates_grouped',
     key_col = 'key',
@@ -155,13 +162,12 @@ fct_trip_updates_summaries AS (
         ending_schedule_relationship,
         starting_route_id,
         ending_route_id,
-        starting_direction_id,
-        ending_direction_id,
         feed_timezone,
         num_distinct_message_ids,
         num_distinct_header_timestamps,
         num_distinct_trip_update_timestamps,
         num_distinct_message_keys,
+        num_distinct_extract_ts,
         min_extract_ts,
         max_extract_ts,
         min_header_timestamp,
@@ -176,6 +182,7 @@ fct_trip_updates_summaries AS (
     FROM non_array_agg
     LEFT JOIN message_ids USING (key)
     LEFT JOIN header_timestamps USING (key)
+    LEFT JOIN extract_ts USING (key)
     LEFT JOIN message_keys USING (key)
     LEFT JOIN trip_update_timestamps USING (key)
     LEFT JOIN skipped_stops USING (key)

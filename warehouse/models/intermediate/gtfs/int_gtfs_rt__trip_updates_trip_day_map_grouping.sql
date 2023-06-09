@@ -54,6 +54,7 @@ int_gtfs_rt__trip_updates_trip_day_map_grouping AS (
         ARRAY_AGG(DISTINCT header_timestamp) AS header_timestamps_array,
         ARRAY_AGG(DISTINCT trip_update_timestamp IGNORE NULLS) AS trip_update_timestamps_array,
         ARRAY_AGG(DISTINCT _trip_updates_message_key) AS message_keys_array,
+        ARRAY_AGG(DISTINCT _extract_ts) AS extract_ts_array,
         MIN(_extract_ts) AS min_extract_ts,
         MAX(_extract_ts) AS max_extract_ts,
         MIN(header_timestamp) AS min_header_timestamp,
