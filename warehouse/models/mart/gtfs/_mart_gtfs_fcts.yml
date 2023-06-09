@@ -1135,17 +1135,82 @@ models:
   - name: fct_service_alerts_trip_summaries
     description: |
       Summarizes trips observed in service alert messages.
+      This table does not include service alerts that select non-trip entities.
+      This table will only include rows for trips where the alert specifically applies to that trip.
+      So, for example, if there is a service alert for Route A on a given date,
+      this table will *not* include all trips on Route A for that date.
     columns:
       - &rt_trip_summary_key
         name: key
-        description: Date, URL, and trip descriptor (https://gtfs.org/realtime/reference/#message-tripdescriptor).
+        description: Composite of calculated service date, URL, trip ID, and trip start time.
         tests:
           - not_null:
               config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+                where: calculated_service_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
           - unique:
               config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+                where: calculated_service_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+      - *base64_url
+      - &rt_trip_id
+        name: trip_id
+        description: |
+          `trip_id` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field and how it corresponds to GTFS schedule data.
+      - &rt_trip_start_time
+        name: trip_id
+        description: |
+          `start_time` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &rt_trip_start_date
+        name: trip_id
+        description: |
+          `start_date` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &starting_schedule_relationship
+        name: starting_schedule_relationship
+        description: |
+          `schedule_relationship` provided in the RT message trip descriptor
+          for the first message for this trip on this `calculated_service_date`.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &ending_schedule_relationship
+        name: ending_schedule_relationship
+        description: |
+          `schedule_relationship` provided in the RT message trip descriptor
+          for the last message for this trip on this `calculated_service_date`.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &starting_route_id
+        name: starting_route_id
+        description: |
+          `route_id` provided in the RT message trip descriptor
+          for the first message for this trip on this `calculated_service_date`.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &ending_route_id
+        name: ending_route_id
+        description: |
+          `route_id` provided in the RT message trip descriptor
+          for the last message for this trip on this `calculated_service_date`.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &starting_direction_id
+        name: starting_direction_id
+        description: |
+          `direction_id` provided in the RT message trip descriptor
+          for the first message for this trip on this `calculated_service_date`.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &ending_direction_id
+        name: ending_direction_id
+        description: |
+          `direction_id` provided in the RT message trip descriptor
+          for the last message for this trip on this `calculated_service_date`.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
       - *feed_timezone_no_tests
       - &num_distinct_message_ids
         name: num_distinct_message_ids
@@ -1153,6 +1218,26 @@ models:
       - &num_distinct_header_timestamps
         name: num_distinct_header_timestamps
         description: Distinct count of header timestamps from the feed (https://gtfs.org/realtime/reference/#message-feedheader).
+      - &num_distinct_message_keys
+        name: num_distinct_message_keys
+        description: |
+          Distinct count of message keys containing this trip (message keys are the synthetic
+          keys we generate for an individual RT message response.)
+          This is the count of distinct messages in which this trip appeared.
+          If you divide this value by `extract_duration_minutes`, you would
+          get a count of how many messages per minute this trip was present for,
+          which can help give a sense for how continuously this trip was updated.
+          This number should be equal to `num_distinct_extract_ts`.
+      - &num_distinct_extract_ts
+        name: num_distinct_extract_ts
+        description: |
+          Distinct count of `_extract_ts` vaues for messages containing this trip (`_extract_ts` represents
+          the instant at which we attempted to scrape data for this feed.)
+          This is the count of distinct messages in which this trip appeared.
+          If you divide this value by `extract_duration_minutes`, you would
+          get a count of how many messages per minute this trip was present for,
+          which can help give a sense for how continuously this trip was updated.
+          This number should be equal to `num_distinct_message_keys`.
       - &min_extract_ts
         name: min_extract_ts
         description: |
@@ -1219,8 +1304,11 @@ models:
         name: max_header_datetime_pacific
         description: |
           `max_header_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
-      - name: service_alert_message_keys
-        description: Keys of the service alert messages that referenced this trip.
+      - name: alert_content_array
+        description: |
+          An array containing a unique STRUCTs of `message_id`, `cause`, `effect`, `header`, and `description`.
+          This is the actual alert content associated with this trip.
+          An individual trip can be associated with multiple alerts so this array can contain multiple distinct structs.
 
   - name: fct_scheduled_trips
     description: |
@@ -1561,12 +1649,14 @@ models:
       - *rt_trip_summary_key
       - *feed_timezone_no_tests
       - name: dt
-      - name: base64_url
-      - name: trip_id
-      - name: trip_route_id
-      - name: trip_direction_id
-      - name: trip_start_time
-      - name: trip_start_date
+      - *base64_url
+      - *rt_trip_id
+      - *starting_route_id
+      - *ending_route_id
+      - *starting_direction_id
+      - *ending_direction_id
+      - *rt_trip_start_time
+      - *rt_trip_start_date
       - *num_distinct_message_ids
       - *num_distinct_header_timestamps
       - name: num_distinct_trip_update_timestamps

@@ -32,18 +32,6 @@ window_functions AS (
             ORDER BY max_header_timestamp
             ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
         ) AS ending_schedule_relationship,
-    FIRST_VALUE(trip_route_id)
-        OVER (
-            PARTITION BY key
-            ORDER BY min_header_timestamp
-            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-        ) AS starting_route_id,
-    LAST_VALUE(trip_route_id)
-        OVER (
-            PARTITION BY key
-            ORDER BY max_header_timestamp
-            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-        ) AS ending_route_id,
     FIRST_VALUE(trip_direction_id)
         OVER (
             PARTITION BY key
@@ -117,13 +105,12 @@ non_array_agg AS(
         calculated_service_date,
         base64_url,
         trip_id,
+        trip_route_id,
         trip_start_time,
         trip_start_date,
         feed_timezone,
         starting_schedule_relationship,
         ending_schedule_relationship,
-        starting_route_id,
-        ending_route_id,
         starting_direction_id,
         ending_direction_id,
         MIN(min_extract_ts) AS min_extract_ts,
@@ -131,7 +118,7 @@ non_array_agg AS(
         MIN(min_header_timestamp) AS min_header_timestamp,
         MAX(max_header_timestamp) AS max_header_timestamp,
     FROM window_functions
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 ),
 
 fct_service_alerts_trip_summaries AS (
@@ -145,6 +132,8 @@ fct_service_alerts_trip_summaries AS (
         feed_timezone,
         starting_schedule_relationship,
         ending_schedule_relationship,
+        starting_direction_id,
+        ending_direction_id,
         starting_route_id,
         ending_route_id,
         starting_direction_id,

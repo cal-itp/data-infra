@@ -579,3 +579,9 @@ models:
         description: |
           100 if English language, 1 if null (null can mean no internationalization),
           0 for other languages. Based on `header_text.language`.
+  - name: int_gtfs_rt__service_alerts_trip_day_map_grouping
+    tests:
+      - gtfs_rt_trip_constant_route_id
+  - name: int_gtfs_rt__trip_updates_trip_day_map_grouping
+    tests:
+      - gtfs_rt_trip_constant_route_id

@@ -34,7 +34,7 @@ schedule_feeds AS (
 -- group by *both* the UTC date that data was scraped (dt) *and* calculated service date
 -- so that in the mart we can get just service date-level data
 -- this allows us to handle the dt/service_date mismatch by grouping in two stages
-int_gtfs_rt__service_alerts_trip_day_map_grouping AS (
+grouped AS (
     SELECT
         -- try to figure out what the service date would be to join back with schedule: fall back from explicit to imputed
         dt,
@@ -74,6 +74,38 @@ int_gtfs_rt__service_alerts_trip_day_map_grouping AS (
     -- we only want to use alerts that were actually *active*
     WHERE header_timestamp BETWEEN active_period_start_ts AND active_period_end_ts
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+),
+
+int_gtfs_rt__service_alerts_trip_day_map_grouping AS (
+    SELECT
+        -- https://gtfs.org/realtime/reference/#message-tripdescriptor
+        -- this key is not unique yet here but will be on the downstream final model
+        {{ dbt_utils.generate_surrogate_key([
+            'calculated_service_date',
+            'base64_url',
+            'trip_id',
+            'trip_start_time',
+        ]) }} as key,
+        dt,
+        calculated_service_date,
+        base64_url,
+        trip_id,
+        trip_route_id,
+        trip_direction_id,
+        trip_start_time,
+        trip_start_date,
+        trip_schedule_relationship,
+        feed_timezone,
+        alert_content_array,
+        message_ids_array,
+        extract_ts_array,
+        header_timestamps_array,
+        message_keys_array,
+        min_extract_ts,
+        max_extract_ts,
+        min_header_timestamp,
+        max_header_timestamp,
+    FROM grouped
 )
 
 SELECT * FROM int_gtfs_rt__service_alerts_trip_day_map_grouping
