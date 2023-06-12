@@ -686,6 +686,10 @@ def parse_and_validate(
                         "Process", {"stderr": e.stderr.decode("utf-8")[-2000:]}
                     )
 
+                    # we could also use a custom exception for this
+                    if "Unexpected end of ZLIB input stream" in stderr:
+                        fingerprint.append("Unexpected end of ZLIB input stream")
+
                 scope.fingerprint = fingerprint
                 sentry_sdk.capture_exception(e, scope=scope)
             if verbose:
