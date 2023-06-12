@@ -307,8 +307,6 @@ def run(
             mb_pass = os.getenv("MB_PASSWORD")
             mb_host = os.getenv("MB_HOST")
             dbt_database = os.getenv("DBT_DATABASE")
-            # dbt_path = os.getenv("DBT_PROJECT_DIR")
-            # metabase_use_http = True
             metabase_database = (
                 "Data Marts (formerly Warehouse Views)"
                 if target.startswith("prod")
@@ -336,51 +334,17 @@ def run(
             print("Hey, I'm about to go to sleep!", flush=True)
             time.sleep(180)
 
-            # Use a subprocess here so we can just parse the stdout/stderr
-            # p = subprocess.run(
-            #     [
-            #         "dbt-metabase",
-            #         "models",
-            #         "--metabase_exclude_sources",
-            #         "--dbt_manifest_path",
-            #         "./target/manifest.json",
-            #         "--dbt_docs_url",
-            #         "https://dbt-docs.calitp.org",
-            #         "--metabase_database",
-            #         (
-            #             "Data Marts (formerly Warehouse Views)"
-            #             if target.startswith("prod")
-            #             else "(Internal) Staging Warehouse Views"
-            #         ),
-            #         "--dbt_schema_excludes",
-            #         "staging",
-            #         "payments",
-            #         "--metabase_sync_skip",
-            #     ],
-            #     env={
-            #         **os.environ,
-            #         "COLUMNS": "300",  # we have to make this wide enough to avoid splitting log lines
-            #     },
-            #     capture_output=True,
-            # )
-
             # use programmatic invocation
             # Instantiate dbt interface
             dbt = DbtInterface(
-                # path=dbt_path,
                 manifest_path="./target/manifest.json",
                 database=dbt_database,
-                # dont't need
-                # schema="mart_payments",
                 schema_excludes=["staging", "payments"],
-                # includes=dbt_includes,
-                # excludes=dbt_excludes,
             )
 
             # Load models
             print("reading dbt models", flush=True)
             dbt_models, aliases = dbt.read_models(
-                # include_tags=dbt_include_tags,
                 docs_url="https://dbt-docs.calitp.org",
             )
 
@@ -391,10 +355,7 @@ def run(
                 user=mb_user,
                 password=mb_pass,
                 use_http=True,
-                # verify=metabase_verify,
                 database=metabase_database,
-                # sync=metabase_sync,
-                # sync_timeout=metabase_sync_timeout,
             )
 
             # Propagate models to Metabase
@@ -413,7 +374,6 @@ def run(
                     + str(metabase_export_exception),
                     flush=True,
                 )
-                # raise RuntimeError from e
 
         # with redirect_stdout(io.StringIO()) as f:
         #     help(pow)
