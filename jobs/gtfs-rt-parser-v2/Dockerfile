@@ -8,7 +8,7 @@ ENV GTFS_RT_VALIDATOR_VERSION=v1.0.0
 RUN apt-get update -y \
     && apt-get install -y python3 python3-pip python3-venv
 
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -
+RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:${PATH}"
 
 # from https://github.com/MobilityData/gtfs-realtime-validator/packages/1268973
