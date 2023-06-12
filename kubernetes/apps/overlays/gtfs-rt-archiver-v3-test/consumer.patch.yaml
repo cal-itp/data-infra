@@ -2,8 +2,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gtfs-rt-archive
+  name: gtfs-rt-archiver-consumer
 spec:
+  replicas: 2
   template:
     spec:
       containers:
