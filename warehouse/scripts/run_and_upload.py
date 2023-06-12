@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
+import io
 import json
 import os
 import re
 import shutil
 import subprocess
 import time
+from contextlib import redirect_stdout
 from pathlib import Path
 from typing import List, Optional
 
@@ -336,86 +338,85 @@ def run(
 
             # use programmatic invocation
             # Instantiate dbt interface
-            dbt = DbtInterface(
-                manifest_path="./target/manifest.json",
-                database=dbt_database,
-                schema_excludes=["staging", "payments"],
-            )
-
-            # Load models
-            print("reading dbt models", flush=True)
-            dbt_models, aliases = dbt.read_models(
-                docs_url="https://dbt-docs.calitp.org",
-            )
-
-            # Instantiate Metabase interface
-            print("instantiating metabase interface", flush=True)
-            metabase = MetabaseInterface(
-                host=mb_host.lstrip("https://"),
-                user=mb_user,
-                password=mb_pass,
-                use_http=True,
-                database=metabase_database,
-            )
-
-            # Propagate models to Metabase
-            print("propagating models to metabase", flush=True)
-            metabase_export_exception: Optional[Exception] = None
-            try:
-                metabase.client.export_models(
-                    database=metabase.database,
-                    models=dbt_models,
-                    aliases=aliases,
-                )
-            except Exception as e:
-                metabase_export_exception = e
-                print(
-                    "Metabase export models failed with exception "
-                    + str(metabase_export_exception),
-                    flush=True,
+            with redirect_stdout(io.StringIO()) as f:
+                dbt = DbtInterface(
+                    manifest_path="./target/manifest.json",
+                    database=dbt_database,
+                    schema_excludes=["staging", "payments"],
                 )
 
-        # with redirect_stdout(io.StringIO()) as f:
-        #     help(pow)
-        # s = f.getvalue()
+                # Load models
+                print("reading dbt models", flush=True)
+                dbt_models, aliases = dbt.read_models(
+                    docs_url="https://dbt-docs.calitp.org",
+                )
 
-        #     with open("./target/manifest.json") as f:
-        #         manifest = Manifest(**json.load(f))
-        #     matches = {}
-        #     for line in p.stdout.decode().splitlines():
-        #         print(line)
-        #         for pattern in (
-        #             r"WARNING\s+Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)",
-        #             r"WARNING\s+Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)",
-        #         ):
-        #             match = re.search(pattern, line)
-        #             if match and match.group("model") not in matches:
-        #                 matches[match.group("model")] = (match, line)
-        #     for model, (first_match, line) in matches.items():
-        #         # Just use a single exception type for now, regardless of whether the model is missing entirely
-        #         # or just a column
-        #         exc = DbtMetabaseSyncFailure(first_match.group())
-        #         with sentry_sdk.push_scope() as scope:
-        #             scope.fingerprint = [type(exc), model]
-        #             scope.set_context(
-        #                 "log",
-        #                 {
-        #                     "match": str(first_match),
-        #                     "line": line,
-        #                 },
-        #             )
-        #             node = next(
-        #                 node
-        #                 for node in manifest.nodes.values()
-        #                 if node.name == model.lower()
-        #             )
-        #             scope.set_context(
-        #                 "dbt",
-        #                 {
-        #                     "path": str(node.original_file_path),
-        #                 },
-        #             )
-        #             sentry_sdk.capture_exception(exc, scope=scope)
+                # Instantiate Metabase interface
+                print("instantiating metabase interface", flush=True)
+                metabase = MetabaseInterface(
+                    host=mb_host.lstrip("https://"),
+                    user=mb_user,
+                    password=mb_pass,
+                    use_http=True,
+                    database=metabase_database,
+                )
+
+                # Propagate models to Metabase
+                print("propagating models to metabase", flush=True)
+                metabase_export_exception: Optional[Exception] = None
+                try:
+                    metabase.client.export_models(
+                        database=metabase.database,
+                        models=dbt_models,
+                        aliases=aliases,
+                    )
+                except Exception as e:
+                    metabase_export_exception = e
+                    print(
+                        "Metabase export models failed with exception "
+                        + str(metabase_export_exception),
+                        flush=True,
+                    )
+            s = f.getvalue()
+
+            with open("./target/manifest.json") as f:
+                manifest = Manifest(**json.load(f))
+            matches = {}
+            for line in s.splitlines():
+                # for line in s.stdout.decode().splitlines():
+                print(line)
+                for pattern in (
+                    r"WARNING\s+Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)",
+                    r"WARNING\s+Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)",
+                ):
+                    match = re.search(pattern, line)
+                    if match and match.group("model") not in matches:
+                        matches[match.group("model")] = (match, line)
+            for model, (first_match, line) in matches.items():
+                # Just use a single exception type for now, regardless of whether the model is missing entirely
+                # or just a column
+                exc = DbtMetabaseSyncFailure(first_match.group())
+                with sentry_sdk.push_scope() as scope:
+                    scope.fingerprint = [type(exc), model]
+                    scope.set_context(
+                        "log",
+                        {
+                            "match": str(first_match),
+                            "line": line,
+                        },
+                    )
+                    node = next(
+                        node
+                        for node in manifest.nodes.values()
+                        if node.name == model.lower()
+                    )
+                    scope.set_context(
+                        "dbt",
+                        {
+                            "path": str(node.original_file_path),
+                        },
+                    )
+                    sentry_sdk.capture_exception(exc, scope=scope)
         else:
             typer.secho(
                 f"WARNING: running with non-prod target {target} so skipping metabase sync",
