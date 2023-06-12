@@ -7,14 +7,7 @@
 
 
 WITH service_alerts AS (
-    SELECT *,
-            -- https://gtfs.org/realtime/reference/#message-tripdescriptor
-        {{ dbt_utils.generate_surrogate_key([
-            'calculated_service_date',
-            'base64_url',
-            'trip_id',
-            'trip_start_time',
-        ]) }} as key,
+    SELECT *
     FROM {{ ref('int_gtfs_rt__service_alerts_trip_day_map_grouping') }}
 ),
 
