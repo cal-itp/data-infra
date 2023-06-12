@@ -600,75 +600,81 @@ def parse_and_validate(
     verbose: bool = False,
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
-    fs = get_fs()
-    dst_path_rt = f"{tmp_dir}/rt_{hour.name_hash}/"
-    get_with_retry(
-        fs,
-        rpath=[
-            extract.path
-            for extract in hour.local_paths_to_extract(dst_path_rt).values()
-        ],
-        lpath=list(hour.local_paths_to_extract(dst_path_rt).keys()),
-    )
+    with sentry_sdk.push_scope() as scope:
+        scope.set_tag("config_feed_type", hour.first_extract.config.feed_type)
+        scope.set_tag("config_name", hour.first_extract.config.name)
+        scope.set_tag("config_url", hour.first_extract.config.url)
+        scope.set_context("RT Hourly Aggregation", json.loads(hour.json()))
 
-    if hour.step == RTProcessingStep.validate:
-        if not hour.extracts[0].config.schedule_url_for_validation:
-            return [
-                RTFileProcessingOutcome(
-                    step=hour.step,
-                    success=False,
-                    extract=extract,
-                    exception=NoScheduleDataSpecified(),
-                )
-                for extract in hour.extracts
-            ]
+        fs = get_fs()
+        dst_path_rt = f"{tmp_dir}/rt_{hour.name_hash}/"
+        get_with_retry(
+            fs,
+            rpath=[
+                extract.path
+                for extract in hour.local_paths_to_extract(dst_path_rt).values()
+            ],
+            lpath=list(hour.local_paths_to_extract(dst_path_rt).keys()),
+        )
 
-        try:
-            first_extract = hour.extracts[0]
-            extract_day = first_extract.dt
-            for target_date in reversed(
-                list(extract_day - extract_day.subtract(days=7))
-            ):  # Fall back to most recent available schedule within 7 days
-                try:
-                    schedule_extract = get_schedule_extracts_for_day(target_date)[
-                        first_extract.config.base64_validation_url
-                    ]
+        if hour.step == RTProcessingStep.validate:
+            if not hour.extracts[0].config.schedule_url_for_validation:
+                return [
+                    RTFileProcessingOutcome(
+                        step=hour.step,
+                        success=False,
+                        extract=extract,
+                        exception=NoScheduleDataSpecified(),
+                    )
+                    for extract in hour.extracts
+                ]
 
-                    gtfs_zip = download_gtfs_schedule_zip(
-                        fs,
-                        schedule_extract=schedule_extract,
-                        dst_dir=tmp_dir,
-                        pbar=pbar,
+            try:
+                first_extract = hour.extracts[0]
+                extract_day = first_extract.dt
+                for target_date in reversed(
+                    list(extract_day - extract_day.subtract(days=7))
+                ):  # Fall back to most recent available schedule within 7 days
+                    try:
+                        schedule_extract = get_schedule_extracts_for_day(target_date)[
+                            first_extract.config.base64_validation_url
+                        ]
+
+                        scope.set_context(
+                            "Schedule Extract", json.loads(schedule_extract.json())
+                        )
+
+                        gtfs_zip = download_gtfs_schedule_zip(
+                            fs,
+                            schedule_extract=schedule_extract,
+                            dst_dir=tmp_dir,
+                            pbar=pbar,
+                        )
+
+                        break
+                    except (KeyError, FileNotFoundError):
+                        print(
+                            f"no schedule data found for {first_extract.path} and day {target_date}"
+                        )
+                else:
+                    raise ScheduleDataNotFound(
+                        f"no recent schedule data found for {first_extract.path}"
                     )
 
-                    break
-                except (KeyError, FileNotFoundError):
-                    print(
-                        f"no schedule data found for {first_extract.path} and day {target_date}"
-                    )
-            else:
-                raise ScheduleDataNotFound(
-                    f"no recent schedule data found for {first_extract.path}"
+                return validate_and_upload(
+                    fs=fs,
+                    jar_path=jar_path,
+                    dst_path_rt=dst_path_rt,
+                    tmp_dir=tmp_dir,
+                    hour=hour,
+                    gtfs_zip=gtfs_zip,
+                    verbose=verbose,
+                    pbar=pbar,
                 )
 
-            return validate_and_upload(
-                fs=fs,
-                jar_path=jar_path,
-                dst_path_rt=dst_path_rt,
-                tmp_dir=tmp_dir,
-                hour=hour,
-                gtfs_zip=gtfs_zip,
-                verbose=verbose,
-                pbar=pbar,
-            )
-        except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
-            stderr = None
-
-            with sentry_sdk.push_scope() as scope:
-                scope.set_tag("config_feed_type", hour.first_extract.config.feed_type)
-                scope.set_tag("config_name", hour.first_extract.config.name)
-                scope.set_tag("config_url", hour.first_extract.config.url)
-                scope.set_context("RT Hourly Aggregation", json.loads(hour.json()))
+            # these are the only two types of errors we expect; let any others bubble up
+            except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
+                stderr = None
 
                 fingerprint: List[Any] = [
                     type(e),
@@ -678,9 +684,7 @@ def parse_and_validate(
                 if isinstance(e, subprocess.CalledProcessError):
                     fingerprint.append(e.returncode)
                     stderr = e.stderr.decode("utf-8")
-                    scope.set_context(
-                        "Schedule Extract", json.loads(schedule_extract.json())
-                    )
+
                     # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
                     scope.set_context(
                         "Process", {"stderr": e.stderr.decode("utf-8")[-2000:]}
@@ -692,41 +696,42 @@ def parse_and_validate(
 
                 scope.fingerprint = fingerprint
                 sentry_sdk.capture_exception(e, scope=scope)
-            if verbose:
-                log(
-                    f"{str(e)} thrown for {hour.path}",
-                    fg=typer.colors.RED,
-                    pbar=pbar,
-                )
-                if isinstance(e, subprocess.CalledProcessError):
+
+                if verbose:
                     log(
-                        e.stderr.decode("utf-8"),
-                        fg=typer.colors.YELLOW,
+                        f"{str(e)} thrown for {hour.path}",
+                        fg=typer.colors.RED,
                         pbar=pbar,
                     )
+                    if isinstance(e, subprocess.CalledProcessError):
+                        log(
+                            e.stderr.decode("utf-8"),
+                            fg=typer.colors.YELLOW,
+                            pbar=pbar,
+                        )
 
-            return [
-                RTFileProcessingOutcome(
-                    step=hour.step,
-                    success=False,
-                    extract=extract,
-                    exception=e,
-                    process_stderr=stderr,
-                )
-                for extract in hour.extracts
-            ]
+                return [
+                    RTFileProcessingOutcome(
+                        step=hour.step,
+                        success=False,
+                        extract=extract,
+                        exception=e,
+                        process_stderr=stderr,
+                    )
+                    for extract in hour.extracts
+                ]
 
-    if hour.step == RTProcessingStep.parse:
-        return parse_and_upload(
-            fs=fs,
-            dst_path_rt=dst_path_rt,
-            tmp_dir=tmp_dir,
-            hour=hour,
-            verbose=verbose,
-            pbar=pbar,
-        )
+        if hour.step == RTProcessingStep.parse:
+            return parse_and_upload(
+                fs=fs,
+                dst_path_rt=dst_path_rt,
+                tmp_dir=tmp_dir,
+                hour=hour,
+                verbose=verbose,
+                pbar=pbar,
+            )
 
-    raise RuntimeError("we should not be here")
+        raise RuntimeError("we should not be here")
 
 
 @app.command()
