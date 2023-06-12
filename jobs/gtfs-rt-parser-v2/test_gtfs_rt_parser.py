@@ -5,12 +5,13 @@ from calitp_data_infra.storage import (  # type: ignore
     GTFSFeedType,
     GTFSRTFeedExtract,
 )
+from pydantic import ValidationError
+
 from gtfs_rt_parser import (
     RTFileProcessingOutcome,
     RTHourlyAggregation,
     RTProcessingStep,
 )
-from pydantic import ValidationError
 
 
 def test_rt_file_processing_outcome_construction() -> None:
@@ -31,9 +32,7 @@ def test_rt_file_processing_outcome_construction() -> None:
         aggregation=RTHourlyAggregation(
             filename="vehicle_positions.jsonl.gz",
             step=RTProcessingStep.parse,
-            feed_type=GTFSFeedType.vehicle_positions,
-            hour=extract.ts.replace(minute=0, second=0, microsecond=0),
-            base64_url=extract.base64_url,
+            first_extract=extract,
             extracts=[
                 extract,
             ],
