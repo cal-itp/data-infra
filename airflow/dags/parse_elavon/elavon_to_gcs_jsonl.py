@@ -8,9 +8,9 @@ from typing import ClassVar, List, Optional
 
 import pandas as pd
 import pendulum
+from calitp_data.storage import get_fs
 from calitp_data_infra.storage import (  # type: ignore
     PartitionedGCSArtifact,
-    get_fs,
     make_name_bq_safe,
 )
 

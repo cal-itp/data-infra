@@ -14,13 +14,13 @@ from typing import ClassVar, Dict, List, Optional, Tuple
 import pendulum
 import sentry_sdk
 import typer
+from calitp_data.storage import get_fs
 from calitp_data_infra.storage import (
     GTFSFeedType,
     GTFSScheduleFeedExtract,
     PartitionedGCSArtifact,
     ProcessingOutcome,
     fetch_all_in_partition,
-    get_fs,
 )
 from tqdm import tqdm
 from utils import GTFSScheduleFeedFile

@@ -3,9 +3,9 @@ FROM openjdk:11
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
 RUN apt-get update -y \
-    && apt-get install -y python3 python3-pip python3-venv
+    && apt-get install -y python3 python3-pip python3-venv libunwind-dev liblz4-dev
 
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -
+RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:${PATH}"
 
 # v2 from https://github.com/MobilityData/gtfs-validator/releases/download/v2.0.0/gtfs-validator-v2.0.0_cli.jar
