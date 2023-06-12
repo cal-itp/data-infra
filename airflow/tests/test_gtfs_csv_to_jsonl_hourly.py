@@ -14,20 +14,41 @@ def test_parse_csv_str():
     1,2,3
     1,2,3
     """.strip()
-    lines, fields = parse_csv_str(contents=csv)
+    lines, fields, dialect = parse_csv_str(contents=csv)
 
     assert len(lines) == 3
     assert len(fields) == 3
+    assert dialect == "excel"
 
 
 def test_parse_csv_str_tsv():
-    tsv = """
-    a   b   c
-    1   2   3
-    1   2   3
-    1   2   3
-    """.strip()
-    lines, fields = parse_csv_str(contents=tsv)
+    tsv = "\n".join(
+        [
+            "\t".join(row)
+            for row in [
+                ["a", "2", "c"],
+                ["1", "2", "3"],
+                ["1", "2", "3"],
+                ["1", "2", "3"],
+            ]
+        ]
+    )
+    lines, fields, dialect = parse_csv_str(contents=tsv)
 
     assert len(lines) == 3
     assert len(fields) == 3
+    assert dialect == "excel-tab"
+
+
+def test_parse_csv_str_one_column():
+    tsv = """
+    a
+    1
+    1
+    1
+    """.strip()
+    lines, fields, dialect = parse_csv_str(contents=tsv)
+
+    assert len(lines) == 3
+    assert len(fields) == 1
+    assert dialect == "excel"
