@@ -7,7 +7,9 @@ from calitp_data_infra.storage import (  # type: ignore
 )
 from pydantic import ValidationError
 
-from gtfs_rt_parser import (
+# isort doesn't realize this is a local file when run from the top of the project
+# the actual fix would be to make gtfs_rt_parser a proper module that is executed with -m
+from gtfs_rt_parser import (  # isort:skip
     RTFileProcessingOutcome,
     RTHourlyAggregation,
     RTProcessingStep,
