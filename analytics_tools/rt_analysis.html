@@ -766,6 +766,11 @@
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#more-performant-maps-via-embedded-app">
+       More performant maps via embedded app
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#stop-segment-speed-view">
        <code class="docutils literal notranslate">
         <span class="pre">
@@ -951,6 +956,11 @@
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#mapping">
        Mapping
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#more-performant-maps-via-embedded-app">
+       More performant maps via embedded app
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
@@ -1303,30 +1313,35 @@
 <div class="mermaid">
             flowchart TD
     gcs[(&quot;GCS (calitp-analytics-data/data_analyses/rt_delay)&quot;)]
+    map_gcs[(&quot;Public GCS (calitp-map-tiles/)&quot;)]
     subgraph rt_fil_map[RtFilterMapper]
         st_flt[self.set_filter] --&gt;
         flt[self._filter]
         rs_flt[self.reset_filter] --&gt;
         flt
         subgraph stv[static views]
-            self.calitp_agency_name
+            self.organization_name
             self.rt_trips
             self.stop_delay_view
             self.endpoint_delay_summary
             self.endpoint_delay_view
         end
         subgraph dyn[dynamic tools]
-            ssm[self.segment_speed_map] --&gt;
+            ssm[self.segment_speed_map] --&gt;|optionally renders map| dmv
             dmv[self.detailed_map_view] --&gt;
-            gis[/GIS Format Exports/]
+            gis[/Manual GIS Format Exports/]
+            dmv --&gt; mgz[self.map_gz_export]
             self.chart_variability
-            self.map_variance
+            mpv[self.map_variance]
+            mpv --&gt; |optionally renders map| mgz
+            mgz -.-&gt; map_gcs
+            map_gcs -.-&gt; spa
+            mgz -.-&gt; |self.spa_map_state| spa
+            mgz --&gt;|self.display_spa_map| spa([render maps via external app + IFrame])
             self.chart_delays
             self.chart_speeds
             self.describe_slow_routes
-            ssm --&gt; rend[/renders map/]
             ssm --&gt; ssv[self.stop_segment_speed_view]
-            rend -.- dmv
             subgraph cor[corridor tools]
                 acor[self.autocorridor] -.-&gt;
                 add_cor[self.add_corridor] --&gt;
@@ -1399,7 +1414,13 @@
 <div class="section" id="mapping">
 <h4>Mapping<a class="headerlink" href="#mapping" title="Permalink to this headline">¶</a></h4>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">segment_speed_map</span></code> method to generate a speed map. Depending on parameters, the speeds visualized will either be the 20th percentile or average speeds for all trips in each segment matching the current filter, if any. See function docstring for additional information.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">map_variance</span></code> method, currently under development, offers a spatial view of relative variance in speeds for all trips in each segment matching the current filter, if any.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">map_variance</span></code> method, currently under development, offers a spatial view of variation in speeds for all trips in each segment matching the current filter, if any. This is now quantified as the ratio between 80th percentile and 20th percentile speeds, and used on the CA Transit Speed Maps tool.</p>
+</div>
+<div class="section" id="more-performant-maps-via-embedded-app">
+<h4>More performant maps via embedded app<a class="headerlink" href="#more-performant-maps-via-embedded-app" title="Permalink to this headline">¶</a></h4>
+<p>Rather than render the maps directly in the notebook via geopandas and folium, we now have the capability to save them as compressed GeoJSON to GCS and render them in an IFrame using a <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/apps/maps">minimal web app</a>.</p>
+<p>This method is much more efficient, and we rely on it to maintain the quantity and quality of maps on the <a class="reference external" href="https://analysis.calitp.org/rt/README.html">CA Transit Speed Maps</a> site.</p>
+<p><code class="docutils literal notranslate"><span class="pre">display_spa_map</span></code> will always show the most recent map generated with either <code class="docutils literal notranslate"><span class="pre">segment_speed_map</span></code> or <code class="docutils literal notranslate"><span class="pre">map_variance</span></code>, then saved via <code class="docutils literal notranslate"><span class="pre">map_gz_export</span></code>.</p>
 </div>
 <div class="section" id="stop-segment-speed-view">
 <h4><code class="docutils literal notranslate"><span class="pre">stop_segment_speed_view</span></code><a class="headerlink" href="#stop-segment-speed-view" title="Permalink to this headline">¶</a></h4>
@@ -1496,11 +1517,15 @@
 <td><p>20th percentile speed for all trips on this segment</p></td>
 <td><p>float64</p></td>
 </tr>
-<tr class="row-odd"><td><p>var_mph**</p></td>
-<td><p>statistical variance in speed for all trips on this segment</p></td>
+<tr class="row-odd"><td><p>_80p_mph**</p></td>
+<td><p>80th percentile speed for all trips on this segment</p></td>
 <td><p>float64</p></td>
 </tr>
-<tr class="row-even"><td><p>trips_per_hour</p></td>
+<tr class="row-even"><td><p>fast_slow_ratio**</p></td>
+<td><p>ratio between p80 speed and p20 speed for all trips on this segment</p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-odd"><td><p>trips_per_hour</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n_trips_shp</span></code> / hours in filter</p></td>
 <td><p>float64</p></td>
 </tr>
