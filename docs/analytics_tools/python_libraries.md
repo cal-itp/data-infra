@@ -14,7 +14,7 @@ kernelspec:
 ---
 (python-libraries)=
 # Useful Python Libraries
-The following libraries are available and recommended for use by Cal-ITP data analysts.
+The following libraries are available and recommended for use by Cal-ITP data analysts. Our JupyterHub environment comes with all of these installed already!
 
 ## Table of Contents
 1. [shared utils](#shared-utils)

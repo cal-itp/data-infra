@@ -1,6 +1,6 @@
 # architecture
 
-This page displays the architecture of our kubernetes enviornment.
+This page displays the architecture of our kubernetes environment.
 
 ##
 

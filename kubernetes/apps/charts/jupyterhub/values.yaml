@@ -8,7 +8,7 @@ jupyterhub:
     defaultUrl: "/lab"
     image:
       name: ghcr.io/cal-itp/data-infra/jupyter-singleuser
-      tag: 2023.4.28
+      tag: 2023.6.8
     memory:
       # Much more than 10 and we risk bumping up against the actual capacity of e2-highmem-2
       limit: 10G
@@ -25,6 +25,7 @@ jupyterhub:
             - "-c"
             - >
               cp /tmp/profile.sh /home/jovyan/.profile;
+              mkdir -p -- /home/jovyan/.jupyter;
               cp /tmp/jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py;
   scheduling:
     userPods:

@@ -76,7 +76,12 @@ models:
       - *key
       - name: ntd_id
         description: |
-          The organization's ID in the National Transit Database
+          The organization's ID in the National Transit Database / FTA agency ID number.
+          Data entry processes / sources of truth for this field have changed over time.
+          As of May 2023, the source is the `raw_ntd_id` field in the Airtable `organizations` table;
+          for records before May 2023, sources were some combination of the `NTD agency info` table in
+          Airtable and the `ntd_agency_to_organizations` CSV seed file in this dbt project (now
+          renamed to `_deprecated__ntd_agency_to_organizations`).
       - name: name
         description: Organization name
       - name: organization_type
@@ -117,9 +122,12 @@ models:
       - name: hubspot_company_record_id
         description: |
           Organization's ID in Hubspot CRM.
-      - name: assessment_status
+      - name: _deprecated__assessment_status
         description: |
-          Is either "Yes" or "No" and indicates whether this Organization
+          *Deprecated May 2023 in favor of `public_currently_operating`; column remains
+          for backwards compatibility in some downstream models but is not
+          recommended for use in current analysis.*
+          Boolean indicating whether this organization
           manages qualifying assessed services
       - &valid_from_actual
         name: _valid_from
@@ -134,6 +142,30 @@ models:
         description: |
           Flag indicating whether this is the most recent version of
           this record.
+      - &public_currently_operating
+        name: public_currently_operating
+        description: |
+          Formula in source system returns true value if the following criteria are met:
+
+            1. Service has “Operating” value in `operational_status` column (for organizations, only at least one managed service must meet this criterion)
+            2. Service is rideable by the general public (for organizations, only at least one managed service must meet this criterion)
+            3. Provider is either an NTD reporter (indicated by non-empty `raw_ntd_id`) or is a public entity.
+      - &public_currently_operating_fixed_route
+        name: public_currently_operating_fixed_route
+        description: |
+          Formula in source system returns true value under same conditions as `public_currently_operating`
+          plus additional requirement that service has `fixed_route = true` (for organizations, only at least one managed service must meet this criterion).
+      - name: is_public_entity
+        description: |
+          Formula in source system returns true if the `organization_type` column has been set to one of the following:
+            City/Town,
+            Independent Agency,
+            MPO/RTPA,
+            County,
+            Tribe,
+            Federal Government,
+            Joint Powers Agency, or
+            Council of Governments
   - name: dim_services
     description: '{{ doc("services_table") }}'
     tests: *mutually_exclusive_ranges
@@ -149,8 +181,11 @@ models:
         description: |
           Array of categorical choices; example
           values "bus, car/van"; "ferry"
-      - name: currently_operating
+      - name: _deprecated__currently_operating
         description: |
+          *Deprecated May 2023 in favor of `operational_status`; column remains
+          for backwards compatibility in some downstream models but is not
+          recommended for use in current analysis.*
           Boolean for whether service is currently active
       - name: gtfs_schedule_status
         description: |
@@ -163,7 +198,7 @@ models:
           for example in `mart_gtfs.dim_schedule_feeds`.**
       - name: gtfs_schedule_quality
         description: |
-          Status of overall GTFS quality for a given transit service. Options are:
+          Status of overall GTFS quality for a given transit service. Options:
           `0 - Does not have GTFS Schedule`;
           `1 - Has URL for GTFS downloading`;
           `2 - GTFS data has active service`;
@@ -174,17 +209,41 @@ models:
           This field can also be empty (null). Sometimes this field is null (missing) even
           for services that **do** have GTFS schedule data.
           **Note: This field is manually entered in the Transit Database,
-          so it may be subject to some gaps in coverage and it is not updated automatically.
-          Data in this field may not align with validations data from the
+          so it may be subject to gaps in coverage and it is not updated automatically.
+          Data in this field may not align with validations from the
           GTFS pipeline, for example in `mart_gtfs_quality.fct_daily_schedule_feed_validation_notices`,
           or GTFS guidelines checks implemented in `mart_gtfs_guidelines.fact_daily_guideline_checks`.
           Use those tables directly for the most up-to-date information on individual GTFS feeds'
           validation and guideline statuses.**
-      - name: assessment_status
+      - name: _deprecated__assessment_status
         description: |
+          *Deprecated May 2023 in favor of `public_currently_operating`; column remains
+          for backwards compatibility in some downstream models but is not
+          recommended for use in current analysis.*
           Is either "Yes" or "No" and indicates whether this Service qualifies as
           being an assessed service
       - name: deprecated_date
+        description: |
+          The approximate date that the service was terminated, is expected to end, or temporarily suspended.
+      - name: start_date
+        description: |
+          The approximate date that the service is expected to begin or resume service if it was temporarily suspended.
+      - name: fixed_route
+        description: |
+          This will be set to true for services that have the following:
+          - Have a published schedule
+          - Run along a predetermined route.
+      - name: is_public
+        description: |
+          Formula in source system returns "Yes" value if the rider requirement of "Public" has been set in the `rider_requirements` column.
+      - *public_currently_operating
+      - *public_currently_operating_fixed_route
+      - name: operational_status
+        description: |
+          Formula in source system automatically calculates the operational status based on the following criteria:
+            A. Status is "Planned" when the service “Start Date” is in the future.
+            B. Status is "Operating" when the current date is not before the start date and not after the deprecated date or both start date and deprecated date are empty
+            C. Status is "Deprecated" when the service "Deprecated Date" is in the past.
       - *valid_from_actual
       - *valid_to_actual
       - *is_current_actual
@@ -649,6 +708,9 @@ models:
       This is a partially versioned, many-to-many relationship.
       Because organization records are versioned and funding programs are current-only this represents relationships between
       versioned organization records and unversioned funding program records.
+
+      Organizations that have been deleted will not have their funding programs present in
+      this table.
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -670,7 +732,13 @@ models:
     description: |
       Mapping table between fare systems and services.
       Relationship indicates that service utilizes the given fare system.
-      This is a versioned, many-to-many relationship.
+      This is a partially versioned, many-to-many relationship.
+      Because service records are versioned and fare systems records
+      are current-only this represents relationships between versioned service
+      records and unversioned fare systems records.
+
+      Services that have been deleted will not have their fare systems present in
+      this table.
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -766,6 +834,10 @@ models:
       Because organization records are versioned and headquarters county geography records
       are current-only this represents relationships between versioned organization
       records and unversioned headquarters county geography records.
+
+      Organizations that have been deleted will not have their headquarters county geographies present in
+      this table.
+
       Joins via this table can result in fanout.
   - name: bridge_services_x_operating_county_geographies
     description: |

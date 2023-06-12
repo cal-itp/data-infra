@@ -10,7 +10,7 @@
 
 WITH fct_vehicle_locations AS (
     SELECT * FROM {{ ref('fct_vehicle_locations') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 fct_daily_vehicle_location_trip_counts AS (

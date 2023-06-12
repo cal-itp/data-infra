@@ -13,6 +13,7 @@ stg_gtfs_schedule__translations AS (
         base64_url,
         ts,
         dt AS _dt,
+        _line_number,
         {{ trim_make_empty_string_null('table_name') }} AS table_name,
         {{ trim_make_empty_string_null('field_name') }} AS field_name,
         {{ trim_make_empty_string_null('language') }} AS language,

@@ -8,7 +8,6 @@ from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Unio
 
 import humanize
 import pendulum
-from palettable.scientific.sequential import LaJolla_6  # type: ignore
 from pydantic import BaseModel, Field, constr, root_validator
 from slugify import slugify
 from sqlalchemy import MetaData, Table, create_engine, select
@@ -69,7 +68,8 @@ DependsOn.resolved_nodes = property(  # type: ignore[attr-defined]
     if self.nodes
     else []
 )
-ColumnInfo.publish = property(lambda self: not self.meta.get("publish.ignore", False))  # type: ignore[attr-defined]
+ColumnInfo.publish = property(lambda self: self.meta.get("publish.include", False))  # type: ignore[attr-defined]
+
 
 # End monkey patches
 
@@ -111,7 +111,9 @@ class NodeModelMixin(BaseModel):
         columns = [
             c
             for c in self.sqlalchemy_table(engine).columns
-            if not self.columns or c.name not in self.columns or self.columns[c.name].publish  # type: ignore[attr-defined]
+            if not self.columns
+            or c.name not in self.columns
+            or self.columns[c.name].publish  # type: ignore[attr-defined]
         ]
         return select(columns=columns)
 
@@ -120,12 +122,7 @@ class NodeModelMixin(BaseModel):
         """
         Returns a string representation intended for graphviz labels
         """
-        return "\n".join(
-            [
-                self.config.materialized or self.resource_type.value,  # type: ignore[attr-defined]
-                self.name,
-            ]
-        )
+        return self.unique_id
 
     @property
     def gvattrs(self) -> Dict[str, Any]:
@@ -133,7 +130,13 @@ class NodeModelMixin(BaseModel):
         Return a dictionary of graphviz attrs for DAG visualization
         """
         return {
-            "fillcolor": "black",
+            "fillcolor": "white",  # this is already the default but make explicit
+            "label": "\n".join(
+                [
+                    self.config.materialized or self.resource_type.value,  # type: ignore[attr-defined]
+                    self.name,
+                ]
+            ),
         }
 
 
@@ -151,43 +154,53 @@ class HookNode(BaseHookNode, NodeModelMixin):
 
 class ModelNode(BaseModelNode, NodeModelMixin):
     @property
-    def gvrepr(self) -> str:
-        if (
-            self.config
-            and self.config.materialized in ("table", "incremental")
-            and self.catalog_entry
-            and self.catalog_entry.num_bytes  # type: ignore[attr-defined]
-        ):
-            return "\n".join(
-                [
-                    super(ModelNode, self).gvrepr,
-                    f"Storage: {humanize.naturalsize(self.catalog_entry.num_bytes)}",  # type: ignore[attr-defined]
-                ]
-            )
-        return super(ModelNode, self).gvrepr
+    def children(self) -> List["ModelNode"]:
+        children = []
+        for unique_id, node in NodeModelMixin._instances.items():
+            if (
+                isinstance(node, ModelNode)
+                and node.depends_on
+                and node.depends_on.nodes
+                and self.unique_id in node.depends_on.nodes
+            ):
+                children.append(node)
+
+        return children
 
     @property
     def gvattrs(self) -> Dict[str, Any]:
-        fillcolor = "white"
+        assert self.config is not None, self.unique_id
+        fillcolor = super(ModelNode, self).gvattrs["fillcolor"]
 
-        if self.config and self.config.materialized in ("table", "incremental"):
-            fillcolor = "aquamarine"
-
-        if (
+        more_than_100gb = (
             self.catalog_entry
             and self.catalog_entry.num_bytes  # type: ignore[attr-defined]
             and self.catalog_entry.num_bytes > 100_000_000_000  # type: ignore[attr-defined]
+        )
+
+        if self.config.materialized == "table":
+            fillcolor = "darkseagreen"
+        elif self.config.materialized == "incremental":
+            fillcolor = "darkseagreen1"
+
+        if (
+            more_than_100gb
+            and self.catalog_entry
             and "clustering_fields" not in self.catalog_entry.stats
             and "partitioning_type" not in self.catalog_entry.stats
         ):
-            fillcolor = "red"
+            fillcolor = "orange"
 
-        # TODO: bring me back
-        # if self.config.materialized == "view" and len(self.children) > 1:
-        #     fillcolor = "pink"
+        if self.config.materialized == "view" and len(self.children) > 1:
+            fillcolor = "yellow"
+
+        label = super(ModelNode, self).gvattrs["label"]
+        if self.catalog_entry and self.catalog_entry.num_bytes:  # type: ignore[attr-defined]
+            label += f"\nStorage: {humanize.naturalsize(self.catalog_entry.num_bytes)}"  # type: ignore[attr-defined]
 
         return {
             "fillcolor": fillcolor,
+            "label": label,
         }
 
 
@@ -211,7 +224,7 @@ class SeedNode(BaseSeedNode, NodeModelMixin):
     @property
     def gvattrs(self):
         return {
-            "fillcolor": "green",
+            "style": "dashed",
         }
 
 
@@ -416,21 +429,17 @@ class RunResultOutput(BaseRunResultOutput):
         """
         Returns a string representation intended for graphviz labels
         """
+        color = "white"
         assert self.node is not None
-        # TODO: do an actual linear transform on this
-        # the top colors are too dark to use as a background
-        white, yellow, orange, red, _, _ = LaJolla_6.hex_colors
+        # TODO: use palettable
         if self.bytes_processed > 500_000_000_000:
-            color = red
+            color = "red"
         elif self.bytes_processed > 300_000_000_000:
-            color = orange
+            color = "orange"
         elif self.bytes_processed > 100_000_000_000:
-            color = yellow
-        else:
-            color = white
+            color = "yellow"
 
         return {
-            **self.node.gvattrs,
             "fillcolor": color,
             "label": "\n".join(
                 [

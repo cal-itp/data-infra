@@ -15,7 +15,8 @@ make_intervals AS(
 
 dim_frequencies AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id', 'start_time']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id', 'start_time']) }} AS _gtfs_key,
         feed_key,
         trip_id,
         start_time,
@@ -27,7 +28,9 @@ dim_frequencies AS (
         headway_secs,
         exact_times,
         base64_url,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone
     FROM make_intervals
 )

@@ -18,6 +18,7 @@ parts:
         - file: analytics_tools/bi_dashboards
         - file: analytics_tools/jupyterhub
         - file: analytics_tools/python_libraries
+        - file: analytics_tools/scripts
         - file: analytics_tools/rt_analysis
         - file: analytics_tools/saving_code
         - file: analytics_tools/storing_data
@@ -25,14 +26,7 @@ parts:
         - file: analytics_tools/knowledge_sharing
       - file: analytics_new_analysts/overview
         sections:
-        - file: analytics_new_analysts/data-analysis-intro
-        - file: analytics_new_analysts/data-analysis-intermediate
-        - file: analytics_new_analysts/data-management
-        - file: analytics_new_analysts/notebooks
-        - file: analytics_new_analysts/spatial-analysis-basics
-        - file: analytics_new_analysts/spatial-analysis-intro
-        - file: analytics_new_analysts/spatial-analysis-intermediate
-        - file: analytics_new_analysts/spatial-analysis-advanced
+        - glob: analytics_new_analysts/*
       - file: warehouse/overview
         sections:
         - file: warehouse/what_is_agency
@@ -41,11 +35,6 @@ parts:
       - file: datasets_and_tables/overview
         sections:
         - file: datasets_and_tables/transitdatabase
-      - file: analytics_examples/overview
-        sections:
-        - file: analytics_examples/warehouse_tutorial
-        - file: analytics_examples/new_tutorial
-        - file: analytics_examples/sample-catalog-viewer
       - file: publishing/overview
         sections:
           - glob: publishing/sections/*

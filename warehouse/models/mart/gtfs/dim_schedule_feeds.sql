@@ -27,6 +27,7 @@ data_available AS (
 hashed AS (
     SELECT
         base64_url,
+        dt,
         ts,
         download_success,
         unzip_success,
@@ -49,6 +50,7 @@ next_valid_extract AS (
 -- following: https://dba.stackexchange.com/questions/210907/determine-consecutive-occurrences-of-values
 first_instances AS (
     SELECT
+        hashed.dt,
         hashed.ts,
         base64_url,
         latest_extract,
@@ -77,6 +79,7 @@ get_next_first AS (
         unzip_success,
         content_hash,
         zipfile_extract_md5hash,
+        dt,
         ts,
         LEAD(ts) OVER(PARTITION BY base64_url ORDER BY ts) AS next_first_ts
     FROM first_instances
@@ -90,6 +93,7 @@ all_versioned AS (
         get_next_first.unzip_success,
         get_next_first.content_hash,
         get_next_first.zipfile_extract_md5hash,
+        get_next_first.dt,
         get_next_first.ts AS _valid_from,
         {{ make_end_of_valid_range('COALESCE(
                 (
@@ -117,6 +121,7 @@ actual_data_only AS (
         download_success,
         unzip_success,
         zipfile_extract_md5hash,
+        dt,
         _valid_from,
         _valid_to,
         _valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current
@@ -145,6 +150,7 @@ dim_schedule_feeds AS (
         unzip_success,
         zipfile_extract_md5hash,
         feed_timezone,
+        dt AS _dt,
         _valid_from,
         _valid_to,
         _is_current

@@ -66,7 +66,7 @@ gtfs_joins AS (
         shapes.key AS shape_array_key,
 
         trips.shape_id,
-        trips.warning_duplicate_primary_key AS contains_warning_duplicate_trip_primary_key,
+        trips.warning_duplicate_gtfs_key AS contains_warning_duplicate_trip_primary_key,
 
         stop_times_grouped.num_distinct_stops_served,
         stop_times_grouped.num_stop_times,
@@ -74,7 +74,7 @@ gtfs_joins AS (
         stop_times_grouped.trip_last_arrival_sec,
         stop_times_grouped.service_hours,
         stop_times_grouped.flex_service_hours,
-        stop_times_grouped.contains_warning_duplicate_primary_key AS contains_warning_duplicate_stop_times_primary_key,
+        stop_times_grouped.contains_warning_duplicate_gtfs_key AS contains_warning_duplicate_stop_times_primary_key,
         stop_times_grouped.contains_warning_missing_foreign_key_stop_id,
         stop_times_grouped.trip_start_timezone,
         stop_times_grouped.trip_end_timezone,

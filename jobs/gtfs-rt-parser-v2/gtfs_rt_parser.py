@@ -30,6 +30,7 @@ from aiohttp.client_exceptions import (
     ClientResponseError,
     ServerDisconnectedError,
 )
+from calitp_data.storage import get_fs  # type: ignore
 from calitp_data_infra.storage import (  # type: ignore
     JSONL_GZIP_EXTENSION,
     GTFSDownloadConfig,
@@ -40,7 +41,6 @@ from calitp_data_infra.storage import (  # type: ignore
     PartitionedGCSArtifact,
     ProcessingOutcome,
     fetch_all_in_partition,
-    get_fs,
     make_name_bq_safe,
 )
 from google.cloud.storage import Blob  # type: ignore

@@ -12,6 +12,7 @@ stg_gtfs_schedule__routes AS (
         base64_url,
         ts,
         dt AS _dt,
+        _line_number,
         {{ trim_make_empty_string_null('route_id') }} AS route_id,
         -- TODO: cast route_type to integer for consistency with other enum types
         {{ trim_make_empty_string_null('route_type') }} AS route_type,

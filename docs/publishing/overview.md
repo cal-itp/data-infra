@@ -17,8 +17,8 @@ listed in increasing order of complexity and therefore capability.
 * HTML visualizations can be rendered in [GitHub Pages](publishing-github-pages)
   and embedded as a URL into slide deck
 * More advanced HTML-based reports can be hosted in the [analytics portfolio](publishing-analytics-portfolio-site)
-  which supports interactivity and notebook paramterization.
+  which supports interactivity and notebook parameterization.
 * Interactive dashboards should be hosted in [Metabase](publishing-metabase) to
   share with external stakeholders.
-* Structured data may be published to [CKAN](publishing-ckan) to facilitate
-  usage by analysts, researchers, or other stakeholders.
+* Structured tabular data may be published to [CKAN](publishing-ckan) to facilitate usage by analysts, researchers, or other stakeholders. These will be hosted at [https://data.ca.gov](https://data.ca.gov).
+* Structured geospatial data may be published to the Caltrans [Geoportal](publishing-geoportal). These will be hosted at [https://https://gis.data.ca.gov](https://gis.data.ca.gov).
