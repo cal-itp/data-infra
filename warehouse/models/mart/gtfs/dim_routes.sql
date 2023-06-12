@@ -7,7 +7,8 @@ WITH make_dim AS (
 
 dim_routes AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'route_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'route_id']) }} AS _gtfs_key,
         feed_key,
         route_id,
         route_type,
@@ -23,7 +24,9 @@ dim_routes AS (
         continuous_drop_off,
         network_id,
         base64_url,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
 )

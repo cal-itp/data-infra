@@ -15,6 +15,17 @@ calitp_warehouse:
       # which takes ~2700 seconds to full refresh
       timeout_seconds: 3000
       type: bigquery
+      gcs_bucket: calitp-dbt-python-models
+      dataproc_region: us-west2
+      submission_method: serverless
+      dataproc_batch:
+        runtime_config:
+          container_image: gcr.io/cal-itp-data-infra/dbt-spark:2023.3.28
+          properties:
+            spark.executor.cores: "4" # this is the default but put it here for clarity
+            spark.executor.instances: "4" # dbt defaults to 2
+            spark.executor.memory: 4g
+            spark.dynamicAllocation.maxExecutors: "16"
     prod_service_account:
       <<: *prod
       method: service-account
@@ -25,6 +36,7 @@ calitp_warehouse:
       execution_project: cal-itp-data-infra-staging
       database: cal-itp-data-infra-staging
       schema: staging
+      gcs_bucket: test-calitp-dbt-python-models
     staging_service_account:
       <<: *staging
       method: service-account

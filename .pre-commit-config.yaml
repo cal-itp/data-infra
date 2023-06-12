@@ -33,7 +33,7 @@ repos:
         args: ["-ll", "--skip=B108,B608,B310,B303,B324,B113"]
         files: .py$
   - repo: https://github.com/sqlfluff/sqlfluff
-    rev: 2.0.2
+    rev: 2.1.1
     hooks:
       - id: sqlfluff-lint
         additional_dependencies: ['dbt-bigquery', 'sqlfluff-templater-dbt']

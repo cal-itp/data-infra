@@ -45,7 +45,7 @@ DBT_ARTIFACTS_BUCKET = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
 MANIFEST_DEFAULT = f"{DBT_ARTIFACTS_BUCKET}/latest/manifest.json"
 PUBLISH_BUCKET = os.environ["CALITP_BUCKET__PUBLISH"]
 
-app = typer.Typer(pretty_exceptions_enable=False)
+app = typer.Typer()
 
 WGS84 = "EPSG:4326"  # "standard" lat/lon coordinate system
 CHUNK_SIZE = (
@@ -119,7 +119,7 @@ class DictionaryRow(BaseModel):
     field_type: str
     field_length: int
     field_precision: Optional[int]
-    units: None
+    units: Optional[str]
     domain_type: Literal["Unrepresented"]
     allowable_min_value: None
     allowable_max_value: None
@@ -344,7 +344,7 @@ def _generate_exposure_documentation(
         )
 
         for name, column in node.columns.items():
-            if not column.meta.get("publish.ignore", False):
+            if column.meta.get("publish.include", False):
                 field_description_authority = column.meta.get(
                     "ckan.authority", node.meta.get("ckan.authority")
                 )
@@ -363,7 +363,7 @@ def _generate_exposure_documentation(
                     field_type=column.meta.get("ckan.type", "STRING"),
                     field_length=column.meta.get("ckan.length", 1024),
                     field_precision=column.meta.get("ckan.precision"),
-                    units=None,
+                    units=column.meta.get("ckan.units", None),
                     domain_type="Unrepresented",
                     allowable_min_value=None,
                     allowable_max_value=None,

@@ -11,63 +11,98 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#agencytxt
     columns:
-      - name: key
+      - &schedule_dim_pk
+        name: key
         description: |
-          Synthetic primary key constructed from `feed_key` and `agency_id`.
-        tests: &primary_key_tests
-          - unique:
-              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+          Synthetic primary key constructed from `feed_key` and `_line_number`.
+        tests:
           - not_null
-        meta: &pk_meta
-          publish.ignore: true
+          - unique
+      - &schedule_dim_gtfs_key
+        name: _gtfs_key
+        description:
+          Synthetic primary natural key constructed from the model's GTFS specification uniqueness.
+        tests:
+          - not_null
+          - unique
+      - &schedule_dim_dt
+        name: _dt
+        tests:
+          - not_null
+      - &schedule_dim_line_number
+        name: _line_number
+        tests:
+          - not_null
       - &feed_key
         name: feed_key
         description: |
           Foreign key to the `schedule_feeds` table.
-        tests:
-          - not_null
-          - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
-        meta:
-          publish.ignore: true
       - &base64_url
         name: base64_url
         description: |
           Base 64 encoded URL from which this data was scraped.
+        meta:
+          publish.include: true
       - name: agency_id
         description: '{{ doc("gtfs_agency__agency_id") }}'
+        meta:
+          publish.include: true
       - name: agency_name
         description: '{{ doc("gtfs_agency__agency_name") }}'
-        tests: &not_null_warn_99_threshold
-          - dbt_utils.not_null_proportion:
-              at_least: 0.99
-              severity: warn
+        meta:
+          publish.include: true
       - name: agency_url
         description: '{{ doc("gtfs_agency__agency_url") }}'
-        tests: *not_null_warn_99_threshold
+        meta:
+          publish.include: true
       - name: agency_timezone
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
-        tests: &not_null_warn
-        - not_null:
-            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
-            config:
-              severity: warn
+        meta:
+          publish.include: true
       - name: agency_lang
         description: '{{ doc("gtfs_agency__agency_lang") }}'
+        meta:
+          publish.include: true
       - name: agency_phone
         description: '{{ doc("gtfs_agency__agency_phone") }}'
+        meta:
+          publish.include: true
       - name: agency_fare_url
         description: '{{ doc("gtfs_agency__agency_fare_url") }}'
+        meta:
+          publish.include: true
       - name: agency_email
         description: '{{ doc("gtfs_agency__agency_email") }}'
+        meta:
+          publish.include: true
+      - &_feed_valid_from
+        name: _feed_valid_from
       - &feed_timezone
         name: feed_timezone
-        meta:
-          publish.ignore: true
 
+  - name: dim_areas_latest
+    description: |
+      This table is a latest-only cut of the cleaned GTFS data.
+      It contains current-only data for agencies we are currently scraping.
+      Each row is a cleaned row from an areas.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#areastxt.
+    meta:
+      ckan.authority: https://gtfs.org/schedule/reference/#areastxt
+    columns:
+      - *schedule_dim_pk
+      - *feed_key
+      - *base64_url
+      - name: area_id
+        description: '{{ doc("gtfs_areas__area_id") }}'
+        meta:
+          publish.include: true
+      - name: area_name
+        description: '{{ doc("gtfs_areas__area_name") }}'
+        meta:
+          publish.include: true
+      - *_feed_valid_from
+      - *feed_timezone
 
   - name: dim_attributions_latest
     description: |
@@ -79,48 +114,63 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#attributionstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `attribution_id`.
-        tests: &pk_tests_with_dups
-          - unique:
-              where: "not warning_duplicate_primary_key"
-          - not_null
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: attribution_id
         description: '{{ doc("gtfs_attributions__attribution_id") }}'
+        meta:
+          publish.include: true
       - name: agency_id
         description: '{{ doc("gtfs_attributions__agency_id") }}'
+        meta:
+          publish.include: true
       - name: route_id
         description: '{{ doc("gtfs_attributions__route_id") }}'
+        meta:
+          publish.include: true
       - name: trip_id
         description: '{{ doc("gtfs_attributions__trip_id") }}'
+        meta:
+          publish.include: true
       - name: organization_name
         description: '{{ doc("gtfs_attributions__organization_name") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: is_producer
         description: '{{ doc("gtfs_attributions__is_producer") }}'
+        meta:
+          publish.include: true
       - name: is_operator
         description: '{{ doc("gtfs_attributions__is_operator") }}'
+        meta:
+          publish.include: true
       - name: is_authority
         description: '{{ doc("gtfs_attributions__is_authority") }}'
+        meta:
+          publish.include: true
       - name: attribution_url
         description: '{{ doc("gtfs_attributions__attribution_url") }}'
+        meta:
+          publish.include: true
       - name: attribution_email
         description: '{{ doc("gtfs_attributions__attribution_email") }}'
+        meta:
+          publish.include: true
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
-      - &warning_duplicate_primary_key
-        name: warning_duplicate_primary_key
+      - &warning_duplicate_gtfs_key
+        name: warning_duplicate_gtfs_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., the attribute(s) that is meant to
           uniquely identify a row are duplicated within an individual feed instance and `key` will
           also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
-        meta:
-          publish.ignore: true
   - name: dim_calendar_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
@@ -131,46 +181,52 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#calendartxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `service_id`.
-        tests: *primary_key_tests
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
-        tests: &not_null_error
-        - not_null:
-            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+        meta:
+          publish.include: true
       - name: monday
         description: '{{ doc("gtfs_calendar__monday") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: tuesday
         description: '{{ doc("gtfs_calendar__tuesday") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: wednesday
         description: '{{ doc("gtfs_calendar__wednesday") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: thursday
         description: '{{ doc("gtfs_calendar__thursday") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: friday
         description: '{{ doc("gtfs_calendar__friday") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: saturday
         description: '{{ doc("gtfs_calendar__saturday") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: sunday
         description: '{{ doc("gtfs_calendar__sunday") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: start_date
         description: '{{ doc("gtfs_calendar__start_date") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: end_date
         description: '{{ doc("gtfs_calendar__end_date") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_calendar_dates_latest
@@ -183,22 +239,24 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#calendar_datestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `service_id`, and `date`.
-        tests: *primary_key_tests
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: service_id
         description: '{{ doc("gtfs_calendar_dates__service_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: date
         description: '{{ doc("gtfs_calendar_dates__date") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: exception_type
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_fare_attributes_latest
@@ -211,32 +269,141 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#fare_attributestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `fare_id`.
-        tests: *primary_key_tests
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: fare_id
         description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: price
         description: '{{ doc("gtfs_fare_attributes__price") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: currency_type
         description: '{{ doc("gtfs_fare_attributes__currency_type") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: payment_method
         description: '{{ doc("gtfs_fare_attributes__payment_method") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: transfers
         description: '{{ doc("gtfs_fare_attributes__transfers") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: agency_id
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
+        meta:
+          publish.include: true
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
+        meta:
+          ckan.units: SECONDS
+          publish.include: true
+      - *feed_timezone
+
+  - name: dim_fare_leg_rules_latest
+    description: |
+      This table is a latest-only cut of the cleaned GTFS data.
+      It contains current-only data for agencies we are currently scraping.
+      Each row is a cleaned row from a fare_leg_rules.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#fare_leg_rulestxt.
+    meta:
+      ckan.authority: https://gtfs.org/schedule/reference/#fare_leg_rulestxt
+    columns:
+      - *schedule_dim_pk
+      - *feed_key
+      - *base64_url
+      - name: leg_group_id
+        description: '{{ doc("gtfs_fare_leg_rules__leg_group_id") }}'
+        meta:
+          publish.include: true
+      - name: network_id
+        description: '{{ doc("gtfs_fare_leg_rules__network_id") }}'
+        meta:
+          publish.include: true
+      - name: from_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__from_area_id") }}'
+        meta:
+          publish.include: true
+      - name: to_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__to_area_id") }}'
+        meta:
+          publish.include: true
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
+        meta:
+          publish.include: true
+      - *_feed_valid_from
+      - *feed_timezone
+
+  - name: dim_fare_media_latest
+    description: |
+      This table is a latest-only cut of the cleaned GTFS data.
+      It contains current-only data for agencies we are currently scraping.
+      Each row is a cleaned row from a fare_media.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#fare_mediatxt.
+    meta:
+      ckan.authority: https://gtfs.org/schedule/reference/#fare_mediatxt
+    columns:
+      - *schedule_dim_pk
+      - *feed_key
+      - *base64_url
+      - name: fare_media_id
+        description: '{{ doc("gtfs_fare_media__fare_media_id") }}'
+        meta:
+          publish.include: true
+      - name: fare_media_name
+        description: '{{ doc("gtfs_fare_media__fare_media_name") }}'
+        meta:
+          publish.include: true
+      - name: fare_media_type
+        description: '{{ doc("gtfs_fare_media__fare_media_type") }}'
+        meta:
+          publish.include: true
+      - *_feed_valid_from
+      - *feed_timezone
+
+  - name: dim_fare_products_latest
+    description: |
+      This table is a latest-only cut of the cleaned GTFS data.
+      It contains current-only data for agencies we are currently scraping.
+      Each row is a cleaned row from a fare_products.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#fare_productstxt.
+    meta:
+      ckan.authority: https://gtfs.org/schedule/reference/#fare_productstxt
+    columns:
+      - *schedule_dim_pk
+      - *feed_key
+      - *base64_url
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
+        meta:
+          publish.include: true
+      - name: fare_product_name
+        description: '{{ doc("gtfs_fare_products__fare_product_name") }}'
+        meta:
+          publish.include: true
+      - name: fare_media_id
+        description: '{{ doc("gtfs_fare_products__fare_media_id") }}'
+        meta:
+          publish.include: true
+      - name: amount
+        description: '{{ doc("gtfs_fare_products__amount") }}'
+        meta:
+          publish.include: true
+      - name: currency
+        description: '{{ doc("gtfs_fare_products__currency") }}'
+        meta:
+          publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
 
   - name: dim_fare_rules_latest
@@ -249,26 +416,78 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#fare_rulestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id`.
-        tests: *pk_tests_with_dups
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: fare_id
         description: '{{ doc("gtfs_fare_rules__fare_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: route_id
         description: '{{ doc("gtfs_fare_rules__route_id") }}'
+        meta:
+          publish.include: true
       - name: origin_id
         description: '{{ doc("gtfs_fare_rules__origin_id") }}'
+        meta:
+          publish.include: true
       - name: destination_id
         description: '{{ doc("gtfs_fare_rules__destination_id") }}'
+        meta:
+          publish.include: true
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
+
+  - name: dim_fare_transfer_rules_latest
+    description: |
+      This table is a latest-only cut of the cleaned GTFS data.
+      It contains current-only data for agencies we are currently scraping.
+      Each row is a cleaned row from a fare_transfer_rules.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#fare_transfer_rulestxt.
+    meta:
+      ckan.authority: https://gtfs.org/schedule/reference/#fare_transfer_rulestxt
+    columns:
+      - *schedule_dim_pk
+      - *feed_key
+      - *base64_url
+      - name: from_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__from_leg_group_id") }}'
+        meta:
+          publish.include: true
+      - name: to_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__to_leg_group_id") }}'
+        meta:
+          publish.include: true
+      - name: transfer_count
+        description: '{{ doc("gtfs_fare_transfer_rules__transfer_count") }}'
+        meta:
+          publish.include: true
+      - name: duration_limit
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit") }}'
+        meta:
+          publish.include: true
+      - name: duration_limit_type
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit_type") }}'
+        meta:
+          publish.include: true
+      - name: fare_transfer_type
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_transfer_type") }}'
+        meta:
+          publish.include: true
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
+        meta:
+          publish.include: true
+      - *_feed_valid_from
+      - *feed_timezone
 
   - name: dim_feed_info_latest
     description: |
@@ -280,36 +499,50 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#feed_infotxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
-        tests: *pk_tests_with_dups
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: feed_publisher_name
         description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: feed_publisher_url
         description: '{{ doc("gtfs_feed_info__feed_publisher_url") }}'
-        tests: *not_null_warn_99_threshold
+        meta:
+          publish.include: true
       - name: feed_lang
         description: '{{ doc("gtfs_feed_info__feed_lang") }}'
-        tests: *not_null_warn_99_threshold
+        meta:
+          publish.include: true
       - name: default_lang
         description: '{{ doc("gtfs_feed_info__default_lang") }}'
+        meta:
+          publish.include: true
       - name: feed_start_date
         description: '{{ doc("gtfs_feed_info__feed_start_date") }}'
+        meta:
+          publish.include: true
       - name: feed_end_date
         description: '{{ doc("gtfs_feed_info__feed_end_date") }}'
+        meta:
+          publish.include: true
       - name: feed_version
         description: '{{ doc("gtfs_feed_info__feed_version") }}'
+        meta:
+          publish.include: true
       - name: feed_contact_email
         description: '{{ doc("gtfs_feed_info__feed_contact_email") }}'
+        meta:
+          publish.include: true
       - name: feed_contact_url
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
 
   - name: dim_frequencies_latest
     description: |
@@ -321,40 +554,38 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#frequenciestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `trip_id`, and `start_time`.
-        tests: *primary_key_tests
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: trip_id
         description: '{{ doc("gtfs_frequencies__trip_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: start_time
         description: '{{ doc("gtfs_frequencies__start_time") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: end_time
         description: '{{ doc("gtfs_frequencies__end_time") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: headway_secs
         description: '{{ doc("gtfs_frequencies__headway_secs") }}'
-        tests: *not_null_warn
+        meta:
+          ckan.units: SECONDS
+          publish.include: true
       - name: exact_times
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
       - name: start_time_interval
-        meta:
-          publish.ignore: true
       - name: end_time_interval
-        meta:
-          publish.ignore: true
       - name: start_time_sec
-        meta:
-          publish.ignore: true
       - name: end_time_sec
-        meta:
-          publish.ignore: true
 
   - name: dim_levels_latest
     description: |
@@ -366,21 +597,24 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#levelstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `level_id`.
-        tests: *primary_key_tests
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: level_id
         description: '{{ doc("gtfs_levels__level_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: level_index
         description: '{{ doc("gtfs_levels__level_index") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: level_name
         description: '{{ doc("gtfs_levels__level_name") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_pathways_latest
@@ -393,42 +627,63 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#pathwaystxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `pathway_id`.
-        tests: *primary_key_tests
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: pathway_id
         description: '{{ doc("gtfs_pathways__pathway_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: from_stop_id
         description: '{{ doc("gtfs_pathways__from_stop_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: to_stop_id
         description: '{{ doc("gtfs_pathways__to_stop_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: pathway_mode
         description: '{{ doc("gtfs_pathways__pathway_mode") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: is_bidirectional
         description: '{{ doc("gtfs_pathways__is_bidirectional") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: length
         description: '{{ doc("gtfs_pathways__length") }}'
+        meta:
+          ckan.units: METERS
+          publish.include: true
       - name: traversal_time
         description: '{{ doc("gtfs_pathways__traversal_time") }}'
+        meta:
+          ckan.units: SECONDS
+          publish.include: true
       - name: stair_count
         description: '{{ doc("gtfs_pathways__stair_count") }}'
+        meta:
+          publish.include: true
       - name: max_slope
         description: '{{ doc("gtfs_pathways__max_slope") }}'
+        meta:
+          publish.include: true
       - name: min_width
         description: '{{ doc("gtfs_pathways__min_width") }}'
+        meta:
+          ckan.units: METERS
+          publish.include: true
       - name: signposted_as
         description: '{{ doc("gtfs_pathways__signposted_as") }}'
+        meta:
+          publish.include: true
       - name: reversed_signposted_as
         description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_routes_latest
@@ -441,41 +696,64 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#routestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `route_id`.
-        tests: *primary_key_tests
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_routes__route_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: agency_id
         description: '{{ doc("gtfs_routes__agency_id") }}'
+        meta:
+          publish.include: true
       - name: route_short_name
         description: '{{ doc("gtfs_routes__route_short_name") }}'
+        meta:
+          publish.include: true
       - name: route_long_name
         description: '{{ doc("gtfs_routes__route_long_name") }}'
+        meta:
+          publish.include: true
       - name: route_desc
         description: '{{ doc("gtfs_routes__route_desc") }}'
+        meta:
+          publish.include: true
       - name: route_type
         description: '{{ doc("gtfs_routes__route_type") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: route_url
         description: '{{ doc("gtfs_routes__route_url") }}'
+        meta:
+          publish.include: true
       - name: route_color
         description: '{{ doc("gtfs_routes__route_color") }}'
+        meta:
+          publish.include: true
       - name: route_text_color
         description: '{{ doc("gtfs_routes__route_text_color") }}'
+        meta:
+          publish.include: true
       - name: route_sort_order
         description: '{{ doc("gtfs_routes__route_sort_order") }}'
+        meta:
+          publish.include: true
       - name: continuous_pickup
         description: '{{ doc("gtfs_routes__continuous_pickup") }}'
+        meta:
+          publish.include: true
       - name: continuous_drop_off
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
+        meta:
+          publish.include: true
       - name: network_id
         description: '{{ doc("gtfs_routes__network_id") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_shapes_latest
@@ -488,37 +766,64 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#shapestxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `shape_id`, and `shape_pt_sequence`.
-        tests: *primary_key_tests
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: shape_pt_lat
         description: '{{ doc("gtfs_shapes__shape_pt_lat") }}'
-        tests: *not_null_warn
         meta:
           metabase.semantic_type: type/Latitude
           ckan.type: FLOAT
           ckan.length: 6
           ckan.precision: 3
+          publish.include: true
       - name: shape_pt_lon
         description: '{{ doc("gtfs_shapes__shape_pt_lon") }}'
-        tests: *not_null_warn
         meta:
           metabase.semantic_type: type/Longitude
           ckan.type: FLOAT
           ckan.length: 7
           ckan.precision: 3
+          publish.include: true
       - name: shape_pt_sequence
         description: '{{ doc("gtfs_shapes__shape_pt_sequence") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
+        meta:
+          publish.include: true
+      - *feed_timezone
+
+  - name: dim_stop_areas_latest
+    description: |
+      This table is a latest-only cut of the cleaned GTFS data.
+      It contains current-only data for agencies we are currently scraping.
+      Each row is a cleaned row from a stop_areas.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#stop_areastxt.
+    meta:
+      ckan.authority: https://gtfs.org/schedule/reference/#stop_areastxt
+    columns:
+      - *schedule_dim_pk
+      - *feed_key
+      - *base64_url
+      - name: area_id
+        description: '{{ doc("gtfs_stop_areas__area_id") }}'
+        meta:
+          publish.include: true
+      - name: stop_id
+        description: '{{ doc("gtfs_stop_areas__stop_id") }}'
+        meta:
+          publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
 
   - name: dim_stop_times_latest
@@ -532,49 +837,65 @@ models:
       ckan.authority: https://gtfs.org/reference/static#stop_timestxt
       publish.gis_coordinate_system_epsg: WGS84
     columns:
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `trip_id`, and `stop_sequence`.
-        tests: *pk_tests_with_dups
-        meta: *pk_meta
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: arrival_time
         description: '{{ doc("gtfs_stop_times__arrival_time") }}'
+        meta:
+          publish.include: true
       - name: departure_time
         description: '{{ doc("gtfs_stop_times__departure_time") }}'
+        meta:
+          publish.include: true
       - name: stop_id
         description: '{{ doc("gtfs_stop_times__stop_id") }}'
-        tests:
-        - not_null:
-            where: "not warning_missing_foreign_key_stop_id"
+        meta:
+          publish.include: true
       - name: stop_sequence
         description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: stop_headsign
         description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
+        meta:
+          publish.include: true
       - name: pickup_type
         description: '{{ doc("gtfs_stop_times__pickup_type") }}'
+        meta:
+          publish.include: true
       - name: drop_off_type
         description: '{{ doc("gtfs_stop_times__drop_off_type") }}'
+        meta:
+          publish.include: true
       - name: continuous_pickup
         description: '{{ doc("gtfs_stop_times__continuous_pickup") }}'
+        meta:
+          publish.include: true
       - name: continuous_drop_off
         description: '{{ doc("gtfs_stop_times__continuous_drop_off") }}'
+        meta:
+          publish.include: true
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
+        meta:
+          publish.include: true
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
-      - *warning_duplicate_primary_key
+        meta:
+          publish.include: true
+      - *warning_duplicate_gtfs_key
       - name: warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column are missing the required `stop_id` value.
           This means they will fail to join with `stop` related information.
-        meta:
-          publish.ignore: true
       - name: arrival_sec
         description: |
           This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
@@ -583,6 +904,9 @@ models:
           For example, `arrival_time = 21:30:45` would lead to `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
+        meta:
+          ckan.units: SECONDS
+          publish.include: true
       - name: departure_sec
         description: |
           This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
@@ -591,45 +915,44 @@ models:
           For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
+        meta:
+          ckan.units: SECONDS
+          publish.include: true
       - *feed_timezone
       - name: arrival_time_interval
-        meta:
-          publish.ignore: true
       - name: departure_time_interval
-        meta:
-          publish.ignore: true
       - name: start_pickup_drop_off_window
         description: '{{ doc("gtfs_stop_times__start_pickup_drop_off_window") }}'
         meta:
-          publish.ignore: true
+          publish.include: true
       - name: end_pickup_drop_off_window
         description: '{{ doc("gtfs_stop_times__end_pickup_drop_off_window") }}'
         meta:
-          publish.ignore: true
+          publish.include: true
       - name: mean_duration_factor
         description: '{{ doc("gtfs_stop_times__mean_duration_factor") }}'
         meta:
-          publish.ignore: true
+          publish.include: true
       - name: mean_duration_offset
         description: '{{ doc("gtfs_stop_times__mean_duration_offset") }}'
         meta:
-          publish.ignore: true
+          publish.include: true
       - name: safe_duration_factor
         description: '{{ doc("gtfs_stop_times__safe_duration_factor") }}'
         meta:
-          publish.ignore: true
+          publish.include: true
       - name: safe_duration_offset
         description: '{{ doc("gtfs_stop_times__safe_duration_offset") }}'
         meta:
-          publish.ignore: true
+          publish.include: true
       - name: pickup_booking_rule_id
         description: '{{ doc("gtfs_stop_times__pickup_booking_rule_id") }}'
         meta:
-          publish.ignore: true
+          publish.include: true
       - name: drop_off_booking_rule_id
         description: '{{ doc("gtfs_stop_times__drop_off_booking_rule_id") }}'
         meta:
-          publish.ignore: true
+          publish.include: true
       - name: start_pickup_drop_off_window_sec
         description: |
           This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
@@ -640,8 +963,6 @@ models:
           `25:40:00`, which are allowed in GTFS.
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
-        meta:
-          publish.ignore: true
       - name: end_pickup_drop_off_window_sec
         description: |
           This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
@@ -652,8 +973,6 @@ models:
           `25:40:00`, which are allowed in GTFS.
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
-        meta:
-          publish.ignore: true
       - name: start_pickup_drop_off_window_interval
         description: |
           This is a calculated field that does not appear directly in GTFS. It converts `start_pickup_drop_off_window`
@@ -661,8 +980,6 @@ models:
           and thus handle times past the following midnight (like `25:40:00`).
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
-        meta:
-          publish.ignore: true
       - name: end_pickup_drop_off_window_interval
         description: |
           This is a calculated field that does not appear directly in GTFS. It converts `end_pickup_drop_off_window`
@@ -670,8 +987,6 @@ models:
           and thus handle times past the following midnight (like `25:40:00`).
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
-        meta:
-          publish.ignore: true
 
   - name: dim_stops_latest
     description: |
@@ -683,26 +998,32 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#stopstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `stop_id`.
-        tests: *pk_tests_with_dups
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
-        tests: &not_null_error_99_threshold
-          - dbt_utils.not_null_proportion:
-              at_least: 0.99
+        meta:
+          publish.include: true
       - name: stop_code
         description: '{{ doc("gtfs_stops__stop_code") }}'
+        meta:
+          publish.include: true
       - name: stop_name
         description: '{{ doc("gtfs_stops__stop_name") }}'
+        meta:
+          publish.include: true
       - name: tts_stop_name
         description: '{{ doc("gtfs_stops__tts_stop_name") }}'
+        meta:
+          publish.include: true
       - name: stop_desc
         description: '{{ doc("gtfs_stops__stop_desc") }}'
+        meta:
+          publish.include: true
       - name: stop_lat
         description: '{{ doc("gtfs_stops__stop_lat") }}'
         meta:
@@ -710,6 +1031,7 @@ models:
           ckan.type: FLOAT
           ckan.length: 6
           ckan.precision: 3
+          publish.include: true
       - name: stop_lon
         description: '{{ doc("gtfs_stops__stop_lon") }}'
         meta:
@@ -717,31 +1039,44 @@ models:
           ckan.type: FLOAT
           ckan.length: 7
           ckan.precision: 3
+          publish.include: true
       - name: zone_id
         description: '{{ doc("gtfs_stops__zone_id") }}'
+        meta:
+          publish.include: true
       - name: stop_url
         description: '{{ doc("gtfs_stops__stop_url") }}'
+        meta:
+          publish.include: true
       - name: location_type
         description: '{{ doc("gtfs_stops__location_type") }}'
+        meta:
+          publish.include: true
       - name: parent_station
         description: '{{ doc("gtfs_stops__parent_station") }}'
+        meta:
+          publish.include: true
       - name: stop_timezone
         description: '{{ doc("gtfs_stops__stop_timezone") }}'
+        meta:
+          publish.include: true
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+        meta:
+          publish.include: true
       - name: level_id
         description: '{{ doc("gtfs_stops__level_id") }}'
+        meta:
+          publish.include: true
       - name: platform_code
         description: '{{ doc("gtfs_stops__platform_code") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
         # TODO: would be good to actually publish this, with appropriate documentation, next time we are ready to make a round of updates
-      - name: warning_missing_primary_key
-        meta:
-          publish.ignore: true
+      - name: warning_missing_schedule_dim_pk
       - name: stop_timezone_coalesced
-        meta:
-          publish.ignore: true
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
 
   - name: dim_transfers_latest
     description: |
@@ -753,34 +1088,47 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#transferstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`.
-        tests: *pk_tests_with_dups
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: from_stop_id
         description: '{{ doc("gtfs_transfers__from_stop_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: to_stop_id
         description: '{{ doc("gtfs_transfers__to_stop_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: transfer_type
         description: '{{ doc("gtfs_transfers__transfer_type") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: min_transfer_time
         description: '{{ doc("gtfs_transfers__min_transfer_time") }}'
+        meta:
+          ckan.units: SECONDS
+          publish.include: true
       - name: from_route_id
         description: '{{ doc("gtfs_transfers__from_route_id") }}'
+        meta:
+          publish.include: true
       - name: to_route_id
         description: '{{ doc("gtfs_transfers__to_route_id") }}'
+        meta:
+          publish.include: true
       - name: from_trip_id
         description: '{{ doc("gtfs_transfers__from_trip_id") }}'
+        meta:
+          publish.include: true
       - name: to_trip_id
         description: '{{ doc("gtfs_transfers__to_trip_id") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
-      - *warning_duplicate_primary_key
+      - *warning_duplicate_gtfs_key
 
   - name: dim_translations_latest
     description: |
@@ -792,31 +1140,40 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#translationstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key`, `table_name`, `field_name`, `language`, `record_id`, `record_sub_id`, and `field_value`.
-        tests: *primary_key_tests
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: table_name
         description: '{{ doc("gtfs_translations__table_name") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: field_name
         description: '{{ doc("gtfs_translations__field_name") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: language
         description: '{{ doc("gtfs_translations__language") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: translation
         description: '{{ doc("gtfs_translations__translation") }}'
-        tests: *not_null_warn
+        meta:
+          publish.include: true
       - name: record_id
         description: '{{ doc("gtfs_translations__record_id") }}'
+        meta:
+          publish.include: true
       - name: record_sub_id
         description: '{{ doc("gtfs_translations__record_sub_id") }}'
+        meta:
+          publish.include: true
       - name: field_value
         description: '{{ doc("gtfs_translations__field_value") }}'
+        meta:
+          publish.include: true
       - *feed_timezone
 
   - name: dim_trips_latest
@@ -829,37 +1186,53 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#tripstxt
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `feed_key` and `trip_id`.
-        tests: *pk_tests_with_dups
-        meta: *pk_meta
+      - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
+      - *schedule_dim_dt
+      - *schedule_dim_line_number
       - *feed_key
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: service_id
         description: '{{ doc("gtfs_trips__service_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: trip_id
         description: '{{ doc("gtfs_trips__trip_id") }}'
-        tests: *not_null_error
+        meta:
+          publish.include: true
       - name: trip_headsign
         description: '{{ doc("gtfs_trips__trip_headsign") }}'
+        meta:
+          publish.include: true
       - name: trip_short_name
         description: '{{ doc("gtfs_trips__trip_short_name") }}'
+        meta:
+          publish.include: true
       - name: direction_id
         description: '{{ doc("gtfs_trips__direction_id") }}'
+        meta:
+          publish.include: true
       - name: block_id
         description: '{{ doc("gtfs_trips__block_id") }}'
+        meta:
+          publish.include: true
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
+        meta:
+          publish.include: true
       - name: wheelchair_accessible
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
+        meta:
+          publish.include: true
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
-      - *warning_duplicate_primary_key
+        meta:
+          publish.include: true
+      - *warning_duplicate_gtfs_key
       - *feed_timezone
 
 exposures:
@@ -871,11 +1244,16 @@ exposures:
 
     depends_on:
       - ref("dim_agency_latest")
+      - ref("dim_areas_latest")
       - ref("dim_attributions_latest")
       - ref("dim_calendar_latest")
       - ref("dim_calendar_dates_latest")
       - ref("dim_fare_attributes_latest")
+      - ref("dim_fare_leg_rules_latest")
+      - ref("dim_fare_media_latest")
+      - ref("dim_fare_products_latest")
       - ref("dim_fare_rules_latest")
+      - ref("dim_fare_transfer_rules_latest")
       - ref("dim_feed_info_latest")
       - ref("dim_frequencies_latest")
       - ref("dim_gtfs_datasets_latest")
@@ -883,6 +1261,7 @@ exposures:
       - ref("dim_pathways_latest")
       - ref("dim_routes_latest")
       - ref("dim_shapes_latest")
+      - ref("dim_stop_areas_latest")
       - ref("dim_stop_times_latest")
       - ref("dim_stops_latest")
       - ref("dim_transfers_latest")
@@ -890,7 +1269,7 @@ exposures:
       - ref("dim_trips_latest")
 
     owner:
-      email: laurie.m@jarv.us
+      email: soren.s@jarv.us
 
     meta:
       methodology: |
@@ -909,6 +1288,12 @@ exposures:
                 Each row is a cleaned row from an agency.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#agencytxt.
+            dim_areas_latest:
+              id: e6b684c0-5af1-4012-b7ef-0166808831a6
+              description: |
+                Each row is a cleaned row from an areas.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#areastxt.
             dim_attributions_latest:
               id: 038b7354-06e8-4082-a4a1-40debd3110d5
               description: |
@@ -933,12 +1318,36 @@ exposures:
                 Each row is a cleaned row from a fare_attributes.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_attributestxt.
+            dim_fare_leg_rules_latest:
+              id: ea5040fb-de2d-4011-a21e-fcf4a96fa80a
+              description: |
+                Each row is a cleaned row from an fare_leg_rules.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#fare_leg_rulestxt.
+            dim_fare_media_latest:
+              id: 7342e023-5855-4923-a3a9-0450eaf8fd17
+              description: |
+                Each row is a cleaned row from an fare_media.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#fare_mediatxt.
+            dim_fare_products_latest:
+              id: 060d905b-eda4-476f-98c9-ac5e712e13f6
+              description: |
+                Each row is a cleaned row from an fare_products.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#fare_productstxt.
             dim_fare_rules_latest:
               id: 4fb1fa39-0ef9-457d-97b1-bb7e9e848312
               description: |
                 Each row is a cleaned row from a fare_rules.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_rulestxt.
+            dim_fare_transfer_rules_latest:
+              id: a1002670-235c-41b2-be63-35f7a643ed92
+              description: |
+                Each row is a cleaned row from an fare_transfer_rules.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#fare_transfer_rulestxt.
             dim_feed_info_latest:
               id: 50d12559-635e-4222-ac25-3706c066902d
               description: |
@@ -980,6 +1389,12 @@ exposures:
                 Each row is a cleaned row from a shapes.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#shapestxt.
+            dim_stop_areas_latest:
+              id: ebd6109c-3ebb-4d3f-96ba-8d4c20961363
+              description: |
+                Each row is a cleaned row from an stop_areas.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#stop_areastxt.
             dim_stop_times_latest:
               id: d31eef2f-e223-4ca4-a86b-170acc6b2590
               description: |

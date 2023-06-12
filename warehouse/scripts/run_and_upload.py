@@ -25,7 +25,7 @@ artifacts = map(
 
 sentry_sdk.init()
 
-app = typer.Typer(pretty_exceptions_enable=False)
+app = typer.Typer()
 
 
 class DbtException(Exception):
@@ -152,6 +152,7 @@ def run(
     sync_metabase: bool = False,
     check_sync_metabase: bool = False,
     select: Optional[str] = None,
+    dbt_vars: Optional[str] = None,
     exclude: Optional[str] = None,
 ) -> None:
     assert (
@@ -200,6 +201,8 @@ def run(
             args.append("--full-refresh")
         if select:
             args.extend(["--select", *select.split(" ")])
+        if dbt_vars:
+            args.extend(["--vars", dbt_vars])
         if exclude:
             args.extend(["--exclude", exclude])
         results_to_check.append(subprocess.run(get_command(*args)))
@@ -222,6 +225,8 @@ def run(
             args.extend(["--exclude", exclude])
         if select:
             args.extend(["--select", *select.split(" ")])
+        if dbt_vars:
+            args.extend(["--vars", dbt_vars])
         subprocess.run(get_command(*args))
 
         with open("./target/run_results.json") as f:

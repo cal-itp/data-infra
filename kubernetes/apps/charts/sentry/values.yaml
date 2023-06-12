@@ -11,6 +11,8 @@ sentry:
     resources:
       requests:
         memory: 3Gi
+    persistence:
+      size: 100Gi
 
   user:
     create: true
