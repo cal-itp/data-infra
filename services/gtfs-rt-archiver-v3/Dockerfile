@@ -2,7 +2,9 @@ FROM python:3.9
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
+RUN apt-get update && apt-get install -y libunwind-dev liblz4-dev
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:${PATH}"
 
 WORKDIR /app
