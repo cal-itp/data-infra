@@ -336,6 +336,7 @@ models:
 
   - name: fct_daily_scheduled_trips
     description: |
+      This model will be deprecated on Friday, June 23rd 2023 and replaced 1:1 by fct_scheduled_trips.
       A daily table showing all trips that were scheduled on a given date.
       If a `service_date`, `trip_key` pair is present in this table,
       it means that that `trip_key` was scheduled to occur on that `service_date`.
