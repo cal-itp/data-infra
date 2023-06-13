@@ -1461,6 +1461,338 @@ models:
       - name: service_alert_message_keys
         description: Keys of the service alert messages that referenced this trip.
 
+  - name: fct_scheduled_trips
+    description: |
+      A daily table showing all trips that were scheduled on a given date.
+      If a `service_date`, `trip_key` pair is present in this table,
+      it means that that `trip_key` was scheduled to occur on that `service_date`.
+      Specifically, it means that the associated `service_id` was active and had service
+      scheduled. Dates where a `service_id` was active but not scheduled (for example,
+      weekend dates within a weekday service's effective dates) are not listed in this table.
+
+      The GTFS standard allows for a trip's scheduled stop activity to occur more than 24 hours after the beginning of the
+      associated `service_date`. See https://gtfs.org/schedule/reference/#field-types for the GTFS definitions of times and dates.
+
+      Additionally, different feeds use different time zones (see: https://gtfs.org/schedule/reference/#agencytxt
+      and https://gtfs.org/schedule/reference/#stopstxt).
+
+      For this reason, this table contains multiple date and time labels associated with a given trip.
+      Please consult each individual column's definition for guidance on which field is
+      most appropriate for your use case.
+
+      This table only contains service through the date (UTC) on which the table was most recently run.
+    # TODO: a test that one of trip_first_departure_sec and trip_start_pickup_drop_off_window_sec is populated
+    # as of May 2023 this test would fail because we have Flex feeds that use incorrect column names so both fields are null
+    columns:
+      - name: key
+        tests:
+          - unique:
+              where: "not contains_warning_duplicate_trip_primary_key"
+          - not_null
+      - *feed_key
+      - name: name
+      - name: regional_feed_type
+        description: |
+          Describes whether this feed is a combined regional feed or has a relation
+          to a combined regional feed in some manner.
+          For example for MTC 511, the combined regional feed has type "Combined
+          Regional Feed", and the MTC-published subfeeds have type "Regional Subfeed".
+          If you are performing an analysis where using a regional combined feed is
+          inappropriate (even though that is the customer-facing data), this field can
+          help you assess other alternative feeds for the same services and organizations.
+          Not specified (null) for feeds with no relationship to regional feeds.
+      - name: service_date
+        description: |
+          Agency's service date for which this trip was active.
+          See https://gtfs.org/schedule/reference/#field-types
+          for the GTFS definitions of times and dates.
+          This date is defined with respect to `feed_timezone`.
+
+          This field should be used to:
+          * Identify the service date that the agency assigns to this trip
+          * Join with other internal-to-GTFS data that is keyed by service date
+
+          This field should not be used to:
+          * Filter trip activity by calendar date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+      - name: service_id
+        description: |
+          Service ID from calendar or calendar_dates that determines that this trip
+          has service on this date.
+      - name: trip_key
+        description: Foreign key to dim_trips.
+        tests:
+          - relationships:
+              to: ref('dim_trips')
+              field: key
+      - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+      - name: trip_short_name
+        description: '{{ doc("gtfs_trips__trip_short_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: block_id
+        description: '{{ doc("gtfs_trips__block_id") }}'
+      - name: route_key
+        description: Foreign key to dim_routes.
+        tests:
+          - relationships:
+              to: ref('dim_routes')
+              field: key
+      - name: route_id
+        description: '{{ doc("gtfs_routes__route_id") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
+      - name: route_short_name
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
+      - name: route_long_name
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
+      - name: route_desc
+        description: '{{ doc("gtfs_routes__route_desc") }}'
+      - name: agency_id
+        description: '{{ doc("gtfs_routes__agency_id") }}'
+      - name: network_id
+        description: '{{ doc("gtfs_routes__network_id") }}'
+      - name: route_continuous_pickup
+        description: '{{ doc("gtfs_routes__continuous_pickup") }}'
+      - name: route_continuous_drop_off
+        description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
+      - name: shape_array_key
+        description: Foreign key to dim_shapes_arrays.
+        tests:
+          - relationships:
+              to: ref('dim_shapes_arrays')
+              field: key
+      - name: gtfs_dataset_key
+        description: |
+          Foreign key to the associated GTFS dataset record.
+          Because GTFS data was downloaded in the v1 pipeline before
+          `gtfs dataset` records were being archived in the warehouse,
+          it is possible for GTFS data to be associated with a GTFS dataset
+          record that was not yet in effect at the time the data was downloaded.
+          (So, you may see GTFS data from January 2022 associated with a GTFS dataset
+          record that does not take effect until July 2022.)
+          This is done for convenience to facilitate labeling of older data (the alternative
+          would be failing to join and making it essentially impossible to label
+          historical GTFS data with their associated transit database records).
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: contains_warning_duplicate_trip_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key in dim_trips;
+          i.e., `trip_id` is duplicated within an individual feed instance.
+          Treat these rows with caution.
+      - name: num_distinct_stops_served
+        description: '{{ doc("column_num_distinct_stops_served") }}'
+      - name: num_stop_times
+        description: '{{ doc("column_num_stop_times") }}'
+      - name: trip_first_departure_sec
+        description: |
+          The number of seconds after 12 hours before noon (usually midnight) on `service_date`
+          in `feed_timezone` at which this trip's first stop departure occurred.
+
+          This field is used upstream of this table to make generic service determinations
+          in tables where we don't have a specific date assigned yet (for example, within
+          stop_times.) Downstream of this table, now that specific dates are associated
+          with the trips, this field should not be used.
+      - name: trip_last_arrival_sec
+        description: |
+          The number of seconds after midnight on `service_day` in `feed_timezone` at
+          which this trip's last stop arrival occurred.
+
+          This field is used upstream of this table to make generic service determinations
+          in tables where we don't have a specific date assigned yet (for example, within
+          stop_times.) Downstream of this table, now that specific dates are associated
+          with the trips, this field should not be used.
+      - name: service_hours
+        description: '{{ doc("column_service_hours") }}'
+      - name: flex_service_hours
+        description: '{{ doc("column_flex_service_hours") }}'
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: '{{ doc("column_contains_warning_duplicate_stop_times_primary_key") }}'
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: '{{ doc("column_contains_warning_missing_foreign_key_stop_id") }}'
+      - name: trip_start_timezone
+        description: '{{ doc("column_trip_start_timezone") }}'
+      - name: trip_end_timezone
+        description: '{{ doc("column_trip_end_timezone") }}'
+      - name: trip_first_departure_ts
+        description: |
+          The timestamp (non-localized, absolute) at which this trip's first departure occurred.
+
+          This field should be used to:
+          * Identify all activity that was happening at a specific instant in time
+          * Calculate durations or identify relative ordering of events
+
+          This field should not be used to:
+          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+      - name: trip_last_arrival_ts
+        description: |
+          The timestamp (non-localized, absolute) at which this trip's last stop arrival occurred.
+
+          This field should be used to:
+          * Identify all activity that was happening at a specific instant in time
+          * Calculate durations or identify relative ordering of events
+
+          This field should not be used to:
+          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+      - name: trip_start_date_pacific
+        description: |
+          The "America/Los_Angeles" time zone date on which this trip began.
+          There are some feeds with activity that does not occur within this time zone,
+          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+
+          This field should be used to:
+          * Filter trip activity by date
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+
+      - name: trip_first_departure_datetime_pacific
+        description: |
+          The "America/Los_Angeles" time zone date and time of this trip's first departure.
+          There are some feeds with activity that does not occur within this time zone,
+          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+
+          This field should be used to:
+          * Filter trip activity by date and time
+          * Bucket trips by time of day
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+
+      - name: trip_last_arrival_datetime_pacific
+        description: |
+          The "America/Los_Angeles" time zone date and time of this trip's last arrival.
+          See trip_first_departure_datetime_pacific for usage notes.
+      - name: trip_start_date_local_tz
+        description: |
+          The local (`trip_start_timezone`) date on which this trip began.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_start_date_pacific.
+      - name: trip_first_departure_datetime_local_tz
+        description: |
+          The local (`trip_start_timezone`) datetime of this trip's first departure.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_first_departure_datetime_pacific.
+
+      - name: trip_last_arrival_datetime_local_tz
+        description: |
+          The local (`trip_end_timezone`) datetime of this trip's last arrival.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_last_arrival_datetime_pacific.
+      - *feed_timezone_no_tests
+      - name: frequencies_defined_trip
+        description: '{{ doc("column_frequencies_defined_trip") }}'
+      - name: iteration_num
+        description: '{{ doc("column_st_iteration_num") }}'
+        tests:
+          - not_null:
+              config:
+                where: "frequencies_defined_trip"
+      - name: is_gtfs_flex_trip
+        description: '{{ doc("column_is_gtfs_flex_trip") }}'
+      - name: is_entirely_demand_responsive_trip
+        description: '{{ doc("column_is_entirely_demand_responsive_trip") }}'
+      - name: num_gtfs_flex_stop_times
+        description: '{{ doc("column_num_gtfs_flex_stop_times") }}'
+      - name: first_start_pickup_drop_off_window_sec
+        description: '{{ doc("column_first_start_pickup_drop_off_window_sec") }}'
+      - name: last_end_pickup_drop_off_window_sec
+        description: '{{ doc("column_last_end_pickup_drop_off_window_sec") }}'
+      - name: num_approximate_timepoint_stop_times
+        description: '{{ doc("column_num_approximate_timepoint_stop_times") }}'
+      - name: num_exact_timepoint_stop_times
+        description: '{{ doc("column_num_exact_timepoint_stop_times") }}'
+      - name: num_arrival_times_populated_stop_times
+        description: '{{ doc("column_num_arrival_times_populated_stop_times") }}'
+      - name: num_departure_times_populated_stop_times
+        description: '{{ doc("column_num_departure_times_populated_stop_times") }}'
+      - name: trip_first_start_pickup_drop_off_window_ts
+        description: |
+          The timestamp (non-localized, absolute) at which this trip's first pickup/drop off window started.
+          Only populated for flexible trips.
+
+          This field should be used to:
+          * Identify all activity that was happening at a specific instant in time
+          * Calculate durations or identify relative ordering of events
+
+          This field should not be used to:
+          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+      - name: trip_last_end_pickup_drop_off_window_ts
+        description: |
+          The timestamp (non-localized, absolute) at which this trip's last pickup/drop off window ended.
+          Only populated for flexible trips.
+
+          This field should be used to:
+          * Identify all activity that was happening at a specific instant in time
+          * Calculate durations or identify relative ordering of events
+
+          This field should not be used to:
+          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+      - name: trip_first_start_pickup_drop_off_window_date_pacific
+        description: |
+          The "America/Los_Angeles" time zone date on which this trip's first pickup/drop off window started.
+          Only populated for flexible trips.
+          There are some feeds with activity that does not occur within this time zone,
+          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+
+          This field should be used to:
+          * Filter trip activity by date
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+
+      - name: trip_first_start_pickup_drop_off_window_datetime_pacific
+        description: |
+          The "America/Los_Angeles" time zone date and time of the beginning of this trip's first pickup/drop off window.
+          Only populated for flexible trips.
+          There are some feeds with activity that does not occur within this time zone,
+          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+
+          This field should be used to:
+          * Filter trip activity by date and time
+          * Bucket trips by time of day
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+
+      - name: trip_last_end_pickup_drop_off_window_pacific
+        description: |
+          The "America/Los_Angeles" time zone date and time at which this trip's last pickup/drop off window ended.
+          Only populated for flexible trips.
+          See trip_first_start_pickup_drop_off_window_datetime_pacific for usage notes.
+      - name: trip_first_start_pickup_drop_off_window_date_local_tz
+        description: |
+          The local (`trip_start_timezone`) date of the beginning of this trip's first pickup/drop off window.
+          Only populated for flexible trips.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_first_start_pickup_drop_off_window_date_pacific.
+      - name: trip_first_start_pickup_drop_off_window_datetime_local_tz
+        description: |
+          The local (`trip_start_timezone`) datetime of this trip's first pickup/drop off window.
+          Only populated for flexible trips.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_first_departure_datetime_pacific.
+
+      - name: trip_last_end_pickup_drop_off_window_datetime_local_tz
+        description: |
+          The local (`trip_end_timezone`) datetime at which this trip's last pickup/drop off window ended.
+          Only populated for flexible trips.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_last_end_pickup_drop_off_window_datetime_pacific.
+
   - name: fct_trip_updates_summaries
     description: |
       Summarizes trips observed in trip update messages.
