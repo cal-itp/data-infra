@@ -16,7 +16,7 @@ import pendulum
 import sentry_sdk
 import typer
 from dbt_artifacts import Manifest, RunResults, RunResultStatus
-from dbtmetabase.models.interface import DbtInterface, MetabaseInterface
+from dbtmetabase.models.interface import DbtInterface, MetabaseInterface  # type: ignore
 from metabase_api import Metabase_API  # type: ignore
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
@@ -316,6 +316,7 @@ def run(
             )
 
             # initialize session
+            assert mb_host, "mb_host is empty."
             mb = Metabase_API(mb_host, mb_user, mb_pass)
 
             # get database ids (does this need prod / staging handling?)
