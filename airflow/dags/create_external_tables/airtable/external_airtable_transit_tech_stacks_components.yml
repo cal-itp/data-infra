@@ -14,3 +14,37 @@ hive_options:
   mode: AUTO
   require_partition_filter: false
   source_uri_prefix: "transit_technology_stacks__components/"
+schema_fields:
+  - name: products
+    type: STRING
+    mode: REPEATED
+  - name: name
+    type: STRING
+    mode: NULLABLE
+  - name: function_group
+    type: STRING
+    mode: NULLABLE
+  - name: location
+    type: STRING
+    mode: REPEATED
+  - name: system
+    type: STRING
+    mode: REPEATED
+  - name: contracts
+    type: STRING
+    mode: REPEATED
+  - name: organization_stack_components
+    type: STRING
+    mode: REPEATED
+  - name: description
+    type: STRING
+    mode: NULLABLE
+  - name: properties___features
+    type: STRING
+    mode: REPEATED
+  - name: aliases
+    type: STRING
+    mode: NULLABLE
+  - name: example_stacks
+    type: STRING
+    mode: REPEATED
