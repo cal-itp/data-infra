@@ -383,7 +383,6 @@ def run(
                 manifest = Manifest(**json.load(f))
             matches = {}
             for line in s.splitlines():
-                # for line in s.stdout.decode().splitlines():
                 print(line)
                 for pattern in (
                     r"WARNING\s+Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)",
