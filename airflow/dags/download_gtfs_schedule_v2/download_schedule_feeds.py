@@ -10,6 +10,7 @@ from typing import ClassVar, List, Optional
 import humanize
 import pendulum
 import sentry_sdk
+from calitp_data.storage import get_fs
 from calitp_data_infra.auth import get_secrets_by_label
 from calitp_data_infra.storage import (
     JSONL_EXTENSION,
@@ -21,7 +22,6 @@ from calitp_data_infra.storage import (
     PartitionedGCSArtifact,
     ProcessingOutcome,
     download_feed,
-    get_fs,
     get_latest,
 )
 from pydantic import validator
