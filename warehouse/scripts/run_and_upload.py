@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 
+import io
 import json
 import os
 import re
 import shutil
 import subprocess
+import time
+from contextlib import redirect_stdout
 from pathlib import Path
 from typing import List, Optional
 
@@ -13,6 +16,8 @@ import pendulum
 import sentry_sdk
 import typer
 from dbt_artifacts import Manifest, RunResults, RunResultStatus
+from dbtmetabase.models.interface import DbtInterface, MetabaseInterface
+from metabase_api import Metabase_API  # type: ignore
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
 
@@ -298,41 +303,86 @@ def run(
     if sync_metabase:
         if target and (target.startswith("prod") or target.startswith("staging")):
             typer.secho("syncing documentation to metabase", fg=typer.colors.MAGENTA)
-            # Use a subprocess here so we can just parse the stdout/stderr
-            p = subprocess.run(
-                [
-                    "dbt-metabase",
-                    "models",
-                    "--metabase_exclude_sources",
-                    "--dbt_manifest_path",
-                    "./target/manifest.json",
-                    "--dbt_docs_url",
-                    "https://dbt-docs.calitp.org",
-                    "--metabase_database",
-                    (
-                        "Data Marts (formerly Warehouse Views)"
-                        if target.startswith("prod")
-                        else "(Internal) Staging Warehouse Views"
-                    ),
-                    "--dbt_schema_excludes",
-                    "staging",
-                    "payments",
-                    "--metabase_sync_skip",
-                ],
-                env={
-                    **os.environ,
-                    "COLUMNS": "300",  # we have to make this wide enough to avoid splitting log lines
-                },
-                capture_output=True,
+
+            # get secrets
+            mb_user = os.getenv("MB_USER")
+            mb_pass = os.getenv("MB_PASSWORD")
+            mb_host = os.getenv("MB_HOST")
+            dbt_database = os.getenv("DBT_DATABASE")
+            metabase_database = (
+                "Data Marts (formerly Warehouse Views)"
+                if target.startswith("prod")
+                else "(Internal) Staging Warehouse Views"
             )
 
-            if check_sync_metabase:
-                results_to_check.append(p)
+            # initialize session
+            mb = Metabase_API(mb_host, mb_user, mb_pass)
+
+            # get database ids (does this need prod / staging handling?)
+            print("getting database ids", flush=True)
+            databases = mb.get("/api/database/")
+
+            db_ids = []
+            for db in databases["data"]:
+                db_ids.append(db["id"])
+
+            # sync database contents
+            for id in db_ids:
+                print(f'Syncing database: {db["name"]}', flush=True)
+                response_dict = mb.post(f"/api/database/{id}/sync")
+                assert response_dict, str(response_dict)
+
+            # wait to call dbt-metabase
+            print("Hey, I'm about to go to sleep!", flush=True)
+            time.sleep(180)
+
+            # use programmatic invocation
+            # Instantiate dbt interface
+            with redirect_stdout(io.StringIO()) as f:
+                dbt = DbtInterface(
+                    manifest_path="./target/manifest.json",
+                    database=dbt_database,
+                    schema_excludes=["staging", "payments"],
+                )
+
+                # Load models
+                print("reading dbt models", flush=True)
+                dbt_models, aliases = dbt.read_models(
+                    docs_url="https://dbt-docs.calitp.org",
+                )
+
+                # Instantiate Metabase interface
+                print("instantiating metabase interface", flush=True)
+                metabase = MetabaseInterface(
+                    host=mb_host.lstrip("https://"),
+                    user=mb_user,
+                    password=mb_pass,
+                    use_http=True,
+                    database=metabase_database,
+                )
+
+                # Propagate models to Metabase
+                print("propagating models to metabase", flush=True)
+                metabase_export_exception: Optional[Exception] = None
+                try:
+                    metabase.client.export_models(
+                        database=metabase.database,
+                        models=dbt_models,
+                        aliases=aliases,
+                    )
+                except Exception as e:
+                    metabase_export_exception = e
+                    print(
+                        "Metabase export models failed with exception "
+                        + str(metabase_export_exception),
+                        flush=True,
+                    )
+            s = f.getvalue()
 
             with open("./target/manifest.json") as f:
                 manifest = Manifest(**json.load(f))
             matches = {}
-            for line in p.stdout.decode().splitlines():
+            for line in s.splitlines():
                 print(line)
                 for pattern in (
                     r"WARNING\s+Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)",
@@ -374,6 +424,9 @@ def run(
 
     for result in results_to_check:
         result.check_returncode()
+
+    if check_sync_metabase and metabase_export_exception:
+        raise metabase_export_exception
 
 
 if __name__ == "__main__":
