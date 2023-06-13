@@ -28,7 +28,7 @@ dim_gtfs_datasets AS (
     FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
-fct_schedule_files_parsed AS (
+fct_schedule_feed_files AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key([
             'unzip.ts',
@@ -38,7 +38,10 @@ fct_schedule_files_parsed AS (
         unzip.feed_file AS original_filepath,
         -- these can have directories etc. at the beginning
         SPLIT(unzip.feed_file, "/")[ORDINAL(ARRAY_LENGTH(SPLIT(unzip.feed_file, "/")))] AS original_filename,
+        parse.fields,
         parse.gtfs_filename,
+        parse.csv_dialect,
+        parse.num_lines,
         unzip.ts,
         unzip.base64_url,
         unzip.unzip_success,
@@ -63,4 +66,4 @@ fct_schedule_files_parsed AS (
         ON urls.gtfs_dataset_key = datasets.key
 )
 
-SELECT * FROM fct_schedule_files_parsed
+SELECT * FROM fct_schedule_feed_files

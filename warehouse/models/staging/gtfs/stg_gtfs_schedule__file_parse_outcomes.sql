@@ -39,6 +39,8 @@ stg_gtfs_schedule__file_parse_outcomes AS (
         feed_file.original_filename AS original_filename,
         fields,
         parsed_file.gtfs_filename AS gtfs_filename,
+        parsed_file.dialect AS dialect,
+        parsed_file.num_lines AS num_lines,
         dt,
         feed_file.ts AS ts,
         {{ to_url_safe_base64('feed_file.extract_config.url') }} AS base64_url

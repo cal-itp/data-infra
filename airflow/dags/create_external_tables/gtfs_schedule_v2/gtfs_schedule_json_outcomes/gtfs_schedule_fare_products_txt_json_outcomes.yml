@@ -57,7 +57,7 @@ schema_fields:
       - *extract_config
       - name: gtfs_filename
         type: STRING
-      - name: dialect
+      - name: csv_dialect
         type: STRING
         mode: NULLABLE
       - name: num_lines

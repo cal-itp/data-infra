@@ -29,7 +29,9 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     ts: pendulum.DateTime
     extract_config: GTFSDownloadConfig
     gtfs_filename: str
-    dialect: Optional[str]
+    csv_dialect: Optional[
+        str
+    ]  # dialect would be a better name but we have an old field with that name...
     num_lines: Optional[int]
 
     # if you try to set table directly, you get an error because it "shadows a BaseModel attribute"
@@ -131,7 +133,7 @@ def parse_individual_file(
             extract_config=input_file.extract_config,
             filename=gtfs_filename + ".jsonl.gz",
             gtfs_filename=gtfs_filename,
-            dialect=dialect,
+            csv_dialect=dialect,
             num_lines=num_lines,
         )
 
