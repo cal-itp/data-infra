@@ -4,3 +4,6 @@ config:
       value: gs:calitp-backups-metabase:/
     - name: PGHOST
       value: database.metabase.svc.cluster.local
+
+healthchecks:
+  uuid: f223e786-4fa4-44f9-a3db-3db5988a12cf
