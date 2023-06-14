@@ -15,7 +15,7 @@
 
 ## Trips
 On a given day:
-* [fct_daily_scheduled_trips](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_scheduled_trips)
+* [fct_scheduled_trips](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_scheduled_trips)
     * Use `gtfs_utils_v2.get_trips()`.
     * Answer how many trips a provider is scheduled to run and how many trips a particular route may make?
 * [fct_observed_trips](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_observed_trips)
