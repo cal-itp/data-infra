@@ -736,8 +736,8 @@ models:
       Daily service totals by feed. Each row is a date / feed pair where that feed
       was online on that date (corresponds to `fct_daily_schedule_feeds`).
       This means there are feeds present with 0 `ttl_service_hours`.
-      Service summary is based on `fct_daily_scheduled_trips`, grouped to the feed level
-      (a feed with no trips in `fct_daily_scheduled_trips` will have 0s here for the summary columns.)
+      Service summary is based on `fct_scheduled_trips`, grouped to the feed level
+      (a feed with no trips in `fct_scheduled_trips` will have 0s here for the summary columns.)
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -753,7 +753,7 @@ models:
           This respects the agency's definition of a service day, which may not correspond to
           a calendar date or even a 24-hour period.
           See https://gtfs.org/schedule/reference/#field-types for the GTFS
-          Schedule definition of a "date" data type or `fct_daily_scheduled_trips` for
+          Schedule definition of a "date" data type or `fct_scheduled_trips` for
           more dates that can be associated with trip activity.
 
           This date is used so that this table's service summaries correspond to the

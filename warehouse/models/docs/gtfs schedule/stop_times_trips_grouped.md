@@ -1,4 +1,4 @@
-Columns that appear in int_gtfs_schedule__stop_times and fct_daily_scheduled_trips
+Columns that appear in int_gtfs_schedule__stop_times and fct_scheduled_trips
 
 --- NON-ENUM AGGREGATIONS ---
 

@@ -1,9 +1,9 @@
 {{ config(materialized='table') }}
 
-WITH fct_daily_scheduled_trips AS (
+WITH fct_scheduled_trips AS (
 
     SELECT *
-    FROM {{ ref('fct_daily_scheduled_trips') }}
+    FROM {{ ref('fct_scheduled_trips') }}
 
 ),
 
@@ -28,7 +28,7 @@ trips_counted AS (
             contains_warning_duplicate_trip_primary_key
         ) AS contains_warning_duplicate_trip_primary_key
 
-    FROM fct_daily_scheduled_trips
+    FROM fct_scheduled_trips
     WHERE shape_id IS NOT NULL
     GROUP BY 1, 2, 3, 4, 5
 
