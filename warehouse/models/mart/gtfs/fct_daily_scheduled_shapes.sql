@@ -1,4 +1,11 @@
-{{ config(materialized='table') }}
+{{ config(
+    materialized='table',
+    partition_by={
+      "field": "service_date",
+      "data_type": "timestamp",
+      "granularity": "day"
+    }
+) }}
 
 WITH fct_scheduled_trips AS (
 
