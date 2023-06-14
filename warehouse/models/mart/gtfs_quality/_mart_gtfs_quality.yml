@@ -383,7 +383,7 @@ models:
           Agency service date on which this service level was present.
           This respect's the agency's definition of a service day, which may not correspond to
           a calendar date. See https://gtfs.org/schedule/reference/#field-types for the GTFS
-          Schedule definition of a "date" data type or `fct_daily_scheduled_trips` for
+          Schedule definition of a "date" data type or `fct_scheduled_trips` for
           more dates that can be associated with trip activity.
           This date is used so that this table's service summaries correspond to the
           service levels that an agency might describe on a given date, even

@@ -1,9 +1,9 @@
 {{ config(materialized='table') }}
 
-WITH fct_daily_scheduled_trips AS (
+WITH fct_scheduled_trips AS (
 
     SELECT *
-    FROM {{ ref('fct_daily_scheduled_trips') }}
+    FROM {{ ref('fct_scheduled_trips') }}
 ),
 
 dim_stop_times AS (
@@ -62,7 +62,7 @@ stops_by_day_by_route AS (
         ON stop_times.feed_key = freq.feed_key
         AND stop_times.trip_id = freq.trip_id
         AND stop_times.stop_id = freq.stop_id
-    LEFT JOIN fct_daily_scheduled_trips AS trips
+    LEFT JOIN fct_scheduled_trips AS trips
         ON trips.feed_key = stop_times.feed_key
             AND trips.trip_id = stop_times.trip_id
     GROUP BY 1, 2, 3, 4, 5

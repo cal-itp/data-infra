@@ -7,10 +7,10 @@ WITH fct_daily_schedule_feeds AS (
     FROM {{ ref('fct_daily_schedule_feeds') }}
 ),
 
-fct_daily_scheduled_trips AS (
+fct_scheduled_trips AS (
 
     SELECT *
-    FROM {{ ref('fct_daily_scheduled_trips') }}
+    FROM {{ ref('fct_scheduled_trips') }}
 
 ),
 
@@ -37,7 +37,7 @@ summarize_service AS (
             contains_warning_missing_foreign_key_stop_id
         ) AS contains_warning_missing_foreign_key_stop_id
 
-    FROM fct_daily_scheduled_trips
+    FROM fct_scheduled_trips
     WHERE service_date < CURRENT_DATE()
     GROUP BY service_date, feed_key, gtfs_dataset_key
 ),
