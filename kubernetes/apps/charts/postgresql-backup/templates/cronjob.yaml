@@ -45,7 +45,7 @@ spec:
                 - |
 
                 {{ if .Values.healthchecks.uuid }}
-                  wget --no-check-certificate -q -O - {{ .Values.healthchecks.host }}/ping/{{ .Values.healthchecks.uuid }}/start
+                  wget --no-check-certificate -q -O - {{ .Values.healthchecks.host }}/ping/{{ .Values.healthchecks.uuid }}/start || echo "Failed to ping start"
                 {{ end }}
 
                   # snapshot current database
@@ -81,5 +81,5 @@ spec:
                   fi
 
 
-                  wget --no-check-certificate -q -O - {{ .Values.healthchecks.host }}/ping/{{ .Values.healthchecks.uuid }}/${backup_status}
+                  wget --no-check-certificate -q -O - {{ .Values.healthchecks.host }}/ping/{{ .Values.healthchecks.uuid }}/${backup_status} || echo "Failed to ping job end"
                 {{ end }}
