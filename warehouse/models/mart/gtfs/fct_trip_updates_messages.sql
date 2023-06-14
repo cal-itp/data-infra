@@ -3,26 +3,8 @@ WITH stg_gtfs_rt__trip_updates AS (
     FROM {{ ref('stg_gtfs_rt__trip_updates') }}
 ),
 
-urls_to_gtfs_datasets AS (
-    SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
-),
-
-dim_gtfs_datasets AS (
-    SELECT *
-    FROM {{ ref('dim_gtfs_datasets') }}
-),
-
 keying AS (
-    SELECT
-        urls_to_gtfs_datasets.gtfs_dataset_key,
-        gd.name as _gtfs_dataset_name,
-        tu.*
-    FROM stg_gtfs_rt__trip_updates AS tu
-    LEFT JOIN urls_to_gtfs_datasets
-        ON tu.base64_url = urls_to_gtfs_datasets.base64_url
-        AND tu._extract_ts BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
-    LEFT JOIN dim_gtfs_datasets AS gd
-        ON urls_to_gtfs_datasets.gtfs_dataset_key = gd.key
+    {{ gtfs_rt_messages_keying('stg_gtfs_rt__trip_updates') }}
 ),
 
 fct_trip_updates_messages AS (
@@ -35,7 +17,12 @@ fct_trip_updates_messages AS (
         base64_url,
         _extract_ts,
         _config_extract_ts,
-        _gtfs_dataset_name,
+        name,
+        schedule_gtfs_dataset_key,
+        schedule_base64_url,
+        schedule_name,
+        schedule_feed_key,
+        schedule_feed_timezone,
 
         TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND) AS _header_message_age,
         TIMESTAMP_DIFF(_extract_ts, trip_update_timestamp, SECOND) AS _trip_update_message_age,

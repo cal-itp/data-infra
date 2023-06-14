@@ -142,12 +142,73 @@ models:
                 # this threshold may need to increase if the backfill occurs prior to that
                 error_if: ">20"
                 where: '__rt_sampled__'
-      - name: dt
-      - name: hour
-      - name: base64_url
-      - name: _extract_ts
-      - name: _config_extract_ts
-      - name: _gtfs_dataset_name
+      - &gtfs_rt_dt
+        name: dt
+        description: |
+          Date (UTC) on which this data was scraped. A value for this field must be provided when querying this model due
+          to data size.
+      - &gtfs_rt_hour
+        name: hour
+        description: |
+          The starting timestamp for the hour (UTC) in which this data was scraped.
+          Example value: '2023-06-14T15:00:00+00:00'. Adding a filter on this can further improve performance.
+      - *base64_url
+      - &gtfs_rt_extract_ts
+        name: _extract_ts
+        description: |
+            Timestamp at which this message was scraped. More specifically, this identifies the individual "tick" for
+            which this data was collected.
+            These value are pinned to `:00`, `:20`, `:40` second values (to ensure consistency), but there can be some slippage
+            between the `_extract_ts` and the time that the data was actually requested.
+      - &gtfs_rt_config_extract_ts
+        name: _config_extract_ts
+        description: |
+          The timestamp at which the GTFS data config for this download was extracted. This will correspond to the
+          `ts` value for the associated Airtable data extract.
+          Note that there may not be a corresponding value in `dim_gtfs_datasets` with this value in `_valid_from`, because this
+          value updates every time that the Airtable data extract runs, whereas `dim_gtfs_datasets` has versioning applied
+          and `_valid_from` only updates when an attribute within the record actually changes.
+      - &gtfs_rt_name
+        name: name
+        description: |
+          Name from the associated GTFS dataset record.
+      - &gtfs_rt_schedule_dataset_key
+        name: schedule_dataset_key
+        description: |
+          The foreign key to `dim_gtfs_datasets` for the GTFS schedule dataset record associated with this GTFS RT dataset for validation purposes.
+        tests:
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+              config:
+                where: '__rt_sampled__'
+      - &gtfs_rt_schedule_dataset_name
+        name: schedule_name
+        description: |
+          Name of the GTFS schedule dataset used to validate this GTFS RT dataset.
+      - &gtfs_rt_schedule_feed_key
+        name: schedule_feed_key
+        description: |
+          Foreign key to `dim_schedule_feeds` for the GTFS schedule feed associated with the
+          GTFS schedule dataset that is used to validate this GTFS RT data.
+          This is the schedule feed version that was in effect at the time the GTFS RT data
+          was scraped.
+          If this is null, we did not download GTFS schedule data associated with the dataset used
+          to validate this GTFS RT data. This could happen because of download failures (for example, a temporary technical issue) or
+          because of issues with the GTFS dataset associations upstream.
+        tests:
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
+              config:
+                where: '__rt_sampled__'
+      - &gtfs_rt_schedule_feed_timezone
+        name: schedule_feed_timezone
+        description: |
+          The `feed_timezone` of the feed referenced by `schedule_feed_key`.
+          This information is required to match trips from GTFS RT to
+          their scheduled counterparts, so that the date/time data from the RT feed
+          can be interpreted within the appropriate time zone to align with its schedule.
       - name: header_timestamp
       - name: header_incrementality
       - name: header_version
@@ -222,20 +283,16 @@ models:
           entity `id`, `vehicle_id`, and `trip_id`.
         tests: *almost_unique_rt_key_tests
       - *gtfs_rt_dataset_key
-      - name: dt
-        description: |
-          Date on which we scraped this message.
-          A date filter *must* be provided when querying this table, because of the size of the data.
-      - name: hour
-        description: |
-          Timestamp of the beginning of the hour in which this message was scraped,
-          ex. "2022-09-01T00:00:00+00".
-      - name: base64_url
-        description: |
-          URL-safe base64 encoding of the URL from which this message was scraped.
-      - name: _extract_ts
-        description: |
-          Time at which this message was scraped.
+      - *gtfs_rt_dt
+      - *gtfs_rt_hour
+      - *base64_url
+      - *gtfs_rt_extract_ts
+      - *gtfs_rt_config_extract_ts
+      - *gtfs_rt_name
+      - *gtfs_rt_schedule_dataset_key
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *gtfs_rt_schedule_feed_timezone
       - *_header_message_age
       - name: _vehicle_message_age
         description: |
@@ -907,31 +964,17 @@ models:
               where: '__rt_sampled__'
           - not_null:
               where: '__rt_sampled__'
-      - name: gtfs_dataset_key
-        description: |
-          The primary key for the record in `dim_gtfs_datasets` associated with this message.
-        columns:
-          - <<: *gtfs_dataset_key
-            config:
-              where: '__rt_sampled__'
-      - name: dt
-        description: |
-          Date on which we scraped this message.
-          A date filter *must* be provided when querying this table, because of the size of the data.
-      - name: hour
-        description: |
-          Timestamp of the beginning of the hour in which this message was scraped,
-          ex. "2022-09-01T00:00:00+00".
-      - name: base64_url
-        description: |
-          URL-safe base64 encoding of the URL from which this message was scraped.
-      - name: _extract_ts
-        description: |
-          Time at which this message was scraped.
-      - name: _gtfs_dataset_name
-        description: |
-          String name of the GTFS dataset of which this message is a part.
-          This field is provided for human readability and should not be used as a join key.
+      - *gtfs_rt_dataset_key
+      - *gtfs_rt_dt
+      - *gtfs_rt_hour
+      - *base64_url
+      - *gtfs_rt_extract_ts
+      - *gtfs_rt_config_extract_ts
+      - *gtfs_rt_name
+      - *gtfs_rt_schedule_dataset_key
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *gtfs_rt_schedule_feed_timezone
       - name: header_timestamp
         description: |
           See: https://gtfs.org/realtime/reference/#message-feedheader.
