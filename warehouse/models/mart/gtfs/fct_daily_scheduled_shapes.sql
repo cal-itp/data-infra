@@ -1,9 +1,9 @@
 {{ config(
     materialized='table',
     partition_by={
-      "field": "service_date",
-      "data_type": "timestamp",
-      "granularity": "day"
+      'field': 'service_date',
+      'data_type': 'date',
+      'granularity': 'day'
     }
 ) }}
 
