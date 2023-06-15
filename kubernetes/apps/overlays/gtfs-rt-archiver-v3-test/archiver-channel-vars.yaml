@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: archiver-channel-vars
+data:
+  AIRFLOW_ENV: development
+  CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://test-calitp-gtfs-download-config"
+  CALITP_BUCKET__GTFS_RT_RAW: "gs://test-calitp-gtfs-rt-raw-v2"
+  CALITP_HUEY_CONSUMER_WORKERS: "8"
+  SENTRY_DSN: "https://e498431022154366b0ff8b71cf2d93e0@sentry.k8s.calitp.jarv.us/2"
+  SENTRY_ENVIRONMENT: test

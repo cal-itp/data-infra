@@ -4,6 +4,8 @@ metadata:
   name: archiver-channel-vars
 data:
   AIRFLOW_ENV: cal-itp-data-infra
-  CALITP_BUCKET__AIRTABLE: "gs://calitp-airtable"
-  CALITP_BUCKET__GTFS_RT_RAW: "gs://calitp-gtfs-rt-raw"
-  HUEY_CONSUMER_WORKERS: "16"
+  CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://calitp-gtfs-download-config"
+  CALITP_BUCKET__GTFS_RT_RAW: "gs://calitp-gtfs-rt-raw-v2"
+  CALITP_HUEY_CONSUMER_WORKERS: "24"
+  SENTRY_DSN: "https://0fc56e5e8a96482da63b8d9dd3955ee7@sentry.k8s.calitp.jarv.us/2"
+  SENTRY_ENVIRONMENT: cal-itp-data-infra

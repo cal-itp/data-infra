@@ -41,6 +41,15 @@ spec:
               cpu: 1
             limits:
               memory: 1Gi
+          livenessProbe:
+            exec:
+              command:
+                - python
+                - "-m"
+                - "gtfs_rt_archiver_v3.liveness"
+                - "tick"
+            initialDelaySeconds: 30
+            periodSeconds: 30
       volumes:
         - name: gtfs-feed-secrets
           secret:

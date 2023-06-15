@@ -6,7 +6,7 @@ metadata:
   labels:
     name: gtfs-rt-archiver-consumer
 spec:
-  replicas: 3
+  replicas: 6
   strategy:
     type: Recreate
   selector:
@@ -41,6 +41,20 @@ spec:
               cpu: 1
             limits:
               memory: 1Gi
+          livenessProbe:
+            exec:
+              command:
+                - python
+                - "-m"
+                - "gtfs_rt_archiver_v3.liveness"
+                - "fetch"
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          lifecycle:
+            preStop:
+              exec:
+                command: ["kill", "-2", "1"]
+      terminationGracePeriodSeconds: 5
       volumes:
         - name: gtfs-feed-secrets
           secret:
