@@ -47,6 +47,10 @@ spec:
         - name: {{ template "prometheus.name" . }}-{{ .Values.alertmanager.name }}
           image: "{{ .Values.alertmanager.image.repository }}:{{ .Values.alertmanager.image.tag }}"
           imagePullPolicy: "{{ .Values.alertmanager.image.pullPolicy }}"
+          {{- with .Values.alertmanager.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           env:
             {{- range $key, $value := .Values.alertmanager.extraEnv }}
             - name: {{ $key }}
@@ -82,12 +86,9 @@ spec:
             httpGet:
               path: {{ .Values.alertmanager.prefixURL }}/-/ready
               port: 9093
-              {{- if .Values.alertmanager.probeHeaders }}
+              {{- with .Values.alertmanager.probeHeaders }}
               httpHeaders:
-              {{- range .Values.alertmanager.probeHeaders }}
-              - name: {{ .name }}
-                value: {{ .value }}
-              {{- end }}
+{{- toYaml . | nindent 14 }}
               {{- end }}
             initialDelaySeconds: 30
             timeoutSeconds: 30
@@ -116,6 +117,10 @@ spec:
         - name: {{ template "prometheus.name" . }}-{{ .Values.alertmanager.name }}-{{ .Values.configmapReload.alertmanager.name }}
           image: "{{ .Values.configmapReload.alertmanager.image.repository }}:{{ .Values.configmapReload.alertmanager.image.tag }}"
           imagePullPolicy: "{{ .Values.configmapReload.alertmanager.image.pullPolicy }}"
+          {{- with .Values.configmapReload.alertmanager.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           args:
             - --volume-dir=/etc/config
             - --webhook-url=http://127.0.0.1:9093{{ .Values.alertmanager.prefixURL }}/-/reload
@@ -124,6 +129,10 @@ spec:
           {{- end }}
           {{- range .Values.configmapReload.alertmanager.extraVolumeDirs }}
             - --volume-dir={{ . }}
+          {{- end }}
+          {{- if .Values.configmapReload.alertmanager.containerPort }}
+          ports:
+            - containerPort: {{ .Values.configmapReload.alertmanager.containerPort }}
           {{- end }}
           resources:
 {{ toYaml .Values.configmapReload.alertmanager.resources | indent 12 }}
@@ -150,9 +159,9 @@ spec:
       dnsConfig:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- if .Values.alertmanager.securityContext }}
+    {{- with .Values.alertmanager.securityContext }}
       securityContext:
-{{ toYaml .Values.alertmanager.securityContext | indent 8 }}
+        {{- toYaml . | nindent 8 }}
     {{- end }}
     {{- if .Values.alertmanager.tolerations }}
       tolerations:
