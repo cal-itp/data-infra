@@ -720,31 +720,28 @@ models:
           #     field: key
           #     config:
           #       where: '__rt_sampled__'
-      - name: gtfs_dataset_key
+      - &calculated_service_date
+        name: calculated_service_date
         description: |
-          The primary key for the record in `dim_gtfs_datasets` associated with this message.
-        columns:
-          - <<: *gtfs_dataset_key
-            config:
-              where: '__rt_sampled__'
-      - name: dt
-        description: |
-          Date on which we scraped this message.
-          A date filter *must* be provided when querying this table, because of the size of the data.
-      - name: hour
-        description: |
-          Timestamp of the beginning of the hour in which this message was scraped,
-          ex. "2022-09-01T00:00:00+00".
-      - name: base64_url
-        description: |
-          URL-safe base64 encoding of the URL from which this message was scraped.
-      - name: _extract_ts
-        description: |
-          Time at which this message was scraped.
-      - name: _gtfs_dataset_name
-        description: |
-          String name of the GTFS dataset of which this message is a part.
-          This field is provided for human readability and should not be used as a join key.
+          Attempt to identify the `service_date` (corresponding to the related schedule feed) for trip activity referenced in a
+          GTFS RT feed. It uses the following fallback logic:
+          * If `trip_start_date` is populated, use that. This is assumed to be provided with respect to `schedule_feed_timezone`.
+          * Otherwise, for trip updates and vehicle positions, if `trip_update_timestamp` or `vehicle_timestamp` (respectively) are populated, convert that
+          to the `schedule_feed_timezone` and extract the date from that.
+          * Otherwise, use `header_timestamp` converted to `schedule_feed_timezone` and extract the date.
+          * Finally (and this generally should not happen, since `header_timestamp` should be populated), fall back to `_extract_ts` converted to `schedule_feed_timezone` and extract the date.
+      - *gtfs_rt_dataset_key
+      - *gtfs_rt_dt
+      - *gtfs_rt_hour
+      - *base64_url
+      - *gtfs_rt_extract_ts
+      - *gtfs_rt_config_extract_ts
+      - *gtfs_rt_name
+      - *gtfs_rt_schedule_dataset_key
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *gtfs_rt_schedule_feed_timezone
+      - *_header_message_age
       - name: url_text
         description: |
           See: https://gtfs.org/realtime/reference/#message-translation.
@@ -822,7 +819,23 @@ models:
         description: |
           `active_period_end` converted to a TIMESTAMP data type.
           If `active_period_end` is null, will be midnight on January 1, 2099.
-      - *_header_message_age
+      - name: trip_start_time_interval
+        description: |
+          `trip_start_time` converted to a BigQuery INTERVAL type to allow handling for times after midnight.
+          See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
+      - name: trip_start_time_interval
+        description: |
+          `trip_start_time` converted to a BigQuery INTERVAL type to allow handling for times after midnight.
+          See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
+          *Note: If the interval is longer than 24 hours and `trip_start_date` is not populated, the interpretation for this
+          field becomes unclear.*
+      - name: trip_start_time_sec
+        description: |
+          `trip_start_time` converted to a number of seconds after twelve hours before noon (usually midnight)
+          on `calculated_service_date`.
+          See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
+          *Note: If this is larger than 86,400 (the number of seconds in one day) and `trip_start_date` is not populated, the interpretation for this
+          field becomes unclear.*
   - name: fct_daily_service_alerts
     description: |
       Each row is a daily summary of a service alert.
