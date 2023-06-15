@@ -1,9 +1,26 @@
 ingress:
-
   enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
   hosts:
     - monitoring.k8s.calitp.jarv.us
+    - monitoring.calitp.org
   tls:
     - secretName: grafana-tls
       hosts:
         - monitoring.k8s.calitp.jarv.us
+        - monitoring.calitp.org
+
+envFromSecret: grafana-postgresql
+
+# TODO: could use initdb scripts to create this user rather than manual
+
+grafana.ini:
+  database:
+    type: postgres
+    host: postgresql.monitoring-grafana.svc.cluster.local
+    name: grafana
+    user: grafana
+    password: $__env{POSTGRES_PASSWORD}
+  server:
+    domain: monitoring.calitp.org
