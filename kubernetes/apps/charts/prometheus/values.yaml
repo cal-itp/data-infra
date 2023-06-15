@@ -48,7 +48,7 @@ alertmanager:
   ##
   image:
     repository: quay.io/prometheus/alertmanager
-    tag: v0.23.0
+    tag: v0.24.0
     pullPolicy: IfNotPresent
 
   ## alertmanager priorityClassName
@@ -255,6 +255,11 @@ alertmanager:
     #  matchExpressions:
     #    - { key: environment, operator: In, values: [ dev ] }
 
+    ## Persistent Volume Name
+    ## Useful if Persistent Volumes have been provisioned in advance and you want to use a specific one
+    ##
+    # volumeName: ""
+
   emptyDir:
     ## alertmanager emptyDir volume size limit
     ##
@@ -348,6 +353,10 @@ alertmanager:
     runAsGroup: 65534
     fsGroup: 65534
 
+  ## Security context to be added to alertmanager container
+  ##
+  containerSecurityContext: {}
+
   service:
     annotations: {}
     labels: {}
@@ -393,6 +402,8 @@ configmapReload:
       tag: v0.5.0
       pullPolicy: IfNotPresent
 
+    # containerPort: 9533
+
     ## Additional configmap-reload container arguments
     ##
     extraArgs: {}
@@ -410,6 +421,8 @@ configmapReload:
       #   configMap: prometheus-alerts
       #   readOnly: true
 
+    ## Security context to be added to configmap-reload container
+    containerSecurityContext: {}
 
     ## configmap-reload resource requests and limits
     ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -431,6 +444,8 @@ configmapReload:
       tag: v0.5.0
       pullPolicy: IfNotPresent
 
+    # containerPort: 9533
+
     ## Additional configmap-reload container arguments
     ##
     extraArgs: {}
@@ -448,6 +463,8 @@ configmapReload:
       #   configMap: prometheus-alerts
       #   readOnly: true
 
+    ## Security context to be added to configmap-reload container
+    containerSecurityContext: {}
 
     ## configmap-reload resource requests and limits
     ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -489,7 +506,7 @@ nodeExporter:
   ##
   image:
     repository: quay.io/prometheus/node-exporter
-    tag: v1.3.0
+    tag: v1.3.1
     pullPolicy: IfNotPresent
 
   ## Specify if a Pod Security Policy for node-exporter must be created
@@ -578,7 +595,9 @@ nodeExporter:
     # requests:
     #   cpu: 100m
     #   memory: 30Mi
-
+  container:
+    securityContext:
+      allowPrivilegeEscalation: false
   # Custom DNS configuration to be added to node-exporter pods
   dnsConfig: {}
     # nameservers:
@@ -606,7 +625,7 @@ nodeExporter:
 
     # Exposed as a headless service:
     # https://kubernetes.io/docs/concepts/services-networking/service/#headless-services
-    clusterIP: None
+    clusterIP: ""
 
     ## List of IP addresses at which the node-exporter service is available
     ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
@@ -664,7 +683,7 @@ server:
   ##
   image:
     repository: quay.io/prometheus/prometheus
-    tag: v2.34.0
+    tag: v2.39.1
     pullPolicy: IfNotPresent
 
   ## prometheus server priorityClassName
@@ -748,6 +767,8 @@ server:
   ##
   ## Useful for providing HTTP Basic Auth to healthchecks
   probeHeaders: []
+    # - name: "Authorization"
+    #   value: "Bearer ABCDEabcde12345"
 
   ## Additional Prometheus server container arguments
   ##
@@ -795,6 +816,9 @@ server:
   ## to NOT generate a ConfigMap resource
   ##
   configMapOverrideName: ""
+
+  ## Extra labels for Prometheus server ConfigMap (ConfigMap that holds serverFiles)
+  extraConfigmapLabels: {}
 
   ingress:
     ## If true, Prometheus server Ingress will be created
@@ -895,6 +919,10 @@ server:
     accessModes:
       - ReadWriteOnce
 
+    ## Prometheus server data Persistent Volume labels
+    ##
+    labels: {}
+
     ## Prometheus server data Persistent Volume annotations
     ##
     annotations: {}
@@ -942,6 +970,11 @@ server:
     #    release: "stable"
     #  matchExpressions:
     #    - { key: environment, operator: In, values: [ dev ] }
+
+    ## Persistent Volume Name
+    ## Useful if Persistent Volumes have been provisioned in advance and you want to use a specific one
+    ##
+    # volumeName: ""
 
   emptyDir:
     ## Prometheus server emptyDir volume size limit
@@ -1042,7 +1075,7 @@ server:
   ##
   hostNetwork: false
 
-  # When hostNetwork is enabled, you probably want to set this to ClusterFirstWithHostNet
+  # When hostNetwork is enabled, this will set to ClusterFirstWithHostNet automatically
   dnsPolicy: ClusterFirst
 
   # Use hostPort
@@ -1068,6 +1101,7 @@ server:
     #   - name: ndots
     #     value: "2"
   #   - name: edns0
+
   ## Security context to be added to server pods
   ##
   securityContext:
@@ -1075,6 +1109,10 @@ server:
     runAsNonRoot: true
     runAsGroup: 65534
     fsGroup: 65534
+
+  ## Security context to be added to server container
+  ##
+  containerSecurityContext: {}
 
   service:
     ## If false, no Service will be created for the Prometheus server
@@ -1117,6 +1155,25 @@ server:
   ##
   retention: "15d"
 
+  ## Array of extra Kubernetes manifests, in form of YAML object,
+  ## if you want to deploy
+  extraObjects: []
+  # - apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: '{{ template "prometheus.name" . }}-extra-config'
+
+  ## Array of extra Kubernetes manifest, in form of template string,
+  ## if you want to deploy
+  extraTemplates: []
+  # - |
+  #   apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: extra-config
+  #     labels:
+  #   {{- include "prometheus.server.labels" . | nindent 4 }}
+
 pushgateway:
   ## If false, pushgateway will not be installed
   ##
@@ -1135,7 +1192,7 @@ pushgateway:
   ##
   image:
     repository: prom/pushgateway
-    tag: v1.4.2
+    tag: v1.4.3
     pullPolicy: IfNotPresent
 
   ## pushgateway priorityClassName
@@ -1280,6 +1337,9 @@ pushgateway:
     runAsUser: 65534
     runAsNonRoot: true
 
+  ## Security context to be added to push-gateway container
+  containerSecurityContext: {}
+
   service:
     annotations:
       prometheus.io/probe: pushgateway
@@ -1299,6 +1359,13 @@ pushgateway:
   ## pushgateway Deployment Strategy type
   # strategy:
   #   type: Recreate
+
+  ## Custom HTTP headers for Liveness/Readiness/Startup Probe
+  ##
+  ## Useful for providing HTTP Basic Auth to healthchecks
+  probeHeaders: []
+    # - name: "Authorization"
+    #   value: "Bearer ABCDEabcde12345"
 
   persistentVolume:
     ## If true, pushgateway will create/use a Persistent Volume Claim
@@ -1350,6 +1417,10 @@ pushgateway:
     ##
     subPath: ""
 
+    ## Persistent Volume Name
+    ## Useful if Persistent Volumes have been provisioned in advance and you want to use a specific one
+    ##
+    # volumeName: ""
 
 ## alertmanager ConfigMap entries
 ##
@@ -1555,6 +1626,7 @@ serverFiles:
       # * `prometheus.io/param_<parameter>`: If the metrics endpoint uses parameters
       # then you can set any parameter
       - job_name: 'kubernetes-service-endpoints'
+        honor_labels: true
 
         kubernetes_sd_configs:
           - role: endpoints
@@ -1577,7 +1649,7 @@ serverFiles:
           - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
             action: replace
             target_label: __address__
-            regex: ([^:]+)(?::\d+)?;(\d+)
+            regex: (.+?)(?::\d+)?;(\d+)
             replacement: $1:$2
           - action: labelmap
             regex: __meta_kubernetes_service_annotation_prometheus_io_param_(.+)
@@ -1609,6 +1681,7 @@ serverFiles:
       # * `prometheus.io/param_<parameter>`: If the metrics endpoint uses parameters
       # then you can set any parameter
       - job_name: 'kubernetes-service-endpoints-slow'
+        honor_labels: true
 
         scrape_interval: 5m
         scrape_timeout: 30s
@@ -1631,7 +1704,7 @@ serverFiles:
           - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
             action: replace
             target_label: __address__
-            regex: ([^:]+)(?::\d+)?;(\d+)
+            regex: (.+?)(?::\d+)?;(\d+)
             replacement: $1:$2
           - action: labelmap
             regex: __meta_kubernetes_service_annotation_prometheus_io_param_(.+)
@@ -1666,6 +1739,7 @@ serverFiles:
       #
       # * `prometheus.io/probe`: Only probe services that have a value of `true`
       - job_name: 'kubernetes-services'
+        honor_labels: true
 
         metrics_path: /probe
         params:
@@ -1703,6 +1777,7 @@ serverFiles:
       # * `prometheus.io/path`: If the metrics path is not `/metrics` override this.
       # * `prometheus.io/port`: Scrape the pod on the indicated port instead of the default of `9102`.
       - job_name: 'kubernetes-pods'
+        honor_labels: true
 
         kubernetes_sd_configs:
           - role: pod
@@ -1724,7 +1799,7 @@ serverFiles:
             regex: (.+)
           - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
             action: replace
-            regex: ([^:]+)(?::\d+)?;(\d+)
+            regex: (.+?)(?::\d+)?;(\d+)
             replacement: $1:$2
             target_label: __address__
           - action: labelmap
@@ -1754,6 +1829,7 @@ serverFiles:
       # * `prometheus.io/path`: If the metrics path is not `/metrics` override this.
       # * `prometheus.io/port`: Scrape the pod on the indicated port instead of the default of `9102`.
       - job_name: 'kubernetes-pods-slow'
+        honor_labels: true
 
         scrape_interval: 5m
         scrape_timeout: 30s
@@ -1775,7 +1851,7 @@ serverFiles:
             regex: (.+)
           - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
             action: replace
-            regex: ([^:]+)(?::\d+)?;(\d+)
+            regex: (.+?)(?::\d+)?;(\d+)
             replacement: $1:$2
             target_label: __address__
           - action: labelmap
@@ -1827,3 +1903,13 @@ networkPolicy:
 
 # Force namespace of namespaced resources
 forceNamespace: null
+
+# Extra manifests to deploy as an array
+extraManifests: []
+  # - apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #   labels:
+  #     name: prometheus-extra
+  #   data:
+  #     extra-data: "value"
