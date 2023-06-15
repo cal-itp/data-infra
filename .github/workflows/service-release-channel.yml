@@ -12,6 +12,7 @@ jobs:
       CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
       GKE_NAME: data-infra-apps
       GKE_REGION: us-west1
+      USE_GKE_GCLOUD_AUTH_PLUGIN: True
     steps:
 
       - name: Check out repo
