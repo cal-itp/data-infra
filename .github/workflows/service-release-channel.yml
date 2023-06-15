@@ -29,8 +29,8 @@ jobs:
         uses: google-github-actions/get-gke-credentials@v1
         with:
           use_auth_provider: true
-          cluster_name: "$GKE_NAME"
-          location: "$GKE_REGION"
+          cluster_name: data-infra-apps
+          location: us-west1
 
       - id: service-release
         name: Run ci/workflows/service-release.sh
