@@ -7,9 +7,13 @@ resources:
 - archiver-channel-vars.yaml
 - ../gtfs-rt-archiver-v3-release
 
-patchesStrategicMerge:
-- consumer.patch.yaml
-- ticker.patch.yaml
+patches:
+- path: consumer.patch.yaml
+  target:
+    name: gtfs-rt-archiver-consumer
+- path: ticker.patch.yaml
+  target:
+    name: gtfs-rt-archiver-ticker
 
 images:
 - name: 'gtfs-rt-archiver'
