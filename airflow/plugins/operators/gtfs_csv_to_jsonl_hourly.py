@@ -3,6 +3,8 @@ import gzip
 import json
 import logging
 import os
+import traceback
+from io import StringIO
 from typing import ClassVar, List, Optional
 
 import pendulum
@@ -27,6 +29,10 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     ts: pendulum.DateTime
     extract_config: GTFSDownloadConfig
     gtfs_filename: str
+    csv_dialect: Optional[
+        str
+    ]  # dialect would be a better name but we have an old field with that name...
+    num_lines: Optional[int]
 
     # if you try to set table directly, you get an error because it "shadows a BaseModel attribute"
     # so set as a property instead
@@ -79,6 +85,28 @@ class ScheduleParseResult(PartitionedGCSArtifact):
         )
 
 
+def parse_csv_str(contents: str):
+    lines = []
+    reader = csv.DictReader(StringIO(contents), restkey="calitp_unknown_fields")
+    field_names = reader.fieldnames
+
+    if len(field_names) == 1:
+        # we probably have a tab-delimited file; check that, but proceed with default
+        tab_reader = csv.DictReader(
+            StringIO(contents), dialect="excel-tab", restkey="calitp_unknown_fields"
+        )
+
+        if len(tab_reader.fieldnames) > 1:
+            reader = tab_reader
+            field_names = tab_reader.fieldnames
+
+    for line_number, row in enumerate(reader, start=1):
+        row["_line_number"] = line_number
+        lines.append(row)
+
+    return lines, field_names, reader.dialect
+
+
 def parse_individual_file(
     fs,
     input_file: GTFSScheduleFeedFileHourly,
@@ -86,14 +114,13 @@ def parse_individual_file(
 ) -> GTFSScheduleParseOutcome:
     logging.info(f"Processing {input_file.path}")
     field_names = None
-    lines = []
     try:
         with fs.open(input_file.path, newline="", mode="r", encoding="utf-8-sig") as f:
-            reader = csv.DictReader(f, restkey="calitp_unknown_fields")
-            field_names = reader.fieldnames
-            for line_number, row in enumerate(reader, start=1):
-                row["_line_number"] = line_number
-                lines.append(row)
+            contents = f.read()
+
+        lines, field_names, dialect = parse_csv_str(contents)
+
+        num_lines = len(lines)
 
         jsonl_content = gzip.compress(
             "\n".join(json.dumps(line) for line in lines).encode()
@@ -106,6 +133,8 @@ def parse_individual_file(
             extract_config=input_file.extract_config,
             filename=gtfs_filename + ".jsonl.gz",
             gtfs_filename=gtfs_filename,
+            csv_dialect=dialect,
+            num_lines=num_lines,
         )
 
         jsonl_file.save_content(content=jsonl_content, fs=fs)
@@ -113,13 +142,14 @@ def parse_individual_file(
         del jsonl_content
 
     except Exception as e:
-        logging.warn(f"Can't process {input_file.path}: {e}")
+        logging.warn(f"Failed to process {input_file.path}: {traceback.format_exc()}")
         return GTFSScheduleParseOutcome(
             success=False,
             exception=e,
             feed_file=input_file,
             fields=field_names,
         )
+
     logging.info(f"Parsed {input_file.path}")
     return GTFSScheduleParseOutcome(
         success=True,
@@ -191,10 +221,6 @@ class GtfsGcsToJsonlOperatorHourly(BaseOperator):
 
 
 if __name__ == "__main__":
-    lines = []
     with open("/Users/laurie/Downloads/bad_routes.txt", newline="") as f:
-        for row in csv.DictReader(f):
-            lines.append(row)
-
-    content = "\n".join(json.dumps(o) for o in lines).encode()
+        content = "\n".join(json.dumps(o) for o in csv.DictReader(f)).encode()
     print(content)
