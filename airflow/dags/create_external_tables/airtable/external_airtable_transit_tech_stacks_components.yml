@@ -48,3 +48,6 @@ schema_fields:
   - name: example_stacks
     type: STRING
     mode: REPEATED
+  - name: id
+    type: STRING
+    mode: NULLABLE
