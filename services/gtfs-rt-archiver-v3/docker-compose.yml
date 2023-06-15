@@ -31,10 +31,10 @@ services:
     <<: *gtfs-rt-archiver-v3-common
     command: python -m gtfs_rt_archiver_v3.ticker --load-env-secrets
     volumes:
-      - $CALITP_ARCHIVER_V3_SERVICE_ACCOUNT: "/Users/charlescostanzo/workspace/sa/cal-itp-data-infra-f5259e2158b5.json"
+      - $CALITP_ARCHIVER_V3_SERVICE_ACCOUNT:/tmp/secret.json:ro
 
   gtfs-rt-archiver-v3-consumer:
     <<: *gtfs-rt-archiver-v3-common
     command: python -m gtfs_rt_archiver_v3.consumer --load-env-secrets
     volumes:
-      - $CALITP_ARCHIVER_V3_SERVICE_ACCOUNT: "/Users/charlescostanzo/workspace/sa/cal-itp-data-infra-f5259e2158b5.json"
+      - $CALITP_ARCHIVER_V3_SERVICE_ACCOUNT:/tmp/secret.json:ro
