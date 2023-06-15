@@ -3,6 +3,12 @@ kind: ConfigMap
 metadata:
   name: archiver-app-vars
 data:
+  CALITP_HUEY_BACKOFF: "1"
+  CALITP_HUEY_MAX_DELAY: "1"
+  CALITP_HUEY_READ_TIMEOUT: "20"
   CALITP_HUEY_REDIS_HOST: redis
   CALITP_USER: pipeline
   GOOGLE_APPLICATION_CREDENTIALS: /secrets/gtfs-feed-secrets/google_application_credentials.json
+  LAST_FETCH_FILE: /tmp/fetch
+  LAST_TICK_FILE: /tmp/tick
+  MAX_LIVENESS_FILE_AGE_SECONDS: '30'
