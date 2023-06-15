@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: archiver-channel-vars
-data:
-  AIRFLOW_ENV: development
-  CALITP_BUCKET__AIRTABLE: "gs://test-calitp-airtable"
-  CALITP_BUCKET__GTFS_RT_RAW: "gs://test-calitp-gtfs-rt-raw"
-  HUEY_CONSUMER_WORKERS: "16"
