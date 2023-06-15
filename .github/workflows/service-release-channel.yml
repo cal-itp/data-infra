@@ -30,7 +30,7 @@ jobs:
         with:
           use_auth_provider: true
           cluster_name: "$GKE_NAME"
-          location: "$GKE_LOCATION"
+          location: "$GKE_REGION"
 
       - id: service-release
         name: Run ci/workflows/service-release.sh
