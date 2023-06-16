@@ -387,7 +387,7 @@ def run(
                     if match and match.group("model") not in matches:
                         matches[match.group("model")] = (match, line)
             for model, (first_match, line) in matches.items():
-                typer.secho(" ".join([model, first_match, line]))
+                typer.secho(" ".join([model, str(first_match), line]))
                 # Just use a single exception type for now, regardless of whether the model is missing entirely
                 # or just a column
                 exc = DbtMetabaseSyncFailure(first_match.group())
