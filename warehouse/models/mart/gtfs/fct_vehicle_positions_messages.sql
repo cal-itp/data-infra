@@ -18,7 +18,7 @@ fct_vehicle_positions_messages AS (
         base64_url,
         _extract_ts,
         _config_extract_ts,
-        name,
+        _gtfs_dataset_name,
         schedule_gtfs_dataset_key,
         schedule_base64_url,
         schedule_name,

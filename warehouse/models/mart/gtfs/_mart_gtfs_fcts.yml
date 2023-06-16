@@ -169,7 +169,7 @@ models:
           value updates every time that the Airtable data extract runs, whereas `dim_gtfs_datasets` has versioning applied
           and `_valid_from` only updates when an attribute within the record actually changes.
       - &gtfs_rt_name
-        name: name
+        name: _gtfs_dataset_name
         description: |
           Name from the associated GTFS dataset record.
       - &gtfs_rt_schedule_dataset_key
