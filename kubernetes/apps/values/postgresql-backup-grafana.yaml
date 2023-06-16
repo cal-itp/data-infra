@@ -29,3 +29,6 @@ config:
       value: gs:calitp-backups-grafana:/
     - name: PGHOST
       value: postgresql.monitoring-grafana.svc.cluster.local
+
+healthchecks:
+  uuid: 9095f868-4c8e-443c-80a4-9b9a22d9a8d8
