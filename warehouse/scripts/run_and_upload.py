@@ -319,23 +319,17 @@ def run(
             assert mb_host, "mb_host is empty."
             mb = Metabase_API(mb_host, mb_user, mb_pass)
 
-            # get database ids (does this need prod / staging handling?)
-            print("getting database ids", flush=True)
-            databases = mb.get("/api/database/")
-
-            db_ids = []
-            for db in databases["data"]:
-                db_ids.append(db["id"])
-
-            # sync database contents
-            for id in db_ids:
-                print(f'Syncing database: {db["name"]}', flush=True)
-                response_dict = mb.post(f"/api/database/{id}/sync")
+            # sync database contents (does this need prod / staging handling?)
+            for db in mb.get("/api/database/")["data"]:
+                typer.secho(f'Syncing database: {db["name"]}')
+                response_dict = mb.post(f"/api/database/{db['id']}/sync")
                 assert response_dict, str(response_dict)
 
-            # wait to call dbt-metabase
-            print("Hey, I'm about to go to sleep!", flush=True)
-            time.sleep(180)
+            sleep_seconds = 180
+            typer.secho(
+                f"Sleeping for {sleep_seconds} seconds to hopefully allow syncs to finish."
+            )
+            time.sleep(sleep_seconds)
 
             # use programmatic invocation
             # Instantiate dbt interface
@@ -347,23 +341,24 @@ def run(
                 )
 
                 # Load models
-                print("reading dbt models", flush=True)
+                typer.secho("reading dbt models")
                 dbt_models, aliases = dbt.read_models(
                     docs_url="https://dbt-docs.calitp.org",
                 )
 
                 # Instantiate Metabase interface
-                print("instantiating metabase interface", flush=True)
+                typer.secho("instantiating metabase interface")
                 metabase = MetabaseInterface(
                     host=mb_host.lstrip("https://"),
                     user=mb_user,
                     password=mb_pass,
                     use_http=True,
                     database=metabase_database,
+                    exclude_sources=True,
                 )
 
                 # Propagate models to Metabase
-                print("propagating models to metabase", flush=True)
+                typer.secho("propagating models to metabase")
                 metabase_export_exception: Optional[Exception] = None
                 try:
                     metabase.client.export_models(
@@ -373,10 +368,9 @@ def run(
                     )
                 except Exception as e:
                     metabase_export_exception = e
-                    print(
+                    typer.secho(
                         "Metabase export models failed with exception "
-                        + str(metabase_export_exception),
-                        flush=True,
+                        + str(metabase_export_exception)
                     )
             s = f.getvalue()
 
@@ -384,7 +378,7 @@ def run(
                 manifest = Manifest(**json.load(f))
             matches = {}
             for line in s.splitlines():
-                print(line)
+                typer.secho(line)
                 for pattern in (
                     r"WARNING\s+Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)",
                     r"WARNING\s+Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)",
@@ -393,6 +387,7 @@ def run(
                     if match and match.group("model") not in matches:
                         matches[match.group("model")] = (match, line)
             for model, (first_match, line) in matches.items():
+                typer.secho(" ".join([model, str(first_match), line]))
                 # Just use a single exception type for now, regardless of whether the model is missing entirely
                 # or just a column
                 exc = DbtMetabaseSyncFailure(first_match.group())
@@ -405,6 +400,7 @@ def run(
                             "line": line,
                         },
                     )
+                    # since we only look for nodes, sources will fail here
                     node = next(
                         node
                         for node in manifest.nodes.values()
