@@ -1,0 +1,414 @@
+[helm:metabase-test=kubernetes/apps/charts/metabase]
+
+diff -u -N /tmp/LIVE-2160804287/apps.v1.Deployment.metabase-test.metabase /tmp/MERGED-1466045275/apps.v1.Deployment.metabase-test.metabase
+--- /tmp/LIVE-2160804287/apps.v1.Deployment.metabase-test.metabase	2023-06-16 16:48:36.696703957 +0000
++++ /tmp/MERGED-1466045275/apps.v1.Deployment.metabase-test.metabase	2023-06-16 16:48:36.696703957 +0000
+@@ -0,0 +1,77 @@
++apiVersion: apps/v1
++kind: Deployment
++metadata:
++  creationTimestamp: "2023-06-16T16:48:36Z"
++  generation: 1
++  labels:
++    name: metabase
++  name: metabase
++  namespace: metabase-test
++  uid: 1d19f74d-c3c8-41e1-b570-b6fa84241633
++spec:
++  progressDeadlineSeconds: 600
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      name: metabase
++  strategy:
++    rollingUpdate:
++      maxSurge: 25%
++      maxUnavailable: 25%
++    type: RollingUpdate
++  template:
++    metadata:
++      creationTimestamp: null
++      labels:
++        name: metabase
++    spec:
++      containers:
++      - envFrom:
++        - configMapRef:
++            name: metabase-config
++        image: metabase/metabase:v0.42.3
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /
++            port: 3000
++            scheme: HTTP
++          initialDelaySeconds: 5
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        name: metabase
++        ports:
++        - containerPort: 3000
++          name: metabase
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /
++            port: 3000
++            scheme: HTTP
++          initialDelaySeconds: 30
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        resources: {}
++        startupProbe:
++          failureThreshold: 30
++          httpGet:
++            path: /
++            port: 3000
++            scheme: HTTP
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++      dnsPolicy: ClusterFirst
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext: {}
++      terminationGracePeriodSeconds: 30
++status: {}
+diff -u -N /tmp/LIVE-2160804287/apps.v1.StatefulSet.metabase-test.database /tmp/MERGED-1466045275/apps.v1.StatefulSet.metabase-test.database
+--- /tmp/LIVE-2160804287/apps.v1.StatefulSet.metabase-test.database	2023-06-16 16:48:36.964709015 +0000
++++ /tmp/MERGED-1466045275/apps.v1.StatefulSet.metabase-test.database	2023-06-16 16:48:36.964709015 +0000
+@@ -0,0 +1,90 @@
++apiVersion: apps/v1
++kind: StatefulSet
++metadata:
++  creationTimestamp: "2023-06-16T16:48:36Z"
++  generation: 1
++  labels:
++    name: database
++  name: database
++  namespace: metabase-test
++  uid: 533bcdd2-e118-41ff-b2ca-b05965422105
++spec:
++  podManagementPolicy: OrderedReady
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      name: database
++  serviceName: database
++  template:
++    metadata:
++      annotations:
++        prometheus.io/port: "9187"
++        prometheus.io/scrape: "true"
++      creationTimestamp: null
++      labels:
++        name: database
++    spec:
++      containers:
++      - envFrom:
++        - configMapRef:
++            name: database-config
++        image: postgres:13.5
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 3
++          initialDelaySeconds: 15
++          periodSeconds: 20
++          successThreshold: 1
++          tcpSocket:
++            port: 5432
++          timeoutSeconds: 1
++        name: database
++        ports:
++        - containerPort: 5432
++          name: postgresql
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          initialDelaySeconds: 5
++          periodSeconds: 10
++          successThreshold: 1
++          tcpSocket:
++            port: 5432
++          timeoutSeconds: 1
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /var/lib/postgresql/data
++          name: data
++          subPath: postgresql-data
++      dnsPolicy: ClusterFirst
++      imagePullSecrets:
++      - name: regcred
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext: {}
++      terminationGracePeriodSeconds: 30
++  updateStrategy:
++    rollingUpdate:
++      partition: 0
++    type: RollingUpdate
++  volumeClaimTemplates:
++  - apiVersion: v1
++    kind: PersistentVolumeClaim
++    metadata:
++      creationTimestamp: null
++      name: data
++    spec:
++      accessModes:
++      - ReadWriteOnce
++      resources:
++        requests:
++          storage: 10Gi
++      volumeMode: Filesystem
++    status:
++      phase: Pending
++status:
++  availableReplicas: 0
++  replicas: 0
+diff -u -N /tmp/LIVE-2160804287/networking.k8s.io.v1.Ingress.metabase-test.metabase-test /tmp/MERGED-1466045275/networking.k8s.io.v1.Ingress.metabase-test.metabase-test
+--- /tmp/LIVE-2160804287/networking.k8s.io.v1.Ingress.metabase-test.metabase-test	2023-06-16 16:48:40.924778536 +0000
++++ /tmp/MERGED-1466045275/networking.k8s.io.v1.Ingress.metabase-test.metabase-test	2023-06-16 16:48:40.924778536 +0000
+@@ -0,0 +1,35 @@
++apiVersion: networking.k8s.io/v1
++kind: Ingress
++metadata:
++  annotations:
++    cert-manager.io/cluster-issuer: letsencrypt-prod
++    kubernetes.io/ingress.class: nginx
++  creationTimestamp: "2023-06-16T16:48:37Z"
++  generation: 1
++  labels:
++    app.kubernetes.io/instance: metabase-test
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: metabase
++    app.kubernetes.io/version: 1.16.0
++    helm.sh/chart: metabase-0.1.0
++  name: metabase-test
++  namespace: metabase-test
++  uid: 5de9ef19-fd20-4642-870a-fcf65544e1eb
++spec:
++  rules:
++  - host: metabase-test.k8s.calitp.jarv.us
++    http:
++      paths:
++      - backend:
++          service:
++            name: metabase
++            port:
++              number: 3000
++        path: /
++        pathType: ImplementationSpecific
++  tls:
++  - hosts:
++    - metabase-test.k8s.calitp.jarv.us
++    secretName: metabase-tls
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-2160804287/v1.ConfigMap.metabase-test.database-config /tmp/MERGED-1466045275/v1.ConfigMap.metabase-test.database-config
+--- /tmp/LIVE-2160804287/v1.ConfigMap.metabase-test.database-config	2023-06-16 16:48:35.692685008 +0000
++++ /tmp/MERGED-1466045275/v1.ConfigMap.metabase-test.database-config	2023-06-16 16:48:35.692685008 +0000
+@@ -0,0 +1,11 @@
++apiVersion: v1
++data:
++  POSTGRES_DB: metabase
++  POSTGRES_PASSWORD: admin
++  POSTGRES_USER: admin
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2023-06-16T16:48:35Z"
++  name: database-config
++  namespace: metabase-test
++  uid: befac58c-7908-4c3c-9bdc-ded615866144
+diff -u -N /tmp/LIVE-2160804287/v1.ConfigMap.metabase-test.metabase-config /tmp/MERGED-1466045275/v1.ConfigMap.metabase-test.metabase-config
+--- /tmp/LIVE-2160804287/v1.ConfigMap.metabase-test.metabase-config	2023-06-16 16:48:35.932689537 +0000
++++ /tmp/MERGED-1466045275/v1.ConfigMap.metabase-test.metabase-config	2023-06-16 16:48:35.932689537 +0000
+@@ -0,0 +1,15 @@
++apiVersion: v1
++data:
++  MB_DB_DBNAME: metabase
++  MB_DB_HOST: database.metabase-test.svc.cluster.local
++  MB_DB_PASS: admin
++  MB_DB_PORT: "5432"
++  MB_DB_TYPE: postgres
++  MB_DB_USER: admin
++  MB_SITE_URL: https://metabase-test.k8s.calitp.jarv.us
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2023-06-16T16:48:35Z"
++  name: metabase-config
++  namespace: metabase-test
++  uid: 8928603d-f1dc-4c0e-a331-f79242dade88
+diff -u -N /tmp/LIVE-2160804287/v1.Service.metabase-test.database /tmp/MERGED-1466045275/v1.Service.metabase-test.database
+--- /tmp/LIVE-2160804287/v1.Service.metabase-test.database	2023-06-16 16:48:36.200694596 +0000
++++ /tmp/MERGED-1466045275/v1.Service.metabase-test.database	2023-06-16 16:48:36.200694596 +0000
+@@ -0,0 +1,26 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2023-06-16T16:48:36Z"
++  name: database
++  namespace: metabase-test
++  uid: 6ffe7132-9877-45ef-bddf-cef2b987f919
++spec:
++  clusterIP: 10.100.0.0
++  clusterIPs:
++  - 10.100.0.0
++  internalTrafficPolicy: Cluster
++  ipFamilies:
++  - IPv4
++  ipFamilyPolicy: SingleStack
++  ports:
++  - name: postgresql
++    port: 5432
++    protocol: TCP
++    targetPort: 5432
++  selector:
++    name: database
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-2160804287/v1.Service.metabase-test.metabase /tmp/MERGED-1466045275/v1.Service.metabase-test.metabase
+--- /tmp/LIVE-2160804287/v1.Service.metabase-test.metabase	2023-06-16 16:48:36.440699125 +0000
++++ /tmp/MERGED-1466045275/v1.Service.metabase-test.metabase	2023-06-16 16:48:36.440699125 +0000
+@@ -0,0 +1,26 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2023-06-16T16:48:36Z"
++  name: metabase
++  namespace: metabase-test
++  uid: 35ca8d73-8b44-4f80-ab9e-96d2c2e6822a
++spec:
++  clusterIP: 10.100.0.0
++  clusterIPs:
++  - 10.100.0.0
++  internalTrafficPolicy: Cluster
++  ipFamilies:
++  - IPv4
++  ipFamilyPolicy: SingleStack
++  ports:
++  - name: metabase-http
++    port: 3000
++    protocol: TCP
++    targetPort: 3000
++  selector:
++    name: metabase
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-2427138428/batch.v1beta1.CronJob.metabase-test.postgresql-backup /tmp/MERGED-917271084/batch.v1beta1.CronJob.metabase-test.postgresql-backup
+--- /tmp/LIVE-2427138428/batch.v1beta1.CronJob.metabase-test.postgresql-backup	2023-06-16 16:48:45.444837858 +0000
++++ /tmp/MERGED-917271084/batch.v1beta1.CronJob.metabase-test.postgresql-backup	2023-06-16 16:48:45.444837858 +0000
+@@ -0,0 +1,98 @@
++apiVersion: batch/v1beta1
++kind: CronJob
++metadata:
++  creationTimestamp: "2023-06-16T16:48:45Z"
++  generation: 1
++  labels:
++    name: database-backup
++  name: postgresql-backup
++  namespace: metabase-test
++  uid: 869366aa-25b2-45d0-87ee-573749089508
++spec:
++  concurrencyPolicy: Forbid
++  failedJobsHistoryLimit: 1
++  jobTemplate:
++    metadata:
++      creationTimestamp: null
++    spec:
++      activeDeadlineSeconds: 7200
++      template:
++        metadata:
++          creationTimestamp: null
++        spec:
++          containers:
++          - args:
++            - |2
++
++              # snapshot current database
++              echo "Snapshotting Database"
++              pg_dumpall --clean \
++                | gzip --rsyncable \
++                | restic backup \
++                  --host metabase-test:postgresql-backup \
++                  --stdin \
++                  --stdin-filename pg_dumpall.sql.gz
++
++              # prune aged snapshots
++              echo "Pruning aged snapshots"
++              restic forget \
++                --host metabase-test:postgresql-backup \
++                --keep-last 36 \
++                --keep-daily 7 \
++                --keep-weekly 52
++            command:
++            - /bin/bash
++            - -c
++            env:
++            - name: GOOGLE_PROJECT_ID
++              value: "1005246706141"
++            - name: GOOGLE_APPLICATION_CREDENTIALS
++              value: /secrets/gcs-upload-svcacct/gcs-upload-svcacct.json
++            - name: PGPORT
++              value: "5432"
++            - name: PGDATABASE
++              valueFrom:
++                configMapKeyRef:
++                  key: POSTGRES_DB
++                  name: database-config
++            - name: PGUSER
++              valueFrom:
++                configMapKeyRef:
++                  key: POSTGRES_USER
++                  name: database-config
++            - name: PGPASSWORD
++              valueFrom:
++                configMapKeyRef:
++                  key: POSTGRES_PASSWORD
++                  name: database-config
++            - name: RESTIC_REPOSITORY
++              value: gs:calitp-backups-test:/metabase
++            - name: PGHOST
++              value: database.metabase-test.svc.cluster.local
++            envFrom:
++            - secretRef:
++                name: database-backup
++            image: ghcr.io/jarvusinnovations/restic-toolkit:1.3.0
++            imagePullPolicy: IfNotPresent
++            name: client
++            resources: {}
++            terminationMessagePath: /dev/termination-log
++            terminationMessagePolicy: File
++            volumeMounts:
++            - mountPath: /secrets/gcs-upload-svcacct
++              name: gcs-upload-svcacct
++          dnsPolicy: ClusterFirst
++          restartPolicy: Never
++          schedulerName: default-scheduler
++          securityContext: {}
++          terminationGracePeriodSeconds: 30
++          volumes:
++          - name: gcs-upload-svcacct
++            secret:
++              defaultMode: 420
++              secretName: gcs-upload-svcacct
++  schedule: 15 * * * *
++  startingDeadlineSeconds: 86400
++  successfulJobsHistoryLimit: 3
++  suspend: false
++status: {}
