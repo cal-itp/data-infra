@@ -73,10 +73,10 @@ spec:
                   backup_status=0
 
                   if [ $sql_snapshot_status -ne 0 ]; then
-                    echo "Reporting failure: SQL snapshot"
+                    echo "Failed to snapshot; reporting to healthchecks"
                     backup_status=1
                   elif [ $prune_status -ne 0 ]; then
-                    echo "Reporting failure: Prune"
+                    echo "Failed to prune; reporting to healthchecks"
                     backup_status=2
                   fi
 
