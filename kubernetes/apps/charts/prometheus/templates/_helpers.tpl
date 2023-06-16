@@ -177,11 +177,16 @@ Return the appropriate apiVersion for networkpolicy.
 {{- define "prometheus.networkPolicy.apiVersion" -}}
 {{- print "networking.k8s.io/v1" -}}
 {{- end -}}
+
 {{/*
-Return the appropriate apiVersion for podsecuritypolicy.
+Return the appropriate apiVersion for poddisruptionbudget.
 */}}
-{{- define "prometheus.podSecurityPolicy.apiVersion" -}}
+{{- define "prometheus.podDisruptionBudget.apiVersion" -}}
+{{- if .Capabilities.APIVersions.Has "policy/v1" }}
+{{- print "policy/v1" -}}
+{{- else -}}
 {{- print "policy/v1beta1" -}}
+{{- end -}}
 {{- end -}}
 {{/*
 Return the appropriate apiVersion for rbac.

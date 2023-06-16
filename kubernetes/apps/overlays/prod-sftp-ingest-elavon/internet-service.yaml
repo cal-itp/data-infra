@@ -7,7 +7,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 22
+    - port: 2200
+      targetPort: 22
       name: sftp
   selector:
     statefulset.kubernetes.io/pod-name: sftp-server-0

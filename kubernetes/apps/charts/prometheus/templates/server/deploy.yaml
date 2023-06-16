@@ -56,6 +56,10 @@ spec:
         - name: {{ template "prometheus.name" . }}-{{ .Values.server.name }}-{{ .Values.configmapReload.prometheus.name }}
           image: "{{ .Values.configmapReload.prometheus.image.repository }}:{{ .Values.configmapReload.prometheus.image.tag }}"
           imagePullPolicy: "{{ .Values.configmapReload.prometheus.image.pullPolicy }}"
+          {{- with .Values.configmapReload.prometheus.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           args:
             - --volume-dir=/etc/config
             - --webhook-url=http://127.0.0.1:9090{{ .Values.server.prefixURL }}/-/reload
@@ -64,6 +68,10 @@ spec:
           {{- end }}
           {{- range .Values.configmapReload.prometheus.extraVolumeDirs }}
             - --volume-dir={{ . }}
+          {{- end }}
+          {{- if .Values.configmapReload.prometheus.containerPort }}
+          ports:
+            - containerPort: {{ .Values.configmapReload.prometheus.containerPort }}
           {{- end }}
           resources:
 {{ toYaml .Values.configmapReload.prometheus.resources | indent 12 }}
@@ -125,12 +133,9 @@ spec:
               path: {{ .Values.server.prefixURL }}/-/ready
               port: 9090
               scheme: {{ .Values.server.probeScheme }}
-              {{- if .Values.server.probeHeaders }}
+              {{- with .Values.server.probeHeaders }}
               httpHeaders:
-              {{- range .Values.server.probeHeaders}}
-              - name: {{ .name }}
-                value: {{ .value }}
-              {{- end }}
+{{- toYaml . | nindent 14 }}
               {{- end }}
             {{- else }}
             tcpSocket:
@@ -147,12 +152,9 @@ spec:
               path: {{ .Values.server.prefixURL }}/-/healthy
               port: 9090
               scheme: {{ .Values.server.probeScheme }}
-              {{- if .Values.server.probeHeaders }}
+              {{- with .Values.server.probeHeaders }}
               httpHeaders:
-              {{- range .Values.server.probeHeaders}}
-              - name: {{ .name }}
-                value: {{ .value }}
-              {{- end }}
+{{- toYaml . | nindent 14 }}
               {{- end }}
             {{- else }}
             tcpSocket:
@@ -214,6 +216,10 @@ spec:
           {{- if .Values.server.extraVolumeMounts }}
             {{ toYaml .Values.server.extraVolumeMounts | nindent 12 }}
           {{- end }}
+          {{- with .Values.server.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
       {{- if .Values.server.sidecarContainers }}
         {{- range $name, $spec :=  .Values.server.sidecarContainers }}
         - name: {{ $name }}
@@ -224,8 +230,10 @@ spec:
           {{- end }}
         {{- end }}
       {{- end }}
-      hostNetwork: {{ .Values.server.hostNetwork }}
-    {{- if .Values.server.dnsPolicy }}
+    {{- if .Values.server.hostNetwork }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+    {{- else }}
       dnsPolicy: {{ .Values.server.dnsPolicy }}
     {{- end }}
     {{- if .Values.imagePullSecrets }}
@@ -244,9 +252,9 @@ spec:
       dnsConfig:
 {{ toYaml .Values.server.dnsConfig | indent 8 }}
     {{- end }}
-    {{- if .Values.server.securityContext }}
+    {{- with .Values.server.securityContext }}
       securityContext:
-{{ toYaml .Values.server.securityContext | indent 8 }}
+        {{- toYaml . | nindent 8 }}
     {{- end }}
     {{- if .Values.server.tolerations }}
       tolerations:

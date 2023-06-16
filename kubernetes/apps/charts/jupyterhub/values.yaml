@@ -7,16 +7,16 @@ jupyterhub:
   singleuser:
     defaultUrl: "/lab"
     image:
-      name: ghcr.io/cal-itp/calitp-py
-      tag: hub-v15
+      name: ghcr.io/cal-itp/data-infra/jupyter-singleuser
+      tag: 2023.6.8
     memory:
       # Much more than 10 and we risk bumping up against the actual capacity of e2-highmem-2
       limit: 10G
       # Very roughly I have seen most usage in the 2-3GB range
       guarantee: 3G
     cpu:
-      limit: 1
-      guarantee: 0.5
+      # this is to put 2 pods per e2-highmem-2 which has 1.93 allocatable
+      guarantee: 0.7
     lifecycleHooks:
       postStart:
         exec:
@@ -24,7 +24,9 @@ jupyterhub:
             - "sh"
             - "-c"
             - >
-              cp /tmp/custom.sh /home/jovyan/.profile;
+              cp /tmp/profile.sh /home/jovyan/.profile;
+              mkdir -p -- /home/jovyan/.jupyter;
+              cp /tmp/jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py;
   scheduling:
     userPods:
       nodeAffinity:
@@ -46,6 +48,7 @@ jupyterhub:
         authenticator_class: github
         Authenticator:
           admin_users:
+            - atvaccaro
             - machow
             - themightchris
             - lottspot
