@@ -658,8 +658,8 @@
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#deploy-your-topic-branch-to-preprod">
-       2.1.1 deploy your topic branch to preprod
+      <a class="reference internal nav-link" href="#deploy-your-topic-branch-to-test">
+       2.1.1 deploy your topic branch to test
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
@@ -758,8 +758,8 @@
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#deploy-your-topic-branch-to-preprod">
-       2.1.1 deploy your topic branch to preprod
+      <a class="reference internal nav-link" href="#deploy-your-topic-branch-to-test">
+       2.1.1 deploy your topic branch to test
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
@@ -886,15 +886,15 @@ process.</p></li>
 </ul>
 <div class="section" id="id1">
 <h3>2.1.0 quick start<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="deploy-your-topic-branch-to-preprod">
-<h4>2.1.1 deploy your topic branch to preprod<a class="headerlink" href="#deploy-your-topic-branch-to-preprod" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="deploy-your-topic-branch-to-test">
+<h4>2.1.1 deploy your topic branch to test<a class="headerlink" href="#deploy-your-topic-branch-to-test" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this can be determined from a release config under ci/vars/releases</span>
 <span class="nv">app_name</span><span class="o">=</span>gtfs-rt-archive
 <span class="c1"># choose your appropriate remote name if different</span>
 <span class="nv">git_remote</span><span class="o">=</span>origin
 <span class="nv">topic_branch</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>branch<span class="w"> </span>--show-current<span class="k">)</span>
 <span class="c1"># load the helm or kustomize specific parameters</span>
-<span class="nb">source</span><span class="w"> </span>ci/vars/releases/preprod-<span class="nv">$app_name</span>.env
+<span class="nb">source</span><span class="w"> </span>ci/vars/releases/test-<span class="nv">$app_name</span>.env
 
 <span class="k">if</span><span class="w">   </span><span class="o">[[</span><span class="w"> </span><span class="nv">$RELEASE_DRIVER</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;kustomize&#39;</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
 <span class="w">  </span><span class="c1"># bump the newTag version to match the newly pushed app version</span>
@@ -918,10 +918,10 @@ git<span class="w"> </span>push<span class="w"> </span><span class="nv">$git_rem
 <span class="c1"># fetch the release candidate</span>
 git<span class="w"> </span>fetch<span class="w"> </span><span class="nv">$git_remote</span><span class="w"> </span>candidates/<span class="nv">$topic_branch</span>
 
-<span class="c1"># deploy to preprod</span>
-git<span class="w"> </span>push<span class="w"> </span>-f<span class="w"> </span><span class="nv">$git_remote</span><span class="w"> </span><span class="nv">$git_remote</span>/candidates/<span class="nv">$topic_branch</span>:releases/preprod
+<span class="c1"># deploy to test</span>
+git<span class="w"> </span>push<span class="w"> </span>-f<span class="w"> </span><span class="nv">$git_remote</span><span class="w"> </span><span class="nv">$git_remote</span>/candidates/<span class="nv">$topic_branch</span>:releases/test
 
-<span class="c1"># after it looks good in preprod, merge your changes into main.</span>
+<span class="c1"># after it looks good in test, merge your changes into main.</span>
 </pre></div>
 </div>
 </div>
@@ -990,7 +990,7 @@ when deploying these applications.</p>
 less ambiguous term used to describe an “environment” (e.g., “production”, “staging”, etc).
 There are currently two release branches:</p>
 <ol class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">releases/preprod</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">releases/test</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">releases/prod</span></code></p></li>
 </ol>
 <p>The basename of the branch (i.e., the name after the last “/” character) is used

@@ -38,7 +38,7 @@ flowchart TD
     subgraph rt_archiver[ ]
         rt_archiver_label[<a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archive'>RT archiver</a>]
         prod_rt_archiver[Prod archiver]
-        prepod_rt_archiver[Preprod archiver]
+        prepod_rt_archiver[test archiver]
     end
     subgraph reports[ ]
         reports_label[Reports]
