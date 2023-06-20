@@ -322,7 +322,7 @@ def run(
             # sync database contents (does this need prod / staging handling?)
             for db in mb.get("/api/database/")["data"]:
                 typer.secho(f'Syncing database: {db["name"]}')
-                response_dict = mb.post(f"/api/database/{db['id']}/sync")
+                response_dict = mb.post(f"/api/database/{db['id']}/")
                 assert response_dict, str(response_dict)
 
             sleep_seconds = 180
