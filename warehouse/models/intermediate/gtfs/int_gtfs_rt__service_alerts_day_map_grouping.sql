@@ -62,10 +62,19 @@ grouped AS (
 
 int_gtfs_rt__service_alerts_day_map_grouping AS (
     SELECT
+        -- we shouldn't need header and description here (those should be distinguished by id) but there seem to be cases where id is not unique
         {{ dbt_utils.generate_surrogate_key([
             'active_date',
             'base64_url',
             'id',
+            'header',
+            'description',
+            'active_period_start',
+            'active_period_end',
+            'agency_id',
+            'route_id',
+            'trip_id',
+            'stop_id'
         ]) }} as key,
         dt,
         active_date,

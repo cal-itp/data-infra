@@ -844,23 +844,120 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `dt`,
-          `base64_url`, and entity `id`.
+          Synthetic primary key constructed from `active_date`,
+          `base64_url`, `id`, entity selectors, and alert active period.
         tests:
-          - unique_proportion:
-              at_least: 0.98
-              where: '__rt_sampled__'
-          - not_null:
-              where: '__rt_sampled__'
-      - name: first_header_timestamp
+          - unique
+          - not_null
+      - *base64_url
+      - *gtfs_rt_schedule_feed_timezone
+      - &rt_trip_id
+        name: trip_id
         description: |
-          Earliest header timestamp at which this alert appeared on this date.
-      - name: last_header_timestamp
+          `trip_id` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field and how it corresponds to GTFS schedule data.
+      - &rt_trip_start_time
+        name: trip_id
         description: |
-          Latest header timestamp at which this alert appeared on this date.
-      - name: num_appearances
+          `start_time` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &rt_trip_start_date
+        name: trip_id
         description: |
-          Number of times that this alert appeared on this date.
+          `start_date` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &min_extract_ts
+        name: min_extract_ts
+        description: |
+          Timestamp of the first extract (i.e. the time at which
+          we downloaded this feed extract) of the entity being summarized.
+          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
+      - &max_extract_ts
+        name: max_extract_ts
+        description: |
+          Timestamp of the last extract (i.e. the time at which
+          we downloaded this feed extract) of the entity being summarized.
+          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
+      - &extract_duration_minutes
+        name: extract_duration_minutes
+        description: |
+          The difference between `max_extract_ts` and `min_extract_ts` in minutes,
+          representing the duration of time for which this entity was present in message responses we received from the agency.
+          Note that the entity may not have been present in every message between the minimum and maximum
+          timestamps, and therefore may not have been present continuously for the
+          duration listed here.
+      - &header_duration_minutes
+        name: header_duration_minutes
+        description: |
+          The difference between `max_header_timestamp` and `min_header_timestamp` in minutes,
+          representing the duration of time for which this entity was present in the messages produced by the agency.
+          Note that the entity may not have been present in every message between the minimum and maximum
+          timestamps, and therefore may not have been present continuously for the
+          duration listed here.
+      - &min_extract_ts_local_tz
+        name: min_extract_datetime_local_tz
+        description: |
+          `min_extract_ts` converted to a DATETIME type in `feed_timezone`.
+      - &max_extract_ts_local_tz
+        name: max_extract_datetime_local_tz
+        description: |
+          `max_extract_ts` converted to a DATETIME type in `feed_timezone`.
+      - &min_extract_ts_pacific
+        name: min_extract_datetime_pacific
+        description: |
+          `min_extract_ts` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+      - &max_extract_ts_pacific
+        name: max_extract_datetime_pacific
+        description: |
+          `max_extract_ts` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+      - &min_header_timestamp
+        name: min_header_timestamp
+        description: Earliest header timestamp of a message referencing this entity.
+      - &max_header_timestamp
+        name: max_header_timestamp
+        description: Latest header timestamp of a message referencing this entity.
+      - &min_header_local_tz
+        name: min_header_datetime_local_tz
+        description: |
+          `min_header_timestamp` converted to a DATETIME type in `feed_timezone`.
+      - &max_header_local_tz
+        name: max_header_datetime_local_tz
+        description: |
+          `max_header_timestamp` converted to a DATETIME type in `feed_timezone`.
+      - &min_header_pacific
+        name: min_header_datetime_pacific
+        description: |
+          `min_header_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+      - &max_header_pacific
+        name: max_header_datetime_pacific
+        description: |
+          `max_header_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+      - &num_distinct_header_timestamps
+        name: num_distinct_header_timestamps
+        description: Distinct count of header timestamps for messages being summarized (https://gtfs.org/realtime/reference/#message-feedheader).
+      - &num_distinct_message_keys
+        name: num_distinct_message_keys
+        description: |
+          Distinct count of message keys being summarized here (message keys are the synthetic
+          keys we generate for an individual RT message response.)
+          This is the count of distinct messages in which this entity appeared.
+          If you divide this value by `extract_duration_minutes`, you would
+          get a count of how many messages per minute this entity was present for,
+          which can help give a sense for how continuously this trip was updated.
+          This number should be equal to `num_distinct_extract_ts`.
+      - &num_distinct_extract_ts
+        name: num_distinct_extract_ts
+        description: |
+          Distinct count of `_extract_ts` values for messages being summarized here (`_extract_ts` represents
+          the instant at which we attempted to scrape data for this feed.)
+          This is the count of distinct messages in which this entity appeared.
+          If you divide this value by `extract_duration_minutes`, you would
+          get a count of how many messages per minute this entity was present for,
+          which can help give a sense for how continuously this entity was updated.
+          This number should be equal to `num_distinct_message_keys`.
   - name: fct_daily_scheduled_shapes
     description: |
       Each row is a summary of trip activity by shape for a given feed on a given agency-defined `service_date`.
@@ -1164,24 +1261,9 @@ models:
               config:
                 where: calculated_service_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
       - *base64_url
-      - &rt_trip_id
-        name: trip_id
-        description: |
-          `trip_id` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field and how it corresponds to GTFS schedule data.
-      - &rt_trip_start_time
-        name: trip_id
-        description: |
-          `start_time` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - &rt_trip_start_date
-        name: trip_id
-        description: |
-          `start_date` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
+      - *rt_trip_id
+      - *rt_trip_start_time
+      - *rt_trip_start_date
       - &starting_schedule_relationship
         name: starting_schedule_relationship
         description: |
@@ -1228,95 +1310,23 @@ models:
       - &num_distinct_message_ids
         name: num_distinct_message_ids
         description: Distinct count of top-level ids (https://gtfs.org/realtime/reference/#message-feedentity).
-      - &num_distinct_header_timestamps
-        name: num_distinct_header_timestamps
-        description: Distinct count of header timestamps from the feed (https://gtfs.org/realtime/reference/#message-feedheader).
-      - &num_distinct_message_keys
-        name: num_distinct_message_keys
-        description: |
-          Distinct count of message keys containing this trip (message keys are the synthetic
-          keys we generate for an individual RT message response.)
-          This is the count of distinct messages in which this trip appeared.
-          If you divide this value by `extract_duration_minutes`, you would
-          get a count of how many messages per minute this trip was present for,
-          which can help give a sense for how continuously this trip was updated.
-          This number should be equal to `num_distinct_extract_ts`.
-      - &num_distinct_extract_ts
-        name: num_distinct_extract_ts
-        description: |
-          Distinct count of `_extract_ts` vaues for messages containing this trip (`_extract_ts` represents
-          the instant at which we attempted to scrape data for this feed.)
-          This is the count of distinct messages in which this trip appeared.
-          If you divide this value by `extract_duration_minutes`, you would
-          get a count of how many messages per minute this trip was present for,
-          which can help give a sense for how continuously this trip was updated.
-          This number should be equal to `num_distinct_message_keys`.
-      - &min_extract_ts
-        name: min_extract_ts
-        description: |
-          Timestamp of the first extract (i.e. the time at which
-          we downloaded this feed extract) on this day referencing this trip.
-          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
-      - &max_extract_ts
-        name: max_extract_ts
-        description: |
-          Timestamp of the last extract (i.e. the time at which
-          we downloaded this feed extract) on this day referencing this trip.
-          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
-      - &extract_duration_minutes
-        name: extract_duration_minutes
-        description: |
-          The difference between `max_extract_ts` and `min_extract_ts` in minutes,
-          representing the duration of time for which this trip was present in message responses we received from the agency.
-          Note that the trip may not have been present in every message between the minimum and maximum
-          timestamps, and therefore may not have been present continuously for the
-          duration listed here.
-      - &header_duration_minutes
-        name: header_duration_minutes
-        description: |
-          The difference between `max_header_timestamp` and `min_header_timestamp` in minutes,
-          representing the duration of time for which this trip was present in the messages produced by the agency.
-          Note that the trip may not have been present in every message between the minimum and maximum
-          timestamps, and therefore may not have been present continuously for the
-          duration listed here.
-      - &min_extract_ts_local_tz
-        name: min_extract_datetime_local_tz
-        description: |
-          `min_extract_ts` converted to a DATETIME type in `feed_timezone`.
-      - &max_extract_ts_local_tz
-        name: max_extract_datetime_local_tz
-        description: |
-          `max_extract_ts` converted to a DATETIME type in `feed_timezone`.
-      - &min_extract_ts_pacific
-        name: min_extract_datetime_pacific
-        description: |
-          `min_extract_ts` converted to a DATETIME type in the "America/Los_Angeles" time zone.
-      - &max_extract_ts_pacific
-        name: max_extract_datetime_pacific
-        description: |
-          `max_extract_ts` converted to a DATETIME type in the "America/Los_Angeles" time zone.
-      - &min_header_timestamp
-        name: min_header_timestamp
-        description: Earliest header timestamp of a message referencing this trip.
-      - &max_header_timestamp
-        name: max_header_timestamp
-        description: Latest header timestamp of a message referencing this trip.
-      - &min_header_local_tz
-        name: min_header_datetime_local_tz
-        description: |
-          `min_header_timestamp` converted to a DATETIME type in `feed_timezone`.
-      - &max_header_local_tz
-        name: max_header_datetime_local_tz
-        description: |
-          `max_header_timestamp` converted to a DATETIME type in `feed_timezone`.
-      - &min_header_pacific
-        name: min_header_datetime_pacific
-        description: |
-          `min_header_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
-      - &max_header_pacific
-        name: max_header_datetime_pacific
-        description: |
-          `max_header_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+      - *num_distinct_header_timestamps
+      - *num_distinct_message_keys
+      - *num_distinct_extract_ts
+      - *min_extract_ts
+      - *max_extract_ts
+      - *extract_duration_minutes
+      - *header_duration_minutes
+      - *min_extract_ts_local_tz
+      - *max_extract_ts_local_tz
+      - *min_extract_ts_pacific
+      - *max_extract_ts_pacific
+      - *min_header_timestamp
+      - *max_header_timestamp
+      - *min_header_local_tz
+      - *max_header_local_tz
+      - *min_header_pacific
+      - *max_header_pacific
       - name: alert_content_array
         description: |
           An array containing a unique STRUCTs of `message_id`, `cause`, `effect`, `header`, and `description`.

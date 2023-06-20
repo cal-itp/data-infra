@@ -35,7 +35,6 @@ non_array_agg AS(
      SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         key,
-        dt,
         active_date,
         base64_url,
         schedule_feed_timezone,
@@ -64,13 +63,12 @@ non_array_agg AS(
         MIN(min_header_timestamp) AS min_header_timestamp,
         MAX(max_header_timestamp) AS max_header_timestamp,
     FROM service_alerts
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24
 ),
 
 fct_daily_service_alerts AS (
     SELECT
         key,
-        dt,
         active_date,
         base64_url,
         schedule_feed_timezone,
