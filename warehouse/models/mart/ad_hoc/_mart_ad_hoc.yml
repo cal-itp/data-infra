@@ -35,7 +35,6 @@ models:
       - name: source_record_id
       - name: route_id
       - name: route_short_name
-      - name: shape_id
       - name: time_of_day
         description: |
           Categorized based on the Pacific Time departure of the trip's first departure.
@@ -54,3 +53,4 @@ models:
           This means that overnight service is associated with the calendar date on which it was scheduled,
           even if it was associated with the prior `service_date` by the agency.
       - name: n_trips
+      - name: ttl_service_hours
