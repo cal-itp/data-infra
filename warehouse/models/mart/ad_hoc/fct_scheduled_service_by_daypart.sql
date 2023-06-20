@@ -7,7 +7,6 @@ WITH dim_gtfs_datasets AS (
 fct_scheduled_trips AS (
     SELECT *
     FROM {{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= '2023-06-01' AND service_date < '2023-07-01'
 ),
 
 extract_trip_date_types AS (
