@@ -1,9 +1,16 @@
-{{ config(materialized='table') }}
+{{
+    config(
+        materialized='incremental',
+        unique_key = 'key',
+        cluster_by='feed_key',
+    )
+}}
 
 WITH
 
 dim_stop_times AS (
     SELECT * FROM {{ ref('dim_stop_times') }}
+    WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START', this_dt_column='_feed_valid_from', filter_dt_column='_feed_valid_from', dev_lookback_days = None) }}
 ),
 
 int_gtfs_schedule__frequencies_stop_times AS (
@@ -59,6 +66,7 @@ grouped AS (
         trip_end_timezone,
         iteration_num,
         exact_times,
+        _feed_valid_from,
         COUNT(DISTINCT stop_id) AS num_distinct_stops_served,
         COUNT(*) AS num_stop_times,
         -- note: not using the interval columns here because the interval type doesn't support aggregation
@@ -119,11 +127,12 @@ grouped AS (
         ) AS num_departure_times_populated_stop_times,
 
     FROM stops_times_with_tz
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
 ),
 
 int_gtfs_schedule__stop_times_grouped AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id', 'trip_first_departure_sec']) }} AS key,
         trip_id,
         feed_key,
         base64_url,
@@ -132,6 +141,7 @@ int_gtfs_schedule__stop_times_grouped AS (
         trip_end_timezone,
         iteration_num,
         exact_times,
+        _feed_valid_from,
         num_distinct_stops_served,
         num_stop_times,
         trip_first_departure_sec,

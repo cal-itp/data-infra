@@ -29,3 +29,6 @@ config:
       value: gs:calitp-backups-sentry:/
     - name: PGHOST
       value: sentry-sentry-postgresql.sentry.svc.cluster.local
+
+healthchecks:
+  uuid: 93c6d460-e014-4b30-bf32-b7974bf5fa4d

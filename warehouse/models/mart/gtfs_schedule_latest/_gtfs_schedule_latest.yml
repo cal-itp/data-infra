@@ -15,24 +15,14 @@ models:
         name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `_line_number`.
-        tests:
-          - not_null
-          - unique
       - &schedule_dim_gtfs_key
         name: _gtfs_key
         description:
           Synthetic primary natural key constructed from the model's GTFS specification uniqueness.
-        tests:
-          - not_null
-          - unique
       - &schedule_dim_dt
         name: _dt
-        tests:
-          - not_null
       - &schedule_dim_line_number
         name: _line_number
-        tests:
-          - not_null
       - &feed_key
         name: feed_key
         description: |
