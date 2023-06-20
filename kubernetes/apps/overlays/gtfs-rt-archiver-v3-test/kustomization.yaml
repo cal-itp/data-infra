@@ -18,4 +18,4 @@ patches:
 images:
 - name: 'gtfs-rt-archiver'
   newName: 'ghcr.io/cal-itp/data-infra/gtfs-rt-archiver'
-  newTag: '2023.6.7'
+  newTag: '2023.6.20'
