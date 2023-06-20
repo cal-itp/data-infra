@@ -15,6 +15,12 @@ x-gtfs-rt-archiver-v3-common:
     LAST_TICK_FILE: /tmp/tick
     SENTRY_DSN: $SENTRY_DSN
     SENTRY_ENVIRONMENT: "development"
+  volumes:
+    - type: bind
+      source: $CALITP_ARCHIVER_V3_SERVICE_ACCOUNT
+      target: /tmp/secret.json
+      read_only: true
+
 services:
   redis:
     image: redis:5.0.4
@@ -30,11 +36,7 @@ services:
   gtfs-rt-archiver-v3-ticker:
     <<: *gtfs-rt-archiver-v3-common
     command: python -m gtfs_rt_archiver_v3.ticker --load-env-secrets
-    volumes:
-      - $CALITP_ARCHIVER_V3_SERVICE_ACCOUNT:/tmp/secret.json:ro
 
   gtfs-rt-archiver-v3-consumer:
     <<: *gtfs-rt-archiver-v3-common
     command: python -m gtfs_rt_archiver_v3.consumer --load-env-secrets
-    volumes:
-      - $CALITP_ARCHIVER_V3_SERVICE_ACCOUNT:/tmp/secret.json:ro
