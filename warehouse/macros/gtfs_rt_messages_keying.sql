@@ -22,7 +22,7 @@ WITH
     -- if we ever backfill v1 RT data, the reliance on _config_extract_ts for joins in this table may become problematic
     SELECT
         urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
-        rt_datasets.name as _gtfs_dataset_name,
+        rt_datasets.name as name,
         schedule_datasets.key AS schedule_gtfs_dataset_key,
         schedule_datasets.base64_url AS schedule_base64_url,
         schedule_datasets.name AS schedule_name,
