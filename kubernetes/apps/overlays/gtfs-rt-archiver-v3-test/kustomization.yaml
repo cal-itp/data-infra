@@ -8,8 +8,12 @@ resources:
 - ../gtfs-rt-archiver-v3-release
 
 patches:
-- consumer.patch.yaml
-- ticker.patch.yaml
+- path: consumer.patch.yaml
+  target:
+    name: gtfs-rt-archiver-consumer
+- path: ticker.patch.yaml
+  target:
+    name: gtfs-rt-archiver-ticker
 
 images:
 - name: 'gtfs-rt-archiver'
