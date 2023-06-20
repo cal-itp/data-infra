@@ -66,7 +66,7 @@ grouped AS (
         trip_end_timezone,
         iteration_num,
         exact_times,
-        MAX(_feed_valid_from) AS _feed_valid_from,
+        _feed_valid_from,
         COUNT(DISTINCT stop_id) AS num_distinct_stops_served,
         COUNT(*) AS num_stop_times,
         -- note: not using the interval columns here because the interval type doesn't support aggregation
@@ -127,7 +127,7 @@ grouped AS (
         ) AS num_departure_times_populated_stop_times,
 
     FROM stops_times_with_tz
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
 ),
 
 int_gtfs_schedule__stop_times_grouped AS (
