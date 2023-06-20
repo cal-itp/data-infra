@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64/v8 python:3.9 as build
+FROM python:3.9
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
