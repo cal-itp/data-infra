@@ -35,6 +35,7 @@ models:
       - name: source_record_id
       - name: route_id
       - name: route_short_name
+      - name: route_long_name
       - name: time_of_day
         description: |
           Categorized based on the Pacific Time departure of the trip's first departure.

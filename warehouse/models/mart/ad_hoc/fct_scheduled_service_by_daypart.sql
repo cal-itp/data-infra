@@ -27,6 +27,7 @@ extract_trip_date_types AS (
         gtfs_dataset_key,
         route_id,
         route_short_name,
+        route_long_name,
         EXTRACT(hour FROM trip_first_departure_datetime_pacific) AS hour,
         EXTRACT(month FROM service_date) AS month,
         EXTRACT(year FROM service_date) AS year,
@@ -50,6 +51,7 @@ service_with_daypart AS (
         trips.day_type,
         trips.route_id,
         trips.route_short_name,
+        trips.route_long_name,
         trips.service_hours,
 
     FROM extract_trip_date_types AS trips
@@ -65,6 +67,7 @@ daypart_aggregations AS (
         source_record_id,
         route_id,
         route_short_name,
+        route_long_name,
         time_of_day,
         hour,
         month,
@@ -75,7 +78,7 @@ daypart_aggregations AS (
         SUM(service_hours) AS ttl_service_hours
 
     FROM service_with_daypart
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
 fct_scheduled_service_by_daypart AS (
@@ -85,6 +88,7 @@ fct_scheduled_service_by_daypart AS (
         source_record_id,
         route_id,
         route_short_name,
+        route_long_name,
         time_of_day,
         hour,
         month,
