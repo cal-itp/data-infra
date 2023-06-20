@@ -9,6 +9,14 @@ server:
   strategy:
     type: Recreate
 
+  persistentVolume:
+    size: 100Gi
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 3Gi
+
 alertmanager:
   strategy:
     type: Recreate
@@ -16,10 +24,6 @@ alertmanager:
   persistentVolume:
     size: 10Gi
 
-server:
-
-  persistentVolume:
-    size: 100Gi
 
 pushgateway:
 

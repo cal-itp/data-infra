@@ -1,0 +1,88 @@
+# Reference: https://raslasarslas.medium.com/how-to-deploy-sentry-on-a-kubernetes-cluster-using-helm-600db31d4486
+# Sentry chart: https://github.com/sentry-kubernetes/charts
+sentry:
+  existingSecret: sentry-secret
+  existingSecretKey: session-secret
+
+  postgresql:
+    global:
+      postgresql:
+        existingSecret: sentry-sentry-postgresql
+    resources:
+      requests:
+        memory: 3Gi
+    persistence:
+      size: 100Gi
+
+  user:
+    create: true
+    email: general+cal-itp@jarv.us
+    existingSecret: sentry-secret
+    existingSecretKey: admin-password
+  nginx:
+    enabled: false
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/ingress.allow-http: "false"
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hostname: sentry.calitp.org
+    additionalHostNames:
+      - sentry.k8s.calitp.jarv.us
+    tls:
+      - secretName: metabase-tls
+        hosts:
+          - sentry.calitp.org
+          - sentry.k8s.calitp.jarv.us
+  mail:
+    backend: smtp
+    useTls: true
+    username: "PM-T-outbound-FUA5Xw3iImqk9PVLER6dkt"
+    port: 587
+    host: "smtp.postmarkapp.com"
+    from: "bot@calitp.org"
+    existingSecret: sentry-secret
+
+  slack:
+    existingSecret: sentry-secret
+
+  # https://develop.sentry.dev/self-hosted/sso/#update-your-configuration-with-your-github-app-information
+  github:
+    appId: 288470
+    appName: 'cal-itp-sentry'
+    existingSecret: sentry-secret
+
+  sentry:
+    web:
+      resources:
+        requests:
+          memory: 1Gi
+    worker:
+      resources:
+        requests:
+          memory: 1Gi
+    ingestConsumer:
+      replicas: 2
+    cleanup:
+      days: 30
+    postProcessForwardTransactions:
+      replicas: 2
+
+  snuba:
+    subscriptionConsumerTransactions:
+      replicas: 3
+    subscriptionConsumerEvents:
+      replicas: 2
+
+  zookeeper:
+    persistence:
+      size: 32Gi
+    autopurge:
+      snapRetainCount: 10
+      purgeInterval: 1
+
+  kafka:
+    logRetentionHours: 72 # 3 days, the default is 7
+    numPartitions: 12
