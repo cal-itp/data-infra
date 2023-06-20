@@ -75,7 +75,7 @@ daypart_aggregations AS (
         SUM(service_hours) AS ttl_service_hours
 
     FROM service_with_daypart
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
 ),
 
 fct_scheduled_service_by_daypart AS (
