@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gtfs-rt-archiver"
-version = "2023.6.7"
+version = "2023.6.20"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
