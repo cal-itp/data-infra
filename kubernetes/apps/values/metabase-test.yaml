@@ -15,7 +15,7 @@ configs:
   metabase:
     MB_DB_USER: admin
     MB_DB_PASS: admin
-    MB_DB_HOST: database.metabase-preprod.svc.cluster.local
+    MB_DB_HOST: database.metabase-test.svc.cluster.local
 
 volumes:
   database:
@@ -28,9 +28,9 @@ ingress:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - host: metabase-preprod.k8s.calitp.jarv.us
+    - host: metabase-test.k8s.calitp.jarv.us
       paths: [ '/' ]
   tls:
     - secretName: metabase-tls
       hosts:
-        - metabase-preprod.k8s.calitp.jarv.us
+        - metabase-test.k8s.calitp.jarv.us

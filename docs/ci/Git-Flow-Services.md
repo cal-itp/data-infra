@@ -71,7 +71,7 @@ This flow is powered by:
 
 ### 2.1.0 quick start
 
-#### 2.1.1 deploy your topic branch to preprod
+#### 2.1.1 deploy your topic branch to test
 
 ```bash
 # this can be determined from a release config under ci/vars/releases
@@ -80,7 +80,7 @@ app_name=gtfs-rt-archive
 git_remote=origin
 topic_branch=$(git branch --show-current)
 # load the helm or kustomize specific parameters
-source ci/vars/releases/preprod-$app_name.env
+source ci/vars/releases/test-$app_name.env
 
 if   [[ $RELEASE_DRIVER == 'kustomize' ]]; then
   # bump the newTag version to match the newly pushed app version
@@ -104,10 +104,10 @@ git push $git_remote
 # fetch the release candidate
 git fetch $git_remote candidates/$topic_branch
 
-# deploy to preprod
-git push -f $git_remote $git_remote/candidates/$topic_branch:releases/preprod
+# deploy to test
+git push -f $git_remote $git_remote/candidates/$topic_branch:releases/test
 
-# after it looks good in preprod, merge your changes into main.
+# after it looks good in test, merge your changes into main.
 ```
 
 #### 2.1.2 Deploy your changes to prod
@@ -174,7 +174,7 @@ Each release branch is tied to a specific "release channel", which is simply a
 less ambiguous term used to describe an "environment" (e.g., "production", "staging", etc).
 There are currently two release branches:
 
-1. `releases/preprod`
+1. `releases/test`
 2. `releases/prod`
 
 The basename of the branch (i.e., the name after the last "/" character) is used
