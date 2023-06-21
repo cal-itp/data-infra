@@ -44,6 +44,7 @@ grouped AS (
         MIN(vehicle_timestamp) AS min_vehicle_timestamp,
         MAX(vehicle_timestamp) AS max_vehicle_timestamp
     FROM vehicle_positions
+    WHERE trip_id IS NOT NULL
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
