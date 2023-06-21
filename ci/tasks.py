@@ -72,7 +72,7 @@ def kdiff(
             if result.exited != 0:
                 full_diff += result.stdout
 
-    if full_diff and outfile:
-        print(f"writing to {outfile}")
+    if outfile:
+        print(f"writing {len(full_diff)=} to {outfile}", flush=True)
         with open(outfile, "w") as f:
             f.write(full_diff)
