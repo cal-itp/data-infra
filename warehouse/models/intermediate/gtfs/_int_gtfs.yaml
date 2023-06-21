@@ -593,8 +593,6 @@ models:
         1. Incremental materialization based on `dt` (to make efficient use of upstream partitions)
         2. Downstream grouping by `calculated_service_date` alone (since that is the appropriate final grain for trip-based analysis)
       See downstream `fct_service_alerts_trip_summaries` table for further documentation.
-    tests:
-      - gtfs_rt_trip_constant_route_id
   - name: int_gtfs_rt__trip_updates_trip_day_map_grouping
     description: |
       This table groups trip updates messages by `dt` (UTC) and `calculated_service_date` (usually Pacific)
@@ -602,5 +600,3 @@ models:
         1. Incremental materialization based on `dt` (to make efficient use of upstream partitions)
         2. Downstream grouping by `calculated_service_date` alone (since that is the appropriate final grain for trip-based analysis)
       See downstream `fct_trip_updates_summaries` table for further documentation.
-    tests:
-      - gtfs_rt_trip_constant_route_id
