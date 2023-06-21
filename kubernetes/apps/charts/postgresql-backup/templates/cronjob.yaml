@@ -1,5 +1,5 @@
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: postgresql-backup
@@ -44,6 +44,10 @@ spec:
               args:
                 - |
 
+                {{ if .Values.healthchecks.uuid }}
+                  wget -q -O - {{ .Values.healthchecks.host }}/ping/{{ .Values.healthchecks.uuid }}/start || echo "Failed to ping start"
+                {{ end }}
+
                   # snapshot current database
                   echo "Snapshotting Database"
                   pg_dumpall --clean \
@@ -53,6 +57,8 @@ spec:
                       --stdin \
                       --stdin-filename pg_dumpall.sql.gz
 
+                  sql_snapshot_status=$?
+
                   # prune aged snapshots
                   echo "Pruning aged snapshots"
                   restic forget \
@@ -60,3 +66,20 @@ spec:
                     --keep-last 36 \
                     --keep-daily 7 \
                     --keep-weekly 52
+
+                  prune_status=$?
+
+                {{ if .Values.healthchecks.uuid }}
+                  backup_status=0
+
+                  if [ $sql_snapshot_status -ne 0 ]; then
+                    echo "Failed to snapshot; reporting to healthchecks"
+                    backup_status=1
+                  elif [ $prune_status -ne 0 ]; then
+                    echo "Failed to prune; reporting to healthchecks"
+                    backup_status=2
+                  fi
+
+
+                  wget -q -O - {{ .Values.healthchecks.host }}/ping/{{ .Values.healthchecks.uuid }}/${backup_status} || echo "Failed to ping job end"
+                {{ end }}

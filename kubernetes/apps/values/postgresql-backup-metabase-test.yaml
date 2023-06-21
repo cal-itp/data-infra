@@ -1,0 +1,9 @@
+config:
+  envAppend:
+    - name: RESTIC_REPOSITORY
+      value: gs:calitp-backups-test:/metabase
+    - name: PGHOST
+      value: database.metabase-test.svc.cluster.local
+
+healthchecks:
+  uuid: ff63f290-fe1c-4011-8405-0ba8b2636ea0

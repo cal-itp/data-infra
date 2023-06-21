@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: archiver-channel-vars
-data:
-  CALITP_DATA_DEST: gs://gtfs-data-test/rt

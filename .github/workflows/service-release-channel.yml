@@ -12,6 +12,7 @@ jobs:
       CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
       GKE_NAME: data-infra-apps
       GKE_REGION: us-west1
+      USE_GKE_GCLOUD_AUTH_PLUGIN: True
     steps:
 
       - name: Check out repo
@@ -24,9 +25,13 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
-      - name: Setup kubeconfig
-        run: |
-          gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
+      - name: install auth plugin
+        run: gcloud components install gke-gcloud-auth-plugin
+
+      - uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: ${{ env.GKE_NAME }}
+          location: ${{ env.GKE_REGION }}
 
       - id: service-release
         name: Run ci/workflows/service-release.sh

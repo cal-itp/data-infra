@@ -1,0 +1,34 @@
+cronjob:
+  image: ghcr.io/jarvusinnovations/restic-toolkit:1.3.0
+
+secretMounts:
+  - name: database-backup
+    mountPath: /secrets/database-backup
+
+config:
+  envFrom:
+    - secretRef:
+        name: database-backup
+  env:
+    - name: GOOGLE_PROJECT_ID
+      value: '1005246706141'
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /secrets/database-backup/gcs-upload-svcacct.json
+    - name: PGPORT
+      value: '5432'
+    - name: PGDATABASE
+      value: 'grafana'
+    - name: PGUSER
+      value: 'grafana'
+    - name: PGPASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: grafana-postgresql
+          key: POSTGRES_PASSWORD
+    - name: RESTIC_REPOSITORY
+      value: gs:calitp-backups-grafana:/
+    - name: PGHOST
+      value: postgresql.monitoring-grafana.svc.cluster.local
+
+healthchecks:
+  uuid: 9095f868-4c8e-443c-80a4-9b9a22d9a8d8

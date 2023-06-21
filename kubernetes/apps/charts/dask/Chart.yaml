@@ -1,0 +1,10 @@
+apiVersion: v2
+name: dask-gateway
+description: Dask for Kubernetes
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+dependencies:
+  - name: dask
+    version: 2022.8.2
+    repository: https://helm.dask.org
