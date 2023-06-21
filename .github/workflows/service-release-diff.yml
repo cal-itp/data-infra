@@ -9,6 +9,9 @@ on:
       - synchronize
       - reopened
 
+env:
+  GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
 jobs:
   release:
     runs-on: ubuntu-latest
