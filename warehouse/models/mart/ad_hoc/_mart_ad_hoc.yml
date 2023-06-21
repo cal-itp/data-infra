@@ -29,3 +29,21 @@ models:
           even if it was associated with the prior `service_date` by the agency.
       - name: n_trips
       - name: ttl_service_hours
+
+  - name: fct_daily_scheduled_shapes_monthly_aggregations
+    description: |
+      An aggregation of GTFS schedule shapes by month, filtered to the shape_id associated with each route_id with the most trips.
+    columns:
+      - name: name
+      - name: source_record_id
+      - name: route_id
+      - name: shape_id
+      - name: direction_id
+      - name: month
+        description: |
+          Actual calendar month (Pacific Time dates) in which this service was scheduled to occur.
+      - name: year
+        description: |
+          Actual calendar year (Pacific Time dates) in which this service was scheduled to occur.
+      - name: n_trips
+      - name: pt_array
