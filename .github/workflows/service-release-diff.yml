@@ -45,6 +45,7 @@ jobs:
           export RELEASE_CHANNEL=${GITHUB_REF#refs/heads/releases/}
           printf 'WORKFLOW: service-release; RELEASE_CHANNEL=%s\n' "$RELEASE_CHANNEL"
           set -- "$GITHUB_WORKSPACE/ci/vars/project.env"
+          poetry install
           poetry run invoke kdiff $RELEASE_CHANNEL
 
       - uses: peter-evans/find-comment@v2
