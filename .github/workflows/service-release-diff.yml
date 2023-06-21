@@ -33,7 +33,7 @@ jobs:
       - id: diff
         name: Run ci/workflows/service-release.sh
         shell: bash
-        working-directory: $GITHUB_WORKSPACE/ci
+        working-directory: ci
         run: |
           # GITHUB_JOB is not populated until the job is running
           git config user.name "Github Action $GITHUB_JOB"
