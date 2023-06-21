@@ -39,7 +39,6 @@ jobs:
 
       # Diff and write back to PR
       - id: diff
-        name: Run ci/workflows/service-release.sh
         shell: bash
         working-directory: ci
         run: |
@@ -50,7 +49,7 @@ jobs:
           printf 'WORKFLOW: service-release; RELEASE_CHANNEL=%s\n' "$RELEASE_CHANNEL"
           set -- "$GITHUB_WORKSPACE/ci/vars/project.env"
           poetry install
-          poetry run invoke kdiff $RELEASE_CHANNEL
+          poetry run invoke kdiff $RELEASE_CHANNEL --outfile=kdiff.txt
 
       - uses: peter-evans/find-comment@v2
         id: fc
@@ -62,5 +61,5 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.number }}
-          body: ${{ steps.diff.outputs.DIFF }}
+          body-file: "${{ env.GITHUB_WORKSPACE }}/ci/kdiff.txt"
           edit-mode: replace

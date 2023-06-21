@@ -1,4 +1,3 @@
-import os
 from enum import Enum
 from pathlib import Path
 from typing import Any, Generator, List, Optional
@@ -54,7 +53,7 @@ def kdiff(
     c,
     channel,
     app=None,
-    outfile=os.getenv("GITHUB_OUTPUT"),
+    outfile=None,
 ):
     repo = git.Repo(".", search_parent_directories=True)
 
@@ -75,6 +74,5 @@ def kdiff(
 
     if full_diff and outfile:
         print(f"writing to {outfile}")
-        with open(outfile, "a") as f:
-            f.write(f"DIFF={full_diff}")
-    print(flush=True)
+        with open(outfile, "w") as f:
+            f.write(full_diff)
