@@ -58,8 +58,9 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: --cal-itp-previews.netlify.app
       - uses: peter-evans/create-or-update-comment@v2
+        working-directory: ci
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.number }}
-          body-file: "${{ GITHUB_WORKSPACE }}/ci/kdiff.txt"
+          body-file: "kdiff.txt"
           edit-mode: replace
