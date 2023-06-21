@@ -15,7 +15,7 @@ on:
 
 
 env:
-  GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_TOKEN }}
   BIO_RELEASE: 1.6.372
 
 
@@ -28,7 +28,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-        token: ${{ secrets.BOT_GITHUB_TOKEN }}
+        token: ${{ secrets.GH_ACTIONS_TOKEN }}
 
     - name: 'Build release candidate branch'
       run: |
