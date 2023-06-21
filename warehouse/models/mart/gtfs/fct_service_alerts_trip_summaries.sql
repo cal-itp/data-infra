@@ -80,22 +80,21 @@ reaggregate_alert_content AS (
     GROUP BY 1
 ),
 
-non_array_agg AS(
+aggregation AS(
      SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         key,
         calculated_service_date,
         base64_url,
         trip_id,
-        trip_route_id,
         trip_start_time,
         trip_start_date,
         schedule_feed_timezone,
         starting_schedule_relationship,
         ending_schedule_relationship,
-        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_schedule_relationship ORDER BY 1), "|") AS trip_schedule_relationships,
-        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_route_id ORDER BY 1), "|") AS trip_route_ids,
-        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_direction_id ORDER BY 1), "|") AS trip_direction_ids,
+        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_schedule_relationship ORDER BY trip_schedule_relationship), "|") AS trip_schedule_relationships, --noqa: L054
+        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_route_id ORDER BY trip_route_id), "|") AS trip_route_ids, --noqa: L054
+        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_direction_id ORDER BY trip_direction_id), "|") AS trip_direction_ids, --noqa: L054
         MIN(min_extract_ts) AS min_extract_ts,
         MAX(max_extract_ts) AS max_extract_ts,
         MIN(min_header_timestamp) AS min_header_timestamp,
@@ -106,7 +105,7 @@ non_array_agg AS(
 
 fct_service_alerts_trip_summaries AS (
     SELECT
-        key,
+        aggregation.key,
         calculated_service_date,
         base64_url,
         trip_id,
@@ -130,16 +129,16 @@ fct_service_alerts_trip_summaries AS (
         min_header_timestamp,
         max_header_timestamp,
         TIMESTAMP_DIFF(max_header_timestamp, min_header_timestamp, MINUTE) AS header_duration_minutes,
-        DATETIME(min_extract_ts, "America/Los_Angeles") AS min_header_datetime_pacific,
-        DATETIME(max_extract_ts, "America/Los_Angeles") AS max_header_datetime_pacific,
-        DATETIME(min_extract_ts, schedule_feed_timezone) AS min_header_datetime_local_tz,
-        DATETIME(max_extract_ts, schedule_feed_timezone) AS max_header_datetime_local_tz,
+        DATETIME(min_header_timestamp, "America/Los_Angeles") AS min_header_datetime_pacific,
+        DATETIME(max_header_timestamp, "America/Los_Angeles") AS max_header_datetime_pacific,
+        DATETIME(min_header_timestamp, schedule_feed_timezone) AS min_header_datetime_local_tz,
+        DATETIME(max_header_timestamp, schedule_feed_timezone) AS max_header_datetime_local_tz,
         num_distinct_message_ids,
         num_distinct_header_timestamps,
         num_distinct_message_keys,
         num_distinct_extract_ts,
         alert_content_array,
-    FROM non_array_agg
+    FROM aggregation
     LEFT JOIN message_ids USING (key)
     LEFT JOIN header_timestamps USING (key)
     LEFT JOIN extract_ts USING (key)

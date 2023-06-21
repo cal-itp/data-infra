@@ -40,7 +40,7 @@ grouped AS (
         -- so we turn them into JSON strings which we can turn back into structs later
         ARRAY_AGG(DISTINCT
             TO_JSON_STRING(
-                STRUCT<message_id string, cause string, effect string, header string, description string >
+                STRUCT<message_id STRING, cause STRING, effect STRING, header STRING, description STRING >
                 (id, cause, effect, header_text_text, description_text_text)
                 )) AS alert_content_array,
         ARRAY_AGG(DISTINCT id) AS message_ids_array,

@@ -24,6 +24,10 @@ fct_vehicle_positions_messages AS (
         schedule_name,
         schedule_feed_key,
         schedule_feed_timezone,
+        COALESCE(
+            PARSE_DATE("%Y%m%d", trip_start_date),
+            DATE(header_timestamp, schedule_feed_timezone),
+            DATE(_extract_ts, schedule_feed_timezone)) AS calculated_service_date,
 
         TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND) AS _header_message_age,
         TIMESTAMP_DIFF(_extract_ts, vehicle_timestamp, SECOND) AS _vehicle_message_age,
