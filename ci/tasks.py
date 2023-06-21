@@ -64,8 +64,10 @@ def kdiff(
             kustomize_dir = Path(repo.working_tree_dir) / Path(
                 release.release_kustomize_dir
             )
+            cmd = f"kubectl diff -k {kustomize_dir}"
+            print(cmd, flush=True)
             result: Result = c.run(
-                f"kubectl diff -k {kustomize_dir}",
+                cmd,
                 echo=True,
                 warn=True,
             )
