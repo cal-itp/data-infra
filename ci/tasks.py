@@ -75,6 +75,7 @@ def kdiff(
                 full_diff += result.stdout
 
     if outfile:
-        print(f"writing {len(full_diff)=} to {outfile}", flush=True)
+        msg = f"```{full_diff}```" if full_diff else "No kustomize changes found."
+        print(f"writing {len(msg)=} to {outfile}", flush=True)
         with open(outfile, "w") as f:
-            f.write(full_diff)
+            f.write(msg)
