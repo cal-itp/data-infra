@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gtfs-rt-archiver"
-version = "2023.6.7"
+version = "2023.6.20"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
@@ -22,7 +22,7 @@ structlog = "^22.1.0"
 python-json-logger = "^2.0.4"
 backoff = "^2.1.2"
 sentry-sdk = "^1.9.8"
-calitp-data-infra = "2023.5.30"
+calitp-data-infra = "2023.6.20"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
