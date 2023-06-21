@@ -327,6 +327,7 @@ def run(
 
             # Instantiate Metabase interface
             typer.secho("instantiating metabase interface")
+            assert mb_host, "mb_host is empty."
             metabase = MetabaseInterface(
                 host=mb_host.lstrip("https://"),
                 user=mb_user,
