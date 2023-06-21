@@ -23,6 +23,15 @@ fct_trip_updates_messages AS (
         schedule_name,
         schedule_feed_key,
         schedule_feed_timezone,
+        -- try to figure out what the service date would be to join back with schedule: fall back from explicit to imputed
+        -- TODO: it's possible that this could lead to some weirdness around midnight Pacific / in feed timezone
+        -- if `trip_start_date` is not set we theoretically should be trying to grab the date of the first arrival time per trip
+        -- because trip updates may be generated hours before the beginning of the actual trip activity
+        -- however the fact that this would occur near date boundaries is precisely why it's a bit tricky to pick the right first arrival time if trip start date is not populated
+        COALESCE(
+            PARSE_DATE("%Y%m%d", trip_start_date),
+            DATE(header_timestamp, schedule_feed_timezone),
+            DATE(_extract_ts, schedule_feed_timezone)) AS calculated_service_date,
 
         TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND) AS _header_message_age,
         TIMESTAMP_DIFF(_extract_ts, trip_update_timestamp, SECOND) AS _trip_update_message_age,

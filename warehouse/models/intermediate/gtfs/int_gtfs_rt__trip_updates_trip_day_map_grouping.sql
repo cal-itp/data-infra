@@ -22,16 +22,8 @@ WITH stop_time_updates AS (
 -- this allows us to handle the dt/service_date mismatch by grouping in two stages
 grouped AS (
     SELECT
-        -- try to figure out what the service date would be to join back with schedule: fall back from explicit to imputed
-        -- TODO: it's possible that this could lead to some weirdness around midnight Pacific / in feed timezone
-        -- if `trip_start_date` is not set we theoretically should be trying to grab the date of the first arrival time per trip
-        -- because trip updates may be generated hours before the beginning of the actual trip activity
-        -- however the fact that this would occur near date boundaries is precisely why it's a bit tricky to pick the right first arrival time if trip start date is not populated
         dt,
-        COALESCE(
-            PARSE_DATE("%Y%m%d", trip_start_date),
-            DATE(header_timestamp, schedule_feed_timezone),
-            DATE(_extract_ts, schedule_feed_timezone)) AS calculated_service_date,
+        calculated_service_date,
         stop_time_updates.base64_url,
         trip_id,
         trip_route_id,
