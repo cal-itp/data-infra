@@ -1272,9 +1272,6 @@ models:
       This table will only include rows for trips where the alert specifically applies to that trip.
       So, for example, if there is a service alert for Route A on a given date,
       this table will *not* include all trips on Route A for that date.
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "starting_route_id = ending_route_id"
     columns:
       - &rt_trip_summary_key
         name: key

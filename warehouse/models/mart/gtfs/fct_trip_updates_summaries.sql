@@ -6,7 +6,8 @@
 }}
 
 WITH trip_updates_grouped AS (
-    SELECT *
+    SELECT * EXCEPT(trip_direction_id),
+        CAST(trip_direction_id AS STRING) AS trip_direction_id
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
 ),
 
@@ -103,9 +104,9 @@ aggregation AS(
         schedule_feed_timezone,
         starting_schedule_relationship,
         ending_schedule_relationship,
-        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_schedule_relationship), "|") AS trip_schedule_relationships,
-        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_route_id), "|") AS trip_route_ids,
-        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT CAST(trip_direction_id AS STRING)), "|") AS trip_direction_ids,
+        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_schedule_relationship ORDER BY trip_schedule_relationship), "|") AS trip_schedule_relationships,
+        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_route_id ORDER BY trip_route_id), "|") AS trip_route_ids,
+        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_direction_id ORDER BY trip_direction_id), "|") AS trip_direction_ids,
         MIN(min_extract_ts) AS min_extract_ts,
         MAX(max_extract_ts) AS max_extract_ts,
         MIN(min_header_timestamp) AS min_header_timestamp,
@@ -114,7 +115,7 @@ aggregation AS(
         MAX(max_trip_update_timestamp) AS max_trip_update_timestamp,
         MAX(max_delay) AS max_delay,
     FROM window_functions
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9 --noqa: L054
 ),
 
 fct_trip_updates_summaries AS (
@@ -131,8 +132,8 @@ fct_trip_updates_summaries AS (
         trip_route_ids,
         trip_direction_ids,
         trip_schedule_relationships,
-        REGEXP_CONTAINS(trip_route_ids, "|") AS warning_multiple_route_ids,
-        REGEXP_CONTAINS(trip_direction_ids, "|") AS warning_multiple_direction_ids,
+        ARRAY_LENGTH(SPLIT(trip_route_ids, "|")) > 1 AS warning_multiple_route_ids,
+        ARRAY_LENGTH(SPLIT(trip_direction_ids, "|")) > 1 AS warning_multiple_direction_ids,
         schedule_feed_timezone,
         num_distinct_message_ids,
         num_distinct_header_timestamps,

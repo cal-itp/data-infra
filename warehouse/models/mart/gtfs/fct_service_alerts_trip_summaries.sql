@@ -7,7 +7,8 @@
 
 
 WITH service_alerts AS (
-    SELECT *
+    SELECT * EXCEPT(trip_direction_id),
+        CAST(trip_direction_id AS STRING) AS trip_direction_id
     FROM {{ ref('int_gtfs_rt__service_alerts_trip_day_map_grouping') }}
 ),
 
@@ -24,31 +25,7 @@ window_functions AS (
                 PARTITION BY key
                 ORDER BY max_header_timestamp
                 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-            ) AS ending_schedule_relationship,
-        FIRST_VALUE(trip_route_id)
-        OVER (
-            PARTITION BY key
-            ORDER BY min_header_timestamp
-            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-        ) AS starting_route_id,
-        LAST_VALUE(trip_route_id)
-            OVER (
-                PARTITION BY key
-                ORDER BY max_header_timestamp
-                ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-            ) AS ending_route_id,
-        FIRST_VALUE(trip_direction_id)
-            OVER (
-                PARTITION BY key
-                ORDER BY min_header_timestamp
-                ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-            ) AS starting_direction_id,
-        LAST_VALUE(trip_direction_id)
-            OVER (
-                PARTITION BY key
-                ORDER BY max_header_timestamp
-                ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-            ) AS ending_direction_id,
+            ) AS ending_schedule_relationship
     FROM service_alerts
 ),
 
@@ -92,7 +69,7 @@ reaggregate_alert_content AS (
     SELECT
         key,
         ARRAY_AGG(
-            STRUCT<message_id string, cause string, effect string, header string, description string >
+            STRUCT<message_id STRING, cause STRING, effect STRING, header STRING, description STRING >
                 (JSON_VALUE(unnested_alert_content, '$.message_id'),
                 JSON_VALUE(unnested_alert_content, '$.cause'),
                 JSON_VALUE(unnested_alert_content, '$.effect'),
@@ -114,18 +91,17 @@ non_array_agg AS(
         trip_start_time,
         trip_start_date,
         schedule_feed_timezone,
-        starting_route_id,
-        ending_route_id,
         starting_schedule_relationship,
         ending_schedule_relationship,
-        starting_direction_id,
-        ending_direction_id,
+        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_schedule_relationship ORDER BY 1), "|") AS trip_schedule_relationships,
+        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_route_id ORDER BY 1), "|") AS trip_route_ids,
+        ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_direction_id ORDER BY 1), "|") AS trip_direction_ids,
         MIN(min_extract_ts) AS min_extract_ts,
         MAX(max_extract_ts) AS max_extract_ts,
         MIN(min_header_timestamp) AS min_header_timestamp,
         MAX(max_header_timestamp) AS max_header_timestamp,
     FROM window_functions
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
 fct_service_alerts_trip_summaries AS (
@@ -139,10 +115,11 @@ fct_service_alerts_trip_summaries AS (
         schedule_feed_timezone,
         starting_schedule_relationship,
         ending_schedule_relationship,
-        starting_direction_id,
-        ending_direction_id,
-        starting_route_id,
-        ending_route_id,
+        trip_route_ids,
+        trip_direction_ids,
+        trip_schedule_relationships,
+        ARRAY_LENGTH(SPLIT(trip_route_ids, "|")) > 1 AS warning_multiple_route_ids,
+        ARRAY_LENGTH(SPLIT(trip_direction_ids, "|")) > 1 AS warning_multiple_direction_ids,
         min_extract_ts,
         max_extract_ts,
         TIMESTAMP_DIFF(max_extract_ts, min_extract_ts, MINUTE) AS extract_duration_minutes,
