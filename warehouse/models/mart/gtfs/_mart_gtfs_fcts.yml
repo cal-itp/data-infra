@@ -100,18 +100,6 @@ models:
       - name: zipfile_dirs
         description: '{{ doc("column_zipfile_dirs") }}'
 
-  - name: fct_stop_time_updates
-    description: |
-      Unnested and de-duped stop time updates.
-    columns:
-      - name: key
-        tests: &almost_unique_rt_key_tests
-          - unique_proportion:
-              at_least: 0.999
-              where: '__rt_sampled__'
-          - not_null:
-              where: '__rt_sampled__'
-
   - name: fct_trip_updates_messages
     description: |
       Each row is a message received from a trip updates GTFS RT feed.
@@ -124,7 +112,12 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
           entity `id`, `vehicle_id`, and `trip_id`.
-        tests: *almost_unique_rt_key_tests
+        tests: &almost_unique_rt_key_tests
+          - unique_proportion:
+              at_least: 0.999
+              where: '__rt_sampled__'
+          - not_null:
+              where: '__rt_sampled__'
       - &gtfs_rt_dataset_key
         name: gtfs_dataset_key
         description: |
@@ -247,6 +240,24 @@ models:
           Difference between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
           and `trip_update_timestamp` (timestamp of individual trip_update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
 
+  - name: fct_stop_time_updates
+    description: |
+      Unnested and de-duped stop time updates.
+    columns:
+      - name: key
+        tests: *almost_unique_rt_key_tests
+      - *gtfs_rt_dataset_key
+      - *gtfs_rt_dt
+      - *gtfs_rt_hour
+      - *base64_url
+      - *gtfs_rt_extract_ts
+      - *gtfs_rt_config_extract_ts
+      - *gtfs_rt_name
+      - *gtfs_rt_schedule_dataset_key
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *gtfs_rt_schedule_feed_timezone
+      - *_header_message_age
   - name: fct_vehicle_locations
     description: |
       De-duped vehicle positions, removing redundant/duplicated positions
@@ -1241,6 +1252,18 @@ models:
     columns:
       - name: key
         tests: *almost_unique_rt_key_tests
+      - *gtfs_rt_dataset_key
+      - *gtfs_rt_dt
+      - *gtfs_rt_hour
+      - *base64_url
+      - *gtfs_rt_extract_ts
+      - *gtfs_rt_config_extract_ts
+      - *gtfs_rt_name
+      - *gtfs_rt_schedule_dataset_key
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *gtfs_rt_schedule_feed_timezone
+      - *_header_message_age
 
   - name: fct_service_alerts_trip_summaries
     description: |
@@ -1250,12 +1273,8 @@ models:
       So, for example, if there is a service alert for Route A on a given date,
       this table will *not* include all trips on Route A for that date.
     tests:
-      # we have a known failure for this, see: https://github.com/cal-itp/data-infra/issues/2703
-      # but in general it should be true
       - dbt_utils.expression_is_true:
           expression: "starting_route_id = ending_route_id"
-          config:
-            error_if: ">10"
     columns:
       - &rt_trip_summary_key
         name: key
@@ -1681,10 +1700,6 @@ models:
       - name: dt
       - *base64_url
       - *rt_trip_id
-      - *starting_route_id
-      - *ending_route_id
-      - *starting_direction_id
-      - *ending_direction_id
       - *rt_trip_start_time
       - *rt_trip_start_date
       - *num_distinct_message_ids

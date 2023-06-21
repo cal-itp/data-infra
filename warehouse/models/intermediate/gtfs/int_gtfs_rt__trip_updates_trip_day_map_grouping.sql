@@ -17,16 +17,6 @@ WITH stop_time_updates AS (
     WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
-rt_feeds AS (
-    SELECT *
-    FROM {{ ref('fct_daily_rt_feed_files') }}
-),
-
-schedule_feeds AS (
-    SELECT *
-    FROM {{ ref('dim_schedule_feeds') }}
-),
-
 -- group by *both* the UTC date that data was scraped (dt) *and* calculated service date
 -- so that in the mart we can get just service date-level data
 -- this allows us to handle the dt/service_date mismatch by grouping in two stages
@@ -40,8 +30,8 @@ grouped AS (
         dt,
         COALESCE(
             PARSE_DATE("%Y%m%d", trip_start_date),
-            DATE(header_timestamp, schedule_feeds.feed_timezone),
-            DATE(_extract_ts, schedule_feeds.feed_timezone)) AS calculated_service_date,
+            DATE(header_timestamp, schedule_feed_timezone),
+            DATE(_extract_ts, schedule_feed_timezone)) AS calculated_service_date,
         stop_time_updates.base64_url,
         trip_id,
         trip_route_id,
@@ -49,7 +39,7 @@ grouped AS (
         trip_start_time,
         trip_start_date,
         trip_schedule_relationship,
-        schedule_feeds.feed_timezone,
+        schedule_feed_timezone,
         ARRAY_AGG(DISTINCT id) AS message_ids_array,
         ARRAY_AGG(DISTINCT header_timestamp) AS header_timestamps_array,
         ARRAY_AGG(DISTINCT trip_update_timestamp IGNORE NULLS) AS trip_update_timestamps_array,
@@ -67,11 +57,6 @@ grouped AS (
         ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'CANCELED' THEN stop_id END IGNORE NULLS) AS canceled_stops_array,
         ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'ADDED' THEN stop_id END IGNORE NULLS) AS added_stops_array,
     FROM stop_time_updates
-    LEFT JOIN rt_feeds
-        ON stop_time_updates.base64_url = rt_feeds.base64_url
-        AND stop_time_updates.dt = rt_feeds.date
-    LEFT JOIN schedule_feeds
-        ON rt_feeds.schedule_feed_key = schedule_feeds.key
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
@@ -94,7 +79,7 @@ int_gtfs_rt__trip_updates_trip_day_map_grouping AS (
         trip_start_time,
         trip_start_date,
         trip_schedule_relationship,
-        feed_timezone,
+        schedule_feed_timezone,
         message_ids_array,
         header_timestamps_array,
         trip_update_timestamps_array,
@@ -113,6 +98,5 @@ int_gtfs_rt__trip_updates_trip_day_map_grouping AS (
         added_stops_array,
     FROM grouped
 )
-
 
 SELECT * FROM int_gtfs_rt__trip_updates_trip_day_map_grouping
