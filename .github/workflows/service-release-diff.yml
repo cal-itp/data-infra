@@ -61,5 +61,5 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.number }}
-          body-file: "${{ env.GITHUB_WORKSPACE }}/ci/kdiff.txt"
+          body-file: "${{ GITHUB_WORKSPACE }}/ci/kdiff.txt"
           edit-mode: replace
