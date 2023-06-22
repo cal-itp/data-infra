@@ -161,3 +161,36 @@ def krelease(c, channel, app=None):
             cmd = f"kubectl apply -k {kustomize_dir}"
             print(cmd, flush=True)
             c.run(cmd)
+
+
+@task(parse_calitp_config)
+def hrelease(
+    c,
+    channel,
+    app=None,
+):
+    release: Release
+    for release in c.calitp_config.channels[channel].releases:
+        if release.driver == ReleaseDriver.helm and (not app or app == release.name):
+            chart_path = c.calitp_config.git_root / Path(release.helm_chart)
+            cmd = f"helm dependency update {chart_path}"
+            print(cmd, flush=True)
+            c.run(cmd, warn=True)
+            values_str = " ".join(
+                [
+                    f"--values {c.calitp_config.git_root / Path(values_file)}"
+                    for values_file in release.helm_values
+                ]
+            )
+            cmd = f"kubectl get ns {release.namespace}"
+            result: Result = c.run(cmd)
+            verb = "upgrade"
+
+            if result.exited != 0:
+                # namespace does not exist yet
+                c.run(f"kubectl create ns {release.namespace}")
+                verb = "install"
+
+            c.run(
+                f"helm {verb} {release.helm_name} {chart_path} --namespace {release.namespace} {values_str}"
+            )
