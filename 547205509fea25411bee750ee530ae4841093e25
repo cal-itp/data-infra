@@ -1,0 +1,367 @@
+[helm:loki=kubernetes/apps/charts/loki]
+
+diff -u -N /tmp/LIVE-3771712196/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki /tmp/MERGED-3716523152/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki
+--- /tmp/LIVE-3771712196/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2023-06-22 15:16:53.080857709 +0000
++++ /tmp/MERGED-3716523152/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2023-06-22 15:16:53.080857709 +0000
+@@ -22,3 +22,4 @@
+ subjects:
+ - kind: ServiceAccount
+   name: loki
++  namespace: monitoring-loki
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-706370278/batch.v1.CronJob.monitoring-grafana.postgresql-backup /tmp/MERGED-1073592319/batch.v1.CronJob.monitoring-grafana.postgresql-backup
+--- /tmp/LIVE-706370278/batch.v1.CronJob.monitoring-grafana.postgresql-backup	2023-06-22 15:17:02.968926141 +0000
++++ /tmp/MERGED-1073592319/batch.v1.CronJob.monitoring-grafana.postgresql-backup	2023-06-22 15:17:02.968926141 +0000
+@@ -0,0 +1,114 @@
++apiVersion: batch/v1
++kind: CronJob
++metadata:
++  creationTimestamp: "2023-06-22T15:17:02Z"
++  generation: 1
++  labels:
++    name: database-backup
++  name: postgresql-backup
++  namespace: monitoring-grafana
++  uid: f021a027-20ee-49f2-8625-f99af0154633
++spec:
++  concurrencyPolicy: Forbid
++  failedJobsHistoryLimit: 1
++  jobTemplate:
++    metadata:
++      creationTimestamp: null
++    spec:
++      activeDeadlineSeconds: 7200
++      template:
++        metadata:
++          creationTimestamp: null
++        spec:
++          containers:
++          - args:
++            - |2
++
++
++              wget -q -O - https://healthchecks.ops.k8s.jarv.us/ping/9095f868-4c8e-443c-80a4-9b9a22d9a8d8/start || echo "Failed to ping start"
++
++
++              # snapshot current database
++              echo "Snapshotting Database"
++              pg_dumpall --clean \
++                | gzip --rsyncable \
++                | restic backup \
++                  --host monitoring-grafana:postgresql-backup \
++                  --stdin \
++                  --stdin-filename pg_dumpall.sql.gz
++
++              sql_snapshot_status=$?
++
++              # prune aged snapshots
++              echo "Pruning aged snapshots"
++              restic forget \
++                --host monitoring-grafana:postgresql-backup \
++                --keep-last 36 \
++                --keep-daily 7 \
++                --keep-weekly 52
++
++              prune_status=$?
++
++
++              backup_status=0
++
++              if [ $sql_snapshot_status -ne 0 ]; then
++                echo "Failed to snapshot; reporting to healthchecks"
++                backup_status=1
++              elif [ $prune_status -ne 0 ]; then
++                echo "Failed to prune; reporting to healthchecks"
++                backup_status=2
++              fi
++
++
++              wget -q -O - https://healthchecks.ops.k8s.jarv.us/ping/9095f868-4c8e-443c-80a4-9b9a22d9a8d8/${backup_status} || echo "Failed to ping job end"
++            command:
++            - /bin/bash
++            - -c
++            env:
++            - name: GOOGLE_PROJECT_ID
++              value: "1005246706141"
++            - name: GOOGLE_APPLICATION_CREDENTIALS
++              value: /secrets/database-backup/gcs-upload-svcacct.json
++            - name: PGPORT
++              value: "5432"
++            - name: PGDATABASE
++              value: grafana
++            - name: PGUSER
++              value: grafana
++            - name: PGPASSWORD
++              valueFrom:
++                secretKeyRef:
++                  key: POSTGRES_PASSWORD
++                  name: grafana-postgresql
++            - name: RESTIC_REPOSITORY
++              value: gs:calitp-backups-grafana:/
++            - name: PGHOST
++              value: postgresql.monitoring-grafana.svc.cluster.local
++            envFrom:
++            - secretRef:
++                name: database-backup
++            image: ghcr.io/jarvusinnovations/restic-toolkit:1.3.0
++            imagePullPolicy: IfNotPresent
++            name: client
++            resources: {}
++            terminationMessagePath: /dev/termination-log
++            terminationMessagePolicy: File
++            volumeMounts:
++            - mountPath: /secrets/database-backup
++              name: database-backup
++          dnsPolicy: ClusterFirst
++          restartPolicy: Never
++          schedulerName: default-scheduler
++          securityContext: {}
++          terminationGracePeriodSeconds: 30
++          volumes:
++          - name: database-backup
++            secret:
++              defaultMode: 420
++              secretName: database-backup
++  schedule: 15 * * * *
++  startingDeadlineSeconds: 86400
++  successfulJobsHistoryLimit: 3
++  suspend: false
++status: {}
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-4039854919/batch.v1.CronJob.sentry.postgresql-backup /tmp/MERGED-1869918532/batch.v1.CronJob.sentry.postgresql-backup
+--- /tmp/LIVE-4039854919/batch.v1.CronJob.sentry.postgresql-backup	2023-06-22 15:17:07.508961347 +0000
++++ /tmp/MERGED-1869918532/batch.v1.CronJob.sentry.postgresql-backup	2023-06-22 15:17:07.508961347 +0000
+@@ -0,0 +1,114 @@
++apiVersion: batch/v1
++kind: CronJob
++metadata:
++  creationTimestamp: "2023-06-22T15:17:07Z"
++  generation: 1
++  labels:
++    name: database-backup
++  name: postgresql-backup
++  namespace: sentry
++  uid: 0f5c06b8-5797-4850-afc1-43390bb36aef
++spec:
++  concurrencyPolicy: Forbid
++  failedJobsHistoryLimit: 1
++  jobTemplate:
++    metadata:
++      creationTimestamp: null
++    spec:
++      activeDeadlineSeconds: 7200
++      template:
++        metadata:
++          creationTimestamp: null
++        spec:
++          containers:
++          - args:
++            - |2
++
++
++              wget -q -O - https://healthchecks.ops.k8s.jarv.us/ping/93c6d460-e014-4b30-bf32-b7974bf5fa4d/start || echo "Failed to ping start"
++
++
++              # snapshot current database
++              echo "Snapshotting Database"
++              pg_dumpall --clean \
++                | gzip --rsyncable \
++                | restic backup \
++                  --host sentry:postgresql-backup \
++                  --stdin \
++                  --stdin-filename pg_dumpall.sql.gz
++
++              sql_snapshot_status=$?
++
++              # prune aged snapshots
++              echo "Pruning aged snapshots"
++              restic forget \
++                --host sentry:postgresql-backup \
++                --keep-last 36 \
++                --keep-daily 7 \
++                --keep-weekly 52
++
++              prune_status=$?
++
++
++              backup_status=0
++
++              if [ $sql_snapshot_status -ne 0 ]; then
++                echo "Failed to snapshot; reporting to healthchecks"
++                backup_status=1
++              elif [ $prune_status -ne 0 ]; then
++                echo "Failed to prune; reporting to healthchecks"
++                backup_status=2
++              fi
++
++
++              wget -q -O - https://healthchecks.ops.k8s.jarv.us/ping/93c6d460-e014-4b30-bf32-b7974bf5fa4d/${backup_status} || echo "Failed to ping job end"
++            command:
++            - /bin/bash
++            - -c
++            env:
++            - name: GOOGLE_PROJECT_ID
++              value: "1005246706141"
++            - name: GOOGLE_APPLICATION_CREDENTIALS
++              value: /secrets/database-backup/gcs-upload-svcacct.json
++            - name: PGPORT
++              value: "5432"
++            - name: PGDATABASE
++              value: sentry
++            - name: PGUSER
++              value: postgres
++            - name: PGPASSWORD
++              valueFrom:
++                secretKeyRef:
++                  key: postgresql-password
++                  name: sentry-sentry-postgresql
++            - name: RESTIC_REPOSITORY
++              value: gs:calitp-backups-sentry:/
++            - name: PGHOST
++              value: sentry-sentry-postgresql.sentry.svc.cluster.local
++            envFrom:
++            - secretRef:
++                name: database-backup
++            image: ghcr.io/jarvusinnovations/restic-toolkit:1.3.0
++            imagePullPolicy: IfNotPresent
++            name: client
++            resources: {}
++            terminationMessagePath: /dev/termination-log
++            terminationMessagePolicy: File
++            volumeMounts:
++            - mountPath: /secrets/database-backup
++              name: database-backup
++          dnsPolicy: ClusterFirst
++          restartPolicy: Never
++          schedulerName: default-scheduler
++          securityContext: {}
++          terminationGracePeriodSeconds: 30
++          volumes:
++          - name: database-backup
++            secret:
++              defaultMode: 420
++              secretName: database-backup
++  schedule: 15 * * * *
++  startingDeadlineSeconds: 86400
++  successfulJobsHistoryLimit: 3
++  suspend: false
++status: {}
+[helm:promtail=kubernetes/apps/charts/promtail]
+
+diff -u -N /tmp/LIVE-1893731913/apps.v1.DaemonSet.monitoring-loki.promtail /tmp/MERGED-1272471180/apps.v1.DaemonSet.monitoring-loki.promtail
+--- /tmp/LIVE-1893731913/apps.v1.DaemonSet.monitoring-loki.promtail	2023-06-22 15:17:17.573044922 +0000
++++ /tmp/MERGED-1272471180/apps.v1.DaemonSet.monitoring-loki.promtail	2023-06-22 15:17:17.573044922 +0000
+@@ -2,17 +2,17 @@
+ kind: DaemonSet
+ metadata:
+   annotations:
+-    deprecated.daemonset.template.generation: "5"
++    deprecated.daemonset.template.generation: "6"
+     meta.helm.sh/release-name: promtail
+     meta.helm.sh/release-namespace: monitoring-loki
+   creationTimestamp: "2022-04-19T00:20:08Z"
+-  generation: 5
++  generation: 6
+   labels:
+     app.kubernetes.io/instance: promtail
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: promtail
+-    app.kubernetes.io/version: 2.4.2
+-    helm.sh/chart: promtail-3.11.0
++    app.kubernetes.io/version: 2.6.1
++    helm.sh/chart: promtail-6.6.2
+   name: promtail
+   namespace: monitoring-loki
+   resourceVersion: "610526003"
+@@ -26,7 +26,7 @@
+   template:
+     metadata:
+       annotations:
+-        checksum/config: b9a3248c9ff77368090a528aea30459b3594e9c427ab543c48fae2f965a3582e
++        checksum/config: 9206bfa12842095d4d3a7f46cce83cac84621a9accc22b63e1bf0dc22eecdecc
+       creationTimestamp: null
+       labels:
+         app.kubernetes.io/instance: promtail
+@@ -41,7 +41,7 @@
+             fieldRef:
+               apiVersion: v1
+               fieldPath: spec.nodeName
+-        image: docker.io/grafana/promtail:2.4.2
++        image: docker.io/grafana/promtail:2.6.1
+         imagePullPolicy: IfNotPresent
+         name: promtail
+         ports:
+@@ -79,6 +79,7 @@
+           name: pods
+           readOnly: true
+       dnsPolicy: ClusterFirst
++      enableServiceLinks: true
+       restartPolicy: Always
+       schedulerName: default-scheduler
+       securityContext:
+diff -u -N /tmp/LIVE-1893731913/rbac.authorization.k8s.io.v1.ClusterRole..promtail /tmp/MERGED-1272471180/rbac.authorization.k8s.io.v1.ClusterRole..promtail
+--- /tmp/LIVE-1893731913/rbac.authorization.k8s.io.v1.ClusterRole..promtail	2023-06-22 15:17:16.985039930 +0000
++++ /tmp/MERGED-1272471180/rbac.authorization.k8s.io.v1.ClusterRole..promtail	2023-06-22 15:17:16.985039930 +0000
+@@ -9,8 +9,8 @@
+     app.kubernetes.io/instance: promtail
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: promtail
+-    app.kubernetes.io/version: 2.4.2
+-    helm.sh/chart: promtail-3.11.0
++    app.kubernetes.io/version: 2.6.1
++    helm.sh/chart: promtail-6.6.2
+   name: promtail
+   resourceVersion: "229039277"
+   uid: 1af63dc2-8799-4912-8177-2dfb09ae8c8c
+diff -u -N /tmp/LIVE-1893731913/rbac.authorization.k8s.io.v1.ClusterRoleBinding..promtail /tmp/MERGED-1272471180/rbac.authorization.k8s.io.v1.ClusterRoleBinding..promtail
+--- /tmp/LIVE-1893731913/rbac.authorization.k8s.io.v1.ClusterRoleBinding..promtail	2023-06-22 15:17:17.185041628 +0000
++++ /tmp/MERGED-1272471180/rbac.authorization.k8s.io.v1.ClusterRoleBinding..promtail	2023-06-22 15:17:17.185041628 +0000
+@@ -9,8 +9,8 @@
+     app.kubernetes.io/instance: promtail
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: promtail
+-    app.kubernetes.io/version: 2.4.2
+-    helm.sh/chart: promtail-3.11.0
++    app.kubernetes.io/version: 2.6.1
++    helm.sh/chart: promtail-6.6.2
+   name: promtail
+   resourceVersion: "229039278"
+   uid: 02963225-356c-4557-9a64-fc2890e5a744
+diff -u -N /tmp/LIVE-1893731913/v1.Secret.monitoring-loki.promtail /tmp/MERGED-1272471180/v1.Secret.monitoring-loki.promtail
+--- /tmp/LIVE-1893731913/v1.Secret.monitoring-loki.promtail	2023-06-22 15:17:17.373043224 +0000
++++ /tmp/MERGED-1272471180/v1.Secret.monitoring-loki.promtail	2023-06-22 15:17:17.373043224 +0000
+@@ -1,6 +1,6 @@
+ apiVersion: v1
+ data:
+-  promtail.yaml: '*** (before)'
++  promtail.yaml: '*** (after)'
+ kind: Secret
+ metadata:
+   annotations:
+@@ -11,8 +11,8 @@
+     app.kubernetes.io/instance: promtail
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: promtail
+-    app.kubernetes.io/version: 2.4.2
+-    helm.sh/chart: promtail-3.11.0
++    app.kubernetes.io/version: 2.6.1
++    helm.sh/chart: promtail-6.6.2
+   name: promtail
+   namespace: monitoring-loki
+   resourceVersion: "229549949"
+diff -u -N /tmp/LIVE-1893731913/v1.ServiceAccount.monitoring-loki.promtail /tmp/MERGED-1272471180/v1.ServiceAccount.monitoring-loki.promtail
+--- /tmp/LIVE-1893731913/v1.ServiceAccount.monitoring-loki.promtail	2023-06-22 15:17:16.773038130 +0000
++++ /tmp/MERGED-1272471180/v1.ServiceAccount.monitoring-loki.promtail	2023-06-22 15:17:16.773038130 +0000
+@@ -9,8 +9,8 @@
+     app.kubernetes.io/instance: promtail
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: promtail
+-    app.kubernetes.io/version: 2.4.2
+-    helm.sh/chart: promtail-3.11.0
++    app.kubernetes.io/version: 2.6.1
++    helm.sh/chart: promtail-6.6.2
+   name: promtail
+   namespace: monitoring-loki
+   resourceVersion: "229039275"
