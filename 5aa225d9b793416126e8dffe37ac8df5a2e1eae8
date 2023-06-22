@@ -1,0 +1,10 @@
+[helm:loki=kubernetes/apps/charts/loki]
+
+diff -u -N /tmp/LIVE-2918839824/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki /tmp/MERGED-3681711416/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki
+--- /tmp/LIVE-2918839824/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2023-06-22 16:43:21.212837775 +0000
++++ /tmp/MERGED-3681711416/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2023-06-22 16:43:21.212837775 +0000
+@@ -22,3 +22,4 @@
+ subjects:
+ - kind: ServiceAccount
+   name: loki
++  namespace: monitoring-loki
