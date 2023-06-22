@@ -1,0 +1,20 @@
+calitp:
+  name: test
+  releases:
+    - name: archiver
+      release_driver: kustomize
+      release_kustomize_dir: kubernetes/apps/overlays/gtfs-rt-archiver-v3-test
+
+    - name: metabase
+      release_driver: helm
+      release_namespace: metabase-test
+      release_helm_name: metabase-test
+      release_helm_chart: kubernetes/apps/charts/metabase
+      release_helm_values: kubernetes/apps/values/metabase-test.yaml
+
+    - name: postgresql-backup-metabase
+      release_driver: helm
+      release_namespace: metabase-test
+      release_helm_name: postgresql-backup
+      release_helm_chart: kubernetes/apps/charts/postgresql-backup
+      release_helm_values: kubernetes/apps/values/postgresql-backup-metabase.yaml:kubernetes/apps/values/postgresql-backup-metabase-test.yaml
