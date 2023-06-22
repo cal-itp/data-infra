@@ -1,0 +1,164 @@
+[helm:grafana=kubernetes/apps/charts/grafana]
+
+diff -u -N /tmp/LIVE-3979705608/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole /tmp/MERGED-1540751879/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole
+--- /tmp/LIVE-3979705608/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-03-31 22:01:28.337753192 +0000
++++ /tmp/MERGED-1540751879/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-03-31 22:01:28.337753192 +0000
+@@ -27,10 +27,16 @@
+           f:app.kubernetes.io/name: {}
+           f:app.kubernetes.io/version: {}
+           f:helm.sh/chart: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:23:33Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-03-31T22:01:28Z"
+   name: grafana-clusterrole
+   resourceVersion: "192167988"
+   uid: 552f4bb0-454e-4f8d-84e8-597fe033928f
+[helm:loki=kubernetes/apps/charts/loki-stack]
+
+diff -u -N /tmp/LIVE-2749620658/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki /tmp/MERGED-1663227868/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki
+--- /tmp/LIVE-2749620658/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2022-03-31 22:01:45.273830809 +0000
++++ /tmp/MERGED-1663227868/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2022-03-31 22:01:45.273830809 +0000
+@@ -31,10 +31,16 @@
+         f:apiGroup: {}
+         f:kind: {}
+         f:name: {}
+-      f:subjects: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:06Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-03-31T22:01:45Z"
+   name: loki
+   namespace: monitoring-loki
+   resourceVersion: "215533488"
+@@ -46,3 +52,4 @@
+ subjects:
+ - kind: ServiceAccount
+   name: loki
++  namespace: monitoring-loki
+diff -u -N /tmp/LIVE-2749620658/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki-promtail /tmp/MERGED-1663227868/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki-promtail
+--- /tmp/LIVE-2749620658/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki-promtail	2022-03-31 22:01:45.453831836 +0000
++++ /tmp/MERGED-1663227868/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki-promtail	2022-03-31 22:01:45.453831836 +0000
+@@ -31,10 +31,16 @@
+         f:apiGroup: {}
+         f:kind: {}
+         f:name: {}
+-      f:subjects: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:06Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-03-31T22:01:45Z"
+   name: loki-promtail
+   namespace: monitoring-loki
+   resourceVersion: "192168358"
+@@ -46,3 +52,4 @@
+ subjects:
+ - kind: ServiceAccount
+   name: loki-promtail
++  namespace: monitoring-loki
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-2961425589/batch.v1beta1.CronJob.metabase.postgresql-backup /tmp/MERGED-3914537979/batch.v1beta1.CronJob.metabase.postgresql-backup
+--- /tmp/LIVE-2961425589/batch.v1beta1.CronJob.metabase.postgresql-backup	2022-03-31 22:01:53.877872663 +0000
++++ /tmp/MERGED-3914537979/batch.v1beta1.CronJob.metabase.postgresql-backup	2022-03-31 22:01:53.881872671 +0000
+@@ -84,7 +84,6 @@
+                         f:name: {}
+                         f:value: {}
+                     f:envFrom: {}
+-                    f:image: {}
+                     f:imagePullPolicy: {}
+                     f:name: {}
+                     f:resources: {}
+@@ -125,6 +124,20 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-03-31T21:15:06Z"
++  - apiVersion: batch/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:jobTemplate:
++          f:spec:
++            f:template:
++              f:spec:
++                f:containers:
++                  k:{"name":"client"}:
++                    f:image: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-03-31T22:01:53Z"
+   name: postgresql-backup
+   namespace: metabase
+   resourceVersion: "216337828"
+@@ -193,7 +206,7 @@
+             envFrom:
+             - secretRef:
+                 name: database-backup
+-            image: ghcr.io/jarvusinnovations/restic-toolkit:latest
++            image: ghcr.io/jarvusinnovations/restic-toolkit:1.3.0
+             imagePullPolicy: Always
+             name: client
+             resources: {}
+[helm:prometheus=kubernetes/apps/charts/prometheus]
+
+diff -u -N /tmp/LIVE-208855427/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-alertmanager /tmp/MERGED-179707179/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-alertmanager
+--- /tmp/LIVE-208855427/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-alertmanager	2022-03-31 22:01:58.569881714 +0000
++++ /tmp/MERGED-179707179/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-alertmanager	2022-03-31 22:01:58.569881714 +0000
+@@ -29,10 +29,16 @@
+           f:component: {}
+           f:heritage: {}
+           f:release: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:30:48Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-03-31T22:01:58Z"
+   name: prometheus-alertmanager
+   resourceVersion: "192171630"
+   uid: e86a4ee1-77f8-4eee-bb34-c756d00dbd17
+diff -u -N /tmp/LIVE-208855427/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-pushgateway /tmp/MERGED-179707179/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-pushgateway
+--- /tmp/LIVE-208855427/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-pushgateway	2022-03-31 22:01:58.797882154 +0000
++++ /tmp/MERGED-179707179/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-pushgateway	2022-03-31 22:01:58.797882154 +0000
+@@ -29,10 +29,16 @@
+           f:component: {}
+           f:heritage: {}
+           f:release: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:30:48Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-03-31T22:01:58Z"
+   name: prometheus-pushgateway
+   resourceVersion: "192171629"
+   uid: cadf3cba-d45e-445d-a383-86aa12c68667
