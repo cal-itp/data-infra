@@ -26,6 +26,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: sftp-user
+            - secretRef:
+                name: sftp-password
           ports:
             - containerPort: 22
               name: sftp
@@ -36,6 +38,8 @@ spec:
               mountPath: /config/user
             - name: server-config
               mountPath: /config/server
+            - name: server-hostkeys
+              mountPath: /config/hostkeys
           command: [ /bin/bash ]
           args:
             - -c
@@ -52,8 +56,14 @@ spec:
               else
                 echo "warn: no $SFTP_AUTHORIZED_KEYS_SRC file; user $SFTP_USER may not be able to login"
               fi
+              if [[ $SFTP_USER_PASSWORD ]]; then
+                echo "$SFTP_USER:$SFTP_USER_PASSWORD" | chpasswd
+              fi
               chown -R $SFTP_USER:$SFTP_USER "$SFTP_USER_SSH_HOME"
               cp "$SFTP_SSHD_CONFIG_SRC" /etc/ssh/sshd_config
+              for arc in /config/hostkeys/*.tar.gz; do
+                tar -C /etc/ssh -xzvf "$arc"
+              done
               ssh-keygen -A
               exec /usr/sbin/sshd -e -D
           readinessProbe:
@@ -70,6 +80,9 @@ spec:
         - name: server-config
           configMap:
             name: sftp-sshd
+        - name: server-hostkeys
+          secret:
+            secretName: sftp-hostkeys
   volumeClaimTemplates:
     - metadata:
         name: data

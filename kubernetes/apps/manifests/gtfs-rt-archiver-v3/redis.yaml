@@ -29,6 +29,9 @@ spec:
       app: redis
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9121"
       labels:
         app: redis
     spec:
@@ -41,6 +44,22 @@ spec:
               cpu: 1
             limits:
               memory: 1Gi
+        # from https://github.com/oliver006/redis_exporter
+        - name: redis-exporter
+          image: oliver006/redis_exporter:v1.46.0
+          securityContext:
+            runAsUser: 59000
+            runAsGroup: 59000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+          - containerPort: 9121
       tolerations:
         - key: resource-domain
           operator: Equal
@@ -55,3 +74,14 @@ spec:
                 operator: In
                 values:
                 - gtfsrtv3
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: name
+                      operator: In
+                      values:
+                        - redis
