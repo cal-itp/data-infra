@@ -1,0 +1,481 @@
+[helm:grafana=kubernetes/apps/charts/grafana]
+
+diff -u -N /tmp/LIVE-3383371565/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole /tmp/MERGED-1244838843/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole
+--- /tmp/LIVE-3383371565/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-04-19 00:19:38.253214508 +0000
++++ /tmp/MERGED-1244838843/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-04-19 00:19:38.253214508 +0000
+@@ -27,10 +27,16 @@
+           f:app.kubernetes.io/name: {}
+           f:app.kubernetes.io/version: {}
+           f:helm.sh/chart: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:23:33Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-19T00:19:38Z"
+   name: grafana-clusterrole
+   resourceVersion: "228878962"
+   uid: 552f4bb0-454e-4f8d-84e8-597fe033928f
+[helm:loki=kubernetes/apps/charts/loki]
+
+diff -u -N /tmp/LIVE-4255843565/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki /tmp/MERGED-2102007334/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki
+--- /tmp/LIVE-4255843565/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2022-04-19 00:19:51.609381069 +0000
++++ /tmp/MERGED-2102007334/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2022-04-19 00:19:51.613381122 +0000
+@@ -31,10 +31,16 @@
+         f:apiGroup: {}
+         f:kind: {}
+         f:name: {}
+-      f:subjects: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:06Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-19T00:19:51Z"
+   name: loki
+   namespace: monitoring-loki
+   resourceVersion: "228879138"
+@@ -46,3 +52,4 @@
+ subjects:
+ - kind: ServiceAccount
+   name: loki
++  namespace: monitoring-loki
+[helm:promtail=kubernetes/apps/charts/promtail]
+
+diff -u -N /tmp/LIVE-4004576752/apps.v1.DaemonSet.monitoring-loki.promtail /tmp/MERGED-1589502943/apps.v1.DaemonSet.monitoring-loki.promtail
+--- /tmp/LIVE-4004576752/apps.v1.DaemonSet.monitoring-loki.promtail	2022-04-19 00:20:07.017585262 +0000
++++ /tmp/MERGED-1589502943/apps.v1.DaemonSet.monitoring-loki.promtail	2022-04-19 00:20:07.021585315 +0000
+@@ -0,0 +1,263 @@
++apiVersion: apps/v1
++kind: DaemonSet
++metadata:
++  annotations:
++    deprecated.daemonset.template.generation: "1"
++  creationTimestamp: "2022-04-19T00:20:06Z"
++  generation: 1
++  labels:
++    app.kubernetes.io/instance: promtail
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: promtail
++    app.kubernetes.io/version: 2.4.2
++    helm.sh/chart: promtail-3.11.0
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:deprecated.daemonset.template.generation: {}
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:template:
++          f:metadata:
++            f:annotations:
++              .: {}
++              f:checksum/config: {}
++            f:labels:
++              .: {}
++              f:app.kubernetes.io/instance: {}
++              f:app.kubernetes.io/name: {}
++          f:spec:
++            f:containers:
++              k:{"name":"promtail"}:
++                .: {}
++                f:args: {}
++                f:env:
++                  .: {}
++                  k:{"name":"HOSTNAME"}:
++                    .: {}
++                    f:name: {}
++                    f:valueFrom:
++                      .: {}
++                      f:fieldRef:
++                        .: {}
++                        f:apiVersion: {}
++                        f:fieldPath: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":3101,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:securityContext:
++                  .: {}
++                  f:allowPrivilegeEscalation: {}
++                  f:capabilities:
++                    .: {}
++                    f:drop: {}
++                  f:readOnlyRootFilesystem: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/etc/promtail"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/run/promtail"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/var/lib/docker/containers"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:readOnly: {}
++                  k:{"mountPath":"/var/log/pods"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:readOnly: {}
++            f:dnsPolicy: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext:
++              .: {}
++              f:runAsGroup: {}
++              f:runAsUser: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++            f:tolerations: {}
++            f:volumes:
++              .: {}
++              k:{"name":"config"}:
++                .: {}
++                f:name: {}
++                f:secret:
++                  .: {}
++                  f:defaultMode: {}
++                  f:secretName: {}
++              k:{"name":"containers"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++              k:{"name":"pods"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++              k:{"name":"run"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++        f:updateStrategy:
++          f:rollingUpdate:
++            .: {}
++            f:maxUnavailable: {}
++          f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-19T00:20:06Z"
++  name: promtail
++  namespace: monitoring-loki
++  uid: 682a4abe-a8c2-483e-a15e-98254a879b29
++spec:
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app.kubernetes.io/instance: promtail
++      app.kubernetes.io/name: promtail
++  template:
++    metadata:
++      annotations:
++        checksum/config: 5a79caae58e8cf1cfff438d3d04e5c40a13ae33c72887995ee00f75c616b6a7c
++      creationTimestamp: null
++      labels:
++        app.kubernetes.io/instance: promtail
++        app.kubernetes.io/name: promtail
++    spec:
++      containers:
++      - args:
++        - -config.file=/etc/promtail/promtail.yaml
++        env:
++        - name: HOSTNAME
++          valueFrom:
++            fieldRef:
++              apiVersion: v1
++              fieldPath: spec.nodeName
++        image: docker.io/grafana/promtail:2.4.2
++        imagePullPolicy: IfNotPresent
++        name: promtail
++        ports:
++        - containerPort: 3101
++          name: http-metrics
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 5
++          httpGet:
++            path: /ready
++            port: http-metrics
++            scheme: HTTP
++          initialDelaySeconds: 10
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        resources: {}
++        securityContext:
++          allowPrivilegeEscalation: false
++          capabilities:
++            drop:
++            - ALL
++          readOnlyRootFilesystem: true
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /etc/promtail
++          name: config
++        - mountPath: /run/promtail
++          name: run
++        - mountPath: /var/lib/docker/containers
++          name: containers
++          readOnly: true
++        - mountPath: /var/log/pods
++          name: pods
++          readOnly: true
++      dnsPolicy: ClusterFirst
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext:
++        runAsGroup: 0
++        runAsUser: 0
++      serviceAccount: promtail
++      serviceAccountName: promtail
++      terminationGracePeriodSeconds: 30
++      tolerations:
++      - effect: NoSchedule
++        key: node-role.kubernetes.io/master
++        operator: Exists
++      - effect: NoSchedule
++        key: node-role.kubernetes.io/control-plane
++        operator: Exists
++      volumes:
++      - name: config
++        secret:
++          defaultMode: 420
++          secretName: promtail
++      - hostPath:
++          path: /run/promtail
++          type: ""
++        name: run
++      - hostPath:
++          path: /var/lib/docker/containers
++          type: ""
++        name: containers
++      - hostPath:
++          path: /var/log/pods
++          type: ""
++        name: pods
++  updateStrategy:
++    rollingUpdate:
++      maxUnavailable: 1
++    type: RollingUpdate
++status:
++  currentNumberScheduled: 0
++  desiredNumberScheduled: 0
++  numberMisscheduled: 0
++  numberReady: 0
+diff -u -N /tmp/LIVE-4004576752/rbac.authorization.k8s.io.v1.ClusterRole..promtail /tmp/MERGED-1589502943/rbac.authorization.k8s.io.v1.ClusterRole..promtail
+--- /tmp/LIVE-4004576752/rbac.authorization.k8s.io.v1.ClusterRole..promtail	2022-04-19 00:20:06.421577361 +0000
++++ /tmp/MERGED-1589502943/rbac.authorization.k8s.io.v1.ClusterRole..promtail	2022-04-19 00:20:06.425577414 +0000
+@@ -0,0 +1,41 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRole
++metadata:
++  creationTimestamp: "2022-04-19T00:20:06Z"
++  labels:
++    app.kubernetes.io/instance: promtail
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: promtail
++    app.kubernetes.io/version: 2.4.2
++    helm.sh/chart: promtail-3.11.0
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-19T00:20:06Z"
++  name: promtail
++  uid: a91fd9cb-8bcc-489d-a2ee-77d92951ac38
++rules:
++- apiGroups:
++  - ""
++  resources:
++  - nodes
++  - nodes/proxy
++  - services
++  - endpoints
++  - pods
++  verbs:
++  - get
++  - watch
++  - list
+diff -u -N /tmp/LIVE-4004576752/rbac.authorization.k8s.io.v1.ClusterRoleBinding..promtail /tmp/MERGED-1589502943/rbac.authorization.k8s.io.v1.ClusterRoleBinding..promtail
+--- /tmp/LIVE-4004576752/rbac.authorization.k8s.io.v1.ClusterRoleBinding..promtail	2022-04-19 00:20:06.585579536 +0000
++++ /tmp/MERGED-1589502943/rbac.authorization.k8s.io.v1.ClusterRoleBinding..promtail	2022-04-19 00:20:06.585579536 +0000
+@@ -0,0 +1,40 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRoleBinding
++metadata:
++  creationTimestamp: "2022-04-19T00:20:06Z"
++  labels:
++    app.kubernetes.io/instance: promtail
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: promtail
++    app.kubernetes.io/version: 2.4.2
++    helm.sh/chart: promtail-3.11.0
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-19T00:20:06Z"
++  name: promtail
++  uid: f18d0018-17d9-416f-90e0-6929232dfb33
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: ClusterRole
++  name: promtail
++subjects:
++- kind: ServiceAccount
++  name: promtail
++  namespace: monitoring-loki
+diff -u -N /tmp/LIVE-4004576752/v1.Secret.monitoring-loki.promtail /tmp/MERGED-1589502943/v1.Secret.monitoring-loki.promtail
+--- /tmp/LIVE-4004576752/v1.Secret.monitoring-loki.promtail	2022-04-19 00:20:06.793582293 +0000
++++ /tmp/MERGED-1589502943/v1.Secret.monitoring-loki.promtail	2022-04-19 00:20:06.793582293 +0000
+@@ -1 +1,35 @@
+-null
++apiVersion: v1
++data:
++  promtail.yaml: '***'
++kind: Secret
++metadata:
++  creationTimestamp: "2022-04-19T00:20:06Z"
++  labels:
++    app.kubernetes.io/instance: promtail
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: promtail
++    app.kubernetes.io/version: 2.4.2
++    helm.sh/chart: promtail-3.11.0
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:promtail.yaml: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-19T00:20:06Z"
++  name: promtail
++  namespace: monitoring-loki
++  uid: bfa4a769-ea8a-4cfe-afc6-14293f47bdff
++type: Opaque
+diff -u -N /tmp/LIVE-4004576752/v1.ServiceAccount.monitoring-loki.promtail /tmp/MERGED-1589502943/v1.ServiceAccount.monitoring-loki.promtail
+--- /tmp/LIVE-4004576752/v1.ServiceAccount.monitoring-loki.promtail	2022-04-19 00:20:06.257575187 +0000
++++ /tmp/MERGED-1589502943/v1.ServiceAccount.monitoring-loki.promtail	2022-04-19 00:20:06.257575187 +0000
+@@ -0,0 +1,28 @@
++apiVersion: v1
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-04-19T00:20:06Z"
++  labels:
++    app.kubernetes.io/instance: promtail
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: promtail
++    app.kubernetes.io/version: 2.4.2
++    helm.sh/chart: promtail-3.11.0
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-19T00:20:06Z"
++  name: promtail
++  namespace: monitoring-loki
++  uid: e642daf8-1964-4807-b0eb-9c0ce8d6cdcf

@@ -1,0 +1,145 @@
+[helm:grafana=kubernetes/apps/charts/grafana]
+
+diff -u -N /tmp/LIVE-3718108439/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole /tmp/MERGED-2132249430/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole
+--- /tmp/LIVE-3718108439/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-04-19 15:53:53.593414307 +0000
++++ /tmp/MERGED-2132249430/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-04-19 15:53:53.597414368 +0000
+@@ -27,10 +27,16 @@
+           f:app.kubernetes.io/name: {}
+           f:app.kubernetes.io/version: {}
+           f:helm.sh/chart: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:23:33Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-19T15:53:53Z"
+   name: grafana-clusterrole
+   resourceVersion: "228878962"
+   uid: 552f4bb0-454e-4f8d-84e8-597fe033928f
+[helm:loki=kubernetes/apps/charts/loki]
+
+diff -u -N /tmp/LIVE-89417406/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki /tmp/MERGED-3528665408/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki
+--- /tmp/LIVE-89417406/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2022-04-19 15:54:08.465853257 +0000
++++ /tmp/MERGED-3528665408/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2022-04-19 15:54:08.469853379 +0000
+@@ -31,10 +31,16 @@
+         f:apiGroup: {}
+         f:kind: {}
+         f:name: {}
+-      f:subjects: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:06Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-19T15:54:08Z"
+   name: loki
+   namespace: monitoring-loki
+   resourceVersion: "228879138"
+@@ -46,3 +52,4 @@
+ subjects:
+ - kind: ServiceAccount
+   name: loki
++  namespace: monitoring-loki
+[helm:promtail=kubernetes/apps/charts/promtail]
+
+diff -u -N /tmp/LIVE-1280333345/apps.v1.DaemonSet.monitoring-loki.promtail /tmp/MERGED-1615291935/apps.v1.DaemonSet.monitoring-loki.promtail
+--- /tmp/LIVE-1280333345/apps.v1.DaemonSet.monitoring-loki.promtail	2022-04-19 15:54:27.746216059 +0000
++++ /tmp/MERGED-1615291935/apps.v1.DaemonSet.monitoring-loki.promtail	2022-04-19 15:54:27.746216059 +0000
+@@ -2,11 +2,11 @@
+ kind: DaemonSet
+ metadata:
+   annotations:
+-    deprecated.daemonset.template.generation: "2"
++    deprecated.daemonset.template.generation: "3"
+     meta.helm.sh/release-name: promtail
+     meta.helm.sh/release-namespace: monitoring-loki
+   creationTimestamp: "2022-04-19T00:20:08Z"
+-  generation: 2
++  generation: 3
+   labels:
+     app.kubernetes.io/instance: promtail
+     app.kubernetes.io/managed-by: Helm
+@@ -35,9 +35,7 @@
+         f:selector: {}
+         f:template:
+           f:metadata:
+-            f:annotations:
+-              .: {}
+-              f:checksum/config: {}
++            f:annotations: {}
+             f:labels:
+               .: {}
+               f:app.kubernetes.io/instance: {}
+@@ -172,6 +170,17 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-04-19T15:18:26Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:template:
++          f:metadata:
++            f:annotations:
++              f:checksum/config: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-19T15:54:27Z"
+   name: promtail
+   namespace: monitoring-loki
+   resourceVersion: "229494410"
+@@ -185,7 +194,7 @@
+   template:
+     metadata:
+       annotations:
+-        checksum/config: 08e99f5f82394f2675cb2d57d9a37280d8f418260a133ab016a0a88ab79fc313
++        checksum/config: 466dc1f6723a40312b2fb5532c1a3100e1910f572cfb602dfae311432ddfd0ef
+       creationTimestamp: null
+       labels:
+         app.kubernetes.io/instance: promtail
+diff -u -N /tmp/LIVE-1280333345/v1.Secret.monitoring-loki.promtail /tmp/MERGED-1615291935/v1.Secret.monitoring-loki.promtail
+--- /tmp/LIVE-1280333345/v1.Secret.monitoring-loki.promtail	2022-04-19 15:54:27.522212756 +0000
++++ /tmp/MERGED-1615291935/v1.Secret.monitoring-loki.promtail	2022-04-19 15:54:27.522212756 +0000
+@@ -1,6 +1,6 @@
+ apiVersion: v1
+ data:
+-  promtail.yaml: '*** (before)'
++  promtail.yaml: '*** (after)'
+ kind: Secret
+ metadata:
+   annotations:
+@@ -17,9 +17,7 @@
+   - apiVersion: v1
+     fieldsType: FieldsV1
+     fieldsV1:
+-      f:data:
+-        .: {}
+-        f:promtail.yaml: {}
++      f:data: {}
+       f:metadata:
+         f:annotations:
+           .: {}
+@@ -36,6 +34,14 @@
+     manager: helm
+     operation: Update
+     time: "2022-04-19T00:20:08Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        f:promtail.yaml: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-19T15:54:27Z"
+   name: promtail
+   namespace: monitoring-loki
+   resourceVersion: "229436414"
