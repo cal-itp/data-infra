@@ -66,6 +66,7 @@ sentry:
     ingestConsumer:
       replicas: 2
     cleanup:
+      activeDeadlineSeconds: 600
       days: 30
     postProcessForwardTransactions:
       replicas: 2
