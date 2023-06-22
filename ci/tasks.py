@@ -1,10 +1,18 @@
 from enum import Enum
 from pathlib import Path
-from typing import Any, Generator, List, Optional
+from typing import List, Optional
 
 import git
 from invoke import Result, task
-from pydantic import BaseSettings
+from pydantic import BaseModel, validator
+
+KUSTOMIZE_HELM_TEMPLATE = """
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: {release_namespace}
+resources:
+- manifest.yaml
+"""
 
 
 class ReleaseDriver(str, Enum):
@@ -12,7 +20,7 @@ class ReleaseDriver(str, Enum):
     kustomize = "kustomize"
 
 
-class Release(BaseSettings):
+class Release(BaseModel):
     name: str
     release_driver: ReleaseDriver
 
@@ -25,42 +33,37 @@ class Release(BaseSettings):
     # for kustomize
     release_kustomize_dir: Optional[Path]
 
-    class Config:
-        @classmethod
-        def parse_env_var(cls, field_name: str, raw_val: str) -> Any:
-            if field_name == "release_helm_values":
-                return raw_val.split(":")
-            return cls.json_loads(raw_val)
-
-
-def get_releases(
-    channel: str,
-    releases_dir="./vars/releases",
-    driver: Optional[ReleaseDriver] = None,
-) -> Generator[Release, None, None]:
-    for release in Path(releases_dir).glob(f"{channel}-*"):
-        r = Release(
-            name=str(release),
-            _env_file=release,
-            _env_file_encoding="utf-8",
-        )
-        if not driver or r.release_driver == driver:
-            yield r
+    @validator("release_helm_values", pre=True)
+    def split_release_helm_values(cls, v):
+        return v.split(":")
 
 
 @task
+def load_release(c):
+    c.update(
+        {
+            "releases": [
+                Release(**release) for release in c.config._config["calitp"]["releases"]
+            ]
+        }
+    )
+
+
+@task(load_release)
 def kdiff(
     c,
-    channel,
     app=None,
     outfile=None,
 ):
-    repo = git.Repo(".", search_parent_directories=True)
+    repo = git.Repo(c.config.calitp.git_repo_path, search_parent_directories=True)
 
     full_diff = ""
 
-    for release in get_releases(channel, driver=ReleaseDriver.kustomize):
-        if not app or app == release.name:
+    release: Release
+    for release in c.releases:
+        if release.release_driver == ReleaseDriver.kustomize and (
+            not app or app == release.name
+        ):
             kustomize_dir = Path(repo.working_tree_dir) / Path(
                 release.release_kustomize_dir
             )
@@ -68,14 +71,34 @@ def kdiff(
             print(cmd, flush=True)
             result: Result = c.run(
                 cmd,
-                echo=True,
                 warn=True,
             )
             if result.exited != 0:
                 full_diff += result.stdout
-
+    c.update({"kdiff": full_diff})
     if outfile:
         msg = f"```{full_diff}```" if full_diff else "No kustomize changes found."
         print(f"writing {len(msg)=} to {outfile}", flush=True)
         with open(outfile, "w") as f:
             f.write(msg)
+
+
+@task(kdiff)
+def krelease(c, app=None):
+    try:
+        c.kdiff
+
+        repo = git.Repo(c.config.calitp.git_repo_path, search_parent_directories=True)
+        release: Release
+        for release in c.releases:
+            if release.release_driver == ReleaseDriver.kustomize and (
+                not app or app == release.name
+            ):
+                kustomize_dir = Path(repo.working_tree_dir) / Path(
+                    release.release_kustomize_dir
+                )
+                cmd = f"kubectl apply -k {kustomize_dir}"
+                print(cmd, flush=True)
+                c.run(cmd)
+    except AttributeError:
+        pass
