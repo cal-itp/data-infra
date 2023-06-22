@@ -24,7 +24,7 @@ grouped AS (
     SELECT
         dt,
         calculated_service_date,
-        stop_time_updates.base64_url,
+        base64_url,
         trip_id,
         trip_route_id,
         trip_direction_id,
@@ -32,6 +32,7 @@ grouped AS (
         trip_start_date,
         trip_schedule_relationship,
         schedule_feed_timezone,
+        schedule_base64_url,
         ARRAY_AGG(DISTINCT id) AS message_ids_array,
         ARRAY_AGG(DISTINCT header_timestamp) AS header_timestamps_array,
         ARRAY_AGG(DISTINCT trip_update_timestamp IGNORE NULLS) AS trip_update_timestamps_array,
@@ -49,7 +50,7 @@ grouped AS (
         ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'CANCELED' THEN stop_id END IGNORE NULLS) AS canceled_stops_array,
         ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'ADDED' THEN stop_id END IGNORE NULLS) AS added_stops_array,
     FROM stop_time_updates
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 ),
 
 int_gtfs_rt__trip_updates_trip_day_map_grouping AS (
@@ -72,6 +73,7 @@ int_gtfs_rt__trip_updates_trip_day_map_grouping AS (
         trip_start_date,
         trip_schedule_relationship,
         schedule_feed_timezone,
+        schedule_base64_url,
         message_ids_array,
         header_timestamps_array,
         trip_update_timestamps_array,

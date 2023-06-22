@@ -8,7 +8,13 @@
 
 WITH service_alerts AS (
     SELECT * EXCEPT(trip_direction_id),
-        CAST(trip_direction_id AS STRING) AS trip_direction_id
+        CAST(trip_direction_id AS STRING) AS trip_direction_id,
+        -- subtract one because row_number is 1-based count and in frequency-based schedule we use 0-based
+        ROW_NUMBER() OVER (PARTITION BY
+            base64_url,
+            calculated_service_date,
+            trip_id
+            ORDER BY trip_start_time) - 1 AS calculated_iteration_num
     FROM {{ ref('int_gtfs_rt__service_alerts_trip_day_map_grouping') }}
 ),
 
@@ -88,8 +94,10 @@ aggregation AS(
         base64_url,
         trip_id,
         trip_start_time,
+        calculated_iteration_num,
         trip_start_date,
         schedule_feed_timezone,
+        schedule_base64_url,
         starting_schedule_relationship,
         ending_schedule_relationship,
         ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_schedule_relationship ORDER BY trip_schedule_relationship), "|") AS trip_schedule_relationships, --noqa: L054
@@ -100,18 +108,21 @@ aggregation AS(
         MIN(min_header_timestamp) AS min_header_timestamp,
         MAX(max_header_timestamp) AS max_header_timestamp,
     FROM window_functions
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 ),
 
 fct_service_alerts_trip_summaries AS (
     SELECT
         aggregation.key,
+        {{ dbt_utils.generate_surrogate_key(['calculated_service_date', 'schedule_base64_url', 'trip_id', 'calculated_iteration_num']) }} AS trip_instance_key,
         calculated_service_date,
         base64_url,
         trip_id,
         trip_start_time,
+        calculated_iteration_num,
         trip_start_date,
         schedule_feed_timezone,
+        schedule_base64_url,
         starting_schedule_relationship,
         ending_schedule_relationship,
         trip_route_ids,

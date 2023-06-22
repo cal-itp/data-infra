@@ -32,6 +32,7 @@ grouped AS (
         trip_start_date,
         trip_schedule_relationship,
         schedule_feed_timezone,
+        schedule_base64_url,
         ARRAY_AGG(DISTINCT id) AS message_ids_array,
         ARRAY_AGG(DISTINCT header_timestamp) AS header_timestamps_array,
         ARRAY_AGG(DISTINCT vehicle_timestamp IGNORE NULLS) AS vehicle_timestamps_array,
@@ -45,7 +46,7 @@ grouped AS (
         MAX(vehicle_timestamp) AS max_vehicle_timestamp
     FROM vehicle_positions
     WHERE trip_id IS NOT NULL
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 ),
 
 int_gtfs_rt__vehicle_positions_trip_day_map_grouping AS (
@@ -68,6 +69,7 @@ int_gtfs_rt__vehicle_positions_trip_day_map_grouping AS (
         trip_start_date,
         trip_schedule_relationship,
         schedule_feed_timezone,
+        schedule_base64_url,
         message_ids_array,
         header_timestamps_array,
         vehicle_timestamps_array,

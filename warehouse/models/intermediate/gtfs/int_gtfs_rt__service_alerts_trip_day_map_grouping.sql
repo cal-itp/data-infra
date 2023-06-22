@@ -36,6 +36,7 @@ grouped AS (
         trip_start_date,
         trip_schedule_relationship,
         schedule_feed_timezone,
+        schedule_base64_url,
         -- what we really want here is an array of the distinct structs, but you can't DISTINCT structs
         -- so we turn them into JSON strings which we can turn back into structs later
         ARRAY_AGG(DISTINCT
@@ -54,7 +55,7 @@ grouped AS (
     FROM service_alerts
     -- we only want to use alerts that were actually *active*
     WHERE header_timestamp BETWEEN active_period_start_ts AND active_period_end_ts
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 ),
 
 int_gtfs_rt__service_alerts_trip_day_map_grouping AS (
@@ -77,6 +78,7 @@ int_gtfs_rt__service_alerts_trip_day_map_grouping AS (
         trip_start_date,
         trip_schedule_relationship,
         schedule_feed_timezone,
+        schedule_base64_url,
         alert_content_array,
         message_ids_array,
         extract_ts_array,
