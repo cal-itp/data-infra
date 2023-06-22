@@ -1,0 +1,49 @@
+[helm:metabase-test=kubernetes/apps/charts/metabase]
+
+diff -u -N /tmp/LIVE-3702063035/apps.v1.Deployment.metabase-test.metabase /tmp/MERGED-3158779469/apps.v1.Deployment.metabase-test.metabase
+--- /tmp/LIVE-3702063035/apps.v1.Deployment.metabase-test.metabase	2023-06-20 15:52:26.767961452 +0000
++++ /tmp/MERGED-3158779469/apps.v1.Deployment.metabase-test.metabase	2023-06-20 15:52:26.767961452 +0000
+@@ -6,7 +6,7 @@
+     meta.helm.sh/release-name: metabase-test
+     meta.helm.sh/release-namespace: metabase-test
+   creationTimestamp: "2023-06-16T16:48:43Z"
+-  generation: 1
++  generation: 2
+   labels:
+     app.kubernetes.io/managed-by: Helm
+     name: metabase
+@@ -36,7 +36,7 @@
+       - envFrom:
+         - configMapRef:
+             name: metabase-config
+-        image: metabase/metabase:v0.42.3
++        image: metabase/metabase:v0.46.5
+         imagePullPolicy: IfNotPresent
+         livenessProbe:
+           failureThreshold: 3
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-1921239139/batch.v1.CronJob.metabase-test.postgresql-backup /tmp/MERGED-1316415920/batch.v1.CronJob.metabase-test.postgresql-backup
+--- /tmp/LIVE-1921239139/batch.v1.CronJob.metabase-test.postgresql-backup	2023-06-20 15:52:29.719959809 +0000
++++ /tmp/MERGED-1316415920/batch.v1.CronJob.metabase-test.postgresql-backup	2023-06-20 15:52:29.719959809 +0000
+@@ -5,7 +5,7 @@
+     meta.helm.sh/release-name: postgresql-backup
+     meta.helm.sh/release-namespace: metabase-test
+   creationTimestamp: "2023-06-16T16:48:46Z"
+-  generation: 2
++  generation: 3
+   labels:
+     app.kubernetes.io/managed-by: Helm
+     name: database-backup
+@@ -58,10 +58,10 @@
+               backup_status=0
+
+               if [ $sql_snapshot_status -ne 0 ]; then
+-                echo "Reporting failure: SQL snapshot"
++                echo "Failed to snapshot; reporting to healthchecks"
+                 backup_status=1
+               elif [ $prune_status -ne 0 ]; then
+-                echo "Reporting failure: Prune"
++                echo "Failed to prune; reporting to healthchecks"
+                 backup_status=2
+               fi
