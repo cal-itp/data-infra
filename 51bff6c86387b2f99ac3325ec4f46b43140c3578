@@ -1,0 +1,23 @@
+[helm:metabase-test=kubernetes/apps/charts/metabase]
+
+diff -u -N /tmp/LIVE-2579321646/apps.v1.Deployment.metabase-test.metabase /tmp/MERGED-532696927/apps.v1.Deployment.metabase-test.metabase
+--- /tmp/LIVE-2579321646/apps.v1.Deployment.metabase-test.metabase	2023-06-22 20:09:29.627424088 +0000
++++ /tmp/MERGED-532696927/apps.v1.Deployment.metabase-test.metabase	2023-06-22 20:09:29.627424088 +0000
+@@ -6,7 +6,7 @@
+     meta.helm.sh/release-name: metabase-test
+     meta.helm.sh/release-namespace: metabase-test
+   creationTimestamp: "2023-06-16T16:48:43Z"
+-  generation: 2
++  generation: 3
+   labels:
+     app.kubernetes.io/managed-by: Helm
+     name: metabase
+@@ -36,7 +36,7 @@
+       - envFrom:
+         - configMapRef:
+             name: metabase-config
+-        image: metabase/metabase:v0.46.5
++        image: metabase/metabase:v0.47.0-RC1
+         imagePullPolicy: IfNotPresent
+         livenessProbe:
+           failureThreshold: 3
