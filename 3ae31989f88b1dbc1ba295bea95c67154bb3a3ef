@@ -1,0 +1,464 @@
+[helm:grafana=kubernetes/apps/charts/grafana]
+
+diff -u -N /tmp/LIVE-3504334224/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole /tmp/MERGED-2600841226/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole
+--- /tmp/LIVE-3504334224/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-04-12 20:48:51.418773869 +0000
++++ /tmp/MERGED-2600841226/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-04-12 20:48:51.418773869 +0000
+@@ -27,10 +27,16 @@
+           f:app.kubernetes.io/name: {}
+           f:app.kubernetes.io/version: {}
+           f:helm.sh/chart: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:23:33Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:48:51Z"
+   name: grafana-clusterrole
+   resourceVersion: "192167988"
+   uid: 552f4bb0-454e-4f8d-84e8-597fe033928f
+[kustomize:kubernetes/apps/overlays/gtfs-rt-archive-prod]
+
+diff -u -N /tmp/LIVE-3032666569/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive /tmp/MERGED-2915271406/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive
+--- /tmp/LIVE-3032666569/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-04-12 20:48:59.242895994 +0000
++++ /tmp/MERGED-2915271406/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-04-12 20:48:59.242895994 +0000
+@@ -6,7 +6,7 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"gtfs-rt-archive"},"name":"gtfs-rt-archive","namespace":"gtfs-rt"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"gtfs-rt-archive"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"gtfs-rt-archive"}},"spec":{"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"resource-domain","operator":"In","values":["gtfsrt"]}]}]}}},"containers":[{"envFrom":[{"configMapRef":{"name":"archiver-app-vars"}},{"configMapRef":{"name":"archiver-channel-vars"}}],"image":"us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:2.1","name":"app","resources":{"limits":{"memory":"5.0Gi"},"requests":{"memory":"5.0Gi"}},"volumeMounts":[{"mountPath":"/secrets/agencies-data","name":"agencies-data"},{"mountPath":"/secrets/gcs-upload-svcacct","name":"gcs-upload-svcacct"}]}],"tolerations":[{"effect":"NoSchedule","key":"resource-domain","operator":"Equal","value":"gtfsrt"}],"volumes":[{"name":"agencies-data","secret":{"secretName":"agencies-data"}},{"name":"gcs-upload-svcacct","secret":{"secretName":"gcs-upload-svcacct"}}]}}}}
+   creationTimestamp: "2021-07-26T20:39:07Z"
+-  generation: 104
++  generation: 105
+   labels:
+     name: gtfs-rt-archive
+   managedFields:
+@@ -194,9 +194,9 @@
+         name: app
+         resources:
+           limits:
+-            memory: 5Gi
++            memory: 2Gi
+           requests:
+-            memory: 5Gi
++            memory: 2Gi
+         terminationMessagePath: /dev/termination-log
+         terminationMessagePolicy: File
+         volumeMounts:
+[helm:loki=kubernetes/apps/charts/loki-stack]
+
+diff -u -N /tmp/LIVE-2469353182/apps.v1.StatefulSet.monitoring-loki.loki /tmp/MERGED-250836450/apps.v1.StatefulSet.monitoring-loki.loki
+--- /tmp/LIVE-2469353182/apps.v1.StatefulSet.monitoring-loki.loki	2022-04-12 20:49:15.058974869 +0000
++++ /tmp/MERGED-250836450/apps.v1.StatefulSet.monitoring-loki.loki	2022-04-12 20:49:15.058974869 +0000
+@@ -5,11 +5,11 @@
+     meta.helm.sh/release-name: loki
+     meta.helm.sh/release-namespace: monitoring-loki
+   creationTimestamp: "2022-02-23T18:24:07Z"
+-  generation: 3
++  generation: 4
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.10.3
++    chart: loki-2.11.0
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -25,7 +25,6 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:spec:
+@@ -38,7 +37,6 @@
+           f:metadata:
+             f:annotations:
+               .: {}
+-              f:checksum/config: {}
+               f:prometheus.io/port: {}
+               f:prometheus.io/scrape: {}
+             f:labels:
+@@ -52,7 +50,6 @@
+               k:{"name":"loki"}:
+                 .: {}
+                 f:args: {}
+-                f:image: {}
+                 f:imagePullPolicy: {}
+                 f:livenessProbe:
+                   .: {}
+@@ -155,6 +152,24 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-04-07T18:58:59Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++      f:spec:
++        f:template:
++          f:metadata:
++            f:annotations:
++              f:checksum/config: {}
++          f:spec:
++            f:containers:
++              k:{"name":"loki"}:
++                f:image: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:49:15Z"
+   name: loki
+   namespace: monitoring-loki
+   resourceVersion: "221070453"
+@@ -171,7 +186,7 @@
+   template:
+     metadata:
+       annotations:
+-        checksum/config: f2d0a37c8ae6ac6bf729db1546d4afb3d92c1ffa3c4b3837f3332bee26bbd56e
++        checksum/config: 93ff14a8b1d537c0a5d08a4d6b1ae5c6c0f7712c03b69dd69fa5b1834ac5bd3b
+         prometheus.io/port: http-metrics
+         prometheus.io/scrape: "true"
+       creationTimestamp: null
+@@ -184,7 +199,7 @@
+       containers:
+       - args:
+         - -config.file=/etc/loki/loki.yaml
+-        image: grafana/loki:2.4.2
++        image: grafana/loki:2.5.0
+         imagePullPolicy: IfNotPresent
+         livenessProbe:
+           failureThreshold: 3
+diff -u -N /tmp/LIVE-2469353182/policy.v1beta1.PodSecurityPolicy..loki /tmp/MERGED-250836450/policy.v1beta1.PodSecurityPolicy..loki
+--- /tmp/LIVE-2469353182/policy.v1beta1.PodSecurityPolicy..loki	2022-04-12 20:49:12.818963525 +0000
++++ /tmp/MERGED-250836450/policy.v1beta1.PodSecurityPolicy..loki	2022-04-12 20:49:12.818963525 +0000
+@@ -8,7 +8,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.10.3
++    chart: loki-2.11.0
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -24,7 +24,6 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:spec:
+@@ -45,6 +44,15 @@
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:06Z"
++  - apiVersion: policy/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:49:12Z"
+   name: loki
+   resourceVersion: "221069647"
+   uid: 1947d245-87df-49bc-b291-fdbe17771eda
+diff -u -N /tmp/LIVE-2469353182/rbac.authorization.k8s.io.v1.Role.monitoring-loki.loki /tmp/MERGED-250836450/rbac.authorization.k8s.io.v1.Role.monitoring-loki.loki
+--- /tmp/LIVE-2469353182/rbac.authorization.k8s.io.v1.Role.monitoring-loki.loki	2022-04-12 20:49:13.238964630 +0000
++++ /tmp/MERGED-250836450/rbac.authorization.k8s.io.v1.Role.monitoring-loki.loki	2022-04-12 20:49:13.238964630 +0000
+@@ -8,7 +8,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.10.3
++    chart: loki-2.11.0
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -24,13 +24,21 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:06Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:49:13Z"
+   name: loki
+   namespace: monitoring-loki
+   resourceVersion: "221069664"
+diff -u -N /tmp/LIVE-2469353182/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki /tmp/MERGED-250836450/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki
+--- /tmp/LIVE-2469353182/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2022-04-12 20:49:13.666965756 +0000
++++ /tmp/MERGED-250836450/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2022-04-12 20:49:13.666965756 +0000
+@@ -8,7 +8,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.10.3
++    chart: loki-2.11.0
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -24,17 +24,25 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:roleRef:
+         f:apiGroup: {}
+         f:kind: {}
+         f:name: {}
+-      f:subjects: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:06Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:49:13Z"
+   name: loki
+   namespace: monitoring-loki
+   resourceVersion: "221069675"
+@@ -46,3 +54,4 @@
+ subjects:
+ - kind: ServiceAccount
+   name: loki
++  namespace: monitoring-loki
+diff -u -N /tmp/LIVE-2469353182/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki-promtail /tmp/MERGED-250836450/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki-promtail
+--- /tmp/LIVE-2469353182/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki-promtail	2022-04-12 20:49:13.886966335 +0000
++++ /tmp/MERGED-250836450/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki-promtail	2022-04-12 20:49:13.886966335 +0000
+@@ -31,10 +31,16 @@
+         f:apiGroup: {}
+         f:kind: {}
+         f:name: {}
+-      f:subjects: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:06Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:49:13Z"
+   name: loki-promtail
+   namespace: monitoring-loki
+   resourceVersion: "192168358"
+@@ -46,3 +52,4 @@
+ subjects:
+ - kind: ServiceAccount
+   name: loki-promtail
++  namespace: monitoring-loki
+diff -u -N /tmp/LIVE-2469353182/v1.Secret.monitoring-loki.loki /tmp/MERGED-250836450/v1.Secret.monitoring-loki.loki
+--- /tmp/LIVE-2469353182/v1.Secret.monitoring-loki.loki	2022-04-12 20:49:14.406969548 +0000
++++ /tmp/MERGED-250836450/v1.Secret.monitoring-loki.loki	2022-04-12 20:49:14.406969548 +0000
+@@ -10,7 +10,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.10.3
++    chart: loki-2.11.0
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -29,13 +29,21 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:type: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:06Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:49:14Z"
+   name: loki
+   namespace: monitoring-loki
+   resourceVersion: "221069660"
+diff -u -N /tmp/LIVE-2469353182/v1.Service.monitoring-loki.loki /tmp/MERGED-250836450/v1.Service.monitoring-loki.loki
+--- /tmp/LIVE-2469353182/v1.Service.monitoring-loki.loki	2022-04-12 20:49:14.642971474 +0000
++++ /tmp/MERGED-250836450/v1.Service.monitoring-loki.loki	2022-04-12 20:49:14.642971474 +0000
+@@ -8,7 +8,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.10.3
++    chart: loki-2.11.0
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -24,7 +24,6 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:spec:
+@@ -45,6 +44,15 @@
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:07Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:49:14Z"
+   name: loki
+   namespace: monitoring-loki
+   resourceVersion: "221069682"
+diff -u -N /tmp/LIVE-2469353182/v1.Service.monitoring-loki.loki-headless /tmp/MERGED-250836450/v1.Service.monitoring-loki.loki-headless
+--- /tmp/LIVE-2469353182/v1.Service.monitoring-loki.loki-headless	2022-04-12 20:49:14.846973139 +0000
++++ /tmp/MERGED-250836450/v1.Service.monitoring-loki.loki-headless	2022-04-12 20:49:14.850973172 +0000
+@@ -8,7 +8,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.10.3
++    chart: loki-2.11.0
+     heritage: Helm
+     release: loki
+     variant: headless
+@@ -25,7 +25,6 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+           f:variant: {}
+@@ -48,6 +47,15 @@
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:07Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:49:14Z"
+   name: loki-headless
+   namespace: monitoring-loki
+   resourceVersion: "221069677"
+diff -u -N /tmp/LIVE-2469353182/v1.ServiceAccount.monitoring-loki.loki /tmp/MERGED-250836450/v1.ServiceAccount.monitoring-loki.loki
+--- /tmp/LIVE-2469353182/v1.ServiceAccount.monitoring-loki.loki	2022-04-12 20:49:12.494962672 +0000
++++ /tmp/MERGED-250836450/v1.ServiceAccount.monitoring-loki.loki	2022-04-12 20:49:12.494962672 +0000
+@@ -9,7 +9,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.10.3
++    chart: loki-2.11.0
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -26,7 +26,6 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+     manager: helm
+@@ -43,6 +42,15 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-02-23T18:24:06Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:49:12Z"
+   name: loki
+   namespace: monitoring-loki
+   resourceVersion: "221069648"
+[helm:prometheus=kubernetes/apps/charts/prometheus]
+
+diff -u -N /tmp/LIVE-312423911/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-alertmanager /tmp/MERGED-1273616601/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-alertmanager
+--- /tmp/LIVE-312423911/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-alertmanager	2022-04-12 20:49:29.879091430 +0000
++++ /tmp/MERGED-1273616601/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-alertmanager	2022-04-12 20:49:29.879091430 +0000
+@@ -29,10 +29,16 @@
+           f:component: {}
+           f:heritage: {}
+           f:release: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:30:48Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:49:29Z"
+   name: prometheus-alertmanager
+   resourceVersion: "192171630"
+   uid: e86a4ee1-77f8-4eee-bb34-c756d00dbd17
+diff -u -N /tmp/LIVE-312423911/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-pushgateway /tmp/MERGED-1273616601/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-pushgateway
+--- /tmp/LIVE-312423911/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-pushgateway	2022-04-12 20:49:30.199093592 +0000
++++ /tmp/MERGED-1273616601/rbac.authorization.k8s.io.v1.ClusterRole..prometheus-pushgateway	2022-04-12 20:49:30.199093592 +0000
+@@ -29,10 +29,16 @@
+           f:component: {}
+           f:heritage: {}
+           f:release: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:30:48Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-12T20:49:30Z"
+   name: prometheus-pushgateway
+   resourceVersion: "192171629"
+   uid: cadf3cba-d45e-445d-a383-86aa12c68667

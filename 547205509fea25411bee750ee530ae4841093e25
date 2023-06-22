@@ -1,0 +1,102 @@
+[helm:loki=kubernetes/apps/charts/loki]
+
+diff -u -N /tmp/LIVE-988073481/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki /tmp/MERGED-4188291254/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki
+--- /tmp/LIVE-988073481/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2023-06-22 15:23:23.519920426 +0000
++++ /tmp/MERGED-4188291254/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2023-06-22 15:23:23.519920426 +0000
+@@ -22,3 +22,4 @@
+ subjects:
+ - kind: ServiceAccount
+   name: loki
++  namespace: monitoring-loki
+[helm:prometheus=kubernetes/apps/charts/prometheus]
+
+diff -u -N /tmp/LIVE-2989439057/apps.v1.Deployment.monitoring-prometheus.prometheus-kube-state-metrics /tmp/MERGED-2386274459/apps.v1.Deployment.monitoring-prometheus.prometheus-kube-state-metrics
+--- /tmp/LIVE-2989439057/apps.v1.Deployment.monitoring-prometheus.prometheus-kube-state-metrics	2023-06-22 15:23:41.868013914 +0000
++++ /tmp/MERGED-2386274459/apps.v1.Deployment.monitoring-prometheus.prometheus-kube-state-metrics	2023-06-22 15:23:41.868013914 +0000
+@@ -0,0 +1,86 @@
++apiVersion: apps/v1
++kind: Deployment
++metadata:
++  creationTimestamp: "2023-06-22T15:23:41Z"
++  generation: 1
++  labels:
++    app.kubernetes.io/component: metrics
++    app.kubernetes.io/instance: prometheus
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: kube-state-metrics
++    app.kubernetes.io/part-of: kube-state-metrics
++    app.kubernetes.io/version: 2.6.0
++    helm.sh/chart: kube-state-metrics-4.22.3
++  name: prometheus-kube-state-metrics
++  namespace: monitoring-prometheus
++  uid: 18e506cc-8b2d-457c-8fc7-d005bd2555ac
++spec:
++  progressDeadlineSeconds: 600
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app.kubernetes.io/instance: prometheus
++      app.kubernetes.io/name: kube-state-metrics
++  strategy:
++    rollingUpdate:
++      maxSurge: 25%
++      maxUnavailable: 25%
++    type: RollingUpdate
++  template:
++    metadata:
++      creationTimestamp: null
++      labels:
++        app.kubernetes.io/component: metrics
++        app.kubernetes.io/instance: prometheus
++        app.kubernetes.io/managed-by: Helm
++        app.kubernetes.io/name: kube-state-metrics
++        app.kubernetes.io/part-of: kube-state-metrics
++        app.kubernetes.io/version: 2.6.0
++        helm.sh/chart: kube-state-metrics-4.22.3
++    spec:
++      containers:
++      - args:
++        - --port=8080
++        - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,leases,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments
++        image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.6.0
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /healthz
++            port: 8080
++            scheme: HTTP
++          initialDelaySeconds: 5
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 5
++        name: kube-state-metrics
++        ports:
++        - containerPort: 8080
++          name: http
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /
++            port: 8080
++            scheme: HTTP
++          initialDelaySeconds: 5
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 5
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++      dnsPolicy: ClusterFirst
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext:
++        fsGroup: 65534
++        runAsGroup: 65534
++        runAsUser: 65534
++      serviceAccount: prometheus-kube-state-metrics
++      serviceAccountName: prometheus-kube-state-metrics
++      terminationGracePeriodSeconds: 30
++status: {}
