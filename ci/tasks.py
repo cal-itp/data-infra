@@ -1,3 +1,4 @@
+import tempfile
 from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -55,6 +56,10 @@ class Config(BaseModel):
     def parse_git_repo(cls, v):
         return git.Repo(v, search_parent_directories=True)
 
+    @property
+    def git_root(self) -> Path:
+        return Path(self.git_repo.working_tree_dir)
+
 
 @task
 def parse_calitp_config(c):
@@ -75,9 +80,7 @@ def kdiff(
         if release.driver == ReleaseDriver.kustomize and (
             not app or app == release.name
         ):
-            kustomize_dir = Path(c.calitp_config.git_repo.working_tree_dir) / Path(
-                release.kustomize_dir
-            )
+            kustomize_dir = c.calitp_config.git_root / Path(release.kustomize_dir)
             cmd = f"kubectl diff -k {kustomize_dir}"
             print(cmd, flush=True)
             result: Result = c.run(
@@ -95,8 +98,55 @@ def kdiff(
 
 
 @task(parse_calitp_config)
-def hdiff(c, channel, app=None):
-    pass
+def hdiff(
+    c,
+    channel,
+    app=None,
+    outfile=None,
+):
+    full_diff = ""
+
+    release: Release
+    for release in c.calitp_config.channels[channel].releases:
+        if release.driver == ReleaseDriver.helm and (not app or app == release.name):
+            chart_path = c.calitp_config.git_root / Path(release.helm_chart)
+            cmd = f"helm dependency update {chart_path}"
+            print(cmd, flush=True)
+            c.run(
+                cmd,
+                warn=True,
+            )
+            with tempfile.TemporaryDirectory() as tmpdir:
+                manifest_path = Path(tmpdir) / Path("manifest.yaml")
+                kustomization_path = Path(tmpdir) / Path("kustomization.yaml")
+                values_str = " ".join(
+                    [
+                        f"--values {c.calitp_config.git_root / Path(values_file)}"
+                        for values_file in release.helm_values
+                    ]
+                )
+                cmd = f"helm template {release.helm_name} {chart_path} --namespace {release.namespace} {values_str} > {manifest_path}"
+                print(cmd, flush=True)
+                c.run(
+                    cmd,
+                    warn=True,
+                )
+                with open(kustomization_path, "w") as f:
+                    f.write(KUSTOMIZE_HELM_TEMPLATE.format(namespace=release.namespace))
+                cmd = f"kubectl diff -k {tmpdir}"
+                print(cmd, flush=True)
+                result: Result = c.run(
+                    cmd,
+                    warn=True,
+                )
+            if result.exited != 0:
+                full_diff += result.stdout
+    c.update({"hdiff": full_diff})
+    if outfile:
+        msg = f"```{full_diff}```" if full_diff else "No kustomize changes found."
+        print(f"writing {len(msg)=} to {outfile}", flush=True)
+        with open(outfile, "w") as f:
+            f.write(msg)
 
 
 # TODO: we may want to split up channels into separate files so channel is not an argument but a config file
@@ -107,9 +157,7 @@ def krelease(c, channel, app=None):
         if release.driver == ReleaseDriver.kustomize and (
             not app or app == release.name
         ):
-            kustomize_dir = Path(c.calitp_config.git_repo.working_tree_dir) / Path(
-                release.kustomize_dir
-            )
+            kustomize_dir = c.calitp_config.git_root / Path(release.kustomize_dir)
             cmd = f"kubectl apply -k {kustomize_dir}"
             print(cmd, flush=True)
             c.run(cmd)
