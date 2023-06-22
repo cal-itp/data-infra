@@ -1,0 +1,23 @@
+[kustomize:kubernetes/apps/overlays/gtfs-rt-archiver-v3-test]
+
+diff -u -N /tmp/LIVE-3954077930/apps.v1.Deployment.gtfs-rt-v3-test.gtfs-rt-archiver-consumer /tmp/MERGED-136229721/apps.v1.Deployment.gtfs-rt-v3-test.gtfs-rt-archiver-consumer
+--- /tmp/LIVE-3954077930/apps.v1.Deployment.gtfs-rt-v3-test.gtfs-rt-archiver-consumer	2023-06-22 14:48:28.948013453 +0000
++++ /tmp/MERGED-136229721/apps.v1.Deployment.gtfs-rt-v3-test.gtfs-rt-archiver-consumer	2023-06-22 14:48:28.948013453 +0000
+@@ -6,7 +6,7 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"gtfs-rt-archiver-consumer"},"name":"gtfs-rt-archiver-consumer","namespace":"gtfs-rt-v3-test"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"gtfs-rt-archiver-consumer"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"annotations":{"prometheus.io/port":"9102","prometheus.io/scrape":"true"},"labels":{"name":"gtfs-rt-archiver-consumer"}},"spec":{"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"resource-domain","operator":"In","values":["gtfsrtv3"]}]}]}},"podAntiAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"podAffinityTerm":{"labelSelector":{"matchExpressions":[{"key":"name","operator":"In","values":["gtfs-rt-archiver-consumer"]}]},"topologyKey":"kubernetes.io/hostname"},"weight":100}]}},"containers":[{"args":["-m","gtfs_rt_archiver_v3.consumer","--load-env-secrets"],"command":["python"],"envFrom":[{"configMapRef":{"name":"archiver-app-vars"}},{"configMapRef":{"name":"archiver-channel-vars"}},{"secretRef":{"name":"gtfs-feed-secrets"}}],"image":"ghcr.io/cal-itp/data-infra/gtfs-rt-archiver:2023.6.20","imagePullPolicy":"Always","lifecycle":{"preStop":{"exec":{"command":["kill","-2","1"]}}},"livenessProbe":{"exec":{"command":["python","-m","gtfs_rt_archiver_v3.liveness","fetch"]},"initialDelaySeconds":30,"periodSeconds":30},"name":"app","resources":{"limits":{"memory":"1Gi"},"requests":{"cpu":1,"memory":"512Mi"}},"volumeMounts":[{"mountPath":"/secrets/gtfs-feed-secrets","name":"gtfs-feed-secrets"}]}],"terminationGracePeriodSeconds":5,"tolerations":[{"effect":"NoSchedule","key":"resource-domain","operator":"Equal","value":"gtfsrtv3"}],"volumes":[{"name":"gtfs-feed-secrets","secret":{"secretName":"gtfs-feed-secrets"}}]}}}}
+   creationTimestamp: "2022-09-15T17:36:32Z"
+-  generation: 109
++  generation: 110
+   labels:
+     name: gtfs-rt-archiver-consumer
+   name: gtfs-rt-archiver-consumer
+@@ -15,7 +15,7 @@
+   uid: 790576e1-b9ae-4cc5-8bf6-5fcf5e2011ef
+ spec:
+   progressDeadlineSeconds: 600
+-  replicas: 1
++  replicas: 2
+   revisionHistoryLimit: 10
+   selector:
+     matchLabels:
