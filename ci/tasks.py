@@ -29,7 +29,7 @@ class Release(BaseModel):
     namespace: Optional[str]
     helm_name: Optional[str]
     helm_chart: Optional[Path]
-    helm_values: Optional[List[Path]]
+    helm_values: List[Path] = []
 
     # for kustomize
     kustomize_dir: Optional[Path]
