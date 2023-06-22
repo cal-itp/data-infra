@@ -9,7 +9,7 @@ from pydantic import BaseModel, validator
 KUSTOMIZE_HELM_TEMPLATE = """
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: {release_namespace}
+namespace: {namespace}
 resources:
 - manifest.yaml
 """
@@ -22,19 +22,19 @@ class ReleaseDriver(str, Enum):
 
 class Release(BaseModel):
     name: str
-    release_driver: ReleaseDriver
+    driver: ReleaseDriver
 
     # for helm
-    release_namespace: Optional[str]
-    release_helm_name: Optional[str]
-    release_helm_chart: Optional[Path]
-    release_helm_values: Optional[List[Path]]
+    namespace: Optional[str]
+    helm_name: Optional[str]
+    helm_chart: Optional[Path]
+    helm_values: Optional[List[Path]]
 
     # for kustomize
-    release_kustomize_dir: Optional[Path]
+    kustomize_dir: Optional[Path]
 
-    @validator("release_helm_values", pre=True)
-    def split_release_helm_values(cls, v):
+    @validator("helm_values", pre=True)
+    def split_helm_values(cls, v):
         return v.split(":")
 
 
@@ -61,12 +61,10 @@ def kdiff(
 
     release: Release
     for release in c.releases:
-        if release.release_driver == ReleaseDriver.kustomize and (
+        if release.driver == ReleaseDriver.kustomize and (
             not app or app == release.name
         ):
-            kustomize_dir = Path(repo.working_tree_dir) / Path(
-                release.release_kustomize_dir
-            )
+            kustomize_dir = Path(repo.working_tree_dir) / Path(release.kustomize_dir)
             cmd = f"kubectl diff -k {kustomize_dir}"
             print(cmd, flush=True)
             result: Result = c.run(
@@ -91,11 +89,11 @@ def krelease(c, app=None):
         repo = git.Repo(c.config.calitp.git_repo_path, search_parent_directories=True)
         release: Release
         for release in c.releases:
-            if release.release_driver == ReleaseDriver.kustomize and (
+            if release.driver == ReleaseDriver.kustomize and (
                 not app or app == release.name
             ):
                 kustomize_dir = Path(repo.working_tree_dir) / Path(
-                    release.release_kustomize_dir
+                    release.kustomize_dir
                 )
                 cmd = f"kubectl apply -k {kustomize_dir}"
                 print(cmd, flush=True)
