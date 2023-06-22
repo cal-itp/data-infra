@@ -1,6 +1,6 @@
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import git
 from invoke import Result, task
@@ -38,33 +38,46 @@ class Release(BaseModel):
         return v.split(":")
 
 
+class Channel(BaseModel):
+    releases: List[Release]
+
+
+# TODO: rename this
+class Config(BaseModel):
+    git_repo: git.Repo
+    kdiff_outfile: str
+    channels: Dict[str, Channel]
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    @validator("git_repo", pre=True)
+    def parse_git_repo(cls, v):
+        return git.Repo(v, search_parent_directories=True)
+
+
 @task
-def load_release(c):
-    c.update(
-        {
-            "releases": [
-                Release(**release) for release in c.config._config["calitp"]["releases"]
-            ]
-        }
-    )
+def parse_calitp_config(c):
+    c.update({"calitp_config": Config(**c.config._config["calitp"])})
 
 
-@task(load_release)
+@task(parse_calitp_config)
 def kdiff(
     c,
+    channel,
     app=None,
     outfile=None,
 ):
-    repo = git.Repo(c.config.calitp.git_repo_path, search_parent_directories=True)
-
     full_diff = ""
 
     release: Release
-    for release in c.releases:
+    for release in c.calitp_config.channels[channel].releases:
         if release.driver == ReleaseDriver.kustomize and (
             not app or app == release.name
         ):
-            kustomize_dir = Path(repo.working_tree_dir) / Path(release.kustomize_dir)
+            kustomize_dir = Path(c.calitp_config.git_repo.working_tree_dir) / Path(
+                release.kustomize_dir
+            )
             cmd = f"kubectl diff -k {kustomize_dir}"
             print(cmd, flush=True)
             result: Result = c.run(
@@ -81,22 +94,22 @@ def kdiff(
             f.write(msg)
 
 
-@task(kdiff)
-def krelease(c, app=None):
-    try:
-        c.kdiff
+@task(parse_calitp_config)
+def hdiff(c, channel, app=None):
+    pass
 
-        repo = git.Repo(c.config.calitp.git_repo_path, search_parent_directories=True)
-        release: Release
-        for release in c.releases:
-            if release.driver == ReleaseDriver.kustomize and (
-                not app or app == release.name
-            ):
-                kustomize_dir = Path(repo.working_tree_dir) / Path(
-                    release.kustomize_dir
-                )
-                cmd = f"kubectl apply -k {kustomize_dir}"
-                print(cmd, flush=True)
-                c.run(cmd)
-    except AttributeError:
-        pass
+
+# TODO: we may want to split up channels into separate files so channel is not an argument but a config file
+@task(parse_calitp_config)
+def krelease(c, channel, app=None):
+    release: Release
+    for release in c.calitp_config.channels[channel].releases:
+        if release.driver == ReleaseDriver.kustomize and (
+            not app or app == release.name
+        ):
+            kustomize_dir = Path(c.calitp_config.git_repo.working_tree_dir) / Path(
+                release.kustomize_dir
+            )
+            cmd = f"kubectl apply -k {kustomize_dir}"
+            print(cmd, flush=True)
+            c.run(cmd)

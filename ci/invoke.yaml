@@ -1,6 +1,26 @@
 run:
-    echo: true
+  echo: true
 # would be cool if we can define a pydantic type for this
 calitp:
-    git_repo_path: .
-    kdiff_outfile: kdiff.txt
+  git_repo: .
+  kdiff_outfile: kdiff.txt
+  channels:
+    test:
+      releases:
+        - name: archiver
+          driver: kustomize
+          kustomize_dir: kubernetes/apps/overlays/gtfs-rt-archiver-v3-test
+
+        - name: metabase
+          driver: helm
+          namespace: metabase-test
+          helm_name: metabase-test
+          helm_chart: kubernetes/apps/charts/metabase
+          helm_values: kubernetes/apps/values/metabase-test.yaml
+
+        - name: postgresql-backup-metabase
+          driver: helm
+          namespace: metabase-test
+          helm_name: postgresql-backup
+          helm_chart: kubernetes/apps/charts/postgresql-backup
+          helm_values: kubernetes/apps/values/postgresql-backup-metabase.yaml:kubernetes/apps/values/postgresql-backup-metabase-test.yaml
