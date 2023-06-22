@@ -91,7 +91,11 @@ def kdiff(
                 full_diff += result.stdout
     c.update({"kdiff": full_diff})
     if outfile:
-        msg = f"```{full_diff}```" if full_diff else "No kustomize changes found.\n"
+        msg = (
+            f"```Kustomize changes:\n{full_diff}```"
+            if full_diff
+            else "No kustomize changes found.\n"
+        )
         print(f"writing {len(msg)=} to {outfile}", flush=True)
         with open(outfile, "w") as f:
             f.write(msg)
@@ -143,7 +147,11 @@ def hdiff(
                 full_diff += result.stdout
     c.update({"hdiff": full_diff})
     if outfile:
-        msg = f"```{full_diff}```" if full_diff else "No helm changes found.\n"
+        msg = (
+            f"```Helm changes:\n{full_diff}```"
+            if full_diff
+            else "No helm changes found.\n"
+        )
         print(f"writing {len(msg)=} to {outfile}", flush=True)
         with open(outfile, "w") as f:
             f.write(msg)
