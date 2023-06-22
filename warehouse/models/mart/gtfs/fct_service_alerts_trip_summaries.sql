@@ -10,7 +10,7 @@ WITH service_alerts AS (
     SELECT * EXCEPT(trip_direction_id),
         CAST(trip_direction_id AS STRING) AS trip_direction_id,
         -- subtract one because row_number is 1-based count and in frequency-based schedule we use 0-based
-        ROW_NUMBER() OVER (PARTITION BY
+        DENSE_RANK() OVER (PARTITION BY
             base64_url,
             calculated_service_date,
             trip_id
@@ -125,11 +125,11 @@ fct_service_alerts_trip_summaries AS (
         schedule_base64_url,
         starting_schedule_relationship,
         ending_schedule_relationship,
-        trip_route_ids,
-        trip_direction_ids,
-        trip_schedule_relationships,
-        ARRAY_LENGTH(SPLIT(trip_route_ids, "|")) > 1 AS warning_multiple_route_ids,
-        ARRAY_LENGTH(SPLIT(trip_direction_ids, "|")) > 1 AS warning_multiple_direction_ids,
+        {{ trim_make_empty_string_null('trip_route_ids') }} AS trip_route_ids,
+        {{ trim_make_empty_string_null('trip_direction_ids') }} AS trip_direction_ids,
+        {{ trim_make_empty_string_null('trip_schedule_relationships') }} AS trip_schedule_relationships,
+        COALESCE(ARRAY_LENGTH(SPLIT(trip_route_ids, "|")), FALSE) > 1 AS warning_multiple_route_ids,
+        COALESCE(ARRAY_LENGTH(SPLIT(trip_direction_ids, "|")), FALSE) > 1 AS warning_multiple_direction_ids,
         min_extract_ts,
         max_extract_ts,
         TIMESTAMP_DIFF(max_extract_ts, min_extract_ts, MINUTE) AS extract_duration_minutes,
