@@ -1,6 +1,5 @@
 run:
   echo: true
-# would be cool if we can define a pydantic type for this
 calitp:
   git_repo: .
   kdiff_outfile: kdiff.txt
