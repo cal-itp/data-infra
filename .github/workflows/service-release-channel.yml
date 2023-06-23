@@ -37,11 +37,7 @@ jobs:
         shell: bash
         working-directory: ci
         run: |
-          # GITHUB_JOB is not populated until the job is running
-          git config user.name "Github Action $GITHUB_JOB"
-          git config user.email "$(whoami)@$(uname -n)"
           export RELEASE_CHANNEL=${GITHUB_REF#refs/heads/releases/}
-          printf 'WORKFLOW: service-release; RELEASE_CHANNEL=%s\n' "$RELEASE_CHANNEL"
-          set -- "$GITHUB_WORKSPACE/ci/vars/project.env"
+          printf 'WORKFLOW: service-release-channel; RELEASE_CHANNEL=%s\n' "$RELEASE_CHANNEL"
           poetry install
           poetry run invoke release $RELEASE_CHANNEL
