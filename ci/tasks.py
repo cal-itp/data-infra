@@ -89,6 +89,8 @@ def get_releases(
     return ret
 
 
+# TODO: kubectl diff now supports masking secrets, so we shoulds be able to render secret diffs in PRs
+#  see https://github.com/kubernetes/kubernetes/pull/96084
 @task(
     parse_calitp_config,
     help={
