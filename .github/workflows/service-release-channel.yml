@@ -40,4 +40,5 @@ jobs:
           export RELEASE_CHANNEL=${GITHUB_REF#refs/heads/releases/}
           printf 'WORKFLOW: service-release-channel; RELEASE_CHANNEL=%s\n' "$RELEASE_CHANNEL"
           poetry install
+          poetry run invoke secrets $RELEASE_CHANNEL
           poetry run invoke release $RELEASE_CHANNEL
