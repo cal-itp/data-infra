@@ -692,6 +692,17 @@ files = [
 ]
 
 [[package]]
+name = "types-pyyaml"
+version = "6.0.12.10"
+description = "Typing stubs for PyYAML"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-PyYAML-6.0.12.10.tar.gz", hash = "sha256:ebab3d0700b946553724ae6ca636ea932c1b0868701d4af121630e78d695fc97"},
+    {file = "types_PyYAML-6.0.12.10-py3-none-any.whl", hash = "sha256:662fa444963eff9b68120d70cda1af5a5f2aa57900003c2006d7626450eaae5f"},
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.6.3"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -736,4 +747,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "9efa10092523133041f627d77b0293ae04109563f4e86a998e8e712ce4103d29"
+content-hash = "fffc6395c0ede1cbc19cd6eabacb7d4bc99056ef584e0be5630749fd03b6670a"
