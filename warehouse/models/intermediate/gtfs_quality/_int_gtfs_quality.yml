@@ -73,6 +73,9 @@ models:
           Boolean flag for whether the associated check was performed by hand (via Airtable) or automatically.
         tests:
           - not_null
+      - name: reports_order
+        description: |
+          Integer value that declares which order a given check should appear on the reports site. It can be null for checks that don't appear on the reports site.
 
   # Index tables
 

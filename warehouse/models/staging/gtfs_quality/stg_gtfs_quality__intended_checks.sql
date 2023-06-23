@@ -2,7 +2,7 @@
 {{ config(materialized='ephemeral') }}
 
 WITH stg_gtfs_quality__intended_checks AS (
-    SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance_schedule() }} AS feature, {{ schedule_url() }} AS entity, false AS is_manual, 1 AS reports_importance
+    SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance_schedule() }} AS feature, {{ schedule_url() }} AS entity, false AS is_manual, 1 AS reports_order
     UNION ALL
     SELECT {{ no_validation_errors() }}, {{ compliance_schedule() }}, {{ schedule_feed() }}, false, 2
     UNION ALL
