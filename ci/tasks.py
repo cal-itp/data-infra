@@ -78,11 +78,18 @@ def get_releases(c, channel, driver: ReleaseDriver, app=None) -> List[Release]:
     return ret
 
 
+GENERIC_HELP = {
+    "channel": "The release channel/environment, e.g. test or prod",
+    "driver": "The k8s driver (kustomize or helm)",
+    "app": "The specific app/release (e.g. metabase or archiver)",
+}
+
+
 @task(
     parse_calitp_config,
     help={
-        "channel": "The release channel/environment, e.g. test or prod",
-        "driver": "The k8s driver (kustomize or helm)",
+        **GENERIC_HELP,
+        "outfile": "File in which to save the combined kubectl diff output",
     },
 )
 def diff(
@@ -143,13 +150,16 @@ def diff(
 
 
 # TODO: we may want to split up channels into separate files so channel is not an argument but a config file
-@task(parse_calitp_config)
+@task(parse_calitp_config, help=GENERIC_HELP)
 def release(
     c,
     channel: str,
     driver=None,
     app=None,
 ):
+    """
+    Releases (i.e. deploys) apps into a specific channel.
+    """
     release: Release
     actual_driver = ReleaseDriver[driver] if driver else None
     for release in get_releases(c, channel, driver=actual_driver, app=app):
