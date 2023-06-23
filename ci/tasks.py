@@ -46,7 +46,6 @@ class Channel(BaseModel):
 # TODO: rename this
 class Config(BaseModel):
     git_repo: git.Repo
-    kdiff_outfile: str
     channels: Dict[str, Channel]
 
     class Config:
