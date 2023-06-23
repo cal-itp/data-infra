@@ -174,6 +174,7 @@ def diff(
                         for values_file in release.helm_values
                     ]
                 )
+                # TODO: consider looking into https://github.com/databus23/helm-diff
                 c.run(
                     f"helm template {release.helm_name} {chart_path} --namespace {release.namespace} {values_str} > {manifest_path}"
                 )
