@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 import git
+import yaml
 from google.cloud import secretmanager
 from invoke import Result, task
 from pydantic import BaseModel, validator
@@ -28,7 +29,7 @@ class Release(BaseModel):
 
     # we could consider labeling secrets and pulling all secrets by label
     # but that moves some logic into Secret Manager itself
-    secrets: Optional[List[str]]
+    secrets: List[str] = []
 
     # for helm
     namespace: Optional[str]
@@ -98,7 +99,7 @@ GENERIC_HELP = {
         "secret": "Optionally, specify a single secret to deploy",
     },
 )
-def deploy_secret(
+def secrets(
     c,
     channel: str,
     app=None,
@@ -119,11 +120,18 @@ def deploy_secret(
                     secret_contents = client.access_secret_version(
                         request={"name": name}
                     ).payload.data.decode("UTF-8")
+
+                    if release.namespace:
+                        ns_str = f"--namespace {release.namespace}"
+                    else:
+                        ns_str = ""
+                        assert (
+                            "namespace" in yaml.safe_load(secret_contents)["metadata"]
+                        )
+
                     with open(secret_path, "w") as f:
                         f.write(secret_contents)
-                    c.run(
-                        f"kubectl apply --namespace {release.namespace} -f {secret_path}"
-                    )
+                    c.run(f"kubectl apply {ns_str} -f {secret_path}")
                 found_secret = True
 
     if not found_secret:

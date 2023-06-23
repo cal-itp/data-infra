@@ -26,6 +26,9 @@ calitp:
           helm_values:
             - kubernetes/apps/values/postgresql-backup-metabase.yaml
             - kubernetes/apps/values/postgresql-backup-metabase-test.yaml
+          secrets:
+            - metabase-test_database-backup
+            - metabase-test_gcs-upload-svcacct
     prod:
       releases:
         - name: airflow-jobs
