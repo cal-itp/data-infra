@@ -44,5 +44,4 @@ jobs:
           printf 'WORKFLOW: service-release; RELEASE_CHANNEL=%s\n' "$RELEASE_CHANNEL"
           set -- "$GITHUB_WORKSPACE/ci/vars/project.env"
           poetry install
-          poetry run invoke krelease $RELEASE_CHANNEL
-          poetry run invoke hrelease $RELEASE_CHANNEL
+          poetry run invoke release $RELEASE_CHANNEL

@@ -1,5 +1,6 @@
 run:
   echo: true
+  echo_format: "Executing: {command}" # without this, the echoed text is white which does not show on light themes
 calitp:
   git_repo: .
   kdiff_outfile: kdiff.txt
