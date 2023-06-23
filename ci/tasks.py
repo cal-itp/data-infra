@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 import git
+from google.cloud import secretmanager
 from invoke import Result, task
 from pydantic import BaseModel, validator
 
@@ -25,6 +26,10 @@ class Release(BaseModel):
     name: str
     driver: ReleaseDriver
 
+    # we could consider labeling secrets and pulling all secrets by label
+    # but that moves some logic into Secret Manager itself
+    secrets: Optional[List[str]]
+
     # for helm
     namespace: Optional[str]
     helm_name: Optional[str]
@@ -33,10 +38,6 @@ class Release(BaseModel):
 
     # for kustomize
     kustomize_dir: Optional[Path]
-
-    @validator("helm_values", pre=True)
-    def split_helm_values(cls, v):
-        return v.split(":")
 
 
 class Channel(BaseModel):
@@ -87,6 +88,46 @@ GENERIC_HELP = {
     "driver": "The k8s driver (kustomize or helm)",
     "app": "The specific app/release (e.g. metabase or archiver)",
 }
+
+
+@task(
+    parse_calitp_config,
+    help={
+        "channel": GENERIC_HELP["channel"],
+        "app": GENERIC_HELP["app"],
+        "secret": "Optionally, specify a single secret to deploy",
+    },
+)
+def deploy_secret(
+    c,
+    channel: str,
+    app=None,
+    secret=None,
+):
+    """
+    Deploy secret(s) by channel, and optionally app or secret name.
+    """
+    client = secretmanager.SecretManagerServiceClient()
+    found_secret = False
+    for release in get_releases(c, channel, app=app):
+        for release_secret in release.secrets:
+            if not secret or secret == release_secret:
+                with tempfile.TemporaryDirectory() as tmpdir:
+                    secret_path = Path(tmpdir) / Path(f"{release_secret}.yml")
+                    # this ID maps to cal-itp-data-infra; there's probably a better way to do this
+                    name = f"projects/1005246706141/secrets/{release_secret}/versions/latest"
+                    secret_contents = client.access_secret_version(
+                        request={"name": name}
+                    ).payload.data.decode("UTF-8")
+                    with open(secret_path, "w") as f:
+                        f.write(secret_contents)
+                    c.run(
+                        f"kubectl apply --namespace {release.namespace} -f {secret_path}"
+                    )
+                found_secret = True
+
+    if not found_secret:
+        print("Failed to deploy any secrets.")
 
 
 @task(
