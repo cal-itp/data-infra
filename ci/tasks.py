@@ -1,7 +1,7 @@
 import tempfile
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 import git
 import yaml
@@ -16,6 +16,12 @@ namespace: {namespace}
 resources:
 - manifest.yaml
 """
+
+
+GENERIC_HELP = {
+    "driver": "The k8s driver (kustomize or helm)",
+    "app": "The specific app/release (e.g. metabase or archiver)",
+}
 
 
 class ReleaseDriver(str, Enum):
@@ -41,14 +47,11 @@ class Release(BaseModel):
     kustomize_dir: Optional[Path]
 
 
-class Channel(BaseModel):
-    releases: List[Release]
-
-
 # TODO: rename this
 class Config(BaseModel):
     git_repo: git.Repo
-    channels: Dict[str, Channel]
+    channel: str  # this is a bit weird, but I want to be able to log this value
+    releases: List[Release]
 
     class Config:
         arbitrary_types_allowed = True
@@ -73,10 +76,12 @@ def parse_calitp_config(c):
 
 
 def get_releases(
-    c, channel, driver: Optional[ReleaseDriver] = None, app=None
+    c,
+    driver: Optional[ReleaseDriver] = None,
+    app=None,
 ) -> List[Release]:
     ret = []
-    for release in c.calitp_config.channels[channel].releases:
+    for release in c.calitp_config.releases:
         if (not driver or release.driver == driver) and (
             not app or app == release.name
         ):
@@ -84,24 +89,15 @@ def get_releases(
     return ret
 
 
-GENERIC_HELP = {
-    "channel": "The release channel/environment, e.g. test or prod",
-    "driver": "The k8s driver (kustomize or helm)",
-    "app": "The specific app/release (e.g. metabase or archiver)",
-}
-
-
 @task(
     parse_calitp_config,
     help={
-        "channel": GENERIC_HELP["channel"],
         "app": GENERIC_HELP["app"],
         "secret": "Optionally, specify a single secret to deploy",
     },
 )
 def secrets(
     c,
-    channel: str,
     app=None,
     secret=None,
 ):
@@ -110,7 +106,7 @@ def secrets(
     """
     client = secretmanager.SecretManagerServiceClient()
     found_secret = False
-    for release in get_releases(c, channel, app=app):
+    for release in get_releases(c, app=app):
         for release_secret in release.secrets:
             if not secret or secret == release_secret:
                 with tempfile.TemporaryDirectory() as tmpdir:
@@ -147,7 +143,6 @@ def secrets(
 )
 def diff(
     c,
-    channel: str,
     driver=None,
     app=None,
     outfile=None,
@@ -160,7 +155,7 @@ def diff(
     full_diff = ""
     result: Result
 
-    for release in get_releases(c, channel, driver=actual_driver, app=app):
+    for release in get_releases(c, driver=actual_driver, app=app):
         if release.driver == ReleaseDriver.kustomize:
             assert release.kustomize_dir is not None
             kustomize_dir = c.calitp_config.git_root / Path(release.kustomize_dir)
@@ -195,7 +190,7 @@ def diff(
     msg = (
         f"```{full_diff}```"
         if full_diff
-        else f"No {driver if driver else 'manifest'} changes found for {channel}.\n"
+        else f"No {driver if driver else 'manifest'} changes found for {c.calitp_config.channel}.\n"
     )
     if outfile:
         print(f"writing {len(msg)=} to {outfile}", flush=True)
@@ -209,7 +204,6 @@ def diff(
 @task(parse_calitp_config, help=GENERIC_HELP)
 def release(
     c,
-    channel: str,
     driver=None,
     app=None,
 ):
@@ -219,7 +213,7 @@ def release(
     assert c.calitp_config.git_root is not None
     actual_driver = ReleaseDriver[driver] if driver else None
 
-    for release in get_releases(c, channel, driver=actual_driver, app=app):
+    for release in get_releases(c, driver=actual_driver, app=app):
         if release.driver == ReleaseDriver.kustomize:
             assert release.kustomize_dir is not None
             kustomize_dir = c.calitp_config.git_root / Path(release.kustomize_dir)
