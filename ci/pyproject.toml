@@ -17,6 +17,7 @@ google-cloud-secret-manager = "^2.16.1"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.4.0"
+types-pyyaml = "^6.0.12.10"
 
 [build-system]
 requires = ["poetry-core"]
