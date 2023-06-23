@@ -17,7 +17,7 @@ All CI/CD automation in this project is executed via GitHub Actions, whose workf
 While we're using GCP Composer, "deployment" of Airflow consists of two parts:
 
 1. Calling `gcloud composer environments update ...` to update the Composer environment with new (or specific versions of) packages
-2. Copying the [dags](../../airflow/dags) and [plugins](../../airflow/plugins) folders to a GCS bucket that Composer reads
+2. Copying the `dags` and `plugins` folders to a GCS bucket that Composer reads
 
 ## build-*.yml workflows
 
