@@ -50,9 +50,7 @@ jobs:
           printf 'WORKFLOW: service-release; RELEASE_CHANNEL=%s\n' "$RELEASE_CHANNEL"
           set -- "$GITHUB_WORKSPACE/ci/vars/project.env"
           poetry install
-          poetry run invoke kdiff $RELEASE_CHANNEL --outfile=kdiff.txt
-          poetry run invoke hdiff $RELEASE_CHANNEL --outfile=hdiff.txt
-          cat kdiff.txt hdiff.txt > diff.txt
+          poetry run invoke diff $RELEASE_CHANNEL --outfile=diff.txt
 
       - uses: peter-evans/find-comment@v2
         id: fc

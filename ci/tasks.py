@@ -63,59 +63,51 @@ class Config(BaseModel):
 
 @task
 def parse_calitp_config(c):
+    """
+    Parses the top-level calitp configuration key via Pydantic
+    """
     c.update({"calitp_config": Config(**c.config._config["calitp"])})
 
 
-@task(parse_calitp_config)
-def kdiff(
-    c,
-    channel,
-    app=None,
-    outfile=None,
-):
-    full_diff = ""
-
-    release: Release
+def get_releases(c, channel, driver: ReleaseDriver, app=None) -> List[Release]:
+    ret = []
     for release in c.calitp_config.channels[channel].releases:
-        if release.driver == ReleaseDriver.kustomize and (
+        if (not driver or release.driver == driver) and (
             not app or app == release.name
         ):
-            kustomize_dir = c.calitp_config.git_root / Path(release.kustomize_dir)
-            cmd = f"kubectl diff -k {kustomize_dir}"
-            print(cmd, flush=True)
-            result: Result = c.run(
-                cmd,
-                warn=True,
-            )
-            if result.exited != 0:
-                full_diff += result.stdout
-    c.update({"kdiff": full_diff})
-    if outfile:
-        msg = f"```{full_diff}```" if full_diff else "No kustomize changes found.\n"
-        print(f"writing {len(msg)=} to {outfile}", flush=True)
-        with open(outfile, "w") as f:
-            f.write(msg)
+            ret.append(release)
+    return ret
 
 
-@task(parse_calitp_config)
-def hdiff(
+@task(
+    parse_calitp_config,
+    help={
+        "channel": "The release channel/environment, e.g. test or prod",
+        "driver": "The k8s driver (kustomize or helm)",
+    },
+)
+def diff(
     c,
-    channel,
+    channel: str,
+    driver=None,
     app=None,
     outfile=None,
 ):
+    """
+    Applies kubectl diff to manifests for a given channel.
+    """
+    actual_driver = ReleaseDriver[driver] if driver else None
     full_diff = ""
 
     release: Release
-    for release in c.calitp_config.channels[channel].releases:
-        if release.driver == ReleaseDriver.helm and (not app or app == release.name):
+    for release in get_releases(c, channel, driver=actual_driver, app=app):
+        if release.driver == ReleaseDriver.kustomize:
+            kustomize_dir = c.calitp_config.git_root / Path(release.kustomize_dir)
+            result: Result = c.run(f"kubectl diff -k {kustomize_dir}", warn=True)
+        elif release.driver == ReleaseDriver.helm:
             chart_path = c.calitp_config.git_root / Path(release.helm_chart)
-            cmd = f"helm dependency update {chart_path}"
-            print(cmd, flush=True)
-            c.run(
-                cmd,
-                warn=True,
-            )
+            c.run(f"helm dependency update {chart_path}")
+
             with tempfile.TemporaryDirectory() as tmpdir:
                 manifest_path = Path(tmpdir) / Path("manifest.yaml")
                 kustomization_path = Path(tmpdir) / Path("kustomization.yaml")
@@ -125,65 +117,56 @@ def hdiff(
                         for values_file in release.helm_values
                     ]
                 )
-                cmd = f"helm template {release.helm_name} {chart_path} --namespace {release.namespace} {values_str} > {manifest_path}"
-                print(cmd, flush=True)
                 c.run(
-                    cmd,
-                    warn=True,
+                    f"helm template {release.helm_name} {chart_path} --namespace {release.namespace} {values_str} > {manifest_path}"
                 )
                 with open(kustomization_path, "w") as f:
                     f.write(KUSTOMIZE_HELM_TEMPLATE.format(namespace=release.namespace))
-                cmd = f"kubectl diff -k {tmpdir}"
-                print(cmd, flush=True)
-                result: Result = c.run(
-                    cmd,
-                    warn=True,
-                )
-            if result.exited != 0:
-                full_diff += result.stdout
-    c.update({"hdiff": full_diff})
+                result: Result = c.run(f"kubectl diff -k {tmpdir}", warn=True)
+        else:
+            print(f"Encountered unknown driver: {release.driver}", flush=True)
+            raise RuntimeError
+
+        if result.exited != 0:
+            full_diff += result.stdout
+
+    msg = (
+        f"```{full_diff}```"
+        if full_diff
+        else f"No {driver if driver else 'manifest'} changes found for {channel}.\n"
+    )
     if outfile:
-        msg = f"```{full_diff}```" if full_diff else "No helm changes found.\n"
         print(f"writing {len(msg)=} to {outfile}", flush=True)
         with open(outfile, "w") as f:
             f.write(msg)
+    else:
+        print(msg, flush=True)
 
 
 # TODO: we may want to split up channels into separate files so channel is not an argument but a config file
 @task(parse_calitp_config)
-def krelease(c, channel, app=None):
-    release: Release
-    for release in c.calitp_config.channels[channel].releases:
-        if release.driver == ReleaseDriver.kustomize and (
-            not app or app == release.name
-        ):
-            kustomize_dir = c.calitp_config.git_root / Path(release.kustomize_dir)
-            cmd = f"kubectl apply -k {kustomize_dir}"
-            print(cmd, flush=True)
-            c.run(cmd)
-
-
-@task(parse_calitp_config)
-def hrelease(
+def release(
     c,
-    channel,
+    channel: str,
+    driver=None,
     app=None,
 ):
     release: Release
-    for release in c.calitp_config.channels[channel].releases:
-        if release.driver == ReleaseDriver.helm and (not app or app == release.name):
+    actual_driver = ReleaseDriver[driver] if driver else None
+    for release in get_releases(c, channel, driver=actual_driver, app=app):
+        if release.driver == ReleaseDriver.kustomize:
+            kustomize_dir = c.calitp_config.git_root / Path(release.kustomize_dir)
+            c.run(f"kubectl apply -k {kustomize_dir}")
+        elif release.driver == ReleaseDriver.helm:
             chart_path = c.calitp_config.git_root / Path(release.helm_chart)
-            cmd = f"helm dependency update {chart_path}"
-            print(cmd, flush=True)
-            c.run(cmd, warn=True)
+            c.run(f"helm dependency update {chart_path}", warn=True)
             values_str = " ".join(
                 [
                     f"--values {c.calitp_config.git_root / Path(values_file)}"
                     for values_file in release.helm_values
                 ]
             )
-            cmd = f"kubectl get ns {release.namespace}"
-            result: Result = c.run(cmd)
+            result: Result = c.run(f"kubectl get ns {release.namespace}")
             verb = "upgrade"
 
             if result.exited != 0:
@@ -194,3 +177,6 @@ def hrelease(
             c.run(
                 f"helm {verb} {release.helm_name} {chart_path} --namespace {release.namespace} {values_str}"
             )
+        else:
+            print(f"Encountered unknown driver: {release.driver}", flush=True)
+            raise RuntimeError
