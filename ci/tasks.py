@@ -114,6 +114,7 @@ def secrets(
                 with tempfile.TemporaryDirectory() as tmpdir:
                     secret_path = Path(tmpdir) / Path(f"{release_secret}.yml")
                     # this ID maps to cal-itp-data-infra; there's probably a better way to do this
+                    # TODO: we could probably just use gcloud CLI for this
                     name = f"projects/1005246706141/secrets/{release_secret}/versions/latest"
                     secret_contents = client.access_secret_version(
                         request={"name": name}
