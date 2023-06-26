@@ -1,12 +1,6 @@
 {{
     config(
-        materialized='incremental',
-        incremental_strategy='insert_overwrite',
-        partition_by={
-            'field': 'calculated_service_date',
-            'data_type': 'date',
-            'granularity': 'day',
-        },
+        materialized='table',
         cluster_by='base64_url',
     )
 }}
@@ -21,7 +15,6 @@ WITH vehicle_positions AS (
             trip_id
             ORDER BY trip_start_time) - 1 AS calculated_iteration_num
     FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_day_map_grouping') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 window_functions AS (
@@ -90,6 +83,10 @@ aggregation AS(
         schedule_base64_url,
         starting_schedule_relationship,
         ending_schedule_relationship,
+        first_position_latitude,
+        first_position_longitude,
+        last_position_latitude,
+        last_position_longitude,
         ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_schedule_relationship ORDER BY trip_schedule_relationship), "|") AS trip_schedule_relationships, --noqa: L054
         ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_route_id ORDER BY trip_route_id), "|") AS trip_route_ids, --noqa: L054
         ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_direction_id ORDER BY trip_direction_id), "|") AS trip_direction_ids, --noqa: L054
@@ -100,7 +97,7 @@ aggregation AS(
         MIN(min_vehicle_timestamp) AS min_vehicle_timestamp,
         MAX(max_vehicle_timestamp) AS max_vehicle_timestamp,
     FROM window_functions
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 --noqa: L054
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 --noqa: L054
 ),
 
 fct_vehicle_positions_trip_summaries AS (
@@ -117,6 +114,10 @@ fct_vehicle_positions_trip_summaries AS (
         schedule_feed_timezone,
         starting_schedule_relationship,
         ending_schedule_relationship,
+        first_position_latitude,
+        first_position_longitude,
+        last_position_latitude,
+        last_position_longitude,
         {{ trim_make_empty_string_null('trip_route_ids') }} AS trip_route_ids,
         {{ trim_make_empty_string_null('trip_direction_ids') }} AS trip_direction_ids,
         {{ trim_make_empty_string_null('trip_schedule_relationships') }} AS trip_schedule_relationships,

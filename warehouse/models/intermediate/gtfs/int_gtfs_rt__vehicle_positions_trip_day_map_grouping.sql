@@ -3,7 +3,7 @@
         materialized='incremental',
         incremental_strategy='insert_overwrite',
         partition_by={
-            'field': 'calculated_service_date',
+            'field': 'dt',
             'data_type': 'date',
             'granularity': 'day',
         },
@@ -12,7 +12,47 @@
 }}
 
 WITH vehicle_positions AS (
-    SELECT *
+    SELECT *,
+        FIRST_VALUE(position_latitude)
+            OVER
+            (PARTITION BY
+                base64_url,
+                calculated_service_date,
+                trip_id,
+                trip_start_time
+            ORDER BY COALESCE(vehicle_timestamp, header_timestamp, _extract_ts)
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+            ) AS first_position_latitude,
+        FIRST_VALUE(position_longitude)
+            OVER
+            (PARTITION BY
+                base64_url,
+                calculated_service_date,
+                trip_id,
+                trip_start_time
+            ORDER BY COALESCE(vehicle_timestamp, header_timestamp, _extract_ts)
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+            ) AS first_position_longitude,
+        LAST_VALUE(position_latitude)
+            OVER
+            (PARTITION BY
+                base64_url,
+                calculated_service_date,
+                trip_id,
+                trip_start_time
+            ORDER BY COALESCE(vehicle_timestamp, header_timestamp, _extract_ts)
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+            ) AS last_position_latitude,
+        LAST_VALUE(position_longitude)
+            OVER
+            (PARTITION BY
+                base64_url,
+                calculated_service_date,
+                trip_id,
+                trip_start_time
+            ORDER BY COALESCE(vehicle_timestamp, header_timestamp, _extract_ts)
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+            ) AS last_position_longitude,
     FROM {{ ref('fct_vehicle_positions_messages') }}
     WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
@@ -33,6 +73,10 @@ grouped AS (
         trip_schedule_relationship,
         schedule_feed_timezone,
         schedule_base64_url,
+        first_position_latitude,
+        first_position_longitude,
+        last_position_latitude,
+        last_position_longitude,
         ARRAY_AGG(DISTINCT id) AS message_ids_array,
         ARRAY_AGG(DISTINCT header_timestamp) AS header_timestamps_array,
         ARRAY_AGG(DISTINCT vehicle_timestamp IGNORE NULLS) AS vehicle_timestamps_array,
@@ -46,7 +90,7 @@ grouped AS (
         MAX(vehicle_timestamp) AS max_vehicle_timestamp
     FROM vehicle_positions
     WHERE trip_id IS NOT NULL
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
 ),
 
 int_gtfs_rt__vehicle_positions_trip_day_map_grouping AS (
@@ -70,6 +114,10 @@ int_gtfs_rt__vehicle_positions_trip_day_map_grouping AS (
         trip_schedule_relationship,
         schedule_feed_timezone,
         schedule_base64_url,
+        first_position_latitude,
+        first_position_longitude,
+        last_position_latitude,
+        last_position_longitude,
         message_ids_array,
         header_timestamps_array,
         vehicle_timestamps_array,

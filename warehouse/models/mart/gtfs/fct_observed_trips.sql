@@ -18,7 +18,6 @@ service_alerts AS (
 
 fct_observed_trips AS (
     SELECT
-        -- keys/identifiers
         trip_instance_key,
         -- calculated service date, schedule URL, trip ID, and iteration num are the components of the key
         -- so for these we can coalesce
@@ -95,10 +94,10 @@ fct_observed_trips AS (
         vp.min_vehicle_timestamp AS vp_min_vehicle_timestamp,
         vp.max_vehicle_timestamp AS vp_max_vehicle_timestamp,
         vp.num_distinct_vehicle_timestamps AS vp_num_distinct_vehicle_timestamps,
-        {# vp.first_position_latitude AS vp_first_position_latitude,
+        vp.first_position_latitude AS vp_first_position_latitude,
         vp.first_position_longitude AS vp_first_position_longitude,
         vp.last_position_latitude AS vp_last_position_latitude,
-        vp.last_position_longitude AS vp_last_position_longitude, #}
+        vp.last_position_longitude AS vp_last_position_longitude,
 
         -- service alerts facts
         sa.trip_start_time AS sa_trip_start_time,

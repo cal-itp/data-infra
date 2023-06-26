@@ -3,7 +3,7 @@
         materialized='incremental',
         incremental_strategy='insert_overwrite',
         partition_by={
-            'field': 'calculated_service_date',
+            'field': 'dt',
             'data_type': 'date',
             'granularity': 'day',
         },
@@ -50,6 +50,7 @@ grouped AS (
         ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'CANCELED' THEN stop_id END IGNORE NULLS) AS canceled_stops_array,
         ARRAY_AGG(DISTINCT CASE WHEN schedule_relationship = 'ADDED' THEN stop_id END IGNORE NULLS) AS added_stops_array,
     FROM stop_time_updates
+    WHERE trip_id IS NOT NULL
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 ),
 
