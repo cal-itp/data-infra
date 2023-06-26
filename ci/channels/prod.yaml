@@ -12,7 +12,8 @@ calitp:
       helm_name: grafana
       helm_chart: kubernetes/apps/charts/grafana
       helm_values:
-        - kubernetes/apps/values/grafana.yaml:kubernetes/apps/values/grafana-prod.yaml
+        - kubernetes/apps/values/grafana.yaml
+        - kubernetes/apps/values/grafana-prod.yaml
       secrets:
         - monitoring-grafana__grafana-initial-admin
     - name: jupyterhub
@@ -53,7 +54,8 @@ calitp:
       helm_name: postgresql-backup
       helm_chart: kubernetes/apps/charts/postgresql-backup
       helm_values:
-        - kubernetes/apps/values/postgresql-backup-metabase.yaml:kubernetes/apps/values/postgresql-backup-metabase-prod.yaml
+        - kubernetes/apps/values/postgresql-backup-metabase.yaml
+        - kubernetes/apps/values/postgresql-backup-metabase-prod.yaml
       secrets:
         - metabase_database-backup
         - metabase_gcs-upload-svcacct
