@@ -47,8 +47,7 @@ class Release(BaseModel):
     kustomize_dir: Optional[Path]
 
 
-# TODO: rename this
-class Config(BaseModel):
+class CalitpConfig(BaseModel):
     git_repo: git.Repo
     channel: str  # this is a bit weird, but I want to be able to log this value
     releases: List[Release]
@@ -72,7 +71,7 @@ def parse_calitp_config(c):
     """
     Parses the top-level calitp configuration key via Pydantic
     """
-    c.update({"calitp_config": Config(**c.config._config["calitp"])})
+    c.update({"calitp_config": CalitpConfig(**c.config._config["calitp"])})
 
 
 def get_releases(
@@ -89,7 +88,7 @@ def get_releases(
     return ret
 
 
-# TODO: kubectl diff now supports masking secrets, so we shoulds be able to render secret diffs in PRs
+# TODO: kubectl diff now supports masking secrets, so we should be able to render secret diffs in PRs
 #  see https://github.com/kubernetes/kubernetes/pull/96084
 @task(
     parse_calitp_config,
@@ -215,7 +214,6 @@ def diff(
         print(msg, flush=True)
 
 
-# TODO: we may want to split up channels into separate files so channel is not an argument but a config file
 @task(parse_calitp_config, help=GENERIC_HELP)
 def release(
     c,
