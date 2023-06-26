@@ -17,6 +17,7 @@ fct_daily_organization_combined_guideline_checks AS (
         feature,
         check,
         is_manual,
+        reports_order,
         {{ guidelines_aggregation_logic() }} as status,
         {{ guidelines_aggregation_logic_reports() }} as reports_status,
         organization_key,
@@ -29,7 +30,7 @@ fct_daily_organization_combined_guideline_checks AS (
         ARRAY_AGG(DISTINCT gtfs_dataset_key IGNORE NULLS ORDER BY gtfs_dataset_key) AS gtfs_dataset_keys_included_array,
         ARRAY_AGG(DISTINCT schedule_feed_key IGNORE NULLS ORDER BY schedule_feed_key) AS schedule_feed_keys_included_array
     FROM int_gtfs_quality__guideline_checks_long
-    GROUP BY date, organization_key, organization_source_record_id, organization_name, feature, check, is_manual
+    GROUP BY date, organization_key, organization_source_record_id, organization_name, feature, check, is_manual, reports_order
 )
 
 SELECT * FROM fct_daily_organization_combined_guideline_checks
