@@ -130,7 +130,12 @@ def secrets(
 
                     with open(secret_path, "w") as f:
                         f.write(secret_contents)
-                    c.run(f"kubectl apply {ns_str} -f {secret_path}")
+                    result = c.run(
+                        f"kubectl apply {ns_str} -f {secret_path}", hide=True, warn=True
+                    )
+                    if result.exited:
+                        print("FAILURE: Failed to apply secret.", flush=True)
+                        raise RuntimeError
                 found_secret = True
 
     if not found_secret:
