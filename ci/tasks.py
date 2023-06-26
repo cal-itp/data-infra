@@ -6,7 +6,7 @@ from typing import List, Optional
 import git
 import yaml
 from google.cloud import secretmanager
-from invoke import Result, task
+from invoke import Exit, Result, task
 from pydantic import BaseModel, validator
 
 KUSTOMIZE_HELM_TEMPLATE = """
@@ -102,6 +102,7 @@ def secrets(
     c,
     app=None,
     secret=None,
+    hide=True,
 ):
     """
     Deploy secret(s) by channel, and optionally app or secret name.
@@ -130,16 +131,21 @@ def secrets(
 
                     with open(secret_path, "w") as f:
                         f.write(secret_contents)
+                    print(f"Applying {release_secret}...", flush=True)
                     result = c.run(
-                        f"kubectl apply {ns_str} -f {secret_path}", hide=True, warn=True
+                        f"kubectl apply {ns_str} -f {secret_path}", hide=hide, warn=True
                     )
                     if result.exited:
-                        print("FAILURE: Failed to apply secret.", flush=True)
-                        raise RuntimeError
+                        print(
+                            f"FAILURE: Failed to apply secret {release_secret}.",
+                            flush=True,
+                        )
+                        raise Exit
+                    print(f"Successfully applied {release_secret}.", flush=True)
                 found_secret = True
 
     if not found_secret:
-        print("Failed to deploy any secrets.")
+        print("WARNING: Failed to deploy any secrets.", flush=True)
 
 
 @task(
