@@ -16,8 +16,8 @@
     import * as convert from 'color-convert';
 
     const STATE_QUERY_PARAM = "state";
-    const START_LAT_LON = [34.05, -118.25];
-    const LEAFLET_START_ZOOM = 13;
+    const START_LAT_LON = [37.6, -120.1];
+    const LEAFLET_START_ZOOM = 6;
     const DEFAULT_BASEMAP_CONFIG = {
       "url": 'https://{s}.basemaps.cartocdn.com/{variant}/{z}/{x}/{y}{r}.png',
       "options": {
@@ -360,6 +360,8 @@
     #map {
       height: 550px;
     }
+
+
 
     /* Use :global to prevent namespacing of CSS for elements that are created dynamically */
     /* TODO: maybe we can define some of these things up front? For example create the legend div in HTML. */
