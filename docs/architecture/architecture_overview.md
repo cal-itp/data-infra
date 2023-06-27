@@ -1,7 +1,15 @@
 (architecture-overview)=
 # Architecture Overview
 
-Deployed services (unless otherwise specified, deployments occur via GitHub Actions)
+Deployed services
+
+| Name             | URL                                            | Source code                                                                  | Development/test environment? |
+|------------------|------------------------------------------------|------------------------------------------------------------------------------|-------------------------------|
+| Airflow          | https://o1d2fa0877cf3fb10p-tp.appspot.com/home | https://github.com/cal-itp/data-infra/tree/main/airflow                      | Yes (local)                   |
+| GTFS-RT Archiver | n/a                                            | https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3 | Yes (gtfs-rt-v3-test)         |
+
+
+Deployments (unless otherwise specified, deployments occur via GitHub Actions)
 ```{mermaid}
 flowchart TD
 %% note that you seemingly cannot have a subgraph that only contains other subgraphs
@@ -55,8 +63,13 @@ reports_repo --> reports_website
 classDef default fill:white, color:black, stroke:black, stroke-width:1px
 classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
 class repos_label,kubernetes_label,netlify_label group_labelstyle
-
 ```
+
+Data flow
+```{mermaid}
+flowchart TD
+```
+
 
 ## “Production environment”
 
