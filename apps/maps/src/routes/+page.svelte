@@ -151,7 +151,7 @@
         return {
           html: `
             <h2 class="has-text-weight-bold has-text-teal-bold">
-              ${stop_name ?? '(Stop name unavailable)'}
+              ${stop_name ?? 'Non-stop segment'}
               <span class="tag ml-2">
                 <i class="fas fa-circle mr-2" style="color: rgb(${getColor(feature)})"></i>
                 ${speed}&nbsp;
