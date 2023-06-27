@@ -33,10 +33,11 @@ grouped AS (
         trip_route_id,
         trip_direction_id,
         trip_start_time,
-        trip_start_date,
         trip_schedule_relationship,
         schedule_feed_timezone,
         schedule_base64_url,
+        trip_start_time_interval,
+        MIN(trip_start_date) AS trip_start_date,
         -- what we really want here is an array of the distinct structs, but you can't DISTINCT structs
         -- so we turn them into JSON strings which we can turn back into structs later
         ARRAY_AGG(DISTINCT
@@ -75,6 +76,7 @@ int_gtfs_rt__service_alerts_trip_day_map_grouping AS (
         trip_route_id,
         trip_direction_id,
         trip_start_time,
+        trip_start_time_interval,
         trip_start_date,
         trip_schedule_relationship,
         schedule_feed_timezone,

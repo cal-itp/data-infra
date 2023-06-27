@@ -28,8 +28,7 @@ select_english AS (
             trip_start_date,
             trip_start_time,
             stop_id
-            ORDER BY english_likelihood DESC, header_text_language ASC) AS english_rank,
-            {{ gtfs_time_string_to_interval('trip_start_time') }} AS trip_start_time_interval
+            ORDER BY english_likelihood DESC, header_text_language ASC) AS english_rank
     FROM int_gtfs_rt__service_alerts_fully_unnested
     QUALIFY english_rank = 1
 ),
@@ -53,7 +52,7 @@ fct_service_alerts_messages_unnested AS (
         -- try to figure out what the service date would be to join back with schedule: fall back from explicit to imputed
         -- TODO; handle trip start time past midnight? subtract in that case?
         COALESCE(
-            PARSE_DATE("%Y%m%d", trip_start_date),
+            trip_start_date,
             DATE(header_timestamp, schedule_feed_timezone),
             DATE(_extract_ts, schedule_feed_timezone)) AS calculated_service_date,
         hour,

@@ -15,6 +15,10 @@ WITH vehicle_positions AS (
             trip_id
             ORDER BY trip_start_time) - 1 AS calculated_iteration_num
     FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_day_map_grouping') }}
+    -- Torrance has two sets of RT feeds that reference the same schedule feed
+    -- this causes problems because trips across both feeds then resolve to the same `trip_instance_key`
+    -- so we manually drop the non-customer-facing feed
+    WHERE base64_url != 'aHR0cDovL3d3dy5teWJ1c2luZm8uY29tL2d0ZnNydC92ZWhpY2xlcw=='
 ),
 
 window_functions AS (
@@ -78,7 +82,6 @@ aggregation AS(
         trip_id,
         trip_start_time,
         calculated_iteration_num,
-        trip_start_date,
         schedule_feed_timezone,
         schedule_base64_url,
         starting_schedule_relationship,
@@ -87,6 +90,8 @@ aggregation AS(
         first_position_longitude,
         last_position_latitude,
         last_position_longitude,
+        trip_start_time_interval,
+        MIN(trip_start_date) AS trip_start_date,
         ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_schedule_relationship ORDER BY trip_schedule_relationship), "|") AS trip_schedule_relationships, --noqa: L054
         ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_route_id ORDER BY trip_route_id), "|") AS trip_route_ids, --noqa: L054
         ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_direction_id ORDER BY trip_direction_id), "|") AS trip_direction_ids, --noqa: L054
@@ -109,6 +114,7 @@ fct_vehicle_positions_trip_summaries AS (
         schedule_base64_url,
         trip_id,
         trip_start_time,
+        trip_start_time_interval,
         calculated_iteration_num,
         trip_start_date,
         schedule_feed_timezone,

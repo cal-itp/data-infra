@@ -41,7 +41,8 @@ int_gtfs_rt__service_alerts_fully_unnested AS (
         unnested_informed_entity.trip.routeId AS trip_route_id,
         unnested_informed_entity.trip.directionId AS trip_direction_id,
         unnested_informed_entity.trip.startTime AS trip_start_time,
-        unnested_informed_entity.trip.startDate AS trip_start_date,
+        {{ gtfs_time_string_to_interval('unnested_informed_entity.trip.startTime') }} AS trip_start_time_interval,
+        PARSE_DATE("%Y%m%d", unnested_informed_entity.trip.startDate) AS trip_start_date,
         unnested_informed_entity.trip.scheduleRelationship AS trip_schedule_relationship,
         unnested_informed_entity.stopId AS stop_id,
 

@@ -25,7 +25,7 @@ fct_vehicle_positions_messages AS (
         schedule_feed_key,
         schedule_feed_timezone,
         COALESCE(
-            PARSE_DATE("%Y%m%d", trip_start_date),
+            trip_start_date,
             DATE(header_timestamp, schedule_feed_timezone),
             DATE(_extract_ts, schedule_feed_timezone)) AS calculated_service_date,
 
@@ -57,6 +57,7 @@ fct_vehicle_positions_messages AS (
         trip_route_id,
         trip_direction_id,
         trip_start_time,
+        trip_start_time_interval,
         trip_start_date,
         trip_schedule_relationship,
 
