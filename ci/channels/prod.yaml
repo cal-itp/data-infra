@@ -40,7 +40,7 @@ calitp:
         - metabase_service_account_key
     - name: postgresql-backup-grafana
       driver: helm
-      namespace: grafana
+      namespace: monitoring-grafana
       helm_name: postgresql-backup
       helm_chart: kubernetes/apps/charts/postgresql-backup
       helm_values:
