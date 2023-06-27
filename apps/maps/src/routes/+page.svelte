@@ -15,6 +15,8 @@
     import { titleCase } from "title-case";
     import * as convert from 'color-convert';
 
+    import "leaflet-loading";
+
     const STATE_QUERY_PARAM = "state";
     const START_LAT_LON = [37.6, -120.1];
     const LEAFLET_START_ZOOM = 6;
@@ -265,6 +267,7 @@
                     getFillColor: (feature) => getColor(feature, layer),
                     highlightColor: ({ object, layer }) => getColor(object, layer, layerProperties.highlight_saturation_multiplier || 0.7),
                     onDataLoad: (data) => {
+                      // map.fire("dataload");
                       console.log("Finished loading", layer);
 
                       if (idx === state.layers.length - 1) {
@@ -316,7 +319,8 @@
         }
 
         map = L.map(mapElement, {
-            preferCanvas: true
+          preferCanvas: true,
+          loadingControl: true,
         }).setView(START_LAT_LON, LEAFLET_START_ZOOM);
 
         const basemapConfig = state.basemap_config || DEFAULT_BASEMAP_CONFIG;
@@ -350,6 +354,7 @@
 </script>
 
 <style>
+    @import "leaflet-loading/src/Control.Loading.css";
     @import 'leaflet/dist/leaflet.css';
 
     .navbar {
