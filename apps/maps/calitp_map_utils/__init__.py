@@ -21,6 +21,7 @@ MAP_APP_URL = os.getenv(MAP_APP_URL_ENV_VAR)
 
 class LayerType(str, Enum):  # name?
     speedmaps = "speedmap"
+    speed_variation = "speed_variation"
     hqta_areas = "hqta_areas"
     hqta_stops = "hqta_stops"
     state_highway_network = "state_highway_network"

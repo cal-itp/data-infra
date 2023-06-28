@@ -190,6 +190,55 @@
         }
       }
 
+      if (layerType === "speed_variation") {
+        const { route_short_name, fast_slow_ratio, p20_mph, p80_mph, trips_per_hour, shape_id, stop_sequence} = feature.properties;
+
+        // TODO: replace route_short_name with actual fields
+        return {
+          html: `
+            <h2 class="has-text-weight-bold has-text-teal-bold">
+              ${route_short_name ?? 'Non-stop segment'}
+              <span class="tag ml-2">
+                <i class="fas fa-circle mr-2" style="color: rgb(${getColor(feature)})"></i>
+                <span class="has-text-weight-normal"><sup>p80</sup> &#8260; <sub>p20</sub> </span>
+                &nbsp;${fast_slow_ratio}
+              </span>
+            </h2>
+
+            <ul class="tooltip-meta-list has-text-slate-bold">
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key"><sup>p80</sup> &#8260; <sub>p20</sub></div>
+                <div class="tooltip-meta-value"><sup>${p80_mph} mph</sup> &#8260; <sub>${p20_mph} mph</sub></div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Route</div>
+                <div class="tooltip-meta-value">${route_short_name ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Stop ID</div>
+                <div class="tooltip-meta-value">${route_short_name ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Route ID</div>
+                <div class="tooltip-meta-value">${route_short_name ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Trips/Hour</div>
+                <div class="tooltip-meta-value">${trips_per_hour ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">GTFS Shape ID</div>
+                <div class="tooltip-meta-value">${shape_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">GTFS Stop Sequence</div>
+                <div class="tooltip-meta-value">${stop_sequence ?? '\u2014'}</div>
+              </li>
+            </ul>`,
+          style: style,
+        }
+      }
+
       if (layerType === "state_highway_network") {
         const { Route, County, District, RouteType } = feature.properties;
 
