@@ -84,9 +84,7 @@
         return colorMap[Math.floor(avg_mph / (MAX_MPH / NSHADES))];
     }
 
-    const alphaBase = 255;
-
-    function getColor(feature, layer, saturationMultiplier = 1) {
+    function getColor(feature, layer, saturationMultiplier = 1, alpha = 255) {
       if (feature.properties.color) {
         if (feature.properties.color.length === 4) {
           return feature.properties.color;
@@ -96,14 +94,14 @@
           const hsv = convert.rgb.hsv(feature.properties.color);
           hsv[1] = hsv[1] * saturationMultiplier;
           const rgb = convert.hsv.rgb(hsv);
-          return [...rgb, 255];
+          return [...rgb, alpha];
         }
       }
 
       if (feature.properties.avg_mph) {
         // LEGACY: support speedmaps testing
         const rgba = speedFeatureColor(feature, rgbaColorMap);
-        return [...rgba.slice(0, -1), 255];
+        return [...rgba.slice(0, -1), alpha];
       }
 
       return [100, 100, 100, 127];
@@ -313,7 +311,7 @@
                     autoHighlight: true,
                     getPointRadius: 10,
                     ...layerProperties,
-                    getFillColor: (feature) => getColor(feature, layer),
+                    getFillColor: (feature) => getColor(feature, layer, 1, 200),
                     highlightColor: ({ object, layer }) => getColor(object, layer, layerProperties.highlight_saturation_multiplier || 0.7),
                     onDataLoad: (data) => {
                       // map.fire("dataload");
