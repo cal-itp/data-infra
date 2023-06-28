@@ -189,13 +189,12 @@
       }
 
       if (layerType === "speed_variation") {
-        const { route_short_name, fast_slow_ratio, p20_mph, p80_mph, trips_per_hour, shape_id, stop_sequence} = feature.properties;
+        const { stop_name, stop_id, route_short_name, route_id, fast_slow_ratio, p20_mph, p80_mph, trips_per_hour, shape_id, stop_sequence} = feature.properties;
 
-        // TODO: replace route_short_name with actual fields
         return {
           html: `
             <h2 class="has-text-weight-bold has-text-teal-bold">
-              ${route_short_name ?? 'Non-stop segment'}
+              ${stop_name ?? 'Non-stop segment'}
               <span class="tag ml-2">
                 <i class="fas fa-circle mr-2" style="color: rgb(${getColor(feature)})"></i>
                 <span class="has-text-weight-normal"><sup>p80</sup> &#8260; <sub>p20</sub> </span>
@@ -214,11 +213,11 @@
               </li>
               <li class="tooltip-meta-item">
                 <div class="tooltip-meta-key">Stop ID</div>
-                <div class="tooltip-meta-value">${route_short_name ?? '\u2014'}</div>
+                <div class="tooltip-meta-value">${stop_id ?? '\u2014'}</div>
               </li>
               <li class="tooltip-meta-item">
                 <div class="tooltip-meta-key">Route ID</div>
-                <div class="tooltip-meta-value">${route_short_name ?? '\u2014'}</div>
+                <div class="tooltip-meta-value">${route_id ?? '\u2014'}</div>
               </li>
               <li class="tooltip-meta-item">
                 <div class="tooltip-meta-key">Trips/Hour</div>

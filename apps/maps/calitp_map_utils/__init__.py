@@ -58,6 +58,7 @@ class HQTA(BaseModel):
 # Dict Props just mean properties are an arbitrary dictionary
 LAYER_FEATURE_TYPES = {
     LayerType.speedmaps: Feature[Polygon, Speedmap],
+    LayerType.speed_variation: Feature[Polygon, Dict],
     LayerType.hqta_areas: Feature[Union[Polygon, MultiPolygon], HQTA],
     LayerType.hqta_stops: Feature[Point, HQTA],
     LayerType.state_highway_network: Feature[Union[Polygon, MultiPolygon], Dict],
