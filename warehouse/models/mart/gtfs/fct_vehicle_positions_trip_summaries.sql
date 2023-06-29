@@ -9,12 +9,47 @@ WITH vehicle_positions AS ( --noqa: ST03
     SELECT * FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_day_map_grouping') }}
 ),
 
+vehicle_positions_no_lat_long AS ( --noqa: ST03
+    SELECT * EXCEPT (first_position_latitude, first_position_longitude, last_position_latitude, last_position_longitude)
+    FROM vehicle_positions
+),
+
 base_fct AS (
-    {{ gtfs_rt_trip_summaries(input_table = 'vehicle_positions',
+    {{ gtfs_rt_trip_summaries(input_table = 'vehicle_positions_no_lat_long',
     urls_to_drop = '("aHR0cDovL3d3dy5teWJ1c2luZm8uY29tL2d0ZnNydC92ZWhpY2xlcw==")',
-    extra_columns = 'first_position_latitude, first_position_longitude, last_position_latitude, last_position_longitude',
     extra_timestamp = 'vehicle')
     }}
+),
+
+lat_long AS (
+    -- can also qualify but the point is that you will get two rows for trips that cross UTC date boundary
+    SELECT DISTINCT
+        key,
+        FIRST_VALUE(first_position_latitude)
+            OVER
+            (PARTITION BY key
+            ORDER BY COALESCE(min_vehicle_timestamp, min_header_timestamp, min_extract_ts)
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+            ) AS first_position_latitude,
+        FIRST_VALUE(first_position_longitude)
+            OVER
+            (PARTITION BY key
+            ORDER BY COALESCE(min_vehicle_timestamp, min_header_timestamp, min_extract_ts)
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+            ) AS first_position_longitude,
+        LAST_VALUE(last_position_latitude)
+            OVER
+            (PARTITION BY key
+            ORDER BY COALESCE(max_vehicle_timestamp, max_header_timestamp, max_extract_ts)
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+            ) AS last_position_latitude,
+        LAST_VALUE(last_position_longitude)
+            OVER
+            (PARTITION BY key
+            ORDER BY COALESCE(max_vehicle_timestamp, max_header_timestamp, max_extract_ts)
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+            ) AS last_position_longitude
+    FROM vehicle_positions
 ),
 
 fct_vehicle_positions_trip_summaries AS (
@@ -68,6 +103,7 @@ fct_vehicle_positions_trip_summaries AS (
         min_vehicle_datetime_local_tz,
         max_vehicle_datetime_local_tz,
     FROM base_fct
+    LEFT JOIN lat_long USING (key)
 )
 
 SELECT * FROM fct_vehicle_positions_trip_summaries

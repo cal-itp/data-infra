@@ -7,8 +7,10 @@
 }}
 
 WITH fct_vehicle_positions_messages AS (
-    SELECT * FROM {{ ref('fct_vehicle_positions_messages') }}
-    WHERE {{ incremental_where() }}
+    SELECT *,
+        COALESCE(vehicle_timestamp, header_timestamp) AS location_timestamp
+    FROM {{ ref('fct_vehicle_positions_messages') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 vp_trips AS (
@@ -21,19 +23,20 @@ vp_trips AS (
     FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
 ),
 
-coalesced_and_filtered AS (
+first_keying_and_filtering AS (
     SELECT * EXCEPT (key),
-        COALESCE(vehicle_timestamp, header_timestamp) AS location_timestamp
+        {{ dbt_utils.generate_surrogate_key(['calculated_service_date', 'base64_url', 'location_timestamp', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['calculated_service_date', 'base64_url', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS vehicle_trip_key
     FROM fct_vehicle_positions_messages
+    WHERE trip_id IS NOT NULL
+        AND name != 'Bay Area 511 Regional VehiclePositions'
 ),
 
 deduped AS (
-    SELECT *,
-        {{ dbt_utils.generate_surrogate_key(['calculated_service_date', 'base64_url', 'location_timestamp', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS key,
-        {{ dbt_utils.generate_surrogate_key(['calculated_service_date', 'base64_url', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS vehicle_trip_key
-    FROM coalesced_and_filtered
+    SELECT *
+    FROM first_keying_and_filtering
     QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY calculated_service_date, base64_url, location_timestamp, vehicle_id, vehicle_label, trip_id, trip_start_time
+        PARTITION BY key
         ORDER BY position_latitude, position_longitude
     ) = 1
 ),

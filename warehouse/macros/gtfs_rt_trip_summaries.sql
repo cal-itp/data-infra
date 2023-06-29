@@ -1,7 +1,6 @@
 {% macro gtfs_rt_trip_summaries(
     input_table,
     urls_to_drop,
-    extra_columns = None,
     extra_summarized = None,
     extra_timestamp = None) %}
 
@@ -90,9 +89,6 @@ aggregation AS(
         starting_schedule_relationship,
         ending_schedule_relationship,
         trip_start_time_interval,
-        {% if extra_columns %}
-        {{ extra_columns }},
-        {% endif %}
         MIN(trip_start_date) AS trip_start_date,
         ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_schedule_relationship ORDER BY trip_schedule_relationship), "|") AS trip_schedule_relationships, --noqa: L054
         ARRAY_TO_STRING(ARRAY_AGG(DISTINCT trip_route_id ORDER BY trip_route_id), "|") AS trip_route_ids, --noqa: L054
@@ -112,11 +108,6 @@ aggregation AS(
         {% endif %}
     FROM window_functions
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
-    {% if extra_columns %}
-    {% for i in range(extra_columns.split(',') | length) %}
-    , {{ 12 + i }}
-    {% endfor %}
-    {% endif %}
 )
 
 
@@ -134,9 +125,6 @@ SELECT
     schedule_base64_url,
     starting_schedule_relationship,
     ending_schedule_relationship,
-    {% if extra_columns %}
-    {{ extra_columns }},
-    {% endif %}
     {{ trim_make_empty_string_null('trip_route_ids') }} AS trip_route_ids,
     {{ trim_make_empty_string_null('trip_direction_ids') }} AS trip_direction_ids,
     {{ trim_make_empty_string_null('trip_schedule_relationships') }} AS trip_schedule_relationships,
