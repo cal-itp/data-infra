@@ -202,10 +202,30 @@ models:
           This information is required to match trips from GTFS RT to
           their scheduled counterparts, so that the date/time data from the RT feed
           can be interpreted within the appropriate time zone to align with its schedule.
-      - name: header_timestamp
-      - name: header_incrementality
-      - name: header_version
-      - name: id
+      - &rt_trip_start_time_interval
+        name: trip_start_time_interval
+        description: |
+          `trip_start_time` converted to a BigQuery INTERVAL type to allow handling for times after midnight.
+          See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
+          *Note: If the interval is longer than 24 hours and `trip_start_date` is not populated, the interpretation for this
+          field becomes unclear.*
+      - &rt_header_timestamp
+        name: header_timestamp
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+          Field has been converted to TIMESTAMP type for convenience.
+      - &rt_header_incrementality
+        name: header_incrementality
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+      - &rt_header_version
+        name: header_version
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+      - &rt_id
+        name: id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedentity.
       - name: trip_update_timestamp
       - name: trip_update_delay
       - name: vehicle_id
@@ -321,19 +341,10 @@ models:
         description: |
           String name of the GTFS dataset of which this message is a part.
           This field is provided for human readability and should not be used as a join key.
-      - name: header_timestamp
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-          Field has been converted to TIMESTAMP type for convenience.
-      - name: header_incrementality
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-      - name: header_version
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-      - name: id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedentity.
+      - *rt_header_timestamp
+      - *rt_header_incrementality
+      - *rt_header_version
+      - *rt_id
       - name: current_stop_sequence
         description: |
           See: https://gtfs.org/realtime/reference/#message-vehicleposition.
@@ -654,19 +665,10 @@ models:
       - *gtfs_rt_schedule_dataset_name
       - *gtfs_rt_schedule_feed_key
       - *gtfs_rt_schedule_feed_timezone
-      - name: header_timestamp
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-          Field has been converted to TIMESTAMP type for convenience.
-      - name: header_incrementality
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-      - name: header_version
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-      - name: id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedentity.
+      - *rt_header_timestamp
+      - *rt_header_incrementality
+      - *rt_header_version
+      - *rt_id
       - name: active_period
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
@@ -753,6 +755,10 @@ models:
       - *gtfs_rt_schedule_feed_key
       - *gtfs_rt_schedule_feed_timezone
       - *_header_message_age
+      - *rt_header_timestamp
+      - *rt_header_incrementality
+      - *rt_header_version
+      - *rt_id
       - name: url_text
         description: |
           See: https://gtfs.org/realtime/reference/#message-translation.
@@ -830,16 +836,7 @@ models:
         description: |
           `active_period_end` converted to a TIMESTAMP data type.
           If `active_period_end` is null, will be midnight on January 1, 2099.
-      - name: trip_start_time_interval
-        description: |
-          `trip_start_time` converted to a BigQuery INTERVAL type to allow handling for times after midnight.
-          See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
-      - name: trip_start_time_interval
-        description: |
-          `trip_start_time` converted to a BigQuery INTERVAL type to allow handling for times after midnight.
-          See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
-          *Note: If the interval is longer than 24 hours and `trip_start_date` is not populated, the interpretation for this
-          field becomes unclear.*
+      - *rt_trip_start_time_interval
       - name: trip_start_time_sec
         description: |
           `trip_start_time` converted to a number of seconds after twelve hours before noon (usually midnight)
@@ -1265,130 +1262,6 @@ models:
       - *gtfs_rt_schedule_feed_timezone
       - *_header_message_age
 
-  - name: fct_service_alerts_trip_summaries
-    description: |
-      Summarizes trips observed in service alert messages.
-      This table does not include service alerts that select non-trip entities.
-      This table will only include rows for trips where the alert specifically applies to that trip.
-      So, for example, if there is a service alert for Route A on a given date,
-      this table will *not* include all trips on Route A for that date.
-    columns:
-      - &rt_trip_summary_key
-        name: key
-        description: Composite of calculated service date, URL, trip ID, and trip start time.
-        tests:
-          - not_null
-          - unique
-      - &trip_instance_key
-        name: trip_instance_key
-        description: |
-          A trip level identifier that uniquely identifies an individual trip across feed types (schedule, trip updates, vehicle positions, service alerts).
-          Composite of:
-            - base64 URL of associated schedule feed
-            - service date
-            - trip_id
-            - calculated iteration number, which attempts to normalize trip start times
-        tests:
-          - not_null
-          - unique
-      - *calculated_service_date
-      - *base64_url
-      - *rt_trip_id
-      - *rt_trip_start_time
-      - *rt_trip_start_date
-      - &rt_calculated_iteration_num
-        name: calculated_iteration_num
-        description: |
-          1-based ordered count of `trip_start_time` values for this `trip_id` on this
-          `calculated_service_date`. So for example if a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
-          the first one will have `calculated_iteration_num` of 1 and the second will have `calculated_iteration_num` of 2.
-          This helps normalize the following cases:
-            - For frequency-based trips: Attempts to standardize to account for the fact that the `trip_start_time` in RT data may
-                not align exactly with the start time of any individual iteration in the schedule data (especially if `frequencies.exact_times` = 1 in the schedule data)
-            - Across RT feeds: We have seen cases where, for example, the trip updates feed provides `trip_start_time` (even for non-frequency-based trips)
-                but the vehicle positions feed does not (the field is null). We can calculate a `calculated_iteration_num` of 1 for both
-                feeds to account for this difference, because it is likely a byproduct of some technical implementation
-                rather than a true indication that the two represent different trips.
-      - &starting_schedule_relationship
-        name: starting_schedule_relationship
-        description: |
-          `schedule_relationship` provided in the RT message trip descriptor
-          for the first message for this trip on this `calculated_service_date`.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - &ending_schedule_relationship
-        name: ending_schedule_relationship
-        description: |
-          `schedule_relationship` provided in the RT message trip descriptor
-          for the last message for this trip on this `calculated_service_date`.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - &rt_trip_route_ids
-        name: trip_route_ids
-        description: |
-          Pipe (`|`) delimited list of distinnct `route_id` values provided in the RT message trip descriptor
-          for messages containing this trip on this `calculated_service_date`.
-          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
-          that likely indicates some level of data corruption.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - &rt_trip_direction_ids
-        name: trip_direction_ids
-        description: |
-          Pipe (`|`) delimited list of distinnct `direction_id` values provided in the RT message trip descriptor
-          for messages containing this trip on this `calculated_service_date`.
-          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
-          that likely indicates some level of data corruption.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - &rt_trip_schedule_relationships
-        name: trip_schedule_relationships
-        description: |
-          Pipe (`|`) delimited list of distinnct `trip_schedule_relationship` values provided in the RT message trip descriptor
-          for messages containing this trip on this `calculated_service_date`.
-          There are valid reasons to have multiple values in this field, for example if a trip was scheduled
-          but later is updated to canceled.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - &warning_multiple_route_ids
-        name: warning_multiple_route_ids
-        description: |
-          Boolean for whether there is a pipe character present in `trip_route_ids`, indicating
-          multiple routes associated with the same trip which represents a data integrity issue.
-          A "true" value in this column means a row should be treated with caution.
-      - &warning_multiple_direction_ids
-        name: warning_multiple_direction_ids
-        description: |
-          Boolean for whether there is a pipe character present in `trip_direction_ids`, indicating
-          multiple directions associated with the same trip which represents a data integrity issue.
-          A "true" value in this column means a row should be treated with caution.
-      - *gtfs_rt_schedule_feed_timezone
-      - &num_distinct_message_ids
-        name: num_distinct_message_ids
-        description: Distinct count of top-level ids (https://gtfs.org/realtime/reference/#message-feedentity).
-      - *num_distinct_header_timestamps
-      - *num_distinct_message_keys
-      - *num_distinct_extract_ts
-      - *min_extract_ts
-      - *max_extract_ts
-      - *extract_duration_minutes
-      - *header_duration_minutes
-      - *min_extract_ts_local_tz
-      - *max_extract_ts_local_tz
-      - *min_extract_ts_pacific
-      - *max_extract_ts_pacific
-      - *min_header_timestamp
-      - *max_header_timestamp
-      - *min_header_local_tz
-      - *max_header_local_tz
-      - *min_header_pacific
-      - *max_header_pacific
-      - name: alert_content_array
-        description: |
-          An array containing a unique STRUCTs of `message_id`, `cause`, `effect`, `header`, and `description`.
-          This is the actual alert content associated with this trip.
-          An individual trip can be associated with multiple alerts so this array can contain multiple distinct structs.
-
   - name: fct_scheduled_trips
     description: |
       A daily table showing all trips that were scheduled on a given date.
@@ -1720,6 +1593,134 @@ models:
           Only populated for flexible trips.
           If you are specifically concerned with activity outside of California,
           it may be preferable to use this rather than trip_last_end_pickup_drop_off_window_datetime_pacific.
+
+  - name: fct_service_alerts_trip_summaries
+    description: |
+      Summarizes trips observed in service alert messages.
+      This table does not include service alerts that select non-trip entities.
+      This table will only include rows for trips where the alert specifically applies to that trip.
+      So, for example, if there is a service alert for Route A on a given date,
+      this table will *not* include all trips on Route A for that date.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "NOT (EXTRACT(HOUR FROM trip_start_time_interval) > 24 AND trip_start_date IS NULL)"
+          severity: warn
+    columns:
+      - &rt_trip_summary_key
+        name: key
+        description: Composite of calculated service date, URL, trip ID, and trip start time.
+        tests:
+          - not_null
+          - unique
+      - &trip_instance_key
+        name: trip_instance_key
+        description: |
+          A trip level identifier that uniquely identifies an individual trip across feed types (schedule, trip updates, vehicle positions, service alerts).
+          Composite of:
+            - base64 URL of associated schedule feed
+            - service date
+            - trip_id
+            - calculated iteration number, which attempts to normalize trip start times
+        tests:
+          - not_null
+          - unique
+      - *calculated_service_date
+      - *base64_url
+      - *rt_trip_id
+      - *rt_trip_start_time
+      - *rt_trip_start_date
+      - &rt_calculated_iteration_num
+        name: calculated_iteration_num
+        description: |
+          1-based ordered count of `trip_start_time` values for this `trip_id` on this
+          `calculated_service_date`. So for example if a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
+          the first one will have `calculated_iteration_num` of 1 and the second will have `calculated_iteration_num` of 2.
+          This helps normalize the following cases:
+            - For frequency-based trips: Attempts to standardize to account for the fact that the `trip_start_time` in RT data may
+                not align exactly with the start time of any individual iteration in the schedule data (especially if `frequencies.exact_times` = 1 in the schedule data)
+            - Across RT feeds: We have seen cases where, for example, the trip updates feed provides `trip_start_time` (even for non-frequency-based trips)
+                but the vehicle positions feed does not (the field is null). We can calculate a `calculated_iteration_num` of 1 for both
+                feeds to account for this difference, because it is likely a byproduct of some technical implementation
+                rather than a true indication that the two represent different trips.
+      - &starting_schedule_relationship
+        name: starting_schedule_relationship
+        description: |
+          `schedule_relationship` provided in the RT message trip descriptor
+          for the first message for this trip on this `calculated_service_date`.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &ending_schedule_relationship
+        name: ending_schedule_relationship
+        description: |
+          `schedule_relationship` provided in the RT message trip descriptor
+          for the last message for this trip on this `calculated_service_date`.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &rt_trip_route_ids
+        name: trip_route_ids
+        description: |
+          Pipe (`|`) delimited list of distinnct `route_id` values provided in the RT message trip descriptor
+          for messages containing this trip on this `calculated_service_date`.
+          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
+          that likely indicates some level of data corruption.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &rt_trip_direction_ids
+        name: trip_direction_ids
+        description: |
+          Pipe (`|`) delimited list of distinnct `direction_id` values provided in the RT message trip descriptor
+          for messages containing this trip on this `calculated_service_date`.
+          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
+          that likely indicates some level of data corruption.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &rt_trip_schedule_relationships
+        name: trip_schedule_relationships
+        description: |
+          Pipe (`|`) delimited list of distinnct `trip_schedule_relationship` values provided in the RT message trip descriptor
+          for messages containing this trip on this `calculated_service_date`.
+          There are valid reasons to have multiple values in this field, for example if a trip was scheduled
+          but later is updated to canceled.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &warning_multiple_route_ids
+        name: warning_multiple_route_ids
+        description: |
+          Boolean for whether there is a pipe character present in `trip_route_ids`, indicating
+          multiple routes associated with the same trip which represents a data integrity issue.
+          A "true" value in this column means a row should be treated with caution.
+      - &warning_multiple_direction_ids
+        name: warning_multiple_direction_ids
+        description: |
+          Boolean for whether there is a pipe character present in `trip_direction_ids`, indicating
+          multiple directions associated with the same trip which represents a data integrity issue.
+          A "true" value in this column means a row should be treated with caution.
+      - *gtfs_rt_schedule_feed_timezone
+      - &num_distinct_message_ids
+        name: num_distinct_message_ids
+        description: Distinct count of top-level ids (https://gtfs.org/realtime/reference/#message-feedentity).
+      - *num_distinct_header_timestamps
+      - *num_distinct_message_keys
+      - *num_distinct_extract_ts
+      - *min_extract_ts
+      - *max_extract_ts
+      - *extract_duration_minutes
+      - *header_duration_minutes
+      - *min_extract_ts_local_tz
+      - *max_extract_ts_local_tz
+      - *min_extract_ts_pacific
+      - *max_extract_ts_pacific
+      - *min_header_timestamp
+      - *max_header_timestamp
+      - *min_header_local_tz
+      - *max_header_local_tz
+      - *min_header_pacific
+      - *max_header_pacific
+      - name: alert_content_array
+        description: |
+          An array containing a unique STRUCTs of `message_id`, `cause`, `effect`, `header`, and `description`.
+          This is the actual alert content associated with this trip.
+          An individual trip can be associated with multiple alerts so this array can contain multiple distinct structs.
 
   - name: fct_trip_updates_summaries
     description: |
