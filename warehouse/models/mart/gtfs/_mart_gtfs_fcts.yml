@@ -911,11 +911,11 @@ models:
       - &min_extract_ts_local_tz
         name: min_extract_datetime_local_tz
         description: |
-          `min_extract_ts` converted to a DATETIME type in `feed_timezone`.
+          `min_extract_ts` converted to a DATETIME type in `schedule_feed_timezone`.
       - &max_extract_ts_local_tz
         name: max_extract_datetime_local_tz
         description: |
-          `max_extract_ts` converted to a DATETIME type in `feed_timezone`.
+          `max_extract_ts` converted to a DATETIME type in `schedule_feed_timezone`.
       - &min_extract_ts_pacific
         name: min_extract_datetime_pacific
         description: |
@@ -933,11 +933,11 @@ models:
       - &min_header_local_tz
         name: min_header_datetime_local_tz
         description: |
-          `min_header_timestamp` converted to a DATETIME type in `feed_timezone`.
+          `min_header_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
       - &max_header_local_tz
         name: max_header_datetime_local_tz
         description: |
-          `max_header_timestamp` converted to a DATETIME type in `feed_timezone`.
+          `max_header_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
       - &min_header_pacific
         name: min_header_datetime_pacific
         description: |
@@ -1277,16 +1277,38 @@ models:
         name: key
         description: Composite of calculated service date, URL, trip ID, and trip start time.
         tests:
-          - not_null:
-              config:
-                where: calculated_service_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-          - unique:
-              config:
-                where: calculated_service_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - not_null
+          - unique
+      - &trip_instance_key
+        name: trip_instance_key
+        description: |
+          A trip level identifier that uniquely identifies an individual trip across feed types (schedule, trip updates, vehicle positions, service alerts).
+          Composite of:
+            - base64 URL of associated schedule feed
+            - service date
+            - trip_id
+            - calculated iteration number, which attempts to normalize trip start times
+        tests:
+          - not_null
+          - unique
+      - *calculated_service_date
       - *base64_url
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_date
+      - &rt_calculated_iteration_num
+        name: calculated_iteration_num
+        description: |
+          1-based ordered count of `trip_start_time` values for this `trip_id` on this
+          `calculated_service_date`. So for example if a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
+          the first one will have `calculated_iteration_num` of 1 and the second will have `calculated_iteration_num` of 2.
+          This helps normalize the following cases:
+            - For frequency-based trips: Attempts to standardize to account for the fact that the `trip_start_time` in RT data may
+                not align exactly with the start time of any individual iteration in the schedule data (especially if `frequencies.exact_times` = 1 in the schedule data)
+            - Across RT feeds: We have seen cases where, for example, the trip updates feed provides `trip_start_time` (even for non-frequency-based trips)
+                but the vehicle positions feed does not (the field is null). We can calculate a `calculated_iteration_num` of 1 for both
+                feeds to account for this difference, because it is likely a byproduct of some technical implementation
+                rather than a true indication that the two represent different trips.
       - &starting_schedule_relationship
         name: starting_schedule_relationship
         description: |
@@ -1301,35 +1323,46 @@ models:
           for the last message for this trip on this `calculated_service_date`.
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret this field.
-      - &starting_route_id
-        name: starting_route_id
+      - &rt_trip_route_ids
+        name: trip_route_ids
         description: |
-          `route_id` provided in the RT message trip descriptor
-          for the first message for this trip on this `calculated_service_date`.
+          Pipe (`|`) delimited list of distinnct `route_id` values provided in the RT message trip descriptor
+          for messages containing this trip on this `calculated_service_date`.
+          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
+          that likely indicates some level of data corruption.
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret this field.
-      - &ending_route_id
-        name: ending_route_id
+      - &rt_trip_direction_ids
+        name: trip_direction_ids
         description: |
-          `route_id` provided in the RT message trip descriptor
-          for the last message for this trip on this `calculated_service_date`.
+          Pipe (`|`) delimited list of distinnct `direction_id` values provided in the RT message trip descriptor
+          for messages containing this trip on this `calculated_service_date`.
+          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
+          that likely indicates some level of data corruption.
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret this field.
-      - &starting_direction_id
-        name: starting_direction_id
+      - &rt_trip_schedule_relationships
+        name: trip_schedule_relationships
         description: |
-          `direction_id` provided in the RT message trip descriptor
-          for the first message for this trip on this `calculated_service_date`.
+          Pipe (`|`) delimited list of distinnct `trip_schedule_relationship` values provided in the RT message trip descriptor
+          for messages containing this trip on this `calculated_service_date`.
+          There are valid reasons to have multiple values in this field, for example if a trip was scheduled
+          but later is updated to canceled.
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret this field.
-      - &ending_direction_id
-        name: ending_direction_id
+      - &warning_multiple_route_ids
+        name: warning_multiple_route_ids
         description: |
-          `direction_id` provided in the RT message trip descriptor
-          for the last message for this trip on this `calculated_service_date`.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - *feed_timezone_no_tests
+          Boolean for whether there is a pipe character present in `trip_route_ids`, indicating
+          multiple routes associated with the same trip which represents a data integrity issue.
+          A "true" value in this column means a row should be treated with caution.
+      - &warning_multiple_direction_ids
+        name: warning_multiple_direction_ids
+        description: |
+          Boolean for whether there is a pipe character present in `trip_direction_ids`, indicating
+          multiple directions associated with the same trip which represents a data integrity issue.
+          A "true" value in this column means a row should be treated with caution.
+      - *gtfs_rt_schedule_feed_timezone
       - &num_distinct_message_ids
         name: num_distinct_message_ids
         description: Distinct count of top-level ids (https://gtfs.org/realtime/reference/#message-feedentity).
@@ -1693,12 +1726,21 @@ models:
       Summarizes trips observed in trip update messages.
     columns:
       - *rt_trip_summary_key
-      - *feed_timezone_no_tests
-      - name: dt
+      - *trip_instance_key
+      - *gtfs_rt_schedule_feed_timezone
+      - *calculated_service_date
       - *base64_url
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_date
+      - *rt_calculated_iteration_num
+      - *starting_schedule_relationship
+      - *ending_schedule_relationship
+      - *rt_trip_route_ids
+      - *rt_trip_direction_ids
+      - *rt_trip_schedule_relationships
+      - *warning_multiple_route_ids
+      - *warning_multiple_direction_ids
       - *num_distinct_message_ids
       - *num_distinct_header_timestamps
       - name: num_distinct_trip_update_timestamps
@@ -1730,10 +1772,10 @@ models:
           duration listed here.
       - name: min_trip_update_datetime_local_tz
         description: |
-          `min_trip_update_timestamp` converted to a DATETIME type in `feed_timezone`.
+          `min_trip_update_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
       - name: max_trip_update_datetime_local_tz
         description: |
-          `max_trip_update_timestamp` converted to a DATETIME type in `feed_timezone`.
+          `max_trip_update_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
       - name: min_trip_update_datetime_pacific
         description: |
           `min_trip_update_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
@@ -1752,25 +1794,62 @@ models:
       Summarizes trips observed in vehicle position messages.
     columns:
       - *rt_trip_summary_key
-      - name: dt
-      - name: base64_url
-      - name: trip_id
-      - name: trip_route_id
-      - name: trip_direction_id
-      - name: trip_start_time
-      - name: trip_start_date
+      - *trip_instance_key
+      - *gtfs_rt_schedule_feed_timezone
+      - *calculated_service_date
+      - *base64_url
+      - *rt_trip_id
+      - *rt_trip_start_time
+      - *rt_trip_start_date
+      - *rt_calculated_iteration_num
+      - *starting_schedule_relationship
+      - *ending_schedule_relationship
+      - *rt_trip_route_ids
+      - *rt_trip_direction_ids
+      - *rt_trip_schedule_relationships
+      - *warning_multiple_route_ids
+      - *warning_multiple_direction_ids
       - *num_distinct_message_ids
       - *num_distinct_header_timestamps
       - name: num_distinct_vehicle_timestamps
         description: Distinct count of vehicle timestamps from the feed (https://gtfs.org/realtime/reference/#message-vehicleposition).
       - *min_extract_ts
       - *max_extract_ts
+      - *extract_duration_minutes
+      - *min_extract_ts_local_tz
+      - *max_extract_ts_local_tz
+      - *min_extract_ts_pacific
+      - *max_extract_ts_pacific
       - *min_header_timestamp
       - *max_header_timestamp
+      - *header_duration_minutes
+      - *min_header_local_tz
+      - *max_header_local_tz
+      - *min_header_pacific
+      - *max_header_pacific
       - name: min_vehicle_timestamp
         description: Earliest vehicle timestamp of a message referencing this trip.
       - name: max_vehicle_timestamp
         description: Latest vehicle timestamp of a message referencing this trip.
+      - name: vehicle_duration_minutes
+        description: |
+          The difference between `max_vehicle_timestamp` and `min_vehicle_timestamp` in minutes,
+          representing the duration of time for which this trip was present in the trip-specific messages produced by the agency.
+          Note that the trip may not have been present in every message between the minimum and maximum
+          timestamps, and therefore may not have been present continuously for the
+          duration listed here.
+      - name: min_vehicle_datetime_local_tz
+        description: |
+          `min_vehicle_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
+      - name: max_vehicle_datetime_local_tz
+        description: |
+          `max_vehicle_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
+      - name: min_vehicle_datetime_pacific
+        description: |
+          `min_vehicle_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+      - name: max_vehicle_datetime_pacific
+        description: |
+          `max_vehicle_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
       - name: first_position_latitude
         description: Position latitude of the first extract referencing this trip.
       - name: first_position_longitude
