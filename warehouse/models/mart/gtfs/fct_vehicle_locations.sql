@@ -28,7 +28,14 @@ first_keying_and_filtering AS (
         {{ dbt_utils.generate_surrogate_key(['calculated_service_date', 'base64_url', 'location_timestamp', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS key,
         {{ dbt_utils.generate_surrogate_key(['calculated_service_date', 'base64_url', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS vehicle_trip_key
     FROM fct_vehicle_positions_messages
+    -- drop cases where trip id is null since these cannot be joined to schedule
+    -- this is something we may want to reconsider
+    -- TODO: theoretically we need to eventually support route / direction / start date / start time as an alternate trip identifier
     WHERE trip_id IS NOT NULL
+    -- we originally dropped the Bay Area regional feed because they don't make their vehicle identifiers unique by agency
+    -- so you can end up intermingling multiple vehicles
+    -- however, not clear this issue remains if we are also dropping rows with no trip
+    -- since regional feed does have unique trip IDs per agency
         AND name != 'Bay Area 511 Regional VehiclePositions'
 ),
 
