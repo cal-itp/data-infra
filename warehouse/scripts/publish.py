@@ -436,8 +436,18 @@ def _publish_exposure(
                         os.path.join(tmpdir, destination.filename(model_name))
                     )
 
+                    schedule_feeds_table = (
+                        node.database + "mart_gtfs.dim_schedule_feeds"
+                    )
+
                     df = pd.read_gbq(
-                        str(node.select),
+                        str(node.select)
+                        + f"""
+                            WHERE EXISTS (
+                                SELECT 1
+                                FROM {schedule_feeds_table} s
+                                    WHERE s._is_current AND t.feed_key = s.key
+                        """,
                         project_id=node.database,
                         progress_bar_type="tqdm",
                     )
