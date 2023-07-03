@@ -26,6 +26,9 @@ models:
       - name: code
         tests:
           - not_null
+      - name: description
+        tests:
+          - not_null
       - name: is_critical
         tests:
           - not_null
