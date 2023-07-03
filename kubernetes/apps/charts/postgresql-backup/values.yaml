@@ -7,3 +7,6 @@ secretMounts: []
 config:
   envFrom: []
   env: []
+
+healthchecks:
+  host: https://healthchecks.ops.k8s.jarv.us

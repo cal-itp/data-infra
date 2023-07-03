@@ -12,6 +12,7 @@ stg_gtfs_schedule__stop_times AS (
         base64_url,
         ts,
         dt AS _dt,
+        _line_number,
         {{ trim_make_empty_string_null('trip_id') }} AS trip_id,
         {{ trim_make_empty_string_null('stop_id') }} AS stop_id,
         SAFE_CAST({{ trim_make_empty_string_null('stop_sequence') }} AS INTEGER) AS stop_sequence,

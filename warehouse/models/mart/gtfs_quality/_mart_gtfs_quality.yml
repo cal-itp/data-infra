@@ -191,6 +191,10 @@ models:
           Boolean flag for whether the associated check was performed by hand (via Airtable) or automatically.
         tests:
           - not_null
+      - &reports_order
+        name: reports_order
+        description: |
+          Integer value that declares which order a given check should appear on the reports site. It can be null for checks that don't appear on the reports site.
   - name: fct_daily_service_combined_guideline_checks
     description: |
       **Documentation coming soon**
@@ -229,6 +233,7 @@ models:
       - *status
       - name: feature
       - *is_manual
+      - *reports_order
   - name: fct_schedule_feed_files
     description: |
       All files found in zipfiles downloaded in the GTFS schedule v2 pipeline.
@@ -383,7 +388,7 @@ models:
           Agency service date on which this service level was present.
           This respect's the agency's definition of a service day, which may not correspond to
           a calendar date. See https://gtfs.org/schedule/reference/#field-types for the GTFS
-          Schedule definition of a "date" data type or `fct_daily_scheduled_trips` for
+          Schedule definition of a "date" data type or `fct_scheduled_trips` for
           more dates that can be associated with trip activity.
           This date is used so that this table's service summaries correspond to the
           service levels that an agency might describe on a given date, even

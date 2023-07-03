@@ -22,6 +22,7 @@ cross_join AS (
         feature,
         entity,
         is_manual,
+        reports_order,
 
         organization_source_record_id,
         service_source_record_id,
@@ -93,6 +94,7 @@ int_gtfs_quality__guideline_checks_index AS (
         feature,
         entity,
         is_manual,
+        reports_order,
 
         organization_source_record_id,
         service_source_record_id,

@@ -4,10 +4,9 @@ WITH dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
-fct_daily_scheduled_trips AS (
+fct_scheduled_trips AS (
     SELECT *
-    FROM {{ ref('fct_daily_scheduled_trips') }}
-    WHERE service_date >= '2022-12-01' AND service_date < '2023-01-01'
+    FROM {{ ref('fct_scheduled_trips') }}
 ),
 
 extract_trip_date_types AS (
@@ -25,15 +24,16 @@ extract_trip_date_types AS (
         AS time_of_day,
 
         gtfs_dataset_key,
-        shape_id,
         route_id,
         route_short_name,
+        route_long_name,
         EXTRACT(hour FROM trip_first_departure_datetime_pacific) AS hour,
         EXTRACT(month FROM service_date) AS month,
         EXTRACT(year FROM service_date) AS year,
-        EXTRACT(DAYOFWEEK from service_date) AS day_type
+        EXTRACT(DAYOFWEEK from service_date) AS day_type,
+        service_hours
 
-    FROM fct_daily_scheduled_trips
+    FROM fct_scheduled_trips
 
 ),
 
@@ -48,9 +48,10 @@ service_with_daypart AS (
         trips.month,
         trips.year,
         trips.day_type,
-        trips.shape_id,
         trips.route_id,
-        trips.route_short_name
+        trips.route_short_name,
+        trips.route_long_name,
+        trips.service_hours,
 
     FROM extract_trip_date_types AS trips
     LEFT JOIN dim_gtfs_datasets
@@ -65,14 +66,15 @@ daypart_aggregations AS (
         source_record_id,
         route_id,
         route_short_name,
-        shape_id,
+        route_long_name,
         time_of_day,
         hour,
         month,
         year,
         day_type,
 
-        COUNT(*) AS n_trips
+        COUNT(*) AS n_trips,
+        SUM(service_hours) AS ttl_service_hours
 
     FROM service_with_daypart
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
@@ -85,13 +87,14 @@ fct_scheduled_service_by_daypart AS (
         source_record_id,
         route_id,
         route_short_name,
-        shape_id,
+        route_long_name,
         time_of_day,
         hour,
         month,
         year,
         day_type,
-        n_trips
+        n_trips,
+        ttl_service_hours
 
     FROM daypart_aggregations
 )

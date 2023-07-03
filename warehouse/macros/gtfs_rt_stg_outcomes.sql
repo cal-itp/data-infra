@@ -30,6 +30,8 @@ stg_gtfs_rt__agg_outcomes AS (
              -- 1/28/2020 6:29:01 PM
              WHEN JSON_VALUE(`extract`.response_headers, '$."last_modified"') like '%PM' THEN PARSE_TIMESTAMP("%m/%d/%Y %I:%M:%S %p", JSON_VALUE(`extract`.response_headers, '$."last_modified"'))
         END AS last_modified_timestamp,
+        {% else %}
+        process_stderr,
         {% endif %}
         `extract`.ts AS extract_ts
     FROM raw_outcomes

@@ -271,7 +271,7 @@ schema_fields:
     type: STRING
     mode: REPEATED
   - name: fixed_route
-    type: STRING
+    type: BOOLEAN
     mode: NULLABLE
   - name: is_public
     type: STRING

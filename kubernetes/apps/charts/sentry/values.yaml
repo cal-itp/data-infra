@@ -1,7 +1,7 @@
 # Reference: https://raslasarslas.medium.com/how-to-deploy-sentry-on-a-kubernetes-cluster-using-helm-600db31d4486
 # Sentry chart: https://github.com/sentry-kubernetes/charts
 sentry:
-  existingSecret: sentry-secrets
+  existingSecret: sentry-secret
   existingSecretKey: session-secret
 
   postgresql:
@@ -11,11 +11,13 @@ sentry:
     resources:
       requests:
         memory: 3Gi
+    persistence:
+      size: 100Gi
 
   user:
     create: true
     email: general+cal-itp@jarv.us
-    existingSecret: sentry-secrets
+    existingSecret: sentry-secret
     existingSecretKey: admin-password
   nginx:
     enabled: false
@@ -41,6 +43,16 @@ sentry:
     port: 587
     host: "smtp.postmarkapp.com"
     from: "bot@calitp.org"
+    existingSecret: sentry-secret
+
+  slack:
+    existingSecret: sentry-secret
+
+  # https://develop.sentry.dev/self-hosted/sso/#update-your-configuration-with-your-github-app-information
+  github:
+    appId: 288470
+    appName: 'cal-itp-sentry'
+    existingSecret: sentry-secret
 
   sentry:
     web:
@@ -54,6 +66,7 @@ sentry:
     ingestConsumer:
       replicas: 2
     cleanup:
+      activeDeadlineSeconds: 600
       days: 30
     postProcessForwardTransactions:
       replicas: 2

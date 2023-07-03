@@ -34,6 +34,12 @@ int_transit_database__services_dim AS (
         manual_check__gtfs_schedule_data_ingested_in_trip_planner,
         deprecated_date,
         operating_county_geographies,
+        fixed_route,
+        is_public,
+        public_currently_operating,
+        public_currently_operating_fixed_route,
+        start_date,
+        operational_status,
         _is_current,
         _valid_from,
         _valid_to

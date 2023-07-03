@@ -15,6 +15,7 @@ int_gtfs_schedule__grouped_feed_file_parse_outcomes AS (
 
 join_outcomes_only AS (
     SELECT
+        d.dt,
         d.ts,
         d.base64_url,
         d._config_extract_ts,
@@ -38,6 +39,7 @@ join_outcomes_only AS (
 
 int_gtfs_schedule__joined_feed_outcomes AS (
     SELECT
+        f.dt,
         f.ts,
         f.base64_url,
         f._config_extract_ts,

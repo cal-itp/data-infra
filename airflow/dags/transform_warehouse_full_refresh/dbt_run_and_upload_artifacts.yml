@@ -13,7 +13,9 @@ arguments:
   - '--deploy-docs'
   - '--sync-metabase'
   - '--select'
-  - "{{ dag_run.conf.get('dbt_select_statement', '') }}"
+  - "{{ dag_run.conf.get('dbt_select', '') }}"
+  - '--dbt-vars'
+  - "{{ dag_run.conf.get('dbt_vars', '') }}"
 
 is_delete_operator_pod: true
 get_logs: true
@@ -31,7 +33,7 @@ env_vars:
   DBT_PROFILE_DIR: /app
   DBT_DATABASE: "{{ get_project_id() }}"
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
-  MB_HOST: dashboards.calitp.org
+  MB_HOST: https://dashboards.calitp.org
   NETLIFY_SITE_ID: cal-itp-dbt-docs
   SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
   SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"

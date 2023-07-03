@@ -28,7 +28,7 @@ This section includes detailed information about the data model and processing s
 
 All of the above are sourced from the v2 warehouse. Note that all components must be present and consistently keyed in order to successfully analyze. This module works at the organization level in order to match the reports site and maintain the structure of the speedmap site.
 
-For each organization, this module will combine and analyze all related GTFS Schedule and GTFS Realtime datasets that are `public_customer_facing_or_regional_subfeed_fixed_route` in [`dim_provider_gtfs_data`](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_provider_gtfs_data). Some organizations share GTFS datasets (Sacramento RT and City of Rancho Cordova, San Diego Airport and San Diego MTS...), in those cases the module can generate seperate analysis for each organization but they might duplicate each other. These are based on the underlying organization/dataset relationships in the Transit Database (Airtable).
+For each organization, this module will combine and analyze all related GTFS Schedule and GTFS Realtime datasets that are `public_customer_facing_or_regional_subfeed_fixed_route` in [`dim_provider_gtfs_data`](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_provider_gtfs_data). Some organizations share GTFS datasets (Sacramento RT and City of Rancho Cordova, San Diego Airport and San Diego MTS...), in those cases the module can generate separate analysis for each organization but they might duplicate each other. These are based on the underlying organization/dataset relationships in the Transit Database (Airtable).
 
 ### How is it structured?
 
@@ -206,30 +206,35 @@ rt_day.export_views_gcs()
 ```{mermaid}
 flowchart TD
     gcs[("GCS (calitp-analytics-data/data_analyses/rt_delay)")]
+    map_gcs[("Public GCS (calitp-map-tiles/)")]
     subgraph rt_fil_map[RtFilterMapper]
         st_flt[self.set_filter] -->
         flt[self._filter]
         rs_flt[self.reset_filter] -->
         flt
         subgraph stv[static views]
-            self.calitp_agency_name
+            self.organization_name
             self.rt_trips
             self.stop_delay_view
             self.endpoint_delay_summary
             self.endpoint_delay_view
         end
         subgraph dyn[dynamic tools]
-            ssm[self.segment_speed_map] -->
+            ssm[self.segment_speed_map] -->|optionally renders map| dmv
             dmv[self.detailed_map_view] -->
-            gis[/GIS Format Exports/]
+            gis[/Manual GIS Format Exports/]
+            dmv --> mgz[self.map_gz_export]
             self.chart_variability
-            self.map_variance
+            mpv[self.map_variance]
+            mpv --> |optionally renders map| mgz
+            mgz -.-> map_gcs
+            map_gcs -.-> spa
+            mgz -.-> |self.spa_map_state| spa
+            mgz -->|self.display_spa_map| spa([render maps via external app + IFrame])
             self.chart_delays
             self.chart_speeds
             self.describe_slow_routes
-            ssm --> rend[/renders map/]
             ssm --> ssv[self.stop_segment_speed_view]
-            rend -.- dmv
             subgraph cor[corridor tools]
                 acor[self.autocorridor] -.->
                 add_cor[self.add_corridor] -->
@@ -284,7 +289,15 @@ Mapping, charting, and metric generation methods, listed under "dynamic tools" i
 
 Use the `segment_speed_map` method to generate a speed map. Depending on parameters, the speeds visualized will either be the 20th percentile or average speeds for all trips in each segment matching the current filter, if any. See function docstring for additional information.
 
-The `map_variance` method, currently under development, offers a spatial view of relative variance in speeds for all trips in each segment matching the current filter, if any.
+The `map_variance` method, currently under development, offers a spatial view of variation in speeds for all trips in each segment matching the current filter, if any. This is now quantified as the ratio between 80th percentile and 20th percentile speeds, and used on the CA Transit Speed Maps tool.
+
+#### More performant maps via embedded app
+
+Rather than render the maps directly in the notebook via geopandas and folium, we now have the capability to save them as compressed GeoJSON to GCS and render them in an IFrame using a [minimal web app](https://github.com/cal-itp/data-infra/tree/main/apps/maps).
+
+This method is much more efficient, and we rely on it to maintain the quantity and quality of maps on the [CA Transit Speed Maps](https://analysis.calitp.org/rt/README.html) site.
+
+`display_spa_map` will always show the most recent map generated with either `segment_speed_map` or `map_variance`, then saved via `map_gz_export`.
 
 #### `stop_segment_speed_view`
 
@@ -313,7 +326,8 @@ After generating a speed map, the underlying data is available at RtFilterMapper
 |n_trips_shp**|number of unique trips on this GTFS shape in filter|int64|
 |avg_mph**|average speed for all trips on this segment|float64|
 |_20p_mph**|20th percentile speed for all trips on this segment|float64|
-|var_mph**|statistical variance in speed for all trips on this segment|float64|
+|_80p_mph**|80th percentile speed for all trips on this segment|float64|
+|fast_slow_ratio**|ratio between p80 speed and p20 speed for all trips on this segment|float64|
 |trips_per_hour|`n_trips_shp` / hours in filter|float64|
 
 *disaggregate value -- applies to this trip only
@@ -332,7 +346,7 @@ The `describe_slow_routes` method lists out the routes in the current filter exp
 
 It's often useful to measure transit delay on a specific corridor to support technical metric generation for the Solutions for Congested Corridors Program, Local Partnership Program, and other analyses.
 
-If you've recieved a corridor from an SCCP/LPP applicant or elsewhere, load it as a geodataframe and add it using the `add_corridor` method. If you're already looking at a speed map and want to measure delay for a portion of the map, you can use the `autocorridor` method to specify a corridor using a shape_id and two stop_sequences. This saves time by avoiding the need to generate the polygon elsewhere.
+If you've received a corridor from an SCCP/LPP applicant or elsewhere, load it as a geodataframe and add it using the `add_corridor` method. If you're already looking at a speed map and want to measure delay for a portion of the map, you can use the `autocorridor` method to specify a corridor using a shape_id and two stop_sequences. This saves time by avoiding the need to generate the polygon elsewhere.
 
 The corridor must be a single polygon, and in order to generate metrics it must include at least one transit stop.
 
@@ -356,7 +370,7 @@ See [`data_analyses/ca_transit_speed_maps/technical_notes.md`](https://github.co
 
 ```{mermaid}
 flowchart TD
-    rcv_corr[/recieve corridor from applicant/] -->
+    rcv_corr[/receive corridor from applicant/] -->
     ver_corr[/verify corridor is polygon/] -->
     gen_data[generate analysis data for timeframe*]
     subgraph fm[RtFilterMapper]

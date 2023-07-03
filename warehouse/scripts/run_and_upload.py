@@ -2,7 +2,6 @@
 
 import json
 import os
-import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -13,6 +12,7 @@ import pendulum
 import sentry_sdk
 import typer
 from dbt_artifacts import Manifest, RunResults, RunResultStatus
+from dbtmetabase.models.interface import DbtInterface, MetabaseInterface  # type: ignore
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
 
@@ -22,7 +22,7 @@ artifacts = map(
 
 sentry_sdk.init()
 
-app = typer.Typer(pretty_exceptions_enable=False)
+app = typer.Typer()
 
 
 class DbtException(Exception):
@@ -149,6 +149,7 @@ def run(
     sync_metabase: bool = False,
     check_sync_metabase: bool = False,
     select: Optional[str] = None,
+    dbt_vars: Optional[str] = None,
     exclude: Optional[str] = None,
 ) -> None:
     assert (
@@ -197,6 +198,8 @@ def run(
             args.append("--full-refresh")
         if select:
             args.extend(["--select", *select.split(" ")])
+        if dbt_vars:
+            args.extend(["--vars", dbt_vars])
         if exclude:
             args.extend(["--exclude", exclude])
         results_to_check.append(subprocess.run(get_command(*args)))
@@ -219,6 +222,8 @@ def run(
             args.extend(["--exclude", exclude])
         if select:
             args.extend(["--select", *select.split(" ")])
+        if dbt_vars:
+            args.extend(["--vars", dbt_vars])
         subprocess.run(get_command(*args))
 
         with open("./target/run_results.json") as f:
@@ -290,85 +295,76 @@ def run(
 
             results_to_check.append(subprocess.run(args))
 
+    metabase_export_exception: Optional[Exception] = None
     if sync_metabase:
         if target and (target.startswith("prod") or target.startswith("staging")):
             typer.secho("syncing documentation to metabase", fg=typer.colors.MAGENTA)
-            # Use a subprocess here so we can just parse the stdout/stderr
-            p = subprocess.run(
-                [
-                    "dbt-metabase",
-                    "models",
-                    "--metabase_exclude_sources",
-                    "--dbt_manifest_path",
-                    "./target/manifest.json",
-                    "--dbt_docs_url",
-                    "https://dbt-docs.calitp.org",
-                    "--metabase_database",
-                    (
-                        "Data Marts (formerly Warehouse Views)"
-                        if target.startswith("prod")
-                        else "(Internal) Staging Warehouse Views"
-                    ),
-                    "--dbt_schema_excludes",
-                    "staging",
-                    "payments",
-                    "--metabase_sync_skip",
-                ],
-                env={
-                    **os.environ,
-                    "COLUMNS": "300",  # we have to make this wide enough to avoid splitting log lines
-                },
-                capture_output=True,
+
+            # get secrets
+            mb_user = os.getenv("MB_USER")
+            mb_pass = os.getenv("MB_PASSWORD")
+            mb_host = os.getenv("MB_HOST")
+            dbt_database = os.getenv("DBT_DATABASE")
+            metabase_database = (
+                "Data Marts (formerly Warehouse Views)"
+                if target.startswith("prod")
+                else "(Internal) Staging Warehouse Views"
             )
 
-            if check_sync_metabase:
-                results_to_check.append(p)
+            # use programmatic invocation
+            # Instantiate dbt interface
+            dbt = DbtInterface(
+                manifest_path="./target/manifest.json",
+                database=dbt_database,
+                schema_excludes=["staging", "payments"],
+            )
 
-            with open("./target/manifest.json") as f:
-                manifest = Manifest(**json.load(f))
-            matches = {}
-            for line in p.stdout.decode().splitlines():
-                print(line)
-                for pattern in (
-                    r"WARNING\s+Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)",
-                    r"WARNING\s+Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)",
-                ):
-                    match = re.search(pattern, line)
-                    if match and match.group("model") not in matches:
-                        matches[match.group("model")] = (match, line)
-            for model, (first_match, line) in matches.items():
-                # Just use a single exception type for now, regardless of whether the model is missing entirely
-                # or just a column
-                exc = DbtMetabaseSyncFailure(first_match.group())
-                with sentry_sdk.push_scope() as scope:
-                    scope.fingerprint = [type(exc), model]
-                    scope.set_context(
-                        "log",
-                        {
-                            "match": str(first_match),
-                            "line": line,
-                        },
-                    )
-                    node = next(
-                        node
-                        for node in manifest.nodes.values()
-                        if node.name == model.lower()
-                    )
-                    scope.set_context(
-                        "dbt",
-                        {
-                            "path": str(node.original_file_path),
-                        },
-                    )
-                    sentry_sdk.capture_exception(exc, scope=scope)
+            # Load models
+            typer.secho("reading dbt models")
+            dbt_models, aliases = dbt.read_models(
+                docs_url="https://dbt-docs.calitp.org",
+            )
+
+            # Instantiate Metabase interface
+            typer.secho("instantiating metabase interface")
+            assert mb_host, "mb_host is empty."
+            metabase = MetabaseInterface(
+                host=mb_host.lstrip("https://"),
+                user=mb_user,
+                password=mb_pass,
+                use_http=True,
+                database=metabase_database,
+                exclude_sources=True,
+            )
+
+            # TODO: We used to try to report individual models to Sentry for tracking,
+            #  but parsing stdout logs is fragile; if we want to add the handling code
+            #  back, we need tests
+            typer.secho("propagating models to metabase")
+            try:
+                metabase.client.export_models(
+                    database=metabase.database,
+                    models=dbt_models,
+                    aliases=aliases,
+                )
+            except Exception as e:
+                metabase_export_exception = e
+                typer.secho(
+                    "Metabase export models failed with exception "
+                    + str(metabase_export_exception)
+                )
+
         else:
             typer.secho(
-                f"WARNING: running with non-prod target {target} so skipping metabase sync",
+                f"WARNING: running with prod target {target} so skipping metabase sync",
                 fg=typer.colors.YELLOW,
             )
 
     for result in results_to_check:
         result.check_returncode()
+
+    if check_sync_metabase and metabase_export_exception:
+        raise metabase_export_exception
 
 
 if __name__ == "__main__":

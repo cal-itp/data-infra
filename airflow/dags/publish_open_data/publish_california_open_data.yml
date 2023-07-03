@@ -33,7 +33,7 @@ secrets:
     key: calitp-ckan-gtfs-schedule-key
 
 k8s_resources:
-  request_memory: 10.0Gi
+  request_memory: 20.0Gi
   request_cpu: 1
 
 tolerations:

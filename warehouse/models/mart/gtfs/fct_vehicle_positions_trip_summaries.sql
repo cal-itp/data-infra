@@ -13,7 +13,7 @@
 
 WITH vehicle_positions AS (
     SELECT * FROM {{ ref('fct_vehicle_positions_messages') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 fct_vehicle_positions_trip_summaries AS (

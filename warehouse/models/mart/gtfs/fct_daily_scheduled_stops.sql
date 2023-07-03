@@ -1,14 +1,21 @@
-{{ config(materialized='table') }}
+{{
+    config(
+        materialized='incremental',
+        unique_key = 'key',
+        cluster_by='feed_key',
+    )
+}}
 
-WITH fct_daily_scheduled_trips AS (
+WITH fct_scheduled_trips AS (
 
     SELECT *
-    FROM {{ ref('fct_daily_scheduled_trips') }}
+    FROM {{ ref('fct_scheduled_trips') }}
 ),
 
 dim_stop_times AS (
     SELECT *
     FROM {{ ref('dim_stop_times') }}
+    WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START', this_dt_column='_feed_valid_from', filter_dt_column='_feed_valid_from', dev_lookback_days = None) }}
 ),
 
 dim_stops AS (
@@ -33,6 +40,7 @@ stops_by_day_by_route AS (
         trips.feed_key,
         COALESCE(CAST(trips.route_type AS INT), 1000) AS route_type,
         stop_times.stop_id,
+        stop_times._feed_valid_from,
         trips.feed_timezone,
 
         COUNT(*) AS stop_events_count_by_route,
@@ -62,10 +70,10 @@ stops_by_day_by_route AS (
         ON stop_times.feed_key = freq.feed_key
         AND stop_times.trip_id = freq.trip_id
         AND stop_times.stop_id = freq.stop_id
-    LEFT JOIN fct_daily_scheduled_trips AS trips
+    LEFT JOIN fct_scheduled_trips AS trips
         ON trips.feed_key = stop_times.feed_key
             AND trips.trip_id = stop_times.trip_id
-    GROUP BY 1, 2, 3, 4, 5
+    GROUP BY 1, 2, 3, 4, 5, 6
 
 ),
 
@@ -77,6 +85,7 @@ stops_by_day AS (
         feed_timezone,
         feed_key,
         stop_id,
+        MAX(_feed_valid_from) as _feed_valid_from,
 
         SUM(stop_events_count_by_route) AS stop_event_count,
 
@@ -130,6 +139,7 @@ fct_daily_scheduled_stops AS (
         stops_by_day.stop_event_count,
         stops_by_day.first_stop_arrival_datetime_pacific,
         stops_by_day.last_stop_departure_datetime_pacific,
+        stops_by_day._feed_valid_from,
 
         pivoted.route_type_0,
         pivoted.route_type_1,
@@ -146,7 +156,7 @@ fct_daily_scheduled_stops AS (
         stops_by_day.contains_warning_duplicate_stop_times_primary_key,
         stops_by_day.contains_warning_duplicate_trip_primary_key,
 
-        stops.warning_duplicate_primary_key AS contains_warning_duplicate_stop_primary_key,
+        stops.warning_duplicate_gtfs_key AS contains_warning_duplicate_stop_primary_key,
 
         stops.key AS stop_key,
         stops.tts_stop_name,

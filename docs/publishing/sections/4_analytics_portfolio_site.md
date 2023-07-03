@@ -58,7 +58,7 @@ Before executing the build, there are a few prior steps you need to do.
             - chapters:
               - caption: County Name
                 params:
-                  paramter1_county_name
+                  parameter1_county_name
                 sections:
                 - city: parameter2_city_name
                 - city: parameter2_city_name

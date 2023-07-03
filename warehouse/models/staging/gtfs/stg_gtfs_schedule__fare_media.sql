@@ -12,6 +12,7 @@ stg_gtfs_schedule__fare_media AS (
         base64_url,
         ts,
         dt AS _dt,
+        _line_number,
         {{ trim_make_empty_string_null('fare_media_id') }} AS fare_media_id,
         {{ trim_make_empty_string_null('fare_media_name') }} AS fare_media_name,
         {{ trim_make_empty_string_null('fare_media_type') }} AS fare_media_type

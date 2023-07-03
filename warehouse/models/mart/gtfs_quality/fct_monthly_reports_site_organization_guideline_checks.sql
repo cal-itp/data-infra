@@ -12,6 +12,7 @@ checks AS (
            check,
            reports_status,
            is_manual,
+           reports_order,
     FROM {{ ref('fct_daily_organization_combined_guideline_checks') }}
     -- This filtering is temporary, and could also be done further downstream:
     WHERE feature = {{ compliance_schedule() }}
@@ -44,7 +45,8 @@ fct_monthly_reports_site_organization_guideline_checks AS (
         checks.feature,
         checks.check,
         checks.reports_status,
-        checks.is_manual
+        checks.is_manual,
+        checks.reports_order
     FROM idx_monthly_reports_site AS idx
     LEFT JOIN generate_biweekly_dates AS dates
         USING (publish_date)

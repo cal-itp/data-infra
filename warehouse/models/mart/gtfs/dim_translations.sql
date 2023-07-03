@@ -7,7 +7,8 @@ WITH make_dim AS (
 
 dim_translations AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'table_name', 'field_name', 'language', 'record_id', 'record_sub_id', 'field_value']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', '_line_number']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'table_name', 'field_name', 'language', 'record_id', 'record_sub_id', 'field_value']) }} AS _gtfs_key,
         feed_key,
         table_name,
         field_name,
@@ -17,7 +18,9 @@ dim_translations AS (
         record_sub_id,
         field_value,
         base64_url,
+        _dt,
         _feed_valid_from,
+        _line_number,
         feed_timezone,
     FROM make_dim
 )

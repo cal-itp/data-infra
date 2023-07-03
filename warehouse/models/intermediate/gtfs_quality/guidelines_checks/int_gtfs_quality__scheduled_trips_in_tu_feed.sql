@@ -10,8 +10,8 @@ fct_observed_trips AS (
     WHERE tu_base64_url IS NOT NULL
 ),
 
-fct_daily_scheduled_trips AS (
-    SELECT * FROM {{ ref('fct_daily_scheduled_trips') }}
+fct_scheduled_trips AS (
+    SELECT * FROM {{ ref('fct_scheduled_trips') }}
 ),
 
 dim_provider_gtfs_data AS (
@@ -27,7 +27,7 @@ compare_trips AS (
         scheduled_trips.feed_key AS schedule_feed_key,
         COUNT(DISTINCT scheduled_trips.trip_id) AS scheduled_trips,
         COUNT(DISTINCT observed_trips.trip_id) AS observed_trips,
-    FROM fct_daily_scheduled_trips AS scheduled_trips
+    FROM fct_scheduled_trips AS scheduled_trips
     LEFT JOIN fct_observed_trips AS observed_trips
       -- should this be activity date or service date? will depend on fix for https://github.com/cal-itp/data-infra/issues/2347
       ON scheduled_trips.service_date = observed_trips.dt

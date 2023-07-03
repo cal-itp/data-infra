@@ -5,7 +5,7 @@
 ### Parameterized Titles
 * If you're parameterizing the notebook, the first Markdown cell must include parameters to inject.
     * Ex: If `district` is one of the parameters in your `sites/my_report.yml`, a header Markdown cell could be `# District {district} Analysis`.
-    * Note: The site URL is constructed from the original notebok name and the parameter in the JupyterBook build: `0_notebook_name__district_x_analysis.html`
+    * Note: The site URL is constructed from the original notebook name and the parameter in the JupyterBook build: `0_notebook_name__district_x_analysis.html`
 
 ### Consecutive Headers
 

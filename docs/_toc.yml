@@ -50,19 +50,7 @@ parts:
         - file: kubernetes/JupyterHub
         - file: kubernetes/architecture
         - file: kubernetes/deployment
-      - file: ci/README
-        sections:
-        - file: ci/Git-Flow-Services
-        - file: ci/Pipeline-Variables
-        - file: ci/steps/build-docker-image
-        - file: ci/steps/build-git-notes
-        - file: ci/steps/build-git-tag
-        - file: ci/steps/configure-build-git-notes
-        - file: ci/steps/configure-docker-login
-        - file: ci/steps/configure-git-remote
-        - file: ci/steps/release-kube-overlay
-        - file: ci/steps/validate-build-git-tag
-        - file: ci/steps/validate-clean-worktree
+      - file: infrastructure/README
       - file: github/contribute_to_repos.md
       - file: services/overview
         sections:

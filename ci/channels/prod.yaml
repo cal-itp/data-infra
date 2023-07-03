@@ -1,0 +1,93 @@
+calitp:
+  channel: prod
+  releases:
+    - name: airflow-jobs
+      driver: kustomize
+      kustomize_dir: kubernetes/apps/manifests/airflow-jobs
+      secrets:
+        - airflow-jobs_jobs-data
+    - name: grafana
+      driver: helm
+      namespace: monitoring-grafana
+      helm_name: grafana
+      helm_chart: kubernetes/apps/charts/grafana
+      helm_values:
+        - kubernetes/apps/values/grafana.yaml
+        - kubernetes/apps/values/grafana-prod.yaml
+      secrets:
+        - monitoring-grafana__grafana-initial-admin
+    - name: jupyterhub
+      driver: helm
+      namespace: jupyterhub
+      helm_name: jupyterhub
+      helm_chart: kubernetes/apps/charts/jupyterhub
+      secrets:
+        - jupyterhub_jupyterhub-gcloud-service-key
+        - jupyterhub_jupyterhub-github-config
+    - name: loki
+      driver: helm
+      namespace: monitoring-loki
+      helm_name: loki
+      helm_chart: kubernetes/apps/charts/loki
+    - name: metabase
+      driver: helm
+      namespace: metabase
+      helm_name: metabase
+      helm_chart: kubernetes/apps/charts/metabase
+      helm_values:
+        - kubernetes/apps/values/metabase.yaml
+      secrets:
+        - metabase_service_account_key
+    - name: postgresql-backup-grafana
+      driver: helm
+      namespace: monitoring-grafana
+      helm_name: postgresql-backup
+      helm_chart: kubernetes/apps/charts/postgresql-backup
+      helm_values:
+        - kubernetes/apps/values/postgresql-backup-grafana.yaml
+      secrets:
+        - monitoring-grafana_database-backup
+        - monitoring-grafana_grafana-postgresql
+    - name: postgresql-backup-metabase
+      driver: helm
+      namespace: metabase
+      helm_name: postgresql-backup
+      helm_chart: kubernetes/apps/charts/postgresql-backup
+      helm_values:
+        - kubernetes/apps/values/postgresql-backup-metabase.yaml
+        - kubernetes/apps/values/postgresql-backup-metabase-prod.yaml
+      secrets:
+        - metabase_database-backup
+        - metabase_gcs-upload-svcacct
+    - name: postgresql-backup-sentry
+      driver: helm
+      namespace: sentry
+      helm_name: postgresql-backup
+      helm_chart: kubernetes/apps/charts/postgresql-backup
+      helm_values:
+        - kubernetes/apps/values/postgresql-backup-sentry.yaml
+      secrets:
+        - sentry_database-backup
+    - name: prometheus
+      driver: helm
+      namespace: monitoring-prometheus
+      helm_name: prometheus
+      helm_chart: kubernetes/apps/charts/prometheus
+      helm_values:
+        - kubernetes/apps/values/prometheus.yaml
+    - name: promtail
+      driver: helm
+      namespace: monitoring-loki
+      helm_name: promtail
+      helm_chart: kubernetes/apps/charts/promtail
+      helm_values:
+        - kubernetes/apps/values/promtail.yaml
+    - name: sftp-ingest-elavon
+      driver: kustomize
+      kustomize_dir: kubernetes/apps/overlays/prod-sftp-ingest-elavon
+      # TODO: sftp secrets
+    # TODO: Sentry
+#    - name: sentry
+#      secrets:
+#        - sentry_sentry-secret
+#        - sentry_sentry-sentry-postgresql
