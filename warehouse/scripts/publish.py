@@ -437,7 +437,7 @@ def _publish_exposure(
                     )
 
                     schedule_feeds_table = (
-                        node.database + "mart_gtfs.dim_schedule_feeds"
+                        node.database + ".mart_gtfs.dim_schedule_feeds"
                     )
 
                     df = pd.read_gbq(
