@@ -30,6 +30,7 @@ fct_daily_rt_feed_validation_notices AS (
         daily_feeds.date,
         daily_feeds.base64_url,
         codes.code,
+        codes.description,
         codes.is_critical,
         -- TODO: at some point, these codes will be versioned by validator version
         ARRAY_AGG(DISTINCT notices.gtfs_validator_version IGNORE NULLS) AS gtfs_validator_versions,
@@ -50,7 +51,7 @@ fct_daily_rt_feed_validation_notices AS (
         ON outcomes.extract_ts = notices.ts
         AND outcomes.base64_url = notices.base64_url
         AND codes.code = notices.error_message_validation_rule_error_id
-    GROUP BY 1, 2, 3, 4, 5
+    GROUP BY 1, 2, 3, 4, 5, 6
 )
 
 SELECT * FROM fct_daily_rt_feed_validation_notices
