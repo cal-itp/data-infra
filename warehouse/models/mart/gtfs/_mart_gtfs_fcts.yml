@@ -1602,7 +1602,8 @@ models:
       So, for example, if there is a service alert for Route A on a given date,
       this table will *not* include all trips on Route A for that date.
     tests:
-      - dbt_utils.expression_is_true:
+      - &warn_rt_trip_hours_past_midnight_no_start_date
+        dbt_utils.expression_is_true:
           expression: "NOT (EXTRACT(HOUR FROM trip_start_time_interval) > 24 AND trip_start_date IS NULL)"
           severity: warn
     columns:
@@ -1633,15 +1634,14 @@ models:
         name: calculated_iteration_num
         description: |
           1-based ordered count of `trip_start_time` values for this `trip_id` on this
-          `calculated_service_date`. So for example if a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
-          the first one will have `calculated_iteration_num` of 1 and the second will have `calculated_iteration_num` of 2.
+          `calculated_service_date`. Ex.: If a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
+          the first will have `calculated_iteration_num` of 1 and the second will have `calculated_iteration_num` of 2.
           This helps normalize the following cases:
-            - For frequency-based trips: Attempts to standardize to account for the fact that the `trip_start_time` in RT data may
-                not align exactly with the start time of any individual iteration in the schedule data (especially if `frequencies.exact_times` = 1 in the schedule data)
-            - Across RT feeds: We have seen cases where, for example, the trip updates feed provides `trip_start_time` (even for non-frequency-based trips)
-                but the vehicle positions feed does not (the field is null). We can calculate a `calculated_iteration_num` of 1 for both
-                feeds to account for this difference, because it is likely a byproduct of some technical implementation
-                rather than a true indication that the two represent different trips.
+          - For frequency-based trips: `trip_start_time` in RT data may not align exactly with the start time of any individual iteration in the schedule data (especially if `frequencies.exact_times` = 1 in schedule), so this field normalizes
+          - Across RT feeds: We have seen cases where, for example, the trip updates feed provides `trip_start_time` (even for non-frequency-based trips)
+          but the vehicle positions feed does not (the field is null). We can calculate a `calculated_iteration_num` of 1 for both
+          feeds to account for this difference, because it is likely a byproduct of technical implementation
+          rather than a true indication that the two represent different trips.
       - &starting_schedule_relationship
         name: starting_schedule_relationship
         description: |
@@ -1679,6 +1679,8 @@ models:
         description: |
           Pipe (`|`) delimited list of distinnct `trip_schedule_relationship` values provided in the RT message trip descriptor
           for messages containing this trip on this `calculated_service_date`.
+          Values are listed in alphabetical order, not the chronological order in which they appeared. So if a trip starts as scheduled
+          and then is canceled, this field will read "CANCELED|SCHEDULED" (Canceled first because it is first alphabetically.)
           There are valid reasons to have multiple values in this field, for example if a trip was scheduled
           but later is updated to canceled.
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
@@ -1725,6 +1727,8 @@ models:
   - name: fct_trip_updates_summaries
     description: |
       Summarizes trips observed in trip update messages.
+    tests:
+      - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
       - *rt_trip_summary_key
       - *trip_instance_key
@@ -1793,6 +1797,8 @@ models:
   - name: fct_vehicle_positions_trip_summaries
     description: |
       Summarizes trips observed in vehicle position messages.
+    tests:
+      - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
       - *rt_trip_summary_key
       - *trip_instance_key
