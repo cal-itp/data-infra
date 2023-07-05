@@ -29,8 +29,7 @@ compare_trips AS (
         COUNT(DISTINCT observed_trips.trip_id) AS observed_trips,
     FROM fct_scheduled_trips AS scheduled_trips
     LEFT JOIN fct_observed_trips AS observed_trips
-      -- should this be activity date or service date? will depend on fix for https://github.com/cal-itp/data-infra/issues/2347
-      ON scheduled_trips.service_date = observed_trips.dt
+      ON scheduled_trips.service_date = observed_trips.service_date
       AND scheduled_trips.gtfs_dataset_key = observed_trips.schedule_to_use_for_rt_validation_gtfs_dataset_key
       AND scheduled_trips.trip_id = observed_trips.trip_id
     GROUP BY 1, 2, 3

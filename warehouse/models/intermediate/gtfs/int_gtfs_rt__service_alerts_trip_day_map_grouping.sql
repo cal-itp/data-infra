@@ -27,7 +27,7 @@ WITH service_alerts AS (
 grouped AS (
     SELECT
         dt,
-        calculated_service_date,
+        service_date,
         service_alerts.base64_url,
         trip_id,
         trip_route_id,
@@ -64,13 +64,13 @@ int_gtfs_rt__service_alerts_trip_day_map_grouping AS (
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         -- this key is not unique yet here but will be on the downstream final model
         {{ dbt_utils.generate_surrogate_key([
-            'calculated_service_date',
+            'service_date',
             'base64_url',
             'trip_id',
             'trip_start_time',
         ]) }} as key,
         dt,
-        calculated_service_date,
+        service_date,
         base64_url,
         trip_id,
         trip_route_id,

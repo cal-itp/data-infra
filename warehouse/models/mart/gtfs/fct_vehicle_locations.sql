@@ -2,7 +2,7 @@
     config(
         materialized='incremental',
         unique_key = 'key',
-        cluster_by = ['calculated_service_date', 'base64_url'],
+        cluster_by = ['service_date', 'base64_url'],
     )
 }}
 
@@ -15,7 +15,7 @@ WITH fct_vehicle_positions_messages AS (
 
 vp_trips AS (
     SELECT
-        calculated_service_date,
+        service_date,
         base64_url,
         trip_id,
         trip_start_time,
@@ -25,8 +25,8 @@ vp_trips AS (
 
 first_keying_and_filtering AS (
     SELECT * EXCEPT (key),
-        {{ dbt_utils.generate_surrogate_key(['calculated_service_date', 'base64_url', 'location_timestamp', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS key,
-        {{ dbt_utils.generate_surrogate_key(['calculated_service_date', 'base64_url', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS vehicle_trip_key
+        {{ dbt_utils.generate_surrogate_key(['service_date', 'base64_url', 'location_timestamp', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['service_date', 'base64_url', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS vehicle_trip_key
     FROM fct_vehicle_positions_messages
     -- drop cases where trip id is null since these cannot be joined to schedule
     -- this is something we may want to reconsider
@@ -55,7 +55,7 @@ fct_vehicle_locations AS (
         trip_instance_key
     FROM deduped
     LEFT JOIN vp_trips
-        ON deduped.calculated_service_date = vp_trips.calculated_service_date
+        ON deduped.service_date = vp_trips.service_date
         AND deduped.trip_id = vp_trips.trip_id
         AND deduped.base64_url = vp_trips.base64_url
         -- this is often null but we need to include it for frequency based trips

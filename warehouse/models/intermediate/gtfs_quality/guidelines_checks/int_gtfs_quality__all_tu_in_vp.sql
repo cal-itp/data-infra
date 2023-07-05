@@ -11,7 +11,7 @@ dim_provider_gtfs_data AS (
 -- condense large trip table to the feed/day level for more performant joins
 observed_trips AS (
     SELECT
-        calculated_service_date AS date,
+        service_date AS date,
         tu_gtfs_dataset_key,
         COUNTIF(tu_num_distinct_message_ids IS NOT NULL
             AND vp_num_distinct_message_ids IS NOT NULL) AS vp_and_tu_present,

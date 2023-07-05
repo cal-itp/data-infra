@@ -31,10 +31,10 @@ rt_joins AS (
         -- so for these we can coalesce across feeds
         -- otherwise, values are not guaranteed to be the same!
         COALESCE(
-            tu.calculated_service_date,
-            vp.calculated_service_date
-            -- , sa.calculated_service_date
-        ) AS calculated_service_date,
+            tu.service_date,
+            vp.service_date
+            -- , sa.service_date
+        ) AS service_date,
         COALESCE(
             tu.schedule_base64_url,
             vp.schedule_base64_url
@@ -46,10 +46,10 @@ rt_joins AS (
             --, sa.trip_id
         ) AS trip_id,
         COALESCE(
-            tu.calculated_iteration_num,
-            vp.calculated_iteration_num
-            --, sa.calculated_iteration_num
-        ) AS calculated_iteration_num,
+            tu.iteration_num,
+            vp.iteration_num
+            --, sa.iteration_num
+        ) AS iteration_num,
 
         COALESCE(tu.warning_multiple_route_ids, FALSE)
             OR COALESCE(vp.warning_multiple_route_ids, FALSE)
@@ -156,10 +156,10 @@ rt_joins AS (
 fct_observed_trips AS (
     SELECT
         trip_instance_key,
-        calculated_service_date,
+        service_date,
         schedule_base64_url,
         trip_id,
-        calculated_iteration_num,
+        iteration_num,
         tu_datasets.name AS tu_name,
         vp_datasets.name AS vp_name,
         -- sa_datasets.name AS sa_name,
@@ -255,7 +255,7 @@ fct_observed_trips AS (
         ON rt_joins.vp_base64_url = vp_datasets.base64_url
         AND rt_joins.vp_min_extract_ts BETWEEN vp_datasets._valid_from AND vp_datasets._valid_to
     LEFT JOIN fct_daily_schedule_feeds AS schedule
-        ON rt_joins.calculated_service_date = schedule.date
+        ON rt_joins.service_date = schedule.date
         AND rt_joins.schedule_base64_url = schedule.base64_url
 )
 

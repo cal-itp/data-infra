@@ -733,8 +733,8 @@ models:
           #     field: key
           #     config:
           #       where: '__rt_sampled__'
-      - &calculated_service_date
-        name: calculated_service_date
+      - &service_date
+        name: service_date
         description: |
           Attempt to identify the `service_date` (corresponding to the related schedule feed) for trip activity referenced in a
           GTFS RT feed. It uses the following fallback logic:
@@ -840,7 +840,7 @@ models:
       - name: trip_start_time_sec
         description: |
           `trip_start_time` converted to a number of seconds after twelve hours before noon (usually midnight)
-          on `calculated_service_date`.
+          on `service_date`.
           See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
           *Note: If this is larger than 86,400 (the number of seconds in one day) and `trip_start_date` is not populated, the interpretation for this
           field becomes unclear.*
@@ -1625,42 +1625,42 @@ models:
         tests:
           - not_null
           - unique
-      - *calculated_service_date
+      - *service_date
       - *base64_url
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_date
-      - &rt_calculated_iteration_num
-        name: calculated_iteration_num
+      - &rt_iteration_num
+        name: iteration_num
         description: |
           1-based ordered count of `trip_start_time` values for this `trip_id` on this
-          `calculated_service_date`. Ex.: If a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
-          the first will have `calculated_iteration_num` of 1 and the second will have `calculated_iteration_num` of 2.
+          `service_date`. Ex.: If a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
+          the first will have `iteration_num` of 1 and the second will have `iteration_num` of 2.
           This helps normalize the following cases:
           - For frequency-based trips: `trip_start_time` in RT data may not align exactly with the start time of any individual iteration in the schedule data (especially if `frequencies.exact_times` = 1 in schedule), so this field normalizes
           - Across RT feeds: We have seen cases where, for example, the trip updates feed provides `trip_start_time` (even for non-frequency-based trips)
-          but the vehicle positions feed does not (the field is null). We can calculate a `calculated_iteration_num` of 1 for both
+          but the vehicle positions feed does not (the field is null). We can calculate a `iteration_num` of 1 for both
           feeds to account for this difference, because it is likely a byproduct of technical implementation
           rather than a true indication that the two represent different trips.
       - &starting_schedule_relationship
         name: starting_schedule_relationship
         description: |
           `schedule_relationship` provided in the RT message trip descriptor
-          for the first message for this trip on this `calculated_service_date`.
+          for the first message for this trip on this `service_date`.
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret this field.
       - &ending_schedule_relationship
         name: ending_schedule_relationship
         description: |
           `schedule_relationship` provided in the RT message trip descriptor
-          for the last message for this trip on this `calculated_service_date`.
+          for the last message for this trip on this `service_date`.
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret this field.
       - &rt_trip_route_ids
         name: trip_route_ids
         description: |
           Pipe (`|`) delimited list of distinnct `route_id` values provided in the RT message trip descriptor
-          for messages containing this trip on this `calculated_service_date`.
+          for messages containing this trip on this `service_date`.
           There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
           that likely indicates some level of data corruption.
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
@@ -1669,7 +1669,7 @@ models:
         name: trip_direction_ids
         description: |
           Pipe (`|`) delimited list of distinnct `direction_id` values provided in the RT message trip descriptor
-          for messages containing this trip on this `calculated_service_date`.
+          for messages containing this trip on this `service_date`.
           There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
           that likely indicates some level of data corruption.
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
@@ -1678,7 +1678,7 @@ models:
         name: trip_schedule_relationships
         description: |
           Pipe (`|`) delimited list of distinnct `trip_schedule_relationship` values provided in the RT message trip descriptor
-          for messages containing this trip on this `calculated_service_date`.
+          for messages containing this trip on this `service_date`.
           Values are listed in alphabetical order, not the chronological order in which they appeared. So if a trip starts as scheduled
           and then is canceled, this field will read "CANCELED|SCHEDULED" (Canceled first because it is first alphabetically.)
           There are valid reasons to have multiple values in this field, for example if a trip was scheduled
@@ -1733,12 +1733,12 @@ models:
       - *rt_trip_summary_key
       - *trip_instance_key
       - *gtfs_rt_schedule_feed_timezone
-      - *calculated_service_date
+      - *service_date
       - *base64_url
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_date
-      - *rt_calculated_iteration_num
+      - *rt_iteration_num
       - *starting_schedule_relationship
       - *ending_schedule_relationship
       - *rt_trip_route_ids
@@ -1803,12 +1803,12 @@ models:
       - *rt_trip_summary_key
       - *trip_instance_key
       - *gtfs_rt_schedule_feed_timezone
-      - *calculated_service_date
+      - *service_date
       - *base64_url
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_date
-      - *rt_calculated_iteration_num
+      - *rt_iteration_num
       - *starting_schedule_relationship
       - *ending_schedule_relationship
       - *rt_trip_route_ids

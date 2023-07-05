@@ -11,9 +11,9 @@ WITH add_cols AS (
         -- subtract one because row_number is 1-based count and in frequency-based schedule we use 0-based
         DENSE_RANK() OVER (PARTITION BY
             base64_url,
-            calculated_service_date,
+            service_date,
             trip_id
-            ORDER BY trip_start_time) - 1 AS calculated_iteration_num
+            ORDER BY trip_start_time) - 1 AS iteration_num
     FROM {{ input_table }}
     -- Torrance has two sets of RT feeds that reference the same schedule feed
     -- this causes problems because trips across both feeds then resolve to the same `trip_instance_key`
@@ -79,11 +79,11 @@ aggregation AS(
      SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         key,
-        calculated_service_date,
+        service_date,
         base64_url,
         trip_id,
         trip_start_time,
-        calculated_iteration_num,
+        iteration_num,
         schedule_feed_timezone,
         schedule_base64_url,
         starting_schedule_relationship,
@@ -113,13 +113,13 @@ aggregation AS(
 
 SELECT
     aggregation.key,
-    {{ dbt_utils.generate_surrogate_key(['calculated_service_date', 'schedule_base64_url', 'trip_id', 'calculated_iteration_num']) }} AS trip_instance_key,
-    calculated_service_date,
+    {{ dbt_utils.generate_surrogate_key(['service_date', 'schedule_base64_url', 'trip_id', 'iteration_num']) }} AS trip_instance_key,
+    service_date,
     base64_url,
     trip_id,
     trip_start_time,
     trip_start_time_interval,
-    calculated_iteration_num,
+    iteration_num,
     trip_start_date,
     schedule_feed_timezone,
     schedule_base64_url,

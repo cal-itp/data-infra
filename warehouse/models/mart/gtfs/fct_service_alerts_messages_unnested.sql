@@ -54,7 +54,7 @@ fct_service_alerts_messages_unnested AS (
         COALESCE(
             trip_start_date,
             DATE(header_timestamp, schedule_feed_timezone),
-            DATE(_extract_ts, schedule_feed_timezone)) AS calculated_service_date,
+            DATE(_extract_ts, schedule_feed_timezone)) AS service_date,
         hour,
         base64_url,
         _extract_ts,

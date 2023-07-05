@@ -31,7 +31,7 @@ fct_trip_updates_messages AS (
         COALESCE(
             trip_start_date,
             DATE(header_timestamp, schedule_feed_timezone),
-            DATE(_extract_ts, schedule_feed_timezone)) AS calculated_service_date,
+            DATE(_extract_ts, schedule_feed_timezone)) AS service_date,
 
         TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND) AS _header_message_age,
         TIMESTAMP_DIFF(_extract_ts, trip_update_timestamp, SECOND) AS _trip_update_message_age,
