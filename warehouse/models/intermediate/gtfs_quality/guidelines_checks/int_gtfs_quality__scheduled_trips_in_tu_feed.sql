@@ -29,14 +29,12 @@ compare_trips AS (
         COUNT(DISTINCT observed_trips.trip_id) AS observed_trips,
     FROM fct_scheduled_trips AS scheduled_trips
     LEFT JOIN fct_observed_trips AS observed_trips
-      ON scheduled_trips.service_date = observed_trips.service_date
-      AND scheduled_trips.gtfs_dataset_key = observed_trips.schedule_to_use_for_rt_validation_gtfs_dataset_key
-      AND scheduled_trips.trip_id = observed_trips.trip_id
+      USING (trip_instance_key)
     GROUP BY 1, 2, 3
 ),
 
 check_start AS (
-    SELECT MIN(dt) AS first_check_date
+    SELECT MIN(service_date) AS first_check_date
     FROM fct_observed_trips
 ),
 
