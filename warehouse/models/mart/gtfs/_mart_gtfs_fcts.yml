@@ -1333,7 +1333,19 @@ models:
         description: '{{ doc("gtfs_trips__direction_id") }}'
       - name: block_id
         description: '{{ doc("gtfs_trips__block_id") }}'
-      - *trip_instance_key
+      - name: trip_instance_key
+        description: |
+          A trip level identifier that uniquely identifies an individual trip across feed types (schedule, trip updates, vehicle positions, service alerts).
+          Composite of:
+            - base64 URL of associated schedule feed
+            - service date
+            - trip_id
+            - iteration number, which attempts to normalize trip start times
+        tests:
+          - not_null
+          - unique:
+              config:
+                where: "not contains_warning_duplicate_trip_primary_key"
       - name: route_key
         description: Foreign key to dim_routes.
         tests:
