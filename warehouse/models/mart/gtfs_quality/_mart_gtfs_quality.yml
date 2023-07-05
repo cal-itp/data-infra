@@ -27,6 +27,7 @@ models:
         tests:
           - not_null
       - name: description
+        description: A plain language description of the issue indicated by the code
         tests:
           - not_null
       - name: is_critical
