@@ -1264,7 +1264,7 @@ models:
 
   - name: fct_scheduled_trips
     description: |
-      A daily table showing all trips that were scheduled on a given date.
+      A table showing all trips that were scheduled according to GTFS schedule data.
       If a `service_date`, `trip_key` pair is present in this table,
       it means that that `trip_key` was scheduled to occur on that `service_date`.
       Specifically, it means that the associated `service_id` was active and had service
@@ -1333,6 +1333,7 @@ models:
         description: '{{ doc("gtfs_trips__direction_id") }}'
       - name: block_id
         description: '{{ doc("gtfs_trips__block_id") }}'
+      - *trip_instance_key
       - name: route_key
         description: Foreign key to dim_routes.
         tests:
@@ -1492,10 +1493,6 @@ models:
         description: '{{ doc("column_frequencies_defined_trip") }}'
       - name: iteration_num
         description: '{{ doc("column_st_iteration_num") }}'
-        tests:
-          - not_null:
-              config:
-                where: "frequencies_defined_trip"
       - name: is_gtfs_flex_trip
         description: '{{ doc("column_is_gtfs_flex_trip") }}'
       - name: is_entirely_demand_responsive_trip
@@ -1621,7 +1618,7 @@ models:
             - base64 URL of associated schedule feed
             - service date
             - trip_id
-            - calculated iteration number, which attempts to normalize trip start times
+            - iteration number, which attempts to normalize trip start times
         tests:
           - not_null
           - unique
@@ -1633,7 +1630,7 @@ models:
       - &rt_iteration_num
         name: iteration_num
         description: |
-          1-based ordered count of `trip_start_time` values for this `trip_id` on this
+          0-based ordered count of `trip_start_time` values for this `trip_id` on this
           `service_date`. Ex.: If a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
           the first will have `iteration_num` of 1 and the second will have `iteration_num` of 2.
           This helps normalize the following cases:
