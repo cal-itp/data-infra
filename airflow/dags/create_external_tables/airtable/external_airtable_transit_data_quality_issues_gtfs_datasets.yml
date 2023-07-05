@@ -11,5 +11,6 @@ destination_project_dataset_table: "external_airtable.transit_data_quality_issue
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
+  require_partition_filter: false
   mode: AUTO
   source_uri_prefix: "transit_data_quality_issues__gtfs_datasets/"
