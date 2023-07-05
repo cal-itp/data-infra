@@ -1273,7 +1273,7 @@ exposures:
           url: https://data.ca.gov
           resources:
             dim_agency_latest:
-              id: e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
+              id: c3828596-e796-4b3b-a146-ebeb09b3a4d2
               description: |
                 Each row is a cleaned row from an agency.txt file.
                 Definitions for the original GTFS fields are available at:
