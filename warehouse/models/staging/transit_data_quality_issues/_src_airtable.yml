@@ -10,4 +10,4 @@ sources:
       - name: transit_data_quality_issues__gtfs_datasets
       - name: transit_data_quality_issues__issue_types
       - name: transit_data_quality_issues__services
-      - name: transit_data_quality_issues__stg_transit_data_quality_issues
+      - name: transit_data_quality_issues__transit_data_quality_issues
