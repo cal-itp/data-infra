@@ -1,13 +1,25 @@
 {{ config(materialized='table') }}
 
-WITH int_transit_data_quality_issues__services AS (
-    SELECT * FROM {{ ref('int_transit_data_quality_issues__services') }}
+WITH latest_data_schemas AS (
+    {{ get_latest_dense_rank(
+        external_table = ref('stg_transit_data_quality_issues__services'),
+        order_by = 'dt DESC'
+        ) }}
 ),
 
-dim_transit_data_quality_services AS (
+historical AS (
     SELECT
-        key,
-        source_record_id,
+        *,
+        TRUE AS _is_current,
+        CAST(universal_first_val AS TIMESTAMP) AS _valid_from,
+        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
+    FROM latest_data_schemas
+),
+
+int_transit_data_quality_issues__services AS (
+    SELECT
+        {{ dbt_utils.generate_surrogate_key(['id', '_valid_from']) }} AS key,
+        id AS source_record_id,
         reporting_category__from_provider__2,
         caltrans_district__from_operating_county_geographies_,
         last_modified_time,
@@ -93,7 +105,7 @@ dim_transit_data_quality_services AS (
         _is_current,
         _valid_from,
         _valid_to,
-    FROM int_transit_data_quality_issues__services
+    FROM historical
 )
 
-SELECT * FROM dim_transit_data_quality_services
+SELECT * FROM int_transit_data_quality_issues__services
