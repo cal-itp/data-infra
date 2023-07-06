@@ -33,6 +33,8 @@ stg_transit_data_quality_issues__transit_data_quality_issues AS (
         waiting_since,
         outreach_status,
         should_wait_until,
+        dt,
+        ts,
     FROM once_daily_transit_data_quality_issues
 )
 

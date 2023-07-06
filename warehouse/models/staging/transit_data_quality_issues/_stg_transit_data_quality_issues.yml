@@ -64,6 +64,10 @@ models:
       - name: data_quality_pipeline_disabled_notes
       - name: future_uri
       - name: schedule_comments
+      - &dt
+        name: dt
+      - &ts
+        name: ts
   - name: stg_transit_data_quality_issues__issue_types
     description: TODO
     columns:
@@ -72,6 +76,8 @@ models:
       - name: transit_data_quality_issues
       - name: name
       - name: notes
+      - *dt
+      - *ts
   - name: stg_transit_data_quality_issues__services
     description: TODO
     columns:
@@ -158,6 +164,8 @@ models:
       - name: start_date
       - name: organizations_2
       - name: eligibility_programs
+      - *dt
+      - *ts
   - name: stg_transit_data_quality_issues__transit_data_quality_issues
     description: TODO
     columns:
@@ -186,3 +194,5 @@ models:
       - name: waiting_since
       - name: outreach_status
       - name: should_wait_until
+      - *dt
+      - *ts

@@ -13,6 +13,8 @@ stg_transit_data_quality_issues__issue_types AS (
         transit_data_quality_issues,
         name,
         notes,
+        dt,
+        ts,
     FROM once_daily_issue_types
 )
 

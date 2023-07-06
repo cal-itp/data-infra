@@ -68,6 +68,8 @@ stg_transit_data_quality_issues__gtfs_datasets AS (
         data_quality_pipeline_disabled_notes,
         future_uri,
         schedule_comments,
+        dt,
+        ts,
     FROM once_daily_gtfs_datasets
 )
 

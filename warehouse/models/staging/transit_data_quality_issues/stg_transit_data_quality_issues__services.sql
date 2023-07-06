@@ -91,6 +91,8 @@ stg_transit_data_quality_issues__services AS (
         start_date,
         organizations_2,
         eligibility_programs,
+        dt,
+        ts,
     FROM once_daily_services
 )
 
