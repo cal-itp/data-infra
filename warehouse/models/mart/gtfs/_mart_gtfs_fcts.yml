@@ -733,7 +733,7 @@ models:
           #     field: key
           #     config:
           #       where: '__rt_sampled__'
-      - &service_date
+      - &rt_service_date
         name: service_date
         description: |
           Attempt to identify the `service_date` (corresponding to the related schedule feed) for trip activity referenced in a
@@ -866,8 +866,8 @@ models:
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret this field and how it corresponds to GTFS schedule data.
       - &rt_trip_start_time
-        name: trip_id
-        description: |
+        name: trip_start_time
+        description: &rt_trip_start_time_desc |
           `start_time` provided in the RT message trip descriptor.
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret this field.
@@ -1138,11 +1138,9 @@ models:
 
   - name: fct_observed_trips
     description: |
-      Joined model of observed trips across RT feeds related to the same
+      Joined model of observed trips across trip updates and vehicle positions RT feeds related to the same
       Schedule feed. For each day, per Schedule, there will be one row
-      per "trip_identifier" which is a hash of the fields that make up
-      a GTFS RT TripDescriptor. See https://gtfs.org/realtime/reference/#message-tripdescriptor
-      for more details.
+      per `trip_instance_key`.
     tests:
       - dbt_utils.expression_is_true:
           expression: "COALESCE(tu_gtfs_dataset_key, vp_gtfs_dataset_key, sa_gtfs_dataset_key) IS NOT NULL"
@@ -1150,21 +1148,61 @@ models:
       # keys and identifiers
       - name: key
         tests: *primary_key_tests
-      - name: dt
-      - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
-        description: Schedule feed used to group RT feeds likely representing the same underlying schedule.
-      - name: trip_identifier
-        description: Hashed representation of a TripDescriptor.
-      - name: trip_id
-        description: Part of a TripDescriptor.
-      - name: trip_route_id
-        description: Part of a TripDescriptor.
-      - name: trip_direction_id
-        description: Part of a TripDescriptor.
-      - name: trip_start_time
-        description: Part of a TripDescriptor.
-      - name: trip_start_date
-        description: Part of a TripDescriptor.
+      - *rt_service_date
+      - name: schedule_base64_url
+        description: |
+          URL-safe base64-encoded URL of the schedule feed associated with
+          the RT feed(s) in which this trip appeared. This is the schedule
+          feed used to validate the associated RT feed(s).
+      - *rt_trip_id
+      - &rt_iteration_num
+        name: iteration_num
+        description: |
+          0-based ordered count of `trip_start_time` values for this `trip_id` on this
+          `service_date`. Ex.: If a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
+          the first will have `iteration_num` of 1 and the second will have `iteration_num` of 2.
+          This helps normalize the following cases:
+          - For frequency-based trips: `trip_start_time` in RT data may not align exactly with the start time of any individual iteration in the schedule data (especially if `frequencies.exact_times` = 1 in schedule), so this field normalizes
+          - Across RT feeds: We have seen cases where, for example, the trip updates feed provides `trip_start_time` (even for non-frequency-based trips)
+          but the vehicle positions feed does not (the field is null). We can calculate a `iteration_num` of 1 for both
+          feeds to account for this difference, because it is likely a byproduct of technical implementation
+          rather than a true indication that the two represent different trips.
+      - name: tu_name
+        description: |
+          Name from the trip updates GTFS dataset record associated
+          with this trip. If null, this trip did not appear in a trip updates feed.
+          This field is provided for convenience and should not be used as a join key.
+        tests:
+          - not_null:
+              config:
+                where: "tu_base64_url IS NOT NULL"
+      - name: vp_name
+        description: |
+          Name from the vehicle positions GTFS dataset record associated
+          with this trip. If null, this trip did not appear in a vehicle positions feed.
+          This field is provided for convenience and should not be used as a join key.
+        tests:
+          - not_null:
+              config:
+                where: "vp_base64_url IS NOT NULL"
+      - name: schedule_name
+        description: |
+          Name from the schedule GTFS dataset record associated
+          with the RT feeds in which this trip appeared.
+      - name: warning_multiple_route_ids
+        description: |
+          Boolean for whether either of the following conditions is met:
+          * Any RT feed in which this trip appeared had `warning_multiple_route_ids` set to true
+          * The trip appeared in multiple RT feeds and the feeds have different `trip_route_ids` values
+          A "true" value in this column means a row should be treated with caution.
+      - name: warning_multiple_route_ids
+        description: |
+          Boolean for whether either of the following conditions is met:
+          * Any RT feed in which this trip appeared had `warning_multiple_direction_ids` set to true
+          * The trip appeared in multiple RT feeds and the feeds have different `trip_direction_ids` values
+          A "true" value in this column means a row should be treated with caution.
+      - name: tu_trip_start_time
+        description: *rt_trip_start_time_desc
       # foreign keys
       - name: tu_gtfs_dataset_key
         tests:
@@ -1634,23 +1672,12 @@ models:
         tests:
           - not_null
           - unique
-      - *service_date
+      - *rt_service_date
       - *base64_url
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_date
-      - &rt_iteration_num
-        name: iteration_num
-        description: |
-          0-based ordered count of `trip_start_time` values for this `trip_id` on this
-          `service_date`. Ex.: If a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
-          the first will have `iteration_num` of 1 and the second will have `iteration_num` of 2.
-          This helps normalize the following cases:
-          - For frequency-based trips: `trip_start_time` in RT data may not align exactly with the start time of any individual iteration in the schedule data (especially if `frequencies.exact_times` = 1 in schedule), so this field normalizes
-          - Across RT feeds: We have seen cases where, for example, the trip updates feed provides `trip_start_time` (even for non-frequency-based trips)
-          but the vehicle positions feed does not (the field is null). We can calculate a `iteration_num` of 1 for both
-          feeds to account for this difference, because it is likely a byproduct of technical implementation
-          rather than a true indication that the two represent different trips.
+      - *rt_iteration_num
       - &starting_schedule_relationship
         name: starting_schedule_relationship
         description: |
@@ -1735,14 +1762,14 @@ models:
 
   - name: fct_trip_updates_summaries
     description: |
-      Summarizes trips observed in trip update messages.
+      Summarizes trips observed in trip update messages, as long as trip_id was populated.
     tests:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
       - *rt_trip_summary_key
       - *trip_instance_key
       - *gtfs_rt_schedule_feed_timezone
-      - *service_date
+      - *rt_service_date
       - *base64_url
       - *rt_trip_id
       - *rt_trip_start_time
@@ -1805,14 +1832,14 @@ models:
 
   - name: fct_vehicle_positions_trip_summaries
     description: |
-      Summarizes trips observed in vehicle position messages.
+      Summarizes trips observed in vehicle position messages, as long as trip_id was populated.
     tests:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
       - *rt_trip_summary_key
       - *trip_instance_key
       - *gtfs_rt_schedule_feed_timezone
-      - *service_date
+      - *rt_service_date
       - *base64_url
       - *rt_trip_id
       - *rt_trip_start_time
