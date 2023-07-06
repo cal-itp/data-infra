@@ -873,19 +873,19 @@ models:
           for details on how to interpret this field.
       - &rt_trip_start_date
         name: trip_id
-        description: |
+        description: &rt_trip_start_date_desc |
           `start_date` provided in the RT message trip descriptor.
           See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret this field.
       - &min_extract_ts
         name: min_extract_ts
-        description: |
+        description: &rt_min_extract_ts_desc |
           Timestamp of the first extract (i.e. the time at which
           we downloaded this feed extract) of the entity being summarized.
           For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
       - &max_extract_ts
         name: max_extract_ts
-        description: |
+        description: &max_extract_ts_desc |
           Timestamp of the last extract (i.e. the time at which
           we downloaded this feed extract) of the entity being summarized.
           For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
@@ -1139,14 +1139,15 @@ models:
   - name: fct_observed_trips
     description: |
       Joined model of observed trips across trip updates and vehicle positions RT feeds related to the same
-      Schedule feed. For each day, per Schedule, there will be one row
-      per `trip_instance_key`.
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "COALESCE(tu_gtfs_dataset_key, vp_gtfs_dataset_key, sa_gtfs_dataset_key) IS NOT NULL"
+      schedule feed. For each day, there will be one row per `trip_instance_key`.
+
+      Columns prefixed with `tu_` or `vp_` reference respectively the trip updates or vehicle positions
+      value for the given attribute. If these are null, it may be because the given trip did not appear in the
+      given feed type or, for optional values, it may simply be because the value was
+      not populated for the given feed.
     columns:
       # keys and identifiers
-      - name: key
+      - name: trip_instance_key
         tests: *primary_key_tests
       - *rt_service_date
       - name: schedule_base64_url
@@ -1175,7 +1176,7 @@ models:
         tests:
           - not_null:
               config:
-                where: "tu_base64_url IS NOT NULL"
+                where: "appeared_in_tu"
       - name: vp_name
         description: |
           Name from the vehicle positions GTFS dataset record associated
@@ -1184,7 +1185,7 @@ models:
         tests:
           - not_null:
               config:
-                where: "vp_base64_url IS NOT NULL"
+                where: "appeared_in_vp"
       - name: schedule_name
         description: |
           Name from the schedule GTFS dataset record associated
@@ -1203,6 +1204,9 @@ models:
           A "true" value in this column means a row should be treated with caution.
       - name: tu_trip_start_time
         description: *rt_trip_start_time_desc
+      - name: tu_trip_start_date
+        description: *rt_trip_start_date_desc
+      - name: tu_min_extract_ts
       # foreign keys
       - name: tu_gtfs_dataset_key
         tests:
@@ -1218,13 +1222,6 @@ models:
               field: key
               to_condition: "type = 'vehicle_positions'"
       - name: vp_base64_url
-      - name: sa_gtfs_dataset_key
-        tests:
-          - dbt_utils.relationships_where:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              to_condition: "type = 'service_alerts'"
-      - name: sa_base64_url
       # trip update facts
       - name: tu_num_distinct_message_ids
         description: Count of distinct trip update message IDs referencing this trip.
@@ -1267,19 +1264,6 @@ models:
         description: Latitude of last vehicle position referencing this trip.
       - name: vp_last_position_longitude
         description: Longitude of last vehicle position referencing this trip.
-      # service alert facts
-      - name: sa_num_distinct_message_ids
-        description: Count of distinct service alert message IDs referencing this trip.
-      - name: sa_service_alert_message_keys
-        description: Array of keys of service alert messages referencing this trip.
-      - name: sa_min_extract_ts
-        description: Timestamp of first service alert extract referencing this trip.
-      - name: sa_max_extract_ts
-        description: Timestamp of last service alert extract referencing this trip.
-      - name: sa_min_header_timestamp
-        description: Timestamp of first service alert header referencing this trip.
-      - name: sa_max_header_timestamp
-        description: Timestamp of last service alert header referencing this trip.
 
   - name: fct_trip_updates_no_stop_times
     description: |
