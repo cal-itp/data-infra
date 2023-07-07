@@ -55,6 +55,7 @@ rt_joins AS (
 
         -- trip updates facts
         tu.trip_start_time AS tu_trip_start_time,
+        tu.trip_start_time_interval AS tu_trip_start_time_interval,
         tu.trip_start_date AS tu_trip_start_date,
         tu.starting_schedule_relationship AS tu_starting_schedule_relationship,
         tu.ending_schedule_relationship AS tu_ending_schedule_relationship,
@@ -82,6 +83,7 @@ rt_joins AS (
 
         -- vehicle positions facts
         vp.trip_start_time AS vp_trip_start_time,
+        vp.trip_start_time_interval AS vp_trip_start_time_interval,
         vp.trip_start_date AS vp_trip_start_date,
         vp.starting_schedule_relationship AS vp_starting_schedule_relationship,
         vp.ending_schedule_relationship AS vp_ending_schedule_relationship,
@@ -128,6 +130,7 @@ fct_observed_trips AS (
 
         -- trip updates facts
         tu_trip_start_time,
+        tu_trip_start_time_interval,
         tu_trip_start_date,
         tu_starting_schedule_relationship,
         tu_ending_schedule_relationship,
@@ -153,6 +156,7 @@ fct_observed_trips AS (
 
         -- vehicle positions facts
         vp_trip_start_time,
+        vp_trip_start_time_interval,
         vp_trip_start_date,
         vp_starting_schedule_relationship,
         vp_ending_schedule_relationship,

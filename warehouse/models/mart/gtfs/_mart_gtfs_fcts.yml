@@ -1161,11 +1161,11 @@ models:
         description: |
           0-based ordered count of `trip_start_time` values for this `trip_id` on this
           `service_date`. Ex.: If a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
-          the first will have `iteration_num` of 1 and the second will have `iteration_num` of 2.
+          the first will have `iteration_num` of 0 and the second will have `iteration_num` of 1.
           This helps normalize the following cases:
           - For frequency-based trips: `trip_start_time` in RT data may not align exactly with the start time of any individual iteration in the schedule data (especially if `frequencies.exact_times` = 1 in schedule), so this field normalizes
           - Across RT feeds: We have seen cases where, for example, the trip updates feed provides `trip_start_time` (even for non-frequency-based trips)
-          but the vehicle positions feed does not (the field is null). We can calculate a `iteration_num` of 1 for both
+          but the vehicle positions feed does not (the field is null). We can calculate a `iteration_num` of 0 for both
           feeds to account for this difference, because it is likely a byproduct of technical implementation
           rather than a true indication that the two represent different trips.
       - name: tu_name
@@ -1189,7 +1189,7 @@ models:
       - name: schedule_name
         description: |
           Name from the schedule GTFS dataset record associated
-          with the RT feeds in which this trip appeared.
+          with the RT feed(s) in which this trip appeared.
       - name: warning_multiple_route_ids
         description: |
           Boolean for whether either of the following conditions is met:
