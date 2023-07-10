@@ -593,6 +593,12 @@ models:
         1. Incremental materialization based on `dt` (to make efficient use of upstream partitions)
         2. Downstream grouping by `service_date` alone (since that is the appropriate final grain for trip-based analysis)
       See downstream `fct_service_alerts_trip_summaries` table for further documentation.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - key
+            - dt
+            - service_date
   - name: int_gtfs_rt__trip_updates_trip_day_map_grouping
     description: |
       This table groups trip updates messages by `dt` (UTC) and `service_date` (usually Pacific)
@@ -600,3 +606,25 @@ models:
         1. Incremental materialization based on `dt` (to make efficient use of upstream partitions)
         2. Downstream grouping by `service_date` alone (since that is the appropriate final grain for trip-based analysis)
       See downstream `fct_trip_updates_summaries` table for further documentation.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - key
+            - dt
+            - service_date
+            - trip_schedule_relationship
+            - trip_direction_id
+  - name: int_gtfs_rt__vehicle_positions_trip_day_map_grouping
+    description: |
+      This table groups vehicle positions messages by `dt` (UTC) and `service_date` (usually Pacific)
+      to enable:
+        1. Incremental materialization based on `dt` (to make efficient use of upstream partitions)
+        2. Downstream grouping by `service_date` alone (since that is the appropriate final grain for trip-based analysis)
+      See downstream `fct_vehicle_positions_summaries` table for further documentation.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - key
+            - dt
+            - service_date
+            - trip_schedule_relationship
