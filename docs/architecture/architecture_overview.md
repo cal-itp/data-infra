@@ -1,7 +1,7 @@
 (architecture-overview)=
 # Architecture Overview
 
-Deployed services
+## Deployed services
 
 | Name             | Function                                                                                                                                                                                 | URL                                            | Source code                                                                                         | K8s namespace      | Development/test environment? |
 |------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|-----------------------------------------------------------------------------------------------------|--------------------|-------------------------------|
@@ -13,7 +13,7 @@ Deployed services
 | JupyterHub       | Kubernetes-driven Jupyter workspace provider                                                                                                                                             | https://notebooks.calitp.org                   | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/jupyterhub                   | jupyterhub         | No                            |
 
 
-Deployments (unless otherwise specified, deployments occur via GitHub Actions)
+## Code and deployments (unless otherwise specified, deployments occur via GitHub Actions)
 ```{mermaid}
 flowchart TD
 %% note that you seemingly cannot have a subgraph that only contains other subgraphs
@@ -69,7 +69,7 @@ classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
 class repos_label,kubernetes_label,netlify_label group_labelstyle
 ```
 
-Data flow
+## Data flow
 ```{mermaid}
 flowchart TD
 %% note that you seemingly cannot have a subgraph that only contains other subgraphs
@@ -155,9 +155,8 @@ linkStyle 0,9,10,11 stroke:orange, stroke-width:4px
 ```
 
 
-## “Production environment”
-
-The "production" ("prod") environment consists of:
+## Environments
+### production
 * Managed Airflow (i.e. Google Cloud Composer)
 * Production gtfs-rt-archiver-v3
 * `cal-itp-data-infra` database (i.e. project) in BigQuery
@@ -165,8 +164,7 @@ The "production" ("prod") environment consists of:
     * e.g. `gs://calitp-gtfs-schedule-parsed-hourly`
 
 
-## “Testing environment”
-The "testing"/"staging"/"dev" environment consists of:
+### testing/staging/dev
 * Locally-run Airflow (via docker-compose)
 * Test gtfs-rt-archiver-v3
 * `cal-itp-data-infra-staging` database (i.e. project) in BigQuery
