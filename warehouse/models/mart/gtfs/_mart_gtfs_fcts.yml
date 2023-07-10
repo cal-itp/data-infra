@@ -227,17 +227,66 @@ models:
         description: |
           See: https://gtfs.org/realtime/reference/#message-feedentity.
       - name: trip_update_timestamp
+        description: |
+          `timestamp` provided in this trip update message.
+          See: https://gtfs.org/realtime/reference/#message-tripupdate.
       - name: trip_update_delay
-      - name: vehicle_id
-      - name: vehicle_label
-      - name: vehicle_license_plate
-      - name: trip_id
-      - name: trip_route_id
-      - name: trip_direction_id
-      - name: trip_start_time
-      - name: trip_start_date
-      - name: trip_schedule_relationship
+        description: |
+          `delay` provided in this trip update message.
+          See: https://gtfs.org/realtime/reference/#message-tripupdate.
+      - &rt_vehicle_id
+        name: vehicle_id
+        description: |
+          `id` provided in the RT message vehicle descriptor.
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - &rt_vehicle_label
+        name: vehicle_label
+        description: |
+          `label` provided in the RT message vehicle descriptor.
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - &rt_vehicle_license_plate
+        name: vehicle_license_plate
+        description: |
+          `license_plate` provided in the RT message vehicle descriptor.
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - &rt_trip_id
+        name: trip_id
+        description: |
+          `trip_id` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field and how it corresponds to GTFS schedule data.
+      - &rt_trip_route_id
+        name: trip_route_id
+        description: |
+          `route_id` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field and how it corresponds to GTFS schedule data.
+      - &rt_trip_direction_id
+        name: trip_direction_id
+        description: |
+          `direction_id` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - &rt_trip_start_time
+        name: trip_start_time
+        description: &rt_trip_start_time_desc |
+          `start_time` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &rt_trip_start_date
+        name: trip_start_date
+        description: &rt_trip_start_date_desc |
+          `start_date` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - &rt_trip_schedule_relationship
+        name: trip_schedule_relationship
+        description: |
+          `schedule_relationship` provided in the RT message trip descriptor.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
       - name: stop_time_updates
+        description: |
+          See https://gtfs.org/realtime/reference/#message-stoptimeupdate.
       - &_header_message_age
         name: _header_message_age
         description: |
@@ -294,7 +343,7 @@ models:
           - not_null:
               config:
                 where: '__rt_sampled__'
-      - name: trip_id
+      - <<: *rt_trip_id
         tests:
           - not_null:
               config:
@@ -367,36 +416,20 @@ models:
       - name: occupancy_percentage
         description: |
           See: https://gtfs.org/realtime/reference/#message-vehicleposition.
-      - name: vehicle_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-      - name: vehicle_label
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-      - name: vehicle_license_plate
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - *rt_vehicle_id
+      - *rt_vehicle_label
+      - *rt_vehicle_license_plate
       - name: vehicle_wheelchair_accessible
         description: |
           See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-      - name: trip_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: trip_route_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - *rt_trip_id
+      - *rt_trip_route_id
       - name: trip_direction_id
         description: |
           See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: trip_start_time
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: trip_start_date
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: trip_schedule_relationship
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - *rt_trip_start_time
+      - *rt_trip_start_date
+      - *rt_trip_schedule_relationship
       - name: position_latitude
         description: |
           See: https://gtfs.org/realtime/reference/#message-position.
@@ -801,24 +834,12 @@ models:
       - name: direction_id
         description: |
           See: https://gtfs.org/realtime/reference/#message-entityselector.
-      - name: trip_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-entityselector.
-      - name: route_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: trip_direction_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: trip_start_time
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: trip_start_date
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: trip_schedule_relationship
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - *rt_trip_id
+      - *rt_trip_route_id
+      - *rt_trip_direction_id
+      - *rt_trip_start_time
+      - *rt_trip_start_date
+      - *rt_trip_schedule_relationship
       - name: stop_id
         description: |
           See: https://gtfs.org/realtime/reference/#message-entityselector.
@@ -859,24 +880,9 @@ models:
           - not_null
       - *base64_url
       - *gtfs_rt_schedule_feed_timezone
-      - &rt_trip_id
-        name: trip_id
-        description: |
-          `trip_id` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field and how it corresponds to GTFS schedule data.
-      - &rt_trip_start_time
-        name: trip_start_time
-        description: &rt_trip_start_time_desc |
-          `start_time` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - &rt_trip_start_date
-        name: trip_id
-        description: &rt_trip_start_date_desc |
-          `start_date` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
+      - *rt_trip_id
+      - *rt_trip_start_time
+      - *rt_trip_start_date
       - &min_extract_ts
         name: min_extract_ts
         description: &rt_min_extract_ts_desc |
@@ -1147,8 +1153,18 @@ models:
       not populated for the given feed.
     columns:
       # keys and identifiers
-      - name: trip_instance_key
-        tests: *primary_key_tests
+      - &trip_instance_key
+        name: trip_instance_key
+        description: |
+          A trip level identifier that uniquely identifies an individual trip across feed types (schedule, trip updates, vehicle positions, service alerts).
+          Composite of:
+            - base64 URL of associated schedule feed
+            - service date
+            - trip_id
+            - iteration number, which attempts to normalize trip start times
+        tests:
+          - not_null
+          - unique
       - *rt_service_date
       - name: schedule_base64_url
         description: |
@@ -1190,19 +1206,31 @@ models:
         description: |
           Name from the schedule GTFS dataset record associated
           with the RT feed(s) in which this trip appeared.
+      - name: appeared_in_tu
+        description: |
+          Boolean for whether this trip appeared in a trip updates feed.
+          Can be false either because there is no trip updates feed for this data (see `dim_provider_gtfs_data` to confirm)
+          or because there is a trip updates feed but this trip did not appear within it.
+      - name: appeared_in_vp
+        description: |
+          Boolean for whether this trip appeared in a vehicle positions feed.
+          Can be false either because there is no vehicle positions feed for this data (see `dim_provider_gtfs_data` to confirm)
+          or because there is a vehicle positions feed but this trip did not appear within it.
       - name: warning_multiple_route_ids
         description: |
           Boolean for whether either of the following conditions is met:
           * Any RT feed in which this trip appeared had `warning_multiple_route_ids` set to true
           * The trip appeared in multiple RT feeds and the feeds have different `trip_route_ids` values
           A "true" value in this column means a row should be treated with caution.
-      - name: warning_multiple_route_ids
+      - name: warning_multiple_direction_ids
         description: |
           Boolean for whether either of the following conditions is met:
           * Any RT feed in which this trip appeared had `warning_multiple_direction_ids` set to true
           * The trip appeared in multiple RT feeds and the feeds have different `trip_direction_ids` values
           A "true" value in this column means a row should be treated with caution.
       - name: tu_trip_start_time
+        description: *rt_trip_start_time_desc
+      - name: tu_trip_start_time_interval
         description: *rt_trip_start_time_desc
       - name: tu_trip_start_date
         description: *rt_trip_start_date_desc
@@ -1355,14 +1383,7 @@ models:
         description: '{{ doc("gtfs_trips__direction_id") }}'
       - name: block_id
         description: '{{ doc("gtfs_trips__block_id") }}'
-      - name: trip_instance_key
-        description: |
-          A trip level identifier that uniquely identifies an individual trip across feed types (schedule, trip updates, vehicle positions, service alerts).
-          Composite of:
-            - base64 URL of associated schedule feed
-            - service date
-            - trip_id
-            - iteration number, which attempts to normalize trip start times
+      - <<: *trip_instance_key
         tests:
           - not_null
           - unique:
@@ -1644,18 +1665,7 @@ models:
         tests:
           - not_null
           - unique
-      - &trip_instance_key
-        name: trip_instance_key
-        description: |
-          A trip level identifier that uniquely identifies an individual trip across feed types (schedule, trip updates, vehicle positions, service alerts).
-          Composite of:
-            - base64 URL of associated schedule feed
-            - service date
-            - trip_id
-            - iteration number, which attempts to normalize trip start times
-        tests:
-          - not_null
-          - unique
+      - *trip_instance_key
       - *rt_service_date
       - *base64_url
       - *rt_trip_id
