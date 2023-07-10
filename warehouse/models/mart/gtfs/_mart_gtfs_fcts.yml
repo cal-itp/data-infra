@@ -1159,7 +1159,8 @@ models:
           - not_null
           - unique
       - *rt_service_date
-      - name: schedule_base64_url
+      - &rt_trip_schedule_base64_url
+        name: schedule_base64_url
         description: |
           URL-safe base64-encoded URL of the schedule feed associated with
           the RT feed(s) in which this trip appeared. This is the schedule
@@ -1800,8 +1801,10 @@ models:
       - *trip_instance_key
       - *rt_service_date
       - *base64_url
+      - *rt_trip_schedule_base64_url
       - *rt_trip_id
       - *rt_trip_start_time
+      - *rt_trip_start_time_interval
       - *rt_trip_start_date
       - *rt_iteration_num
       - &starting_schedule_relationship
@@ -1835,6 +1838,18 @@ models:
       - &num_distinct_message_ids
         name: num_distinct_message_ids
         description: *rt_num_distinct_message_ids
+      - &rt_trip_min_ts
+        name: min_ts
+        description: *rt_trip_min_ts_desc
+      - &rt_trip_max_ts
+        name: max_ts
+        description: *rt_trip_max_ts_desc
+      - &rt_trip_min_datetime_pacific
+        name: min_datetime_pacific
+        description: *rt_trip_min_datetime_pacific_desc
+      - &rt_trip_max_datetime_pacific
+        name: max_datetime_pacific
+        description: *rt_trip_max_datetime_pacific_desc
       - *num_distinct_header_timestamps
       - *num_distinct_message_keys
       - *num_distinct_extract_ts
@@ -1888,6 +1903,8 @@ models:
       - *warning_multiple_direction_ids
       - *num_distinct_message_ids
       - *num_distinct_header_timestamps
+      - *num_distinct_message_keys
+      - *num_distinct_extract_ts
       - name: num_distinct_trip_update_timestamps
         description: Distinct count of trip update timestamps from the feed (https://gtfs.org/realtime/reference/#message-tripupdate).
       - *min_extract_ts
@@ -1937,6 +1954,15 @@ models:
         description: *tu_num_added_stops_desc
       - name: num_distinct_scheduled_stops
         description: *tu_num_scheduled_stops_desc
+      - *rt_trip_min_ts
+      - *rt_trip_max_ts
+      - *rt_trip_min_datetime_pacific
+      - *rt_trip_max_datetime_pacific
+      - *rt_trip_start_time_interval
+      - &rt_trip_num_distinct_updates
+        name: num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - *rt_trip_schedule_base64_url
 
   - name: fct_vehicle_positions_trip_summaries
     description: |
@@ -1955,6 +1981,7 @@ models:
       - *gtfs_rt_schedule_feed_timezone
       - *rt_service_date
       - *base64_url
+      - *rt_trip_schedule_base64_url
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_date
@@ -1968,6 +1995,8 @@ models:
       - *warning_multiple_direction_ids
       - *num_distinct_message_ids
       - *num_distinct_header_timestamps
+      - *num_distinct_message_keys
+      - *num_distinct_extract_ts
       - name: num_distinct_vehicle_timestamps
         description: Distinct count of vehicle timestamps from the feed (https://gtfs.org/realtime/reference/#message-vehicleposition).
       - *min_extract_ts
@@ -2019,3 +2048,8 @@ models:
         description: *vp_first_position_desc
       - name: last_position
         description: *vp_last_position_desc
+      - *rt_trip_min_ts
+      - *rt_trip_max_ts
+      - *rt_trip_min_datetime_pacific
+      - *rt_trip_max_datetime_pacific
+      - *rt_trip_start_time_interval
