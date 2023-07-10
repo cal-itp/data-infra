@@ -1391,7 +1391,7 @@ exposures:
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#routestxt.
             dim_shapes_latest:
-              id: 2f5e7bdb-33e8-4633-b163-6bab42ad0951
+              id: 69cd03e4-6371-47be-9447-f38cb0154961
               description: |
                 Each row is a cleaned row from a shapes.txt file.
                 Definitions for the original GTFS fields are available at:
@@ -1421,7 +1421,7 @@ exposures:
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#transferstxt.
             dim_translations_latest:
-              id: 7abe9256-6cd2-4c1f-9b6a-72108022a382
+              id: bee16abf-7862-45fb-bbc4-2dac25007eec
               description: |
                 Each row is a cleaned row from a translations.txt file.
                 Definitions for the original GTFS fields are available at:
