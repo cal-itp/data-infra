@@ -1862,7 +1862,13 @@ models:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
       - *rt_trip_summary_key
-      - *trip_instance_key
+      - <<: *trip_instance_key
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('fct_observed_trips')
+              field: trip_instance_key
       - *gtfs_rt_schedule_feed_timezone
       - *rt_service_date
       - *base64_url
@@ -1936,7 +1942,13 @@ models:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
       - *rt_trip_summary_key
-      - *trip_instance_key
+      - <<: *trip_instance_key
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('fct_observed_trips')
+              field: trip_instance_key
       - *gtfs_rt_schedule_feed_timezone
       - *rt_service_date
       - *base64_url
