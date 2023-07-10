@@ -68,6 +68,86 @@ class repos_label,kubernetes_label,netlify_label group_labelstyle
 Data flow
 ```{mermaid}
 flowchart TD
+%% note that you seemingly cannot have a subgraph that only contains other subgraphs
+%% so I am using "label" nodes to make sure each subgraph has at least one direct child
+    subgraph sources[ ]
+        data_sources_label[Data Sources]
+        raw_gtfs[Raw GTFS schedule data]
+        airtable[<a href='https://airtable.com/'>Airtable</a>]
+        raw_payment[Raw fare payment]
+        raw_rt[Raw GTFS RT feeds]
+    end
+    subgraph rt_archiver[ ]
+        rt_archiver_label[<a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3'>RT archiver</a>]
+        prod_rt_archiver[Prod archiver]
+        test_rt_archiver[Test archiver]
+    end
+    subgraph airflow[ ]
+        airflow_label[Airflow]
+        airflow_prod[Production Airflow <br><i><a href='https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra&supportedpurview=project'>Composer</a></i>]
+        airflow_local[Local Airflow <br><i><a href='https://github.com/cal-itp/data-infra/blob/main/airflow/README.md'>Setup</a></i>]
+    end
+    subgraph gcs[<a href='https://console.cloud.google.com/storage/browser'>Google Cloud Storage</a> buckets]
+        gcs_raw[(Raw)]
+        gcs_parsed[(Parsed)]
+        gcs_validation[(Validation)]
+        gcs_analysis[(Analysis artifacts)]
+        gcs_map_tiles[(Map tiles/GeoJSON)]
+        gcs_other[(Backups, Composer code, etc.)]
+    end
+
+    bigquery[(<a href=''>BigQuery</a>)]
+
+    subgraph data_consumers[ ]
+        consumers_label[Data consumers]
+        jupyterhub[<a href='https://hubtest.k8s.calitp.jarv.us/hub/'>JupyterHub</a>]
+        metabase[<a href='https://dashboards.calitp.org/'>Metabase - dashboards.calitp.org</a>]
+        reports_website[<a href='https://reports.calitp.org'>reports.calitp.org</a>]
+    end
+%% data producers
+raw_gtfs -.-> airflow
+airtable --> airflow
+raw_payment -.-> airflow
+airflow ---> gcs_raw
+raw_rt -.-> prod_rt_archiver --> gcs_raw
+raw_rt -.-> test_rt_archiver --> gcs_raw
+%% data transformations
+gcs_raw -->|"GTFS Schedule validator  <br> <i>externally maintained</i>"| gcs_validation
+gcs_raw -->|"GTFS RT validator <br> <i>externally maintained</i>"| gcs_validation
+
+%% queries
+gcs_parsed --> bigquery
+gcs_validation --> bigquery
+bigquery --> metabase
+bigquery --> jupyterhub
+bigquery --> reports
+gcs_parsed --> jupyterhub --> gcs_analysis
+jupyterhub --> gcs_map_tiles
+
+%% define styles
+classDef default fill:white, color:black, stroke:black, stroke-width:1px
+%% yellow for testing / staging versions
+classDef teststyle fill:#fdfcd8, color:#000000
+%% styling for groups & their labels
+classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
+%% styling for subgroups
+classDef subgroupstyle fill:#14A6E0, color:white
+%% styling for the key
+classDef keystyle fill:#1e1e19, color: white
+%% apply test styles
+class prepod_rt_archiver,bq_stage,gcs_gtfs_test,airflow_local,test teststyle
+%% apply label styles
+class data_storage_label,data_sources_label,reports_label,docs_label,analysis_tools_label,airflow_label,rt_archiver_label group_labelstyle
+%% apply group styles
+class data_storage,data_sources,reports,docs,analysis_tools,airflow,rt_archiver group_labelstyle
+%% apply subgroup styles
+class gcs,bq subgroupstyle
+%% style the key
+class key keystyle
+%% default arrow style
+linkStyle default stroke:black, stroke-width:4px
+%% manual connection arrow style
+linkStyle 0,9,10,11 stroke:orange, stroke-width:4px
 ```
 
 
