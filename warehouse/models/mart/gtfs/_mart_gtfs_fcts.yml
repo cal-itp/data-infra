@@ -249,6 +249,11 @@ models:
         description: |
           `license_plate` provided in the RT message vehicle descriptor.
           See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - &rt_vehicle_wheelchair_accessible
+        name: vehicle_wheelchair_accessible
+        description: |
+          `wheelchair_accessible` value provided in the RT message vehicle descriptor.
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
       - &rt_trip_id
         name: trip_id
         description: |
@@ -419,9 +424,7 @@ models:
       - *rt_vehicle_id
       - *rt_vehicle_label
       - *rt_vehicle_license_plate
-      - name: vehicle_wheelchair_accessible
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - *rt_vehicle_wheelchair_accessible
       - *rt_trip_id
       - *rt_trip_route_id
       - name: trip_direction_id
