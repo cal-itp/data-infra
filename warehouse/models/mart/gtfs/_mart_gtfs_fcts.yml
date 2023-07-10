@@ -27,7 +27,7 @@ models:
               field: key
       - &gtfs_dataset_key_errorif
         name: gtfs_dataset_key
-        description: |
+        description: &gtfs_dataset_key_desc |
           Foreign key to the associated GTFS dataset record.
           Because GTFS data was downloaded in the v1 pipeline before
           `gtfs dataset` records were being archived in the warehouse,
@@ -37,7 +37,7 @@ models:
           record that does not take effect until July 2022.)
           This is done for convenience to facilitate labeling of older data (the alternative
           would be failing to join and making it essentially impossible to label
-          historical GTFS data with any associated transit database records).
+          historical GTFS data with their associated transit database records).
         tests:
           - not_null:
               config:
@@ -204,7 +204,7 @@ models:
           can be interpreted within the appropriate time zone to align with its schedule.
       - &rt_trip_start_time_interval
         name: trip_start_time_interval
-        description: |
+        description: &rt_trip_start_time_interval_desc |
           `trip_start_time` converted to a BigQuery INTERVAL type to allow handling for times after midnight.
           See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
           *Note: If the interval is longer than 24 hours and `trip_start_date` is not populated, the interpretation for this
@@ -471,17 +471,7 @@ models:
         - not_null
     - &gtfs_dataset_key
       name: gtfs_dataset_key
-      description: |
-        Foreign key to the associated GTFS dataset record.
-        Because GTFS data was downloaded in the v1 pipeline before
-        `gtfs dataset` records were being archived in the warehouse,
-        it is possible for GTFS data to be associated with a GTFS dataset
-        record that was not yet in effect at the time the data was downloaded.
-        (So, you may see GTFS data from January 2022 associated with a GTFS dataset
-        record that does not take effect until July 2022.)
-        This is done for convenience to facilitate labeling of older data (the alternative
-        would be failing to join and making it essentially impossible to label
-        historical GTFS data with their associated transit database records).
+      description: *gtfs_dataset_key_desc
       tests:
         - dbt_utils.not_null_proportion:
             # TODO: raise back to .999 after some time getting new data - was .998 because
@@ -1228,70 +1218,209 @@ models:
           * Any RT feed in which this trip appeared had `warning_multiple_direction_ids` set to true
           * The trip appeared in multiple RT feeds and the feeds have different `trip_direction_ids` values
           A "true" value in this column means a row should be treated with caution.
-      - name: tu_trip_start_time
-        description: *rt_trip_start_time_desc
-      - name: tu_trip_start_time_interval
-        description: *rt_trip_start_time_desc
-      - name: tu_trip_start_date
-        description: *rt_trip_start_date_desc
-      - name: tu_min_extract_ts
       # foreign keys
       - name: tu_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
         tests:
           - dbt_utils.relationships_where:
               to: ref('dim_gtfs_datasets')
               field: key
               to_condition: "type = 'trip_updates'"
-      - name: tu_base64_url
+      - <<: *base64_url
+        name: tu_base64_url
       - name: vp_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
         tests:
           - dbt_utils.relationships_where:
               to: ref('dim_gtfs_datasets')
               field: key
               to_condition: "type = 'vehicle_positions'"
-      - name: vp_base64_url
+      - name: schedule_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+        tests:
+          - dbt_utils.relationships_where:
+              to: ref('dim_gtfs_datasets')
+              field: key
+              to_condition: "type = 'schedule'"
+      - <<: *base64_url
+        name: vp_base64_url
       # trip update facts
-      - name: tu_num_distinct_message_ids
-        description: Count of distinct trip update message IDs referencing this trip.
-      - name: tu_min_extract_ts
-        description: Timestamp of first trip update extract referencing this trip.
-      - name: tu_max_extract_ts
-        description: Timestamp of last trip update extract referencing this trip.
-      - name: tu_min_header_timestamp
-        description: Timestamp of first trip update header referencing this trip.
-      - name: tu_max_header_timestamp
-        description: Timestamp of last trip update header referencing this trip.
-      - name: tu_min_trip_update_timestamp
-        description: Timestamp of first trip update referencing this trip.
-      - name: tu_max_trip_update_timestamp
-        description: Timestamp of last trip update referencing this trip.
+      - name: tu_trip_start_time
+        description: *rt_trip_start_time_desc
+      - name: tu_trip_start_time_interval
+        description: *rt_trip_start_time_interval_desc
+      - name: tu_trip_start_date
+        description: *rt_trip_start_date_desc
+      - name: tu_starting_schedule_relationship
+        description: &starting_schedule_relationship_desc |
+          `schedule_relationship` provided in the RT message trip descriptor
+          for the first message for this trip on this `service_date`.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - name: tu_ending_schedule_relationship
+        description: &ending_schedule_relationship_desc |
+          `schedule_relationship` provided in the RT message trip descriptor
+          for the last message for this trip on this `service_date`.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
+      - name: tu_min_ts
+        description: &rt_trip_min_ts_desc |
+          Earliest timestamp associated with this trip.
+          If trip update timestamp or vehicle timestamps are available, this will be the earliest
+          trip update or vehicle timestamp for a message containing this trip.
+          If not, this will be the earliest header timestamp  for a message containing
+          this trip.
+          If header timestamp is not available (should never occur), this
+          will be the earliest `_extract_ts` for a message containing
+          this trip.
+      - name: tu_max_ts
+        description: &rt_trip_max_ts_desc |
+          Latest timestamp associated with this trip.
+          If trip update timestamp or vehicle timestamps are available, this will be the latest
+          trip update or vehicle timestamp for a message containing this trip.
+          If not, this will be the latest header timestamp  for a message containing
+          this trip.
+          If header timestamp is not available (should never occur), this
+          will be the latest `_extract_ts` for a message containing
+          this trip.
+      - name: tu_min_datetime_pacific
+        description: &rt_trip_min_datetime_pacific_desc |
+          Earliest Pacific datetime associated with this trip.
+          If trip update timestamp or vehicle timestamps are available, this will be the
+          earliest trip update or vehicle timestamp for a message containing this trip, converted to a
+          datetime in the "US/Los_Angeles" time zone.
+          If not, this will be the earliest header timestamp  for a message containing
+          this trip, converted to a datetime in the "US/Los_Angeles" time zone.
+          If header timestamp is not available (should never occur), this
+          will be the earliest `_extract_ts` for a message containing
+          this trip, converted to a datetime in the "US/Los_Angeles" time zone.
+      - name: tu_max_datetime_pacific
+        description: &rt_trip_max_datetime_pacific_desc |
+          Latest Pacific datetime associated with this trip.
+          If trip update timestamp or vehicle timestamps are available, this will be the
+          latest trip update or vehicle timestamp for a message containing this trip, converted to a
+          datetime in the "US/Los_Angeles" time zone.
+          If not, this will be the latest header timestamp  for a message containing
+          this trip, converted to a datetime in the "US/Los_Angeles" time zone.
+          If header timestamp is not available (should never occur), this
+          will be the latest `_extract_ts` for a message containing
+          this trip, converted to a datetime in the "US/Los_Angeles" time zone.
+      - name: tu_num_distinct_extract_ts
+        description: &rt_trip_num_distinct_extract_ts_desc |
+          The number of distinct extracts in our pipeline in which this trip occurred.
+          If the feed publisher updates data less frequently than every 20 seconds (our
+          scrape frequency) then identical data can appear in multiple extracts,
+          so this does not necessarily represent the number of unique actual data values.
+      - name: tu_num_distinct_updates
+        description: &rt_trip_num_distinct_updates_desc |
+          The number of distinct producer-produced timestamps for messages containing this trip.
+          If trip update or vehicle timestamps are available, use the count of distinct
+          values of that timestamp. Otherwise use count of distinct header timestamps
+          for messages containing this trip.
+          This should generally reflect how many distinct data updates there were
+          for this trip in our data, though note that the producer timestamps
+          can increment without the actual data values changing.
+      - name: tu_trip_route_ids
+        description: &rt_trip_route_ids_desc |
+          Pipe (`|`) delimited list of distinnct `route_id` values provided in the RT message trip descriptor
+          for messages containing this trip on this `service_date`.
+          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
+          that likely indicates some level of data corruption.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret `trip_route_id` in general.
+      - name: tu_trip_direction_ids
+        description: &rt_trip_direction_ids_desc |
+          Pipe (`|`) delimited list of distinnct `direction_id` values provided in the RT message trip descriptor
+          for messages containing this trip on this `service_date`.
+          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
+          that likely indicates some level of data corruption.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret `trip_direction_id` in general.
+      - name: tu_trip_schedule_relationships
+        description: &rt_trip_schedule_relationships_desc |
+          Pipe (`|`) delimited list of distinct `trip_schedule_relationship` values provided in the RT message trip descriptor
+          for messages containing this trip on this `service_date`.
+          Values are listed in alphabetical order, not the chronological order in which they appeared. So if a trip starts as scheduled
+          and then is canceled, this field will read "CANCELED|SCHEDULED" (Canceled first because it is first alphabetically.)
+          There are valid reasons to have multiple values in this field, for example if a trip was scheduled
+          but later is updated to canceled.
+          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          for details on how to interpret this field.
       - name: tu_max_delay
         description: Maximum observed delay for this trip.
       - name: tu_num_skipped_stops
-        description: Number of skipped stops for this trip.
+        description: &tu_num_skipped_stops_desc |
+          Distinct count of stop_ids in messages where the stop time update schedule_relationship was SKIPPED
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate; this is
+          different than the overall trip-level schedule relationship).
+      - name: tu_num_canceled_stops
+        description: &tu_num_canceled_stops_desc |
+          Distinct count of stop_ids in messages where the stop time update schedule_relationship was CANCELED
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate; this is
+          different than the overall trip-level schedule relationship).
+      - name: tu_num_added_stops
+        description: &tu_num_added_stops_desc |
+          Distinct count of stop_ids in messages where the stop time update schedule_relationship was ADDED
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate; this is
+          different than the overall trip-level schedule relationship).
+      - name: tu_num_scheduled_stops
+        description: &tu_num_scheduled_stops_desc |
+          Distinct count of stop_ids in messages where the stop time update schedule_relationship was SCHEDULED
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate; this is
+          different than the overall trip-level schedule relationship).
+      - name: tu_num_scheduled_canceled_added_stops
+        description: |
+          Sum of counts of scheduled, canceled, and added stops.
+          Included for backwards compatibility with a downstream guideline check.
+      - name: tu_num_distinct_message_ids
+        description: &rt_num_distinct_message_ids |
+          Distinct count of top-level ids (https://gtfs.org/realtime/reference/#message-feedentity)
+          in which this entity appeared.
+          This is meant to identify a given entity across messages, so the
+          count should usually be 1; some feeds change the ID based on technical
+          implementation so that it changes for example once a trip actually begins
+          its run.
       # vehicle position facts
+      - name: vp_trip_start_time
+        description: *rt_trip_start_time_desc
+      - name: vp_trip_start_time_interval
+        description: *rt_trip_start_time_interval_desc
+      - name: vp_trip_start_date
+        description: *rt_trip_start_date_desc
+      - name: vp_starting_schedule_relationship
+        description: *starting_schedule_relationship_desc
+      - name: vp_ending_schedule_relationship
+        description: *ending_schedule_relationship_desc
+      - name: vp_trip_schedule_relationships
+        description: *rt_trip_schedule_relationships_desc
       - name: vp_num_distinct_message_ids
-        description: Count of distinct vehicle position message IDs referencing this trip.
-      - name: vp_min_extract_ts
-        description: Timestamp of first vehicle position extract referencing this trip.
-      - name: vp_max_extract_ts
-        description: Timestamp of last vehicle position extract referencing this trip.
-      - name: vp_min_header_timestamp
-        description: Timestamp of first vehicle position header referencing this trip.
-      - name: vp_max_header_timestamp
-        description: Timestamp of last vehicle position header referencing this trip.
-      - name: vp_min_vehicle_timestamp
-        description: Timestamp of first vehicle position referencing this trip.
-      - name: vp_max_vehicle_timestamp
-        description: Timestamp of last vehicle position referencing this trip.
-      - name: vp_first_position_latitude
-        description: Latitude of first vehicle position referencing this trip.
-      - name: vp_first_position_longitude
-        description: Longitude of first vehicle position referencing this trip.
-      - name: vp_last_position_latitude
-        description: Latitude of last vehicle position referencing this trip.
-      - name: vp_last_position_longitude
-        description: Longitude of last vehicle position referencing this trip.
+        description: *rt_num_distinct_message_ids
+      - name: vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: vp_num_distinct_extract_ts
+        description: *rt_trip_num_distinct_extract_ts_desc
+      - name: vp_min_ts
+        description: *rt_trip_min_ts_desc
+      - name: vp_max_ts
+        description: *rt_trip_max_ts_desc
+      - name: vp_min_datetime_pacific
+        description: *rt_trip_min_datetime_pacific_desc
+      - name: vp_max_datetime_pacific
+        description: *rt_trip_max_datetime_pacific_desc
+      - name: vp_trip_route_ids
+        description: *rt_trip_route_ids_desc
+      - name: vp_trip_direction_ids
+        description: *rt_trip_direction_ids_desc
+      - name: vp_trip_schedule_relatonships
+        description: *rt_trip_schedule_relationships_desc
+      - name: vp_first_position
+        description: &vp_first_position_desc |
+          The position (longitude, latitude pair) of the first
+          update from a vehicle on this trip.
+      - name: vp_last_position
+        description: &vp_last_position_desc |
+          The position (longitude, latitude pair) of the last
+          update from a vehicle on this trip.
 
   - name: fct_trip_updates_no_stop_times
     description: |
@@ -1674,47 +1803,19 @@ models:
       - *rt_iteration_num
       - &starting_schedule_relationship
         name: starting_schedule_relationship
-        description: |
-          `schedule_relationship` provided in the RT message trip descriptor
-          for the first message for this trip on this `service_date`.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
+        description: *starting_schedule_relationship_desc
       - &ending_schedule_relationship
         name: ending_schedule_relationship
-        description: |
-          `schedule_relationship` provided in the RT message trip descriptor
-          for the last message for this trip on this `service_date`.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
+        description: *ending_schedule_relationship_desc
       - &rt_trip_route_ids
         name: trip_route_ids
-        description: |
-          Pipe (`|`) delimited list of distinnct `route_id` values provided in the RT message trip descriptor
-          for messages containing this trip on this `service_date`.
-          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
-          that likely indicates some level of data corruption.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
+        description: *rt_trip_route_ids_desc
       - &rt_trip_direction_ids
         name: trip_direction_ids
-        description: |
-          Pipe (`|`) delimited list of distinnct `direction_id` values provided in the RT message trip descriptor
-          for messages containing this trip on this `service_date`.
-          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
-          that likely indicates some level of data corruption.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
+        description: *rt_trip_direction_ids_desc
       - &rt_trip_schedule_relationships
         name: trip_schedule_relationships
-        description: |
-          Pipe (`|`) delimited list of distinnct `trip_schedule_relationship` values provided in the RT message trip descriptor
-          for messages containing this trip on this `service_date`.
-          Values are listed in alphabetical order, not the chronological order in which they appeared. So if a trip starts as scheduled
-          and then is canceled, this field will read "CANCELED|SCHEDULED" (Canceled first because it is first alphabetically.)
-          There are valid reasons to have multiple values in this field, for example if a trip was scheduled
-          but later is updated to canceled.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
+        description: *rt_trip_schedule_relationships_desc
       - &warning_multiple_route_ids
         name: warning_multiple_route_ids
         description: |
@@ -1730,7 +1831,7 @@ models:
       - *gtfs_rt_schedule_feed_timezone
       - &num_distinct_message_ids
         name: num_distinct_message_ids
-        description: Distinct count of top-level ids (https://gtfs.org/realtime/reference/#message-feedentity).
+        description: *rt_num_distinct_message_ids
       - *num_distinct_header_timestamps
       - *num_distinct_message_keys
       - *num_distinct_extract_ts
@@ -1819,10 +1920,14 @@ models:
           `max_trip_update_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
       - name: max_delay
         description: Maximium observed delay for this trip during this day.
-      - name: num_skipped_stops
-        description: Distinct count of stop_ids in messages where schedule_relationship was SKIPPED.
-      - name: num_scheduled_canceled_added_stops
-        description: Distinct count of stop_ids in messages where schedule_relationship was SCHEDULED, CANCELED, or ADDED.
+      - name: num_distinct_skipped_stops
+        description: *tu_num_skipped_stops_desc
+      - name: num_distinct_canceled_stops
+        description: *tu_num_canceled_stops_desc
+      - name: num_distinct_added_stops
+        description: *tu_num_added_stops_desc
+      - name: num_distinct_scheduled_stops
+        description: *tu_num_scheduled_stops_desc
 
   - name: fct_vehicle_positions_trip_summaries
     description: |
@@ -1895,3 +2000,7 @@ models:
         description: Position latitude of the last extract referencing this trip.
       - name: last_position_longitude
         description: Position longitude of the last extract referencing this trip.
+      - name: first_position
+        description: *vp_first_position_desc
+      - name: last_position
+        description: *vp_last_position_desc
