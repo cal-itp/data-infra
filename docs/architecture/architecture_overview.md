@@ -3,10 +3,14 @@
 
 Deployed services
 
-| Name             | URL                                            | Source code                                                                  | Development/test environment? |
-|------------------|------------------------------------------------|------------------------------------------------------------------------------|-------------------------------|
-| Airflow          | https://o1d2fa0877cf3fb10p-tp.appspot.com/home | https://github.com/cal-itp/data-infra/tree/main/airflow                      | Yes (local)                   |
-| GTFS-RT Archiver | n/a                                            | https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3 | Yes (gtfs-rt-v3-test)         |
+| Name             | URL                                            | Source code                                                                                         | K8s namespace      | Development/test environment? |
+|------------------|------------------------------------------------|-----------------------------------------------------------------------------------------------------|--------------------|-------------------------------|
+| Airflow          | https://o1d2fa0877cf3fb10p-tp.appspot.com/home | https://github.com/cal-itp/data-infra/tree/main/airflow                                             | n/a                | Yes (local)                   |
+| GTFS-RT Archiver | n/a                                            | https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3                        | gtfs-rt-v3         | Yes (gtfs-rt-v3-test)         |
+| Metabase         | https://dashboards.calitp.org                  | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/metabase                     | metabase           | Yes (metabase-test)           |
+| Grafana          | https://monitoring.calitp.org                  | https://github.com/JarvusInnovations/cluster-template/tree/develop/k8s-common/grafana (via hologit) | monitoring-grafana | No                            |
+| Sentry           | https://sentry.calitp.org                      | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/sentry                       | sentry             | No                            |
+| JupyterHub       | https://notebooks.calitp.org                   | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/jupyterhub                   | jupyterhub         | No                            |
 
 
 Deployments (unless otherwise specified, deployments occur via GitHub Actions)
