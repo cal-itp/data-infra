@@ -3,14 +3,14 @@
 
 Deployed services
 
-| Name             | URL                                            | Source code                                                                                         | K8s namespace      | Development/test environment? |
-|------------------|------------------------------------------------|-----------------------------------------------------------------------------------------------------|--------------------|-------------------------------|
-| Airflow          | https://o1d2fa0877cf3fb10p-tp.appspot.com/home | https://github.com/cal-itp/data-infra/tree/main/airflow                                             | n/a                | Yes (local)                   |
-| GTFS-RT Archiver | n/a                                            | https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3                        | gtfs-rt-v3         | Yes (gtfs-rt-v3-test)         |
-| Metabase         | https://dashboards.calitp.org                  | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/metabase                     | metabase           | Yes (metabase-test)           |
-| Grafana          | https://monitoring.calitp.org                  | https://github.com/JarvusInnovations/cluster-template/tree/develop/k8s-common/grafana (via hologit) | monitoring-grafana | No                            |
-| Sentry           | https://sentry.calitp.org                      | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/sentry                       | sentry             | No                            |
-| JupyterHub       | https://notebooks.calitp.org                   | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/jupyterhub                   | jupyterhub         | No                            |
+| Name             | Function                                                                                                                                                                                 | URL                                            | Source code                                                                                         | K8s namespace      | Development/test environment? |
+|------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|-----------------------------------------------------------------------------------------------------|--------------------|-------------------------------|
+| Airflow          | General orchestation/automation platform; downloads non-GTFS Realtime data and orchestrates data transformations outside of dbt; executes stateless jobs such as dbt and data publishing | https://o1d2fa0877cf3fb10p-tp.appspot.com/home | https://github.com/cal-itp/data-infra/tree/main/airflow                                             | n/a                | Yes (local)                   |
+| GTFS-RT Archiver | Downloads GTFS Realtime data (more rapidly than Airflow can handle)                                                                                                                      | n/a                                            | https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3                        | gtfs-rt-v3         | Yes (gtfs-rt-v3-test)         |
+| Metabase         | Web-hosted BI tool                                                                                                                                                                       | https://dashboards.calitp.org                  | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/metabase                     | metabase           | Yes (metabase-test)           |
+| Grafana          | Application observability (i.e. monitoring and alerting on metrics)                                                                                                                      | https://monitoring.calitp.org                  | https://github.com/JarvusInnovations/cluster-template/tree/develop/k8s-common/grafana (via hologit) | monitoring-grafana | No                            |
+| Sentry           | Application error observability (i.e. collecting errors for investigation)                                                                                                               | https://sentry.calitp.org                      | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/sentry                       | sentry             | No                            |
+| JupyterHub       | Kubernetes-driven Jupyter workspace provider                                                                                                                                             | https://notebooks.calitp.org                   | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/jupyterhub                   | jupyterhub         | No                            |
 
 
 Deployments (unless otherwise specified, deployments occur via GitHub Actions)
@@ -158,31 +158,18 @@ linkStyle 0,9,10,11 stroke:orange, stroke-width:4px
 ## “Production environment”
 
 The "production" ("prod") environment consists of:
-* RT Archiver
-* Airflow as run through Composer
-* `cal-itp-data-infra` project in Google Cloud Platform (BigQuery and Google Cloud Storage)
-    * Specifically, the `gtfs-data` and `littlepay-data-extract-prod` buckets in Google Cloud Storage
+* Managed Airflow (i.e. Google Cloud Composer)
+* Production gtfs-rt-archiver-v3
+* `cal-itp-data-infra` database (i.e. project) in BigQuery
+* Google Cloud Storage buckets _without_ a prefix
+    * e.g. `gs://calitp-gtfs-schedule-parsed-hourly`
 
 
 ## “Testing environment”
 The "testing"/"staging"/"dev" environment consists of:
-* RT Archiver pre-prod
-* Airflow as run locally
-* `cal-itp-data-infra-staging` project in BigQuery
-    * Note that this project also exists in Google Cloud Storage (since it's a Google Cloud Platform project) but it is not used in GCS
-* The `gtfs-data-test` bucket in Google Cloud Storage (which is inside the *production* `cal-itp-data-infra` *project*)
-
-## Airflow data production:
-* Downloads GTFS Schedule data
-* Consumes raw RT data and produces parsed RT data
-* Runs the validators to produce validation data for both Schedule and RT
-
-## Airflow data consumption:
-* Consumes raw Schedule and RT data
-* Consumes BigQuery data for job configuration
-
-## BigQuery data consumption:
-* Reads GCS -- see the [Querying Cloud Storage data](https://cloud.google.com/bigquery/external-data-cloud-storage) documentation
-
-## BigQuery data production:
-* Some tables are read by Airflow for job configuration (for example, `gtfs_schedule_history.calitp_feed_status`)
+* Locally-run Airflow (via docker-compose)
+* Test gtfs-rt-archiver-v3
+* `cal-itp-data-infra-staging` database (i.e. project) in BigQuery
+* GCS buckets with the `test-` prefix
+    * e.g. `gs://test-calitp-gtfs-rt-raw-v2`
+    * Some buckets prefixed with `dev-` also exist; primarily for testing the RT archiver locally
