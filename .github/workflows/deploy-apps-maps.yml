@@ -28,7 +28,7 @@ jobs:
       if: ${{ github.ref == 'refs/heads/main' }}
       run: |
         npm install -g netlify-cli
-        netlify deploy --site=maps-calitp-org --dir=apps/maps/build --prod
+        netlify deploy --site=embeddable-maps-calitp-org --dir=apps/maps/build --prod
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
@@ -37,7 +37,7 @@ jobs:
       if: ${{ github.ref != 'refs/heads/main' }}
       run: |
         npm install -g netlify-cli
-        netlify deploy --site=maps-calitp-org --dir=apps/maps/build --alias=maps-${GITHUB_REPOSITORY#*/}-${PR_NUMBER}
+        netlify deploy --site=embeddable-maps-calitp-org --dir=apps/maps/build --alias=${GITHUB_REPOSITORY#*/}-${PR_NUMBER}
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         PR_NUMBER: ${{ github.event.number }}
@@ -48,12 +48,12 @@ jobs:
       with:
         issue-number: ${{ github.event.number }}
         comment-author: 'github-actions[bot]'
-        body-includes: --maps-calitp-org.netlify.app
+        body-includes: --embeddable-maps-calitp-org.netlify.app
 
     - uses: peter-evans/create-or-update-comment@v2
       if: ${{ github.event_name == 'pull_request' }}
       with:
         comment-id: ${{ steps.fc.outputs.comment-id }}
         issue-number: ${{ github.event.number }}
-        body: "Preview url: https://maps-${{github.event.repository.name}}-${{ github.event.number }}--maps-calitp-org.netlify.app"
+        body: "Preview url: https://${{github.event.repository.name}}-${{ github.event.number }}--embeddable-maps-calitp-org.netlify.app"
         edit-mode: replace
