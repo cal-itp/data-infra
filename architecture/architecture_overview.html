@@ -574,34 +574,36 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#production-environment">
-   “Production environment”
+  <a class="reference internal nav-link" href="#deployed-services">
+   Deployed services
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#testing-environment">
-   “Testing environment”
+  <a class="reference internal nav-link" href="#code-and-deployments-unless-otherwise-specified-deployments-occur-via-github-actions">
+   Code and deployments (unless otherwise specified, deployments occur via GitHub Actions)
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#airflow-data-production">
-   Airflow data production:
+  <a class="reference internal nav-link" href="#data-flow">
+   Data flow
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#airflow-data-consumption">
-   Airflow data consumption:
+  <a class="reference internal nav-link" href="#environments">
+   Environments
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#bigquery-data-consumption">
-   BigQuery data consumption:
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#bigquery-data-production">
-   BigQuery data production:
-  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#production">
+     production
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#testing-staging-dev">
+     testing/staging/dev
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -624,34 +626,36 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#production-environment">
-   “Production environment”
+  <a class="reference internal nav-link" href="#deployed-services">
+   Deployed services
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#testing-environment">
-   “Testing environment”
+  <a class="reference internal nav-link" href="#code-and-deployments-unless-otherwise-specified-deployments-occur-via-github-actions">
+   Code and deployments (unless otherwise specified, deployments occur via GitHub Actions)
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#airflow-data-production">
-   Airflow data production:
+  <a class="reference internal nav-link" href="#data-flow">
+   Data flow
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#airflow-data-consumption">
-   Airflow data consumption:
+  <a class="reference internal nav-link" href="#environments">
+   Environments
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#bigquery-data-consumption">
-   BigQuery data consumption:
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#bigquery-data-production">
-   BigQuery data production:
-  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#production">
+     production
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#testing-staging-dev">
+     testing/staging/dev
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -664,156 +668,234 @@
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="architecture-overview">
 <span id="id1"></span><h1>Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permalink to this headline">¶</a></h1>
-<p>Here is a high-level summary of the Cal-ITP data services architecture.</p>
+<div class="section" id="deployed-services">
+<h2>Deployed services<a class="headerlink" href="#deployed-services" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Function</p></th>
+<th class="head"><p>URL</p></th>
+<th class="head"><p>Source code</p></th>
+<th class="head"><p>K8s namespace</p></th>
+<th class="head"><p>Development/test environment?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Airflow</p></td>
+<td><p>General orchestation/automation platform; downloads non-GTFS Realtime data and orchestrates data transformations outside of dbt; executes stateless jobs such as dbt and data publishing</p></td>
+<td><p><a class="reference external" href="https://o1d2fa0877cf3fb10p-tp.appspot.com/home">https://o1d2fa0877cf3fb10p-tp.appspot.com/home</a></p></td>
+<td><p><a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow">https://github.com/cal-itp/data-infra/tree/main/airflow</a></p></td>
+<td><p>n/a</p></td>
+<td><p>Yes (local)</p></td>
+</tr>
+<tr class="row-odd"><td><p>GTFS-RT Archiver</p></td>
+<td><p>Downloads GTFS Realtime data (more rapidly than Airflow can handle)</p></td>
+<td><p>n/a</p></td>
+<td><p><a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3">https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3</a></p></td>
+<td><p>gtfs-rt-v3</p></td>
+<td><p>Yes (gtfs-rt-v3-test)</p></td>
+</tr>
+<tr class="row-even"><td><p>Metabase</p></td>
+<td><p>Web-hosted BI tool</p></td>
+<td><p><a class="reference external" href="https://dashboards.calitp.org">https://dashboards.calitp.org</a></p></td>
+<td><p><a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/metabase">https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/metabase</a></p></td>
+<td><p>metabase</p></td>
+<td><p>Yes (metabase-test)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Grafana</p></td>
+<td><p>Application observability (i.e. monitoring and alerting on metrics)</p></td>
+<td><p><a class="reference external" href="https://monitoring.calitp.org">https://monitoring.calitp.org</a></p></td>
+<td><p><a class="reference external" href="https://github.com/JarvusInnovations/cluster-template/tree/develop/k8s-common/grafana">https://github.com/JarvusInnovations/cluster-template/tree/develop/k8s-common/grafana</a> (via hologit)</p></td>
+<td><p>monitoring-grafana</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Sentry</p></td>
+<td><p>Application error observability (i.e. collecting errors for investigation)</p></td>
+<td><p><a class="reference external" href="https://sentry.calitp.org">https://sentry.calitp.org</a></p></td>
+<td><p><a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/sentry">https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/sentry</a></p></td>
+<td><p>sentry</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>JupyterHub</p></td>
+<td><p>Kubernetes-driven Jupyter workspace provider</p></td>
+<td><p><a class="reference external" href="https://notebooks.calitp.org">https://notebooks.calitp.org</a></p></td>
+<td><p><a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/jupyterhub">https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/jupyterhub</a></p></td>
+<td><p>jupyterhub</p></td>
+<td><p>No</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="code-and-deployments-unless-otherwise-specified-deployments-occur-via-github-actions">
+<h2>Code and deployments (unless otherwise specified, deployments occur via GitHub Actions)<a class="headerlink" href="#code-and-deployments-unless-otherwise-specified-deployments-occur-via-github-actions" title="Permalink to this headline">¶</a></h2>
 <div class="mermaid">
             flowchart TD
 %% note that you seemingly cannot have a subgraph that only contains other subgraphs
 %% so I am using &quot;label&quot; nodes to make sure each subgraph has at least one direct child
-    subgraph key[Key]
-        empty3[ ]--Manual--&gt;empty4[ ]
-        test[Test/staging/dev]
+    subgraph repos[ ]
+        repos_label[GitHub repositories]
+        data_infra_repo[data-infra]
+        data_analyses_repo[data-analyses]
+        reports_repo[reports]
     end
-    subgraph data_sources[ ]
-        data_sources_label[Data Sources]
-        raw_gtfs[Raw GTFS schedule data]
-        airtable[&lt;a href='https://airtable.com/'&gt;Airtable&lt;/a&gt;]
-        raw_payment[Raw fare payment]
-        raw_rt[Raw GTFS RT feeds]
-    end
-    subgraph airflow[ ]
-        airflow_label[Airflow]
-        airflow_prod[Production Airflow &lt;br&gt;&lt;i&gt;&lt;a href='https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra&amp;supportedpurview=project'&gt;Composer&lt;/a&gt;&lt;/i&gt;]
-        airflow_local[Local Airflow &lt;br&gt;&lt;i&gt;&lt;a href='https://github.com/cal-itp/data-infra/blob/main/airflow/README.md'&gt;Setup&lt;/a&gt;&lt;/i&gt;]
-    end
-    subgraph data_storage[ ]
-        data_storage_label[Data Storage]
-        subgraph bq[&lt;a href='https://console.cloud.google.com/bigquery'&gt;BigQuery&lt;/a&gt; - projects]
-            bq_prod[BigQuery prod project]
-            bq_stage[BigQuery staging project]
+    subgraph kubernetes[ ]
+        kubernetes_label[Google Kubernetes Engine]
+        subgraph airflow[us-west2-calitp-airflow2-pr-171e4e47-gke]
+            airflow_label[Production Airflow &lt;br&gt;&lt;i&gt;&lt;a href='https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra&amp;supportedpurview=project'&gt;Composer&lt;/a&gt;&lt;/i&gt;]
+            airflow_dags
+            airflow_plugins
         end
-        subgraph gcs[&lt;a href='https://console.cloud.google.com/storage/browser'&gt;GCS&lt;/a&gt; - buckets]
-            gcs_other[Metabase, GCP logs, etc.]
-            gcs_payment[Payment buckets]
-            gcs_gtfs[gtfs-data]
-            gcs_gtfs_test[gtfs-data-test]
+        subgraph data_infra_apps_cluster[ ]
+            data_infra_apps_label[data-infra-apps]
+            subgraph rt_archiver[GTFS-RT Archiver]
+                rt_archiver_label[&lt;a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3'&gt;RT archiver&lt;/a&gt;]
+                prod_rt_archiver[gtfs-rt-v3 archiver]
+                test_rt_archiver[gtfs-rt-v3-test archiver]
+            end
+            jupyterhub[&lt;a href='https://notebooks.calitp.org'&gt;JupyterHub&lt;/a&gt;]
+            metabase[&lt;a href='https://dashboards.calitp.org'&gt;Metabase&lt;/a&gt;]
+            grafana[&lt;a href='https://monitoring.calitp.org'&gt;Grafana&lt;/a&gt;]
+            sentry[&lt;a href='https://sentry.calitp.org'&gt;Sentry&lt;/a&gt;]
         end
     end
-    subgraph rt_archiver[ ]
-        rt_archiver_label[&lt;a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archive'&gt;RT archiver&lt;/a&gt;]
-        prod_rt_archiver[Prod archiver]
-        prepod_rt_archiver[test archiver]
+
+    subgraph netlify[ ]
+        netlify_label[Netlify]
+        data_infra_docs[&lt;a href='https://docs.calitp.org/data-infra'&gt;data-infra Docs&lt;/a&gt;]
+        reports_website[&lt;a href='https://reports.calitp.org'&gt;California GTFS Quality Dashboard&lt;/a&gt;]
+        analysis_portfolio[&lt;a href='https://analysis.calitp.org'&gt;Cal-ITP Analysis Portfolio&lt;/a&gt;]
     end
-    subgraph reports[ ]
-        reports_label[Reports]
-        reports_website[&lt;a href='https://reports.calitp.org'&gt;reports.calitp.org&lt;/a&gt;]
-    end
-    subgraph docs[ ]
-        docs_label[Docs]
-        docs_website[&lt;a href='https://docs.calitp.org'&gt;docs.calitp.org&lt;/a&gt;]
-    end
-    subgraph analysis_tools[ ]
-        analysis_tools_label[Analysis]
-        jupyterhub[&lt;a href='https://hubtest.k8s.calitp.jarv.us/hub/'&gt;JupyterHub&lt;/a&gt;]
-        metabase[&lt;a href='https://dashboards.calitp.org/'&gt;Metabase - dashboards.calitp.org&lt;/a&gt;]
-    end
-%% links from data sources
-raw_payment --&gt; data_transfer[Data Transfer]
-raw_rt --&gt; rt_archiver
-raw_gtfs --&gt; airflow
-airtable --&gt; airflow
-raw_gtfs -.-&gt; schedule_validator
-raw_gtfs -.-&gt; rt_validator
-raw_rt -.-&gt; rt_validator
-%% links from data storage
-bq --&gt; metabase
-bq --&gt; jupyterhub
-bq --&gt; reports
-gcs &lt;--&gt; jupyterhub
-%% links from ungrouped items
-data_transfer --&gt; gcs
-rt_archiver --&gt; gcs
-airflow &lt;--&gt; data_storage
-airflow --&gt; schedule_validator[GTFS Schedule validator  &lt;br&gt; &lt;i&gt;externally maintained&lt;/i&gt;]
-airflow --&gt; rt_validator[GTFS RT validator &lt;br&gt; &lt;i&gt;externally maintained&lt;/i&gt;]
-schedule_validator --&gt; gcs
-rt_validator --&gt; gcs
-%% define styles
+
+data_infra_repo --&gt; airflow_dags
+data_infra_repo --&gt; airflow_plugins
+data_infra_repo --&gt; rt_archiver
+data_infra_repo --&gt; jupyterhub
+data_infra_repo --&gt; metabase
+data_infra_repo --&gt; grafana
+data_infra_repo --&gt; sentry
+
+data_infra_repo --&gt; data_infra_docs
+data_analyses_repo --&gt; jupyterhub ---&gt;|portfolio.py| analysis_portfolio
+reports_repo --&gt; reports_website
+
 classDef default fill:white, color:black, stroke:black, stroke-width:1px
-%% yellow for testing / staging versions
-classDef teststyle fill:#fdfcd8, color:#000000
-%% styling for groups &amp; their labels
 classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
-%% styling for subgroups
-classDef subgroupstyle fill:#14A6E0, color:white
-%% styling for the key
-classDef keystyle fill:#1e1e19, color: white
-%% apply test styles
-class prepod_rt_archiver,bq_stage,gcs_gtfs_test,airflow_local,test teststyle
-%% apply label styles
-class data_storage_label,data_sources_label,reports_label,docs_label,analysis_tools_label,airflow_label,rt_archiver_label group_labelstyle
-%% apply group styles
-class data_storage,data_sources,reports,docs,analysis_tools,airflow,rt_archiver group_labelstyle
-%% apply subgroup styles
-class gcs,bq subgroupstyle
-%% style the key
-class key keystyle
-%% default arrow style
+class repos_label,kubernetes_label,netlify_label group_labelstyle
+        </div></div>
+<div class="section" id="data-flow">
+<h2>Data flow<a class="headerlink" href="#data-flow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Dotted lines indicate data flow from external (i.e. non-Cal-ITP) sources, such as agency-hosted GTFS feeds</p></li>
+<li><p>Orange lines indicate manual data flows, such as an analyst executing a Jupyter notebook</p></li>
+<li><p>Yellow nodes indicate testing/development environments</p></li>
+</ul>
+<div class="mermaid">
+            flowchart LR
+%% default styles
+classDef default fill:white, color:black, stroke:black, stroke-width:1px
 linkStyle default stroke:black, stroke-width:4px
-%% manual connection arrow style
-linkStyle 0,9,10,11 stroke:orange, stroke-width:4px
-        </div><div class="section" id="production-environment">
-<h2>“Production environment”<a class="headerlink" href="#production-environment" title="Permalink to this headline">¶</a></h2>
-<p>The “production” (“prod”) environment consists of:</p>
+classDef test fill:#fdfcd8, color:#000000
+classDef group fill:#cde6ef, color:black, stroke-width:0px
+classDef subgroup fill:#14A6E0, color:white
+
+%% note that you seemingly cannot have a subgraph that only contains other subgraphs
+%% so I am using &quot;label&quot; nodes to make sure each subgraph has at least one direct child
+subgraph sources[ ]
+    data_sources_label[Data Sources]:::group
+    raw_gtfs[Raw GTFS schedule data]
+    airtable[&lt;a href='https://airtable.com/'&gt;Airtable&lt;/a&gt;]
+    raw_payment[Raw fare payment]
+    raw_rt[Raw GTFS RT feeds]
+end
+subgraph rt_archiver[ ]
+    rt_archiver_label[&lt;a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3'&gt;RT archiver&lt;/a&gt;]:::group
+    prod_rt_archiver[Prod archiver]
+    test_rt_archiver[Test archiver]:::test
+end
+subgraph airflow[ ]
+    airflow_label[Airflow]:::group
+    airflow_prod[Production Airflow &lt;br&gt;&lt;i&gt;&lt;a href='https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra&amp;supportedpurview=project'&gt;Composer&lt;/a&gt;&lt;/i&gt;]
+    airflow_local[Local Airflow &lt;br&gt;&lt;i&gt;&lt;a href='https://github.com/cal-itp/data-infra/blob/main/airflow/README.md'&gt;Setup&lt;/a&gt;&lt;/i&gt;]:::test
+end
+subgraph gcp[Google Cloud Project]
+    subgraph bigquery[&lt;a href=''&gt;BigQuery&lt;/a&gt;]
+        bq_cal_itp_data_infra[(cal-itp-data-infra)]
+        bq_cal_itp_data_infra_staging[(cal-itp-data-infra-staging)]:::test
+    end
+    subgraph gcs[&lt;a href='https://console.cloud.google.com/storage/browser'&gt;Google Cloud Storage&lt;/a&gt;]
+        gcs_raw[(Raw)]
+        gcs_parsed[(Parsed)]
+        gcs_validation[(Validation)]
+        gcs_analysis[(Analysis artifacts)]
+        gcs_map_tiles[(Map tiles/GeoJSON)]
+        gcs_other[(Backups, Composer code, etc.)]
+        gcs_test[(test-* buckets)]:::test
+    end
+end
+
+subgraph consumers[ ]
+    consumers_label[Data consumers]:::group
+    jupyterhub[&lt;a href='https://hubtest.k8s.calitp.jarv.us/hub/'&gt;JupyterHub&lt;/a&gt;]
+    metabase[&lt;a href='https://dashboards.calitp.org/'&gt;Metabase - dashboards.calitp.org&lt;/a&gt;]
+    reports_website[&lt;a href='https://reports.calitp.org'&gt;reports.calitp.org&lt;/a&gt;]
+end
+
+%% subgraphs cannot be styled in-line
+class sources,rt_archiver,airflow,gcp,consumers group
+
+%% manual actions; put first for easier style indexing
+%% add indices to linkStyle as new manual connections exist
+jupyterhub --&gt; gcs_analysis
+jupyterhub --&gt; gcs_map_tiles
+linkStyle 0,1 stroke:orange, stroke-width:4p
+
+%% data sources and transforms
+raw_gtfs -.-&gt; airflow
+airtable --&gt; airflow
+raw_payment -.-&gt; airflow
+airflow_prod ---&gt; gcs_raw
+airflow_local ---&gt; gcs_test
+raw_rt -.-&gt; prod_rt_archiver --&gt; gcs_raw
+raw_rt -.-&gt; test_rt_archiver --&gt; gcs_test
+%% data transformations
+gcs_raw --&gt;|&lt;a href='https://github.com/MobilityData/gtfs-validator'&gt;GTFS Schedule validator&lt;/a&gt;| gcs_validation
+gcs_raw --&gt;|&lt;a href='https://github.com/MobilityData/gtfs-realtime-validator'&gt;GTFS-RT validator&lt;/a&gt;| gcs_validation
+gcs_raw --&gt;|&quot;GTFS Schedule, RT, Payments, etc. parsing jobs&quot;| gcs_parsed
+
+%% data consumption
+gcs_parsed --&gt; bigquery
+gcs_validation --&gt; bigquery
+bigquery --&gt; consumers
+        </div></div>
+<div class="section" id="environments">
+<h2>Environments<a class="headerlink" href="#environments" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="production">
+<h3>production<a class="headerlink" href="#production" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p>RT Archiver</p></li>
-<li><p>Airflow as run through Composer</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra</span></code> project in Google Cloud Platform (BigQuery and Google Cloud Storage)</p>
+<li><p>Managed Airflow (i.e. Google Cloud Composer)</p></li>
+<li><p>Production gtfs-rt-archiver-v3</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra</span></code> database (i.e. project) in BigQuery</p></li>
+<li><p>Google Cloud Storage buckets <em>without</em> a prefix</p>
 <ul>
-<li><p>Specifically, the <code class="docutils literal notranslate"><span class="pre">gtfs-data</span></code> and <code class="docutils literal notranslate"><span class="pre">littlepay-data-extract-prod</span></code> buckets in Google Cloud Storage</p></li>
+<li><p>e.g. <code class="docutils literal notranslate"><span class="pre">gs://calitp-gtfs-schedule-parsed-hourly</span></code></p></li>
 </ul>
 </li>
 </ul>
 </div>
-<div class="section" id="testing-environment">
-<h2>“Testing environment”<a class="headerlink" href="#testing-environment" title="Permalink to this headline">¶</a></h2>
-<p>The “testing”/”staging”/”dev” environment consists of:</p>
+<div class="section" id="testing-staging-dev">
+<h3>testing/staging/dev<a class="headerlink" href="#testing-staging-dev" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p>RT Archiver pre-prod</p></li>
-<li><p>Airflow as run locally</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging</span></code> project in BigQuery</p>
+<li><p>Locally-run Airflow (via docker-compose)</p></li>
+<li><p>Test gtfs-rt-archiver-v3</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging</span></code> database (i.e. project) in BigQuery</p></li>
+<li><p>GCS buckets with the <code class="docutils literal notranslate"><span class="pre">test-</span></code> prefix</p>
 <ul>
-<li><p>Note that this project also exists in Google Cloud Storage (since it’s a Google Cloud Platform project) but it is not used in GCS</p></li>
+<li><p>e.g. <code class="docutils literal notranslate"><span class="pre">gs://test-calitp-gtfs-rt-raw-v2</span></code></p></li>
+<li><p>Some buckets prefixed with <code class="docutils literal notranslate"><span class="pre">dev-</span></code> also exist; primarily for testing the RT archiver locally</p></li>
 </ul>
 </li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">gtfs-data-test</span></code> bucket in Google Cloud Storage (which is inside the <em>production</em> <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra</span></code> <em>project</em>)</p></li>
 </ul>
 </div>
-<div class="section" id="airflow-data-production">
-<h2>Airflow data production:<a class="headerlink" href="#airflow-data-production" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>Downloads GTFS Schedule data</p></li>
-<li><p>Consumes raw RT data and produces parsed RT data</p></li>
-<li><p>Runs the validators to produce validation data for both Schedule and RT</p></li>
-</ul>
-</div>
-<div class="section" id="airflow-data-consumption">
-<h2>Airflow data consumption:<a class="headerlink" href="#airflow-data-consumption" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>Consumes raw Schedule and RT data</p></li>
-<li><p>Consumes BigQuery data for job configuration</p></li>
-</ul>
-</div>
-<div class="section" id="bigquery-data-consumption">
-<h2>BigQuery data consumption:<a class="headerlink" href="#bigquery-data-consumption" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>Reads GCS – see the <a class="reference external" href="https://cloud.google.com/bigquery/external-data-cloud-storage">Querying Cloud Storage data</a> documentation</p></li>
-</ul>
-</div>
-<div class="section" id="bigquery-data-production">
-<h2>BigQuery data production:<a class="headerlink" href="#bigquery-data-production" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>Some tables are read by Airflow for job configuration (for example, <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history.calitp_feed_status</span></code>)</p></li>
-</ul>
 </div>
 </div>
 
