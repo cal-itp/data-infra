@@ -303,6 +303,7 @@
                     type: layer.type,
                     ...(layer.properties || {})
                   };
+                  map.fire("dataloading");
                   return new GeoJsonLayer({
                     id: layer.name,
                     data: fetchGeoJSON(layer.url),
@@ -313,8 +314,8 @@
                     getFillColor: (feature) => getColor(feature, layer, 1, 200),
                     highlightColor: ({ object, layer }) => getColor(object, layer, layerProperties.highlight_saturation_multiplier || 0.7),
                     onDataLoad: (data) => {
-                      // map.fire("dataload");
                       console.log("Finished loading", layer);
+                      map.fire("dataload");
 
                       if (idx === state.layers.length - 1) {
                         if (state.bbox) {
