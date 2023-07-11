@@ -36,21 +36,6 @@ models:
       relation: true
       columns: true
 
-    gtfs_views:
-      +enabled: false
-      +materialized: table
-      schema: views
-
-    gtfs_views_staging:
-      +enabled: false
-      +materialized: view
-      schema: gtfs_views_staging
-
-    rt_views:
-      +enabled: false
-      +materialized: table
-      schema: views
-
     # To-do: should probably end up in `staging`
     payments_views_staging:
       +materialized: view
