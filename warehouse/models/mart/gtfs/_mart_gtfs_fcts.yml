@@ -2053,3 +2053,4 @@ models:
       - *rt_trip_min_datetime_pacific
       - *rt_trip_max_datetime_pacific
       - *rt_trip_start_time_interval
+      - *rt_trip_num_distinct_updates
