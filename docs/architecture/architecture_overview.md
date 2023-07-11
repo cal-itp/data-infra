@@ -70,88 +70,87 @@ class repos_label,kubernetes_label,netlify_label group_labelstyle
 ```
 
 ## Data flow
+* Dotted lines indicate data flow from external (i.e. non-Cal-ITP) sources, such as agency-hosted GTFS feeds
+* Orange lines indicate manual data flows, such as an analyst executing a Jupyter notebook
+* Yellow nodes indicate testing/development environments
 ```{mermaid}
-flowchart TD
+flowchart LR
+%% default styles
+classDef default fill:white, color:black, stroke:black, stroke-width:1px
+linkStyle default stroke:black, stroke-width:4px
+classDef test fill:#fdfcd8, color:#000000
+classDef group fill:#cde6ef, color:black, stroke-width:0px
+classDef subgroup fill:#14A6E0, color:white
+
 %% note that you seemingly cannot have a subgraph that only contains other subgraphs
 %% so I am using "label" nodes to make sure each subgraph has at least one direct child
-    subgraph sources[ ]
-        data_sources_label[Data Sources]
-        raw_gtfs[Raw GTFS schedule data]
-        airtable[<a href='https://airtable.com/'>Airtable</a>]
-        raw_payment[Raw fare payment]
-        raw_rt[Raw GTFS RT feeds]
+subgraph sources[ ]
+    data_sources_label[Data Sources]:::group
+    raw_gtfs[Raw GTFS schedule data]
+    airtable[<a href='https://airtable.com/'>Airtable</a>]
+    raw_payment[Raw fare payment]
+    raw_rt[Raw GTFS RT feeds]
+end
+subgraph rt_archiver[ ]
+    rt_archiver_label[<a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3'>RT archiver</a>]:::group
+    prod_rt_archiver[Prod archiver]
+    test_rt_archiver[Test archiver]:::test
+end
+subgraph airflow[ ]
+    airflow_label[Airflow]:::group
+    airflow_prod[Production Airflow <br><i><a href='https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra&supportedpurview=project'>Composer</a></i>]
+    airflow_local[Local Airflow <br><i><a href='https://github.com/cal-itp/data-infra/blob/main/airflow/README.md'>Setup</a></i>]:::test
+end
+subgraph gcp[Google Cloud Project]
+    subgraph bigquery[<a href=''>BigQuery</a>]
+        bq_cal_itp_data_infra[(cal-itp-data-infra)]
+        bq_cal_itp_data_infra_staging[(cal-itp-data-infra-staging)]:::test
     end
-    subgraph rt_archiver[ ]
-        rt_archiver_label[<a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3'>RT archiver</a>]
-        prod_rt_archiver[Prod archiver]
-        test_rt_archiver[Test archiver]
-    end
-    subgraph airflow[ ]
-        airflow_label[Airflow]
-        airflow_prod[Production Airflow <br><i><a href='https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra&supportedpurview=project'>Composer</a></i>]
-        airflow_local[Local Airflow <br><i><a href='https://github.com/cal-itp/data-infra/blob/main/airflow/README.md'>Setup</a></i>]
-    end
-    subgraph gcs[<a href='https://console.cloud.google.com/storage/browser'>Google Cloud Storage</a> buckets]
+    subgraph gcs[<a href='https://console.cloud.google.com/storage/browser'>Google Cloud Storage</a>]
         gcs_raw[(Raw)]
         gcs_parsed[(Parsed)]
         gcs_validation[(Validation)]
         gcs_analysis[(Analysis artifacts)]
         gcs_map_tiles[(Map tiles/GeoJSON)]
         gcs_other[(Backups, Composer code, etc.)]
+        gcs_test[(test-* buckets)]:::test
     end
+end
 
-    bigquery[(<a href=''>BigQuery</a>)]
+subgraph consumers[ ]
+    consumers_label[Data consumers]:::group
+    jupyterhub[<a href='https://hubtest.k8s.calitp.jarv.us/hub/'>JupyterHub</a>]
+    metabase[<a href='https://dashboards.calitp.org/'>Metabase - dashboards.calitp.org</a>]
+    reports_website[<a href='https://reports.calitp.org'>reports.calitp.org</a>]
+end
 
-    subgraph data_consumers[ ]
-        consumers_label[Data consumers]
-        jupyterhub[<a href='https://hubtest.k8s.calitp.jarv.us/hub/'>JupyterHub</a>]
-        metabase[<a href='https://dashboards.calitp.org/'>Metabase - dashboards.calitp.org</a>]
-        reports_website[<a href='https://reports.calitp.org'>reports.calitp.org</a>]
-    end
+%% subgraphs cannot be styled in-line
+class sources,rt_archiver,airflow,gcp,consumers group
+
+%% manual data consumption; put first for easier style indexing
+%% add indices to linkStyle as new manual connections exist
+gcs_parsed --> jupyterhub
+jupyterhub --> gcs_analysis
+jupyterhub --> gcs_map_tiles
+linkStyle 0,1,2 stroke:orange, stroke-width:4p
+
 %% data producers
 raw_gtfs -.-> airflow
 airtable --> airflow
 raw_payment -.-> airflow
-airflow ---> gcs_raw
+airflow_prod ---> gcs_raw
+airflow_local ---> gcs_test
 raw_rt -.-> prod_rt_archiver --> gcs_raw
-raw_rt -.-> test_rt_archiver --> gcs_raw
+raw_rt -.-> test_rt_archiver --> gcs_test
 %% data transformations
-gcs_raw -->|"GTFS Schedule validator  <br> <i>externally maintained</i>"| gcs_validation
-gcs_raw -->|"GTFS RT validator <br> <i>externally maintained</i>"| gcs_validation
+gcs_raw -->|<a href='https://github.com/MobilityData/gtfs-validator'>GTFS Schedule validator</a>| gcs_validation
+gcs_raw -->|<a href='https://github.com/MobilityData/gtfs-realtime-validator'>GTFS-RT validator</a>| gcs_validation
+gcs_raw -->|"GTFS Schedule, RT, Payments, etc. parsing jobs"| gcs_parsed
 
-%% queries
+%% data consumption
 gcs_parsed --> bigquery
 gcs_validation --> bigquery
-bigquery --> metabase
-bigquery --> jupyterhub
-bigquery --> reports
-gcs_parsed --> jupyterhub --> gcs_analysis
-jupyterhub --> gcs_map_tiles
-
-%% define styles
-classDef default fill:white, color:black, stroke:black, stroke-width:1px
-%% yellow for testing / staging versions
-classDef teststyle fill:#fdfcd8, color:#000000
-%% styling for groups & their labels
-classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
-%% styling for subgroups
-classDef subgroupstyle fill:#14A6E0, color:white
-%% styling for the key
-classDef keystyle fill:#1e1e19, color: white
-%% apply test styles
-class prepod_rt_archiver,bq_stage,gcs_gtfs_test,airflow_local,test teststyle
-%% apply label styles
-class data_storage_label,data_sources_label,reports_label,docs_label,analysis_tools_label,airflow_label,rt_archiver_label group_labelstyle
-%% apply group styles
-class data_storage,data_sources,reports,docs,analysis_tools,airflow,rt_archiver group_labelstyle
-%% apply subgroup styles
-class gcs,bq subgroupstyle
-%% style the key
-class key keystyle
-%% default arrow style
-linkStyle default stroke:black, stroke-width:4px
-%% manual connection arrow style
-linkStyle 0,9,10,11 stroke:orange, stroke-width:4px
+bigquery --> consumers
 ```
 
 
