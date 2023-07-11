@@ -127,14 +127,13 @@ end
 %% subgraphs cannot be styled in-line
 class sources,rt_archiver,airflow,gcp,consumers group
 
-%% manual data consumption; put first for easier style indexing
+%% manual actions; put first for easier style indexing
 %% add indices to linkStyle as new manual connections exist
-gcs_parsed --> jupyterhub
 jupyterhub --> gcs_analysis
 jupyterhub --> gcs_map_tiles
-linkStyle 0,1,2 stroke:orange, stroke-width:4p
+linkStyle 0,1 stroke:orange, stroke-width:4p
 
-%% data producers
+%% data sources and transforms
 raw_gtfs -.-> airflow
 airtable --> airflow
 raw_payment -.-> airflow
