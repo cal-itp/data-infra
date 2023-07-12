@@ -1,4 +1,3 @@
-(architecture-overview)=
 # Architecture Overview
 
 ## Deployed services

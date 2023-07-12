@@ -1,12 +1,3 @@
-# Infrastructure code
-
-# pyinvoke
-
-[invoke](https://docs.pyinvoke.org/en/stable/) is a Python framework for executing subprocess and building a CLI application.
-The tasks are defined in `tasks.py` and configuration in `invoke.yaml`; config values under the top-level `calitp`
-are specific to our defined tasks.
-
-Run `poetry run invoke -l` to list the available commands, and `poetry run invoke -h <command>` to get more detailed help for each individual command.
 
 ## CI/CD
 

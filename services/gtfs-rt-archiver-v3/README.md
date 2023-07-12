@@ -57,39 +57,30 @@ Rolling restarts with `kubectl` use the following syntax.
 kubectl rollout restart deployment.apps/<deployment> -n <namespace>
 ```
 
-So for example, to restart all 3 deployments in test, you would run the following.
+For example, to restart all 3 deployments in test, you would run the following.
 ```shell
 kubectl rollout restart deployment.apps/redis -n gtfs-rt-v3-test
 kubectl rollout restart deployment.apps/gtfs-rt-archiver-ticker -n gtfs-rt-v3-test
 kubectl rollout restart deployment.apps/gtfs-rt-archiver-consumer -n gtfs-rt-v3-test
 ```
 
-### Deploying configuration changes
-Environment-agnostic configurations live in [app vars](../../kubernetes/apps/manifests/gtfs-rt-archiver-v3/archiver-app-vars.yaml) while environment-specific configurations live in [channel vars](../../kubernetes/apps/overlays/gtfs-rt-archiver-v3-test/archiver-channel-vars.yaml). You can edit these files and deploy the changes with `kubectl`.
-```
-kubectl apply -k apps/overlays/gtfs-rt-archiver-v3-<env>
-```
+### Deploying code and/or changes
+Environment-agnostic configurations live in [app vars](../../kubernetes/apps/manifests/gtfs-rt-archiver-v3/archiver-app-vars.yaml) while environment-specific configurations live in [channel vars](../../kubernetes/apps/overlays/gtfs-rt-archiver-v3-test/archiver-channel-vars.yaml). Code changes require building and pushing a new Docker image, as well as making a configuration change to point the deployments at the new image. These are automated via GitHub Actions; a specific workflow to [build the image](../../.github/workflows/build-gtfs-rt-archiver-v3-image) and the generic [release candidate](../../.github/workflows/service-release-candidate.yml) and [release channel](../../.github/workflows/service-release-channel.yml) actions that will apply config changes.
 
-For example, you can change the environment variables in [test](../../kubernetes/apps/overlays/gtfs-rt-archiver-v3-test/archiver-channel-vars.yaml) with the following.
-```
-kubectl apply -k apps/overlays/gtfs-rt-archiver-v3-test
-```
-
-These commands will also re-deploy the archiver from scratch if needed, as long as the proper namespace exists.
-
-### Deploying code changes
-Code changes require building and pushing a new Docker image, as well as applying `kubectl` changes to point the deployment at the new image.
-1. Make code changes and increment version in `pyproject.toml`
+To trigger a new mage deploy, you must make the following changes.
+1. Make source code changes and increment version in `pyproject.toml`
    1. Ex. `poetry version 2023.4.10`
 2. Change image tag version in the environments `kustomization.yaml`.
    1. Ex. change the value of `newTag` to '`2023.4.10'`
-3. `docker build ... & docker push ...` (*from within the archiver directory*) or wait for [build-gtfs-rt-archiver-v3-image](../../.github/workflows/build-gtfs-rt-archiver-v3-image.yml) GitHub Action to run after merge to main
+
+If necessary, you can take the following steps to deploy manually.
+1. `docker build ... & docker push ...` (*from within the archiver directory*).
    1. Ex. `docker build -t ghcr.io/cal-itp/data-infra/gtfs-rt-archiver:2023.4.10 . && docker push ghcr.io/cal-itp/data-infra/gtfs-rt-archiver:2023.4.10`
    2. To push from your local machine, you must have [authenticated to ghcr.io](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry)
-4. Finally, apply changes using `kubectl` as described above.
-   1. Currently, the image is built/pushed on merges to main but the Kubernetes manifests are not applied.
+2. Finally, apply changes using `kubectl`.
+    1. Ex. `kubectl apply -k apps/overlays/gtfs-rt-archiver-v3-<env>`
 
 ### Fixing download configurations
 GTFS download configurations (for both Schedule and RT) are sourced from the [GTFS Dataset table](https://airtable.com/appPnJWrQ7ui4UmIl/tbl5V6Vjs4mNQgYbc) in the California Transit Airtable base, and we have [specific documentation](https://docs.google.com/document/d/1IO8x9-31LjwmlBDH0Jri-uWI7Zygi_IPc9nqd7FPEQM/edit#heading=h.b2yta6yeugar) for modifying the table. (Both of these Airtable links require authentication/access to Airtable.) You may need to make URL or authentication adjustments in this table. This data is downloaded daily into our infrastructure and will propagate to the GTFS Schedule and RT downloads; you may execute the [Airtable download job](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/airtable_loader_v2/grid) manually after making edits to "deploy" the changes more quickly.
 
-Another possible intervention is updating or adding authentication information in [Secret Manager](https://console.cloud.google.com/security/secret-manager). You may create new versions . **As of 2023-04-10 the archiver does not automatically pick up new/modified secrets; you must restart the archiver for changes to take effect.**
+Another possible intervention is updating or adding authentication information in [Secret Manager](https://console.cloud.google.com/security/secret-manager). You may create new versions, and the archiver will always read the `latest` version of each secret. **As of 2023-04-10 the archiver does not automatically pick up new/modified secrets; you must restart the archiver for changes to take effect.**
