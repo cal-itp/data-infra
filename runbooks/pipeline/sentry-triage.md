@@ -55,6 +55,6 @@ This category primarily includes unhandled data processing exceptions (e.g. RTFe
     2. For example, you may want to split up an issue by feed URL, which would mean adding the feed URL to the fingerprint.
     3. When the new fingerprint has been deployed, _resolve_ the existing issue since it should no longer appear.
 
-## Additional Triage Task: Monday Performance Check
+## Additional Triage Task: Friday Performance Check
 
-Each Monday, the person assigned to Sentry triage should use the [Cal-ITP System Performance and Outcomes Monitoring dashboard](https://dashboards.calitp.org/dashboard/138-cal-itp-system-performance-and-outcomes-monitoring?single_date=2023-06-22) to fill out the spreadsheet linked within the dashboard with metrics from the previous week.
+Each Friday, the person assigned to Sentry triage should use the [Cal-ITP System Performance and Outcomes Monitoring dashboard](https://dashboards.calitp.org/dashboard/138-cal-itp-system-performance-and-outcomes-monitoring?single_date=2023-06-22) to populate the metrics in the spreadsheet linked within the dashboard. (Checks recommended to occur on Fridays because for one of the metrics, Google auto-bins 7 day periods to Friday-Thursday.)
