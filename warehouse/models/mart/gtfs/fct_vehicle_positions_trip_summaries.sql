@@ -26,30 +26,19 @@ lat_long AS (
     SELECT DISTINCT
         key,
         FIRST_VALUE(first_position_latitude)
-            OVER
-            (PARTITION BY key
-            ORDER BY COALESCE(min_vehicle_timestamp, min_header_timestamp, min_extract_ts)
-            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-            ) AS first_position_latitude,
+            OVER key_timestamp_window AS first_position_latitude,
         FIRST_VALUE(first_position_longitude)
-            OVER
-            (PARTITION BY key
-            ORDER BY COALESCE(min_vehicle_timestamp, min_header_timestamp, min_extract_ts)
-            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-            ) AS first_position_longitude,
+            OVER key_timestamp_window AS first_position_longitude,
         LAST_VALUE(last_position_latitude)
-            OVER
-            (PARTITION BY key
-            ORDER BY COALESCE(max_vehicle_timestamp, max_header_timestamp, max_extract_ts)
-            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-            ) AS last_position_latitude,
+            OVER key_timestamp_window AS last_position_latitude,
         LAST_VALUE(last_position_longitude)
-            OVER
-            (PARTITION BY key
-            ORDER BY COALESCE(max_vehicle_timestamp, max_header_timestamp, max_extract_ts)
-            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-            ) AS last_position_longitude
+            OVER key_timestamp_window AS last_position_longitude
     FROM vehicle_positions
+    WINDOW key_timestamp_window AS (
+        PARTITION BY key
+        ORDER BY COALESCE(max_vehicle_timestamp, max_header_timestamp, max_extract_ts)
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
+
 ),
 
 fct_vehicle_positions_trip_summaries AS (
