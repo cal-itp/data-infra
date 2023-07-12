@@ -12,7 +12,7 @@ int_gtfs_rt__service_alerts_fully_unnested AS (
         base64_url,
         _extract_ts,
         _config_extract_ts,
-        name,
+        gtfs_dataset_name,
         schedule_gtfs_dataset_key,
         schedule_base64_url,
         schedule_name,

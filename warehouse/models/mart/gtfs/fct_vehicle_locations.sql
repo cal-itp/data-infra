@@ -36,7 +36,7 @@ first_keying_and_filtering AS (
     -- so you can end up intermingling multiple vehicles
     -- however, not clear this issue remains if we are also dropping rows with no trip
     -- since regional feed does have unique trip IDs per agency
-        AND name != 'Bay Area 511 Regional VehiclePositions'
+        AND gtfs_dataset_name != 'Bay Area 511 Regional VehiclePositions'
 ),
 
 deduped AS (

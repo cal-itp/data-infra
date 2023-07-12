@@ -162,7 +162,7 @@ models:
           value updates every time that the Airtable data extract runs, whereas `dim_gtfs_datasets` has versioning applied
           and `_valid_from` only updates when an attribute within the record actually changes.
       - &gtfs_rt_name
-        name: _gtfs_dataset_name
+        name: gtfs_dataset_name
         description: |
           Name from the associated GTFS dataset record.
       - &gtfs_rt_schedule_dataset_key
@@ -175,6 +175,21 @@ models:
               field: key
               config:
                 where: '__rt_sampled__'
+      - &rt_service_date
+        name: service_date
+        description: |
+          Attempt to identify the `service_date` (corresponding to the related schedule feed) for trip activity referenced in a
+          GTFS RT feed. It uses the following fallback logic:
+          * If `trip_start_date` is populated, use that. This is assumed to be provided with respect to `schedule_feed_timezone`.
+          * Otherwise, for trip updates and vehicle positions, if `trip_update_timestamp` or `vehicle_timestamp` (respectively) are populated, convert that
+          to the `schedule_feed_timezone` and extract the date from that.
+          * Otherwise, use `header_timestamp` converted to `schedule_feed_timezone` and extract the date.
+          * Finally (and this generally should not happen, since `header_timestamp` should be populated), fall back to `_extract_ts` converted to `schedule_feed_timezone` and extract the date.
+      - &rt_schedule_base64_url
+        name: schedule_base64_url
+        description: |
+          URL-safe base64-encoded URL of the schedule feed used to validate
+          this RT feed.
       - &gtfs_rt_schedule_dataset_name
         name: schedule_name
         description: |
@@ -371,6 +386,8 @@ models:
       - *gtfs_rt_dt
       - *gtfs_rt_hour
       - *base64_url
+      - *rt_schedule_base64_url
+      - *rt_service_date
       - *gtfs_rt_extract_ts
       - *gtfs_rt_config_extract_ts
       - *gtfs_rt_name
@@ -684,6 +701,8 @@ models:
       - *gtfs_rt_dt
       - *gtfs_rt_hour
       - *base64_url
+      - *rt_schedule_base64_url
+      - *rt_service_date
       - *gtfs_rt_extract_ts
       - *gtfs_rt_config_extract_ts
       - *gtfs_rt_name
@@ -759,16 +778,7 @@ models:
           #     field: key
           #     config:
           #       where: '__rt_sampled__'
-      - &rt_service_date
-        name: service_date
-        description: |
-          Attempt to identify the `service_date` (corresponding to the related schedule feed) for trip activity referenced in a
-          GTFS RT feed. It uses the following fallback logic:
-          * If `trip_start_date` is populated, use that. This is assumed to be provided with respect to `schedule_feed_timezone`.
-          * Otherwise, for trip updates and vehicle positions, if `trip_update_timestamp` or `vehicle_timestamp` (respectively) are populated, convert that
-          to the `schedule_feed_timezone` and extract the date from that.
-          * Otherwise, use `header_timestamp` converted to `schedule_feed_timezone` and extract the date.
-          * Finally (and this generally should not happen, since `header_timestamp` should be populated), fall back to `_extract_ts` converted to `schedule_feed_timezone` and extract the date.
+      - *rt_service_date
       - *gtfs_rt_dataset_key
       - *gtfs_rt_dt
       - *gtfs_rt_hour
