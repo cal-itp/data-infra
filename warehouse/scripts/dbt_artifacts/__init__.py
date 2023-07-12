@@ -111,9 +111,7 @@ class NodeModelMixin(BaseModel):
         columns = [
             c
             for c in self.sqlalchemy_table(engine).columns
-            if not self.columns
-            or c.name not in self.columns
-            or self.columns[c.name].publish  # type: ignore[attr-defined]
+            if self.columns[c.name].publish  # type: ignore[attr-defined]
         ]
         return select(columns=columns)
 
