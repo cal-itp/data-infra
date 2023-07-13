@@ -1,6 +1,16 @@
 version: 2
 
 seeds:
+  - name: payments_gtfs_datasets
+    columns:
+      - name: gtfs_dataset_source_record_id
+        description: Unversioned key to dim_gtfs_datasets natural key from Airtable.
+      - name: participant_id
+        description: Littlepay-assigned Participant ID.
+        tests:
+          - not_null
+          - unique
+
   - name: gtfs_rt_validation_code_descriptions
     description: |
       A list of validation codes output by the GTFS RT validator, and their severities.
