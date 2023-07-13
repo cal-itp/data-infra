@@ -51,7 +51,11 @@ deduped AS (
 fct_vehicle_locations AS (
     SELECT deduped.*,
         LEAD(key) OVER (PARTITION BY vehicle_trip_key ORDER BY location_timestamp) AS next_location_key,
-        ST_GEOGPOINT(position_longitude, position_latitude) AS location,
+        -- BQ errors on latitudes outside this range
+        CASE
+            WHEN position_latitude BETWEEN -90 AND 90 THEN ST_GEOGPOINT(position_longitude, position_latitude)
+        END
+        AS location,
         trip_instance_key
     FROM deduped
     LEFT JOIN vp_trips
