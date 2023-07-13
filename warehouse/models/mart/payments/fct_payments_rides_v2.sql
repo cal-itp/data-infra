@@ -26,6 +26,26 @@
     principals = ['serviceAccount:ccjpa-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }}",
 " {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'humboldt-transit-authority',
+    principals = ['serviceAccount:humboldt-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'lake-transit-authority',
+    principals = ['serviceAccount:lake-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'mendocino-transit-authority',
+    principals = ['serviceAccount:mendocino-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'redwood-coast-transit',
+    principals = ['serviceAccount:redwood-coast-transit@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
     principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
                   'group:cal-itp@jarv.us',
