@@ -67,6 +67,8 @@ schema_fields:
             type: STRING
           - name: id
             type: STRING
+          - name: wheelchairAccessible
+            type: STRING
         name: vehicle
         type: RECORD
       - fields:

@@ -18,12 +18,16 @@ fct_vehicle_positions_messages AS (
         base64_url,
         _extract_ts,
         _config_extract_ts,
-        _gtfs_dataset_name,
+        gtfs_dataset_name,
         schedule_gtfs_dataset_key,
         schedule_base64_url,
         schedule_name,
         schedule_feed_key,
         schedule_feed_timezone,
+        COALESCE(
+            trip_start_date,
+            DATE(header_timestamp, schedule_feed_timezone),
+            DATE(_extract_ts, schedule_feed_timezone)) AS service_date,
 
         TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND) AS _header_message_age,
         TIMESTAMP_DIFF(_extract_ts, vehicle_timestamp, SECOND) AS _vehicle_message_age,
@@ -53,6 +57,7 @@ fct_vehicle_positions_messages AS (
         trip_route_id,
         trip_direction_id,
         trip_start_time,
+        trip_start_time_interval,
         trip_start_date,
         trip_schedule_relationship,
 

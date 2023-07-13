@@ -139,7 +139,9 @@ int_gtfs_schedule__stop_times_grouped AS (
         feed_timezone,
         trip_start_timezone,
         trip_end_timezone,
-        iteration_num,
+        -- if it's not a frequency based trip, it should be unique on its given date
+        -- so simply coalesce
+        COALESCE(iteration_num, 0) AS iteration_num,
         exact_times,
         _feed_valid_from,
         num_distinct_stops_served,
