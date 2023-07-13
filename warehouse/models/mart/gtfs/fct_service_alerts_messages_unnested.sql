@@ -76,8 +76,10 @@ fct_service_alerts_messages_unnested AS (
         -- active periods
         active_period_start,
         active_period_end,
-        -- per spec, start/end is +/- infinity if null: https://gtfs.org/realtime/reference/#message-timerange
-        -- use placeholders instead
+        -- per spec:
+        -- if one is populated and the other is null, use +/- infinity for the missing one: https://gtfs.org/realtime/reference/#message-timerange
+        -- if neither is populated (active period is optional), then messages are assumed to be active
+        -- in either case, using far past/future timestamps when null works out correctly downstream for comparisons
         COALESCE(TIMESTAMP_SECONDS(active_period_start), TIMESTAMP(DATE(1900,1,1))) AS active_period_start_ts,
         COALESCE(TIMESTAMP_SECONDS(active_period_end), TIMESTAMP(DATE(2099,1,1))) AS active_period_end_ts,
 
