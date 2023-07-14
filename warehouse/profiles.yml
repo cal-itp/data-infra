@@ -11,9 +11,9 @@ calitp_warehouse:
       method: oauth
       priority: interactive
       threads: 8
-      # currently slowest models are int_gtfs_rt__vehicle_positions_trip_day_map_grouping / int_gtfs_rt__trip_updates_trip_day_map_grouping
-      # 5400 is not enough
-      timeout_seconds: 21600
+      # currently slowest model is int_gtfs_rt__trip_updates_trip_day_map_grouping
+      # as of 7/14/23, takes about 13000 seconds
+      timeout_seconds: 14400
       type: bigquery
       gcs_bucket: calitp-dbt-python-models
       dataproc_region: us-west2
