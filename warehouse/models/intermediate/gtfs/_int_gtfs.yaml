@@ -599,6 +599,9 @@ models:
             - key
             - dt
             - service_date
+            - trip_schedule_relationship
+            - schedule_base64_url
+            - schedule_feed_timezone
           where: '__rt_sampled__'
   - name: int_gtfs_rt__trip_updates_trip_day_map_grouping
     description: |
@@ -633,4 +636,6 @@ models:
             - dt
             - service_date
             - trip_schedule_relationship
+            - schedule_base64_url
+            - schedule_feed_timezone
           where: '__rt_sampled__'
