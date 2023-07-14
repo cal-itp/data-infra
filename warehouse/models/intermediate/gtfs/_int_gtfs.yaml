@@ -613,7 +613,10 @@ models:
             - dt
             - service_date
             - trip_schedule_relationship
+            - trip_route_id
             - trip_direction_id
+            - schedule_base64_url
+            - schedule_feed_timezone
   - name: int_gtfs_rt__vehicle_positions_trip_day_map_grouping
     description: |
       This table groups vehicle positions messages by `dt` (UTC) and `service_date` (usually Pacific)
