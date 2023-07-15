@@ -32,8 +32,15 @@
 - [ ]  **siuba** - Recommended data analysis library | ([Docs](siuba))
 - [ ]  [**shared_utils**](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) - A shared utilities library for the analytics team | ([Docs](shared-utils))
 
+**Caltrans Employee Resources:**
+
+- [ ]  [**OnRamp**](https://onramp.dot.ca.gov/) - Caltrans employee intranet
+- [ ]  [**Service Now (SNOW)**](https://cdotprod.service-now.com/sp) - Caltrans IT Service Management Portal for IT issues and requesting specific software
+- [ ]  [**Cal Employee Connect**](https://connect.sco.ca.gov/) - State Controller's Office site for paystubs and tax information
+- [ ]  [**Geospatial Enterprise Engagement Platform - GIS Account Request Form**](https://sv03tmcpo.ct.dot.ca.gov/portal/apps/sites/#/geep/pages/account-request) (optional) - User request form for ArcGIS Online and ArcGIS Portal accounts
+
 &nbsp;
 (get-help)=
-```{admonition} Still need access to a tool above?
+```{admonition} Still need access to a non-Caltrans tool above?
 DM Charlie <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">on Cal-ITP Slack using this link</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="_blank">by email</a>.
 ```
