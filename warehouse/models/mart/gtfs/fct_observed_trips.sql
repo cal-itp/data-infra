@@ -16,10 +16,6 @@ urls_to_datasets AS (
     SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 
-fct_daily_schedule_feeds AS (
-    SELECT * FROM {{ ref('fct_daily_schedule_feeds') }}
-),
-
 rt_joins AS (
     SELECT
         trip_instance_key,
@@ -173,7 +169,7 @@ fct_observed_trips AS (
         vp_base64_url,
         tu_datasets.gtfs_dataset_key AS tu_gtfs_dataset_key,
         vp_datasets.gtfs_dataset_key AS vp_gtfs_dataset_key,
-        schedule.gtfs_dataset_key AS schedule_gtfs_dataset_key,
+        schedule.gtfs_dataset_key AS schedule_gtfs_dataset_key
     FROM rt_joins
     LEFT JOIN urls_to_datasets AS tu_datasets
         ON rt_joins.tu_base64_url = tu_datasets.base64_url
@@ -181,9 +177,10 @@ fct_observed_trips AS (
     LEFT JOIN urls_to_datasets AS vp_datasets
         ON rt_joins.vp_base64_url = vp_datasets.base64_url
         AND rt_joins.vp_min_extract_ts BETWEEN vp_datasets._valid_from AND vp_datasets._valid_to
-    LEFT JOIN fct_daily_schedule_feeds AS schedule
-        ON rt_joins.service_date = schedule.date
-        AND rt_joins.schedule_base64_url = schedule.base64_url
+    LEFT JOIN urls_to_datasets AS schedule
+        ON rt_joins.schedule_base64_url = schedule.base64_url
+        AND rt_joins.service_date BETWEEN schedule._valid_from AND schedule._valid_to
+    -- TODO: do we also want to join in schedule feed key here? we already have trip instance key that can traverse to schedule
 )
 
 SELECT * FROM fct_observed_trips
