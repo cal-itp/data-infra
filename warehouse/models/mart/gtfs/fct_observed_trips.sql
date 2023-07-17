@@ -113,8 +113,8 @@ fct_observed_trips AS (
         schedule_base64_url,
         trip_id,
         iteration_num,
-        tu_datasets.name AS tu_name,
-        vp_datasets.name AS vp_name,
+        tu_datasets.gtfs_dataset_name AS tu_name,
+        vp_datasets.gtfs_dataset_name AS vp_name,
         schedule.gtfs_dataset_name AS schedule_name,
         tu_base64_url IS NOT NULL AS appeared_in_tu,
         vp_base64_url IS NOT NULL AS appeared_in_vp,
@@ -179,7 +179,8 @@ fct_observed_trips AS (
         AND rt_joins.vp_min_extract_ts BETWEEN vp_datasets._valid_from AND vp_datasets._valid_to
     LEFT JOIN urls_to_datasets AS schedule
         ON rt_joins.schedule_base64_url = schedule.base64_url
-        AND rt_joins.service_date BETWEEN schedule._valid_from AND schedule._valid_to
+        AND LEAST(COALESCE(tu_min_ts, CAST("2099-01-01" AS TIMESTAMP)),
+            COALESCE(vp_min_ts, CAST("2099-01-01" AS TIMESTAMP))) BETWEEN schedule._valid_from AND schedule._valid_to
     -- TODO: do we also want to join in schedule feed key here? we already have trip instance key that can traverse to schedule
 )
 
