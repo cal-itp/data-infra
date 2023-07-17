@@ -1,7 +1,7 @@
 {{ config(materialized='table') }}
 
 WITH int_transit_database__issue_types AS (
-    SELECT * FROM {{ ref('int_transit_database_issues__issue_types') }}
+    SELECT * FROM {{ ref('int_transit_database__issue_types') }}
 ),
 
 dim_transit_data_quality_issue_types AS (

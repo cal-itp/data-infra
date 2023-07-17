@@ -852,7 +852,9 @@ models:
     description: TODO
     columns:
       - *key
-      - *source_record_id
+      - &source_record_id
+        name: source_record_id
+        description: Airtable-generated row-level record ID
       - name: dataset_type
       - name: transit_data_quality_issues
       - name: name

@@ -2,7 +2,7 @@
 
 WITH latest_data_schemas AS (
     {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database_issues__transit_data_quality_issues'),
+        external_table = ref('stg_transit_database__transit_data_quality_issues'),
         order_by = 'dt DESC'
         ) }}
 ),
