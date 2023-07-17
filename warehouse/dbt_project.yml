@@ -77,5 +77,3 @@ models:
         schema: mart_payments
       benefits:
         schema: mart_benefits
-      transit_data_quality_issues:
-        schema: mart_transit_data_quality_issues
