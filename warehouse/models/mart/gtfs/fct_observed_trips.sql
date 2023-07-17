@@ -12,8 +12,8 @@ vehicle_positions AS (
     SELECT * FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
 ),
 
-dim_gtfs_datasets AS (
-    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
+urls_to_datasets AS (
+    SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 
 fct_daily_schedule_feeds AS (
@@ -171,14 +171,14 @@ fct_observed_trips AS (
         -- keying
         tu_base64_url,
         vp_base64_url,
-        tu_datasets.key AS tu_gtfs_dataset_key,
-        vp_datasets.key AS vp_gtfs_dataset_key,
+        tu_datasets.gtfs_dataset_key AS tu_gtfs_dataset_key,
+        vp_datasets.gtfs_dataset_key AS vp_gtfs_dataset_key,
         schedule.gtfs_dataset_key AS schedule_gtfs_dataset_key,
     FROM rt_joins
-    LEFT JOIN dim_gtfs_datasets AS tu_datasets
+    LEFT JOIN urls_to_datasets AS tu_datasets
         ON rt_joins.tu_base64_url = tu_datasets.base64_url
         AND rt_joins.tu_min_extract_ts BETWEEN tu_datasets._valid_from AND tu_datasets._valid_to
-    LEFT JOIN dim_gtfs_datasets AS vp_datasets
+    LEFT JOIN urls_to_datasets AS vp_datasets
         ON rt_joins.vp_base64_url = vp_datasets.base64_url
         AND rt_joins.vp_min_extract_ts BETWEEN vp_datasets._valid_from AND vp_datasets._valid_to
     LEFT JOIN fct_daily_schedule_feeds AS schedule
