@@ -1,9 +1,8 @@
 WITH
 once_daily_transit_data_quality_issues AS (
-    {{ get_latest_dense_rank(
-        external_table = source('airtable', 'transit_data_quality_issues__transit_data_quality_issues'),
-        order_by = 'ts DESC', partition_by = 'dt'
-        ) }}
+    SELECT *
+    -- have to use base table to get the california transit base organization record ids
+    FROM {{ ref('base_tdqi_issues_idmap') }}
 ),
 
 stg_transit_data_quality_issues__transit_data_quality_issues AS (
