@@ -1,40 +1,69 @@
-WITH
+{{
+    config(
+        materialized='incremental',
+        unique_key = 'key',
+        cluster_by = ['service_date', 'base64_url'],
+    )
+}}
 
--- base64_url
--- header_timestamp
--- vehicle_timestamp
--- vehicle_id
--- trip_id
--- is unique
-fct_vehicle_positions_messages AS (
-    SELECT * FROM {{ ref('fct_vehicle_positions_messages') }}
+WITH fct_vehicle_positions_messages AS (
+    SELECT *,
+        COALESCE(vehicle_timestamp, header_timestamp) AS location_timestamp
+    FROM {{ ref('fct_vehicle_positions_messages') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
-coalesced_and_filtered AS (
+vp_trips AS (
+    SELECT
+        service_date,
+        base64_url,
+        trip_id,
+        trip_start_time,
+        trip_instance_key
+    FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
+),
+
+first_keying_and_filtering AS (
     SELECT * EXCEPT (key),
-        COALESCE(vehicle_timestamp, header_timestamp) AS location_timestamp
+        {{ dbt_utils.generate_surrogate_key(['service_date', 'base64_url', 'location_timestamp', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['service_date', 'base64_url', 'vehicle_id', 'vehicle_label', 'trip_id', 'trip_start_time']) }} AS vehicle_trip_key
     FROM fct_vehicle_positions_messages
+    -- drop cases where trip id is null since these cannot be joined to schedule
+    -- this is something we may want to reconsider
+    -- TODO: theoretically we need to eventually support route / direction / start date / start time as an alternate trip identifier
     WHERE trip_id IS NOT NULL
-        AND _gtfs_dataset_name != 'Bay Area 511 Regional VehiclePositions'
+    -- we originally dropped the Bay Area regional feed because they don't make their vehicle identifiers unique by agency
+    -- so you can end up intermingling multiple vehicles
+    -- however, not clear this issue remains if we are also dropping rows with no trip
+    -- since regional feed does have unique trip IDs per agency
+        AND gtfs_dataset_name != 'Bay Area 511 Regional VehiclePositions'
 ),
 
 deduped AS (
-    SELECT *,
-        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url', 'location_timestamp', 'vehicle_id', 'vehicle_label', 'trip_id']) }} AS key,
-        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url', 'vehicle_id', 'vehicle_label', 'trip_id']) }} AS vehicle_trip_key
-    FROM coalesced_and_filtered
+    SELECT *
+    FROM first_keying_and_filtering
     QUALIFY ROW_NUMBER() OVER (
-        -- the dt is necessary to preserve partition elimination in downstream queries
-        PARTITION BY dt, base64_url, location_timestamp, vehicle_id, vehicle_label, trip_id
-        ORDER BY NULL
+        PARTITION BY key
+        ORDER BY position_latitude, position_longitude
     ) = 1
 ),
 
 fct_vehicle_locations AS (
-    SELECT *,
-        LEAD(key) OVER (PARTITION BY dt, base64_url, vehicle_trip_key ORDER BY location_timestamp) AS next_location_key,
-        ST_GEOGPOINT(position_longitude, position_latitude) AS location
+    SELECT deduped.*,
+        LEAD(key) OVER (PARTITION BY vehicle_trip_key ORDER BY location_timestamp) AS next_location_key,
+        -- BQ errors on latitudes outside this range
+        CASE
+            WHEN position_latitude BETWEEN -90 AND 90 THEN ST_GEOGPOINT(position_longitude, position_latitude)
+        END
+        AS location,
+        trip_instance_key
     FROM deduped
+    LEFT JOIN vp_trips
+        ON deduped.service_date = vp_trips.service_date
+        AND deduped.trip_id = vp_trips.trip_id
+        AND deduped.base64_url = vp_trips.base64_url
+        -- this is often null but we need to include it for frequency based trips
+        AND COALESCE(deduped.trip_start_time, "") = COALESCE(vp_trips.trip_start_time, "")
 )
 
 SELECT * FROM fct_vehicle_locations

@@ -154,6 +154,7 @@ models:
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
       - &warning_duplicate_gtfs_key
         name: warning_duplicate_gtfs_key
@@ -161,6 +162,7 @@ models:
           Rows with `true` in this column have a duplicate primary key; i.e., the attribute(s) that is meant to
           uniquely identify a row are duplicated within an individual feed instance and `key` will
           also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+
   - name: dim_calendar_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
@@ -217,6 +219,7 @@ models:
         description: '{{ doc("gtfs_calendar__end_date") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
 
   - name: dim_calendar_dates_latest
@@ -247,6 +250,7 @@ models:
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
 
   - name: dim_fare_attributes_latest
@@ -294,6 +298,7 @@ models:
         meta:
           ckan.units: SECONDS
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
 
   - name: dim_fare_leg_rules_latest
@@ -432,6 +437,7 @@ models:
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
       - *warning_duplicate_gtfs_key
 
@@ -531,6 +537,7 @@ models:
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
       - *warning_duplicate_gtfs_key
 
@@ -571,6 +578,7 @@ models:
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
       - name: start_time_interval
       - name: end_time_interval
@@ -605,6 +613,7 @@ models:
         description: '{{ doc("gtfs_levels__level_name") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
 
   - name: dim_pathways_latest
@@ -674,6 +683,7 @@ models:
         description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
 
   - name: dim_routes_latest
@@ -744,6 +754,7 @@ models:
         description: '{{ doc("gtfs_routes__network_id") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
 
   - name: dim_shapes_latest
@@ -790,6 +801,7 @@ models:
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
 
   - name: dim_stop_areas_latest
@@ -908,6 +920,7 @@ models:
         meta:
           ckan.units: SECONDS
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
       - name: arrival_time_interval
       - name: departure_time_interval
@@ -1062,6 +1075,7 @@ models:
         description: '{{ doc("gtfs_stops__platform_code") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
         # TODO: would be good to actually publish this, with appropriate documentation, next time we are ready to make a round of updates
       - name: warning_missing_schedule_dim_pk
@@ -1117,6 +1131,7 @@ models:
         description: '{{ doc("gtfs_transfers__to_trip_id") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
       - *warning_duplicate_gtfs_key
 
@@ -1164,6 +1179,7 @@ models:
         description: '{{ doc("gtfs_translations__field_value") }}'
         meta:
           publish.include: true
+      - *_feed_valid_from
       - *feed_timezone
 
   - name: dim_trips_latest
@@ -1223,6 +1239,7 @@ models:
         meta:
           publish.include: true
       - *warning_duplicate_gtfs_key
+      - *_feed_valid_from
       - *feed_timezone
 
 exposures:
@@ -1374,7 +1391,7 @@ exposures:
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#routestxt.
             dim_shapes_latest:
-              id: 2f5e7bdb-33e8-4633-b163-6bab42ad0951
+              id: 69cd03e4-6371-47be-9447-f38cb0154961
               description: |
                 Each row is a cleaned row from a shapes.txt file.
                 Definitions for the original GTFS fields are available at:
@@ -1404,7 +1421,7 @@ exposures:
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#transferstxt.
             dim_translations_latest:
-              id: 7abe9256-6cd2-4c1f-9b6a-72108022a382
+              id: bee16abf-7862-45fb-bbc4-2dac25007eec
               description: |
                 Each row is a cleaned row from a translations.txt file.
                 Definitions for the original GTFS fields are available at:

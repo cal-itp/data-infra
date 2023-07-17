@@ -25,12 +25,14 @@ stg_gtfs_rt__trip_updates AS (
         tripUpdate.vehicle.id AS vehicle_id,
         tripUpdate.vehicle.label AS vehicle_label,
         tripUpdate.vehicle.licensePlate AS vehicle_license_plate,
+        tripUpdate.vehicle.wheelchairAccessible AS vehicle_wheelchair_accessible,
 
         tripUpdate.trip.tripId AS trip_id,
         tripUpdate.trip.routeId AS trip_route_id,
         tripUpdate.trip.directionId AS trip_direction_id,
         tripUpdate.trip.startTime AS trip_start_time,
-        tripUpdate.trip.startDate AS trip_start_date,
+        {{ gtfs_time_string_to_interval('tripUpdate.trip.startTime') }} AS trip_start_time_interval,
+        PARSE_DATE("%Y%m%d", tripUpdate.trip.startDate) AS trip_start_date,
         tripUpdate.trip.scheduleRelationship AS trip_schedule_relationship,
 
         tripUpdate.stopTimeUpdate AS stop_time_updates,

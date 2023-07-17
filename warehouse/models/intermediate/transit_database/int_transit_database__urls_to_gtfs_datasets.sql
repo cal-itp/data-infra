@@ -22,6 +22,7 @@ int_transit_database__urls_to_gtfs_datasets AS (
         gtfs_datasets.base64_url,
         gtfs_datasets.source_record_id,
         gtfs_datasets.key AS gtfs_dataset_key,
+        gtfs_datasets.name AS gtfs_dataset_name,
         CASE
             WHEN gtfs_datasets._valid_from = appearance_duration.first_app THEN CAST('1900-01-01' AS TIMESTAMP)
             ELSE gtfs_datasets._valid_from

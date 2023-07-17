@@ -29,9 +29,9 @@ see https://gtfs.org/schedule/reference/#frequenciestxt for more information.
 {% enddocs %}
 
 {% docs column_st_iteration_num %}
-For frequencies-defined trips, the iteration number (starting from 0) for this trip within its
-defined window. So the first iteration of the trip will have `iteration_num = 0`, and the next
-trip will have `iteration_num = 1`, and so on.
+The iteration number (starting from 0) for this trip within its
+defined window. For frequencies-defined trips,
+the first iteration of the trip will have `iteration_num = 0`, and the next trip will have `iteration_num = 1`, and so on. For non-frequency trips, `iteration_num = 0` (there is only one iteration of the trip per day.)
 {% enddocs %}
 
 {% docs column_trip_start_timezone %}
