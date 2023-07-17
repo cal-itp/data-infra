@@ -21,11 +21,16 @@ int_transit_database__urls_to_gtfs_datasets AS (
         gtfs_datasets.source_record_id,
         gtfs_datasets.key AS gtfs_dataset_key,
         gtfs_datasets.name AS gtfs_dataset_name,
+        -- backdate start of first URL/record relationship so data scraped before record can be mapped
         CASE
             WHEN gtfs_datasets._valid_from = appearance_duration.first_app THEN CAST('1900-01-01' AS TIMESTAMP)
             ELSE gtfs_datasets._valid_from
         END AS _valid_from,
-        gtfs_datasets._valid_to
+        -- forward date end of last URL/record relationship so data scraped after URL deleted can be mapped
+        CASE
+            WHEN gtfs_datasets._valid_to = appearance_duration.latest_app THEN {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }}
+            ELSE gtfs_datasets._valid_to
+        END AS _valid_to,
     FROM gtfs_datasets
     LEFT JOIN appearance_duration
         USING (base64_url)
