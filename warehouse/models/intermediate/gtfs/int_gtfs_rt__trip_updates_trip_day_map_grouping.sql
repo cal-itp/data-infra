@@ -62,6 +62,7 @@ int_gtfs_rt__trip_updates_trip_day_map_grouping AS (
         {{ dbt_utils.generate_surrogate_key([
             'service_date',
             'base64_url',
+            'schedule_base64_url',
             'trip_id',
             'trip_start_time',
         ]) }} as key,
