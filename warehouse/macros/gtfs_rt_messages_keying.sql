@@ -17,6 +17,11 @@ WITH
     dim_schedule_feeds AS (
         SELECT *
         FROM {{ ref('dim_schedule_feeds') }}
+    ),
+
+    fct_daily_schedule_feeds AS (
+        SELECT *
+        FROM {{ ref('fct_daily_schedule_feeds') }}
     )
 
     -- if we ever backfill v1 RT data, the reliance on _config_extract_ts for joins in this table may become problematic
@@ -51,6 +56,6 @@ WITH
     -- and RT data was downloaded that references a new URL that hasn't had data downloaded yet
     LEFT JOIN fct_daily_schedule_feeds
         ON schedule_datasets.base64_url = fct_daily_schedule_feeds.base64_url
-        AND EXTRACT(DAY FROM rt._extract_ts) = fct_daily_schedule_feeds.date
+        AND EXTRACT(DATE FROM rt._extract_ts) = fct_daily_schedule_feeds.date
 
     {% endmacro %}
