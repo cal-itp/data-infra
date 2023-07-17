@@ -6,7 +6,7 @@ once_daily_issue_types AS (
         ) }}
 ),
 
-stg_transit_data_quality_issues__issue_types AS (
+stg_transit_database__issue_types AS (
     SELECT
         id,
         dataset_type,
@@ -18,4 +18,4 @@ stg_transit_data_quality_issues__issue_types AS (
     FROM once_daily_issue_types
 )
 
-SELECT * FROM stg_transit_data_quality_issues__issue_types
+SELECT * FROM stg_transit_database__issue_types

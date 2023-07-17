@@ -848,3 +848,47 @@ models:
       are current-only this represents relationships between versioned service
       records and unversioned operating county geography records.
       Joins via this table can result in fanout.
+  - name: dim_transit_data_quality_issue_types
+    description: TODO
+    columns:
+      - *key
+      - *source_record_id
+      - name: dataset_type
+      - name: transit_data_quality_issues
+      - name: name
+      - name: notes
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
+  - name: dim_transit_data_quality_issues
+    description: TODO
+    columns:
+      - *key
+      - *source_record_id
+      - name: description
+      - name: issue_type
+      - name: gtfs_datasets
+      - name: status
+      - name: issue__
+      - name: services
+      - name: resolution_date
+      - name: assignee
+      - name: issue_creation_time
+      - name: waiting_over_a_week_
+      - name: created_by
+      - name: qc__num_services
+      - name: qc__num_issue_types
+      - name: qc_checks
+      - name: waiting_on_someone_other_than_transit_data_quality_
+      - name: caltrans_district__from_operating_county_geographies___from_services_
+      - name: is_open
+      - name: last_update
+      - name: last_update_month
+      - name: last_update_year
+      - name: status_notes
+      - name: waiting_since
+      - name: outreach_status
+      - name: should_wait_until
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder

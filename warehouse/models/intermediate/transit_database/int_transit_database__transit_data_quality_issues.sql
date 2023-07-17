@@ -2,7 +2,7 @@
 
 WITH latest_data_schemas AS (
     {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_data_quality_issues__transit_data_quality_issues'),
+        external_table = ref('stg_transit_database_issues__transit_data_quality_issues'),
         order_by = 'dt DESC'
         ) }}
 ),
@@ -16,7 +16,7 @@ historical AS (
     FROM latest_data_schemas
 ),
 
-int_transit_data_quality_issues__transit_data_quality_issues AS (
+int_transit_database__transit_data_quality_issues AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['id', '_valid_from']) }} AS key,
         id AS source_record_id,
@@ -50,4 +50,4 @@ int_transit_data_quality_issues__transit_data_quality_issues AS (
     FROM historical
 )
 
-SELECT * FROM int_transit_data_quality_issues__transit_data_quality_issues
+SELECT * FROM int_transit_database__transit_data_quality_issues

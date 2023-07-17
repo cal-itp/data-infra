@@ -5,7 +5,7 @@ once_daily_transit_data_quality_issues AS (
     FROM {{ ref('base_tdqi_issues_idmap') }}
 ),
 
-stg_transit_data_quality_issues__transit_data_quality_issues AS (
+stg_transit_database__transit_data_quality_issues AS (
     SELECT
         id,
         description,
@@ -37,4 +37,4 @@ stg_transit_data_quality_issues__transit_data_quality_issues AS (
     FROM once_daily_transit_data_quality_issues
 )
 
-SELECT * FROM stg_transit_data_quality_issues__transit_data_quality_issues
+SELECT * FROM stg_transit_database__transit_data_quality_issues
