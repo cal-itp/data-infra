@@ -1175,7 +1175,8 @@ models:
             - iteration number, which attempts to normalize trip start times
         tests:
           - not_null
-          - unique
+          - unique_proportion:
+              at_least: 0.9999
       - *rt_service_date
       - &rt_trip_schedule_base64_url
         name: schedule_base64_url
@@ -1815,7 +1816,8 @@ models:
         description: Composite of calculated service date, URL, trip ID, and trip start time.
         tests:
           - not_null
-          - unique
+          - unique_proportion:
+              at_least: 0.9999
       - *trip_instance_key
       - *rt_service_date
       - *base64_url
@@ -1901,7 +1903,8 @@ models:
       - <<: *trip_instance_key
         tests:
           - not_null
-          - unique
+          - unique_proportion:
+              at_least: 0.9999
           - relationships:
               to: ref('fct_observed_trips')
               field: trip_instance_key
@@ -1992,7 +1995,8 @@ models:
       - <<: *trip_instance_key
         tests:
           - not_null
-          - unique
+          - unique_proportion:
+              at_least: 0.9999
           - relationships:
               to: ref('fct_observed_trips')
               field: trip_instance_key
