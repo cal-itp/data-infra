@@ -1156,12 +1156,17 @@ models:
   - name: fct_observed_trips
     description: |
       Joined model of observed trips across trip updates and vehicle positions RT feeds related to the same
-      schedule feed. For each day, there will be one row per `trip_instance_key`.
+      schedule feed. There will be one row per `trip_instance_key` (see caveat below).
 
       Columns prefixed with `tu_` or `vp_` reference respectively the trip updates or vehicle positions
       value for the given attribute. If these are null, it may be because the given trip did not appear in the
       given feed type or, for optional values, it may simply be because the value was
       not populated for the given feed.
+
+      Caveat on uniqueness: We have a very small number of duplicate `trip_instance_key` values,
+      specifically they can occur on days where the URL or time zone for a given feed change because
+      of how the keys are generated upstream.
+
     columns:
       # keys and identifiers
       - &trip_instance_key
@@ -1896,6 +1901,10 @@ models:
   - name: fct_trip_updates_summaries
     description: |
       Summarizes trips observed in trip update messages, as long as trip_id was populated.
+
+      Caveat on uniqueness: We have a very small number of duplicate `trip_instance_key` and `key` values,
+      specifically they can occur on days where the URL or time zone for a given feed change because
+      of how the keys are generated upstream.
     tests:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
@@ -1988,6 +1997,10 @@ models:
   - name: fct_vehicle_positions_trip_summaries
     description: |
       Summarizes trips observed in vehicle position messages, as long as trip_id was populated.
+
+      Caveat on uniqueness: We have a very small number of duplicate `trip_instance_key` and `key` values,
+      specifically they can occur on days where the URL or time zone for a given feed change because
+      of how the keys are generated upstream.
     tests:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
