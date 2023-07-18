@@ -47,7 +47,7 @@ jobs:
       if: ${{ github.ref != 'refs/heads/main' }}
       run: |
         npm install -g netlify-cli
-        netlify deploy --dir=docs/_build/html --alias=${GITHUB_REPOSITORY#*/}-${PR_NUMBER}
+        netlify deploy --dir=docs/_build/html --alias=docs-${GITHUB_REPOSITORY#*/}-${PR_NUMBER}
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -66,5 +66,5 @@ jobs:
       with:
         comment-id: ${{ steps.fc.outputs.comment-id }}
         issue-number: ${{ github.event.number }}
-        body: "Preview url: https://${{github.event.repository.name}}-${{ github.event.number }}--cal-itp-previews.netlify.app"
+        body: "Preview url: https://docs-${{github.event.repository.name}}-${{ github.event.number }}--cal-itp-previews.netlify.app"
         edit-mode: replace

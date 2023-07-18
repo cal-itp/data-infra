@@ -1,0 +1,59 @@
+name: Build and publish apps/maps
+
+on:
+  push:
+    paths:
+      - 'apps/maps/**'
+  pull_request:
+    paths:
+      - 'apps/maps/**'
+  workflow_dispatch:
+
+jobs:
+  build-apps-maps:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-python@v1
+    - uses: actions/setup-node@v3
+    - run: |
+        npm install
+        npm run build
+      working-directory: apps/maps
+
+    # Production
+    - name: Deploy apps/maps production to Netlify
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: |
+        npm install -g netlify-cli
+        netlify deploy --site=embeddable-maps-calitp-org --dir=apps/maps/build --prod
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+    # Preview on PRs
+    - name: Deploy apps/maps preview to Netlify
+      if: ${{ github.ref != 'refs/heads/main' }}
+      run: |
+        npm install -g netlify-cli
+        netlify deploy --site=embeddable-maps-calitp-org --dir=apps/maps/build --alias=${GITHUB_REPOSITORY#*/}-${PR_NUMBER}
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        PR_NUMBER: ${{ github.event.number }}
+
+    - uses: peter-evans/find-comment@v2
+      if: ${{ github.event_name == 'pull_request' }}
+      id: fc
+      with:
+        issue-number: ${{ github.event.number }}
+        comment-author: 'github-actions[bot]'
+        body-includes: --embeddable-maps-calitp-org.netlify.app
+
+    - uses: peter-evans/create-or-update-comment@v2
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        issue-number: ${{ github.event.number }}
+        body: "Preview url: https://${{github.event.repository.name}}-${{ github.event.number }}--embeddable-maps-calitp-org.netlify.app"
+        edit-mode: replace

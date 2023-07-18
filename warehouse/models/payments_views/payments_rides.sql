@@ -26,6 +26,26 @@
     principals = ['serviceAccount:ccjpa-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }}",
 " {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'humboldt-transit-authority',
+    principals = ['serviceAccount:humboldt-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'lake-transit-authority',
+    principals = ['serviceAccount:lake-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'mendocino-transit-authority',
+    principals = ['serviceAccount:mendocino-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'redwood-coast-transit',
+    principals = ['serviceAccount:redwood-coast-transit@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
     principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
@@ -55,8 +75,8 @@ dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
-payments_feeds AS (
-    SELECT * FROM {{ ref('payments_feeds') }}
+payments_gtfs_datasets AS (
+    SELECT * FROM {{ ref('payments_gtfs_datasets') }}
 ),
 
 stg_cleaned_micropayments AS (
@@ -106,7 +126,7 @@ participants_to_routes AS (
         r.route_id,
         r.route_short_name,
         r.route_long_name,
-    FROM payments_feeds AS pf
+    FROM payments_gtfs_datasets AS pf
     LEFT JOIN dim_gtfs_datasets d
         ON pf.gtfs_dataset_source_record_id = d.source_record_id
     LEFT JOIN fct_daily_schedule_feeds AS f

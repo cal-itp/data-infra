@@ -12,12 +12,8 @@ vehicle_positions AS (
     SELECT * FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
 ),
 
-dim_gtfs_datasets AS (
-    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
-),
-
-fct_daily_schedule_feeds AS (
-    SELECT * FROM {{ ref('fct_daily_schedule_feeds') }}
+urls_to_datasets AS (
+    SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 
 rt_joins AS (
@@ -117,8 +113,8 @@ fct_observed_trips AS (
         schedule_base64_url,
         trip_id,
         iteration_num,
-        tu_datasets.name AS tu_name,
-        vp_datasets.name AS vp_name,
+        tu_datasets.gtfs_dataset_name AS tu_name,
+        vp_datasets.gtfs_dataset_name AS vp_name,
         schedule.gtfs_dataset_name AS schedule_name,
         tu_base64_url IS NOT NULL AS appeared_in_tu,
         vp_base64_url IS NOT NULL AS appeared_in_vp,
@@ -171,19 +167,21 @@ fct_observed_trips AS (
         -- keying
         tu_base64_url,
         vp_base64_url,
-        tu_datasets.key AS tu_gtfs_dataset_key,
-        vp_datasets.key AS vp_gtfs_dataset_key,
-        schedule.gtfs_dataset_key AS schedule_gtfs_dataset_key,
+        tu_datasets.gtfs_dataset_key AS tu_gtfs_dataset_key,
+        vp_datasets.gtfs_dataset_key AS vp_gtfs_dataset_key,
+        schedule.gtfs_dataset_key AS schedule_gtfs_dataset_key
     FROM rt_joins
-    LEFT JOIN dim_gtfs_datasets AS tu_datasets
+    LEFT JOIN urls_to_datasets AS tu_datasets
         ON rt_joins.tu_base64_url = tu_datasets.base64_url
         AND rt_joins.tu_min_extract_ts BETWEEN tu_datasets._valid_from AND tu_datasets._valid_to
-    LEFT JOIN dim_gtfs_datasets AS vp_datasets
+    LEFT JOIN urls_to_datasets AS vp_datasets
         ON rt_joins.vp_base64_url = vp_datasets.base64_url
         AND rt_joins.vp_min_extract_ts BETWEEN vp_datasets._valid_from AND vp_datasets._valid_to
-    LEFT JOIN fct_daily_schedule_feeds AS schedule
-        ON rt_joins.service_date = schedule.date
-        AND rt_joins.schedule_base64_url = schedule.base64_url
+    LEFT JOIN urls_to_datasets AS schedule
+        ON rt_joins.schedule_base64_url = schedule.base64_url
+        AND LEAST(COALESCE(tu_min_ts, CAST("2099-01-01" AS TIMESTAMP)),
+            COALESCE(vp_min_ts, CAST("2099-01-01" AS TIMESTAMP))) BETWEEN schedule._valid_from AND schedule._valid_to
+    -- TODO: do we also want to join in schedule feed key here? we already have trip instance key that can traverse to schedule
 )
 
 SELECT * FROM fct_observed_trips

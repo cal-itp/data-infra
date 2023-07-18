@@ -25,11 +25,13 @@ models:
     description: |
       Creates a 1:N relationship so any given extract/URL in the
       GTFS models can identify its source gtfs_datasets record.
-      Because GTFS dataset history from Airtable starts later than GTFS schedule history (feeds downloaded by the pipeline),
-      this mapping back-dates the first appearance of a URL in a GTFS dataset record to the beginning
-      of history to allow a URL from the GTFS data to map to a dataset record even if that URL
-      was being downloaded before that dataset record was created. I.e., if URL
-      www.calitp.org/gtfs.zip was downloaded on January 1, 2022, but the first GTFS
+      Because GTFS dataset history from Airtable starts later than GTFS schedule history (feeds downloaded by the pipeline) or
+      data can be downloaded in the gap between when an Airtable record is deleted and that deletion
+      is reflected in the pipeline download configurations,
+      this mapping back- and forward-dates the appearance of a URL in a GTFS dataset record to allow a URL
+      from the GTFS data to map to a dataset record even if that URL
+      was being downloaded before that dataset record was created or after it was deleted.
+      I.e., if URL www.calitp.org/gtfs.zip was downloaded on January 1, 2022, but the first GTFS
       dataset record with that URL is record with key `123` and `123` doesn't appear until July 1, 2022,
       the January 1 download from www.calitp.org/gtfs.zip will still be mapped to GTFS dataset record `123`,
       even though it was downloaded outside the record's validity window, to facilitate some assignment of the
@@ -49,11 +51,6 @@ models:
           - relationships:
               to: ref('dim_gtfs_datasets')
               field: key
-              config:
-                # four SMART urls and two test URLs that have been removed
-                # will work once the dim is historical
-                error_if: ">10"
-                warn_if: ">0"
   - name: int_transit_database__issue_types
     description: TODO
     columns:

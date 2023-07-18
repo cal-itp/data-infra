@@ -15,6 +15,8 @@
     import { titleCase } from "title-case";
     import * as convert from 'color-convert';
 
+    import "leaflet-loading";
+
     const STATE_QUERY_PARAM = "state";
     const START_LAT_LON = [37.6, -120.1];
     const LEAFLET_START_ZOOM = 6;
@@ -82,9 +84,7 @@
         return colorMap[Math.floor(avg_mph / (MAX_MPH / NSHADES))];
     }
 
-    const alphaBase = 255;
-
-    function getColor(feature, layer, saturationMultiplier = 1) {
+    function getColor(feature, layer, saturationMultiplier = 1, alpha = 255) {
       if (feature.properties.color) {
         if (feature.properties.color.length === 4) {
           return feature.properties.color;
@@ -94,14 +94,14 @@
           const hsv = convert.rgb.hsv(feature.properties.color);
           hsv[1] = hsv[1] * saturationMultiplier;
           const rgb = convert.hsv.rgb(hsv);
-          return [...rgb, 255];
+          return [...rgb, alpha];
         }
       }
 
       if (feature.properties.avg_mph) {
         // LEGACY: support speedmaps testing
         const rgba = speedFeatureColor(feature, rgbaColorMap);
-        return [...rgba.slice(0, -1), 255];
+        return [...rgba.slice(0, -1), alpha];
       }
 
       return [100, 100, 100, 127];
@@ -149,7 +149,7 @@
         return {
           html: `
             <h2 class="has-text-weight-bold has-text-teal-bold">
-              ${stop_name ?? '(Stop name unavailable)'}
+              ${stop_name ?? 'Non-stop segment'}
               <span class="tag ml-2">
                 <i class="fas fa-circle mr-2" style="color: rgb(${getColor(feature)})"></i>
                 ${speed}&nbsp;
@@ -184,6 +184,54 @@
               </li>
             </ul>
           `,
+          style: style,
+        }
+      }
+
+      if (layerType === "speed_variation") {
+        const { stop_name, stop_id, route_short_name, route_id, fast_slow_ratio, p20_mph, p80_mph, trips_per_hour, shape_id, stop_sequence} = feature.properties;
+
+        return {
+          html: `
+            <h2 class="has-text-weight-bold has-text-teal-bold">
+              ${stop_name ?? 'Non-stop segment'}
+              <span class="tag ml-2">
+                <i class="fas fa-circle mr-2" style="color: rgb(${getColor(feature)})"></i>
+                <span class="has-text-weight-normal"><sup>p80</sup> &#8260; <sub>p20</sub> </span>
+                &nbsp;${fast_slow_ratio}
+              </span>
+            </h2>
+
+            <ul class="tooltip-meta-list has-text-slate-bold">
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key"><sup>p80</sup> &#8260; <sub>p20</sub></div>
+                <div class="tooltip-meta-value"><sup>${p80_mph} mph</sup> &#8260; <sub>${p20_mph} mph</sub></div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Route</div>
+                <div class="tooltip-meta-value">${route_short_name ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Stop ID</div>
+                <div class="tooltip-meta-value">${stop_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Route ID</div>
+                <div class="tooltip-meta-value">${route_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Trips/Hour</div>
+                <div class="tooltip-meta-value">${trips_per_hour ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">GTFS Shape ID</div>
+                <div class="tooltip-meta-value">${shape_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">GTFS Stop Sequence</div>
+                <div class="tooltip-meta-value">${stop_sequence ?? '\u2014'}</div>
+              </li>
+            </ul>`,
           style: style,
         }
       }
@@ -255,6 +303,7 @@
                     type: layer.type,
                     ...(layer.properties || {})
                   };
+                  map.fire("dataloading");
                   return new GeoJsonLayer({
                     id: layer.name,
                     data: fetchGeoJSON(layer.url),
@@ -262,10 +311,11 @@
                     autoHighlight: true,
                     getPointRadius: 10,
                     ...layerProperties,
-                    getFillColor: (feature) => getColor(feature, layer),
+                    getFillColor: (feature) => getColor(feature, layer, 1, 200),
                     highlightColor: ({ object, layer }) => getColor(object, layer, layerProperties.highlight_saturation_multiplier || 0.7),
                     onDataLoad: (data) => {
                       console.log("Finished loading", layer);
+                      map.fire("dataload");
 
                       if (idx === state.layers.length - 1) {
                         if (state.bbox) {
@@ -316,7 +366,8 @@
         }
 
         map = L.map(mapElement, {
-            preferCanvas: true
+          preferCanvas: true,
+          loadingControl: true,
         }).setView(START_LAT_LON, LEAFLET_START_ZOOM);
 
         const basemapConfig = state.basemap_config || DEFAULT_BASEMAP_CONFIG;
@@ -350,6 +401,7 @@
 </script>
 
 <style>
+    @import "leaflet-loading/src/Control.Loading.css";
     @import 'leaflet/dist/leaflet.css';
 
     .navbar {

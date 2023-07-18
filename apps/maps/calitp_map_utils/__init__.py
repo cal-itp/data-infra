@@ -21,6 +21,7 @@ MAP_APP_URL = os.getenv(MAP_APP_URL_ENV_VAR)
 
 class LayerType(str, Enum):  # name?
     speedmaps = "speedmap"
+    speed_variation = "speed_variation"
     hqta_areas = "hqta_areas"
     hqta_stops = "hqta_stops"
     state_highway_network = "state_highway_network"
@@ -57,6 +58,7 @@ class HQTA(BaseModel):
 # Dict Props just mean properties are an arbitrary dictionary
 LAYER_FEATURE_TYPES = {
     LayerType.speedmaps: Feature[Polygon, Speedmap],
+    LayerType.speed_variation: Feature[Polygon, Dict],
     LayerType.hqta_areas: Feature[Union[Polygon, MultiPolygon], HQTA],
     LayerType.hqta_stops: Feature[Point, HQTA],
     LayerType.state_highway_network: Feature[Union[Polygon, MultiPolygon], Dict],
