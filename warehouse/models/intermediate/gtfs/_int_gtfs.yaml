@@ -601,8 +601,7 @@ models:
             - service_date
             - trip_schedule_relationship
             - schedule_base64_url
-          # TODO: uncomment once this is passing in prod
-          # where: '__rt_sampled__'
+          where: '__rt_sampled__'
   - name: int_gtfs_rt__trip_updates_trip_day_map_grouping
     description: |
       This table groups trip updates messages by `dt` (UTC) and `service_date` (usually Pacific)
@@ -620,8 +619,8 @@ models:
             - trip_route_id
             - trip_direction_id
             - schedule_base64_url
-          # TODO: uncomment once this is passing in prod
-          # where: '__rt_sampled__'
+          # we have a very small number of historical failures on this uniqueness on days where a given feed's time zone changed
+          where: '__rt_sampled__'
   - name: int_gtfs_rt__vehicle_positions_trip_day_map_grouping
     description: |
       This table groups vehicle positions messages by `dt` (UTC) and `service_date` (usually Pacific)
@@ -639,5 +638,5 @@ models:
             - trip_route_id
             - trip_direction_id
             - schedule_base64_url
-          # TODO: uncomment once this is passing in prod
-          # where: '__rt_sampled__'
+          # we have a very small number of historical failures on this uniqueness on days where a given feed's time zone changed
+          where: '__rt_sampled__'
