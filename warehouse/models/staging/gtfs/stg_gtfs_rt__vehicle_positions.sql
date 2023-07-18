@@ -36,7 +36,8 @@ stg_gtfs_rt__vehicle_positions AS (
         vehicle.trip.routeId AS trip_route_id,
         vehicle.trip.directionId AS trip_direction_id,
         vehicle.trip.startTime AS trip_start_time,
-        vehicle.trip.startDate AS trip_start_date,
+        {{ gtfs_time_string_to_interval('vehicle.trip.startTime') }} AS trip_start_time_interval,
+        PARSE_DATE("%Y%m%d", vehicle.trip.startDate) AS trip_start_date,
         vehicle.trip.scheduleRelationship AS trip_schedule_relationship,
 
         vehicle.position.latitude AS position_latitude,

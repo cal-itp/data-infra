@@ -49,12 +49,23 @@ fct_service_alerts_messages_unnested AS (
         service_alert_message_key,
         gtfs_dataset_key,
         dt,
+        -- try to figure out what the service date would be to join back with schedule: fall back from explicit to imputed
+        -- TODO; handle trip start time past midnight? subtract in that case?
+        COALESCE(
+            trip_start_date,
+            DATE(header_timestamp, schedule_feed_timezone),
+            DATE(_extract_ts, schedule_feed_timezone)) AS service_date,
         hour,
-        _extract_ts,
-        header_timestamp,
         base64_url,
+        _extract_ts,
         _config_extract_ts,
-        _gtfs_dataset_name,
+        gtfs_dataset_name,
+        schedule_gtfs_dataset_key,
+        schedule_base64_url,
+        schedule_name,
+        schedule_feed_key,
+        schedule_feed_timezone,
+        header_timestamp,
         _header_message_age,
         header_version,
         header_incrementality,
@@ -65,8 +76,10 @@ fct_service_alerts_messages_unnested AS (
         -- active periods
         active_period_start,
         active_period_end,
-        -- per spec, start/end is +/- infinity if null: https://gtfs.org/realtime/reference/#message-timerange
-        -- use placeholders instead
+        -- per spec:
+        -- if one is populated and the other is null, use +/- infinity for the missing one: https://gtfs.org/realtime/reference/#message-timerange
+        -- if neither is populated (active period is optional), then messages are assumed to be active
+        -- in either case, using far past/future timestamps when null works out correctly downstream for comparisons
         COALESCE(TIMESTAMP_SECONDS(active_period_start), TIMESTAMP(DATE(1900,1,1))) AS active_period_start_ts,
         COALESCE(TIMESTAMP_SECONDS(active_period_end), TIMESTAMP(DATE(2099,1,1))) AS active_period_end_ts,
 
@@ -79,6 +92,8 @@ fct_service_alerts_messages_unnested AS (
         trip_route_id,
         trip_direction_id,
         trip_start_time,
+        trip_start_time_interval,
+        {{ gtfs_interval_to_seconds('trip_start_time_interval') }} AS trip_start_time_seconds,
         trip_start_date,
         trip_schedule_relationship,
         stop_id,

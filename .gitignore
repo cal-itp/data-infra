@@ -143,3 +143,6 @@ dmypy.json
 
 #.DS_Store files that Macs create
 .DS_Store
+
+# Local Netlify folder
+.netlify

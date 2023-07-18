@@ -11,12 +11,12 @@ dim_provider_gtfs_data AS (
 -- condense large trip table to the feed/day level for more performant joins
 observed_trips AS (
     SELECT
-        dt AS date,
+        service_date AS date,
         tu_gtfs_dataset_key,
-        COUNTIF(tu_num_distinct_message_ids IS NOT NULL
-            AND vp_num_distinct_message_ids IS NOT NULL) AS vp_and_tu_present,
-        COUNTIF(tu_num_distinct_message_ids IS NOT NULL
-            AND vp_num_distinct_message_ids IS NULL) AS tu_missing_vp,
+        COUNTIF(appeared_in_tu
+            AND appeared_in_vp) AS vp_and_tu_present,
+        COUNTIF(appeared_in_tu
+            AND NOT appeared_in_vp) AS tu_missing_vp,
     FROM {{ ref('fct_observed_trips') }}
     -- TODO: you can have a trip-level schedule relationship of scheduled, canceled, or added without having stop-level updates of those types
     -- we would need a trip level schedule_relationship on fct_observed_trips to make this more robust

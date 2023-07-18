@@ -28,7 +28,8 @@ fct_daily_schedule_feeds AS (
         t2.key AS feed_key,
         t2.feed_timezone,
         t2.base64_url,
-        urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key
+        urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
+        urls_to_gtfs_datasets.gtfs_dataset_name AS gtfs_dataset_name,
     FROM make_noon_pacific AS t1
     INNER JOIN dim_schedule_feeds AS t2
         ON t1.noon_pacific BETWEEN t2._valid_from AND t2._valid_to

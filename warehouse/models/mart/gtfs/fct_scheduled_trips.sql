@@ -131,6 +131,7 @@ gtfs_joins AS (
 fct_scheduled_trips AS (
     SELECT
         gtfs_joins.key,
+        {{ dbt_utils.generate_surrogate_key(['gtfs_joins.service_date', 'gtfs_joins.base64_url', 'gtfs_joins.trip_id', 'gtfs_joins.iteration_num']) }} AS trip_instance_key,
         gtfs_joins.feed_timezone,
         gtfs_joins.base64_url,
 
@@ -144,7 +145,9 @@ fct_scheduled_trips AS (
         gtfs_joins.service_id,
         gtfs_joins.trip_key,
         gtfs_joins.trip_id,
-        gtfs_joins.iteration_num,
+        -- if it's not a frequency based trip, it should be unique on its given date
+        -- so simply coalesce
+        COALESCE(gtfs_joins.iteration_num, 1) AS iteration_num,
         gtfs_joins.frequencies_defined_trip,
         gtfs_joins.trip_short_name,
         gtfs_joins.direction_id,
