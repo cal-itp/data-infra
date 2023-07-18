@@ -5,7 +5,7 @@
 /* Do not modify it by hand - just update the pydantic models and then re-run the script
 */
 
-export type LayerType = "speedmap" | "hqta_areas" | "hqta_stops" | "state_highway_network";
+export type LayerType = "speedmap" | "speed_variation" | "hqta_areas" | "hqta_stops" | "state_highway_network";
 
 export interface BasemapConfig {
   url: string;
