@@ -4,7 +4,7 @@ WITH int_transit_database__transit_data_quality_issues AS (
     SELECT * FROM {{ ref('int_transit_database__transit_data_quality_issues') }}
 ),
 
-dim_transit_data_quality_issue_types AS (
+dim_transit_data_quality_issues AS (
     SELECT
         key,
         source_record_id,
@@ -38,4 +38,4 @@ dim_transit_data_quality_issue_types AS (
     FROM int_transit_database__transit_data_quality_issues
 )
 
-SELECT * FROM dim_transit_data_quality_issue_types
+SELECT * FROM dim_transit_data_quality_issues
