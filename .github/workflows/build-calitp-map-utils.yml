@@ -1,4 +1,4 @@
-name: Test, visualize, and build dbt project
+name: Test, visualize, and build calitp-map-utils
 
 on:
   push:
