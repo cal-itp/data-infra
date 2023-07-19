@@ -9,7 +9,7 @@ dim_transit_data_quality_issue_types AS (
         key,
         source_record_id,
         dataset_type,
-        transit_data_quality_issues,
+        transit_data_quality_issue,
         name,
         notes,
         _is_current,
