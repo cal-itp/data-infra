@@ -856,7 +856,7 @@ models:
         name: source_record_id
         description: Airtable-generated row-level record ID
       - name: dataset_type
-      - name: transit_data_quality_issues
+      - name: transit_data_quality_issue
       - name: name
       - name: notes
       - *valid_from_placeholder
@@ -869,10 +869,10 @@ models:
       - *source_record_id
       - name: description
       - name: issue_type
-      - name: gtfs_datasets
+      - name: gtfs_dataset
       - name: status
       - name: issue__
-      - name: services
+      - name: service
       - name: resolution_date
       - name: assignee
       - name: issue_creation_time
