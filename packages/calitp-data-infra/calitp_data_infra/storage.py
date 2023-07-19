@@ -166,11 +166,11 @@ class GTFSFeedType(str, Enum):
         raise RuntimeError(f"managed to end up with an invalid enum type of {self}")
 
 
-def upload_from_string(blob: storage.Blob, data, content_type, client):
+def upload_from_string(blob: storage.Blob, data: bytes, content_type: str, client: storage.Client):
     blob.upload_from_string(
-        data,
-        content_type,
-        client,
+        data=data,
+        content_type=content_type,
+        client=client,
     )
 
 
