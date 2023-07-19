@@ -619,7 +619,8 @@ models:
             - trip_route_id
             - trip_direction_id
             - schedule_base64_url
-          # we have a very small number of historical failures on this uniqueness on days where a given feed's time zone changed
+          # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
+          # even then the number of failures is very small
           where: '__rt_sampled__'
   - name: int_gtfs_rt__vehicle_positions_trip_day_map_grouping
     description: |
@@ -638,5 +639,6 @@ models:
             - trip_route_id
             - trip_direction_id
             - schedule_base64_url
-          # we have a very small number of historical failures on this uniqueness on days where a given feed's time zone changed
+          # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
+          # even then the number of failures is very small
           where: '__rt_sampled__'
