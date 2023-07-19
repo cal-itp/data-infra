@@ -111,11 +111,7 @@ models:
   - name: int_transit_database__issue_types_dim
     description: TODO
     columns:
-      - &key
-        name: key
-        tests: &pk_tests
-          - not_null
-          - unique
+      - *key
       - &source_record_id
         name: source_record_id
         description: Airtable-generated row-level record ID
