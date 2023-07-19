@@ -1,0 +1,37 @@
+name: Test, visualize, and build calitp-data-infra
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.github/workflows/build-calitp-data-infra.yml'
+      - 'apps/maps/calitp_data_infra/**'
+  pull_request:
+    paths:
+      - '.github/workflows/build-calitp-data-infra.yml'
+      - 'apps/maps/calitp_data_infra/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check_and_build:
+    name: check python
+    runs-on: ubuntu-latest
+    working-directory: apps/maps
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Run checks
+        working-directory: packages/calitp-data-infra
+        run: |
+          curl -sSL https://install.python-poetry.org | python -
+          poetry install
+          poetry run mypy .
+          poetry run pytest
+          poetry run build
+# TODO: add publishing
