@@ -1,7 +1,7 @@
 {{ config(materialized='table') }}
 
-WITH int_transit_database__transit_data_quality_issues AS (
-    SELECT * FROM {{ ref('int_transit_database__transit_data_quality_issues') }}
+WITH int_transit_database__transit_data_quality_issues_dim AS (
+    SELECT * FROM {{ ref('int_transit_database__transit_data_quality_issues_dim') }}
 ),
 
 dim_transit_data_quality_issues AS (
@@ -35,7 +35,7 @@ dim_transit_data_quality_issues AS (
         _is_current,
         _valid_from,
         _valid_to,
-    FROM int_transit_database__transit_data_quality_issues
+    FROM int_transit_database__transit_data_quality_issues_dim
 )
 
 SELECT * FROM dim_transit_data_quality_issues

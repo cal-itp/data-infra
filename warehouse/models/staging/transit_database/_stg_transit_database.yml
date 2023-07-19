@@ -109,7 +109,8 @@ models:
       - name: itp_schedule_todo
       - name: deprecated_date
       - name: time
-      - name: dt
+      - &dt
+        name: dt
   - name: stg_transit_database__gtfs_service_data
     description: |
       Each row is an individual row from an individual download (snapshot) of the
@@ -142,7 +143,7 @@ models:
       - name: provider_reporting_category
       - name: itp_schedule_todo__from_gtfs_dataset_
       - name: time
-      - name: dt
+      - *dt
   - name: stg_transit_database__county_geography
     description: '{{ doc("county_geography_table") }}'
     columns:
@@ -156,7 +157,7 @@ models:
       - name: mpo
       - name: place_geography
       - name: time
-      - name: dt
+      - *dt
   - name: stg_transit_database__eligibility_programs
     description: |
       Each row is an individual row from an individual download (snapshot) of the
@@ -173,7 +174,7 @@ models:
       - name: expected_process_turn_around_application_eligibility__days_
       - name: website
       - name: time
-      - name: dt
+      - *dt
   - name: stg_transit_database__fare_systems
     description: |
       Each row is an individual row from an individual download (snapshot) of the
@@ -219,7 +220,7 @@ models:
       - name: fares_v2_status__from_mobility_services_managed___from_transit_provider_
       - name: itp_id
       - name: time
-      - name: dt
+      - *dt
   - name: stg_transit_database__funding_programs
     description: |
       Each row is an individual row from an individual download (snapshot) of the
@@ -234,7 +235,7 @@ models:
       - name: category
       - name: drmt_data
       - name: time
-      - name: dt
+      - *dt
   - name: stg_transit_database__ntd_agency_info
     description: |
       Each row is an individual row from an individual download (snapshot) of the
@@ -281,7 +282,7 @@ models:
       - name: personal_vehicles
       - name: organization_key
       - name: time
-      - name: dt
+      - *dt
   - name: stg_transit_database__place_geography
     description: |
       Each row is an individual row from an individual download (snapshot) of the
@@ -304,7 +305,7 @@ models:
       - name: mpo__from_county_base_
       - name: organizations_2
       - name: time
-      - name: dt
+      - *dt
   - name: stg_transit_database__rider_requirements
     description: |
       Each row is an individual row from an individual download (snapshot) of the
@@ -317,7 +318,7 @@ models:
       - name: services
       - name: eligibility_program_key
       - name: time
-      - name: dt
+      - *dt
   - name: stg_transit_database__modes
     description: |
       Each row is an individual row from an individual download (snapshot) of the
@@ -329,7 +330,7 @@ models:
       - name: description
       - name: link_to_formal_definition
       - name: services
-      - name: dt
+      - *dt
   - name: stg_transit_database__issue_types
     description: TODO
     columns:
@@ -338,8 +339,7 @@ models:
       - name: transit_data_quality_issues
       - name: name
       - name: notes
-      - &dt
-        name: dt
+      - *dt
       - &ts
         name: ts
   - name: stg_transit_database__transit_data_quality_issues
