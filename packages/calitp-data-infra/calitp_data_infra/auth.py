@@ -1,6 +1,6 @@
 from typing import Mapping
 
-from google.cloud import secretmanager
+from google.cloud import secretmanager  # type: ignore
 
 project = "projects/cal-itp-data-infra"
 

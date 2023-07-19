@@ -11,6 +11,7 @@ from abc import ABC
 from datetime import datetime
 from enum import Enum
 from typing import (
+    Callable,
     ClassVar,
     Dict,
     List,
@@ -23,20 +24,19 @@ from typing import (
 )
 
 import backoff
-import gcsfs
+import gcsfs  # type: ignore
 import humanize
 import pendulum
-from calitp_data.config import get_bucket, require_pipeline
-from calitp_data.storage import get_fs
-from google.cloud import storage
-from google.cloud.storage import Blob
+from calitp_data.config import get_bucket, require_pipeline  # type: ignore
+from calitp_data.storage import get_fs  # type: ignore
+from google.cloud import storage  # type: ignore
 from pydantic import (
     BaseModel,
+    ConstrainedStr,
     Extra,
     Field,
     HttpUrl,
     ValidationError,
-    constr,
     validator,
 )
 from pydantic.class_validators import root_validator
@@ -114,24 +114,24 @@ def make_name_bq_safe(name: str):
     return str.lower(re.sub("[^\w]", "_", name))  # noqa: W605
 
 
-AIRTABLE_BUCKET = os.getenv("CALITP_BUCKET__AIRTABLE")
-GTFS_DOWNLOAD_CONFIG_BUCKET = os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG")
-SCHEDULE_RAW_BUCKET = os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW")
-RT_RAW_BUCKET = os.getenv("CALITP_BUCKET__GTFS_RT_RAW")
+AIRTABLE_BUCKET = os.environ["CALITP_BUCKET__AIRTABLE"]
+GTFS_DOWNLOAD_CONFIG_BUCKET = os.environ["CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"]
+SCHEDULE_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_RAW"]
+RT_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_RAW"]
 
 
 PARTITIONED_ARTIFACT_METADATA_KEY = "PARTITIONED_ARTIFACT_METADATA"
 
 PartitionType = Union[str, int, pendulum.DateTime, pendulum.Date, pendulum.Time]
 
-PARTITION_SERIALIZERS = {
+PARTITION_SERIALIZERS: Dict[Type, Callable] = {
     str: str,
     int: str,
     pendulum.Date: lambda d: d.to_date_string(),
     pendulum.DateTime: lambda dt: dt.to_iso8601_string(),
 }
 
-PARTITION_DESERIALIZERS = {
+PARTITION_DESERIALIZERS: Dict[Type, Callable] = {
     str: str,
     int: int,
     pendulum.Date: lambda s: pendulum.parse(s, exact=True),
@@ -139,7 +139,7 @@ PARTITION_DESERIALIZERS = {
 }
 
 
-def partition_map(path) -> Dict[str, PartitionType]:
+def partition_map(path) -> Dict[str, str]:
     return {key: value for key, value in re.findall(r"/(\w+)=([\w\-:=+.]+)(?=/)", path)}
 
 
@@ -201,13 +201,17 @@ def set_metadata_with_retry(*args, **kwargs):
     return set_metadata(*args, **kwargs)
 
 
+class StringNoWhitespace(ConstrainedStr):
+    strip_whitespace = True
+
+
 class PartitionedGCSArtifact(BaseModel, abc.ABC):
     """
     This class is designed to be subclassed to model "extracts", i.e. a particular
     download of a given data source.
     """
 
-    filename: constr(strip_whitespace=True)
+    filename: StringNoWhitespace
 
     class Config:
         json_encoders = {
@@ -297,38 +301,53 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
                 bucket=client.bucket(self.bucket.replace("gs://", "")),
             )
 
-            upload_from_string_func = upload_from_string_with_retry if retry_content else upload_from_string
-            upload_from_string_func(
-                blob=blob,
-                data=content,
-                content_type="application/octet-stream",
-                client=client,
-            )
+            if retry_content:
+                upload_from_string_with_retry(
+                    blob=blob,
+                    data=content,
+                    content_type="application/octet-stream",
+                    client=client,
+                )
+            else:
+                upload_from_string(
+                    blob=blob,
+                    data=content,
+                    content_type="application/octet-stream",
+                    client=client,
+                )
 
-            set_metadata_func = set_metadata_with_retry if retry_metadata else set_metadata
-            set_metadata_func(
-                blob=blob,
-                model=self,
-                exclude=exclude,
-            )
+            if retry_metadata:
+                set_metadata_with_retry(
+                    blob=blob,
+                    model=self,
+                    exclude=exclude,
+                )
+            else:
+                set_metadata(
+                    blob=blob,
+                    model=self,
+                    exclude=exclude,
+                )
 
 
 # TODO: this should really use a typevar
+# This contains several assignment ignores because they are actually ClassVars.
+# Maybe the underlying abstract property definition is an anti-pattern.
 def fetch_all_in_partition(
     cls: Type[PartitionedGCSArtifact],
     partitions: Dict[str, PartitionType],
-    bucket: str = None,
-    table: str = None,
+    bucket: Optional[str] = None,
+    table: Optional[str] = None,
     verbose=False,
-) -> Tuple[List[PartitionedGCSArtifact], List[Blob], List[Blob]]:
+) -> Tuple[List[PartitionedGCSArtifact], List[storage.Blob], List[storage.Blob]]:
     if not bucket:
-        bucket = cls.bucket
+        bucket = cls.bucket  # type: ignore[assignment]
 
         if not isinstance(bucket, str):
             raise TypeError(f"must either pass bucket, or the bucket must resolve to a string; got {type(bucket)}")
 
     if not table:
-        table = cls.table
+        table = cls.table  # type: ignore[assignment]
 
         if not isinstance(table, str):
             raise TypeError(f"must either pass table, or the table must resolve to a string; got {type(table)}")
@@ -348,8 +367,8 @@ def fetch_all_in_partition(
     files = client.list_blobs(re.sub(r"^gs://", "", bucket), prefix=prefix, delimiter=None)
 
     parsed: List[PartitionedGCSArtifact] = []
-    blobs_with_missing_metadata: List[Blob] = []
-    blobs_with_invalid_metadata: List[Blob] = []
+    blobs_with_missing_metadata: List[storage.Blob] = []
+    blobs_with_invalid_metadata: List[storage.Blob] = []
 
     for file in files:
         try:
@@ -442,14 +461,18 @@ def get_latest_file(
     directory = GCSDirectoryInfo(**prefix_info)
 
     for key, typ in partition_types.items():
-        directory = sorted(
+        next_dir = sorted(
             directory.children(fs),
             key=lambda o: PARTITION_DESERIALIZERS[typ](o.partition[key]),
             reverse=True,
         )[0]
+        # ensure we always get directories
+        assert isinstance(next_dir, GCSDirectoryInfo)
+        directory = next_dir
 
     children = directory.children(fs)
     # This is just a convention for us for now; we could also label files with metadata if desired
+    # Note: this assumes that there is only 1 file in the final "directory"; this is probably an anti-pattern
     if len(children) != 1:
         raise ValueError(f"found {len(directory.children(fs))} files rather than 1 in the directory {directory.name}")
 
@@ -462,26 +485,28 @@ def get_latest_file(
     return ret
 
 
+# This contains several assignment ignores because they are actually ClassVars.
+# Maybe the underlying abstract property definition is an anti-pattern.
 def get_latest(
     cls: Type[PartitionedGCSArtifact],
-    bucket: str = None,
-    table: str = None,
-    partition_names: List[str] = None,
+    bucket: Optional[str] = None,
+    table: Optional[str] = None,
+    partition_names: Optional[List[str]] = None,
 ) -> PartitionedGCSArtifact:
     if not bucket:
-        bucket = cls.bucket
+        bucket = cls.bucket  # type: ignore[assignment]
 
         if not isinstance(bucket, str):
             raise TypeError(f"must either pass bucket, or the bucket must resolve to a string; got {type(bucket)}")
 
     if not table:
-        table = cls.table
+        table = cls.table  # type: ignore[assignment]
 
         if not isinstance(table, str):
             raise TypeError(f"must either pass table, or the table must resolve to a string; got {type(table)}")
 
     if not partition_names:
-        partition_names = cls.partition_names
+        partition_names = cls.partition_names  # type: ignore[assignment]
 
         if not isinstance(partition_names, list):
             raise TypeError(
@@ -612,6 +637,7 @@ class GTFSDownloadConfig(BaseModel, extra=Extra.forbid):
 
     @property
     def base64_validation_url(self) -> str:
+        assert self.schedule_url_for_validation is not None
         return base64.urlsafe_b64encode(self.schedule_url_for_validation.encode()).decode()
 
 
@@ -664,7 +690,7 @@ class GTFSFeedExtract(PartitionedGCSArtifact, ABC):
 class GTFSScheduleFeedExtract(GTFSFeedExtract):
     bucket: ClassVar[str] = SCHEDULE_RAW_BUCKET
     table: ClassVar[str] = GTFSFeedType.schedule
-    feed_type: ClassVar[str] = GTFSFeedType.schedule
+    feed_type: ClassVar[GTFSFeedType] = GTFSFeedType.schedule
     partition_names: ClassVar[List[str]] = ["dt", "ts", "base64_url"]
     reconstructed: bool = False
 
