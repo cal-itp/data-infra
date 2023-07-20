@@ -41,6 +41,7 @@ parts:
           - glob: publishing/sections/*
   - caption: Developers
     chapters:
+      - file: github/contribute_to_repos.md
       - file: architecture/architecture_overview
       - file: airflow/overview
         sections:
@@ -51,10 +52,6 @@ parts:
         - file: kubernetes/architecture
         - file: kubernetes/deployment
       - file: infrastructure/README
-      - file: github/contribute_to_repos.md
-      - file: services/overview
-        sections:
-        - file: services/gtfs-ckan-uploader
       - file: backups/metabase
   - caption: Contribute to the Docs!
     chapters:
