@@ -6,11 +6,11 @@ on:
       - 'main'
     paths:
       - '.github/workflows/build-calitp-data-infra.yml'
-      - 'apps/maps/calitp_data_infra/**'
+      - 'packages/calitp-data-infra/calitp_data_infra/**'
   pull_request:
     paths:
       - '.github/workflows/build-calitp-data-infra.yml'
-      - 'apps/maps/calitp_data_infra/**'
+      - 'packages/calitp-data-infra/calitp_data_infra/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
