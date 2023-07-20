@@ -33,4 +33,9 @@ jobs:
           poetry run mypy .
           poetry run pytest
           poetry run build
+        env:
+          CALITP_BUCKET__AIRTABLE: gs://this-does-not-exist
+          CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: gs://this-does-not-exist
+          CALITP_BUCKET__GTFS_SCHEDULE_RAW: gs://this-does-not-exist
+          CALITP_BUCKET__GTFS_RT_RAW: gs://this-does-not-exist
 # TODO: add publishing
