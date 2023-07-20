@@ -31,7 +31,7 @@ unnested AS (
     UNNEST(transit_data_quality_issues) as transit_data_quality_issue
 ),
 
-int_transit_database__issue_types AS (
+int_transit_database__issue_types_dim AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['id', '_valid_from', 'transit_data_quality_issue']) }} AS key,
         id AS source_record_id,
@@ -45,4 +45,4 @@ int_transit_database__issue_types AS (
     FROM unnested
 )
 
-SELECT * FROM int_transit_database__issue_types
+SELECT * FROM int_transit_database__issue_types_dim
