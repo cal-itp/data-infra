@@ -144,7 +144,10 @@ def partition_map(path) -> Dict[str, str]:
 
 
 def serialize_partitions(partitions: Dict[str, PartitionType]) -> List[str]:
-    return [f"{name}={PARTITION_SERIALIZERS[type(value)](value)}" for name, value in partitions.items()]
+    return [
+        f"{name}={PARTITION_SERIALIZERS[type(value)](value)}"
+        for name, value in partitions.items()
+    ]
 
 
 class GTFSFeedType(str, Enum):
@@ -166,7 +169,9 @@ class GTFSFeedType(str, Enum):
         raise RuntimeError(f"managed to end up with an invalid enum type of {self}")
 
 
-def upload_from_string(blob: storage.Blob, data: bytes, content_type: str, client: storage.Client):
+def upload_from_string(
+    blob: storage.Blob, data: bytes, content_type: str, client: storage.Client
+):
     blob.upload_from_string(
         data=data,
         content_type=content_type,
@@ -243,7 +248,9 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
 
     @property
     def serialized_partitions(self) -> List[str]:
-        return serialize_partitions({name: getattr(self, name) for name in self.partition_names})
+        return serialize_partitions(
+            {name: getattr(self, name) for name in self.partition_names}
+        )
 
     @property
     def partition_types(self) -> Dict[str, Type[PartitionType]]:
@@ -254,10 +261,18 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
         # TODO: this isn't great but some partition_names are properties
         if isinstance(cls.partition_names, property):
             return values
-        cls_properties = [name for name in dir(cls) if isinstance(getattr(cls, name), property)]
-        missing = [name for name in cls.partition_names if name not in values and name not in cls_properties]
+        cls_properties = [
+            name for name in dir(cls) if isinstance(getattr(cls, name), property)
+        ]
+        missing = [
+            name
+            for name in cls.partition_names
+            if name not in values and name not in cls_properties
+        ]
         if missing:
-            raise ValueError(f"all partition names must exist as fields or properties; missing {missing}")
+            raise ValueError(
+                f"all partition names must exist as fields or properties; missing {missing}"
+            )
         return values
 
     @property
@@ -295,7 +310,9 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
             )
 
         if client:
-            logging.info(f"saving {humanize.naturalsize(len(content))} to {self.bucket} {self.name}")
+            logging.info(
+                f"saving {humanize.naturalsize(len(content))} to {self.bucket} {self.name}"
+            )
             blob = storage.Blob(
                 name=self.name,
                 bucket=client.bucket(self.bucket.replace("gs://", "")),
@@ -344,13 +361,17 @@ def fetch_all_in_partition(
         bucket = cls.bucket  # type: ignore[assignment]
 
         if not isinstance(bucket, str):
-            raise TypeError(f"must either pass bucket, or the bucket must resolve to a string; got {type(bucket)}")
+            raise TypeError(
+                f"must either pass bucket, or the bucket must resolve to a string; got {type(bucket)}"
+            )
 
     if not table:
         table = cls.table  # type: ignore[assignment]
 
         if not isinstance(table, str):
-            raise TypeError(f"must either pass table, or the table must resolve to a string; got {type(table)}")
+            raise TypeError(
+                f"must either pass table, or the table must resolve to a string; got {type(table)}"
+            )
 
     prefix = "/".join(
         [
@@ -364,7 +385,9 @@ def fetch_all_in_partition(
     client = storage.Client()
     # once Airflow is upgraded to Python 3.9, can use:
     # files = client.list_blobs(bucket.removeprefix("gs://"), prefix=prefix, delimiter=None)
-    files = client.list_blobs(re.sub(r"^gs://", "", bucket), prefix=prefix, delimiter=None)
+    files = client.list_blobs(
+        re.sub(r"^gs://", "", bucket), prefix=prefix, delimiter=None
+    )
 
     parsed: List[PartitionedGCSArtifact] = []
     blobs_with_missing_metadata: List[storage.Blob] = []
@@ -372,7 +395,11 @@ def fetch_all_in_partition(
 
     for file in files:
         try:
-            parsed.append(parse_obj_as(cls, json.loads(file.metadata[PARTITIONED_ARTIFACT_METADATA_KEY])))
+            parsed.append(
+                parse_obj_as(
+                    cls, json.loads(file.metadata[PARTITIONED_ARTIFACT_METADATA_KEY])
+                )
+            )
         except (TypeError, KeyError):
             logging.exception(f"metadata missing on {bucket}/{file.name}")
             blobs_with_missing_metadata.append(file)
@@ -436,7 +463,9 @@ class GCSDirectoryInfo(GCSBaseInfo):
 
     def children(self, fs) -> List["GCSObjectInfo"]:
         # TODO: this should work with a discriminated type but idk why it's not
-        return parse_obj_as(GCSObjectInfoList, [fs.info(child) for child in fs.ls(self.name)]).__root__
+        return parse_obj_as(
+            GCSObjectInfoList, [fs.info(child) for child in fs.ls(self.name)]
+        ).__root__
 
 
 GCSObjectInfo = Annotated[
@@ -457,7 +486,9 @@ def get_latest_file(
     fs = get_fs()
     fs.invalidate_cache()
 
-    prefix_info = fs.info("/".join([bucket, table, *serialize_partitions(prefix_partitions), ""]))
+    prefix_info = fs.info(
+        "/".join([bucket, table, *serialize_partitions(prefix_partitions), ""])
+    )
     directory = GCSDirectoryInfo(**prefix_info)
 
     for key, typ in partition_types.items():
@@ -474,13 +505,17 @@ def get_latest_file(
     # This is just a convention for us for now; we could also label files with metadata if desired
     # Note: this assumes that there is only 1 file in the final "directory"; this is probably an anti-pattern
     if len(children) != 1:
-        raise ValueError(f"found {len(directory.children(fs))} files rather than 1 in the directory {directory.name}")
+        raise ValueError(
+            f"found {len(directory.children(fs))} files rather than 1 in the directory {directory.name}"
+        )
 
     ret = children[0]
 
     # is there a way to have pydantic check this?
     if not isinstance(ret, GCSFileInfo):
-        raise ValueError(f"encountered unexpected type {type(ret)} rather than GCSFileInfo")
+        raise ValueError(
+            f"encountered unexpected type {type(ret)} rather than GCSFileInfo"
+        )
 
     return ret
 
@@ -497,13 +532,17 @@ def get_latest(
         bucket = cls.bucket  # type: ignore[assignment]
 
         if not isinstance(bucket, str):
-            raise TypeError(f"must either pass bucket, or the bucket must resolve to a string; got {type(bucket)}")
+            raise TypeError(
+                f"must either pass bucket, or the bucket must resolve to a string; got {type(bucket)}"
+            )
 
     if not table:
         table = cls.table  # type: ignore[assignment]
 
         if not isinstance(table, str):
-            raise TypeError(f"must either pass table, or the table must resolve to a string; got {type(table)}")
+            raise TypeError(
+                f"must either pass table, or the table must resolve to a string; got {type(table)}"
+            )
 
     if not partition_names:
         partition_names = cls.partition_names  # type: ignore[assignment]
@@ -518,12 +557,20 @@ def get_latest(
         table,
         prefix_partitions={},
         # TODO: this doesn't pick up the type hint of dt since it's a property; it's fine as a string but we should fix
-        partition_types={name: get_type_hints(cls).get(name, str) for name in partition_names},
+        partition_types={
+            name: get_type_hints(cls).get(name, str) for name in partition_names
+        },
     )
 
     logging.info(f"identified {latest.name} as the most recent extract of {cls}")
 
-    return cls(**json.loads(get_fs().getxattr(path=f"gs://{latest.name}", attr=PARTITIONED_ARTIFACT_METADATA_KEY)))
+    return cls(
+        **json.loads(
+            get_fs().getxattr(
+                path=f"gs://{latest.name}", attr=PARTITIONED_ARTIFACT_METADATA_KEY
+            )
+        )
+    )
 
 
 class AirtableGTFSDataRecord(BaseModel):
@@ -564,10 +611,14 @@ class AirtableGTFSDataExtract(PartitionedGCSArtifact):
             cls.table,
             prefix_partitions={},
             # TODO: this doesn't pick up the type hint of dt since it's a property; it's fine as a string but we should fix
-            partition_types={name: get_type_hints(cls).get(name, str) for name in cls.partition_names},
+            partition_types={
+                name: get_type_hints(cls).get(name, str) for name in cls.partition_names
+            },
         )
 
-        logging.info(f"identified {latest.name} as the most recent extract of gtfs datasets")
+        logging.info(
+            f"identified {latest.name} as the most recent extract of gtfs datasets"
+        )
 
         with get_fs().open(latest.name, "rb") as f:
             content = gzip.decompress(f.read())
@@ -575,7 +626,10 @@ class AirtableGTFSDataExtract(PartitionedGCSArtifact):
         return AirtableGTFSDataExtract(
             filename=latest.filename,
             ts=pendulum.parse(latest.partition["ts"], exact=True),
-            records=[AirtableGTFSDataRecord(**json.loads(row)) for row in content.decode().splitlines()],
+            records=[
+                AirtableGTFSDataRecord(**json.loads(row))
+                for row in content.decode().splitlines()
+            ],
         )
 
 
@@ -617,7 +671,9 @@ class GTFSDownloadConfig(BaseModel, extra=Extra.forbid):
         headers = {k: auth_dict[v] for k, v in self.auth_headers.items()}
 
         # some web servers require user agents or they will throw a 4XX error
-        headers["User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0"
+        headers[
+            "User-Agent"
+        ] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0"
 
         # inspired by: https://stackoverflow.com/questions/18869074/create-url-without-request-execution
         return Request(
@@ -638,7 +694,9 @@ class GTFSDownloadConfig(BaseModel, extra=Extra.forbid):
     @property
     def base64_validation_url(self) -> str:
         assert self.schedule_url_for_validation is not None
-        return base64.urlsafe_b64encode(self.schedule_url_for_validation.encode()).decode()
+        return base64.urlsafe_b64encode(
+            self.schedule_url_for_validation.encode()
+        ).decode()
 
 
 class GTFSDownloadConfigExtract(PartitionedGCSArtifact):
@@ -736,7 +794,9 @@ def download_feed(
     resp = s.send(r, **request_kwargs)
     resp.raise_for_status()
 
-    disposition_header = resp.headers.get("content-disposition", resp.headers.get("Content-Disposition"))
+    disposition_header = resp.headers.get(
+        "content-disposition", resp.headers.get("Content-Disposition")
+    )
 
     if disposition_header:
         if disposition_header.startswith("filename="):
@@ -748,10 +808,14 @@ def download_feed(
         disposition_filename = None
 
     filename = (
-        disposition_filename or (os.path.basename(resp.url) if resp.url.endswith(".zip") else None) or default_filename
+        disposition_filename
+        or (os.path.basename(resp.url) if resp.url.endswith(".zip") else None)
+        or default_filename
     )
 
-    extract_class = GTFSRTFeedExtract if config.feed_type.is_rt else GTFSScheduleFeedExtract
+    extract_class = (
+        GTFSRTFeedExtract if config.feed_type.is_rt else GTFSScheduleFeedExtract
+    )
     extract = extract_class(
         filename=filename,
         config=config,
@@ -771,7 +835,9 @@ if __name__ == "__main__":
     fs = get_fs()
     with fs.open(extract.path, "rb") as f:
         content = gzip.decompress(f.read())
-    records = [GTFSDownloadConfig(**json.loads(row)) for row in content.decode().splitlines()]
+    records = [
+        GTFSDownloadConfig(**json.loads(row)) for row in content.decode().splitlines()
+    ]
     download_feed(records[0], auth_dict={}, ts=pendulum.now(), timeout=1)
     print("downloaded a thing!")
     sys.exit(0)
@@ -780,7 +846,9 @@ if __name__ == "__main__":
     # Etc/UTC is what the pods get as a timezone... and it serializes to 2022-08-18T00:00:00+00:00
     # whereas UTC serializes to 2022-08-18T00:00:00Z
     # this should probably be checked in the partitioned artifact?
-    yesterday_noon = pendulum.yesterday("Etc/UTC").replace(minute=0, second=0, microsecond=0)
+    yesterday_noon = pendulum.yesterday("Etc/UTC").replace(
+        minute=0, second=0, microsecond=0
+    )
     vp_files, _, _ = fetch_all_in_partition(
         cls=GTFSRTFeedExtract,
         fs=get_fs(),
