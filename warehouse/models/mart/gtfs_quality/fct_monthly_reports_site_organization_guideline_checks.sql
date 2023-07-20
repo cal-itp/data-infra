@@ -14,8 +14,6 @@ checks AS (
            is_manual,
            reports_order,
     FROM {{ ref('fct_daily_organization_combined_guideline_checks') }}
-    -- This filtering is temporary, and could also be done further downstream:
-    WHERE feature = {{ compliance_schedule() }}
 ),
 
 generate_biweekly_dates AS (
