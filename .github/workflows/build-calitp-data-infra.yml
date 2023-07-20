@@ -20,7 +20,6 @@ jobs:
   check_and_build:
     name: check python
     runs-on: ubuntu-latest
-    working-directory: apps/maps
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
