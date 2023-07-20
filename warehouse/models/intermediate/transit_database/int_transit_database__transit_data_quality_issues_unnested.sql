@@ -1,16 +1,17 @@
 {{ config(materialized='table') }}
 
-WITH int_transit_database__transit_data_quality_issues_dim AS (
-    SELECT * FROM {{ ref('int_transit_database__transit_data_quality_issues_dim') }}
+WITH latest AS (
+    {{ get_latest_dense_rank(
+        external_table = ref('stg_transit_database__transit_data_quality_issues'),
+        order_by = 'dt DESC'
+        ) }}
 ),
 
-dim_transit_data_quality_issues AS (
+int_transit_database__transit_data_quality_issues_unnested AS (
     SELECT
-        key,
-        source_record_id,
+        id,
         description,
         issue_type_key,
-        issue_type_name,
         gtfs_dataset_key,
         status,
         issue__,
@@ -33,10 +34,13 @@ dim_transit_data_quality_issues AS (
         waiting_since,
         outreach_status,
         should_wait_until,
-        _is_current,
-        _valid_from,
-        _valid_to,
-    FROM int_transit_database__transit_data_quality_issues_dim
+        dt,
+        universal_first_val
+    FROM latest,
+    UNNEST(gtfs_datasets) AS gtfs_dataset_key,
+    UNNEST(services) AS service_key,
+    UNNEST(issue_type) AS issue_type_key,
+    UNNEST(caltrans_district__from_operating_county_geographies___from_services_) AS caltrans_district__from_operating_county_geographies___from_services__key
 )
 
-SELECT * FROM dim_transit_data_quality_issues
+SELECT * FROM int_transit_database__transit_data_quality_issues_unnested

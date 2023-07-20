@@ -145,11 +145,11 @@ models:
       - *key
       - *source_record_id
       - name: description
-      - name: issue_type
-      - name: gtfs_dataset
+      - name: issue_type_key
+      - name: gtfs_dataset_key
       - name: status
       - name: issue__
-      - name: service
+      - name: service_key
       - name: resolution_date
       - name: assignee
       - name: issue_creation_time
@@ -159,7 +159,7 @@ models:
       - name: qc__num_issue_types
       - name: qc_checks
       - name: waiting_on_someone_other_than_transit_data_quality_
-      - name: caltrans_district__from_operating_county_geographies___from_services_
+      - name: caltrans_district__from_operating_county_geographies___from_services__key
       - name: is_open
       - name: last_update
       - name: last_update_month
