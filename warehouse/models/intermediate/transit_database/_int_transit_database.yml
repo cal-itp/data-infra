@@ -51,7 +51,7 @@ models:
           - relationships:
               to: ref('dim_gtfs_datasets')
               field: key
-  - name: int_transit_database__transit_data_quality_issues_dim
+  - name: int_transit_database__transit_data_quality_issues_unnested
     description: TODO
     columns:
       - name: id
