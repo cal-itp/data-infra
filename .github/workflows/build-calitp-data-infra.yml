@@ -32,7 +32,7 @@ jobs:
           poetry install
           poetry run mypy .
           poetry run pytest
-          poetry run build
+          poetry build
         env:
           CALITP_BUCKET__AIRTABLE: gs://this-does-not-exist
           CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: gs://this-does-not-exist
