@@ -25,7 +25,9 @@ def get_secrets_by_label(
         if label in secret.labels:
             version = f"{secret.name}/versions/latest"
             response = client.access_secret_version(version)
-            secret_values[secret.name.split("/")[-1]] = response.payload.data.decode("UTF-8").strip()
+            secret_values[secret.name.split("/")[-1]] = response.payload.data.decode(
+                "UTF-8"
+            ).strip()
 
     return secret_values
 
