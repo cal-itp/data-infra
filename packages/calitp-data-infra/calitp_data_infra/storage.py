@@ -114,10 +114,10 @@ def make_name_bq_safe(name: str):
     return str.lower(re.sub("[^\w]", "_", name))  # noqa: W605
 
 
-AIRTABLE_BUCKET = os.environ["CALITP_BUCKET__AIRTABLE"]
-GTFS_DOWNLOAD_CONFIG_BUCKET = os.environ["CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"]
-SCHEDULE_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_RAW"]
-RT_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_RAW"]
+AIRTABLE_BUCKET = os.getenv("CALITP_BUCKET__AIRTABLE")
+GTFS_DOWNLOAD_CONFIG_BUCKET = os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG")
+SCHEDULE_RAW_BUCKET = os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW")
+RT_RAW_BUCKET = os.getenv("CALITP_BUCKET__GTFS_RT_RAW")
 
 
 PARTITIONED_ARTIFACT_METADATA_KEY = "PARTITIONED_ARTIFACT_METADATA"
@@ -225,8 +225,12 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
 
     @property
     @abc.abstractmethod
-    def bucket(self) -> str:
-        """Bucket name"""
+    def bucket(self) -> Optional[str]:
+        """
+        Bucket name
+
+        Note that this is Optional; not all apps will have all bucket env vars set.
+        """
 
     @validator("bucket", check_fields=False, allow_reuse=True)
     def bucket_exists(cls, v):
@@ -297,6 +301,7 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
         retry_metadata: bool = False,
         retry_content: bool = False,
     ):
+        assert self.bucket is not None
         if (fs is None) == (client is None):
             raise TypeError("must provide a gcsfs file system OR a storage client")
 
@@ -592,7 +597,7 @@ class AirtableGTFSDataRecord(BaseModel):
 
 
 class AirtableGTFSDataExtract(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = AIRTABLE_BUCKET
+    bucket: ClassVar[Optional[str]] = AIRTABLE_BUCKET
     table: ClassVar[str] = "california_transit__gtfs_datasets"
     partition_names: ClassVar[List[str]] = ["dt", "ts"]
     ts: pendulum.DateTime
@@ -606,6 +611,7 @@ class AirtableGTFSDataExtract(PartitionedGCSArtifact):
     #  airtable downloader does not set metadata yet
     @classmethod
     def get_latest(cls) -> "AirtableGTFSDataExtract":
+        assert cls.bucket is not None
         latest = get_latest_file(
             cls.bucket,
             cls.table,
@@ -700,7 +706,7 @@ class GTFSDownloadConfig(BaseModel, extra=Extra.forbid):
 
 
 class GTFSDownloadConfigExtract(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = GTFS_DOWNLOAD_CONFIG_BUCKET
+    bucket: ClassVar[Optional[str]] = GTFS_DOWNLOAD_CONFIG_BUCKET
     table: ClassVar[str] = "gtfs_download_configs"
     partition_names: ClassVar[List[str]] = ["dt", "ts"]
     ts: pendulum.DateTime
@@ -746,7 +752,7 @@ class GTFSFeedExtract(PartitionedGCSArtifact, ABC):
 
 
 class GTFSScheduleFeedExtract(GTFSFeedExtract):
-    bucket: ClassVar[str] = SCHEDULE_RAW_BUCKET
+    bucket: ClassVar[Optional[str]] = SCHEDULE_RAW_BUCKET
     table: ClassVar[str] = GTFSFeedType.schedule
     feed_type: ClassVar[GTFSFeedType] = GTFSFeedType.schedule
     partition_names: ClassVar[List[str]] = ["dt", "ts", "base64_url"]
@@ -760,7 +766,7 @@ class GTFSScheduleFeedExtract(GTFSFeedExtract):
 
 
 class GTFSRTFeedExtract(GTFSFeedExtract):
-    bucket: ClassVar[str] = RT_RAW_BUCKET
+    bucket: ClassVar[Optional[str]] = RT_RAW_BUCKET
     partition_names: ClassVar[List[str]] = ["dt", "hour", "ts", "base64_url"]
 
     @validator("config", allow_reuse=True)
