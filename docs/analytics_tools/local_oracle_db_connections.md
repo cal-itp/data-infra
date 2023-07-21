@@ -1,4 +1,4 @@
-# Local Database Connections:
+# Local Oracle Database Connections:
 
 This document is an aid for setting up a local connection to an Oracle Database using ArcGIS environments, Python Command Prompt, and a local Jupyter Notebook setup.
 
