@@ -29,7 +29,9 @@ echo '{ "legend_url": "https://storage.googleapis.com/calitp-map-tiles/legend_te
 URL: localhost:5173?state=H4sIAO38fWQC_6WSMU_DMBCF_8opM03GSt0KDAwUgcqGkHVNr47B8RnfhZJW_e8kbVE6FAY6WSef3_fek7dZwJqyCYTG-yvIPLaUpJtftj832e0Y5opKcOdstcYWHkjXnN6zbr9Jvl-pVKNMikKUE1rKLbP1hNFJXnJdlOidxlGNcaTOkxTLsZEq5Jb4Tbg7N72WtnHPkx5mqgPMhAEWE0dK6kiOhndXMNi86SArTsHh3ig8NT21heeEQZzCNBEKjLosHOUC7yWa6sPoQdVIr3Y-yLHSv13fT2FGmhiuG4F5JFrCDKPAdAaPhJd0XPeyBuvfWu5Z3fb5Yl_3f0GN5zAk2TDXw7RY8NfJhEKdmik5rJw9-VBkKSzNPzMcXyuJ5vJps9039EE5DrACAAA%3D
 ```
 
-You can point the `--host` parameter at a Netlify URL to provide an easy way to test against an already-published version of the app.
+You can point the `--host` parameter at a Netlify URL to provide an easy way to test against an already-published version of the app. As of 2023-07-21
+the production URL is [https://embeddable-maps.calitp.org](https://embeddable-maps.calitp.org) but you can also use preview
+Netlify sites deployed via `netlify deploy ...` with `--alias=some-alias` and/or without the `--prod` flag (see below).
 
 ## Build and deploy to Netlify
 
@@ -39,7 +41,10 @@ You may also deploy manually with the following:
 ```bash
 (from the apps/maps folder)
 npm run build
-netlify deploy --site=embeddable-maps-calitp-org --dir=build --prod
+netlify deploy --site=embeddable-maps-calitp-org --dir=build
 ```
+
+By default, this deploys a preview site with a generated alias prefix. You may pass an explicit alias with `--alias=<some-alias>`
+or deploy to production with `--prod`.
 
 We could look into using the [Netlify adapter](https://kit.svelte.dev/docs/adapter-netlify) at some point.
