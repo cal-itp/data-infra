@@ -1,6 +1,6 @@
 # Airflow
 
-The following folder contains the project level directory for all our [Apache Airflow](https://airflow.apache.org/) [DAGs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html). Airflow is an orchestration tool that we use to manage our raw data ingest. Airflow DAG tasks are scheduled at regular intervals to perform data processing steps, for example unzipping raw GTFS zipfiles and writing the contents out to new locations in Google Cloud Storage.
+The following folder contains the project level directory for all our [Apache Airflow](https://airflow.apache.org/) [DAGs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html). Airflow is an orchestration tool that we use to manage our raw data ingest. Airflow DAG tasks are scheduled at regular intervals to perform data processing steps, for example unzipping raw GTFS zipfiles and writing the contents out to Google Cloud Storage.
 
 Our DAGs are deployed automatically to Google Cloud Composer when a PR is merged into the `main` branch; see the section on deployment below for more information.
 
@@ -10,11 +10,11 @@ The DAGs for this project are stored and version controlled in the `dags` folder
 
 The logs are stored locally in the `logs` folder. You should be unable to add files here but it is gitkeep'ed so that it is avaliable when testing and debugging.
 
-Finally, Airflow plugins can be found in `plugins`; this includes general utility functions as well as custom operator definitions.
+Finally, Airflow plugins can be found in `plugins`; this includes general utility functions as well as custom [operator](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/operators.html) definitions.
 
 ## Developing Locally
 
-This project is developed using docker and docker-compose. Before getting started, please make sure you have installed both on your system.
+This project is developed using Docker and docker-compose. Before getting started, please make sure you have [installed Docker on your system](https://docs.docker.com/get-docker/).
 
 First, if you're on linux, you'll need to make sure that the UID and GID of the container match, to do so, run
 
@@ -36,7 +36,7 @@ gcloud init
 # gcloud auth application-default login
 ```
 
-Next, run the initial database migration which also creates a default user named `airflow.
+Next, run the initial database migration which also creates a default user named `airflow`.
 ```shell
 docker-compose run airflow db init
 ```
