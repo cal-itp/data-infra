@@ -5,7 +5,7 @@ calitp:
       driver: kustomize
       kustomize_dir: kubernetes/apps/overlays/gtfs-rt-archiver-v3-prod
       secrets:
-        - gtfs-rt-v3-prod_gtfs-feed-secrets
+        - gtfs-rt-v3_gtfs-feed-secrets
     - name: airflow-jobs
       driver: kustomize
       kustomize_dir: kubernetes/apps/manifests/airflow-jobs
