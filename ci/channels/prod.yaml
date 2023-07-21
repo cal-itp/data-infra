@@ -1,6 +1,11 @@
 calitp:
   channel: prod
   releases:
+    - name: archiver
+      driver: kustomize
+      kustomize_dir: kubernetes/apps/overlays/gtfs-rt-archiver-v3-prod
+      secrets:
+        - gtfs-rt-v3-prod_gtfs-feed-secrets
     - name: airflow-jobs
       driver: kustomize
       kustomize_dir: kubernetes/apps/manifests/airflow-jobs
@@ -86,8 +91,11 @@ calitp:
       driver: kustomize
       kustomize_dir: kubernetes/apps/overlays/prod-sftp-ingest-elavon
       # TODO: sftp secrets
-    # TODO: Sentry
-#    - name: sentry
-#      secrets:
-#        - sentry_sentry-secret
-#        - sentry_sentry-sentry-postgresql
+    - name: sentry
+      driver: helm
+      namespace: sentry
+      helm_name: sentry
+      helm_chart: kubernetes/apps/charts/sentry
+      secrets:
+        - sentry_sentry-secret
+        - sentry_sentry-sentry-postgresql
