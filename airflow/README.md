@@ -6,7 +6,9 @@ Our DAGs are deployed automatically to Google Cloud Composer when a PR is merged
 
 ## Structure
 
-The DAGs for this project are stored and version controlled in the `dags` folder. Each DAG has its own `README` with further information about its specific purpose and considerations.
+The DAGs for this project are stored and version controlled in the `dags` folder. Each DAG has its own `README` with further information about its specific purpose and considerations. We use [gusty](https://github.com/pipeline-tools/gusty) to simplify DAG management.
+
+Each DAG folder contains a [`METADATA.yml` file](https://github.com/pipeline-tools/gusty#metadata) that contains overall DAG settings, including the DAG's schedule (if any).
 
 The logs are stored locally in the `logs` folder. You should be unable to add files here but it is gitkeep'ed so that it is avaliable when testing and debugging.
 
