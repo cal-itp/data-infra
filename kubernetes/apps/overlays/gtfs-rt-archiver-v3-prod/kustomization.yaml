@@ -9,5 +9,5 @@ resources:
 
 images:
 - name: 'gtfs-rt-archiver'
-  newName: 'ghcr.io/cal-itp/data-infra/gtfs-rt-archiver'
+  newName: 'ghcr.io/cal-itp/data-infra/gtfs-rt-archiver-v3'
   newTag: '2023.7.20'
