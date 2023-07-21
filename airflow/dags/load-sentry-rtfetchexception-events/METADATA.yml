@@ -1,8 +1,0 @@
-description: "Load RTFetchException events from Sentry API to Google Cloud Storage as JSONL"
-schedule_interval: "30 0 * * *"
-tags:
-  - all_gusty_features
-catchup: True
-default_args:
-    owner: airflow
-    start_date: "2023-01-01"
