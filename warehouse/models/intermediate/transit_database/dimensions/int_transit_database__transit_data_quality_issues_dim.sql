@@ -47,7 +47,7 @@ join_gtfs_datasets_at_creation AS (
         qc__num_issue_types,
         qc_checks,
         waiting_on_someone_other_than_transit_data_quality_,
-        caltrans_district__from_operating_county_geographies___from_services_,
+        caltrans_district__from_operating_county_geographies___from_services__key,
         is_open,
         last_update,
         last_update_month,
@@ -88,7 +88,7 @@ join_gtfs_datasets_at_resolution AS (
         qc__num_issue_types,
         qc_checks,
         waiting_on_someone_other_than_transit_data_quality_,
-        caltrans_district__from_operating_county_geographies___from_services_,
+        caltrans_district__from_operating_county_geographies___from_services__key,
         is_open,
         last_update,
         last_update_month,
@@ -101,11 +101,10 @@ join_gtfs_datasets_at_resolution AS (
         join_gtfs_datasets_at_creation._valid_from,
         join_gtfs_datasets_at_creation._valid_to
     FROM join_gtfs_datasets_at_creation
-    INNER JOIN dim_gtfs_datasets
+    LEFT JOIN dim_gtfs_datasets
         ON join_gtfs_datasets_at_creation.gtfs_dataset_key = dim_gtfs_datasets.source_record_id
         AND CAST(join_gtfs_datasets_at_creation.resolution_date AS TIMESTAMP) < dim_gtfs_datasets._valid_to
         AND CAST(join_gtfs_datasets_at_creation.resolution_date AS TIMESTAMP) > dim_gtfs_datasets._valid_from
-    WHERE resolution_date IS NOT NULL
 ),
 
 join_services_at_creation AS (
@@ -130,7 +129,7 @@ join_services_at_creation AS (
         qc__num_issue_types,
         qc_checks,
         waiting_on_someone_other_than_transit_data_quality_,
-        caltrans_district__from_operating_county_geographies___from_services_,
+        caltrans_district__from_operating_county_geographies___from_services__key,
         is_open,
         last_update,
         last_update_month,
@@ -172,7 +171,7 @@ join_services_at_resolution AS (
         qc__num_issue_types,
         qc_checks,
         waiting_on_someone_other_than_transit_data_quality_,
-        caltrans_district__from_operating_county_geographies___from_services_,
+        caltrans_district__from_operating_county_geographies___from_services__key,
         is_open,
         last_update,
         last_update_month,
@@ -185,11 +184,10 @@ join_services_at_resolution AS (
         join_services_at_creation._valid_from,
         join_services_at_creation._valid_to
     FROM join_services_at_creation
-    INNER JOIN dim_services
+    LEFT JOIN dim_services
         ON join_services_at_creation.service_key = dim_services.source_record_id
         AND CAST(join_services_at_creation.resolution_date AS TIMESTAMP) < dim_services._valid_to
         AND CAST(join_services_at_creation.resolution_date AS TIMESTAMP) > dim_services._valid_from
-    WHERE resolution_date IS NOT NULL
 ),
 
 join_issue_types AS (
@@ -213,7 +211,7 @@ join_issue_types AS (
         qc__num_issue_types,
         qc_checks,
         waiting_on_someone_other_than_transit_data_quality_,
-        caltrans_district__from_operating_county_geographies___from_services_,
+        caltrans_district__from_operating_county_geographies___from_services__key,
         is_open,
         last_update,
         last_update_month,
@@ -234,7 +232,7 @@ join_issue_types AS (
 
 int_transit_database__transit_data_quality_issues_dim AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['source_record_id', '_valid_from', 'gtfs_dataset_key_at_creation', 'gtfs_dataset_key_at_resolution', 'service_key_at_creation', 'service_key_at_resolution', 'issue_type_key']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['source_record_id', '_valid_from', 'gtfs_dataset_key_at_creation', 'gtfs_dataset_key_at_resolution', 'service_key_at_creation', 'service_key_at_resolution', 'issue_type_key', 'caltrans_district__from_operating_county_geographies___from_services__key']) }} AS key,
         source_record_id,
         description,
         issue_type_key,
@@ -254,7 +252,7 @@ int_transit_database__transit_data_quality_issues_dim AS (
         qc__num_issue_types,
         qc_checks,
         waiting_on_someone_other_than_transit_data_quality_,
-        caltrans_district__from_operating_county_geographies___from_services_,
+        caltrans_district__from_operating_county_geographies___from_services__key,
         is_open,
         last_update,
         last_update_month,
