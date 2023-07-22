@@ -1,0 +1,41 @@
+name: Test, visualize, and build calitp-data-infra
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.github/workflows/build-calitp-data-infra.yml'
+      - 'packages/calitp-data-infra/calitp_data_infra/**'
+  pull_request:
+    paths:
+      - '.github/workflows/build-calitp-data-infra.yml'
+      - 'packages/calitp-data-infra/calitp_data_infra/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check_and_build:
+    name: check python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Run checks
+        working-directory: packages/calitp-data-infra
+        run: |
+          curl -sSL https://install.python-poetry.org | python -
+          poetry install
+          poetry run mypy .
+          poetry run pytest
+          poetry build
+        env:
+          CALITP_BUCKET__AIRTABLE: gs://this-does-not-exist
+          CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: gs://this-does-not-exist
+          CALITP_BUCKET__GTFS_SCHEDULE_RAW: gs://this-does-not-exist
+          CALITP_BUCKET__GTFS_RT_RAW: gs://this-does-not-exist
+# TODO: add publishing
