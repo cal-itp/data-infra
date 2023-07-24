@@ -877,6 +877,4 @@ models:
       - name: waiting_since
       - name: outreach_status
       - name: should_wait_until
-      - *valid_from_placeholder
-      - *valid_to_placeholder
       - *is_current_placeholder
