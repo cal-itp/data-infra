@@ -15,22 +15,21 @@ other agencies, Caltrans publishes [many data sets](https://data.ca.gov/organiza
 Data is generally published as flat files (typically CSV) alongside required
 metadata and a data dictionary.
 
-## Cal-ITP data sets
-* [Cal-ITP GTFS Schedule Data](https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset)
+## Cal-ITP datasets
+* [Cal-ITP GTFS-Ingest Pipeline Dataset (schedule data)](https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset)
 
 ## General process
 ### Develop data models
 Generally, data models should be built in dbt/BigQuery if possible. For example,
-we have [latest-only GTFS schedule models](https://github.com/cal-itp/data-infra/tree/main/warehouse/models/gtfs_schedule_latest_only)
+we have [latest-only GTFS schedule models](https://github.com/cal-itp/data-infra/tree/main/warehouse/models/mart/gtfs_schedule_latest)
 we can use to update and expand the existing [CKAN dataset](https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset)
-[latest-only agency](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.agency)
 
 ### Document data
 California Open Data requires two documentation files for published datasets.
 1. `metadata.csv` - one row per resource (i.e. file) to be published
 2. `dictionary.csv` - one row per column across all resources
 
-If you are using dbt exposure-based data publishing, you can automatically generate
+We use dbt exposure-based data publishing to automatically generate
 these two files using the main `publish.py` script (specifically the `generate-exposure-documentation`
 subcommand). The documentation from the dbt models' corresponding YAML will be
 converted into appropriate CSVs and written out locally.
@@ -41,16 +40,17 @@ artifacts in `target/` from a `dbt run` or `dbt compile`.
 poetry run python scripts/publish.py document-exposure california_open_data
 ```
 
+Each day, new versions of `metadata.csv` and `dictionary.csv` are also automatically generated for tables in the production warehouse by the `dbt_run_and_upload_artifacts` job in [the `transform_warehouse` DAG](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/transform_warehouse/grid), and placed inside the `calitp-dbt-artifacts` GCS bucket.
+
 ### Create dataset and metadata
 Once you've generated the necessary metadata and dictionary CSV, you need to get
-approval from Chad Baker. Send the CSVs via email, preferably CC'ing somebody
-with a Caltrans email.
+approval from Chad Baker for publication. Send the dictionary and metadata CSVs via email, and explain what changes are coming to the dataset - have columns been added or removed from one of the tables, do you have a new table to add, or is there some other change?
 
-Once approved, a CKAN dataset will be created with UUIDs corresponding to each
+For new tables, a CKAN destination will be created with UUIDs corresponding to each
 model that will be published. If you are using dbt exposures, you will need to
-update the `meta` field to map the dbt models to the appropriate UUIDs.
+update the `meta` field [here](https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs_schedule_latest/_gtfs_schedule_latest.yml) to map the dbt models to the appropriate UUIDs.
 
-An example from the latest-only GTFS data exposure.
+For exmaple:
 ```yaml
     meta:
       methodology: |
@@ -80,19 +80,17 @@ An example from the latest-only GTFS data exposure.
 ### Publish the data!
 If you are using dbt-based publishing, the `publish_exposure` subcommand of `publish.py`
 will query BigQuery, write out CSV files, and upload those files to CKAN.
-Either create an Airflow job to refresh/update the data at the specified
-frequency, or do it manually. You can use flags to execute a dry run or write to
-GCS without also uploading to CKAN.
+[An Airflow job](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/publish_open_data/grid) refreshes/updates the data at a specified
+frequency, or the publication script can be run manually. By default, the `--no-publish` flag is set, executing a dry run. You can also write to GCS without uploading to CKAN by manually entering an arbitrary bucket destination.
 
-The publish script supports referencing `gs://` paths for the manifest; by default,
-the script will read the latest manifest in GCS uploaded by an Airflow job.
+The publish script supports referencing `gs://` paths for the manifest, which is used to determine which tables and columns to publish; by default, the script will read the latest manifest in GCS uploaded by the `dbt_run_and_upload_artifacts` Airflow job.
 You may also choose to run dbt models and/or run the publish script locally; these
 operations can be mixed-and-matched. If you are running `publish.py` locally, you
 will need to set `$CALITP_CKAN_GTFS_SCHEDULE_KEY` ahead of time.
 
 By default, the script will upload artifacts to GCS, but will not actually
 upload data to CKAN. In addition, the script will upload the metadata and dictionary
-files to GCS for eventual sharing with Caltrans.
+files to GCS for eventual sharing with Caltrans employees responsible for the open data portal.
 ```bash
 $ poetry run python scripts/publish.py publish-exposure california_open_data --manifest ./target/manifest.json
 reading manifest from ./target/manifest.json
@@ -112,3 +110,11 @@ you may specify a manifest file in GCS if desired.
 ```bash
 poetry run python scripts/publish.py publish-exposure california_open_data --bucket gs://calitp-publish --manifest gs://calitp-dbt-artifacts/latest/manifest.json --publish
 ```
+
+## In greater detail: the publish.py script
+
+The publication script relies on a [dbt exposure](https://docs.getdbt.com/docs/build/exposures) to determine what to publish - in practice, that exposure is titled `california_open_data`. The tables included in that exposure, their CKAN destinations, and their published descriptions are defined in [_gtfs_schedule_latest.yml](https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs_schedule_latest/_gtfs_schedule_latest.yml) under the `exposures` heading.
+
+By default, the columns of a table included in the exposure are _not_ published on the portal. This is to prevent fields that are useful for internal data management but are hard to interpret for public users, like `_is_current`, from being included in the open data portal. Columns meant for publication are explicitly included in publication via the dbt `meta` tag `publish.include: true`, which you can see on various columns of the models in the same YAML file where the exposure itself is defined.
+
+The publication script does _not_ read from that YAML file directly when publishing - it reads from the manifest file generated in the steps outlined in previous sections. By default, that manifest file is read from the GCS bucket where `run_and_upload.py` stores it during regular daily runs. If you need to make changes to the Cal-ITP GTFS-Ingest Pipeline Dataset in between runs of the daily `dbt_run_and_upload_artifacts` Airflow job (e.g. if there's a time-sensitive bug you're fixing in open data), you'll need to either kick off an ad hoc run of that job in Airflow or run the script locally to generate a new manifest, and use that manifest to underpin the `publish.py` run.
