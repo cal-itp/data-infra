@@ -1,10 +1,10 @@
 {{ config(materialized='table') }}
 
-WITH int_transit_database__transit_data_quality_issues_dim AS (
-    SELECT * FROM {{ ref('int_transit_database__transit_data_quality_issues_dim') }}
+WITH int_transit_database__transit_data_quality_issues AS (
+    SELECT * FROM {{ ref('int_transit_database__transit_data_quality_issues') }}
 ),
 
-dim_transit_data_quality_issues AS (
+fct_transit_data_quality_issues AS (
     SELECT
         key,
         source_record_id,
@@ -35,7 +35,7 @@ dim_transit_data_quality_issues AS (
         outreach_status,
         should_wait_until,
         _is_current
-    FROM int_transit_database__transit_data_quality_issues_dim
+    FROM int_transit_database__transit_data_quality_issues
 )
 
-SELECT * FROM dim_transit_data_quality_issues
+SELECT * FROM fct_transit_data_quality_issues

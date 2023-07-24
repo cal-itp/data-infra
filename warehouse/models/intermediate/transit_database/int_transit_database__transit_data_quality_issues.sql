@@ -1,8 +1,10 @@
 {{ config(materialized='table') }}
 
-WITH latest_transit_data_quality_issues AS (
-    SELECT *
-    FROM {{ ref('int_transit_database__transit_data_quality_issues_unnested') }}
+WITH latest AS (
+    {{ get_latest_dense_rank(
+        external_table = ref('stg_transit_database__transit_data_quality_issues'),
+        order_by = 'dt DESC'
+        ) }}
 ),
 
 dim_gtfs_datasets AS (
@@ -17,13 +19,48 @@ dim_issue_types AS (
     SELECT * FROM {{ ref('int_transit_database__issue_types_dim') }}
 ),
 
+unnested AS (
+    SELECT
+        id,
+        description,
+        issue_type_key,
+        gtfs_dataset_key,
+        status,
+        issue__,
+        service_key,
+        resolution_date,
+        assignee,
+        issue_creation_time,
+        waiting_over_a_week_,
+        created_by,
+        qc__num_services,
+        qc__num_issue_types,
+        qc_checks,
+        waiting_on_someone_other_than_transit_data_quality_,
+        caltrans_district__from_operating_county_geographies___from_services_,
+        is_open,
+        last_update,
+        last_update_month,
+        last_update_year,
+        status_notes,
+        waiting_since,
+        outreach_status,
+        should_wait_until,
+        dt,
+        universal_first_val
+    FROM latest,
+    UNNEST(gtfs_datasets) AS gtfs_dataset_key,
+    UNNEST(services) AS service_key,
+    UNNEST(issue_type) AS issue_type_key
+),
+
 historical AS (
     SELECT
         *,
         TRUE AS _is_current,
         CAST(universal_first_val AS TIMESTAMP) AS _valid_from,
         {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
-    FROM latest_transit_data_quality_issues
+    FROM unnested
 ),
 
 join_gtfs_datasets_at_creation AS (
@@ -62,7 +99,7 @@ join_gtfs_datasets_at_creation AS (
     FROM historical
     INNER JOIN dim_gtfs_datasets
         ON historical.gtfs_dataset_key = dim_gtfs_datasets.source_record_id
-        AND historical.issue_creation_time =< dim_gtfs_datasets._valid_to
+        AND historical.issue_creation_time <= dim_gtfs_datasets._valid_to
         AND historical.issue_creation_time > dim_gtfs_datasets._valid_from
 ),
 
@@ -228,9 +265,9 @@ join_issue_types AS (
         AND join_services_at_resolution._valid_to > distinct_issue_types._valid_from
 ),
 
-int_transit_database__transit_data_quality_issues_dim AS (
+int_transit_database__transit_data_quality_issues AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['source_record_id', '_valid_from', 'gtfs_dataset_key_at_creation', 'gtfs_dataset_key_at_resolution', 'service_key_at_creation', 'service_key_at_resolution']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['source_record_id', 'gtfs_dataset_key_at_creation', 'gtfs_dataset_key_at_resolution', 'service_key_at_creation', 'service_key_at_resolution']) }} AS key,
         source_record_id,
         description,
         issue_type_key,
@@ -263,4 +300,4 @@ int_transit_database__transit_data_quality_issues_dim AS (
     FROM join_issue_types
 )
 
-SELECT * FROM int_transit_database__transit_data_quality_issues_dim
+SELECT * FROM int_transit_database__transit_data_quality_issues
