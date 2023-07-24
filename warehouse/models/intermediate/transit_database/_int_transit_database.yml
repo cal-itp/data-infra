@@ -70,7 +70,7 @@ models:
       - name: qc__num_issue_types
       - name: qc_checks
       - name: waiting_on_someone_other_than_transit_data_quality_
-      - name: caltrans_district__from_operating_county_geographies___from_services__key
+      - name: caltrans_district__from_operating_county_geographies___from_services_
       - name: is_open
       - name: last_update
       - name: last_update_month

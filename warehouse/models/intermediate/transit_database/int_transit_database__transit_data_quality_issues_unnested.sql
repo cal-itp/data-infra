@@ -39,8 +39,7 @@ int_transit_database__transit_data_quality_issues_unnested AS (
     FROM latest,
     UNNEST(gtfs_datasets) AS gtfs_dataset_key,
     UNNEST(services) AS service_key,
-    UNNEST(issue_type) AS issue_type_key,
-    UNNEST(caltrans_district__from_operating_county_geographies___from_services_) AS caltrans_district__from_operating_county_geographies___from_services__key
+    UNNEST(issue_type) AS issue_type_key
 )
 
 SELECT * FROM int_transit_database__transit_data_quality_issues_unnested
