@@ -41,7 +41,6 @@ parts:
           - glob: publishing/sections/*
   - caption: Developers
     chapters:
-      - file: github/contribute_to_repos.md
       - file: architecture/architecture_overview
       - file: airflow/overview
         sections:
