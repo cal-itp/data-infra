@@ -62,7 +62,7 @@ join_gtfs_datasets_at_creation AS (
     FROM historical
     INNER JOIN dim_gtfs_datasets
         ON historical.gtfs_dataset_key = dim_gtfs_datasets.source_record_id
-        AND historical.issue_creation_time < dim_gtfs_datasets._valid_to
+        AND historical.issue_creation_time =< dim_gtfs_datasets._valid_to
         AND historical.issue_creation_time > dim_gtfs_datasets._valid_from
 ),
 
@@ -232,7 +232,7 @@ join_issue_types AS (
 
 int_transit_database__transit_data_quality_issues_dim AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['source_record_id', '_valid_from', 'gtfs_dataset_key_at_creation', 'gtfs_dataset_key_at_resolution', 'service_key_at_creation', 'service_key_at_resolution', 'issue_type_key']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['source_record_id', '_valid_from', 'gtfs_dataset_key_at_creation', 'gtfs_dataset_key_at_resolution', 'service_key_at_creation', 'service_key_at_resolution']) }} AS key,
         source_record_id,
         description,
         issue_type_key,
