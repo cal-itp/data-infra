@@ -50,7 +50,7 @@ For new tables, a CKAN destination will be created with UUIDs corresponding to e
 model that will be published. If you are using dbt exposures, you will need to
 update the `meta` field [here](https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs_schedule_latest/_gtfs_schedule_latest.yml) to map the dbt models to the appropriate UUIDs.
 
-For exmaple:
+For example:
 ```yaml
     meta:
       methodology: |
