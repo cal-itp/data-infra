@@ -51,7 +51,6 @@ parts:
         - file: kubernetes/JupyterHub
         - file: kubernetes/architecture
         - file: kubernetes/deployment
-      - file: infrastructure/README
       - file: backups/metabase
   - caption: Contribute to the Docs!
     chapters:

@@ -1,16 +1,6 @@
-# Infrastructure code
+# GitHub Actions
 
-# pyinvoke
-
-[invoke](https://docs.pyinvoke.org/en/stable/) is a Python framework for executing subprocess and building a CLI application.
-The tasks are defined in `tasks.py` and configuration in `invoke.yaml`; config values under the top-level `calitp`
-are specific to our defined tasks.
-
-Run `poetry run invoke -l` to list the available commands, and `poetry run invoke -h <command>` to get more detailed help for each individual command.
-
-## CI/CD
-
-All CI/CD automation in this project is executed via GitHub Actions, whose workflow files live in the `.github` directory.
+All CI/CD automation in this project is executed via GitHub Actions, whose workflow files live in the [./workflows/](./workflows) directory.
 
 ## deploy-airflow.yml
 
@@ -18,6 +8,10 @@ While we're using GCP Composer, "deployment" of Airflow consists of two parts:
 
 1. Calling `gcloud composer environments update ...` to update the Composer environment with new (or specific versions of) packages
 2. Copying the `dags` and `plugins` folders to a GCS bucket that Composer reads (this is specified in the Composer Environment)
+
+## deploy-apps-maps.yml
+
+This workflow builds a static website from the Svelte app and deploys it to Netlify.
 
 ## build-*.yml workflows
 
@@ -31,7 +25,7 @@ Workflows prefixed with `service-` deal with Kubernetes deployments.
 * `service-release-diff.yml` renders kubectl diffs on PRs targeting release branches
 * `service-release-channel.yml` deploys to a given channel (i.e. environment) on updates to a release branch
 
-Some of these workflows use the same `invoke` framework described earlier.
+Some of these workflows use hologit or invoke. See the READMEs in [.holo](../.holo) and [ci](../ci) for documentation regarding hologit and invoke, respectively.
 
 ## GitOps
 The workflows described above also define their triggers. In general, developer workflows should follow these steps.
