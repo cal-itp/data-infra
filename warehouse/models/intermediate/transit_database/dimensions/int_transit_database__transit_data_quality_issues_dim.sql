@@ -220,9 +220,7 @@ join_issue_types AS (
         waiting_since,
         outreach_status,
         should_wait_until,
-        (join_services_at_resolution._is_current AND distinct_issue_types._is_current) AS _is_current,
-        GREATEST(join_services_at_resolution._valid_from, distinct_issue_types._valid_from) AS _valid_from,
-        LEAST(join_services_at_resolution._valid_to, distinct_issue_types._valid_to) AS _valid_to
+        (join_services_at_resolution._is_current AND distinct_issue_types._is_current) AS _is_current
     FROM join_services_at_resolution
     INNER JOIN (select distinct source_record_id, name, _is_current, _valid_from, _valid_to from dim_issue_types) as distinct_issue_types
         ON join_services_at_resolution.issue_type_key = distinct_issue_types.source_record_id
@@ -261,9 +259,7 @@ int_transit_database__transit_data_quality_issues_dim AS (
         waiting_since,
         outreach_status,
         should_wait_until,
-        _is_current,
-        _valid_from,
-        _valid_to,
+        _is_current
     FROM join_issue_types
 )
 

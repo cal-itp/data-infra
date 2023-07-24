@@ -34,9 +34,7 @@ dim_transit_data_quality_issues AS (
         waiting_since,
         outreach_status,
         should_wait_until,
-        _is_current,
-        _valid_from,
-        _valid_to,
+        _is_current
     FROM int_transit_database__transit_data_quality_issues_dim
 )
 
