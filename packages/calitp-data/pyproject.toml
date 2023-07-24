@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "calitp-data"
+version = "2023.2.15.1"
+description = "Shared code for the Cal-ITP data codebases"
+authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
+license = "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.10"
+gcsfs = "!=2022.7.1"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.0.0"
+pytest = "^7.1.2"
+hypothesis = "^6.54.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
