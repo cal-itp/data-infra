@@ -419,33 +419,6 @@
   </ul>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../infrastructure/README.html">
-   Infrastructure code
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../github/contribute_to_repos.html">
-   Contributing to Data Services Repos
-  </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../services/overview.html">
-   Services
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-  <label for="toctree-checkbox-8">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../services/gtfs-ckan-uploader.html">
-     GTFS CKAN Uploader
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../backups/metabase.html">
    Backups
   </a>
@@ -461,8 +434,8 @@
   <a class="reference internal" href="../contribute/overview.html">
    Getting Started
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-  <label for="toctree-checkbox-9">
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -739,7 +712,7 @@
 <p>To inspect tables as you are working, the fastest method is usually to run some manual test queries or “preview” the tables in the <a class="reference external" href="https://console.cloud.google.com/bigquery?project=cal-itp-data-infra-staging">BigQuery user interface</a>. You can also use something like <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.read_gbq.html"><code class="docutils literal notranslate"><span class="pre">pandas.read_gbq</span></code></a> to perform example queries in a notebook.</p>
 <p>When you run dbt commands locally on JupyterHub, your models will be created in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging.&lt;your</span> <span class="pre">name&gt;_&lt;dbt</span> <span class="pre">folder</span> <span class="pre">name,</span> <span class="pre">like</span> <span class="pre">mart_gtfs&gt;</span></code> BigQuery dataset. Note that this is in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging</span></code> Google Cloud Platform project, <em>not</em> the production <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra</span></code> project.</p>
 <p>Once your models are working the way you want, please make sure to update the associated YAML files (there will generally be one or two YAML files per folder with model tests, documentation, and additional configuration.) Especially if you created a brand-new model, you will want to add tests for things like unique, non-null primary keys and valid foreign keys. The YAML is also where table- and column-level documentation is populated. <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs/_mart_gtfs_dims.yml">Here is an example YAML file from our project</a>, and <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2097">here is an example PR that created a new mart table with accompanying documentation</a>.</p>
-<p>Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against <code class="docutils literal notranslate"><span class="pre">main</span></code> when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging. (<a class="reference internal" href="../github/contribute_to_repos.html#contribute-to-repos"><span class="std std-ref">See our repo contribution page</span></a> for more information on GitHub practices.)</p>
+<p>Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against <code class="docutils literal notranslate"><span class="pre">main</span></code> when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging. See <a class="reference external" href="http://CONTRIBUTING.md">CONTRIBUTING.md</a> in the repo for more information on GitHub practices.)</p>
 </div>
 </div>
 <div class="section" id="modeling-considerations">
