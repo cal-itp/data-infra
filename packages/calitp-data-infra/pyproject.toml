@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "calitp-data-infra"
-version = "2023.7.20.1"
+version = "2023.7.24"
 description = "Shared code for developing data pipelines that process Cal-ITP data."
 authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
 
@@ -14,8 +14,8 @@ humanize = "^4.6.0"
 backoff = "^2.2.1"
 google-api-core = ">=1.31.4"
 typing-extensions = ">=3.10.0.2"
-calitp-data = "2023.2.15.1"
 google-cloud-secret-manager = "~1.0.0"
+gcsfs = "!=2022.7.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"
