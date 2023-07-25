@@ -6,9 +6,9 @@
 # trigger_rule: all_done
 # ---
 import datetime
+import os
 
 import pandas as pd
-from calitp_data.config import is_development
 
 from airflow.models.taskinstance import TaskInstance
 from airflow.utils.email import send_email
@@ -32,7 +32,7 @@ def email_failures(task_instance: TaskInstance, execution_date, **kwargs):
     {html_report}
     """
 
-    if is_development():
+    if os.environ["AIRFLOW_ENV"] == "development":
         print(
             f"Skipping since in development mode! Would have emailed {failures_df.shape[0]} failures."
         )

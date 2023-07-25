@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "calitp-data-infra"
-version = "2023.7.24"
+version = "2023.7.25"
 description = "Shared code for developing data pipelines that process Cal-ITP data."
 authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
 

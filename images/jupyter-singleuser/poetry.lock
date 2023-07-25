@@ -672,19 +672,20 @@ gcsfs = "2022.5.0"
 
 [[package]]
 name = "calitp-data-analysis"
-version = "2023.2.15"
+version = "2023.7.25"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
 optional = false
 python-versions = ">=3.9,<3.10"
 files = [
-    {file = "calitp_data_analysis-2023.2.15-py3-none-any.whl", hash = "sha256:33873ad4542e05978c9c15a93813a77b18d96c84f6624a00a24fb2a934ec225f"},
-    {file = "calitp_data_analysis-2023.2.15.tar.gz", hash = "sha256:fa0c7e24f3b777dcce871f7c25b5a06ea79af16649a1eaec2e4c51f46c1d5aa8"},
+    {file = "calitp_data_analysis-2023.7.25-py3-none-any.whl", hash = "sha256:7496b7169be2ede7fedce94f52527729b3e44c2a352cbf48e4417a97632de70f"},
+    {file = "calitp_data_analysis-2023.7.25.tar.gz", hash = "sha256:89f663c5e75145f4f663fbba0bacb5ef1b54b8b5cece21820e21de56bee997d0"},
 ]
 
 [package.dependencies]
-calitp-data = "2023.2.13.1"
+gcsfs = "!=2022.7.1"
 ipython = ">=8.9.0,<9.0.0"
 jinja2 = "<3.1.0"
+pandas = "<2"
 pandas-gbq = ">=0.19.1,<0.20.0"
 siuba = ">=0.4.2,<0.5.0"
 sqlalchemy-bigquery = ">=1.6.1,<2.0.0"
@@ -4308,13 +4309,13 @@ test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
 
 [[package]]
 name = "pandas-gbq"
-version = "0.19.1"
+version = "0.19.2"
 description = "Google BigQuery connector for pandas"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pandas-gbq-0.19.1.tar.gz", hash = "sha256:c31255cf23316c574ed06d8cbfb4240f487d691f39dcdc2e9192153c08351da4"},
-    {file = "pandas_gbq-0.19.1-py2.py3-none-any.whl", hash = "sha256:8733d78e169b0c4506ca7314c113e3240cf2b2accd83ba5cf456f1d13d79ebd3"},
+    {file = "pandas-gbq-0.19.2.tar.gz", hash = "sha256:b0f7fa84a2be0fe767e33a008ca7e4ad9a9e3ac67255fd0a41fc19b503138447"},
+    {file = "pandas_gbq-0.19.2-py2.py3-none-any.whl", hash = "sha256:0ef8da3e4088053a2bea069ed688992a44b52af67dadb97eee494b32a2147563"},
 ]
 
 [package.dependencies]
@@ -5022,13 +5023,13 @@ email = ["email-validator (>=1.0.3)"]
 
 [[package]]
 name = "pydata-google-auth"
-version = "1.7.0"
+version = "1.8.1"
 description = "PyData helpers for authenticating to Google APIs"
 optional = false
 python-versions = "*"
 files = [
-    {file = "pydata-google-auth-1.7.0.tar.gz", hash = "sha256:87710d964898d2ddf56a9c4ddc9109a69279856596c3848408bdeb3a58fa3b8c"},
-    {file = "pydata_google_auth-1.7.0-py2.py3-none-any.whl", hash = "sha256:ad999065d3838002278008069cc38e3f1b694c705cedb5e20747219e363752c4"},
+    {file = "pydata-google-auth-1.8.1.tar.gz", hash = "sha256:0e26c144177a0b64374e90f19a9696ca0cea1f72342df9c47ce37bf396e55a81"},
+    {file = "pydata_google_auth-1.8.1-py2.py3-none-any.whl", hash = "sha256:97cebd52ae1df1bdc3bdf1a703310d401a78706462578b93d65a831f1e36d141"},
 ]
 
 [package.dependencies]
@@ -7452,4 +7453,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "e6e6cca92cfef0df994e82458c772689a5017ca4dda9ac8dc3f50ca08a48d5c7"
+content-hash = "6474bd166d4fac69f007551044c91697f39c90578af4e5e35eefa7619e482474"

@@ -8,11 +8,11 @@ from io import StringIO
 from typing import ClassVar, List, Optional
 
 import pendulum
-from calitp_data.storage import get_fs
 from calitp_data_infra.storage import (
     GTFSDownloadConfig,
     PartitionedGCSArtifact,
     ProcessingOutcome,
+    get_fs,
 )
 from utils import GTFSScheduleFeedFileHourly, get_schedule_files_in_hour
 

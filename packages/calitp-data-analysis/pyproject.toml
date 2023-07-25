@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "calitp-data-analysis"
-version = "2023.7.24"
+version = "2023.7.25"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
 authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
 

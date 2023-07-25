@@ -6,12 +6,12 @@ import os
 from typing import ClassVar, List, Optional
 
 import pendulum
-from calitp_data.storage import get_fs
 from calitp_data_infra.storage import (
     GTFSDownloadConfig,
     PartitionedGCSArtifact,
     ProcessingOutcome,
     fetch_all_in_partition,
+    get_fs,
 )
 from utils import GTFSScheduleFeedFile
 
