@@ -848,3 +848,56 @@ models:
       are current-only this represents relationships between versioned service
       records and unversioned operating county geography records.
       Joins via this table can result in fanout.
+  - name: dim_transit_data_quality_issues
+    description: TODO
+    columns:
+      - *key
+      - name: source_record_id
+      - name: description
+      - name: issue_type_name
+      - name: gtfs_dataset_key_at_creation
+        description: |
+          Rather than using a synthetic _is_current, _valid_from, and _valid_to, we rely on The
+          `issue_creation_time` and `resolution_date` fields present in the source data to time-bound
+          data validity. This field records the active GTFS dataset key mapped to the issue at the
+          time it was created.
+      - name: gtfs_dataset_key_at_resolution
+        description: |
+          Rather than using a synthetic _is_current, _valid_from, and _valid_to, we rely on The
+          `issue_creation_time` and `resolution_date` fields present in the source data to time-bound
+          data validity. This field records the active GTFS dataset key mapped to the issue at the
+          time it was resolved.
+      - name: gtfs_dataset_source_record_id
+      - name: status
+      - name: issue__
+      - name: service_key_at_creation
+        description: |
+          Rather than using a synthetic _is_current, _valid_from, and _valid_to, we rely on The
+          `issue_creation_time` and `resolution_date` fields present in the source data to time-bound
+          data validity. This field records the active service key mapped to the issue at the time it
+          was created.
+      - name: service_key_at_resolution
+        description: |
+          Rather than using a synthetic _is_current, _valid_from, and _valid_to, we rely on The
+          `issue_creation_time` and `resolution_date` fields present in the source data to time-bound
+          data validity. This field records the active service key mapped to the issue at the time it
+          was resolved.
+      - name: service_source_record_id
+      - name: resolution_date
+      - name: assignee
+      - name: issue_creation_time
+      - name: waiting_over_a_week_
+      - name: created_by
+      - name: qc__num_services
+      - name: qc__num_issue_types
+      - name: qc_checks
+      - name: waiting_on_someone_other_than_transit_data_quality_
+      - name: caltrans_district__from_operating_county_geographies___from_services_
+      - name: is_open
+      - name: last_update
+      - name: last_update_month
+      - name: last_update_year
+      - name: status_notes
+      - name: waiting_since
+      - name: outreach_status
+      - name: should_wait_until
