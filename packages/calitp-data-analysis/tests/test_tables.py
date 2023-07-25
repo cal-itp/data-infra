@@ -1,6 +1,6 @@
 import pandas as pd
 from calitp_data_analysis.tables import AutoTable, TableFactory
-from siuba.sql import LazyTbl
+from siuba.sql import LazyTbl  # type: ignore[import]
 
 
 def test_auto_table_write(engine, tmp_name):

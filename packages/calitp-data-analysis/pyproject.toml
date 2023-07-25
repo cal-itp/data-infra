@@ -33,3 +33,6 @@ line-length = 120
 
 [tool.mypy]
 plugins = "sqlmypy"
+exclude = [
+    "dist/",
+]
