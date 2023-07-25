@@ -17,7 +17,6 @@ from typing import ClassVar, Dict, List, Optional, Tuple, Type, Union
 import pendulum
 import sentry_sdk
 import typer
-from calitp_data.storage import get_fs  # type: ignore
 from calitp_data_infra.storage import (  # type: ignore
     JSONL_EXTENSION,
     JSONL_GZIP_EXTENSION,
@@ -28,6 +27,7 @@ from calitp_data_infra.storage import (  # type: ignore
     PartitionedGCSArtifact,
     ProcessingOutcome,
     fetch_all_in_partition,
+    get_fs,
 )
 from pydantic import BaseModel, validator
 from slugify import slugify
