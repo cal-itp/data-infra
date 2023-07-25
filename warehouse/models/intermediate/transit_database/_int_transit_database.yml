@@ -58,10 +58,12 @@ models:
       - name: source_record_id
       - name: description
       - name: issue_type_key
-      - name: gtfs_dataset_key
+      - name: gtfs_dataset_key_at_creation
+      - name: gtfs_dataset_key_at_resolution
       - name: status
       - name: issue__
-      - name: service_key
+      - name: service_key_at_creation
+      - name: service_key_at_resolution
       - name: resolution_date
       - name: assignee
       - name: issue_creation_time

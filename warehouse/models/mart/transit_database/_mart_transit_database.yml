@@ -855,10 +855,32 @@ models:
       - name: source_record_id
       - name: description
       - name: issue_type
-      - name: gtfs_dataset
+      - name: gtfs_dataset_key_at_creation
+        description: |
+          Rather than using a synthetic _is_current, _valid_from, and _valid_to, we rely on The
+          `issue_creation_time` and `resolution_date` fields present in the source data to time-bound
+          data validity. This field records the active GTFS dataset key mapped to the issue at the
+          time it was created.
+      - name: gtfs_dataset_key_at_resolution
+        description: |
+          Rather than using a synthetic _is_current, _valid_from, and _valid_to, we rely on The
+          `issue_creation_time` and `resolution_date` fields present in the source data to time-bound
+          data validity. This field records the active GTFS dataset key mapped to the issue at the
+          time it was resolved.
       - name: status
       - name: issue__
-      - name: service
+      - name: service_key_at_creation
+        description: |
+          Rather than using a synthetic _is_current, _valid_from, and _valid_to, we rely on The
+          `issue_creation_time` and `resolution_date` fields present in the source data to time-bound
+          data validity. This field records the active service key mapped to the issue at the time it
+          was created.
+      - name: service_key_at_resolution
+        description: |
+          Rather than using a synthetic _is_current, _valid_from, and _valid_to, we rely on The
+          `issue_creation_time` and `resolution_date` fields present in the source data to time-bound
+          data validity. This field records the active service key mapped to the issue at the time it
+          was resolved.
       - name: resolution_date
       - name: assignee
       - name: issue_creation_time
