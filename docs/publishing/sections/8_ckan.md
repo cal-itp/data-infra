@@ -1,4 +1,5 @@
 (publishing-ckan)=
+
 # Publishing data to California Open Data aka CKAN
 
 NOTE: Only non-spatial data should be directly published to CKAN. Spatial data
@@ -16,16 +17,21 @@ Data is generally published as flat files (typically CSV) alongside required
 metadata and a data dictionary.
 
 ## Cal-ITP datasets
+
 * [Cal-ITP GTFS-Ingest Pipeline Dataset (schedule data)](https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset)
 
 ## General process
+
 ### Develop data models
+
 Generally, data models should be built in dbt/BigQuery if possible. For example,
 we have [latest-only GTFS schedule models](https://github.com/cal-itp/data-infra/tree/main/warehouse/models/mart/gtfs_schedule_latest)
 we can use to update and expand the existing [CKAN dataset](https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset)
 
 ### Document data
+
 California Open Data requires two documentation files for published datasets.
+
 1. `metadata.csv` - one row per resource (i.e. file) to be published
 2. `dictionary.csv` - one row per column across all resources
 
@@ -36,6 +42,7 @@ converted into appropriate CSVs and written out locally.
 
 Run this command inside the `warehouse` folder, assuming you have local dbt
 artifacts in `target/` from a `dbt run` or `dbt compile`.
+
 ```bash
 poetry run python scripts/publish.py document-exposure california_open_data
 ```
@@ -43,6 +50,7 @@ poetry run python scripts/publish.py document-exposure california_open_data
 Each day, new versions of `metadata.csv` and `dictionary.csv` are also automatically generated for tables in the production warehouse by the `dbt_run_and_upload_artifacts` job in [the `transform_warehouse` DAG](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/transform_warehouse/grid), and placed inside the `calitp-dbt-artifacts` GCS bucket.
 
 ### Create dataset and metadata
+
 Once you've generated the necessary metadata and dictionary CSV, you need to get
 approval from Chad Baker for publication. Send the dictionary and metadata CSVs via email, and explain what changes are coming to the dataset - have columns been added or removed from one of the tables, do you have a new table to add, or is there some other change?
 
@@ -51,6 +59,7 @@ model that will be published. If you are using dbt exposures, you will need to
 update the `meta` field [here](https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs_schedule_latest/_gtfs_schedule_latest.yml) to map the dbt models to the appropriate UUIDs.
 
 For example:
+
 ```yaml
     meta:
       methodology: |
@@ -77,7 +86,8 @@ For example:
                 https://gtfs.org/reference/static#attributionstxt.
 ```
 
-### Publish the data!
+### Publish the data
+
 If you are using dbt-based publishing, the `publish_exposure` subcommand of `publish.py`
 will query BigQuery, write out CSV files, and upload those files to CKAN.
 [An Airflow job](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/publish_open_data/grid) refreshes/updates the data at a specified
@@ -91,6 +101,7 @@ will need to set `$CALITP_CKAN_GTFS_SCHEDULE_KEY` ahead of time.
 By default, the script will upload artifacts to GCS, but will not actually
 upload data to CKAN. In addition, the script will upload the metadata and dictionary
 files to GCS for eventual sharing with Caltrans employees responsible for the open data portal.
+
 ```bash
 $ poetry run python scripts/publish.py publish-exposure california_open_data --manifest ./target/manifest.json
 reading manifest from ./target/manifest.json
@@ -107,6 +118,7 @@ You can add the `--publish` flag to actually upload artifacts to CKAN after they
 are written to GCS. You must be using a production bucket to publish, either
 by setting `$CALITP_BUCKET__PUBLISH` or using the `--bucket` flag. In addition,
 you may specify a manifest file in GCS if desired.
+
 ```bash
 poetry run python scripts/publish.py publish-exposure california_open_data --bucket gs://calitp-publish --manifest gs://calitp-dbt-artifacts/latest/manifest.json --publish
 ```
