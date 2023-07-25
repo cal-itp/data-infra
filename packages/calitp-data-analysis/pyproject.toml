@@ -22,6 +22,7 @@ types-pyyaml = "^6.0.12.11"
 # note: this is deprecated in sqlalchemy 2.0
 sqlalchemy-stubs = "^0.4"
 pandas-stubs = "^2.0.2.230605"
+pytest-spec = "^3.2.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

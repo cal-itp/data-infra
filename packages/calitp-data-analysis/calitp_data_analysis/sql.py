@@ -10,6 +10,28 @@ from sqlalchemy.sql.expression import ClauseElement, Executable
 CALITP_BQ_MAX_BYTES = os.environ.get("CALITP_BQ_MAX_BYTES", 5_000_000_000)
 CALITP_BQ_LOCATION = os.environ.get("CALITP_BQ_LOCATION", "us-west2")
 
+USER_DEFINED_FILTERS = dict(
+    table=lambda x: format_table_name(x, is_staging=False, full_name=True),
+    quote=lambda s: '"%s"' % s,
+)
+USER_DEFINED_MACROS = dict(
+    THE_FUTURE='DATE("2099-01-01")',
+)
+
+
+def get_engine(max_bytes=None, project="cal-itp-data-infra"):
+    max_bytes = CALITP_BQ_MAX_BYTES if max_bytes is None else max_bytes
+
+    cred_path = os.environ.get("CALITP_SERVICE_KEY_PATH")
+
+    # Note that we should be able to add location as a uri parameter, but
+    # it is not being picked up, so passing as a separate argument for now.
+    return create_engine(
+        f"bigquery://{project}/?maximum_bytes_billed={max_bytes}",
+        location=CALITP_BQ_LOCATION,
+        credentials_path=cred_path,
+    )
+
 
 def format_table_name(name, is_staging=False, full_name=False):
     dataset, table_name = name.split(".")
@@ -53,20 +75,6 @@ def visit_insert_from_select(element, compiler, **kw):
         """
 
 
-def get_engine(max_bytes=None):
-    max_bytes = CALITP_BQ_MAX_BYTES if max_bytes is None else max_bytes
-
-    cred_path = os.environ.get("CALITP_SERVICE_KEY_PATH")
-
-    # Note that we should be able to add location as a uri parameter, but
-    # it is not being picked up, so passing as a separate argument for now.
-    return create_engine(
-        f"bigquery://cal-itp-data-infra/?maximum_bytes_billed={max_bytes}",
-        location=CALITP_BQ_LOCATION,
-        credentials_path=cred_path,
-    )
-
-
 def get_table(table_name, as_df=False):
     engine = get_engine()
     src_table = format_table_name(table_name)
@@ -79,7 +87,7 @@ def get_table(table_name, as_df=False):
     return table
 
 
-def query_sql(fname, dry_run=False, as_df=True):
+def query_sql(fname, dry_run=False, as_df=True, engine=None):
     if fname.endswith(".yml") or fname.endswith(".yaml"):
         config = yaml.safe_load(open(fname))
 
@@ -87,25 +95,21 @@ def query_sql(fname, dry_run=False, as_df=True):
     else:
         sql_template_raw = fname
 
-    env = Environment(autoescape=True)
+    env = Environment(autoescape=False)  # nosec B701
     env.filters = dict(
         **env.filters,
-        table=lambda x: format_table_name(x, is_staging=False, full_name=True),
-        quote=lambda s: '"%s"' % s,
+        **USER_DEFINED_FILTERS,
     )
 
     template = env.from_string(sql_template_raw)
 
-    sql_code = template.render(
-        dict(
-            THE_FUTURE='DATE("2099-01-01")',
-        )
-    )
+    sql_code = template.render(USER_DEFINED_MACROS)
 
     if dry_run:
         return sql_code
     else:
-        engine = get_engine()
+        if not engine:
+            engine = get_engine()
 
         if as_df:
             return pd.read_sql_query(sql_code, engine)

@@ -1672,6 +1672,20 @@ tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
 
 [[package]]
+name = "pytest-spec"
+version = "3.2.0"
+description = "Library pytest-spec is a pytest plugin to display test execution output like a SPECIFICATION."
+optional = false
+python-versions = "*"
+files = [
+    {file = "pytest-spec-3.2.0.tar.gz", hash = "sha256:4af154588195f4bb6c62d6ca030a20218db7d80b675a08897d9a99239ea3d087"},
+    {file = "pytest_spec-3.2.0-py2.py3-none-any.whl", hash = "sha256:128dd1e133c72d6a18b28ed96d0af0fc43aece8f796ebcfcd81c850f0094b62e"},
+]
+
+[package.dependencies]
+six = "*"
+
+[[package]]
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
@@ -2168,4 +2182,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "35bdcef370cd3390d3a2151b4bb9a9bf74eb6293282ac3e2252af7f963a380da"
+content-hash = "46ffc15d808d4c5c90e78e34d536481d48967c1619ead72d729ca0d646316604"
