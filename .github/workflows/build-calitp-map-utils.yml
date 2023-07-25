@@ -1,4 +1,4 @@
-name: Test, visualize, and build dbt project
+name: Test, visualize, and build calitp-map-utils
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       - run: poetry run mypy calitp_map_utils
       - run: poetry run pytest --spec
       - run: poetry run build
+      # TODO: should we actually publish to pypi?

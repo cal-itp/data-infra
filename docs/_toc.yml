@@ -51,11 +51,6 @@ parts:
         - file: kubernetes/JupyterHub
         - file: kubernetes/architecture
         - file: kubernetes/deployment
-      - file: infrastructure/README
-      - file: github/contribute_to_repos.md
-      - file: services/overview
-        sections:
-        - file: services/gtfs-ckan-uploader
       - file: backups/metabase
   - caption: Contribute to the Docs!
     chapters:

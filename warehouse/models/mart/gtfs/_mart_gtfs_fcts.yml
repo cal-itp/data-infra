@@ -880,14 +880,23 @@ models:
     description: |
       Each row is a daily summary of a service alert.
       See https://gtfs.org/realtime/reference/#message-alert for information
-      about message structure.
+      about message structure. An alert here is a unique combination of:
+        * Message content (header, description, cause, effect)
+        * Informed entity (agencies, routes, stops, trips)
+        * Active period (start/end date)
+      So an individual alert message can yield multiple rows in this table if it includes multiple informed entities or active periods.
+
+      Caveat on uniqueness: We have a very small number of duplicate `key` values,
+      specifically they can occur on days where the URL or time zone for a given feed change because
+      of how the keys are generated upstream.
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `active_date`,
           `base64_url`, `id`, entity selectors, and alert active period.
         tests:
-          - unique
+          - unique_proportion:
+              at_least: 0.999
           - not_null
       - *base64_url
       - *gtfs_rt_schedule_feed_timezone
@@ -1156,12 +1165,17 @@ models:
   - name: fct_observed_trips
     description: |
       Joined model of observed trips across trip updates and vehicle positions RT feeds related to the same
-      schedule feed. For each day, there will be one row per `trip_instance_key`.
+      schedule feed. There will be one row per `trip_instance_key` (see caveat below).
 
       Columns prefixed with `tu_` or `vp_` reference respectively the trip updates or vehicle positions
       value for the given attribute. If these are null, it may be because the given trip did not appear in the
       given feed type or, for optional values, it may simply be because the value was
       not populated for the given feed.
+
+      Caveat on uniqueness: We have a very small number of duplicate `trip_instance_key` values,
+      specifically they can occur on days where the URL or time zone for a given feed change because
+      of how the keys are generated upstream.
+
     columns:
       # keys and identifiers
       - &trip_instance_key
@@ -1175,7 +1189,8 @@ models:
             - iteration number, which attempts to normalize trip start times
         tests:
           - not_null
-          - unique
+          - unique_proportion:
+              at_least: 0.9999
       - *rt_service_date
       - &rt_trip_schedule_base64_url
         name: schedule_base64_url
@@ -1815,7 +1830,8 @@ models:
         description: Composite of calculated service date, URL, trip ID, and trip start time.
         tests:
           - not_null
-          - unique
+          - unique_proportion:
+              at_least: 0.9999
       - *trip_instance_key
       - *rt_service_date
       - *base64_url
@@ -1894,6 +1910,10 @@ models:
   - name: fct_trip_updates_summaries
     description: |
       Summarizes trips observed in trip update messages, as long as trip_id was populated.
+
+      Caveat on uniqueness: We have a very small number of duplicate `trip_instance_key` and `key` values,
+      specifically they can occur on days where the URL or time zone for a given feed change because
+      of how the keys are generated upstream.
     tests:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
@@ -1901,7 +1921,8 @@ models:
       - <<: *trip_instance_key
         tests:
           - not_null
-          - unique
+          - unique_proportion:
+              at_least: 0.9999
           - relationships:
               to: ref('fct_observed_trips')
               field: trip_instance_key
@@ -1985,6 +2006,10 @@ models:
   - name: fct_vehicle_positions_trip_summaries
     description: |
       Summarizes trips observed in vehicle position messages, as long as trip_id was populated.
+
+      Caveat on uniqueness: We have a very small number of duplicate `trip_instance_key` and `key` values,
+      specifically they can occur on days where the URL or time zone for a given feed change because
+      of how the keys are generated upstream.
     tests:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
@@ -1992,7 +2017,8 @@ models:
       - <<: *trip_instance_key
         tests:
           - not_null
-          - unique
+          - unique_proportion:
+              at_least: 0.9999
           - relationships:
               to: ref('fct_observed_trips')
               field: trip_instance_key

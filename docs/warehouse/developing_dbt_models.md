@@ -28,7 +28,7 @@ When you run dbt commands locally on JupyterHub, your models will be created in 
 
 Once your models are working the way you want, please make sure to update the associated YAML files (there will generally be one or two YAML files per folder with model tests, documentation, and additional configuration.) Especially if you created a brand-new model, you will want to add tests for things like unique, non-null primary keys and valid foreign keys. The YAML is also where table- and column-level documentation is populated. [Here is an example YAML file from our project](https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs/_mart_gtfs_dims.yml), and [here is an example PR that created a new mart table with accompanying documentation](https://github.com/cal-itp/data-infra/pull/2097).
 
-Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against `main` when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging. ([See our repo contribution page](contribute-to-repos) for more information on GitHub practices.)
+Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against `main` when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging. See CONTRIBUTING.md in the repo for more information on GitHub practices.)
 
 ## Modeling considerations
 

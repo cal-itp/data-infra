@@ -69,6 +69,8 @@ int_gtfs_rt__service_alerts_day_map_grouping AS (
             'id',
             'header',
             'description',
+            'cause',
+            'effect',
             'active_period_start',
             'active_period_end',
             'agency_id',
