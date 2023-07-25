@@ -1,12 +1,4 @@
-import uuid
-
-import pandas as pd
-import pytest
-from calitp_data.config import RequiresAdminWarning, pipeline_context
-from calitp_data_analysis.sql import get_table, query_sql, write_table
-from pandas.testing import assert_frame_equal
-
-from .helpers import CI_SCHEMA_NAME, as_calitp_user
+from calitp_data_analysis.sql import get_table, query_sql
 
 # TODO: set up a separate project for CI, so our CI doesn't have permission
 # to create / delete prod tables. Bigquery lets you set read access on individual
@@ -14,45 +6,8 @@ from .helpers import CI_SCHEMA_NAME, as_calitp_user
 # by creating a table outside CI, then only testing reading it.
 
 
-@pytest.fixture
-def tmp_name():
-    from sqlalchemy.exc import NoSuchTableError
-
-    # generate a random table name. ensure it does not start with a number.
-    table_name = "t_" + str(uuid.uuid4()).replace("-", "_")
-    schema_table = f"{CI_SCHEMA_NAME}.{table_name}"
-
-    yield schema_table
-
-    try:
-        tbl = get_table(schema_table)
-        tbl.drop()
-    except NoSuchTableError:
-        pass
-
-
-@pytest.mark.skip
-def test_write_table(tmp_name):
-    df = pd.DataFrame({"x": [1, 2, 3]})
-
-    with pipeline_context():
-        write_table(df, tmp_name)
-
-
-def test_write_table_no_admin(tmp_name):
-    df = pd.DataFrame({"x": [1, 2, 3]})
-
-    with as_calitp_user("not the pipeline user"), pytest.warns(RequiresAdminWarning):
-        write_table(df, tmp_name)
-
-
-def test_get_table(tmp_name):
-    df = pd.DataFrame({"x": [1, 2, 3]})
-    with pipeline_context():
-        write_table(df, tmp_name)
-
-    tbl_test = get_table(tmp_name, as_df=True)
-    assert_frame_equal(tbl_test, df)
+def test_get_table():
+    get_table("mart_transit_database.dim_gtfs_datasets", as_df=True)
 
 
 def test_query_sql():

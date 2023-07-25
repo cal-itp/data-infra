@@ -1,6 +1,5 @@
-from calitp_data.config import is_development
-from siuba.sql import LazyTbl
-from sqlalchemy.engine import Inspector
+from siuba.sql import LazyTbl  # type: ignore[import]
+from sqlalchemy.engine.reflection import Inspector
 
 from .sql import get_engine
 
@@ -116,7 +115,6 @@ class TableFactory:
 tbls = AutoTable(
     get_engine(),
     lambda s: s,  # s.replace(".", "_"),
-    lambda s: "zzz_test_" not in s if not is_development() else True,
 )
 
 tbls._init()
