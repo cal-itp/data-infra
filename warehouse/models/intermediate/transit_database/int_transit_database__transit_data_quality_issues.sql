@@ -54,18 +54,9 @@ unnested AS (
     UNNEST(issue_type) AS issue_type_key
 ),
 
-historical AS (
-    SELECT
-        *,
-        TRUE AS _is_current,
-        CAST(universal_first_val AS TIMESTAMP) AS _valid_from,
-        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
-    FROM unnested
-),
-
 join_gtfs_datasets_at_creation AS (
     SELECT
-        historical.id AS source_record_id,
+        unnested.id AS source_record_id,
         gtfs_dataset_key,
         dim_gtfs_datasets.key AS gtfs_dataset_key_at_creation,
         dim_gtfs_datasets.name AS gtfs_dataset_name,
@@ -92,15 +83,12 @@ join_gtfs_datasets_at_creation AS (
         status_notes,
         waiting_since,
         outreach_status,
-        should_wait_until,
-        historical._is_current,
-        historical._valid_from,
-        historical._valid_to
-    FROM historical
+        should_wait_until
+    FROM unnested
     INNER JOIN dim_gtfs_datasets
-        ON historical.gtfs_dataset_key = dim_gtfs_datasets.source_record_id
-        AND historical.issue_creation_time <= dim_gtfs_datasets._valid_to
-        AND historical.issue_creation_time > dim_gtfs_datasets._valid_from
+        ON unnested.gtfs_dataset_key = dim_gtfs_datasets.source_record_id
+        AND unnested.issue_creation_time <= dim_gtfs_datasets._valid_to
+        AND unnested.issue_creation_time > dim_gtfs_datasets._valid_from
 ),
 
 join_gtfs_datasets_at_resolution AS (
@@ -133,10 +121,7 @@ join_gtfs_datasets_at_resolution AS (
         status_notes,
         waiting_since,
         outreach_status,
-        should_wait_until,
-        join_gtfs_datasets_at_creation._is_current,
-        join_gtfs_datasets_at_creation._valid_from,
-        join_gtfs_datasets_at_creation._valid_to
+        should_wait_until
     FROM join_gtfs_datasets_at_creation
     LEFT JOIN dim_gtfs_datasets
         ON join_gtfs_datasets_at_creation.gtfs_dataset_key = dim_gtfs_datasets.source_record_id
@@ -174,10 +159,7 @@ join_services_at_creation AS (
         status_notes,
         waiting_since,
         outreach_status,
-        should_wait_until,
-        join_gtfs_datasets_at_resolution._is_current,
-        join_gtfs_datasets_at_resolution._valid_from,
-        join_gtfs_datasets_at_resolution._valid_to
+        should_wait_until
     FROM join_gtfs_datasets_at_resolution
     INNER JOIN dim_services
         ON join_gtfs_datasets_at_resolution.service_key = dim_services.source_record_id
@@ -216,10 +198,7 @@ join_services_at_resolution AS (
         status_notes,
         waiting_since,
         outreach_status,
-        should_wait_until,
-        join_services_at_creation._is_current,
-        join_services_at_creation._valid_from,
-        join_services_at_creation._valid_to
+        should_wait_until
     FROM join_services_at_creation
     LEFT JOIN dim_services
         ON join_services_at_creation.service_key = dim_services.source_record_id
@@ -256,13 +235,10 @@ join_issue_types AS (
         status_notes,
         waiting_since,
         outreach_status,
-        should_wait_until,
-        (join_services_at_resolution._is_current AND distinct_issue_types._is_current) AS _is_current
+        should_wait_until
     FROM join_services_at_resolution
     INNER JOIN (select distinct source_record_id, name, _is_current, _valid_from, _valid_to from dim_issue_types) as distinct_issue_types
         ON join_services_at_resolution.issue_type_key = distinct_issue_types.source_record_id
-        AND join_services_at_resolution._valid_from < distinct_issue_types._valid_to
-        AND join_services_at_resolution._valid_to > distinct_issue_types._valid_from
 ),
 
 int_transit_database__transit_data_quality_issues AS (
@@ -295,8 +271,7 @@ int_transit_database__transit_data_quality_issues AS (
         status_notes,
         waiting_since,
         outreach_status,
-        should_wait_until,
-        _is_current
+        should_wait_until
     FROM join_issue_types
 )
 

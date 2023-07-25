@@ -33,8 +33,7 @@ fct_transit_data_quality_issues AS (
         status_notes,
         waiting_since,
         outreach_status,
-        should_wait_until,
-        _is_current
+        should_wait_until
     FROM int_transit_database__transit_data_quality_issues
 )
 

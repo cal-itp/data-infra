@@ -80,4 +80,3 @@ models:
       - name: waiting_since
       - name: outreach_status
       - name: should_wait_until
-      - name: is_current_placeholder
