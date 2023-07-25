@@ -854,7 +854,7 @@ models:
       - *key
       - name: source_record_id
       - name: description
-      - name: issue_type
+      - name: issue_type_name
       - name: gtfs_dataset_key_at_creation
         description: |
           Rather than using a synthetic _is_current, _valid_from, and _valid_to, we rely on The

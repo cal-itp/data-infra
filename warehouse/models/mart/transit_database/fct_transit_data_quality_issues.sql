@@ -9,7 +9,6 @@ fct_transit_data_quality_issues AS (
         key,
         source_record_id,
         description,
-        issue_type_key,
         issue_type_name,
         gtfs_dataset_key_at_creation,
         gtfs_dataset_key_at_resolution,
