@@ -1,10 +1,7 @@
 {{ config(materialized='table') }}
 
-WITH latest AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__transit_data_quality_issues'),
-        order_by = 'dt DESC'
-        ) }}
+WITH stg_transit_database__transit_data_quality_issues AS (
+    SELECT * FROM {{ ref('stg_transit_database__transit_data_quality_issues') }}
 ),
 
 dim_gtfs_datasets AS (
@@ -46,9 +43,8 @@ unnested AS (
         waiting_since,
         outreach_status,
         should_wait_until,
-        dt,
-        universal_first_val
-    FROM latest,
+        dt
+    FROM stg_transit_database__transit_data_quality_issues,
     UNNEST(gtfs_datasets) AS gtfs_dataset_key,
     UNNEST(services) AS service_key,
     UNNEST(issue_type) AS issue_type_key
