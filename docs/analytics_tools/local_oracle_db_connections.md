@@ -50,11 +50,12 @@ python –m pip install oracledb
 ![Uninstall sqlalchemy](assets/lodc_step7.png)
 
 **Step 8:**
- 1. Determine what directory you are in and navigate to your directory of choice within Python Command Prompt.  It is highly  recommended to go into `C:\Users\SNUMBER` using `cd../../../../../../ `
+ 1. Determine what directory you are in and navigate to your directory of choice within Python Command Prompt.  It is highly  recommended to go into your S Number folder (i.e. `cd C:\Users\SNUMBER`)
+    * TIP: [See this Bash cheat sheet with some helpful commands](https://hpc.ua.edu/wp-content/uploads/2022/02/Linux_bash_cheat_sheet.pdf)
 
  ![Navigate out to base directory](assets/lodc_step8_1.png)
 
- 2. Open File Explorer and navigate to the same directory you are  in the command line. Add a new folder  to house your Jupyter Notebooks. Make sure folders do not have any spaces.
+ 2. Open File Explorer and navigate to the same directory you are in the command line. Add a new folder to house your Jupyter Notebooks. Make sure the folder name does not have any spaces.
 
 ![Check Folder](assets/lodc_step8_2.png)
 
@@ -65,9 +66,10 @@ python –m pip install oracledb
 
 
 ```bash
-cd ../../../../../../../Users/SNUMBER/Notebooks
+cd C:\Users\SNUMBER/Notebook_Folder
 ##example of path you can take to get into the directory of your choice. In this case, we are navigating to the Notebooks folder we just created above.
-
+```
+```bash
 jupyter lab
 ```
 
