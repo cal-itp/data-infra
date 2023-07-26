@@ -46,7 +46,7 @@ California Open Data requires two documentation files for published datasets.
 We use dbt exposure-based data publishing to automatically generate
 these two files using the main `publish.py` script (specifically the `document-exposure`
 subcommand). The documentation from the dbt models' corresponding YAML will be
-converted into appropriate CSVs and written out locally. By default, the script will read the latest `manifest.json` in GCS uploaded by the `dbt_run_and_upload_artifacts` Airflow job, so if you intend to generate new documentation locally, you'll need to generate a new `manifest.json` locally first.
+converted into appropriate CSVs and written out locally. By default, the script will read the latest `manifest.json` in GCS uploaded by the `dbt_run_and_upload_artifacts` Airflow job.
 
 Run this command inside the `warehouse` folder, assuming you have local dbt
 artifacts in `target/` from a `dbt run` or `dbt compile`.
@@ -55,12 +55,12 @@ artifacts in `target/` from a `dbt run` or `dbt compile`.
 poetry run python scripts/publish.py document-exposure california_open_data
 ```
 
-Each day, new versions of `metadata.csv` and `dictionary.csv` are also automatically generated for tables in the production warehouse by the `dbt_run_and_upload_artifacts` job in [the `transform_warehouse` DAG](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/transform_warehouse/grid), and placed inside the `calitp-dbt-artifacts` GCS bucket.
+Each day, a new version of `manifest.json` is automatically generated for tables in the production warehouse by the `dbt_run_and_upload_artifacts` job in [the `transform_warehouse` DAG](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/transform_warehouse/grid), and placed inside the `calitp-dbt-artifacts` GCS bucket. If you intend to generate new documentation locally, you'll need to generate a new `manifest.json` locally first.
 
 ### Create dataset and metadata
 
 Once you've generated the necessary metadata and dictionary CSV, you need to get
-approval from the Caltrans Geospatial Data Officer (at the time of wriring, Chad Baker) for publication. Send the dictionary and metadata CSVs via email, and explain what changes are coming to the dataset - have columns been added or removed from one of the tables, do you have a new table to add, or is there some other change?
+approval from the Caltrans Geospatial Data Officer (at the time of writing, Chad Baker) for publication. Send the dictionary and metadata CSVs via email, and explain what changes are coming to the dataset - have columns been added or removed from one of the tables, do you have a new table to add, or is there some other change?
 
 For new tables, a CKAN destination will be created with UUIDs corresponding to each
 model that will be published. If you are using dbt exposures, you will need to
