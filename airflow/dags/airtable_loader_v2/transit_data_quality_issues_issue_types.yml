@@ -1,0 +1,6 @@
+operator: operators.AirtableToGCSOperator
+
+air_base_id: appmBGOFTvsDv4jdJ
+air_table_name: "Issue Types"
+air_base_name: transit_data_quality_issues
+bucket: "{{ env_var('CALITP_BUCKET__AIRTABLE') }}"

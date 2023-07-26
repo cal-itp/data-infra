@@ -108,3 +108,34 @@ models:
     columns:
       - *key
   - name: int_transit_database__county_geography_dim
+  - name: int_transit_database__issue_types_dim
+    description: TODO
+    columns:
+      - *key
+      - &source_record_id
+        name: source_record_id
+        description: Airtable-generated row-level record ID
+      - name: dataset_type
+      - name: transit_data_quality_issue
+      - name: name
+      - name: notes
+      - &valid_from_placeholder
+        name: _valid_from
+        description: |
+          Starting timestamp from which this record is in effect (inclusive).
+          Because this table has not actually been fully versioned,
+          this is a constant placeholder value representing the first
+          time that this table was extracted from the source data.
+      - &valid_to_placeholder
+        name: _valid_to
+        description: |
+          End timestamp until which this record is in effect (inclusive).
+          Because this table has not actually been fully versioned,
+          this is a constant placeholder value in the distant future.
+      - &is_current_placeholder
+        name: _is_current
+        description: |
+          Flag indicating whether this is the most recent version of
+          this record.
+          Because this table has not actually been fully versioned,
+          this will always be True.
