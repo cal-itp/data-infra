@@ -105,7 +105,7 @@
 {% endmacro %}
 
 {% macro no_rt_validation_errors_sa() %}
-"The Service_alerts feed produces no errors in the MobilityData GTFS Realtime Validator"
+"The Service alerts feed produces no errors in the MobilityData GTFS Realtime Validator"
 {% endmacro %}
 
 {% macro trip_id_alignment() %}
