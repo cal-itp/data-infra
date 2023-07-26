@@ -550,15 +550,22 @@
   <a class="reference internal nav-link" href="#what-is-the-california-open-data-portal">
    What is the California Open Data Portal?
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cal-itp-datasets">
+     Cal-ITP datasets
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#cal-itp-data-sets">
-   Cal-ITP data sets
+  <a class="reference internal nav-link" href="#what-is-the-publication-script">
+   What is the publication script?
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#general-process">
-   General process
+  <a class="reference internal nav-link" href="#general-open-data-publication-process">
+   General open data publication process
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
@@ -578,7 +585,7 @@
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#publish-the-data">
-     Publish the data!
+     Publish the data
     </a>
    </li>
   </ul>
@@ -607,15 +614,22 @@
   <a class="reference internal nav-link" href="#what-is-the-california-open-data-portal">
    What is the California Open Data Portal?
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cal-itp-datasets">
+     Cal-ITP datasets
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#cal-itp-data-sets">
-   Cal-ITP data sets
+  <a class="reference internal nav-link" href="#what-is-the-publication-script">
+   What is the publication script?
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#general-process">
-   General process
+  <a class="reference internal nav-link" href="#general-open-data-publication-process">
+   General open data publication process
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
@@ -635,7 +649,7 @@
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#publish-the-data">
-     Publish the data!
+     Publish the data
     </a>
    </li>
   </ul>
@@ -663,21 +677,26 @@ for and download data sets that might be useful for analysis or research. Among
 other agencies, Caltrans publishes <a class="reference external" href="https://data.ca.gov/organization/caltrans">many data sets</a> to CKAN.
 Data is generally published as flat files (typically CSV) alongside required
 metadata and a data dictionary.</p>
-</div>
-<div class="section" id="cal-itp-data-sets">
-<h2>Cal-ITP data sets<a class="headerlink" href="#cal-itp-data-sets" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cal-itp-datasets">
+<h3>Cal-ITP datasets<a class="headerlink" href="#cal-itp-datasets" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset">Cal-ITP GTFS Schedule Data</a></p></li>
+<li><p><a class="reference external" href="https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset">Cal-ITP GTFS-Ingest Pipeline Dataset (schedule data)</a></p></li>
 </ul>
 </div>
-<div class="section" id="general-process">
-<h2>General process<a class="headerlink" href="#general-process" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="what-is-the-publication-script">
+<h2>What is the publication script?<a class="headerlink" href="#what-is-the-publication-script" title="Permalink to this headline">¶</a></h2>
+<p>The publication script <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/scripts/publish.py">publish.py</a>, typically used within the <a class="reference external" href="https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/publish_open_data/grid">publish_open_data Airflow workflow</a>, relies on a <a class="reference external" href="https://docs.getdbt.com/docs/build/exposures">dbt exposure</a> to determine what to publish - in practice, that exposure is titled <code class="docutils literal notranslate"><span class="pre">california_open_data</span></code>. The tables included in that exposure, their CKAN destinations, and their published descriptions are defined in <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs_schedule_latest/_gtfs_schedule_latest.yml">_gtfs_schedule_latest.yml</a> under the <code class="docutils literal notranslate"><span class="pre">exposures</span></code> heading.</p>
+<p>By default, the columns of a table included in the exposure are <em>not</em> published on the portal. This is to prevent fields that are useful for internal data management but are hard to interpret for public users, like <code class="docutils literal notranslate"><span class="pre">_is_current</span></code>, from being included in the open data portal. Columns meant for publication are explicitly included in publication via the dbt <code class="docutils literal notranslate"><span class="pre">meta</span></code> tag <code class="docutils literal notranslate"><span class="pre">publish.include:</span> <span class="pre">true</span></code>, which you can see on various columns of the models in the same YAML file where the exposure itself is defined.</p>
+<p>The publication script does <em>not</em> read from that YAML file directly when publishing - it reads from the manifest file generated by the <code class="docutils literal notranslate"><span class="pre">dbt_run_and_upload_artifacts</span></code> Airflow job. By default, that manifest file is read from the GCS bucket where <code class="docutils literal notranslate"><span class="pre">run_and_upload.py</span></code> stores it during regular daily runs. If you need to make changes to the Cal-ITP GTFS-Ingest Pipeline Dataset in between runs of the daily <code class="docutils literal notranslate"><span class="pre">dbt_run_and_upload_artifacts</span></code> Airflow job (e.g. if there’s a time-sensitive bug you’re fixing in open data), you’ll need to either kick off an ad hoc run of that job in Airflow or run the script locally to generate a new manifest, and use that manifest to underpin the <code class="docutils literal notranslate"><span class="pre">publish.py</span></code> run. Take care when generating a manifest locally - you don’t want any information in your local dbt project to be different than the production project besides the models you’re making changes to.</p>
+</div>
+<div class="section" id="general-open-data-publication-process">
+<h2>General open data publication process<a class="headerlink" href="#general-open-data-publication-process" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="develop-data-models">
 <h3>Develop data models<a class="headerlink" href="#develop-data-models" title="Permalink to this headline">¶</a></h3>
 <p>Generally, data models should be built in dbt/BigQuery if possible. For example,
-we have <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse/models/gtfs_schedule_latest_only">latest-only GTFS schedule models</a>
-we can use to update and expand the existing <a class="reference external" href="https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset">CKAN dataset</a>
-<a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.agency">latest-only agency</a></p>
+we have <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse/models/mart/gtfs_schedule_latest">latest-only GTFS schedule models</a>
+we can use to update and expand the existing <a class="reference external" href="https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset">CKAN dataset</a></p>
 </div>
 <div class="section" id="document-data">
 <h3>Document data<a class="headerlink" href="#document-data" title="Permalink to this headline">¶</a></h3>
@@ -686,25 +705,25 @@ we can use to update and expand the existing <a class="reference external" href=
 <li><p><code class="docutils literal notranslate"><span class="pre">metadata.csv</span></code> - one row per resource (i.e. file) to be published</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dictionary.csv</span></code> - one row per column across all resources</p></li>
 </ol>
-<p>If you are using dbt exposure-based data publishing, you can automatically generate
-these two files using the main <code class="docutils literal notranslate"><span class="pre">publish.py</span></code> script (specifically the <code class="docutils literal notranslate"><span class="pre">generate-exposure-documentation</span></code>
+<p>We use dbt exposure-based data publishing to automatically generate
+these two files using the main <code class="docutils literal notranslate"><span class="pre">publish.py</span></code> script (specifically the <code class="docutils literal notranslate"><span class="pre">document-exposure</span></code>
 subcommand). The documentation from the dbt models’ corresponding YAML will be
-converted into appropriate CSVs and written out locally.</p>
+converted into appropriate CSVs and written out locally. By default, the script will read the latest <code class="docutils literal notranslate"><span class="pre">manifest.json</span></code> in GCS uploaded by the <code class="docutils literal notranslate"><span class="pre">dbt_run_and_upload_artifacts</span></code> Airflow job.</p>
 <p>Run this command inside the <code class="docutils literal notranslate"><span class="pre">warehouse</span></code> folder, assuming you have local dbt
 artifacts in <code class="docutils literal notranslate"><span class="pre">target/</span></code> from a <code class="docutils literal notranslate"><span class="pre">dbt</span> <span class="pre">run</span></code> or <code class="docutils literal notranslate"><span class="pre">dbt</span> <span class="pre">compile</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/publish.py<span class="w"> </span>document-exposure<span class="w"> </span>california_open_data
 </pre></div>
 </div>
+<p>Each day, a new version of <code class="docutils literal notranslate"><span class="pre">manifest.json</span></code> is automatically generated for tables in the production warehouse by the <code class="docutils literal notranslate"><span class="pre">dbt_run_and_upload_artifacts</span></code> job in <a class="reference external" href="https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/transform_warehouse/grid">the <code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code> DAG</a>, and placed inside the <code class="docutils literal notranslate"><span class="pre">calitp-dbt-artifacts</span></code> GCS bucket. If you intend to generate new documentation locally, you’ll need to generate a new <code class="docutils literal notranslate"><span class="pre">manifest.json</span></code> locally first.</p>
 </div>
 <div class="section" id="create-dataset-and-metadata">
 <h3>Create dataset and metadata<a class="headerlink" href="#create-dataset-and-metadata" title="Permalink to this headline">¶</a></h3>
 <p>Once you’ve generated the necessary metadata and dictionary CSV, you need to get
-approval from Chad Baker. Send the CSVs via email, preferably CC’ing somebody
-with a Caltrans email.</p>
-<p>Once approved, a CKAN dataset will be created with UUIDs corresponding to each
+approval from the Caltrans Geospatial Data Officer (at the time of writing, Chad Baker) for publication. Send the dictionary and metadata CSVs via email, and explain what changes are coming to the dataset - have columns been added or removed from one of the tables, do you have a new table to add, or is there some other change?</p>
+<p>For new tables, a CKAN destination will be created with UUIDs corresponding to each
 model that will be published. If you are using dbt exposures, you will need to
-update the <code class="docutils literal notranslate"><span class="pre">meta</span></code> field to map the dbt models to the appropriate UUIDs.</p>
-<p>An example from the latest-only GTFS data exposure.</p>
+update the <code class="docutils literal notranslate"><span class="pre">meta</span></code> field <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs_schedule_latest/_gtfs_schedule_latest.yml">here</a> to map the dbt models to the appropriate UUIDs.</p>
+<p>For example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nt">meta</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">methodology</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <span class="w">        </span><span class="no">Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table</span>
@@ -732,20 +751,18 @@ update the <code class="docutils literal notranslate"><span class="pre">meta</sp
 </div>
 </div>
 <div class="section" id="publish-the-data">
-<h3>Publish the data!<a class="headerlink" href="#publish-the-data" title="Permalink to this headline">¶</a></h3>
+<h3>Publish the data<a class="headerlink" href="#publish-the-data" title="Permalink to this headline">¶</a></h3>
 <p>If you are using dbt-based publishing, the <code class="docutils literal notranslate"><span class="pre">publish_exposure</span></code> subcommand of <code class="docutils literal notranslate"><span class="pre">publish.py</span></code>
 will query BigQuery, write out CSV files, and upload those files to CKAN.
-Either create an Airflow job to refresh/update the data at the specified
-frequency, or do it manually. You can use flags to execute a dry run or write to
-GCS without also uploading to CKAN.</p>
-<p>The publish script supports referencing <code class="docutils literal notranslate"><span class="pre">gs://</span></code> paths for the manifest; by default,
-the script will read the latest manifest in GCS uploaded by an Airflow job.
+<a class="reference external" href="https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/publish_open_data/grid">An Airflow job</a> refreshes/updates the data at a specified
+frequency, or the publication script can be run manually. By default, the <code class="docutils literal notranslate"><span class="pre">--no-publish</span></code> flag is set, executing a dry run. You can also write to GCS without uploading to CKAN by manually entering an arbitrary bucket destination.</p>
+<p>The weekly publishing Airflow job supports referencing <code class="docutils literal notranslate"><span class="pre">gs://</span></code> paths for the manifest, which is used to determine which tables and columns to publish; by default, the script will read the latest manifest in GCS uploaded by the <code class="docutils literal notranslate"><span class="pre">dbt_run_and_upload_artifacts</span></code> Airflow job.
 You may also choose to run dbt models and/or run the publish script locally; these
 operations can be mixed-and-matched. If you are running <code class="docutils literal notranslate"><span class="pre">publish.py</span></code> locally, you
 will need to set <code class="docutils literal notranslate"><span class="pre">$CALITP_CKAN_GTFS_SCHEDULE_KEY</span></code> ahead of time.</p>
 <p>By default, the script will upload artifacts to GCS, but will not actually
 upload data to CKAN. In addition, the script will upload the metadata and dictionary
-files to GCS for eventual sharing with Caltrans.</p>
+files to GCS for eventual sharing with Caltrans employees responsible for the open data portal.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/publish.py<span class="w"> </span>publish-exposure<span class="w"> </span>california_open_data<span class="w"> </span>--manifest<span class="w"> </span>./target/manifest.json
 reading<span class="w"> </span>manifest<span class="w"> </span>from<span class="w"> </span>./target/manifest.json
 would<span class="w"> </span>be<span class="w"> </span>writing<span class="w"> </span>to<span class="w"> </span>gs://test-calitp-publish/california_open_data__metadata/dt<span class="o">=</span><span class="m">2022</span>-08-30/ts<span class="o">=</span><span class="m">2022</span>-08-30T20:46:00.474199Z/metadata.csv
