@@ -547,13 +547,30 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#re-running-or-clearing-dags">
-   Re-running or clearing DAGs
+  <a class="reference internal nav-link" href="#monitoring-dags">
+   Monitoring DAGs
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#gtfs-realtime-parsing-and-validation">
-     GTFS Realtime parsing and validation
+    <a class="reference internal nav-link" href="#considerations-for-re-running-or-clearing-dags">
+     Considerations for re-running or clearing DAGs
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#now-vs-data-interval-processing">
+       Now vs. data interval processing
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#scheduled-vs-ad-hoc">
+       Scheduled vs. ad-hoc
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-to-clear-a-dag-or-dag-task">
+     How to clear a DAG or DAG task
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -564,26 +581,18 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#task-level-considerations">
-   Task-level considerations
+  <a class="reference internal nav-link" href="#podoperators">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     PodOperators
+    </span>
+   </code>
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#backfilling-from-the-command-line">
    Backfilling from the command line
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#legacy-payments">
-   Legacy Payments
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dags-overview">
-     DAGs Overview
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -606,13 +615,30 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#re-running-or-clearing-dags">
-   Re-running or clearing DAGs
+  <a class="reference internal nav-link" href="#monitoring-dags">
+   Monitoring DAGs
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#gtfs-realtime-parsing-and-validation">
-     GTFS Realtime parsing and validation
+    <a class="reference internal nav-link" href="#considerations-for-re-running-or-clearing-dags">
+     Considerations for re-running or clearing DAGs
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#now-vs-data-interval-processing">
+       Now vs. data interval processing
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#scheduled-vs-ad-hoc">
+       Scheduled vs. ad-hoc
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-to-clear-a-dag-or-dag-task">
+     How to clear a DAG or DAG task
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -623,26 +649,18 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#task-level-considerations">
-   Task-level considerations
+  <a class="reference internal nav-link" href="#podoperators">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     PodOperators
+    </span>
+   </code>
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#backfilling-from-the-command-line">
    Backfilling from the command line
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#legacy-payments">
-   Legacy Payments
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dags-overview">
-     DAGs Overview
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -655,107 +673,66 @@
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="production-dags-maintenance">
 <span id="dags-maintenance"></span><h1>Production DAGs Maintenance<a class="headerlink" href="#production-dags-maintenance" title="Permalink to this headline">¶</a></h1>
-<p><em>Last edited: May 5, 2022</em></p>
-<div class="section" id="re-running-or-clearing-dags">
-<h2>Re-running or clearing DAGs<a class="headerlink" href="#re-running-or-clearing-dags" title="Permalink to this headline">¶</a></h2>
-<p>Sometimes DAGs will fail in production. Below are considerations to take into account when re-running or clearing DAGs to address failures.</p>
-<p>There are roughly two categories of Airflow DAGs in our system.</p>
+<p>We use <a class="reference external" href="https://airflow.apache.org/">Airflow</a> to orchestrate our data ingest processes. This page describes how to handle cases where an Airflow <a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/tasks.html">DAG task</a> fails.</p>
+<div class="section" id="monitoring-dags">
+<h2>Monitoring DAGs<a class="headerlink" href="#monitoring-dags" title="Permalink to this headline">¶</a></h2>
+<p>When an Airflow DAG task fails, it will alert to the <code class="docutils literal notranslate"><span class="pre">#data-infra-alerts</span></code> channel in Slack.</p>
+<p>In that case, someone should respond according to the considerations described below and in each individual DAG’s documentation (available in <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags">each DAG subdirectory</a> in the <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> GitHub repository).</p>
+<div class="section" id="considerations-for-re-running-or-clearing-dags">
+<h3>Considerations for re-running or clearing DAGs<a class="headerlink" href="#considerations-for-re-running-or-clearing-dags" title="Permalink to this headline">¶</a></h3>
+<p>Below are considerations to take into account when re-running or clearing DAGs to address failures. You can <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags">consult the individual DAG’s documentation</a> for information on which of the following categories each DAG falls into.</p>
+<div class="section" id="now-vs-data-interval-processing">
+<h4>Now vs. data interval processing<a class="headerlink" href="#now-vs-data-interval-processing" title="Permalink to this headline">¶</a></h4>
+<p>There are roughly two types of Airflow DAGs in our system:</p>
 <ul class="simple">
 <li><p>“Now” DAGs - mostly for executing code on a schedule (often scraping current data, or a fancy cron job), NOT orchestrating distributed processing of existing data</p>
 <ul>
 <li><p><strong>When these DAGs fail, and you’d like to re-run them, you should execute a new manual run rather than clearing a historical run.</strong></p></li>
 <li><p>Only the actual execution time matters if relevant (usually for timestamping data or artifacts)</p></li>
 <li><p>Generally safe but not useful to execute multiple times simultaneously</p></li>
-<li><p>There is no concept of backfilling via these DAGs; they may output data/artifacts that require “backfilling” (i.e. modifying existing data) via a script or notebook</p></li>
+<li><p>There is no concept of backfilling via these DAGs</p></li>
 </ul>
 </li>
-<li><p>“Data interval processing” DAGs - orchestrates processing of previously-captured data, or data than can be retrieved in a timestamped manner (e.g. Amplitude)</p>
+<li><p>“Data interval processing” DAGs - these DAGs orchestrate processing of previously-captured data, or data than can be retrieved in a timestamped manner</p>
 <ul>
 <li><p><strong>When these DAGs fail, you should clear the historical task instances that failed.</strong> (Generally, these DAGs are expected to be 100% successful.)</p></li>
-<li><p>Relies heavily on the <code class="docutils literal notranslate"><span class="pre">execution_date</span></code> or <code class="docutils literal notranslate"><span class="pre">data_interval_start/end</span></code> concepts</p></li>
+<li><p><strong>Failures in these jobs may cause data to be missing from the data warehouse in unexpected ways:</strong> if a parse job fails, then the data that should have been processed will not be available in the warehouse. Sometimes this is resolved easily by clearing the failed parse job so that the data will be picked up in the next warehouse run (orchestrated by <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/transform_warehouse/">the <code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code> DAG</a>). However, because the data warehouse uses <a class="reference external" href="https://docs.getdbt.com/docs/build/incremental-models">incremental models</a>, it’s possible that if the failed job is not cleared quickly enough the missing data will not be picked up because the incremental lookback period will have passed.</p></li>
+<li><p>Relies heavily on the <a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html"><code class="docutils literal notranslate"><span class="pre">execution_date</span></code> or <code class="docutils literal notranslate"><span class="pre">data_interval_start/end</span></code></a> concepts</p></li>
 <li><p>May not be entirely idempotent though we try; for example, validating RT data depends on Schedule data which may be late-arriving</p></li>
 <li><p>Backfilling can generally be performed by clearing past task instances and letting them re-run</p></li>
 <li><p>We try to avoid <code class="docutils literal notranslate"><span class="pre">depends_on_past</span></code> DAGs, so parallelization is possible during backfills</p></li>
 </ul>
 </li>
 </ul>
-<p>DAGs are listed in alphabetical order (like in the Airflow UI) and are labeled by</p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>DAG</p></th>
-<th class="head"><p>“Now”</p></th>
-<th class="head"><p>Notes</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">airtable_loader_v2</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>Don’t need to rerun more than once if multiple failures; scraped data is labeled by actual execution time</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">amplitude_benefits</span></code></p></td>
-<td><p>No</p></td>
-<td><p>This will be replaced soon by an Amplitude-to-GCS export.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">create_external_tables</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>Generally only fails due to GCP issues or definition problems; individual tasks can be cleared once fixed</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">deploy_dbt_docs</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>Manual job to deploy dbt docs to Metabase and Netlify</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">download_gtfs_schedule_v2</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>Don’t need to rerun more than once if multiple failures; scraped data is labeled by actual execution time</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">parse_and_validate_rt_v2</span></code></p></td>
-<td><p>No</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>This is deprecated, pending data consumers switching to v2 models. See below for maintenance.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scrape_feed_aggregators</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>Scraped data is labeled by actual execution time</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>Configurable via JSON task parameters to run a portion of the DAG (<code class="docutils literal notranslate"><span class="pre">dbt_select_statement</span></code> key); outputs timestamped artifacts</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse_full_refresh</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>Manual job to execute a full-refresh dbt job; should be used sparingly; configurable via JSON task parameters to run a portion of the DAG (<code class="docutils literal notranslate"><span class="pre">dbt_select_statement</span></code> key); outputs timestamped artifacts</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">unzip_and_validate_gtfs_schedule</span></code></p></td>
-<td><p>No</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-<div class="section" id="gtfs-realtime-parsing-and-validation">
-<h3>GTFS Realtime parsing and validation<a class="headerlink" href="#gtfs-realtime-parsing-and-validation" title="Permalink to this headline">¶</a></h3>
-<p>The primary DAG relevant to GTFS Realtime data is <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags/parse_and_validate_rt_v2">parse_and_validate_rt_v2</a>.
-This DAG parses RT files into JSONL and writes them to GCS for querying via BigQuery external tables.
-It also executes the <a class="reference external" href="https://github.com/MobilityData/gtfs-realtime-validator">realtime validator</a>
-against the RT files and writes the validation notices as JSONL to GCS for querying.</p>
-<p>The raw proto files themselves are fetched via <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3">the archiver</a>.</p>
+</div>
+<div class="section" id="scheduled-vs-ad-hoc">
+<h4>Scheduled vs. ad-hoc<a class="headerlink" href="#scheduled-vs-ad-hoc" title="Permalink to this headline">¶</a></h4>
+<p>Additionally, DAGs can either be scheduled or ad-hoc:</p>
+<ul class="simple">
+<li><p><strong>Scheduled</strong> DAGs are designed to be run regularly, based on the <a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/1.10.1/scheduler.html">cron schedule</a> set in the DAG’s <code class="docutils literal notranslate"><span class="pre">METADATA.yml</span></code> file. All “data interval processing” DAGs will be scheduled.</p></li>
+<li><p><strong>Ad-hoc</strong> DAGs are designed to be run as one-offs, to automate a workflow that is risky or difficult for an individual user to run locally. These will have <code class="docutils literal notranslate"><span class="pre">schedule_interval:</span> <span class="pre">None</span></code> in their <code class="docutils literal notranslate"><span class="pre">METADATA.yml</span></code> files. Only “now” DAGs can be ad-hoc.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="how-to-clear-a-dag-or-dag-task">
+<h3>How to clear a DAG or DAG task<a class="headerlink" href="#how-to-clear-a-dag-or-dag-task" title="Permalink to this headline">¶</a></h3>
+<p>Failures can be cleared (re-run) via the Airflow user interface (<a class="reference external" href="https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra&amp;supportedpurview=project">accessible via Composer here</a>.)</p>
+<p><a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/stable/ui.html">This Airflow guide</a> can help you use and interpret the Airflow UI.</p>
 </div>
 <div class="section" id="deprecated-dags">
 <h3>Deprecated DAGs<a class="headerlink" href="#deprecated-dags" title="Permalink to this headline">¶</a></h3>
-<p>The following DAGs are still listed in the Airflow UI even though they are <strong>deprecated or indefinitely paused</strong>. They never need to be re-run.</p>
+<p>The following DAGs may still be listed in the Airflow UI even though they are <strong>deprecated or indefinitely paused</strong>. They never need to be re-run. (They show up in the UI because the Airflow database has historical DAG/task entries even though the code has been deleted.)</p>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">amplitude_benefits</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">check_data_freshness</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">load-sentry-rtfetchexception-events</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unzip_and_validate_gtfs_schedule</span></code></p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="task-level-considerations">
-<h2>Task-level considerations<a class="headerlink" href="#task-level-considerations" title="Permalink to this headline">¶</a></h2>
-<p>Some tasks have unique considerations, beyond the requirements of their overall DAG.</p>
-<ul class="simple">
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code></strong>: When restarting a failed <code class="docutils literal notranslate"><span class="pre">PodOperator</span></code> run, check the logs before restarting. If the logs show any indication that the prior run’s pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the pod associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. If you don’t know how to check a pod status, please ask in the <code class="docutils literal notranslate"><span class="pre">#data-infra</span></code> channel on Slack before proceeding.</p></li>
-</ul>
+<div class="section" id="podoperators">
+<h2><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code><a class="headerlink" href="#podoperators" title="Permalink to this headline">¶</a></h2>
+<p>When restarting a failed <code class="docutils literal notranslate"><span class="pre">PodOperator</span></code> run, check the logs before restarting. If the logs show any indication that the prior run’s pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the pod associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. If you don’t know how to check a pod status, please ask in the <code class="docutils literal notranslate"><span class="pre">#data-infra</span></code> channel on Slack before proceeding.</p>
 </div>
 <div class="section" id="backfilling-from-the-command-line">
 <h2>Backfilling from the command line<a class="headerlink" href="#backfilling-from-the-command-line" title="Permalink to this headline">¶</a></h2>
@@ -763,21 +740,6 @@ against the RT files and writes the validation notices as JSONL to GCS for query
 <p>Subject to the considerations outlined above, backfilling can be performed by clearing historical runs in the web interface, or via the CLI:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>gcloud<span class="w"> </span>composer<span class="w"> </span>environments<span class="w"> </span>run<span class="w"> </span>calitp-airflow-prod<span class="w"> </span>--location<span class="o">=</span>us-west2<span class="w"> </span>backfill<span class="w"> </span>--<span class="w"> </span>--start_date<span class="w"> </span><span class="m">2021</span>-04-18<span class="w"> </span>--end_date<span class="w"> </span><span class="m">2021</span>-11-03<span class="w"> </span>-x<span class="w"> </span>--reset_dagruns<span class="w"> </span>-y<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;gtfs_schedule_history_load&quot;</span><span class="w"> </span>-i<span class="w"> </span>gtfs_loader
 </pre></div>
-</div>
-</div>
-<div class="section" id="legacy-payments">
-<h2>Legacy Payments<a class="headerlink" href="#legacy-payments" title="Permalink to this headline">¶</a></h2>
-<p>The ETL is currently a scheduled Google Data Transfer job that transfers all files to <code class="docutils literal notranslate"><span class="pre">gcs://littlepay-data-extract-prod</span></code>, and parse jobs that transfer those files into the location read by BigQuery’s external tables (only keeping relevant columns).</p>
-<div class="section" id="dags-overview">
-<h3>DAGs Overview<a class="headerlink" href="#dags-overview" title="Permalink to this headline">¶</a></h3>
-<p>The payments data is loaded and transformed in the payments_loader DAG.</p>
-<p>The payments_loader dag has three kinds of tasks:</p>
-<ul class="simple">
-<li><p>ExternalTable operator tasks (e.g. <code class="docutils literal notranslate"><span class="pre">customer_funding_source</span></code>). These define the underlying data.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">calitp_included_payments_data</span></code> - a table of underlying payments table names defined in the task above.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">preprocessing_columns</span></code> - move data from <code class="docutils literal notranslate"><span class="pre">gs://littlepay-data-extract-prod</span></code> to <code class="docutils literal notranslate"><span class="pre">gs://gtfs-data</span></code>,
-then process to keep only columns defined in external tables.</p></li>
-</ul>
 </div>
 </div>
 </div>
