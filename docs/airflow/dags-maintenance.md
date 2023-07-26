@@ -21,7 +21,7 @@ There are roughly two types of Airflow DAGs in our system:
   * Only the actual execution time matters if relevant (usually for timestamping data or artifacts)
   * Generally safe but not useful to execute multiple times simultaneously
   * There is no concept of backfilling via these DAGs
-* "Data interval processing" DAGs - these DAGs orchestrate processing of previously-captured data, or data than can be retrieved in a timestamped manner (e.g. Amplitude)
+* "Data interval processing" DAGs - these DAGs orchestrate processing of previously-captured data, or data than can be retrieved in a timestamped manner
   * **When these DAGs fail, you should clear the historical task instances that failed.** (Generally, these DAGs are expected to be 100% successful.)
   * **Failures in these jobs may cause data to be missing from the data warehouse in unexpected ways:** if a parse job fails, then the data that should have been processed will not be available in the warehouse. Sometimes this is resolved easily by clearing the failed parse job so that the data will be picked up in the next warehouse run (orchestrated by [the `transform_warehouse` DAG](https://github.com/cal-itp/data-infra/blob/main/airflow/dags/transform_warehouse/)). However, because the data warehouse uses [incremental models](https://docs.getdbt.com/docs/build/incremental-models), it's possible that if the failed job is not cleared quickly enough the missing data will not be picked up because the incremental lookback period will have passed.
   * Relies heavily on the [`execution_date` or `data_interval_start/end`](https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html) concepts
@@ -33,8 +33,8 @@ There are roughly two types of Airflow DAGs in our system:
 
 Additionally, DAGs can either be scheduled or ad-hoc:
 
-* **Scheduled** DAGs are designed to be run regularly, based on the [cron schedule](https://airflow.apache.org/docs/apache-airflow/1.10.1/scheduler.html) set in the DAG's `METADATA.yml` file
-* **Ad-hoc** DAGs are designed to be run as one-offs, to automate a workflow that is risky or difficult for an individual user to run locally
+* **Scheduled** DAGs are designed to be run regularly, based on the [cron schedule](https://airflow.apache.org/docs/apache-airflow/1.10.1/scheduler.html) set in the DAG's `METADATA.yml` file. All "data interval processing" DAGs will be scheduled.
+* **Ad-hoc** DAGs are designed to be run as one-offs, to automate a workflow that is risky or difficult for an individual user to run locally. These will have `schedule_interval: None` in their `METADATA.yml` files. Only "now" DAGs can be ad-hoc.
 
 ### How to clear a DAG or DAG task
 
@@ -44,7 +44,7 @@ Failures can be cleared (re-run) via the Airflow user interface ([accessible via
 
 ### Deprecated DAGs
 
-The following DAGs may still be listed in the Airflow UI even though they are **deprecated or indefinitely paused**. They never need to be re-run.
+The following DAGs may still be listed in the Airflow UI even though they are **deprecated or indefinitely paused**. They never need to be re-run. (They show up in the UI because the Airflow database has historical DAG/task entries even though the code has been deleted.)
 
 * `amplitude_benefits`
 * `check_data_freshness`
