@@ -1,9 +1,10 @@
 # Vim
 .*.sw[po]
 
-# PyCharm, etc.
+# PyCharm, VSCode, etc.
 .idea/
 .DS_Store
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

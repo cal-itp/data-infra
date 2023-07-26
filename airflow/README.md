@@ -1,18 +1,22 @@
 # Airflow
 
-The following folder contains the project level directory for all our Apache Airflow DAGs, which are deployed automatically to Google Cloud Composer from the `main` branch.
+The following folder contains the project level directory for all our [Apache Airflow](https://airflow.apache.org/) [DAGs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html). Airflow is an orchestration tool that we use to manage our raw data ingest. Airflow DAG tasks are scheduled at regular intervals to perform data processing steps, for example unzipping raw GTFS zipfiles and writing the contents out to Google Cloud Storage.
+
+Our DAGs are deployed automatically to Google Cloud Composer when a PR is merged into the `main` branch; see the section on deployment below for more information.
 
 ## Structure
 
-The DAGs for this project are stored and version controlled in the `dags` folder.
+The DAGs for this project are stored and version controlled in the `dags` folder. Each DAG has its own `README` with further information about its specific purpose and considerations. We use [gusty](https://github.com/pipeline-tools/gusty) to simplify DAG management.
+
+Each DAG folder contains a [`METADATA.yml` file](https://github.com/pipeline-tools/gusty#metadata) that contains overall DAG settings, including the DAG's schedule (if any).
 
 The logs are stored locally in the `logs` folder. You should be unable to add files here but it is gitkeep'ed so that it is avaliable when testing and debugging.
 
-Finally, Airflow plugins can be found in `plugins`; this includes general utility functions as well as custom operator definitions.
+Finally, Airflow plugins can be found in `plugins`; this includes general utility functions as well as custom [operator](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/operators.html) definitions.
 
 ## Developing Locally
 
-This project is developed using docker and docker-compose. Before getting started, please make sure you have installed both on your system.
+This project is developed using Docker and docker-compose. Before getting started, please make sure you have [installed Docker on your system](https://docs.docker.com/get-docker/).
 
 First, if you're on linux, you'll need to make sure that the UID and GID of the container match, to do so, run
 
@@ -22,7 +26,7 @@ mkdir ./dags ./logs ./plugins
 echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
 ```
 
-Second, ensure you have a default authentication file, by [installing google sdk](https://cloud.google.com/sdk/docs/install) and running
+Second, ensure you have a default authentication file, by [installing Google SDK](https://cloud.google.com/sdk/docs/install) and running
 
 ```console
 unset GOOGLE_APPLICATION_CREDENTIALS
@@ -34,7 +38,7 @@ gcloud init
 # gcloud auth application-default login
 ```
 
-Next, run the initial database migration which also creates a default user named `airflow.
+Next, run the initial database migration which also creates a default user named `airflow`.
 ```shell
 docker-compose run airflow db init
 ```
@@ -61,4 +65,4 @@ Additional reading about this setup can be found on the [Airflow Docs](https://a
 
 ## Deploying to production
 
-We have a [GitHub Action](../.github/workflows/deploy_airflow_dags.yml) defined that updates requirements and syncs the [dags](./airflow/dags) and [plugins](./airflow/plugins) directories to the bucket which Composer watches for code/data to parse. As of 2023-04-11, this bucket is `us-west2-calitp-airflow2-pr-171e4e47-bucket`. Our production Composer instance is called [calitp-airflow2-prod](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod/monitoring); its configuration (including worker count, Airflow config overrides, and environment variables) is manually managed through the web console.
+We have a [GitHub Action](../.github/workflows/deploy_airflow_dags.yml) that runs when PRs touching this directory merge to the `main` branch. The GitHub Action updates requirements and syncs the [DAGs](./airflow/dags) and [plugins](./airflow/plugins) directories to the bucket that Composer watches for code/data to parse. As of 2023-07-18, this bucket is `us-west2-calitp-airflow2-pr-171e4e47-bucket`. Our production Composer instance is called [calitp-airflow2-prod](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod/monitoring); its configuration (including worker count, Airflow config overrides, and environment variables) is manually managed through the web console.
