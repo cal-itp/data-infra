@@ -1,0 +1,19 @@
+# Deleting / deprecating files in Google Cloud Storage
+
+Occasionally, we want to assess our Google Cloud Storage buckets for outdatedness and deprecate buckets that we have no use for. Please follow the steps outlined here when performing a deletion or deprecation.
+
+1. In the Google Cloud Console, sort [our available GCS buckets](https://console.cloud.google.com/storage/browser) by their Last Modified date, in ascending order.
+
+2. Among buckets not recently modified (more than ~3 months since the last update), there are two general categories:
+    * Buckets used for testing, prefixed with "test-", generally correspond to infrequent tests of Airflow jobs and other scripts that take place during new feature development. The buckets themselves should generally remain in existence (unless the corresponding job/script is no longer actively used in production), but any objects they contain from previous rounds of testing can be deleted.
+    * All other buckets are deprecation candidates, but should be treated with greater care, utilizing the remaining steps of this guide.
+
+3. For the non-test buckets that constitute the deprecation candidate list, the path forward relies on investigation of internal project configuration and conversation with data stakeholders. Some data may need to be kept in place because it is frequently accessed despite being infrequently updated (NTD data or static website assets, for instance). Some data may need to be cold-stored rather than deleted outright to conform with regulatory requirements or provide a window for future research access. Each of the following steps should be taken to determine which path to take:
+    * Search the source code of [data-infra repository](https://github.com/cal-itp/data-infra), the [data-analyses repository](https://github.com/cal-itp/data-analyses), and the [reports repository](https://github.com/cal-itp/reports) for the name of the bucket, as well as the environment variables [set in Cloud Composer](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod/variables?project=cal-itp-data-infra). If you find it referenced anywhere, investigate whether the reference is in active use.
+    * Post in `#data-warehouse-devs` and any other relevant channels in Slack (this may vary by domain; for example, if investigating a bucket related to GTFS quality, you may post in `#gtfs-quality`). Ask whether anybody knows of ongoing use of the bucket(s) in question. If there are identifiable stakeholders who aren't active in Slack, like external research partners, reach out to them directly.
+
+4. For each bucket that hasn't been removed from the deprecation list via the investigation in the last step, create a new bucket named "[EXISTING BUCKET NAME]-deprecated" and follow [these steps](https://cloud.google.com/storage/docs/moving-buckets#permissions-console) to transfer the original bucket contents into the newly created bucket(s). Delete the original bucket(s), inform stakeholders about the newly deprecated buckets via `#data-warehouse-devs` and other relevant channels, and monitor for two weeks for any new code or process breakages related to the deletion of the old buckets.
+
+5. After two weeks is up, take the most relevant option of the following two:
+    * For buckets that must be retained for regulatory reasons or potential future research/analysis access, [change the storage class](https://cloud.google.com/storage/docs/changing-storage-classes#command-line) of the objects within "-deprecated" bucket to Archive and change the bucket's default storage class to the same. Note that this will incur higher costs if the data within the bucket is accessed than the standard storage class - it is intended for data that will not be accessed frequently, and is cost-optimized for lower costs of storage and higher costs of access.
+    * For buckets that do not need to be kept long term, simply delete the "-deprecated" bucket.
