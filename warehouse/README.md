@@ -1,8 +1,12 @@
 # Cal-ITP's dbt project
 
-This dbt project is intended to be the source of truth for the cal-itp-data-infra BigQuery warehouse.
+This dbt project manages the `cal-itp-data-infra` BigQuery warehouse.
 
-## Setting up the project in your JupyterHub personal server
+## Setup
+
+If you are doing to do dbt development, you will need to set up the project either in your JupyterHub server or on your local machine. Follow the relevant instructions below to set up the project for the first time.
+
+### Setting up the project in your JupyterHub personal server
 If you are developing dbt models in JupyterHub, the following pieces
 are already configured/installed.
 * Libraries such as gdal and graphviz
@@ -12,7 +16,7 @@ are already configured/installed.
 > You may have already authenticated gcloud and the GitHub CLI (gh) if you followed the
 [JupyterHub setup docs](https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html). If not, follow those instructions before proceeding.
 
-### Clone and install the warehouse project
+#### Clone and install the warehouse project
 1. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
    the `data-infra` repo via `git clone git@github.com:cal-itp/data-infra.git` if you haven't already. Use [SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account), not HTTPS. If you haven't made a folder/directory for your git repos yet, you can create one with `mkdir git` (within your home directory, usually).
    1. You may be prompted to accept GitHub key's fingerprint if you are cloning a repository for the first time.
@@ -98,10 +102,69 @@ are already configured/installed.
    All checks passed!
    ```
 
-## dbt Commands
+### Setting up the project on your local machine
+
+If you prefer to install dbt locally and use your own development environment, you may follow these instructions to install the same tools already installed in the JupyterHub environment.
+
+> Note: These instructions assume you are on macOS, but are largely similar for
+> other operating systems. Most *nix OSes will have a package manager that you
+> should use instead of Homebrew.
+>
+> Note: if you get `Operation not permitted` when attempting to use the terminal,
+> you may need to [fix your terminal permissions](https://osxdaily.com/2018/10/09/fix-operation-not-permitted-terminal-error-macos/)
+>
+> You can enable [displaying hidden folders/files in macOS Finder](https://www.macworld.com/article/671158/how-to-show-hidden-files-on-a-mac.html)
+   but generally, we recommend using the terminal when possible for editing
+   these files. Generally, `nano ~/.dbt/profiles.yml` will be the easiest method
+   for editing your personal profiles file. `nano` is a simple terminal-based
+   text editor; you use the arrows keys to navigate and the hotkeys displayed
+   at the bottom to save and exit. Reading an [online tutorial](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/)
+   may be useful if you haven't used a terminal-based editor before.
+
+#### Install Homebrew (if you haven't)
+
+1. Follow the installation instructions at [https://brew.sh/](https://brew.sh/)
+2. Then, `brew install gdal graphviz` to install libraries used by some Python libraries.
+
+#### Install the Google SDK (if you haven't)
+
+0. Implied: make sure that you have GCP permissions (i.e. that someone has added you to the GCP project)
+1. Follow the installation instructions at [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install)
+   1. If this is your first time using the terminal, we recommend reading [https://blog.teamtreehouse.com/introduction-to-the-mac-os-x-command-line](https://blog.teamtreehouse.com/introduction-to-the-mac-os-x-command-line)
+      or another tutorial first. You will generally need to understand `cd` and
+      the concept of the "home directory" aka `~`. When you first open the
+      terminal, your "working directory" will be the home directory. Running the
+      `cd` command without any arguments will set your working directory back to
+      `~`.
+   2. Use `tar -xvf <drag file from Finder window to get file name> ~` to unzip into your home directory
+   3. Answer `yes` to adding the tool to your path
+   4. Most recent macOS versions use `zsh` as the default shell, so ensure the path modification is added to `~/.zshrc` when prompted
+   5. Restart your terminal, and run `gcloud init`
+   6. Answer `yes` to log in, and select the Google account associated with GCP
+   7. Set `cal-itp-data-infra` as the default project, and do not set a region
+2. You should also [set the application default](https://cloud.google.com/sdk/gcloud/reference/auth/application-default)
+3. If `bq ls` shows output, you are good to go.
+
+#### Install poetry
+
+1. Install [poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) (used for package/dependency management).
+   1. If `curl -sSL https://install.python-poetry.org | python3 -`
+      does not work, you can `curl` to a file `curl -sSL https://install.python-poetry.org -o install-poetry.py`
+      and then execute the file with `python install-poetry.py`.
+   2. Add the tool to your system PATH. This process varies by system, but the poetry installer provides a sample command for
+      addition upon its completion. On an OSX device using zshell, for instance, that line should be added to the ~/.zshrc file.
+2. Restart your terminal and confirm `poetry --version` works.
+3. Ensure you have set the environment variable `DBT_PROFILES_DIR=~/.dbt/` in your `~/.zshrc`. You can either restart your terminal after setting it, or run `source ~/.zshrc`.
+4. Follow the [warehouse setup instructions](#Set up the warehouse dbt project)
+5. If this doesn’t work because of an error with Python version, you may need to install Python 3.9
+   2. `brew install python@3.9`
+   3. `brew link python@3.9`
+   4. After restarting the terminal, confirm with `python3 --version` and retry `poetry install`
+
+## Running dbt Commands
 
 Once you have performed the setup above, you are good to go run
-[dbt commands](https://docs.getdbt.com/reference/dbt-commands) locally! Run the following commands in order.
+[dbt commands](https://docs.getdbt.com/reference/dbt-commands)! If you're setting up for the first time, run the following commands in order.
 
 1. `poetry run dbt seed`
    1. Will create tables in your personally-named schema from the CSV files present in [./seeds](./seeds), which can then be referenced by dbt models.
@@ -127,64 +190,7 @@ We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/inc
 * If you are able to develop and test with only recent data, execute a `--full-refresh` on your model(s) and all parents. This will drop the existing tables and re-build them with the last 7 days of data.
 * If you need historical data for your analysis, copy the production table with `CREATE TABLE <your_schema>.<tablename> COPY <production_schema>.<tablename`; copies are free in BigQuery so this is substantially cheaper than fully building the model yourself.
 
-## Setting up the project on your local machine
 
-If you prefer to install dbt locally and use your own development environment, you may follow these instructions to install the same tools already installed in the JupyterHub environment.
-
-> Note: These instructions assume you are on macOS, but are largely similar for
-> other operating systems. Most *nix OSes will have a package manager that you
-> should use instead of Homebrew.
->
-> Note: if you get `Operation not permitted` when attempting to use the terminal,
-> you may need to [fix your terminal permissions](https://osxdaily.com/2018/10/09/fix-operation-not-permitted-terminal-error-macos/)
->
-> You can enable [displaying hidden folders/files in macOS Finder](https://www.macworld.com/article/671158/how-to-show-hidden-files-on-a-mac.html)
-   but generally, we recommend using the terminal when possible for editing
-   these files. Generally, `nano ~/.dbt/profiles.yml` will be the easiest method
-   for editing your personal profiles file. `nano` is a simple terminal-based
-   text editor; you use the arrows keys to navigate and the hotkeys displayed
-   at the bottom to save and exit. Reading an [online tutorial](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/)
-   may be useful if you haven't used a terminal-based editor before.
-
-### Install Homebrew (if you haven't)
-
-1. Follow the installation instructions at [https://brew.sh/](https://brew.sh/)
-2. Then, `brew install gdal graphviz` to install libraries used by some Python libraries.
-
-### Install the Google SDK (if you haven't)
-
-0. Implied: make sure that you have GCP permissions (i.e. that someone has added you to the GCP project)
-1. Follow the installation instructions at [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install)
-   1. If this is your first time using the terminal, we recommend reading [https://blog.teamtreehouse.com/introduction-to-the-mac-os-x-command-line](https://blog.teamtreehouse.com/introduction-to-the-mac-os-x-command-line)
-      or another tutorial first. You will generally need to understand `cd` and
-      the concept of the "home directory" aka `~`. When you first open the
-      terminal, your "working directory" will be the home directory. Running the
-      `cd` command without any arguments will set your working directory back to
-      `~`.
-   2. Use `tar -xvf <drag file from Finder window to get file name> ~` to unzip into your home directory
-   3. Answer `yes` to adding the tool to your path
-   4. Most recent macOS versions use `zsh` as the default shell, so ensure the path modification is added to `~/.zshrc` when prompted
-   5. Restart your terminal, and run `gcloud init`
-   6. Answer `yes` to log in, and select the Google account associated with GCP
-   7. Set `cal-itp-data-infra` as the default project, and do not set a region
-2. You should also [set the application default](https://cloud.google.com/sdk/gcloud/reference/auth/application-default)
-3. If `bq ls` shows output, you are good to go.
-
-### Install poetry
-
-1. Install [poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) (used for package/dependency management).
-   1. If `curl -sSL https://install.python-poetry.org | python3 -`
-      does not work, you can `curl` to a file `curl -sSL https://install.python-poetry.org -o install-poetry.py`
-      and then execute the file with `python install-poetry.py`.
-   2. Add the tool to your system PATH. This process varies by system, but the poetry installer provides a sample command for
-      addition upon its completion. On an OSX device using zshell, for instance, that line should be added to the ~/.zshrc file.
-2. Restart your terminal and confirm `poetry --version` works.
-3. Ensure you have set the environment variable `DBT_PROFILES_DIR=~/.dbt/` in your `~/.zshrc`. You can either restart your terminal after setting it, or run `source ~/.zshrc`.
-4. Follow the [warehouse setup instructions](#Set up the warehouse dbt project)
-5. If this doesn’t work because of an error with Python version, you may need to install Python 3.9
-   2. `brew install python@3.9`
-   3. `brew link python@3.9`
-   4. After restarting the terminal, confirm with `python3 --version` and retry `poetry install`
 
 ### Dataproc configuration
 
