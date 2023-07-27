@@ -1,23 +1,23 @@
 {{ config(materialized='ephemeral') }}
 
-{% set min_month_list = dbt_utils.get_column_values(table=ref('payments_rides'), column='transaction_date_pacific', order_by = 'transaction_date_pacific', max_records = 1) %}
+{% set min_month_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_v2'), column='transaction_date_pacific', order_by = 'transaction_date_pacific', max_records = 1) %}
 
 {% set min_month = min_month_list[0] %}
 
-{% set max_month_list = dbt_utils.get_column_values(table=ref('payments_rides'), column='transaction_date_pacific', order_by = 'transaction_date_pacific DESC', max_records = 1) %}
+{% set max_month_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_v2'), column='transaction_date_pacific', order_by = 'transaction_date_pacific DESC', max_records = 1) %}
 
 {% set max_month = max_month_list[0] %}
 
 {{ log(min_month ~ " " ~ max_month) }}
 
 
-WITH payments_rides AS (
-    SELECT * FROM {{ ref('payments_rides') }}
+WITH fct_payments_rides_v2 AS (
+    SELECT * FROM {{ ref('fct_payments_rides_v2') }}
 ),
 
 distinct_providers AS (
     SELECT DISTINCT participant_id
-    FROM payments_rides
+    FROM fct_payments_rides_v2
 ),
 
 create_month_range AS (
