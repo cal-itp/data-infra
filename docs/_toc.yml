@@ -17,6 +17,7 @@ parts:
         - file: analytics_tools/tools_quick_links
         - file: analytics_tools/bi_dashboards
         - file: analytics_tools/jupyterhub
+        - file: analytics_tools/local_oracle_db_connections
         - file: analytics_tools/python_libraries
         - file: analytics_tools/scripts
         - file: analytics_tools/rt_analysis
