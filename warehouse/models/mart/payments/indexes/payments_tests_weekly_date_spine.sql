@@ -1,15 +1,15 @@
 {{ config(materialized='ephemeral') }}
 
-{% set min_week_list = dbt_utils.get_column_values(table=ref('payments_rides'), column='transaction_date_pacific', order_by = 'transaction_date_pacific', max_records = 1) %}
+{% set min_week_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_v2'), column='transaction_date_pacific', order_by = 'transaction_date_pacific', max_records = 1) %}
 
 {% set min_week = min_week_list[0] %}
 
-{% set max_week_list = dbt_utils.get_column_values(table=ref('payments_rides'), column='transaction_date_pacific', order_by = 'transaction_date_pacific DESC', max_records = 1) %}
+{% set max_week_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_v2'), column='transaction_date_pacific', order_by = 'transaction_date_pacific DESC', max_records = 1) %}
 
 {% set max_week = max_week_list[0] %}
 
 WITH payments_rides AS (
-    SELECT * FROM {{ ref('payments_rides') }}
+    SELECT * FROM {{ ref('fct_payments_rides_v2') }}
 ),
 
 distinct_providers AS (
