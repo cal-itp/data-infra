@@ -51,3 +51,34 @@ models:
           - relationships:
               to: ref('dim_gtfs_datasets')
               field: key
+  - name: int_transit_database__transit_data_quality_issues
+    description: TODO
+    columns:
+      - name: key
+      - name: source_record_id
+      - name: description
+      - name: issue_type_key
+      - name: gtfs_dataset_key_at_creation
+      - name: gtfs_dataset_key_at_resolution
+      - name: status
+      - name: issue__
+      - name: service_key_at_creation
+      - name: service_key_at_resolution
+      - name: resolution_date
+      - name: assignee
+      - name: issue_creation_time
+      - name: waiting_over_a_week_
+      - name: created_by
+      - name: qc__num_services
+      - name: qc__num_issue_types
+      - name: qc_checks
+      - name: waiting_on_someone_other_than_transit_data_quality_
+      - name: caltrans_district__from_operating_county_geographies___from_services_
+      - name: is_open
+      - name: last_update
+      - name: last_update_month
+      - name: last_update_year
+      - name: status_notes
+      - name: waiting_since
+      - name: outreach_status
+      - name: should_wait_until

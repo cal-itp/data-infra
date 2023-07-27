@@ -19,6 +19,10 @@ sources:
       - name: california_transit__place_geography
       - name: california_transit__rider_requirements
       - name: california_transit__services
+      - name: transit_data_quality_issues__gtfs_datasets
+      - name: transit_data_quality_issues__issue_types
+      - name: transit_data_quality_issues__services
+      - name: transit_data_quality_issues__transit_data_quality_issues
       - name: transit_technology_stacks__components
       - name: transit_technology_stacks__contracts
       - name: transit_technology_stacks__products
