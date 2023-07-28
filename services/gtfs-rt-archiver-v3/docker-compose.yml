@@ -20,6 +20,9 @@ x-gtfs-rt-archiver-v3-common:
       source: $CALITP_ARCHIVER_V3_SERVICE_ACCOUNT
       target: /tmp/secret.json
       read_only: true
+  depends_on:
+    redis:
+      condition: service_healthy
 
 services:
   redis:
