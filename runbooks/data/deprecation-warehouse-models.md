@@ -3,7 +3,8 @@
 When a warehouse table becomes obsolete, we want to intentionally deprecate and delete it to avoid the risk that someone continues using outdated or incorrect data. Please follow the steps outlined here when performing a deletion or deprecation.
 
 1. Check whether the model(s) you are deprecating has been accessed within the last two weeks:
-```
+
+```sql
 SELECT date, timestamp, principal_email, job_type, query, referenced_table, destination_table,
 FROM `cal-itp-data-infra.mart_audit.fct_bigquery_data_access_referenced_tables`
 WHERE
