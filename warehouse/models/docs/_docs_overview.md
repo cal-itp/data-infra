@@ -9,7 +9,7 @@ The Cal-ITP Data Warehouse contains four core types of data (a few other data so
 
 * **Transit Database data, generally in `mart_transit_database`**: This is data hand-collected by Cal-ITP about transit in California, including things like organizations (whether they are transit providers, vendors, or other participants in the transit ecosystem); transit services; GTFS datasets; contracts; components of a transit technology stack; etc. For additional documentation of the Transit Database data model, see the [Airtable Data Documentation](https://docs.google.com/document/d/1KvlYRYB8cnyTOkT1Q0BbBmdQNguK_AMzhSV5ELXiZR4/edit#heading=h.u7y2eosf0i1d) or the older [Transit Database docs](https://docs.calitp.org/data-infra/datasets_and_tables/transitdatabase.html).
 
-* **Payments data, further docs to come after v2 migration**
+* **Payments data, generally in `mart_payments`**: Data provided by fare processors (such as Littlepay) that includes device transactions, payments, funding sources, etc. Currently this data is sourced from vendor-provided published artifacts (such as S3 files) and used to power agency-facing dashboards showing usage of contactless payments. Mart models for this data must have row-level access controls to ensure agencies only see their data.
 
 ## Naming and types of models
 
