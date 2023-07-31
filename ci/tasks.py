@@ -193,13 +193,14 @@ def diff(
                         values_str,
                         "-C 5",  # only include 5 lines of context
                     ]
-                )
+                ),
+                warn=True,
             )
         else:
             print(f"Encountered unknown driver: {release.driver}", flush=True)
             raise RuntimeError
 
-        if result.exited != 0:
+        if result.stdout:
             full_diff += result.stdout
 
     msg = (
