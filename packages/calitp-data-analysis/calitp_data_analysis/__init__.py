@@ -1,6 +1,6 @@
 import os
 
-import gcsfs
+import gcsfs  # type: ignore[import]
 
 
 def get_fs(gcs_project="", **kwargs):
