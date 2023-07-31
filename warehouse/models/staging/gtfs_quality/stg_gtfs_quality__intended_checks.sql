@@ -22,19 +22,19 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ no_expired_services() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}, false, null
     UNION ALL
-    SELECT {{ no_rt_validation_errors_vp() }}, {{ compliance_rt() }}, {{ rt_feed_vp() }}, false, null
+    SELECT {{ no_rt_validation_errors_vp() }}, {{ compliance_rt() }}, {{ rt_feed_vp() }}, false, 6
     UNION ALL
-    SELECT {{ no_rt_validation_errors_tu() }}, {{ compliance_rt() }}, {{ rt_feed_tu() }}, false, null
+    SELECT {{ no_rt_validation_errors_tu() }}, {{ compliance_rt() }}, {{ rt_feed_tu() }}, false, 7
     UNION ALL
-    SELECT {{ no_rt_validation_errors_sa() }}, {{ compliance_rt() }}, {{ rt_feed_sa() }}, false, null
+    SELECT {{ no_rt_validation_errors_sa() }}, {{ compliance_rt() }}, {{ rt_feed_sa() }}, false, 8
     UNION ALL
     SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}, {{ rt_feed() }}, false, null
     UNION ALL
-    SELECT {{ feed_present_vehicle_positions() }}, {{ compliance_rt() }}, {{ rt_url_vp() }}, false, null
+    SELECT {{ feed_present_vehicle_positions() }}, {{ compliance_rt() }}, {{ rt_url_vp() }}, false, 3
     UNION ALL
-    SELECT {{ feed_present_trip_updates() }}, {{ compliance_rt() }}, {{ rt_url_tu() }}, false, null
+    SELECT {{ feed_present_trip_updates() }}, {{ compliance_rt() }}, {{ rt_url_tu() }}, false, 4
     UNION ALL
-    SELECT {{ feed_present_service_alerts() }}, {{ compliance_rt() }}, {{ rt_url_sa() }}, false, null
+    SELECT {{ feed_present_service_alerts() }}, {{ compliance_rt() }}, {{ rt_url_sa() }}, false, 5
     UNION ALL
     SELECT {{ rt_https_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_tu() }}, false, null
     UNION ALL
@@ -98,12 +98,12 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ feed_listed_schedule() }}, {{ compliance_schedule() }}, {{ service() }}, false, 0
     UNION ALL
-    SELECT {{ feed_listed_vp() }}, {{ compliance_rt() }}, {{ service() }}, false, null
+    SELECT {{ feed_listed_vp() }}, {{ compliance_rt() }}, {{ service() }}, false, 0
     UNION ALL
-    SELECT {{ feed_listed_tu() }}, {{ compliance_rt() }}, {{ service() }}, false, null
+    SELECT {{ feed_listed_tu() }}, {{ compliance_rt() }}, {{ service() }}, false, 1
     UNION ALL
-    SELECT {{ feed_listed_sa() }}, {{ compliance_rt() }}, {{ service() }}, false, null
-    -- MANUAL CHECKS, null
+    SELECT {{ feed_listed_sa() }}, {{ compliance_rt() }}, {{ service() }}, false, 2
+    -- MANUAL CHECKS
     UNION ALL
     SELECT {{ organization_has_contact_info() }}, {{ technical_contact_availability() }}, {{ organization() }}, true, null
     UNION ALL
@@ -111,11 +111,11 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ data_license_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset_schedule() }}, true, 4
     UNION ALL
-    SELECT {{ data_license_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset_vp() }}, true, null
+    SELECT {{ data_license_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset_vp() }}, true, 12
     UNION ALL
-    SELECT {{ data_license_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset_tu() }}, true, null
+    SELECT {{ data_license_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset_tu() }}, true, 13
     UNION ALL
-    SELECT {{ data_license_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset_sa() }}, true, null
+    SELECT {{ data_license_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset_sa() }}, true, 14
     UNION ALL
     SELECT {{ authentication_acceptable_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset_schedule() }}, true, null
     UNION ALL
@@ -127,11 +127,11 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ stable_url_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset_schedule() }}, true, 3
     UNION ALL
-    SELECT {{ stable_url_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset_vp() }}, true, null
+    SELECT {{ stable_url_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset_vp() }}, true, 9
     UNION ALL
-    SELECT {{ stable_url_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset_tu() }}, true, null
+    SELECT {{ stable_url_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset_tu() }}, true, 10
     UNION ALL
-    SELECT {{ stable_url_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset_sa() }}, true, null
+    SELECT {{ stable_url_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset_sa() }}, true, 11
     UNION ALL
     SELECT {{ grading_scheme_v1() }}, {{ accurate_service_data() }}, {{ gtfs_dataset_schedule() }}, true, null
     UNION ALL
@@ -145,7 +145,7 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ trip_planner_schedule() }}, {{ compliance_schedule() }}, {{ service() }}, true, 5
     UNION ALL
-    SELECT {{ trip_planner_rt() }}, {{ compliance_rt() }}, {{ service() }}, true, null
+    SELECT {{ trip_planner_rt() }}, {{ compliance_rt() }}, {{ service() }}, true, 15
     UNION ALL
     SELECT {{ fixed_routes_match() }}, {{ fixed_route_completeness() }}, {{ gtfs_service_data_schedule() }}, true, null
     UNION ALL
