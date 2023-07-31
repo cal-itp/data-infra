@@ -8,7 +8,7 @@ arguments:
   - '/app/scripts/publish.py'
   - 'publish-exposure'
   - 'california_open_data'
-  - '{% if is_development() %}--no-publish{% else %}--publish{% endif %}'
+  - '{% if env_var("AIRFLOW_ENV") == "development" %}--no-publish{% else %}--publish{% endif %}'
 
 is_delete_operator_pod: true
 get_logs: true
