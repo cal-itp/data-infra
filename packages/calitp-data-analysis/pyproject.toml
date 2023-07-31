@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "calitp-data-analysis"
+version = "2023.7.25"
+description = "Shared code for querying Cal-ITP data in notebooks, primarily."
+authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
+
+[tool.poetry.dependencies]
+python = "~3.9"
+ipython = "^8.9.0"
+siuba = "^0.4.2"
+jinja2 = "<3.1.0"
+sqlalchemy-bigquery = "^1.6.1"
+pandas-gbq = "^0.19.1"
+pandas = "<2" # keep us below pandas 2.0 since pandas-gbq does not specify, and siuba errors currently
+gcsfs = "!=2022.7.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.1"
+mypy = "^1.0.0"
+hypothesis = "^6.68.0"
+types-pyyaml = "^6.0.12.11"
+# note: this is deprecated in sqlalchemy 2.0
+sqlalchemy-stubs = "^0.4"
+pandas-stubs = "^2.0.2.230605"
+pytest-spec = "^3.2.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+plugins = "sqlmypy"
+exclude = [
+    "dist/",
+]

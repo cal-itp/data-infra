@@ -6,8 +6,8 @@ import os
 
 import paramiko
 import pendulum
-from calitp_data.storage import get_fs
 from calitp_data_infra.auth import get_secret_by_name
+from calitp_data_infra.storage import get_fs
 
 CALITP__ELAVON_SFTP_HOSTNAME = os.environ["CALITP__ELAVON_SFTP_HOSTNAME"]
 CALITP__ELAVON_SFTP_PORT = os.environ["CALITP__ELAVON_SFTP_PORT"]

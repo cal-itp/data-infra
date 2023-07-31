@@ -2,8 +2,6 @@ import inspect
 import os
 from functools import wraps
 
-from calitp_data.config import is_development
-
 # FYI, one day we may need to add apache-airflow-providers-cncf-kubernetes==3.0.0 to requirements.txt if we self-host
 # But it's already installed in the Composer environment
 from airflow.contrib.operators.gcp_container_operator import GKEPodOperator
@@ -24,7 +22,8 @@ def PodOperator(*args, **kwargs):
     if "secrets" in kwargs:
         kwargs["secrets"] = map(lambda d: Secret(**d), kwargs["secrets"])
 
-    if is_development() or is_gke:
+    # do we ever have non-GKE pods?
+    if os.environ["AIRFLOW_ENV"] == "development" or is_gke:
         return GKEPodOperator(
             *args,
             in_cluster=False,

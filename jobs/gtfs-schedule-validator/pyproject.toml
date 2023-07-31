@@ -15,8 +15,8 @@ pendulum = "^2.1.2"
 tqdm = "^4.64.0"
 backoff = "^2.2.1"
 python-slugify = "^7.0.0"
-calitp-data-infra = "2023.5.30"
 sentry-sdk = "^1.12.1"
+calitp-data-infra = "2023.7.25"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

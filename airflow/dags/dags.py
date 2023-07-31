@@ -3,7 +3,6 @@ from pathlib import Path
 
 import macros
 import requests
-from calitp_data.templates import user_defined_filters, user_defined_macros
 from gusty import create_dag
 
 import airflow  # noqa
@@ -56,8 +55,7 @@ for dag_directory in dag_directories:
         task_group_defaults={"tooltip": "this is a default tooltip"},
         wait_for_defaults={"retries": 24, "check_existence": True, "timeout": 10 * 60},
         latest_only=False,
-        user_defined_macros={**user_defined_macros, **macros.data_infra_macros},
-        user_defined_filters=user_defined_filters,
+        user_defined_macros=macros.data_infra_macros,
         default_args={
             "on_failure_callback": log_failure_to_slack,
             # "on_retry_callback": log_failure_to_slack,

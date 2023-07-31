@@ -7,19 +7,35 @@ Now, the pipeline aims to use bigquery's sqlalchemy client where possible.
 However, it's cumbersome to convert the http api style schema fields to SQL, so
 we provide a fallback for these old-style tasks.
 """
+import os
 import re
 
-from calitp_data.config import (
-    format_table_name,
-    get_bucket,
-    get_project_id,
-    is_development,
-)
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
 from utils import CALITP_BQ_LOCATION
 
 from airflow.models import BaseOperator
+
+
+# TODO: this should probably be an env var
+def get_project_id():
+    return (
+        "cal-itp-data-infra-staging"
+        if os.environ["AIRFLOW_ENV"] == "development"
+        else "cal-itp-data-infra"
+    )
+
+
+def format_table_name(name, is_staging=False, full_name=False):
+    dataset, table_name = name.split(".")
+    staging = "__staging" if is_staging else ""
+    # test_prefix = "zzz_test_" if is_development() else ""
+    test_prefix = ""
+
+    project_id = "cal-itp-data-infra" + "." if full_name else ""
+    # e.g. test_gtfs_schedule__staging.agency
+
+    return f"{project_id}{test_prefix}{dataset}.{table_name}{staging}"
 
 
 def _bq_client_create_external_table(
@@ -123,9 +139,10 @@ class ExternalTable(BaseOperator):
         post_hook=None,
         **kwargs,
     ):
+        assert bucket is not None
         self.bucket = bucket
         # This only exists because the prefix_bucket() template isn't working in the yml file for some reason
-        if self.bucket and prefix_bucket and is_development():
+        if self.bucket and prefix_bucket and os.environ["AIRFLOW_ENV"] == "development":
             self.bucket = re.sub(r"gs://([\w-]+)", r"gs://test-\1", self.bucket)
 
         self.destination_project_dataset_table = format_table_name(
@@ -203,7 +220,5 @@ OPTIONS ({options_str})
         return self.schema_fields
 
     def fix_prefix(self, entry):
-        bucket = get_bucket() if not self.bucket else self.bucket
         entry = entry.replace("gs://", "") if entry.startswith("gs://") else entry
-
-        return f"{bucket}/{entry}"
+        return f"{self.bucket}/{entry}"
