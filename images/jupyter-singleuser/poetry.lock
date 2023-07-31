@@ -672,13 +672,13 @@ gcsfs = "2022.5.0"
 
 [[package]]
 name = "calitp-data-analysis"
-version = "2023.7.25"
+version = "2023.7.31"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
 optional = false
 python-versions = ">=3.9,<3.10"
 files = [
-    {file = "calitp_data_analysis-2023.7.25-py3-none-any.whl", hash = "sha256:7496b7169be2ede7fedce94f52527729b3e44c2a352cbf48e4417a97632de70f"},
-    {file = "calitp_data_analysis-2023.7.25.tar.gz", hash = "sha256:89f663c5e75145f4f663fbba0bacb5ef1b54b8b5cece21820e21de56bee997d0"},
+    {file = "calitp_data_analysis-2023.7.31-py3-none-any.whl", hash = "sha256:0624876b54a75eb7155db0692a6b0b0de15c103b07776be0df8a26d4d3c688a7"},
+    {file = "calitp_data_analysis-2023.7.31.tar.gz", hash = "sha256:cba924e1a41f59fca382c83fdc4c88d7a1f91ee53bffd172e87965f9859a5b78"},
 ]
 
 [package.dependencies]
@@ -7453,4 +7453,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "6474bd166d4fac69f007551044c91697f39c90578af4e5e35eefa7619e482474"
+content-hash = "f4a13a42561e1cb4f7fd35a45896cee2450cb5dac294224afffc0681a82e8831"
