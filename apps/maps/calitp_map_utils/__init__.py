@@ -5,9 +5,9 @@ import os
 from enum import Enum
 from typing import Any, Dict, Optional, Tuple, Union
 
+import gcsfs
 import requests
 import typer
-from calitp_data.storage import get_fs  # type: ignore
 from furl import furl
 from geojson_pydantic import Feature, FeatureCollection, MultiPolygon, Point, Polygon
 from geojson_pydantic.geometries import Geometry
@@ -80,7 +80,7 @@ def validate_geojson(
             gzip.decompress(resp.content).decode() if is_compressed else resp.text
         )
     else:
-        openf = get_fs().open if path.startswith("gs://") else open
+        openf = gcsfs.GCSFileSystem().open if path.startswith("gs://") else open
 
         with openf(path, "rb" if is_compressed else "r") as f:
             if is_compressed:
