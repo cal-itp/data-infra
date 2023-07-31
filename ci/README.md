@@ -5,7 +5,7 @@ a deployment named `archiver` is configured in [the prod channel](./channels/pro
 by `invoke` (see below) calling `kubectl` commands.
 
 ## invoke (aka pyinvoke)
-[invoke](https://docs.pyinvoke.org/en/stable/) is a Python framework for executing subprocess and building a CLI application.
+[invoke](https://docs.pyinvoke.org/en/stable/) is a Python framework for executing subprocesses and building a CLI application.
 The tasks are defined in `tasks.py` and configuration in `invoke.yaml`; config values under the top-level `calitp`
 are specific to our defined tasks.
 
