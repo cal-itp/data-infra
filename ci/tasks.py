@@ -1,7 +1,7 @@
 import tempfile
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional
+from typing import List, NoReturn, Optional
 
 import git
 import yaml
@@ -13,6 +13,10 @@ GENERIC_HELP = {
     "driver": "The k8s driver (kustomize or helm)",
     "app": "The specific app/release (e.g. metabase or archiver)",
 }
+
+
+def _assert_never(x: NoReturn) -> NoReturn:
+    assert False, "Unhandled type: {}".format(type(x).__name__)
 
 
 class ReleaseDriver(str, Enum):
@@ -182,6 +186,7 @@ def diff(
                     for values_file in release.helm_values
                 ]
             )
+            assert release.helm_name is not None
             result = c.run(
                 " ".join(
                     [
@@ -252,6 +257,7 @@ def release(
                 c.run(f"kubectl create ns {release.namespace}")
                 verb = "install"
 
+            assert release.helm_name is not None
             c.run(
                 " ".join(
                     [
@@ -266,5 +272,4 @@ def release(
                 )
             )
         else:
-            print(f"Encountered unknown driver: {release.driver}", flush=True)
-            raise RuntimeError
+            _assert_never(release.driver)
