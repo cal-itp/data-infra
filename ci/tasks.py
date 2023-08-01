@@ -33,6 +33,7 @@ class Release(BaseModel):
     helm_name: Optional[str]
     helm_chart: Optional[Path]
     helm_values: List[Path] = []
+    timeout: Optional[str]
 
     # for kustomize
     kustomize_dir: Optional[Path]
@@ -252,7 +253,17 @@ def release(
                 verb = "install"
 
             c.run(
-                f"helm {verb} {release.helm_name} {chart_path} --namespace {release.namespace} {values_str}"
+                " ".join(
+                    [
+                        "helm",
+                        verb,
+                        release.helm_name,
+                        str(chart_path),
+                        f"--namespace {release.namespace}",
+                        values_str,
+                        f"--timeout {release.timeout}" if release.timeout else "",
+                    ]
+                )
             )
         else:
             print(f"Encountered unknown driver: {release.driver}", flush=True)
