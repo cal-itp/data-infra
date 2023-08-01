@@ -36,6 +36,9 @@ sentry:
         hosts:
           - sentry.calitp.org
           - sentry.k8s.calitp.jarv.us
+
+  # mail and slack use the same existingSecret as github but we use the default/only keys
+
   mail:
     backend: smtp
     useTls: true
@@ -49,10 +52,15 @@ sentry:
     existingSecret: sentry-secret
 
   # https://develop.sentry.dev/self-hosted/sso/#update-your-configuration-with-your-github-app-information
+  # namespace these keys since the defaults overlap with slack
   github:
     appId: 288470
     appName: 'cal-itp-sentry'
     existingSecret: sentry-secret
+    existingSecretPrivateKeyKey: "github-private-key"
+    existingSecretWebhookSecretKey: "github-webhook-secret"
+    existingSecretClientIdKey: "github-client-id"
+    existingSecretClientSecretKey: "github-client-secret"
 
   sentry:
     web:

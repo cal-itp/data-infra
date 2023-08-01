@@ -9,15 +9,6 @@ from google.cloud import secretmanager
 from invoke import Exit, Result, task
 from pydantic import BaseModel, validator
 
-KUSTOMIZE_HELM_TEMPLATE = """
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: {namespace}
-resources:
-- manifest.yaml
-"""
-
-
 GENERIC_HELP = {
     "driver": "The k8s driver (kustomize or helm)",
     "app": "The specific app/release (e.g. metabase or archiver)",
@@ -64,6 +55,11 @@ class CalitpConfig(BaseModel):
         if not self.git_repo.working_tree_dir:
             return None
         return Path(self.git_repo.working_tree_dir)
+
+
+@task
+def install_helm_plugins(c):
+    c.run("helm plugin install https://github.com/databus23/helm-diff", warn=True)
 
 
 @task
@@ -149,6 +145,7 @@ def secrets(
 
 @task(
     parse_calitp_config,
+    install_helm_plugins,
     help={
         **GENERIC_HELP,
         "outfile": "File in which to save the combined kubectl diff output",
@@ -178,27 +175,32 @@ def diff(
             chart_path = c.calitp_config.git_root / Path(release.helm_chart)
             c.run(f"helm dependency update {chart_path}")
 
-            with tempfile.TemporaryDirectory() as tmpdir:
-                manifest_path = Path(tmpdir) / Path("manifest.yaml")
-                kustomization_path = Path(tmpdir) / Path("kustomization.yaml")
-                values_str = " ".join(
+            values_str = " ".join(
+                [
+                    f"--values {c.calitp_config.git_root / Path(values_file)}"
+                    for values_file in release.helm_values
+                ]
+            )
+            result = c.run(
+                " ".join(
                     [
-                        f"--values {c.calitp_config.git_root / Path(values_file)}"
-                        for values_file in release.helm_values
+                        "helm",
+                        "diff",
+                        "upgrade",
+                        release.helm_name,
+                        str(chart_path),
+                        f"--namespace={release.namespace}",
+                        values_str,
+                        "-C 5",  # only include 5 lines of context
                     ]
-                )
-                # TODO: consider looking into https://github.com/databus23/helm-diff
-                c.run(
-                    f"helm template {release.helm_name} {chart_path} --namespace {release.namespace} {values_str} > {manifest_path}"
-                )
-                with open(kustomization_path, "w") as f:
-                    f.write(KUSTOMIZE_HELM_TEMPLATE.format(namespace=release.namespace))
-                result = c.run(f"kubectl diff -k {tmpdir}", warn=True)
+                ),
+                warn=True,
+            )
         else:
             print(f"Encountered unknown driver: {release.driver}", flush=True)
             raise RuntimeError
 
-        if result.exited != 0:
+        if result.stdout:
             full_diff += result.stdout
 
     msg = (
