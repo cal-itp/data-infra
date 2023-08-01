@@ -133,14 +133,12 @@ def secrets(
                         f.write(secret_contents)
                     print(f"Applying {release_secret}...", flush=True)
                     result = c.run(
-                        f"kubectl apply {ns_str} -f {secret_path}", hide=hide, warn=True
+                        f"kubectl apply {ns_str} -f {secret_path}",
+                        hide=hide,
+                        warn=True,
                     )
                     if result.exited:
-                        print(
-                            f"FAILURE: Failed to apply secret {release_secret}.",
-                            flush=True,
-                        )
-                        raise Exit
+                        raise Exit(f"FAILURE: Failed to apply secret {release_secret}.")
                     print(f"Successfully applied {release_secret}.", flush=True)
                 found_secret = True
 
