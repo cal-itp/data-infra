@@ -98,3 +98,8 @@ calitp:
       secrets:
         - sentry_sentry-secret
         - sentry_sentry-sentry-postgresql
+    - name: dask
+      driver: helm
+      namespace: dask
+      helm_name: dask
+      helm_chart: kubernetes/apps/charts/dask
