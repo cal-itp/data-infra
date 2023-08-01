@@ -13,26 +13,32 @@ kernelspec:
   name: python3
 ---
 (python-libraries)=
+
 # Useful Python Libraries
-The following libraries are available and recommended for use by Cal-ITP data analysts. Our JupyterHub environment comes with all of these installed already!
+
+The following libraries are available and recommended for use by Cal-ITP data analysts. Our JupyterHub environment comes with all of these installed already, except for `calitp-data-infra`.
 
 ## Table of Contents
+
 1. [shared utils](#shared-utils)
-1. [calitp-data-analysis](#calitp-data-analysis)
-1. [siuba](#siuba)
+2. [calitp-data-analysis](#calitp-data-analysis)
+3. [siuba](#siuba)
 <br> - [Basic Query](#basic-query)
 <br> - [Collect Query Results](#collect-query-results)
 <br> - [Show Query SQL](#show-query-sql)
 <br> - [More siuba Resources](more-siuba-resources)
-1. [pandas](pandas-resources)
-1. [Add New Packages](#add-new-packages)
+4. [pandas](pandas-resources)
+5. [Add New Packages](#add-new-packages)
+<br> - [calitp-data-infra](#calitp-data-infra)
 
 (shared-utils)=
+
 ## shared utils
+
 A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
 
+### In terminal
 
-### In terminal:
 * Navigate to the package folder: `cd data-analyses/_shared_utils`
 * Use the make command to run through conda install and pip install: `make setup_env`
     * Note: you may need to select Kernel -> Restart Kernel from the top menu after make setup_env in order to successfully import shared_utils
@@ -43,8 +49,8 @@ A set of shared utility functions can also be installed, similarly to any Python
     * Exit with Ctrl+X, hit yes, then hit enter at the filename prompt
     * Restart your server; you can check your changes with `cat .bash_profile`
 
+### In notebook
 
-### In notebook:
 ```python
 import shared_utils
 
@@ -55,7 +61,9 @@ shared_utils.geography_utils.WGS84
 See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples on how to use `shared_utils` for general functions, charts, and maps.
 
 (calitp-data-analysis)=
+
 ## calitp-data-analysis
+
 `calitp-data-analysis` is an internal library of utility functions used to access our warehouse data for analysis purposes.
 
 ### import tbls
@@ -67,6 +75,7 @@ from calitp_data_analysis.tables import tbls
 ```
 
 Example:
+
 ```{code-cell}
 from calitp_data_analysis.tables import tbls
 
@@ -78,6 +87,7 @@ tbls.mart_gtfs.dim_agency()
 `query_sql` is another useful function to use inside of JupyterHub notebooks to turn a SQL query into a pandas DataFrame.
 
 As an example, in a notebook:
+
 ```{code-cell}
 from calitp_data_analysis.sql import query_sql
 ```
@@ -93,8 +103,11 @@ LIMIT 10""", as_df=True)
 ```{code-cell}
 df_dim_agency.head()
 ```
+
 (siuba)=
+
 ## siuba
+
 `siuba` is a tool that allows the same analysis code to run on a pandas DataFrame,
 as well as generate SQL for different databases.
 It supports most [pandas Series methods](https://pandas.pydata.org/pandas-docs/stable/reference/series.html) analysts use. See the [siuba docs](https://siuba.readthedocs.io) for more information.
@@ -103,6 +116,7 @@ The examples below go through the basics of using siuba, collecting a database q
 and showing SQL test queries that siuba code generates.
 
 ### Basic query
+
 ```{code-cell}
 from calitp_data_analysis.tables import tbls
 from siuba import _, filter, count, collect, show_query
@@ -115,9 +129,8 @@ from siuba import _, filter, count, collect, show_query
 )
 ```
 
-
-
 ### Collect query results
+
 Note that siuba by default prints out a preview of the SQL query results.
 In order to fetch the results of the query as a pandas DataFrame, run `collect()`.
 
@@ -128,8 +141,6 @@ tbl_agency_names = tbls.mart_gtfs.dim_agency() >> collect()
 tbl_agency_names.head()
 
 ```
-
-
 
 ### Show query SQL
 
@@ -142,16 +153,20 @@ While `collect()` fetches query results, `show_query()` prints out the SQL code 
 )
 
 ```
+
 Note that here the pandas Series method `str.contains` corresponds to `regexp_contains` in Google BigQuery.
 
 (more-siuba-resources)=
-### More siuba Resources:
+
+### More siuba Resources
+
 * [siuba docs](https://siuba.readthedocs.io)
 * ['Tidy Tuesday' live analyses with siuba](https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf)
 
-
 (pandas-resources)=
+
 ## pandas
+
 The library pandas is very commonly used in data analysis, and the external resources below provide a brief overview of it's use.
 
 * [Cheat Sheet - pandas](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
@@ -163,3 +178,9 @@ While most Python packages an analyst uses come in JupyterHub, there may be addi
 * Install [shared utility functions](#shared-utils)
 * Change directory into the project task's subfolder and add `requirements.txt` and/or `conda-requirements.txt`
 * Run `pip install -r requirements.txt` and/or `conda install --yes -c conda-forge --file conda-requirements.txt`
+
+### calitp-data-infra
+
+The calitp-data-infra package, used primarily by warehouse mainainers and data pipeline developers, includes utilities that analysts may not often need to interact with, but should be aware of. For instance, the `get_secret_by_name()` and `get_secrets_by_label()` functions in [the package's `auth` module](https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-infra/calitp_data_infra/auth.py) are used to interact with Google's [Secret Manager](https://console.cloud.google.com/security/secret-manager), the service that securely stores API keys and other sensitive information that underpins many of our data syncs.
+
+You can read more about the `calitp-data-infra` Python package [here](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-infra#readme).
