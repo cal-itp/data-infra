@@ -34,7 +34,11 @@ jobs:
           poetry run build
         working-directory: apps/maps
       # TODO: only run on main/version changes
-      - run: poetry publish
+      - if: ${{ github.ref != 'refs/heads/main' }}
+        run: |
+          poetry config repositories.test-pypi https://test.pypi.org/legacy/
+          poetry config pypi-token.test-pypi $POETRY_TEST_PYPI_TOKEN_PYPI
+          poetry publish -r test-pypi
         working-directory: apps/maps
         env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_CALITP_MAP_UTILS_TOKEN }}
+          POETRY_TEST_PYPI_TOKEN_PYPI: ${{ secrets.TEST_PYPI_CALITP_MAP_UTILS_TOKEN }}
