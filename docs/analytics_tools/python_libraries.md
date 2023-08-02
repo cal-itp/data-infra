@@ -16,7 +16,7 @@ kernelspec:
 
 # Useful Python Libraries
 
-The following libraries are available and recommended for use by Cal-ITP data analysts. Our JupyterHub environment comes with all of these installed already, except for `calitp-data-infra`.
+The following libraries are available and recommended for use by Cal-ITP data analysts. Our JupyterHub environment comes with all of these installed already, except for `calitp-data-infra`. A full list of the packages included in the system image that underpins our JupyterHub environment can be found (and updated when needed) [here](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml).
 
 ## Table of Contents
 
