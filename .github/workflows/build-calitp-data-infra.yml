@@ -38,4 +38,11 @@ jobs:
           CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: gs://this-does-not-exist
           CALITP_BUCKET__GTFS_SCHEDULE_RAW: gs://this-does-not-exist
           CALITP_BUCKET__GTFS_RT_RAW: gs://this-does-not-exist
-# TODO: add publishing
+      # TODO: only run on main/version changes
+      - run: |
+          echo $PYPI_TOKEN > token
+          poetry config pypi-token.pypi token
+          poetry run publish
+        working-directory: packages/calitp-data-infra
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_CALITP_DATA_INFRA_TOKEN }}
