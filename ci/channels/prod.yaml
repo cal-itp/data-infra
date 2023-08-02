@@ -29,6 +29,7 @@ calitp:
       secrets:
         - jupyterhub_jupyterhub-gcloud-service-key
         - jupyterhub_jupyterhub-github-config
+      timeout: 10m0s
     - name: loki
       driver: helm
       namespace: monitoring-loki
@@ -41,8 +42,6 @@ calitp:
       helm_chart: kubernetes/apps/charts/metabase
       helm_values:
         - kubernetes/apps/values/metabase.yaml
-      secrets:
-        - metabase_service_account_key
     - name: postgresql-backup-grafana
       driver: helm
       namespace: monitoring-grafana
@@ -99,3 +98,8 @@ calitp:
       secrets:
         - sentry_sentry-secret
         - sentry_sentry-sentry-postgresql
+    - name: dask
+      driver: helm
+      namespace: dask
+      helm_name: dask
+      helm_chart: kubernetes/apps/charts/dask

@@ -1,7 +1,7 @@
 import tempfile
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional
+from typing import List, NoReturn, Optional
 
 import git
 import yaml
@@ -13,6 +13,10 @@ GENERIC_HELP = {
     "driver": "The k8s driver (kustomize or helm)",
     "app": "The specific app/release (e.g. metabase or archiver)",
 }
+
+
+def _assert_never(x: NoReturn) -> NoReturn:
+    assert False, "Unhandled type: {}".format(type(x).__name__)
 
 
 class ReleaseDriver(str, Enum):
@@ -33,6 +37,7 @@ class Release(BaseModel):
     helm_name: Optional[str]
     helm_chart: Optional[Path]
     helm_values: List[Path] = []
+    timeout: Optional[str]
 
     # for kustomize
     kustomize_dir: Optional[Path]
@@ -128,14 +133,12 @@ def secrets(
                         f.write(secret_contents)
                     print(f"Applying {release_secret}...", flush=True)
                     result = c.run(
-                        f"kubectl apply {ns_str} -f {secret_path}", hide=hide, warn=True
+                        f"kubectl apply {ns_str} -f {secret_path}",
+                        hide=hide,
+                        warn=True,
                     )
                     if result.exited:
-                        print(
-                            f"FAILURE: Failed to apply secret {release_secret}.",
-                            flush=True,
-                        )
-                        raise Exit
+                        raise Exit(f"FAILURE: Failed to apply secret {release_secret}.")
                     print(f"Successfully applied {release_secret}.", flush=True)
                 found_secret = True
 
@@ -181,6 +184,7 @@ def diff(
                     for values_file in release.helm_values
                 ]
             )
+            assert release.helm_name is not None
             result = c.run(
                 " ".join(
                     [
@@ -251,9 +255,19 @@ def release(
                 c.run(f"kubectl create ns {release.namespace}")
                 verb = "install"
 
+            assert release.helm_name is not None
             c.run(
-                f"helm {verb} {release.helm_name} {chart_path} --namespace {release.namespace} {values_str}"
+                " ".join(
+                    [
+                        "helm",
+                        verb,
+                        release.helm_name,
+                        str(chart_path),
+                        f"--namespace {release.namespace}",
+                        values_str,
+                        f"--timeout {release.timeout}" if release.timeout else "",
+                    ]
+                )
             )
         else:
-            print(f"Encountered unknown driver: {release.driver}", flush=True)
-            raise RuntimeError
+            _assert_never(release.driver)

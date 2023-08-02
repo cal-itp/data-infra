@@ -16,3 +16,9 @@ jobs:
       - uses: crate-ci/typos@master
         with:
           files: ./docs/**
+      - uses: snok/install-poetry@v1
+      - name: mypy ci
+        working-directory: ci
+        run: |
+          poetry install
+          poetry run mypy tasks.py --check-untyped-def
