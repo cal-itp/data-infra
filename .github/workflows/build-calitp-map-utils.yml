@@ -27,9 +27,16 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - run: curl -sSL https://install.python-poetry.org | python -
-      - run: poetry install
-      - run: poetry run mypy calitp_map_utils
-      - run: poetry run pytest --spec
-      - run: poetry run build
-      # TODO: should we actually publish to pypi?
+      - run: |
+          curl -sSL https://install.python-poetry.org | python -
+          poetry install
+          poetry run mypy calitp_map_utils
+          poetry run pytest --spec
+          poetry run build
+      # TODO: only run on main/version changes
+      - run: |
+          echo $PYPI_TOKEN > token
+          poetry config pypi-token.pypi token
+          poetry run publish
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_CALITP_MAP_UTILS_TOKEN }}
