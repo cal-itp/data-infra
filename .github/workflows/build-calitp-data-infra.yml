@@ -28,7 +28,6 @@ jobs:
         with:
           python-version: '3.9'
       - name: Run checks
-        working-directory: packages/calitp-data-infra
         run: |
           curl -sSL https://install.python-poetry.org | python -
           poetry install
