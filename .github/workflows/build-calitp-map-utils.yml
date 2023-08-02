@@ -20,7 +20,6 @@ jobs:
   check_and_build:
     name: check python
     runs-on: ubuntu-latest
-    working-directory: apps/maps
     steps:
       - run: sudo apt-get install -y libgraphviz-dev graphviz-dev
       - uses: actions/checkout@v3
@@ -33,10 +32,12 @@ jobs:
           poetry run mypy calitp_map_utils
           poetry run pytest --spec
           poetry run build
+        working-directory: apps/maps
       # TODO: only run on main/version changes
       - run: |
           echo $PYPI_TOKEN > token
           poetry config pypi-token.pypi token
           poetry run publish
+        working-directory: apps/maps
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_CALITP_MAP_UTILS_TOKEN }}
