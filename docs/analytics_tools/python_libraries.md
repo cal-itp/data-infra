@@ -29,7 +29,7 @@ The following libraries are available and recommended for use by Cal-ITP data an
 <br> - [More siuba Resources](more-siuba-resources)
 4. [pandas](pandas-resources)
 5. [Add New Packages](#add-new-packages)
-<br> - [calitp-data-infra](#calitp-data-infra)
+6. [Appendix: calitp-data-infra](appendix)
 
 (shared-utils)=
 
@@ -179,8 +179,10 @@ While most Python packages an analyst uses come in JupyterHub, there may be addi
 * Change directory into the project task's subfolder and add `requirements.txt` and/or `conda-requirements.txt`
 * Run `pip install -r requirements.txt` and/or `conda install --yes -c conda-forge --file conda-requirements.txt`
 
-### calitp-data-infra
+(appendix)=
 
-The calitp-data-infra package, used primarily by warehouse mainainers and data pipeline developers, includes utilities that analysts may not often need to interact with, but should be aware of. For instance, the `get_secret_by_name()` and `get_secrets_by_label()` functions in [the package's `auth` module](https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-infra/calitp_data_infra/auth.py) are used to interact with Google's [Secret Manager](https://console.cloud.google.com/security/secret-manager), the service that securely stores API keys and other sensitive information that underpins many of our data syncs.
+## Appdendix: calitp-data-infra
+
+The calitp-data-infra package, used primarily by warehouse mainainers and data pipeline developers, includes utilities that analysts will likely not need need to interact with directly (and therefore generally won't need to install), but which may be helpful to be aware of. For instance, the `get_secret_by_name()` and `get_secrets_by_label()` functions in [the package's `auth` module](https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-infra/calitp_data_infra/auth.py) are used to interact with Google's [Secret Manager](https://console.cloud.google.com/security/secret-manager), the service that securely stores API keys and other sensitive information that underpins many of our data syncs.
 
 You can read more about the `calitp-data-infra` Python package [here](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-infra#readme).
