@@ -19,6 +19,9 @@ concurrency:
 jobs:
   check_and_build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/calitp-data-analysis
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -41,12 +44,9 @@ jobs:
           poetry config repositories.test-pypi https://test.pypi.org/legacy/
           poetry config pypi-token.test-pypi $POETRY_TEST_PYPI_TOKEN_PYPI
           poetry publish -r test-pypi --skip-existing
-        working-directory: packages/calitp-data-analysis
         env:
           POETRY_TEST_PYPI_TOKEN_PYPI: ${{ secrets.TEST_PYPI_CALITP_DATA_ANALYSIS_TOKEN }}
       - if: ${{ github.ref == 'refs/heads/main' }}
-        run: |
-          poetry publish --skip-existing
-        working-directory: packages/calitp-data-analysis
+        run: poetry publish --skip-existing
         env:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_CALITP_DATA_ANALYSIS_TOKEN }}
