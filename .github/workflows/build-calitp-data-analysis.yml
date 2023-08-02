@@ -36,12 +36,17 @@ jobs:
           poetry run mypy .
           poetry run pytest
           poetry build
-      # TODO: only run on main/version changes
       - if: ${{ github.ref != 'refs/heads/main' }}
         run: |
           poetry config repositories.test-pypi https://test.pypi.org/legacy/
           poetry config pypi-token.test-pypi $POETRY_TEST_PYPI_TOKEN_PYPI
-          poetry publish -r test-pypi
+          poetry publish -r test-pypi --skip-existing
         working-directory: packages/calitp-data-analysis
         env:
           POETRY_TEST_PYPI_TOKEN_PYPI: ${{ secrets.TEST_PYPI_CALITP_DATA_ANALYSIS_TOKEN }}
+      - if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          poetry publish --skip-existing
+        working-directory: packages/calitp-data-analysis
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_CALITP_DATA_ANALYSIS_TOKEN }}
