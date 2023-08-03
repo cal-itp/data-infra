@@ -33,7 +33,7 @@ jobs:
           poetry install
           poetry run mypy calitp_map_utils
           poetry run pytest --spec
-          poetry run build
+          poetry build
         env:
           CALITP_MAP_APP_URL: https://embeddable-maps.calitp.org/
       - if: ${{ github.ref != 'refs/heads/main' }}
