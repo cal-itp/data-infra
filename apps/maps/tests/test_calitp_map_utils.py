@@ -46,7 +46,7 @@ TEST_STATES = [
             {
                 "name": "LA Metro Bus Speed Maps AM Peak",
                 "url": "https://storage.googleapis.com/calitp-map-tiles/metro_am.geojson.gz",
-                "type": "speedmaps",
+                "type": "speedmap",
             },
         ],
         "bbox": [[34.1, -118.5], [33.9, -118]],
@@ -86,9 +86,12 @@ def test_iframe_url_works_with_env_var():
     with pytest.MonkeyPatch.context() as mp:
         mp.setattr("calitp_map_utils.MAP_APP_URL", "https://some.domain")
 
-        assert "some.domain" in State(**TEST_STATES[0]).iframe_url
+        assert "some.domain" in State(**TEST_STATES[0]).iframe_url()
 
 
 def test_iframe_url_missing_env_throws_exception(monkeypatch):
-    with pytest.raises(RuntimeError):
-        _ = State(**TEST_STATES[0]).iframe_url
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr("calitp_map_utils.MAP_APP_URL", None)
+
+        with pytest.raises(RuntimeError):
+            _ = State(**TEST_STATES[0]).iframe_url()
