@@ -3,12 +3,12 @@ import gzip
 import json
 import os
 from enum import Enum
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple, Union
 
-import gcsfs
+import gcsfs  # type: ignore[import]
 import requests
 import typer
-from furl import furl
+from furl import furl  # type: ignore[import]
 from geojson_pydantic import Feature, FeatureCollection, MultiPolygon, Point, Polygon
 from geojson_pydantic.geometries import Geometry
 from geojson_pydantic.types import Position
@@ -32,6 +32,14 @@ class Tooltip(BaseModel):
     style: Optional[Dict[str, Any]]
 
 
+# https://github.com/pydantic/pydantic/discussions/5528#discussioncomment-5663312
+if TYPE_CHECKING:
+    Color = Optional[list[int]]
+else:
+    # we add alpha in the JS if only 3 colors are passed
+    Color = Optional[conlist(int, min_items=3, max_items=4)]
+
+
 class Speedmap(BaseModel):
     stop_id: Optional[str]
     stop_name: Optional[str]
@@ -39,9 +47,8 @@ class Speedmap(BaseModel):
     tooltip: Optional[Tooltip]
     avg_mph: Optional[float]
     p20_mph: Optional[float] = Field(alias="_20p_mph")
-    # we add alpha in the JS if only 3 colors are passed
-    color: Optional[conlist(int, min_items=3, max_items=4)]
-    highlight_color: Optional[conlist(int, min_items=3, max_items=4)]
+    color: Color
+    highlight_color: Color
 
     @root_validator
     def some_identifier_exists(cls, values):
@@ -89,7 +96,10 @@ def validate_geojson(
 
     collection = FeatureCollection(**d)
 
-    layer_type_class = LAYER_FEATURE_TYPES.get(layer_type, Feature[Geometry, Dict])
+    if layer_type:
+        layer_type_class = LAYER_FEATURE_TYPES.get(layer_type, Feature[Geometry, Dict])
+    else:
+        layer_type_class = Feature[Geometry, Dict]
 
     if verbose:
         typer.secho(
@@ -117,13 +127,18 @@ class BasemapConfig(BaseModel):
     options: Dict[str, Any]
 
 
+if TYPE_CHECKING:
+    LayerList = list[Layer]
+else:
+    # this will not render in erdantic; needs to be List[Layer] but then pydantic2ts will not set min_items
+    LayerList = conlist(Layer, min_items=1)
+
+
 # Any positions in this are flipped from typical geojson
 # leaflet wants lat/lon
 class State(BaseModel):
     name: Optional[str]
-    layers: conlist(
-        Layer, min_items=1
-    )  # this will not render in erdantic; needs to be List[Layer] but then pydantic2ts will not set min_items
+    layers: LayerList
     lat_lon: Optional[Position]
     zoom: Optional[int]
     bbox: Optional[Tuple[Position, Position]]
@@ -151,7 +166,7 @@ class State(BaseModel):
             if data:
                 validate_geojson(layer.url, layer.typ, verbose=verbose)
 
-    def iframe_url(self, host: str = None) -> str:
+    def iframe_url(self, host: Optional[str] = None) -> str:
         host = host or MAP_APP_URL
         if not host:
             raise RuntimeError(
