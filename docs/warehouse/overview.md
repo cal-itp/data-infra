@@ -4,4 +4,4 @@ The section serves as an introduction to the Cal-ITP warehouse through conventio
 * [Starter Kit](warehouse-starter-kit-page)
 * [Adding Data to the Warehouse](adding-data-to-warehouse)
 * [Developing dbt Models](developing-dbt-models)
-* [What's GTFS, anyway?](what-is-gtfs)
+* [What is GTFS, anyway?](what-is-gtfs)
