@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: packages/calitp-data-analysis
+        working-directory: packages/calitp-data-infra
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
