@@ -98,6 +98,7 @@ calitp:
       secrets:
         - sentry_sentry-secret
         - sentry_sentry-sentry-postgresql
+      timeout: 10m0s
     - name: dask
       driver: helm
       namespace: dask
