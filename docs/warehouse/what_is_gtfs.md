@@ -1,5 +1,5 @@
 (what-is-gtfs)=
-# What's GTFS, anyway
+# What is GTFS, anyway
 
 Lots of information in the warehouse comes from the General Transit Feed Specification, or GTFS.
 
