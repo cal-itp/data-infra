@@ -32,8 +32,23 @@
 - [ ]  **siuba** - Recommended data analysis library | ([Docs](siuba))
 - [ ]  [**shared_utils**](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) - A shared utilities library for the analytics team | ([Docs](shared-utils))
 
+**Caltrans Employee Resources:**
+
+- [ ]  [**OnRamp**](https://onramp.dot.ca.gov/) - Caltrans employee intranet
+- [ ]  [**Service Now (SNOW)**](https://cdotprod.service-now.com/sp) - Caltrans IT Service Management Portal for IT issues and requesting specific software
+- [ ]  [**Cal Employee Connect**](https://connect.sco.ca.gov/) - State Controller's Office site for paystubs and tax information
+- [ ]  [**Geospatial Enterprise Engagement Platform - GIS Account Request Form**](https://sv03tmcpo.ct.dot.ca.gov/portal/apps/sites/#/geep/pages/account-request) (optional) - User request form for ArcGIS Online and ArcGIS Portal accounts
+
 &nbsp;
 (get-help)=
-```{admonition} Still need access to a tool above?
+```{admonition} Still need access to a non-Caltrans tool above?
 DM Charlie <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">on Cal-ITP Slack using this link</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="_blank">by email</a>.
 ```
+
+## New Analyst Training Curriculum
+This is a rough guide to your first few weeks on our team:
+1. Week 1 -- Introduction to Caltrans, Cal-ITP, and Division of Data & Digital Services: Includes non-technical 1:1 chats with the rest of the analyst team to meet and discuss ongoing and past projects. Also includes peer-guided introduction to [transit data](https://docs.calitp.org/data-infra/warehouse/what_is_gtfs.html) and transportation grants concepts.
+2. Weeks 1-2 -- Technical onboarding (GitHub, JupyterHub, Google products): Includes working through an example push/pull/commit workflow with your Personal README.
+3. Weeks 2-3 -- Introduction to our data: Includes learning what is in and how to access our data [warehouse](https://docs.calitp.org/data-infra/warehouse/warehouse_starter_kit.html) and Airtable, with Python and in Metabase. Also includes basic data visualization concepts.
+4. Weeks 4-5 -- Python [training curriculum](https://docs.calitp.org/data-infra/analytics_new_analysts/overview.html): Includes foundational concepts and team-specific starter kit exercises.
+5. 6-Month mark -- Option to explore intermediate Python concepts with more tutorials.
