@@ -20,7 +20,7 @@ Slack Username:
   - [ ] Github
     - [ ] Organization: Cal-ITP
     - [ ] Team: warehouse-users and warehouse-contributors
-  - [ ] JupyterLab 
+  - [ ] JupyterLab
   - [ ] Google Cloud Console
   - [ ] Metabase
   - [ ] Slack
@@ -36,4 +36,3 @@ Slack Username:
   - [ ] #data-office-hours
   - [ ] #data
   - [ ] #ct-bdat-internal
-
