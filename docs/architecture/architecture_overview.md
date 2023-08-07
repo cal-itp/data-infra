@@ -226,7 +226,7 @@ Some of the key attributes of this approach:
 * We generate an [`outcomes`](https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-infra/calitp_data_infra/storage.py#L418) file describing whether scrape or parse operations were successful. This makes operation outcomes visible in BigQuery, so they can be analyzed (for example: how long has the download operation for X feed been failing?)
 * [External tables](https://cloud.google.com/bigquery/docs/external-data-sources#external_tables) provide the interface between ingested data and BigQuery modeling/transformations. We try to limit the amount of manipulation in Airflow `parse` tasks to the bare minimum to make the data legible to BigQuery (for example, replace illegal column names that would break the external tables.)
 
-While many of the key elements of this architecture are common to most of our data sources, each data source has some unique aspects as well. Below are detailed overviews over each data source and its ingest considerations.
+While many of the key elements of this architecture are common to most of our data sources, each data source has some unique aspects as well. Below are detailed overviews by data source, outlining the specific code/resources that correspond to each step in the general data flow for each main data source.
 
 Step | Airtable | GTFS (Schedule) | GTFS (RT) | Payments (Littlepay) | Payments (Elavon)
 --- | --- | --- | --- | --- | ----
