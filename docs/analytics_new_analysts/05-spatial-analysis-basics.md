@@ -99,7 +99,7 @@ There are [lots of different CRS available](https://epsg.io). The most common on
 ```
 # If the CRS is not set after checking it with gdf.crs
 
-gdf = gdf.set_crs('EPSG:WGS84')
+gdf = gdf.set_crs('EPSG:4326')
 
 ```
 
