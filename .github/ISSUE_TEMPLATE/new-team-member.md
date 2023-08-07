@@ -19,8 +19,8 @@ Slack Username:
 - [ ] Added to tools:
   - [ ] Github
     - [ ] Organization: Cal-ITP
-    - [ ] Team: warehouse-users
-  - [ ] JupyterLab
+    - [ ] Team: warehouse-users and warehouse-contributors
+  - [ ] JupyterLab 
   - [ ] Google Cloud Console
   - [ ] Metabase
   - [ ] Slack
@@ -29,9 +29,11 @@ Slack Username:
   - [ ] Analyst Round Tables (Tuesday & Thursday)
   - [ ] Lunch n' Learn
   - [ ] All-hands
+  - [ ] Data & Digital Services email list
 
 - [ ] Added to Slack channels:
   - [ ] #data-analyses
   - [ ] #data-office-hours
-  - [ ] #lunch-n-learn
   - [ ] #data
+  - [ ] #ct-bdat-internal
+
