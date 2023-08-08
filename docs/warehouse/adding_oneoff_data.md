@@ -3,7 +3,7 @@
 To work with data in our BI tool ([Metabase](https://dashboards.calitp.org/)) we first have to add the data to our warehouse ([BigQuery](https://console.cloud.google.com/bigquery)). This page describes how to do an ad-hoc, one-time import of a dataset (for example, an individual extract from some other system that you want to access in the warehouse or in Metabase.)
 
 ```{admonition} Warning
-If you are looking to create a new data pipeline for a data source that needs to be updated regularly (for example, a new data source to be ingested daily or weekly), you should follow the [general data pipeline architecture](architecture/data)
+If you are looking to create a new data pipeline for a data source that needs to be updated regularly (for example, a new data source to be ingested daily or weekly), you should follow the [general data pipeline architecture](architecture-data)
 ```
 
 
