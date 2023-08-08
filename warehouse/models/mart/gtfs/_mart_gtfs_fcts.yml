@@ -2087,7 +2087,7 @@ models:
       - *rt_trip_max_datetime_pacific
       - *rt_trip_start_time_interval
       - *rt_trip_num_distinct_updates
-  - name: fct_daily_scheduled_shapes_monthly_aggregations
+  - name: fct_monthly_shapes
     description: |
       An aggregation of GTFS schedule shapes by month, filtered to the shape_id associated with each route_id with the most trips.
     columns:
