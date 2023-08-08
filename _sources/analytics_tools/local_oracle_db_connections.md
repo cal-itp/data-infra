@@ -24,7 +24,7 @@ If you do not have ArcGIS Pro installed, submit a SNOW ticket for “ArcPro.”
 
 ![Select Cloned Environment](assets/lodc_step5.png)
 
-**Step 6:** Then when you are in your new cloned environment, search in the Start Menu for Python Command Prompt and open. Your Python Command Prompt Screen should have the name of your cloned environment (arcgispro-py3-clone) in the command line.
+**Step 6:** Then when you are in your new cloned environment, search in the Start Menu for Python Command Prompt and open. Your Python Command Prompt Screen should have the name of your cloned environment (`arcgispro-py3-clone`) in the command line.
 
 ![Open Python Command Prompt](assets/lodc_step6_1.png)
 
@@ -50,12 +50,12 @@ python –m pip install oracledb
 ![Uninstall sqlalchemy](assets/lodc_step7.png)
 
 **Step 8:**
- 1. Determine what directory you are in and navigate to your directory of choice within Python Command Prompt.  It is highly  recommended to go into your S Number folder (i.e. `cd C:\Users\SNUMBER`)
+1. Determine what directory you are in and navigate to your directory of choice within Python Command Prompt.  It is highly  recommended to go into your S Number folder (i.e. `cd C:\Users\SNUMBER`)
     * TIP: [See this Bash cheat sheet with some helpful commands](https://hpc.ua.edu/wp-content/uploads/2022/02/Linux_bash_cheat_sheet.pdf)
 
- ![Navigate out to base directory](assets/lodc_step8_1.png)
+![Navigate out to base directory](assets/lodc_step8_1.png)
 
- 2. Open File Explorer and navigate to the same directory you are in the command line. Add a new folder to house your Jupyter Notebooks. Make sure the folder name does not have any spaces.
+2. Open File Explorer and navigate to the same directory you are in the command line. Add a new folder to house your Jupyter Notebooks. Make sure the folder name does not have any spaces.
 
 ![Check Folder](assets/lodc_step8_2.png)
 
@@ -147,6 +147,6 @@ If you are not in a clone environment, you may need to repeat the setup, steps 1
 
 ![Check environment](assets/lodc_edw_step2_2.png)
 
-**Step 3:** Once you have confirmed that you are in the clone environment you set up, navigate using ..cd to the directory you chose in Step 8 of the setup (recommended `C:\\Users\SNUMBER`).
+**Step 3:** Once you have confirmed that you are in the clone environment you set up, navigate using `cd ../` to the directory you chose in Step 8 of the setup (recommended `C:\\Users\SNUMBER`).
 
 **Step 4:** Open up Jupyter Lab or JupyterHub by typing in the command line, as displayed in step 8.
