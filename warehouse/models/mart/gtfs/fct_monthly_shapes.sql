@@ -62,7 +62,6 @@ fct_monthly_shapes AS (
         trips.shape_id,
         trips.month,
         trips.year,
-        trips.n_trips,
 
         shapes.shape_array_key,
         shapes.pt_array
