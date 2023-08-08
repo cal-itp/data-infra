@@ -48,10 +48,3 @@ To examine the documentation for our tables from the `Project` perspective:
         2. Within that list, select `models`
         3. From here, file directories will appear below.
         4. Select the directory of your choice. A dropdown list of tables will appear and you can select a table to view its documentation
-
-# Legacy documentation
-In general, the dbt docs should be the main source of all documentation for warehouse entities (sources, views, tables, "models", etc.) but the following pages contain some not-yet-migrated documentation.
-
-| page | description | datasets |
-| ---- | ----------- | -------- |
-| [Transit Database](./transitdatabase.md) | A representation of Cal-ITP's internal knowledge about our Transit Operators in CA and various pieces of National Transit Database statistics for ease of use | `airtable.*`, `staging.transit_database__*`, `transitstacks.*` |
