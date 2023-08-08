@@ -8,8 +8,7 @@ WITH dim_gtfs_datasets AS (
 fct_scheduled_trips AS (
     SELECT *
     FROM {{ ref('fct_scheduled_trips') }}
-    #WHERE service_date < CURRENT_DATE()
-    WHERE service_date >= '2023-06-01' AND service_date < '2023-06-03'
+    WHERE service_date >= '2023-07-29' AND service_date <= '2023-07-31'
 ),
 
 dim_shapes_arrays AS (
