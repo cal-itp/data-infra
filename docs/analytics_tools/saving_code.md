@@ -121,8 +121,6 @@ If you would like to commit directly from the Github User Interface:
 
 1. Navigate the Github repository and folder that you would like to add your work, and locate the file on your computer that you would like to commit
 
-    (Note: if you would like to commit your file to a directory that does not yet exist, <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">message Charlie on Cal-ITP Slack</a> to add it for you)
-
 
 
     ![Collection Matrix](assets/step-1-gh-drag-drop.png)

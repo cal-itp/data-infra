@@ -1,3 +1,5 @@
+(architecture-data)=
+
 # Data pipelines
 In general, our data ingest follows versions of this pattern:
 
