@@ -1,13 +1,12 @@
 (adding-data-to-warehouse)=
 # Adding Ad-Hoc Data to the Warehouse
-To work with data in our BI tool ([Metabase](https://dashboards.calitp.org/)) we first have to add the data to our warehouse ([BigQuery](https://console.cloud.google.com/bigquery)). This page describes how to do an ad-hoc, one-time import of a dataset (for example, an individual extract from some other system that you want to access in the warehouse or in Metabase.)
+To work with data in our BI tool ([Metabase](https://dashboards.calitp.org/)) we first have to add the data to our warehouse ([BigQuery](https://console.cloud.google.com/bigquery)). This page describes how to do an ad-hoc, one-time import of a dataset (for example, an individual extract from some other system.)
 
-```{admonition} Warning
-If you are looking to create a new data pipeline for a data source that needs to be updated regularly (for example, a new data source to be ingested daily or weekly), you should follow the [general data pipeline architecture](architecture-data)
+```{warning}
+If you are working with a data source that needs to be updated regularly (like data that should be ingested/updated daily, weekly, or monthly), you should follow the [general data pipeline architecture](architecture-data) and create a dedicated pipeline. The instructions here are only for one-time imports of individual files that will not be regularly updated.
 ```
 
-
-To add data to BigQuery for use in Metabase follow the instructions below. You may need additional Google Cloud or BigQuery permissions; if so, post in the `#services-team` channel in Slack to ask for assistance. The general process involves uploading data to Google Cloud Storage and then making that data available in the `uploaded_data` dataset in BigQuery.
+To add one-time data to BigQuery for use in Metabase follow the instructions below. You may need additional Google Cloud or BigQuery permissions; if so, post in the `#services-team` channel in Slack to ask for assistance.
 
 1. First, upload your data to a [Google Cloud Storage](https://console.cloud.google.com/storage/browser/calitp-analytics-data) bucket in the `gs://calitp-analytics-data/data-analyses/` directory and make note of the `gsutil URI` (file path).
 
