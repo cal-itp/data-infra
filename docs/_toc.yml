@@ -31,6 +31,7 @@ parts:
       - file: warehouse/overview
         sections:
         - file: warehouse/warehouse_starter_kit
+        - file: warehouse/navigating_dbt_docs
         - file: warehouse/what_is_agency
         - file: warehouse/developing_dbt_models
         - file: warehouse/adding_oneoff_data
@@ -47,9 +48,8 @@ parts:
         sections:
           - file: architecture/services
           - file: architecture/data
-      - file: airflow/overview
-        sections:
-        - file: airflow/dags-maintenance
+      - file: airflow/dags-maintenance
+      - file: transit_database/transitdatabase
       - file: kubernetes/README
         sections:
         - file: kubernetes/JupyterHub
