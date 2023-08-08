@@ -1,7 +1,7 @@
 (architecture-data)=
 
 # Data pipelines
-In general, our data ingest follows versions of the pattern diagrammed below.
+In general, our data ingest follows versions of the pattern diagrammed below. For an example PR that ingests a brand new data source from scratch, see [data infra PR #2376](https://github.com/cal-itp/data-infra/pull/2376).
 
 Some of the key attributes of our approach:
 * We generate an [`outcomes`](https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-infra/calitp_data_infra/storage.py#L418) file describing whether scrape, parse, or validate operations were successful. This makes operation outcomes visible in BigQuery, so they can be analyzed (for example: how long has the download operation for X feed been failing?)
@@ -9,6 +9,8 @@ Some of the key attributes of our approach:
 * [External tables](https://cloud.google.com/bigquery/docs/external-data-sources#external_tables) provide the interface between ingested data and BigQuery modeling/transformations.
 
 While many of the key elements of our architecture are common to most of our data sources, each data source has some unique aspects as well. [This spreadsheet](https://docs.google.com/spreadsheets/d/1bv1K5lZMnq1eCSZRy3sPd3MgbdyghrMl4u8HvjNjWPw/edit#gid=0) details overviews by data source, outlining the specific code/resources that correspond to each step in the general data flow shown below.
+
+## Data ingest diagram
 
 ```{mermaid}
 flowchart TD
