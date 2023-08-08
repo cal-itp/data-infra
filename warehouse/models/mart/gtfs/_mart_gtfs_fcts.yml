@@ -2093,7 +2093,6 @@ models:
     columns:
       - name: source_record_id
       - name: name
-      - name: gtfs_dataset_key
       - name: base64_url
       - name: route_id
       - name: shape_id
