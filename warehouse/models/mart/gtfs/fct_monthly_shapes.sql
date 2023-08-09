@@ -11,40 +11,44 @@ fct_scheduled_trips AS (
     WHERE service_date >= '2023-06-01'
 ),
 
-fct_daily_schedule_feeds AS (
-    SELECT
-        feed_key,
-        date,
-        LAST_DAY(date, MONTH) AS month_last_day
-
-    FROM {{ ref('fct_daily_schedule_feeds') }}
-),
+--fct_daily_schedule_feeds AS (
+--    SELECT
+--        feed_key,
+--        date,
+--        LAST_DAY(date, MONTH) AS month_last_day
+--
+--    FROM {{ ref('fct_daily_schedule_feeds') }}
+--),
 
 -- get feeds that are present on the last day of the month
-feeds_month_end AS (
-    SELECT DISTINCT
-        feed_key
-
-    FROM fct_daily_schedule_feeds
-    WHERE date = month_last_day
-),
+-- feeds_month_end AS (
+--     SELECT DISTINCT
+--        feed_key
+--        EXTRACT(month FROM date) AS month,
+--        EXTRACT(year FROM date) AS year,
+--
+--    FROM fct_daily_schedule_feeds
+--    WHERE LAST_DAY(date, MONTH) = date
+--),
 
 dim_shapes_arrays AS (
 
     SELECT
-        key,
         base64_url,
         shape_id,
-        pt_array
+        pt_array,
+        _feed_valid_from
 
     FROM {{ ref('dim_shapes_arrays') }}
-    INNER JOIN feeds_month_end
-        ON dim_shapes_arrays.feed_key = feeds_month_end.feed_key
     WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START',
                                this_dt_column='month_last_day',
                                filter_dt_column='_feed_valid_from',
                                dev_lookback_days = None)
            }}
+    -- keep most recent feed's shape_id pt_array if multiple versions are stored
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY
+                               base64_url, shape_id
+                               ORDER BY _feed_valid_from DESC) = 1
 ),
 
 trips_by_shape AS (
@@ -86,7 +90,6 @@ fct_monthly_shapes AS (
         trips.month,
         trips.year,
 
-        shapes.key AS shape_array_key,
         shapes.pt_array
 
     FROM trips_by_shape AS trips
