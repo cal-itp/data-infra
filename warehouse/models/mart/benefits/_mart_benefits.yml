@@ -89,7 +89,7 @@ models:
         description: UUID
       - name: sample_rate
         description: ""
-      - name: $insert_id
+      - name: insert_id
         description: string
       - name: insert_key
         description: string
@@ -99,7 +99,7 @@ models:
         description: string
       - name: partner_id
         description: string
-      - name: $schema
+      - name: schema
         description: int
       - name: processed_time
         description: UTC ISO-8601 timestamp
