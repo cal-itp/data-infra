@@ -38,8 +38,8 @@ services:
 
   gtfs-rt-archiver-v3-ticker:
     <<: *gtfs-rt-archiver-v3-common
-    command: python -m gtfs_rt_archiver_v3.ticker --load-env-secrets
+    command: python -m gtfs_rt_archiver_v3.ticker
 
   gtfs-rt-archiver-v3-consumer:
     <<: *gtfs-rt-archiver-v3-common
-    command: python -m gtfs_rt_archiver_v3.consumer --load-env-secrets
+    command: python -m gtfs_rt_archiver_v3.consumer

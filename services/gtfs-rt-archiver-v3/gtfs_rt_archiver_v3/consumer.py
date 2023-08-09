@@ -9,7 +9,6 @@ import sys
 
 import sentry_sdk
 import typer
-from calitp_data_infra.auth import get_secrets_by_label  # type: ignore
 from huey.constants import WORKER_THREAD  # type: ignore
 from huey.consumer_options import ConsumerConfig  # type: ignore
 from prometheus_client import start_http_server
@@ -42,16 +41,9 @@ def set_exception_fingerprint(event, hint):
     return event
 
 
-def main(
-    port: int = int(os.getenv("CONSUMER_PROMETHEUS_PORT", 9102)),
-    load_env_secrets: bool = False,
-):
+def main(port: int = int(os.getenv("CONSUMER_PROMETHEUS_PORT", 9102))):
     sentry_sdk.init(before_send=set_exception_fingerprint)
     start_http_server(port)
-
-    if load_env_secrets:
-        for key, value in get_secrets_by_label("gtfs_rt").items():
-            os.environ[key] = value
 
     config = ConsumerConfig(
         workers=int(
