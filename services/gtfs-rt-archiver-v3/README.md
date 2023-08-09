@@ -87,7 +87,7 @@ Code changes require building and pushing a new Docker image, as well as applyin
 4. Finally, apply changes using `kubectl` as described above.
    1. Currently, the image is built/pushed on merges to main but the Kubernetes manifests are not applied.
 
-### Fixing download configurations
+### Changing download configurations
 GTFS download configurations (for both Schedule and RT) are sourced from the [GTFS Dataset table](https://airtable.com/appPnJWrQ7ui4UmIl/tbl5V6Vjs4mNQgYbc) in the California Transit Airtable base, and we have [specific documentation](https://docs.google.com/document/d/1IO8x9-31LjwmlBDH0Jri-uWI7Zygi_IPc9nqd7FPEQM/edit#heading=h.b2yta6yeugar) for modifying the table. (Both of these Airtable links require authentication/access to Airtable.) You may need to make URL or authentication adjustments in this table. This data is downloaded daily into our infrastructure and will propagate to the GTFS Schedule and RT downloads; you may execute the [Airtable download job](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/airtable_loader_v2/grid) manually after making edits to "deploy" the changes more quickly.
 
-Another possible intervention is updating or adding authentication information in [Secret Manager](https://console.cloud.google.com/security/secret-manager). You may create new versions . **As of 2023-04-10 the archiver does not automatically pick up new/modified secrets; you must restart the archiver for changes to take effect.**
+Another possible intervention is updating or adding authentication information in [Secret Manager](https://console.cloud.google.com/security/secret-manager). You may create new versions of existing secrets, or add entirely new secrets. Secrets must be tagged with `gtfs_rt: true` to be loaded as secrets in the archiver; secrets are refreshed every 5 minutes by the ticker.
