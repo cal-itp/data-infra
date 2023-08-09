@@ -14,11 +14,16 @@ Information related to contributing to the [Cal-ITP dbt project](https://github.
 
 ### Getting started
 
-To get set up to contribute to the dbt project via JupyterHub, follow [the README in the data-infra repo warehouse folder](https://github.com/cal-itp/data-infra/blob/main/warehouse/README.md#setting-up-the-project-in-your-jupyterhub-personal-server). If you hit any trouble with setup, let folks know in the #data-warehouse-devs or #data-office-hours channel in the Cal-ITP Slack.
+To get set up to contribute to the dbt project via JupyterHub, follow [the README in the data-infra repo warehouse folder](https://github.com/cal-itp/data-infra/blob/main/warehouse/README.md#setting-up-the-project-in-your-jupyterhub-personal-server). If you hit any trouble with setup, let folks know in the `#data-warehouse-devs` or `#data-office-hours` channels in the Cal-ITP Slack.
 
 We also recommend that everyone who does dbt development joins the `#data-warehouse-devs` channel in the Cal-ITP Slack workspace to ask questions, collaborate, and build shared knowledge.
 
 ### Developer workflow
+
+```{admonition}
+This section describes the high-level mechanics/process of the developer workflow to edit the dbt project.
+**Please read the next section for things you should consider from the data modeling perspective.**
+```
 
 To test your work while developing dbt models, you can edit the `.sql` files for your models, save your changes, and then [run the model from the command line](https://github.com/cal-itp/data-infra/tree/main/warehouse#dbt-commands) to execute the SQL you updated.
 
@@ -28,24 +33,64 @@ When you run dbt commands locally on JupyterHub, your models will be created in 
 
 Once your models are working the way you want, please make sure to update the associated YAML files (there will generally be one or two YAML files per folder with model tests, documentation, and additional configuration.) Especially if you created a brand-new model, you will want to add tests for things like unique, non-null primary keys and valid foreign keys. The YAML is also where table- and column-level documentation is populated. [Here is an example YAML file from our project](https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs/_mart_gtfs_dims.yml), and [here is an example PR that created a new mart table with accompanying documentation](https://github.com/cal-itp/data-infra/pull/2097).
 
-Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against `main` when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging. See CONTRIBUTING.md in the repo for more information on GitHub practices.)
+Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against `main` when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging. See CONTRIBUTING.md in the repo for more information on GitHub practices.
 
 ## Modeling considerations
 
-When developing dbt models, there are some considerations which may differ from considerations for a notebook-based analysis.
+When developing or updating dbt models, there are some considerations which may differ from considerations for a notebook-based analysis. These can be thought of as a checklist or decision tree of questions that you should run through whenever you are editing or creating a dbt model. Longer explanations of each item are described below.
 
-### When to develop or update a model
+```{mermaid}
+flowchart TD
 
-One key question to ask is whether a given data need is best met by a new dbt model or updates to an existing model vs. some other tool or process.
+workflow_type[Are you fixing a bug or creating something new?]
+identify_bug[<a href="identify-bug">Identify the models implicated in your bug.</a>]
+tool_choice[Should this be a dbt model, or a different type of analysis, for example a Jupyter notebook or a dashboard?]
+not_dbt[Use a notebook or dashboard for your analysis.]
+grain[What is the grain/row definition of your target model?<br>Is there already a model with this grain?]
+add_column[Add a column to the existing model.]
+new_model[Create a new model with your desired grain.]
+test_column[Test the new column in the staging environment.<br>Is it ever null?<br>Did it change the number of rows in the model?<br>Did it substantially change the size in bytes of the model?<br>etc.]
+
+workflow_type -- fixing a bug --> identify_bug
+workflow_type -- creating something new --> tool_choice
+tool_choice -- dbt model--> grain
+tool_choice -- not dbt --> not_dbt
+grain -- same grain as existing model --> add_column
+grain -- new grain --> new_model
+add_column --> test_column
+new_model
+```
+
+
+- Should this be a dbt model, or a different type of analysis (for example a Jupyter notebook or a dashboard)?
+- Should I create a new model, or update an existing model?
+
+(identify-bug)=
+### Identify the models implicated in your bug.
+
+Test
+
+### Should this be a dbt model?
 
 Changes to dbt models are likely to be appropriate, and often beneficial over other approaches, when one or more of the following is true:
-* There is a consistent or ongoing need for the same transformations. dbt can ensure that transformations are performed consistently at scale, every day.
-* Transformations are needed on large data. Doing transformations in BigQuery can be more performant than doing them in notebooks or any workflow where the large data must be loaded into local memory.
+* There is a consistent or ongoing need for this data. dbt can ensure that transformations are performed consistently at scale, every day.
+* The data is big. Doing transformations in BigQuery can be more performant than doing them in notebooks or any workflow where the large data must be loaded into local memory.
 * We want to use the same model across multiple domains or tools. The BigQuery data warehouse is the easiest way to provide consistent data throughout the Cal-ITP data ecosystem (in JupyterHub, Metabase, open data publishing, the reports site, etc.)
 
-dbt model updates may not be appropriate when:
-* There is insufficient support in dbt or BigQuery for the necessary tooling. The biggest current example is geospatial work; once we have [Python models in the dbt project](https://github.com/cal-itp/data-infra/issues/2359), there will be fewer limitations.
+dbt models may not be appropriate when:
 * You are doing exploratory data analysis, especially on inconsistently-constructed data. It will almost always be faster to do initial exploration of data via Jupyter/Python than in SQL.
+* You want to apply a simple transformation (for example, a grouped summary or filter, or a join) to answer a specific question. In this case, it may be more appropriate to simply create a Metabase dashboard with the desired transformations.
+
+### Should I create a new model or update an existing model?
+
+
+
+If you determine a dbt update is appropriate, you must decide whether a given data need is best met by creating a new dbt model or updating an existing model.
+
+The main consideration should be: **Is there already a model with the grain that my new model would be?** *Grain* here means "what does a row represent". This could be something like "route by month" or "scheduled trip" or "organization by year". If there is already a model with the grain you are targeting, you should almost always add new columns to that existing model rather than making a new model with the same grain.
+
+For example, say you want to create a model with the count of scheduled stop events by route per month. Your new model would have one row per route per month. Say that there is already a model that lists the count of scheduled trips per route per month. That model also has one row per route per month. So, you should add a column with a stop event count to that existing model, rather than making a brand new model.
+
 
 ### Materializations, performance, and cost
 
