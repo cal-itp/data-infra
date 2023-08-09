@@ -26,7 +26,7 @@ Airtable forces the use of the left-most field as the primary key of the databas
 
 ## Importing Airtable data into the Cal-ITP data warehouse
 
-We ingest data from Airtable into the Cal-ITP data warehouse. To see general information about the existing ingest processes, see [the pipeline architecture documentation](architecture-data).
+We ingest data from Airtable into the Cal-ITP data warehouse. For an overview of the data ingest process/architecture, see [the pipeline architecture documentation](architecture-data). For pointers to where Airtable-specific code and artifacts, see [the pipeline reference Google Sheet](https://docs.google.com/spreadsheets/d/1bv1K5lZMnq1eCSZRy3sPd3MgbdyghrMl4u8HvjNjWPw/edit#gid=0).
 
 To ingest a new Airtable table or base and make it available in the warehouse, you need to make updates throughout the data ingest flow, from the Airtable scraper Airflow DAG all the way to dbt mart tables. See [data infra PR #2781](https://github.com/cal-itp/data-infra/pull/2781) for an example of what this can look like. Ingesting new columns in an existing table is similar; see [data infra PR #2383](https://github.com/cal-itp/data-infra/pull/2383) for an example.
 
