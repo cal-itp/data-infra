@@ -11,26 +11,6 @@ fct_scheduled_trips AS (
     WHERE service_date >= '2023-06-01'
 ),
 
---fct_daily_schedule_feeds AS (
---    SELECT
---        feed_key,
---        date,
---        LAST_DAY(date, MONTH) AS month_last_day
---
---    FROM {{ ref('fct_daily_schedule_feeds') }}
---),
-
--- get feeds that are present on the last day of the month
--- feeds_month_end AS (
---     SELECT DISTINCT
---        feed_key
---        EXTRACT(month FROM date) AS month,
---        EXTRACT(year FROM date) AS year,
---
---    FROM fct_daily_schedule_feeds
---    WHERE LAST_DAY(date, MONTH) = date
---),
-
 dim_shapes_arrays AS (
 
     SELECT
