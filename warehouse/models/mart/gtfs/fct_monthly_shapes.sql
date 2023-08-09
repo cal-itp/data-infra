@@ -8,7 +8,25 @@ WITH dim_gtfs_datasets AS (
 fct_scheduled_trips AS (
     SELECT *
     FROM {{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= '2023-07-01'
+    WHERE service_date >= '2023-06-01'
+),
+
+fct_daily_schedule_feeds AS (
+    SELECT
+        feed_key,
+        date,
+        LAST_DAY(date, MONTH) AS month_last_day
+
+    FROM {{ ref('fct_daily_schedule_feeds') }}
+),
+
+-- get feeds that are present on the last day of the month
+feeds_month_end AS (
+    SELECT DISTINCT
+        feed_key
+
+    FROM fct_daily_schedule_feeds
+    WHERE date = month_last_day
 ),
 
 dim_shapes_arrays AS (
@@ -20,6 +38,8 @@ dim_shapes_arrays AS (
         pt_array
 
     FROM {{ ref('dim_shapes_arrays') }}
+    INNER JOIN feeds_month_end
+        ON dim_shapes_arrays.feed_key = feeds_month_end.feed_key
     WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START',
                                this_dt_column='month_last_day',
                                filter_dt_column='_feed_valid_from',
