@@ -43,13 +43,13 @@ When developing or updating dbt models, there are some considerations which may 
 flowchart TD
 
 workflow_type[Are you fixing a bug or creating something new?]
-identify_bug[<a href='identify-bug'>Identify the models implicated in your bug.</a>]
+identify_bug[<a href='.#identify-bug'>Identify the models implicated in your bug.</a>]
 tool_choice[Should this be a dbt model, or a different type of analysis, for example a Jupyter notebook or a dashboard?]
 not_dbt[Use a notebook or dashboard for your analysis.]
 grain[What is the grain/row definition of your target model?<br>Is there already a model with this grain?]
 add_column[Add a column to the existing model.]
 new_model[Create a new model with your desired grain.]
-test_column[Test the new column in the staging environment.<br>Is it ever null?<br>Did it change the number of rows in the model?<br>Did it substantially change the size in bytes of the model?<br>etc.]
+test_column[Test your changes in the staging environment.<br>Are the values what you expect?<br>Are there null values?<br>Did you change the number of rows in the model?<br>Did you substantially change the size in bytes of the model?<br>etc.]
 
 workflow_type -- fixing a bug --> identify_bug
 workflow_type -- creating something new --> tool_choice
@@ -61,14 +61,12 @@ add_column --> test_column
 new_model
 ```
 
-
-- Should this be a dbt model, or a different type of analysis (for example a Jupyter notebook or a dashboard)?
-- Should I create a new model, or update an existing model?
-
 (identify-bug)=
 ### Identify the models implicated in your bug.
 
-Test
+How to identify the models implicated in the bug depends on how the bug was noticed.
+
+If there was a failing dbt test, you can `dbt compile` locally to compile the project SQL. You can then find the SQL for the failing test (how to do this is described in the [dbt testing FAQ under "one of my tests failed, how can I debug it?"](https://docs.getdbt.com/docs/build/tests#faqs)). Run that SQL in BigQuery to see the rows that are failing and identify the problem.
 
 ### Should this be a dbt model?
 
