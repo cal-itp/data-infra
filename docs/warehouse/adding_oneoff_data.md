@@ -1,16 +1,16 @@
 (adding-data-to-warehouse)=
-# Adding Data to the Warehouse
-To work with data in our BI tool ([Metabase](https://dashboards.calitp.org/)) we first have to add the data to our warehouse ([BigQuery](https://console.cloud.google.com/bigquery)). To add data to BigQuery for use in Metabase follow the instructions below.
+# Adding Ad-Hoc Data to the Warehouse
+To work with data in our BI tool ([Metabase](https://dashboards.calitp.org/)) we first have to add the data to our warehouse ([BigQuery](https://console.cloud.google.com/bigquery)). This page describes how to do an ad-hoc, one-time import of a dataset (for example, an individual extract from some other system.)
 
-```{admonition} Note
-**Not sure if you have the appropriate permissions to write tables in BigQuery?** Reach out to Charlie on Cal-ITP Slack <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">using this link</a>.
+```{warning}
+If you are working with a data source that needs to be updated regularly (like data that should be ingested/updated daily, weekly, or monthly), you should follow the [general data pipeline architecture](architecture-data) and create a dedicated pipeline. The instructions here are only for one-time imports of individual files that will not be regularly updated.
 ```
 
-When uploading data to the warehouse we will use the `uploaded_data` dataset in Big Query as our destination. To write data here we will first add the data to a Google Cloud Storage bucket and then input the command below in the BigQuery terminal.
+To add one-time data to BigQuery for use in Metabase follow the instructions below. You may need additional Google Cloud or BigQuery permissions; if so, post in the `#services-team` channel in Slack to ask for assistance.
 
 1. First, upload your data to a [Google Cloud Storage](https://console.cloud.google.com/storage/browser/calitp-analytics-data) bucket in the `gs://calitp-analytics-data/data-analyses/` directory and make note of the `gsutil URI` (file path).
 
-2. Next, navigate to a JupyterLab terminal window.
+2. Next, navigate to a [JupyterLab](https://notebooks.calitp.org/) terminal window.
 
 3. Once in the terminal, input the following command with the appropriate structure:
 ```

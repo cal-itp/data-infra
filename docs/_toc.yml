@@ -44,6 +44,9 @@ parts:
   - caption: Developers
     chapters:
       - file: architecture/architecture_overview
+        sections:
+          - file: architecture/services
+          - file: architecture/data
       - file: airflow/overview
         sections:
         - file: airflow/dags-maintenance
