@@ -72,7 +72,9 @@ def main(
     sentry_sdk.init(environment=os.getenv("AIRFLOW_ENV"))
     start_http_server(port)
     get_configs()
+    assert configs is not None
     get_secrets()
+    assert secrets is not None
     typer.secho("flushing huey")
     huey.flush()
 
