@@ -43,7 +43,7 @@ When developing or updating dbt models, there are some considerations which may 
 flowchart TD
 
 workflow_type[Are you fixing a bug or creating something new?]
-identify_bug[<a href="identify-bug">Identify the models implicated in your bug.</a>]
+identify_bug[<a href='identify-bug'>Identify the models implicated in your bug.</a>]
 tool_choice[Should this be a dbt model, or a different type of analysis, for example a Jupyter notebook or a dashboard?]
 not_dbt[Use a notebook or dashboard for your analysis.]
 grain[What is the grain/row definition of your target model?<br>Is there already a model with this grain?]
