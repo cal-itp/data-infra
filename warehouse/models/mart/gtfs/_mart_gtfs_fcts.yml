@@ -2091,6 +2091,12 @@ models:
     description: |
       An aggregation of GTFS schedule shapes by month, filtered to the shape_id associated with each route_id with the most trips.
     columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url`, `route_id`, `month`, and `year`.
+        tests: &primary_key_tests
+          - unique
+          - not_null
       - name: source_record_id
       - name: name
       - name: base64_url
@@ -2098,9 +2104,9 @@ models:
       - name: shape_id
       - name: month
         description: |
-          Actual calendar month (Pacific Time dates) in which this service was scheduled to occur.
+          Service month in which this service was scheduled to occur.
       - name: year
         description: |
-          Actual calendar year (Pacific Time dates) in which this service was scheduled to occur.
+          Service year in which this service was scheduled to occur.
       - name: shape_array_key
       - name: pt_array
