@@ -408,7 +408,7 @@ models:
         description: |
           Difference in seconds between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
           and `vehicle_timestamp` (timestamp of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
-      - name: _gtfs_dataset_name
+      - name: gtfs_dataset_name
         description: |
           String name of the GTFS dataset of which this message is a part.
           This field is provided for human readability and should not be used as a join key.
@@ -702,7 +702,6 @@ models:
       - *gtfs_rt_hour
       - *base64_url
       - *rt_schedule_base64_url
-      - *rt_service_date
       - *gtfs_rt_extract_ts
       - *gtfs_rt_config_extract_ts
       - *gtfs_rt_name
@@ -869,7 +868,7 @@ models:
             2. If neither is populated, assume that the message is active while it is present in the feed
           Imputing these timestamp versions of the columns to be far future/past covers both cases for our use cases.
       - *rt_trip_start_time_interval
-      - name: trip_start_time_sec
+      - name: trip_start_time
         description: |
           `trip_start_time` converted to a number of seconds after twelve hours before noon (usually midnight)
           on `service_date`.
@@ -1448,8 +1447,6 @@ models:
         description: *rt_trip_route_ids_desc
       - name: vp_trip_direction_ids
         description: *rt_trip_direction_ids_desc
-      - name: vp_trip_schedule_relatonships
-        description: *rt_trip_schedule_relationships_desc
       - name: vp_first_position
         description: &vp_first_position_desc |
           The position (longitude, latitude pair) of the first
@@ -2080,14 +2077,6 @@ models:
       - name: max_vehicle_datetime_pacific
         description: |
           `max_vehicle_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
-      - name: first_position_latitude
-        description: Position latitude of the first extract referencing this trip.
-      - name: first_position_longitude
-        description: Position longitude of the first extract referencing this trip.
-      - name: last_position_latitude
-        description: Position latitude of the last extract referencing this trip.
-      - name: last_position_longitude
-        description: Position longitude of the last extract referencing this trip.
       - name: first_position
         description: *vp_first_position_desc
       - name: last_position

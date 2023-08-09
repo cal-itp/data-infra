@@ -507,7 +507,7 @@ models:
           Date on which file presence was checked. (Will be the 4th and 18th of each month.)
       - name: feature
       - name: check
-      - name: status
+      - name: reports_status
         description: |
           The status of this check for this organization.
           Note that this is an aggregation of the status of this check for all services under this organization,

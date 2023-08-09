@@ -1077,8 +1077,6 @@ models:
           publish.include: true
       - *_feed_valid_from
       - *feed_timezone
-        # TODO: would be good to actually publish this, with appropriate documentation, next time we are ready to make a round of updates
-      - name: warning_missing_schedule_dim_pk
       - name: stop_timezone_coalesced
       - *warning_duplicate_gtfs_key
 
