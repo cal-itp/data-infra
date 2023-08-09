@@ -20,7 +20,7 @@ We also recommend that everyone who does dbt development joins the `#data-wareho
 
 ### Developer workflow
 
-```{admonition}
+```{admonition} See next section for modeling considerations
 This section describes the high-level mechanics/process of the developer workflow to edit the dbt project.
 **Please read the next section for things you should consider from the data modeling perspective.**
 ```
