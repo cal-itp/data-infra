@@ -5,7 +5,7 @@ import random
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Mapping, Tuple
 
 import pendulum
 import schedule  # type: ignore
@@ -54,6 +54,16 @@ def get_configs() -> Tuple[pendulum.DateTime, List[GTFSDownloadConfig]]:
     return latest.ts, configs
 
 
+@ttl_cache(ttl=300)
+def get_secrets() -> Mapping[str, str]:
+    start = pendulum.now()
+    secrets = get_secrets_by_label("gtfs_rt")
+    typer.secho(
+        f"took {(pendulum.now() - start).in_words()} to load {len(secrets)} secrets"
+    )
+    return secrets
+
+
 def main(
     port: int = int(os.getenv("TICKER_PROMETHEUS_PORT", 9102)),
     load_env_secrets: bool = False,
@@ -82,6 +92,7 @@ def main(
             fetch(
                 tick=dt,
                 config=config,
+                auth_dict=get_secrets(),
             )
         typer.secho(
             f"took {(pendulum.now() - start).in_words()} to enqueue {len(configs)} fetches"

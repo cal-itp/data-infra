@@ -3,7 +3,7 @@ import traceback
 from datetime import datetime
 from functools import wraps
 from pathlib import Path
-from typing import Optional
+from typing import Mapping, Optional
 
 import humanize
 import pendulum
@@ -98,15 +98,12 @@ def increment_task_signals_counter(
     ).inc()
 
 
-auth_dict = None
 last_fetch_file = None
 
 
 @huey.on_startup()
-def load_auth_dict():
-    global auth_dict, last_fetch_file
-    # TODO: this isn't ideal, we probably could store the keys from get_secrets_by_label() in consumer.py
-    auth_dict = os.environ
+def load_globals():
+    global last_fetch_file
     last_fetch_file = os.environ["LAST_FETCH_FILE"]
 
 
@@ -129,7 +126,7 @@ def scoped(f):
 
 @huey.task(expires=int(os.getenv("CALITP_FETCH_EXPIRATION_SECONDS", 5)))
 @scoped
-def fetch(tick: datetime, config: GTFSDownloadConfig):
+def fetch(tick: datetime, config: GTFSDownloadConfig, auth_dict: Mapping[str, str]):
     labels = dict(
         record_name=config.name,
         record_uri=config.url,
