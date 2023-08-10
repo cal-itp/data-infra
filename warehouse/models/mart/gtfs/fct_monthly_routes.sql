@@ -72,10 +72,10 @@ fct_monthly_routes AS (
         shapes.pt_array
 
     FROM trips_by_route AS trips
-    INNER JOIN fct_daily_schedule_feeds AS feeds
+    LEFT JOIN fct_daily_schedule_feeds AS feeds
         ON trips.base64_url = feeds.base64_url
         AND trips.month_last_day = feeds.month_last_day
-    INNER JOIN dim_shapes_arrays AS shapes
+    LEFT JOIN dim_shapes_arrays AS shapes
         ON feeds.feed_key = shapes.feed_key
         AND trips.shape_id = shapes.shape_id
     WHERE trips.month_last_day <= CURRENT_DATE()
