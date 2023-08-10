@@ -16,33 +16,18 @@ historical AS (
     FROM latest_data_schemas
 ),
 
-unnested AS (
-    SELECT
-        {{ dbt_utils.generate_surrogate_key(['id', '_valid_from']) }} AS key,
-        id,
-        dataset_type,
-        transit_data_quality_issue,
-        name,
-        notes,
-        _is_current,
-        _valid_from,
-        _valid_to,
-    FROM historical,
-    UNNEST(transit_data_quality_issues) as transit_data_quality_issue
-),
-
 int_transit_database__issue_types_dim AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['id', '_valid_from', 'transit_data_quality_issue']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['id', '_valid_from']) }} AS key,
         id AS source_record_id,
         dataset_type,
-        transit_data_quality_issue,
+        transit_data_quality_issues,
         name,
         notes,
         _is_current,
         _valid_from,
         _valid_to,
-    FROM unnested
+    FROM historical
 )
 
 SELECT * FROM int_transit_database__issue_types_dim
