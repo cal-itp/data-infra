@@ -7,12 +7,11 @@ WITH dim_gtfs_datasets AS (
 
 -- keep feeds that are active at the end of the month
 fct_daily_schedule_feeds AS (
-    SELECT
+    SELECT DISTINCT
         feed_key,
         LAST_DAY(date, MONTH) AS month_last_day
 
     FROM {{ ref('fct_daily_schedule_feeds') }}
-    GROUP BY 1, 2
 ),
 
 fct_scheduled_trips AS (
