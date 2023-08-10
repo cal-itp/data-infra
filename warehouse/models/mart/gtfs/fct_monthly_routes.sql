@@ -5,10 +5,17 @@ WITH dim_gtfs_datasets AS (
     FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
+fct_daily_schedule_feeds AS (
+    SELECT DISTINCT
+        feed_key,
+        date,
+    FROM {{ ref('fct_daily_schedule_feeds') }}
+    WHERE LAST_DAY(date, MONTH) = date
+),
+
 fct_scheduled_trips AS (
     SELECT *
     FROM {{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= '2023-06-01'
 ),
 
 dim_shapes_arrays AS (
@@ -17,21 +24,13 @@ dim_shapes_arrays AS (
         base64_url,
         shape_id,
         pt_array,
-        _feed_valid_from
 
     FROM {{ ref('dim_shapes_arrays') }}
-    WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START',
-                               this_dt_column='month_last_day',
-                               filter_dt_column='_feed_valid_from',
-                               dev_lookback_days = None)
-           }}
-    -- keep most recent feed's shape_id pt_array if multiple versions are stored
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY
-                               base64_url, shape_id
-                               ORDER BY _feed_valid_from DESC) = 1
+    -- pull shapes for feeds that were active on last day of month
+    WHERE feed_key = fct_daily_schedule_feeds.feed_key
 ),
 
-trips_by_shape AS (
+trips_by_route AS (
 
     SELECT
 
@@ -55,7 +54,7 @@ trips_by_shape AS (
                                ORDER BY n_trips DESC) = 1
 ),
 
-fct_monthly_shapes AS (
+fct_monthly_routes AS (
 
     SELECT
         {{ dbt_utils.generate_surrogate_key([
@@ -72,11 +71,11 @@ fct_monthly_shapes AS (
 
         shapes.pt_array
 
-    FROM trips_by_shape AS trips
+    FROM trips_by_route AS trips
     INNER JOIN dim_shapes_arrays AS shapes
         ON trips.base64_url = shapes.base64_url
         AND trips.shape_id = shapes.shape_id
     WHERE trips.month_last_day <= CURRENT_DATE()
 )
 
-SELECT * FROM fct_monthly_shapes
+SELECT * FROM fct_monthly_routes
