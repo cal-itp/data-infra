@@ -2087,3 +2087,24 @@ models:
       - *rt_trip_max_datetime_pacific
       - *rt_trip_start_time_interval
       - *rt_trip_num_distinct_updates
+  - name: fct_monthly_routes
+    description: |
+      An aggregation of GTFS schedule routes, where the shape with the most trips is  associated.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url`, `route_id`, `month`, and `year`.
+        tests: *primary_key_tests
+      - name: source_record_id
+      - name: name
+      - name: base64_url
+      - name: route_id
+      - name: shape_id
+      - name: month
+        description: |
+          Service month in which this service was scheduled to occur.
+      - name: year
+        description: |
+          Service year in which this service was scheduled to occur.
+      - name: shape_array_key
+      - name: pt_array
