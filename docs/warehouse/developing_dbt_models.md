@@ -43,13 +43,14 @@ When developing or updating dbt models, there are some considerations which may 
 flowchart TD
 
 workflow_type[Are you fixing a bug or creating something new?]
-identify_bug[<a href='.#identify-bug'>Identify the models implicated in your bug.</a>]
-tool_choice[Should this be a dbt model, or a different type of analysis, for example a Jupyter notebook or a dashboard?]
+identify_bug[<a href='developing_dbt_models#identify-bug'>Identify the cause of your bug.</a>]
+identify_bug[<a href='developing_dbt_models#fix-bug'>Fix the bug.</a>]
+tool_choice[<a href='developing_dbt_models#tool-choice'>Should this be a dbt model or a different type of analysis, for example a Jupyter notebook or a dashboard?</a>]
 not_dbt[Use a notebook or dashboard for your analysis.]
-grain[What is the grain/row definition of your target model?<br>Is there already a model with this grain?]
+grain[<a href='developing_dbt_models#tool-choice'>What is the grain/row definition of your target model?<br>Is there already a model with this grain?</a>]
 add_column[Add a column to the existing model.]
 new_model[Create a new model with your desired grain.]
-test_column[Test your changes in the staging environment.<br>Are the values what you expect?<br>Are there null values?<br>Did you change the number of rows in the model?<br>Did you substantially change the size in bytes of the model?<br>etc.]
+test_changes[Test your changes in the staging environment.<br>Are the values what you expect?<br>Are there null values?<br>Did you change the number of rows in the model?<br>Did you substantially change the size in bytes of the model?<br>etc.]
 
 workflow_type -- fixing a bug --> identify_bug
 workflow_type -- creating something new --> tool_choice
@@ -57,17 +58,36 @@ tool_choice -- dbt model--> grain
 tool_choice -- not dbt --> not_dbt
 grain -- same grain as existing model --> add_column
 grain -- new grain --> new_model
-add_column --> test_column
-new_model
+add_column --> test_changes
+new_model --> test_changes
+fix_bug --> test_changes
 ```
 
 (identify-bug)=
-### Identify the models implicated in your bug.
+### Identify the cause of your bug.
 
-How to identify the models implicated in the bug depends on how the bug was noticed.
+Usually, a bug is caused by either:
+* New data issues. For example, an agency may be doing something new in their GTFS data that we didn't expect and this may have broken one of our models.
+* SQL bugs. Sometimes we may have written SQL incorrectly (for example, used the wrong kind of join.)
 
-If there was a failing dbt test, you can `dbt compile` locally to compile the project SQL. You can then find the SQL for the failing test (how to do this is described in the [dbt testing FAQ under "one of my tests failed, how can I debug it?"](https://docs.getdbt.com/docs/build/tests#faqs)). Run that SQL in BigQuery to see the rows that are failing and identify the problem.
+How to investigate the bug depends on how the bug was noticed.
 
+If there was a failing dbt test, you can `dbt compile` locally to compile the project SQL. You can then find the SQL for the failing test (follow the [dbt testing FAQ under "one of my tests failed, how can I debug it?"](https://docs.getdbt.com/docs/build/tests#faqs) to find the compiled test SQL). Run that SQL in BigQuery to see the rows that are failing.
+
+If you noticed an issue that wasn't caused by a failing test, you can start with the model that you noticed the problem in.
+
+In either case, you may need to consider upstream models. To identify your model's parents, you can look at the [dbt docs website](https://dbt-docs.calitp.org/#!/overview) page for your model. [See the dbt docs](https://docs.getdbt.com/docs/collaborate/documentation#navigating-the-documentation-site) for how to look at the model's lineage. You can modify the model selector in the bottom middle to just `+<your model name>` to only see the model's parents. You can also run `poetry run dbt ls -s +<your model> --resource-type model` to see a model's parents just on the command line. Try to figure out where the root cause of the problem is occurring. This may involve running ad-hoc SQL queries to inspect the models involved.
+
+(fix-bug)=
+### Fix the bug.
+
+Once you understand the issue, you can attempt to fix it. This might involve changing model SQL, changing tests to reflect a new understanding, or something else.
+
+Here are a few example `data-infra` PRs that fixed past bugs:
+- [#2076](https://github.com/cal-itp/data-infra/pull/2076) fixed two bugs: There was a hardcoded incorrect value in our SQL that was causing Sundays to not appear in our scheduled service index (SQL syntax bug), and there was a bug in how we were handling the relationship between `calendar_dates` and `calendar` (GTFS logic bug).
+- [#2623](https://github.com/cal-itp/data-infra/pull/2623) fixed bugs caused by unexpected calendar data from a producer.
+
+(tool_choice)=
 ### Should this be a dbt model?
 
 Changes to dbt models are likely to be appropriate, and often beneficial over other approaches, when one or more of the following is true:
@@ -79,13 +99,28 @@ dbt models may not be appropriate when:
 * You are doing exploratory data analysis, especially on inconsistently-constructed data. It will almost always be faster to do initial exploration of data via Jupyter/Python than in SQL.
 * You want to apply a simple transformation (for example, a grouped summary or filter, or a join) to answer a specific question. In this case, it may be more appropriate to simply create a Metabase dashboard with the desired transformations.
 
+(model-grain)=
+### What is the grain/row definition of your target model? Is there already a model with this grain?
+
+*Grain* means "what does a row represent". For example: Do you want one row per route per day? One row per fare transaction? One row per organization per month?
+
+This concept of grain can be one of the biggest differences between notebook-based analysis and warehouse analytics engineering. In notebooks, you may be making a lot of transformations and saving each step out as its own dataframe, and you may use functions for reusable transformation steps. In warehouse development, we want to be focused on making reusable models, where the data itself is the common building block across analyses. That often means trying to make only one table in the warehouse for each grain, regardless of how many different types of analysis it might be used for.
+
+``` {annotation} Example: fct_scheduled_trips
+Consider [`fct_scheduled_trips`](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_scheduled_trips). This is our core trip-level table. Every scheduled trip should have a row in this model and attributes that you might want from that trip should be present for easy access. As a result, this table has a lot of columns, because when we need new information about trips, we add it here.  For example, when we wanted to fix time zone handling for trips, we [added those columns](https://github.com/cal-itp/data-infra/pull/2457) instead of creating a new model.
+```
+
+If there is already a model with the grain you are targeting, you should almost always add new columns to that existing model rather than making a new model with the same grain.
+
+To figure out if there is a model with your desired grain, you can [search the dbt docs](https://dbt-docs.calitp.org/#!/overview) for relevant terms. For example, if you want a table of routes, you can search "routes" to see what models already exist. You can also explore the dependency tree for a related table (like `dim_routes`) to see if you can find a table that looks like it has the right grain. You can also see [our dbt docs homepage](https://dbt-docs.calitp.org/#!/overview) for a discussion of table naming conventions to interpret dimension, fact, and bridge tables.
+
 ### Should I create a new model or update an existing model?
 
 
 
 If you determine a dbt update is appropriate, you must decide whether a given data need is best met by creating a new dbt model or updating an existing model.
 
-The main consideration should be: **Is there already a model with the grain that my new model would be?** *Grain* here means "what does a row represent". This could be something like "route by month" or "scheduled trip" or "organization by year". If there is already a model with the grain you are targeting, you should almost always add new columns to that existing model rather than making a new model with the same grain.
+The main consideration should be: **Is there already a model with the grain that my new model would be?**
 
 For example, say you want to create a model with the count of scheduled stop events by route per month. Your new model would have one row per route per month. Say that there is already a model that lists the count of scheduled trips per route per month. That model also has one row per route per month. So, you should add a column with a stop event count to that existing model, rather than making a brand new model.
 
