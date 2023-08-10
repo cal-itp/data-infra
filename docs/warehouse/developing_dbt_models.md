@@ -22,7 +22,7 @@ We also recommend that everyone who does dbt development joins the `#data-wareho
 
 ```{admonition} See next section for modeling considerations
 This section describes the high-level mechanics/process of the developer workflow to edit the dbt project.
-**Please read the next section for things you should consider from the data modeling perspective.**
+**Please read the [next section](developing_dbt_models#modeling-considerations) for things you should consider from the data modeling perspective.**
 ```
 
 To test your work while developing dbt models, you can edit the `.sql` files for your models, save your changes, and then [run the model from the command line](https://github.com/cal-itp/data-infra/tree/main/warehouse#dbt-commands) to execute the SQL you updated.
@@ -31,10 +31,11 @@ To inspect tables as you are working, the fastest method is usually to run some 
 
 When you run dbt commands locally on JupyterHub, your models will be created in the `cal-itp-data-infra-staging.<your name>_<dbt folder name, like mart_gtfs>` BigQuery dataset. Note that this is in the `cal-itp-data-infra-staging` Google Cloud Platform project, *not* the production `cal-itp-data-infra` project.
 
-Once your models are working the way you want, please make sure to update the associated YAML files (there will generally be one or two YAML files per folder with model tests, documentation, and additional configuration.) Especially if you created a brand-new model, you will want to add tests for things like unique, non-null primary keys and valid foreign keys. The YAML is also where table- and column-level documentation is populated. [Here is an example YAML file from our project](https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs/_mart_gtfs_dims.yml), and [here is an example PR that created a new mart table with accompanying documentation](https://github.com/cal-itp/data-infra/pull/2097).
+Once your models are working the way you want and you have added all necessary documentation and tests in YAML files ([see below](developing_dbt_models#modeling-considerations) for more on modeling, documentation, and testing considerations), you are ready to merge.
 
-Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against `main` when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging. See CONTRIBUTING.md in the repo for more information on GitHub practices.
+Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against `main` when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging.
 
+(modeling-considerations)=
 ## Modeling considerations
 
 When developing or updating dbt models, there are some considerations which may differ from considerations for a notebook-based analysis. These can be thought of as a checklist or decision tree of questions that you should run through whenever you are editing or creating a dbt model. Longer explanations of each item are described below.
@@ -44,24 +45,24 @@ flowchart TD
 
 workflow_type[Are you fixing a bug or creating something new?]
 identify_bug[<a href='developing_dbt_models#identify-bug'>Identify the cause of your bug.</a>]
-fix_bug[<a href='developing_dbt_models#fix-bug'>Fix the bug.</a>]
+change_models[<a href='developing_dbt_models#change-models'>Make your changes.</a>]
 tool_choice[<a href='developing_dbt_models#tool-choice'>Should this be a dbt model or a different type of analysis, for example a Jupyter notebook or a dashboard?</a>]
 not_dbt[Use a notebook or dashboard for your analysis.]
 grain[<a href='developing_dbt_models#tool-choice'>What is the grain/row definition of your target model?<br>Is there already a model with this grain?</a>]
-add_column[Add a column to the existing model.]
-new_model[Create a new model with your desired grain.]
-test_changes[Test your changes in the staging environment.<br>Are the values what you expect?<br>Are there null values?<br>Did you change the number of rows in the model?<br>Did you substantially change the size in bytes of the model?<br>etc.]
+new_column[Add a column to the existing model.]
+new_model[Create a new model.]
+test_changes[<a href='developing_dbt_models#test-changes'>Test your changes in the staging environment.</a><br>Are the values what you expect?<br>Are there null values?<br>Did you change the number of rows in the model?<br>Did you substantially change the size in bytes of the model?<br>etc.]
 
 workflow_type -- fixing a bug --> identify_bug
-identify_bug --> fix_bug
-fix_bug --> test_changes
+identify_bug --> change_models
 workflow_type -- creating something new --> tool_choice
 tool_choice -- dbt model--> grain
 tool_choice -- not dbt --> not_dbt
-grain -- same grain as existing model --> add_column
-grain -- new grain --> new_model
-add_column --> test_changes
-new_model --> test_changes
+grain -- there is an existing model with this grain --> new_column
+grain -- there is no existing model with this grain --> new_model
+new_column --> change_models
+new_model --> change_models
+change_models --> test_changes
 ```
 
 (identify-bug)=
@@ -78,15 +79,6 @@ If there was a failing dbt test, you can `dbt compile` locally to compile the pr
 If you noticed an issue that wasn't caused by a failing test, you can start with the model that you noticed the problem in.
 
 In either case, you may need to consider upstream models. To identify your model's parents, you can look at the [dbt docs website](https://dbt-docs.calitp.org/#!/overview) page for your model. [See the dbt docs](https://docs.getdbt.com/docs/collaborate/documentation#navigating-the-documentation-site) for how to look at the model's lineage. You can modify the model selector in the bottom middle to just `+<your model name>` to only see the model's parents. You can also run `poetry run dbt ls -s +<your model> --resource-type model` to see a model's parents just on the command line. Try to figure out where the root cause of the problem is occurring. This may involve running ad-hoc SQL queries to inspect the models involved.
-
-(fix-bug)=
-### Fix the bug.
-
-Once you understand the issue, you can attempt to fix it. This might involve changing model SQL, changing tests to reflect a new understanding, or something else.
-
-Here are a few example `data-infra` PRs that fixed past bugs:
-- [#2076](https://github.com/cal-itp/data-infra/pull/2076) fixed two bugs: There was a hardcoded incorrect value in our SQL that was causing Sundays to not appear in our scheduled service index (SQL syntax bug), and there was a bug in how we were handling the relationship between `calendar_dates` and `calendar` (GTFS logic bug).
-- [#2623](https://github.com/cal-itp/data-infra/pull/2623) fixed bugs caused by unexpected calendar data from a producer.
 
 (tool_choice)=
 ### Should this be a dbt model?
@@ -115,28 +107,105 @@ If there is already a model with the grain you are targeting, you should almost 
 
 To figure out if there is a model with your desired grain, you can [search the dbt docs](https://dbt-docs.calitp.org/#!/overview) for relevant terms. For example, if you want a table of routes, you can search "routes" to see what models already exist. You can also explore the dependency tree for a related table (like `dim_routes`) to see if you can find a table that looks like it has the right grain. You can also see [our dbt docs homepage](https://dbt-docs.calitp.org/#!/overview) for a discussion of table naming conventions to interpret dimension, fact, and bridge tables.
 
-(add-column)=
-### Add your column.
+(change-models)=
+### Make your changes.
 
-Adding a column can involve different steps depending on whether the data you need is already ingested in the warehouse or whether you will need to update external tables or raw data. In general, you will need to update one or more SQL files and the accompanying YAML to document and possibly test your new column.
+What kind of changes you are making will depend on what you've discovered in previous steps. Fixing a bug might involve changing model SQL, changing tests to reflect a new understanding, or something else. Adding a column might involve a simple change, or require changing parent models. Creating a new model for brand new data may involve a new external table, or it might be a straightforward transformation just in the mart.
 
+Here are a few example `data-infra` PRs that fixed past bugs:
+- [#2076](https://github.com/cal-itp/data-infra/pull/2076) fixed two bugs: There was a hardcoded incorrect value in our SQL that was causing Sundays to not appear in our scheduled service index (SQL syntax bug), and there was a bug in how we were handling the relationship between `calendar_dates` and `calendar` (GTFS logic bug).
+- [#2623](https://github.com/cal-itp/data-infra/pull/2623) fixed bugs caused by unexpected calendar data from a producer.
+
+Here are a few example `data-infra` PRs that added columns to existing models:
 * For a simple example of adding a column that already exists in staging to a mart table, see [data infra PR #2778](https://github.com/cal-itp/data-infra/pull/2778).
 * For a intermediate examples of adding a column in a staging table and propagating it through a few different downstream models, see
     * [Data infra PR #2768](https://github.com/cal-itp/data-infra/pull/2768)
     * [Data infra PR #2601](https://github.com/cal-itp/data-infra/pull/2686)
 * For an example of adding a column to Airtable data end-to-end (starting from the raw data/external tables; this involves non-dbt code), see [data infra PR #2383](https://github.com/cal-itp/data-infra/pull/2383).
 
-(new-model)=
-### Create a new model with your desired grain.
-
-Creating a new model can involve different steps depending on whether the model needs new preparatory models (for example, staging or intermediate tables) or whether it is built on top of existing data.
-
+Here are a few `data-infra` PRs that created brand new models:
 * For a simple example of creating a new model based on existing data, see [data infra PR #2686](https://github.com/cal-itp/data-infra/pull/2686).
 * For an example of adding models to dbt end-to-end (starting from raw data/external tables; this involves non-dbt code), see:
    * [Data infra PR #2509](https://github.com/cal-itp/data-infra/pull/2509)
    * [Data infra PR #2781](https://github.com/cal-itp/data-infra/pull/2781)
 
+(test-changes)=
 ### Test your changes.
+
+Once you have made some changes, it is important to test them. This is different than adding dbt tests (described below). dbt tests ensure some floor of model validity over time; while developing, you should do some more holistic tests to ensure that your code is working as expected.
+
+The first step is running your changes in the test environment. You can run a command like `poetry run dbt run -s +<your model>` to run your model and its antecedents.  Your models will be created in the `cal-itp-data-infra-staging.<your name>_<dbt folder name, like mart_gtfs>` BigQuery dataset. Note that this is in the `cal-itp-data-infra-staging` Google Cloud Platform project, *not* the production `cal-itp-data-infra` project.
+
+What to test/check will vary based on what you're doing, but here are some example things to check:
+
+* **Nulls / distinct values / min/max**: You should check whether the values in your column are what you expect. For example, are there nulls? If so, do they make sense? Does the column have the values you expect (for example, if you have a day of the week column, is data from all 7 days present)? If it's numeric, what are the minimum and maximum values; do they make sense? What is the most common value?
+   * To check nulls:
+        ```
+        SELECT * FROM <your model>
+        WHERE <your column> IS NULL
+        ```
+   * To check distinct values in a column:
+        ```
+        SELECT DISTINCT <your column>
+        FROM <your model>
+        ```
+   * To check min/max:
+        ```
+        SELECT
+            MIN(<your column>),
+            MAX(<your_column>)
+        FROM <your model>
+        ```
+    * To check most common values:
+        ```
+        SELECT
+            <your_column>,
+            COUNT(*) AS ct
+        FROM <your model>
+        GROUP BY 1
+        ORDER BY ct DESC
+        ```
+
+* **Row count / uniqueness**: To confirm that the grain is what you expect, you should check whether an anticipated unique key is actually unique. For example, if you were making a daily shapes table, you might expect that `date + feed_key + shape_id` would be unique. Similarly, you should have a ballpark idea of the order of magnitude of the number of rows you expect. If you're making a yearly organizations table and your table has a million rows, something is likely off. Some example queries here:
+
+   * To check row count:
+        ```
+        SELECT COUNT(*) FROM <your model>
+        ```
+
+   * To check row count by some attribute (for example, rows per date):
+        ```
+        SELECT <your column>, COUNT(*) AS ct
+        FROM <your model>
+        GROUP BY 1
+        ORDER BY 1
+        ```
+
+   * To check uniqueness based on a combination of a few columns:
+        ```
+        --
+        WITH tbl AS (
+                SELECT * FROM <your model>
+            ),
+
+        dups AS (
+            SELECT
+                <column 1>,
+                <column 2>,
+                <column 3>,
+                COUNT(*) AS ct
+            FROM tbl
+            -- adjust this based on the number of columns that make the composite unique key
+            GROUP BY 1, 2, 3
+            HAVING ct > 1
+        )
+
+        SELECT *
+        FROM dups
+        LEFT JOIN tbl USING (<column 1>, <column 2>, <column 3>)
+        ORDER BY <column 1>, <column 2>, <column 3>
+        ```
+
 
 
 ### Materializations, performance, and cost
