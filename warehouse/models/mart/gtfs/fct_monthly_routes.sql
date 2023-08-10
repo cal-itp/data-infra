@@ -5,12 +5,14 @@ WITH dim_gtfs_datasets AS (
     FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
+-- keep feeds that are active at the end of the month
 fct_daily_schedule_feeds AS (
-    SELECT DISTINCT
+    SELECT
         feed_key,
-        date,
+        LAST_DAY(date, MONTH) AS month_last_day
+
     FROM {{ ref('fct_daily_schedule_feeds') }}
-    WHERE LAST_DAY(date, MONTH) = date
+    GROUP BY 1, 2
 ),
 
 fct_scheduled_trips AS (
@@ -27,7 +29,8 @@ dim_shapes_arrays AS (
 
     FROM {{ ref('dim_shapes_arrays') }}
     -- pull shapes for feeds that were active on last day of month
-    WHERE feed_key = fct_daily_schedule_feeds.feed_key
+    WHERE dim_shapes_arrays.feed_key = fct_daily_schedule_feeds.feed_key
+
 ),
 
 trips_by_route AS (
@@ -45,7 +48,7 @@ trips_by_route AS (
         LAST_DAY(service_date, MONTH) AS month_last_day,
         COUNT(*) AS n_trips,
 
-    FROM fct_scheduled_trips as trips
+    FROM fct_scheduled_trips AS trips
     LEFT JOIN dim_gtfs_datasets
         ON trips.gtfs_dataset_key = dim_gtfs_datasets.key
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
