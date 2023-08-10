@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Production DAGs Maintenance &#8212; Cal-ITP Data Services</title>
+    <title>Airflow Operational Considerations &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -57,8 +57,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Kubernetes" href="../kubernetes/README.html" />
-    <link rel="prev" title="Airflow" href="overview.html" />
+    <link rel="next" title="Transit Database (Airtable)" href="../transit_database/transitdatabase.html" />
+    <link rel="prev" title="Data pipelines" href="../architecture/data.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -283,6 +283,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/navigating_dbt_docs.html">
+     Navigating the dbt Docs
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../warehouse/what_is_agency.html">
      What is an
      <code class="docutils literal notranslate">
@@ -309,11 +314,6 @@
     </a>
    </li>
   </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../datasets_and_tables/overview.html">
-   Navigating the dbt Docs
-  </a>
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../publishing/overview.html">
@@ -401,29 +401,22 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
-   Airflow
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Airflow Operational Considerations
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Production DAGs Maintenance
-    </a>
-   </li>
-  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../transit_database/transitdatabase.html">
+   Transit Database (Airtable)
+  </a>
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../kubernetes/README.html">
    Kubernetes
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-  <label for="toctree-checkbox-8">
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -461,8 +454,8 @@
   <a class="reference internal" href="../contribute/overview.html">
    Getting Started
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-  <label for="toctree-checkbox-9">
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -631,7 +624,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Production DAGs Maintenance</h1>
+                <h1>Airflow Operational Considerations</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -698,9 +691,9 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="production-dags-maintenance">
-<span id="dags-maintenance"></span><h1>Production DAGs Maintenance<a class="headerlink" href="#production-dags-maintenance" title="Permalink to this headline">¶</a></h1>
-<p>We use <a class="reference external" href="https://airflow.apache.org/">Airflow</a> to orchestrate our data ingest processes. This page describes how to handle cases where an Airflow <a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/tasks.html">DAG task</a> fails.</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="airflow-operational-considerations">
+<span id="dags-maintenance"></span><h1>Airflow Operational Considerations<a class="headerlink" href="#airflow-operational-considerations" title="Permalink to this headline">¶</a></h1>
+<p>We use <a class="reference external" href="https://airflow.apache.org/">Airflow</a> to orchestrate our data ingest processes. This page describes how to handle cases where an Airflow <a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/tasks.html">DAG task</a> fails. For general information about Airflow development, see the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/README.md">Airflow README in the data-infra GitHub repo</a>.</p>
 <div class="section" id="monitoring-dags">
 <h2>Monitoring DAGs<a class="headerlink" href="#monitoring-dags" title="Permalink to this headline">¶</a></h2>
 <p>When an Airflow DAG task fails, it will alert to the <code class="docutils literal notranslate"><span class="pre">#data-infra-alerts</span></code> channel in Slack.</p>
@@ -796,17 +789,17 @@
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../architecture/data.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Airflow</p>
+            <p class="prev-next-title">Data pipelines</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../kubernetes/README.html" title="next page">
+    <a class='right-next' id="next-link" href="../transit_database/transitdatabase.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Kubernetes</p>
+        <p class="prev-next-title">Transit Database (Airtable)</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

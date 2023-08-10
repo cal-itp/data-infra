@@ -28,7 +28,7 @@ This avoids the need to set up a local environment, provides dedicated storage, 
 
 JupyterHub currently lives at [notebooks.calitp.org](https://notebooks.calitp.org/).
 
-Note: you will need to have been added to the Cal-ITP organization on GitHub to obtain access. If you have yet to be added to the organization and need to be, DM Charlie on Cal-ITP Slack <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">using this link</a>.
+Note: you will need to have been added to the Cal-ITP organization on GitHub to obtain access. If you have yet to be added to the organization and need to be, ask in the `#services-team` channel in Slack.
 
 (connecting-to-warehouse)=
 ### Connecting to the Warehouse
