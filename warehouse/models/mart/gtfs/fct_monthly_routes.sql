@@ -7,11 +7,12 @@ WITH dim_gtfs_datasets AS (
 
 -- keep feeds that are active at the end of the month
 fct_daily_schedule_feeds AS (
-    SELECT DISTINCT
+    SELECT
         feed_key,
-        LAST_DAY(date, MONTH) AS month_last_day
-
+        base64_url,
+        LAST_DAY(date, MONTH) as month_last_day
     FROM {{ ref('fct_daily_schedule_feeds') }}
+    WHERE date = LAST_DAY(date, MONTH)
 ),
 
 fct_scheduled_trips AS (
@@ -22,14 +23,11 @@ fct_scheduled_trips AS (
 dim_shapes_arrays AS (
 
     SELECT
-        base64_url,
+        feed_key,
         shape_id,
         pt_array,
 
     FROM {{ ref('dim_shapes_arrays') }}
-    -- pull shapes for feeds that were active on last day of month
-    WHERE dim_shapes_arrays.feed_key = fct_daily_schedule_feeds.feed_key
-
 ),
 
 trips_by_route AS (
@@ -74,10 +72,14 @@ fct_monthly_routes AS (
         shapes.pt_array
 
     FROM trips_by_route AS trips
+    INNER JOIN fct_daily_schedule_feeds AS feeds
+        ON trips.base64_url = feeds.base64_url
+        AND trips.month_last_day = feeds.month_last_day
     INNER JOIN dim_shapes_arrays AS shapes
-        ON trips.base64_url = shapes.base64_url
+        ON feeds.feed_key = shapes.feed_key
         AND trips.shape_id = shapes.shape_id
     WHERE trips.month_last_day <= CURRENT_DATE()
 )
+
 
 SELECT * FROM fct_monthly_routes
