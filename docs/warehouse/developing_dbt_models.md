@@ -44,7 +44,7 @@ flowchart TD
 
 workflow_type[Are you fixing a bug or creating something new?]
 identify_bug[<a href='developing_dbt_models#identify-bug'>Identify the cause of your bug.</a>]
-identify_bug[<a href='developing_dbt_models#fix-bug'>Fix the bug.</a>]
+fix_bug[<a href='developing_dbt_models#fix-bug'>Fix the bug.</a>]
 tool_choice[<a href='developing_dbt_models#tool-choice'>Should this be a dbt model or a different type of analysis, for example a Jupyter notebook or a dashboard?</a>]
 not_dbt[Use a notebook or dashboard for your analysis.]
 grain[<a href='developing_dbt_models#tool-choice'>What is the grain/row definition of your target model?<br>Is there already a model with this grain?</a>]
@@ -53,6 +53,8 @@ new_model[Create a new model with your desired grain.]
 test_changes[Test your changes in the staging environment.<br>Are the values what you expect?<br>Are there null values?<br>Did you change the number of rows in the model?<br>Did you substantially change the size in bytes of the model?<br>etc.]
 
 workflow_type -- fixing a bug --> identify_bug
+identify_bug --> fix_bug
+fix_bug --> test_changes
 workflow_type -- creating something new --> tool_choice
 tool_choice -- dbt model--> grain
 tool_choice -- not dbt --> not_dbt
@@ -60,7 +62,6 @@ grain -- same grain as existing model --> add_column
 grain -- new grain --> new_model
 add_column --> test_changes
 new_model --> test_changes
-fix_bug --> test_changes
 ```
 
 (identify-bug)=
@@ -106,7 +107,7 @@ dbt models may not be appropriate when:
 
 This concept of grain can be one of the biggest differences between notebook-based analysis and warehouse analytics engineering. In notebooks, you may be making a lot of transformations and saving each step out as its own dataframe, and you may use functions for reusable transformation steps. In warehouse development, we want to be focused on making reusable models, where the data itself is the common building block across analyses. That often means trying to make only one table in the warehouse for each grain, regardless of how many different types of analysis it might be used for.
 
-``` {annotation} Example: fct_scheduled_trips
+``` {admonition} Example: fct_scheduled_trips
 Consider [`fct_scheduled_trips`](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_scheduled_trips). This is our core trip-level table. Every scheduled trip should have a row in this model and attributes that you might want from that trip should be present for easy access. As a result, this table has a lot of columns, because when we need new information about trips, we add it here.  For example, when we wanted to fix time zone handling for trips, we [added those columns](https://github.com/cal-itp/data-infra/pull/2457) instead of creating a new model.
 ```
 
@@ -114,15 +115,28 @@ If there is already a model with the grain you are targeting, you should almost 
 
 To figure out if there is a model with your desired grain, you can [search the dbt docs](https://dbt-docs.calitp.org/#!/overview) for relevant terms. For example, if you want a table of routes, you can search "routes" to see what models already exist. You can also explore the dependency tree for a related table (like `dim_routes`) to see if you can find a table that looks like it has the right grain. You can also see [our dbt docs homepage](https://dbt-docs.calitp.org/#!/overview) for a discussion of table naming conventions to interpret dimension, fact, and bridge tables.
 
-### Should I create a new model or update an existing model?
+(add-column)=
+### Add your column.
 
+Adding a column can involve different steps depending on whether the data you need is already ingested in the warehouse or whether you will need to update external tables or raw data. In general, you will need to update one or more SQL files and the accompanying YAML to document and possibly test your new column.
 
+* For a simple example of adding a column that already exists in staging to a mart table, see [data infra PR #2778](https://github.com/cal-itp/data-infra/pull/2778).
+* For a intermediate examples of adding a column in a staging table and propagating it through a few different downstream models, see
+    * [Data infra PR #2768](https://github.com/cal-itp/data-infra/pull/2768)
+    * [Data infra PR #2601](https://github.com/cal-itp/data-infra/pull/2686)
+* For an example of adding a column to Airtable data end-to-end (starting from the raw data/external tables; this involves non-dbt code), see [data infra PR #2383](https://github.com/cal-itp/data-infra/pull/2383).
 
-If you determine a dbt update is appropriate, you must decide whether a given data need is best met by creating a new dbt model or updating an existing model.
+(new-model)=
+### Create a new model with your desired grain.
 
-The main consideration should be: **Is there already a model with the grain that my new model would be?**
+Creating a new model can involve different steps depending on whether the model needs new preparatory models (for example, staging or intermediate tables) or whether it is built on top of existing data.
 
-For example, say you want to create a model with the count of scheduled stop events by route per month. Your new model would have one row per route per month. Say that there is already a model that lists the count of scheduled trips per route per month. That model also has one row per route per month. So, you should add a column with a stop event count to that existing model, rather than making a brand new model.
+* For a simple example of creating a new model based on existing data, see [data infra PR #2686](https://github.com/cal-itp/data-infra/pull/2686).
+* For an example of adding models to dbt end-to-end (starting from raw data/external tables; this involves non-dbt code), see:
+   * [Data infra PR #2509](https://github.com/cal-itp/data-infra/pull/2509)
+   * [Data infra PR #2781](https://github.com/cal-itp/data-infra/pull/2781)
+
+### Test your changes.
 
 
 ### Materializations, performance, and cost
