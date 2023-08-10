@@ -33,7 +33,7 @@ If you feel a new section is warranted, make sure you follow Jupyter Book's guid
 
 (new-pages)=
 ### New Pages and Chapters
-Add new pages and chapters only as truly needed. If you're unsure of whether a new page or chapter is necessary, reach out to `@Charlie Costanzo` on `Cal-ITP Slack`.
+Add new pages and chapters only as truly needed.
 
 If you are adding new pages or chapters, you will need to also update the `_toc.yml` file. You can find more information at Jupyter Book's resource [Structure and organize content](https://jupyterbook.org/basics/organize.html).
 

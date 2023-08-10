@@ -1,7 +1,7 @@
 (dags-maintenance)=
-# Production DAGs Maintenance
+# Airflow Operational Considerations
 
-We use [Airflow](https://airflow.apache.org/) to orchestrate our data ingest processes. This page describes how to handle cases where an Airflow [DAG task](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/tasks.html) fails.
+We use [Airflow](https://airflow.apache.org/) to orchestrate our data ingest processes. This page describes how to handle cases where an Airflow [DAG task](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/tasks.html) fails. For general information about Airflow development, see the [Airflow README in the data-infra GitHub repo](https://github.com/cal-itp/data-infra/blob/main/airflow/README.md).
 
 ## Monitoring DAGs
 
