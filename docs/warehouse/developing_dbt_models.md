@@ -16,7 +16,7 @@ Information related to contributing to the [Cal-ITP dbt project](https://github.
 
 To get set up to contribute to the dbt project via JupyterHub, follow [the README in the data-infra repo warehouse folder](https://github.com/cal-itp/data-infra/blob/main/warehouse/README.md#setting-up-the-project-in-your-jupyterhub-personal-server). If you hit any trouble with setup, let folks know in the `#data-warehouse-devs` or `#data-office-hours` channels in the Cal-ITP Slack.
 
-We also recommend that everyone who does dbt development joins the `#data-warehouse-devs` channel in the Cal-ITP Slack workspace to ask questions, collaborate, and build shared knowledge.
+We recommend that everyone who does dbt development joins the `#data-warehouse-devs` channel in the Cal-ITP Slack workspace to ask questions, collaborate, and build shared knowledge.
 
 ### Developer workflow
 
@@ -44,7 +44,7 @@ For an example of working with dbt in JupyterHub, see the recording of the [orig
 (modeling-considerations)=
 ## Modeling considerations
 
-When developing or updating dbt models, there are some considerations which may differ from considerations for a notebook-based analysis. These can be thought of as a checklist or decision tree of questions that you should run through whenever you are editing or creating a dbt model. Longer explanations of each item are described below.
+When developing or updating dbt models, there are some considerations which may differ from a notebook-based analysis. These can be thought of as a checklist or decision tree of questions that you should run through whenever you are editing or creating a dbt model. Longer explanations of each item are included below.
 
 ```{mermaid}
 flowchart TD
@@ -52,27 +52,31 @@ flowchart TD
 workflow_type[Are you fixing a bug or creating something new?]
 identify_bug[<a href='developing_dbt_models#identify-bug'>Identify the cause of your bug.</a>]
 change_models[<a href='developing_dbt_models#change-models'>Make your changes.</a>]
-tool_choice[<a href='developing_dbt_models#tool-choice'>Should this be a dbt model or a different type of analysis?</a>]
+tool_choice[<a href='developing_dbt_models#tool-choice'>Should it be a dbt model?</a>]
 not_dbt[Use a notebook or dashboard for your analysis.]
-grain[<a href='developing_dbt_models#grain'>What is the grain/row definition of your target model?<br>Is there already a model with this grain?</a>]
+grain[<a href='developing_dbt_models#model-grain'>What is the grain of your model?</a>]
+grain_exists[<a href='developing_dbt_models#grain-exists'>Is there already a model with your desired grain?</a>]
 new_column[Add a column to the existing model.]
 new_model[Create a new model.]
-test_changes[<a href='developing_dbt_models#test-changes'><b>Test your changes in the staging environment.</b></a>]
+test_changes[<a href='developing_dbt_models#test-changes'><b>Test your changes.</b></a>]
 new_column[Add a column to the existing model.]
 tests_and_docs[<a href='developing_dbt_models#tests-and-docs'>Add dbt tests and documentation.</a>]
+merge_model_changes[<a href='developing_dbt_models#merge-model-changes'>Merge your changes. 🎉</a>]
 
 workflow_type -- fixing a bug --> identify_bug
 identify_bug --> change_models
 workflow_type -- creating something new --> tool_choice
 tool_choice -- dbt model--> grain
 tool_choice -- not dbt --> not_dbt
-grain -- there is an existing model with this grain --> new_column
-grain -- there is no existing model with this grain --> new_model
+grain --> grain_exists
+grain_exists -- there is an existing model with this grain --> new_column
+grain_exists -- there is no existing model with this grain --> new_model
 new_column --> change_models
 new_model --> change_models
 change_models --> test_changes
 test_changes -- identify issues--> change_models
 test_changes -- no issues --> tests_and_docs
+tests_and_docs --> merge_model_changes
 ```
 
 (identify-bug)=
@@ -91,64 +95,73 @@ If you noticed an issue that wasn't caused by a failing test, you can start with
 In either case, you may need to consider upstream models. To identify your model's parents, you can look at the [dbt docs website](https://dbt-docs.calitp.org/#!/overview) page for your model. [See the dbt docs](https://docs.getdbt.com/docs/collaborate/documentation#navigating-the-documentation-site) for how to look at the model's lineage. You can modify the model selector in the bottom middle to just `+<your model name>` to only see the model's parents. You can also run `poetry run dbt ls -s +<your model> --resource-type model` to see a model's parents just on the command line. Try to figure out where the root cause of the problem is occurring. This may involve running ad-hoc SQL queries to inspect the models involved.
 
 (tool_choice)=
-### Should this be a dbt model?
+### Should it be a dbt model?
 
-Changes to dbt models are likely to be appropriate, and often beneficial over other approaches, when one or more of the following is true:
+Changes to dbt models are likely to be appropriate when one or more of the following is true:
 * There is a consistent or ongoing need for this data. dbt can ensure that transformations are performed consistently at scale, every day.
 * The data is big. Doing transformations in BigQuery can be more performant than doing them in notebooks or any workflow where the large data must be loaded into local memory.
 * We want to use the same model across multiple domains or tools. The BigQuery data warehouse is the easiest way to provide consistent data throughout the Cal-ITP data ecosystem (in JupyterHub, Metabase, open data publishing, the reports site, etc.)
 
 dbt models may not be appropriate when:
-* You are doing exploratory data analysis, especially on inconsistently-constructed data. It will almost always be faster to do initial exploration of data via Jupyter/Python than in SQL.
-* You want to apply a simple transformation (for example, a grouped summary or filter, or a join) to answer a specific question. In this case, it may be more appropriate to simply create a Metabase dashboard with the desired transformations.
+* You are doing exploratory data analysis. It will almost always be faster to do initial exploration of data via Jupyter/Python than in SQL.
+* You want to apply a simple transformation (for example, a grouped summary or filter) to answer a specific question. In this case, it may be more appropriate to create a Metabase dashboard with the desired transformations.
 
 (model-grain)=
-### What is the grain/row definition of your target model? Is there already a model with this grain?
+### What is the grain of your model?
 
-*Grain* means "what does a row represent". For example: Do you want one row per route per day? One row per fare transaction? One row per organization per month?
+[*Grain* means "what does a row represent"](https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/grain/). For example, for: Do you want one row per route per day? One row per fare transaction? One row per organization per month?
 
-This concept of grain can be one of the biggest differences between notebook-based analysis and warehouse analytics engineering. In notebooks, you may be making a lot of transformations and saving each step out as its own dataframe, and you may use functions for reusable transformation steps. In warehouse development, we want to be focused on making reusable models, where the data itself is the common building block across analyses. That often means trying to make only one table in the warehouse for each grain, regardless of how many different types of analysis it might be used for.
+This concept of grain can be one of the biggest differences between notebook-based analysis and warehouse analytics engineering. In notebooks, you may be making a lot of transformations and saving each step out as its own dataframe, and you may use functions for reusable transformation steps. In warehouse development, we want to be focused on making reusable models where the data itself is the common building block across analyses. That often means trying to make only one table in the warehouse for each grain, regardless of how many different types of analysis it might be used for.
+
+(grain-exists)=
+### Is there already a model with this grain?
+
+If there is already a model with the grain you are targeting, you should almost always add new columns to that existing model rather than making a new model with the same grain.
 
 ``` {admonition} Example: fct_scheduled_trips
 Consider [`fct_scheduled_trips`](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_scheduled_trips). This is our core trip-level table. Every scheduled trip should have a row in this model and attributes that you might want from that trip should be present for easy access. As a result, this table has a lot of columns, because when we need new information about trips, we add it here.  For example, when we wanted to fix time zone handling for trips, we [added those columns](https://github.com/cal-itp/data-infra/pull/2457) instead of creating a new model.
 ```
 
-If there is already a model with the grain you are targeting, you should almost always add new columns to that existing model rather than making a new model with the same grain.
-
 To figure out if there is a model with your desired grain, you can [search the dbt docs](https://dbt-docs.calitp.org/#!/overview) for relevant terms. For example, if you want a table of routes, you can search "routes" to see what models already exist. You can also explore the dependency tree for a related table (like `dim_routes`) to see if you can find a table that looks like it has the right grain. You can also see [our dbt docs homepage](https://dbt-docs.calitp.org/#!/overview) for a discussion of table naming conventions to interpret dimension, fact, and bridge tables.
+
+For dimensions you may need to think more about whether you are truly making a new dimension, or whether you are simply applying a filter on an existing dimension (for example, `dim_bus_vehicles` could be a subset of an existing `dim_vehicles` dimension model, in which case you could just add a boolean column `is_bus` on `dim_vehicles` rather than making a new dedicated model.)
 
 (change-models)=
 ### Make your changes.
 
-What kind of changes you are making will depend on what you've discovered in previous steps. Fixing a bug might involve changing model SQL, changing tests to reflect a new understanding, or something else. Adding a column might involve a simple change, or require changing parent models. Creating a new model for brand new data may involve a new external table, or it might be a straightforward transformation just in the mart.
+The kind of changes you make will depend on what you've discovered in previous steps. Fixing a bug might involve changing model SQL, changing tests to reflect a new understanding, or something else. Adding a column might involve a simple change on one model or require updating several parent models. Creating a new model for brand new data may involve a new external table or it might be a straightforward transformation just in the mart.
 
+#### Example bug fix PRs
 Here are a few example `data-infra` PRs that fixed past bugs:
-- [#2076](https://github.com/cal-itp/data-infra/pull/2076) fixed two bugs: There was a hardcoded incorrect value in our SQL that was causing Sundays to not appear in our scheduled service index (SQL syntax bug), and there was a bug in how we were handling the relationship between `calendar_dates` and `calendar` (GTFS logic bug).
-- [#2623](https://github.com/cal-itp/data-infra/pull/2623) fixed bugs caused by unexpected calendar data from a producer.
+- [PR #2076](https://github.com/cal-itp/data-infra/pull/2076) fixed two bugs: There was a hardcoded incorrect value in our SQL that was causing Sundays to not appear in our scheduled service index (SQL syntax bug), and there was a bug in how we were handling the relationship between `calendar_dates` and `calendar` (GTFS logic bug).
+- [PR #2623](https://github.com/cal-itp/data-infra/pull/2623) fixed bugs caused by unexpected calendar data from a producer.
 
+
+#### Example new column PRs
 Here are a few example `data-infra` PRs that added columns to existing models:
-* For a simple example of adding a column that already exists in staging to a mart table, see [data infra PR #2778](https://github.com/cal-itp/data-infra/pull/2778).
-* For a intermediate examples of adding a column in a staging table and propagating it through a few different downstream models, see
-    * [Data infra PR #2768](https://github.com/cal-itp/data-infra/pull/2768)
-    * [Data infra PR #2601](https://github.com/cal-itp/data-infra/pull/2686)
-* For an example of adding a column to Airtable data end-to-end (starting from the raw data/external tables; this involves non-dbt code), see [data infra PR #2383](https://github.com/cal-itp/data-infra/pull/2383).
+* [PR #2778](https://github.com/cal-itp/data-infra/pull/2778) is a simple example of adding a column that already exists in staging to a mart table.
+* For intermediate examples of adding a column in a staging table and propagating it through a few different downstream models, see
+    * [PR #2768](https://github.com/cal-itp/data-infra/pull/2768)
+    * [PR #2601](https://github.com/cal-itp/data-infra/pull/2686)
+* [PR #2383](https://github.com/cal-itp/data-infra/pull/2383) adds a column to Airtable data end-to-end (starting from the raw data/external tables; this involves non-dbt code).
 
+#### Example new model PRs
 Here are a few `data-infra` PRs that created brand new models:
-* For a simple example of creating a new model based on existing data, see [data infra PR #2686](https://github.com/cal-itp/data-infra/pull/2686).
-* For an example of adding models to dbt end-to-end (starting from raw data/external tables; this involves non-dbt code), see:
-   * [Data infra PR #2509](https://github.com/cal-itp/data-infra/pull/2509)
-   * [Data infra PR #2781](https://github.com/cal-itp/data-infra/pull/2781)
+* [PR #2686](https://github.com/cal-itp/data-infra/pull/2686) created a new model based on existing warehouse data.
+* For examples of adding models to dbt end-to-end (starting from raw data/external tables; this involves non-dbt code), see:
+   * [PR #2509](https://github.com/cal-itp/data-infra/pull/2509)
+   * [PR #2781](https://github.com/cal-itp/data-infra/pull/2781)
 
 (test-changes)=
 ### Test your changes.
 
 Once you have made some changes, it is important to test them.
 
-```{admonition} Functional testing vs. dbt tests
-Functional testing during development is different than adding dbt tests (described below). dbt tests ensure some floor of model validity over time; while developing, you should do some more holistic tests to ensure that your code is working as expected.
+```{admonition} Different types of testing
+Functional testing during development is different than adding dbt tests ([described below](dbt-tests)). dbt tests ensure some floor of model validity over time; while developing, you should run some more holistic tests to ensure that your code is working as expected.
 ```
 
-The first step is running your changes in the test environment. You can run a command like `poetry run dbt run -s +<your model>` to run your model and its antecedents.  Your models will be created in the `cal-itp-data-infra-staging.<your name>_<dbt folder name, like mart_gtfs>` BigQuery dataset. Note that this is in the `cal-itp-data-infra-staging` Google Cloud Platform project, *not* the production `cal-itp-data-infra` project.
+The first step is running your changes in the test/staging environment. You can run a command like `poetry run dbt run -s +<your model>` to run your model and its antecedents.  Your models will be created in the `cal-itp-data-infra-staging.<your name>_<dbt folder name, like mart_gtfs>` BigQuery dataset. Note that this is in the `cal-itp-data-infra-staging` Google Cloud Platform project, *not* the production `cal-itp-data-infra` project.
 
 What to test/check will vary based on what you're doing, but here are some example things to consider:
 
@@ -234,14 +247,24 @@ Below are a few options to improve performance. [Data infra PR #2711](https://gi
     * Consider storing it as a [table rather than a view](https://docs.getdbt.com/docs/build/materializations).
     * If the model is already a table, you can consider [partitioning](https://cloud.google.com/bigquery/docs/partitioned-tables) or [clustering](https://cloud.google.com/bigquery/docs/clustered-tables#when_to_use_clustering) on columns that will commonly be used as filters.
 
+#### Downstream impacts
+Another important consideration is the potential downstream impacts of your changes, particularly if you are changing existing models.
+
+Check which models are downstream of your changes using `poetry run dbt ls -s <your_model>+ --resource-type model`. If your model has a lot of descendents, consider performing additional tests to ensure that your changes will not cause problems downstream.
+
+To check for impacts on defined downstream artifacts (like the reports site and open data publishing), you can check which [exposures](https://docs.getdbt.com/docs/build/exposures) are downstream of your model using `poetry run dbt ls -s <your_model>+ --resource-type exposure`.
+
+You can run dbt tests on the downstream models using `poetry run dbt test -s <your_model>+`. You should make sure that your changes do not cause new test failures in downstream models.
+
 #### Other considerations
-Other questions will be more specific to your changes or goals, but it's usually a good idea to take a second and brainstorm things that you would expect to be true and check whether your model reflects them. For example, we expect more trip activity during AM/PM peak periods than in the middle of the night; does your model reflect that? What is the balance of weekend to weekday activity in your model, and does it make sense for the context?
+Other questions will be more specific to your changes or goals, but it's usually a good idea to take a second and brainstorm things that you would expect to be true and check whether your model reflects them. For example, we expect more trip activity during AM/PM peak periods than in the middle of the night; is that true in your model? What is the balance of weekend to weekday activity in your model, and does it make sense for the context?
 
 (tests-and-docs)=
 ### Add dbt tests and documentation.
 
 Once you are satisfied with your changes, you should add tests and documentation, both of which are vital to keeping the project maintainable over time.
 
+(dbt-tests)=
 #### dbt tests
 
 [dbt tests](https://docs.getdbt.com/docs/build/tests) help us ensure baseline model validity over time. They are run every day in Airflow and alert when models fail, helping us monitor the data and model quality. Because they run every day and execute SQL code, there is some tradeoff with cost: we don't want to test too excessively because that could become wasteful.
@@ -260,15 +283,15 @@ After you add your tests, you should make sure they pass by running `poetry run 
 
 #### Documentation
 
-[Documentation in dbt](https://docs.getdbt.com/docs/collaborate/documentation) helps different data users collaborate by explaining what a given model or column is. All models should have a description and most columns should too.
-
-```{admonition} Tip
-Model documentation should answer the question: **What information would someone else need to use this model effectively?**
-```
+[Documentation in dbt](https://docs.getdbt.com/docs/collaborate/documentation) helps different data users collaborate by explaining what a given model or column is. Documentation should answer the question: **What information would someone else need to use this model/column effectively?** All models should have a description and most columns should too.
 
 Try not to write time-bound documentation about why the model is being created (for example "this is a new table to do XYZ analysis") -- that belongs in the PR description to give reviewers context about what you're doing, not in the model description. The model description should be time-agnostic and describe the model itself.
 
 Model documentation should make the [grain](model-grain) clear.
+
+(merge-model-changes)=
+### Merge your changes
+Once you have finished work, you should make a PR to get your changes merged into `main`. PRs that sit and become stale may become problematic if other people make changes to models before they merge that cause them to behave unexpectedly.
 
 ## Helpful talks and presentations
 
