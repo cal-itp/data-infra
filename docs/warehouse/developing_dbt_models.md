@@ -255,7 +255,7 @@ We usually prefer to have tests on [tables (rather than views)](https://docs.get
 You may want to find a model similar to the one you're changing and see what tests the other model has.
 
 ```{admonition} Make sure your tests pass!
-After you add your tests, you should make sure they pass by running `poetry run dbt test -s <your_model>`. If your tests don't pass, you should [figure out why](identify-bugs) and [make changes](change-model) until they do.
+After you add your tests, you should make sure they pass by running `poetry run dbt test -s <your_model>`. If your tests don't pass, you should [figure out why](identify-bug) and [make changes](change-models) until they do.
 ```
 
 #### Documentation
@@ -268,7 +268,7 @@ Model documentation should answer the question: **What information would someone
 
 Try not to write time-bound documentation about why the model is being created (for example "this is a new table to do XYZ analysis") -- that belongs in the PR description to give reviewers context about what you're doing, not in the model description. The model description should be time-agnostic and describe the model itself.
 
-Model documentation should make the [grain](grain) clear.
+Model documentation should make the [grain](model-grain) clear.
 
 ## Helpful talks and presentations
 
