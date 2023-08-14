@@ -263,12 +263,6 @@ Check which models are downstream of your changes using `poetry run dbt ls -s <y
 
 To check for impacts on defined downstream artifacts (like the reports site and open data publishing), you can check which [exposures](https://docs.getdbt.com/docs/build/exposures) are downstream of your model using `poetry run dbt ls -s <your_model>+ --resource-type exposure`.
 
-```{warning}
-[Incremental models](https://docs.getdbt.com/docs/build/incremental-models) downstream of your changes may require a **full refresh** after your changes merge.
-
-To check for incremental models downstream of your model, run `poetry run dbt ls -s <your_model>+,config.materialized:incremental --resource-type model`. If you need to refresh incremental models, run the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh) **with appropriate selectors specified after your changes merge to `main` and the [deploy-airflow](https://github.com/cal-itp/data-infra/actions/workflows/deploy-airflow.yml) GitHub action associated with your PR has completed.**
-```
-
 #### Other considerations
 Other questions will be more specific to your changes or goals, but it's usually a good idea to take a second and brainstorm things that you would expect to be true and check whether your model reflects them. For example, we expect more trip activity during AM/PM peak periods than in the middle of the night; is that true in your model? What is the balance of weekend to weekday activity in your model, and does it make sense for the context?
 
@@ -305,6 +299,12 @@ Model documentation should make the [grain](model-grain) clear.
 Once you have finished work, you should make a PR to get your changes merged into `main`. PRs that sit and become stale may become problematic if other people make changes to models before they merge that cause them to behave unexpectedly.
 
 Once your changees merge, if they will impact other users (for example by changing a high-traffic model), you may want to announce your changes on Slack in `#data-warehouse-devs`, `#data-analysis`, or a similar channel.
+
+```{warning}
+[Incremental models](https://docs.getdbt.com/docs/build/incremental-models) downstream of your changes may require a **full refresh** after your changes merge.
+
+To check for incremental models downstream of your model, run `poetry run dbt ls -s <your_model>+,config.materialized:incremental --resource-type model`. If you need to refresh incremental models, run the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh) **with appropriate selectors specified after your changes merge to `main` and the [deploy-airflow](https://github.com/cal-itp/data-infra/actions/workflows/deploy-airflow.yml) GitHub action associated with your PR has completed.**
+```
 
 ## Helpful talks and presentations
 
