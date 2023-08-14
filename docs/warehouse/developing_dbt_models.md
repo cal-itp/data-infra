@@ -249,6 +249,10 @@ Below are a few options to improve performance. [Data infra PR #2711](https://gi
     * Consider storing it as a [table rather than a view](https://docs.getdbt.com/docs/build/materializations).
     * If the model is already a table, you can consider [partitioning](https://cloud.google.com/bigquery/docs/partitioned-tables) or [clustering](https://cloud.google.com/bigquery/docs/clustered-tables#when_to_use_clustering) on columns that will commonly be used as filters.
 
+```{warning}
+If you make your table incremental, you should make sure to run both a full refresh (use the `--full-refresh` flag) and an incremental run (after the table has been built; no flag) in your testing to ensure that both are working as expected.
+```
+
 (model-downstream-impacts)=
 #### Downstream impacts
 Another important consideration is the potential downstream impacts of your changes, particularly if you are changing existing models.
