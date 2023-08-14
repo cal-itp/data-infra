@@ -61,7 +61,7 @@ new_model[Create a new model.]
 test_changes[<a href='developing_dbt_models#test-changes'><b>Test your changes.</b></a>]
 new_column[Add a column to the existing model.]
 tests_and_docs[<a href='developing_dbt_models#tests-and-docs'>Add dbt tests and documentation.</a>]
-merge_model_changes[<a href='developing_dbt_models#merge-model-changes'>Merge your changes. 🎉</a>]
+merge_model_changes[<a href='developing_dbt_models#merge-model-changes'>Merge your changes.</a>]
 
 workflow_type -- fixing a bug --> identify_bug
 identify_bug --> change_models
@@ -248,13 +248,17 @@ Below are a few options to improve performance. [Data infra PR #2711](https://gi
     * If the model is already a table, you can consider [partitioning](https://cloud.google.com/bigquery/docs/partitioned-tables) or [clustering](https://cloud.google.com/bigquery/docs/clustered-tables#when_to_use_clustering) on columns that will commonly be used as filters.
 
 #### Downstream impacts
-Another important consideration is the potential downstream impacts of your changes, particularly if you are changing existing models.
+Another important consideration is the potential downstream impacts of your changes, particularly if you are changing existing models. You can run dbt tests on the downstream models using `poetry run dbt test -s <your_model>+`. You should make sure that your changes do not cause new test failures in downstream models.
 
 Check which models are downstream of your changes using `poetry run dbt ls -s <your_model>+ --resource-type model`. If your model has a lot of descendents, consider performing additional tests to ensure that your changes will not cause problems downstream.
 
 To check for impacts on defined downstream artifacts (like the reports site and open data publishing), you can check which [exposures](https://docs.getdbt.com/docs/build/exposures) are downstream of your model using `poetry run dbt ls -s <your_model>+ --resource-type exposure`.
 
-You can run dbt tests on the downstream models using `poetry run dbt test -s <your_model>+`. You should make sure that your changes do not cause new test failures in downstream models.
+```{warning}
+[Incremental models](https://docs.getdbt.com/docs/build/incremental-models) downstream of your changes may require a **full refresh** after your changes merge.
+
+To check for incremental models downstream of your model, run `poetry run dbt ls -s <your_model>+,config.materialized:incremental --resource-type model`. If you need to refresh incremental models, run the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh) **with appropriate selectors specified after your changes merge to `main` and the [deploy-airflow](https://github.com/cal-itp/data-infra/actions/workflows/deploy-airflow.yml) GitHub action associated with your PR has completed.**
+```
 
 #### Other considerations
 Other questions will be more specific to your changes or goals, but it's usually a good idea to take a second and brainstorm things that you would expect to be true and check whether your model reflects them. For example, we expect more trip activity during AM/PM peak periods than in the middle of the night; is that true in your model? What is the balance of weekend to weekday activity in your model, and does it make sense for the context?
