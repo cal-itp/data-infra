@@ -1,4 +1,5 @@
 cronjob:
+  schedule: "15 0,12 * * *"
   image: ghcr.io/jarvusinnovations/restic-toolkit:1.3.0
 
 secretMounts:
