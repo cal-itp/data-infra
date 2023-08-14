@@ -1,44 +1,16 @@
----
-jupytext:
-  cell_metadata_filter: -all
-  formats: md:myst
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.10.3
-kernelspec:
-  display_name: Python 3 (ipykernel)
-  language: python
-  name: python3
----
-
 # Kubernetes
-## Cluster Administration ##
-### preflight ###
 
-Check logged in user
+We deploy our applications and services to a Google Kubernetes Engine cluster. If you are unfamiliar with Kubernetes, we recommend reading through [the official tutorial](https://kubernetes.io/docs/tutorials/kubernetes-basics/) to understand the main components (you do not have to actually perform all the steps).
 
+## Cluster Administration
+
+We do not currently use Terraform to manage our cluster, nodepools, etc. and major changes to the cluster are unlikely to be necessary, but we do have some bash scripts that can help with tasks such as creating new node pools or creating a test cluster.
+
+First, verify you are logged in and gcloud is pointed at `cal-itp-data-infra` and the `us-west1` region.
 ```bash
 gcloud auth list
-# ensure correct active user
-# gcloud auth login
-```
-
-Check active project
-
-```bash
 gcloud config get-value project
-# project should be cal-itp-data-infra
-# gcloud config set project cal-itp-data-infra
-```
-
-Check compute region
-
-```bash
 gcloud config get-value compute/region
-# region should be us-west1
-# gcloud config set compute/region us-west1
 ```
 
 ### quick start ###
@@ -96,21 +68,20 @@ Once the old node pool is removed from the array, it can be drained and deleted 
 
 Cluster workloads are divided into two classes:
 
-1. system
-2. apps
+1. Apps
+2. System
 
-Apps are the workloads that users actually care about.
+Apps are the workloads that users actually care about; this includes deployed "applications"
+such as the GTFS-RT archiver but also includes "services" like Grafana and Sentry.
 
-### system workloads ###
+System workloads are used to support running applications. This includes items
+such as an ingress controller, HTTPS certificate manager, etc. The system deploy command
+is run at cluster create time, but when new system workloads are added it may need
+to be run again.
 
 ```bash
 kubectl apply -k kubernetes/system
 ```
-
-System workloads are used to support running applications. This includes items
-such as an ingress controller, monitoring, logging, etc. The system deploy command
-is run at cluster create time, but when new system workloads are added it may need
-to be run again.
 
 # JupyterHub
 
@@ -128,38 +99,12 @@ kubectl create ns jupyterhub
 
 ### 2. Add Secrets to Namespace
 
-Two base64-encoded secrets must be added to the `jupyterhub` namespace before installing the Helm chart.
+JupyterHub relies on two secrets ( and ); these are stored in Secret Manager and are deployable via invoke.
 
-We'll cover the purpose of each secret in the subsections below.
-
-We'll put both of these secrets in a local file, `jupyterhub-secrets.yaml`, which will contain something that looks like this:
-
-```yaml
-apiVersion: v1
-data:
-  service-key.json: <your-base64-encoded-service-key-here>
-kind: Secret
-metadata:
-  name: jupyterhub-gcloud-service-key
-  namespace: jupyterhub
----
-
-apiVersion: v1
-data:
-  values.yaml: <your-base64-encoded-github-oauth-config-here>
-kind: Secret
-metadata:
-  name: jupyterhub-github-config
-  namespace: jupyterhub
+From the `ci` directory:
 ```
-
-With the above configured, we can go ahead and apply:
-
+poetry run invoke secrets -f channels/prod.yaml --app=jupyterhub
 ```
-kubectl apply -f jupyterhub-secrets.yaml
-```
-
-**This file should never be committed!!!**
 
 #### jupyterhub-gcloud-service-key
 
@@ -167,13 +112,6 @@ The GCloud service key, a .json file, is used to authenticate users to GCloud.
 
 Currently, the secret `jupyterhub-gcloud-service-key` is mounted to every JupyterHub user's running container at `/usr/local/secrets/service-key.json`. As we refine our authentication approach, this secret may become obsolete and may be removed from this process, but for now the process of volume mounting this secret is required for authentication.
 
-To create the base64 encoded string from your terminal:
-
-```
-cat the-service-key.json | base64 -w 0
-```
-
-Then add the terminal's output to the `jupyterhub-secrets.yaml` outlined above.
 
 #### jupyterhub-github-config
 
@@ -225,64 +163,16 @@ hub:
       client_secret: <your-client-secret-here>
 ```
 
-##### Encode the File Contents
+### 3. Deploying the application
 
-From your terminal:
-
-```
-cat github-secrets.yaml | base64 -w 0
-```
-
-##### Add the Encoding to Your Secret
-
-Add the terminal output from above to your `jupyterhub-secrets.yaml` file.
-
-##### Clean up
-
-From your terminal:
+You are now ready to install the chart to your cluster using invoke (which calls helm underneath).
 
 ```
-rm github-secrets.yaml
+poetry run invoke release -f channels/prod.yaml --app=jupyterhub
 ```
 
-#### Reminder - Apply the secrets file!
+In general, any non-secret changes to the chart can be accomplished by modifying the chart's `values.yaml` and running the `invoke release` from above.
 
-This was a long section, don't forget to apply the following before proceeding.
-
-```
-kubectl apply -f jupyterhub-secrets.yaml
-```
-
-After you apply it - you should delete it or keep it somewhere very safe!
-
-### 3. Install the Helm Chart
-
-You are now ready to install the chart to your cluster using Helm.
-
-```
-helm dependency update  kubernetes/apps/charts/jupyterhub
-helm install jupyterhub kubernetes/apps/charts/jupyterhub -n jupyterhub
-```
-
-## Updating
-
-In general, any non-secret changes to the chart can be added to / adjusted in the chart's `values.yaml`.
-
-Upgrade with:
-
-```
-# On changes to dependencies in Chart.yaml, remember to re-run:
-# helm dependency update kubernetes/apps/charts/jupyterhub
-helm upgrade jupyterhub kubernetes/apps/charts/jupyterhub -n jupyterhub
-```
-
-Note that if you haven't yet connected to the kubernetes cluster, you may need to run the following.
-
-```
-source kubernetes/gke/config-cluster.sh
-export KUBECONFIG=$HOME/.kube/data-infra-apps.yaml
-gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
-```
 
 ## Domain Name Changes
 
@@ -303,12 +193,6 @@ After the changes have been made to the GitHub OAuth application, the following 
   - `hub.config.GitHubOAuthenticator.oauth_callback_url`
   - `ingress.hosts`
   - `ingress.tls.hosts`
-
-Apply these chart changes with:
-
-```
-helm upgrade jupyterhub kubernetes/apps/charts/jupyterhub -n jupyterhub
-```
 
 # Backups
 
