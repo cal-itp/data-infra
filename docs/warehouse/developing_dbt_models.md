@@ -129,7 +129,9 @@ For dimensions you may need to think more about whether you are truly making a n
 (change-models)=
 ### Make your changes.
 
-The kind of changes you make will depend on what you've discovered in previous steps. Fixing a bug might involve changing model SQL, changing tests to reflect a new understanding, or something else. Adding a column might involve a simple change on one model or require updating several parent models. Creating a new model for brand new data may involve a new external table or it might be a straightforward transformation just in the mart.
+The kind of changes you make will depend on what you've discovered in previous steps. Fixing a bug might involve changing model SQL, changing tests to reflect a new understanding, or something else. Adding a column might involve a simple change on one model or require updating several parent models. Creating a new model for brand new data may involve a new external table or it might be a straightforward transformation just in the mart. See the examples listed below for examples of what making these changes looks like.
+
+If you find yourself making big changes that seem likely to significantly affect other users, you may need to step back and convene a conversation to make sure that everyone is on board; see for example [this Google Doc about Airtable schema changes](https://docs.google.com/document/d/1F4METWYNip5nobcPZSUg-5XGtC1XX1hWMQfEmERPPd4/edit#heading=h.dsfdelw2zz3n) where stakeholders confirmed how they wanted to handle schema changes in the warehouse. The [downstream impacts section below](model-downstream-impacts) has suggestions for how to assess the impacts of your changes.
 
 #### Example bug fix PRs
 Here are a few example `data-infra` PRs that fixed past bugs:
@@ -247,8 +249,11 @@ Below are a few options to improve performance. [Data infra PR #2711](https://gi
     * Consider storing it as a [table rather than a view](https://docs.getdbt.com/docs/build/materializations).
     * If the model is already a table, you can consider [partitioning](https://cloud.google.com/bigquery/docs/partitioned-tables) or [clustering](https://cloud.google.com/bigquery/docs/clustered-tables#when_to_use_clustering) on columns that will commonly be used as filters.
 
+(model-downstream-impacts)=
 #### Downstream impacts
-Another important consideration is the potential downstream impacts of your changes, particularly if you are changing existing models. You can run dbt tests on the downstream models using `poetry run dbt test -s <your_model>+`. You should make sure that your changes do not cause new test failures in downstream models.
+Another important consideration is the potential downstream impacts of your changes, particularly if you are changing existing models.
+
+You can run dbt tests on the downstream models using `poetry run dbt test -s <your_model>+`. You should make sure that your changes do not cause new test failures in downstream models.
 
 Check which models are downstream of your changes using `poetry run dbt ls -s <your_model>+ --resource-type model`. If your model has a lot of descendents, consider performing additional tests to ensure that your changes will not cause problems downstream.
 
@@ -271,11 +276,9 @@ Once you are satisfied with your changes, you should add tests and documentation
 (dbt-tests)=
 #### dbt tests
 
-[dbt tests](https://docs.getdbt.com/docs/build/tests) help us ensure baseline model validity over time. They are run every day in Airflow and alert when models fail, helping us monitor the data and model quality. Because they run every day and execute SQL code, there is some tradeoff with cost: we don't want to test too excessively because that could become wasteful.
+[dbt tests](https://docs.getdbt.com/docs/build/tests) help us ensure baseline model validity over time. A dbt test failure should be something that you'd want to fix quickly to ensure models work for downstream users. So, **a test failure should be something you'd want to act on** by doing something like fixing, dropping, or adding a warning flag on failing rows.
 
-```{admonition} dbt test rule of thumb
-A dbt test failure should be something that you'd want to fix quickly to ensure model validity for downstream users. So, **a test failure should be something you'd want to act on** by doing something like fixing, dropping, or adding a warning flag on failing rows.
-```
+dbt tests are run every day in Airflow and alert when models fail. Because they run every day and execute SQL code, there is some tradeoff with cost: we don't want to test too excessively because that could become wasteful.
 
 We usually prefer to have tests on [tables (rather than views)](https://docs.getdbt.com/docs/build/materializations) for cost reasons. Most tables, especially in mart datasets, should have at least a primary key test that tests that there is a unique, non-null column.
 
@@ -296,6 +299,8 @@ Model documentation should make the [grain](model-grain) clear.
 (merge-model-changes)=
 ### Merge your changes
 Once you have finished work, you should make a PR to get your changes merged into `main`. PRs that sit and become stale may become problematic if other people make changes to models before they merge that cause them to behave unexpectedly.
+
+Once your changees merge, if they will impact other users (for example by changing a high-traffic model), you may want to announce your changes on Slack in `#data-warehouse-devs`, `#data-analysis`, or a similar channel.
 
 ## Helpful talks and presentations
 
