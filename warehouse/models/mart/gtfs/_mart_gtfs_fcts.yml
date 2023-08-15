@@ -2098,9 +2098,8 @@ models:
         tests: *primary_key_tests
       - name: source_record_id
         description: |
-          Source record ID of the associated `dim_gtfs_datasets` record for this route
+          Source record ID of the associated GTFS dataset record for this route
           as of the last day of this month.
-          If null, the source feed was not present on the last day of this month to facilitate a lookup.
       - name: name
       - name: base64_url
       - name: route_id
