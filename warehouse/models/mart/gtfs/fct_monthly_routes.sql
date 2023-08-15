@@ -13,7 +13,6 @@ fct_daily_schedule_feeds AS (
     SELECT
         feed_key,
         base64_url,
-        gtfs_dataset_key,
         LAST_DAY(date, MONTH) as month_last_day
     FROM {{ ref('fct_daily_schedule_feeds') }}
     WHERE date = LAST_DAY(date, MONTH)
