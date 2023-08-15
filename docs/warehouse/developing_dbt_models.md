@@ -90,9 +90,22 @@ How to investigate the bug depends on how the bug was noticed.
 
 If there was a failing dbt test, you can `dbt compile` locally to compile the project SQL. You can then find the SQL for the failing test (follow the [dbt testing FAQ under "one of my tests failed, how can I debug it?"](https://docs.getdbt.com/docs/build/tests#faqs) to find the compiled test SQL). Run that SQL in BigQuery to see the rows that are failing.
 
+```{admonition} Note
+When you `dbt compile` locally, you will compile SQL that's pointed at the staging project and your namespaced dataset. Make sure to change those references when you run the compiled SQL. So, `cal-itp-data-infra-staging.laurie_mart_gtfs.fct_scheduled_trips` would become `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`.
+```
+
 If you noticed an issue that wasn't caused by a failing test, you can start with the model that you noticed the problem in.
 
 In either case, you may need to consider upstream models. To identify your model's parents, you can look at the [dbt docs website](https://dbt-docs.calitp.org/#!/overview) page for your model. [See the dbt docs](https://docs.getdbt.com/docs/collaborate/documentation#navigating-the-documentation-site) for how to look at the model's lineage. You can modify the model selector in the bottom middle to just `+<your model name>` to only see the model's parents. You can also run `poetry run dbt ls -s +<your model> --resource-type model` to see a model's parents just on the command line. Try to figure out where the root cause of the problem is occurring. This may involve running ad-hoc SQL queries to inspect the models involved.
+
+```{admonition} Example bug troubleshooting walkthrough
+Here is a series of recordings showing a workflow for debugging a failing dbt test. The resulting PR is [#2892](https://github.com/cal-itp/data-infra/pull/2892).
+
+1. [Find the compiled SQL](https://www.loom.com/share/0bf1eaa6d3374be782eb18859f24e08f?sid=0ab9251a-723d-4a5a-9d77-0be3b116a021)
+2. [Run the test SQL](https://www.loom.com/share/e57a163ecd8c4b15af0959fb0b4ab3eb?sid=36b5cf66-9832-4538-8813-c3dd982e6a77)
+3. [Confirm the nature of the problem](https://www.loom.com/share/cf82e6a7ab824d8dbd572d9371ccf6dc?sid=9d31aa40-ff34-4c34-9fd9-22985c7c57e4)
+4. [Plan a fix](https://www.loom.com/share/99133f1172c44540a683e423f4ad91ef?sid=e199aed5-00e0-4acc-98de-24f696e4267e)
+```
 
 (tool_choice)=
 ### Should it be a dbt model?
