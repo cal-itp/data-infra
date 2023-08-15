@@ -1,8 +1,11 @@
 {{ config(materialized='table') }}
 
-WITH dim_gtfs_datasets AS (
+WITH
+-- because we want to guarantee a mapping to a GTFS dataset based on the last day of the month
+-- use this model for mapping (rather than dim gtfs datasets directly) because it handles deletions/changes
+int_transit_database__urls_to_gtfs_datasets AS (
     SELECT *
-    FROM {{ ref('dim_gtfs_datasets') }}
+    FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 
 -- keep feeds that are active at the end of the month
@@ -10,6 +13,7 @@ fct_daily_schedule_feeds AS (
     SELECT
         feed_key,
         base64_url,
+        gtfs_dataset_key,
         LAST_DAY(date, MONTH) as month_last_day
     FROM {{ ref('fct_daily_schedule_feeds') }}
     WHERE date = LAST_DAY(date, MONTH)
@@ -18,6 +22,8 @@ fct_daily_schedule_feeds AS (
 fct_scheduled_trips AS (
     SELECT *
     FROM {{ ref('fct_scheduled_trips') }}
+    -- some trips don't have route; this is not supposed to happen but it does
+    WHERE route_id IS NOT NULL
 ),
 
 dim_shapes_arrays AS (
@@ -30,13 +36,8 @@ dim_shapes_arrays AS (
     FROM {{ ref('dim_shapes_arrays') }}
 ),
 
-trips_by_route AS (
-
+trips_by_route_shape AS (
     SELECT
-
-        dim_gtfs_datasets.source_record_id,
-        dim_gtfs_datasets.name,
-
         trips.base64_url,
         trips.route_id,
         trips.shape_id,
@@ -46,11 +47,9 @@ trips_by_route AS (
         COUNT(*) AS n_trips,
 
     FROM fct_scheduled_trips AS trips
-    LEFT JOIN dim_gtfs_datasets
-        ON trips.gtfs_dataset_key = dim_gtfs_datasets.key
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
+    GROUP BY 1, 2, 3, 4, 5, 6
     QUALIFY ROW_NUMBER() OVER (PARTITION BY
-                               source_record_id, route_id, month_last_day
+                               base64_url, route_id, month_last_day
                                ORDER BY n_trips DESC) = 1
 ),
 
@@ -61,20 +60,24 @@ fct_monthly_routes AS (
             'trips.base64_url', 'trips.route_id',
             'trips.month', 'trips.year']) }} AS key,
 
-        trips.source_record_id,
-        trips.name,
+        gtfs.source_record_id,
+        gtfs.gtfs_dataset_name AS name,
         trips.base64_url,
         trips.route_id,
         trips.shape_id,
         trips.month,
         trips.year,
+        trips.month_last_day,
 
         shapes.pt_array
 
-    FROM trips_by_route AS trips
+    FROM trips_by_route_shape AS trips
     LEFT JOIN fct_daily_schedule_feeds AS feeds
         ON trips.base64_url = feeds.base64_url
         AND trips.month_last_day = feeds.month_last_day
+    LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS gtfs
+        ON trips.base64_url = gtfs.base64_url
+        AND CAST(trips.month_last_day AS TIMESTAMP) BETWEEN gtfs._valid_from AND gtfs._valid_to
     LEFT JOIN dim_shapes_arrays AS shapes
         ON feeds.feed_key = shapes.feed_key
         AND trips.shape_id = shapes.shape_id
