@@ -35,6 +35,8 @@ calitp:
       namespace: monitoring-loki
       helm_name: loki
       helm_chart: kubernetes/apps/charts/loki
+      helm_values:
+        - kubernetes/apps/values/loki-prod.yaml
     - name: metabase
       driver: helm
       namespace: metabase
