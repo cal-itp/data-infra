@@ -325,7 +325,10 @@ Once your changees merge, if they will impact other users (for example by changi
 ```{warning}
 [Incremental models](https://docs.getdbt.com/docs/build/incremental-models) downstream of your changes may require a **full refresh** after your changes merge.
 
-To check for incremental models downstream of your model, run `poetry run dbt ls -s <your_model>+,config.materialized:incremental --resource-type model`. If you need to refresh incremental models, run the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh) **with appropriate selectors specified after your changes merge to `main` and the [deploy-airflow](https://github.com/cal-itp/data-infra/actions/workflows/deploy-airflow.yml) GitHub action associated with your PR has completed.**
+To check for incremental models downstream of your model, run `poetry run dbt ls -s <your_model>+,config.materialized:incremental --resource-type model`. If you need to refresh incremental models:
+1. Wait for the [deploy-airflow](https://github.com/cal-itp/data-infra/actions/workflows/deploy-airflow.yml) GitHub action associated with your PR to complete after you merge.
+
+2. Go into the [Airflow UI](https://o1d2fa0877cf3fb10p-tp.appspot.com/home) and go to the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh). **Specify appropriate model selectors to only refresh models that were affected by your changes** and then run the DAG task.
 ```
 
 ## Helpful talks and presentations
