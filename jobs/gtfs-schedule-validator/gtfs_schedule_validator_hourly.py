@@ -39,6 +39,7 @@ SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_SCHEDULE_VALIDATOR_JAR"
 V2_VALIDATOR_JAR = os.getenv("V2_VALIDATOR_JAR")
 V3_VALIDATOR_JAR = os.getenv("V3_VALIDATOR_JAR")
 V4_VALIDATOR_JAR = os.getenv("V4_VALIDATOR_JAR")
+V4_1_VALIDATOR_JAR = os.getenv("V4_1_VALIDATOR_JAR")
 
 JAR_DEFAULT = typer.Option(
     default=os.environ.get(SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY),
@@ -153,8 +154,11 @@ def execute_schedule_validator(
     elif extract_ts.date() < pendulum.Date(2022, 11, 16):
         versioned_jar_path = V3_VALIDATOR_JAR
         validator_version = "v3.1.1"
-    else:
+    elif extract_ts.date() < pendulum.Date(2023, 9, 1):
         versioned_jar_path = V4_VALIDATOR_JAR
+        validator_version = "v4.0.0"
+    else:
+        versioned_jar_path = V4_1_VALIDATOR_JAR
         validator_version = "v4.1.0"
 
     assert versioned_jar_path
