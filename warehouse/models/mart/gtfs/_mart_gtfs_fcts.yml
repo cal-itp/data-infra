@@ -2089,22 +2089,39 @@ models:
       - *rt_trip_num_distinct_updates
   - name: fct_monthly_routes
     description: |
-      An aggregation of GTFS schedule routes, where the shape with the most trips is  associated.
+      An aggregation of GTFS schedule routes with trip activity in a given month,
+      where the shape with the most trips is associated.
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `base64_url`, `route_id`, `month`, and `year`.
         tests: *primary_key_tests
       - name: source_record_id
+        description: |
+          Source record ID of the associated GTFS dataset record for this route
+          as of the last day of this month.
       - name: name
       - name: base64_url
       - name: route_id
       - name: shape_id
+        description: |
+          If null, this route was mostly missing shapes data.
       - name: month
         description: |
           Service month in which this service was scheduled to occur.
       - name: year
         description: |
           Service year in which this service was scheduled to occur.
+      - name: month_last_day
+        description: |
+          Last day of the month being summarized. This is the date that was used
+          to look up feed and GTFS dataset attributes.
       - name: shape_array_key
+        description: |
+          Key to `dim_shapes_arrays` for this month, route, and shape.
+          If null, it's possible that: this route did not have shapes data; or the most common associated shape may have
+          been deleted in the course of the month being summarized; or the source feed was not
+          present on the last day of this month to facilitate a shape lookup.
       - name: pt_array
+        description: |
+          Array of points describing this shape, looked up from `dim_shapes_arrays` via `shape_array_key`.
