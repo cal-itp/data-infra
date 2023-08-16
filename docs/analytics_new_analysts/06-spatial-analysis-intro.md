@@ -1,24 +1,26 @@
 (geo-intro)=
+
 # Working with Geospatial Data: Intro
 
 Place matters. That's why data analysis often includes a geospatial or geographic component. Data analysts are called upon to merge tabular and geospatial data, count the number of points within given boundaries, and create a map illustrating the results.
 
 Below are short demos of common techniques to help get you started with exploring your geospatial data.
+
 * [Merge tabular and geospatial data](#merge-tabular-and-geospatial-data)
 * [Attach geographic characteristics to all points or lines that fall within a boundary (spatial join and dissolve)](#attach-geographic-characteristics-to-all-points-or-lines-that-fall-within-a-boundary)
 * [Aggregate and calculate summary statistics](#aggregate-and-calculate-summary-statistics)
 * [Buffers](#buffers)
 
-
 ## Getting Started
 
-```
+```python
 # Import Python packages
 import pandas as pd
 import geopandas as gpd
 ```
 
 ## Merge Tabular and Geospatial Data
+
 We have two files: Council District boundaries (geospatial) and population values (tabular). Through visual inspection, we know that `CD` and `District` are columns that help us make this match.
 
 `df`: population by council district
@@ -38,7 +40,8 @@ We have two files: Council District boundaries (geospatial) and population value
 | 3 |  polygon
 
 We could merge these two dfs using the District and CD columns. If our left df is a geodataframe (gdf), then our merged df will also be a gdf.
-```
+
+```python
 merge = pd.merge(gdf, df, left_on = 'District', right_on = 'CD')
 merge
 ```
@@ -55,7 +58,7 @@ Sometimes with a point shapefile (list of lat/lon points), we want to count how 
 
 The ArcGIS equivalent of this is a **spatial join** between the point and polygon shapefiles, then **dissolving** to calculate summary statistics.
 
-```
+```python
 locations = gpd.read_file('../folder/paunch_burger_locations.geojson')
 gdf = gpd.read_file('../folder/council_boundaries.geojson')
 
@@ -88,7 +91,7 @@ gdf = gdf.to_crs('EPSG:4326')
 
 A spatial join finds the Council District the location falls within and attaches that information.
 
-```
+```python
 join = gpd.sjoin(locations, gdf, how = 'inner', predicate = 'intersects')
 
 # how = 'inner' means that we only want to keep observations that matched,
@@ -107,11 +110,11 @@ The `join` gdf looks like this. We lost Stores 4 (Eagleton) and 7 (Indianapolis)
 | 5 | Pawnee  | $4 | (x5, y5) | 1 | polygon
 | 6 | Pawnee  | $6 | (x6, y6) | 2 | polygon
 
-
 ## Aggregate and Calculate Summary Statistics
+
 We want to count the number of Paunch Burger locations and their total sales within each District.
 
-```
+```python
 summary = join.pivot_table(index = ['District', 'Geometry_y],
     values = ['Store', 'Sales_millions'],
     aggfunc = {'Store': 'count', 'Sales_millions': 'sum'}).reset_index()
@@ -133,7 +136,7 @@ summary
 
 By keeping the `Geometry` column, we're able to export this as a GeoJSON or shapefile.
 
-```
+```python
 summary.to_file(driver = 'GeoJSON',
     filename = '../folder/pawnee_sales_by_district.geojson')
 
@@ -142,9 +145,11 @@ summary.to_file(driver = 'ESRI Shapefile',
 ```
 
 ## Buffers
+
 Buffers are areas of a certain distance around a given point, line, or polygon. Buffers are used to determine <i> proximity </i>. A 5 mile buffer around a point would be a circle of 5 mile radius centered at the point. This [ESRI page](http://desktop.arcgis.com/en/arcmap/10.3/tools/analysis-toolbox/buffer.htm) shows how buffers for points, lines, and polygons look.
 
 Some examples of questions that buffers help answer are:
+
 * How many stores are within 1 mile of my house?
 * Which streets are within 5 miles of the mall?
 * Which census tracts or neighborhoods are within a half mile from the rail station?
@@ -165,7 +170,6 @@ We start with two point shapefiles: `locations` (Paunch Burger locations) and `h
 | 6 | Pawnee  | $6 | (x6, y6)
 | 7 | Indianapolis  | $7 | (x7, y7)
 
-
 `homes`: friends' addresses
 
 | Name |  Geometry
@@ -175,14 +179,15 @@ We start with two point shapefiles: `locations` (Paunch Burger locations) and `h
 
 First, prepare our point gdf and change it to the right projection. Pawnee is in Indiana, so we'll use EPSG:2965.
 
-```
+```python
 # Use NAD83/Indiana East projection (units are in feet)
 homes = homes.to_crs('EPSG:2965')
 locations = locations.to_crs('EPSG:2965')
 ```
 
 Next, draw a 2 mile buffer around `homes`.
-```
+
+```python
 # Make a copy of the homes gdf
 homes_buffer = homes.copy()
 
@@ -196,12 +201,13 @@ homes_buffer['geometry'] = homes.geometry.buffer(two_miles)
 
 Do a spatial join between `locations` and `homes_buffer`. Repeat the process of spatial join and aggregation in Python as illustrated in the previous section (spatial join and dissolve in ArcGIS).
 
-```
+```python
 sjoin = gpd.sjoin(locations, homes_buffer, how = 'inner', predicate = 'intersects')
 sjoin
 ```
 
 `sjoin` looks like this.
+
 * Geometry_x is the point geometry from our left df `locations`.
 * Geometry_y is the polygon geometry from our right df `homes_buffer`.
 
@@ -214,7 +220,7 @@ sjoin
 
 Count the number of Paunch Burger locations for each friend.
 
-```
+```python
 count = sjoin.pivot_table(index = 'Name',
     values = 'Store', aggfunc = 'count').reset_index()
 

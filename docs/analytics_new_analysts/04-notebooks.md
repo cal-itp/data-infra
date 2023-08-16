@@ -1,4 +1,5 @@
 (nb-best-practices)=
+
 # Working with Jupyter notebooks
 
 Jupyter notebooks are ubiquitous in the fields of data analysis, data science, and education.
@@ -22,7 +23,6 @@ This document is meant to outline some recommendations for how to best use noteb
 * [Notebooks and Version Control](#notebooks-and-version-control)
 * [Prose and Documentation](#prose-and-documentation)
 * [Data Access](#data-access)
-
 
 ## Notebooks and Reproducibility
 

@@ -1,8 +1,11 @@
 (intro-analytics-tools)=
+
 # Introduction to Analytics Tools
+
 Welcome to the Analytics Tools section! If you're here, you're ready to begin conducting analyses.
 
 **What you should know after reading**:
+
 * [Where to easily access links to team tools](tools-quick-links)
 * [How to use our BI & dashboarding tool](metabase)
 * [How to use our cloud notebook](jupyterhub-intro)

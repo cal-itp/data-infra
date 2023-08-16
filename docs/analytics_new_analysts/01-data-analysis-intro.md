@@ -1,4 +1,5 @@
 (pandas-intro)=
+
 # Data Analysis: Intro
 
 Below are Python tutorials covering the basics of data cleaning and wrangling. [Chris Albon's guide](https://chrisalbon.com/#python) is particularly helpful. Rather than reinventing the wheel, this tutorial instead highlights specific methods and operations that might make your life easier as a data analyst.
@@ -12,25 +13,29 @@ Below are Python tutorials covering the basics of data cleaning and wrangling. [
 
 ## Getting Started
 
-```
+```python
 import numpy as np
 import pandas as pd
 import geopandas as gpd
 ```
 
 ## Import and Export Data in Python
+
 ### **Local files**
+
 We import a tabular dataframe `my_csv.csv` and an Excel spreadsheet `my_excel.xlsx`.
-```
+
+```python
 df = pd.read_csv('./folder/my_csv.csv')
 
 df = pd.read_excel('./folder/my_excel.xlsx', sheet_name = 'Sheet1')
 ```
 
 ### **GCS**
+
 The data we use outside of the warehouse can be stored in GCS buckets.
 
-```
+```python
 # Read from GCS
 df = pd.read_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.csv')
 
@@ -40,8 +45,8 @@ df.to_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.csv')
 
 Refer to the [Data Management best practices](data-management-page) and [Basics of Working with Geospatial Data](geo-intro) for additional information on importing various file types.
 
-
 ## Merge Tabular and Geospatial Data
+
 Merging data from multiple sources creates one large dataframe (df) to perform data analysis. Let's say there are 3 sources of data that need to be merged:
 
 Dataframe #1: `council_population` (tabular)
@@ -51,7 +56,6 @@ Dataframe #1: `council_population` (tabular)
 | 1 | Leslie Knope | 1,500 |
 | 2 | Jeremy Jamm | 2,000
 | 3 | Douglass Howser | 2,250
-
 
 Dataframe #2: `paunch_locations` (geospatial)
 
@@ -65,9 +69,7 @@ Dataframe #2: `paunch_locations` (geospatial)
 | 6 | Pawnee  | $6 | 2 | (x6, y6)
 | 7 | Indianapolis  | $7 | | (x7, y7)
 
-
 If `paunch_locations` did not come with the council district information, use a spatial join to attach the council district within which the store falls. More on spatial joins [here](geo-intro).
-
 
 Dataframe #3: `council_boundaries` (geospatial)
 
@@ -77,10 +79,9 @@ Dataframe #3: `council_boundaries` (geospatial)
 | 2 |  polygon
 | 3 |  polygon
 
-
 First, merge `paunch_locations` with `council_population` using the `CD` column, which they have in common.
 
-```
+```python
 merge1 = pd.merge(paunch_locations, council_population, on = 'CD',
     how = 'inner', validate = 'm:1')
 
@@ -90,16 +91,16 @@ merge1 = pd.merge(paunch_locations, council_population, on = 'CD',
 
 Next, merge `merge1` and `council_boundaries`. Columns don't have to have the same names to be matched on, as long as they hold the same values.
 
-```
+```python
 merge2 = pd.merge(merge1, council_boundaries, left_on = 'CD',
     right_on = 'District', how = 'left', validate = 'm:1')
 ```
 
 Here are some things to know about `merge2`:
+
 * `merge2` is a geodataframe (gdf) because the ***base,*** `paunch_locations`, is a gdf.
 * Pandas allows the merge to take place even if the `Geometry` column appears in both dfs. The resulting df contains 2 renamed `Geometry` columns;  `Geometry_x` corresponds to the left df `Geometry` and `Geometry_y` for the right df.
 * Geopandas still designates a geometry to use. To see what which geometry column is set, type `merge2.geometry.name`. To change the geometry to a different column, type `merge2 = merge2.set_geometry('new_column')`.
-
 
 `merge2` looks like this:
 
@@ -111,13 +112,13 @@ Here are some things to know about `merge2`:
 | 5 | Pawnee  | $4 | 1 | (x5, y5) | Leslie Knope | 1,500 | polygon
 | 6 | Pawnee  | $6 | 2 | (x6, y6)  | Jeremy Jamm | 2,000 | polygon
 
-
 ## Functions
+
 A function is a set of instructions to *do something*. It can be as simple as changing values in a column or as complicated as a series of steps to clean, group, aggregate, and plot the data.
 
 ### **Lambda Functions**
-Lambda functions are quick and dirty. You don't even have to name the function! These are used for one-off functions that you don't need to save for repeated use within the script or notebook. You can use it for any simple function (e.g., if-else statements, etc) you want to apply to all rows of the df.
 
+Lambda functions are quick and dirty. You don't even have to name the function! These are used for one-off functions that you don't need to save for repeated use within the script or notebook. You can use it for any simple function (e.g., if-else statements, etc) you want to apply to all rows of the df.
 
 `df`: Andy Dwyer's band names and number of songs played under that name
 
@@ -130,7 +131,7 @@ Lambda functions are quick and dirty. You don't even have to name the function! 
 
 ### **If-Else Statements**
 
-```
+```python
 # Create column called duration. If Songs > 10, duration is 'long'.
 # Otherwise, duration is 'short'.
 df['duration'] = df.apply(lambda row: 'long' if row.Songs > 10
@@ -160,10 +161,9 @@ df
 | Jet Black Pope | 4  |  short | 0
 | Nothing Rhymes with Orange | 6 | short | 0
 
-
 ### **Other Lambda Functions**
 
-```
+```python
 # Split the band name at the spaces
 # [1] means we want to extract the second word
 # [0:2] means we want to start at the first character
@@ -180,13 +180,13 @@ df
 | Jet Black Pope | 4  |  Po
 | Nothing Rhymes with Orange | 6 | Or
 
-
 ### **Apply over Dataframe**
+
 You should use a full function when a function is too complicated to be a lambda function. These functions are defined by a name and are called upon to operate on the rows of a dataframe. You can also write more complex functions that bundle together all the steps (including nesting more functions) you want to execute over the dataframe.
 
 `df.apply` is one common usage of a function.
 
-```
+```python
 def years_active(row):
     if row.Band == 'Mouse Rat':
         return '2009-2014'
@@ -207,14 +207,13 @@ df
 | Jet Black Pope | 4  |  2008
 | Nothing Rhymes with Orange | 6 | 2008
 
-
-
 ## Grouping
+
 Sometimes it's necessary to create a new column to group together certain values of a column. Here are two ways to accomplish this:
 
 <b>Method #1</b>: Write a function using if-else statement and apply it using a lambda function.
 
-```
+```python
 # The function is called elected_year, and it operates on every row.
 def elected_year(row):
     # For each row, if Council_Member says 'Leslie Knope', then return 2012
@@ -240,10 +239,9 @@ council_population
 | 2 | Jeremy Jamm | 2,000 | 2008
 | 3 | Douglass Howser | 2,250 | 2006
 
-
 <b>Method #2</b>: Loop over every value, fill in the new column value, then attach that new column.
 
-```
+```python
 # Create a list to store the new column
 sales_group = []
 
@@ -273,13 +271,13 @@ paunch_locations
 | 6 | Pawnee  | $6 | 2 | (x6, y6) | high
 | 7 | Indianapolis  | $7 | | (x7, y7) | high
 
-
 ## Aggregating
+
 One of the most common form of summary statistics is aggregating by groups. In Excel, it's called a pivot table. In ArcGIS, it's doing a dissolve and calculating summary statistics. There are two ways to do it in Python: `groupby` and `agg` or `pivot_table`.
 
 To answer the question of how many Paunch Burger locations there are per Council District and the sales generated per resident,
 
-```
+```python
 # Method #1: groupby and agg
 pivot = merge2.groupby(['CD', 'Geometry_y']).agg({'Sales_millions': 'sum',
      'Store': 'count', 'Population': 'mean'}).reset_index()
@@ -304,13 +302,13 @@ pivot = merge2.pivot_table(index= ['CD', 'Geometry_y'],
 | 2 | polygon | $8.5 | 2 | Jeremy Jamm | 2,000
 | 3 | polygon  | $2.5 | 1 | Douglass Howser | 2,250
 
-
 ## Export Aggregated Output
+
 Python can do most of the heavy lifting for data cleaning, transformations, and general wrangling. But, for charts or tables, it might be preferable to finish in Excel so that visualizations conform to the corporate style guide.
 
 Dataframes can be exported into Excel and written into multiple sheets.
 
-```
+```python
 import xlsxwriter
 
 # initiate a writer
@@ -326,7 +324,8 @@ writer.save()
 ```
 
 Geodataframes can be exported as a shapefile or GeoJSON to visualize in ArcGIS/QGIS.
-```
+
+```python
 gdf.to_file(driver = 'ESRI Shapefile', filename = '../folder/my_shapefile.shp' )
 
 gdf.to_file(driver = 'GeoJSON', filename = '../folder/my_geojson.geojson')

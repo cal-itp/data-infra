@@ -1,8 +1,11 @@
 (beginner_analysts_tutorials)=
+
 # Tutorials for New Python Users
+
 This section is geared towards data analysts who are new to Python. The following tutorials highlight the most relevant Python skills used at Cal ITP. Use them to guide you through completing [practice exercises #1-9](https://github.com/cal-itp/data-analyses/tree/main/starter_kit).
 
-## Content:
+## Content
+
 * [Data Analysis: Introduction](pandas-intro)
 * [Data Analysis: Intermediate](pandas-intermediate)
 * [Data Management](data-management-page)
@@ -12,7 +15,8 @@ This section is geared towards data analysts who are new to Python. The followin
 * [Working with Geospatial Data: Intermediate](geo-intermediate)
 * [Working with Geospatial Data: Advanced](geo-advanced)
 
-## Additional Resources:
+## Additional Resources
+
 * If you are new to Python, take a look at [all the Python tutorials](https://www.linkedin.com/learning/search?keywords=python&u=36029164) available through Caltrans. There are many introductory Python courses [such as this one.](https://www.linkedin.com/learning/python-essential-training-18764650/getting-started-with-python?autoplay=true&u=36029164)
 * [Joris van den Bossche's Geopandas Tutorial](https://github.com/jorisvandenbossche/geopandas-tutorial)
 * [Practical Python for Data Science by Jill Cates](https://www.practicalpythonfordatascience.com/intro.html)
@@ -22,7 +26,8 @@ This section is geared towards data analysts who are new to Python. The followin
 * [Why Dask?](https://docs.dask.org/en/stable/why.html)
 * [10 Minutes to Dask](https://docs.dask.org/en/stable/10-minutes-to-dask.html)
 
-### Books:
+### Books
+
 * [The Performance Stat Potential](https://www.brookings.edu/book/the-performancestat-potential/)
 * [Python for Data Analysis](http://shop.oreilly.com/product/0636920023784.do)
 * [Data Wrangling With Python](http://shop.oreilly.com/product/0636920032861.do)

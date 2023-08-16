@@ -1,17 +1,19 @@
 (geo-intermediate)=
+
 # Working with Geospatial Data: Intermediate
 
 After breezing through the [intro tutorial](geo-intro), you're ready to take your spatial analysis to the next level.
 
 Below are short demos of other common manipulations of geospatial data.
+
 * [Create geometry column from latitude and longitude coordinates](#create-geometry-column-from-latitude-and-longitude-coordinates)
 * [Create geometry column from text](#create-geometry-column-from-text)
 * [Use a loop to do spatial joins and aggregations over different boundaries](#use-a-loop-to-do-spatial-joins-and-aggregations-over-different-boundaries)
 * [Multiple geometry columns](#multiple-geometry-columns)
 
-
 ## Getting Started
-```
+
+```python
 # Import Python packages
 import pandas as pd
 import geopandas as gpd
@@ -27,15 +29,15 @@ df = pd.read_csv('../folder/pawnee_businesses.csv')
 | Jurassic Fork | x3 | y3 | 2
 | Gryzzl | x4 | y4 | 40
 
-
 ## Create Geometry Column from Latitude and Longitude Coordinates
+
 Sometimes, latitude and longitude coordinates are given in a tabular form. The file is read in as a dataframe (df), but it needs to be converted into a geodataframe (gdf). The `geometry` column contains a Shapely object (point, line, or polygon), and is what makes it a <b>geo</b>dataframe. A gdf can be exported as GeoJSON, parquet, or shapefile.
 
 In ArcGIS/QGIS, this is equivalent to adding XY data, selecting the columns that correspond to latitude and longitude, and exporting the layer as a shapefile.
 
 First, drop all the points that are potentially problematic (NAs or zeroes).
 
-```
+```python
 # Drop NAs
 df = df.dropna(subset=['X', 'Y'])
 
@@ -45,7 +47,7 @@ df = df[(df.X != 0) & (df.Y != 0)]
 
 Then, create the `geometry` column.  We use a lambda function and apply it to all rows in our df. For every row, take the XY coordinates and make it Point(X,Y). Make sure you set the projection (coordinate reference system)!
 
-```
+```python
 # Rename columns
 df.rename(columns = {'X': 'longitude', 'Y':'latitude'}, inplace=True)
 
@@ -66,8 +68,8 @@ gdf
 | Jurassic Fork | x3 | y3 | 2 | Point(x3, y3)
 | Gryzzl | x4 | y4 | 40 | Point(x4, y4)
 
-
 ## Create Geometry Column from Text
+
 If you are importing your df directly from a CSV or database, the geometry information might be stored as as text. To create our geometry column, we extract the latitude and longitude information and use these components to create a Shapely object.
 
 `df` starts off this way, with column `Coord` stored as text:
@@ -79,10 +81,9 @@ If you are importing your df directly from a CSV or database, the geometry infor
 | Jurassic Fork | (x3, y3) | 2 |
 | Gryzzl | (x4, y4) | 40 |
 
-
 First, we split `Coord` at the comma.
 
-```
+```python
 # We want to expand the result into multiple columns.
 # Save the result and call it new.
 new = df.Coord.str.split(", ", expand = True)
@@ -90,7 +91,7 @@ new = df.Coord.str.split(", ", expand = True)
 
 Then, extract our X, Y components. Put lat, lon into a Shapely object as demonstrated [in the prior section.](#create-geometry-column-from-latitude-and-longitude-coordinates)
 
-```
+```python
 # Make sure only numbers, not parentheses, are captured. Cast it as float.
 
 # 0 corresponds to the portion before the comma. [1:] means starting from
@@ -103,10 +104,9 @@ df['lat'] = new[0].str[1:].astype(float)
 df['lon'] = new[1].str[:-1].astype(float)
 ```
 
-
 Or, do it in one swift move:
 
-```
+```python
 df['geometry'] = df.dropna(subset=['Coord']).apply(
     lambda x: Point(
         float(str(x.Coord).split(",")[0][1:]),
@@ -122,8 +122,8 @@ gdf = gpd.GeoDataFrame(df)
 gdf = df.set_crs('EPSG:4326')
 ```
 
-
 ## Use a Loop to Do Spatial Joins and Aggregations Over Different Boundaries
+
 Let's say we want to do a spatial join between `df` to 2 different boundaries. Different government departments often use different boundaries for their operations (i.e. city planning districts, water districts, transportation districts, etc). Looping over dictionary items would be an efficient way to do this.
 
 We want to count the number of stores and total sales within each Council District and Planning District.
@@ -139,8 +139,7 @@ We want to count the number of stores and total sales within each Council Distri
 
 `council_district` and `planning_district` are polygon shapefiles while `df` is a point shapefile. For simplicity, `council_district` and `planning_district` both use column `ID` as the unique identifier.
 
-
-```
+```python
 # Save the dataframes into dictionaries
 boundaries = {'council': council_district, 'planning': planning_district}
 
@@ -161,7 +160,8 @@ for key, value in boundaries.items():
 ```
 
 Our results dictionary contains 2 dataframes: `council_summary` and `planning_summary`. We can see the contents of the results dictionary using this:
-```
+
+```python
 for key, value in results.items():
     display(key)
     display(value.head())
@@ -180,11 +180,11 @@ results["planning_summary"].head()
 | 2 | 1 | 2
 | 3 | 1 | 30
 
-
 ## Multiple Geometry Columns
+
 Sometimes we want to iterate over different options, and we want to see the results side-by-side. Here, we draw multiple buffers around `df`, specifically, 100 ft and 200 ft buffers.
 
-```
+```python
 # Make sure our projection has US feet as its units
 df.to_crs('EPSG:2965')
 
@@ -202,10 +202,9 @@ df
 | Jurassic Fork  | 2 | Point(x3, y3) | polygon | polygon
 | Gryzzl | 40 | Point(x4, y4) | polygon | polygon
 
-
 To create a new gdf with just 100 ft buffers, select the relevant geometry column, `geometry100`, and set it as the geometry of the gdf.
 
-```
+```python
 df100 = df[['Business', 'Sales_millions',
     'geometry100']].set_geometry('geometry100')
 ```
