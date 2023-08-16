@@ -585,6 +585,13 @@
     <a class="reference internal nav-link" href="#developer-workflow">
      Developer workflow
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#video-walkthrough">
+       Video walkthrough
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -594,13 +601,99 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#when-to-develop-or-update-a-model">
-     When to develop or update a model
+    <a class="reference internal nav-link" href="#identify-bug">
+     Identify the cause of your bug.
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#materializations-performance-and-cost">
-     Materializations, performance, and cost
+    <a class="reference internal nav-link" href="#should-it-be-a-dbt-model">
+     Should it be a dbt model?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-is-the-grain-of-your-model">
+     What is the grain of your model?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#is-there-already-a-model-with-this-grain">
+     Is there already a model with this grain?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#make-your-changes">
+     Make your changes.
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-bug-fix-prs">
+       Example bug fix PRs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-new-column-prs">
+       Example new column PRs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-new-model-prs">
+       Example new model PRs
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#test-your-changes">
+     Test your changes.
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#column-values">
+       Column values
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#row-count-and-uniqueness">
+       Row count and uniqueness
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#performance">
+       Performance
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#downstream-impacts">
+       Downstream impacts
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#other-considerations">
+       Other considerations
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#add-dbt-tests-and-documentation">
+     Add dbt tests and documentation.
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#dbt-tests">
+       dbt tests
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#documentation">
+       Documentation
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#merge-your-changes">
+     Merge your changes
     </a>
    </li>
   </ul>
@@ -661,6 +754,13 @@
     <a class="reference internal nav-link" href="#developer-workflow">
      Developer workflow
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#video-walkthrough">
+       Video walkthrough
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -670,13 +770,99 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#when-to-develop-or-update-a-model">
-     When to develop or update a model
+    <a class="reference internal nav-link" href="#identify-bug">
+     Identify the cause of your bug.
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#materializations-performance-and-cost">
-     Materializations, performance, and cost
+    <a class="reference internal nav-link" href="#should-it-be-a-dbt-model">
+     Should it be a dbt model?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-is-the-grain-of-your-model">
+     What is the grain of your model?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#is-there-already-a-model-with-this-grain">
+     Is there already a model with this grain?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#make-your-changes">
+     Make your changes.
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-bug-fix-prs">
+       Example bug fix PRs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-new-column-prs">
+       Example new column PRs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-new-model-prs">
+       Example new model PRs
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#test-your-changes">
+     Test your changes.
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#column-values">
+       Column values
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#row-count-and-uniqueness">
+       Row count and uniqueness
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#performance">
+       Performance
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#downstream-impacts">
+       Downstream impacts
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#other-considerations">
+       Other considerations
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#add-dbt-tests-and-documentation">
+     Add dbt tests and documentation.
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#dbt-tests">
+       dbt tests
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#documentation">
+       Documentation
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#merge-your-changes">
+     Merge your changes
     </a>
    </li>
   </ul>
@@ -713,9 +899,9 @@
 <div class="section" id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>If you have questions specific to our project or you encounter any issues when developing, please reach out in the <code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code> or <code class="docutils literal notranslate"><span class="pre">#data-office-hours</span></code> Cal-ITP Slack channels.</p></li>
+<li><p>If you have questions specific to our project or you encounter any issues when developing, please reach out in the <a class="reference external" href="https://cal-itp.slack.com/archives/C050ZNDUL21"><code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code></a> or <a class="reference external" href="https://cal-itp.slack.com/archives/C02KH3DGZL7"><code class="docutils literal notranslate"><span class="pre">#data-office-hours</span></code></a> Cal-ITP Slack channels.</p></li>
 <li><p>For Cal-ITP-specific data warehouse documentation, including high-level concepts and naming conventions, see <a class="reference external" href="https://dbt-docs.calitp.org/#%21/overview">our Cal-ITP dbt documentation site</a>. This documentation is automatically generated by dbt, and incorporates the table- and column-level documentation that developers enter in YAML files in the dbt project.</p></li>
-<li><p>For general dbt concepts (for example, dbt <a class="reference external" href="https://docs.getdbt.com/guides/advanced/using-jinja">Jinja</a> or <a class="reference external" href="https://docs.getdbt.com/docs/build/tests">tests</a>), see the <a class="reference external" href="https://docs.getdbt.com/docs/introduction">general dbt documentation site</a></p></li>
+<li><p>For general dbt concepts (for example, dbt <a class="reference external" href="https://docs.getdbt.com/guides/advanced/using-jinja">Jinja</a> or <a class="reference external" href="https://docs.getdbt.com/docs/build/tests">tests</a>), see the <a class="reference external" href="https://docs.getdbt.com/docs/introduction">general dbt documentation site</a>.</p></li>
 <li><p>For general SQL or BigQuery concepts (for example, <a class="reference external" href="https://cloud.google.com/bigquery/docs/tables-intro">tables</a>, <a class="reference external" href="https://cloud.google.com/bigquery/docs/views-intro">views</a>, or <a class="reference external" href="https://cloud.google.com/bigquery/docs/reference/standard-sql/window-function-calls">window functions</a>), see the <a class="reference external" href="https://cloud.google.com/bigquery/docs">BigQuery docs site</a>.</p></li>
 </ul>
 </div>
@@ -723,41 +909,326 @@
 <h2>How to contribute to the dbt project<a class="headerlink" href="#how-to-contribute-to-the-dbt-project" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="getting-started">
 <h3>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h3>
-<p>To get set up to contribute to the dbt project via JupyterHub, follow <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/README.md#setting-up-the-project-in-your-jupyterhub-personal-server">the README in the data-infra repo warehouse folder</a>. If you hit any trouble with setup, let folks know in the #data-warehouse-devs or #data-office-hours channel in the Cal-ITP Slack.</p>
-<p>We also recommend that everyone who does dbt development joins the <code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code> channel in the Cal-ITP Slack workspace to ask questions, collaborate, and build shared knowledge.</p>
+<p>To get set up to contribute to the dbt project via JupyterHub, follow <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/README.md#setting-up-the-project-in-your-jupyterhub-personal-server">the README in the data-infra repo warehouse folder</a>. If you hit any trouble with setup, let folks know in the <a class="reference external" href="https://cal-itp.slack.com/archives/C050ZNDUL21"><code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code></a> or <a class="reference external" href="https://cal-itp.slack.com/archives/C02KH3DGZL7"><code class="docutils literal notranslate"><span class="pre">#data-office-hours</span></code></a> Cal-ITP Slack channels.</p>
+<p>We recommend that everyone who does dbt development joins the  <a class="reference external" href="https://cal-itp.slack.com/archives/C050ZNDUL21"><code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code></a> channel in the Cal-ITP Slack to ask questions, collaborate, and build shared knowledge.</p>
 </div>
 <div class="section" id="developer-workflow">
 <h3>Developer workflow<a class="headerlink" href="#developer-workflow" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-see-next-section-for-modeling-considerations admonition">
+<p class="admonition-title">See next section for modeling considerations</p>
+<p>This section describes the high-level mechanics/process of the developer workflow to edit the dbt project.
+<strong>Please read the <a class="reference external" href="developing_dbt_models#modeling-considerations">next section</a> for things you should consider from the data modeling perspective.</strong></p>
+</div>
 <p>To test your work while developing dbt models, you can edit the <code class="docutils literal notranslate"><span class="pre">.sql</span></code> files for your models, save your changes, and then <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse#dbt-commands">run the model from the command line</a> to execute the SQL you updated.</p>
 <p>To inspect tables as you are working, the fastest method is usually to run some manual test queries or “preview” the tables in the <a class="reference external" href="https://console.cloud.google.com/bigquery?project=cal-itp-data-infra-staging">BigQuery user interface</a>. You can also use something like <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.read_gbq.html"><code class="docutils literal notranslate"><span class="pre">pandas.read_gbq</span></code></a> to perform example queries in a notebook.</p>
 <p>When you run dbt commands locally on JupyterHub, your models will be created in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging.&lt;your</span> <span class="pre">name&gt;_&lt;dbt</span> <span class="pre">folder</span> <span class="pre">name,</span> <span class="pre">like</span> <span class="pre">mart_gtfs&gt;</span></code> BigQuery dataset. Note that this is in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging</span></code> Google Cloud Platform project, <em>not</em> the production <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra</span></code> project.</p>
-<p>Once your models are working the way you want, please make sure to update the associated YAML files (there will generally be one or two YAML files per folder with model tests, documentation, and additional configuration.) Especially if you created a brand-new model, you will want to add tests for things like unique, non-null primary keys and valid foreign keys. The YAML is also where table- and column-level documentation is populated. <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs/_mart_gtfs_dims.yml">Here is an example YAML file from our project</a>, and <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2097">here is an example PR that created a new mart table with accompanying documentation</a>.</p>
-<p>Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against <code class="docutils literal notranslate"><span class="pre">main</span></code> when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging. See <a class="reference external" href="http://CONTRIBUTING.md">CONTRIBUTING.md</a> in the repo for more information on GitHub practices.)</p>
+<p>Once your models are working the way you want and you have added all necessary documentation and tests in YAML files (<a class="reference external" href="developing_dbt_models#modeling-considerations">see below</a> for more on modeling, documentation, and testing considerations), you are ready to merge.</p>
+<p>Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against <code class="docutils literal notranslate"><span class="pre">main</span></code> when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging.</p>
+<div class="section" id="video-walkthrough">
+<h4>Video walkthrough<a class="headerlink" href="#video-walkthrough" title="Permalink to this headline">¶</a></h4>
+<p>For an example of working with dbt in JupyterHub, see the recording of the <a class="reference external" href="https://drive.google.com/file/d/1NDh_4u0-ROsH0w8J3Z1ccn_ICLAHtDhX/view?usp=drive_link">original onboarding call in April 2023 (requires Cal-ITP Google Drive access).</a> A few notes on this video:</p>
+<ul class="simple">
+<li><p>The documentation shown is an older version of this docs page; the information shared verbally is correct but the page has been updated.</p></li>
+<li><p>The bug encountered towards the end of the video (that prevented us from running dbt tests) has been fixed.</p></li>
+<li><p>The code owners mentioned in the video have changed; consult in Slack for process guidance.</p></li>
+</ul>
+</div>
 </div>
 </div>
 <div class="section" id="modeling-considerations">
-<h2>Modeling considerations<a class="headerlink" href="#modeling-considerations" title="Permalink to this headline">¶</a></h2>
-<p>When developing dbt models, there are some considerations which may differ from considerations for a notebook-based analysis.</p>
-<div class="section" id="when-to-develop-or-update-a-model">
-<h3>When to develop or update a model<a class="headerlink" href="#when-to-develop-or-update-a-model" title="Permalink to this headline">¶</a></h3>
-<p>One key question to ask is whether a given data need is best met by a new dbt model or updates to an existing model vs. some other tool or process.</p>
-<p>Changes to dbt models are likely to be appropriate, and often beneficial over other approaches, when one or more of the following is true:</p>
+<span id="id1"></span><h2>Modeling considerations<a class="headerlink" href="#modeling-considerations" title="Permalink to this headline">¶</a></h2>
+<p>When developing or updating dbt models, there are some considerations which may differ from a notebook-based analysis. These can be thought of as a checklist or decision tree of questions that you should run through whenever you are editing or creating a dbt model. Longer explanations of each item are included below.</p>
+<div class="mermaid">
+            flowchart TD
+
+workflow_type[Are you fixing a bug or creating something new?]
+identify_bug[&lt;a href='developing_dbt_models#identify-bug'&gt;Identify the cause of your bug.&lt;/a&gt;]
+change_models[&lt;a href='developing_dbt_models#change-models'&gt;Make your changes.&lt;/a&gt;]
+tool_choice[&lt;a href='developing_dbt_models#tool-choice'&gt;Should it be a dbt model?&lt;/a&gt;]
+not_dbt[Use a notebook or dashboard for your analysis.]
+grain[&lt;a href='developing_dbt_models#model-grain'&gt;What is the grain of your model?&lt;/a&gt;]
+grain_exists[&lt;a href='developing_dbt_models#grain-exists'&gt;Is there already a model with your desired grain?&lt;/a&gt;]
+new_column[Add a column to the existing model.]
+new_model[Create a new model.]
+test_changes[&lt;a href='developing_dbt_models#test-changes'&gt;&lt;b&gt;Test your changes.&lt;/b&gt;&lt;/a&gt;]
+new_column[Add a column to the existing model.]
+tests_and_docs[&lt;a href='developing_dbt_models#tests-and-docs'&gt;Add dbt tests and documentation.&lt;/a&gt;]
+merge_model_changes[&lt;a href='developing_dbt_models#merge-model-changes'&gt;Merge your changes.&lt;/a&gt;]
+
+workflow_type -- fixing a bug --&gt; identify_bug
+identify_bug --&gt; change_models
+workflow_type -- creating something new --&gt; tool_choice
+tool_choice -- dbt model--&gt; grain
+tool_choice -- not dbt --&gt; not_dbt
+grain --&gt; grain_exists
+grain_exists -- there is an existing model with this grain --&gt; new_column
+grain_exists -- there is no existing model with this grain --&gt; new_model
+new_column --&gt; change_models
+new_model --&gt; change_models
+change_models --&gt; test_changes
+test_changes -- identify issues--&gt; change_models
+test_changes -- no issues --&gt; tests_and_docs
+tests_and_docs --&gt; merge_model_changes
+        </div><div class="section" id="identify-bug">
+<span id="identify-the-cause-of-your-bug"></span><h3>Identify the cause of your bug.<a class="headerlink" href="#identify-bug" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-example-bug-troubleshooting-walkthrough admonition">
+<p class="admonition-title">Example bug troubleshooting walkthrough</p>
+<p>Here is a series of recordings showing a workflow for debugging a failing dbt test. The resulting PR is <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2892">#2892</a>.</p>
+<ol class="simple">
+<li><p><a class="reference external" href="https://www.loom.com/share/0bf1eaa6d3374be782eb18859f24e08f?sid=0ab9251a-723d-4a5a-9d77-0be3b116a021">Find the compiled test SQL</a></p></li>
+<li><p><a class="reference external" href="https://www.loom.com/share/e57a163ecd8c4b15af0959fb0b4ab3eb?sid=36b5cf66-9832-4538-8813-c3dd982e6a77">Run the test SQL</a></p></li>
+<li><p><a class="reference external" href="https://www.loom.com/share/cf82e6a7ab824d8dbd572d9371ccf6dc?sid=9d31aa40-ff34-4c34-9fd9-22985c7c57e4">Confirm the nature of the problem</a></p></li>
+<li><p><a class="reference external" href="https://www.loom.com/share/99133f1172c44540a683e423f4ad91ef?sid=e199aed5-00e0-4acc-98de-24f696e4267e">Plan a fix</a></p></li>
+</ol>
+</div>
+<p>Usually, bug are caused by:</p>
 <ul class="simple">
-<li><p>There is a consistent or ongoing need for the same transformations. dbt can ensure that transformations are performed consistently at scale, every day.</p></li>
-<li><p>Transformations are needed on large data. Doing transformations in BigQuery can be more performant than doing them in notebooks or any workflow where the large data must be loaded into local memory.</p></li>
+<li><p>New or historical data issues. For example, an agency may be doing something in their GTFS data that we didn’t expect and this may have broken one of our models. This can happen with brand new data that is coming in or in historical data that wasn’t included in local testing (this is especially relevant for RT data, where local testing usually includes a very small subset of the full data.)</p></li>
+<li><p>GTFS or data schema bugs. Sometimes we may have misinterpreted the GTFS spec (or another incoming data model) and modeled something incorrectly.</p></li>
+<li><p>SQL bugs. Sometimes we may have written SQL incorrectly (for example, used the wrong kind of join.)</p></li>
+</ul>
+<p>How to investigate the bug depends on how the bug was noticed.</p>
+<p>If there was a failing dbt test, you can <code class="docutils literal notranslate"><span class="pre">dbt</span> <span class="pre">compile</span></code> locally to compile the project SQL. You can then find the SQL for the failing test (follow the <a class="reference external" href="https://docs.getdbt.com/docs/build/tests#faqs">dbt testing FAQ under “one of my tests failed, how can I debug it?”</a> to find the compiled test SQL). Run that SQL in BigQuery to see the rows that are failing.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When you <code class="docutils literal notranslate"><span class="pre">dbt</span> <span class="pre">compile</span></code> locally, you will compile SQL that’s pointed at the staging project and your namespaced dataset. Make sure to change those references when you run the compiled SQL. So, <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging.laurie_mart_gtfs.fct_scheduled_trips</span></code> would become <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra.mart_gtfs.fct_scheduled_trips</span></code>.</p>
+</div>
+<p>If you noticed an issue that wasn’t caused by a failing test, you can start with the model that you noticed the problem in.</p>
+<p>In either case, you may need to consider upstream models. To identify your model’s parents, you can look at the <a class="reference external" href="https://dbt-docs.calitp.org/#%21/overview">dbt docs website</a> page for your model. <a class="reference external" href="https://docs.getdbt.com/docs/collaborate/documentation#navigating-the-documentation-site">See the dbt docs</a> for how to look at the model’s lineage. You can modify the model selector in the bottom middle to just <code class="docutils literal notranslate"><span class="pre">+&lt;your</span> <span class="pre">model</span> <span class="pre">name&gt;</span></code> to only see the model’s parents. You can also run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">+&lt;your</span> <span class="pre">model&gt;</span> <span class="pre">--resource-type</span> <span class="pre">model</span></code> to see a model’s parents just on the command line. Try to figure out where the root cause of the problem is occurring. This may involve running ad-hoc SQL queries to inspect the models involved.</p>
+</div>
+<div class="section" id="should-it-be-a-dbt-model">
+<span id="tool-choice"></span><h3>Should it be a dbt model?<a class="headerlink" href="#should-it-be-a-dbt-model" title="Permalink to this headline">¶</a></h3>
+<p>Changes to dbt models are likely to be appropriate when one or more of the following is true:</p>
+<ul class="simple">
+<li><p>There is a consistent or ongoing need for this data. dbt can ensure that transformations are performed consistently at scale, every day.</p></li>
+<li><p>The data is big. Doing transformations in BigQuery can be more performant than doing them in notebooks or any workflow where the large data must be loaded into local memory.</p></li>
 <li><p>We want to use the same model across multiple domains or tools. The BigQuery data warehouse is the easiest way to provide consistent data throughout the Cal-ITP data ecosystem (in JupyterHub, Metabase, open data publishing, the reports site, etc.)</p></li>
 </ul>
-<p>dbt model updates may not be appropriate when:</p>
+<p>dbt models may not be appropriate when:</p>
 <ul class="simple">
-<li><p>There is insufficient support in dbt or BigQuery for the necessary tooling. The biggest current example is geospatial work; once we have <a class="reference external" href="https://github.com/cal-itp/data-infra/issues/2359">Python models in the dbt project</a>, there will be fewer limitations.</p></li>
-<li><p>You are doing exploratory data analysis, especially on inconsistently-constructed data. It will almost always be faster to do initial exploration of data via Jupyter/Python than in SQL.</p></li>
+<li><p>You are doing exploratory data analysis. It will almost always be faster to do initial exploration of data via Jupyter/Python than in SQL.</p></li>
+<li><p>You want to apply a simple transformation (for example, a grouped summary or filter) to answer a specific question. In this case, it may be more appropriate to create a Metabase dashboard with the desired transformations.</p></li>
 </ul>
 </div>
-<div class="section" id="materializations-performance-and-cost">
-<h3>Materializations, performance, and cost<a class="headerlink" href="#materializations-performance-and-cost" title="Permalink to this headline">¶</a></h3>
-<p>Because the dbt project is run and built every day, we want to be mindful of cost and be efficient in how we build and structure our models. The <a class="reference external" href="https://docs.getdbt.com/docs/build/materializations#overview">dbt docs materializations page</a> provides a good overview of different materialization options and associated considerations.</p>
-<p>When developing a new model, or updating an existing model, it is helpful to keep an eye on the number of bytes billed to build the model (this information is printed in the terminal output from dbt.) As a rule of thumb in our project, models that take more than 100 GB to build should probably be optimized a bit more, potentially by being made <a class="reference external" href="https://docs.getdbt.com/docs/build/materializations#incremental">incremental</a>.</p>
-<p>Performance is one of the hardest things to manage when you are new to developing in SQL, so please don’t hesitate to ask questions (the <code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code> or <code class="docutils literal notranslate"><span class="pre">#data-office-hours</span></code> Cal-ITP Slack channels are good places to ask) as you get used to the options.</p>
+<div class="section" id="what-is-the-grain-of-your-model">
+<span id="model-grain"></span><h3>What is the grain of your model?<a class="headerlink" href="#what-is-the-grain-of-your-model" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/grain/"><em>Grain</em> means “what does a row represent”</a>. For example, for: Do you want one row per route per day? One row per fare transaction? One row per organization per month?</p>
+<p>This concept of grain can be one of the biggest differences between notebook-based analysis and warehouse analytics engineering. In notebooks, you may be making a lot of transformations and saving each step out as its own dataframe, and you may use functions for reusable transformation steps. In warehouse development, we want to be focused on making reusable models where the data itself is the common building block across analyses. That often means trying to make only one table in the warehouse for each grain, regardless of how many different types of analysis it might be used for.</p>
+</div>
+<div class="section" id="is-there-already-a-model-with-this-grain">
+<span id="grain-exists"></span><h3>Is there already a model with this grain?<a class="headerlink" href="#is-there-already-a-model-with-this-grain" title="Permalink to this headline">¶</a></h3>
+<p>If there is already a model with the grain you are targeting, you should almost always add new columns to that existing model rather than making a new model with the same grain.</p>
+<div class="admonition-example-fct-scheduled-trips admonition">
+<p class="admonition-title">Example: fct_scheduled_trips</p>
+<p>Consider <a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.fct_scheduled_trips"><code class="docutils literal notranslate"><span class="pre">fct_scheduled_trips</span></code></a>. This is our core trip-level table. Every scheduled trip should have a row in this model and attributes that you might want from that trip should be present for easy access. As a result, this table has a lot of columns, because when we need new information about trips, we add it here.  For example, when we wanted to fix time zone handling for trips, we <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2457">added those columns</a> instead of creating a new model.</p>
+</div>
+<p>To figure out if there is a model with your desired grain, you can <a class="reference external" href="https://dbt-docs.calitp.org/#%21/overview">search the dbt docs</a> for relevant terms. For example, if you want a table of routes, you can search “routes” to see what models already exist. You can also explore the dependency tree for a related table (like <code class="docutils literal notranslate"><span class="pre">dim_routes</span></code>) to see if you can find a table that looks like it has the right grain. You can also see <a class="reference external" href="https://dbt-docs.calitp.org/#%21/overview">our dbt docs homepage</a> for a discussion of table naming conventions to interpret dimension, fact, and bridge tables.</p>
+<p>For dimensions you may need to think more about whether you are truly making a new dimension, or whether you are simply applying a filter on an existing dimension (for example, <code class="docutils literal notranslate"><span class="pre">dim_bus_vehicles</span></code> could be a subset of an existing <code class="docutils literal notranslate"><span class="pre">dim_vehicles</span></code> dimension model, in which case you could just add a boolean column <code class="docutils literal notranslate"><span class="pre">is_bus</span></code> on <code class="docutils literal notranslate"><span class="pre">dim_vehicles</span></code> rather than making a new dedicated model.)</p>
+</div>
+<div class="section" id="make-your-changes">
+<span id="change-models"></span><h3>Make your changes.<a class="headerlink" href="#make-your-changes" title="Permalink to this headline">¶</a></h3>
+<p>The kind of changes you make will depend on what you’ve discovered in previous steps. Fixing a bug might involve changing model SQL, changing tests to reflect a new understanding, or something else. Adding a column might involve a simple change on one model or require updating several parent models. Creating a new model for brand new data may involve a new external table or it might be a straightforward transformation just in the mart. Some examples of different types of changes are listed below.</p>
+<p>If you find yourself making big changes that seem likely to significantly affect other users, you may need to step back and convene a conversation to make sure that everyone is on board; see for example <a class="reference external" href="https://docs.google.com/document/d/1F4METWYNip5nobcPZSUg-5XGtC1XX1hWMQfEmERPPd4/edit#heading=h.dsfdelw2zz3n">this Google Doc about Airtable schema changes</a> where stakeholders confirmed how they wanted to handle schema changes in the warehouse. The <a class="reference internal" href="#model-downstream-impacts"><span class="std std-ref">downstream impacts section below</span></a> has suggestions for how to assess the impacts of your changes.</p>
+<div class="section" id="example-bug-fix-prs">
+<h4>Example bug fix PRs<a class="headerlink" href="#example-bug-fix-prs" title="Permalink to this headline">¶</a></h4>
+<p>Here are a few example <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> PRs that fixed past bugs:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2076">PR #2076</a> fixed two bugs: There was a hardcoded incorrect value in our SQL that was causing Sundays to not appear in our scheduled service index (SQL syntax bug), and there was a bug in how we were handling the relationship between <code class="docutils literal notranslate"><span class="pre">calendar_dates</span></code> and <code class="docutils literal notranslate"><span class="pre">calendar</span></code> (GTFS logic bug).</p></li>
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2623">PR #2623</a> fixed bugs caused by unexpected calendar data from a producer.</p></li>
+</ul>
+</div>
+<div class="section" id="example-new-column-prs">
+<h4>Example new column PRs<a class="headerlink" href="#example-new-column-prs" title="Permalink to this headline">¶</a></h4>
+<p>Here are a few example <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> PRs that added columns to existing models:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2778">PR #2778</a> is a simple example of adding a column that already exists in staging to a mart table.</p></li>
+<li><p>For intermediate examples of adding a column in a staging table and propagating it through a few different downstream models, see</p>
+<ul>
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2768">PR #2768</a></p></li>
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2686">PR #2601</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2383">PR #2383</a> adds a column to Airtable data end-to-end (starting from the raw data/external tables; this involves non-dbt code).</p></li>
+</ul>
+</div>
+<div class="section" id="example-new-model-prs">
+<h4>Example new model PRs<a class="headerlink" href="#example-new-model-prs" title="Permalink to this headline">¶</a></h4>
+<p>Here are a few <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> PRs that created brand new models:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2686">PR #2686</a> created a new model based on existing warehouse data.</p></li>
+<li><p>For examples of adding models to dbt end-to-end (starting from raw data/external tables; this involves non-dbt code), see:</p>
+<ul>
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2509">PR #2509</a></p></li>
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2781">PR #2781</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="test-your-changes">
+<span id="test-changes"></span><h3>Test your changes.<a class="headerlink" href="#test-your-changes" title="Permalink to this headline">¶</a></h3>
+<p>Once you have made some changes, it is important to test them.</p>
+<div class="admonition-different-types-of-testing admonition">
+<p class="admonition-title">Different types of testing</p>
+<p>Functional testing during development is different than adding dbt tests (<a class="reference internal" href="#dbt-tests"><span class="std std-ref">described below</span></a>). dbt tests ensure some floor of model validity over time; while developing, you should run more holistic tests to ensure that your code is working as expected.</p>
+</div>
+<p>The first step is running your changes in the test/staging environment. You can run a command like <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">run</span> <span class="pre">-s</span> <span class="pre">+&lt;your</span> <span class="pre">model&gt;</span></code> to run your model and its antecedents.  Your models will be created in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging.&lt;your</span> <span class="pre">name&gt;_&lt;dbt</span> <span class="pre">folder</span> <span class="pre">name,</span> <span class="pre">like</span> <span class="pre">mart_gtfs&gt;</span></code> BigQuery dataset. Note that this is in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging</span></code> Google Cloud Platform project, <em>not</em> the production <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra</span></code> project.</p>
+<p>What to test/check will vary based on what you’re doing, but below are some example things to consider.</p>
+<div class="section" id="column-values">
+<h4>Column values<a class="headerlink" href="#column-values" title="Permalink to this headline">¶</a></h4>
+<p>Are the values in your column/model what you expect? For example, are there nulls? Does the column have all the values you anticipated (for example, if you have a day of the week column, is data from all 7 days present)? If it’s numeric, what are the minimum and maximum values; do they make sense (for example, if you have a percentage column, is it always between 0 and 100)? What is the most common value?</p>
+<ul>
+<li><p>To check nulls:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">model</span><span class="o">&gt;</span>
+<span class="n">WHERE</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">column</span><span class="o">&gt;</span> <span class="n">IS</span> <span class="n">NULL</span>
+</pre></div>
+</div>
+</li>
+<li><p>To check distinct values in a column:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="n">DISTINCT</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">column</span><span class="o">&gt;</span>
+<span class="n">FROM</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">model</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p>To check min/max:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span>
+    <span class="n">MIN</span><span class="p">(</span><span class="o">&lt;</span><span class="n">your</span> <span class="n">column</span><span class="o">&gt;</span><span class="p">),</span>
+    <span class="n">MAX</span><span class="p">(</span><span class="o">&lt;</span><span class="n">your_column</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="n">FROM</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">model</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p>To check most common values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span>
+    <span class="o">&lt;</span><span class="n">your_column</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">AS</span> <span class="n">ct</span>
+<span class="n">FROM</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">model</span><span class="o">&gt;</span>
+<span class="n">GROUP</span> <span class="n">BY</span> <span class="mi">1</span>
+<span class="n">ORDER</span> <span class="n">BY</span> <span class="n">ct</span> <span class="n">DESC</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="row-count-and-uniqueness">
+<h4>Row count and uniqueness<a class="headerlink" href="#row-count-and-uniqueness" title="Permalink to this headline">¶</a></h4>
+<p>To confirm that the grain is what you expect, you should check whether an anticipated unique key is actually unique. For example, if you were making a daily shapes table, you might expect that <code class="docutils literal notranslate"><span class="pre">date</span> <span class="pre">+</span> <span class="pre">feed_key</span> <span class="pre">+</span> <span class="pre">shape_id</span></code> would be unique. Similarly, you should have a ballpark idea of the order of magnitude of the number of rows you expect. If you’re making a yearly organizations table and your table has a million rows, something is likely off. Some example queries could be:</p>
+<ul>
+<li><p>To check row count:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="n">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">model</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p>To check row count by some attribute (for example, rows per date):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">column</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">AS</span> <span class="n">ct</span>
+<span class="n">FROM</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">model</span><span class="o">&gt;</span>
+<span class="n">GROUP</span> <span class="n">BY</span> <span class="mi">1</span>
+<span class="n">ORDER</span> <span class="n">BY</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</li>
+<li><p>To check uniqueness based on a combination of a few columns:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">WITH</span> <span class="n">tbl</span> <span class="n">AS</span> <span class="p">(</span>
+        <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="o">&lt;</span><span class="n">your</span> <span class="n">model</span><span class="o">&gt;</span>
+    <span class="p">),</span>
+
+<span class="n">dups</span> <span class="n">AS</span> <span class="p">(</span>
+    <span class="n">SELECT</span>
+        <span class="o">&lt;</span><span class="n">column</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="o">&lt;</span><span class="n">column</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="o">&lt;</span><span class="n">column</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="n">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">AS</span> <span class="n">ct</span>
+    <span class="n">FROM</span> <span class="n">tbl</span>
+    <span class="o">--</span> <span class="n">adjust</span> <span class="n">this</span> <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">columns</span> <span class="n">that</span> <span class="n">make</span> <span class="n">the</span> <span class="n">composite</span> <span class="n">unique</span> <span class="n">key</span>
+    <span class="n">GROUP</span> <span class="n">BY</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
+    <span class="n">HAVING</span> <span class="n">ct</span> <span class="o">&gt;</span> <span class="mi">1</span>
+<span class="p">)</span>
+
+<span class="n">SELECT</span> <span class="o">*</span>
+<span class="n">FROM</span> <span class="n">dups</span>
+<span class="n">LEFT</span> <span class="n">JOIN</span> <span class="n">tbl</span> <span class="n">USING</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">column</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">column</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">column</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="n">ORDER</span> <span class="n">BY</span> <span class="o">&lt;</span><span class="n">column</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">column</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">column</span> <span class="mi">3</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="performance">
+<h4>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h4>
+<p>While testing, you should keep an eye on the performance (cost/data efficiency) of the model:</p>
+<ul class="simple">
+<li><p>When you run the dbt model locally, look at how many bytes are billed to build the model(s).</p></li>
+<li><p>Before you run test queries, <a class="reference external" href="https://cloud.google.com/bigquery/docs/best-practices-costs#use-query-validator">check the bytes estimates</a> (these may not be accurate for queries on <a class="reference external" href="https://cloud.google.com/bigquery/docs/views-intro#view_pricing">views</a> or <a class="reference external" href="https://cloud.google.com/bigquery/docs/clustered-tables#clustered_table_pricing">clustered tables</a>)</p></li>
+<li><p>After you run test queries, look at the total bytes billed after the fact in the <strong>Job Information</strong> tab in the <strong>Query results</strong> section of the BigQuery console.</p></li>
+</ul>
+<p>If the model takes more than 100 GB to build, or if test queries seem to be reading a lot of data (this is subjective; it’s ok to build a sense over time), you may want to consider performance optimizations.</p>
+<p>Below are a few options to improve performance. <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2711">Data infra PR #2711</a> has examples of several different types of performance interventions.</p>
+<ul class="simple">
+<li><p>If the model is expensive to <strong>build</strong>: First, try to figure out what specific steps are expensive. You can run individual portions of your model SQL in the BigQuery console to assess the performance of individual <a class="reference external" href="https://docs.getdbt.com/terms/cte">CTEs</a>.</p>
+<ul>
+<li><p>If the model involves transformations on a lot of data that doesn’t need to be reprocessed every day, you may want to make the model <a class="reference external" href="https://docs.getdbt.com/docs/build/incremental-models">incremental</a>. You can run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">config.materialized:incremental</span> <span class="pre">--resource-type</span> <span class="pre">model</span></code> to see examples of other incremental models in the repo.</p></li>
+<li><p>If the model reads data from an expensive parent table, you may want to consider leveraging clustering or partitioning on that parent table to make a join or select more efficient. See <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2743#pullrequestreview-1570532320">this comment on data infra PR #2743</a> for an example of a case where changing a join condition was a more appropriate performance intervention than making the table incremental.</p></li>
+</ul>
+</li>
+<li><p>If the model is expensive to <strong>query</strong>: The main interventions to make a model more efficient to query involve changing the data storage.</p>
+<ul>
+<li><p>Consider storing it as a <a class="reference external" href="https://docs.getdbt.com/docs/build/materializations">table rather than a view</a>.</p></li>
+<li><p>If the model is already a table, you can consider <a class="reference external" href="https://cloud.google.com/bigquery/docs/partitioned-tables">partitioning</a> or <a class="reference external" href="https://cloud.google.com/bigquery/docs/clustered-tables#when_to_use_clustering">clustering</a> on columns that will commonly be used as filters.</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Incremental models have two different run modes: <strong>full refreshes</strong> (which re-process all historical data available) and <strong>incremental runs</strong> that load data in batches based on your incremental logic. These two modes run different code.</p>
+<p>If you make your table incremental, you should make sure to run both a full refresh (use the <code class="docutils literal notranslate"><span class="pre">--full-refresh</span></code> flag) and an incremental run (after the table has already been built once; no flag) in your testing to ensure that both are working as expected.</p>
+</div>
+</div>
+<div class="section" id="downstream-impacts">
+<span id="model-downstream-impacts"></span><h4>Downstream impacts<a class="headerlink" href="#downstream-impacts" title="Permalink to this headline">¶</a></h4>
+<p>Another important consideration is the potential downstream impacts of your changes, particularly if you are changing existing models.</p>
+<p>You can run dbt tests on the downstream models using <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">test</span> <span class="pre">-s</span> <span class="pre">&lt;your_model&gt;+</span></code>. You should make sure that your changes do not cause new test failures in downstream models.</p>
+<p>Check which models are downstream of your changes using <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">&lt;your_model&gt;+</span> <span class="pre">--resource-type</span> <span class="pre">model</span></code>. If your model has a lot of descendents, consider performing additional tests to ensure that your changes will not cause problems downstream.</p>
+<p>To check for impacts on defined downstream artifacts (like the reports site and open data publishing), you can check which <a class="reference external" href="https://docs.getdbt.com/docs/build/exposures">exposures</a> are downstream of your model using <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">&lt;your_model&gt;+</span> <span class="pre">--resource-type</span> <span class="pre">exposure</span></code>.</p>
+</div>
+<div class="section" id="other-considerations">
+<h4>Other considerations<a class="headerlink" href="#other-considerations" title="Permalink to this headline">¶</a></h4>
+<p>Other questions will be more specific to your changes or goals, but it’s usually a good idea to take a second and brainstorm things that you would expect to be true and check whether your model reflects them. For example, we expect more trip activity during AM/PM peak periods than in the middle of the night; is that true in your model? What is the balance of weekend to weekday activity in your model, and does it make sense for the context?</p>
+</div>
+</div>
+<div class="section" id="add-dbt-tests-and-documentation">
+<span id="tests-and-docs"></span><h3>Add dbt tests and documentation.<a class="headerlink" href="#add-dbt-tests-and-documentation" title="Permalink to this headline">¶</a></h3>
+<p>Once you are satisfied with your changes, you should add tests and documentation, both of which are vital to keeping the project maintainable over time.</p>
+<div class="section" id="dbt-tests">
+<span id="id2"></span><h4>dbt tests<a class="headerlink" href="#dbt-tests" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="https://docs.getdbt.com/docs/build/tests">dbt tests</a> help us ensure baseline model validity and guarantees over time (for example: “this ID is unique”). A dbt test failure should be something that you’d want to fix quickly to ensure models work for downstream users. So, <strong>a test failure should be something you’d want to act on</strong> by doing something like fixing, dropping, or adding a warning flag on failing rows. A test can also be thought of an assertion: a not-null test on a column asserts that that column is never null.</p>
+<p>dbt tests are run every day in Airflow and alert when models fail. Because they run every day and execute SQL code, there is some tradeoff with cost: we don’t want to test too excessively because that could become wasteful.</p>
+<p>We usually prefer to have tests on <a class="reference external" href="https://docs.getdbt.com/docs/build/materializations">tables (rather than views)</a> for cost reasons. Most tables, especially in mart datasets, should have at least a primary key test that tests that there is a unique, non-null column; this is one way to monitor that the <a class="reference internal" href="#model-grain"><span class="std std-ref">grain</span></a> of the model is stable and is not being violated.</p>
+<p>You may want to find a model similar to the one you’re changing and see what tests that other model has.</p>
+<div class="admonition-make-sure-your-tests-pass admonition">
+<p class="admonition-title">Make sure your tests pass!</p>
+<p>After you add your tests, you should make sure they pass by running <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">test</span> <span class="pre">-s</span> <span class="pre">&lt;your_model&gt;</span></code>. If your tests don’t pass, you should <a class="reference internal" href="#identify-bug"><span class="std std-ref">figure out why</span></a> and <a class="reference internal" href="#change-models"><span class="std std-ref">make changes</span></a> until they do.</p>
+</div>
+</div>
+<div class="section" id="documentation">
+<h4>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="https://docs.getdbt.com/docs/collaborate/documentation">Documentation in dbt</a> helps different data users collaborate by explaining what a given model or column is. Documentation should answer the question: <strong>What information would someone else need to use this model/column effectively?</strong> All models should have a description and most columns should too.</p>
+<p>Try to write a description that will make sense to future readers. It is helpful to be specific, for example saying “April 2023” instead of “now” or “current”.</p>
+<p>Model documentation should make the <a class="reference internal" href="#model-grain"><span class="std std-ref">grain</span></a> clear.</p>
+</div>
+</div>
+<div class="section" id="merge-your-changes">
+<span id="merge-model-changes"></span><h3>Merge your changes<a class="headerlink" href="#merge-your-changes" title="Permalink to this headline">¶</a></h3>
+<p>Once you have finished work, you should make a PR to get your changes merged into <code class="docutils literal notranslate"><span class="pre">main</span></code>. PRs that sit and become stale may become problematic if other people make changes to models before they merge that cause them to behave unexpectedly.</p>
+<p>Once your changes merge, if they will impact other users (for example by changing a high-traffic model), you may want to announce your changes on Slack in  <a class="reference external" href="https://cal-itp.slack.com/archives/C050ZNDUL21"><code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code></a>, <a class="reference external" href="https://cal-itp.slack.com/archives/C02H6JUSS9L"><code class="docutils literal notranslate"><span class="pre">#data-analysis</span></code></a>, or a similar channel.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><a class="reference external" href="https://docs.getdbt.com/docs/build/incremental-models">Incremental models</a> downstream of your changes may require a <strong>full refresh</strong> after your changes merge.</p>
+<p>To check for incremental models downstream of your model, run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">&lt;your_model&gt;+,config.materialized:incremental</span> <span class="pre">--resource-type</span> <span class="pre">model</span></code>. If you need to refresh incremental models:</p>
+<ol class="simple">
+<li><p>Wait for the <a class="reference external" href="https://github.com/cal-itp/data-infra/actions/workflows/build-dbt.yml">build-dbt</a> GitHub action associated with your PR to complete after you merge.</p></li>
+<li><p>Go into the <a class="reference external" href="https://o1d2fa0877cf3fb10p-tp.appspot.com/home">Airflow UI</a> and go to the <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh">transform_warehouse_full_refresh DAG</a>. <strong>Specify appropriate model selectors to only refresh models that were affected by your changes</strong> and then run the DAG task.</p></li>
+</ol>
+</div>
 </div>
 </div>
 <div class="section" id="helpful-talks-and-presentations">
