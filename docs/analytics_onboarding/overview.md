@@ -47,8 +47,7 @@
 &nbsp;
 (get-help)=
 
-```{admonition}
-Still need access to a non-Caltrans tool above?
+```{admonition} Still need access to a non-Caltrans tool above?
 Ask on the `#services-team` channel in the Cal-ITP Slack.
 ```
 
