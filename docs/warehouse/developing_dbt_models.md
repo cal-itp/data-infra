@@ -143,7 +143,7 @@ For dimensions you may need to think more about whether you are truly making a n
 (change-models)=
 ### Make your changes.
 
-The kind of changes you make will depend on what you've discovered in previous steps. Fixing a bug might involve changing model SQL, changing tests to reflect a new understanding, or something else. Adding a column might involve a simple change on one model or require updating several parent models. Creating a new model for brand new data may involve a new external table or it might be a straightforward transformation just in the mart. See the examples listed below for examples of what making these changes looks like.
+The kind of changes you make will depend on what you've discovered in previous steps. Fixing a bug might involve changing model SQL, changing tests to reflect a new understanding, or something else. Adding a column might involve a simple change on one model or require updating several parent models. Creating a new model for brand new data may involve a new external table or it might be a straightforward transformation just in the mart. Some examples of different types of changes are listed below.
 
 If you find yourself making big changes that seem likely to significantly affect other users, you may need to step back and convene a conversation to make sure that everyone is on board; see for example [this Google Doc about Airtable schema changes](https://docs.google.com/document/d/1F4METWYNip5nobcPZSUg-5XGtC1XX1hWMQfEmERPPd4/edit#heading=h.dsfdelw2zz3n) where stakeholders confirmed how they wanted to handle schema changes in the warehouse. The [downstream impacts section below](model-downstream-impacts) has suggestions for how to assess the impacts of your changes.
 
@@ -174,7 +174,7 @@ Here are a few `data-infra` PRs that created brand new models:
 Once you have made some changes, it is important to test them.
 
 ```{admonition} Different types of testing
-Functional testing during development is different than adding dbt tests ([described below](dbt-tests)). dbt tests ensure some floor of model validity over time; while developing, you should run some more holistic tests to ensure that your code is working as expected.
+Functional testing during development is different than adding dbt tests ([described below](dbt-tests)). dbt tests ensure some floor of model validity over time; while developing, you should run more holistic tests to ensure that your code is working as expected.
 ```
 
 The first step is running your changes in the test/staging environment. You can run a command like `poetry run dbt run -s +<your model>` to run your model and its antecedents.  Your models will be created in the `cal-itp-data-infra-staging.<your name>_<dbt folder name, like mart_gtfs>` BigQuery dataset. Note that this is in the `cal-itp-data-infra-staging` Google Cloud Platform project, *not* the production `cal-itp-data-infra` project.
@@ -252,7 +252,13 @@ To confirm that the grain is what you expect, you should check whether an antici
     ```
 #### Performance
 
-While testing, you should keep an eye on the performance (cost/data efficiency) of the model. When you run it locally, look at how many bytes are billed to build the model(s). When you run test queries, [keep an eye on the bytes estimates](https://cloud.google.com/bigquery/docs/best-practices-costs#use-query-validator) (these may not be accurate for queries on [views](https://cloud.google.com/bigquery/docs/views-intro#view_pricing) or [clustered tables](https://cloud.google.com/bigquery/docs/clustered-tables#clustered_table_pricing)) and look at the total bytes billed after the fact in the **Job Information** tab in the **Query results** section of the BigQuery console. If the model takes more than 100 GB to build, or if test queries seem to be reading a lot of data (this is subjective; it's ok to build a sense over time), you may want to consider performance optimizations.
+While testing, you should keep an eye on the performance (cost/data efficiency) of the model:
+
+* When you run the dbt model locally, look at how many bytes are billed to build the model(s).
+* Before you run test queries, [check the bytes estimates](https://cloud.google.com/bigquery/docs/best-practices-costs#use-query-validator) (these may not be accurate for queries on [views](https://cloud.google.com/bigquery/docs/views-intro#view_pricing) or [clustered tables](https://cloud.google.com/bigquery/docs/clustered-tables#clustered_table_pricing))
+* After you run test queries, look at the total bytes billed after the fact in the **Job Information** tab in the **Query results** section of the BigQuery console.
+
+If the model takes more than 100 GB to build, or if test queries seem to be reading a lot of data (this is subjective; it's ok to build a sense over time), you may want to consider performance optimizations.
 
 Below are a few options to improve performance. [Data infra PR #2711](https://github.com/cal-itp/data-infra/pull/2711) has examples of several different types of performance interventions.
 
@@ -264,7 +270,9 @@ Below are a few options to improve performance. [Data infra PR #2711](https://gi
     * If the model is already a table, you can consider [partitioning](https://cloud.google.com/bigquery/docs/partitioned-tables) or [clustering](https://cloud.google.com/bigquery/docs/clustered-tables#when_to_use_clustering) on columns that will commonly be used as filters.
 
 ```{warning}
-If you make your table incremental, you should make sure to run both a full refresh (use the `--full-refresh` flag) and an incremental run (after the table has been built; no flag) in your testing to ensure that both are working as expected.
+Incremental models have two different run modes: **full refreshes** (which re-process all historical data available) and **incremental runs** that load data in batches based on your incremental logic. These two modes run different code.
+
+If you make your table incremental, you should make sure to run both a full refresh (use the `--full-refresh` flag) and an incremental run (after the table has already been built once; no flag) in your testing to ensure that both are working as expected.
 ```
 
 (model-downstream-impacts)=
@@ -292,9 +300,9 @@ Once you are satisfied with your changes, you should add tests and documentation
 
 dbt tests are run every day in Airflow and alert when models fail. Because they run every day and execute SQL code, there is some tradeoff with cost: we don't want to test too excessively because that could become wasteful.
 
-We usually prefer to have tests on [tables (rather than views)](https://docs.getdbt.com/docs/build/materializations) for cost reasons. Most tables, especially in mart datasets, should have at least a primary key test that tests that there is a unique, non-null column.
+We usually prefer to have tests on [tables (rather than views)](https://docs.getdbt.com/docs/build/materializations) for cost reasons. Most tables, especially in mart datasets, should have at least a primary key test that tests that there is a unique, non-null column; this is one way to monitor that the [grain](model-grain) of the model is stable and is not being violated.
 
-You may want to find a model similar to the one you're changing and see what tests the other model has.
+You may want to find a model similar to the one you're changing and see what tests that other model has.
 
 ```{admonition} Make sure your tests pass!
 After you add your tests, you should make sure they pass by running `poetry run dbt test -s <your_model>`. If your tests don't pass, you should [figure out why](identify-bug) and [make changes](change-models) until they do.
