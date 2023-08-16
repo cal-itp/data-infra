@@ -1,3 +1,10 @@
+# override things coming from cluster-template; won't be necessary starting with grafana chart version 6.51.3
+rbac:
+  pspEnabled: false
+  pspUserAppArmor: false
+testFramework:
+  enabled: false
+
 ingress:
   enabled: true
   annotations:
