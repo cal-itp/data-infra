@@ -54,7 +54,7 @@ To create the actual code block:
 (executing-code-python)=
 **Python**
 
-```{code-cell}
+```markdown
     ```{code-cell}
     Sample Code
     ```
@@ -69,7 +69,7 @@ To run SQL within the Jupyter Book we are using an iPython wrapper called `cell 
 import calitp_data_analysis.magics
 ```
 
-```{code-cell}
+```markdown
     ```{code-cell}
     %%sql
     Sample SQL Here
@@ -84,13 +84,13 @@ You can visit [this page](https://jupyterbook.org/content/code-outputs.html) for
 
 Non-executing code is formatted similarly to the executing code above, but replaces `{code-cell}` with the name of the language you would like to represent, as seen below, to provide syntax highlighting.
 
-```{code-cell}
+```markdown
     ```python
     Sample Code
     ```
 ```
 
-```{code-cell}
+```markdown
     ```sql
     Sample Code
     ```
