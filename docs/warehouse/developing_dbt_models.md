@@ -320,13 +320,13 @@ Model documentation should make the [grain](model-grain) clear.
 ### Merge your changes
 Once you have finished work, you should make a PR to get your changes merged into `main`. PRs that sit and become stale may become problematic if other people make changes to models before they merge that cause them to behave unexpectedly.
 
-Once your changees merge, if they will impact other users (for example by changing a high-traffic model), you may want to announce your changes on Slack in  [`#data-warehouse-devs`](https://cal-itp.slack.com/archives/C050ZNDUL21), [`#data-analysis`](https://cal-itp.slack.com/archives/C02H6JUSS9L), or a similar channel.
+Once your changes merge, if they will impact other users (for example by changing a high-traffic model), you may want to announce your changes on Slack in  [`#data-warehouse-devs`](https://cal-itp.slack.com/archives/C050ZNDUL21), [`#data-analysis`](https://cal-itp.slack.com/archives/C02H6JUSS9L), or a similar channel.
 
 ```{warning}
 [Incremental models](https://docs.getdbt.com/docs/build/incremental-models) downstream of your changes may require a **full refresh** after your changes merge.
 
 To check for incremental models downstream of your model, run `poetry run dbt ls -s <your_model>+,config.materialized:incremental --resource-type model`. If you need to refresh incremental models:
-1. Wait for the [deploy-airflow](https://github.com/cal-itp/data-infra/actions/workflows/deploy-airflow.yml) GitHub action associated with your PR to complete after you merge.
+1. Wait for the [build-dbt](https://github.com/cal-itp/data-infra/actions/workflows/build-dbt.yml) GitHub action associated with your PR to complete after you merge.
 
 2. Go into the [Airflow UI](https://o1d2fa0877cf3fb10p-tp.appspot.com/home) and go to the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh). **Specify appropriate model selectors to only refresh models that were affected by your changes** and then run the DAG task.
 ```
