@@ -54,18 +54,18 @@ When developing or updating dbt models, there are some considerations which may 
 flowchart TD
 
 workflow_type[Are you fixing a bug or creating something new?]
-identify_bug[<a href='developing_dbt_models#identify-bug'>Identify the cause of your bug.</a>]
-change_models[<a href='developing_dbt_models#change-models'>Make your changes.</a>]
+identify_bug[<a href='developing_dbt_models#identify-bug'>Identify the cause of your bug</a>]
+change_models[<a href='developing_dbt_models#change-models'>Make your changes</a>]
 tool_choice[<a href='developing_dbt_models#tool-choice'>Should it be a dbt model?</a>]
-not_dbt[Use a notebook or dashboard for your analysis.]
+not_dbt[Use a notebook or dashboard for your analysis]
 grain[<a href='developing_dbt_models#model-grain'>What is the grain of your model?</a>]
 grain_exists[<a href='developing_dbt_models#grain-exists'>Is there already a model with your desired grain?</a>]
-new_column[Add a column to the existing model.]
-new_model[Create a new model.]
-test_changes[<a href='developing_dbt_models#test-changes'><b>Test your changes.</b></a>]
-new_column[Add a column to the existing model.]
-tests_and_docs[<a href='developing_dbt_models#tests-and-docs'>Add dbt tests and documentation.</a>]
-merge_model_changes[<a href='developing_dbt_models#merge-model-changes'>Merge your changes.</a>]
+new_column[Add a column to the existing model]
+new_model[Create a new model]
+test_changes[<a href='developing_dbt_models#test-changes'><b>Test your changes</b></a>]
+new_column[Add a column to the existing model]
+tests_and_docs[<a href='developing_dbt_models#tests-and-docs'>Add dbt tests and documentation</a>]
+merge_model_changes[<a href='developing_dbt_models#merge-model-changes'>Merge your changes</a>]
 
 workflow_type -- fixing a bug --> identify_bug
 identify_bug --> change_models
