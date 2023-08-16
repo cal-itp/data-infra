@@ -13,18 +13,7 @@ gcloud config get-value project
 gcloud config get-value compute/region
 ```
 
-### quick start ###
-
-```bash
-./kubernetes/gke/cluster-create.sh
-# ...
-export KUBECONFIG=$PWD/kubernetes/gke/kube/admin.yaml
-kubectl cluster-info
-```
-
-### cluster lifecycle ###
-
-Create the cluster by running `kubernetes/gke/cluster-create.sh`.
+### Deploying the cluster
 
 The cluster level configuration parameters are stored in
 [`kubernetes/gke/config-cluster.sh`](https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-cluster.sh).
@@ -37,16 +26,23 @@ creation time.
 Once the cluster is created, it can be managed by pointing the `KUBECONFIG`
 environment variable to `kubernetes/gke/kube/admin.yaml`.
 
+```bash
+./kubernetes/gke/cluster-create.sh
+# ...
+export KUBECONFIG=$PWD/kubernetes/gke/kube/admin.yaml
+kubectl cluster-info
+```
+
 The cluster can be deleted by running `kubernetes/gke/cluster-delete.sh`.
 
-### nodepool lifecycle ###
+### Nodepool lifecycle
 
-Certain features of node pools are immutable (e.g., machine type); to change
+Certain features of node pools are immutable (e.g. machine type); to change
 such parameters requires creating a new node pool with the desired new values,
 migrating workloads off of the old node pool, and then deleting the old node pool.
 The node pool lifecycle scripts help simplify this process.
 
-#### create a new node pool ####
+#### Create a new node pool
 
 Configure a new node pool by adding its name to the `GKE_NODEPOOL_NAMES` array
 in [`kubernetes/gke/config-nodepool.sh`](https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-nodepool.sh).
@@ -64,60 +60,26 @@ removed from the `GKE_NODEPOOL_NAMES` array.
 
 Once the old node pool is removed from the array, it can be drained and deleted by running `kubernetes/gke/nodepool-down.sh <nodepool-name>`.
 
-## Deploy Cluster Workloads ##
+## Deploying workloads
 
 Cluster workloads are divided into two classes:
 
-1. Apps
-2. System
+1. Apps are the workloads that users actually care about; this includes deployed "applications" such as the GTFS-RT archiver but also includes "services" like Grafana and Sentry. These workloads are deployed using `invoke` as defined in the [ci](../ci/) folder.
+2. System workloads are used to support running applications. This includes items such as an ingress controller, HTTPS certificate manager, etc. The system deploy command is run at cluster create time, but when new system workloads are added it may need to be run again.
 
-Apps are the workloads that users actually care about; this includes deployed "applications"
-such as the GTFS-RT archiver but also includes "services" like Grafana and Sentry.
-
-System workloads are used to support running applications. This includes items
-such as an ingress controller, HTTPS certificate manager, etc. The system deploy command
-is run at cluster create time, but when new system workloads are added it may need
-to be run again.
-
-```bash
-kubectl apply -k kubernetes/system
-```
+    ```bash
+    kubectl apply -k kubernetes/system
+    ```
 
 # JupyterHub
 
-This page outlines how to deploy JupyterHub to Cal-ITP's Kubernetes cluster.
-
-As we are not yet able to commit encrypted secrets to the cluster, we'll have to do some work ahead of a `helm install`.
-
-## Installation
-
-### 1. Create the Namespace
-
+In general, any non-secret changes to the chart can be accomplished by modifying the chart's `values.yaml` and running the `invoke release` specific to JupyterHub.
 ```
-kubectl create ns jupyterhub
+poetry run invoke release -f channels/prod.yaml --app=jupyterhub
 ```
 
-### 2. Add Secrets to Namespace
-
-JupyterHub relies on two secrets ( and ); these are stored in Secret Manager and are deployable via invoke.
-
-From the `ci` directory:
-```
-poetry run invoke secrets -f channels/prod.yaml --app=jupyterhub
-```
-
-#### jupyterhub-gcloud-service-key
-
-The GCloud service key, a .json file, is used to authenticate users to GCloud.
-
-Currently, the secret `jupyterhub-gcloud-service-key` is mounted to every JupyterHub user's running container at `/usr/local/secrets/service-key.json`. As we refine our authentication approach, this secret may become obsolete and may be removed from this process, but for now the process of volume mounting this secret is required for authentication.
-
-
-#### jupyterhub-github-config
-
-Because we use [Github OAuth](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/authentication.html?highlight=oauth#github) for user authentication in JupyterHub, we have to provide a client-id and client-secret to the JupyterHub Helm chart. We also have to provide a bunch of non-sensitive information to the chart, as well, for GitHub OAuth to function.
-
-For context, here is what the full configuration for the GitHub OAuth in our JupyterHub Helm chart's `values.yaml` might look like:
+## Secrets
+Because we use [Github OAuth](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/authentication.html?highlight=oauth#github) for user authentication in JupyterHub, we have to provide a client-id and client-secret to the JupyterHub Helm chart. Here is what the full configuration for the GitHub OAuth in our JupyterHub Helm chart's `values.yaml` might look like:
 
 ```yaml
 hub:
@@ -139,21 +101,7 @@ hub:
           - lottspot
 ```
 
-Fortunately, we don't have to store all of this information in the secret! The JupyterHub chart affords us the ability to use the `hub.existingSecret` parameter to pass in the sensitive information, so we can mix-and-match parts of the configuration.
-
-This means that we can leave parameters like `hub.config.GitHubOAuthenticator.oauth_callback_url` and `hub.config.GitHubOAuthenticator.allowed_organizations` in plain text in our `values.yaml`, and place sensitive information like `hub.config.GitHubOAuthenticator.client_id` and `hub.config.GitHubOAuthenticator.client_secret` in our `jupyterhub-secrets.yaml`.
-
-So, what format must our base64 encoded string take in order for the JuptyerHub chart to accept it?
-
-##### Create a Temporary File
-
-```
-touch github-secrets.yaml
-```
-
-##### Fill the File with Chart-Formatted Secrets
-
-Your `github-secrets.yaml` should look like this:
+We want to avoid committing these secrets to GitHub, but we also want to version control as much of the `values.yaml` as possible. Fortunately, he JupyterHub chart affords us the ability to use the `hub.existingSecret` parameter to referencing an existing secret containing additional `values.yaml` entries. For GitHub OAuth specifically, the `jupyterhub-github-config` secret must contain a `values.yaml` key containing a base64-encoded representation of the following yaml:
 
 ```yaml
 hub:
@@ -163,40 +111,21 @@ hub:
       client_secret: <your-client-secret-here>
 ```
 
-### 3. Deploying the application
-
-You are now ready to install the chart to your cluster using invoke (which calls helm underneath).
-
-```
-poetry run invoke release -f channels/prod.yaml --app=jupyterhub
-```
-
-In general, any non-secret changes to the chart can be accomplished by modifying the chart's `values.yaml` and running the `invoke release` from above.
-
+This encoding could be accomplished by calling `cat <the secret yaml file> | base64` or using similar CLI tools; do not use an online base64 converter for secrets!
 
 ## Domain Name Changes
 
-At the time of this writing, a JupyterHub deployment is available at `https://hubtest.k8s.calitp.jarv.us`.
+At the time of this writing, a JupyterHub deployment is available at [https://notebooks.calitp.org](https://notebooks.calitp.org). If this domain name needs to change, the following configurations must also change so OAuth and ingress continue to function.
 
-If, in the future, the domain name were to change to something more permanent, some configuration would have to change. Fortunately, though, none of the secrets we covered above are affected by these configuration changes!
+1. Within the GitHub OAuth application, in Github, the homepage and callback URLs would need to be changed. Cal-ITP owns the Github OAUth application in GitHub, and [this Cal-ITP Github issue](https://github.com/cal-itp/data-infra/issues/367) can be referenced for individual contributors who may be able to helm adjusting the Github OAUth application's homepage and callback URLs.
 
-It is advised the below changes are planned and executed in a coordinated effort.
-
-### Changes in GitHub OAuth
-
-Within the GitHub OAuth application, in Github, the homepage and callback URLs would need to be changed. Cal-ITP owns the Github OAUth application in GitHub, and [this Cal-ITP Github issue](https://github.com/cal-itp/data-infra/issues/367) can be referenced for individual contributors who may be able to helm adjusting the Github OAUth application's homepage and callback URLs.
-
-### Changes in the Helm Chart
-
-After the changes have been made to the GitHub OAuth application, the following portions of the JupyterHub chart's `values.yaml` must be changed:
+2. After the changes have been made to the GitHub OAuth application, the following portions of the JupyterHub chart's `values.yaml` must be changed:
 
   - `hub.config.GitHubOAuthenticator.oauth_callback_url`
   - `ingress.hosts`
   - `ingress.tls.hosts`
 
 # Backups
-
-## Metabase
 
 For most of our backups we utilize [Restic](https://restic.readthedocs.io/en/latest/010_introduction.html)
 
@@ -207,6 +136,8 @@ To verify that metabase configuration backups have been created, there are three
 3. Google Access token
 
 There are several ways to obtain the Restic information.
+
+## Metabase
 
 ## Google Cloud Engine
 
