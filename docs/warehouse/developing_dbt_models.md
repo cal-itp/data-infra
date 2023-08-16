@@ -91,8 +91,9 @@ Here is a series of recordings showing a workflow for debugging a failing dbt te
 4. [Plan a fix](https://www.loom.com/share/99133f1172c44540a683e423f4ad91ef?sid=e199aed5-00e0-4acc-98de-24f696e4267e)
 ```
 
-Usually, a bug is caused by either:
-* New data issues. For example, an agency may be doing something new in their GTFS data that we didn't expect and this may have broken one of our models.
+Usually, bug are caused by:
+* New or historical data issues. For example, an agency may be doing something in their GTFS data that we didn't expect and this may have broken one of our models. This can happen with brand new data that is coming in or in historical data that wasn't included in local testing (this is especially relevant for RT data, where local testing usually includes a very small subset of the full data.)
+* GTFS or data schema bugs. Sometimes we may have misinterpreted the GTFS spec (or another incoming data model) and modeled something incorrectly.
 * SQL bugs. Sometimes we may have written SQL incorrectly (for example, used the wrong kind of join.)
 
 How to investigate the bug depends on how the bug was noticed.
