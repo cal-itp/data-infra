@@ -1,0 +1,7 @@
+# override things coming from cluster-template; shouldn't be necessary when migrated off the grafana helm-chart source
+# to the loki repo itself
+rbac:
+  pspEnabled: false
+  pspUserAppArmor: false
+testFramework:
+  enabled: false
