@@ -205,21 +205,21 @@ Are the values in your column/model what you expect? For example, are there null
 
 * To check nulls:
 
-    ```{sql}
+    ```sql
     SELECT * FROM <your model>
     WHERE <your column> IS NULL
     ```
 
 * To check distinct values in a column:
 
-    ```{sql}
+    ```sql
     SELECT DISTINCT <your column>
     FROM <your model>
     ```
 
 * To check min/max:
 
-    ```{sql}
+    ```sql
     SELECT
         MIN(<your column>),
         MAX(<your_column>)
@@ -228,7 +228,7 @@ Are the values in your column/model what you expect? For example, are there null
 
 * To check most common values:
 
-    ```{sql}
+    ```sql
     SELECT
         <your_column>,
         COUNT(*) AS ct
@@ -243,13 +243,13 @@ To confirm that the grain is what you expect, you should check whether an antici
 
 * To check row count:
 
-    ```{sql}
+    ```sql
     SELECT COUNT(*) FROM <your model>
     ```
 
 * To check row count by some attribute (for example, rows per date):
 
-    ```{sql}
+    ```sql
     SELECT <your column>, COUNT(*) AS ct
     FROM <your model>
     GROUP BY 1
@@ -258,7 +258,7 @@ To confirm that the grain is what you expect, you should check whether an antici
 
 * To check uniqueness based on a combination of a few columns:
 
-    ```{sql}
+    ```sql
     WITH tbl AS (
             SELECT * FROM <your model>
         ),
