@@ -8,6 +8,7 @@ Important Airtable documentation is maintained elsewhere:
 * [California Transit Data - Operating Procedures Google Doc](https://docs.google.com/document/d/1IO8x9-31LjwmlBDH0Jri-uWI7Zygi_IPc9nqd7FPEQM/edit#) -  outlines the processes by which Airtable data is maintained
 
 In addition, some documentation is available automatically within Airtable (these require Airtable authentication to access):
+
 * Airtable creates an API documentation page for each base (for example, [here is the page for California Transit](https://airtable.com/appPnJWrQ7ui4UmIl/api/docs)). This page provides technical information about field types and relationships. Airtable does not currently have an effective mechanism to programmatically download your data schema (they have paused issuing keys to their metadata API).
 * When looking at a base, there is an `Extensions` tab at the far upper right corner (below the share, notifications, and user icons). If you click that, an extensions sidebar will open. In that sidebar, there is an extension called `Base schema` (you may have to open it fullscreen to actually see it.) This extension will let you see an auto-generated visualization of the technical relationships among fields in the base.
 
@@ -16,7 +17,7 @@ Cal-ITP uses two main Airtable bases:
 | **Base** | **Description** |
 | :------------ | :-------------- |
 | [**California Transit**](#california-transit) | Defines key organizational relationships and properties. Organizations, geography, funding programs,  transit services, service characteristics, transit datasets such as GTFS, and the intersection between transit datasets and services.
-| [**Transit Technology Stacks**](#transit-technology-stacks) | Defines operational setups at transit provider organizations. Defines relationships between vendor organizations, transit provider and operator organizations, products, contracts to provide products, transit stack components, and how they relate to one-another.
+| [**Transit Technology Stacks**](transit-technology-stacks) | Defines operational setups at transit provider organizations. Defines relationships between vendor organizations, transit provider and operator organizations, products, contracts to provide products, transit stack components, and how they relate to one-another.
 
 The rest of this page outlines stray technical considerations associated with Airtable and its ingestion into the data warehouse.
 
@@ -31,12 +32,15 @@ We ingest data from Airtable into the Cal-ITP data warehouse. For an overview of
 To ingest a new Airtable table or base and make it available in the warehouse, you need to make updates throughout the data ingest flow, from the Airtable scraper Airflow DAG all the way to dbt mart tables. See [data infra PR #2781](https://github.com/cal-itp/data-infra/pull/2781) for an example of what this can look like. Ingesting new columns in an existing table is similar; see [data infra PR #2383](https://github.com/cal-itp/data-infra/pull/2383) for an example.
 
 ### Gotchas
+
 Bringing Airtable data into the warehouse can involve a few tricky situations. Here are a few we've encountered so far, with suggested resolutions.
 
 #### Foreign keys and bridge tables
+
 Airtable allows users to define links between tables, to create relationships between records of different types. In the Airtable UI, these links display the primary field for the linked record in the relevant column (so, for example, the `Services.provider` column contains an organization's name like `City of Anaheim`.) However, these foreign key links are exported via the Airtable API as an array of the back-end record IDs (so, instead of a single organization name like `City of Anaheim`, that `Services.provider` field will appear as an array containing a record ID, like `[rec0123asdf]`.) It does this even if the given field only ever contains exactly one foreign key (i.e., it turns it into an array even if all the arrays have only one entry.)
 
 This means:
+
 * All foreign keys need to be unpacked from arrays in the warehouse to become useful for joins. See below for more on this.
 * If a linked field is severed in Airtable (if the foreign key relationship is removed, but the columns that contained the links are not deleted) it can break our data ingest, because these array-type fields will become string-type fields. Ideally, it is best to just delete any associated columns when a foreign key relationship/link is ended. If this is not done and the data ingest does break, the solution is to suppress the broken column from the associated table by removing it from the external table schema. If the external table uses schema auto-detect, you may have to define a schema for the table that does not include the broken column. See [data infra PR #2441](https://github.com/cal-itp/data-infra/pull/2441) for an example of this process (though addressing a different issue.)
 
@@ -53,6 +57,7 @@ The mechanism that we have used to deal with both of these is the **bridge table
 Bridge tables do introduce some complexity in handling fanout from joins, but they remove that complexity from the dimension tables themselves. Another solution would be to only store the unversioned natural key for the foreign key, in which case you would only need bridge tables for true many-to-many relationships (to handle the array/cardinality issue), but that would still create fanout without the explicit artifact of the bridge table to help troubleshoot.
 
 #### Synced tables
+
 Airtable allows you to "sync" a table from one base to another, where it appears with all the data from its source location and can be linked to records in the second base. An example in our Airtable is the `California Transit.organizations` table is synced to `Transit Technology Stacks.organizations`; you will see a little lightning icon to show that it is a synced table.
 
 This requires special handling when importing to the warehouse, because Airtable assigns new back-end record IDs in the synced table, which means that foreign keys to the synced table in the second base will not match record IDs in the source table. We resolve this by mapping all foreign keys to point to the source table in a base layer in dbt. See [data infra PR #2781](https://github.com/cal-itp/data-infra/pull/2781) for an example.

@@ -23,6 +23,7 @@ Visit this link to view the [dbt Cal-ITP warehouse documentation](https://dbt-do
 In the [dbt Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview), you can navigate from either the `Database` perspective (table-level) or the `Project` perspective (as the files are configured in the repository).
 
 ### The `Database` Perspective
+
 This allows you to view the dbt project as it exists in the warehouse.
 
 To examine the documentation from the `Database` perspective:
@@ -33,6 +34,7 @@ To examine the documentation from the `Database` perspective:
 1. From here, a dropdown list of tables will appear and you can select a table to view its documentation
 
 ### The `Project` Perspective
+
 This allows you to view the warehouse project as it exists as files in the repository.
 
 To examine the documentation for our tables from the `Project` perspective:

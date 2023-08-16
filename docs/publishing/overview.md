@@ -1,4 +1,5 @@
 (publish-analyses)=
+
 # Where can I publish data?
 
 Analysts have a variety of tools available to publish their final
@@ -12,6 +13,7 @@ The workflow will look different depending on these factors:
 
 Analysts can string together a combination of these solutions. These options are
 listed in increasing order of complexity and therefore capability.
+
 * [Static visualizations](publishing-static-files) can be inserted directly
   into slide decks (e.g. PNG) or emailed to stakeholders (e.g. HTML or PDF)
 * HTML visualizations can be rendered in [GitHub Pages](publishing-github-pages)

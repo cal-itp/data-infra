@@ -1,4 +1,5 @@
 (architecture-overview)=
+
 # Architecture Overview
 
 The Cal-ITP data infrastructure facilitates several types of data workflows:
@@ -48,6 +49,7 @@ class ingestion_label,modeling_label,analysis_label group_labelstyle
 ```
 
 This documentation outlines two ways to think of this system and its components from a technical/maintenance perspective:
+
 * [Services](services) that are deployed and maintained (ex. Metabase, JupyterHub, etc.)
 * [Data pipelines](data) to ingest specific types of data (ex. GTFS Schedule, Payments, etc.)
 
@@ -56,14 +58,15 @@ This documentation outlines two ways to think of this system and its components 
 Across both data and services, we often have a "production" (live, end-user-facing) environment and some type of testing, staging, or development environment.
 
 ### production
+
 * Managed Airflow (i.e. Google Cloud Composer)
 * Production gtfs-rt-archiver-v3
 * `cal-itp-data-infra` database (i.e. project) in BigQuery
 * Google Cloud Storage buckets _without_ a prefix
     * e.g. `gs://calitp-gtfs-schedule-parsed-hourly`
 
-
 ### testing/staging/dev
+
 * Locally-run Airflow (via docker-compose)
 * Test gtfs-rt-archiver-v3
 * `cal-itp-data-infra-staging` database (i.e. project) in BigQuery

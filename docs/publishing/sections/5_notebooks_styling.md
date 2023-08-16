@@ -3,6 +3,7 @@
 ## Headers
 
 ### Parameterized Titles
+
 * If you're parameterizing the notebook, the first Markdown cell must include parameters to inject.
     * Ex: If `district` is one of the parameters in your `sites/my_report.yml`, a header Markdown cell could be `# District {district} Analysis`.
     * Note: The site URL is constructed from the original notebook name and the parameter in the JupyterBook build: `0_notebook_name__district_x_analysis.html`
@@ -11,7 +12,7 @@
 
 * Headers must move consecutively in Markdown cells. No skipping!
 
-```
+```markdown
 # Notebook Title
 ## First Section
 ## Second Section
@@ -20,15 +21,16 @@
 
 * To get around consecutive headers, you can use `display(HTML())`.
 
-    ```
+    ```python
     display(HTML(<h1>First Header</h1>) display(HTML(<h3>Next Header</h3>))
     ```
 
 ### Capturing Parameters
+
 * If you're using a heading, you can either use HTML or capture the parameter and inject.
 * HTML - this option works when you run your notebook locally.
 
-    ```
+    ```python
     from IPython.display import HTML
 
     display(HTML(f"<h3>Header with {variable}</h3>"))
@@ -37,7 +39,8 @@
 * Capture parameters - this option won't display locally in your notebook (it will still show `{district_number}`), but will be injected with the value when the JupyterBook is built.
 
     In a code cell:
-    ```
+
+    ```python
     %%capture_parameters
 
     district_number = f"{df.caltrans_district.iloc[0].split('-')[0].strip()}"
@@ -46,15 +49,16 @@
     <br>
 
     In a Markdown cell:
-    ```
+
+    ```markdown
     ## District {district_number}
     ```
 
-
 ### Suppress Warnings
+
 * Suppress warnings from displaying in the portfolio site (`shared_utils`).
 
-```
+```python
 # Include this in the cell where packages are imported
 
 %%capture
@@ -63,6 +67,7 @@ warnings.filterwarnings('ignore')
 ```
 
 ## Narrative
+
 * Narrative content can be done in Markdown cells or code cells.
     * Markdown cells should be used when there are no variables to inject.
     * Code cells should be used to write narrative whenever variables constructed from f-strings are used.
@@ -70,7 +75,7 @@ warnings.filterwarnings('ignore')
     Note: Our portfolio uses a custom `papermill` engine and we can skip this step.
 * Markdown cells can inject f-strings if it's plain Markdown (not a heading) using `display(Markdown())` in a code cell.
 
-```
+```python
 from IPython.display import Markdown
 
 display(Markdown(f"The value of {variable} is {value}."))
@@ -80,7 +85,7 @@ display(Markdown(f"The value of {variable} is {value}."))
     * Turn anything that runs in a loop or relies on a function into a variable.
     * Use functions to grab those values for a specific entity (operator, district), rather than hard-coding the values into the narrative.
 
-```
+```python
 n_routes = (df[df.calitp_itp_id == itp_id]
             .route_id.nunique()
             )
@@ -126,6 +131,7 @@ These are a set of principles to adhere to when writing the narrative content in
 * Additional references: [American Psychological Association (APA) style](https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf), and [Purdue](https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_numbers_statistics.html)
 
 ## Standard Names
+
 * GTFS data in our warehouse stores information on operators, routes, and stops.
 * Analysts should reference the operator name, route name, and Caltrans district the same way across analyses.
     * ITP ID: 182 is `Metro` (not LA Metro, Los Angeles County Metropolitan Transportation Authority, though those are all correct names for the operator)
@@ -134,7 +140,7 @@ These are a set of principles to adhere to when writing the narrative content in
 * Before deploying your portfolio, make sure the operator name you're using is what's used in other analyses in the portfolio.
     * Use `shared_utils.portfolio_utils` to help you grab the right names to use.
 
-        ```
+        ```python
         from shared_utils import portfolio_utils
 
         route_names = portfolio_utils.add_route_name()
