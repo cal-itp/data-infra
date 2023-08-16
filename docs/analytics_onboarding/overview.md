@@ -5,16 +5,16 @@
 :::{admonition} Bookmark this page for quick access to team resources
 :class: tip
 
-## Analysts
+    **Analysts**
 
-* See below for list of our collaboration and analysis tools.
-* As part of your onboarding, privileges have already been created for you to access the resources below.
+    * See below for list of our collaboration and analysis tools.
+    * As part of your onboarding, privileges have already been created for you to access the resources below.
 
-## Non-Analyst Team Members
+    **Non-Analyst Team Members**
 
-* Any of the tools below are available to you as well!
+    * Any of the tools below are available to you as well!
 
-**If you still need help with access**, use the information at the bottom of this page to [**get help**](get-help).
+    **If you still need help with access**, use the information at the bottom of this page to [**get help**](get-help).
 :::
 **Collaboration Tools:**
 
@@ -47,9 +47,9 @@
 &nbsp;
 (get-help)=
 
-```{admonition} Still need access to a non-Caltrans tool above?
-Ask on the `#services-team` channel in the Cal-ITP Slack.
-```
+    ```{admonition} Still need access to a non-Caltrans tool above?
+    Ask on the `#services-team` channel in the Cal-ITP Slack.
+    ```
 
 ## New Analyst Training Curriculum
 
