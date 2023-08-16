@@ -16,9 +16,9 @@ COPY ./gtfs-validator-v2.0.0_cli.jar ${V2_VALIDATOR_JAR}
 ENV V3_VALIDATOR_JAR=/gtfs-validator-3.1.1-cli.jar
 COPY ./gtfs-validator-3.1.1-cli.jar ${V3_VALIDATOR_JAR}
 
-# v4 from https://github.com/MobilityData/gtfs-validator/releases/download/v4.0.0/gtfs-validator-4.0.0-cli.jar
-ENV V4_VALIDATOR_JAR=/gtfs-validator-4.0.0-cli.jar
-COPY ./gtfs-validator-4.0.0-cli.jar ${V4_VALIDATOR_JAR}
+# v4 from https://github.com/MobilityData/gtfs-validator/releases/download/v4.1.0/gtfs-validator-4.1.0-cli.jar
+ENV V4_VALIDATOR_JAR=/gtfs-validator-4.1.0-cli.jar
+COPY ./gtfs-validator-4.1.0-cli.jar ${V4_VALIDATOR_JAR}
 
 WORKDIR /app
 

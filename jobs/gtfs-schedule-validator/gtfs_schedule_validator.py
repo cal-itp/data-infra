@@ -148,7 +148,7 @@ def execute_schedule_validator(
         validator_version = "v3.1.1"
     else:
         versioned_jar_path = V4_VALIDATOR_JAR
-        validator_version = "v4.0.0"
+        validator_version = "v4.1.0"
 
     assert versioned_jar_path
 

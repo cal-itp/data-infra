@@ -2,8 +2,8 @@
 
 This image exists to faciliate a pod operator executing a Java JAR which validates
 GTFS Schedule zipfiles and outputs the resulting notices (i.e. violations). The
-JAR in this folder is sourced from https://github.com/MobilityData/gtfs-validator/
-and is currently v2.0.0 of that project.
+JARs in this folder are sourced from https://github.com/MobilityData/gtfs-validator/,
+and our Python code automatically select which version is relevant for an extract.
 
 Note that unlike `gtfs-rt-parser`, this code does NOT include any parsing/unzipping
 of the underlying data. The RT code was written prior to substantial changes to
