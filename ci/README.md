@@ -31,7 +31,7 @@ candidates_branch[GitHub Action renders candidates/branch-name]
 branch_diff[invoke diff renders on test PR]
 branch_invoke[invoke releases to test]
 
-candidates_main[GitHub Action builds images and renders candidates/main]
+candidates_main[GitHub Action builds images and renders candidates/main\nNote: if you stop here, no Kubernetes changes will actually be deployed.]
 prod_diff[invoke diff renders on prod PR]
 prod_invoke[invoke releases to prod]
 
