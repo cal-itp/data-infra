@@ -21,20 +21,13 @@ gcloud config get-value compute/region
 
 ### Deploying the cluster
 
-The cluster level configuration parameters are stored in
-[`kubernetes/gke/config-cluster.sh`](https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-cluster.sh).
-Creating the cluster also requires configuring parameters for a node pool
-named "default-pool" (unconfigurable name defined by GKE) in
-[`kubernetes/gke/config-nodepool.sh`](https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-nodepool.sh).
-Any additional node pools configured in this file are also stood up at cluster
-creation time.
+The cluster level configuration parameters are stored in [config-cluster.sh](./gke/config-cluster.sh). Creating the cluster also requires configuring parameters for a node pool named "default-pool" (unconfigurable name defined by GKE) in [kubernetes/gke/config-nodepool.sh](./gke/config-nodepool.sh). Any additional node pools configured in this file are also stood up at cluster creation time.
 
 Once the cluster is created, it can be managed by pointing the `KUBECONFIG`
 environment variable to `kubernetes/gke/kube/admin.yaml`.
 
 ```bash
 ./kubernetes/gke/cluster-create.sh
-# ...
 export KUBECONFIG=$PWD/kubernetes/gke/kube/admin.yaml
 kubectl cluster-info
 ```
@@ -50,19 +43,13 @@ The node pool lifecycle scripts help simplify this process.
 
 #### Create a new node pool
 
-Configure a new node pool by adding its name to the `GKE_NODEPOOL_NAMES` array
-in [`kubernetes/gke/config-nodepool.sh`](https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-nodepool.sh).
-For each nodepool property (`GKE_NODEPOOL_NODE_COUNT`, `GKE_NODEPOOL_NODE_LOCATIONS`, etc)
-it is required to add an entry to the array which is mapped to the nodepool name.
+Configure a new node pool by adding its name to the `GKE_NODEPOOL_NAMES` array in [kubernetes/gke/config-nodepool.sh](./gke/config-nodepool.sh). For each nodepool property (`GKE_NODEPOOL_NODE_COUNT`, `GKE_NODEPOOL_NODE_LOCATIONS`, etc) it is required to add an entry to the array which is mapped to the nodepool name. This config file is also where you will set Kubernetes [taints](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) and [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) on the nodes.
 
-Once the new nodepool is configured, it can be stood up by running `kubernetes/gke/nodepool-up.sh [nodepool-name]`,
-or by simply running `kubernetes/gke/nodepool-up.sh`, which will stand up all configured node pools which do not yet
-exist.
+Once the new nodepool is configured, it can be stood up by running `kubernetes/gke/nodepool-up.sh <nodepool-name>`, or by simply running `kubernetes/gke/nodepool-up.sh`, which will stand up all configured node pools which do not yet exist.
 
-#### drain and delete an old node pool ####
+#### Drain and delete an old node pool ####
 
-Once a new nodepool has been created to replace an active node pool, the old node pool must be
-removed from the `GKE_NODEPOOL_NAMES` array.
+Once a new nodepool has been created to replace an active node pool, the old node pool must be removed from the `GKE_NODEPOOL_NAMES` array.
 
 Once the old node pool is removed from the array, it can be drained and deleted by running `kubernetes/gke/nodepool-down.sh <nodepool-name>`.
 
@@ -77,14 +64,14 @@ Cluster workloads are divided into two classes:
     kubectl apply -k kubernetes/system
     ```
 
-# JupyterHub
+## JupyterHub
 
-In general, any non-secret changes to the chart can be accomplished by modifying the chart's `values.yaml` and running the `invoke release` specific to JupyterHub.
+JupyterHub is a good example of an application using a Helm chart that is ultimately exposed to the outside internet for user access. In general, any non-secret changes to the chart can be accomplished by modifying the chart's `values.yaml` and running the `invoke release` specific to JupyterHub.
 ```
 poetry run invoke release -f channels/prod.yaml --app=jupyterhub
 ```
 
-## Secrets
+### Secrets
 Because we use [Github OAuth](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/authentication.html?highlight=oauth#github) for user authentication in JupyterHub, we have to provide a client-id and client-secret to the JupyterHub Helm chart. Here is what the full configuration for the GitHub OAuth in our JupyterHub Helm chart's `values.yaml` might look like:
 
 ```yaml
@@ -119,7 +106,7 @@ hub:
 
 This encoding could be accomplished by calling `cat <the secret yaml file> | base64` or using similar CLI tools; do not use an online base64 converter for secrets!
 
-## Domain Name Changes
+### Domain Name Changes
 
 At the time of this writing, a JupyterHub deployment is available at [https://notebooks.calitp.org](https://notebooks.calitp.org). If this domain name needs to change, the following configurations must also change so OAuth and ingress continue to function.
 
