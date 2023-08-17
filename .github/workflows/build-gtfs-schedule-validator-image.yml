@@ -32,7 +32,7 @@ jobs:
     name: Run pytest
     runs-on: ubuntu-latest
     env:
-      CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION: gs://some-test-bucket
+      CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY: gs://some-test-bucket
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v4
