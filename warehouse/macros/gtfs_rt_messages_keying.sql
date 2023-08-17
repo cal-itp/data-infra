@@ -68,9 +68,10 @@ WITH
         schedule_datasets.base64_url AS schedule_base64_url,
         schedule_datasets.name AS schedule_name,
         COALESCE(extend_schedule_dates.schedule_feed_key, fct_daily_schedule_feeds.feed_key) AS schedule_feed_key,
-        -- TODO: coalescing to America/Los_Angeles at the end here is a bit of a blunt instrument to ensure the field is populated
+        -- extend_schedule_dates + fallback to daily feed should ensure that timezone is populated
+        -- but just in case...
+        -- coalescing to America/Los_Angeles at the end here is a bit of a blunt instrument to ensure the field is populated
         -- America/Los_Angeles is the most common time zone by a huge margin, so we assume it's a good guess
-        -- we could do more advanced imputation eventually; the issue here is cases where RT data was downloaded but schedule wasn't available for some reason
         COALESCE(extend_schedule_dates.feed_timezone, fct_daily_schedule_feeds.feed_timezone, "America/Los_Angeles") AS schedule_feed_timezone,
         rt.* EXCEPT(_name)
     FROM {{ raw_messages }} AS rt
