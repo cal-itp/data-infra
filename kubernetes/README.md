@@ -1,5 +1,7 @@
 # Kubernetes
 
+> See the [ci README](../ci/README.md) for the specifics of deploying Kubernetes changes via GitOps.
+
 > :bulb: Both the Google Kubernetes Engine UI and the Lens Kubernetes IDE are useful GUI tools for interacting with a Kubernetes cluster, though you can get by with `kubectl` on the command line.
 
 We deploy our applications and services to a Google Kubernetes Engine cluster. If you are unfamiliar with Kubernetes, we recommend reading through [the official tutorial](https://kubernetes.io/docs/tutorials/kubernetes-basics/) to understand the main components (you do not have to actually perform all the steps).
