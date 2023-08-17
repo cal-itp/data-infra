@@ -1,6 +1,10 @@
 # Kubernetes
 
+> :bulb: Both the Google Kubernetes Engine UI and the Lens Kubernetes IDE are useful GUI tools for interacting with a Kubernetes cluster, though you can get by with `kubectl` on the command line.
+
 We deploy our applications and services to a Google Kubernetes Engine cluster. If you are unfamiliar with Kubernetes, we recommend reading through [the official tutorial](https://kubernetes.io/docs/tutorials/kubernetes-basics/) to understand the main components (you do not have to actually perform all the steps).
+
+A [glossary](#Glossary) exists at the end of this document.
 
 ## Cluster Administration
 
@@ -133,30 +137,15 @@ To verify that metabase configuration backups have been created, there are three
 
 1. Name of the Restic repository
 2. Restic password
-3. Google Access token
+3. Google Access token (if you have previously authenticated to `gcloud`, this should already be complete)
 
-There are several ways to obtain the Restic information.
+There are several ways to obtain the Restic information, listed in order of effort.
 
-## Metabase
-
-## Google Cloud Engine
-
-Within the kubernetes engine on GCE, go to the sidebar of `Secrets and Config Maps`. Select `cluster = data-infra-apps(us-west1)` and `namespace = metabase`, then select `database-backup`. This will have the Restic password that you will need but it will be encrypted.
-
-## Lens
-
-The preferred method is to use the Lens Kubernetes IDE https://k8slens.dev/. Once Lens desktop is set up, sync the following cluster `gke_cal-itp-data-infra_us-west1_data-infra-apps`. Within the configuration sidebar, navigate to `Secrets`. Select the `database-backup` secret where you will see the `RESTIC_PASSWORD`. Click the eye icon to unencrypt the password.
-
-Navigate to the Workloads parent folder and select `CronJobs`. Select the cronjob `postgresql-backup`. If you click the edit button you can look at it in YAML form. There you will obtain the Restic repository info.
-
-```shell
-name: RESTIC_REPOSITORY
-value: gs:calitp-backups-metabase:/
-- name: PGHOST
-value: database.metabase.svc.cluster.local
-```
-
-Once you have the name of the Restic repository, the password and your google access token you can connect to Restic.
+1. In Google Cloud Console, find the `database-backup` K8s Secret in the appropriate namespace (e.g. `metabase`) in the data-infra-apps cluster
+2. Perform #1 but using the [Lens Kubernetes IDE](https://k8slens.dev)
+3. Print out the K8s Secret and decode from base64 using `kubectl` and `jq`
+4. Determine the name of the secret from the deployment YAML (e.g. `metabase_database-backup`) and track it down in Google Cloud Secret Manager; the secrets generally follow the pattern of `<k8s-namespace>_<secret-name`
+5. Look at the K8s configuration of the CronJob that performs the backup (e.g. `postgresql-backup`) from the deployment YAML; this can be accomplished via Google Cloud, Lens, or kubectl
 
 ## Restic
 
@@ -186,3 +175,19 @@ To load the sql into postgres, run the following command:
 `psql -U postgres < pg_dumpall.sql`
 
 Then you can verify the schema and underlying data within postgres.
+
+## Glossary
+> Mostly cribbed from the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/workloads)
+ * Kubernetes - a platform for orchestrating (i.e. deploying) containerized software applications onto a collection of virtual machines
+ * Cluster - a collection of virtual machines (i.e. nodes) on which Kubernetes is installed, and onto which Kubernetes in turn deploys pods
+ * Pod - one (or more) containers deployed to run within a Kubernetes cluster
+   * For deployed services/applications, Pods exist because of a Deployment
+   * For ephemeral workloads (think Airflow tasks or database backups), Pods may be managed directly or via a Job
+ * Deployment - a Kubernetes object that manages a set of Pods, such as multiple replicas of the same web application
+   * StatefulSet - similar to Deployments but provides guarantees (e.g. deterministic network identifiers) necessary for stateful applications such as databases
+ * Service - an abstraction around Pods that provides a network interface _within the cluster_
+   * For example, a Redis instance needs a Service to be usable by other Pods
+ * Ingress - exposes Services to the outside world
+   * For example, a Metabase Service needs an Ingress to be accessible from the internet
+ * Volume - an abstraction of storage that is typically mounted into the file system of Pods
+ * Secrets/ConfigMaps - an abstraction of configuration information, typically mounted as environment variables of or files within Pods
