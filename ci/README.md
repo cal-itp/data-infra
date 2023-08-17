@@ -18,7 +18,7 @@ poetry run invoke release -f channels/test.yaml
 
 ## GitOps
 
-```{mermaid}
+```mermaid
 flowchart TD
 classDef default fill:white, color:black, stroke:black, stroke-width:1px
 classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
