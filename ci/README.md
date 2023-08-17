@@ -35,7 +35,7 @@ candidates_main[GitHub Action builds images and renders candidates/main\nNote: i
 prod_diff[invoke diff renders on prod PR]
 prod_invoke[invoke releases to prod]
 
-pr -- Yes --> candidates_branch -- "Open PR from candidates/branch-name to releases/test" --> branch_diff -- "Merge candidate PR to releases/test" --> branch_invoke -- Merge to main after review and testing --> candidates_main -- "Open PR from candidates/main to releases/prod" --> prod_diff -- "Merge candidate PR to releases/prod" --> prod_invoke
+pr -- Yes --> candidates_branch -- "Open PR from candidates/branch-name to releases/test" --> branch_diff -- "Merge candidate PR to releases/test" --> branch_invoke -- Merge original PR to main after review and testing --> candidates_main -- "Open PR from candidates/main to releases/prod" --> prod_diff -- "Merge candidate PR to releases/prod" --> prod_invoke
 pr -- "No; merge to main after review" --> candidates_main
 
 class pr initial
