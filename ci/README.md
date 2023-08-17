@@ -24,7 +24,7 @@ classDef default fill:white, color:black, stroke:black, stroke-width:1px
 classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
 class ingestion_label,modeling_label,analysis_label group_labelstyle
 
-pr[Push commits to a branch.\nTest environment?]
+pr[Push commits to a branch.\nDoes a test environment exist?]
 candidates_branch[GitHub Action renders candidates/branch-name]
 branch_diff[invoke diff renders on test PR]
 branch_invoke[invoke releases to test]

@@ -1,8 +1,8 @@
 # Kubernetes
 
-> See the [ci README](../ci/README.md) for the specifics of deploying Kubernetes changes via GitOps.
+> :blub: See the [ci README](../ci/README.md) for the specifics of deploying Kubernetes changes via GitOps. Only workloads (i.e. applications) are deployed via CI/CD and pull requests; changing the Kubernetes cluster itself (e.g. adding a node pool) is a manual operation.
 
-> :bulb: Both the Google Kubernetes Engine UI and the Lens Kubernetes IDE are useful GUI tools for interacting with a Kubernetes cluster, though you can get by with `kubectl` on the command line.
+> :notebook: Both the Google Kubernetes Engine UI and the Lens Kubernetes IDE are useful GUI tools for interacting with a Kubernetes cluster, though you can get by with `kubectl` on the command line.
 
 We deploy our applications and services to a Google Kubernetes Engine cluster. If you are unfamiliar with Kubernetes, we recommend reading through [the official tutorial](https://kubernetes.io/docs/tutorials/kubernetes-basics/) to understand the main components (you do not have to actually perform all the steps).
 
@@ -21,6 +21,8 @@ gcloud config get-value compute/region
 
 ### Deploying the cluster
 
+> :red_circle: You should only run this script if you intend to actually deploy a new cluster, though it will stop if the cluster already exists. This is likely to be a rare operation but may be necessary for migrating regions, creating a totally isolated test cluster, etc.
+
 The cluster level configuration parameters are stored in [config-cluster.sh](./gke/config-cluster.sh). Creating the cluster also requires configuring parameters for a node pool named "default-pool" (unconfigurable name defined by GKE) in [kubernetes/gke/config-nodepool.sh](./gke/config-nodepool.sh). Any additional node pools configured in this file are also stood up at cluster creation time.
 
 Once the cluster is created, it can be managed by pointing the `KUBECONFIG`
@@ -36,10 +38,7 @@ The cluster can be deleted by running `kubernetes/gke/cluster-delete.sh`.
 
 ### Nodepool lifecycle
 
-Certain features of node pools are immutable (e.g. machine type); to change
-such parameters requires creating a new node pool with the desired new values,
-migrating workloads off of the old node pool, and then deleting the old node pool.
-The node pool lifecycle scripts help simplify this process.
+It's much more likely that a user may want to add or change node pools than make changes to the cluster itself. Certain features of node pools are immutable (e.g. machine type); to change such parameters requires creating a new node pool with the desired new values, migrating workloads off of the old node pool, and then deleting the old node pool. The node pool lifecycle scripts help simplify this process.
 
 #### Create a new node pool
 
@@ -94,7 +93,7 @@ hub:
           - lottspot
 ```
 
-We want to avoid committing these secrets to GitHub, but we also want to version control as much of the `values.yaml` as possible. Fortunately, he JupyterHub chart affords us the ability to use the `hub.existingSecret` parameter to referencing an existing secret containing additional `values.yaml` entries. For GitHub OAuth specifically, the `jupyterhub-github-config` secret must contain a `values.yaml` key containing a base64-encoded representation of the following yaml:
+We want to avoid committing these secrets to GitHub, but we also want to version control as much of the `values.yaml` as possible. Fortunately, the JupyterHub chart affords us the ability to use the `hub.existingSecret` parameter to referencing an existing secret containing additional `values.yaml` entries. For GitHub OAuth specifically, the `jupyterhub-github-config` secret must contain a `values.yaml` key containing a base64-encoded representation of the following yaml:
 
 ```yaml
 hub:
@@ -120,9 +119,9 @@ At the time of this writing, a JupyterHub deployment is available at [https://no
 
 # Backups
 
-For most of our backups we utilize [Restic](https://restic.readthedocs.io/en/latest/010_introduction.html)
+For most of our backups we utilize [Restic](https://restic.readthedocs.io/en/latest/010_introduction.html); this section uses the Metabase database backup as an example.
 
-To verify that metabase configuration backups have been created, there are three pieces of information you require:
+To verify that Metabase configuration backups have been created, there are three pieces of information you require:
 
 1. Name of the Restic repository
 2. Restic password
@@ -153,13 +152,13 @@ This will be a zipped file, unzip it by using
 
 ## Verify SQL in Postgres
 
-To verify the SQL schema and underlying data has not been corrupted , open the SQL file within a Docker container. For initial Docker container setup please visit [Docker Documentation](https://docs.docker.com/get-started/)
+To verify the SQL schema and underlying data has not been corrupted, open the SQL file within a Docker container. For initial Docker container setup please visit [Docker Documentation](https://docs.docker.com/get-started/)
 
 `docker run --rm -v /tmp/sql:/workspace -e POSTGRES_HOST_AUTH_METHOD=trust postgres:13.5`
 
-It is important to note that the version of postgres used to take the metabase snapshots (13.5) needs to be the same version of postgres that is restoring the dump.
+It is important to note that the version of Postgres used to take the Metabase snapshots (13.5) needs to be the same version of Postgres that is restoring the dump.
 
-To load the sql into postgres, run the following command:
+To load the SQL into Postgres, run the following command:
 
 `psql -U postgres < pg_dumpall.sql`
 
