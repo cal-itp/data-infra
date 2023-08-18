@@ -19,10 +19,6 @@ WITH fct_scheduled_trips AS (
 dim_stop_times AS (
     SELECT *
     FROM {{ ref('dim_stop_times') }}
-    WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START',
-                               this_dt_column='_feed_valid_from',
-                               filter_dt_column='_feed_valid_from',
-                               dev_lookback_days = None) }}
 ),
 
 dim_stops AS (
