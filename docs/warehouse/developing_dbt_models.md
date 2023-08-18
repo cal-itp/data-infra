@@ -371,6 +371,20 @@ To check for incremental models downstream of your model, run `poetry run dbt ls
 2. Go into the [Airflow UI](https://o1d2fa0877cf3fb10p-tp.appspot.com/home) and go to the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh). **Specify appropriate model selectors to only refresh models that were affected by your changes** and then run the DAG task.
 ```
 
+## Incremental models
+
+[Incremental models](https://docs.getdbt.com/docs/build/incremental-models) are one of the trickier concepts to learn in dbt and in our warehouse. By default, dbt models process all of the available data identified by the SQL queries within them and essentially re-create each model from scratch every day. Incremental models are designed to process smaller batches of data and **update** existing models, rather than creating the model from scratch. This is helpful for large data (like GTFS RT and GTFS schedule stop times) where re-processing all of history every day is expensive.
+
+```{admonition} Computational cost vs. complexity cost trade-off
+Incremental models basically trade off a simple but computationally expensive approach (just process all of history every day) for a more complex approach, where daily processing is cheaper computationally but there is a higher cost in terms of time spent understanding or troubleshooting the model.
+```
+
+Most of the Cal-ITP incremental models use a shared [`incremental_where macro`](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/incremental_where.sql) to handle the incremental logic; by default in dbt you could use the `if is_incremental()` checks directly in each incremental model, but we use the `incremental_where` macro to store some shared handling for things like the concept of the GTFS RT and GTFS schedule data start dates.
+
+The core question to ask when working with incremental models is: **How do I identify the new rows that should be brought in on each new run?**
+
+You can compile the SQL for an incremental model and run it directly in BigQuery to inspect what rows are identified for addition in an incremental run (see the [section on identifying bugs above]((identify-bug)=) for information on how to find compiled SQL).
+
 ## Helpful talks and presentations
 
 ### dbt at Cal-ITP introduction
