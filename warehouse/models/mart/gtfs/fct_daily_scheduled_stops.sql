@@ -65,14 +65,14 @@ stops_by_day_by_route AS (
             trips.contains_warning_missing_foreign_key_stop_id
         ) AS contains_warning_missing_foreign_key_stop_id
 
-    FROM dim_stop_times AS stop_times
+    FROM fct_scheduled_trips AS trips
+    LEFT JOIN dim_stop_times AS stop_times
+        ON trips.feed_key = stop_times.feed_key
+            AND trips.trip_id = stop_times.trip_id
     LEFT JOIN int_gtfs_schedule__frequencies_stop_times freq
         ON stop_times.feed_key = freq.feed_key
         AND stop_times.trip_id = freq.trip_id
         AND stop_times.stop_id = freq.stop_id
-    LEFT JOIN fct_scheduled_trips AS trips
-        ON trips.feed_key = stop_times.feed_key
-            AND trips.trip_id = stop_times.trip_id
     GROUP BY 1, 2, 3, 4, 5, 6
 
 ),
