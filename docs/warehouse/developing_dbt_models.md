@@ -98,7 +98,7 @@ Here is a series of recordings showing a workflow for debugging a failing dbt te
 [Here's a recording](https://drive.google.com/file/d/115gyrr67XoNbG69gGH-6B4MiwQJIbLH5/view?usp=drive_link) of a meeting on August 17, 2023 demonstrating the investigation of some failing dbt tests that day. The [notes shown in the video live here](https://docs.google.com/document/d/15ay0rSpgLG_Hm75R5bFBcYP8eZNoORMMZAX5R4uO3oc/edit). The associated PR is [#2899](https://github.com/cal-itp/data-infra/pull/2899).
 ```
 
-Usually, bug are caused by:
+Usually, bugs are caused by:
 
 * New or historical data issues. For example, an agency may be doing something in their GTFS data that we didn't expect and this may have broken one of our models. This can happen with brand new data that is coming in or in historical data that wasn't included in local testing (this is especially relevant for RT data, where local testing usually includes a very small subset of the full data.)
 * GTFS or data schema bugs. Sometimes we may have misinterpreted the GTFS spec (or another incoming data model) and modeled something incorrectly.
