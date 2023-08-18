@@ -87,16 +87,18 @@ tests_and_docs --> merge_model_changes
 
 ### Identify the cause of your bug
 
-```{admonition} Example bug troubleshooting walkthrough
+```{admonition} Example bug troubleshooting walkthroughs
 Here is a series of recordings showing a workflow for debugging a failing dbt test. The resulting PR is [#2892](https://github.com/cal-itp/data-infra/pull/2892).
 
 1. [Find the compiled test SQL](https://www.loom.com/share/0bf1eaa6d3374be782eb18859f24e08f?sid=0ab9251a-723d-4a5a-9d77-0be3b116a021)
 2. [Run the test SQL](https://www.loom.com/share/e57a163ecd8c4b15af0959fb0b4ab3eb?sid=36b5cf66-9832-4538-8813-c3dd982e6a77)
 3. [Confirm the nature of the problem](https://www.loom.com/share/cf82e6a7ab824d8dbd572d9371ccf6dc?sid=9d31aa40-ff34-4c34-9fd9-22985c7c57e4)
 4. [Plan a fix](https://www.loom.com/share/99133f1172c44540a683e423f4ad91ef?sid=e199aed5-00e0-4acc-98de-24f696e4267e)
+
+[Here's a recording](https://drive.google.com/file/d/115gyrr67XoNbG69gGH-6B4MiwQJIbLH5/view?usp=drive_link) of a meeting on August 17, 2023 demonstrating the investigation of some failing dbt tests that day. The [notes shown in the video live here](https://docs.google.com/document/d/15ay0rSpgLG_Hm75R5bFBcYP8eZNoORMMZAX5R4uO3oc/edit). The associated PR is [#2899](https://github.com/cal-itp/data-infra/pull/2899).
 ```
 
-Usually, bug are caused by:
+Usually, bugs are caused by:
 
 * New or historical data issues. For example, an agency may be doing something in their GTFS data that we didn't expect and this may have broken one of our models. This can happen with brand new data that is coming in or in historical data that wasn't included in local testing (this is especially relevant for RT data, where local testing usually includes a very small subset of the full data.)
 * GTFS or data schema bugs. Sometimes we may have misinterpreted the GTFS spec (or another incoming data model) and modeled something incorrectly.
@@ -368,6 +370,22 @@ To check for incremental models downstream of your model, run `poetry run dbt ls
 
 2. Go into the [Airflow UI](https://o1d2fa0877cf3fb10p-tp.appspot.com/home) and go to the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh). **Specify appropriate model selectors to only refresh models that were affected by your changes** and then run the DAG task.
 ```
+
+## Incremental models
+
+[Incremental models](https://docs.getdbt.com/docs/build/incremental-models) are one of the trickier concepts to learn in dbt and in our warehouse. By default, dbt models process all of the available data identified by the SQL queries within them and essentially re-create each model from scratch every day. Incremental models are designed to process smaller batches of data and **update** existing models, rather than creating the model from scratch. This is helpful for large data (like GTFS RT and GTFS schedule stop times) where re-processing all of history every day is expensive.
+
+```{admonition} Computational cost vs. complexity cost trade-off
+Incremental models basically trade off a simple but computationally expensive approach (just process all of history every day) for a more complex approach, where daily processing is cheaper computationally but there is a higher cost in terms of time spent understanding or troubleshooting the model.
+```
+
+Most of the Cal-ITP incremental models use a shared [`incremental_where macro`](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/incremental_where.sql) to handle the incremental logic; by default in dbt you could use the `if is_incremental()` checks directly in each incremental model, but we use the `incremental_where` macro to store some shared handling for things like the concept of the GTFS RT and GTFS schedule data start dates.
+
+The core question to ask when working with incremental models is: **How do I identify the new rows that should be brought in on each new run?**
+
+You can compile the SQL for an incremental model and run it directly in BigQuery to inspect what rows are identified for addition in an incremental run (see the [section on identifying bugs above](identify-bug) for information on how to find compiled SQL).
+
+Working with incremental models can affect how you approach various dbt-related workflows. See callouts in the individual step sections above related to incremental models for more details.
 
 ## Helpful talks and presentations
 
