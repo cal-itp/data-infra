@@ -9,13 +9,20 @@ stop_check_cts AS (
     SELECT service_date, COUNT(DISTINCT feed_key) AS stop_n_feeds
     FROM {{ ref('fct_daily_scheduled_stops') }}
     GROUP BY 1
+),
+
+check_cts AS (
+    SELECT
+        trip_check_cts.service_date,
+        trip_n_feeds,
+        stop_n_feeds,
+        stop_n_feeds / trip_n_feeds AS ratio
+    FROM trip_check_cts
+    LEFT JOIN stop_check_cts
+        ON trip_check_cts.service_date = stop_check_cts.service_date
+    ORDER BY service_date DESC
 )
 
-SELECT
-    trip_check_cts.service_date,
-    trip_n_feeds,
-    stop_n_feeds
-FROM trip_check_cts
-LEFT JOIN stop_check_cts
-    ON trip_check_cts.service_date = stop_check_cts.service_date
-WHERE trip_n_feeds > stop_n_feeds
+SELECT *
+FROM check_cts
+WHERE ratio < 0.75
