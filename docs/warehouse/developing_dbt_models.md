@@ -87,13 +87,15 @@ tests_and_docs --> merge_model_changes
 
 ### Identify the cause of your bug
 
-```{admonition} Example bug troubleshooting walkthrough
+```{admonition} Example bug troubleshooting walkthroughs
 Here is a series of recordings showing a workflow for debugging a failing dbt test. The resulting PR is [#2892](https://github.com/cal-itp/data-infra/pull/2892).
 
 1. [Find the compiled test SQL](https://www.loom.com/share/0bf1eaa6d3374be782eb18859f24e08f?sid=0ab9251a-723d-4a5a-9d77-0be3b116a021)
 2. [Run the test SQL](https://www.loom.com/share/e57a163ecd8c4b15af0959fb0b4ab3eb?sid=36b5cf66-9832-4538-8813-c3dd982e6a77)
 3. [Confirm the nature of the problem](https://www.loom.com/share/cf82e6a7ab824d8dbd572d9371ccf6dc?sid=9d31aa40-ff34-4c34-9fd9-22985c7c57e4)
 4. [Plan a fix](https://www.loom.com/share/99133f1172c44540a683e423f4ad91ef?sid=e199aed5-00e0-4acc-98de-24f696e4267e)
+
+[Here's a recording](https://drive.google.com/file/d/115gyrr67XoNbG69gGH-6B4MiwQJIbLH5/view?usp=drive_link) of a meeting on August 17, 2023 demonstrating the investigation of some failing dbt tests that day. The [notes shown in the video live here](https://docs.google.com/document/d/15ay0rSpgLG_Hm75R5bFBcYP8eZNoORMMZAX5R4uO3oc/edit). The associated PR is [#2899](https://github.com/cal-itp/data-infra/pull/2899).
 ```
 
 Usually, bug are caused by:
