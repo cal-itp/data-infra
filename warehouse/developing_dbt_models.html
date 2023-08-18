@@ -699,6 +699,11 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#incremental-models">
+   Incremental models
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#helpful-talks-and-presentations">
    Helpful talks and presentations
   </a>
@@ -868,6 +873,11 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#incremental-models">
+   Incremental models
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#helpful-talks-and-presentations">
    Helpful talks and presentations
   </a>
@@ -971,8 +981,8 @@ test_changes -- no issues --&gt; tests_and_docs
 tests_and_docs --&gt; merge_model_changes
         </div><div class="section" id="identify-bug">
 <span id="identify-the-cause-of-your-bug"></span><h3>Identify the cause of your bug<a class="headerlink" href="#identify-bug" title="Permalink to this headline">¶</a></h3>
-<div class="admonition-example-bug-troubleshooting-walkthrough admonition">
-<p class="admonition-title">Example bug troubleshooting walkthrough</p>
+<div class="admonition-example-bug-troubleshooting-walkthroughs admonition">
+<p class="admonition-title">Example bug troubleshooting walkthroughs</p>
 <p>Here is a series of recordings showing a workflow for debugging a failing dbt test. The resulting PR is <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2892">#2892</a>.</p>
 <ol class="simple">
 <li><p><a class="reference external" href="https://www.loom.com/share/0bf1eaa6d3374be782eb18859f24e08f?sid=0ab9251a-723d-4a5a-9d77-0be3b116a021">Find the compiled test SQL</a></p></li>
@@ -980,8 +990,9 @@ tests_and_docs --&gt; merge_model_changes
 <li><p><a class="reference external" href="https://www.loom.com/share/cf82e6a7ab824d8dbd572d9371ccf6dc?sid=9d31aa40-ff34-4c34-9fd9-22985c7c57e4">Confirm the nature of the problem</a></p></li>
 <li><p><a class="reference external" href="https://www.loom.com/share/99133f1172c44540a683e423f4ad91ef?sid=e199aed5-00e0-4acc-98de-24f696e4267e">Plan a fix</a></p></li>
 </ol>
+<p><a class="reference external" href="https://drive.google.com/file/d/115gyrr67XoNbG69gGH-6B4MiwQJIbLH5/view?usp=drive_link">Here’s a recording</a> of a meeting on August 17, 2023 demonstrating the investigation of some failing dbt tests that day. The <a class="reference external" href="https://docs.google.com/document/d/15ay0rSpgLG_Hm75R5bFBcYP8eZNoORMMZAX5R4uO3oc/edit">notes shown in the video live here</a>. The associated PR is <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2899">#2899</a>.</p>
 </div>
-<p>Usually, bug are caused by:</p>
+<p>Usually, bugs are caused by:</p>
 <ul class="simple">
 <li><p>New or historical data issues. For example, an agency may be doing something in their GTFS data that we didn’t expect and this may have broken one of our models. This can happen with brand new data that is coming in or in historical data that wasn’t included in local testing (this is especially relevant for RT data, where local testing usually includes a very small subset of the full data.)</p></li>
 <li><p>GTFS or data schema bugs. Sometimes we may have misinterpreted the GTFS spec (or another incoming data model) and modeled something incorrectly.</p></li>
@@ -1230,6 +1241,18 @@ tests_and_docs --&gt; merge_model_changes
 </ol>
 </div>
 </div>
+</div>
+<div class="section" id="incremental-models">
+<h2>Incremental models<a class="headerlink" href="#incremental-models" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://docs.getdbt.com/docs/build/incremental-models">Incremental models</a> are one of the trickier concepts to learn in dbt and in our warehouse. By default, dbt models process all of the available data identified by the SQL queries within them and essentially re-create each model from scratch every day. Incremental models are designed to process smaller batches of data and <strong>update</strong> existing models, rather than creating the model from scratch. This is helpful for large data (like GTFS RT and GTFS schedule stop times) where re-processing all of history every day is expensive.</p>
+<div class="admonition-computational-cost-vs-complexity-cost-trade-off admonition">
+<p class="admonition-title">Computational cost vs. complexity cost trade-off</p>
+<p>Incremental models basically trade off a simple but computationally expensive approach (just process all of history every day) for a more complex approach, where daily processing is cheaper computationally but there is a higher cost in terms of time spent understanding or troubleshooting the model.</p>
+</div>
+<p>Most of the Cal-ITP incremental models use a shared <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/incremental_where.sql"><code class="docutils literal notranslate"><span class="pre">incremental_where</span> <span class="pre">macro</span></code></a> to handle the incremental logic; by default in dbt you could use the <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">is_incremental()</span></code> checks directly in each incremental model, but we use the <code class="docutils literal notranslate"><span class="pre">incremental_where</span></code> macro to store some shared handling for things like the concept of the GTFS RT and GTFS schedule data start dates.</p>
+<p>The core question to ask when working with incremental models is: <strong>How do I identify the new rows that should be brought in on each new run?</strong></p>
+<p>You can compile the SQL for an incremental model and run it directly in BigQuery to inspect what rows are identified for addition in an incremental run (see the <a class="reference internal" href="#identify-bug"><span class="std std-ref">section on identifying bugs above</span></a> for information on how to find compiled SQL).</p>
+<p>Working with incremental models can affect how you approach various dbt-related workflows. See callouts in the individual step sections above related to incremental models for more details.</p>
 </div>
 <div class="section" id="helpful-talks-and-presentations">
 <h2>Helpful talks and presentations<a class="headerlink" href="#helpful-talks-and-presentations" title="Permalink to this headline">¶</a></h2>
