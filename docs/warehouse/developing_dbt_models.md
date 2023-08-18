@@ -383,7 +383,7 @@ Most of the Cal-ITP incremental models use a shared [`incremental_where macro`](
 
 The core question to ask when working with incremental models is: **How do I identify the new rows that should be brought in on each new run?**
 
-You can compile the SQL for an incremental model and run it directly in BigQuery to inspect what rows are identified for addition in an incremental run (see the [section on identifying bugs above]((identify-bug)=) for information on how to find compiled SQL).
+You can compile the SQL for an incremental model and run it directly in BigQuery to inspect what rows are identified for addition in an incremental run (see the [section on identifying bugs above](identify-bug) for information on how to find compiled SQL).
 
 Working with incremental models can affect how you approach various dbt-related workflows. See callouts in the individual step sections above related to incremental models for more details.
 
