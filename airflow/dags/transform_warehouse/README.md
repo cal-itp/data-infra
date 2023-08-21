@@ -11,4 +11,4 @@ This DAG has some special considerations:
 
 * Because the tasks in this DAG involve running a large volume of SQL transformations, they risk triggering data quotas if the DAG is run multiple times in a single day.
 
-* This task can be run with a `dbt_select` statement provided (use the `Trigger DAG w/ config` button in the Airflow UI and provide a JSON configuration like `{"dbt_select": "+<your_model_here>+"}` using [dbt selection syntax](https://docs.getdbt.com/reference/node-selection/syntax#specifying-resources)) to re-run a specific individual model's lineage.
+* This task can be run with a `dbt_select` statement provided (use the `Trigger DAG w/ config` button (option under the "play" icon in the upper right corner when looking at an individual DAG) in the Airflow UI and provide a JSON configuration like `{"dbt_select": "<+ if you want to run parents><your_model_here><+ if you want to run children>"}` using [dbt selection syntax](https://docs.getdbt.com/reference/node-selection/syntax#specifying-resources)) to re-run a specific individual model's lineage.
