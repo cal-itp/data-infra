@@ -387,6 +387,10 @@ You can compile the SQL for an incremental model and run it directly in BigQuery
 
 Working with incremental models can affect how you approach various dbt-related workflows. See callouts in the individual step sections above related to incremental models for more details.
 
+```{admonition} Identifying incremental models in your dependency tree
+If you're trying to identify whether there are incremental models in the dependency tree of a model you're working with, you can use the following command (run from the `warehouse` directory in the data infra repo): `poetry run dbt ls -s +<your_model>+,config.materialized:incremental --resource-type model`.
+```
+
 ## Helpful talks and presentations
 
 ### dbt at Cal-ITP introduction
