@@ -1253,6 +1253,10 @@ tests_and_docs --&gt; merge_model_changes
 <p>The core question to ask when working with incremental models is: <strong>How do I identify the new rows that should be brought in on each new run?</strong></p>
 <p>You can compile the SQL for an incremental model and run it directly in BigQuery to inspect what rows are identified for addition in an incremental run (see the <a class="reference internal" href="#identify-bug"><span class="std std-ref">section on identifying bugs above</span></a> for information on how to find compiled SQL).</p>
 <p>Working with incremental models can affect how you approach various dbt-related workflows. See callouts in the individual step sections above related to incremental models for more details.</p>
+<div class="admonition-identifying-incremental-models-in-your-dependency-tree admonition">
+<p class="admonition-title">Identifying incremental models in your dependency tree</p>
+<p>If you’re trying to identify whether there are incremental models in the dependency tree of a model you’re working with, you can use the following command (run from the <code class="docutils literal notranslate"><span class="pre">warehouse</span></code> directory in the data infra repo): <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">+&lt;your_model&gt;+,config.materialized:incremental</span> <span class="pre">--resource-type</span> <span class="pre">model</span></code>.</p>
+</div>
 </div>
 <div class="section" id="helpful-talks-and-presentations">
 <h2>Helpful talks and presentations<a class="headerlink" href="#helpful-talks-and-presentations" title="Permalink to this headline">¶</a></h2>
