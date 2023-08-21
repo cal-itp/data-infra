@@ -331,7 +331,7 @@ join_table AS (
         ON m.funding_source_vault_id = v.funding_source_vault_id
             AND m.transaction_time >= v.calitp_valid_at
             AND m.transaction_time < v.calitp_invalid_at
-    INNER JOIN initial_transactions AS t1
+    LEFT JOIN initial_transactions AS t1
         ON m.participant_id = t1.participant_id
             AND m.micropayment_id = t1.micropayment_id
     LEFT JOIN second_transactions AS t2
