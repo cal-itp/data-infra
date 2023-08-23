@@ -34,7 +34,6 @@ disabled in the CI run due to flakiness, but it will still lint any SQL files
 you attempt to commit locally.
 
 ### mypy
-
 We encourage mypy compliance for Python when possible, though we do not
 currently run mypy on Airflow DAGs. All service and job images do pass mypy,
 which runs in the GitHub Actions that build the individual images. If you are
