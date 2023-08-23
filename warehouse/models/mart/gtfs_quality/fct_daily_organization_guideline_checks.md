@@ -4,6 +4,7 @@ Each row represents a date/guideline check/organization combination, with pass/f
 information indicating whether that feed complied with that check on that date.
 Only contains checks that are performed at the organization level.
 
+
 Here is a list of currently-implemented checks:
 
 | Check | Feature | Description |

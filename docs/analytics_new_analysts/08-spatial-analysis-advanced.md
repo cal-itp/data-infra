@@ -1,13 +1,12 @@
 (geo-advanced)=
-
 # Working with Geospatial Data: Advanced
 
 Place matters. After covering the [intermediate tutorial](geo-intermediate), you're ready to cover some advanced spatial analysis topics.
 
 Below are more detailed explanations for dealing with geometry in Python.
+* [Types of geometric shapes](#types-of-geometric-shapes)
+* [Geometry in-memory and in databases](#geometry-in-memory-and-in-databases)
 
-- [Types of geometric shapes](#types-of-geometric-shapes)
-- [Geometry in-memory and in databases](#geometry-in-memory-and-in-databases)
 
 ## Getting Started
 
@@ -20,20 +19,18 @@ from geoalchemy2 import WKTElement
 ```
 
 ## Types of Geometric Shapes
-
 There are six possible geometric shapes that are represented in geospatial data. [More description here.](http://postgis.net/workshops/postgis-intro/geometries.html#representing-real-world-objects)
-
-- Point
-- MultiPoint: collection of points
-- LineString
-- MultiLineString: collection of linestrings, which are disconnected from each other
-- Polygon
-- MultiPolygon: collection of polygons, which can be disconnected or overlapping from each other
+* Point
+* MultiPoint: collection of points
+* LineString
+* MultiLineString: collection of linestrings, which are disconnected from each other
+* Polygon
+* MultiPolygon: collection of polygons, which can be disconnected or overlapping from each other
 
 The ArcGIS equivalent of these are just points, lines, and polygons.
 
-## Geometry In-Memory and in Databases
 
+## Geometry In-Memory and in Databases
 If you're loading a GeoDataFrame (gdf), having the `geometry` column is necessary to do spatial operations in your Python session. The `geometry` column is composed of Shapely objects, such as Point or MultiPoint, LineString or MultiLineString, and Polygon or MultiPolygon.
 
 Databases often store geospatial information as well-known text (WKT) or its binary equivalent, well-known binary (WKB). These are well-specified interchange formats for the importing and exporting of geospatial data. Often, querying a database (PostGIS, SpatiaLite, etc) or writing data to the database requires converting the `geometry` column to/from WKT/WKB.

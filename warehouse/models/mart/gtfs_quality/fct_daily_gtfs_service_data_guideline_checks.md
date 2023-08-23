@@ -4,6 +4,7 @@ Each row represents a date/guideline check/GTFS service data combination, with p
 information indicating whether that feed complied with that check on that date.
 Only contains checks that are performed at the GTFS service data level.
 
+
 Here is a list of currently-implemented checks:
 
 | Check | Feature | Description |

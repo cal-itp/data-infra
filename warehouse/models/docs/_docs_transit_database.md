@@ -81,6 +81,8 @@ was in effect.
 
 Each record is a product used in a transit technology stack at another organization (e.g. fixed-route scheduling software) or by riders (e.g. Google Maps).  Products have properties such as input/output capabilities.
 
+
+
 This is currently a current-only table, so historical data is not present and the data represents
 the record states as they existed in the most recent extract from the source database.
 Versioning columns (`_valid_from` and `_valid_to` for validity dates and `source_record_id` for a stable identifier)
@@ -112,7 +114,6 @@ was in effect.
 Each record represents a gtfs dataset (feed) that is either a type of GTFS Schedule, Trip Updates, Vehicle Locations or Alerts.
 
 A gtfs dataset MAY:
-
 - be *disaggregated into* one or more `gtfs service data` records.
 - be *produced* by one or more `organizations`
 - be *published* by an `organizations`.

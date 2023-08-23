@@ -1,12 +1,12 @@
-{% docs int_gtfs_quality\_\_guideline_checks_long %}
+{% docs int_gtfs_quality__guideline_checks_long %}
 
 Each row represents a date/organization/service/feed/guideline/check combination, with pass/fail
 information indicating whether that entity complied with that check on that date. Entities
 in this table are considered `assessed` for guidelines purposes, meaning:
 
-- Organizations in this table have a `reporting_category` of `Core` or `Other Public Transit`
-- The organization manages at least one service that is currently operating and has at least some fixed-route service
-- That service is represented in at least one customer-facing GTFS dataset
+* Organizations in this table have a `reporting_category` of `Core` or `Other Public Transit`
+* The organization manages at least one service that is currently operating and has at least some fixed-route service
+* That service is represented in at least one customer-facing GTFS dataset
 
 This table is designed to be an exhaustive accounting of all checks performed on assessed entities which can then be further summarized (grouped) based on the specific entity of interest  (for example, services or organizations). See the `fct_daily_organization_combined_guideline_checks` and `fct_daily_service_combined_guideline_checks` tables to
 get daily assessments for organizations or services; they use the aggregation logic described below.
@@ -19,9 +19,8 @@ This makes the raw row counts or percentages in this table very difficult to int
 
 To aggregate to a given entity-level (service, organization, dataset, or feed), as this
 table is intended to be used, the logic is:
-
-- Group by date, that entity's key (for example, `organization_key`), `check`, and `feature`
-- Apply `LOGICAL_OR` and `LOGICAL_AND` aggregation on the `status` column, like so:
+* Group by date, that entity's key (for example, `organization_key`), `check`, and `feature`
+* Apply `LOGICAL_OR` and `LOGICAL_AND` aggregation on the `status` column, like so:
 
 ```
 -- note that the order here matters; the conditions are meant to be applied in this order
@@ -35,11 +34,10 @@ END as status
 ```
 
 This will result in:
-
-- The overall entity check will fail if any check on a constituent entity failed
-- The overall entity check will pass if all constituent entity checks were either `N/A` or pass
-- The overall entity check will be `MANUAL CHECK NEEDED` if all constituent entity checks were `N/A` or `MANUAL CHECK NEEDED`
-- The overall entity check will be `N/A` if all constituent entity checks were `N/A`
+* The overall entity check will fail if any check on a constituent entity failed
+* The overall entity check will pass if all constituent entity checks were either `N/A` or pass
+* The overall entity check will be `MANUAL CHECK NEEDED` if all constituent entity checks were `N/A` or `MANUAL CHECK NEEDED`
+* The overall entity check will be `N/A` if all constituent entity checks were `N/A`
 
 Else it will be null.
 
