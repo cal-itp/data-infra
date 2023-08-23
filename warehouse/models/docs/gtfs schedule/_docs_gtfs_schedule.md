@@ -40,7 +40,8 @@ timezone, for example 'America/Los_Angeles' or 'US/Pacific'.
 
 {% docs gtfs_schedule_stop_timezone_coalesced %}
 This field applies the fallback logic specified by https://gtfs.org/schedule/reference/#stopstxt to have a guaranteed non-null time zone for this stop. The logic is:
-* If there is a parent stop with stop_timezone, use that.
-* Otherwise if there is a stop_timezone for this stop, use that (technically per the spec if there is a parent stop with null timezone and the child stop_timezone is populated, it is not clear what is supposed to happen. In that case this field would just use the child stop's timezone.)
-* Finally, fall back to `agency_timezone` from `agency.txt`, which here is available as `feed_timezone`.
-{% enddocs %}
+
+- If there is a parent stop with stop_timezone, use that.
+- Otherwise if there is a stop_timezone for this stop, use that (technically per the spec if there is a parent stop with null timezone and the child stop_timezone is populated, it is not clear what is supposed to happen. In that case this field would just use the child stop's timezone.)
+- Finally, fall back to `agency_timezone` from `agency.txt`, which here is available as `feed_timezone`.
+  {% enddocs %}

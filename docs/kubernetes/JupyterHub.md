@@ -186,9 +186,9 @@ Within the GitHub OAuth application, in Github, the homepage and callback URLs w
 
 After the changes have been made to the GitHub OAuth application, the following portions of the JupyterHub chart's `values.yaml` must be changed:
 
-  - `hub.config.GitHubOAuthenticator.oauth_callback_url`
-  - `ingress.hosts`
-  - `ingress.tls.hosts`
+- `hub.config.GitHubOAuthenticator.oauth_callback_url`
+- `ingress.hosts`
+- `ingress.tls.hosts`
 
 Apply these chart changes with:
 

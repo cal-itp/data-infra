@@ -1,9 +1,8 @@
 # Description
+
 _Describe your changes and why you're making them. Please include the context, motivation, and relevant dependencies._
 
-
-
-Resolves #[issue]
+Resolves #\[issue\]
 
 ## Type of change
 
@@ -13,11 +12,11 @@ Resolves #[issue]
 - [ ] Documentation
 
 ## How has this been tested?
+
 _Include commands/logs/screenshots as relevant._
 
-
-
 ## Post-merge follow-ups
+
 _Document any actions that must be taken post-merge to deploy or otherwise implement the changes in this PR (for example, running a full refresh of some incremental model in dbt). If these actions will take more than a few hours after the merge or if they will be completed by someone other than the PR author, please create a dedicated follow-up issue and link it here to track resolution._
 
 - [ ] No action required
