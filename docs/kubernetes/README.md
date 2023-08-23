@@ -1,21 +1,12 @@
----
-jupytext:
-  cell_metadata_filter: -all
-  formats: md:myst
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.10.3
-kernelspec:
-  display_name: Python 3 (ipykernel)
-  language: python
-  name: python3
----
+______________________________________________________________________
+
+## jupytext: cell_metadata_filter: -all formats: md:myst text_representation: extension: .md format_name: myst format_version: 0.13 jupytext_version: 1.10.3 kernelspec: display_name: Python 3 (ipykernel) language: python name: python3
 
 # Kubernetes
-## Cluster Administration ##
-### preflight ###
+
+## Cluster Administration
+
+### preflight
 
 Check logged in user
 
@@ -41,7 +32,7 @@ gcloud config get-value compute/region
 # gcloud config set compute/region us-west1
 ```
 
-### quick start ###
+### quick start
 
 ```bash
 ./kubernetes/gke/cluster-create.sh
@@ -50,7 +41,7 @@ export KUBECONFIG=$PWD/kubernetes/gke/kube/admin.yaml
 kubectl cluster-info
 ```
 
-### cluster lifecycle ###
+### cluster lifecycle
 
 Create the cluster by running `kubernetes/gke/cluster-create.sh`.
 
@@ -67,14 +58,14 @@ environment variable to `kubernetes/gke/kube/admin.yaml`.
 
 The cluster can be deleted by running `kubernetes/gke/cluster-delete.sh`.
 
-### nodepool lifecycle ###
+### nodepool lifecycle
 
 Certain features of node pools are immutable (e.g., machine type); to change
 such parameters requires creating a new node pool with the desired new values,
 migrating workloads off of the old node pool, and then deleting the old node pool.
 The node pool lifecycle scripts help simplify this process.
 
-#### create a new node pool ####
+#### create a new node pool
 
 Configure a new node pool by adding its name to the `GKE_NODEPOOL_NAMES` array
 in [`kubernetes/gke/config-nodepool.sh`](https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-nodepool.sh).
@@ -85,23 +76,23 @@ Once the new nodepool is configured, it can be stood up by running `kubernetes/g
 or by simply running `kubernetes/gke/nodepool-up.sh`, which will stand up all configured node pools which do not yet
 exist.
 
-#### drain and delete an old node pool ####
+#### drain and delete an old node pool
 
 Once a new nodepool has been created to replace an active node pool, the old node pool must be
 removed from the `GKE_NODEPOOL_NAMES` array.
 
 Once the old node pool is removed from the array, it can be drained and deleted by running `kubernetes/gke/nodepool-down.sh <nodepool-name>`.
 
-## Deploy Cluster Workloads ##
+## Deploy Cluster Workloads
 
 Cluster workloads are divided into two classes:
 
 1. system
-2. apps
+1. apps
 
 Apps are the workloads that users actually care about.
 
-### system workloads ###
+### system workloads
 
 ```bash
 kubectl apply -k kubernetes/system
@@ -112,7 +103,7 @@ such as an ingress controller, monitoring, logging, etc. The system deploy comma
 is run at cluster create time, but when new system workloads are added it may need
 to be run again.
 
-### app: metabase ###
+### app: metabase
 
 First deploy:
 

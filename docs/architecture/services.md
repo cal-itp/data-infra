@@ -11,7 +11,6 @@ Here is a list of services that are deployed as part of the Cal-ITP project.
 | Sentry           | Application error observability (i.e. collecting errors for investigation)                                                                                                               | https://sentry.calitp.org                      | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/sentry                       | sentry             | No                            | Infrastructure |
 | JupyterHub       | Kubernetes-driven Jupyter workspace provider                                                                                                                                             | https://notebooks.calitp.org                   | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/jupyterhub                   | jupyterhub         | No                            | Analysis |
 
-
 ## Code and deployments (unless otherwise specified, deployments occur via GitHub Actions)
 
 The above services are managed by code and deployed according to the following processes.

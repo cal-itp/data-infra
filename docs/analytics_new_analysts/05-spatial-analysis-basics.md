@@ -1,11 +1,13 @@
 (geo-basics)=
+
 # Working with Geospatial Data: Basics
 
 Place matters. That's why data analysis often includes a geospatial or geographic component. Before we wrangle with our data, let's go over the basics and make sure we're properly set up.
 
 Below are short demos for getting started:
-* [Import and export data in Python](#import-and-export-data-in-python)
-* [Setting and projecting coordinate reference system](#setting-and-projecting-coordinate-reference-system)
+
+- [Import and export data in Python](#import-and-export-data-in-python)
+- [Setting and projecting coordinate reference system](#setting-and-projecting-coordinate-reference-system)
 
 ## Getting Started
 
@@ -16,8 +18,11 @@ import geopandas as gpd
 ```
 
 ## Import and Export Data in Python
+
 ### **Local files**
+
 We import a tabular dataframe `my_csv.csv` and a geodataframe `my_geojson.geojson` or `my_shapefile.shp`.
+
 ```
 df = pd.read_csv('../folder/my_csv.csv')
 
@@ -33,6 +38,7 @@ gdf.to_file(driver = 'ESRI Shapefile', filename = '../folder/my_shapefile.shp' )
 ```
 
 ### **GCS**
+
 To read in our dataframe (df) and geodataframe (gdf) from GCS:
 
 ```
@@ -54,18 +60,19 @@ utils.geoparquet_gcs_export(gdf, GCS_FILE_PATH, FILE_NAME)
 Additional general information about various file types can be found in the [Data Management section](data-management-page).
 
 ## Setting and Projecting Coordinate Reference System
+
 A coordinate reference system (CRS) tells geopandas how to plot the coordinates on the Earth. Starting with a shapefile usually means that the CRS is already set. In that case, we are interested in re-projecting the gdf to a different CRS. The CRS is chosen specific to a region (i.e., USA, Southern California, New York, etc) or for its map units (i.e., decimal degrees, US feet, meters, etc). Map units that are US feet or meters are easier to work when it comes to defining distances (100 ft buffer, etc).
 
 In Python, there are 2 related concepts:
-1. Setting the CRS <--> corresponds to geographic coordinate system in ArcGIS
-2. Re-projecting the CRS <--> corresponds to datum transformation and projected coordinated system in ArcGIS
 
-
+1. Setting the CRS \<--> corresponds to geographic coordinate system in ArcGIS
+1. Re-projecting the CRS \<--> corresponds to datum transformation and projected coordinated system in ArcGIS
 
 The ArcGIS equivalent of this is in [3 related concepts](https://pro.arcgis.com/en/pro-app/help/mapping/properties/coordinate-systems-and-projections.htm):
+
 1. geographic coordinate system
-2. datum transformation
-3. projected coordinate system
+1. datum transformation
+1. projected coordinate system
 
 The **geographic coordinate system** is the coordinate system of the latitude and longitude points. Common ones are WGS84, NAD83, and NAD27.
 
