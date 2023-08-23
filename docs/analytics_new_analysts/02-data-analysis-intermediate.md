@@ -1,12 +1,12 @@
 (pandas-intermediate)=
-
 # Data Analysis: Intermediate
 
 After polishing off the [intro tutorial](pandas-intro), you're ready to devour some more techniques to simplify your life as a data analyst.
 
-- [Create a new column using a dictionary to map the values](#create-a-new-column-using-a-dictionary-to-map-the-values)
-- [Loop over columns with a dictionary](#loop-over-columns-with-a-dictionary)
-- [Loop over dataframes with a dictionary](#loop-over-dataframes-with-a-dictionary)
+* [Create a new column using a dictionary to map the values](#create-a-new-column-using-a-dictionary-to-map-the-values)
+* [Loop over columns with a dictionary](#loop-over-columns-with-a-dictionary)
+* [Loop over dataframes with a dictionary](#loop-over-dataframes-with-a-dictionary)
+
 
 ## Getting Started
 
@@ -17,20 +17,19 @@ import geopandas as gpd
 ```
 
 ### Create a New Column Using a Dictionary to Map the Values
-
 Sometimes, you want to create a new column by converting one set of values into a different set of values. We could write a function or we could use the map function to add a new column. For our `df`, we want a new column that shows the state.
 
 `df`: person and birthplace
 
-| Person        | Birthplace           |
-| ------------- | -------------------- |
-| Leslie Knope  | Eagleton, Indiana    |
-| Tom Haverford | South Carolina       |
-| Ann Perkins   | Michigan             |
-| Ben Wyatt     | Partridge, Minnesota |
+| Person | Birthplace |
+| ---| ---- |
+| Leslie Knope | Eagleton, Indiana
+| Tom Haverford | South Carolina |
+| Ann Perkins | Michigan |
+| Ben Wyatt | Partridge, Minnesota |
+
 
 ### Write a Function
-
 [Quick refresher on functions](pandas-intro)
 
 ```
@@ -53,7 +52,6 @@ df['State'] = df.apply(state_abbrev, axis = 1)
 ```
 
 ### Use a Dictionary to Map the Values
-
 But, writing a function could take up a lot of space, especially with all the if-elif-else statements. Alternatively, a dictionary would also work. We could use a dictionary and map the four different city-state values into the state abbreviation.
 
 ```
@@ -94,15 +92,16 @@ df['State'] = df.Birthplace.map(state_abbrev2)
 
 All 3 methods would give us this `df`:
 
-| Person        | Birthplace           | State |
-| ------------- | -------------------- | ----- |
-| Leslie Knope  | Eagleton, Indiana    | IN    |
-| Tom Haverford | South Carolina       | SC    |
-| Ann Perkins   | Michigan             | MI    |
-| Ben Wyatt     | Partridge, Minnesota | MN    |
+| Person | Birthplace | State |
+| ---| ---- | --- |
+| Leslie Knope | Eagleton, Indiana | IN |
+| Tom Haverford | South Carolina | SC |
+| Ann Perkins | Michigan | MI |
+| Ben Wyatt | Partridge, Minnesota | MN |
+
+
 
 ### Loop over Columns with a Dictionary
-
 If there are operations or data transformations that need to be performed on multiple columns, the best way to do that is with a loop.
 
 ```
@@ -116,27 +115,28 @@ for c in columns:
 ```
 
 ### Loop over Dataframes with a Dictionary
-
 It's easier and more efficient to use a loop to do the same operations over the different dataframes (df). Here, we want to find the number of Pawnee businesses and Tom Haverford businesses located in each Council District.
 
 This type of question is perfect for a loop. Each df will be spatially joined to the geodataframe `council_district`, followed by some aggregation.
 
 `business`: list of Pawnee stores
 
-| Business      | longitude | latitude | Sales_millions | geometry      |
-| ------------- | --------- | -------- | -------------- | ------------- |
-| Paunch Burger | x1        | y1       | 5              | Point(x1, y1) |
-| Sweetums      | x2        | y2       | 30             | Point(x2, y2) |
-| Jurassic Fork | x3        | y3       | 2              | Point(x3, y3) |
-| Gryzzl        | x4        | y4       | 40             | Point(x4, y4) |
+| Business | longitude | latitude | Sales_millions | geometry
+| ---| ---- | --- | ---| ---|
+| Paunch Burger | x1 | y1 | 5 | Point(x1, y1)
+| Sweetums | x2 | y2 | 30 | Point(x2, y2)
+| Jurassic Fork | x3 | y3 | 2 | Point(x3, y3)
+| Gryzzl | x4 | y4 | 40 | Point(x4, y4)
+
 
 `tom`: list of Tom Haverford businesses
 
-| Business          | longitude | latitude | Sales_millions | geometry      |
-| ----------------- | --------- | -------- | -------------- | ------------- |
-| Tom's Bistro      | x1        | y1       | 30             | Point(x1, y1) |
-| Entertainment 720 | x2        | y2       | 1              | Point(x2, y2) |
-| Rent-A-Swag       | x3        | y3       | 4              | Point(x3, y3) |
+| Business | longitude | latitude | Sales_millions | geometry
+| ---| ---- | --- | ---| ---|
+| Tom's Bistro | x1 | y1 |30 | Point(x1, y1)
+| Entertainment 720 | x2 | y2 | 1 | Point(x2, y2)
+| Rent-A-Swag | x3 | y3 | 4 | Point(x3, y3)
+
 
 ```
 # Save our existing dfs into a dictionary. The business df is named
@@ -177,17 +177,20 @@ summary_dfs["tom"]
 
 `join_tom`: result of spatial join between tom and council_district
 
-| Business          | longitude | latitude | Sales_millions | geometry      | ID  |
-| ----------------- | --------- | -------- | -------------- | ------------- | --- |
-| Tom's Bistro      | x1        | y1       | 30             | Point(x1, y1) | 1   |
-| Entertainment 720 | x2        | y2       | 1              | Point(x2, y2) | 3   |
-| Rent-A-Swag       | x3        | y3       | 4              | Point(x3, y3) | 3   |
+| Business | longitude | latitude | Sales_millions | geometry | ID
+| ---| ---- | --- | ---| ---| --- |
+| Tom's Bistro | x1 | y1 | 30 | Point(x1, y1) | 1
+| Entertainment 720 | x2 | y2 | 1 | Point(x2, y2) | 3
+| Rent-A-Swag | x3 | y3 | 4 | Point(x3, y3) | 3
+
 
 `summary_dfs["tom"]`: result of the counting number of Tom's businesses by CD
 
-| ID  | Business | Sales_millions |
-| --- | -------- | -------------- |
-| 1   | 1        | 30             |
-| 3   | 2        | 5              |
+| ID | Business | Sales_millions
+| ---| ---- | --- |
+| 1 | 1 | 30
+| 3 | 2 | 5
+
+
 
 <br>

@@ -38,7 +38,6 @@ Netlify sites deployed via `netlify deploy ...` with `--alias=some-alias` and/or
 The site is deployed to production on merges to main, as defined in [../../.github/workflows/deploy-apps-maps.yml](../../.github/workflows/deploy-apps-maps.yml).
 
 You may also deploy manually with the following:
-
 ```bash
 (from the apps/maps folder)
 npm run build

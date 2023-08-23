@@ -1,5 +1,4 @@
 (publishing-static-files)=
-
 # Static Visualizations
 
 Static visualizations should be created in a Jupyter Notebook, saved locally
@@ -24,7 +23,6 @@ chart.save(filename = '../my-visualization.png')
 ```
 
 ## Publishing Reports
-
 Reports can be shared as HTML webpages or PDFs. Standalone HTML pages tend
 to be self-contained and can be sent via email or similar.
 

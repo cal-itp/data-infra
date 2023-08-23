@@ -12,9 +12,7 @@ kernelspec:
   language: python
   name: python3
 ---
-
 (data-catalogs)=
-
 # Using Data Catalogs
 
 One major difficulty with conducting reproducible analyses is the location of data. If a data analyst downloads a CSV on their local system, but does not document its provenance or access, the analysis becomes very difficult to reproduce.
@@ -39,9 +37,8 @@ Data analysts tend to load their data from many heterogeneous sources (Databases
 Refer to this [sample-catalog.yml](sample-catalog) to see how various data sources and file types are documented. Each dataset is given a human-readable name, with optional metadata associated.
 
 File types that work within GCS buckets, URLs, or DCATs (open data catalogs):
-
-- Tabular: CSV, parquet
-- Geospatial: zipped shapefile, GeoJSON, geoparquet
+* Tabular: CSV, parquet
+* Geospatial: zipped shapefile, GeoJSON, geoparquet
 
 To open the catalog in a Jupyter Notebook:
 
@@ -58,10 +55,10 @@ catalog = intake.open_catalog("./*.yml")
 
 Open data portals (such as the CA Open Data Portal and CA Geoportal) usually provide a DCAT catalog for their datasets, including links for downloading them and metadata describing them. Many civic data analysis projects end up using these open datasets. When they do, it should be clearly documented.
 
-- To input a dataset from an open data portal, find the dataset's identifier for the `catalog.yml`.
-- Ex: The URL for CA Open Data Portal is: https://data.ca.gov.
-- Navigate to the corresponding `data.json` file at https://data.ca.gov/data.json
-- Each dataset has associated metadata, including `accessURL`, `landingPage`, etc. Find the dataset's `identifier`, and input that as the catalog item.
+* To input a dataset from an open data portal, find the dataset's identifier for the `catalog.yml`.
+* Ex: The URL for CA Open Data Portal is: https://data.ca.gov.
+* Navigate to the corresponding `data.json` file at https://data.ca.gov/data.json
+* Each dataset has associated metadata, including `accessURL`, `landingPage`, etc. Find the dataset's `identifier`, and input that as the catalog item.
 
 ```yaml
 # Catalog item
@@ -78,14 +75,12 @@ To import this dataset as a dataframe within the notebook:
 ```python
 df = catalog.ca_open_data.cdcr_population_covid_tracking.read()
 ```
-
 (catalogue-cloud-storage)=
-
 ### Google Cloud Storage
 
 When putting GCS files into the catalog, note that geospatial datasets (zipped shapefiles, GeoJSONs) require the additional `use_fsspec: true` argument compared to tabular datasets (parquets, CSVs). Geoparquets, the exception, are catalogued like tabular datasets.
 
-Opening geospatial datasets through `intake` is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, `geopandas` can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to \[storing data\](Connecting to the Warehouse) to set up your Google authentication.
+Opening geospatial datasets through `intake` is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, `geopandas` can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to [storing data](Connecting to the Warehouse) to set up your Google authentication.
 
 ```yaml
 lehd_federal_jobs_by_tract:
@@ -125,7 +120,6 @@ gdf2 = catalog.test_geoparquet.read()
 ```
 
 (sample-catalog)=
-
 # Sample Data Catalog
 
 ```{literalinclude} sample-catalog.yml

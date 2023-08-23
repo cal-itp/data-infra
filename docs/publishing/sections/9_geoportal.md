@@ -1,5 +1,4 @@
 (publishing-geoportal)=
-
 # Publishing data to California State Geoportal
 
 Spatial data cannot be directly published to CKAN. The Geoportal runs on the ESRI ArcGIS Online Hub platform. The Geoportal is synced to the CA open data portal for spatial datasets, and users are able to find the same spatial dataset via [data.ca.gov](https://data.ca.gov) or [gis.data.ca.gov](https://gis.data.ca.gov).
@@ -12,7 +11,6 @@ The state of California's ESRI ArcGIS instance is called the [California State G
 Data is published through the enterprise geodatabase and made available in a variety of formats, including as ArcGIS Hub datasets, geoservices, geojsons, CSVs, KMLs, and shapefiles.
 
 ### General Process
-
 1. Submit the required metadata and data dictionary to the Caltrans GIS team.
 1. Set up permissions related to the enterprise geodatabase. Learn more about the ArcGIS Pro [file geodatabase](https://pro.arcgis.com/en/pro-app/latest/help/data/geodatabases/overview/what-is-a-geodatabase-.htm) structure.
 1. Create the metadata XML to use with each layer of the file geodatabase and update that at the time of each publishing.
