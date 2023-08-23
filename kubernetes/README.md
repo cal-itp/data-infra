@@ -1,6 +1,6 @@
 # Kubernetes
 
-> :blub: See the [ci README](../ci/README.md) for the specifics of deploying Kubernetes changes via GitOps. Only workloads (i.e. applications) are deployed via CI/CD and pull requests; changing the Kubernetes cluster itself (e.g. adding a node pool) is a manual operation.
+> :bulb: See the [ci README](../ci/README.md) for the specifics of deploying Kubernetes changes via GitOps. Only workloads (i.e. applications) are deployed via CI/CD and pull requests; changing the Kubernetes cluster itself (e.g. adding a node pool) is a manual operation.
 
 > :notebook: Both the Google Kubernetes Engine UI and the Lens Kubernetes IDE are useful GUI tools for interacting with a Kubernetes cluster, though you can get by with `kubectl` on the command line.
 
