@@ -64,6 +64,7 @@ repos:
     rev: 0.7.16
     hooks:
     - id: mdformat
+      exclude: ^warehouse/models/docs
       additional_dependencies:
       - mdformat-gfm
       - mdformat-frontmatter
