@@ -65,6 +65,7 @@ repos:
     hooks:
     - id: mdformat
       exclude: ^(warehouse/analyses/|warehouse/macros/|warehouse/models/|warehouse/secrets/|warehouse/seeds/|warehouse/snapshots/|warehouse/tests/)
+      args: ["--number"]
       additional_dependencies:
       - mdformat-gfm
       - mdformat-frontmatter
