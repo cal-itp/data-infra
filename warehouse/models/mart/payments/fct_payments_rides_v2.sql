@@ -354,7 +354,12 @@ join_table AS (
 fct_payments_rides_v2 AS (
     SELECT
 
-        *,
+        * EXCEPT(form_factor),
+        CASE
+            WHEN form_factor IS NULL THEN 'Unidentified'
+            WHEN form_factor = '' THEN 'Unidentified'
+            ELSE form_factor
+            END AS form_factor,
         DATETIME_DIFF(
             off_transaction_date_time_pacific,
             transaction_date_time_pacific,
