@@ -47,12 +47,6 @@ parts:
           - file: architecture/data
       - file: airflow/dags-maintenance
       - file: transit_database/transitdatabase
-      - file: kubernetes/README
-        sections:
-        - file: kubernetes/JupyterHub
-        - file: kubernetes/architecture
-        - file: kubernetes/deployment
-      - file: backups/metabase
   - caption: Contribute to the Docs!
     chapters:
       - file: contribute/overview

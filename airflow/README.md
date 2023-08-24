@@ -59,6 +59,22 @@ docker-compose run airflow tasks test download_gtfs_schedule_v2 download_schedul
 
 Additional reading about this setup can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html)
 
+### PodOperators
+Airflow PodOperator tasks execute a specific Docker image; as of 2023-08-24 these images are pushed to [GitHub Container Registry](https://ghcr.io/) and production uses `:latest` tags while local uses `:development`. If you want to test these tasks locally, you must build and push development versions of the images used by the tasks. The Dockerfiles and code that make up the images live in the [../jobs](../jobs) directory. For example:
+
+```bash
+# running from jobs/gtfs-schedule-validator/
+docker build -t ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:development .
+docker push ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:development
+```
+
+Then, you could execute a task using this updated image.
+
+```bash
+# running from airflow/
+docker-compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly validate_gtfs_schedule 2023-06-07T16:00:00
+```
+
 ### Common Issues
 
 * `docker-compose up` exits with code 137 - Check that your docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.

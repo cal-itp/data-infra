@@ -1,6 +1,6 @@
 # GitHub Actions
 
-All CI/CD automation in this project is executed via GitHub Actions, whose workflow files live in the [./workflows/](./workflows) directory.
+All CI/CD automation in this project is executed via GitHub Actions, whose workflow files live in this directory.
 
 ## deploy-airflow.yml
 
