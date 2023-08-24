@@ -1,4 +1,5 @@
 (publishing-github-pages)=
+
 # HTML Visualizations
 
 Visualizations that benefit from limited interactivity, such as displaying tooltips on hover or zooming in / out and scrolling can be rendered within GitHub pages.
@@ -36,13 +37,13 @@ fig.save("../my-visualization.html")
 ```
 
 ## Rendering Jupyter Notebook as HTML
+
 A single notebook can be converted to HTML using `nbconvert`. If it's a quick analysis in a standalone notebook, sometimes an analyst may choose not to go down the [portfolio method](publishing-analytics-portfolio-site).
 
-* In the terminal: `jupyter nbconvert --to html --no-input --no-prompt`
-    * `--no-input`: hide code cells
-    * `--no-prompt`: hide prompts to have all cells vertically aligned
-* A longer example of [converting multiple notebooks into HTML pages and uploading to GitHub](https://github.com/cal-itp/data-analyses/blob/main/bus_service_increase/publish_single_report.py)
-
+- In the terminal: `jupyter nbconvert --to html --no-input --no-prompt`
+  - `--no-input`: hide code cells
+  - `--no-prompt`: hide prompts to have all cells vertically aligned
+- A longer example of [converting multiple notebooks into HTML pages and uploading to GitHub](https://github.com/cal-itp/data-analyses/blob/main/bus_service_increase/publish_single_report.py)
 
 ## Use GitHub pages to display these HTML pages
 

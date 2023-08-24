@@ -45,13 +45,14 @@ python –m pip install oracledb
 
 ```
 
-  - python will be uninstalled when sqlalchemy is uninstalled so we need to reinstall.
+- python will be uninstalled when sqlalchemy is uninstalled so we need to reinstall.
 
 ![Uninstall sqlalchemy](assets/lodc_step7.png)
 
 **Step 8:**
+
 1. Determine what directory you are in and navigate to your directory of choice within Python Command Prompt.  It is highly  recommended to go into your S Number folder (i.e. `cd C:\Users\SNUMBER`)
-    * TIP: [See this Bash cheat sheet with some helpful commands](https://hpc.ua.edu/wp-content/uploads/2022/02/Linux_bash_cheat_sheet.pdf)
+   - TIP: [See this Bash cheat sheet with some helpful commands](https://hpc.ua.edu/wp-content/uploads/2022/02/Linux_bash_cheat_sheet.pdf)
 
 ![Navigate out to base directory](assets/lodc_step8_1.png)
 
@@ -60,15 +61,14 @@ python –m pip install oracledb
 ![Check Folder](assets/lodc_step8_2.png)
 
 3. Open a new Python Command Prompt Window. Navigate to the same directory, only adding the name of your new folder (cell #1 below). Then, open a Jupyter Lab (cell #2 below).
-    * This should open a new internet tab with Jupyter Lab.
-    * TIP: you can use `dir` to find out what files and folders you are in your current directory.
-
-
+   - This should open a new internet tab with Jupyter Lab.
+   - TIP: you can use `dir` to find out what files and folders you are in your current directory.
 
 ```bash
 cd C:\Users\SNUMBER/Notebook_Folder
 ##example of path you can take to get into the directory of your choice. In this case, we are navigating to the Notebooks folder we just created above.
 ```
+
 ```bash
 jupyter lab
 ```
@@ -84,7 +84,7 @@ jupyter lab
 ![Open a Notebook](assets/lodc_step10.png)
 
 Go to the left sidebar and see your new notebook. Right now, it is named untitled.ipynb. It is recommended to rename the notebook without spaces, using underscores instead. For example,
-  `my_notebook.ipynb` is easier to access compared to `My Notebook.ipynb`.
+`my_notebook.ipynb` is easier to access compared to `My Notebook.ipynb`.
 
 In the notebook, copy the following in the notebook cells.  It is recommended to copy this in chunks, as delineated by the lines in the table. To run the code, you can press SHIFT + ENTER.
 
@@ -96,6 +96,7 @@ import oracledb
 
 oracledb.version = "8.3.0"
 ```
+
 ```python
 sys.modules["cx_Oracle"] = oracledb
 ```
@@ -104,7 +105,6 @@ sys.modules["cx_Oracle"] = oracledb
 sqlalchemy.__version__
 ##checks the version of sqlalchemy. Output should read version   ``1.4.39`
 ```
-
 
 **Step 11:** Connect to the database. For this step, you will need the database Username, Password, Host Name, Service Name and Port.
 
@@ -123,6 +123,7 @@ ENGINE_PATH_WIN_AUTH = f"{DIALECT}://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/?servic
 ```python
 engine = sqlalchemy.create_engine(ENGINE_PATH_WIN_AUTH)
 ```
+
 ```python
 ## test the query
 

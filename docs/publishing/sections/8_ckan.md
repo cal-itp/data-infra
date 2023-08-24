@@ -18,11 +18,11 @@ metadata and a data dictionary.
 
 ### Cal-ITP datasets
 
-* [Cal-ITP GTFS-Ingest Pipeline Dataset (schedule data)](https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset)
+- [Cal-ITP GTFS-Ingest Pipeline Dataset (schedule data)](https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset)
 
 ## What is the publication script?
 
-The publication script [publish.py](https://github.com/cal-itp/data-infra/blob/main/warehouse/scripts/publish.py), typically used within the [publish_open_data Airflow workflow](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/publish_open_data/grid), relies on a [dbt exposure](https://docs.getdbt.com/docs/build/exposures) to determine what to publish - in practice, that exposure is titled `california_open_data`. The tables included in that exposure, their CKAN destinations, and their published descriptions are defined in [_gtfs_schedule_latest.yml](https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs_schedule_latest/_gtfs_schedule_latest.yml) under the `exposures` heading.
+The publication script [publish.py](https://github.com/cal-itp/data-infra/blob/main/warehouse/scripts/publish.py), typically used within the [publish_open_data Airflow workflow](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/publish_open_data/grid), relies on a [dbt exposure](https://docs.getdbt.com/docs/build/exposures) to determine what to publish - in practice, that exposure is titled `california_open_data`. The tables included in that exposure, their CKAN destinations, and their published descriptions are defined in [\_gtfs_schedule_latest.yml](https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs_schedule_latest/_gtfs_schedule_latest.yml) under the `exposures` heading.
 
 By default, the columns of a table included in the exposure are _not_ published on the portal. This is to prevent fields that are useful for internal data management but are hard to interpret for public users, like `_is_current`, from being included in the open data portal. Columns meant for publication are explicitly included in publication via the dbt `meta` tag `publish.include: true`, which you can see on various columns of the models in the same YAML file where the exposure itself is defined.
 
@@ -41,7 +41,7 @@ we can use to update and expand the existing [CKAN dataset](https://data.ca.gov/
 California Open Data requires two documentation files for published datasets.
 
 1. `metadata.csv` - one row per resource (i.e. file) to be published
-2. `dictionary.csv` - one row per column across all resources
+1. `dictionary.csv` - one row per column across all resources
 
 We use dbt exposure-based data publishing to automatically generate
 these two files using the main `publish.py` script (specifically the `document-exposure`
