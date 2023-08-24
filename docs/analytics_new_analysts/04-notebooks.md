@@ -1,15 +1,14 @@
 (nb-best-practices)=
-
 # Working with Jupyter notebooks
 
 Jupyter notebooks are ubiquitous in the fields of data analysis, data science, and education.
 There are a number of reasons for their popularity, some of which are (in no particular order):
 
-- They are user-friendly.
-- They allow for richer outputs than plain code (e.g, images, equations, HTML, and prose).
-- They allow for interactive, human-in-the-loop computing.
-- They provide an easy route to publishing papers, technical documents, and blog posts that involve computation.
-- They can be served over the internet, and can live in the cloud.
+* They are user-friendly.
+* They allow for richer outputs than plain code (e.g, images, equations, HTML, and prose).
+* They allow for interactive, human-in-the-loop computing.
+* They provide an easy route to publishing papers, technical documents, and blog posts that involve computation.
+* They can be served over the internet, and can live in the cloud.
 
 However, the popularity of the format has also revealed some of its drawbacks,
 and prompted criticism of how notebooks are used.
@@ -19,10 +18,11 @@ see [this](https://www.youtube.com/watch?v=7jiPeIFXb6U) talk from Joel Grus.
 
 This document is meant to outline some recommendations for how to best use notebooks.
 
-- [Notebooks and Reproducibility](#notebooks-and-reproducibility)
-- [Notebooks and Version Control](#notebooks-and-version-control)
-- [Prose and Documentation](#prose-and-documentation)
-- [Data Access](#data-access)
+* [Notebooks and Reproducibility](#notebooks-and-reproducibility)
+* [Notebooks and Version Control](#notebooks-and-version-control)
+* [Prose and Documentation](#prose-and-documentation)
+* [Data Access](#data-access)
+
 
 ## Notebooks and Reproducibility
 
@@ -68,19 +68,19 @@ and using them with most version control tools is painful.
 There are a few things that can be done to mitigate this:
 
 1. Don't commit changes to a notebook unless you intend to.
-   Often opening and running a notebook can result in different metadata,
-   slightly different results, or produce errors.
-   In general, these differences are not worth committing to a code repository,
-   and such commits will mostly read as noise in your version history.
+Often opening and running a notebook can result in different metadata,
+slightly different results, or produce errors.
+In general, these differences are not worth committing to a code repository,
+and such commits will mostly read as noise in your version history.
 1. Use a tool like [`nbdime`](https://nbdime.readthedocs.io/en/latest).
-   This provides command-line tools for diffing and merging notebooks.
-   It provides git integration and a small web app for viewing differences between notebooks.
-   It is also available as a JupyterLab extension.
+This provides command-line tools for diffing and merging notebooks.
+It provides git integration and a small web app for viewing differences between notebooks.
+It is also available as a JupyterLab extension.
 1. Move some code into scripts. There will often be large code blocks in notebooks.
-   Sometimes these code blocks are duplicated among many notebooks within a project repository.
-   Examples include code for cleaning and preprocessing data.
-   Often such code is best removed from the interactive notebook environment and put in plain-text scripts,
-   where it can be more easily automated and tracked.
+Sometimes these code blocks are duplicated among many notebooks within a project repository.
+Examples include code for cleaning and preprocessing data.
+Often such code is best removed from the interactive notebook environment and put in plain-text scripts,
+where it can be more easily automated and tracked.
 
 ## Prose and Documentation
 
@@ -112,9 +112,9 @@ These problems are not specific to notebooks, but often arise in a notebook envi
 A few strategies to mitigate these issues:
 
 1. Small datasets (less than a few megabytes) may be included in the code repositories for analyses.
-1. Larger datasets may be stored elsewhere (S3, GCS, data portals, databases).
-   However, instructions to access them should be given in the repository.
-   Tools like [intake](https://intake.readthedocs.io/en/latest/) can help here.
-1. Credentials to access private data sources should be read from environment variables,
-   and never stored in code repositories or saved to notebooks.
-   The environment variables needed to access the data for an analysis should be documented in the project `README`.
+2. Larger datasets may be stored elsewhere (S3, GCS, data portals, databases).
+However, instructions to access them should be given in the repository.
+Tools like [intake](https://intake.readthedocs.io/en/latest/) can help here.
+3. Credentials to access private data sources should be read from environment variables,
+and never stored in code repositories or saved to notebooks.
+The environment variables needed to access the data for an analysis should be documented in the project `README`.

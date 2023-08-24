@@ -8,10 +8,10 @@ It includes its own interface and data model. Some functionality may shift to a 
 
 ### Which analyses does it currently support?
 
-- [California Transit Speed Maps](https://analysis.calitp.org/rt/README.html)
-- Technical Metric Generation for Solutions for Congested Corridors Program, Local Partnership Program
-- Various prioritization exercises from intermediate data, such as using aggregated speed data as an input for identifying bus route improvements as part of a broader model
-- Various ad-hoc speed and delay analyses, such as highlighting relevant examples for presentations to stakeholders, or providing a shapefile of bus speeds on certain routes to support a district’s grant application
+* [California Transit Speed Maps](https://analysis.calitp.org/rt/README.html)
+* Technical Metric Generation for Solutions for Congested Corridors Program, Local Partnership Program
+* Various prioritization exercises from intermediate data, such as using aggregated speed data as an input for identifying bus route improvements as part of a broader model
+* Various ad-hoc speed and delay analyses, such as highlighting relevant examples for presentations to stakeholders, or providing a shapefile of bus speeds on certain routes to support a district’s grant application
 
 ## How does it work?
 
@@ -19,12 +19,12 @@ This section includes detailed information about the data model and processing s
 
 ### Which data does it require?
 
-- GTFS-RT Vehicle Positions
-- GTFS Schedule Trips
-- GTFS Schedule Stops
-- GTFS Schedule Routes
-- GTFS Schedule Stop Times
-- GTFS Schedule Shapes
+* GTFS-RT Vehicle Positions
+* GTFS Schedule Trips
+* GTFS Schedule Stops
+* GTFS Schedule Routes
+* GTFS Schedule Stop Times
+* GTFS Schedule Shapes
 
 All of the above are sourced from the v2 warehouse. Note that all components must be present and consistently keyed in order to successfully analyze. This module works at the organization level in order to match the reports site and maintain the structure of the speedmap site.
 
@@ -99,28 +99,28 @@ This step uses the generated interpolator objects to estimate and store speed an
 
 The results of this step are saved in OperatorDayAnalysis.stop_delay_view, a geodataframe.
 
-|                  |                                                                                                                                        |                       |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| Column           | Source                                                                                                                                 | Type                  |
-| shape_meters     | Projection of GTFS Stop along GTFS Shape (with 0 being start of shape), additionally 1km segments generated where stops are infrequent | float64               |
-| stop_id          | GTFS Schedule                                                                                                                          | string\*              |
-| stop_name        | GTFS Schedule                                                                                                                          | string\*              |
-| geometry         | GTFS Schedule                                                                                                                          | geometry              |
-| shape_id         | GTFS Schedule                                                                                                                          | string                |
-| trip_id          | GTFS Schedule                                                                                                                          | string                |
-| stop_sequence    | GTFS Schedule                                                                                                                          | float64\*\*           |
-| arrival_time     | GTFS Schedule                                                                                                                          | np.datetime64\[ns\]\* |
-| route_id         | GTFS Schedule                                                                                                                          | string                |
-| route_short_name | GTFS Schedule                                                                                                                          | string                |
-| direction_id     | GTFS Schedule                                                                                                                          | float64               |
-| actual_time      | VehiclePositionInterpolator                                                                                                            | np.datetime64\[ns\]   |
-| delay_seconds    | Calculated here (actual_time-arrival_time)\*\*\*                                                                                       | float64\*             |
+||||
+|--- |--- |--- |
+|Column|Source|Type|
+|shape_meters|Projection of GTFS Stop along GTFS Shape (with 0 being start of shape), additionally 1km segments generated where stops are infrequent|float64|
+|stop_id|GTFS Schedule|string*|
+|stop_name|GTFS Schedule|string*|
+|geometry|GTFS Schedule|geometry|
+|shape_id|GTFS Schedule|string|
+|trip_id|GTFS Schedule|string|
+|stop_sequence|GTFS Schedule|float64**|
+|arrival_time|GTFS Schedule|np.datetime64[ns]*|
+|route_id|GTFS Schedule|string|
+|route_short_name|GTFS Schedule|string|
+|direction_id|GTFS Schedule|float64|
+|actual_time|VehiclePositionInterpolator|np.datetime64[ns]|
+|delay_seconds|Calculated here (actual_time-arrival_time)***|float64*|
 
-\*null if location is an added 1km segment
+*null if location is an added 1km segment
 
-\*\*integer values from GTFS, but added 1km segments are inserted in between the nearest 2 stops with a decimal
+**integer values from GTFS, but added 1km segments are inserted in between the nearest 2 stops with a decimal
 
-\*\*\*early arrivals currently represented as zero delay
+***early arrivals currently represented as zero delay
 
 #### __VehiclePositionsInterpolator: a foundational building block__
 
@@ -136,9 +136,9 @@ VehiclePositionsInterpolator has simple logging functionality built in through t
 
 #### Projection
 
-Vehicle Positions data includes a series of positions for a single trip at different points in time. Since we’re interested in tracking speed and delay along the transit route, we need to project those lat/long positions to a linear reference along the actual transit route (GTFS Shape). This is accomplished by the constructor calling VehiclePositionsInterpolator.\_attach_shape, which first does a naive projection of each position using shapely.LineString.project. This linearly referenced value is stored in the shape_meters column.
+Vehicle Positions data includes a series of positions for a single trip at different points in time. Since we’re interested in tracking speed and delay along the transit route, we need to project those lat/long positions to a linear reference along the actual transit route (GTFS Shape). This is accomplished by the constructor calling VehiclePositionsInterpolator._attach_shape, which first does a naive projection of each position using shapely.LineString.project. This linearly referenced value is stored in the shape_meters column.
 
-Since later stages will have to interpolate these times and positions, it’s necessary to undertake some additional data cleaning. This happens by calling VehiclePositionsInterpolator.\_linear_reference, which casts shape_meters to be monotonically increasing with respect to time. This removes multiple position reports at the same location, as well as any positions that suggest the vehicle traveled backwards along the route. While this introduces the assumption that the GPS-derived Vehicle Positions data is fairly accurate, our experience is that this process produces good results in most cases. Future updates will better accommodate [looping and inlining](https://gtfs.org/schedule/best-practices/#shapestxt); these currently get dropped in certain cases, which is undesirable.
+Since later stages will have to interpolate these times and positions, it’s necessary to undertake some additional data cleaning. This happens by calling VehiclePositionsInterpolator._linear_reference, which casts shape_meters to be monotonically increasing with respect to time. This removes multiple position reports at the same location, as well as any positions that suggest the vehicle traveled backwards along the route. While this introduces the assumption that the GPS-derived Vehicle Positions data is fairly accurate, our experience is that this process produces good results in most cases. Future updates will better accommodate [looping and inlining](https://gtfs.org/schedule/best-practices/#shapestxt); these currently get dropped in certain cases, which is undesirable.
 
 #### Interpolating, quickly
 
@@ -154,29 +154,29 @@ This method saves 2 artifacts: a geoparquet of OperatorDayAnalysis.stop_delay_vi
 
 rt_trips is a dataframe of trip-level information for every trip for which a VehiclePositionsInterpolator was successfully generated. It supports filtering by various attributes and provides useful contextual information for maps and analyses.
 
-|                    |                                 |               |
-| ------------------ | ------------------------------- | ------------- |
-| Column             | Source                          | Type          |
-| feed_key\*         | v2 warehouse (gtfs mart)        | string        |
-| trip_key           | Key from v2 warehouse           | string        |
-| gtfs_dataset_key\* | v2 warehouse (gtfs mart)        | string        |
-| activity_date      | v2 warehouse                    | datetime.date |
-| trip_id            | GTFS Schedule                   | string        |
-| route_id           | GTFS Schedule                   | string        |
-| route_short_name   | GTFS Schedule                   | string        |
-| shape_id           | GTFS Schedule                   | string        |
-| direction_id       | GTFS Schedule                   | string        |
-| route_type         | GTFS Schedule                   | string        |
-| route_long_name    | GTFS Schedule                   | string        |
-| route_desc         | GTFS Schedule                   | string        |
-| route_long_name    | GTFS Schedule                   | string        |
-| calitp_itp_id      | v2 warehouse (transit database) | int64         |
-| median_time        | VehiclePositionsInterpolator    | datetime.time |
-| direction          | VehiclePositionsInterpolator    | string        |
-| mean_speed_mph     | VehiclePositionsInterpolator    | float64       |
-| organization_name  | v2 warehouse (transit database) | string        |
+||||
+|--- |--- |--- |
+|Column|Source|Type|
+|feed_key*|v2 warehouse (gtfs mart)|string|
+|trip_key|Key from v2 warehouse|string|
+|gtfs_dataset_key*|v2 warehouse (gtfs mart)|string|
+|activity_date|v2 warehouse|datetime.date|
+|trip_id|GTFS Schedule|string|
+|route_id|GTFS Schedule|string|
+|route_short_name|GTFS Schedule|string|
+|shape_id|GTFS Schedule|string|
+|direction_id|GTFS Schedule|string|
+|route_type|GTFS Schedule|string|
+|route_long_name|GTFS Schedule|string|
+|route_desc|GTFS Schedule|string|
+|route_long_name|GTFS Schedule|string|
+|calitp_itp_id|v2 warehouse (transit database)|int64|
+|median_time|VehiclePositionsInterpolator|datetime.time|
+|direction|VehiclePositionsInterpolator|string|
+|mean_speed_mph|VehiclePositionsInterpolator|float64|
+|organization_name|v2 warehouse (transit database)|string|
 
-- keys and IDs in this table refer to GTFS Schedule datasets
+* keys and IDs in this table refer to GTFS Schedule datasets
 
 ## How do I use it?
 
@@ -271,17 +271,17 @@ To load intermediate data, use `rt_filter_map_plot.from_gcs` to create an RtFilt
 
 Using the `set_filter` method, RtFilterMapper supports filtering based on at least one of these attributes at a time:
 
-|              |                                        |
-| ------------ | -------------------------------------- |
-| Attribute    | Type                                   |
-| start_time   | str (%H:%M, i.e. 11:00)                |
-| end_time     | str (%H:%M, i.e. 19:00)                |
-| route_names  | list, pd.Series                        |
-| shape_ids    | list, pd.Series                        |
-| direction_id | str, '0' or '1'                        |
-| direction    | str, "Northbound", etc, _experimental_ |
-| trip_ids     | list, pd.Series                        |
-| route_types  | list, pd.Series                        |
+|||
+|--- |--- |
+|Attribute|Type|
+|start_time|str (%H:%M, i.e. 11:00)|
+|end_time|str (%H:%M, i.e. 19:00)|
+|route_names|list, pd.Series|
+|shape_ids|list, pd.Series|
+|direction_id|str, '0' or '1'|
+|direction|str, "Northbound", etc, _experimental_|
+|trip_ids|list, pd.Series|
+|route_types|list, pd.Series|
 
 Mapping, charting, and metric generation methods, listed under "dynamic tools" in the chart above, will respect the current filter. After generating your desired output, you can call `set_filter` again to set a new filter, or use `reset_filter` to remove the filter entirely. Then you can continue to analyze, without needing to create a new RtFilterMapper instance.
 
@@ -303,36 +303,36 @@ This method is much more efficient, and we rely on it to maintain the quantity a
 
 After generating a speed map, the underlying data is available at RtFilterMapper.stop_segment_speed_view, a geodataframe. This data can be easily exported into a geoparquet, geojson, shapefile, or spreadsheet with the appropriate geopandas method.
 
-|                     |                                                                                                                                        |                     |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| Column              | Source                                                                                                                                 | Type                |
-| shape_meters        | Projection of GTFS Stop along GTFS Shape (with 0 being start of shape), additionally 1km segments generated where stops are infrequent | float64             |
-| stop_id             | GTFS Schedule                                                                                                                          | string              |
-| stop_name           | GTFS Schedule                                                                                                                          | string              |
-| geometry            | GTFS Schedule                                                                                                                          | geometry            |
-| shape_id            | GTFS Schedule                                                                                                                          | string              |
-| trip_id             | GTFS Schedule                                                                                                                          | string              |
-| stop_sequence       | GTFS Schedule                                                                                                                          | float64             |
-| route_id            | GTFS Schedule                                                                                                                          | string              |
-| route_short_name    | GTFS Schedule                                                                                                                          | string              |
-| direction_id        | GTFS Schedule                                                                                                                          | float64             |
-| delay_seconds\*     | `stop_delay_view`                                                                                                                      | np.datetime64\[ns\] |
-| seconds_from_last\* | time for trip to travel to this stop from last stop                                                                                    | float64             |
-| last_loc\*          | previous stop `shape_meters`                                                                                                           | float64             |
-| meters_from_last\*  | `shape_meters` - `last_loc`                                                                                                            | float64             |
-| speed_from_last\*   | `meters_from_last` / `seconds_from_last`                                                                                               | float64             |
-| delay_chg_sec\*     | `delay_seconds` - delay at last stop                                                                                                   | float64             |
-| speed_mph\*         | `speed_from_last` converted to miles per hour                                                                                          | float64             |
-| n_trips_shp\*\*     | number of unique trips on this GTFS shape in filter                                                                                    | int64               |
-| avg_mph\*\*         | average speed for all trips on this segment                                                                                            | float64             |
-| \_20p_mph\*\*       | 20th percentile speed for all trips on this segment                                                                                    | float64             |
-| \_80p_mph\*\*       | 80th percentile speed for all trips on this segment                                                                                    | float64             |
-| fast_slow_ratio\*\* | ratio between p80 speed and p20 speed for all trips on this segment                                                                    | float64             |
-| trips_per_hour      | `n_trips_shp` / hours in filter                                                                                                        | float64             |
+||||
+|--- |--- |--- |
+|Column|Source|Type|
+|shape_meters|Projection of GTFS Stop along GTFS Shape (with 0 being start of shape), additionally 1km segments generated where stops are infrequent|float64|
+|stop_id|GTFS Schedule|string|
+|stop_name|GTFS Schedule|string|
+|geometry|GTFS Schedule|geometry|
+|shape_id|GTFS Schedule|string|
+|trip_id|GTFS Schedule|string|
+|stop_sequence|GTFS Schedule|float64|
+|route_id|GTFS Schedule|string|
+|route_short_name|GTFS Schedule|string|
+|direction_id|GTFS Schedule|float64|
+|delay_seconds*|`stop_delay_view`|np.datetime64[ns]|
+|seconds_from_last*|time for trip to travel to this stop from last stop|float64|
+|last_loc*|previous stop `shape_meters`|float64|
+|meters_from_last*|`shape_meters` - `last_loc`|float64|
+|speed_from_last*|`meters_from_last` / `seconds_from_last`|float64|
+|delay_chg_sec*|`delay_seconds` - delay at last stop|float64|
+|speed_mph*|`speed_from_last` converted to miles per hour|float64|
+|n_trips_shp**|number of unique trips on this GTFS shape in filter|int64|
+|avg_mph**|average speed for all trips on this segment|float64|
+|_20p_mph**|20th percentile speed for all trips on this segment|float64|
+|_80p_mph**|80th percentile speed for all trips on this segment|float64|
+|fast_slow_ratio**|ratio between p80 speed and p20 speed for all trips on this segment|float64|
+|trips_per_hour|`n_trips_shp` / hours in filter|float64|
 
-\*disaggregate value -- applies to this trip only
+*disaggregate value -- applies to this trip only
 
-\*\*aggregated value -- based on all trips in filter
+**aggregated value -- based on all trips in filter
 
 #### Other Charts and Metrics
 
@@ -385,4 +385,4 @@ flowchart TD
 
 Note that these steps are substantially automated using the `rt_analysis.sccp_tools.sccp_average_metrics` function.
 
-- 2022 SCCP/LPP default timeframe is Apr 30 - May 9 2022.
+* 2022 SCCP/LPP default timeframe is Apr 30 - May 9 2022.

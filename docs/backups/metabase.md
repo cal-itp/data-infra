@@ -7,8 +7,8 @@ For most of our backups we utilize [Restic](https://restic.readthedocs.io/en/lat
 To verify that metabase configuration backups have been created, there are three pieces of information you require:
 
 1. Name of the Restic repository
-1. Restic password
-1. Google Access token
+2. Restic password
+3. Google Access token
 
 There are several ways to obtain the Restic information.
 
