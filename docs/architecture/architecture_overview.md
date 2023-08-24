@@ -1,12 +1,11 @@
 (architecture-overview)=
-
 # Architecture Overview
 
 The Cal-ITP data infrastructure facilitates several types of data workflows:
 
-- `Ingestion`
-- `Modeling/transformation`
-- `Analysis`
+* `Ingestion`
+* `Modeling/transformation`
+* `Analysis`
 
 In addition, we have `Infrastructure` tools that monitor the health of the system itself or deploy or run other services and do not directly interact with data or support end user data access.
 
@@ -49,27 +48,25 @@ class ingestion_label,modeling_label,analysis_label group_labelstyle
 ```
 
 This documentation outlines two ways to think of this system and its components from a technical/maintenance perspective:
-
-- [Services](services) that are deployed and maintained (ex. Metabase, JupyterHub, etc.)
-- [Data pipelines](data) to ingest specific types of data (ex. GTFS Schedule, Payments, etc.)
+* [Services](services) that are deployed and maintained (ex. Metabase, JupyterHub, etc.)
+* [Data pipelines](data) to ingest specific types of data (ex. GTFS Schedule, Payments, etc.)
 
 ## Environments
 
 Across both data and services, we often have a "production" (live, end-user-facing) environment and some type of testing, staging, or development environment.
 
 ### production
+* Managed Airflow (i.e. Google Cloud Composer)
+* Production gtfs-rt-archiver-v3
+* `cal-itp-data-infra` database (i.e. project) in BigQuery
+* Google Cloud Storage buckets _without_ a prefix
+    * e.g. `gs://calitp-gtfs-schedule-parsed-hourly`
 
-- Managed Airflow (i.e. Google Cloud Composer)
-- Production gtfs-rt-archiver-v3
-- `cal-itp-data-infra` database (i.e. project) in BigQuery
-- Google Cloud Storage buckets _without_ a prefix
-  - e.g. `gs://calitp-gtfs-schedule-parsed-hourly`
 
 ### testing/staging/dev
-
-- Locally-run Airflow (via docker-compose)
-- Test gtfs-rt-archiver-v3
-- `cal-itp-data-infra-staging` database (i.e. project) in BigQuery
-- GCS buckets with the `test-` prefix
-  - e.g. `gs://test-calitp-gtfs-rt-raw-v2`
-  - Some buckets prefixed with `dev-` also exist; primarily for testing the RT archiver locally
+* Locally-run Airflow (via docker-compose)
+* Test gtfs-rt-archiver-v3
+* `cal-itp-data-infra-staging` database (i.e. project) in BigQuery
+* GCS buckets with the `test-` prefix
+    * e.g. `gs://test-calitp-gtfs-rt-raw-v2`
+    * Some buckets prefixed with `dev-` also exist; primarily for testing the RT archiver locally
