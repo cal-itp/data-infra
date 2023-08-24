@@ -3,25 +3,36 @@
 This dbt project is intended to be the source of truth for the cal-itp-data-infra BigQuery warehouse.
 
 ## Setting up the project in your JupyterHub personal server
+
 If you are developing dbt models in JupyterHub, the following pieces
 are already configured/installed.
-* Libraries such as gdal and graphviz
-* The `gcloud` CLI
-* `poetry`
+
+- Libraries such as gdal and graphviz
+- The `gcloud` CLI
+- `poetry`
 
 > You may have already authenticated gcloud and the GitHub CLI (gh) if you followed the
-[JupyterHub setup docs](https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html). If not, follow those instructions before proceeding.
+> [JupyterHub setup docs](https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html). If not, follow those instructions before proceeding.
 
 ### Clone and install the warehouse project
+
 1. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
    the `data-infra` repo via `git clone git@github.com:cal-itp/data-infra.git` if you haven't already. Use [SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account), not HTTPS. If you haven't made a folder/directory for your git repos yet, you can create one with `mkdir git` (within your home directory, usually).
+
    1. You may be prompted to accept GitHub key's fingerprint if you are cloning a repository for the first time.
+
 2. The rest of these instructions assume you are in the `warehouse/` directory of the repository.
+
    1. You will need to `cd` to it via `cd <git-repos-path>/data-infra/warehouse/` or similar; for example, if you had created your directory with `mkdir git`, you will navigate to the warehouse directory with `cd git/data-infra/warehouse/`.
+
 3. Execute `poetry install` to create a virtual environment and install requirements.
+
 4. Execute `poetry run dbt deps` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`).
+
 5. Ensure that `DBT_PROFILES_DIR` is set to something like `~/.dbt/`; in JupyterHub, it should already be set to `/home/jovyan/.dbt/`. You can check with `echo $DBT_PROFILES_DIR`.
+
 6. Execute `poetry run dbt init` to create the `$DBT_PROFILES_DIR` directory and a pre-built `profiles.yml` file; you will be prompted to enter a personal `schema` which is used as a prefix for your personal development environment schemas. The output should look similar to the following:
+
    ```
    ➜ poetry run dbt init
    19:14:32  Running with dbt=1.4.5
@@ -30,10 +41,13 @@ are already configured/installed.
    maximum_bytes_billed (the maximum number of bytes allowed per BigQuery query; default is 2 TB) [2000000000000]:
    19:14:35  Profile calitp_warehouse written to /Users/andrewvaccaro/.dbt/profiles.yml using project's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
    ```
+
    See [the dbt docs on profiles.yml](https://docs.getdbt.com/dbt-cli/configure-your-profile) for more background on this file.
 
    > Note: This default profile template will set a maximum bytes billed of 2 TB; no models should fail with the default lookbacks in our development environment, even with a full refresh. You can override this limit during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
+
 7. Check whether `~/.dbt/profiles.yml` was successfully created, e.g. `cat ~/.dbt/profiles.yml`. If you encountered an error, you may create it by hand and fill it with the same content:
+
    ```yaml
    calitp_warehouse:
      outputs:
@@ -61,7 +75,9 @@ are already configured/installed.
                spark.dynamicAllocation.maxExecutors: "16"
      target: dev
    ```
+
 8. Finally, test your connection to our staging BigQuery project with `poetry run dbt debug`. You should see output similar to the following.
+
    ```
    ➜  warehouse git:(jupyterhub-dbt) ✗ poetry run dbt debug
    16:50:15  Running with dbt=1.4.5
@@ -115,36 +131,38 @@ Once you have performed the setup above, you are good to go run
 
 Some additional helpful commands:
 
-* `poetry run dbt test` -- will test all the models (this executes SQL in the warehouse to check tables); for this to work, you first need to `dbt run` to generate all the tables to be tested
-* `poetry run dbt compile` -- will compile all the models (generate SQL, with references resolved) but won't execute anything in the warehouse; useful for visualizing what dbt will actually execute
-* `poetry run dbt docs generate` -- will generate the dbt documentation
-* `poetry run dbt docs serve` -- will "serve" the dbt docs locally so you can access them via `http://localhost:8080`; note that you must `docs generate` before you can `docs serve`
+- `poetry run dbt test` -- will test all the models (this executes SQL in the warehouse to check tables); for this to work, you first need to `dbt run` to generate all the tables to be tested
+- `poetry run dbt compile` -- will compile all the models (generate SQL, with references resolved) but won't execute anything in the warehouse; useful for visualizing what dbt will actually execute
+- `poetry run dbt docs generate` -- will generate the dbt documentation
+- `poetry run dbt docs serve` -- will "serve" the dbt docs locally so you can access them via `http://localhost:8080`; note that you must `docs generate` before you can `docs serve`
 
 ### Incremental model considerations
+
 We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/incremental-models) in the Cal-ITP warehouse since we have large data volumes, but that data arrives in a relatively consistent pattern (i.e. temporal).
 
 **In development**, there is a maximum lookback defined for incremental runs. The purpose of this is to handle situations where a developer may not have executed a model for a period of time. It's easy to handle full refreshes with a maximum lookback; we simply template in `N days ago` rather than the "true" start of the data for full refreshes. However, we also template in `MAX(N days ago, max DT of existing table)` for developer incremental runs; otherwise, going a month without executing a model would mean that a naive incremental implementation would then read in that full month of data. This means that your development environment can end up with gaps of data; if you've gone a month without executing a model, and then you execute a regular `run` that reads in the past `N` (7 currently) days of data, you will have a ~23 day gap. If this gap is unacceptable, you can resolve this in one of two ways.
-* If you are able to develop and test with only recent data, execute a `--full-refresh` on your model(s) and all parents. This will drop the existing tables and re-build them with the last 7 days of data.
-* If you need historical data for your analysis, copy the production table with `CREATE TABLE <your_schema>.<tablename> COPY <production_schema>.<tablename`; copies are free in BigQuery so this is substantially cheaper than fully building the model yourself.
+
+- If you are able to develop and test with only recent data, execute a `--full-refresh` on your model(s) and all parents. This will drop the existing tables and re-build them with the last 7 days of data.
+- If you need historical data for your analysis, copy the production table with `CREATE TABLE <your_schema>.<tablename> COPY <production_schema>.<tablename`; copies are free in BigQuery so this is substantially cheaper than fully building the model yourself.
 
 ## Setting up the project on your local machine
 
 If you prefer to install dbt locally and use your own development environment, you may follow these instructions to install the same tools already installed in the JupyterHub environment.
 
 > Note: These instructions assume you are on macOS, but are largely similar for
-> other operating systems. Most *nix OSes will have a package manager that you
+> other operating systems. Most \*nix OSes will have a package manager that you
 > should use instead of Homebrew.
 >
 > Note: if you get `Operation not permitted` when attempting to use the terminal,
 > you may need to [fix your terminal permissions](https://osxdaily.com/2018/10/09/fix-operation-not-permitted-terminal-error-macos/)
 >
 > You can enable [displaying hidden folders/files in macOS Finder](https://www.macworld.com/article/671158/how-to-show-hidden-files-on-a-mac.html)
-   but generally, we recommend using the terminal when possible for editing
-   these files. Generally, `nano ~/.dbt/profiles.yml` will be the easiest method
-   for editing your personal profiles file. `nano` is a simple terminal-based
-   text editor; you use the arrows keys to navigate and the hotkeys displayed
-   at the bottom to save and exit. Reading an [online tutorial](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/)
-   may be useful if you haven't used a terminal-based editor before.
+> but generally, we recommend using the terminal when possible for editing
+> these files. Generally, `nano ~/.dbt/profiles.yml` will be the easiest method
+> for editing your personal profiles file. `nano` is a simple terminal-based
+> text editor; you use the arrows keys to navigate and the hotkeys displayed
+> at the bottom to save and exit. Reading an [online tutorial](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/)
+> may be useful if you haven't used a terminal-based editor before.
 
 ### Install Homebrew (if you haven't)
 
@@ -180,11 +198,11 @@ If you prefer to install dbt locally and use your own development environment, y
       addition upon its completion. On an OSX device using zshell, for instance, that line should be added to the ~/.zshrc file.
 2. Restart your terminal and confirm `poetry --version` works.
 3. Ensure you have set the environment variable `DBT_PROFILES_DIR=~/.dbt/` in your `~/.zshrc`. You can either restart your terminal after setting it, or run `source ~/.zshrc`.
-4. Follow the [warehouse setup instructions](#Set up the warehouse dbt project)
+4. Follow the \[warehouse setup instructions\](#Set up the warehouse dbt project)
 5. If this doesn’t work because of an error with Python version, you may need to install Python 3.9
-   2. `brew install python@3.9`
-   3. `brew link python@3.9`
-   4. After restarting the terminal, confirm with `python3 --version` and retry `poetry install`
+   2\. `brew install python@3.9`
+   3\. `brew link python@3.9`
+   4\. After restarting the terminal, confirm with `python3 --version` and retry `poetry install`
 
 ### Dataproc configuration
 
