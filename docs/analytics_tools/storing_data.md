@@ -12,24 +12,26 @@ kernelspec:
   language: python
   name: python3
 ---
+
 (storing-new-data)=
+
 # Storing Data During Analysis
 
 Our team uses Google Cloud Storage (GCS) buckets, specifically the `calitp-analytics-data` bucket, to store other datasets for analyses. GCS can store anything, of arbitrary object size and shape. It’s like a giant folder in the cloud. You can use it to store CSVs, parquets, pickles, videos, etc. **Within the bucket, the `data-analyses` folder with its sub-folders corresponds to the `data-analyses` GitHub repo with its sub-folders. Versioned data for a task should live within the correct folders.**
 
 ## Table of Contents
-1. [Introduction](#introduction)
-1. [Storing New Data - Screencast](storing-new-data-screencast)
-1. [Uploading Data from a Notebook](uploading-from-notebook)
-<br> - [Tabular Data](#tabular-data)
-  <br> - [Parquet](#parquet)
-  <br> - [CSV](#csv)
-<br> - [Geospatial Data](#geospatial-data)
-  <br> - [Geoparquet](#geoparquet)
-  <br> - [Zipped shapefile](#zipped-shapefile)
-  <br> - [GeoJSON](#geojson)
-1. [Uploading data in Google Cloud Storage](in-gcs)
 
+1. [Introduction](#introduction)
+2. [Storing New Data - Screencast](storing-new-data-screencast)
+3. [Uploading Data from a Notebook](uploading-from-notebook)
+   <br> - [Tabular Data](#tabular-data)
+   <br> - [Parquet](#parquet)
+   <br> - [CSV](#csv)
+   <br> - [Geospatial Data](#geospatial-data)
+   <br> - [Geoparquet](#geoparquet)
+   <br> - [Zipped shapefile](#zipped-shapefile)
+   <br> - [GeoJSON](#geojson)
+4. [Uploading data in Google Cloud Storage](in-gcs)
 
 ## Introduction
 
@@ -37,19 +39,21 @@ Currently, report data can be stored in the `calitp-analytics-data` bucket in Go
 
 In order to save data being used in a report, you can use two methods:
 
-* Using code in your notebook to upload the data.
-* Using the Google Cloud Storage web UI to manually upload.
+- Using code in your notebook to upload the data.
+- Using the Google Cloud Storage web UI to manually upload.
 
 Watch the screencast below and read the additional information to begin.
 
 **Note**: To access Google Cloud Storage you will need to have set up your Google authentication. If you have yet to do so, [follow these instructions](connecting-to-warehouse).
 
 (storing-new-data-screencast)=
+
 ## Storing New Data - Screencast
 
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/51d22876ab6d4d35a39f18e8f6d5f11d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
 (uploading-from-notebook)=
+
 ## Uploading Data from a Notebook
 
 In order to begin, import the following libraries in your notebook and set the `fs` variable
@@ -62,6 +66,7 @@ import pandas as pd
 from calitp_data.storage import get_fs
 fs = get_fs()
 ```
+
 ### Tabular Data
 
 While GCS can store CSVs, parquets, Excel spreadsheets, etc, parquets are the preferred file type. Interacting with tabular datasets in GCS is fairly straightforward and is handled well by `pandas`.
@@ -150,6 +155,7 @@ shared_utils.utils.geojson_gcs_export(
 ```
 
 (in-gcs)=
+
 ## Uploading data in Google Cloud Storage
 
 You can access the cloud bucket from the web from https://console.cloud.google.com/storage/browser/calitp-analytics-data.
