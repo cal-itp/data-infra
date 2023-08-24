@@ -39,11 +39,13 @@ gcloud init
 ```
 
 Next, run the initial database migration which also creates a default user named `airflow`.
+
 ```shell
 docker-compose run airflow db init
 ```
 
 Next, start all services including the Airflow web server.
+
 ```console
 docker-compose up
 ```
@@ -61,7 +63,7 @@ Additional reading about this setup can be found on the [Airflow Docs](https://a
 
 ### Common Issues
 
-* `docker-compose up` exits with code 137 - Check that your docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.
+- `docker-compose up` exits with code 137 - Check that your docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.
 
 ## Deploying to production
 
