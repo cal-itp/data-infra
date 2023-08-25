@@ -39,11 +39,13 @@ gcloud init
 ```
 
 Next, run the initial database migration which also creates a default user named `airflow`.
+
 ```shell
 docker-compose run airflow db init
 ```
 
 Next, start all services including the Airflow web server.
+
 ```console
 docker-compose up
 ```
@@ -60,6 +62,7 @@ docker-compose run airflow tasks test download_gtfs_schedule_v2 download_schedul
 Additional reading about this setup can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html)
 
 ### PodOperators
+
 Airflow PodOperator tasks execute a specific Docker image; as of 2023-08-24 these images are pushed to [GitHub Container Registry](https://ghcr.io/) and production uses `:latest` tags while local uses `:development`. If you want to test these tasks locally, you must build and push development versions of the images used by the tasks. The Dockerfiles and code that make up the images live in the [../jobs](../jobs) directory. For example:
 
 ```bash
@@ -77,7 +80,7 @@ docker-compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly va
 
 ### Common Issues
 
-* `docker-compose up` exits with code 137 - Check that your docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.
+- `docker-compose up` exits with code 137 - Check that your docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.
 
 ## Deploying to production
 

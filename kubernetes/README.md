@@ -13,6 +13,7 @@ A [glossary](#Glossary) exists at the end of this document.
 We do not currently use Terraform to manage our cluster, nodepools, etc. and major changes to the cluster are unlikely to be necessary, but we do have some bash scripts that can help with tasks such as creating new node pools or creating a test cluster.
 
 First, verify you are logged in and gcloud is pointed at `cal-itp-data-infra` and the `us-west1` region.
+
 ```bash
 gcloud auth list
 gcloud config get-value project
@@ -46,7 +47,7 @@ Configure a new node pool by adding its name to the `GKE_NODEPOOL_NAMES` array i
 
 Once the new nodepool is configured, it can be stood up by running `kubernetes/gke/nodepool-up.sh <nodepool-name>`, or by simply running `kubernetes/gke/nodepool-up.sh`, which will stand up all configured node pools which do not yet exist.
 
-#### Drain and delete an old node pool ####
+#### Drain and delete an old node pool
 
 Once a new nodepool has been created to replace an active node pool, the old node pool must be removed from the `GKE_NODEPOOL_NAMES` array.
 
@@ -57,20 +58,23 @@ Once the old node pool is removed from the array, it can be drained and deleted 
 Cluster workloads are divided into two classes:
 
 1. Apps are the workloads that users actually care about; this includes deployed "applications" such as the GTFS-RT archiver but also includes "services" like Grafana and Sentry. These workloads are deployed using `invoke` as defined in the [ci](../ci/) folder.
+
 2. System workloads are used to support running applications. This includes items such as an ingress controller, HTTPS certificate manager, etc. The system deploy command is run at cluster create time, but when new system workloads are added it may need to be run again.
 
-    ```bash
-    kubectl apply -k kubernetes/system
-    ```
+   ```bash
+   kubectl apply -k kubernetes/system
+   ```
 
 ## JupyterHub
 
 JupyterHub is a good example of an application using a Helm chart that is ultimately exposed to the outside internet for user access. In general, any non-secret changes to the chart can be accomplished by modifying the chart's `values.yaml` and running the `invoke release` specific to JupyterHub.
+
 ```
 poetry run invoke release -f channels/prod.yaml --app=jupyterhub
 ```
 
 ### Secrets
+
 Because we use [Github OAuth](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/authentication.html?highlight=oauth#github) for user authentication in JupyterHub, we have to provide a client-id and client-secret to the JupyterHub Helm chart. Here is what the full configuration for the GitHub OAuth in our JupyterHub Helm chart's `values.yaml` might look like:
 
 ```yaml
@@ -113,9 +117,9 @@ At the time of this writing, a JupyterHub deployment is available at [https://no
 
 2. After the changes have been made to the GitHub OAuth application, the following portions of the JupyterHub chart's `values.yaml` must be changed:
 
-  - `hub.config.GitHubOAuthenticator.oauth_callback_url`
-  - `ingress.hosts`
-  - `ingress.tls.hosts`
+- `hub.config.GitHubOAuthenticator.oauth_callback_url`
+- `ingress.hosts`
+- `ingress.tls.hosts`
 
 # Backups
 
@@ -165,17 +169,19 @@ To load the SQL into Postgres, run the following command:
 Then you can verify the schema and underlying data within postgres.
 
 ## Glossary
+
 > Mostly cribbed from the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/workloads)
- * Kubernetes - a platform for orchestrating (i.e. deploying) containerized software applications onto a collection of virtual machines
- * Cluster - a collection of virtual machines (i.e. nodes) on which Kubernetes is installed, and onto which Kubernetes in turn deploys pods
- * Pod - one (or more) containers deployed to run within a Kubernetes cluster
-   * For deployed services/applications, Pods exist because of a Deployment
-   * For ephemeral workloads (think Airflow tasks or database backups), Pods may be managed directly or via a Job
- * Deployment - a Kubernetes object that manages a set of Pods, such as multiple replicas of the same web application
-   * StatefulSet - similar to Deployments but provides guarantees (e.g. deterministic network identifiers) necessary for stateful applications such as databases
- * Service - an abstraction around Pods that provides a network interface _within the cluster_
-   * For example, a Redis instance needs a Service to be usable by other Pods
- * Ingress - exposes Services to the outside world
-   * For example, a Metabase Service needs an Ingress to be accessible from the internet
- * Volume - an abstraction of storage that is typically mounted into the file system of Pods
- * Secrets/ConfigMaps - an abstraction of configuration information, typically mounted as environment variables of or files within Pods
+
+- Kubernetes - a platform for orchestrating (i.e. deploying) containerized software applications onto a collection of virtual machines
+- Cluster - a collection of virtual machines (i.e. nodes) on which Kubernetes is installed, and onto which Kubernetes in turn deploys pods
+- Pod - one (or more) containers deployed to run within a Kubernetes cluster
+  - For deployed services/applications, Pods exist because of a Deployment
+  - For ephemeral workloads (think Airflow tasks or database backups), Pods may be managed directly or via a Job
+- Deployment - a Kubernetes object that manages a set of Pods, such as multiple replicas of the same web application
+  - StatefulSet - similar to Deployments but provides guarantees (e.g. deterministic network identifiers) necessary for stateful applications such as databases
+- Service - an abstraction around Pods that provides a network interface _within the cluster_
+  - For example, a Redis instance needs a Service to be usable by other Pods
+- Ingress - exposes Services to the outside world
+  - For example, a Metabase Service needs an Ingress to be accessible from the internet
+- Volume - an abstraction of storage that is typically mounted into the file system of Pods
+- Secrets/ConfigMaps - an abstraction of configuration information, typically mounted as environment variables of or files within Pods
