@@ -20,14 +20,21 @@ gcloud config get-value project
 gcloud config get-value compute/region
 ```
 
+Then, you may get credentials to the cluster (assuming one already exists).
+
+```bash
+gcloud container clusters get-credentials data-infra-apps (optionally specifying --region us-west1)
+kubectl config get-contexts (prints possible auth contexts; GKE creates them with a defined name format)
+kubectl config use-context gke_cal-itp-data-infra_us-west1_data-infra-apps
+```
+
 ### Deploying the cluster
 
 > :red_circle: You should only run this script if you intend to actually deploy a new cluster, though it will stop if the cluster already exists. This is likely to be a rare operation but may be necessary for migrating regions, creating a totally isolated test cluster, etc.
 
 The cluster level configuration parameters are stored in [config-cluster.sh](./gke/config-cluster.sh). Creating the cluster also requires configuring parameters for a node pool named "default-pool" (unconfigurable name defined by GKE) in [kubernetes/gke/config-nodepool.sh](./gke/config-nodepool.sh). Any additional node pools configured in this file are also stood up at cluster creation time.
 
-Once the cluster is created, it can be managed by pointing the `KUBECONFIG`
-environment variable to `kubernetes/gke/kube/admin.yaml`.
+Once the cluster is created, it can be managed by pointing the `KUBECONFIG` environment variable to `kubernetes/gke/kube/admin.yaml` or you can follow the above authentication steps.
 
 ```bash
 ./kubernetes/gke/cluster-create.sh
