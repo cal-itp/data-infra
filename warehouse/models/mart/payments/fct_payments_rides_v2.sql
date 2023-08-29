@@ -46,6 +46,11 @@
     principals = ['serviceAccount:redwood-coast-transit@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }}",
 " {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'atn',
+    principals = ['serviceAccount:atn@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
     principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
