@@ -48,7 +48,7 @@
 " {{ create_row_access_policy(
     filter_column = 'participant_id',
     filter_value = 'atn',
-    principals = ['serviceAccount:atn@cal-itp-data-infra.iam.gserviceaccount.com']
+    principals = ['serviceAccount:atn-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }}",
 " {{ create_row_access_policy(
     principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
