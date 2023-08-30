@@ -19,6 +19,8 @@ poetry run invoke release -f channels/test.yaml
 
 ## GitOps
 
+> :bulb: A [Loom](https://www.loom.com/share/d5832726dbb547999e7b8703ca810ba6?sid=7776da64-8f34-4143-b849-f5bab8f0ade5) exists of this process
+
 In this diagram, arrows represent human actions such as opening and merging PRs and nodes (except for the very first) represent automated actions such as `invoke` deploying to the cluster. Green nodes indicate a deployment while white nodes indicate an automated git action such as branch creation or commenting on a pull request.
 
 ```mermaid

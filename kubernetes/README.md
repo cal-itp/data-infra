@@ -137,6 +137,7 @@ To verify that Metabase configuration backups have been created, there are three
 1. Name of the Restic repository
 2. Restic password
 3. Google Access token (if you have previously authenticated to `gcloud`, this should already be complete)
+   1. If you are executing this process in a Kubernetes Pod, you may need to write a service key JSON to a file (see below)
 
 There are several ways to obtain the Restic information, listed in order of effort.
 
@@ -148,14 +149,26 @@ There are several ways to obtain the Restic information, listed in order of effo
 
 ## Restic
 
-Within Restic you can see the snapshots by running the following terminal commands:
+If you do not have gcloud credentials set up (for example you are running this in a Kubernetes Pod without a mounted service account file), you can use the service account key that the database backup uses.
 
-`restic list snapshot` or `restic snapshots latest`
+E.g. for Metabase test
 
-For spot testing, create a folder within the tmp directory
-`mkdir /tmp/pgdump` then run the Restic restore command to extract the data from a snapshot.
+```bash
+echo '<keyfile json>' > keyfile.json
+export GOOGLE_APPLICATION_CREDENTIALS=keyfile.json
+```
 
-`restic restore -t /tmp/pgdump latest`
+Within Restic you can see the snapshots:
+
+`restic list snapshot --repo <repo>`
+
+For spot testing, create a folder within the tmp directory `mkdir /tmp/pgdump` then run the Restic restore command to extract the data from a snapshot.
+
+`restic restore -t /tmp/pgdump latest --repo <repo>`
+
+E.g. for Metabase test
+
+`restic restore -t /tmp/pgdump latest --repo gs:calitp-backups-test:/metabase`
 
 This will be a zipped file, unzip it by using
 
@@ -169,11 +182,15 @@ To verify the SQL schema and underlying data has not been corrupted, open the SQ
 
 It is important to note that the version of Postgres used to take the Metabase snapshots (13.5) needs to be the same version of Postgres that is restoring the dump.
 
-To load the SQL into Postgres, run the following command:
+To restore the database, you need to stop any current user pods (e.g. the Metabase web server pod), drop the database, and pipe the SQL contents into `psql`. For example, for Metabase in test:
 
-`psql -U postgres < pg_dumpall.sql`
+```bash
+(stop any pods that would be hitting the database)
+psql --username=admin --dbname=postgres (drop database metabase;)
+psql --username=admin --dbname=postgres < /tmp/pgdump/pg_dumpall.sql
+```
 
-Then you can verify the schema and underlying data within postgres.
+Notice you must specifically reference the default `postgres` database, since you are dropping and re-creating the `metabase` database.
 
 ## Glossary
 
