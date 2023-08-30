@@ -11,7 +11,7 @@ jupyterhub:
       tag: 2023.8.1
     memory:
       # Much more than 10 and we risk bumping up against the actual capacity of e2-highmem-2
-      limit: 12G
+      limit: 10G
       # Very roughly I have seen most usage in the 2-3GB range
       guarantee: 3G
     cpu:
