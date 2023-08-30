@@ -149,7 +149,7 @@ There are several ways to obtain the Restic information, listed in order of effo
 
 ## Restic
 
-If you do not have gcloud credentials set up (for example you are running this in a Kubernetes Pod without a mounted service account file), you can use the service account key that the database backup uses.
+If you do not have gcloud credentials set up (for example you are running this in a Kubernetes Pod without a mounted service account file), you can use the service account key that the database backup uses. This key is stored as a Kubernetes secret.
 
 E.g. for Metabase test
 
