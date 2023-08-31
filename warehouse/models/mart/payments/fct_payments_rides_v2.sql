@@ -330,7 +330,7 @@ join_table AS (
     FROM debited_micropayments AS m
     LEFT JOIN refunded_micropayments AS mr
         ON m.micropayment_id = mr.micropayment_id
-    INNER JOIN int_littlepay__customers AS c
+    LEFT JOIN int_littlepay__customers AS c
         ON m.customer_id = c.customer_id
     LEFT JOIN int_littlepay__customer_funding_source_vaults AS v
         ON m.funding_source_vault_id = v.funding_source_vault_id
