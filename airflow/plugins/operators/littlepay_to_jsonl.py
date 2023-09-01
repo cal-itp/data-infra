@@ -8,7 +8,6 @@ from typing import ClassVar, List
 import pendulum
 from calitp_data_infra.storage import (
     PartitionedGCSArtifact,
-    ProcessingOutcome,
     fetch_all_in_partition,
     get_fs,
 )
@@ -44,20 +43,7 @@ class LittlepayFileJSONL(PartitionedGCSArtifact):
         return self.extract.ts
 
 
-class LittlepayFileParsingOutcome(ProcessingOutcome):
-    raw_file: RawLittlepayFileExtract
-    parsed_file: LittlepayFileJSONL
-
-
-class LittlepayParsingJobResult(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = LITTLEPAY_PARSED_BUCKET
-    table: ClassVar[str] = "parse_littlepay_job_result"
-    partition_names: ClassVar[List[str]] = ["instance", "dt"]
-    instance: str
-    dt: pendulum.Date
-
-
-def parse_raw_file(file: RawLittlepayFileExtract, fs) -> LittlepayFileParsingOutcome:
+def parse_raw_file(file: RawLittlepayFileExtract, fs):
     # mostly stolen from the Schedule job, we could probably abstract this
     # assume this is PSV for now, but we could sniff the delimiter
     filename, extension = os.path.splitext(file.filename)
@@ -80,11 +66,6 @@ def parse_raw_file(file: RawLittlepayFileExtract, fs) -> LittlepayFileParsingOut
         content=gzip.compress("\n".join(json.dumps(line) for line in lines).encode()),
         fs=fs,
     )
-    return LittlepayFileParsingOutcome(
-        success=True,
-        raw_file=file,
-        parsed_file=jsonl_file,
-    )
 
 
 class LittlepayToJSONL(BaseOperator):
@@ -103,7 +84,6 @@ class LittlepayToJSONL(BaseOperator):
         assert LITTLEPAY_RAW_BUCKET is not None and LITTLEPAY_PARSED_BUCKET is not None
 
         fs = get_fs()
-        outcomes: List[LittlepayFileParsingOutcome] = []
 
         # TODO: this could be worth splitting into separate tasks
         entities = [
@@ -134,22 +114,18 @@ class LittlepayToJSONL(BaseOperator):
                 )
                 print(f"found {len(files_to_process)} files to check")
 
-                dt = context["execution_date"].date()
+                # subtract 30 minutes because we run 30 minutes past the hour
+                # in case of late-arriving data
+                period = context["data_interval_end"].subtract(
+                    minutes=30, microseconds=1
+                ) - context["data_interval_start"].subtract(minutes=30)
 
-                print(f"filtering files created on {dt}")
+                print(f"filtering files created in {period}")
 
                 files_to_process = [
-                    file
-                    for file in files_to_process
-                    if file.ts.date() == context["execution_date"].date()
+                    file for file in files_to_process if file.ts in period
                 ]
 
                 file: RawLittlepayFileExtract
                 for file in tqdm(files_to_process, desc=entity):
-                    outcomes.append(parse_raw_file(file, fs=fs))
-
-        LittlepayParsingJobResult(
-            instance=self.instance,
-            dt=dt,
-            filename="results.jsonl",
-        ).save_content("\n".join(o.json() for o in outcomes).encode(), fs=fs)
+                    parse_raw_file(file, fs=fs)
