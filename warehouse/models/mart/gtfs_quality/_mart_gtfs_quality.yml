@@ -82,7 +82,11 @@ models:
               where: validation_validator_version = 'v3.1.1'
           - dbt_utils.accepted_range:
               min_value: "DATE'2022-11-16'"
+              max_value: "DATE'2023-08-31'"
               where: validation_validator_version = 'v4.0.0'
+          - dbt_utils.accepted_range:
+              min_value: "DATE'2023-09-01'"
+              where: validation_validator_version = 'v4.1.0'
       - &schedule_feed_key
         name: feed_key
         tests:
