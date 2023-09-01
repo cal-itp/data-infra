@@ -111,7 +111,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['v2.0.0', 'v3.1.1', 'v4.0.0']
+              values: ['v2.0.0', 'v3.1.1', 'v4.0.0', 'v4.1.0']
       - &schedule_validator_code
         name: code
         description: |
