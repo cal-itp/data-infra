@@ -102,7 +102,7 @@ After completing this section, you will also enjoy various extensions in Jupyter
 
 ### Software to Request First (SNOW ticket via Onramp)
 
-* Git
+- Git
   - multiple options on SNOW, ultimately want IT to install from [here](https://git-scm.com/downloads)
-* Visual Studio Code
+- Visual Studio Code
   - be sure to pick Visual Studio [_Code_](https://code.visualstudio.com/Download)
