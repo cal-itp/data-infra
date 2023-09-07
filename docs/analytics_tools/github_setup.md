@@ -4,12 +4,13 @@
 
 ## Table of Contents
 
-1. [Onboarding Setup](#onboarding-setup)
+1. [Onboarding Setup (JupyterHub)](#onboarding-setup)
    - [Adding a GitHub SSH Key to Jupyter](authenticating-github-jupyter)
    - [Persisting your SSH Key and Enabling Extensions](persisting-ssh-and-extensions)
    - [Cloning a Repository](cloning-a-repository)
+2. [Onboarding Setup (Caltrans Windows PC)](#onboarding-setup-ct)
 
-## Onboarding Setup
+## Onboarding Setup (JupyterHub)
 
 We'll work through getting set up with SSH and GitHub on JupyterHub and cloning one GitHub repo. This is the first task you'll need to complete before contributing code. Repeat the steps in [Cloning a Repository](cloning-a-repository) for other repos.
 
@@ -94,3 +95,14 @@ After completing this section, you will also enjoy various extensions in Jupyter
 3. Double check  with `ls` to list and see that the remote repo was successfully cloned into your "local" (cloud-based) filesystem.
 4. Change into the `data-analyses` directory: `cd data-analyses`
 5. Pull from the `main` branch and sync your remote and local repos: `git pull origin main`
+
+(onboarding-setup-ct)=
+
+## Onboarding Setup (Caltrans Windows PC)
+
+### Software to Request First (SNOW ticket via Onramp)
+
+* Git
+  - multiple options on SNOW, ultimately want IT to install from [here](https://git-scm.com/downloads)
+* Visual Studio Code
+  - be sure to pick Visual Studio [_Code_](https://code.visualstudio.com/Download)
