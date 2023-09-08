@@ -32,6 +32,17 @@ pending_device_transaction_ids AS (
     WHERE m.charge_type = 'pending_charge_fare'
 ),
 
+incomplete_variable_fare_micropayment_device_transaction_ids AS (
+    SELECT
+        micropayment_id,
+        littlepay_transaction_id,
+        transaction_date_time_utc
+    FROM stg_littlepay__micropayments AS m
+    INNER JOIN int_littlepay__cleaned_micropayment_device_transactions USING (micropayment_id)
+    INNER JOIN stg_littlepay__device_transactions USING (littlepay_transaction_id)
+    WHERE m.charge_type = 'incomplete_variable_fare'
+),
+
 potential_tap_on_or_off_micropayment_device_transaction_ids AS (
     SELECT
         micropayment_id,
@@ -83,6 +94,14 @@ int_littlepay__device_transaction_types AS (
         'off' AS transaction_type,
         False AS pending
     FROM paired_device_transaction_ids
+
+    UNION ALL
+
+    SELECT
+        littlepay_transaction_id,
+        'on' AS transaction_type,
+        False AS pending
+    FROM incomplete_variable_fare_micropayment_device_transaction_ids
 )
 
 SELECT * FROM int_littlepay__device_transaction_types
