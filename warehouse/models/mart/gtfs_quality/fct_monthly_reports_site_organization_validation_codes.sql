@@ -39,6 +39,7 @@ fct_monthly_reports_site_organization_validation_codes AS (
         ON notices.date = orgs.date
         AND notices.feed_key = orgs.schedule_feed_key
     INNER JOIN idx_monthly_reports_site AS idx
+        -- revise to both of the two biweekly sample dates to align with checks?
         ON notices.date BETWEEN idx.date_start AND idx.date_end
         AND orgs.organization_source_record_id = idx.organization_source_record_id
     LEFT JOIN validator_details
