@@ -10,11 +10,11 @@
 /kubernetes                             @atvaccaro
 
 # jupyter service, e.g. updating the image
-/kubernetes/apps/charts/jupyterhub      @atvaccaro @charlie-costanzo @SorenSpicknall
-/images                                 @atvaccaro @charlie-costanzo @SorenSpicknall
+/kubernetes/apps/charts/jupyterhub      @atvaccaro @SorenSpicknall
+/images                                 @atvaccaro @SorenSpicknall
 
 # project documentation
-/docs                                   @charlie-costanzo @lauriemerrell
+/docs                                   @lauriemerrell
 
 # actual pipeline code
 /airflow                                @atvaccaro @lauriemerrell @SorenSpicknall
