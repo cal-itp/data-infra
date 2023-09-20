@@ -2,7 +2,7 @@
 Utility functions for geospatial data.
 Some functions for dealing with census tract or other geographic unit dfs.
 """
-from typing import Literal, Optional, Union
+from typing import Literal, Union
 
 import dask.dataframe as dd
 import geopandas as gpd
@@ -21,10 +21,10 @@ SQ_FT_PER_SQ_MI = 2.788 * 10**7
 def aggregate_by_geography(
     df: Union[pd.DataFrame, gpd.GeoDataFrame],
     group_cols: list,
-    sum_cols: Optional[list] = None,
-    mean_cols: Optional[list] = None,
-    count_cols: Optional[list] = None,
-    nunique_cols: Optional[list] = None,
+    sum_cols: list[any],
+    mean_cols: list[any],
+    count_cols: list[any],
+    nunique_cols: list[any],
     rename_cols: bool = False,
 ) -> pd.DataFrame:
     """
@@ -275,4 +275,4 @@ def find_geometry_type(
     elif shapely.get_type_id(geometry) == 7:
         return "geometry_collection"
 
-    return
+    return None
