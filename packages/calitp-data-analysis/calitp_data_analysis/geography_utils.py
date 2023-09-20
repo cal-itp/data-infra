@@ -2,7 +2,7 @@
 Utility functions for geospatial data.
 Some functions for dealing with census tract or other geographic unit dfs.
 """
-from typing import Literal, Union
+from typing import Literal, Optional, Union, cast
 
 import dask.dataframe as dd
 import geopandas as gpd
@@ -55,7 +55,7 @@ def aggregate_by_geography(
         df: Union[pd.DataFrame, gpd.GeoDataFrame],
         final_df: pd.DataFrame,
         group_cols: list,
-        agg_cols: list,
+        agg_cols: Optional[str],
         aggregate_function: str,
     ):
         agg_df = df.pivot_table(
@@ -244,11 +244,14 @@ def cut_segments(
     return segmented2
 
 
+return_options = Literal[
+    "point", "line", "polygon", "missing", "linearring", "geometry_collection"
+]
+
+
 def find_geometry_type(
     geometry,
-) -> Literal[
-    "point", "line", "polygon", "missing", "linearring", "geometry_collection"
-]:
+) -> return_options:
     """
     Find the broad geometry type of a geometry value.
 
@@ -275,6 +278,9 @@ def find_geometry_type(
     elif shapely.get_type_id(geometry) == 7:
         return "geometry_collection"
 
-    return Literal[
+    return_options = Literal[
         "point", "line", "polygon", "missing", "linearring", "geometry_collection"
     ]
+
+    return_object = cast(return_options)
+    return return_object
