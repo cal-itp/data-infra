@@ -5,7 +5,7 @@ import base64
 import os
 import shutil
 from pathlib import Path
-from typing import Literal, Union
+from typing import Literal, Optional, Union
 
 import dask_geopandas as dg
 import fsspec
@@ -124,7 +124,7 @@ def read_geojson(
 
 # Make zipped shapefile
 # https://github.com/CityOfLosAngeles/planning-entitlements/blob/master/notebooks/utils.py
-def make_shapefile(gdf: gpd.GeoDataFrame, path: Union[Path, str]) -> tuple[Path, str]:
+def make_shapefile(gdf: gpd.GeoDataFrame, path: Union[Path, str]) -> tuple[Path, Path]:
     """
     Make a zipped shapefile and save locally
     Parameters
@@ -165,7 +165,9 @@ def make_shapefile(gdf: gpd.GeoDataFrame, path: Union[Path, str]) -> tuple[Path,
 
 
 def make_zipped_shapefile(
-    gdf: gpd.GeoDataFrame, local_path: Union[str, Path], gcs_folder: str = None
+    gdf: gpd.GeoDataFrame,
+    local_path: Union[str, Path],
+    gcs_folder: Optional[str] = None,
 ):
     """
     Make a zipped shapefile and save locally
@@ -268,3 +270,4 @@ def upload_file_to_github(
         },
     )
     r.raise_for_status()
+    return
