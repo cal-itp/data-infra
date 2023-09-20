@@ -111,9 +111,9 @@ After completing this section, you will also enjoy various extensions in Jupyter
 
 First, find where Git Bash lives on your system. You might have a desktop shortcut, or you can find it via the Start Menu or Program Files. Start Git Bash, and setup an SSH key per the [generic GitHub instructions](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) (the Jupyter instructions above won't work since we don't have the `gh` GitHub CLI here).
 
-* This will be a new SSH key unique to this machine, it's ok to have multiple
-* The default file locations from the docs are OK
-* Setting a passphrase is entirely optional, can press enter at the prompt for no passphrase
+- This will be a new SSH key unique to this machine, it's ok to have multiple
+- The default file locations from the docs are OK
+- Setting a passphrase is entirely optional, can press enter at the prompt for no passphrase
 
 Also take this time to configure your [global username](https://docs.github.com/en/get-started/getting-started-with-git/setting-your-username-in-git) and [email](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address) to avoid complications later.
 
