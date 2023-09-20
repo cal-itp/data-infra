@@ -21,10 +21,10 @@ SQ_FT_PER_SQ_MI = 2.788 * 10**7
 def aggregate_by_geography(
     df: Union[pd.DataFrame, gpd.GeoDataFrame],
     group_cols: list,
-    sum_cols: list,
-    mean_cols: list,
-    count_cols: list,
-    nunique_cols: list,
+    sum_cols: Optional[str],
+    mean_cols: Optional[str],
+    count_cols: Optional[str],
+    nunique_cols: Optional[str],
     rename_cols: bool = False,
 ) -> pd.DataFrame:
     """
@@ -266,21 +266,16 @@ def find_geometry_type(
     polygon_type_ids = [3, 6]
 
     if shapely.get_type_id(geometry) in point_type_ids:
-        return "point"
+        geo_type = "point"
     elif shapely.get_type_id(geometry) in line_type_ids:
-        return "line"
+        geo_type = "line"
     elif shapely.get_type_id(geometry) in polygon_type_ids:
-        return "polygon"
+        geo_type = "polygon"
     elif shapely.get_type_id(geometry) == -1:
-        return "missing"
+        geo_type = "missing"
     elif shapely.get_type_id(geometry) == 2:
-        return "linearring"
+        geo_type = "linearring"
     elif shapely.get_type_id(geometry) == 7:
-        return "geometry_collection"
+        geo_type = "geometry_collection"
 
-    return_options = Literal[
-        "point", "line", "polygon", "missing", "linearring", "geometry_collection"
-    ]
-
-    return_object = cast(return_options)
-    return return_object
+    return cast(return_options, geo_type)
