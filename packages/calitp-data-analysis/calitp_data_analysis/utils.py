@@ -7,10 +7,10 @@ import shutil
 from pathlib import Path
 from typing import Literal, Optional, Union
 
-import dask_geopandas as dg
-import fsspec
-import geopandas as gpd
-import requests
+import dask_geopandas as dg  # type: ignore
+import fsspec  # type: ignore
+import geopandas as gpd  # type: ignore
+import requests  # type: ignore
 from calitp_data_analysis import get_fs
 
 fs = get_fs()

@@ -5,9 +5,9 @@ Some functions for dealing with census tract or other geographic unit dfs.
 from typing import Literal, Optional, Sequence, Union, cast
 
 import dask.dataframe as dd
-import geopandas as gpd
+import geopandas as gpd  # type: ignore
 import pandas as pd
-import shapely
+import shapely  # type: ignore
 
 WGS84 = "EPSG:4326"
 CA_StatePlane = "EPSG:2229"  # units are in feet
