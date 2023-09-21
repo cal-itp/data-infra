@@ -2,7 +2,7 @@
 Utility functions for geospatial data.
 Some functions for dealing with census tract or other geographic unit dfs.
 """
-from typing import Literal, Sequence, Union, cast
+from typing import Literal, Optional, Sequence, Union, cast
 
 import dask.dataframe as dd
 import geopandas as gpd
@@ -55,7 +55,7 @@ def aggregate_by_geography(
         df: Union[pd.DataFrame, gpd.GeoDataFrame],
         final_df: pd.DataFrame,
         group_cols: list,
-        agg_cols: Sequence[str],
+        agg_cols: Optional[str],
         aggregate_function: str,
     ):
         agg_df = df.pivot_table(
