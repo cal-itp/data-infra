@@ -2,7 +2,7 @@
 Utility functions for geospatial data.
 Some functions for dealing with census tract or other geographic unit dfs.
 """
-from typing import Literal, Sequence, Union, cast
+from typing import Literal, Union, cast
 
 import dask.dataframe as dd
 import geopandas as gpd  # type: ignore
@@ -16,77 +16,6 @@ CA_NAD83Albers = "EPSG:3310"  # units are in meters
 SQ_MI_PER_SQ_M = 3.86 * 10**-7
 FEET_PER_MI = 5_280
 SQ_FT_PER_SQ_MI = 2.788 * 10**7
-
-
-def aggregate_by_geography(
-    df: Union[pd.DataFrame, gpd.GeoDataFrame],
-    group_cols: list,
-    sum_cols: Sequence,
-    mean_cols: Sequence,
-    count_cols: Sequence,
-    nunique_cols: Sequence,
-    rename_cols: bool = False,
-) -> pd.DataFrame:
-    """
-    df: pandas.DataFrame or geopandas.GeoDataFrame.,
-        The df on which the aggregating is done.
-        If it's a geodataframe, it must exclude the tract's geometry column
-
-    group_cols: list.
-        List of columns to do the groupby, but exclude geometry.
-    sum_cols: list.
-        List of columns to calculate a sum with the groupby.
-    mean_cols: list.
-        List of columns to calculate an average with the groupby
-        (beware: may want weighted averages and not simple average!!).
-    count_cols: list.
-        List of columns to calculate a count with the groupby.
-    nunique_cols: list.
-        List of columns to calculate the number of unique values with the groupby.
-    rename_cols: boolean.
-        Defaults to False. If True, will rename columns in sum_cols to have suffix `_sum`,
-        rename columns in mean_cols to have suffix `_mean`, etc.
-
-    Returns a pandas.DataFrame or geopandas.GeoDataFrame (same as input).
-    """
-    final_df = df[group_cols].drop_duplicates().reset_index()
-
-    def aggregate_and_merge(
-        df: Union[pd.DataFrame, gpd.GeoDataFrame],
-        final_df: pd.DataFrame,
-        group_cols: list,
-        agg_cols: Sequence,
-        aggregate_function: str,
-    ):
-        agg_df = df.pivot_table(
-            index=group_cols, values=agg_cols, aggfunc=aggregate_function
-        ).reset_index()
-
-        # https://stackoverflow.com/questions/34049618/how-to-add-a-suffix-or-prefix-to-each-column-name
-        # Why won't .add_prefix or .add_suffix work?
-        if rename_cols:
-            for c in agg_cols:
-                agg_df = agg_df.rename(columns={c: f"{c}_{aggregate_function}"})
-
-        final_df = pd.merge(final_df, agg_df, on=group_cols, how="left", validate="1:1")
-
-        return final_df
-
-    if len(sum_cols) > 0:
-        final_df = aggregate_and_merge(df, final_df, group_cols, sum_cols, "sum")
-
-    if len(mean_cols) > 0:
-        final_df = aggregate_and_merge(df, final_df, group_cols, mean_cols, "mean")
-
-    if len(count_cols) > 0:
-        final_df = aggregate_and_merge(df, final_df, group_cols, count_cols, "count")
-
-    if len(nunique_cols) > 0:
-        final_df = aggregate_and_merge(
-            df, final_df, group_cols, nunique_cols, "nunique"
-        )
-
-    return final_df.drop(columns="index")
 
 
 # Laurie's example: https://github.com/cal-itp/data-analyses/blob/752eb5639771cb2cd5f072f70a06effd232f5f22/gtfs_shapes_geo_examples/example_shapes_geo_handling.ipynb
