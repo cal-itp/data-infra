@@ -571,6 +571,26 @@
      Software to Request First (SNOW ticket via Onramp)
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#initial-setup">
+     Initial Setup
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#filesystem-notes">
+     Filesystem Notes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     Cloning a Repository
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visual-studio-code">
+     Visual Studio Code
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -628,6 +648,26 @@
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#software-to-request-first-snow-ticket-via-onramp">
      Software to Request First (SNOW ticket via Onramp)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#initial-setup">
+     Initial Setup
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#filesystem-notes">
+     Filesystem Notes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     Cloning a Repository
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visual-studio-code">
+     Visual Studio Code
     </a>
    </li>
   </ul>
@@ -763,6 +803,30 @@ Press Enter to open github.com in your browser...
 </ul>
 </li>
 </ul>
+</div>
+<div class="section" id="initial-setup">
+<h3>Initial Setup<a class="headerlink" href="#initial-setup" title="Permalink to this headline">¶</a></h3>
+<p>First, find where Git Bash lives on your system. You might have a desktop shortcut, or you can find it via the Start Menu or Program Files. Start Git Bash, and setup an SSH key per the <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">generic GitHub instructions</a> (the Jupyter instructions above won’t work since we don’t have the <code class="docutils literal notranslate"><span class="pre">gh</span></code> GitHub CLI here).</p>
+<ul class="simple">
+<li><p>This will be a new SSH key unique to this machine, it’s ok to have multiple</p></li>
+<li><p>The default file locations from the docs are OK</p></li>
+<li><p>Setting a passphrase is entirely optional, can press enter at the prompt for no passphrase</p></li>
+</ul>
+<p>Also take this time to configure your <a class="reference external" href="https://docs.github.com/en/get-started/getting-started-with-git/setting-your-username-in-git">global username</a> and <a class="reference external" href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address">email</a> to avoid complications later.</p>
+</div>
+<div class="section" id="filesystem-notes">
+<h3>Filesystem Notes<a class="headerlink" href="#filesystem-notes" title="Permalink to this headline">¶</a></h3>
+<p>Git Bash creates what looks like a little Unix filesystem on your Windows PC, but it’s a little hard to use. Rather than try to navigate around the filesystem from Git Bash, we find it easiest to first navigate to the folder you want to use Git in via File Explorer, then right-click and use the “Git Bash here” option.</p>
+</div>
+<div class="section" id="id3">
+<h3>Cloning a Repository<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>First, decide where you’d like to put your Git repositories on your local system. For example, you could create a new folder within My Documents called “git”.</p>
+<p>Navigate to your desired folder using File Explorer, and right-click then select “Git Bash here”.</p>
+<p>Git Bash should start at the correct location on your filesystem, and you can immediately clone a repo using the same instructions as for Jupyter: <a class="reference internal" href="#cloning-a-repository"><span class="std std-ref">Cloning a Repository</span></a>.</p>
+</div>
+<div class="section" id="visual-studio-code">
+<h3>Visual Studio Code<a class="headerlink" href="#visual-studio-code" title="Permalink to this headline">¶</a></h3>
+<p>After confirming that the basics work, you might prefer to use VS Code to handle your Git needs on your PC. See <a class="reference external" href="https://code.visualstudio.com/docs/sourcecontrol/overview">here</a> for details on using Git functionality within VS Code.</p>
 </div>
 </div>
 </div>
