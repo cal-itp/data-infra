@@ -1,4 +1,4 @@
-calitp-data-analysis==2023.4.3
+calitp-data-analysis==2023.9.18
 jupyter-book==0.12.0
 # Temporary pinning of pydata-sphinx-theme to workaround Sphinx 4.3.0 error
 # https://github.com/pydata/pydata-sphinx-theme/issues/508
