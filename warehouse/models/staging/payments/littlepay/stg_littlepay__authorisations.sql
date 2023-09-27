@@ -1,5 +1,5 @@
 WITH source AS (
-    SELECT * FROM {{ source('external_littlepay', 'authorisations') }}
+    SELECT * FROM {{ littlepay_source('external_littlepay', 'authorisations') }}
 ),
 
 stg_littlepay__authorisations AS (
