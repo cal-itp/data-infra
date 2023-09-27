@@ -36,7 +36,7 @@ The following libraries are available and recommended for use by Cal-ITP data an
 
 ## shared utils
 
-A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
+A set of shared utility functions can also be installed, similarly to any Python library. The shared_utils are stored in two places: [here in `data-analyses`](https://github.com/cal-itp/data-analyses/shared_utils), which houses functions that are more likely to be updated and [here in `data-infra`](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis), which contains functions that are rarely changed. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
 
 ### In terminal
 
@@ -53,10 +53,10 @@ A set of shared utility functions can also be installed, similarly to any Python
 ### In notebook
 
 ```python
-import shared_utils
+from calitp_data_analysis import geography_utils
 
 #example of using shared_utils
-shared_utils.geography_utils.WGS84
+geography_utils.WGS84
 ```
 
 See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples on how to use `shared_utils` for general functions, charts, and maps.

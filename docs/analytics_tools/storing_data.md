@@ -112,12 +112,12 @@ gdf.to_parquet("./my-geoparqet.parquet")
 fs.put("./my-geoparquet.parquet", f"{GCS_FOLDER}my-geoparquet.parquet")
 ```
 
-Or, use the `shared_utils` package.
+Or, use the `shared_utils` package that lives in [data-infra](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis)
 
 ```python
-import shared_utils
+from calitp_data_analysis import utils
 
-shared_utils.utils.geoparquet_gcs_export(
+utils.geoparquet_gcs_export(
     gdf,
     GCS_FOLDER,
     "my-geoparquet"
@@ -135,18 +135,18 @@ Refer to the [data catalogs doc](catalogue-cloud-storage) to list a GeoJSON, and
 Use the `shared_utils` package to read in or export geojsons.
 
 ```python
-import shared_utils
+from calitp_data_analysis import utils
 
 GCS_FOLDER = "gs://calitp-analytics-data/data-analyses/task-subfolder/"
 
-gdf = shared_utils.utils.read_geojson(
+gdf = utils.read_geojson(
     GCS_FOLDER,
     "my-geojson.geojson",
     geojson_type = "geojson",
     save_locally = True
 )
 
-shared_utils.utils.geojson_gcs_export(
+utils.geojson_gcs_export(
     gdf,
     GCS_FOLDER,
     "my-geojson.geojson",
