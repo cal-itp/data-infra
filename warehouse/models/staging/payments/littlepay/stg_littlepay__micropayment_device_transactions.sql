@@ -4,8 +4,8 @@ WITH source AS (
 
 stg_littlepay__micropayment_device_transactions AS (
     SELECT
-        littlepay_transaction_id,
-        micropayment_id,
+        {{ trim_make_empty_string_null('littlepay_transaction_id') }} AS littlepay_transaction_id,
+        {{ trim_make_empty_string_null('micropayment_id') }} AS micropayment_id,
         _line_number,
         `instance`,
         extract_filename,
