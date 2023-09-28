@@ -19,12 +19,22 @@ clean_columns_and_dedupe_files AS (
         CAST(_line_number AS INTEGER) AS _line_number,
         `instance`,
         extract_filename,
-        {{ extract_littlepay_filename_ts() }} AS littlepay_export_ts,
-        {{ extract_littlepay_filename_date() }} AS littlepay_export_date,
+        -- we have two files with invalid names that cause attributes derived from filename to be missing
+        CASE
+            WHEN extract_filename = "24jan_datafeed.psv" THEN TIMESTAMP(DATE '2023-01-24')
+            WHEN extract_filename = "25jan_datafeed.psv" THEN TIMESTAMP(DATE '2023-01-25')
+            ELSE {{ extract_littlepay_filename_ts() }}
+        END AS littlepay_export_ts,
+
+        CASE
+            WHEN extract_filename = "24jan_datafeed.psv" THEN DATE '2023-01-24'
+            WHEN extract_filename = "25jan_datafeed.psv" THEN DATE '2023-01-25'
+            ELSE {{ extract_littlepay_filename_date() }}
+        END AS littlepay_export_date,
         ts,
     FROM source
     -- remove duplicate instances of the same file (file defined as date-level update from LP)
-    QUALIFY ROW_NUMBER()
+    QUALIFY DENSE_RANK()
         OVER (PARTITION BY littlepay_export_date ORDER BY littlepay_export_ts DESC, ts DESC) = 1
 ),
 
@@ -45,10 +55,18 @@ stg_littlepay__authorisations AS (
          _line_number,
         `instance`,
         extract_filename,
+
+
         littlepay_export_ts,
-        littlepay_export_date,
+
+        CASE
+            WHEN extract_filename = "24jan_datafeed.psv" THEN DATE '2023-01-24'
+            WHEN extract_filename = "25jan_datafeed.psv" THEN DATE '2023-01-25'
+            ELSE littlepay_export_date
+        END AS littlepay_export_date,
         ts,
-        {{ dbt_utils.generate_surrogate_key(['littlepay_export_date', '_line_number']) }} AS _key,
+        {{ dbt_utils.generate_surrogate_key(['littlepay_export_date', '_line_number', 'instance']) }} AS _key,
+        {{ dbt_utils.generate_surrogate_key(['aggregation_id', 'retrieval_reference_number', 'authorisation_date_time_utc']) }} AS _payments_key,
     FROM clean_columns_and_dedupe_files
 )
 

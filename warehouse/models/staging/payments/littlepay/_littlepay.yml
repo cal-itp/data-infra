@@ -138,14 +138,6 @@ models:
       - name: pending
 
   - name: stg_littlepay__authorisations
-    tests:
-      - &littlepay_uniqueness
-        dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - instance
-            - extract_filename
-            - ts
-            - _line_number
     columns:
       - name: participant_id
         description: Identifies the participant that the authorisation belongs to.
@@ -167,10 +159,26 @@ models:
       - name: status
         description: Status of authorisation. One of (`Authorised`, `Declined`, `Failed`, `Invalid`, `Lost`, `Stolen`, `Unavailable`, `Unknown`, `Verified`)
       - name: authorisation_date_time_utc
+      - &payments_input_row_key
+        name: _key
+        tests:
+          - not_null
+          - unique
+      - &payments_natural_key
+        name: _payments_key
+        tests:
+          - not_null
+          - unique
 
   - name: stg_littlepay__customer_funding_source
     tests:
-      - *littlepay_uniqueness
+      - &littlepay_uniqueness
+        dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - instance
+            - extract_filename
+            - ts
+            - _line_number
     columns:
       - name: littlepay_export_ts
         description: Export timestamp parsed from filename.
