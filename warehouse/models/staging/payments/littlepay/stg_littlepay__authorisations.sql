@@ -1,5 +1,5 @@
 WITH source AS (
-    SELECT * FROM {{ littlepay_source('external_littlepay', 'authorisations') }}
+    SELECT * FROM {{ source('external_littlepay', 'authorisations') }}
 ),
 
 stg_littlepay__authorisations AS (
@@ -16,9 +16,11 @@ stg_littlepay__authorisations AS (
         {{ trim_make_empty_string_null('response_code') }} AS response_code,
         {{ trim_make_empty_string_null('status') }} AS status,
         {{ safe_cast('authorisation_date_time_utc', type_timestamp()) }} AS authorisation_date_time_utc,
-        _line_number,
+        CAST(_line_number AS INTEGER) AS _line_number,
         `instance`,
         extract_filename,
+        {{ extract_littlepay_filename_ts() }} AS littlepay_export_ts,
+        {{ extract_littlepay_filename_date() }} AS littlepay_export_date,
         ts,
     FROM source
 )
