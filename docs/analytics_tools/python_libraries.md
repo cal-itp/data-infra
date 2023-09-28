@@ -36,7 +36,7 @@ The following libraries are available and recommended for use by Cal-ITP data an
 
 ## shared utils
 
-A set of shared utility functions can also be installed, similarly to any Python library. The shared_utils are stored in two places: \[here\] in `data-analyses` (https://github.com/cal-itp/data-analyses/shared_utils), which houses functions that are more likely to be updated. Shared functions that are updated less frequently are housed \[here\] in the `calitp_data_analysis` pacakage in `data-infra`(https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis). Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
+A set of shared utility functions can also be installed, similarly to any Python library. The shared_utils are stored in two places: \[here\] in `data-analyses` (https://github.com/cal-itp/data-analyses/shared_utils), which houses functions that are more likely to be updated. Shared functions that are updated less frequently are housed \[here\] in the `calitp_data_analysis` package in `data-infra`(https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis). Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
 
 ### In terminal
 
