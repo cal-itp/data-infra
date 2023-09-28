@@ -3,7 +3,7 @@
 {% endmacro %}
 
 {% macro lp_filename_date_regex() %}
-'^([0-9]{8})_.*'
+'^([0-9]{8})[0-9]{4}_.*'
 {% endmacro %}
 
 {% macro extract_littlepay_filename_ts(column='extract_filename') %}
@@ -21,9 +21,9 @@ END
 CASE
     -- check that the column actually contains this pattern; there are some invalid filenames
     WHEN REGEXP_EXTRACT({{ column }}, {{ lp_filename_date_regex() }}) IS NOT NULL
-        THEN TIMESTAMP(PARSE_DATE(
+        THEN PARSE_DATE(
                 '%Y%m%d',
                 REGEXP_EXTRACT({{ column }}, {{ lp_filename_date_regex() }})
-                ), 'UTC')
+                )
 END
 {% endmacro %}
