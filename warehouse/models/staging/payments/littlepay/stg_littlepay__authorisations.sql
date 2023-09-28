@@ -2,7 +2,7 @@ WITH source AS (
     SELECT * FROM {{ source('external_littlepay', 'authorisations') }}
 ),
 
-stg_littlepay__authorisations AS (
+clean_columns_and_dedupe_files AS (
     SELECT
         {{ trim_make_empty_string_null('participant_id') }} AS participant_id,
         {{ trim_make_empty_string_null('aggregation_id') }} AS aggregation_id,
@@ -23,6 +23,33 @@ stg_littlepay__authorisations AS (
         {{ extract_littlepay_filename_date() }} AS littlepay_export_date,
         ts,
     FROM source
+    -- remove duplicate instances of the same file (file defined as date-level update from LP)
+    QUALIFY ROW_NUMBER()
+        OVER (PARTITION BY littlepay_export_date ORDER BY littlepay_export_ts DESC, ts DESC) = 1
+),
+
+stg_littlepay__authorisations AS (
+    SELECT
+        participant_id,
+        aggregation_id,
+        acquirer_id,
+        request_type,
+        transaction_amount,
+        currency_code,
+        retrieval_reference_number,
+        littlepay_reference_number,
+        external_reference_number,
+        response_code,
+        status,
+        authorisation_date_time_utc,
+         _line_number,
+        `instance`,
+        extract_filename,
+        littlepay_export_ts,
+        littlepay_export_date,
+        ts,
+        {{ dbt_utils.generate_surrogate_key(['littlepay_export_date', '_line_number']) }} AS _key,
+    FROM clean_columns_and_dedupe_files
 )
 
 SELECT * FROM stg_littlepay__authorisations
