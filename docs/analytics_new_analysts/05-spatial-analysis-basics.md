@@ -42,15 +42,17 @@ gdf.to_file(driver = 'ESRI Shapefile', filename = '../folder/my_shapefile.shp' )
 To read in our dataframe (df) and geodataframe (gdf) from GCS:
 
 ```
-df = pd.read_csv('gs://calitp-analytics-data/data-analyses/bucket-name/my-csv.csv')
-gdf = gpd.read_file('gs://calitp-analytics-data/data-analyses/bucket-name/my-geojson.geojson')
-gdf = gpd.read_parquet('gs://calitp-analytics-data/data-analyses/bucket-name/my-geoparquet.parquet', engine= 'auto')
-gdf = gpd.read_file('gs://calitp-analytics-data/data-analyses/bucket-name/my-shapefile.zip')
+GCS_BUCKET = 'gs://calitp-analytics-data/data-analyses/bucket_name/'
+
+df = pd.read_csv(f'{GCS_BUCKET}my-csv.csv')
+gdf = gpd.read_file(f'{GCS_BUCKET}my-geojson.geojson')
+gdf = gpd.read_parquet(f'{GCS_BUCKET}my-geoparquet.parquet')
+gdf = gpd.read_file(f'{GCS_BUCKET}my-shapefile.zip')
 
 # Write a file to GCS
-gdf.to_file('gs://calitp-analytics-data/data-analyses/bucket-name/my-geojson.geojson', driver='GeoJSON')
+gdf.to_file(f'{GCS_BUCKET}my-geojson.geojson', driver='GeoJSON')
 
-#Using shared utils
+# Using calitp_data_analysis
 GCS_FILE_PATH = "gs://calitp-analytics-data/data-analyses/"
 FILE_NAME = "test_geoparquet"
 utils.geoparquet_gcs_export(gdf, GCS_FILE_PATH, FILE_NAME)

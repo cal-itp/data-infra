@@ -23,12 +23,12 @@ from geoalchemy2 import WKTElement
 
 There are six possible geometric shapes that are represented in geospatial data. [More description here.](http://postgis.net/workshops/postgis-intro/geometries.html#representing-real-world-objects)
 
-- Point
-- MultiPoint: collection of points
-- LineString
-- MultiLineString: collection of linestrings, which are disconnected from each other
-- Polygon
-- MultiPolygon: collection of polygons, which can be disconnected or overlapping from each other
+- `Point`
+- `MultiPoint`: collection of points
+- `LineString`
+- `MultiLineString`: collection of linestrings, which are disconnected from each other
+- `Polygon`
+- `MultiPolygon`: collection of polygons, which can be disconnected or overlapping from each other
 
 The ArcGIS equivalent of these are just points, lines, and polygons.
 

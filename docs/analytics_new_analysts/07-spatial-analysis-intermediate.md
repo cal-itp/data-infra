@@ -52,7 +52,8 @@ Then, create the `geometry` column.  We use a lambda function and apply it to al
 df.rename(columns = {'X': 'longitude', 'Y':'latitude'}, inplace=True)
 
 # Create geometry column
-gdf = gpd.points_from_xy(df.longitude, df.latitude, crs="EPSG:4326")
+geom_col = gpd.points_from_xy(df.longitude, df.latitude, crs="EPSG:4326")
+gdf = gpd.GeoDataFrame(df, geometry=geom_col, crs = "EPSG:4326")
 
 # Project to different CRS. Pawnee is in Indiana, so we'll use EPSG:2965.
 # In Southern California, use EPSG:2229.
@@ -152,8 +153,10 @@ for key, value in boundaries.items():
     # Define new variables using f string
     join_df = f"{key}_join"
     agg_df = f"{key}_summary"
+
     # Spatial join, but don't save it into the results dictionary
     join_df = gpd.sjoin(df, value, how = 'inner', predicate = 'intersects')
+
     # Aggregate and save results into results dictionary
     results[agg_df] = join_df.groupby('ID').agg(
         {'Business': 'count', 'Sales_millions': 'sum'})

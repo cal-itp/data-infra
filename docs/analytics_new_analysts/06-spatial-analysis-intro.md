@@ -115,16 +115,30 @@ The `join` gdf looks like this. We lost Stores 4 (Eagleton) and 7 (Indianapolis)
 We want to count the number of Paunch Burger locations and their total sales within each District.
 
 ```
-summary = join.pivot_table(index = ['District', 'Geometry_y],
+
+summary = join.pivot_table(
+    index = ['District'],
     values = ['Store', 'Sales_millions'],
-    aggfunc = {'Store': 'count', 'Sales_millions': 'sum'}).reset_index()
+    aggfunc = {'Store': 'count', 'Sales_millions': 'sum'}
+).reset_index()
 
 OR
 
-summary = join.groupby(['District', 'Geometry_y']).agg({'Store': 'count',
-    'Sales_millions': 'sum'}).reset_index()
+summary = (join.groupby(['District'])
+            .agg({
+                'Store': 'count',
+                'Sales_millions': 'sum'}
+            ).reset_index()
+          )
 
-summary.rename(column = {'Geometry_y': 'Geometry'}, inplace = True)
+# Make sure to merge in district geometry again
+summary = pd.merge(
+    gdf,
+    summary,
+    on = 'District',
+    how = 'inner'
+)
+
 summary
 ```
 
