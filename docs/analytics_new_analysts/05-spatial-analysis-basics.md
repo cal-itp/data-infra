@@ -95,7 +95,7 @@ gdf.crs
 gdf = gdf.to_crs('EPSG:2229')
 ```
 
-Sometimes, the gdf does not have a CRS set and you will need to be manually set it. This might occur if you create the `geometry` column from latitude and longitude points. More on this in the [intermediate tutorial](geo-intermediate):
+Sometimes, the gdf does not have a CRS set and you will need to be manually set it. This might occur if you create the `geometry` column from latitude and longitude points. More on this in the [intermediate tutorial](geo-intermediate).
 
 There are [lots of different CRS available](https://epsg.io). The most common ones used for California are:
 

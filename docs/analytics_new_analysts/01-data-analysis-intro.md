@@ -291,7 +291,7 @@ To answer the question of how many Paunch Burger locations there are per Council
 
 ```
 # Method #1: groupby and agg
-pivot = (merge2.groupby(['CD', 'Geometry_y'])
+pivot = (merge2.groupby(['CD'])
         .agg({'Sales_millions': 'sum',
               'Store': 'count',
               'Population': 'mean'}
@@ -300,7 +300,7 @@ pivot = (merge2.groupby(['CD', 'Geometry_y'])
 
 # Method #2: pivot table
 pivot = merge2.pivot_table(
-        index= ['CD', 'Geometry_y'],
+        index= ['CD'],
         values = ['Sales_millions', 'Store', 'Population'],
         aggfunc= {
             'Sales_millions': 'sum',
@@ -316,11 +316,11 @@ pivot = merge2.pivot_table(
 
 `pivot` looks like this:
 
-| CD  | Geometry_y | Sales_millions | Store | Council_Member  | Population |
-| --- | ---------- | -------------- | ----- | --------------- | ---------- |
-| 1   | polygon    | $9             | 2     | Leslie Knope    | 1,500      |
-| 2   | polygon    | $8.5           | 2     | Jeremy Jamm     | 2,000      |
-| 3   | polygon    | $2.5           | 1     | Douglass Howser | 2,250      |
+| CD  | Sales_millions | Store | Council_Member  | Population |
+| --- | -------------- | ----- | --------------- | ---------- |
+| 1   | $9             | 2     | Leslie Knope    | 1,500      |
+| 2   | $8.5           | 2     | Jeremy Jamm     | 2,000      |
+| 3   | $2.5           | 1     | Douglass Howser | 2,250      |
 
 ## Export Aggregated Output
 
