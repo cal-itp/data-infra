@@ -164,7 +164,7 @@ models:
         description: |
           Date of the source file from Littlepay. Date is extracted from filenames, which generally have the
           structure {timestamp}_{data_type}.{file extension}.
-      - &lp_export_date
+      - &lp_export_ts
         name: littlepay_export_ts
         description: |
           Timestamp of the source file from Littlepay. Timestamp is extracted from filenames, which generally have the
