@@ -39,10 +39,7 @@ clean_columns_and_dedupe_files AS (
             'retrieval_reference_number', 'littlepay_reference_number', 'external_reference_number',
             'response_code', 'status', 'authorisation_date_time_utc']) }} AS content_hash,
     FROM source
-    -- remove duplicate instances of the same file (file defined as date-level update from LP)
-    -- use dense rank instead of row number because we need to allow all rows from a given file to be included (allow ties)
-    QUALIFY DENSE_RANK()
-        OVER (PARTITION BY littlepay_export_date ORDER BY littlepay_export_ts DESC, ts DESC) = 1
+    {{ qualify_dedupe_lp_files() }}
 ),
 
 stg_littlepay__authorisations AS (
@@ -68,9 +65,8 @@ stg_littlepay__authorisations AS (
         {{ dbt_utils.generate_surrogate_key(['littlepay_export_date', '_line_number', 'instance']) }} AS _key,
         {{ dbt_utils.generate_surrogate_key(['aggregation_id', 'authorisation_date_time_utc']) }} AS _payments_key,
     FROM clean_columns_and_dedupe_files
-    -- remove full duplicate rows
-    QUALIFY ROW_NUMBER()
-        OVER (PARTITION BY content_hash ORDER BY littlepay_export_ts DESC, _line_number ASC) = 1
+    {{ qualify_dedupe_lp_rows() }}
+
 )
 
 SELECT * FROM stg_littlepay__authorisations
