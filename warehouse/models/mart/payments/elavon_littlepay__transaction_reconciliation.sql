@@ -6,7 +6,7 @@ WITH stg_littlepay__settlements AS (
 
 
 elavon_deposits AS (
-    SELECT * FROM {{ ref('fct_elavon__transactions') }}
+    SELECT * FROM {{ ref('fct_elavon__deposit_billing_transactions') }}
     WHERE batch_type = 'D'
 ),
 

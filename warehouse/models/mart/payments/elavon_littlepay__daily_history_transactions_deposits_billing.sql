@@ -1,6 +1,8 @@
 {{ config(materialized='table') }}
 
-WITH fct_elavon__transactions AS (
+WITH
+
+fct_elavon__deposit_billing_transactions AS (
     SELECT
 
         *,
@@ -11,7 +13,7 @@ WITH fct_elavon__transactions AS (
         ELSE customer_name
         END AS participant_id
 
-    FROM  {{ ref('fct_elavon__transactions') }}
+    FROM  {{ ref('fct_elavon__deposit_billing_transactions') }}
 ),
 
 fct_payments_rides_v2 AS (
@@ -31,7 +33,7 @@ elavon_agg AS(
         CASE WHEN batch_type = 'B' THEN SUM(amount) END AS elavon_billing_sum,
         CASE WHEN batch_type = 'D' THEN SUM(amount) END AS elavon_deposits_sum
 
-    FROM fct_elavon__transactions
+    FROM fct_elavon__deposit_billing_transactions
     GROUP BY payment_date, participant_id, batch_type
 ),
 
