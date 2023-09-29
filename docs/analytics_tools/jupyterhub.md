@@ -60,6 +60,8 @@ gcloud config set project cal-itp-data-infra
 gcloud auth application-default login
 ```
 
+If you are still not able to connect, make sure you have the suite of permissions associated with other analysts.
+
 ### Increasing the Query Limit
 
 By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into `DatabaseError: 500 Query exceeded limit for bytes billed` should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit, add and execute the following in your notebook:
