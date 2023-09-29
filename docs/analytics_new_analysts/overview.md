@@ -22,10 +22,10 @@ This section is geared towards data analysts who are new to Python. The followin
 - [Practical Python for Data Science by Jill Cates](https://www.practicalpythonfordatascience.com/intro.html)
 - [Ben-Gurion University of the Negev - Geometric operations](https://geobgu.xyz/py/geopandas2.html)
 - [Geographic Thinking for Data Scientists](https://geographicdata.science/book/notebooks/01_geo_thinking.html)
+- [PyGIS Geospatial Tutorials](https://pygis.io/docs/a_intro.html)
 - [Python Courses, compiled by our team](https://docs.google.com/spreadsheets/d/1Omow8F0SUiMx1jyG7GpbwnnJ5yWqlLeMH7SMtKxwG80/edit?usp=sharing)
 - [Why Dask?](https://docs.dask.org/en/stable/why.html)
 - [10 Minutes to Dask](https://docs.dask.org/en/stable/10-minutes-to-dask.html)
-- [PyGIS](https://pygis.io/docs/a_intro.html)
 
 ### Books
 
