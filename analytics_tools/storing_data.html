@@ -756,7 +756,7 @@
 <span class="kn">import</span> <span class="nn">gcsfs</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">calitp_data.storage</span> <span class="kn">import</span> <span class="n">get_fs</span>
+<span class="kn">from</span> <span class="nn">calitp_data_analysis</span> <span class="kn">import</span> <span class="n">get_fs</span>
 <span class="n">fs</span> <span class="o">=</span> <span class="n">get_fs</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -800,10 +800,10 @@
 <span class="n">fs</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;./my-geoparquet.parquet&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">GCS_FOLDER</span><span class="si">}</span><span class="s2">my-geoparquet.parquet&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Or, use the <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> package.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">shared_utils</span>
+<p>Or, use the <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> package that lives in <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis">data-infra</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis</span> <span class="kn">import</span> <span class="n">utils</span>
 
-<span class="n">shared_utils</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">geoparquet_gcs_export</span><span class="p">(</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">geoparquet_gcs_export</span><span class="p">(</span>
     <span class="n">gdf</span><span class="p">,</span>
     <span class="n">GCS_FOLDER</span><span class="p">,</span>
     <span class="s2">&quot;my-geoparquet&quot;</span>
@@ -818,19 +818,19 @@
 <div class="section" id="geojson">
 <h4>GeoJSON<a class="headerlink" href="#geojson" title="Permalink to this headline">¶</a></h4>
 <p>Refer to the <a class="reference internal" href="data_catalogs.html#catalogue-cloud-storage"><span class="std std-ref">data catalogs doc</span></a> to list a GeoJSON, and read in the GeoJSON with the <code class="docutils literal notranslate"><span class="pre">intake</span></code> method. GeoJSONs saved in GCS cannot be read in directly using <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>.</p>
-<p>Use the <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> package to read in or export geojsons.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">shared_utils</span>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> package to read in or export geojsons.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis</span> <span class="kn">import</span> <span class="n">utils</span>
 
 <span class="n">GCS_FOLDER</span> <span class="o">=</span> <span class="s2">&quot;gs://calitp-analytics-data/data-analyses/task-subfolder/&quot;</span>
 
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">shared_utils</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">read_geojson</span><span class="p">(</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">read_geojson</span><span class="p">(</span>
     <span class="n">GCS_FOLDER</span><span class="p">,</span>
     <span class="s2">&quot;my-geojson.geojson&quot;</span><span class="p">,</span>
     <span class="n">geojson_type</span> <span class="o">=</span> <span class="s2">&quot;geojson&quot;</span><span class="p">,</span>
     <span class="n">save_locally</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="p">)</span>
 
-<span class="n">shared_utils</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">geojson_gcs_export</span><span class="p">(</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">geojson_gcs_export</span><span class="p">(</span>
     <span class="n">gdf</span><span class="p">,</span>
     <span class="n">GCS_FOLDER</span><span class="p">,</span>
     <span class="s2">&quot;my-geojson.geojson&quot;</span><span class="p">,</span>

@@ -27,14 +27,14 @@
 - [ ] **[notebooks.calitp.org](https://notebooks.calitp.org/)** - JupyterHub cloud-based notebooks for querying Python, SQL, R | ([Docs](jupyterhub-intro))
 - [ ] **[dashboards.calitp.org](https://dashboards.calitp.org/)** - Metabase business insights & dashboards | ([Docs](metabase))
 - [ ] **[dbt-docs.calitp.org](https://dbt-docs.calitp.org/)** - Documentation for the Cal-ITP data warehouse.
-- [ ] **[analysis.calitp.org](https://analysis.calitp.org/)** - The Cal-ITP analytics portfolio website. | (Docs WIP)
+- [ ] **[analysis.calitp.org](https://analysis.calitp.org/)** - The Cal-ITP analytics portfolio website.
 - [ ] [**Google BigQuery**](https://console.cloud.google.com/bigquery) - Viewing the data warehouse and querying SQL
 
 **Python Libraries:**
 
 - [ ] **calitp-data-analysis** - Cal-ITP's internal Python library for analysis | ([Docs](calitp-data-analysis))
 - [ ] **siuba** - Recommended data analysis library | ([Docs](siuba))
-- [ ] [**shared_utils**](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) - A shared utilities library for the analytics team | ([Docs](shared-utils))
+- [ ] [**shared_utils**](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) and [**here**](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis) - A shared utilities library for the analytics team | ([Docs](shared-utils))
 
 **Caltrans Employee Resources:**
 

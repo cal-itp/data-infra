@@ -854,8 +854,10 @@
     <span class="c1"># Use f string to define a variable join_df (result of our spatial join)</span>
     <span class="c1">## join_{key} would be join_pawnee or join_tom in the loop</span>
     <span class="n">join_df</span> <span class="o">=</span> <span class="s2">&quot;join_</span><span class="si">{key}</span><span class="s2">&quot;</span>
+
     <span class="c1"># Spatial join</span>
     <span class="n">join_df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">council_district</span><span class="p">,</span> <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">op</span> <span class="o">=</span> <span class="s1">&#39;intersects&#39;</span><span class="p">)</span>
+
     <span class="c1"># Calculate summary stats with groupby, agg, then save it into summary_dfs,</span>
     <span class="c1"># naming it &#39;pawnee&#39; or &#39;tom&#39;.</span>
     <span class="n">summary_dfs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">join</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>

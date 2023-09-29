@@ -663,15 +663,17 @@
 <div class="section" id="gcs">
 <h3><strong>GCS</strong><a class="headerlink" href="#gcs" title="Permalink to this headline">¶</a></h3>
 <p>To read in our dataframe (df) and geodataframe (gdf) from GCS:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-csv.csv&#39;</span><span class="p">)</span>
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-geojson.geojson&#39;</span><span class="p">)</span>
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-geoparquet.parquet&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span> <span class="s1">&#39;auto&#39;</span><span class="p">)</span>
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-shapefile.zip&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GCS_BUCKET</span> <span class="o">=</span> <span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket_name/&#39;</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">GCS_BUCKET</span><span class="si">}</span><span class="s1">my-csv.csv&#39;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">GCS_BUCKET</span><span class="si">}</span><span class="s1">my-geojson.geojson&#39;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">GCS_BUCKET</span><span class="si">}</span><span class="s1">my-geoparquet.parquet&#39;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">GCS_BUCKET</span><span class="si">}</span><span class="s1">my-shapefile.zip&#39;</span><span class="p">)</span>
 
 <span class="c1"># Write a file to GCS</span>
-<span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-geojson.geojson&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">GCS_BUCKET</span><span class="si">}</span><span class="s1">my-geojson.geojson&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
 
-<span class="c1">#Using shared utils</span>
+<span class="c1"># Using calitp_data_analysis</span>
 <span class="n">GCS_FILE_PATH</span> <span class="o">=</span> <span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&quot;</span>
 <span class="n">FILE_NAME</span> <span class="o">=</span> <span class="s2">&quot;test_geoparquet&quot;</span>
 <span class="n">utils</span><span class="o">.</span><span class="n">geoparquet_gcs_export</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">GCS_FILE_PATH</span><span class="p">,</span> <span class="n">FILE_NAME</span><span class="p">)</span>
@@ -708,7 +710,7 @@
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">&#39;EPSG:2229&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Sometimes, the gdf does not have a CRS set and you will need to be manually set it. This might occur if you create the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column from latitude and longitude points. More on this in the <a class="reference internal" href="07-spatial-analysis-intermediate.html#geo-intermediate"><span class="std std-ref">intermediate tutorial</span></a>:</p>
+<p>Sometimes, the gdf does not have a CRS set and you will need to be manually set it. This might occur if you create the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column from latitude and longitude points. More on this in the <a class="reference internal" href="07-spatial-analysis-intermediate.html#geo-intermediate"><span class="std std-ref">intermediate tutorial</span></a>.</p>
 <p>There are <a class="reference external" href="https://epsg.io">lots of different CRS available</a>. The most common ones used for California are:</p>
 <table class="colwidths-auto table">
 <thead>

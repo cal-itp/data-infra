@@ -872,16 +872,30 @@
 <div class="section" id="aggregate-and-calculate-summary-statistics">
 <h2>Aggregate and Calculate Summary Statistics<a class="headerlink" href="#aggregate-and-calculate-summary-statistics" title="Permalink to this headline">¶</a></h2>
 <p>We want to count the number of Paunch Burger locations and their total sales within each District.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">summary</span> <span class="o">=</span> <span class="n">join</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;District&#39;</span><span class="p">,</span> <span class="s1">&#39;Geometry_y],</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="n">summary</span> <span class="o">=</span> <span class="n">join</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;District&#39;</span><span class="p">],</span>
     <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Store&#39;</span><span class="p">,</span> <span class="s1">&#39;Sales_millions&#39;</span><span class="p">],</span>
-    <span class="n">aggfunc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Store&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;Sales_millions&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="n">aggfunc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Store&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;Sales_millions&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">}</span>
+<span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
 <span class="n">OR</span>
 
-<span class="n">summary</span> <span class="o">=</span> <span class="n">join</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;District&#39;</span><span class="p">,</span> <span class="s1">&#39;Geometry_y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;Store&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Sales_millions&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="p">(</span><span class="n">join</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;District&#39;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">agg</span><span class="p">({</span>
+                <span class="s1">&#39;Store&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;Sales_millions&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">}</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+          <span class="p">)</span>
 
-<span class="n">summary</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">column</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Geometry_y&#39;</span><span class="p">:</span> <span class="s1">&#39;Geometry&#39;</span><span class="p">},</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Make sure to merge in district geometry again</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+    <span class="n">gdf</span><span class="p">,</span>
+    <span class="n">summary</span><span class="p">,</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="s1">&#39;District&#39;</span><span class="p">,</span>
+    <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span>
+<span class="p">)</span>
+
 <span class="n">summary</span>
 </pre></div>
 </div>
@@ -922,7 +936,7 @@
 </div>
 <div class="section" id="buffers">
 <h2>Buffers<a class="headerlink" href="#buffers" title="Permalink to this headline">¶</a></h2>
-<p>Buffers are areas of a certain distance around a given point, line, or polygon. Buffers are used to determine <i> proximity </i>. A 5 mile buffer around a point would be a circle of 5 mile radius centered at the point. This <a class="reference external" href="http://desktop.arcgis.com/en/arcmap/10.3/tools/analysis-toolbox/buffer.htm">ESRI page</a> shows how buffers for points, lines, and polygons look.</p>
+<p>Buffers are areas of a certain distance around a given point, line, or polygon. Buffers are used to determine <i> proximity</i>. A 5 mile buffer around a point would be a circle of 5 mile radius centered at the point. This <a class="reference external" href="http://desktop.arcgis.com/en/arcmap/10.3/tools/analysis-toolbox/buffer.htm">ESRI page</a> shows how buffers for points, lines, and polygons look.</p>
 <p>Some examples of questions that buffers help answer are:</p>
 <ul class="simple">
 <li><p>How many stores are within 1 mile of my house?</p></li>
@@ -1013,11 +1027,17 @@
 <div class="section" id="select-points-within-a-buffer">
 <h3><strong>Select Points Within a Buffer</strong><a class="headerlink" href="#select-points-within-a-buffer" title="Permalink to this headline">¶</a></h3>
 <p>Do a spatial join between <code class="docutils literal notranslate"><span class="pre">locations</span></code> and <code class="docutils literal notranslate"><span class="pre">homes_buffer</span></code>. Repeat the process of spatial join and aggregation in Python as illustrated in the previous section (spatial join and dissolve in ArcGIS).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sjoin</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">locations</span><span class="p">,</span> <span class="n">homes_buffer</span><span class="p">,</span> <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">predicate</span> <span class="o">=</span> <span class="s1">&#39;intersects&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sjoin</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span>
+    <span class="n">locations</span><span class="p">,</span>
+    <span class="n">homes_buffer</span><span class="p">,</span>
+    <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">,</span>
+    <span class="n">predicate</span> <span class="o">=</span> <span class="s1">&#39;intersects&#39;</span>
+<span class="p">)</span>
+
 <span class="n">sjoin</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">sjoin</span></code> looks like this.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sjoin</span></code> looks like this (without <code class="docutils literal notranslate"><span class="pre">Geometry_y</span></code> column). Using <code class="docutils literal notranslate"><span class="pre">how='left'</span> <span class="pre">or</span> <span class="pre">how='inner'</span></code> will show <code class="docutils literal notranslate"><span class="pre">Geometry_x</span></code> as the resulting geometry column, while using <code class="docutils literal notranslate"><span class="pre">how</span> <span class="pre">=</span> <span class="pre">'right'</span></code> would show <code class="docutils literal notranslate"><span class="pre">Geometry_y</span></code> as the resulting geometry column. Only one geometry column is returned in a spatial join, but you have the flexibility in determining which one it is by changing <code class="docutils literal notranslate"><span class="pre">how=</span></code>.</p>
 <ul class="simple">
 <li><p>Geometry_x is the point geometry from our left df <code class="docutils literal notranslate"><span class="pre">locations</span></code>.</p></li>
 <li><p>Geometry_y is the polygon geometry from our right df <code class="docutils literal notranslate"><span class="pre">homes_buffer</span></code>.</p></li>

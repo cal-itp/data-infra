@@ -109,7 +109,7 @@ If you discover merge conflicts and they are within a single notebook that only 
 
 These are helpful Git commands an analyst might need, listed in no particular order.
 
-- During collaboration, if another analyst already created a remote branch, and you want to work off of the same branch: `git fetch origin`, `git checkout -b our-project-branch origin/our-project-branch`
+- During collaboration, if another analyst already created a remote branch, and you want to work off of the same branch: `git fetch origin`, `git switch -c our-project-branch origin/our-project-branch`
 - To discard the changes you made to a file, `git checkout my-notebook.ipynb`, and you can revert back to the version that was last committed.
 - Temporarily stash changes, move to a different branch, and come back and retain those changes: `git stash`, `git switch some-other-branch`, do stuff on the other branch, `git switch original-branch`, `git stash pop`
 - Rename files and retain the version history associated (`mv` is move, and renaming is moving the file path): `git mv old-notebook.ipynb new-notebook.ipynb`

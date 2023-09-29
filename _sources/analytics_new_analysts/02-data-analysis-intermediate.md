@@ -154,8 +154,10 @@ for key, value in dfs.items():
     # Use f string to define a variable join_df (result of our spatial join)
     ## join_{key} would be join_pawnee or join_tom in the loop
     join_df = "join_{key}"
+
     # Spatial join
     join_df = gpd.sjoin(value, council_district, how = 'inner', op = 'intersects')
+
     # Calculate summary stats with groupby, agg, then save it into summary_dfs,
     # naming it 'pawnee' or 'tom'.
     summary_dfs[key] = join.groupby('ID').agg(
