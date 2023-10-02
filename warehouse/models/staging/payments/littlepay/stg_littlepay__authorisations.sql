@@ -39,7 +39,33 @@ clean_columns_and_dedupe_files AS (
             'retrieval_reference_number', 'littlepay_reference_number', 'external_reference_number',
             'response_code', 'status', 'authorisation_date_time_utc']) }} AS content_hash,
     FROM source
+    -- drop extra header rows
+    WHERE aggregation_id != "aggregation_id"
     {{ qualify_dedupe_lp_files() }}
+),
+
+add_keys_drop_full_dupes AS (
+    SELECT
+        *,
+        -- generate keys now that input columns have been trimmed & cast and files deduped
+        {{ dbt_utils.generate_surrogate_key(['littlepay_export_date', '_line_number', 'instance']) }} AS _key,
+        {{ dbt_utils.generate_surrogate_key(['aggregation_id', 'authorisation_date_time_utc']) }} AS _payments_key,
+    FROM clean_columns_and_dedupe_files
+    {{ qualify_dedupe_full_duplicate_lp_rows() }}
+),
+
+-- we have some authorisations where the same aggregation has multiple rows with the same timestamp
+-- these seem like clear duplicates, and some of them one of the two copies is missing status and RRN; these can be dropped
+-- the rest need to be handled downstream by checking against settlements data
+same_timestamp_simple_dupes AS (
+    SELECT
+        _payments_key,
+        TRUE AS to_drop,
+        COUNT(DISTINCT retrieval_reference_number) AS ct_rrn,
+        COUNT(*) AS ct
+    FROM add_keys_drop_full_dupes
+    GROUP BY 1
+    HAVING ct > 1 AND ct_rrn = 1
 ),
 
 stg_littlepay__authorisations AS (
@@ -62,11 +88,12 @@ stg_littlepay__authorisations AS (
         littlepay_export_ts,
         littlepay_export_date,
         ts,
-        {{ dbt_utils.generate_surrogate_key(['littlepay_export_date', '_line_number', 'instance']) }} AS _key,
-        {{ dbt_utils.generate_surrogate_key(['aggregation_id', 'authorisation_date_time_utc']) }} AS _payments_key,
-    FROM clean_columns_and_dedupe_files
-    {{ qualify_dedupe_lp_rows() }}
-
+        _key,
+        _payments_key,
+    FROM add_keys_drop_full_dupes
+    LEFT JOIN same_timestamp_simple_dupes
+    USING(_payments_key)
+    WHERE NOT COALESCE(to_drop, FALSE)
 )
 
 SELECT * FROM stg_littlepay__authorisations
