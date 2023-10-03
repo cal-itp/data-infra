@@ -138,14 +138,6 @@ models:
       - name: pending
 
   - name: stg_littlepay__authorisations
-    tests:
-      - &littlepay_uniqueness
-        dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - instance
-            - extract_filename
-            - ts
-            - _line_number
     columns:
       - name: participant_id
         description: Identifies the participant that the authorisation belongs to.
@@ -167,10 +159,45 @@ models:
       - name: status
         description: Status of authorisation. One of (`Authorised`, `Declined`, `Failed`, `Invalid`, `Lost`, `Stolen`, `Unavailable`, `Unknown`, `Verified`)
       - name: authorisation_date_time_utc
+      - &lp_export_date
+        name: littlepay_export_date
+        description: |
+          Date of the source file from Littlepay. Date is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - &lp_export_ts
+        name: littlepay_export_ts
+        description: |
+          Timestamp of the source file from Littlepay. Timestamp is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - &lp_line_number
+        name: _line_number
+        description: |
+          Line number of this row in the source file.
+          Some line numbers may be missing because we drop extra copies of rows that are full duplicates of another row.
+      - &payments_input_row_key
+        name: _key
+        description: |
+          Synthetic key composed of Littlepay file date and line number to uniquely identify a row within source data.
+        tests:
+          - not_null
+          - unique
+      - name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+        tests:
+          - not_null
+          - unique_proportion:
+              at_least: 0.999
 
   - name: stg_littlepay__customer_funding_source
     tests:
-      - *littlepay_uniqueness
+      - &littlepay_uniqueness
+        dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - instance
+            - extract_filename
+            - ts
+            - _line_number
     columns:
       - name: littlepay_export_ts
         description: Export timestamp parsed from filename.
