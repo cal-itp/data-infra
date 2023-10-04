@@ -367,13 +367,6 @@ models:
 
   - name: stg_littlepay__micropayment_adjustments
     tests:
-      - &littlepay_uniqueness
-        dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - instance
-            - extract_filename
-            - ts
-            - _line_number
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - micropayment_id
@@ -425,10 +418,27 @@ models:
           The ID of the product with the incentive that was applied to micropayments.
 
           Same ID as `product_id`.
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+        tests:
+          - not_null
+          - unique_proportion:
+              at_least: 0.999
 
   - name: stg_littlepay__micropayment_device_transactions
     tests:
-      - *littlepay_uniqueness
+      - &littlepay_uniqueness
+        dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - instance
+            - extract_filename
+            - ts
+            - _line_number
     columns:
       - name: littlepay_transaction_id
         description: |
