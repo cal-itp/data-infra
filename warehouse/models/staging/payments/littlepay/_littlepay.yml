@@ -277,14 +277,6 @@ models:
               at_least: 0.995
 
   - name: stg_littlepay__device_transactions
-    tests:
-      - &littlepay_uniqueness
-        dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - instance
-            - extract_filename
-            - ts
-            - _line_number
     description: In the case of duplicated littlepay_transaction_id values, the one with the latest transaction_date_time_utc in the latest export file takes precedence.
     columns:
       - name: customer_id
@@ -331,7 +323,7 @@ models:
         description: The route identifier provided by the device.
       - name: transaction_date_time_utc
         description: The date and time that the customer tapped on the device.
-      - name: transaction_deny_reason
+      - name: transction_deny_reason
         description: |
           The reason a transaction was denied.
 
@@ -361,10 +353,27 @@ models:
         description: The zone identifier provided by the device.
       - name: transaction_date_time_pacific
         description: The date and time that the customer tapped on the device (in Pacific time instead of UTC).
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+        tests:
+          - not_null
+          - unique_proportion:
+              at_least: 0.999
 
   - name: stg_littlepay__micropayment_adjustments
     tests:
-      - *littlepay_uniqueness
+      - &littlepay_uniqueness
+        dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - instance
+            - extract_filename
+            - ts
+            - _line_number
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - micropayment_id
