@@ -518,8 +518,6 @@ models:
           * `REFUND`
 
   - name: stg_littlepay__product_data
-    tests:
-      - *littlepay_uniqueness
     columns:
       - name: participant_id
         description: Identifies the participant that the micropayment belongs to.
@@ -654,6 +652,17 @@ models:
         description: |
           Configuration type for the incentive.
           Possible values are `DAILY_TABLE` or `ZONE_TRIANGLE`.
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+        tests:
+          - not_null
+          - unique
+      - *_content_hash
 
   - name: stg_littlepay__refunds
     tests:
