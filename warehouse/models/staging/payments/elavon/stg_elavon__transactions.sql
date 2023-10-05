@@ -65,23 +65,9 @@ format_dates AS (
 
         * EXCEPT (payment_date, transaction_date, settlement_date),
 
-        CASE WHEN
-            LENGTH(payment_date) < 8
-            THEN PARSE_DATE('%m%d%Y',  CONCAT(0, payment_date))
-        ELSE PARSE_DATE('%m%d%Y',  payment_date)
-        END AS payment_date,
-
-        CASE WHEN
-            LENGTH(transaction_date) < 8
-            THEN PARSE_DATE('%m%d%Y',  CONCAT(0, transaction_date))
-        ELSE PARSE_DATE('%m%d%Y',  transaction_date)
-        END AS transaction_date,
-
-        CASE WHEN
-            LENGTH(settlement_date) < 8
-            THEN PARSE_DATE('%m%d%Y',  CONCAT(0, settlement_date))
-        ELSE PARSE_DATE('%m%d%Y',  settlement_date)
-        END AS settlement_date
+        {{ parse_elavon_date('payment_date') }} AS payment_date,
+        {{ parse_elavon_date('transaction_date') }} AS transaction_date,
+        {{ parse_elavon_date('settlement_date') }} AS settlement_date,
 
     FROM handle_strings_and_remove_special_characters
 
