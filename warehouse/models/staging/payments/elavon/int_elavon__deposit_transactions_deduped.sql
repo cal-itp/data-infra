@@ -11,17 +11,9 @@ deposit_transactions AS (
 
 dedup_deposit_transactions AS (
 
-  SELECT
-
-      transactions.*
-
-  FROM deposit_transactions AS transactions
-
-  INNER JOIN
-
-  (SELECT trn_ref_num, MAX(execution_ts) AS max_ts FROM deposit_transactions GROUP BY trn_ref_num) AS grouped_tbl
-      ON transactions.trn_ref_num = grouped_tbl.trn_ref_num
-          AND transactions.execution_ts = max_ts
+  SELECT *
+  FROM deposit_transactions
+  QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
 ),
 
 int_elavon__deposit_transactions_deduped AS (

@@ -13,7 +13,7 @@ dedup_billing_transactions AS (
 
   SELECT *
   FROM billing_transactions
-  WHERE execution_ts = (SELECT MAX(execution_ts) FROM billing_transactions)
+  QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
 
 ),
 
