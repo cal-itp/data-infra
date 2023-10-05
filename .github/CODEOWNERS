@@ -13,12 +13,9 @@
 /kubernetes/apps/charts/jupyterhub      @atvaccaro @SorenSpicknall
 /images                                 @atvaccaro @SorenSpicknall
 
-# project documentation
-/docs                                   @lauriemerrell
-
 # actual pipeline code
-/airflow                                @atvaccaro @lauriemerrell @SorenSpicknall
-/jobs                                   @atvaccaro @lauriemerrell @SorenSpicknall
-/runbooks                               @atvaccaro @lauriemerrell @SorenSpicknall
-/services                               @atvaccaro @lauriemerrell @SorenSpicknall
-/warehouse                              @atvaccaro @lauriemerrell @SorenSpicknall
+/airflow                                @atvaccaro @SorenSpicknall
+/jobs                                   @atvaccaro @SorenSpicknall
+/runbooks                               @atvaccaro @SorenSpicknall
+/services                               @atvaccaro @SorenSpicknall
+/warehouse                              @atvaccaro @SorenSpicknall
