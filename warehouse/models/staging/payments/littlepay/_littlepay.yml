@@ -440,14 +440,6 @@ models:
       - *_content_hash
 
   - name: stg_littlepay__micropayment_device_transactions
-    tests:
-      - &littlepay_uniqueness
-        dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - instance
-            - extract_filename
-            - ts
-            - _line_number
     columns:
       - name: littlepay_transaction_id
         description: |
@@ -456,10 +448,27 @@ models:
           For 'tap on, tap off' integrations, merchants will see two transactions for each micropayment.
       - name: micropayment_id
         description: The micropayment that the transaction is associated with.
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+        tests:
+          - not_null
+          - unique
+      - *_content_hash
 
   - name: stg_littlepay__micropayments
     tests:
-      - *littlepay_uniqueness
+      - &littlepay_uniqueness
+        dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - instance
+            - extract_filename
+            - ts
+            - _line_number
     description: This model makes the assumption that, in the case of duplicated micropayment_id values, the one with the latest transaction_time in the latest export file takes precedence.
     columns:
       - name: micropayment_id
