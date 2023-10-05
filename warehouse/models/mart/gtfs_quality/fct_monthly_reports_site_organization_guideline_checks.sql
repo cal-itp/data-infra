@@ -14,6 +14,7 @@ checks AS (
            is_manual,
            reports_order,
     FROM {{ ref('fct_daily_organization_combined_guideline_checks') }}
+    WHERE public_customer_facing_or_regional_subfeed_fixed_route
 ),
 
 generate_biweekly_dates AS (
