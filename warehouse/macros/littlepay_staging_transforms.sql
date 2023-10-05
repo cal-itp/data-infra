@@ -42,7 +42,7 @@ QUALIFY DENSE_RANK()
 
 {% endmacro %}
 
-{% macro qualify_dedupe_full_duplicate_lp_rows(content_hash_col = 'content_hash', file_ts_col = 'littlepay_export_ts', line_number_col = '_line_number') %}
+{% macro qualify_dedupe_full_duplicate_lp_rows(content_hash_col = '_content_hash', file_ts_col = 'littlepay_export_ts', line_number_col = '_line_number') %}
 
 -- remove full duplicate rows where *all* content is the same
 -- get most recent instance across files and then highest-line-number instance within most recent file

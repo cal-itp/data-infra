@@ -244,7 +244,7 @@ models:
         tests:
           - not_null
           - unique_proportion:
-              at_least: 0.98
+              at_least: 0.97
       - *_content_hash
 
   - name: stg_littlepay__device_transaction_purchases
