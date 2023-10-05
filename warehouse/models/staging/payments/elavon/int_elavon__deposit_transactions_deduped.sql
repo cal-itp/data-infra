@@ -2,15 +2,9 @@
 
 WITH
 
-stg_elavon__transactions AS (
-
-  SELECT * FROM {{ ref('stg_elavon__transactions') }}
-
-),
-
 deposit_transactions AS (
 
-  SELECT * FROM stg_elavon__transactions
+  SELECT * FROM {{ ref('stg_elavon__transactions') }}
   WHERE batch_type = 'D'
 
 ),
