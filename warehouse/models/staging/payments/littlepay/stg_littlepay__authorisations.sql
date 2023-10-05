@@ -59,12 +59,9 @@ add_keys_drop_full_dupes AS (
 same_timestamp_simple_dupes AS (
     SELECT
         _payments_key,
-        TRUE AS to_drop,
-        COUNT(DISTINCT retrieval_reference_number) AS ct_rrn,
-        COUNT(*) AS ct
+        (COUNT(DISTINCT retrieval_reference_number) = 1 AND COUNT(*) > 1) AS drop_candidate,
     FROM add_keys_drop_full_dupes
     GROUP BY 1
-    HAVING ct > 1 AND ct_rrn = 1
 ),
 
 stg_littlepay__authorisations AS (
@@ -93,7 +90,8 @@ stg_littlepay__authorisations AS (
     FROM add_keys_drop_full_dupes
     LEFT JOIN same_timestamp_simple_dupes
     USING(_payments_key)
-    WHERE NOT COALESCE(to_drop, FALSE)
+    -- rows to drop are those where RRN is null and it's a duplicate
+    WHERE NOT drop_candidate OR retrieval_reference_number IS NOT NULL
 )
 
 SELECT * FROM stg_littlepay__authorisations
