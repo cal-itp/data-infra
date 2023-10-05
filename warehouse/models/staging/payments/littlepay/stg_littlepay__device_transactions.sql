@@ -45,16 +45,15 @@ clean_columns_and_dedupe_files AS (
             'type', 'transaction_outcome', 'transction_deny_reason', 'transaction_date_time_utc',
             'location_id', 'location_scheme', 'location_name', 'zone_id', 'route_id', 'mode',
             'direction', 'latitude', 'longitude', 'vehicle_id', 'granted_zone_ids',
-            'onward_zone_ids']) }} AS content_hash,
+            'onward_zone_ids']) }} AS _content_hash,
     FROM source
-    {{ qualify_dedupe_lp_files() }}
 ),
 
 add_keys_drop_full_dupes AS (
     SELECT
         *,
         -- generate keys now that input columns have been trimmed & cast and files deduped
-        {{ dbt_utils.generate_surrogate_key(['littlepay_export_date', '_line_number', 'instance']) }} AS _key,
+        {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
         device_transaction_id AS _payments_key,
     FROM clean_columns_and_dedupe_files
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
@@ -92,6 +91,7 @@ stg_littlepay__device_transactions AS (
             ts,
             _key,
             _payments_key,
+            _content_hash,
     FROM add_keys_drop_full_dupes
     -- Some transactions have placeholder information for routes, stops, and directions in their first export,
     -- then a later export contains the canonical version of the transaction with that information corrected

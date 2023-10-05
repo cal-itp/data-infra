@@ -25,7 +25,7 @@ clean_columns_and_dedupe_files AS (
         -- hashing at this step will preserve distinction between nulls and empty strings in case that is meaningful upstream
         {{ dbt_utils.generate_surrogate_key(['micropayment_id', 'adjustment_id', 'participant_id',
             'customer_id', 'product_id', 'type', 'description', 'amount', 'time_period_type',
-            'applied', 'zone_ids_us']) }} AS content_hash,
+            'applied', 'zone_ids_us']) }} AS _content_hash,
     FROM source
 ),
 
@@ -60,6 +60,7 @@ stg_littlepay__micropayment_adjustments AS (
         littlepay_export_date,
         _key,
         _payments_key,
+        _content_hash,
     FROM add_keys_drop_full_dupes
 )
 

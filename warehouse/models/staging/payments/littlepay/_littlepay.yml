@@ -188,6 +188,11 @@ models:
           - not_null
           - unique_proportion:
               at_least: 0.999
+      - &_content_hash
+        name: _content_hash
+        description: |
+          Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
+          Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
 
   - name: stg_littlepay__customer_funding_source
     columns:
@@ -240,6 +245,7 @@ models:
           - not_null
           - unique_proportion:
               at_least: 0.98
+      - *_content_hash
 
   - name: stg_littlepay__device_transaction_purchases
     columns:
@@ -275,6 +281,7 @@ models:
           - not_null
           - unique_proportion:
               at_least: 0.995
+      - *_content_hash
 
   - name: stg_littlepay__device_transactions
     description: In the case of duplicated littlepay_transaction_id values, the one with the latest transaction_date_time_utc in the latest export file takes precedence.
@@ -364,6 +371,7 @@ models:
           - not_null
           - unique_proportion:
               at_least: 0.999
+      - *_content_hash
 
   - name: stg_littlepay__micropayment_adjustments
     tests:
@@ -429,6 +437,7 @@ models:
           - not_null
           - unique_proportion:
               at_least: 0.999
+      - *_content_hash
 
   - name: stg_littlepay__micropayment_device_transactions
     tests:

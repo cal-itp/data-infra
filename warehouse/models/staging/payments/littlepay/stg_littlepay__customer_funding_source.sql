@@ -24,9 +24,8 @@ clean_columns_and_dedupe_files AS (
         -- hashing at this step will preserve distinction between nulls and empty strings in case that is meaningful upstream
         {{ dbt_utils.generate_surrogate_key(['funding_source_id', 'funding_source_vault_id',
             'customer_id', 'bin', 'masked_pan', 'card_scheme', 'issuer', 'issuer_country',
-            'form_factor']) }} AS content_hash,
+            'form_factor']) }} AS _content_hash,
     FROM source
-    {{ qualify_dedupe_lp_files() }}
 ),
 
 add_keys_drop_full_dupes AS (
@@ -43,7 +42,7 @@ add_keys_drop_full_dupes AS (
             PARTITION BY customer_id
             ORDER BY littlepay_export_ts DESC) AS calitp_customer_id_rank,
         -- generate keys now that input columns have been trimmed & cast and files deduped
-        {{ dbt_utils.generate_surrogate_key(['littlepay_export_date', '_line_number', 'instance']) }} AS _key,
+        {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
         {{ dbt_utils.generate_surrogate_key(['funding_source_id', 'customer_id']) }} AS _payments_key,
     FROM clean_columns_and_dedupe_files
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
@@ -72,6 +71,7 @@ stg_littlepay__customer_funding_source AS (
         calitp_customer_id_rank,
         _key,
         _payments_key,
+        _content_hash,
     FROM add_keys_drop_full_dupes
 )
 

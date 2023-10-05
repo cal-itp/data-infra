@@ -21,16 +21,15 @@ clean_columns_and_dedupe_files AS (
         -- hashing at this step will preserve distinction between nulls and empty strings in case that is meaningful upstream
         {{ dbt_utils.generate_surrogate_key(['littlepay_transaction_id', 'purchase_id',
             'correlated_purchase_id', 'product_id', 'description', 'indicative_amount',
-            'transaction_time']) }} AS content_hash,
+            'transaction_time']) }} AS _content_hash,
     FROM source
-    {{ qualify_dedupe_lp_files() }}
 ),
 
 add_keys_drop_full_dupes AS (
     SELECT
         *,
         -- generate keys now that input columns have been trimmed & cast and files deduped
-        {{ dbt_utils.generate_surrogate_key(['littlepay_export_date', '_line_number', 'instance']) }} AS _key,
+        {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
         {{ dbt_utils.generate_surrogate_key(['littlepay_transaction_id', 'purchase_id']) }} AS _payments_key,
     FROM clean_columns_and_dedupe_files
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
@@ -53,6 +52,7 @@ stg_littlepay__device_transaction_purchases AS (
         ts,
         _key,
         _payments_key,
+        _content_hash,
     FROM add_keys_drop_full_dupes
 )
 
