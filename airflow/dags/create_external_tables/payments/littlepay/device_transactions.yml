@@ -54,5 +54,7 @@ schema_fields:
      type: STRING
    - name: onward_zone_ids
      type: STRING
+   - name: processed_timestamp_utc
+     type: STRING
    - name: _line_number
      type: STRING
