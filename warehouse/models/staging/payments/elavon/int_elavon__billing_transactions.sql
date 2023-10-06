@@ -17,7 +17,7 @@ dedup_billing_transactions AS (
 
 ),
 
-int_elavon__billing_transactions_deduped AS (
+int_elavon__billing_transactions AS (
 
   SELECT
 
@@ -70,4 +70,4 @@ int_elavon__billing_transactions_deduped AS (
 
 )
 
-SELECT * FROM int_elavon__billing_transactions_deduped
+SELECT * FROM int_elavon__billing_transactions

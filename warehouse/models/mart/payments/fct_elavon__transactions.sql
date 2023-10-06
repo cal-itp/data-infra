@@ -2,27 +2,27 @@
 
 WITH
 
-int_elavon__billing_transactions_deduped AS (
-    SELECT * FROM {{ ref('int_elavon__billing_transactions_deduped') }}
+int_elavon__billing_transactions AS (
+    SELECT * FROM {{ ref('int_elavon__billing_transactions') }}
 ),
 
-int_elavon__deposit_transactions_deduped AS (
-    SELECT * FROM {{ ref('int_elavon__deposit_transactions_deduped') }}
+int_elavon__deposit_transactions AS (
+    SELECT * FROM {{ ref('int_elavon__deposit_transactions') }}
 ),
 
 union_deposits_and_billing AS (
 
     SELECT
         *
-    FROM int_elavon__billing_transactions_deduped
+    FROM int_elavon__billing_transactions
     UNION ALL
     SELECT
         *
-    FROM int_elavon__deposit_transactions_deduped
+    FROM int_elavon__deposit_transactions
 
 ),
 
-fct_elavon__deposit_billing_transactions AS (
+fct_elavon__transactions AS (
 
     SELECT
 
@@ -75,4 +75,4 @@ fct_elavon__deposit_billing_transactions AS (
 
 )
 
-SELECT * FROM fct_elavon__deposit_billing_transactions
+SELECT * FROM fct_elavon__transactions

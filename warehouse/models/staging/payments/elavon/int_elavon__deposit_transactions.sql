@@ -16,7 +16,7 @@ dedup_deposit_transactions AS (
   QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
 ),
 
-int_elavon__deposit_transactions_deduped AS (
+int_elavon__deposit_transactions AS (
 
     SELECT
         payment_reference,
@@ -68,4 +68,4 @@ int_elavon__deposit_transactions_deduped AS (
 
 )
 
-SELECT * FROM int_elavon__deposit_transactions_deduped
+SELECT * FROM int_elavon__deposit_transactions
