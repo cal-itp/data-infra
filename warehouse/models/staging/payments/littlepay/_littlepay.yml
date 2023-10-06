@@ -436,8 +436,7 @@ models:
           Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
         tests:
           - not_null
-          - unique_proportion:
-              at_least: 0.999
+          - unique
       - *_content_hash
 
   - name: stg_littlepay__micropayment_device_transactions
