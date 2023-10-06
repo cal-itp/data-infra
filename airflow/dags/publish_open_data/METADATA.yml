@@ -9,7 +9,6 @@ default_args:
     email:
       - "andrew.v@jarv.us"
       - "eric.dasmalchi@dot.ca.gov"
-      - "laurie.m@jarv.us"
     email_on_failure: True
     email_on_retry: False
     retries: 1

@@ -40,7 +40,6 @@ def email_failures(task_instance: TaskInstance, execution_date, **kwargs):
     else:
         send_email(
             to=[
-                "laurie.m@jarv.us",
                 "andrew.v@jarv.us",
                 "evan.siroky@dot.ca.gov",
                 "hunter.owens@dot.ca.gov",

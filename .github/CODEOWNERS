@@ -4,21 +4,21 @@
 *                                       @hunterowens @evansiroky
 
 # infra components
-/.github/workflows                      @SorenSpicknall
-/ci                                     @SorenSpicknall
-/iac                                    @SorenSpicknall
-/kubernetes                             @SorenSpicknall
+/.github/workflows                      @evansiroky @SorenSpicknall
+/ci                                     @evansiroky @SorenSpicknall
+/iac                                    @evansiroky @SorenSpicknall
+/kubernetes                             @evansiroky @SorenSpicknall
 
 # jupyter service, e.g. updating the image
-/kubernetes/apps/charts/jupyterhub      @SorenSpicknall
-/images                                 @SorenSpicknall
+/kubernetes/apps/charts/jupyterhub      @evansiroky @SorenSpicknall
+/images                                 @evansiroky @SorenSpicknall
 
 # project documentation
-/docs                                   @lauriemerrell @tiffanychu90
+/docs                                   @tiffanychu90
 
 # actual pipeline code
-/airflow                                @lauriemerrell @SorenSpicknall
-/jobs                                   @lauriemerrell @SorenSpicknall
-/runbooks                               @lauriemerrell @SorenSpicknall
-/services                               @lauriemerrell @SorenSpicknall
-/warehouse                              @evansiroky @lauriemerrell @SorenSpicknall @tiffanychu90
+/airflow                                @evansiroky @SorenSpicknall
+/jobs                                   @evansiroky @SorenSpicknall
+/runbooks                               @evansiroky @SorenSpicknall
+/services                               @evansiroky @SorenSpicknall
+/warehouse                              @evansiroky @SorenSpicknall
