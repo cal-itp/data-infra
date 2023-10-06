@@ -467,6 +467,17 @@ models:
           * `COMPLETE_VARIABLE_FARE`
           * `INCOMPLETE_VARIABLE_FARE`
           * `REFUND`
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *_content_hash
+      - name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+        tests:
+          - not_null
+          - unique
 
   - name: stg_littlepay__product_data
     tests:
