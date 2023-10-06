@@ -9,14 +9,6 @@ billing_transactions AS (
 
 ),
 
-dedup_billing_transactions AS (
-
-  SELECT *
-  FROM billing_transactions
-  QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
-
-),
-
 int_elavon__billing_transactions AS (
 
   SELECT
@@ -44,7 +36,7 @@ int_elavon__billing_transactions AS (
       dt,
       execution_ts
 
-  FROM dedup_billing_transactions
+  FROM billing_transactions
 
 )
 

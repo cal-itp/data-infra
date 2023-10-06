@@ -6,6 +6,15 @@ source AS (
     SELECT * FROM {{ source('elavon_external_tables', 'transactions') }}
 ),
 
+get_latest_extract AS(
+
+    SELECT *
+    FROM source
+    -- we pull the whole world every day in the pipeline, so this gets only the latest extract
+    QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
+
+),
+
 handle_strings_and_remove_special_characters AS (
 
     SELECT
@@ -55,7 +64,7 @@ handle_strings_and_remove_special_characters AS (
         dt,
         execution_ts
 
-    FROM source
+    FROM get_latest_extract
 
 ),
 
@@ -72,6 +81,8 @@ format_dates AS (
     FROM handle_strings_and_remove_special_characters
 
 ),
+
+
 
 stg_elavon__transactions AS (
 

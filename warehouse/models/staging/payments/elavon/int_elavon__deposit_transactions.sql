@@ -9,13 +9,6 @@ deposit_transactions AS (
 
 ),
 
-dedup_deposit_transactions AS (
-
-  SELECT *
-  FROM deposit_transactions
-  QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
-),
-
 int_elavon__deposit_transactions AS (
 
     SELECT
@@ -64,7 +57,7 @@ int_elavon__deposit_transactions AS (
         dt,
         execution_ts
 
-    FROM dedup_deposit_transactions
+    FROM deposit_transactions
 
 )
 
