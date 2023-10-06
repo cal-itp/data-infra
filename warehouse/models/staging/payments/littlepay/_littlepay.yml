@@ -700,6 +700,12 @@ models:
         description: This field is not in use.
       - name: settlement_response_text
         description: This field is not in use.
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *_content_hash
+      - *payments_key_full_uniqueness
 
   - name: stg_littlepay__settlements
     tests:
