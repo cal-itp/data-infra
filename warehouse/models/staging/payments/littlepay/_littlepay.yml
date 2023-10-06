@@ -181,7 +181,8 @@ models:
         tests:
           - not_null
           - unique
-      - name: _payments_key
+      - &payments_key_fuzzy_uniqueness
+        name: _payments_key
         description: |
           Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
         tests:
