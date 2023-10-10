@@ -1,6 +1,8 @@
 {{ config(materialized='table') }}
 
-WITH fct_elavon__transactions AS (
+WITH
+
+fct_elavon__transactions AS (
     SELECT
 
         *,
