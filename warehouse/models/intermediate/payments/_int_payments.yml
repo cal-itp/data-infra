@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: int_payments__authorisations_deduped
+    description: |
+      This model deduplicates authorisations rows with duplicate `_payments_key` values that require additional handling
+      beyond what is covered in the staging model, essentially rows that require a join for deduplication.
+      Columns have the same meanings as in the upstream staging model.
+      The most important test for this model is on the upstream staging model: to ensure that no
+      `_payments_key` values are fully dropped betweeen that model and this one (i.e., to ensure
+      that all rows dropped do in fact have a duplicate and no authorisations are lost.)

@@ -189,6 +189,9 @@ models:
           - not_null
           - unique_proportion:
               at_least: 0.999
+          - relationships:
+              to: ref('int_payments__authorisations_deduped')
+              field: _payments_key
       - &_content_hash
         name: _content_hash
         description: |
