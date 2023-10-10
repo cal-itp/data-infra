@@ -9,3 +9,8 @@ models:
       The most important test for this model is on the upstream staging model: to ensure that no
       `_payments_key` values are fully dropped betweeen that model and this one (i.e., to ensure
       that all rows dropped do in fact have a duplicate and no authorisations are lost.)
+    columns:
+      - name: request_type
+        tests:
+          - accepted_values:
+              values: ['AUTHORISATION', 'DEBT_RECOVERY_AUTHCHECK', 'DEBT_RECOVERY_REVERSAL', 'CARD_CHECK']
