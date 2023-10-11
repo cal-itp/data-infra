@@ -95,7 +95,10 @@ stg_littlepay__device_transactions AS (
     FROM add_keys_drop_full_dupes
     -- Some transactions have placeholder information for routes, stops, and directions in their first export,
     -- then a later export contains the canonical version of the transaction with that information corrected
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY littlepay_transaction_id ORDER BY littlepay_export_ts DESC, transaction_date_time_utc DESC) = 1
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY littlepay_transaction_id
+        ORDER BY littlepay_export_ts DESC
+    ) = 1
 )
 
 SELECT * FROM stg_littlepay__device_transactions
