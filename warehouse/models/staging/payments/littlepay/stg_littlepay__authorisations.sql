@@ -2,7 +2,7 @@ WITH source AS (
     SELECT * FROM {{ source('external_littlepay', 'authorisations') }}
 ),
 
-clean_columns_and_dedupe_files AS (
+clean_columns AS (
     SELECT
         {{ trim_make_empty_string_null('participant_id') }} AS participant_id,
         {{ trim_make_empty_string_null('aggregation_id') }} AS aggregation_id,
@@ -49,7 +49,7 @@ add_keys_drop_full_dupes AS (
         -- generate keys now that input columns have been trimmed & cast
         {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
         {{ dbt_utils.generate_surrogate_key(['aggregation_id', 'authorisation_date_time_utc']) }} AS _payments_key,
-    FROM clean_columns_and_dedupe_files
+    FROM clean_columns
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
 ),
 
@@ -59,12 +59,9 @@ add_keys_drop_full_dupes AS (
 same_timestamp_simple_dupes AS (
     SELECT
         _payments_key,
-        TRUE AS to_drop,
-        COUNT(DISTINCT retrieval_reference_number) AS ct_rrn,
-        COUNT(*) AS ct
+        (COUNT(DISTINCT retrieval_reference_number) = 1 AND COUNT(*) > 1) AS drop_candidate,
     FROM add_keys_drop_full_dupes
     GROUP BY 1
-    HAVING ct > 1 AND ct_rrn = 1
 ),
 
 stg_littlepay__authorisations AS (
@@ -93,7 +90,8 @@ stg_littlepay__authorisations AS (
     FROM add_keys_drop_full_dupes
     LEFT JOIN same_timestamp_simple_dupes
     USING(_payments_key)
-    WHERE NOT COALESCE(to_drop, FALSE)
+    -- rows to drop are those where RRN is null and it's a duplicate
+    WHERE NOT drop_candidate OR retrieval_reference_number IS NOT NULL
 )
 
 SELECT * FROM stg_littlepay__authorisations
