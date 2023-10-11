@@ -2,29 +2,16 @@
 
 WITH
 
+billing_transactions AS (
+
+  SELECT * FROM {{ ref('stg_elavon__transactions') }}
+  WHERE batch_type = 'B'
+
+),
+
 int_elavon__billing_transactions AS (
-    SELECT * FROM {{ ref('int_elavon__billing_transactions') }}
-),
 
-int_elavon__deposit_transactions AS (
-    SELECT * FROM {{ ref('int_elavon__deposit_transactions') }}
-),
-
-union_deposits_and_billing AS (
-
-    SELECT
-        *
-    FROM int_elavon__billing_transactions
-    UNION ALL
-    SELECT
-        *
-    FROM int_elavon__deposit_transactions
-
-),
-
-fct_elavon__transactions AS (
-
-    SELECT
+  SELECT
 
         payment_reference,
         payment_date,
@@ -71,8 +58,33 @@ fct_elavon__transactions AS (
         dt,
         execution_ts
 
-    FROM union_deposits_and_billing
+-- if we remove the need for a union between billing and deposit data downstream, these are the columns to keep
+-- (ie deposit-specific, always null columns are removed)
+      -- payment_reference,
+      -- payment_date,
+      -- account_number,
+      -- routing_number,
+      -- fund_amt,
+      -- batch_reference,
+      -- batch_type,
+      -- customer_name,
+      -- merchant_number,
+      -- external_mid,
+      -- chain,
+      -- batch_amt,
+      -- amount,
+      -- card_type,
+      -- charge_type,
+      -- charge_type_description,
+      -- card_plan,
+      -- settlement_method,
+      -- currency_code,
+      -- ent_num,
+      -- dt,
+      -- execution_ts
+
+  FROM billing_transactions
 
 )
 
-SELECT * FROM fct_elavon__transactions
+SELECT * FROM int_elavon__billing_transactions

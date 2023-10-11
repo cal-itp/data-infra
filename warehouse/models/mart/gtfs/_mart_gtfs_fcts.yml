@@ -2116,12 +2116,6 @@ models:
         description: |
           Last day of the month being summarized. This is the date that was used
           to look up feed and GTFS dataset attributes.
-      - name: shape_array_key
-        description: |
-          Key to `dim_shapes_arrays` for this month, route, and shape.
-          If null, it's possible that: this route did not have shapes data; or the most common associated shape may have
-          been deleted in the course of the month being summarized; or the source feed was not
-          present on the last day of this month to facilitate a shape lookup.
       - name: pt_array
         description: |
           Array of points describing this shape, looked up from `dim_shapes_arrays` via `shape_array_key`.

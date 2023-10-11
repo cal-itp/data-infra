@@ -516,6 +516,18 @@ models:
           * `COMPLETE_VARIABLE_FARE`
           * `INCOMPLETE_VARIABLE_FARE`
           * `REFUND`
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *_content_hash
+      - &payments_key_full_uniqueness
+        name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+        tests:
+          - not_null
+          - unique
 
   - name: stg_littlepay__product_data
     columns:
@@ -746,6 +758,12 @@ models:
         description: This field is not in use.
       - name: settlement_response_text
         description: This field is not in use.
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *_content_hash
+      - *payments_key_full_uniqueness
 
   - name: stg_littlepay__settlements
     tests:
@@ -789,6 +807,18 @@ models:
 
           If the acquirer is Elavon, then this key will contain the second part of the string from `retrieval_reference_number`.
       - name: settlement_requested_date_time_utc
-        description: Timestamp of when the settlement request was submitted to the acquirer.
+        description: |
+          Timestamp of when the settlement request was submitted to the acquirer.
+          Per October 2023 updates from Littlepay, it may be more appropriate
+          to interpret this field as a "last updated" value.
       - name: acquirer
         description: Identifies the acquirer used to settle the transaction.
+      - name: settlement_type
+        description: |
+          "DEBIT" or "CREDIT". "CREDIT" settlements are associated with refunds.
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *_content_hash
+      - *payments_key_full_uniqueness

@@ -2,30 +2,16 @@
 
 WITH
 
-int_elavon__billing_transactions AS (
-    SELECT * FROM {{ ref('int_elavon__billing_transactions') }}
+deposit_transactions AS (
+
+  SELECT * FROM {{ ref('stg_elavon__transactions') }}
+  WHERE batch_type = 'D'
+
 ),
 
 int_elavon__deposit_transactions AS (
-    SELECT * FROM {{ ref('int_elavon__deposit_transactions') }}
-),
-
-union_deposits_and_billing AS (
 
     SELECT
-        *
-    FROM int_elavon__billing_transactions
-    UNION ALL
-    SELECT
-        *
-    FROM int_elavon__deposit_transactions
-
-),
-
-fct_elavon__transactions AS (
-
-    SELECT
-
         payment_reference,
         payment_date,
         account_number,
@@ -71,8 +57,8 @@ fct_elavon__transactions AS (
         dt,
         execution_ts
 
-    FROM union_deposits_and_billing
+    FROM deposit_transactions
 
 )
 
-SELECT * FROM fct_elavon__transactions
+SELECT * FROM int_elavon__deposit_transactions
