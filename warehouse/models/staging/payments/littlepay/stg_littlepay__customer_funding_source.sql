@@ -2,7 +2,7 @@ WITH source AS (
     SELECT * FROM {{ source('external_littlepay', 'customer_funding_source') }}
 ),
 
-clean_columns_and_dedupe_files AS (
+clean_columns AS (
     SELECT
         {{ trim_make_empty_string_null('funding_source_id') }} AS funding_source_id,
         {{ trim_make_empty_string_null('funding_source_vault_id') }} AS funding_source_vault_id,
@@ -44,7 +44,7 @@ add_keys_drop_full_dupes AS (
         -- generate keys now that input columns have been trimmed & cast and files deduped
         {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
         {{ dbt_utils.generate_surrogate_key(['funding_source_id', 'customer_id']) }} AS _payments_key,
-    FROM clean_columns_and_dedupe_files
+    FROM clean_columns
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
 ),
 

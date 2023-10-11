@@ -2,7 +2,7 @@ WITH source AS (
     SELECT * FROM {{ source('external_littlepay', 'device_transaction_purchases') }}
 ),
 
-clean_columns_and_dedupe_files AS (
+clean_columns AS (
     SELECT
         {{ trim_make_empty_string_null('littlepay_transaction_id') }} AS littlepay_transaction_id,
         {{ trim_make_empty_string_null('purchase_id') }} AS purchase_id,
@@ -31,7 +31,7 @@ add_keys_drop_full_dupes AS (
         -- generate keys now that input columns have been trimmed & cast and files deduped
         {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
         {{ dbt_utils.generate_surrogate_key(['littlepay_transaction_id', 'purchase_id']) }} AS _payments_key,
-    FROM clean_columns_and_dedupe_files
+    FROM clean_columns
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
 ),
 
