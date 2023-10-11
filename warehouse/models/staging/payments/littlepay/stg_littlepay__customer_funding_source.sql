@@ -73,6 +73,15 @@ stg_littlepay__customer_funding_source AS (
         _payments_key,
         _content_hash,
     FROM add_keys_drop_full_dupes
+    -- Some funding sources have incomplete information when first present in data, like missing
+    -- values for form_factor or issuer_country that are filled in during later exports.
+    -- Additionally, sometimes a filled column value is updated in newer exports for a given entry.
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY
+            funding_source_id,
+            customer_id
+        ORDER BY littlepay_export_ts DESC
+    ) = 1
 )
 
 SELECT * FROM stg_littlepay__customer_funding_source
