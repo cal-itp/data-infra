@@ -42,6 +42,3 @@ schema_fields:
   - name: drmt_data
     type: STRING
     mode: NULLABLE
-  - name: dt
-    type: STRING
-    mode: NULLABLE
