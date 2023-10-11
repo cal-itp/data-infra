@@ -54,6 +54,14 @@ stg_littlepay__device_transaction_purchases AS (
         _payments_key,
         _content_hash,
     FROM add_keys_drop_full_dupes
+    -- Some purchases initially are given a value of 'autoscan' for product_id, and then that
+    -- value is later updated. No other partial duplicate conditions exist at implementation time.
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY
+            littlepay_transaction_id,
+            purchase_id
+        ORDER BY littlepay_export_ts DESC
+    ) = 1
 )
 
 SELECT * FROM stg_littlepay__device_transaction_purchases
