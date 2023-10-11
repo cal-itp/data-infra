@@ -95,7 +95,13 @@ stg_littlepay__product_data AS (
         _payments_key,
         _content_hash,
     FROM add_keys_drop_full_dupes
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY littlepay_export_ts DESC) = 1
+    -- Some products change in form over time, e.g. getting different 'capping_type' values or
+    -- changing in status, which produces replacement rows in new exports.
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY
+            product_id
+        ORDER BY littlepay_export_ts DESC
+    ) = 1
 )
 
 SELECT * FROM stg_littlepay__product_data
