@@ -16,8 +16,10 @@ settlement_rrns AS (
 identify_dups AS (
     SELECT
         _payments_key,
-        COUNT(*) > 1 AS is_dup
+        COUNT(DISTINCT _key) > 1 AS is_dup,
+        COUNTIF(settlement_rrns.retrieval_reference_number IS NOT NULL) > 0 AS payment_key_has_settlement
     FROM auth
+    LEFT JOIN settlement_rrns USING (retrieval_reference_number)
     GROUP BY 1
 ),
 
@@ -25,6 +27,7 @@ dedupe_criteria AS (
     SELECT
         auth.*,
         is_dup,
+        payment_key_has_settlement,
         settlement_rrns.retrieval_reference_number IS NOT NULL AS has_settlement,
         ROW_NUMBER() OVER (PARTITION BY _payments_key ORDER BY littlepay_export_ts DESC, _line_number DESC) AS payments_key_appearance_num,
     FROM auth
@@ -58,7 +61,7 @@ int_payments__authorisations_deduped AS (
     FROM dedupe_criteria
     -- filter out duplicate row where RRN doesn't map to a settlement (but its duplicate's RRN does map)
     -- and filter out duplicate row where both have RRNs but neither maps to a settlement
-    WHERE (NOT is_dup) OR (is_dup AND has_settlement) OR (is_dup AND NOT has_settlement AND payments_key_appearance_num = 1)
+    WHERE (NOT is_dup) OR (is_dup AND has_settlement) OR (is_dup AND NOT payment_key_has_settlement AND payments_key_appearance_num = 1)
 )
 
 SELECT * FROM int_payments__authorisations_deduped
