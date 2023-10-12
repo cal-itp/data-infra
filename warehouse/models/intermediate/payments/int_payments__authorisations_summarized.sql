@@ -5,7 +5,10 @@ WITH auth AS (
     FROM {{ ref('int_payments__authorisations_deduped') }}
 ),
 
--- get the payments key values of rows that
+-- TODO: do we want to add any additional summary columns here?
+-- for example: number of attempted authorisations over all?
+
+-- get the payments key values of rows that are the final update for that aggregation ID
 final_update AS (
     SELECT
         _payments_key
