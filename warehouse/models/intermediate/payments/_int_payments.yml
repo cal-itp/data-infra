@@ -14,3 +14,8 @@ models:
         tests:
           - accepted_values:
               values: ['AUTHORISATION', 'DEBT_RECOVERY_AUTHCHECK', 'DEBT_RECOVERY_REVERSAL', 'CARD_CHECK']
+      - name: aggregation_id
+        tests:
+          - relationships:
+              to: ref('int_payments__authorisations_summarized')
+              field: aggregation_id
