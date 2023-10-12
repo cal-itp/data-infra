@@ -76,6 +76,10 @@ dim_routes AS (
     SELECT * FROM {{ ref('dim_routes') }}
 ),
 
+dim_agency AS (
+    SELECT * FROM {{ ref('dim_agency') }}
+),
+
 dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
@@ -124,13 +128,15 @@ stg_littlepay__product_data AS (
     FROM {{ ref('stg_littlepay__product_data') }}
 ),
 
-participants_to_routes AS (
+participants_to_routes_and_agency AS (
     SELECT
         pf.participant_id,
         f.date,
         r.route_id,
         r.route_short_name,
         r.route_long_name,
+        a.agency_id,
+        a.agency_name,
     FROM payments_gtfs_datasets AS pf
     LEFT JOIN dim_gtfs_datasets d
         ON pf.gtfs_dataset_source_record_id = d.source_record_id
@@ -138,6 +144,9 @@ participants_to_routes AS (
         ON d.key = f.gtfs_dataset_key
     LEFT JOIN dim_routes AS r
         ON f.feed_key = r.feed_key
+    LEFT JOIN dim_agency AS a
+        ON r.agency_id = a.agency_id
+            AND r.feed_key = r.feed_key
 ),
 
 debited_micropayments AS (
@@ -292,6 +301,8 @@ join_table AS (
 --         Common transaction info
         r.route_long_name,
         r.route_short_name,
+        r.agency_id,
+        r.agency_name,
         t1.direction,
         t1.vehicle_id,
         t1.littlepay_transaction_id,
@@ -348,12 +359,13 @@ join_table AS (
     LEFT JOIN stg_littlepay__product_data AS p
         ON m.participant_id = p.participant_id
             AND a.product_id = p.product_id
-    LEFT JOIN participants_to_routes AS r
+    LEFT JOIN participants_to_routes_and_agency AS r
         ON r.participant_id = m.participant_id
             -- here, can just use t1 because transaction date will be populated
             -- (don't have to handle unkowns the way we do with route_id)
             AND EXTRACT(DATE FROM TIMESTAMP(t1.transaction_date_time_utc)) = r.date
             AND r.route_id = COALESCE(t1.route_id, t2.route_id)
+
 ),
 
 fct_payments_rides_v2 AS (

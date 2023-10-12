@@ -32,16 +32,13 @@ schema_fields:
     mode: NULLABLE
   - name: services
     type: STRING
-    mode: NULLABLE
+    mode: REPEATED
   - name: organization
     type: STRING
-    mode: NULLABLE
+    mode: REPEATED
   - name: category
     type: STRING
     mode: NULLABLE
   - name: drmt_data
     type: STRING
-    mode: NULLABLE
-  - name: dt
-    type: STRING
-    mode: NULLABLE
+    mode: REPEATED
