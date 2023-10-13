@@ -70,10 +70,10 @@ stg_littlepay__settlements AS (
         _key,
         _payments_key
     FROM dedupe_and_keys
-    -- we have just one duplicate on settlement id; it's not associated with a refund
-    -- drop this one case so that we can continue testing for absolute uniqueness
+    -- we have just two duplicates on settlement id; they are not associated with a refund
+    -- drop these two cases so that we can continue testing for absolute uniqueness
     -- if we get more cases, we can add a qualify to get latest appearance only
-    WHERE _key != "bc6dd0f735a1087b13b424a3c790fc4d"
+    WHERE _key NOT IN ("bc6dd0f735a1087b13b424a3c790fc4d", "e8c09f593df1c61c9a890da0935d0863")
 
 )
 
