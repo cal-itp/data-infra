@@ -146,7 +146,7 @@ participants_to_routes_and_agency AS (
         ON f.feed_key = r.feed_key
     LEFT JOIN dim_agency AS a
         ON r.agency_id = a.agency_id
-            AND r.feed_key = r.feed_key
+            AND r.feed_key = a.feed_key
 ),
 
 debited_micropayments AS (
