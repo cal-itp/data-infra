@@ -76,7 +76,7 @@ schema_fields:
     type: BOOLEAN
   - name: zoned_capping_mode
     type: STRING
-  - name: zoned_capping_price_type
+  - name: zoned_capping_pricing_type
     type: STRING
   - name: on_peak_zones
     type: STRING

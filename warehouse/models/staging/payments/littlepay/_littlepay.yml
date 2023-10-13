@@ -321,7 +321,16 @@ models:
 
           Possible values are `bus` and `train`.
       - name: onward_zone_ids
-        description: ""
+        description: |
+          Zones passed for incomplete variable trips.
+
+          Can be a comma-separated string.
+      - name: processed_timestamp_utc
+        description: |
+          Timestamp of when the device data was processed by Littlepay.
+
+          The difference between this field and transaction_date_time_utc can be sizeable when data
+          is sent by the customer via the Back Office API
       - name: participant_id
         description: The unique identifier of the participant that the device belongs to.
       - name: route_id
