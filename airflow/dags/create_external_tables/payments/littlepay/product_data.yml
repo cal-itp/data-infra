@@ -64,7 +64,7 @@ schema_fields:
     type: STRING
   - name: capping_time_zone
     type: STRING
-  - name: capping_overlap
+  - name: capping_overlap_time
     type: STRING
   - name: capping_application_level
     type: STRING  # (Customer, Card)

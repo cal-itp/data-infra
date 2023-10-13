@@ -14,6 +14,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('issuer_country') }} AS issuer_country,
         {{ trim_make_empty_string_null('form_factor') }} AS form_factor,
         {{ trim_make_empty_string_null('principal_customer_id') }} AS principal_customer_id,
+        {{ trim_make_empty_string_null('participant_id') }} AS participant_id,
         CAST(_line_number AS INTEGER) AS _line_number,
         `instance`,
         extract_filename,
@@ -24,7 +25,7 @@ clean_columns AS (
         -- hashing at this step will preserve distinction between nulls and empty strings in case that is meaningful upstream
         {{ dbt_utils.generate_surrogate_key(['funding_source_id', 'funding_source_vault_id',
             'customer_id', 'bin', 'masked_pan', 'card_scheme', 'issuer', 'issuer_country',
-            'form_factor']) }} AS _content_hash,
+            'form_factor', 'principal_customer_id', 'participant_id']) }} AS _content_hash,
     FROM source
 ),
 
@@ -60,6 +61,7 @@ stg_littlepay__customer_funding_source AS (
         issuer_country,
         form_factor,
         principal_customer_id,
+        participant_id,
         _line_number,
         `instance`,
         extract_filename,

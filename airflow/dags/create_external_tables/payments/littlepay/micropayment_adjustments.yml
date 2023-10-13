@@ -30,7 +30,7 @@ schema_fields:
     type: STRING  # Peak, Off Peak
   - name: applied
     type: STRING
-  - name: zone_ids_us
+  - name: zone_ids_used
     type: STRING
   - name: incentive_product_id
     type: STRING

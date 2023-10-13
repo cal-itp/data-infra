@@ -26,7 +26,7 @@ schema_fields:
      type: STRING
    - name: transaction_outcome
      type: STRING
-   - name: transction_deny_reason
+   - name: transaction_deny_reason
      type: STRING
    - name: transaction_date_time_utc
      type: STRING
