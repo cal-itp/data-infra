@@ -312,6 +312,9 @@ models:
           The longitude of the vehicle, in decimal degrees, where the device transaction took place.
 
           If the device does not support GPS, then this field will not be included.
+      - name: geography
+        description: |
+          Latitude and longitude combined into a geography point type.
       - name: mode
         description: |
           The mode of transport.

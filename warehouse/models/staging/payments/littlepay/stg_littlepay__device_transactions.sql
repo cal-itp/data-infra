@@ -80,6 +80,7 @@ stg_littlepay__device_transactions AS (
             direction,
             latitude,
             longitude,
+            geography,
             vehicle_id,
             granted_zone_ids,
             onward_zone_ids,
