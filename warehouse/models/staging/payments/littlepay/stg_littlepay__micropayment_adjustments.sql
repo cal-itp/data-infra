@@ -14,7 +14,8 @@ clean_columns AS (
         {{ trim_make_empty_string_null('amount') }} AS amount,
         {{ trim_make_empty_string_null('time_period_type') }} AS time_period_type,
         {{ safe_cast('applied', type_boolean()) }} AS applied,
-        {{ trim_make_empty_string_null('zone_ids_us') }} AS zone_ids_us,
+        {{ trim_make_empty_string_null('zone_ids_used') }} AS zone_ids_used,
+        {{ trim_make_empty_string_null('incentive_product_id') }} AS incentive_product_id,
         CAST(_line_number AS INTEGER) AS _line_number,
         `instance`,
         extract_filename,
@@ -25,7 +26,7 @@ clean_columns AS (
         -- hashing at this step will preserve distinction between nulls and empty strings in case that is meaningful upstream
         {{ dbt_utils.generate_surrogate_key(['micropayment_id', 'adjustment_id', 'participant_id',
             'customer_id', 'product_id', 'type', 'description', 'amount', 'time_period_type',
-            'applied', 'zone_ids_us']) }} AS _content_hash,
+            'applied', 'zone_ids_used', 'incentive_product_id']) }} AS _content_hash,
     FROM source
 ),
 
@@ -51,7 +52,8 @@ stg_littlepay__micropayment_adjustments AS (
         amount,
         time_period_type,
         applied,
-        zone_ids_us,
+        zone_ids_used,
+        incentive_product_id,
         _line_number,
         `instance`,
         extract_filename,

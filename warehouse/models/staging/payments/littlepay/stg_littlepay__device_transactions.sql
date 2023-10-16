@@ -12,7 +12,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('device_id_issuer') }} AS device_id_issuer,
         {{ trim_make_empty_string_null('type') }} AS type,
         {{ trim_make_empty_string_null('transaction_outcome') }} AS transaction_outcome,
-        {{ trim_make_empty_string_null('transction_deny_reason') }} AS transction_deny_reason,
+        {{ trim_make_empty_string_null('transaction_deny_reason') }} AS transaction_deny_reason,
         {{ trim_make_empty_string_null('transaction_date_time_utc') }} AS transaction_date_time_utc,
         DATETIME(
             TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles"
@@ -32,6 +32,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('vehicle_id') }} AS vehicle_id,
         {{ trim_make_empty_string_null('granted_zone_ids') }} AS granted_zone_ids,
         {{ trim_make_empty_string_null('onward_zone_ids') }} AS onward_zone_ids,
+        {{ trim_make_empty_string_null('processed_timestamp_utc') }} AS processed_timestamp_utc,
         CAST(_line_number AS INTEGER) AS _line_number,
         `instance`,
         extract_filename,
@@ -42,10 +43,10 @@ clean_columns AS (
         -- hashing at this step will preserve distinction between nulls and empty strings in case that is meaningful upstream
         {{ dbt_utils.generate_surrogate_key(['participant_id', 'customer_id',
             'device_transaction_id', 'littlepay_transaction_id', 'device_id', 'device_id_issuer',
-            'type', 'transaction_outcome', 'transction_deny_reason', 'transaction_date_time_utc',
+            'type', 'transaction_outcome', 'transaction_deny_reason', 'transaction_date_time_utc',
             'location_id', 'location_scheme', 'location_name', 'zone_id', 'route_id', 'mode',
             'direction', 'latitude', 'longitude', 'vehicle_id', 'granted_zone_ids',
-            'onward_zone_ids']) }} AS _content_hash,
+            'onward_zone_ids', 'processed_timestamp_utc']) }} AS _content_hash,
     FROM source
 ),
 
@@ -68,7 +69,7 @@ stg_littlepay__device_transactions AS (
             device_id_issuer,
             type,
             transaction_outcome,
-            transction_deny_reason,
+            transaction_deny_reason,
             transaction_date_time_utc,
             transaction_date_time_pacific,
             location_id,
@@ -84,6 +85,7 @@ stg_littlepay__device_transactions AS (
             vehicle_id,
             granted_zone_ids,
             onward_zone_ids,
+            processed_timestamp_utc,
             _line_number,
             `instance`,
             extract_filename,
