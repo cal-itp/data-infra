@@ -5,6 +5,9 @@ WITH settlements AS (
     FROM {{ ref('stg_littlepay__settlements') }}
 ),
 
+-- TODO: decide whether refunds should be joined in as part of the creation of this table?
+-- mapping refunds to settlements may require using settlement_id, which is not available downstream of this model
+
 -- some rows have null settlement type (debit vs. credit)
 -- so we try to impute based on settlement order
 impute_settlement_type AS (
@@ -47,6 +50,7 @@ summarize_overall AS (
         LOGICAL_OR(type_contains_imputed_type) AS contains_imputed_type,
         MAX(type_latest_update_timestamp) AS latest_update_timestamp,
         SUM(total_amount) AS net_amount,
+        COUNTIF(settlement_type = "CREDIT") > 0 AS contains_refund
     FROM summarize_by_type
     GROUP BY 1, 2, 3
 ),
@@ -59,6 +63,7 @@ int_payments__settlements_summarized AS (
         contains_imputed_type,
         latest_update_timestamp,
         net_amount AS net_settled_amount_dollars,
+        contains_refund,
         COALESCE(debit.total_amount,0) AS debit_amount,
         COALESCE(credit.total_amount,0) AS credit_amount
     FROM summarize_overall AS summary

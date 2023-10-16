@@ -74,7 +74,9 @@ stg_littlepay__settlements AS (
     -- drop these two cases so that we can continue testing for absolute uniqueness
     -- if we get more cases, we can add a qualify to get latest appearance only
     WHERE _key NOT IN ("bc6dd0f735a1087b13b424a3c790fc4d", "e8c09f593df1c61c9a890da0935d0863")
-
+    -- this second drop is a separate issue: we have one single case of a duplicate aggregation_id with separate RRNs
+    -- dropping the first of these two settlements based on cross-referencing with authorisations
+        AND _key != "e8c25be12ecf1f0ec610771422c6efc8"
 )
 
 SELECT * FROM stg_littlepay__settlements
