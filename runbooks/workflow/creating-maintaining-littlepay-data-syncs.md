@@ -23,7 +23,9 @@ Next, [create a service account in the cal-itp-data-infra project](https://conso
 
 After that, you should create a simple YAML file in [the sync-littlepay DAG folder in the data-infra repository](https://github.com/cal-itp/data-infra/tree/8516a1a4ab2ecfe6ef33e3fbc4224bcedbd06e98/airflow/dags/sync_littlepay), structurally similar to the others that are there, utilizing the instance name and access key name for the agency you're setting up. Similarly, you should create a YAML file corresponding to the new agency in [the parse-littlepay DAG folder](https://github.com/cal-itp/data-infra/tree/8516a1a4ab2ecfe6ef33e3fbc4224bcedbd06e98/airflow/dags/parse_littlepay). Then, add a mapping between the agency's instance identifier and its Cal-ITP internal GTFS dataset identifier in [this seed file](https://github.com/cal-itp/data-infra/blob/main/warehouse/seeds/payments_gtfs_datasets.csv).
 
-[This pull request](https://github.com/cal-itp/data-infra/pull/2928/files) demonstrates all four of the code changes involved in this setup process (though the row-level access policy setting is now in a macro [here](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql#L21), rather than in the `fct_payments_rides_v2` model)
+[This pull request](https://github.com/cal-itp/data-infra/pull/2928/files) demonstrates all four of the code changes involved in this setup process (though the row-level access policy setting is now in a macro [here](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql#L21), rather than in the `fct_payments_rides_v2` model).
+
+After these steps are completed, the new Littlepay account's data should start flowing the next time [the external table Airflow DAG](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/create_external_tables/grid) runs.
 
 ## Rotating Littlepay AWS Keys
 
