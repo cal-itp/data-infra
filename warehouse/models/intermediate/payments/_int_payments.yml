@@ -30,3 +30,62 @@ models:
         tests:
           - not_null
           - unique
+  - name: int_payments__settlements_summarized
+    description: |
+      This model contains Littlepay settlements aggregated to the `aggregation_id + retrieval_reference_number` level.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - aggregation_id
+            - retrieval_reference_number
+      - dbt_utils.expression_is_true:
+          expression: "debit_amount + credit_amount = net_settled_amount_dollars"
+      - dbt_utils.expression_is_true:
+          expression: "contains_refund = (credit_amount < 0)"
+    columns:
+      - name: aggregation_id
+        description: |
+          ID of the aggregation being settled.
+        tests:
+          - not_null
+          - unique
+      - name: retrieval_reference_number
+        tests:
+          - not_null
+          - unique
+      - name: participant_id
+        description: '{{ doc("lp_participant_id") }}'
+      - name: contains_imputed_type
+        description: |
+          Some settlements are missing `settlement_type` (i.e., `DEBIT` vs. `CREDIT` designation).
+          We impute those missing values on the heuristic that first updates tend to be the debit
+          and any subsequent updates are credits (refunds).
+          Rows with "true" in this column indicate that at least one input row had its settlement type imputed.
+          These rows could potentially (though we believe it is unlikely) be sources of error if the imputation
+          assumptions were incorrect.
+      - name: contains_refund
+        description: |
+          If `true`, this aggregation settlement included at least one row with settlement_type = `CREDIT`.
+      - name: latest_update_timestamp
+        description: |
+          Most recent `settlement_requested_date_time_utc` value for this aggregation settlement.
+          If a credit (refund) was issued after the initial debit, this will be the timestamp of the credit.
+      - name: net_settled_amount_dollars
+        description: |
+          Net dollar amount of this aggregation settlement; if a refund (credit) has been issued,
+          that will be reflected. So for example if $20 was debited and then $8 was credited,
+          the value in this column will be `12` (= 20 - 8).
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: debit_amount
+        description: |
+          Total dollar amount associated with debit settlements in this aggregation.
+          Numbers in this column are positive because they represent amounts debited (charged) by the participant to the customer (rider);
+          i.e., these values represent income for the participant (agency).
+      - name: credit_amount
+        description: |
+          Total dollar amount associated with credit (refund) settlements in this aggregation.
+          Numbers in this column are negative because they represent amounts credited (refunded) by the participant (agency) to the customer (rider);
+          i.e., these values represent costs for the participant (agency).
