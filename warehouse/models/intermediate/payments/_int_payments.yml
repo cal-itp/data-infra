@@ -81,6 +81,10 @@ models:
               inclusive: true
         description: |
           Total dollar amount associated with debit settlements in this aggregation.
+          Numbers in this column are positive because they represent amounts debited (charged) by the participant to the customer (rider);
+          i.e., these values represent income for the participant (agency).
       - name: credit_amount
         description: |
           Total dollar amount associated with credit (refund) settlements in this aggregation.
+          Numbers in this column are negative because they represent amounts credited (refunded) by the participant (agency) to the customer (rider);
+          i.e., these values represent costs for the participant (agency).
