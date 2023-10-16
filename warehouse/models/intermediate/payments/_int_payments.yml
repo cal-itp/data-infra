@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: int_payments__authorisations_deduped
+    description: |
+      This model deduplicates authorisations rows with duplicate `_payments_key` values that require additional handling
+      beyond what is covered in the staging model, essentially rows that require a join for deduplication.
+      Columns have the same meanings as in the upstream staging model.
+      The most important test for this model is on the upstream staging model: to ensure that no
+      `_payments_key` values are fully dropped betweeen that model and this one (i.e., to ensure
+      that all rows dropped do in fact have a duplicate and no authorisations are lost.)
+    columns:
+      - name: request_type
+        tests:
+          - accepted_values:
+              values: ['AUTHORISATION', 'DEBT_RECOVERY_AUTHCHECK', 'DEBT_RECOVERY_REVERSAL', 'CARD_CHECK']
+      - name: aggregation_id
+        tests:
+          - relationships:
+              to: ref('int_payments__authorisations_summarized')
+              field: aggregation_id
+  - name: int_payments__authorisations_summarized
+    description: |
+      This model contains only the most recent authorisations data per `aggregation_id`.
+      Many aggregations pass through a few different authorisations (for example, perhaps a card check
+      before getting authorised, or multiple debt recovery attempts.) This model keeps only the most
+      recent row according to `authorisation_date_time_utc`.
+    columns:
+      - name: aggregation_id
+        tests:
+          - not_null
+          - unique
