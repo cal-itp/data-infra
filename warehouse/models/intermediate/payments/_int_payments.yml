@@ -79,6 +79,7 @@ models:
           - dbt_utils.accepted_range:
               min_value: 0
               inclusive: true
+      - name: debit_amount
         description: |
           Total dollar amount associated with debit settlements in this aggregation.
           Numbers in this column are positive because they represent amounts debited (charged) by the participant to the customer (rider);
