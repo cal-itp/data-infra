@@ -20,7 +20,9 @@ sources:
 models:
   - name: int_device_transaction_pairs_common_fields
     columns:
-      - name: participant_id
+      - &participant_id
+        name: participant_id
+        description: '{{ doc("lp_participant_id") }}'
       - name: micropayment_id
         description: '{{ doc("micropayment_adjustments_micropayment_id") }}'
       - name: littlepay_transaction_id_1
@@ -139,8 +141,7 @@ models:
 
   - name: stg_littlepay__authorisations
     columns:
-      - name: participant_id
-        description: Identifies the participant that the authorisation belongs to.
+      - *participant_id
       - name: aggregation_id
         description: The aggregation that is being authorised. A single aggregation can have multiple authorisations. The authorisations that are submitted depend on the scheme and the result of the initial authorisation (if declined, debt recovery authorisations may be performed).
       - name: acquirer_id
@@ -223,8 +224,7 @@ models:
         description: Form factor describing the contactless EMV device of the funding source.
       - name: principal_customer_id
         description: '{{ doc("customer_funding_source_principal_customer_id") }}'
-      - name: participant_id
-        description: The participant ID that uniquely identifies each participant.
+      - *participant_id
       - name: calitp_funding_source_id_ranking_size
         description: The number of records on which the `funding_source_id` shows up in the table
       - name: calitp_funding_source_id_rank
@@ -333,8 +333,7 @@ models:
 
           The difference between this field and transaction_date_time_utc can be sizeable when data
           is sent by the customer via the Back Office API
-      - name: participant_id
-        description: The unique identifier of the participant that the device belongs to.
+      - *participant_id
       - name: route_id
         description: The route identifier provided by the device.
       - name: transaction_date_time_utc
@@ -399,8 +398,7 @@ models:
         tests:
           - unique:
               where: applied
-      - name: participant_id
-        description: Identifies the participant that the adjustment belongs to.
+      - *participant_id
       - name: customer_id
         description: Identifies the customer that the adjustment belongs to.
       - name: product_id
@@ -470,8 +468,7 @@ models:
           - unique
       - name: aggregation_id
         description: Identifies the aggregation that the micropayment belongs to.
-      - name: participant_id
-        description: Identifies the participant that the micropayment belongs to.
+      - *participant_id
       - name: customer_id
         description: Identifies the customer that the micropayment belongs to.
       - name: funding_source_vault_id
@@ -517,8 +514,7 @@ models:
 
   - name: stg_littlepay__product_data
     columns:
-      - name: participant_id
-        description: Identifies the participant that the micropayment belongs to.
+      - *participant_id
       - name: product_id
         description: '{{ doc("product_data_product_id") }}'
         tests:
@@ -671,8 +667,7 @@ models:
           authorisations that are submitted depend on the scheme and the result
           of the initial authorisation. For example, if an authorisation is declined,
           then a debt recovery authorisation may be performed.
-      - name: participant_id
-        description: Identifies the participant that the micropayment belongs to.
+      - *participant_id
       - name: customer_id
         description: Identifies the customer that the micropayment belongs to.
       - name: micropayment_id
@@ -752,10 +747,13 @@ models:
     columns:
       - name: settlement_id
         description: A unique identifier for each settlement.
-      - name: participant_id
-        description: The unique identifier of the participant that the device belongs to.
+      - *participant_id
       - name: aggregation_id
         description: Identifies the aggregation that the micropayment belongs to.
+        tests:
+            - relationships:
+                to: ref('int_payments__settlements_summarized')
+                field: _aggregation_id
       - name: customer_id
         description: Identifies the customer that the micropayment belongs to.
       - name: funding_source_id
@@ -777,6 +775,10 @@ models:
           Uniquely identifies a card transaction, based on the ISO 8583 standard.
 
           If the acquirer is Elavon, this value will be split between `littlepay_reference_number` and `external_reference_number`.
+        tests:
+            - relationships:
+                to: ref('int_payments__settlements_summarized')
+                field: retrieval_reference_number
       - name: littlepay_reference_number
         description: |
           Uniquely identifies a card transaction.
