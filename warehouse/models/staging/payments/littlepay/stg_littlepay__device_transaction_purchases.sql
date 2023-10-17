@@ -54,6 +54,9 @@ stg_littlepay__device_transaction_purchases AS (
         _payments_key,
         _content_hash,
     FROM add_keys_drop_full_dupes
+    -- Drops one row associated with the bad customer record, likely used for testing, that's
+    -- dropped in stg_littlepay__customer_funding_source.
+    WHERE _key != '299c8bbfce21157dbab8a724e5831f8b'
     -- Some purchases initially are given a value of 'autoscan' for product_id, and then that
     -- value is later updated. No other partial duplicate conditions exist at implementation time.
     QUALIFY ROW_NUMBER() OVER (

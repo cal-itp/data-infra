@@ -96,6 +96,9 @@ stg_littlepay__device_transactions AS (
             _payments_key,
             _content_hash,
     FROM add_keys_drop_full_dupes
+    -- Drops one row associated with the bad customer record, likely used for testing, that's
+    -- dropped in stg_littlepay__customer_funding_source.
+    WHERE _key != 'b926629d7962c80880d6c4af01db94ae'
     -- Some transactions have placeholder information for routes, stops, and directions in their first export,
     -- then a later export contains the canonical version of the transaction with that information corrected
     QUALIFY ROW_NUMBER() OVER (
