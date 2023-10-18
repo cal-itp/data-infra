@@ -66,7 +66,7 @@ stg_littlepay__product_data AS (
 
 participants_to_routes_and_agency AS (
     SELECT
-        pf.participant_id,
+        pf.littlepay_participant_id,
         f.date,
         r.route_id,
         r.route_short_name,
@@ -296,7 +296,7 @@ join_table AS (
         ON m.participant_id = p.participant_id
             AND a.product_id = p.product_id
     LEFT JOIN participants_to_routes_and_agency AS r
-        ON r.participant_id = m.participant_id
+        ON r.littlepay_participant_id = m.participant_id
             -- here, can just use t1 because transaction date will be populated
             -- (don't have to handle unkowns the way we do with route_id)
             AND EXTRACT(DATE FROM TIMESTAMP(t1.transaction_date_time_utc)) = r.date
