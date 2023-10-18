@@ -75,6 +75,12 @@ stg_littlepay__customer_funding_source AS (
         _payments_key,
         _content_hash,
     FROM add_keys_drop_full_dupes
+    -- We experienced one customer_id in source files that mapped to two different
+    -- principal_customer_id values and instances, but these rows appear to be related to testing.
+    -- Because one of them has associated micropayment records, we keep that one while dropping
+    -- this one that has no associated micropayments. The one that's dropped appears to be genuine
+    -- bad data, mapping to an instance not otherwise associated with this customer_id.
+    WHERE _key != 'bf3d17b734923c2429add3c422e3cfe9'
     -- Some funding sources have incomplete information when first present in data, like missing
     -- values for form_factor or issuer_country that are filled in during later exports.
     -- Additionally, sometimes a filled column value is updated in newer exports for a given entry.
