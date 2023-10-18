@@ -35,11 +35,13 @@ Littlepay requests that clients accessing their raw data feeds through S3 rotate
 
 ### Create and store new credentials
 
-Secret Manager allows multiple versions of secrets, so [create a new version of each secret](https://cloud.google.com/secret-manager/docs/add-secret-version) (the access key ID and the secret key) and paste the new key as the value.
+First, follow the instructions linked above to create a new set of AWS keys for the client. The command you use to do so will look something like this:
 
 `aws iam create-access-key --user-name <username> --profile <profile>`
 
-You could also use the CLI to create new versions of secrets (but [the web UI](https://console.cloud.google.com/security/secret-manager?project=cal-itp-data-infra) contains the same functionality):
+Google Secret Manager allows you to store multiple versions of the same secret as you update the secret's value over time. Once you've created an updated key in AWS using the instructions above, [create a new version of the corresponding secret in Secret Manager](https://cloud.google.com/secret-manager/docs/add-secret-version) and paste the new AWS key as the value stored inside the new version of the secret (following the same format as the existing keys).
+
+If you prefer, you can use the Google Cloud CLI to create new versions of secrets, but [the web UI](https://console.cloud.google.com/security/secret-manager?project=cal-itp-data-infra contains the same functionality):
 
 `gcloud secrets versions add ...`
 
