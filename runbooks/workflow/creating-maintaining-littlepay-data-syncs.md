@@ -41,7 +41,7 @@ First, follow the instructions linked above to create a new set of AWS keys for 
 
 Google Secret Manager allows you to store multiple versions of the same secret as you update the secret's value over time. Once you've created an updated key in AWS using the instructions above, [create a new version of the corresponding secret in Secret Manager](https://cloud.google.com/secret-manager/docs/add-secret-version) and paste the new AWS key as the value stored inside the new version of the secret (following the same format as the existing keys).
 
-If you prefer, you can use the Google Cloud CLI to create new versions of secrets, but [the web UI](https://console.cloud.google.com/security/secret-manager?project=cal-itp-data-infra contains the same functionality):
+If you prefer, you can use the Google Cloud CLI to create new versions of secrets, but [the web UI](https://console.cloud.google.com/security/secret-manager?project=cal-itp-data-infra) contains the same functionality:
 
 `gcloud secrets versions add ...`
 
