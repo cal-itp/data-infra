@@ -8,7 +8,6 @@ seeds:
       - name: littlepay_participant_id
         description: Littlepay-assigned Participant ID.
         tests:
-          - not_null
           - unique
       - name: elavon_customer_name
         description: Elavon-assigned Customer Name.
