@@ -22,7 +22,7 @@ As new agencies are introduced to the contactless payments program we will want 
 - Navigate to the service account that you created in the Google Cloud Platform console and download the key as a `.json` file and store locally on your computer
 
 3. Add a new `Database` in Metabase for the agency
-   This creates the limit-access connection the the BigQuery warehouse.
+   This creates the limited-access connection the the BigQuery warehouse.
 
 - Navigate to Metabase, then from the upper-right hand corner select the `Settings --> Admin settings` section, then the `Databases` section in the top menu
   - Select `Add database`. Replace the following information:
@@ -66,11 +66,15 @@ Now, any questions or dashboards that you create within the collection that was 
 
 Relevant Metabase Concepts:
 
-- `Collection` - Created for each agency, in the previous section
+- `Question` - Visualizations of analysis concepts
+- `Dashboard` - Comprised of `Question`s and text tiles
+- `Collection` - An agency-specific 'folder' within Metabase where agency `Question`s and `Dashboard`s live. Created is explained in the previous documetnation  section. Permission layers are added at the Collection level.
 
-The easiest way to create a new dashboard for an agency in Metabase is to duplicate an existing existing dashboard into the new agency's `Collection`, created in the previous section. By duplicating the dashboard into the privacy-protected collection, you are ensuring that only representatives from that agency (and internal staff) are able to view the data.
+### Duplicating an existing dashboard
 
-At this time there are two different types of agency dashboards: those that use flat-fare fare formats and those that use variable-fare fare formats. There are currently none that use both. These differences impact a few questions within the dashboards, but the majority is the same. Some dashboards do have custom questions as requested by agencies.
+The easiest way to create a new dashboard for an agency in Metabase is to duplicate an existing dashboard into the new agency's `Collection`, created in the previous documentation section. By duplicating the dashboard into the permission-protected collection, you are ensuring that only representatives from that agency (and internal staff) are able to view the data.
+
+At this time there are two different types of agency dashboards: those that use flat fare formats and those that use variable fare formats. There are currently none that use both. These differences impact a few questions within the dashboards, but the majority of the dashboards is the same. Some dashboards do have custom questions as requested by agencies.
 
 Good source dashboards for copying:
 
@@ -79,13 +83,19 @@ Good source dashboards for copying:
 
 Metabase dashboards are comprised of `Questions`, which serve as the tiles in the dashboard. These will also be copied into the collection along with the dashboard during the copying process.
 
-Most of the work of setting up a new dashboard is configuring the copied questions to use the agency-specific database created in the previous section. You will need to open every question in the new collection and change the source table. Unfortunately, this requires you to reconfigure every question. It would be suggested to open up the agency's questions that you used as a source side-by-side with the copied questions and using that as the template. Using this method (duplicating an existing dashboard, changing the source database, and reconfiguring the question) is still preferable to starting from scratch because once the questions are saved the formatting and layout of the dashboard remains.
+### Re-configuring the copied questions to use the correct `Database`
 
-How to change source database in normal questions:
+Most of the work of setting up a new dashboard is re-configuring the copied questions to use the agency-specific database created in the previous section. You will need to open every question in the new collection and change the source table. The database name will be `Payments - [agency name]`, and the table that you use within the database will be the same as the example question.
 
-How to change source database and filter variables in SQL questions:
+Unfortunately, this requires you to reconfigure every question. It would be suggested to open up the agency's questions that you used as a source side-by-side with the copied questions and using that as the template. Using this method (duplicating an existing dashboard, changing the source database, and reconfiguring the question) is still preferable to starting from scratch because once the questions are saved the formatting and layout of the dashboard remains.
 
-How to update the dashboard filter:
+#### How to change source database in normal questions:
+
+#### How to change source database and filter variables in SQL questions:
+
+#### How to update the dashboard filter:
+
+### Configure the dashboard date `Time Window` filter widget
 
 Once the questions are updated, the remaining step is to configure them to be filtered by the dashboard filter widget.
 
