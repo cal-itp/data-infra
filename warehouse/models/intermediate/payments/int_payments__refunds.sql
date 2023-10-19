@@ -7,7 +7,7 @@ micropayments_table_refunds AS (
         micropayment_id,
         participant_id,
         customer_id,
-        charge_amount AS refund_amount,
+        ABS(charge_amount) AS refund_amount,
         EXTRACT(DATE FROM transaction_time AT TIME ZONE "America/Los_Angeles") AS transaction_date,
         _line_number,
         SAFE_CAST(currency_code AS NUMERIC) AS currency_code,
