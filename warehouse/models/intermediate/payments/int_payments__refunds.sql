@@ -1,3 +1,5 @@
+{{ config(materialized = "table") }}
+
 WITH
 
 micropayments_table_refunds AS (
