@@ -26,7 +26,12 @@ models:
       before getting authorised, or multiple debt recovery attempts.) This model keeps only the most
       recent row according to `authorisation_date_time_utc`.
     columns:
-      - name: aggregation_id
+      - &aggregation_pk
+        name: aggregation_id
+        description: |
+          ID of the aggregation being summarized. An aggregation can contain or be associated with multiple
+          micropayment, authorisation, and settlement events. It represents the unit at which settlement occurs
+          (so multiple settlement events only occur for a single aggregation if there are refunds against the original settlement.)
         tests:
           - not_null
           - unique
@@ -43,12 +48,7 @@ models:
       - dbt_utils.expression_is_true:
           expression: "contains_refund = (credit_amount < 0)"
     columns:
-      - name: aggregation_id
-        description: |
-          ID of the aggregation being settled.
-        tests:
-          - not_null
-          - unique
+      - *aggregation_pk
       - name: retrieval_reference_number
         tests:
           - not_null
@@ -89,3 +89,46 @@ models:
           Total dollar amount associated with credit (refund) settlements in this aggregation.
           Numbers in this column are negative because they represent amounts credited (refunded) by the participant (agency) to the customer (rider);
           i.e., these values represent costs for the participant (agency).
+  - name: int_payments__micropayments_to_aggregations
+    description: |
+      Littlepay micropayments grouped to the aggregation (`aggregation_id`) level.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "total_nominal_amount_dollars >= net_micropayment_amount_dollars"
+    columns:
+      - name: participant_id
+      - *aggregation_pk
+      - name: net_micropayment_amount_dollars
+        description: |
+          Sum of the `charge_amount` values for all micropayments in this aggregation.
+          If there are credit (pre-settlement refund) micropayments in the aggregation,
+          the value of those will have been subtracted from this total because they have
+          negative `charge_amount` values.
+          Post-settlement refunds will not be reflected since they are not recorded in the micropayments table.
+      - name: total_nominal_amount_dollars
+        description: |
+          Sum of the `nominal_amount` values for all micropayments in this aggregation.
+      - name: latest_transaction_time
+        description: |
+          Maximum (latest) transaction time for micropayments in this aggregation.
+      - name: num_micropayments
+        description: |
+          Number of distinct micropayment ID values for micropayments in this aggregation.
+      - name: contains_pre_settlement_refund
+        description: |
+          If "true", this aggregation contains a pre-settlement refund (i.e., contains a micropayment
+          with `charge_type` "refund").
+      - name: contains_variable_fare
+        description: |
+          If "true", this aggregation contains at least one micropayment with a variable fare charge type.
+      - name: contains_flat_fare
+        description: |
+          If "true", this aggregation contains at least one micropayment with a `flat_fare` charge type.
+      - name: contains_pending_charge
+        description: |
+          If "true", this aggregation contains at least one micropayment with a pending charge type.
+      - name: contains_adjusted_micropayment
+        description: |
+          If "true", this aggregation contains at least one micropayment that had a micropayment
+          adjustment applied. For example, micropayments that were reduced due to a fare cap being applied
+          will have a "true" in this column.
