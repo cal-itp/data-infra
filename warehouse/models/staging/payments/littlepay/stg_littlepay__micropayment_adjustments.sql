@@ -40,6 +40,15 @@ add_keys_drop_full_dupes AS (
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
 ),
 
+drop_additional_dupes AS (
+    SELECT
+        *
+    FROM add_keys_drop_full_dupes
+    -- drops four true duplicates from two micropayments that generated multiple IDs seemingly
+    -- unintentionally (those micropayments are themselves dropped in the micropayments model)
+    WHERE _key not in ('3d78961ec137c0a16e7e3b888d81c024', '748f95a050d6f45598d1571381b17fad', 'af41f1341756c8feea02d4b8aa9de973', '61fccf1b84e7e3f0afddaae426f29f36')
+),
+
 stg_littlepay__micropayment_adjustments AS (
     SELECT
         micropayment_id,
@@ -63,7 +72,7 @@ stg_littlepay__micropayment_adjustments AS (
         _key,
         _payments_key,
         _content_hash,
-    FROM add_keys_drop_full_dupes
+    FROM drop_additional_dupes
 )
 
 SELECT * FROM stg_littlepay__micropayment_adjustments

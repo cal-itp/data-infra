@@ -37,6 +37,18 @@ dedupe_rows AS (
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
 ),
 
+add_surrogate_keys AS (
+    SELECT
+        *,
+        -- generate keys now that input columns have been trimmed & cast
+        {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
+        {{ dbt_utils.generate_surrogate_key(['micropayment_id']) }} AS _payments_key,
+    FROM dedupe_rows
+    -- completed variable fare payments have two rows with same micropayment id and different transaction times
+    -- we keep the second tap for these
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY micropayment_id ORDER BY transaction_time DESC) = 1
+),
+
 stg_littlepay__micropayments AS (
     SELECT
         micropayment_id,
@@ -58,13 +70,13 @@ stg_littlepay__micropayments AS (
         littlepay_export_ts,
         littlepay_export_date,
         _content_hash,
-        -- generate keys now that input columns have been trimmed & cast
-        {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
-        {{ dbt_utils.generate_surrogate_key(['micropayment_id']) }} AS _payments_key,
-    FROM dedupe_rows
-    -- completed variable fare payments have two rows with same micropayment id and different transaction times
-    -- we keep the second tap for these
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY micropayment_id ORDER BY transaction_time DESC) = 1
+        _key,
+        _payments_key,
+    FROM add_surrogate_keys
+    -- drops two true duplicates that were inexplicably assigned two micropayment IDs at the
+    -- time of transaction creation, despite mapping to only one transaction. This prevents
+    -- modeling failures down the line.
+    WHERE _key not in ('511edf5a7ff43a01b4af5dd07f1f6c86', '666dc7d1eee11e09e27e7ec074bc2f6d')
 )
 
 SELECT * FROM stg_littlepay__micropayments
