@@ -752,7 +752,7 @@ models:
         description: Identifies the aggregation that the micropayment belongs to.
         tests:
             - relationships:
-                to: ref('int_payments__settlements_summarized')
+                to: ref('int_payments__settlements_to_aggregations')
                 field: aggregation_id
       - name: customer_id
         description: Identifies the customer that the micropayment belongs to.
@@ -777,7 +777,7 @@ models:
           If the acquirer is Elavon, this value will be split between `littlepay_reference_number` and `external_reference_number`.
         tests:
             - relationships:
-                to: ref('int_payments__settlements_summarized')
+                to: ref('int_payments__settlements_to_aggregations')
                 field: retrieval_reference_number
       - name: littlepay_reference_number
         description: |

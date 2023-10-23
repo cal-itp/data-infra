@@ -17,9 +17,9 @@ models:
       - name: aggregation_id
         tests:
           - relationships:
-              to: ref('int_payments__authorisations_summarized')
+              to: ref('int_payments__authorisations_to_aggregations')
               field: aggregation_id
-  - name: int_payments__authorisations_summarized
+  - name: int_payments__authorisations_to_aggregations
     description: |
       This model contains only the most recent authorisations data per `aggregation_id`.
       Many aggregations pass through a few different authorisations (for example, perhaps a card check
@@ -35,7 +35,7 @@ models:
         tests:
           - not_null
           - unique
-  - name: int_payments__settlements_summarized
+  - name: int_payments__settlements_to_aggregations
     description: |
       This model contains Littlepay settlements aggregated to the `aggregation_id + retrieval_reference_number` level.
     tests:
