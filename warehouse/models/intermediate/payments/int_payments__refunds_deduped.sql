@@ -5,6 +5,7 @@ WITH
 micropayments_table_refunds AS (
     SELECT
 
+        SAFE_CAST(NULL AS STRING) AS refund_id,
         aggregation_id,
         micropayment_id,
         participant_id,
@@ -12,7 +13,7 @@ micropayments_table_refunds AS (
         ABS(charge_amount) AS refund_amount,
         EXTRACT(DATE FROM transaction_time AT TIME ZONE "America/Los_Angeles") AS transaction_date,
         _line_number,
-        SAFE_CAST(currency_code AS NUMERIC) AS currency_code,
+        currency_code,
         instance,
         extract_filename,
         ts,
@@ -23,12 +24,14 @@ micropayments_table_refunds AS (
         _payments_key,
         'micropayments' AS source_table
 
-    FROM {{ ref('stg_littlepay__micropayments') }} WHERE type = 'CREDIT'
+    FROM {{ ref('stg_littlepay__micropayments') }}
+    WHERE type = 'CREDIT'
 ),
 
 refunds_table_refunds AS (
     SELECT
 
+        refund_id,
         aggregation_id,
         micropayment_id,
         participant_id,
@@ -48,6 +51,9 @@ refunds_table_refunds AS (
         'refunds' AS source_table
 
     FROM {{ ref('stg_littlepay__refunds') }}
+    WHERE approval_status != 'REFUSED'
+    QUALIFY DENSE_RANK() OVER (PARTITION BY refund_id ORDER BY littlepay_export_ts DESC) = 1
+
 ),
 
 refunds_union AS (
@@ -64,6 +70,7 @@ int_payments__refunds AS (
 
     SELECT
 
+        refund_id,
         aggregation_id,
         micropayment_id,
         participant_id,
