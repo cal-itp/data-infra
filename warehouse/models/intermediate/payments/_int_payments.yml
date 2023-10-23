@@ -17,9 +17,9 @@ models:
       - name: aggregation_id
         tests:
           - relationships:
-              to: ref('int_payments__authorisations_to_aggregations')
+              to: ref('int_payments__latest_authorisations_by_aggregation')
               field: aggregation_id
-  - name: int_payments__authorisations_to_aggregations
+  - name: int_payments__latest_authorisations_by_aggregation
     description: |
       This model contains only the most recent authorisations data per `aggregation_id`.
       Many aggregations pass through a few different authorisations (for example, perhaps a card check
