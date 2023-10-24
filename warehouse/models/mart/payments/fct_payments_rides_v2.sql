@@ -20,8 +20,8 @@ dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
-payments_gtfs_datasets AS (
-    SELECT * FROM {{ ref('payments_gtfs_datasets') }}
+payments_entity_mapping AS (
+    SELECT * FROM {{ ref('payments_entity_mapping') }}
 ),
 
 stg_littlepay__micropayments AS (
@@ -73,7 +73,7 @@ participants_to_routes_and_agency AS (
         r.route_long_name,
         a.agency_id,
         a.agency_name,
-    FROM payments_gtfs_datasets AS pf
+    FROM payments_entity_mapping AS pf
     LEFT JOIN dim_gtfs_datasets d
         ON pf.gtfs_dataset_source_record_id = d.source_record_id
     LEFT JOIN fct_daily_schedule_feeds AS f
