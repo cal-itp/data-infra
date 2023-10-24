@@ -1,7 +1,7 @@
 version: 2
 
 seeds:
-  - name: payments_gtfs_datasets
+  - name: payments_entity_mapping
     columns:
       - name: gtfs_dataset_source_record_id
         description: Unversioned key to dim_gtfs_datasets natural key from Airtable.
