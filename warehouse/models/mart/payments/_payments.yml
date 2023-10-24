@@ -140,12 +140,26 @@ models:
       present in the micropayments and settlements source data.
     columns:
       - *participant_id
+      - &organization_name
+        name: organization_name
+        description: |
+          Name of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
+          The mapping of organization records to payments entities is manually maintained in a seed file.
+      - &organization_source_record_id
+        name: organization_source_record_id
+        description: |
+          `source_record_id` of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
+          The mapping of organization records to payments entities is manually maintained in a seed file.
       - name: aggregation_id
         description: |
           Aggregation ID that uniquely identifies this aggregation.
         tests:
           - not_null
           - unique
+      - name: aggregation_datetime
+        description: |
+          Datetime of settlement if present, otherwise falls back to authorisation, otherwise falls back to micropayment.
+          This can be used to represent the most recent update for the aggregation.
       - name: has_micropayment
         description: |
           If "true", there is at least one micropayment in the micropayments source data with this aggregation ID.
@@ -212,9 +226,12 @@ models:
         description: '{{ doc("lp_settlement_debit_amount") }}'
       - name: settlement_credit_amount
         description: '{{ doc("lp_settlement_credit_amount") }}'
+
   - name: fct_elavon__transactions
     description: Transactions processed by Elavon
     columns:
+      - *organization_name
+      - *organization_source_record_id
       - name: payment_reference
         description: |
           Unique number assigned to every "Fund Event" (ACH Payment/Withdrawal, Wire Transfer, Invoice)

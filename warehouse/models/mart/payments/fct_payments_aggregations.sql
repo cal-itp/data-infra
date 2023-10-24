@@ -20,12 +20,24 @@ settlements AS (
     FROM {{ ref('int_payments__settlements_to_aggregations') }}
 ),
 
+payments_entity_mapping AS (
+    SELECT
+        * EXCEPT(littlepay_participant_id),
+        littlepay_participant_id AS participant_id
+    FROM {{ ref('payments_entity_mapping') }}
+),
+
+orgs AS (
+    SELECT * FROM {{ ref('dim_organizations') }}
+),
+
 -- TODO: add refunds
 
-joined AS (
+join_payments AS (
     SELECT
         COALESCE(micropayments.aggregation_id, authorisations.aggregation_id, settlements.aggregation_id) AS aggregation_id,
         COALESCE(micropayments.participant_id, authorisations.participant_id, settlements.participant_id) AS participant_id,
+        COALESCE(latest_update_timestamp, authorisation_date_time_utc, latest_transaction_time) AS aggregation_datetime,
         micropayments.aggregation_id IS NOT NULL AS has_micropayment,
         authorisations.aggregation_id IS NOT NULL AS has_authorisation,
         settlements.aggregation_id IS NOT NULL AS has_settlement,
@@ -39,13 +51,28 @@ joined AS (
     FULL OUTER JOIN settlements USING (aggregation_id)
 ),
 
+join_orgs AS (
+    SELECT
+        join_payments.*,
+        orgs.name AS organization_name,
+        orgs.source_record_id AS organization_source_record_id,
+    FROM join_payments
+    LEFT JOIN payments_entity_mapping USING (participant_id)
+    LEFT JOIN orgs
+        ON payments_entity_mapping.organization_source_record_id = orgs.source_record_id
+        AND CAST(join_payments.aggregation_datetime AS TIMESTAMP) BETWEEN orgs._valid_from AND orgs._valid_to
+),
+
 fct_payments_aggregations AS (
     SELECT
         participant_id,
+        organization_name,
+        organization_source_record_id,
         aggregation_id,
         has_micropayment,
         has_authorisation,
         has_settlement,
+        aggregation_datetime,
         authorisation_retrieval_reference_number,
         settlement_retrieval_reference_number,
         net_micropayment_amount_dollars,
@@ -67,7 +94,7 @@ fct_payments_aggregations AS (
         contains_refund AS settlement_contains_refund,
         debit_amount AS settlement_debit_amount,
         credit_amount AS settlement_credit_amount
-    FROM joined
+    FROM join_orgs
 )
 
 SELECT * FROM fct_payments_aggregations
