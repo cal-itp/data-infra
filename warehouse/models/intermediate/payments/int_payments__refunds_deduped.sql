@@ -12,9 +12,7 @@ micropayments_table_refunds AS (
         ABS(charge_amount) AS refund_amount,
         EXTRACT(DATE FROM transaction_time AT TIME ZONE "America/Los_Angeles") AS transaction_date,
 
-        -- Add columns that we want to preserve from refunds table after union as null strings
-        -- Is this an appropriate way to add new columns that are always NULL as the
-        -- same type that appears in the refunds table?
+        -- add columns that we want to preserve from refunds table after union as null strings
         SAFE_CAST(NULL AS STRING) AS refund_id,
         SAFE_CAST(NULL AS STRING) AS settlement_id,
         SAFE_CAST(NULL AS STRING) AS retrieval_reference_number,
@@ -88,9 +86,6 @@ refunds_table_refunds AS (
         'refunds' AS source_table
 
     FROM {{ ref('stg_littlepay__refunds') }}
-
-    -- should this be here, and should it also include 'AWAITING' if so?
-    WHERE approval_status != 'REFUSED'
     QUALIFY DENSE_RANK() OVER (PARTITION BY refund_id ORDER BY littlepay_export_ts DESC) = 1
 
 ),
@@ -149,7 +144,7 @@ int_payments__refunds AS (
     -- for refunds that appear in both micropayments and refunds source tables,
     -- is this a functional way to only keep duplicates that are in refunds source table?
     -- This is currently filtering out refunds table entries that have the same aggregation_id/refund_amount but different refund_ids
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY aggregation_id, refund_amount ORDER BY source_table DESC) = 1
+    --QUALIFY ROW_NUMBER() OVER (PARTITION BY aggregation_id, refund_amount ORDER BY source_table DESC) = 1
 
 )
 
