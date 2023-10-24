@@ -16,7 +16,7 @@ final_update AS (
     QUALIFY ROW_NUMBER() OVER(PARTITION BY aggregation_id ORDER BY authorisation_date_time_utc DESC) = 1
 ),
 
-int_payments__authorisations_summarized AS (
+int_payments__latest_authorisations_by_aggregation AS (
     SELECT
         participant_id,
         aggregation_id,
@@ -43,4 +43,4 @@ int_payments__authorisations_summarized AS (
     LEFT JOIN auth USING(_payments_key)
 )
 
-SELECT * FROM int_payments__authorisations_summarized
+SELECT * FROM int_payments__latest_authorisations_by_aggregation

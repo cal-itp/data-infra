@@ -55,7 +55,7 @@ summarize_overall AS (
     GROUP BY 1, 2, 3
 ),
 
-int_payments__settlements_summarized AS (
+int_payments__settlements_to_aggregations AS (
     SELECT
         summary.participant_id,
         summary.aggregation_id,
@@ -77,4 +77,4 @@ int_payments__settlements_summarized AS (
         AND credit.settlement_type = "CREDIT"
 )
 
-SELECT * FROM int_payments__settlements_summarized
+SELECT * FROM int_payments__settlements_to_aggregations

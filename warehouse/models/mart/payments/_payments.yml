@@ -17,8 +17,9 @@ models:
           - not_null
           - unique_proportion:
               at_least: 0.999
-      - name: participant_id
-        description: Littlepay-assigned Participant ID
+      - &participant_id
+        name: participant_id
+        description: '{{ doc("lp_participant_id") }}'
       - name: funding_source_vault_id
         description: From payments.micropayments.funding_source_vault_id
       - name: customer_id
@@ -128,6 +129,89 @@ models:
       - name: transaction_date_pacific
       - name: day_of_week
         description: Day of week value of the transaction in the range [1,7] with Sunday as the first day of the week.
+
+  - name: fct_payments_aggregations
+    description: |
+      Each row in this table is an "aggregation".
+      An "aggregation" is a group of micropayment/transactions processed (authorised and settled) together.
+      This table summarizes information about aggregations which can be used to reconcile
+      payments information with other sources.
+      Note: This table does not currently include information from the refunds source data, but it does contain refund information
+      present in the micropayments and settlements source data.
+    columns:
+      - *participant_id
+      - name: aggregation_id
+        description: |
+          Aggregation ID that uniquely identifies this aggregation.
+        tests:
+          - not_null
+          - unique
+      - name: has_micropayment
+        description: |
+          If "true", there is at least one micropayment in the micropayments source data with this aggregation ID.
+          Essentially all aggregations should have a micropayment because the micropayment is the first step
+          in the payment workflow.
+      - name: has_authorisation
+        description: |
+          If "true", there is at least one authorisation in the authorisations source data with this aggregation ID.
+          Authorisation is the second step in the payment workflow after the micropayment occurs.
+      - name: has_settlement
+        description: |
+          If "true", there is at least one settlement in the settlements source data with this aggregation ID.
+          Settlement is the final step in the payment workflow, so some aggregations may be missing
+          settlements simply because they are not processed yet.
+      - name: authorisation_retrieval_reference_number
+        description: |
+          Retrieval reference number for the most recent authorisation of this aggregation.
+      - name: settlement_retrieval_reference_number
+        description: |
+          Retrieval reference number for the settlement of this aggregation.
+          This field can be used to map to Elavon data.
+      - name: net_micropayment_amount_dollars
+        description: '{{ doc("lp_net_micropayment_amount_dollars") }}'
+      - name: total_nominal_amount_dollars
+        description: '{{ doc("lp_total_nominal_amount_dollars") }}'
+      - name: latest_transaction_time
+        description: '{{ doc("lp_mp_latest_transaction_time") }}'
+      - name: num_micropayments
+        description: '{{ doc("lp_num_micropayments") }}'
+      - name: contains_pre_settlement_refund
+        description: '{{ doc("lp_contains_pre_settlement_refund") }}'
+      - name: contains_variable_fare
+        description: '{{ doc("lp_contains_variable_fare") }}'
+      - name: contains_flat_fare
+        description: '{{ doc("lp_contains_flat_fare") }}'
+      - name: contains_pending_charge
+        description: '{{ doc("lp_contains_pending_charge") }}'
+      - name: contains_adjusted_micropayment
+        description: '{{ doc("lp_contains_adjusted_micropayment") }}'
+      - name: latest_authorisation_request_type
+        description: |
+          Request type of the most recent authorisation associated with this aggregation.
+      - name: authorisation_transaction_amount
+        description: |
+          Transaction amount of the most recent authorisation associated with this aggregation.
+          Note that `CARD_CHECK` authorisations may have transaction amount of 0 even if the transaction being authorised will
+          ultimately have a larger transaction amount.
+      - name: latest_authorisation_status
+        description: |
+          Status of the most recent authorisation associated with this aggregation.
+      - name: latest_authorisation_update_datetime
+        description: |
+          `authorisation_date_time_utc` of the most recent authorisation associated with this aggregation.
+          This is a UTC datetime.
+      - name: settlement_contains_imputed_type
+        description: '{{ doc("lp_settlement_contains_imputed_type") }}'
+      - name: latest_settlement_update_datetime
+        description: '{{ doc("lp_settlement_latest_update_timestamp") }}'
+      - name: net_settled_amount_dollars
+        description: '{{ doc("lp_net_settled_amount_dollars") }}'
+      - name: settlement_contains_refund
+        description: '{{ doc("lp_settlement_contains_refund") }}'
+      - name: settlement_debit_amount
+        description: '{{ doc("lp_settlement_debit_amount") }}'
+      - name: settlement_credit_amount
+        description: '{{ doc("lp_settlement_credit_amount") }}'
   - name: fct_elavon__transactions
     description: Transactions processed by Elavon
     columns:
