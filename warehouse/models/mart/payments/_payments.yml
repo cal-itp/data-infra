@@ -136,6 +136,8 @@ models:
       An "aggregation" is a group of micropayment/transactions processed (authorised and settled) together.
       This table summarizes information about aggregations which can be used to reconcile
       payments information with other sources.
+      Note: This table does not currently include information from the refunds source data, but it does contain refund information
+      present in the micropayments and settlements source data.
     columns:
       - *participant_id
       - name: aggregation_id
