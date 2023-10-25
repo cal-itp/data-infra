@@ -59,7 +59,7 @@ refunds_table_refunds AS (
         transaction_date,
         refund_id,
         settlement_id,
-        retrieval_reference_number,
+        COALESCE(retrieval_reference_number, aggregation_id) AS retrieval_reference_number,
         transaction_amount,
         proposed_amount,
         status,
@@ -141,7 +141,7 @@ int_payments__refunds AS (
         source_table
 
     FROM refunds_union
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY aggregation_id, refund_amount ORDER BY littlepay_export_ts DESC) = 1
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY retrieval_reference_number, refund_amount ORDER BY littlepay_export_ts DESC) = 1
 
 )
 
