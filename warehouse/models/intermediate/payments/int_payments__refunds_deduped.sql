@@ -45,7 +45,7 @@ micropayments_table_refunds AS (
 
     FROM {{ ref('stg_littlepay__micropayments') }}
     WHERE type = 'CREDIT'
-        AND _key NOT IN (['043ecc000223a299ce17f6a342b1d240', '3536fb2035bbcf4dcb1f3abf001b5185'])
+        AND _key NOT IN ('043ecc000223a299ce17f6a342b1d240', '3536fb2035bbcf4dcb1f3abf001b5185')
 ),
 
 refunds_table_refunds AS (
