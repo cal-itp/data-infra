@@ -68,6 +68,7 @@ fct_payments_aggregations AS (
         participant_id,
         organization_name,
         organization_source_record_id,
+        LAST_DAY(EXTRACT(DATE FROM aggregation_datetime), MONTH) AS end_of_month_date,
         aggregation_id,
         has_micropayment,
         has_authorisation,

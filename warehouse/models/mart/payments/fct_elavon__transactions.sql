@@ -50,6 +50,8 @@ fct_elavon__transactions AS (
     SELECT
         organization_name,
         organization_source_record_id,
+        -- settlement date is populated for deposits but not for billing
+        LAST_DAY(COALESCE(settlement_date, payment_date), MONTH) AS end_of_month_date,
         payment_reference,
         payment_date,
         account_number,
