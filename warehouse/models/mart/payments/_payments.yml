@@ -155,6 +155,8 @@ models:
           The last day of the month of the aggregation_datetime.
           This column is primarily for use in BI tooling to support consistent dates across activity types.
           Aggregation activity happens throughout the month.
+        tests:
+          - not_null
       - name: aggregation_id
         description: |
           Aggregation ID that uniquely identifies this aggregation.
@@ -245,6 +247,8 @@ models:
           This column is primarily for use in BI tooling to support consistent dates across activity types.
           Billing activity generally occurs only once per month, at the end of the month, while deposit
           activity happens throughout the month.
+        tests:
+          - not_null
       - name: payment_reference
         description: |
           Unique number assigned to every "Fund Event" (ACH Payment/Withdrawal, Wire Transfer, Invoice)
