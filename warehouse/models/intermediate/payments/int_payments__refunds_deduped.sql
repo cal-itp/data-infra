@@ -45,6 +45,7 @@ micropayments_table_refunds AS (
 
     FROM {{ ref('stg_littlepay__micropayments') }}
     WHERE type = 'CREDIT'
+        AND _key NOT IN (['043ecc000223a299ce17f6a342b1d240', '3536fb2035bbcf4dcb1f3abf001b5185'])
 ),
 
 refunds_table_refunds AS (
@@ -140,11 +141,7 @@ int_payments__refunds AS (
         source_table
 
     FROM refunds_union
-
-    -- for refunds that appear in both micropayments and refunds source tables,
-    -- is this a functional way to only keep duplicates that are in refunds source table?
-    -- This is currently filtering out refunds table entries that have the same aggregation_id/refund_amount but different refund_ids
-    --QUALIFY ROW_NUMBER() OVER (PARTITION BY aggregation_id, refund_amount ORDER BY source_table DESC) = 1
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY aggregation_id, refund_amount ORDER BY littlepay_export_ts DESC) = 1
 
 )
 
