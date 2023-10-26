@@ -80,3 +80,65 @@ Total dollar amount associated with credit (refund) settlements in this aggregat
 Numbers in this column are negative because they represent amounts credited (refunded) by the participant (agency) to the customer (rider);
 i.e., these values represent costs for the participant (agency).
 {% enddocs %}
+
+---------------- SETTLEMENTS TABLE ----------------
+
+{% docs lp_settlement_id %}
+A unique identifier for each settlement.
+{% enddocs %}
+
+{% docs lp_aggregation_id %}
+Identifies an aggregation of one or more micropayments that can be authorised/settled.
+{% enddocs %}
+
+{% docs lp_customer_id %}
+Identifies the customer that the micropayment belongs to.
+{% enddocs %}
+
+{% docs lp_funding_source_id %}
+Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped.
+
+A registered customer can have multiple funding sources linked to it. This field can be used to join to the `customer_funding_source` feed.
+{% enddocs %}
+
+{% docs lp_settlement_type %}
+Type of settlement that occurred. Possible values are `DEBIT` or `CREDIT`.
+
+If refunding a micropayment that has already been settled, the value will be `CREDIT`.
+{% enddocs %}
+
+{% docs lp_transaction_amount %}
+The settlement amount.
+{% enddocs %}
+
+{% docs lp_currency_code %}
+ISO 4217 numeric currency code for the amount that was requested to be settled.
+{% enddocs %}
+
+{% docs lp_retrieval_reference_number %}
+Uniquely identifies a card transaction, based on the ISO 8583 standard.
+
+If the acquirer is Elavon, this value will be split between `littlepay_reference_number` and `external_reference_number`.
+{% enddocs %}
+
+{% docs lp_littlepay_reference_number %}
+Uniquely identifies a card transaction.
+
+If the acquirer is Elavon, then this key will contain the first part of the string from `retrieval_reference_number`.
+{% enddocs %}
+
+{% docs lp_external_reference_number %}
+Uniquely identifies a card transaction.
+
+If the acquirer is Elavon, then this key will contain the second part of the string from `retrieval_reference_number`.
+{% enddocs %}
+
+{% docs lp_settlement_requested_date_time_utc %}
+Timestamp of when the settlement request was submitted to the acquirer.
+Per October 2023 updates from Littlepay, it may be more appropriate
+to interpret this field as a "last updated" value.
+{% enddocs %}
+
+{% docs lp_acquirer %}
+Identifies the acquirer used to settle the transaction.
+{% enddocs %}
