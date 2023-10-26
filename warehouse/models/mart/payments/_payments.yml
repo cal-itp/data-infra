@@ -190,9 +190,9 @@ models:
           This field can be used to map to Elavon data.
       - name: net_micropayment_amount_dollars
         description: '{{ doc("lp_net_micropayment_amount_dollars") }}'
-      - name: total_nominal_amount_dollars
+      - name: total_micropayment_nominal_amount_dollars
         description: '{{ doc("lp_total_nominal_amount_dollars") }}'
-      - name: latest_transaction_time
+      - name: latest_micropayment_transaction_datetime
         description: '{{ doc("lp_mp_latest_transaction_time") }}'
       - name: num_micropayments
         description: '{{ doc("lp_num_micropayments") }}'
