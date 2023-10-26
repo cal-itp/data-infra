@@ -117,8 +117,8 @@ def sync_file(
         )
         try:
             metadata_str = fs.getxattr(
-                path=f"gs://{fileinfo.name}",
-                attr=PARTITIONED_ARTIFACT_METADATA_KEY,  # noqa: E231
+                path=f"gs://{fileinfo.name}",  # noqa: E231
+                attr=PARTITIONED_ARTIFACT_METADATA_KEY,
             )
         except KeyError:
             print(f"metadata missing on {fileinfo.name}")

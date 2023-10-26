@@ -30,7 +30,7 @@ def email_failures(task_instance: TaskInstance, execution_date, **kwargs):
     The following agency GTFS feeds could not be extracted on {execution_date}:
 
     {html_report}
-    """  # noqa: E231
+    """  # noqa: E231,E241
 
     if os.environ["AIRFLOW_ENV"] == "development":
         print(
