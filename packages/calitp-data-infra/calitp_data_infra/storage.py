@@ -520,8 +520,8 @@ def get_latest(
     return cls(
         **json.loads(
             get_fs().getxattr(
-                path=f"gs://{latest.name}",
-                attr=PARTITIONED_ARTIFACT_METADATA_KEY,  # noqa: E231
+                path=f"gs://{latest.name}",  # noqa: E231
+                attr=PARTITIONED_ARTIFACT_METADATA_KEY,
             )
         )
     )
