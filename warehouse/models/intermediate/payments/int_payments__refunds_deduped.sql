@@ -51,11 +51,13 @@ micropayments_table_refunds AS (
         AND _key NOT IN ('043ecc000223a299ce17f6a342b1d240', '3536fb2035bbcf4dcb1f3abf001b5185')
 ),
 
+
 distinct_aggregations_by_refund_id AS (
 
-    SELECT DISTINCT aggregation_id,
-        refund_id
+    SELECT DISTINCT refund_id,
+        aggregation_id
     FROM {{ ref('stg_littlepay__refunds') }}
+    WHERE aggregation_id IS NOT NULL
 
 ),
 
@@ -71,7 +73,7 @@ refunds_table_refunds AS (
         refund_id,
         settlement_id,
         retrieval_reference_number,
-        COALESCE(retrieval_reference_number, t1. aggregation_id, t2.aggregation_id) AS coalesced_id,
+        COALESCE(retrieval_reference_number, t1.aggregation_id, t2.aggregation_id) AS coalesced_id,
         transaction_amount,
         proposed_amount,
         status,
@@ -100,7 +102,7 @@ refunds_table_refunds AS (
 
     FROM {{ ref('stg_littlepay__refunds') }} AS t1
     LEFT JOIN distinct_aggregations_by_refund_id AS t2
-    USING (refund_id)
+        USING (refund_id)
     -- this dedupes on refund ID because individual refunds sometimes appear multiple times with multiple statuses
     -- the goal here is to get the latest update per refund
     QUALIFY DENSE_RANK() OVER (PARTITION BY refund_id ORDER BY littlepay_export_ts DESC) = 1
