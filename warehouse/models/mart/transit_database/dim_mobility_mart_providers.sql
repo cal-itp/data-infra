@@ -16,7 +16,9 @@ WITH program_funding AS (
 annual_ntd AS (
     SELECT *
     FROM mart_ntd.dim_annual_ntd_agency_information
-    WHERE year = (SELECT MAX(year) FROM mart_ntd.dim_annual_ntd_agency_information)
+    WHERE
+        year = (SELECT MAX(year) FROM mart_ntd.dim_annual_ntd_agency_information) AND
+        state = 'CA'
 ),
 
 gtfs_data AS (
@@ -59,8 +61,8 @@ serviced_counties AS (
 
 dim_mobility_mart_providers AS (
     SELECT
-        orgs.name AS agency_name,
-        orgs.ntd_id AS ntd_id,
+        annual_ntd.agency_name AS agency_name,
+        annual_ntd.ntd_id AS ntd_id,
         annual_ntd.city AS hq_city,
         orgs_x_hq.county_geography_name AS hq_county,
         ARRAY_TO_STRING(
@@ -72,7 +74,7 @@ dim_mobility_mart_providers AS (
             ),
             innerDelimiter
         ) AS counties_served,
-        orgs.website AS agency_website,
+        annual_ntd.url AS agency_website,
         county_geog.caltrans_district AS caltrans_district_id,
         county_geog.caltrans_district_name AS caltrans_district_name,
         orgs.is_public_entity AS is_public_entity,
@@ -90,7 +92,9 @@ dim_mobility_mart_providers AS (
             innerDelimiter
         ) AS gtfs_schedule_uris
     FROM
-        mart_transit_database.dim_organizations orgs
+        annual_ntd
+    LEFT JOIN
+        mart_transit_database.dim_organizations orgs ON orgs.ntd_id = annual_ntd.ntd_id AND orgs._is_current IS TRUE
     LEFT JOIN
         mart_transit_database.bridge_organizations_x_headquarters_county_geography orgs_x_hq ON orgs.key = orgs_x_hq.organization_key
     LEFT JOIN
@@ -98,14 +102,11 @@ dim_mobility_mart_providers AS (
     LEFT JOIN
         program_funding ON program_funding.organization_key = orgs.key
     LEFT JOIN
-        annual_ntd ON annual_ntd.ntd_id = orgs.ntd_id
-    LEFT JOIN
         gtfs_data ON gtfs_data.key = orgs.key
     LEFT JOIN
         serviced_counties ON serviced_counties.key = orgs.key
-    WHERE
-        orgs._is_current IS TRUE AND
-        public_currently_operating IS TRUE
+    ORDER BY
+        annual_ntd.ntd_id
 )
 
 SELECT * FROM dim_mobility_mart_providers
