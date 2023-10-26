@@ -9,10 +9,13 @@ WITH auth AS (
 -- for example: number of attempted authorisations over all?
 
 -- get the payments key values of rows that are the final update for that aggregation ID
-final_update AS (
+final_update_with_status AS (
     SELECT
         _payments_key
     FROM auth
+    -- We cannot glean useful information downstream from a null status, so we take the most recent
+    -- authorisation with a non-null status.
+    WHERE status IS NOT NULL
     QUALIFY ROW_NUMBER() OVER(PARTITION BY aggregation_id ORDER BY authorisation_date_time_utc DESC) = 1
 ),
 
@@ -39,7 +42,7 @@ int_payments__latest_authorisations_by_aggregation AS (
         _key,
         _payments_key,
         _content_hash,
-    FROM final_update
+    FROM final_update_with_status
     LEFT JOIN auth USING(_payments_key)
 )
 
