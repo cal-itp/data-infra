@@ -16,7 +16,7 @@ micropayments_table_refunds AS (
         SAFE_CAST(NULL AS STRING) AS refund_id,
         SAFE_CAST(NULL AS STRING) AS settlement_id,
         SAFE_CAST(NULL AS STRING) AS retrieval_reference_number,
-        SAFE_CAST(NULL AS STRING) AS coalesced_id,
+        aggregation_id AS coalesced_id,
         SAFE_CAST(NULL AS NUMERIC) AS transaction_amount,
         SAFE_CAST(NULL AS NUMERIC) AS proposed_amount,
         SAFE_CAST(NULL AS STRING) AS status,
@@ -46,6 +46,8 @@ micropayments_table_refunds AS (
 
     FROM {{ ref('stg_littlepay__micropayments') }}
     WHERE type = 'CREDIT'
+        -- these two refunds appear in both the micropayments and refund tables, and it was easier to
+        -- drop them manually than make an overfit filter
         AND _key NOT IN ('043ecc000223a299ce17f6a342b1d240', '3536fb2035bbcf4dcb1f3abf001b5185')
 ),
 
@@ -89,6 +91,8 @@ refunds_table_refunds AS (
         'refunds' AS source_table
 
     FROM {{ ref('stg_littlepay__refunds') }}
+    -- this dedupes on refund ID because individual refunds sometimes appear multiple times with multiple statuses
+    -- the goal here is to get the latest update per refund
     QUALIFY DENSE_RANK() OVER (PARTITION BY refund_id ORDER BY littlepay_export_ts DESC) = 1
 
 ),
@@ -116,6 +120,7 @@ int_payments__refunds AS (
         refund_id,
         settlement_id,
         retrieval_reference_number,
+        coalesced_id,
         transaction_amount,
         proposed_amount,
         status,
@@ -143,7 +148,7 @@ int_payments__refunds AS (
         source_table
 
     FROM refunds_union
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY retrieval_reference_number, refund_amount ORDER BY littlepay_export_ts DESC) = 1
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY coalesced_id, refund_amount ORDER BY littlepay_export_ts DESC) = 1
 
 )
 
