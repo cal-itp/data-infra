@@ -42,7 +42,7 @@ final_update_with_status AS (
 join_with_flag AS (
     SELECT
         final_update_with_status._payments_key,
-        CASE WHEN final_update_without_status.aggregation_id IS NOT NULL THEN True ELSE False END AS final_authorisation_has_null_status
+        COALESCE(final_update_without_status.aggregation_id IS NOT NULL, False) AS final_authorisation_has_null_status
     FROM final_update_with_status
     LEFT OUTER JOIN final_update_without_status
         ON final_update_with_status.aggregation_id = final_update_without_status.aggregation_id
