@@ -88,6 +88,7 @@ fct_payments_aggregations AS (
         request_type AS latest_authorisation_request_type,
         transaction_amount AS authorisation_transaction_amount,
         status AS latest_authorisation_status,
+        final_authorisation_has_null_status,
         authorisation_date_time_utc AS latest_authorisation_update_datetime,
         contains_imputed_type AS settlement_contains_imputed_type,
         latest_update_timestamp AS latest_settlement_update_datetime,

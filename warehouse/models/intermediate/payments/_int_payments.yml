@@ -40,6 +40,10 @@ models:
           - accepted_values:
               values: [840]
               quote: false
+      - name: final_authorisation_has_null_status
+        descrpition: |
+          A boolean flag that identifies aggregations for which the chosen "latest" authorisation
+          is older than a more recent record with a null status
   - name: int_payments__settlements_to_aggregations
     description: |
       This model contains Littlepay settlements aggregated to the `aggregation_id + retrieval_reference_number` level.
