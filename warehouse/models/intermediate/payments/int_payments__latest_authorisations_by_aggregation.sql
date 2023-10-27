@@ -18,6 +18,8 @@ final_update AS (
     QUALIFY ROW_NUMBER() OVER(PARTITION BY aggregation_id ORDER BY authorisation_date_time_utc DESC) = 1
 ),
 
+-- get the payments key values of rows that are the final update with a null status for that
+-- aggregation ID
 final_update_without_status AS (
     SELECT
         _payments_key,
@@ -39,6 +41,8 @@ final_update_with_status AS (
     QUALIFY ROW_NUMBER() OVER(PARTITION BY aggregation_id ORDER BY authorisation_date_time_utc DESC) = 1
 ),
 
+-- Take the latest rows for each aggregation with a non-null status, but flag where a final
+-- authorisation exists that has a null status
 join_with_flag AS (
     SELECT
         final_update_with_status._payments_key,
