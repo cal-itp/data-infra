@@ -546,7 +546,7 @@ def _publish_exposure(
                         "-o",
                         mbtiles_path,
                         *[
-                            f"--named-layer={layer}:{path}"
+                            f"--named-layer={layer}:{path}"  # noqa: E231
                             for layer, path in layer_geojson_paths.items()
                         ],
                     ]
