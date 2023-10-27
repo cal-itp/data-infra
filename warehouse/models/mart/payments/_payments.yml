@@ -267,8 +267,6 @@ models:
           settlements missing a type in the raw data.
       - name: transaction_amount
         description: Settlement amount in dollars. Negative for credit (refund) settlements.
-      - name: currency_code
-        description: '{{ doc("lp_currency_code") }}'
       - name: retrieval_reference_number
         description: '{{ doc("lp_retrieval_reference_number") }}'
         tests:
