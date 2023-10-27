@@ -289,9 +289,7 @@ models:
       - *organization_source_record_id
       - name: end_of_month_date
         description: |
-          The last day of the month associated with this activity.
-          For deposit activity, this is the last day of the month of the settlement date.
-          For billing activity, this is the last day of the month of the payment date.
+          The last day of the month of the payment_date associated with this activity.
           This column is primarily for use in BI tooling to support consistent dates across activity types.
           Billing activity generally occurs only once per month, at the end of the month, while deposit
           activity happens throughout the month.
