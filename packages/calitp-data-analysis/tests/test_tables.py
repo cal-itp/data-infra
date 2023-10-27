@@ -33,7 +33,7 @@ def test_auto_table_comments(engine, tmp_name):
         OPTIONS(
             description="the table comment"
         )
-    """
+    """  # noqa: E231,E241,E202
     )
 
     # TODO: rather than using AutoTable, let's just use CalitpTable directly
