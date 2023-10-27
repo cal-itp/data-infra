@@ -184,21 +184,21 @@ While most Python packages an analyst uses come in JupyterHub, there may be addi
 
 ## Updating calitp-data-analysis
 
-`calitp-data-analysis` is a [package](https://pypi.org/project/calitp-data-analysis/) that lives [here](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis) in the `data-infra` repo. Follow the steps below update the package.
+`calitp-data-analysis` is a [package](https://pypi.org/project/calitp-data-analysis/) that lives [here](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis) in the `data-infra` repo. Follow the steps below update to the package.
 
 <b>Steps </b>
 
-Adapted from instructions from [this Slack thread](https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809).
+Adapted from [this Slack thread](https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809).
 
 1. Make the changes you want in the `calitp-data-analysis` folder inside `packages` [here](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis).
-   - If you are adding a new function that relies on a package that isn't already a dependency, you need to run `poetry add <package name>` after changing directories to `data-infra/packages/calitp_data_analysis`. Check this [Jupyter image file](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml) for the version number associated with the package, because you should add the version after `poetry add`.
-     - For example, your function relies on `dask`. In the Jupyter image file, the dask version is `dask = "~2022.8"` so you should run `poetry add dask==~2022.8` in the terminal.
+   - If you are adding a new function that relies on a package that isn't already a dependency, run `poetry add <package name>` after changing directories to `data-infra/packages/calitp_data_analysis`. Check this [Jupyter image file](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml) for the version number associated with the package, because you should specify the version.
+     - For example, your function relies on `dask`. In the Jupyter image file, the version is `dask = "~2022.8"` so run `poetry add dask==~2022.8` in the terminal.
    - You may also have run `poetry install mypy`. `mypy` is a package that audits all the functions. [Read more about it here.](https://mypy-lang.org/)
 2. Each time you update the package, you must also update the version number. We use dates to reflect which version we are on. Update the version in [pyproject.toml](https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-analysis/pyproject.toml#L3) that lives in `calitp-data-analysis` to either today's date or a future date.
 3. Open a new pull request and make sure the new version date appears on the [test version page](https://test.pypi.org/project/calitp-data-analysis/).
-   - The new version date may not show up on the test page due to errors. Go to the GitHub Action page of your pull request to see the errors that have occurred.
-   - If you run into the error message similar to this, `error: Skipping analyzing "dask_geopandas": module is installed, but missing library stubs or py.typed marker  [import]` go to your `.py` file and add `# type: ignore` behind the package import.
-     - To fix the error above for `dask_geopandas` change `import dask_geopandas as dg` to `import dask_geopandas as dg  # type: ignore`.
+   - The new version date may not show up on the test page due to errors. Check the GitHub Action page of your pull request to see the errors that have occurred.
+   - If you run into the error message like this, `error: Skipping analyzing "dask_geopandas": module is installed, but missing library stubs or py.typed marker  [import]` go to your `.py` file and add `# type: ignore` behind the package import.
+     - To fix the error above, change `import dask_geopandas as dg` to `import dask_geopandas as dg  # type: ignore`.
    - It is encouraged to make changes in a set of smaller commits. For example, add all the necessary packages with `poetry run <package` first, fix any issues flagged by `mypy`, and finally address any additional issues.
 4. Merge the PR. Once it is merged in, the [actual package](https://pypi.org/project/calitp-data-analysis/) will display the new version number. To make sure everything works as expected, run `pip install calitp-data-analysis==<new version here>` in a cell of Jupyter notebook and import a package (or two) such as `from calitp_data_analysis import styleguide`.
 5. Update the new version number in the `data-infra` repository [here](https://github.com/cal-itp/data-infra/blob/main/images/dask/requirements.txt#L30), [here](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml#L48), [here](https://github.com/cal-itp/data-infra/blob/main/docs/requirements.txt), and anywhere else you find a reference to the old version of the package. You'll also want to do the same for any other Cal-ITP repositories that reference the calitp-data-analysis package.
