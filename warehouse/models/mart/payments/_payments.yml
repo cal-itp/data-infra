@@ -581,8 +581,39 @@ models:
       - *charge_type_description
       - *card_plan
       - *transaction_date
-      - *roc_text
       - *trn_aci
+      - *card_scheme_ref
+      - *trn_ref_num
+      - *settlement_method
+      - *currency_code
+      - *trn_arn
+      - *ent_num
+      - *dt
+      - *execution_ts
+  - name: fct_payments_adjustment_transactions
+    description: |
+      Adjustment transactions data from Elavon.
+      Each row is an individual adjustment transaction.
+    columns:
+      - *elavon_end_of_month_date
+      - *organization_name
+      - *organization_source_record_id
+      - *elavon_lp_participant_id
+      - *payment_reference
+      - *payment_date
+      - *fund_amt
+      - *batch_reference
+      - *batch_type
+      - *customer_name
+      - *merchant_number
+      - *external_mid
+      - *chain
+      - *batch_amt
+      - *amount
+      - *card_type
+      - *charge_type
+      - *charge_type_description
+      - *card_plan
       - *card_scheme_ref
       - *trn_ref_num
       - *settlement_method
