@@ -6,6 +6,17 @@ WITH settlements AS (
     FROM {{ ref('stg_littlepay__settlements') }}
 ),
 
+payments_entity_mapping AS (
+    SELECT
+        * EXCEPT(littlepay_participant_id),
+        littlepay_participant_id AS participant_id
+    FROM {{ ref('payments_entity_mapping') }}
+),
+
+orgs AS (
+    SELECT * FROM {{ ref('dim_organizations') }}
+),
+
 -- some rows have null settlement type (debit vs. credit)
 -- so we try to impute based on settlement order
 impute_settlement_type AS (
@@ -23,9 +34,23 @@ impute_settlement_type AS (
     FROM settlements
 ),
 
+join_orgs AS (
+    SELECT
+        impute_settlement_type.*,
+        orgs.name AS organization_name,
+        orgs.source_record_id AS organization_source_record_id,
+    FROM impute_settlement_type
+    LEFT JOIN payments_entity_mapping USING (participant_id)
+    LEFT JOIN orgs
+        ON payments_entity_mapping.organization_source_record_id = orgs.source_record_id
+        AND CAST(impute_settlement_type.settlement_requested_date_time_utc AS TIMESTAMP) BETWEEN orgs._valid_from AND orgs._valid_to
+),
+
 -- TODO: add "new schema" columns that are present only for ATN as of 10/6/23
 fct_payments_settlements AS (
     SELECT
+        organization_name,
+        organization_source_record_id,
         settlement_id,
         participant_id,
         aggregation_id,
@@ -52,7 +77,7 @@ fct_payments_settlements AS (
         littlepay_export_date,
         _key,
         _payments_key
-    FROM impute_settlement_type
+    FROM join_orgs
 )
 
 SELECT * FROM fct_payments_settlements

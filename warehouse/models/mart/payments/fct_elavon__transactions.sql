@@ -38,6 +38,7 @@ join_orgs AS (
         union_deposits_and_billing.*,
         orgs.name AS organization_name,
         orgs.source_record_id AS organization_source_record_id,
+        littlepay_participant_id
     FROM union_deposits_and_billing
     LEFT JOIN payments_entity_mapping USING (customer_name)
     LEFT JOIN orgs
@@ -50,8 +51,8 @@ fct_elavon__transactions AS (
     SELECT
         organization_name,
         organization_source_record_id,
-        -- settlement date is populated for deposits but not for billing
-        LAST_DAY(COALESCE(settlement_date, payment_date), MONTH) AS end_of_month_date,
+        littlepay_participant_id,
+        LAST_DAY(payment_date, MONTH) AS end_of_month_date,
         payment_reference,
         payment_date,
         account_number,

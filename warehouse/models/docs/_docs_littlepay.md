@@ -111,10 +111,6 @@ If refunding a micropayment that has already been settled, the value will be `CR
 The settlement amount.
 {% enddocs %}
 
-{% docs lp_currency_code %}
-ISO 4217 numeric currency code for the amount that was requested to be settled.
-{% enddocs %}
-
 {% docs lp_retrieval_reference_number %}
 Uniquely identifies a card transaction, based on the ISO 8583 standard.
 

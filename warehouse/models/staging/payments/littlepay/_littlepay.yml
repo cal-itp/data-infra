@@ -766,8 +766,6 @@ models:
         description: '{{ doc("lp_settlement_type") }}'
       - name: transaction_amount
         description: '{{ doc("lp_transaction_amount") }}'
-      - name: currency_code
-        description: '{{ doc("lp_currency_code") }}'
       - name: retrieval_reference_number
         description: '{{ doc("lp_retrieval_reference_number") }}'
       - name: littlepay_reference_number
