@@ -551,3 +551,43 @@ models:
       - *ent_num
       - *dt
       - *execution_ts
+  - name: fct_payments_chargeback_transactions
+    description: |
+      Chargeback transactions data from Elavon.
+      Each row is an individual chargeback transaction.
+    columns:
+      - *elavon_end_of_month_date
+      - *organization_name
+      - *organization_source_record_id
+      - *elavon_lp_participant_id
+      - *payment_reference
+      - *payment_date
+      - *fund_amt
+      - *batch_reference
+      - *batch_type
+      - *customer_name
+      - *merchant_number
+      - *external_mid
+      - *chargeback_control_no
+      - *roc_text
+      - *cb_acq_ref_id
+      - *chgbk_rsn_code
+      - *chgbk_rsn_desc
+      - *chain
+      - *batch_amt
+      - *amount
+      - *card_type
+      - *charge_type
+      - *charge_type_description
+      - *card_plan
+      - *transaction_date
+      - *roc_text
+      - *trn_aci
+      - *card_scheme_ref
+      - *trn_ref_num
+      - *settlement_method
+      - *currency_code
+      - *trn_arn
+      - *ent_num
+      - *dt
+      - *execution_ts
