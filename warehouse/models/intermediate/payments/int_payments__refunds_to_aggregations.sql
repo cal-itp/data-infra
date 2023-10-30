@@ -29,6 +29,7 @@ int_payments__refunds_to_aggregations AS (
     SELECT
         summary.aggregation_id,
         summary.retrieval_reference_number,
+        --should this be renamed?
         COALESCE(summary.refund_amount,0) AS total_refund_activity_amount_dollars,
         COALESCE(approved.refund_amount,0) AS approved_amount,
         COALESCE(refused.refund_amount,0) AS refused_amount,
