@@ -16,7 +16,7 @@ SELECT
     orgs.source_record_id AS organization_source_record_id,
     -- flag whether the given customer name/merchant id number is associated with fare transactions
     -- we get some data from unrelated merchants
-    littlepay_participant_id IS NOT NULL AS is_fare_transaction_mid
+    littlepay_participant_id IS NOT NULL AS mid_corresponds_to_lp_participant
 FROM {{ input_model }} AS input
 LEFT JOIN payments_entity_mapping USING (customer_name)
 LEFT JOIN orgs

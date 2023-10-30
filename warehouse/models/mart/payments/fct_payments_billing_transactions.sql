@@ -14,7 +14,7 @@ fct_payments_billing_transactions AS (
         LAST_DAY(payment_date, MONTH) AS end_of_month_date,
         organization_name,
         organization_source_record_id,
-        is_fare_transaction_mid,
+        mid_corresponds_to_lp_participant,
         account_number,
         routing_number,
         fund_amt,
