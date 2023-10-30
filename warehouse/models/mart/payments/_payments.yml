@@ -296,6 +296,12 @@ models:
           activity happens throughout the month.
         tests:
           - not_null
+      - &elavon_lp_participant_id
+        name: littlepay_participant_id
+        description: |
+          The Littlepay-assigned `participant_id` value that corresponds to this customer name/merchant number.
+          If null, this customer/merchant's activity is not associated with Littlepay (for example, office or
+          online sales not processed by Littlepay).
       - &payment_reference
         name: payment_reference
         description: |
@@ -484,12 +490,7 @@ models:
       - *elavon_end_of_month_date
       - *organization_name
       - *organization_source_record_id
-      - &elavon_lp_participant_id
-        name: littlepay_participant_id
-        description: |
-          The Littlepay-assigned `participant_id` value that corresponds to this customer name/merchant number.
-          If null, this customer/merchant's activity is not associated with Littlepay (for example, office or
-          online sales not processed by Littlepay).
+      - *elavon_lp_participant_id
       - *fund_amt
       - *batch_reference
       - *batch_type
