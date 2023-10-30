@@ -490,8 +490,6 @@ models:
           The Littlepay-assigned `participant_id` value that corresponds to this customer name/merchant number.
           If null, this customer/merchant's activity is not associated with Littlepay (for example, office or
           online sales not processed by Littlepay).
-      - *account_number
-      - *routing_number
       - *fund_amt
       - *batch_reference
       - *batch_type
