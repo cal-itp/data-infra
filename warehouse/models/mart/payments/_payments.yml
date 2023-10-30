@@ -217,6 +217,10 @@ models:
       - name: latest_authorisation_status
         description: |
           Status of the most recent authorisation associated with this aggregation.
+      - name: final_authorisation_has_null_status
+        description: |
+          Indicates the existence of another authorisation record, not represented directly here,
+          which occured after the "latest" authorisation in an aggregation but had a null status.
       - name: latest_authorisation_update_datetime
         description: |
           `authorisation_date_time_utc` of the most recent authorisation associated with this aggregation.
