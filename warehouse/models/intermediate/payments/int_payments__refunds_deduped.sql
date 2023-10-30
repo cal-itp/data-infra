@@ -10,7 +10,7 @@ micropayments_table_refunds AS (
         participant_id,
         customer_id,
         ABS(charge_amount) AS refund_amount,
-        EXTRACT(DATE FROM transaction_time AT TIME ZONE "America/Los_Angeles") AS transaction_date,
+        EXTRACT(DATE FROM transaction_time) AS transaction_date,
 
         -- add columns that we want to preserve from refunds table after union as null strings
         SAFE_CAST(NULL AS STRING) AS refund_id,
