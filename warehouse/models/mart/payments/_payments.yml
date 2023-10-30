@@ -484,13 +484,12 @@ models:
       - *elavon_end_of_month_date
       - *organization_name
       - *organization_source_record_id
-      - name: mid_corresponds_to_lp_participant
+      - &elavon_lp_participant_id
+        name: littlepay_participant_id
         description: |
-          If "true", this merchant identifier/customer name is associated with a merchant that
-          corresponds to Littlepay fare processing activity; i.e., activity associated with this
-          merchant/customer would also be expected to appear in Littlepay data.
-          When "false", this merchant/customer's activity is not expected to correspond to Littlepay
-          (for example, it may be associated with a separate sales channel.)
+          The Littlepay-assigned `participant_id` value that corresponds to this customer name/merchant number.
+          If null, this customer/merchant's activity is not associated with Littlepay (for example, office or
+          online sales not processed by Littlepay).
       - *account_number
       - *routing_number
       - *fund_amt
