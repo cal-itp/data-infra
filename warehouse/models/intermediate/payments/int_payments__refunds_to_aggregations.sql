@@ -10,7 +10,7 @@ summarize_by_type AS (
         aggregation_id,
         retrieval_reference_number,
         approval_status,
-        SUM(refund_amount) AS refund_amount,
+        SUM(proposed_amount) AS proposed_refund_amount,
     FROM refunds
     GROUP BY 1, 2, 3
 ),
@@ -20,7 +20,7 @@ summarize_overall AS (
     SELECT
         aggregation_id,
         retrieval_reference_number,
-        SUM(refund_amount) AS refund_amount,
+        SUM(proposed_refund_amount) AS proposed_refund_amount,
     FROM summarize_by_type
     GROUP BY 1, 2
 ),
@@ -30,11 +30,11 @@ int_payments__refunds_to_aggregations AS (
         summary.aggregation_id,
         summary.retrieval_reference_number,
         --should this be renamed?
-        COALESCE(summary.refund_amount,0) AS total_refund_activity_amount_dollars,
-        COALESCE(approved.refund_amount,0) AS approved_amount,
-        COALESCE(refused.refund_amount,0) AS refused_amount,
-        COALESCE(awaiting.refund_amount,0) AS awaiting_amount,
-        COALESCE(null_approval_status.refund_amount,0) AS null_approval_status_amount
+        COALESCE(summary.proposed_refund_amount,0) AS total_refund_activity_amount_dollars,
+        COALESCE(approved.proposed_refund_amount,0) AS approved_amount,
+        COALESCE(refused.proposed_refund_amount,0) AS refused_amount,
+        COALESCE(awaiting.proposed_refund_amount,0) AS awaiting_amount,
+        COALESCE(null_approval_status.proposed_refund_amount,0) AS null_approval_status_amount
     FROM summarize_overall AS summary
     LEFT JOIN summarize_by_type AS approved
         ON summary.aggregation_id = approved.aggregation_id

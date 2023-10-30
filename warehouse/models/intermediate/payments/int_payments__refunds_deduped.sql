@@ -9,16 +9,16 @@ micropayments_table_refunds AS (
         micropayment_id,
         participant_id,
         customer_id,
-        ABS(charge_amount) AS refund_amount,
+        ABS(charge_amount) AS proposed_amount,
         EXTRACT(DATE FROM transaction_time) AS transaction_date,
+        aggregation_id AS coalesced_id,
 
         -- add columns that we want to preserve from refunds table after union as null strings
+        SAFE_CAST(NULL AS NUMERIC) AS refund_amount,
         SAFE_CAST(NULL AS STRING) AS refund_id,
         SAFE_CAST(NULL AS STRING) AS settlement_id,
         SAFE_CAST(NULL AS STRING) AS retrieval_reference_number,
-        aggregation_id AS coalesced_id,
         SAFE_CAST(NULL AS NUMERIC) AS transaction_amount,
-        SAFE_CAST(NULL AS NUMERIC) AS proposed_amount,
         SAFE_CAST(NULL AS STRING) AS status,
         SAFE_CAST(NULL AS STRING) AS initiator,
         SAFE_CAST(NULL AS STRING) AS reason,
@@ -68,14 +68,14 @@ refunds_table_refunds AS (
         micropayment_id,
         participant_id,
         customer_id,
-        refund_amount,
+        proposed_amount,
         transaction_date,
+        COALESCE(retrieval_reference_number, t1.aggregation_id, t2.aggregation_id) AS coalesced_id,
+        refund_amount,
         refund_id,
         settlement_id,
         retrieval_reference_number,
-        COALESCE(retrieval_reference_number, t1.aggregation_id, t2.aggregation_id) AS coalesced_id,
         transaction_amount,
-        proposed_amount,
         status,
         initiator,
         reason,
@@ -127,14 +127,14 @@ int_payments__refunds AS (
         micropayment_id,
         participant_id,
         customer_id,
-        refund_amount,
+        proposed_amount,
         transaction_date,
+        coalesced_id,
+        refund_amount,
         refund_id,
         settlement_id,
         retrieval_reference_number,
-        coalesced_id,
         transaction_amount,
-        proposed_amount,
         status,
         initiator,
         reason,
@@ -160,6 +160,8 @@ int_payments__refunds AS (
         source_table
 
     FROM refunds_union
+    -- this dedupes on coalesced_id (which is comprised of retrieval_reference_number or aggregation_id if it is null) and refund_amount
+    -- because we observe some duplicate refunds by retrieval_reference_number/aggregation_id and refund_amount
     QUALIFY ROW_NUMBER() OVER (PARTITION BY coalesced_id, refund_amount ORDER BY littlepay_export_ts DESC) = 1
 
 )
