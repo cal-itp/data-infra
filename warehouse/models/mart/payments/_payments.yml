@@ -255,7 +255,7 @@ models:
         description: '{{ doc("lp_aggregation_id") }}'
         tests:
             - relationships:
-                to: ref('int_payments__settlements_to_aggregations')
+                to: ref('fct_payments_aggregations')
                 field: aggregation_id
       - name: customer_id
         description: '{{ doc("lp_customer_id") }}'
@@ -273,8 +273,8 @@ models:
         description: '{{ doc("lp_retrieval_reference_number") }}'
         tests:
             - relationships:
-                to: ref('int_payments__settlements_to_aggregations')
-                field: retrieval_reference_number
+                to: ref('fct_payments_aggregations')
+                field: settlement_retrieval_reference_number
       - name: littlepay_reference_number
         description: '{{ doc("lp_littlepay_reference_number") }}'
       - name: external_reference_number
