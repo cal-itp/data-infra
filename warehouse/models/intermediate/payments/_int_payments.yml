@@ -19,6 +19,10 @@ models:
           - relationships:
               to: ref('int_payments__latest_authorisations_by_aggregation')
               field: aggregation_id
+              config:
+                # there is a single update from 2021 where there's only one update with a null status
+                # we're comfortable letting this row get dropped
+                where: "_key != '60e1a87f2cafe52c08589cb13fb39707'"
   - name: int_payments__latest_authorisations_by_aggregation
     description: |
       This model contains only the most recent authorisations data per `aggregation_id`.
