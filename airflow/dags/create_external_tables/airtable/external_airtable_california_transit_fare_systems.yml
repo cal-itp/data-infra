@@ -101,7 +101,7 @@ schema_fields:
     type: STRING
   - name: reduced_fare_categories
     mode: NULLABLE
-    type: STRING
+    type: JSON
   - name: itp_id
     mode: NULLABLE
     type: FLOAT
