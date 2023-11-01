@@ -1,13 +1,20 @@
 DECLARE innerDelimiter STRING DEFAULT ';';
 
 -- Some orgs have multiple funding sources, so preformat it using a delimiter
-WITH program_funding AS (
+WITH services_funding AS (
     SELECT
-        organization_key,
-        STRING_AGG(funding_program_name, innerDelimiter) AS funding_programs
-    FROM mart_transit_database.bridge_organizations_x_funding_programs funding
-    WHERE funding._is_current
-    GROUP BY organization_key
+        orgs.key AS organization_key,
+        ARRAY_AGG(services_x_funding.funding_program_name) AS funding_sources
+    FROM
+        mart_transit_database.dim_organizations orgs
+    INNER JOIN
+        mart_transit_database.bridge_organizations_x_services_managed orgs_x_services ON orgs_x_services.organization_key = orgs.key AND orgs_x_services._is_current IS TRUE
+    INNER JOIN
+        mart_transit_database.bridge_services_x_funding_programs services_x_funding ON orgs_x_services.service_key = services_x_funding.service_key AND services_x_funding._is_current IS TRUE
+    WHERE
+        orgs._is_current IS TRUE
+    GROUP BY
+        orgs.key
 ),
 
 -- This table has historical data for every year (looks like dating back to
@@ -79,7 +86,15 @@ dim_mobility_mart_providers AS (
         county_geog.caltrans_district_name AS caltrans_district_name,
         orgs.is_public_entity AS is_public_entity,
         orgs.public_currently_operating AS is_publicly_operating,
-        program_funding.funding_programs AS funding_sources,
+        ARRAY_TO_STRING(
+            ARRAY(
+                SELECT DISTINCT
+                    source
+                FROM UNNEST(services_funding.funding_sources) source
+                ORDER BY source
+            ),
+            innerDelimiter
+        ) AS funding_sources,
         annual_ntd.voms_do AS on_demand_vehicles_at_max_service,
         annual_ntd.total_voms AS vehicles_at_max_service,
         ARRAY_TO_STRING(
@@ -100,7 +115,7 @@ dim_mobility_mart_providers AS (
     LEFT JOIN
         mart_transit_database.dim_county_geography county_geog ON orgs_x_hq.county_geography_key = county_geog.key
     LEFT JOIN
-        program_funding ON program_funding.organization_key = orgs.key
+        services_funding ON services_funding.organization_key = orgs.key
     LEFT JOIN
         gtfs_data ON gtfs_data.key = orgs.key
     LEFT JOIN
