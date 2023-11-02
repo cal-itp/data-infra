@@ -30,8 +30,8 @@ annual_ntd AS (
     SELECT *
     FROM mart_ntd.dim_annual_ntd_agency_information
     WHERE
-        year = (SELECT MAX(year) FROM mart_ntd.dim_annual_ntd_agency_information) AND
-        state = 'CA'
+        year = (SELECT MAX(year) FROM mart_ntd.dim_annual_ntd_agency_information)
+        AND state = 'CA'
 ),
 
 gtfs_data_by_organization AS (
@@ -46,13 +46,13 @@ gtfs_data_by_organization AS (
     LEFT JOIN
         mart_transit_database.dim_gtfs_datasets gtfs_datasets ON gtfs_service.gtfs_dataset_key = gtfs_datasets.key
     WHERE
-        orgs._is_current IS TRUE AND
-        orgs.public_currently_operating IS TRUE AND
-        gtfs_service._is_current IS TRUE AND
-        gtfs_service.customer_facing IS TRUE AND
-        gtfs_datasets._is_current IS TRUE AND
+        orgs._is_current IS TRUE
+        AND orgs.public_currently_operating IS TRUE
+        AND gtfs_service._is_current IS TRUE
+        AND gtfs_service.customer_facing IS TRUE
+        AND gtfs_datasets._is_current IS TRUE
         -- We only want to track schedule feeds for right now
-        gtfs_datasets.type = 'schedule'
+        AND gtfs_datasets.type = 'schedule'
     GROUP BY
         orgs.key
 ),
@@ -67,8 +67,8 @@ serviced_counties_by_organization AS (
     LEFT JOIN
         mart_transit_database.dim_services services ON services.key = orgs_x_services.service_key
     WHERE
-        orgs._is_current IS TRUE AND
-        services._is_current IS TRUE
+        orgs._is_current IS TRUE
+        AND services._is_current IS TRUE
     GROUP BY
         orgs.key
 ),
