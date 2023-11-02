@@ -539,23 +539,33 @@ models:
       - name: _valid_to
   - name: dim_mobility_mart_providers
     description: |-
-      Listing of all Transit Agencies (TAs) in California with respective data fields need for the Mobility Marketplace provider map.
+      Listing of all Transit Agencies (TAs) in California with respective data fields needed for the Mobility Marketplace provider map.
     columns:
       - name: agency_name
+        description: The name of the TA as specified in the National Transit Database (NTD).
       - *org_ntd_id
       - name: hq_city
+        description: The city where this TA's headquarters is located.
       - name: hq_county
+        description: The county where this TA's headquarters is located.
       - name: counties_served
+        description: An array of counties that are serviced by the parent organization this TA belongs to.
       - name: agency_website
+        description: The website for this TA.
       - name: caltrans_district_id
       - name: caltrans_district_name
       - *org_is_public_entity
       - <<: *public_currently_operating
         name: is_publicly_operating
       - name: funding_sources
-      - name: on_demand_vehicles_at_max_service
+        description: An array of funding program names that this TA's parent organization receives.
       - name: vehicles_at_max_service
+        description: (abbreviated as "voms") The number of revenue vehicles operated to meet the annual maximum service requirement. This is the revenue vehicle count during the peak season of the year on the week and day that maximum service is provided.
+      - name: on_demand_vehicles_at_max_service
+        description: |-
+          (abbreviated as "voms_dr") The number of revenue vehicles operated to meet the annual maximum service requirement for NTD categories: Demand Response (DR) and Demand Response Taxi (DT).
       - name: gtfs_schedule_uris
+        description: An array of URLs for GTFS schedules this TA's parent organization has under its umbrella of services.
   - name: bridge_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.
