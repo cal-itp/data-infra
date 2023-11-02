@@ -81,6 +81,9 @@ stg_littlepay__customer_funding_source AS (
     -- this one that has no associated micropayments. The one that's dropped appears to be genuine
     -- bad data, mapping to an instance not otherwise associated with this customer_id.
     WHERE _key != 'bf3d17b734923c2429add3c422e3cfe9'
+    -- Some customer records are later superseded/outmoded, but aren't directly replaced by another
+    -- entry with the same ID. If not dropped, these trip up principal_customer_id relationships.
+    AND _key not in ('834c1a4c74d13610de80bb9fd2612f69', 'f4645b45361cc70360d6fe645b9c088e', '941a8f4372c07bd9b82c8b0eb3a3d0d6')
     -- Some funding sources have incomplete information when first present in data, like missing
     -- values for form_factor or issuer_country that are filled in during later exports.
     -- Additionally, sometimes a filled column value is updated in newer exports for a given entry.
