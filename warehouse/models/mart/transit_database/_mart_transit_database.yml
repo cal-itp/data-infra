@@ -539,14 +539,13 @@ models:
       - name: _valid_to
   - name: dim_mobility_mart_providers
     description: |-
-      Hello world
+      Listing of all Transit Agencies (TAs) in California with respective data fields need for the Mobility Marketplace provider map.
     columns:
       - name: agency_name
       - *org_ntd_id
       - name: hq_city
       - name: hq_county
       - name: counties_served
-        description: A semi-colon delimited list of counties this agency serves
       - name: agency_website
       - name: caltrans_district_id
       - name: caltrans_district_name
@@ -554,11 +553,9 @@ models:
       - <<: *public_currently_operating
         name: is_publicly_operating
       - name: funding_sources
-        description: A semi-colon delimited list of funding sources
       - name: on_demand_vehicles_at_max_service
       - name: vehicles_at_max_service
       - name: gtfs_schedule_uris
-        description: A semi-colono delimited list of GTFS schedule URIs
   - name: bridge_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.

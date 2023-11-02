@@ -1,7 +1,10 @@
-DECLARE innerDelimiter STRING DEFAULT ';';
+-- An Organization (i.e. dim_organizations) can provide multiple different
+-- Services (i.e. dim_services). Each Service will have its own funding sources,
+-- GTFS feeds, and target counties.
 
--- Some orgs have multiple funding sources, so preformat it using a delimiter
-WITH services_funding AS (
+-- This query will collect every funding source an Organization has via the
+-- services it provides.
+WITH funding_by_organization AS (
     SELECT
         orgs.key AS organization_key,
         ARRAY_AGG(services_x_funding.funding_program_name) AS funding_sources
@@ -20,6 +23,9 @@ WITH services_funding AS (
 -- This table has historical data for every year (looks like dating back to
 -- 2018), so let's narrow down that table to *just* the most recent year so
 -- we don't get duplicate rows for each year.
+--
+-- We cannot use `_is_current` here because every year is marked as "current"
+-- since it's the "current" record for the respective year.
 annual_ntd AS (
     SELECT *
     FROM mart_ntd.dim_annual_ntd_agency_information
@@ -28,9 +34,9 @@ annual_ntd AS (
         state = 'CA'
 ),
 
-gtfs_data AS (
+gtfs_data_by_organization AS (
     SELECT
-        orgs.key,
+        orgs.key AS organization_key,
         ARRAY_AGG(gtfs_datasets.uri) AS gtfs_uris
     FROM mart_transit_database.dim_organizations orgs
     LEFT JOIN
@@ -45,14 +51,15 @@ gtfs_data AS (
         gtfs_service._is_current IS TRUE AND
         gtfs_service.customer_facing IS TRUE AND
         gtfs_datasets._is_current IS TRUE AND
+        -- We only want to track schedule feeds for right now
         gtfs_datasets.type = 'schedule'
     GROUP BY
         orgs.key
 ),
 
-serviced_counties AS (
+serviced_counties_by_organization AS (
     SELECT
-        orgs.key AS key,
+        orgs.key AS organization_key,
         ARRAY_CONCAT_AGG(services.operating_counties) AS operating_counties
     FROM mart_transit_database.dim_organizations orgs
     LEFT JOIN
@@ -66,45 +73,36 @@ serviced_counties AS (
         orgs.key
 ),
 
-dim_mobility_mart_providers AS (
+mobility_market_providers AS (
     SELECT
         annual_ntd.agency_name AS agency_name,
         annual_ntd.ntd_id AS ntd_id,
         annual_ntd.city AS hq_city,
         orgs_x_hq.county_geography_name AS hq_county,
-        ARRAY_TO_STRING(
-            ARRAY(
-                SELECT DISTINCT
-                    county
-                FROM UNNEST(serviced_counties.operating_counties) county
-                ORDER BY county
-            ),
-            innerDelimiter
+        ARRAY(
+            SELECT DISTINCT
+                county
+            FROM UNNEST(serviced_counties_by_organization.operating_counties) county
+            ORDER BY county
         ) AS counties_served,
         annual_ntd.url AS agency_website,
         county_geog.caltrans_district AS caltrans_district_id,
         county_geog.caltrans_district_name AS caltrans_district_name,
         orgs.is_public_entity AS is_public_entity,
         orgs.public_currently_operating AS is_publicly_operating,
-        ARRAY_TO_STRING(
-            ARRAY(
-                SELECT DISTINCT
-                    source
-                FROM UNNEST(services_funding.funding_sources) source
-                ORDER BY source
-            ),
-            innerDelimiter
+        ARRAY(
+            SELECT DISTINCT
+            source
+            FROM UNNEST(funding_by_organization.funding_sources) source
+            ORDER BY source
         ) AS funding_sources,
         annual_ntd.voms_do AS on_demand_vehicles_at_max_service,
         annual_ntd.total_voms AS vehicles_at_max_service,
-        ARRAY_TO_STRING(
-            ARRAY(
-                SELECT DISTINCT
-                    uris
-                FROM UNNEST(gtfs_data.gtfs_uris) uris
-                ORDER BY uris
-            ),
-            innerDelimiter
+        ARRAY(
+            SELECT DISTINCT
+            uris
+            FROM UNNEST(gtfs_data_by_organization.gtfs_uris) uris
+            ORDER BY uris
         ) AS gtfs_schedule_uris
     FROM
         annual_ntd
@@ -115,13 +113,13 @@ dim_mobility_mart_providers AS (
     LEFT JOIN
         mart_transit_database.dim_county_geography county_geog ON orgs_x_hq.county_geography_key = county_geog.key
     LEFT JOIN
-        services_funding ON services_funding.organization_key = orgs.key
+        funding_by_organization ON funding_by_organization.organization_key = orgs.key
     LEFT JOIN
-        gtfs_data ON gtfs_data.key = orgs.key
+        gtfs_data_by_organization ON gtfs_data_by_organization.organization_key = orgs.key
     LEFT JOIN
-        serviced_counties ON serviced_counties.key = orgs.key
+        serviced_counties_by_organization ON serviced_counties_by_organization.organization_key = orgs.key
     ORDER BY
         annual_ntd.ntd_id
 )
 
-SELECT * FROM dim_mobility_mart_providers
+SELECT * FROM mobility_market_providers
