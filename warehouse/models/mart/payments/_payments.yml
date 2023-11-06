@@ -11,6 +11,13 @@ models:
           - not_null
           - unique_proportion:
               at_least: 0.999
+      - name: aggregation_id
+        description: Aggregation ID for this micropayment. Can be used to map to subsequent aggregation processing steps.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fct_payments_aggregations')
+              field: aggregation_id
       - name: littlepay_transaction_id
         description: The littlepay_transaction_id of the first tap transaction
         tests:
