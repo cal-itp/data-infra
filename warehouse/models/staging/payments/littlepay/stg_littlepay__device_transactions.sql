@@ -99,10 +99,6 @@ stg_littlepay__device_transactions AS (
     -- Drops one row associated with the bad customer record, likely used for testing, that's
     -- dropped in stg_littlepay__customer_funding_source.
     WHERE _key != 'b926629d7962c80880d6c4af01db94ae'
-    -- Drops three rows associated with bad customer records that only seem to be associated with
-    -- testing transactions (with no associated micropayments) and screw up principal_customer_id
-    -- relationships if kept
-    AND _key NOT IN ('67ac8b4b2af29a97ae84cf1a5a7d6855', '8dbe167cea7ec8ff70e62b318f38f8f4', 'cf6ab74168f4eee67eec7df0e639db95')
     -- Some transactions have placeholder information for routes, stops, and directions in their first export,
     -- then a later export contains the canonical version of the transaction with that information corrected
     QUALIFY ROW_NUMBER() OVER (
