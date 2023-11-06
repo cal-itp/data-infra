@@ -207,6 +207,7 @@ join_table AS (
 
         m.participant_id,
         m.micropayment_id,
+        m.aggregation_id,
 
         -- Customer and funding source information
         m.funding_source_vault_id,
