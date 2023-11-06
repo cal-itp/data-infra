@@ -85,9 +85,17 @@ participants_to_routes_and_agency AS (
             AND r.feed_key = a.feed_key
 ),
 
+-- micropayments that don't appear in the cleaned table are subject to issue #647
+-- they are pending payments that incorrectly had a different micropayment ID created from their associated completed payment
+valid_micropayments AS (
+    SELECT DISTINCT micropayment_id
+    FROM int_littlepay__cleaned_micropayment_device_transactions
+),
+
 debited_micropayments AS (
     SELECT *
     FROM stg_littlepay__micropayments
+    INNER JOIN valid_micropayments USING(micropayment_id)
     WHERE type = 'DEBIT'
 ),
 
