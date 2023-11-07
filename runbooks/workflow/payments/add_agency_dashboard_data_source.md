@@ -14,14 +14,14 @@ As new agencies are introduced to the contactless payments program we will want 
 - Within the `Grant this service account access to the project` section, assign the role `Agency Payments Service Reader`
 - Select `Done`
 
-1. Download the service account key for the service account you've just created
+2. Download the service account key for the service account you've just created
 
 - After selecting `Done` in the previous section, you'll be returned to the list of existing service accounts, where you should click into the service account that you just created
 - Select `Keys` from the top-center of the page, and then select the `Add Key` dropdown and the `Create new key` selection within that
 - Keep the default key type `JSON` and select `Create`
 - This will download a JSON copy of the service accout key to your local environment, which will be used in later steps within Metabase
 
-1. Open a new branch and edit the [create_row_access_policy macro](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql)
+3. Open a new branch and edit the [create_row_access_policy macro](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql)
 
 Duplicate an existing row access policy within the file and append to the bottom of the file, before the `{% endmacro %}` text. The contents of the policy you're duplicating should look like this:
 
@@ -48,7 +48,7 @@ This creates the limited-access connection the the BigQuery warehouse.
 
 In the upper-right hand corner, select the `Settings` wheel icon. Within the dropdown, select `Admin settings`.
 
-1. In the top menu, select the `Databases` section to add a new databse
+2. In the top menu, select the `Databases` section to add a new databse
 
 Select `Add database` in the top-right. Replace the following information:
 
@@ -60,7 +60,7 @@ Select `Add database` in the top-right. Replace the following information:
 
 Then `Save` your changes
 
-1. Add a new user `Group` for the agency
+3. Add a new user `Group` for the agency
 
 This step will limit the users that can access the previously created database.
 
@@ -78,7 +78,7 @@ This step will limit the users that can access the previously created database.
     - Populate `First name`, `Last name`, `Email`
     - In the `Groups` dropdown, select the new agency group that was created in the previous step.
 
-1. Create a new `Collection` for the agency
+4. Create a new `Collection` for the agency
 
 This is the folder for the agency within Metbase where we will store their payments dashboard and the questions that comprise it
 
@@ -87,7 +87,7 @@ This is the folder for the agency within Metbase where we will store their payme
   - Input the name as `Payments Collection - [agency name]`
   - Collection it's saved in --> `Our Analytics` (the default)
 
-1. Limit the access permissions on the new `Collection` by using the `Group` created in step #3
+5. Limit the access permissions on the new `Collection` by using the `Group` created in step #3
 
 - Navigate back to `Settings --> Admin settings` in the upper right-hand corner
   - Select `Permissions` from the top menu
@@ -131,7 +131,7 @@ To duplicate a dashboard, navigate to the collection of one of the source dashbo
 
 Like mentioned previously, Metabase Dashboards are comprised of `Questions` which serve as the visualizations in the dashboards. By not selecting the `Only duplicate the dashboard` box, the Questions will also be copied into the Collection along with the Dashboard during the duplication process.
 
-1. Re-configuring the copied questions to use the correct `Database`
+2. Re-configuring the copied questions to use the correct `Database`
 
 Duplicating an existing dashboard preserves much of the text, formatting, and settings of the dashboard -- and saves a lot of work as compared to creating a new dashboard from scratch. Unfortunately, within the duplicated questions there is a lot of re-configuring that must be done when switching the question to use the new agency's `Database` within Metabase, created in the previous documentation section.
 
@@ -153,7 +153,7 @@ However, you will need to change the settings of the field being used as the tim
 
 Once you've re-configured the question, you can press save, selecting `Replace original question` when prompted (the default).
 
-1. Configure the dashboard `Time Window` filter widget
+3. Configure the dashboard `Time Window` filter widget
 
 Once the questions are updated, the remaining step is to configure them to be filtered by the dashboard filter widget.
 
