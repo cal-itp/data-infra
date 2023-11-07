@@ -108,7 +108,7 @@ Relevant Metabase Concepts:
 
 Creation of collections and permissions groups are explained in the previous documentation section.
 
-### Duplicating an existing dashboard
+1. Duplicate an existing dashboard
 
 The easiest way to create a new dashboard for an agency in Metabase is to duplicate an existing dashboard into the new agency's `Collection`. By duplicating the dashboard into the permission-protected collection, you are ensuring that only representatives from that agency (and internal staff) are able to view the data.
 
@@ -131,7 +131,7 @@ To duplicate a dashboard, navigate to the collection of one of the source dashbo
 
 Like mentioned previously, Metabase Dashboards are comprised of `Questions` which serve as the visualizations in the dashboards. By not selecting the `Only duplicate the dashboard` box, the Questions will also be copied into the Collection along with the Dashboard during the duplication process.
 
-### Re-configuring the copied questions to use the correct `Database`
+1. Re-configuring the copied questions to use the correct `Database`
 
 Duplicating an existing dashboard preserves much of the text, formatting, and settings of the dashboard -- and saves a lot of work as compared to creating a new dashboard from scratch. Unfortunately, within the duplicated questions there is a lot of re-configuring that must be done when switching the question to use the new agency's `Database` within Metabase, created in the previous documentation section.
 
@@ -153,7 +153,7 @@ However, you will need to change the settings of the field being used as the tim
 
 Once you've re-configured the question, you can press save, selecting `Replace original question` when prompted (the default).
 
-### Configure the dashboard `Time Window` filter widget
+1. Configure the dashboard `Time Window` filter widget
 
 Once the questions are updated, the remaining step is to configure them to be filtered by the dashboard filter widget.
 
