@@ -10,17 +10,17 @@ WITH organizations AS (
 ),
 
 services AS (
-    SELECT * FROM {{ ref('dim_services')}}
+    SELECT * FROM {{ ref('dim_services') }}
     WHERE _is_current
 ),
 
 county_geogs AS (
     SELECT * FROM {{ ref('dim_county_geography') }}
-)
+),
 
 orgs_hq_bridge AS (
     SELECT * FROM {{ ref('bridge_organizations_x_headquarters_county_geography') }}
-)
+),
 
 orgs_services_bridge AS (
    SELECT * FROM {{ ref('bridge_organizations_x_services_managed') }}
@@ -40,7 +40,7 @@ gtfs_services AS (
 gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
    WHERE _is_current
-)
+),
 
 -- This query will collect every funding source an Organization has via the
 -- services it provides.
@@ -51,7 +51,7 @@ funding_by_organization AS (
     FROM
         organizations orgs
     INNER JOIN
-        orgs_services_bridge ON orgs_services_bridge.org_key = orgs.key
+        orgs_services_bridge ON orgs_services_bridge.organization_key = orgs.key
     INNER JOIN
         services_funding_bridge ON orgs_services_bridge.service_key = services_funding_bridge.service_key
     GROUP BY
@@ -81,7 +81,7 @@ gtfs_data_by_organization AS (
         ARRAY_AGG(gtfs_datasets.uri) AS gtfs_uris
     FROM organizations orgs
     LEFT JOIN
-        orgs_services_bridge ON orgs.key = orgs_services_bridge.org_key
+        orgs_services_bridge ON orgs.key = orgs_services_bridge.organization_key
     LEFT JOIN
         gtfs_services ON orgs_services_bridge.service_key = gtfs_services.service_key
     LEFT JOIN
@@ -101,7 +101,7 @@ serviced_counties_by_organization AS (
         ARRAY_CONCAT_AGG(services.operating_counties) AS operating_counties
     FROM organizations orgs
     LEFT JOIN
-        orgs_services_bridge orgs_services_bridge ON orgs_services_bridge.org_key = orgs.key
+        orgs_services_bridge ON orgs_services_bridge.organization_key = orgs.key
     LEFT JOIN
         services ON services.key = orgs_services_bridge.service_key
     GROUP BY
@@ -121,8 +121,8 @@ mobility_market_providers AS (
             ORDER BY county
         ) AS counties_served,
         annual_ntd.url AS agency_website,
-        county_geog.caltrans_district AS caltrans_district_id,
-        county_geog.caltrans_district_name AS caltrans_district_name,
+        county_geogs.caltrans_district AS caltrans_district_id,
+        county_geogs.caltrans_district_name AS caltrans_district_name,
         orgs.is_public_entity AS is_public_entity,
         orgs.public_currently_operating AS is_publicly_operating,
         ARRAY(
@@ -144,7 +144,7 @@ mobility_market_providers AS (
     LEFT JOIN
         organizations orgs ON orgs.ntd_id = annual_ntd.ntd_id
     LEFT JOIN
-        orgs_hq_bridge ON orgs.key = orgs_hq_bridge.org_key
+        orgs_hq_bridge ON orgs.key = orgs_hq_bridge.organization_key
     LEFT JOIN
         county_geogs ON orgs_hq_bridge.county_geography_key = county_geogs.key
     LEFT JOIN
