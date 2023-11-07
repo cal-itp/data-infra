@@ -27,6 +27,16 @@ are already configured/installed.
 
 3. Execute `poetry install` to create a virtual environment and install requirements.
 
+   > \[!NOTE\]
+   >
+   > If you are running an ARM Mac, you may run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
+   >
+   > ```bash
+   > export CFLAGS="-I $(brew --prefix graphviz)/include"
+   > export LDFLAGS="-L $(brew --prefix graphviz)/lib"
+   > poetry install
+   > ```
+
 4. Execute `poetry run dbt deps` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`).
 
 5. Ensure that `DBT_PROFILES_DIR` is set to something like `~/.dbt/`; in JupyterHub, it should already be set to `/home/jovyan/.dbt/`. You can check with `echo $DBT_PROFILES_DIR`.

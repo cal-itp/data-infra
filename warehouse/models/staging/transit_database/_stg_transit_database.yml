@@ -229,7 +229,7 @@ models:
       - *id
       - name: program
       - name: full_name
-      - name: program_informatiom
+      - name: program_information
       - name: services
       - name: organization
       - name: category

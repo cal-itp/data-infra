@@ -258,7 +258,7 @@ def unzip_extracts(
             for failure in result.failures
         ]
         exc_str = "\n".join(str(tup) for tup in exceptions)
-        msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"
+        msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"  # noqa: E231
         if exceptions:
             typer.secho(msg, err=True, fg=typer.colors.RED)
         if success_rate < GTFS_UNZIP_LIST_ERROR_THRESHOLD:

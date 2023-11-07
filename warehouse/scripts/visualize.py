@@ -240,7 +240,7 @@ def viz(
         print(f"Writing DAG to {output}")
     A.draw(output, args=f"-Gratio={ratio}", prog="dot")
     if display:
-        url = f"file://{output.resolve()}"
+        url = f"file://{output.resolve()}"  # noqa: E231
         webbrowser.open(url, new=2)  # open in new tab
 
 

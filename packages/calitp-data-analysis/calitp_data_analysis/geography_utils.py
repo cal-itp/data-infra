@@ -168,7 +168,7 @@ def cut_segments(
         .drop(columns="temp_index")
     )
 
-    segmented2 = gpd.GeoDataFrame(segmented, crs=f"EPSG:{EPSG_CODE}")
+    segmented2 = gpd.GeoDataFrame(segmented, crs=f"EPSG:{EPSG_CODE}")  # noqa: E231
 
     return segmented2
 
