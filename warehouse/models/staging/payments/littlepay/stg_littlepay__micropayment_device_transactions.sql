@@ -42,6 +42,12 @@ stg_littlepay__micropayment_device_transactions AS (
         _payments_key,
         _content_hash,
     FROM add_keys_drop_full_dupes
+    -- Drops one row associated with the bad customer record, likely used for testing, that's
+    -- dropped in stg_littlepay__customer_funding_source.
+    WHERE _key != 'f224555905f05b4869475f01a385d2bb'
+    -- drops two true duplicates from two micropayments that generated multiple IDs seemingly
+    -- unintentionally (those micropayments are themselves dropped in the micropayments model)
+    AND _key not in ('b9578c8e1ffa81a1c5b452cfbee0d8ea', '2a286598030d7037ef4425854b54382b')
 )
 
 SELECT * FROM stg_littlepay__micropayment_device_transactions

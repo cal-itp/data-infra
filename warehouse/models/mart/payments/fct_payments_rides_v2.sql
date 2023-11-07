@@ -20,8 +20,8 @@ dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
-payments_gtfs_datasets AS (
-    SELECT * FROM {{ ref('payments_gtfs_datasets') }}
+payments_entity_mapping AS (
+    SELECT * FROM {{ ref('payments_entity_mapping') }}
 ),
 
 stg_littlepay__micropayments AS (
@@ -66,14 +66,14 @@ stg_littlepay__product_data AS (
 
 participants_to_routes_and_agency AS (
     SELECT
-        pf.participant_id,
+        pf.littlepay_participant_id,
         f.date,
         r.route_id,
         r.route_short_name,
         r.route_long_name,
         a.agency_id,
         a.agency_name,
-    FROM payments_gtfs_datasets AS pf
+    FROM payments_entity_mapping AS pf
     LEFT JOIN dim_gtfs_datasets d
         ON pf.gtfs_dataset_source_record_id = d.source_record_id
     LEFT JOIN fct_daily_schedule_feeds AS f
@@ -207,6 +207,7 @@ join_table AS (
 
         m.participant_id,
         m.micropayment_id,
+        m.aggregation_id,
 
         -- Customer and funding source information
         m.funding_source_vault_id,
@@ -296,7 +297,7 @@ join_table AS (
         ON m.participant_id = p.participant_id
             AND a.product_id = p.product_id
     LEFT JOIN participants_to_routes_and_agency AS r
-        ON r.participant_id = m.participant_id
+        ON r.littlepay_participant_id = m.participant_id
             -- here, can just use t1 because transaction date will be populated
             -- (don't have to handle unkowns the way we do with route_id)
             AND EXTRACT(DATE FROM TIMESTAMP(t1.transaction_date_time_utc)) = r.date

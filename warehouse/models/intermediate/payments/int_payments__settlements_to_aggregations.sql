@@ -2,28 +2,11 @@
 
 WITH settlements AS (
     SELECT *
-    FROM {{ ref('stg_littlepay__settlements') }}
+    FROM {{ ref('fct_payments_settlements') }}
 ),
 
 -- TODO: decide whether refunds should be joined in as part of the creation of this table?
 -- mapping refunds to settlements may require using settlement_id, which is not available downstream of this model
-
--- some rows have null settlement type (debit vs. credit)
--- so we try to impute based on settlement order
-impute_settlement_type AS (
-    SELECT
-        * EXCEPT(settlement_type),
-        COALESCE(settlement_type,
-            -- when a settlement (aggregation_id / RRN) appears multiple times, it is generally because the subsequent lines are refunds
-            -- vast majority of refunds have exactly one debit line and one credit (refund) line, but there are a few oddities with multiple credit (refund) lines
-            CASE
-                WHEN ROW_NUMBER() OVER(PARTITION BY aggregation_id, retrieval_reference_number ORDER BY settlement_requested_date_time_utc) > 1 THEN "CREDIT"
-                ELSE "DEBIT"
-            END
-        ) AS settlement_type,
-        settlement_type IS NULL AS imputed_type,
-    FROM settlements
-),
 
 summarize_by_type AS (
     SELECT
@@ -33,11 +16,8 @@ summarize_by_type AS (
         settlement_type,
         LOGICAL_OR(imputed_type) AS type_contains_imputed_type,
         MAX(settlement_requested_date_time_utc) AS type_latest_update_timestamp,
-        CASE
-            WHEN settlement_type = "CREDIT" THEN -1*SUM(transaction_amount)
-            WHEN settlement_type = "DEBIT" THEN SUM(transaction_amount)
-        END AS total_amount,
-    FROM impute_settlement_type
+        SUM(transaction_amount) AS total_amount,
+    FROM settlements
     GROUP BY 1, 2, 3, 4
 ),
 
@@ -55,7 +35,7 @@ summarize_overall AS (
     GROUP BY 1, 2, 3
 ),
 
-int_payments__settlements_summarized AS (
+int_payments__settlements_to_aggregations AS (
     SELECT
         summary.participant_id,
         summary.aggregation_id,
@@ -77,4 +57,4 @@ int_payments__settlements_summarized AS (
         AND credit.settlement_type = "CREDIT"
 )
 
-SELECT * FROM int_payments__settlements_summarized
+SELECT * FROM int_payments__settlements_to_aggregations

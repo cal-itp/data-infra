@@ -11,12 +11,12 @@ clean_columns AS (
         {{ trim_make_empty_string_null('funding_source_vault_id') }} AS funding_source_vault_id,
         TIMESTAMP({{ trim_make_empty_string_null('transaction_time') }}) AS transaction_time,
         {{ trim_make_empty_string_null('payment_liability') }} AS payment_liability,
-        SAFE_CAST(charge_amount AS NUMERIC) AS charge_amount,
-        SAFE_CAST(nominal_amount AS NUMERIC) AS nominal_amount,
-        {{ trim_make_empty_string_null('currency_code') }} AS currency_code,
+        SAFE_CAST({{ trim_make_empty_string_null('charge_amount') }} AS NUMERIC) AS charge_amount,
+        SAFE_CAST({{ trim_make_empty_string_null('nominal_amount') }} AS NUMERIC) AS nominal_amount,
+        SAFE_CAST({{ trim_make_empty_string_null('currency_code') }} AS NUMERIC) AS currency_code,
         {{ trim_make_empty_string_null('type') }} AS type,
         {{ trim_make_empty_string_null('charge_type') }} AS charge_type,
-        CAST(_line_number AS INTEGER) AS _line_number,
+        SAFE_CAST({{ trim_make_empty_string_null('_line_number') }} AS INTEGER) AS _line_number,
         `instance`,
         extract_filename,
         ts,
@@ -35,6 +35,18 @@ dedupe_rows AS (
     SELECT *
     FROM clean_columns
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
+),
+
+add_surrogate_keys AS (
+    SELECT
+        *,
+        -- generate keys now that input columns have been trimmed & cast
+        {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
+        {{ dbt_utils.generate_surrogate_key(['micropayment_id']) }} AS _payments_key,
+    FROM dedupe_rows
+    -- completed variable fare payments have two rows with same micropayment id and different transaction times
+    -- we keep the second tap for these
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY micropayment_id ORDER BY transaction_time DESC) = 1
 ),
 
 stg_littlepay__micropayments AS (
@@ -58,13 +70,13 @@ stg_littlepay__micropayments AS (
         littlepay_export_ts,
         littlepay_export_date,
         _content_hash,
-        -- generate keys now that input columns have been trimmed & cast
-        {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
-        {{ dbt_utils.generate_surrogate_key(['micropayment_id']) }} AS _payments_key,
-    FROM dedupe_rows
-    -- completed variable fare payments have two rows with same micropayment id and different transaction times
-    -- we keep the second tap for these
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY micropayment_id ORDER BY transaction_time DESC) = 1
+        _key,
+        _payments_key,
+    FROM add_surrogate_keys
+    -- drops two true duplicates that were inexplicably assigned two micropayment IDs at the
+    -- time of transaction creation, despite mapping to only one transaction. This prevents
+    -- modeling failures down the line.
+    WHERE _key not in ('511edf5a7ff43a01b4af5dd07f1f6c86', '666dc7d1eee11e09e27e7ec074bc2f6d')
 )
 
 SELECT * FROM stg_littlepay__micropayments
