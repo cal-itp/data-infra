@@ -298,7 +298,7 @@ typing-inspect==0.8.0
 uc-micro-py==1.0.1
 unicodecsv==0.14.1
 uritemplate==3.0.1
-urllib3==1.26.12
+urllib3==1.26.18
 vine==5.0.0
 virtualenv==20.16.6
 wcwidth==0.2.5
