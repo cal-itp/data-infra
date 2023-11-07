@@ -183,7 +183,7 @@ def main(aggregator: GTFSFeedAggregator, dry_run: bool = False, progress: bool =
     )
     if dry_run:
         typer.secho(
-            f"dry run; skipping upload of {humanize.naturalsize(len(scrape_result.content))}"
+            f"dry run; skipping upload of {humanize.naturalsize(len(scrape_result.content))}"  # noqa: E702
         )
     else:
         typer.secho(

@@ -40,7 +40,7 @@ def get_engine(project, max_bytes=None):
     # Note that we should be able to add location as a uri parameter, but
     # it is not being picked up, so passing as a separate argument for now.
     return create_engine(
-        f"bigquery://{project}/?maximum_bytes_billed={max_bytes}",
+        f"bigquery://{project}/?maximum_bytes_billed={max_bytes}",  # noqa: E231
         location="us-west2",
         credentials_path=os.environ.get("BIGQUERY_KEYFILE_LOCATION"),
     )
