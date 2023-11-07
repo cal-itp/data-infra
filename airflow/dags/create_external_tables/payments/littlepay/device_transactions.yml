@@ -26,7 +26,7 @@ schema_fields:
      type: STRING
    - name: transaction_outcome
      type: STRING
-   - name: transction_deny_reason
+   - name: transaction_deny_reason
      type: STRING
    - name: transaction_date_time_utc
      type: STRING
@@ -53,6 +53,8 @@ schema_fields:
    - name: granted_zone_ids
      type: STRING
    - name: onward_zone_ids
+     type: STRING
+   - name: processed_timestamp_utc
      type: STRING
    - name: _line_number
      type: STRING

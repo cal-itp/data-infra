@@ -1,70 +1,6 @@
 {{ config(
-    post_hook=[
-" {{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = 'mst',
-    principals = ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }}",
-" {{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = 'sacrt',
-    principals = ['serviceAccount:sacrt-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }}",
-" {{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = 'sbmtd',
-    principals = ['serviceAccount:sbmtd-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }}",
-" {{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = 'clean-air-express',
-    principals = ['serviceAccount:clean-air-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }}",
-" {{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = 'ccjpa',
-    principals = ['serviceAccount:ccjpa-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }}",
-" {{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = 'humboldt-transit-authority',
-    principals = ['serviceAccount:humboldt-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
-) }}",
-" {{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = 'lake-transit-authority',
-    principals = ['serviceAccount:lake-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
-) }}",
-" {{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = 'mendocino-transit-authority',
-    principals = ['serviceAccount:mendocino-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
-) }}",
-" {{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = 'redwood-coast-transit',
-    principals = ['serviceAccount:redwood-coast-transit@cal-itp-data-infra.iam.gserviceaccount.com']
-) }}",
-" {{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = 'atn',
-    principals = ['serviceAccount:atn-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }}",
-" {{ create_row_access_policy(
-    principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
-                  'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
-                  'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
-                  'group:cal-itp@jarv.us',
-                  'domain:calitp.org',
-                  'user:angela@compiler.la',
-                  'user:easall@gmail.com',
-                  'user:jeremyscottowades@gmail.com',
-                 ]
-) }}",
-]
-
+    post_hook="{{ payments_row_access_policy() }}"
 ) }}
--- TODO: In the last policy of the macro call above, see if we can get the prod warehouse service account out of context
 
 WITH
 
@@ -76,12 +12,16 @@ dim_routes AS (
     SELECT * FROM {{ ref('dim_routes') }}
 ),
 
+dim_agency AS (
+    SELECT * FROM {{ ref('dim_agency') }}
+),
+
 dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
-payments_gtfs_datasets AS (
-    SELECT * FROM {{ ref('payments_gtfs_datasets') }}
+payments_entity_mapping AS (
+    SELECT * FROM {{ ref('payments_entity_mapping') }}
 ),
 
 stg_littlepay__micropayments AS (
@@ -124,20 +64,25 @@ stg_littlepay__product_data AS (
     FROM {{ ref('stg_littlepay__product_data') }}
 ),
 
-participants_to_routes AS (
+participants_to_routes_and_agency AS (
     SELECT
-        pf.participant_id,
+        pf.littlepay_participant_id,
         f.date,
         r.route_id,
         r.route_short_name,
         r.route_long_name,
-    FROM payments_gtfs_datasets AS pf
+        a.agency_id,
+        a.agency_name,
+    FROM payments_entity_mapping AS pf
     LEFT JOIN dim_gtfs_datasets d
         ON pf.gtfs_dataset_source_record_id = d.source_record_id
     LEFT JOIN fct_daily_schedule_feeds AS f
         ON d.key = f.gtfs_dataset_key
     LEFT JOIN dim_routes AS r
         ON f.feed_key = r.feed_key
+    LEFT JOIN dim_agency AS a
+        ON r.agency_id = a.agency_id
+            AND r.feed_key = a.feed_key
 ),
 
 debited_micropayments AS (
@@ -190,7 +135,7 @@ initial_transactions AS (
         dt.device_id_issuer,
         dt.type,
         dt.transaction_outcome,
-        dt.transction_deny_reason,
+        dt.transaction_deny_reason,
         dt.transaction_date_time_utc,
         dt.location_scheme,
         dt.location_name,
@@ -229,7 +174,7 @@ second_transactions AS (
         dt.device_id_issuer,
         dt.type,
         dt.transaction_outcome,
-        dt.transction_deny_reason,
+        dt.transaction_deny_reason,
         dt.transaction_date_time_utc,
         dt.location_scheme,
         dt.location_name,
@@ -262,6 +207,7 @@ join_table AS (
 
         m.participant_id,
         m.micropayment_id,
+        m.aggregation_id,
 
         -- Customer and funding source information
         m.funding_source_vault_id,
@@ -292,6 +238,8 @@ join_table AS (
 --         Common transaction info
         r.route_long_name,
         r.route_short_name,
+        r.agency_id,
+        r.agency_name,
         t1.direction,
         t1.vehicle_id,
         t1.littlepay_transaction_id,
@@ -348,12 +296,13 @@ join_table AS (
     LEFT JOIN stg_littlepay__product_data AS p
         ON m.participant_id = p.participant_id
             AND a.product_id = p.product_id
-    LEFT JOIN participants_to_routes AS r
-        ON r.participant_id = m.participant_id
+    LEFT JOIN participants_to_routes_and_agency AS r
+        ON r.littlepay_participant_id = m.participant_id
             -- here, can just use t1 because transaction date will be populated
             -- (don't have to handle unkowns the way we do with route_id)
             AND EXTRACT(DATE FROM TIMESTAMP(t1.transaction_date_time_utc)) = r.date
             AND r.route_id = COALESCE(t1.route_id, t2.route_id)
+
 ),
 
 fct_payments_rides_v2 AS (
