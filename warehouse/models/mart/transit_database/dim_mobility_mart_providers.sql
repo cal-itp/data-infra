@@ -23,23 +23,23 @@ orgs_hq_bridge AS (
 ),
 
 orgs_services_bridge AS (
-   SELECT * FROM {{ ref('bridge_organizations_x_services_managed') }}
-   WHERE _is_current
+    SELECT * FROM {{ ref('bridge_organizations_x_services_managed') }}
+    WHERE _is_current
 ),
 
 services_funding_bridge AS (
-   SELECT * FROM {{ ref('bridge_services_x_funding_programs') }}
-   WHERE _is_current
+    SELECT * FROM {{ ref('bridge_services_x_funding_programs') }}
+    WHERE _is_current
 ),
 
 gtfs_services AS (
-   SELECT * FROM {{ ref('dim_gtfs_service_data') }}
-   WHERE _is_current
+    SELECT * FROM {{ ref('dim_gtfs_service_data') }}
+    WHERE _is_current
 ),
 
 gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
-   WHERE _is_current
+    WHERE _is_current
 ),
 
 -- This query will collect every funding source an Organization has via the
