@@ -103,3 +103,17 @@ models:
         description: int
       - name: processed_time
         description: UTC ISO-8601 timestamp
+      - name: event_properties_path
+        description: The `path` key from the `event_properties` dictionary
+      - name: event_properties_eligibility_verifier
+        description: The `eligibility_verifier` key from the `event_properties` dictionary
+      - name: event_properties_transit_agency
+        description: The `transit_agency` key from the `event_properties` dictionary
+      - name: event_properties_eligibility_types
+        description: The `eligibility_types` key from the `event_properties` dictionary
+      - name: user_properties_referrer
+        description: The `referrer` key from the `user_properties` dictionary
+      - name: user_properties_referring_domain
+        description: The `referring_domain` key from the `user_properties` dictionary
+      - name: user_properties_user_agent
+        description: The `user_agent` key from the `user_properties` dictionary
