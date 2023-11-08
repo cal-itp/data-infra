@@ -32,14 +32,20 @@ services_funding_bridge AS (
     WHERE _is_current
 ),
 
-gtfs_services AS (
-    SELECT * FROM {{ ref('dim_gtfs_service_data') }}
+gtfs_datasets AS (
+    SELECT
+        key,
+        {{ from_url_safe_base64('base64_url') }} AS base64_url
+    FROM {{ ref('dim_gtfs_datasets') }}
     WHERE _is_current
+        AND type = 'schedule'
 ),
 
-gtfs_datasets AS (
-    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
+provider_gtfs_data_bridge AS (
+    SELECT * FROM {{ ref('dim_provider_gtfs_data') }}
     WHERE _is_current
+        AND gtfs_service_data_customer_facing
+        AND public_customer_facing_fixed_route
 ),
 
 -- This query will collect every funding source an Organization has via the
@@ -77,22 +83,15 @@ annual_ntd AS (
 
 gtfs_data_by_organization AS (
     SELECT
-        orgs.key AS org_key,
-        ARRAY_AGG(gtfs_datasets.uri) AS gtfs_uris
-    FROM organizations orgs
+        provider_gtfs_data_bridge.organization_key AS org_key,
+        ARRAY_AGG(gtfs_datasets.base64_url) AS gtfs_uris
+    FROM provider_gtfs_data_bridge
     LEFT JOIN
-        orgs_services_bridge ON orgs.key = orgs_services_bridge.organization_key
-    LEFT JOIN
-        gtfs_services ON orgs_services_bridge.service_key = gtfs_services.service_key
-    LEFT JOIN
-        gtfs_datasets ON gtfs_services.gtfs_dataset_key = gtfs_datasets.key
+        gtfs_datasets ON provider_gtfs_data_bridge.schedule_gtfs_dataset_key = gtfs_datasets.key
     WHERE
-        orgs.public_currently_operating IS TRUE
-        AND gtfs_services.customer_facing IS TRUE
-        -- We only want to track schedule feeds for right now
-        AND gtfs_datasets.type = 'schedule'
+        gtfs_datasets.base64_url IS NOT NULL
     GROUP BY
-        orgs.key
+        provider_gtfs_data_bridge.organization_key
 ),
 
 serviced_counties_by_organization AS (
@@ -127,7 +126,7 @@ mobility_market_providers AS (
         orgs.public_currently_operating AS is_publicly_operating,
         ARRAY(
             SELECT DISTINCT
-            source
+                source
             FROM UNNEST(funding_by_organization.funding_sources) source
             ORDER BY source
         ) AS funding_sources,
@@ -135,7 +134,7 @@ mobility_market_providers AS (
         annual_ntd.total_voms AS vehicles_at_max_service,
         ARRAY(
             SELECT DISTINCT
-            uris
+                uris
             FROM UNNEST(gtfs_data_by_organization.gtfs_uris) uris
             ORDER BY uris
         ) AS gtfs_schedule_uris
