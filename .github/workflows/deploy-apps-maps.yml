@@ -27,7 +27,7 @@ jobs:
     - name: Deploy apps/maps production to Netlify
       if: ${{ github.ref == 'refs/heads/main' }}
       run: |
-        npm install -g netlify-cli
+        npm install -g netlify-cli@17.1.0
         netlify deploy --site=embeddable-maps-calitp-org --dir=apps/maps/build --prod
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
     - name: Deploy apps/maps preview to Netlify
       if: ${{ github.ref != 'refs/heads/main' }}
       run: |
-        npm install -g netlify-cli
+        npm install -g @17.1.0
         netlify deploy --site=embeddable-maps-calitp-org --dir=apps/maps/build --alias=${GITHUB_REPOSITORY#*/}-${PR_NUMBER}
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
