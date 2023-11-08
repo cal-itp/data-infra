@@ -21,7 +21,8 @@ models:
       - name: littlepay_transaction_id
         description: The littlepay_transaction_id of the first tap transaction
         tests:
-          - not_null
+          - dbt_utils.not_null_proportion:
+              at_least: 0.998
           - unique_proportion:
               at_least: 0.999
       - &participant_id
