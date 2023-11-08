@@ -44,11 +44,12 @@ jobs:
         publish_dir: docs/_build/html
         publish_branch: gh-pages
 
-    # Preview on PRs
+    # Preview on PRs - netlify-cli version pinned at time of 17.2.0 release due to bug:
+    # https://github.com/cal-itp/data-infra/actions/runs/6803984777/job/18500834451#step:5:1100
     - name: Deploy docs preview to Netlify
       if: ${{ github.ref != 'refs/heads/main' }}
       run: |
-        npm install -g netlify-cli
+        npm install -g netlify-cli@17.1.0
         netlify deploy --dir=docs/_build/html --alias=docs-${GITHUB_REPOSITORY#*/}-${PR_NUMBER}
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
