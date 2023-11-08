@@ -7,9 +7,11 @@ This documentation is broken out into two sections:
 
 ## Add a New Agency Data Source to Metabase and Create Permissions
 
-As new agencies are introduced to the contactless payments program we will need to access their data within Metabase for use in their payments dashboard and other analysis. Because we use a [row access policy](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql) in the warehouse code to limit access to data to authorized parties this is a multi-step process.
+As new agencies are introduced to the contactless payments program we will need to access their data within Metabase for use in their payments dashboard and other analysis. Because we use a [row access policy](https://cloud.google.com/bigquery/docs/row-level-security-intro#how_row-level_security_works) ([configured here](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql)) in the warehouse code to limit access to data to authorized parties this is a multi-step process.
 
 ### Create a new service account and row access policy
+
+**Permissions needed**: Minimum Google Cloud Platform role `roles/iam.serviceAccountCreator` ([more information can be found in the Google IAM documentation](https://cloud.google.com/iam/docs/understanding-roles#iam.serviceAccountCreator))
 
 1. To begin, create a new service account for the agency within the Google Cloud Platform console, which will be used to allow Metabase read-access to the agency's payments data.
 
@@ -26,9 +28,10 @@ As new agencies are introduced to the contactless payments program we will need 
 - Keep the default key type `JSON` and select `Create`
 - This will download a JSON copy of the service accout key to your local environment, which will be used in later steps within Metabase
 
-3. Open a new branch and edit the [create_row_access_policy macro](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql)
+3. Open a new branch in the [cal-itp/data-infra Github repository](https://github.com/cal-itp/data-infra) and edit the [create_row_access_policy macro](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql)
+   **Permissions needed**: Member of the [cal-itp Github organization](https://github.com/cal-itp)
 
-Duplicate an existing row access policy within the file and append to the bottom , before the `{% endmacro %}` text.
+Duplicate an existing row access policy within the file and append to the bottom, before the `{% endmacro %}` text.
 
 The contents of the policy you're duplicating should look like this:
 
@@ -43,13 +46,15 @@ The contents of the policy you're duplicating should look like this:
 Substitute the following fields with the appropriate information for the agency that you are adding:
 
 - `filter_value` which is the Littlepay `participant_id` for the agency
-- `principals` which is the email address for the service account that was created in step #1
+- `principals` which is the email address for the service account that was created in step #1. You can simply subsitute the agency name as used in that step as opposed to updating the whole string.
 
-Open a PR and merge these changes. If you'd like access to the results of this policy before the next time the `transform_warehouse` DAG is run, you will need to run it manually.
+Open a PR in Github and merge these changes. If you'd like access to the results of this policy before the next time the `transform_warehouse` DAG is run, you will need to run it manually. To do this, you should trigger the DAG with a selector [as described in the README for the DAG task](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse). Use selector: `{"dbt_select": "models/mart/payments"}`.
 
 ### Add a new `Database` in Metabase for the agency
 
-This creates the limited-access connection the the BigQuery warehouse.
+**Permissions needed**: Member of the Metabase `Administrators` user group
+
+This creates the limited-access connection to the BigQuery warehouse.
 
 1. Navigate to Metabase, then `Settings`
 
