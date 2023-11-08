@@ -16,10 +16,12 @@ services AS (
 
 county_geogs AS (
     SELECT * FROM {{ ref('dim_county_geography') }}
+    WHERE _is_current
 ),
 
 orgs_hq_bridge AS (
     SELECT * FROM {{ ref('bridge_organizations_x_headquarters_county_geography') }}
+    WHERE _is_current
 ),
 
 orgs_services_bridge AS (
