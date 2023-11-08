@@ -154,7 +154,7 @@ The easiest way to do this is to:
 
 Thankfully, question visualization configurations like visualization type (bar, line) and axis labels should be preserved.
 
-### For SQL-based questions
+**For SQL-based questions**
 
 You will only need to change the name of the Database, but not the table name as it is explicit in the query. There is a dropdown above the query text where you can change the source Database to use the new agency's database.
 
