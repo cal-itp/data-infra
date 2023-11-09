@@ -26,11 +26,6 @@ orgs_hq_bridge AS (
     WHERE _is_current
 ),
 
-orgs_services_bridge AS (
-    SELECT * FROM {{ ref('bridge_organizations_x_services_managed') }}
-    WHERE _is_current
-),
-
 services_funding_bridge AS (
     SELECT * FROM {{ ref('bridge_services_x_funding_programs') }}
     WHERE _is_current
@@ -96,15 +91,13 @@ gtfs_data_by_organization AS (
 
 serviced_counties_by_organization AS (
     SELECT
-        orgs.key AS org_key,
+        orgs.organization_key AS org_key,
         ARRAY_CONCAT_AGG(services.operating_counties) AS operating_counties
-    FROM organizations orgs
+    FROM provider_gtfs_data_bridge orgs
     LEFT JOIN
-        orgs_services_bridge ON orgs_services_bridge.organization_key = orgs.key
-    LEFT JOIN
-        services ON services.key = orgs_services_bridge.service_key
+        services ON services.key = orgs.service_key
     GROUP BY
-        orgs.key
+        orgs.organization_key
 ),
 
 mobility_market_providers AS (
