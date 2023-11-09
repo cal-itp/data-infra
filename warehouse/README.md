@@ -200,13 +200,34 @@ You can enable [displaying hidden folders/files in macOS Finder](https://www.mac
 
 1. Install and configure Google Cloud CLI
 
-   1. Follow the installation instructions in [Google `gcloud` documentation](https://cloud.google.com/sdk/docs/install)
-
-   2. OR install it via Homebrew
+   1. Install it via Homebrew for an automatic process or skip to step 2 for a manual installation
 
       ```bash
       brew install google-cloud-sdk
       ```
+
+   2. Follow download the latest release from [Google `gcloud` documentation](https://cloud.google.com/sdk/docs/install) and follow their instructions or read along here.
+
+      1. Unzip the `.tar.gz` file that you downloaded
+
+         ```bash
+         # This will unzip the file to your home directory (aka ~/)
+         tar -xvf <drag file from Finder window to get file name> ~
+         ```
+
+      2. Then run the installer in your terminal
+
+         ```bash
+         ~/google-cloud-sdk/install.sh
+         ```
+
+      3. When prompted to modify your `$PATH` and enable command completion, choose yes.
+
+      4. After the installation process has completed, check your shell configuration (e.g. `~/.zshrc`, `~/.bashrc`) to ensure that the `google-cloud-sdk` folder has been added to your `$PATH`. The line you're looking for may look similar to,
+
+         ```bash
+         export PATH="$HOME/google-cloud-sdk/bin:$PATH"
+         ```
 
 2. Restart your terminal, and run `gcloud init`
 
