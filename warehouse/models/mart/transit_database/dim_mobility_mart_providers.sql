@@ -21,17 +21,17 @@ county_geogs AS (
     WHERE _is_current
 ),
 
-orgs_hq_bridge AS (
+orgs_x_hq AS (
     SELECT * FROM {{ ref('bridge_organizations_x_headquarters_county_geography') }}
     WHERE _is_current
 ),
 
-services_funding_bridge AS (
+services_x_funding AS (
     SELECT * FROM {{ ref('bridge_services_x_funding_programs') }}
     WHERE _is_current
 ),
 
-gtfs_datasets AS (
+gtfs_schedules AS (
     SELECT
         key,
         {{ from_url_safe_base64('base64_url') }} AS base64_url
@@ -40,21 +40,23 @@ gtfs_datasets AS (
         AND type = 'schedule'
 ),
 
-provider_gtfs_data_bridge AS (
+-- A faux bridge table that conveniently has organizations mapped to services
+-- mapped to GTFS data
+orgs_x_services_x_gtfs AS (
     SELECT * FROM {{ ref('dim_provider_gtfs_data') }}
     WHERE _is_current
 ),
 
 -- This query will collect every funding source an Organization has via the
 -- services it provides.
-funding_by_organization AS (
+funding_by_org AS (
     SELECT
         orgs.organization_key AS org_key,
-        ARRAY_AGG(services_funding_bridge.funding_program_name) AS funding_sources
+        ARRAY_AGG(services_x_funding.funding_program_name) AS funding_sources
     FROM
-        provider_gtfs_data_bridge orgs
+        orgs_x_services_x_gtfs orgs
     INNER JOIN
-        services_funding_bridge ON orgs.service_key = services_funding_bridge.service_key
+        services_x_funding ON orgs.service_key = services_x_funding.service_key
     GROUP BY
         orgs.organization_key
 ),
@@ -76,24 +78,24 @@ annual_ntd AS (
     QUALIFY DENSE_RANK() OVER(ORDER BY year DESC) = 1
 ),
 
-gtfs_data_by_organization AS (
+gtfs_urls_by_org AS (
     SELECT
-        provider_gtfs_data_bridge.organization_key AS org_key,
-        ARRAY_AGG(gtfs_datasets.base64_url) AS gtfs_uris
-    FROM provider_gtfs_data_bridge
+        orgs_x_services_x_gtfs.organization_key AS org_key,
+        ARRAY_AGG(gtfs_schedules.base64_url) AS gtfs_uris
+    FROM orgs_x_services_x_gtfs
     LEFT JOIN
-        gtfs_datasets ON provider_gtfs_data_bridge.schedule_gtfs_dataset_key = gtfs_datasets.key
+        gtfs_schedules ON orgs_x_services_x_gtfs.schedule_gtfs_dataset_key = gtfs_schedules.key
     WHERE
-        gtfs_datasets.base64_url IS NOT NULL
+        gtfs_schedules.base64_url IS NOT NULL
     GROUP BY
-        provider_gtfs_data_bridge.organization_key
+        orgs_x_services_x_gtfs.organization_key
 ),
 
-serviced_counties_by_organization AS (
+serviced_counties_by_org AS (
     SELECT
         orgs.organization_key AS org_key,
         ARRAY_CONCAT_AGG(services.operating_counties) AS operating_counties
-    FROM provider_gtfs_data_bridge orgs
+    FROM orgs_x_services_x_gtfs orgs
     LEFT JOIN
         services ON services.key = orgs.service_key
     GROUP BY
@@ -105,12 +107,12 @@ mobility_market_providers AS (
         annual_ntd.agency_name AS agency_name,
         annual_ntd.ntd_id AS ntd_id,
         annual_ntd.city AS hq_city,
-        orgs_hq_bridge.county_geography_name AS hq_county,
+        orgs_x_hq.county_geography_name AS hq_county,
         ARRAY_TO_STRING(
             ARRAY(
                 SELECT DISTINCT
                     county
-                FROM UNNEST(serviced_counties_by_organization.operating_counties) county
+                FROM UNNEST(serviced_counties_by_org.operating_counties) county
                 ORDER BY county
             ),
             {{ innerDelimiter }}
@@ -124,7 +126,7 @@ mobility_market_providers AS (
             ARRAY(
                 SELECT DISTINCT
                     source
-                FROM UNNEST(funding_by_organization.funding_sources) source
+                FROM UNNEST(funding_by_org.funding_sources) source
                 ORDER BY source
             ),
             {{ innerDelimiter }}
@@ -135,7 +137,7 @@ mobility_market_providers AS (
             ARRAY(
                 SELECT DISTINCT
                     uris
-                FROM UNNEST(gtfs_data_by_organization.gtfs_uris) uris
+                FROM UNNEST(gtfs_urls_by_org.gtfs_uris) uris
                 ORDER BY uris
             ),
             {{ innerDelimiter }}
@@ -145,15 +147,15 @@ mobility_market_providers AS (
     LEFT JOIN
         organizations orgs ON orgs.ntd_id = annual_ntd.ntd_id
     LEFT JOIN
-        orgs_hq_bridge ON orgs.key = orgs_hq_bridge.organization_key
+        orgs_x_hq ON orgs.key = orgs_x_hq.organization_key
     LEFT JOIN
-        county_geogs ON orgs_hq_bridge.county_geography_key = county_geogs.key
+        county_geogs ON orgs_x_hq.county_geography_key = county_geogs.key
     LEFT JOIN
-        funding_by_organization ON funding_by_organization.org_key = orgs.key
+        funding_by_org ON funding_by_org.org_key = orgs.key
     LEFT JOIN
-        gtfs_data_by_organization ON gtfs_data_by_organization.org_key = orgs.key
+        gtfs_urls_by_org ON gtfs_urls_by_org.org_key = orgs.key
     LEFT JOIN
-        serviced_counties_by_organization ON serviced_counties_by_organization.org_key = orgs.key
+        serviced_counties_by_org ON serviced_counties_by_org.org_key = orgs.key
     ORDER BY
         annual_ntd.ntd_id
 )
