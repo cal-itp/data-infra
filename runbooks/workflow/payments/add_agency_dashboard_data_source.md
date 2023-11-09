@@ -7,7 +7,7 @@ This documentation is broken out into two sections:
 
 ## Add a New Agency Data Source to Metabase and Create Permissions
 
-As new agencies are introduced to the contactless payments program we will need to access their data within Metabase for use in their payments dashboard and other analysis. Because we use a [row access policy](https://cloud.google.com/bigquery/docs/row-level-security-intro#how_row-level_security_works) ([configured here](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql)) in the warehouse code to limit access to data to authorized parties this is a multi-step process.
+As new agencies are introduced to the contactless payments program, we will need to access their data within Metabase for use in their payments dashboard and other analysis. Because we use a [row access policy](https://cloud.google.com/bigquery/docs/row-level-security-intro#how_row-level_security_works) ([configured here](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql)) in the warehouse code to limit access to data to authorized parties, this is a multi-step process.
 
 ### Create a new service account and row access policy
 
@@ -48,13 +48,13 @@ Substitute the following fields with the appropriate information for the agency 
 - `filter_value` which is the Littlepay `participant_id` for the agency
 - `principals` which is the email address for the service account that was created in step #1. You can simply subsitute the agency name as used in that step as opposed to updating the whole string.
 
-Open a PR in Github and merge these changes. If you'd like access to the results of this policy before the next time the `transform_warehouse` DAG is run, you will need to run it manually. To do this, you should trigger the DAG with a selector [as described in the README for the DAG task](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse). Use selector: `{"dbt_select": "models/mart/payments"}`.
+Open a PR in Github to merge these changes. If you'd like access to the results of this policy before the next time the `transform_warehouse` DAG is run, you will need to run it manually. To do this, you should trigger the DAG with a selector [as described in the README for the DAG task](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse). Use selector: `{"dbt_select": "models/mart/payments"}`.
 
 ### Add a new `Database` in Metabase for the agency
 
 **Permissions needed**: Member of the Metabase `Administrators` user group
 
-This creates the limited-access connection to the BigQuery warehouse.
+This creates the limited-access connection to the BigQuery warehouse which allows Metabase to access the agency's payments data tables. In order to properly implement the previously-created row access policy within Metabase, each agency must have their own Metabase `Database`.
 
 1. Navigate to Metabase, then `Settings`
 
@@ -93,7 +93,7 @@ To begin, navigate to `People` in the top menu bar while within the `Admin setti
 
 3. Create a new `Collection` for the agency
 
-This is a folder for the agency within Metabase where we will store their payments dashboard and the questions that comprise it
+This is a folder for the agency within Metabase. We will store their payments dashboard and the questions that comprise it in this folder.
 
 - From the previous step, select `Exit Admin` in the top right-hand corner to return to the Metabase homepage
   - Select `+ New` in the top right-hand corner
@@ -110,7 +110,7 @@ This is a folder for the agency within Metabase where we will store their paymen
   - In the dropdown to the right of `Payments Group - [agency name]`, select `View`. This will allow the agency's users to view the dashboard and questions without breaking anything.
   - In the dropdown to the right of  `Payments Team`, select `Curate`. This will allow the internal team to manage the dashboard and questions.
 
-Now, any questions or dashboards that you create within the collection will only be able to be viewed by the agency representatives that you added to the group that was created, and managed by the larger payments team within Cal-ITP.
+Now, any questions or dashboards that you create within the collection will only be able to be viewed by the agency representatives that you added to the `Group`, and managed by the larger payments team within Cal-ITP.
 
 ## Create a New Agency Dashboard and the Comprising Questions
 
@@ -124,14 +124,20 @@ Creation of collections and permissions groups are explained in the previous doc
 
 1. Duplicate an existing dashboard
 
-The easiest way to create a new dashboard for an agency in Metabase is to duplicate an existing dashboard into the new agency's `Collection`. By duplicating the dashboard into the permission-protected collection you are ensuring that only representatives from that agency (and internal staff) are able to view the data.
+The easiest way to create a new dashboard for an agency in Metabase is to duplicate an existing dashboard into the new agency's `Collection`. By duplicating the dashboard into the permission-protected collection, you are ensuring that only representatives from that agency (and internal staff) are able to view the data.
 
-At this time there are two different types of agency dashboards: those that use flat fare formats and those that use variable fare formats. There are currently none that use both. These differences impact a few questions within the dashboards, but the majority of the dashboards are the same. By nature, variable fare format dashboards include some additional questions, some dashboards have custom questions as requested by agencies, and currently one agency excludes certain questions (CCJPA doesn't include any `Form Factor` related questions due to only accepting one type).
+At this time there are two different types of agency dashboards: those that use flat fare formats, and those that use variable fare formats. There are currently none that use both. These differences impact a few questions within the dashboards, but the majority of the dashboards are the same.
+
+*Some notable differences*:
+
+- By nature, variable fare format dashboards include some additional questions
+- Some dashboards have custom questions as requested by agencies
+- Currently, one agency excludes certain questions (CCJPA doesn't include any `Form Factor` related questions due to only accepting one type)
 
 Good source dashboards for copying:
 
-- Flat Fare: Humboldt Transit Authority
-- Variable Fare: Redwood Coast Transit
+- **Flat Fare**: Humboldt Transit Authority
+- **Variable Fare**: Redwood Coast Transit
 
 To duplicate a dashboard, navigate to the collection of one of the source dashboards above
 
@@ -186,5 +192,5 @@ Once the questions are updated, the remaining step is to configure them to be fi
     - `Total Revenue by Day`
     - `Number of Settled Refunds, Grouped by Week`
     - `Value of Settled Refunds, Grouped by Week`
-  - `Week Start` for
+  - `Week Start` for:
     - `Journeys with Unlabeled Routes`
