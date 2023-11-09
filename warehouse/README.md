@@ -29,7 +29,7 @@ are already configured/installed.
 
    > \[!NOTE\]
    >
-   > If you are running an ARM Mac, you may run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
+   > If you run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
    >
    > ```bash
    > export CFLAGS="-I $(brew --prefix graphviz)/include"
@@ -39,11 +39,17 @@ are already configured/installed.
 
 4. Execute `poetry run dbt deps` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`).
 
-5. Ensure that `DBT_PROFILES_DIR` is set to something like `~/.dbt/`; in JupyterHub, it should already be set to `/home/jovyan/.dbt/`. You can check with `echo $DBT_PROFILES_DIR`.
+5. Set up your DBT profiles directory:
+
+   1. If you are using JupyterHub, it should already be set to `/home/jovyan/.dbt/`.
+
+   2. On your local machine, you will need to modify your respective shell's RC (e.g. `.zshrc`, `.bashrc`) file to export `DBT_PROFILES_DIR` to something like `~/.dbt/`.
+
+   You can check with `echo $DBT_PROFILES_DIR` to make sure it's set correctly.
 
 6. Execute `poetry run dbt init` to create the `$DBT_PROFILES_DIR` directory and a pre-built `profiles.yml` file; you will be prompted to enter a personal `schema` which is used as a prefix for your personal development environment schemas. The output should look similar to the following:
 
-   ```
+   ```text
    ➜ poetry run dbt init
    19:14:32  Running with dbt=1.4.5
    19:14:32  Setting up your profile.
@@ -54,7 +60,17 @@ are already configured/installed.
 
    See [the dbt docs on profiles.yml](https://docs.getdbt.com/dbt-cli/configure-your-profile) for more background on this file.
 
-   > Note: This default profile template will set a maximum bytes billed of 2 TB; no models should fail with the default lookbacks in our development environment, even with a full refresh. You can override this limit during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
+   > \[!Note\]
+   >
+   > This default profile template will set a maximum bytes billed of 2 TB; no models should fail with the default lookbacks in our development environment, even with a full refresh. You can override this limit during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
+
+   > \[!WARNING\]
+   >
+   > If you receive a warning similar to the following, do **NOT** overwrite the file. This is a sign that you do not have a `DBT_PROFILES_DIR` variable available in your environment and need to address that first (see step 5).
+   >
+   > ```text
+   > The profile calitp_warehouse already exists in /data-infra/warehouse/profiles.yml. Continue and overwrite it? [y/N]:
+   > ```
 
 7. Check whether `~/.dbt/profiles.yml` was successfully created, e.g. `cat ~/.dbt/profiles.yml`. If you encountered an error, you may create it by hand and fill it with the same content:
 
@@ -134,9 +150,11 @@ Once you have performed the setup above, you are good to go run
    2. You will need to re-run seeds if new seeds are added, or existing ones are changed.
 2. `poetry run dbt run`
    1. Wll run all the models, i.e. execute SQL in the warehouse.
-   2. In the future, you can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) to run only a subset of models, otherwise this will run *all* the tables).
+   2. In the future, you can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) (via the `-s` or `--select` flags) to run only a subset of models, otherwise this will run *all* the tables.
    3. By default, your very first `run` is a [full refresh](https://docs.getdbt.com/reference/commands/run#refresh-incremental-models) but you'll need to pass the `--full-refresh` flag in the future if you want to change the schema of incremental tables, or "backfill" existing rows with new logic.
 
+> \[!NOTE\]
+>
 > In general, it's a good idea to run `seed` and `run --full-refresh` if you think your local environment is substantially outdated (for example, if you haven't worked on dbt models in a few weeks but want to create or modify a model). We have macros in the project that prevent a non-production "full refresh" from actually processing all possible data.
 
 Some additional helpful commands:
