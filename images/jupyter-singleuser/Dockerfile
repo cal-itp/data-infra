@@ -26,7 +26,7 @@ USER $NB_UID
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
-RUN npm install -g --unsafe-perm=true --allow-root netlify-cli@17.1.0 vega-cli vega-lite sql-language-server
+RUN npm install -g --unsafe-perm=true --allow-root netlify-cli vega-cli vega-lite sql-language-server
 
 # gcloud CLI https://cloud.google.com/sdk/docs/install#deb
 RUN cd $GCLOUD_HOME \
