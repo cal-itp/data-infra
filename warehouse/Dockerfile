@@ -2,7 +2,7 @@ FROM  --platform=linux/amd64 python:3.9-buster as build
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get update \
   && apt-get install -y nodejs libgdal-dev libgraphviz-dev graphviz-dev
 
