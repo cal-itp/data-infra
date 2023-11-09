@@ -2,7 +2,7 @@ FROM  --platform=linux/amd64 python:3.9-buster as build
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
-RUN NODE_MAJOR=20
+RUN NODE_MAJOR=18
 RUN apt-get update
 RUN apt-get install -y ca-certificates curl gnupg
 RUN mkdir -p /etc/apt/keyrings
