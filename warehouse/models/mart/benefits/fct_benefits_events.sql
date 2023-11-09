@@ -2,17 +2,63 @@
 
 WITH fct_benefits_events AS (
     SELECT
-        *,
-        JSON_VALUE(event_properties, '$.path') AS event_properties_path,
-        JSON_VALUE(event_properties, '$.eligibility_verifier') AS event_properties_eligibility_verifier,
-        JSON_VALUE(event_properties, '$.transit_agency') AS event_properties_transit_agency,
-        ARRAY_TO_STRING(
-            JSON_VALUE_ARRAY(event_properties, '$.eligibility_types'),
-            ';'
-        ) AS event_properties_eligibility_types,
-        JSON_VALUE(user_properties, '$.referrer') AS user_properties_referrer,
-        JSON_VALUE(user_properties, '$.referring_domain') AS user_properties_referring_domain,
-        JSON_VALUE(user_properties, '$.user_agent') AS user_properties_user_agent
+        -- Only fields that aren't _always_ empty (https://dashboards.calitp.org/question#eyJkYXRhc2V0X3F1ZXJ5Ijp7ImRhdGFiYXNlIjoyLCJxdWVyeSI6eyJzb3VyY2UtdGFibGUiOjM1ODR9LCJ0eXBlIjoicXVlcnkifSwiZGlzcGxheSI6InRhYmxlIiwidmlzdWFsaXphdGlvbl9zZXR0aW5ncyI6e319)
+        app,
+        device_id,
+        user_id,
+        client_event_time,
+        event_id,
+        session_id,
+        event_type,
+        version_name,
+        os_name,
+        os_version,
+        device_family,
+        device_type,
+        country,
+        language,
+        library,
+        city,
+        region,
+        event_properties,
+        user_properties,
+        event_time,
+        client_upload_time,
+        server_upload_time,
+        server_received_time,
+        amplitude_id,
+        start_version,
+        uuid,
+        processed_time,
+
+        -- Event Properties (https://app.amplitude.com/data/compiler/Benefits/properties/main/latest/event)
+        {{ json_extract_column('event_properties', 'auth_provider') }},
+        {{ json_extract_column('event_properties', 'card_tokenize_func') }},
+        {{ json_extract_column('event_properties', 'card_tokenize_url') }},
+        {{ json_extract_column('event_properties', 'eligibility_verifier') }},
+        {{ json_extract_column('event_properties', 'error.name') }},
+        {{ json_extract_column('event_properties', 'error.status') }},
+        {{ json_extract_column('event_properties', 'error.sub') }},
+        {{ json_extract_column('event_properties', 'href') }},
+        {{ json_extract_column('event_properties', 'language') }},
+        {{ json_extract_column('event_properties', 'origin') }},
+        {{ json_extract_column('event_properties', 'path') }},
+        {{ json_extract_column('event_properties', 'payment_group') }},
+        {{ json_extract_column('event_properties', 'status') }},
+        {{ json_extract_column('event_properties', 'transit_agency') }},
+        {{ json_extract_flattened_column('event_properties', 'eligibility_types') }},
+
+        -- User Properties (https://app.amplitude.com/data/compiler/Benefits/properties/main/latest/user)
+        {{ json_extract_column('user_properties', 'eligibility_verifier') }},
+        {{ json_extract_column('user_properties', 'initial_referrer') }},
+        {{ json_extract_column('user_properties', 'initial_referring_domain') }},
+        {{ json_extract_column('user_properties', 'provider_name') }},
+        {{ json_extract_column('user_properties', 'referrer') }},
+        {{ json_extract_column('user_properties', 'referring_domain') }},
+        {{ json_extract_column('user_properties', 'transit_agency') }},
+        {{ json_extract_column('user_properties', 'user_agent') }},
+        {{ json_extract_flattened_column('user_properties', 'eligibility_types') }}
+
     FROM {{ ref('stg_amplitude__benefits_events') }}
 )
 
