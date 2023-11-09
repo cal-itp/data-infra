@@ -39,10 +39,6 @@ models:
         description: string
       - name: region
         description: string
-      - name: event_properties
-        description: dict
-      - name: user_properties
-        description: dict
       - name: event_time
         description: UTC ISO-8601 timestamp
       - name: client_upload_time
