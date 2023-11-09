@@ -6,7 +6,7 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get update \
   && apt-get install -y nodejs libgdal-dev libgraphviz-dev graphviz-dev libunwind-dev liblz4-dev
 
-RUN npm install -g --unsafe-perm=true --allow-root netlify-cli@17.1.0
+RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:${PATH}"

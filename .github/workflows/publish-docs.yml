@@ -49,7 +49,7 @@ jobs:
     - name: Deploy docs preview to Netlify
       if: ${{ github.ref != 'refs/heads/main' }}
       run: |
-        npm install -g netlify-cli@17.1.0
+        npm install -g netlify-cli
         netlify deploy --dir=docs/_build/html --alias=docs-${GITHUB_REPOSITORY#*/}-${PR_NUMBER}
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
