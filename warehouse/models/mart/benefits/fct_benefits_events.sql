@@ -20,8 +20,6 @@ WITH fct_benefits_events AS (
         library,
         city,
         region,
-        event_properties,
-        user_properties,
         event_time,
         client_upload_time,
         server_upload_time,
