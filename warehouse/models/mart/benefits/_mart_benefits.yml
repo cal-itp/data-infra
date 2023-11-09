@@ -105,5 +105,5 @@ models:
         description: The `transit_agency` value from the `user_properties` column
       - name: user_properties_user_agent
         description: The `user_agent` value from the `user_properties` column
-      - name: event_properties_eligibility_types
+      - name: user_properties_eligibility_types
         description: A semi-colon delimited list of `eligibility_types` values from the `user_properties` column
