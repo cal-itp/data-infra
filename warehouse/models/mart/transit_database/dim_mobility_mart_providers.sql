@@ -4,6 +4,8 @@
 -- Services (i.e. dim_services). Each Service will have its own funding sources,
 -- GTFS feeds, and target counties.
 
+{% set innerDelimiter = "';'" %}
+
 WITH organizations AS (
    SELECT * FROM {{ ref('dim_organizations') }}
    WHERE _is_current
@@ -46,24 +48,20 @@ gtfs_datasets AS (
 provider_gtfs_data_bridge AS (
     SELECT * FROM {{ ref('dim_provider_gtfs_data') }}
     WHERE _is_current
-        AND gtfs_service_data_customer_facing
-        AND public_customer_facing_fixed_route
 ),
 
 -- This query will collect every funding source an Organization has via the
 -- services it provides.
 funding_by_organization AS (
     SELECT
-        orgs.key AS org_key,
+        orgs.organization_key AS org_key,
         ARRAY_AGG(services_funding_bridge.funding_program_name) AS funding_sources
     FROM
-        organizations orgs
+        provider_gtfs_data_bridge orgs
     INNER JOIN
-        orgs_services_bridge ON orgs_services_bridge.organization_key = orgs.key
-    INNER JOIN
-        services_funding_bridge ON orgs_services_bridge.service_key = services_funding_bridge.service_key
+        services_funding_bridge ON orgs.service_key = services_funding_bridge.service_key
     GROUP BY
-        orgs.key
+        orgs.organization_key
 ),
 
 -- This table has historical data for every year (looks like dating back to
@@ -115,30 +113,39 @@ mobility_market_providers AS (
         annual_ntd.ntd_id AS ntd_id,
         annual_ntd.city AS hq_city,
         orgs_hq_bridge.county_geography_name AS hq_county,
-        ARRAY(
-            SELECT DISTINCT
-                county
-            FROM UNNEST(serviced_counties_by_organization.operating_counties) county
-            ORDER BY county
+        ARRAY_TO_STRING(
+            ARRAY(
+                SELECT DISTINCT
+                    county
+                FROM UNNEST(serviced_counties_by_organization.operating_counties) county
+                ORDER BY county
+            ),
+            {{ innerDelimiter }}
         ) AS counties_served,
         annual_ntd.url AS agency_website,
         county_geogs.caltrans_district AS caltrans_district_id,
         county_geogs.caltrans_district_name AS caltrans_district_name,
         orgs.is_public_entity AS is_public_entity,
         orgs.public_currently_operating AS is_publicly_operating,
-        ARRAY(
-            SELECT DISTINCT
-                source
-            FROM UNNEST(funding_by_organization.funding_sources) source
-            ORDER BY source
+        ARRAY_TO_STRING(
+            ARRAY(
+                SELECT DISTINCT
+                    source
+                FROM UNNEST(funding_by_organization.funding_sources) source
+                ORDER BY source
+            ),
+            {{ innerDelimiter }}
         ) AS funding_sources,
         annual_ntd.voms_do AS on_demand_vehicles_at_max_service,
         annual_ntd.total_voms AS vehicles_at_max_service,
-        ARRAY(
-            SELECT DISTINCT
-                uris
-            FROM UNNEST(gtfs_data_by_organization.gtfs_uris) uris
-            ORDER BY uris
+        ARRAY_TO_STRING(
+            ARRAY(
+                SELECT DISTINCT
+                    uris
+                FROM UNNEST(gtfs_data_by_organization.gtfs_uris) uris
+                ORDER BY uris
+            ),
+            {{ innerDelimiter }}
         ) AS gtfs_schedule_uris
     FROM
         annual_ntd
