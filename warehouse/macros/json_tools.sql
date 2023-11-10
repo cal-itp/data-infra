@@ -26,6 +26,6 @@
 ) -%}
     ARRAY_TO_STRING(
         {{ json_extract_column(col_name, json_path, is_array = true, no_alias = true) }},
-        ';'
+        '{{ delimiter }}'
     ){{ _as_helper(alias | default(json_path), col_name, no_alias) }}
 {%- endmacro %}
