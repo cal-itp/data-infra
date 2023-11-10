@@ -50,9 +50,16 @@ WITH fct_benefits_events AS (
         {{ json_extract_column('user_properties', 'eligibility_verifier') }},
         {{ json_extract_column('user_properties', 'initial_referrer') }},
         {{ json_extract_column('user_properties', 'initial_referring_domain') }},
+
+        -- Historical data existed in `provider_name` but new data is in `transit_agency`
+        -- https://github.com/cal-itp/benefits/pull/901
+        COALESCE(
+            {{ json_extract_column('user_properties', 'transit_agency', no_alias = true) }},
+            {{ json_extract_column('user_properties', 'provider_name', no_alias = true) }}
+        ) AS user_properties_transit_agency,
+
         {{ json_extract_column('user_properties', 'referrer') }},
         {{ json_extract_column('user_properties', 'referring_domain') }},
-        {{ json_extract_column('user_properties', 'transit_agency') }},
         {{ json_extract_column('user_properties', 'user_agent') }},
         {{ json_extract_flattened_column('user_properties', 'eligibility_types') }}
 

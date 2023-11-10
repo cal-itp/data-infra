@@ -96,7 +96,7 @@ models:
       - name: user_properties_referring_domain
         description: The `referring_domain` value from the `user_properties` column
       - name: user_properties_transit_agency
-        description: The `transit_agency` value from the `user_properties` column
+        description: The `transit_agency` value from the `user_properties` column. For entries prior to October 2022, the information in this column came from the `provider_name` field of `user_properties`.
       - name: user_properties_user_agent
         description: The `user_agent` value from the `user_properties` column
       - name: user_properties_eligibility_types
