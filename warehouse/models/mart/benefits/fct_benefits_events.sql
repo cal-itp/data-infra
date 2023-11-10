@@ -50,7 +50,6 @@ WITH fct_benefits_events AS (
         {{ json_extract_column('user_properties', 'eligibility_verifier') }},
         {{ json_extract_column('user_properties', 'initial_referrer') }},
         {{ json_extract_column('user_properties', 'initial_referring_domain') }},
-        {{ json_extract_column('user_properties', 'provider_name') }},
         {{ json_extract_column('user_properties', 'referrer') }},
         {{ json_extract_column('user_properties', 'referring_domain') }},
         {{ json_extract_column('user_properties', 'transit_agency') }},

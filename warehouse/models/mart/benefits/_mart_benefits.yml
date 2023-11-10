@@ -91,8 +91,6 @@ models:
         description: The `initial_referrer` value from the `user_properties` column
       - name: user_properties_initial_referring_domain
         description: The `initial_referring_domain` value from the `user_properties` column
-      - name: user_properties_provider_name
-        description: The `provider_name` value from the `user_properties` column
       - name: user_properties_referrer
         description: The `referrer` value from the `user_properties` column
       - name: user_properties_referring_domain
