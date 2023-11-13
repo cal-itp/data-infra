@@ -177,20 +177,17 @@ We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/inc
 
 If you prefer to install dbt locally and use your own development environment, you may follow these instructions to install the same tools already installed in the JupyterHub environment.
 
-> Note: These instructions assume you are on macOS, but are largely similar for
-> other operating systems. Most \*nix OSes will have a package manager that you
-> should use instead of Homebrew.
+If this is your first time using the terminal, we recommend reading "[Learning the Mac OS X Command Line](https://blog.teamtreehouse.com/introduction-to-the-mac-os-x-command-line)" or another tutorial first. You will generally need to understand `cd` and the concept of the "home directory" aka `~`. When you first open the terminal, your "working directory" will be the home directory. Running the `cd` command without any arguments will set your working directory back to `~`.
+
+You can enable [displaying hidden folders/files in macOS Finder](https://www.macworld.com/article/671158/how-to-show-hidden-files-on-a-mac.html) but generally, we recommend using the terminal when possible for editing these files. Generally, `nano ~/.dbt/profiles.yml` will be the easiest method for editing your personal profiles file. `nano` is a simple terminal-based text editor; you use the arrows keys to navigate and the hotkeys displayed at the bottom to save and exit. Reading an [online tutorial for using `nano`](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/) may be useful if you haven't used a terminal-based editor before.
+
+> \[!Note\]
 >
-> Note: if you get `Operation not permitted` when attempting to use the terminal,
-> you may need to [fix your terminal permissions](https://osxdaily.com/2018/10/09/fix-operation-not-permitted-terminal-error-macos/)
+> These instructions assume you are on macOS, but are largely similar for other operating systems. Most \*nix OSes will have a package manager that you should use instead of Homebrew.
+
+> \[!Note\]
 >
-> You can enable [displaying hidden folders/files in macOS Finder](https://www.macworld.com/article/671158/how-to-show-hidden-files-on-a-mac.html)
-> but generally, we recommend using the terminal when possible for editing
-> these files. Generally, `nano ~/.dbt/profiles.yml` will be the easiest method
-> for editing your personal profiles file. `nano` is a simple terminal-based
-> text editor; you use the arrows keys to navigate and the hotkeys displayed
-> at the bottom to save and exit. Reading an [online tutorial](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/)
-> may be useful if you haven't used a terminal-based editor before.
+> If you get `Operation not permitted` when attempting to use the terminal, you may need to [fix your terminal permissions](https://osxdaily.com/2018/10/09/fix-operation-not-permitted-terminal-error-macos/)
 
 ### Install Homebrew (if you haven't)
 
@@ -200,37 +197,93 @@ If you prefer to install dbt locally and use your own development environment, y
 ### Install the Google SDK (if you haven't)
 
 0. Implied: make sure that you have GCP permissions (i.e. that someone has added you to the GCP project)
-1. Follow the installation instructions at [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install)
-   1. If this is your first time using the terminal, we recommend reading [https://blog.teamtreehouse.com/introduction-to-the-mac-os-x-command-line](https://blog.teamtreehouse.com/introduction-to-the-mac-os-x-command-line)
-      or another tutorial first. You will generally need to understand `cd` and
-      the concept of the "home directory" aka `~`. When you first open the
-      terminal, your "working directory" will be the home directory. Running the
-      `cd` command without any arguments will set your working directory back to
-      `~`.
-   2. Use `tar -xvf <drag file from Finder window to get file name> ~` to unzip into your home directory
-   3. Answer `yes` to adding the tool to your path
-   4. Most recent macOS versions use `zsh` as the default shell, so ensure the path modification is added to `~/.zshrc` when prompted
-   5. Restart your terminal, and run `gcloud init`
-   6. Answer `yes` to log in, and select the Google account associated with GCP
-   7. Set `cal-itp-data-infra` as the default project, and do not set a region
-2. You should also [set the application default](https://cloud.google.com/sdk/gcloud/reference/auth/application-default)
-3. If `bq ls` shows output, you are good to go.
+
+1. Install and configure Google Cloud CLI
+
+   1. Install it via Homebrew for an automatic process or skip to step 2 for a manual installation
+
+      ```bash
+      brew install google-cloud-sdk
+      ```
+
+   2. Follow download the latest release from [Google `gcloud` documentation](https://cloud.google.com/sdk/docs/install) and follow their instructions or read along here.
+
+      1. Unzip the `.tar.gz` file that you downloaded
+
+         ```bash
+         # This will unzip the file to your home directory (aka ~/)
+         tar -xvf <drag file from Finder window to get file name> ~
+         ```
+
+      2. Then run the installer in your terminal
+
+         ```bash
+         ~/google-cloud-sdk/install.sh
+         ```
+
+      3. When prompted to modify your `$PATH` and enable command completion, choose yes.
+
+      4. After the installation process has completed, check your shell configuration (e.g. `~/.zshrc`, `~/.bashrc`) to ensure that the `google-cloud-sdk` folder has been added to your `$PATH`. The line you're looking for may look similar to,
+
+         ```bash
+         export PATH="$HOME/google-cloud-sdk/bin:$PATH"
+         ```
+
+2. Restart your terminal, and run `gcloud init`
+
+3. Step through the prompts and select the Google account associated with GCP
+
+   - Set `cal-itp-data-infra` as the default project
+   - Do not set a region
+
+4. You should also [set the application default](https://cloud.google.com/sdk/gcloud/reference/auth/application-default) so that `dbt` can access your Google Cloud credentials.
+
+   ```bash
+   gcloud auth application-default login
+   ```
+
+5. If `bq ls` shows output, you are good to go.
 
 ### Install poetry
 
-1. Install [poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) (used for package/dependency management).
-   1. If `curl -sSL https://install.python-poetry.org | python3 -`
-      does not work, you can `curl` to a file `curl -sSL https://install.python-poetry.org -o install-poetry.py`
-      and then execute the file with `python install-poetry.py`.
-   2. Add the tool to your system PATH. This process varies by system, but the poetry installer provides a sample command for
-      addition upon its completion. On an OSX device using zshell, for instance, that line should be added to the ~/.zshrc file.
+1. Install [poetry](https://python-poetry.org/docs/#installing-with-the-official-installer) (used for package/dependency management).
 2. Restart your terminal and confirm `poetry --version` works.
-3. Ensure you have set the environment variable `DBT_PROFILES_DIR=~/.dbt/` in your `~/.zshrc`. You can either restart your terminal after setting it, or run `source ~/.zshrc`.
-4. Follow the \[warehouse setup instructions\](#Set up the warehouse dbt project)
-5. If this doesn’t work because of an error with Python version, you may need to install Python 3.9
-   2\. `brew install python@3.9`
-   3\. `brew link python@3.9`
-   4\. After restarting the terminal, confirm with `python3 --version` and retry `poetry install`
+3. Follow the [warehouse setup instructions](#clone-and-install-the-warehouse-project)
+4. If this doesn't work because of an error with Python version, you may need to install Python 3.9
+   1. `brew install python@3.9`
+   2. `brew link python@3.9`
+   3. After restarting the terminal, confirm with `python3 --version` and retry `poetry install`
+
+#### Upgrading Poetry from legacy installer
+
+If you installed Poetry using their legacy `get-poetry.py` script, you may run into issues upgrading to versions past [1.2.0](https://python-poetry.org/blog/announcing-poetry-1.2.0/). Here is a workflow that has worked:
+
+1. Remove the legacy directory that Poetry used (see the ["Uninstall Poetry" step in their docs](https://python-poetry.org/docs/#installing-with-the-official-installer)),
+
+   ```bash
+   rm -rf "${POETRY_HOME:-~/.poetry}"
+   ```
+
+2. Remove `~/.poetry/bin` declaration from your shell configuration file (e.g. `.zshrc`, `.bashrc`). The line you're looking for may look like this,
+
+   ```text
+   export PATH="$HOME/.poetry/bin:$PATH"
+   ```
+
+3. Now, you may [install poetry](#install-poetry) as described in the above section.
+
+4. Run `poetry --version` to confirm the installation has succeeded. If you get a warning about the location of your TOML configuration files, here's what to do next,
+
+   ```bash
+   # Run these two commands to move the Poetry config TOML file from the legacy location to the new location.
+   mkdir <directory listed in "consider moving files to" section of warning>
+   mv <directory listed in "configuration exists at" section of warning>/config.toml ~/Library/Preferences/pypoetry/
+
+   # Example usage may look like:
+
+   # mkdir ~/Library/Preferences/pypoetry/
+   # mv ~/Library/Application\ Support/pypoetry/config.toml ~/Library/Preferences/pypoetry/
+   ```
 
 ### Dataproc configuration
 
@@ -255,17 +308,3 @@ In addition to the steps specified in the dbt docs, [Google Private Access was e
 and the cal-itp-data-infra-staging project's default service account (`473674835135-compute@developer.gserviceaccount.com`) was granted access to the production project
 since the buckets for compiled Python models (`gs://calitp-dbt-python-models` and `gs://test-calitp-dbt-python-models`)
 as well as external tables exist in the production project.
-
-### Troubleshooting
-
-#### Upgrading Poetry from legacy installer
-
-If you installed Poetry using their legacy `get-poetry.py` script, you may run into issues upgrading to versions past [1.2.0](https://python-poetry.org/blog/announcing-poetry-1.2.0/). Here is a workflow that has worked:
-
-1. Uninstall legacy installer: Run `rm -rf "${POETRY_HOME:-~/.poetry}"` (per [this Poetry docs page](https://python-poetry.org/docs/#installing-with-the-official-installer)).
-2. Remove legacy path from shell profile: as noted above, shell configuration will vary by operating system and setup -- this may be `~/.zshrc` or similar. If you have a line like `export PATH="$HOME/.poetry/bin:$PATH"`, remove it.
-3. Re-install Poetry via the new installer: `curl -sSL https://install.python-poetry.org | python3 -` (per their [1.2.0 upgrade docs](https://python-poetry.org/blog/announcing-poetry-1.2.0/))
-4. Re-add new path to $PATH following the instructions that Poetry prints in the terminal upon installation.
-5. Restart terminal.
-6. Try running `poetry --version` to confirm installation has worked. If you get a warning about the location of your TOML configuration files, proceed to next step.
-7. Double check what paths are listed in the warning message and run `mkdir <directory listed in "consider moving files to" section of warning> && mv <directory listed in "configuration exists at" section of warning>/config.toml ~/Library/Preferences/pypoetry/` to move the Poetry config TOML file from legacy location to new location. For example, this may be: `mkdir ~/Library/Preferences/pypoetry/ && mv ~/Library/Application\ Support/pypoetry/config.toml ~/Library/Preferences/pypoetry/`.
