@@ -3,7 +3,7 @@ version: 2
 models:
   - name: fct_benefits_events
     description: |
-      Events from the Benefits application, from Amplitude. Parsed.
+      Events from the Benefits application, from Amplitude. Parsed & Expanded.
     columns:
       - name: app
         description: int
@@ -19,33 +19,15 @@ models:
         description: long
       - name: event_type
         description: string
-      - name: amplitude_event_type
-        description: string
       - name: version_name
-        description: string
-      - name: platform
         description: string
       - name: os_name
         description: string
       - name: os_version
         description: string
-      - name: device_brand
-        description: string
-      - name: device_manufacturer
-        description: string
-      - name: device_model
-        description: string
       - name: device_family
         description: string
       - name: device_type
-        description: string
-      - name: device_carrier
-        description: string
-      - name: location_lat
-        description: float
-      - name: location_lng
-        description: float
-      - name: ip_address
         description: string
       - name: country
         description: string
@@ -57,14 +39,6 @@ models:
         description: string
       - name: region
         description: string
-      - name: dma
-        description: string
-      - name: group_properties
-        description: dict
-      - name: event_properties
-        description: dict
-      - name: user_properties
-        description: dict
       - name: event_time
         description: UTC ISO-8601 timestamp
       - name: client_upload_time
@@ -75,31 +49,55 @@ models:
         description: UTC ISO-8601 timestamp
       - name: amplitude_id
         description: long
-      - name: idfa
-        description: string
-      - name: adid
-        description: string
-      - name: paying
-        description: boolean
       - name: start_version
         description: string
-      - name: user_creation_time
-        description: UTC ISO-8601 timestamp
       - name: uuid
         description: UUID
-      - name: sample_rate
-        description: ""
-      - name: insert_id
-        description: string
-      - name: insert_key
-        description: string
-      - name: is_attribution_event
-        description: bool
-      - name: amplitude_attribution_ids
-        description: string
-      - name: partner_id
-        description: string
-      - name: schema
-        description: int
       - name: processed_time
         description: UTC ISO-8601 timestamp
+      - name: event_properties_auth_provider
+        description: The `auth_provider` value from the `event_properties` column
+      - name: event_properties_card_tokenize_func
+        description: The `card_tokenize_func` value from the `event_properties` column
+      - name: event_properties_card_tokenize_url
+        description: The `card_tokenize_url` value from the `event_properties` column
+      - name: event_properties_eligibility_verifier
+        description: The `eligibility_verifier` value from the `event_properties` column
+      - name: event_properties_error_name
+        description: The `error` value from the `event_properties` column
+      - name: event_properties_error_status
+        description: The `error` value from the `event_properties` column
+      - name: event_properties_error_sub
+        description: The `error` value from the `event_properties` column
+      - name: event_properties_href
+        description: The `href` value from the `event_properties` column
+      - name: event_properties_language
+        description: The `language` value from the `event_properties` column
+      - name: event_properties_origin
+        description: The `origin` value from the `event_properties` column
+      - name: event_properties_path
+        description: The `path` value from the `event_properties` column
+      - name: event_properties_payment_group
+        description: The `payment_group` value from the `event_properties` column
+      - name: event_properties_status
+        description: The `status` value from the `event_properties` column
+      - name: event_properties_transit_agency
+        description: The `transit_agency` value from the `event_properties` column
+      - name: event_properties_eligibility_types
+        description: A semi-colon delimited list of `eligibility_types` values from the `event_properties` column
+      - name: user_properties_eligibility_verifier
+        description: The `eligibility_verifier` value from the `user_properties` column
+      - name: user_properties_initial_referrer
+        description: The `initial_referrer` value from the `user_properties` column
+      - name: user_properties_initial_referring_domain
+        description: The `initial_referring_domain` value from the `user_properties` column
+      - name: user_properties_referrer
+        description: The `referrer` value from the `user_properties` column
+      - name: user_properties_referring_domain
+        description: The `referring_domain` value from the `user_properties` column
+      - name: user_properties_transit_agency
+        description: The `transit_agency` value from the `user_properties` column. For entries prior to October 2022, the information in this column came from the `provider_name` field of `user_properties`.
+      - name: user_properties_user_agent
+        description: The `user_agent` value from the `user_properties` column
+      - name: user_properties_eligibility_types
+        description: A semi-colon delimited list of `eligibility_types` values from the `user_properties` column
