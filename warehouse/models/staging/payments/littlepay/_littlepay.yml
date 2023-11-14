@@ -79,6 +79,8 @@ models:
   - name: int_littlepay__customer_funding_source_vaults
     description: |
       Derived from customer_funding_source records.
+      funding_source_vault_id values can appear across multiple participants, so this
+      table is unique at the funding_source_vault_id + participant_id level.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: calitp_valid_at
@@ -120,6 +122,8 @@ models:
       principal or canonical customer_id. Each customer_id with the same
       principal_customer_id should be assumed to be the same person. A customer_id
       should only have one principal_customer_id.
+      customer_id values can appear across multiple participants, so this
+      table is unique at the customer_id + participant_id level.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
