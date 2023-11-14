@@ -1,4 +1,4 @@
-description: "Copy prod GTFS configs to test bucket"
+description: "Copy prod archiver configs to test bucket"
 schedule_interval: "0 0 * * 0"
 tags:
   - all_gusty_features
