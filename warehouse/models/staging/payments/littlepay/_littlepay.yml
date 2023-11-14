@@ -83,14 +83,17 @@ models:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: calitp_valid_at
           upper_bound_column: calitp_invalid_at
-          partition_by: funding_source_vault_id
+          partition_by: funding_source_vault_id, participant_id
           gaps: not_allowed
           zero_length_range_allowed: true
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - participant_id
+            - funding_source_id
     columns:
       - name: funding_source_id
         tests:
           - not_null
-          - unique
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
       - name: funding_source_vault_id
@@ -117,11 +120,16 @@ models:
       principal or canonical customer_id. Each customer_id with the same
       principal_customer_id should be assumed to be the same person. A customer_id
       should only have one principal_customer_id.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - participant_id
+            - customer_id
     columns:
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
         tests:
-          - unique
+          - not_null
       - name: principal_customer_id
         description: '{{ doc("customer_funding_source_principal_customer_id") }}'
         tests:

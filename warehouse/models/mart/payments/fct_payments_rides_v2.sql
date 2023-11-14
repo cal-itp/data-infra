@@ -288,10 +288,12 @@ join_table AS (
         ON m.micropayment_id = mr.micropayment_id
     LEFT JOIN int_littlepay__customers AS c
         ON m.customer_id = c.customer_id
+        AND m.participant_id = c.participant_id
     LEFT JOIN int_littlepay__customer_funding_source_vaults AS v
         ON m.funding_source_vault_id = v.funding_source_vault_id
-            AND m.transaction_time >= v.calitp_valid_at
-            AND m.transaction_time < v.calitp_invalid_at
+        AND m.participant_id = v.participant_id
+        AND m.transaction_time >= v.calitp_valid_at
+        AND m.transaction_time < v.calitp_invalid_at
     LEFT JOIN initial_transactions AS t1
         ON m.participant_id = t1.participant_id
             AND m.micropayment_id = t1.micropayment_id

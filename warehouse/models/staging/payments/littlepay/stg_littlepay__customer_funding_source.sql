@@ -14,7 +14,8 @@ clean_columns AS (
         {{ trim_make_empty_string_null('issuer_country') }} AS issuer_country,
         {{ trim_make_empty_string_null('form_factor') }} AS form_factor,
         {{ trim_make_empty_string_null('principal_customer_id') }} AS principal_customer_id,
-        {{ trim_make_empty_string_null('participant_id') }} AS participant_id,
+        -- some early/historical rows are missing participant ID
+        COALESCE({{ trim_make_empty_string_null('participant_id') }}, `instance`) AS participant_id,
         CAST(_line_number AS INTEGER) AS _line_number,
         `instance`,
         extract_filename,
@@ -34,17 +35,17 @@ add_keys_drop_full_dupes AS (
         *,
         -- flag in reverse order, since we usually want the latest
         DENSE_RANK() OVER (
-            PARTITION BY funding_source_id
+            PARTITION BY participant_id, funding_source_id
             ORDER BY littlepay_export_ts DESC) AS calitp_funding_source_id_rank,
         DENSE_RANK() OVER (
-            PARTITION BY funding_source_vault_id
+            PARTITION BY participant_id, funding_source_vault_id
             ORDER BY littlepay_export_ts DESC) AS calitp_funding_source_vault_id_rank,
         DENSE_RANK() OVER (
-            PARTITION BY customer_id
+            PARTITION BY participant_id, customer_id
             ORDER BY littlepay_export_ts DESC) AS calitp_customer_id_rank,
         -- generate keys now that input columns have been trimmed & cast and files deduped
         {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
-        {{ dbt_utils.generate_surrogate_key(['funding_source_id', 'customer_id']) }} AS _payments_key,
+        {{ dbt_utils.generate_surrogate_key(['participant_id', 'funding_source_id', 'customer_id']) }} AS _payments_key,
     FROM clean_columns
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
 ),
@@ -86,6 +87,7 @@ stg_littlepay__customer_funding_source AS (
     -- Additionally, sometimes a filled column value is updated in newer exports for a given entry.
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY
+            participant_id,
             funding_source_id,
             customer_id
         ORDER BY littlepay_export_ts DESC
