@@ -543,7 +543,10 @@ models:
     columns:
       - name: agency_name
         description: The name of the TA as specified in the National Transit Database (NTD).
-      - *org_ntd_id
+      - <<: *org_ntd_id
+        tests:
+          - not_null
+          - unique
       - name: hq_city
         description: The city where this TA's headquarters is located.
       - name: hq_county
