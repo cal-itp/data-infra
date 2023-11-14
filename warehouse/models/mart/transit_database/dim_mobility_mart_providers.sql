@@ -34,7 +34,7 @@ services_x_funding AS (
 gtfs_schedules AS (
     SELECT
         key,
-        {{ from_url_safe_base64('base64_url') }} AS base64_url
+        {{ from_url_safe_base64('base64_url') }} AS schedule_url
     FROM {{ ref('dim_gtfs_datasets') }}
     WHERE _is_current
         AND type = 'schedule'
@@ -52,7 +52,13 @@ orgs_x_services_x_gtfs AS (
 funding_by_org AS (
     SELECT
         orgs.organization_key AS org_key,
-        ARRAY_AGG(services_x_funding.funding_program_name) AS funding_sources
+        ARRAY_TO_STRING(
+            ARRAY_AGG(
+                DISTINCT services_x_funding.funding_program_name
+                ORDER BY funding_program_name
+            ),
+            {{ innerDelimiter }}
+        ) AS funding_sources
     FROM
         orgs_x_services_x_gtfs orgs
     INNER JOIN
@@ -81,12 +87,17 @@ annual_ntd AS (
 gtfs_urls_by_org AS (
     SELECT
         orgs_x_services_x_gtfs.organization_key AS org_key,
-        ARRAY_AGG(gtfs_schedules.base64_url) AS gtfs_uris
+        ARRAY_TO_STRING(
+            ARRAY_AGG(
+                DISTINCT gtfs_schedules.schedule_url
+                IGNORE NULLS
+                ORDER BY schedule_url
+            ),
+            {{ innerDelimiter }}
+        ) AS gtfs_uris
     FROM orgs_x_services_x_gtfs
     LEFT JOIN
         gtfs_schedules ON orgs_x_services_x_gtfs.schedule_gtfs_dataset_key = gtfs_schedules.key
-    WHERE
-        gtfs_schedules.base64_url IS NOT NULL
     GROUP BY
         orgs_x_services_x_gtfs.organization_key
 ),
@@ -94,10 +105,14 @@ gtfs_urls_by_org AS (
 serviced_counties_by_org AS (
     SELECT
         orgs.organization_key AS org_key,
-        ARRAY_CONCAT_AGG(services.operating_counties) AS operating_counties
+        ARRAY_TO_STRING(
+            ARRAY_AGG(DISTINCT counties ORDER BY counties),
+            {{ innerDelimiter }}
+        ) AS operating_counties
     FROM orgs_x_services_x_gtfs orgs
     LEFT JOIN
-        services ON services.key = orgs.service_key
+        services ON services.key = orgs.service_key,
+        UNNEST(services.operating_counties) counties
     GROUP BY
         orgs.organization_key
 ),
@@ -108,40 +123,16 @@ mobility_market_providers AS (
         annual_ntd.ntd_id AS ntd_id,
         annual_ntd.city AS hq_city,
         orgs_x_hq.county_geography_name AS hq_county,
-        ARRAY_TO_STRING(
-            ARRAY(
-                SELECT DISTINCT
-                    county
-                FROM UNNEST(serviced_counties_by_org.operating_counties) county
-                ORDER BY county
-            ),
-            {{ innerDelimiter }}
-        ) AS counties_served,
+        serviced_counties_by_org.operating_counties AS counties_served,
         annual_ntd.url AS agency_website,
         county_geogs.caltrans_district AS caltrans_district_id,
         county_geogs.caltrans_district_name AS caltrans_district_name,
         orgs.is_public_entity AS is_public_entity,
         orgs.public_currently_operating AS is_publicly_operating,
-        ARRAY_TO_STRING(
-            ARRAY(
-                SELECT DISTINCT
-                    source
-                FROM UNNEST(funding_by_org.funding_sources) source
-                ORDER BY source
-            ),
-            {{ innerDelimiter }}
-        ) AS funding_sources,
+        funding_by_org.funding_sources AS funding_sources,
         annual_ntd.voms_do AS on_demand_vehicles_at_max_service,
         annual_ntd.total_voms AS vehicles_at_max_service,
-        ARRAY_TO_STRING(
-            ARRAY(
-                SELECT DISTINCT
-                    uris
-                FROM UNNEST(gtfs_urls_by_org.gtfs_uris) uris
-                ORDER BY uris
-            ),
-            {{ innerDelimiter }}
-        ) AS gtfs_schedule_uris
+        gtfs_urls_by_org.gtfs_uris AS gtfs_schedule_uris
     FROM
         annual_ntd
     LEFT JOIN
