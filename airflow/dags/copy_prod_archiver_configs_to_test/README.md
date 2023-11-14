@@ -3,7 +3,3 @@
 Type: [Now / Scheduled](https://docs.calitp.org/data-infra/airflow/dags-maintenance.html)
 
 This DAG performs a weekly job to copy the latest prod config into the test bucket so the test archiver doesn't get too out of sync.
-
-## Secrets
-
-You may need to change authentication information in [Secret Manager](https://console.cloud.google.com/security/secret-manager); auth keys are loaded from Secret Manager at the start of DAG executions. You may create new versions of existing secrets, or add entirely new secrets.
