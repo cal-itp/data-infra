@@ -63,6 +63,8 @@ funding_by_org AS (
         orgs_x_services_x_gtfs orgs
     INNER JOIN
         services_x_funding ON orgs.service_key = services_x_funding.service_key
+    WHERE
+        REGEXP_CONTAINS(services_x_funding.funding_program_name, '^\\d+$')
     GROUP BY
         orgs.organization_key
 ),
