@@ -29,11 +29,11 @@ models:
         name: participant_id
         description: '{{ doc("lp_participant_id") }}'
       - name: funding_source_vault_id
-        description: From payments.micropayments.funding_source_vault_id (by participant_id.)
+        description: From payments.micropayments.funding_source_vault_id (by participant_id).
       - name: customer_id
-        description: From payments.micropayments.customer_id (by participant_id.)
+        description: From payments.micropayments.customer_id (by participant_id).
       - name: principal_customer_id
-        description: From payments.customer_funding_source.principal_customer_id (by participant_id.)
+        description: From payments.customer_funding_source.principal_customer_id (by participant_id).
       - name: bin
         description: From payments.customer_funding_source.bin
       - name: masked_pan
