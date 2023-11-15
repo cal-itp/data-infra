@@ -64,6 +64,7 @@ funding_by_org AS (
     INNER JOIN
         services_x_funding ON orgs.service_key = services_x_funding.service_key
     WHERE
+        -- We only want funding programs that are numerical in name; i.e. ignore programs like 'Public', 'Caltrans', 'Private'
         REGEXP_CONTAINS(services_x_funding.funding_program_name, '^\\d+$')
     GROUP BY
         orgs.organization_key
