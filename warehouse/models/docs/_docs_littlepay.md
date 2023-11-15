@@ -1,9 +1,32 @@
 Documentation related to Littlepay data schema
 In many cases, taken or adapted directly from Littlepay documentation: https://docs.littlepay.io/data/
 
+-------------------------------- COMMON FIELD INCLUDING KEYS --------------------------------
+
+{% docs lp_micropayment_id %}
+Uniquely identifies a micropayment.
+{% enddocs %}
+
+{% docs lp_aggregation_id %}
+Identifies an aggregation of one or more micropayments that can be authorised/settled.
+{% enddocs %}
+
 {% docs lp_participant_id %}
 Littlepay identifier for the participant (transit agency) associated with this entity or event.
 {% enddocs %}
+
+{% docs lp_customer_id %}
+Identifies the customer associated with this payment activity or entity.
+A customer ID does not necessarily uniquely identify an individual person
+or payment card.
+{% enddocs %}
+
+{% docs lp_funding_source_vault_id %}
+Identifies the funding source (for example, card) that a micropayment will be charged to. This is always the card that was tapped.
+A registered customer can have multiple funding sources linked to it.
+{% enddocs %}
+
+-------------------------------- AGGREGATIONS/SUMMARIES --------------------------------
 
 {% docs lp_net_micropayment_amount_dollars %}
 Sum of the `charge_amount` values for all micropayments in this aggregation.
@@ -102,15 +125,10 @@ If there is no credit activity for the aggregation, this field is null.
 activity was prior to November 28, 2023.)
 {% enddocs %}
 
-
----------------- SETTLEMENTS TABLE ----------------
+-------------------------------- SETTLEMENTS TABLE --------------------------------
 
 {% docs lp_settlement_id %}
 A unique identifier for each settlement.
-{% enddocs %}
-
-{% docs lp_aggregation_id %}
-Identifies an aggregation of one or more micropayments that can be authorised/settled.
 {% enddocs %}
 
 {% docs lp_customer_id %}
@@ -184,4 +202,24 @@ Time settlement response was created.
 
 {% docs lp_refund_id %}
 Populated if the settlement is a refund; can be used when linking to the refunds table.
+-------------------------------- MICROPAYMENTS TABLE --------------------------------
+
+{% docs lp_transaction_time %}
+The date and time when the micropayment was created.
+
+For variable fare (tap on/tap off), the micropayment will not be created until the tap off occurs.
+
+The date reflects the processing time by Littlepay, rather than the event time; that is, when the related taps occurred.
+{% enddocs %}
+
+{% docs lp_payment_liability %}
+Indicates who would be liable to absorb the cost if the micropayment was declined by the issuer when an authorisation is attempted.
+
+Possible values are `ISSUER` or `OPERATOR`.
+{% enddocs %}
+
+{% docs lp_charge_amount %}
+Indicates who would be liable to absorb the cost if the micropayment was declined by the issuer when an authorisation is attempted.
+
+Possible values are `ISSUER` or `OPERATOR`.
 {% enddocs %}

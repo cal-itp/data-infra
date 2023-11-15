@@ -474,32 +474,21 @@ models:
     description: This model makes the assumption that, in the case of duplicated micropayment_id values, the one with the latest transaction_time in the latest export file takes precedence.
     columns:
       - name: micropayment_id
-        description: '{{ doc("micropayments_micropayment_id") }}'
+        description: '{{ doc("lp_micropayment_id") }}'
         tests:
           - not_null
           - unique
       - name: aggregation_id
-        description: Identifies the aggregation that the micropayment belongs to.
+        description: '{{ doc("lp_aggregation_id") }}'
       - *participant_id
       - name: customer_id
-        description: Identifies the customer that the micropayment belongs to.
+        description: '{{ doc("lp_customer_id") }}'
       - name: funding_source_vault_id
-        description: |
-          Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped.
-
-          A registered customer can have multiple funding sources linked to it. This field can be used to join to the `customer_funding_source` feed.
+        description: '{{ doc("lp_funding_source_vault_id") }}'
       - name: transaction_time
-        description: |
-          The date and time when the micropayment was created.
-
-          For variable fare (tap on/tap off), the micropayment will not be created until the tap off occurs.
-
-          The date reflects the processing time by Littlepay, rather than the event time; that is, when the related taps occurred.
+        description: '{{ doc("lp_transaction_time") }}'
       - name: payment_liability
-        description: |
-          Indicates who would be liable to absorb the cost if the micropayment was declined by the issuer when an authorisation is attempted.
-
-          Possible values are `ISSUER` or `OPERATOR`.
+        description: '{{ doc("lp_payment_liability") }}'
       - name: charge_amount
         description: The amount that will be credited to or debited from the funding source. This may be lower than the nominal amount if adjustments have been applied. nominal_amount Decimal The amount that would be charged if no adjustments were to be applied.
       - name: currency_code

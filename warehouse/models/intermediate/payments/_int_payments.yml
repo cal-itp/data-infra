@@ -258,3 +258,55 @@ models:
         description: The sum of refund_amount where approval_status is AWAITING.
       - name: null_approval_status_amount
         description: The sum of refund_amount where approval_status is NULL.
+
+  - name: int_payments__refunds_to_aggregations
+    description: |
+      This model provides a summary of `refund_amount` grouped by `aggregation_id` and `retrieval_reference_number`,
+      as well as sums by `approval_status` (APPROVED, REFUSED, AWAITING, NULL)
+    columns:
+      - name: aggregation_id
+        description: |
+          The aggregation that contains the refund.
+
+          A single aggregation can have multiple refunds.
+      - name: retrieval_reference_number
+        description: |
+          Uniquely identifies a card transaction, based on the ISO 8583 standard. The value is generated during authorisation.
+
+          If the acquirer is Elavon, this value will be split between `littlepay_reference_number` and `external_reference_number`.
+      - name: total_refund_activity_amount_dollars
+        description: The sum of refund_amount across all approval_statuses.
+      - name: approved_amount
+        description: The sum of refund_amount where approval_status is APPROVED.
+      - name: refused_amount
+        description: The sum of refund_amount where approval_status is REFUSED.
+      - name: awaiting_amount
+        description: The sum of refund_amount where approval_status is AWAITING.
+      - name: null_approval_status_amount
+        description: The sum of refund_amount where approval_status is NULL.
+
+  - name: int_payments__micropayments_adjustments_refunds_joined
+    description: |
+      Summarizing micropayment information across the source micropayment,
+      any applied adjustments (ex. fare capping), and any associated refunds.
+    columns:
+      - *participant_id
+      - name: micropayment_id
+      - name: aggregation_id
+      - name: funding_source_vault_id
+      - name: customer_id
+      - name: charge_amount
+      - name: nominal_amount
+      - name: charge_type
+      - name: transaction_date_time_utc
+      - name: adjustment_id
+      - name: adjustment_type
+      - name: adjustment_time_period_type
+      - name: adjustment_description
+      - name: adjustment_amount
+      - name: product_id
+      - name: product_code
+      - name: product_description
+      - name: product_type
+      - name: micropayment_refund_amount
+      - name: aggregation_refund_amount
