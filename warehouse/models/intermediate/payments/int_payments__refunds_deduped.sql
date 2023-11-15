@@ -1,17 +1,31 @@
 {{ config(materialized = "table") }}
 
-WITH
+WITH micropayment_device_transactions AS (
+    SELECT * FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
+),
 
-micropayments_table_refunds AS (
+micropayments_refunds AS (
+    SELECT * FROM {{ ref('stg_littlepay__micropayments') }}
+    WHERE type = 'CREDIT'
+),
+
+refunds AS (
+    SELECT * FROM {{ ref('stg_littlepay__refunds') }}
+),
+
+format_micropayments_table_refunds AS (
     SELECT
 
-        aggregation_id,
-        micropayment_id,
-        participant_id,
-        customer_id,
-        ABS(charge_amount) AS proposed_amount,
-        EXTRACT(DATE FROM transaction_time) AS transaction_date,
-        aggregation_id AS coalesced_id,
+        micropayments_refunds.aggregation_id,
+        -- in the refunds table, the micropayment ID is the ID of the micropayment *being refunded*
+        -- in the micropayments refunds, the refund has a separate micropayment ID
+        -- so we look up the micropayment ID of the micropayment being refunded rather than using the micropayment ID of the refund
+        debit.micropayment_id,
+        micropayments_refunds.participant_id,
+        micropayments_refunds.customer_id,
+        ABS(micropayments_refunds.charge_amount) AS proposed_amount,
+        EXTRACT(DATE FROM micropayments_refunds.transaction_time) AS transaction_date,
+        micropayments_refunds.aggregation_id AS coalesced_id,
 
         -- add columns that we want to preserve from refunds table after union as null strings
         SAFE_CAST(NULL AS NUMERIC) AS refund_amount,
@@ -32,23 +46,27 @@ micropayments_table_refunds AS (
         SAFE_CAST(NULL AS STRING) AS settlement_reason_code,
         SAFE_CAST(NULL AS STRING) AS settlement_response_text,
 
-        _line_number,
-        currency_code,
-        instance,
-        extract_filename,
-        ts,
-        littlepay_export_ts,
-        littlepay_export_date,
-        _content_hash,
-        _key,
-        _payments_key,
+        micropayments_refunds._line_number,
+        micropayments_refunds.currency_code,
+        micropayments_refunds.instance,
+        micropayments_refunds.extract_filename,
+        micropayments_refunds.ts,
+        micropayments_refunds.littlepay_export_ts,
+        micropayments_refunds.littlepay_export_date,
+        micropayments_refunds._content_hash,
+        micropayments_refunds._key,
+        micropayments_refunds._payments_key,
         'micropayments' AS source_table
 
-    FROM {{ ref('stg_littlepay__micropayments') }}
-    WHERE type = 'CREDIT'
-        -- these two refunds appear in both the micropayments and refund tables, and it was easier to
-        -- drop them manually than make an overfit filter
-        AND _key NOT IN ('043ecc000223a299ce17f6a342b1d240', '3536fb2035bbcf4dcb1f3abf001b5185')
+    FROM micropayments_refunds
+    LEFT JOIN micropayment_device_transactions AS credit
+        ON micropayments_refunds.micropayment_id = credit.micropayment_id
+    LEFT JOIN micropayment_device_transactions AS debit
+        ON debit.littlepay_transaction_id = credit.littlepay_transaction_id
+        AND debit.micropayment_id != credit.micropayment_id
+    -- these two refunds appear in both the micropayments and refund tables, and it was easier to
+    -- drop them manually than make an overfit filter
+    WHERE micropayments_refunds._key NOT IN ('043ecc000223a299ce17f6a342b1d240', '3536fb2035bbcf4dcb1f3abf001b5185')
 ),
 
 
@@ -61,7 +79,7 @@ distinct_aggregations_by_refund_id AS (
 
 ),
 
-refunds_table_refunds AS (
+format_refunds_table_refunds AS (
     SELECT
 
         COALESCE(t1.aggregation_id, t2.aggregation_id) as aggregation_id,
@@ -100,7 +118,7 @@ refunds_table_refunds AS (
         _payments_key,
         'refunds' AS source_table
 
-    FROM {{ ref('stg_littlepay__refunds') }} AS t1
+    FROM refunds AS t1
     LEFT JOIN distinct_aggregations_by_refund_id AS t2
         USING (retrieval_reference_number)
     -- this dedupes on refund ID because individual refunds sometimes appear multiple times with multiple statuses
@@ -111,12 +129,12 @@ refunds_table_refunds AS (
 
 refunds_union AS (
     SELECT *
-    FROM micropayments_table_refunds
+    FROM format_micropayments_table_refunds
 
     UNION ALL
 
     SELECT *
-    FROM refunds_table_refunds
+    FROM format_refunds_table_refunds
 ),
 
 int_payments__refunds AS (

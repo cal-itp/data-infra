@@ -138,12 +138,14 @@ models:
 
           A single aggregation can have multiple refunds.
       - name: micropayment_id
-        description: Uniquely identifies the micropayment.
+        description: |
+          Uniquely identifies the micropayment being refunded.
+          For some agencies, this mapping fails due to upstream data issues and `aggregation_id` must be used as a fallback.
       - *participant_id
       - name: customer_id
         description: Identifies the customer that the micropayment belongs to.
       - name: refund_amount
-        description: The actual amount refunded to the customer.
+        description: The amount of the transaction remaining after the refund has been applied (transaction_amount - proposed_amount.)
       - name: transaction_date
         description: Settlement transaction date (if micropayment was settled before refund)
       - name: settlement_id
@@ -159,7 +161,7 @@ models:
       - name: transaction_amount
         description: The amount of the original fare.
       - name: proposed_amount
-        description: The amount equalling `transaction_amount - refund_amount`.
+        description: The amount to be refunded to the customer.
       - name: status
         description: |
           The status of the refund.
