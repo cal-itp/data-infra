@@ -31,7 +31,7 @@ int_payments__micropayments_adjustments_refunds_joined AS (
         debit_micropayments.charge_amount,
         debit_micropayments.nominal_amount,
         debit_micropayments.charge_type,
-        debit_micropayments.transaction_date_time_utc,
+        debit_micropayments.transaction_time,
         adjustments.adjustment_id,
         adjustments.type AS adjustment_type,
         adjustments.time_period_type AS adjustment_time_period_type,
@@ -49,6 +49,6 @@ int_payments__micropayments_adjustments_refunds_joined AS (
     LEFT JOIN products USING (participant_id, product_id)
     LEFT JOIN individual_refunds USING (participant_id, micropayment_id, aggregation_id)
     LEFT JOIN aggregation_refunds USING (participant_id, aggregation_id)
-),
+)
 
 SELECT * FROM int_payments__micropayments_adjustments_refunds_joined

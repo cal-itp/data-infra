@@ -266,18 +266,31 @@ models:
     columns:
       - *participant_id
       - name: micropayment_id
+        description: '{{ doc("lp_micropayment_id") }}'
       - name: aggregation_id
+        description: '{{ doc("lp_aggregation_id") }}'
       - name: funding_source_vault_id
+        description: '{{ doc("lp_funding_source_vault_id") }}'
       - name: customer_id
+        description: '{{ doc("lp_customer_id") }}'
       - name: charge_amount
+        description: '{{ doc("lp_charge_amount") }}'
       - name: nominal_amount
+        description: '{{ doc("lp_nominal_amount") }}'
       - name: charge_type
-      - name: transaction_date_time_utc
+        description: '{{ doc("lp_charge_type") }}'
+      - name: transaction_time
+        description: '{{ doc("lp_transaction_time") }}'
       - name: adjustment_id
+        description: '{{ doc("lp_adjustment_id") }}'
       - name: adjustment_type
+        description: '{{ doc("lp_adj_type") }}'
       - name: adjustment_time_period_type
+        description: '{{ doc("lp_adj_time_period_type") }}'
       - name: adjustment_description
+        description: '{{ doc("lp_adj_description") }}'
       - name: adjustment_amount
+        description: '{{ doc("lp_adj_amount") }}'
       - name: product_id
       - name: product_code
       - name: product_description

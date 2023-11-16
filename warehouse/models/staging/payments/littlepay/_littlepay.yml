@@ -24,7 +24,7 @@ models:
         name: participant_id
         description: '{{ doc("lp_participant_id") }}'
       - name: micropayment_id
-        description: '{{ doc("micropayment_adjustments_micropayment_id") }}'
+        description: '{{ doc("lp_micropayment_id") }}'
       - name: littlepay_transaction_id_1
         description: Unique tap ID generated for the "on" transaction by Littlepay upon receipt of a tap to the Device API.
       - name: littlepay_transaction_id_2
@@ -388,6 +388,12 @@ models:
       - *_content_hash
 
   - name: stg_littlepay__micropayment_adjustments
+    description: |
+      Only adjustments with `applied = True` were actually applied;
+      there may be adjustments present for which a micropayment qualified but
+      which were not actually applied (for example, if a micropayment
+      is eligible for multiple products, adjustments will be present for
+      each applicable product but only one will be applied.)
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -404,34 +410,25 @@ models:
             - zone_ids_used
     columns:
       - name: adjustment_id
-        description: '{{ doc("micropayment_adjustments_adjustment_id") }}'
+        description: '{{ doc("lp_adjustment_id") }}'
       - name: micropayment_id
-        description: '{{ doc("micropayment_adjustments_micropayment_id") }}'
+        description: '{{ doc("lp_micropayment_id") }}'
         tests:
           - unique:
               where: applied
       - *participant_id
       - name: customer_id
-        description: Identifies the customer that the adjustment belongs to.
+        description: '{{ doc("lp_customer_id") }}'
       - name: product_id
-        description: Identifies the product that was used to adjust the micropayment.
+        description: '{{ doc("lp_product_id") }}'
       - name: type
-        description: |
-          The type of product / rule that created the adjustment. Additional values may be added over time.
-
-          Possible values:
-          * `MULTI_DAY_CAP`
-          * `DAILY_CAP`
-          * `WEEKLY_CAP`
+        description: '{{ doc("lp_adj_type") }}'
       - name: description
-        description: General description of the reason the adjustment was created.
+        description: '{{ doc("lp_adj_description") }}'
       - name: amount
-        description: The amount deducted from the `nominal_amount` to arrive at the `charge_amount` for the micropayment being adjusted.
+        description: '{{ doc("lp_adj_amount") }}'
       - name: time_period_type
-        description: |
-          Indicates whether the travel was determined to have occurred during a peak or off-peak period for the purposes of capping.
-
-          Possible values are `PEAK` and `OFFPEAK`.
+        description: '{{ doc("lp_adj_time_period_type") }}'
       - name: applied
         description: If `TRUE`, then the adjustment to the micropayment has been applied.
       - name: incentive_product_id
@@ -510,7 +507,7 @@ models:
     columns:
       - *participant_id
       - name: product_id
-        description: '{{ doc("product_data_product_id") }}'
+        description: '{{ doc("lp_product_id") }}'
         tests:
           - not_null
           - unique

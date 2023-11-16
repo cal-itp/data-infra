@@ -5,6 +5,7 @@ In many cases, taken or adapted directly from Littlepay documentation: https://d
 
 {% docs lp_micropayment_id %}
 Uniquely identifies a micropayment.
+When a foreign key, identifies the micropayment associated with this entity.
 {% enddocs %}
 
 {% docs lp_aggregation_id %}
@@ -25,6 +26,19 @@ or payment card.
 Identifies the funding source (for example, card) that a micropayment will be charged to. This is always the card that was tapped.
 A registered customer can have multiple funding sources linked to it.
 {% enddocs %}
+
+{% docs lp_adjustment_id %}
+Uniquely identifies the adjustment.
+Adjustments are things like fare caps that adjust the amount of a micropayment.
+Individual adjustments apply a specific product to an individual micropayment.
+{% enddocs %}
+
+{% docs lp_product_id %}
+Uniquely identifies a product.
+Products can adjust the amount of a fare micropayment.
+For example, a 10 day fare cap could be a product.
+{% enddocs %}
+
 
 -------------------------------- AGGREGATIONS/SUMMARIES --------------------------------
 
@@ -239,4 +253,29 @@ Possible values:
 * `COMPLETE_VARIABLE_FARE`
 * `INCOMPLETE_VARIABLE_FARE`
 * `REFUND`
+{% enddocs %}
+
+-------------------------------- MICROPAYMENT ADJUSTMENTS TABLE --------------------------------
+
+{% docs lp_adj_type %}
+The type of product / rule that created the adjustment. Additional values may be added over time.
+
+Possible values:
+* `MULTI_DAY_CAP`
+* `DAILY_CAP`
+* `WEEKLY_CAP`
+{% enddocs %}
+
+{% docs lp_adj_time_period_type %}
+Indicates whether the travel was determined to have occurred during a peak or off-peak period for the purposes of capping.
+
+Possible values are `PEAK` and `OFFPEAK`.
+{% enddocs %}
+
+{% docs lp_adj_description %}
+General description of the reason the adjustment was created.
+{% enddocs %}
+
+{% docs lp_adj_amount %}
+The amount deducted from the `nominal_amount` to arrive at the `charge_amount` for the micropayment being adjusted.
 {% enddocs %}
