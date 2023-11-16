@@ -204,32 +204,32 @@ Once the questions are updated, the remaining step is to configure them to be fi
 ```mermaid
 flowchart TD
 
-payments_mart_table[(<b>Payments mart table in BigQuery</b> <br> --- <br> Agency 1 rows <br> --- <br> Agency 2 rows  )]
+payments_mart_table[("<b>Payments mart table in BigQuery</b> <br> --- <br> Agency 1 rows <br> --- <br> Agency 2 rows")]
 
-agency_rbac[Agency RBAC policy]
-general_rbac[Default Cal-ITP Metabase user RBAC policy]
+agency_rbac["Agency RBAC policy"]
+general_rbac["Default Cal-ITP Metabase user RBAC policy"]
 
-agency_acct[Agency service account]
-general_acct[Default Cal-ITP Metabase service account]
+agency_acct["Agency service account"]
+general_acct["Default Cal-ITP Metabase service account"]
 
-agency_mb[Agency Metabase database]
-general_mb[Default Cal-ITP Metabase database]
-
-
-agency_mb[Agency Metabase database]
-general_mb[Default Cal-ITP Metabase database]
+agency_mb["Agency Metabase database"]
+general_mb["Default Cal-ITP Metabase database"]
 
 
-subgraph agency_mb_collection[Agency Metabase collection]
-  agency_mb_qs[Agency Metabase questions and dashboard]
+agency_mb["Agency Metabase database"]
+general_mb["Default Cal-ITP Metabase database"]
+
+
+subgraph agency_mb_collection["Agency Metabase collection"]
+  agency_mb_qs["Agency Metabase questions and dashboard"]
 end
 
-subgraph agency_mb_group[Agency Metabase group]
-  agency_user[Agency Metabase user account]
+subgraph agency_mb_group["Agency Metabase group"]
+  agency_user["Agency Metabase user account"]
 end
 
-subgraph payments_mb_group[Payments Team Metabase group]
-  calitp_user[Cal-ITP Metabase user account]
+subgraph payments_mb_group["Payments Team Metabase group"]
+  calitp_user["Cal-ITP Metabase user account"]
 end
 
 agency_acct --Payments table access managed by --> agency_rbac
