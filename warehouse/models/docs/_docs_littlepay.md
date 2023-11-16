@@ -131,10 +131,6 @@ activity was prior to November 28, 2023.)
 A unique identifier for each settlement.
 {% enddocs %}
 
-{% docs lp_customer_id %}
-Identifies the customer that the micropayment belongs to.
-{% enddocs %}
-
 {% docs lp_funding_source_id %}
 Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped.
 
@@ -219,7 +215,28 @@ Possible values are `ISSUER` or `OPERATOR`.
 {% enddocs %}
 
 {% docs lp_charge_amount %}
-Indicates who would be liable to absorb the cost if the micropayment was declined by the issuer when an authorisation is attempted.
+The amount that will be credited to or debited from the funding source. This may be lower than the nominal amount if adjustments have been applied.
+{% enddocs %}
 
-Possible values are `ISSUER` or `OPERATOR`.
+{% docs lp_nominal_amount %}
+The amount that would be charged if no adjustments were to be applied.
+{% enddocs %}
+
+{% docs lp_currency_code %}
+ISO 4217 numeric code representing the currency that the `charge_amount` and `nominal_amount` are denominated in.
+{% enddocs %}
+
+{% docs lp_mp_type %}
+Transaction type. Possible values are `CREDIT` or `DEBIT`. The value Will be `DEBIT` if `charge_amount >= 0.00`
+{% enddocs %}
+
+{% docs lp_charge_type %}
+Indicates the type of fare that the micropayment charge represents.
+
+Possible values:
+* `RETAIL_FARE`
+* `FLAT_FARE`
+* `COMPLETE_VARIABLE_FARE`
+* `INCOMPLETE_VARIABLE_FARE`
+* `REFUND`
 {% enddocs %}

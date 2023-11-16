@@ -490,22 +490,15 @@ models:
       - name: payment_liability
         description: '{{ doc("lp_payment_liability") }}'
       - name: charge_amount
-        description: The amount that will be credited to or debited from the funding source. This may be lower than the nominal amount if adjustments have been applied. nominal_amount Decimal The amount that would be charged if no adjustments were to be applied.
+        description: '{{ doc("lp_charge_amount") }}'
+      - name: nominal_amount
+        description: '{{ doc("lp_nominal_amount") }}'
       - name: currency_code
-        description: ISO 4217 numeric code representing the currency that the `charge_amount` and `nominal_amount` are denominated in.
+        description: '{{ doc("lp_currency_code") }}'
       - name: type
-        description: |
-          Indicates the type of fare that the micropayment charge represents.
-
-          Transaction type. Possible values are `CREDIT` or `DEBIT`. The value Will be `DEBIT` if `charge_amount >= 0.00`
+        description: '{{ doc("lp_mp_type") }}'
       - name: charge_type
-        description: |
-          Possible values:
-          * `RETAIL_FARE`
-          * `FLAT_FARE`
-          * `COMPLETE_VARIABLE_FARE`
-          * `INCOMPLETE_VARIABLE_FARE`
-          * `REFUND`
+        description: '{{ doc("lp_charge_type") }}'
       - *lp_export_date
       - *lp_export_ts
       - *lp_line_number
