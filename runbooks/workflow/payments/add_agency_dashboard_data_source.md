@@ -1,9 +1,10 @@
 # Metabase: Configure Agency Payments Data and Generate Dashboards
 
-This documentation is broken out into two sections:
+This documentation is broken out into three sections:
 
 - [Add a New Agency Data Source to Metabase and Create Permissions](#add-a-new-agency-data-source-to-metabase-and-create-permissions)
 - [Create a New Agency Dashboard and the Comprising Questions](#create-a-new-agency-dashboard-and-the-comprising-questions)
+- [Diagram: row-based security & Metabase](#diagram-row-based-security--metabase)
 
 ## Add a New Agency Data Source to Metabase and Create Permissions
 
@@ -194,3 +195,61 @@ Once the questions are updated, the remaining step is to configure them to be fi
     - `Value of Settled Refunds, Grouped by Week`
   - `Week Start` for:
     - `Journeys with Unlabeled Routes`
+
+## Diagram: row-based security & Metabase
+
+- [Row-based access control (RBAC) policies](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql) define which rows users can access in a table
+- Metabase uses service accounts to [connect](https://www.metabase.com/docs/latest/databases/connecting) to BigQuery; individual connections are called "databases" in Metabase
+- [Metabase collections](https://www.metabase.com/glossary/collection) contain specific sets of [Metabase questions](https://www.metabase.com/glossary/question) and dashboards
+
+```mermaid
+flowchart TD
+
+payments_mart_table[("<b>Payments mart table in BigQuery</b> <br> --- <br> Agency 1 rows <br> --- <br> Agency 2 rows")]
+
+agency_rbac["Agency RBAC policy"]
+general_rbac["Default Cal-ITP Metabase user RBAC policy"]
+
+agency_acct["Agency service account"]
+general_acct["Default Cal-ITP Metabase service account"]
+
+agency_mb["Agency Metabase database"]
+general_mb["Default Cal-ITP Metabase database"]
+
+
+agency_mb["Agency Metabase database"]
+general_mb["Default Cal-ITP Metabase database"]
+
+
+subgraph agency_mb_collection["Agency Metabase collection"]
+  agency_mb_qs["Agency Metabase questions and dashboard"]
+end
+
+subgraph agency_mb_group["Agency Metabase group"]
+  agency_user["Agency team members' individual Metabase accounts"]
+end
+
+subgraph payments_mb_group["Payments Team Metabase group"]
+  calitp_user["Cal-ITP team members' individual Metabase accounts"]
+end
+
+agency_acct --Payments table access managed by --> agency_rbac
+agency_rbac --grants access to specific Agency rows in-->payments_mart_table
+
+
+general_acct --Payments table access managed by--> general_rbac
+general_rbac --grants access to all rows in-->payments_mart_table
+
+agency_mb -- uses --> agency_acct
+general_mb -- uses --> general_acct
+
+agency_mb_group -- only has access to -->agency_mb_collection
+
+agency_mb_qs -- use data from --> agency_mb
+
+payments_mb_group -- has access to -->agency_mb_collection
+calitp_user -- has access to -->general_mb
+
+
+
+```
