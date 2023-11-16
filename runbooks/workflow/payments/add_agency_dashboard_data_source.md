@@ -1,9 +1,10 @@
 # Metabase: Configure Agency Payments Data and Generate Dashboards
 
-This documentation is broken out into two sections:
+This documentation is broken out into three sections:
 
 - [Add a New Agency Data Source to Metabase and Create Permissions](#add-a-new-agency-data-source-to-metabase-and-create-permissions)
 - [Create a New Agency Dashboard and the Comprising Questions](#create-a-new-agency-dashboard-and-the-comprising-questions)
+- [Diagram: row-based security & Metabase](#diagram-row-based-security--metabase)
 
 ## Add a New Agency Data Source to Metabase and Create Permissions
 
