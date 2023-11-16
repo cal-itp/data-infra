@@ -225,11 +225,11 @@ subgraph agency_mb_collection["Agency Metabase collection"]
 end
 
 subgraph agency_mb_group["Agency Metabase group"]
-  agency_user["Agency Metabase user account"]
+  agency_user["Agency team members' individual Metabase accounts"]
 end
 
 subgraph payments_mb_group["Payments Team Metabase group"]
-  calitp_user["Cal-ITP Metabase user account"]
+  calitp_user["Cal-ITP team members' individual Metabase accounts"]
 end
 
 agency_acct --Payments table access managed by --> agency_rbac
