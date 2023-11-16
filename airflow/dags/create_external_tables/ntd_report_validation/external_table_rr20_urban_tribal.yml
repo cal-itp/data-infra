@@ -1,0 +1,59 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-report-validation
+prefix_bucket: true
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_blackcat.rr20_urban_tribal
+  LIMIT 1;
+source_objects:
+  - "rr20_NTDReportingRR20_Urban_Tribal/*.jsonl.gz"
+destination_project_dataset_table: "external_blackcat.rr20_urban_tribal"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "rr20_NTDReportingRR20_Urban_Tribal/"
+schema_fields:
+  - name: api_report_id
+    type: STRING
+    mode: NULLABLE
+  - name: api_organization
+    type: STRING
+    mode: NULLABLE
+  - name: api_report_period
+    type: INTEGER
+    mode: NULLABLE
+  - name: api_report_status
+    type: STRING
+    mode: NULLABLE
+  - name: api_last_modified
+    type: TIMESTAMP
+    mode: NULLABLE
+  - name: id
+    type: STRING
+    mode: NULLABLE
+  - name: item_id
+    type: STRING
+    mode: NULLABLE
+  - name: report_id
+    type: STRING
+    mode: NULLABLE
+  - name: item
+    type: STRING
+    mode: NULLABLE
+  - name: type
+    type: STRING
+    mode: NULLABLE
+  - name: operations_expended
+    type: STRING
+    mode: NULLABLE
+  - name: capital_expended
+    type: STRING
+    mode: NULLABLE
+  - name: description
+    type: STRING
+    mode: NULLABLE
+  - name: last_modified_date
+    type: DATETIME
+    mode: NULLABLE
