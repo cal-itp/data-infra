@@ -1,0 +1,16 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-report-validation
+prefix_bucket: true
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_blackcat.ntd_tamnarrative
+  LIMIT 1;
+source_objects:
+  - "ntd_NTDReportingTAMNarrative/*.jsonl.gz"
+destination_project_dataset_table: "external_blackcat.ntd_tamnarrative"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "ntd_NTDReportingTAMNarrative/"

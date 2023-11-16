@@ -1,0 +1,77 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-report-validation
+prefix_bucket: true
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_blackcat.rr20_rural
+  LIMIT 1;
+source_objects:
+  - "rr20_NTDReportingRR20_Rural/*.jsonl.gz"
+destination_project_dataset_table: "external_blackcat.rr20_rural"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "rr20_NTDReportingRR20_Rural/"
+schema_fields:
+  - name: api_report_id
+    type: STRING
+    mode: NULLABLE
+  - name: api_organization
+    type: STRING
+    mode: NULLABLE
+  - name: api_report_period
+    type: INTEGER
+    mode: NULLABLE
+  - name: api_report_status
+    type: STRING
+    mode: NULLABLE
+  - name: api_last_modified
+    type: TIMESTAMP
+    mode: NULLABLE
+  - name: id
+    type: STRING
+    mode: NULLABLE
+  - name: report_id
+    type: STRING
+    mode: NULLABLE
+  - name: item
+    type: STRING
+    mode: NULLABLE
+  - name: REVENUE
+    type: FLOAT64
+    mode: NULLABLE
+  - name: css_class
+    type: STRING
+    mode: NULLABLE
+  - name: operations_expended
+    type: STRING
+    mode: NULLABLE
+  - name: capital_expended
+    type: STRING
+    mode: NULLABLE
+  - name: description
+    type: STRING
+    mode: NULLABLE
+  - name: annual_vehicle_rev_miles
+    type: FLOAT64
+    mode: NULLABLE
+  - name: annual_vehicle_rev_hours
+    type: INTEGER
+    mode: NULLABLE
+  - name: annual_unlinked_pass_trips
+    type: FLOAT64
+    mode: NULLABLE
+  - name: annual_vehicle_max_service
+    type: INTEGER
+    mode: NULLABLE
+  - name: sponsored_service_upt
+    type: INTEGER
+    mode: NULLABLE
+  - name: quantity
+    type: INTEGER
+    mode: NULLABLE
+  - name: last_modified_date
+    type: DATETIME
+    mode: NULLABLE
