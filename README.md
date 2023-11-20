@@ -28,7 +28,7 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 
 This repository pre-commit hooks to format code, including black. To install
 pre-commit locally, run `pip install pre-commit` & `pre-commit install`
-in the root of the repo. There is a [GitHub Action](./github/workflows/lint.yml)
+in the root of the repo. There is a [GitHub Action](./.github/workflows/lint.yml)
 that runs pre-commit on all files, not just changed ones. sqlfluff is currently
 disabled in the CI run due to flakiness, but it will still lint any SQL files
 you attempt to commit locally.
