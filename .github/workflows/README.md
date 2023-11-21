@@ -25,7 +25,7 @@ Workflows prefixed with `service-` deal with Kubernetes deployments.
 - `service-release-diff.yml` renders kubectl diffs on PRs targeting release branches
 - `service-release-channel.yml` deploys to a given channel (i.e. environment) on updates to a release branch
 
-Some of these workflows use hologit or invoke. See the READMEs in [.holo](../.holo) and [ci](../ci) for documentation regarding hologit and invoke, respectively.
+Some of these workflows use hologit or invoke. See the READMEs in [.holo](../../.holo) and [ci](../../ci) for documentation regarding hologit and invoke, respectively.
 
 ## GitOps
 

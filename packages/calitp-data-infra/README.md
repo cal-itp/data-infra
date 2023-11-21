@@ -11,5 +11,5 @@ download Airflow DAG and the GTFS RT archiver.
 ## Testing and publishing
 
 This repository should pass mypy and other static checkers, and has a small
-number of tests. These checks are executed in [GiHub Actions](../../.github/workflows/build-calitp-data-infra.yml) and the package will
+number of tests. These checks are executed in [GitHub Actions](../../.github/workflows/build-calitp-data-infra.yml) and the package will
 eventually be published to pypi on merge.
