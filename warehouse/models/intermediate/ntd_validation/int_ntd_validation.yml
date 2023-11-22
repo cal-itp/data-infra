@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: int_rr20_financial
+    description: | 
+      the RR-20 data that pertains to financial reporting. 
+    # tests:
+    #   - dbt_utils.expression_is_true:
+    #       expression: 'status != {{ guidelines_to_be_assessed_status() }}'
+    # columns:
+  - name: int_ntd_rr20_service_ratios
+    description: |
+      makes ratios for validation checks
+    config:
+      materialized: table

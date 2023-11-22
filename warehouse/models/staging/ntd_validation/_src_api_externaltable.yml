@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: ntd_report_validation
+    description: |
+      Data from BlackCat API.
+    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    schema: external_blackcat
+    tables:
+      - name: all_2023_ntdreports
+      - name: a10_ntdreportingstationsandmaintenance
+      - name: a15_ntdtransitassetmanagement
+      - name: a30_ntdassetandresourceinfo
+      - name: ntd_tamnarrative
+      - name: p10_ntdreporterbasicinfo
+      - name: p20_ntdreportermodes
+      - name: p50_ntdreportergtfs
+      - name: rr20_intercity
+      - name: rr20_rural
+      - name: rr20_urban_tribal
+      - name: ss60_safety
