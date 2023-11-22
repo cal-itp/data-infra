@@ -1,0 +1,4 @@
+version: 2
+
+models:
+  - name: fct_ntd_rr20_service_checks
