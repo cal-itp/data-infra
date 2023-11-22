@@ -31,14 +31,6 @@ def write_to_log(logfilename):
     return logger
 
 
-def camel_to_snake(name):
-    '''Converts Snake case to underscore separation for renaming columns; 
-    VehicleStatus becomes vehicle_status and 
-    can handle acroynms like ADAAccess, which becomes ada_access'''
-    name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
-
-
 class BlackCatApiExtract(BaseModel):
     api_url: str
     form: str
@@ -78,43 +70,10 @@ class BlackCatApiExtract(BaseModel):
             f"Downloading BlackCat data for {self.extract_time.format('YYYY')}_{self.bq_table_name}."
         )
         response = requests.get(self.api_url, verify=False)
-        blob = response.json()
-
-        org_data = []
-
-        # Cyling through and processing each org's data
-        for x in blob:
-            report_id = x.get('ReportId')
-            org = x.get('Organization')
-            period = x.get('ReportPeriod')
-            status = x.get('ReportStatus')
-            last_mod = (pendulum.from_format(x.get('ReportLastModifiedDate'), 'MM/DD/YYYY HH:mm:ss A')
-                        .in_tz('America/Los_Angeles')
-                        .set(tz='UTC'))
-            iso = last_mod.to_iso8601_string()
-            
-            org_info_values = {'api_report_id': report_id, 'api_organization': org,
-                            'api_report_period': period, 'api_report_status': status,
-                            'api_last_modified': iso}
-            org_info_df = pd.DataFrame([org_info_values])
-            
-            table_json = x[self.api_tablename]['Data']
-            # checks for nested json entries, replaces any with only the 'Text' value from nested json. 
-            for x in table_json:
-                for k,v in x.items():
-                    if type(v) is dict:
-                        x[k] = x[k]['Text']
-            raw_df = pd.DataFrame.from_dict(table_json)
-            raw_df.rename(columns=lambda c: camel_to_snake(c), inplace=True)
-            whole_df = pd.concat([org_info_df, raw_df], axis=1).sort_values(by='api_organization')
-            
-            # Only the 1st row of data in org_info_df is filled, other rows have NAs. 
-            # Here we fill in the rest with the values
-            whole_df = whole_df.fillna(value=org_info_values) 
-            org_data.append(whole_df)
-
-        raw_df = pd.concat(org_data)
-        raw_df.rename(columns=lambda c: camel_to_snake(c), inplace=True)
+        blob = response.json()  
+        
+        raw_df = pd.json_normalize(blob)
+        raw_df['ReportLastModifiedDate'] = raw_df['ReportLastModifiedDate'].astype('datetime64[ns]')
 
         self.data = raw_df.rename(make_name_bq_safe, axis="columns")
         self.logger.info(
@@ -151,7 +110,7 @@ class BlackCatApiExtract(BaseModel):
         return hive_path
 
 
-class BlackCatApiToGCSOperator(BaseOperator):
+class BlackCatApiToGCSOperator2(BaseOperator):
     template_fields = ("bucket",)
 
     def __init__(
@@ -163,9 +122,10 @@ class BlackCatApiToGCSOperator(BaseOperator):
         bq_table_name,
         **kwargs,
     ):
-        """An operator that downloads data from a BlackCat API
-            and saves it as a JSON file hive-partitioned by date in Google Cloud
-            Storage (GCS).
+        """An operator that downloads all data from a BlackCat API
+            and saves it as one JSON file hive-partitioned by date in Google Cloud
+            Storage (GCS). Each org's data will be in 1 row, and for each separate table in the API, 
+            a nested column will hold all of it's data. 
 
         Args:
             bucket (str): GCS bucket where the scraped BlackCat report will be saved.
