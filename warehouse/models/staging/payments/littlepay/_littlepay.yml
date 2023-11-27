@@ -519,17 +519,11 @@ models:
 
           The `original_version_id` may differs from the `previous_version_id` if the product has been updated more than once.
       - name: product_code
-        description: The code specified in the Merchant Portal against the product.
+        description: '{{ doc("lp_product_code") }}'
       - name: product_description
-        description: The description specified in the Merchant Portal during the product creation.
+        description: '{{ doc("lp_product_description") }}'
       - name: product_type
-        description: |
-          The name of the product type.
-
-          Possible values:
-          * `CAPPING`
-          * `DISCOUNT`
-          * `PURCHASE`
+        description: '{{ doc("lp_product_type") }}'
       - name: activation_type
         description: The type of customers the product will be actioned for.
       - name: product_status

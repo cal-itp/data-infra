@@ -279,3 +279,22 @@ General description of the reason the adjustment was created.
 {% docs lp_adj_amount %}
 The amount deducted from the `nominal_amount` to arrive at the `charge_amount` for the micropayment being adjusted.
 {% enddocs %}
+
+-------------------------------- PRODUCT DATA TABLE --------------------------------
+
+{% docs lp_product_code %}
+The code specified in the Merchant Portal against the product.
+{% enddocs %}
+
+{% docs lp_product_description %}
+The description specified in the Merchant Portal during the product creation.
+{% enddocs %}
+
+{% docs lp_product_type %}
+The name of the product type.
+
+Possible values:
+* `CAPPING`
+* `DISCOUNT`
+* `PURCHASE`
+{% enddocs %}
