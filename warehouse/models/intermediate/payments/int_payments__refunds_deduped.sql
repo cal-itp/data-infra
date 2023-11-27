@@ -64,6 +64,8 @@ format_micropayments_table_refunds AS (
     LEFT JOIN micropayment_device_transactions AS debit
         ON debit.littlepay_transaction_id = credit.littlepay_transaction_id
         AND debit.micropayment_id != credit.micropayment_id
+        -- there's one of these that has a stray extra $0 charge mixed in which messes up the mappings
+        AND debit._key != 'e32be429e135e6df8d3d3fd45f6ecf89'
     -- these two refunds appear in both the micropayments and refund tables, and it was easier to
     -- drop them manually than make an overfit filter
     WHERE micropayments_refunds._key NOT IN ('043ecc000223a299ce17f6a342b1d240', '3536fb2035bbcf4dcb1f3abf001b5185')
