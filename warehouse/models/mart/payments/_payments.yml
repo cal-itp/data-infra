@@ -291,6 +291,16 @@ models:
         description: '{{ doc("lp_record_updated_timestamp_utc") }}'
       - name: acquirer
         description: '{{ doc("lp_acquirer") }}'
+      - name: acquirer_response_rrn
+        description: '{{ doc("lp_acquirer_response_rrn") }}'
+      - name: settlement_status
+        description: '{{ doc("lp_settlement_status") }}'
+      - name: request_created_timestamp_utc
+        description: '{{ doc("lp_request_created_timestamp_utc") }}'
+      - name: response_created_timestamp_utc
+        description: '{{ doc("lp_response_created_timestamp_utc") }}'
+      - name: refund_id
+        description: '{{ doc("lp_refund_id") }}'
 
   - name: fct_elavon__transactions
     description: Transactions processed by Elavon
