@@ -24,7 +24,7 @@ with data_2023 as (
     annual_unlinked_pass_trips as Annual_UPT,
     sponsored_service_upt as Sponsored_UPT,
     annual_vehicle_max_service as VOMX
-    from {{ ref('stg_2023_rr20_rural') }}
+    from {{ ref('stg_ntd_2023_rr20_rural') }}
     WHERE type = "Expenses by Mode"
 ),
 
@@ -38,7 +38,7 @@ service2022 as (
     Annual_UPT,
     Sponsored_UPT,
     VOMX
-    from {{ ref('stg_2022_rr20_service') }}
+    from {{ ref('stg_ntd_2022_rr20_service') }}
 ),
 
 expenses2022 as (
@@ -48,7 +48,7 @@ expenses2022 as (
     Operating_Capital as operating_capital,
     Mode as mode,
     Total_Annual_Expenses_By_Mode
-    FROM {{ ref('stg_2022_rr20_exp_by_mode') }}
+    FROM {{ ref('stg_ntd_2022_rr20_exp_by_mode') }}
 ),
 
 all_2022 as (
