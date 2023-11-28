@@ -126,7 +126,6 @@ format_refunds_table_refunds AS (
     -- this dedupes on refund ID because individual refunds sometimes appear multiple times with multiple statuses
     -- the goal here is to get the latest update per refund
     QUALIFY DENSE_RANK() OVER (PARTITION BY refund_id ORDER BY littlepay_export_ts DESC) = 1
-
 ),
 
 refunds_union AS (
@@ -137,6 +136,25 @@ refunds_union AS (
 
     SELECT *
     FROM format_refunds_table_refunds
+),
+
+-- in addition to the qualify statement above, we have an issue where some refunds are initially refused and then later approved
+-- but they get a new refund ID generated
+-- address that thus
+next_status AS (
+  SELECT
+    participant_id,
+    refund_id,
+    aggregation_id,
+    LEAD(approval_status) OVER(PARTITION BY participant_id, micropayment_id ORDER BY created_time ASC) AS next_approval_status,
+    approval_status
+  FROM refunds_union
+),
+
+to_drop AS (
+  SELECT DISTINCT participant_id, refund_id
+  FROM next_status
+  WHERE approval_status = "REFUSED" AND next_approval_status = "APPROVED"
 ),
 
 int_payments__refunds AS (
@@ -180,6 +198,8 @@ int_payments__refunds AS (
         source_table
 
     FROM refunds_union
+    LEFT JOIN to_drop USING (participant_id, refund_id)
+    WHERE to_drop.refund_id IS NULL
     -- this dedupes on coalesced_id (which is comprised of retrieval_reference_number or aggregation_id if it is null) and refund_amount
     -- because we observe some duplicate refunds by retrieval_reference_number/aggregation_id and refund_amount
     -- add line number to sorting to make this deterministic
