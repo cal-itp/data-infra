@@ -1,4 +1,5 @@
 Documentation related to Littlepay data schema
+In many cases, taken or adapted directly from Littlepay documentation: https://docs.littlepay.io/data/
 
 {% docs lp_participant_id %}
 Littlepay identifier for the participant (transit agency) associated with this entity or event.
@@ -137,4 +138,30 @@ to interpret this field as a "last updated" value.
 
 {% docs lp_acquirer %}
 Identifies the acquirer used to settle the transaction.
+{% enddocs %}
+
+{% docs lp_acquirer_response_rrn %}
+When returned by supported acquirers, uniquely identifies a card transaction as supplied by the acquirer in the settlement response, based on the ISO 8583 standard.
+
+This field is supported for when the acquirer is Nets DK. When not supported or in use, this field will be empty.
+{% enddocs %}
+
+{% docs lp_settlement_status %}
+The status of the settlement. Options are:
+* `PENDING` - for settlements that have had a request but no response
+* `REJECTED`
+* `SETTLED`
+* `FAILED` - an error occurred during processing
+{% enddocs %}
+
+{% docs lp_request_created_timestamp_utc %}
+Time settlement request was created.
+{% enddocs %}
+
+{% docs lp_response_created_timestamp_utc %}
+Time settlement response was created.
+{% enddocs %}
+
+{% docs lp_refund_id %}
+Populated if the settlement is a refund; can be used when linking to the refunds table.
 {% enddocs %}

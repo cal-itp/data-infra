@@ -14,15 +14,19 @@ clean_columns AS (
         {{ trim_make_empty_string_null('littlepay_reference_number') }} AS littlepay_reference_number,
         {{ trim_make_empty_string_null('external_reference_number') }} AS external_reference_number,
         {{ trim_make_empty_string_null('settlement_type') }} AS settlement_type,
-        -- as of 10/6/23, only ATN has record_updated_timestamp_utc
+        -- prior to 11/28/23, only ATN had record_updated_timestamp_utc
         -- per communication from LP, that column is the new name of settlement_requested_date_time_utc
         COALESCE(
             {{ safe_cast('settlement_requested_date_time_utc', type_timestamp()) }},
             {{ safe_cast('record_updated_timestamp_utc', type_timestamp()) }}
             ) AS settlement_requested_date_time_utc,
         {{ trim_make_empty_string_null('acquirer') }} AS acquirer,
+        {{ trim_make_empty_string_null('refund_id') }} AS refund_id,
+        {{ safe_cast('request_created_timestamp_utc', type_timestamp()) }} AS request_created_timestamp_utc,
+        {{ safe_cast('response_created_timestamp_utc', type_timestamp()) }} AS response_created_timestamp_utc,
+        {{ trim_make_empty_string_null('acquirer_response_rrn') }} AS acquirer_response_rrn,
+        {{ trim_make_empty_string_null('settlement_status') }} AS settlement_status,
         CAST(_line_number AS INTEGER) AS _line_number,
-        -- TODO: add "new schema" columns that are present only for ATN as of 10/6/23
         `instance`,
         extract_filename,
         ts,
@@ -59,8 +63,12 @@ stg_littlepay__settlements AS (
         settlement_type,
         settlement_requested_date_time_utc,
         acquirer,
+        refund_id,
+        acquirer_response_rrn,
+        settlement_status,
+        request_created_timestamp_utc,
+        response_created_timestamp_utc,
         _line_number,
-        -- TODO: add "new schema" columns that are present only for ATN as of 10/6/23
         `instance`,
         extract_filename,
         ts,
