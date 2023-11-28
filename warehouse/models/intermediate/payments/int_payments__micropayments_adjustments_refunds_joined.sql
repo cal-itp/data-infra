@@ -21,6 +21,15 @@ aggregation_refunds AS (
     SELECT * FROM {{ ref('int_payments__refunds_to_aggregations') }}
 ),
 
+micropayments_per_aggregation AS (
+    SELECT
+        participant_id,
+        aggregation_id,
+        COUNT(*) AS aggregation_micropayment_ct
+    FROM debit_micropayments
+    GROUP BY 1, 2
+),
+
 int_payments__micropayments_adjustments_refunds_joined AS (
     SELECT
         debit_micropayments.participant_id,
@@ -42,13 +51,19 @@ int_payments__micropayments_adjustments_refunds_joined AS (
         products.product_description,
         products.product_type,
         -- refund amount is a confusing name because our use of it here is directly opposite how LP uses it in their schema
-        individual_refunds.proposed_amount AS micropayment_refund_amount,
+        -- there is a bug where some refunds' micropayment IDs don't map back correctly to their associated micropayment
+        -- in those cases, if there's only one micropayment in the aggregation, we can impute that the aggregation refund applies just to the one micropayment
+        CASE
+            WHEN micropayments_per_aggregation.aggregation_micropayment_ct = 1 AND individual_refunds.proposed_amount IS NULL THEN aggregation_refunds.total_refund_activity_amount_dollars
+            ELSE individual_refunds.proposed_amount
+        END AS micropayment_refund_amount,
         aggregation_refunds.total_refund_activity_amount_dollars AS aggregation_refund_amount
     FROM debit_micropayments
     LEFT JOIN adjustments USING (participant_id, micropayment_id)
     LEFT JOIN products USING (participant_id, product_id)
     LEFT JOIN individual_refunds USING (participant_id, micropayment_id, aggregation_id)
     LEFT JOIN aggregation_refunds USING (participant_id, aggregation_id)
+    LEFT JOIN micropayments_per_aggregation USING (participant_id, aggregation_id)
 )
 
 SELECT * FROM int_payments__micropayments_adjustments_refunds_joined
