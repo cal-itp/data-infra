@@ -784,8 +784,8 @@ models:
         description: '{{ doc("lp_littlepay_reference_number") }}'
       - name: external_reference_number
         description: '{{ doc("lp_external_reference_number") }}'
-      - name: settlement_requested_date_time_utc
-        description: '{{ doc("lp_settlement_requested_date_time_utc") }}'
+      - name: record_updated_timestamp_utc
+        description: '{{ doc("lp_record_updated_timestamp_utc") }}'
       - name: acquirer
         description: '{{ doc("lp_acquirer") }}'
       - name: acquirer_response_rrn

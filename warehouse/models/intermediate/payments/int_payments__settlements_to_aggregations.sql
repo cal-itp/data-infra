@@ -15,7 +15,7 @@ summarize_by_type AS (
         retrieval_reference_number,
         settlement_type,
         LOGICAL_OR(imputed_type) AS type_contains_imputed_type,
-        MAX(settlement_requested_date_time_utc) AS type_latest_update_timestamp,
+        MAX(record_updated_timestamp_utc) AS type_latest_update_timestamp,
         SUM(transaction_amount) AS total_amount,
     FROM settlements
     GROUP BY 1, 2, 3, 4

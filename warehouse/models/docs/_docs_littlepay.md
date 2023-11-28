@@ -60,7 +60,7 @@ If `true`, this aggregation settlement included at least one row with settlement
 {% enddocs %}
 
 {% docs lp_settlement_latest_update_timestamp %}
-Most recent `settlement_requested_date_time_utc` value for this aggregation settlement.
+Most recent `record_updated_timestamp_utc` value for this aggregation settlement.
 If a credit (refund) was issued after the initial debit, this will be the timestamp of the credit.
 {% enddocs %}
 
@@ -130,10 +130,9 @@ Uniquely identifies a card transaction.
 If the acquirer is Elavon, then this key will contain the second part of the string from `retrieval_reference_number`.
 {% enddocs %}
 
-{% docs lp_settlement_requested_date_time_utc %}
-Timestamp of when the settlement request was submitted to the acquirer.
-Per October 2023 updates from Littlepay, it may be more appropriate
-to interpret this field as a "last updated" value.
+{% docs lp_record_updated_timestamp_utc %}
+Settlement last updated timestamp.
+Formerly known as settlement_requested_date_time_utc.
 {% enddocs %}
 
 {% docs lp_acquirer %}
