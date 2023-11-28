@@ -110,7 +110,7 @@ class BlackCatApiExtract(BaseModel):
         return hive_path
 
 
-class BlackCatApiToGCSOperator2(BaseOperator):
+class BlackCatApiToGCSOperator(BaseOperator):
     template_fields = ("bucket",)
 
     def __init__(

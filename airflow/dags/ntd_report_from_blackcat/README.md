@@ -1,4 +1,4 @@
-# `ntd_report_validation`
+# `ntd_report_from_blackcat`
 
 Type: [Now|Scheduled](https://docs.calitp.org/data-infra/airflow/dags-maintenance.html)
 
