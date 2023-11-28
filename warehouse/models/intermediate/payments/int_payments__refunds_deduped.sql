@@ -162,7 +162,8 @@ int_payments__refunds AS (
     FROM refunds_union
     -- this dedupes on coalesced_id (which is comprised of retrieval_reference_number or aggregation_id if it is null) and refund_amount
     -- because we observe some duplicate refunds by retrieval_reference_number/aggregation_id and refund_amount
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY coalesced_id, refund_amount ORDER BY littlepay_export_ts DESC) = 1
+    -- add line number to sorting to make this deterministic
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY coalesced_id, refund_amount ORDER BY littlepay_export_ts DESC, _line_number DESC) = 1
 
 )
 
