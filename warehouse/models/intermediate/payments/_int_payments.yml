@@ -238,6 +238,7 @@ models:
       This model provides a summary of `refund_amount` grouped by `aggregation_id` and `retrieval_reference_number`,
       as well as sums by `approval_status` (APPROVED, REFUSED, AWAITING, NULL)
     columns:
+      - *participant_id
       - name: aggregation_id
         description: |
           The aggregation that contains the refund.
@@ -263,10 +264,16 @@ models:
     description: |
       Summarizing micropayment information across the source micropayment,
       any applied adjustments (ex. fare capping), and any associated refunds.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "micropayment_refund_amount <= charge_amount"
     columns:
       - *participant_id
       - name: micropayment_id
         description: '{{ doc("lp_micropayment_id") }}'
+        tests:
+          - not_null
+          - unique
       - name: aggregation_id
         description: '{{ doc("lp_aggregation_id") }}'
       - name: funding_source_vault_id
@@ -300,4 +307,8 @@ models:
       - name: product_type
         description: '{{ doc("lp_product_type") }}'
       - name: micropayment_refund_amount
+        description: |
+          Refunded amount for this specific micropayment.
       - name: aggregation_refund_amount
+        description: |
+          Total refunded amount associated with this aggregation.
