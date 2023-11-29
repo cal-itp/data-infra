@@ -1,7 +1,7 @@
 Documentation related to Littlepay data schema
 In many cases, taken or adapted directly from Littlepay documentation: https://docs.littlepay.io/data/
 
--------------------------------- COMMON FIELD INCLUDING KEYS --------------------------------
+-------------------------------- COMMON FIELDS INCLUDING KEYS --------------------------------
 
 {% docs lp_micropayment_id %}
 Uniquely identifies a micropayment.
@@ -139,6 +139,16 @@ Same as `aggregation_is_settled` but only includes the aggregation's credit (ref
 If there is no credit activity for the aggregation, this field is null.
 (So, a null in this field can mean either that there was no credit activity at all or that all credit
 activity was prior to November 28, 2023.)
+{% enddocs %}
+
+{% docs lp_micropayment_refund_amount %}
+Refunded amount for this specific micropayment.
+Null if no refund for this micropayment.
+{% enddocs %}
+
+{% docs lp_aggregation_refund_amount %}
+Total refunded amount associated with this aggregation.
+(The aggregation may contain more than one micropayment.)
 {% enddocs %}
 
 -------------------------------- SETTLEMENTS TABLE --------------------------------

@@ -49,7 +49,9 @@ models:
       - name: charge_amount
         description: '{{ doc("lp_charge_amount") }}'
       - name: refund_amount
-        description: If there is a refund micropayment associated with the trip, the charge_amount on that refund
+        description: '{{ doc("lp_micropayment_refund_amount") }}'
+      - name: aggregation_refund_amount
+        description: '{{ doc("lp_aggregation_refund_amount") }}'
       - name: nominal_amount
         description: '{{ doc("lp_nominal_amount") }}'
       - name: charge_type

@@ -307,8 +307,6 @@ models:
       - name: product_type
         description: '{{ doc("lp_product_type") }}'
       - name: micropayment_refund_amount
-        description: |
-          Refunded amount for this specific micropayment.
+        description: '{{ doc("lp_micropayment_refund_amount") }}'
       - name: aggregation_refund_amount
-        description: |
-          Total refunded amount associated with this aggregation.
+        description: '{{ doc("lp_aggregation_refund_amount") }}'
