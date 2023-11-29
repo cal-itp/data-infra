@@ -2,7 +2,10 @@
 
 The following folder contains the project level directory for all our [Apache Airflow](https://airflow.apache.org/) [DAGs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html). Airflow is an orchestration tool that we use to manage our raw data ingest. Airflow DAG tasks are scheduled at regular intervals to perform data processing steps, like unzipping raw GTFS zipfiles and writing the contents out to Google Cloud Storage.
 
-Our DAGs, plugins, and changes to [the Airflow image we use for local testing](./Dockerfile) are deployed automatically to Google Cloud Composer when a PR is merged into the `main` branch; see the section on deployment below for more information. Images used by some of our Airflow DAGs (i.e. those which are configured with PodOperators) are deployed separately, often also automatically upon merged changes to the relevant Dockerfiles in the repository. System configuration for worker count, environment variables, and overrides of Airflow configs are deployed via the [Composer web console](https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra), not via an automated process, but additional dependencies that we add to the standard Composer-managed Airflow install (listed in [requirements.txt](./requirements.txt)) _are_ deployed automatically upon merged changes.
+- Our *DAGs, plugins, and changes to [the Airflow image we use for local testing](./Dockerfile)* are deployed automatically when a PR is merged into the `main` branch; see the section on deployment below for more information.
+- *Images used by our Airflow DAGs* (i.e. those which are configured with PodOperators) are deployed separately, and their deployment information can be found in the respective image READMEs.
+- *System configuration for worker count, environment variables, and overrides of Airflow configs* are deployed via the [Composer web console](https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra), not via an automated process.
+    - Additional dependencies that we add to the standard Composer-managed Airflow install (listed in [requirements.txt](./requirements.txt)) are treated differently, deployed automatically upon merged changes to this repository just like DAG and plugin changes.
 
 ## Structure
 
@@ -16,17 +19,11 @@ Finally, Airflow plugins can be found in `plugins`; this includes general utilit
 
 ## Testing Changes
 
-This project is developed using Docker and docker-compose. Before getting started, please make sure you have [installed Docker on your system](https://docs.docker.com/get-docker/). Docker will need to be running at the time you run any `docker-compose` commands from the console.
+This project is developed using Docker and docker-compose, and we test most changes via a local version of Airflow that is simialrly configured to the production Composer-managed Airflow instance. Before getting started, please make sure you have [installed Docker on your system](https://docs.docker.com/get-docker/). Docker will need to be running at the time you run any `docker-compose` commands from the console.
 
-To test any changes you've made to DAGs, operators, etc., you'll need to make sure that the UID and GID of the container match. To do so, run
+To test any changes you've made to DAGs, operators, etc., you'll need to follow a few setup steps:
 
-```console
-cd airflow (if you are not already in the airflow directory)
-mkdir ./dags ./logs ./plugins
-echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
-```
-
-Second, ensure you have a default authentication file by [installing Google SDK](https://cloud.google.com/sdk/docs/install) and running
+Ensure you have a default authentication file by [installing Google SDK](https://cloud.google.com/sdk/docs/install) and running
 
 ```console
 unset GOOGLE_APPLICATION_CREDENTIALS
@@ -86,6 +83,8 @@ docker-compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly va
 
 We have a [GitHub Action](../.github/workflows/deploy-airflow.yml) that runs when PRs touching this directory merge to the `main` branch. The GitHub Action updates the requirements sourced from [requirements.txt](./requirements.txt) and syncs the [DAGs](./dags) and [plugins](./plugins) directories to the bucket that Composer watches for code/data to parse. As of 2023-07-18, this bucket is `us-west2-calitp-airflow2-pr-171e4e47-bucket`.
 
+### Upgrading Airflow Itself
+
 Our production Composer instance is called [calitp-airflow2-prod](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod/monitoring); its configuration (including worker count, Airflow config overrides, and environment variables) is manually managed through the web console. When scoping upcoming upgrades to the specific Composer-managed Airflow version we use in production, it can be helpful to grab the corresponding list of requirements from the [Cloud Composer version list](https://cloud.google.com/composer/docs/concepts/versioning/composer-versions), copy it into `requirements-composer-[COMPOSER_VERSION_NUMBER]-airflow-[AIRFLOW_VERSION_NUMBER].txt`, change [Dockerfile.composer](./Dockerfile.composer) to reference that file (deleting the previous equivalent) and modify the `FROM` statement at the top to grab the correct Airflow and Python versions for that Composer version, and build the image locally.
 
-It is desirable to keep our local testing image closely aligned with the production image, so the `FROM` statement in [Dockerfile](./Dockerfile) should always reflect the same Airflow version and Python version that are being run in the Composer-managed production environment.
+It is desirable to keep our local testing image closely aligned with the production image, so the `FROM` statement in our automatically deployed [Dockerfile](./Dockerfile) should always be updated after a production Airflow upgrade reflect the same Airflow version and Python version that are being run in the Composer-managed production environment.
