@@ -85,7 +85,10 @@ i.e., these values represent costs for the participant (agency).
 {% docs lp_aggregation_is_settled %}
 Boolean indicating whether all settlements in this aggregation have `settlement_status = SETTLED`.
 `settlement_status` is only available for all agencies starting on November 28, 2023 so
-this field does not account for activity before that date and aggregations that only contain activity before that date have nulls in this field.
+this field does not account for activity before that date and aggregations that only contain activity before that date have nulls in this field. If `false`, there was a settlement present that has a `settlement_status` other than `SETTLED` (i.e., `PENDING`, `REJECTED`, or `FAILED`.)
+
+When this column appears in models where not all aggregations have settlements at all, this field is also null for aggregations
+that don't have any settlements. So, this field can be null if there are no settlements or if all settlement activity occurred before November 28, 2023.
 {% enddocs %}
 
 {% docs lp_debit_is_settled %}

@@ -95,7 +95,10 @@ fct_payments_aggregations AS (
         net_settled_amount_dollars,
         contains_refund AS settlement_contains_refund,
         debit_amount AS settlement_debit_amount,
-        credit_amount AS settlement_credit_amount
+        credit_amount AS settlement_credit_amount,
+        aggregation_is_settled,
+        debit_is_settled,
+        credit_is_settled
     FROM join_orgs
 )
 
