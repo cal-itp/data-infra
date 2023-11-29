@@ -63,7 +63,7 @@ Additional reading about this setup can be found on the [Airflow Docs](https://a
 
 ### PodOperators
 
-Airflow PodOperator tasks execute a specific Docker image; these images are pushed to [GitHub Container Registry](https://ghcr.io/) and production uses `:latest` tags while local uses `:development`. If you want to test these tasks locally, you must build and push development versions of the images used by the tasks, which requires [proper access](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry). The Dockerfiles and code that make up the images live in the [../jobs](../jobs) directory. For example:
+Airflow PodOperator tasks execute a specific Docker image; these images are pushed to [GitHub Container Registry](https://ghcr.io/) and production uses `:latest` tags while local uses `:development`. If you want to test these tasks locally, you must build and push development versions of the images used by the tasks, which requires [proper access](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry). The Dockerfiles and code that make up the images live in the [/jobs](../jobs) directory. For example:
 
 ```bash
 # running from jobs/gtfs-schedule-validator/
