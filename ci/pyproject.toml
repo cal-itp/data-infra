@@ -8,11 +8,12 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.9"
 pydantic = {extras = ["dotenv"], version = "^1.10.9"}
-gitpython = "^3.1.32"
+gitpython = "^3.1.37"
 invoke = "^2.1.3"
 doit = "^0.36.0"
-pyyaml = "^6.0"
+pyyaml = "^6.0.1"
 google-cloud-secret-manager = "^2.16.1"
+grpcio = "^1.59.0"
 
 
 [tool.poetry.group.dev.dependencies]

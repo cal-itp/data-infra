@@ -12,7 +12,7 @@ dask:
   worker:
     image:
       repository: "ghcr.io/cal-itp/data-infra/dask"
-      tag: "2023.3.21"
+      tag: "2023.8.1"
     metrics:
       enabled: true
     annotations:
