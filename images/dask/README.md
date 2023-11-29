@@ -1,4 +1,4 @@
-# dask Image
+# Dask Image
 
 This image exists to add necessary dependencies for Dask schedulers
 and workers, such as the Prometheus client and Python libraries
