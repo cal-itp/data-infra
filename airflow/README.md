@@ -5,7 +5,7 @@ The following folder contains the project level directory for all our [Apache Ai
 - Our *DAGs, plugins, and changes to [the Airflow image we use for local testing](./Dockerfile)* are deployed automatically when a PR is merged into the `main` branch; see the section on deployment below for more information.
 - *Images used by our Airflow DAGs* (i.e. those which are configured with PodOperators) are deployed separately, and their deployment information can be found in the respective image READMEs.
 - *System configuration for worker count, environment variables, and overrides of Airflow configs* are deployed via the [Composer web console](https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra), not via an automated process.
-    - Additional dependencies that we add to the standard Composer-managed Airflow install (listed in [requirements.txt](./requirements.txt)) are treated differently, deployed automatically upon merged changes to this repository just like DAG and plugin changes.
+  - Additional dependencies that we add to the standard Composer-managed Airflow install (listed in [requirements.txt](./requirements.txt)) are treated differently, deployed automatically upon merged changes to this repository just like DAG and plugin changes.
 
 ## Structure
 
