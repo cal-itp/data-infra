@@ -1,4 +1,5 @@
 Documentation related to Littlepay data schema
+In many cases, taken or adapted directly from Littlepay documentation: https://docs.littlepay.io/data/
 
 {% docs lp_participant_id %}
 Littlepay identifier for the participant (transit agency) associated with this entity or event.
@@ -59,7 +60,7 @@ If `true`, this aggregation settlement included at least one row with settlement
 {% enddocs %}
 
 {% docs lp_settlement_latest_update_timestamp %}
-Most recent `settlement_requested_date_time_utc` value for this aggregation settlement.
+Most recent `record_updated_timestamp_utc` value for this aggregation settlement.
 If a credit (refund) was issued after the initial debit, this will be the timestamp of the credit.
 {% enddocs %}
 
@@ -80,6 +81,27 @@ Total dollar amount associated with credit (refund) settlements in this aggregat
 Numbers in this column are negative because they represent amounts credited (refunded) by the participant (agency) to the customer (rider);
 i.e., these values represent costs for the participant (agency).
 {% enddocs %}
+
+{% docs lp_aggregation_is_settled %}
+Boolean indicating whether all settlements in this aggregation have `settlement_status = SETTLED`.
+`settlement_status` is only available for all agencies starting on November 28, 2023 so
+this field does not account for activity before that date and aggregations that only contain activity before that date have nulls in this field. If `false`, there was a settlement present that has a `settlement_status` other than `SETTLED` (i.e., `PENDING`, `REJECTED`, or `FAILED`.)
+
+When this column appears in models where not all aggregations have settlements at all, this field is also null for aggregations
+that don't have any settlements. So, this field can be null if there are no settlements or if all settlement activity occurred before November 28, 2023.
+{% enddocs %}
+
+{% docs lp_debit_is_settled %}
+Same as `aggregation_is_settled` but only includes the aggregation's debit (fare payment) settlements.
+{% enddocs %}
+
+{% docs lp_credit_is_settled %}
+Same as `aggregation_is_settled` but only includes the aggregation's credit (refund) settlements.
+If there is no credit activity for the aggregation, this field is null.
+(So, a null in this field can mean either that there was no credit activity at all or that all credit
+activity was prior to November 28, 2023.)
+{% enddocs %}
+
 
 ---------------- SETTLEMENTS TABLE ----------------
 
@@ -129,12 +151,37 @@ Uniquely identifies a card transaction.
 If the acquirer is Elavon, then this key will contain the second part of the string from `retrieval_reference_number`.
 {% enddocs %}
 
-{% docs lp_settlement_requested_date_time_utc %}
-Timestamp of when the settlement request was submitted to the acquirer.
-Per October 2023 updates from Littlepay, it may be more appropriate
-to interpret this field as a "last updated" value.
+{% docs lp_record_updated_timestamp_utc %}
+Settlement last updated timestamp.
+Formerly known as settlement_requested_date_time_utc.
 {% enddocs %}
 
 {% docs lp_acquirer %}
 Identifies the acquirer used to settle the transaction.
+{% enddocs %}
+
+{% docs lp_acquirer_response_rrn %}
+When returned by supported acquirers, uniquely identifies a card transaction as supplied by the acquirer in the settlement response, based on the ISO 8583 standard.
+
+This field is supported for when the acquirer is Nets DK. When not supported or in use, this field will be empty.
+{% enddocs %}
+
+{% docs lp_settlement_status %}
+The status of the settlement. Options are:
+* `PENDING` - for settlements that have had a request but no response
+* `REJECTED`
+* `SETTLED`
+* `FAILED` - an error occurred during processing
+{% enddocs %}
+
+{% docs lp_request_created_timestamp_utc %}
+Time settlement request was created.
+{% enddocs %}
+
+{% docs lp_response_created_timestamp_utc %}
+Time settlement response was created.
+{% enddocs %}
+
+{% docs lp_refund_id %}
+Populated if the settlement is a refund; can be used when linking to the refunds table.
 {% enddocs %}

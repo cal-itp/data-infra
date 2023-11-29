@@ -85,6 +85,12 @@ models:
         description: '{{ doc("lp_settlement_debit_amount") }}'
       - name: credit_amount
         description: '{{ doc("lp_settlement_credit_amount") }}'
+      - name: aggregation_is_settled
+        description: '{{ doc("lp_aggregation_is_settled") }}'
+      - name: debit_is_settled
+        description: '{{ doc("lp_debit_is_settled") }}'
+      - name: credit_is_settled
+        description: '{{ doc("lp_credit_is_settled") }}'
   - name: int_payments__micropayments_to_aggregations
     description: |
       Littlepay micropayments grouped to the aggregation (`aggregation_id`) level.

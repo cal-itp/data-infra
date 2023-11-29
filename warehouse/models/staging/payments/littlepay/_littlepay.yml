@@ -784,10 +784,20 @@ models:
         description: '{{ doc("lp_littlepay_reference_number") }}'
       - name: external_reference_number
         description: '{{ doc("lp_external_reference_number") }}'
-      - name: settlement_requested_date_time_utc
-        description: '{{ doc("lp_settlement_requested_date_time_utc") }}'
+      - name: record_updated_timestamp_utc
+        description: '{{ doc("lp_record_updated_timestamp_utc") }}'
       - name: acquirer
         description: '{{ doc("lp_acquirer") }}'
+      - name: acquirer_response_rrn
+        description: '{{ doc("lp_acquirer_response_rrn") }}'
+      - name: settlement_status
+        description: '{{ doc("lp_settlement_status") }}'
+      - name: request_created_timestamp_utc
+        description: '{{ doc("lp_request_created_timestamp_utc") }}'
+      - name: response_created_timestamp_utc
+        description: '{{ doc("lp_response_created_timestamp_utc") }}'
+      - name: refund_id
+        description: '{{ doc("lp_refund_id") }}'
       - *lp_export_date
       - *lp_export_ts
       - *lp_line_number
