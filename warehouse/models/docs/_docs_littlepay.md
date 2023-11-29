@@ -1,9 +1,48 @@
 Documentation related to Littlepay data schema
 In many cases, taken or adapted directly from Littlepay documentation: https://docs.littlepay.io/data/
 
+-------------------------------- COMMON FIELDS INCLUDING KEYS --------------------------------
+
+{% docs lp_micropayment_id %}
+Uniquely identifies a micropayment.
+When a foreign key, identifies the micropayment associated with this entity.
+{% enddocs %}
+
+{% docs lp_aggregation_id %}
+Identifies an aggregation of one or more micropayments that can be authorised/settled.
+{% enddocs %}
+
 {% docs lp_participant_id %}
 Littlepay identifier for the participant (transit agency) associated with this entity or event.
 {% enddocs %}
+
+{% docs lp_customer_id %}
+Identifies the customer associated with this payment activity or entity.
+A customer ID does not necessarily uniquely identify an individual person
+or payment card.
+These IDs can appear across `participant_id`s, so there may be cases where you need to use both `participant_id` and `customer_id` to join to the correct instance.
+{% enddocs %}
+
+{% docs lp_funding_source_vault_id %}
+Identifies the funding source (for example, card) that a micropayment will be charged to. This is always the card that was tapped.
+A registered customer can have multiple funding sources linked to them.
+These IDs can appear across `participant_id`s, so there may be cases where you need to use both `participant_id` and `funding_source_vault_id` to join to the correct instance.
+{% enddocs %}
+
+{% docs lp_adjustment_id %}
+Uniquely identifies the adjustment.
+Adjustments are things like fare caps that adjust the amount of a micropayment.
+Individual adjustments apply a specific product to an individual micropayment.
+{% enddocs %}
+
+{% docs lp_product_id %}
+Uniquely identifies a product.
+Products can adjust the amount of a fare micropayment.
+For example, a 10 day fare cap could be a product.
+{% enddocs %}
+
+
+-------------------------------- AGGREGATIONS/SUMMARIES --------------------------------
 
 {% docs lp_net_micropayment_amount_dollars %}
 Sum of the `charge_amount` values for all micropayments in this aggregation.
@@ -102,19 +141,20 @@ If there is no credit activity for the aggregation, this field is null.
 activity was prior to November 28, 2023.)
 {% enddocs %}
 
+{% docs lp_micropayment_refund_amount %}
+Refunded amount for this specific micropayment.
+Null if no refund for this micropayment.
+{% enddocs %}
 
----------------- SETTLEMENTS TABLE ----------------
+{% docs lp_aggregation_refund_amount %}
+Total refunded amount associated with this aggregation.
+(The aggregation may contain more than one micropayment.)
+{% enddocs %}
+
+-------------------------------- SETTLEMENTS TABLE --------------------------------
 
 {% docs lp_settlement_id %}
 A unique identifier for each settlement.
-{% enddocs %}
-
-{% docs lp_aggregation_id %}
-Identifies an aggregation of one or more micropayments that can be authorised/settled.
-{% enddocs %}
-
-{% docs lp_customer_id %}
-Identifies the customer that the micropayment belongs to.
 {% enddocs %}
 
 {% docs lp_funding_source_id %}
@@ -184,4 +224,91 @@ Time settlement response was created.
 
 {% docs lp_refund_id %}
 Populated if the settlement is a refund; can be used when linking to the refunds table.
+{% enddocs %}
+
+-------------------------------- MICROPAYMENTS TABLE --------------------------------
+
+{% docs lp_transaction_time %}
+The date and time when the micropayment was created.
+
+For variable fare (tap on/tap off), the micropayment will not be created until the tap off occurs.
+
+The date reflects the processing time by Littlepay, rather than the event time; that is, when the related taps occurred.
+{% enddocs %}
+
+{% docs lp_payment_liability %}
+Indicates who would be liable to absorb the cost if the micropayment was declined by the issuer when an authorisation is attempted.
+
+Possible values are `ISSUER` or `OPERATOR`.
+{% enddocs %}
+
+{% docs lp_charge_amount %}
+The amount that will be credited to or debited from the funding source. This may be lower than the nominal amount if adjustments have been applied.
+{% enddocs %}
+
+{% docs lp_nominal_amount %}
+The amount that would be charged if no adjustments were to be applied.
+{% enddocs %}
+
+{% docs lp_currency_code %}
+ISO 4217 numeric code representing the currency that the `charge_amount` and `nominal_amount` are denominated in.
+{% enddocs %}
+
+{% docs lp_mp_type %}
+Transaction type. Possible values are `CREDIT` or `DEBIT`. The value Will be `DEBIT` if `charge_amount >= 0.00`
+{% enddocs %}
+
+{% docs lp_charge_type %}
+Indicates the type of fare that the micropayment charge represents.
+
+Possible values:
+* `RETAIL_FARE`
+* `FLAT_FARE`
+* `COMPLETE_VARIABLE_FARE`
+* `INCOMPLETE_VARIABLE_FARE`
+* `REFUND`
+{% enddocs %}
+
+-------------------------------- MICROPAYMENT ADJUSTMENTS TABLE --------------------------------
+
+{% docs lp_adj_type %}
+The type of product / rule that created the adjustment. Additional values may be added over time.
+
+Possible values:
+* `MULTI_DAY_CAP`
+* `DAILY_CAP`
+* `WEEKLY_CAP`
+{% enddocs %}
+
+{% docs lp_adj_time_period_type %}
+Indicates whether the travel was determined to have occurred during a peak or off-peak period for the purposes of capping.
+
+Possible values are `PEAK` and `OFFPEAK`.
+{% enddocs %}
+
+{% docs lp_adj_description %}
+General description of the reason the adjustment was created.
+{% enddocs %}
+
+{% docs lp_adj_amount %}
+The amount deducted from the `nominal_amount` to arrive at the `charge_amount` for the micropayment being adjusted.
+{% enddocs %}
+
+-------------------------------- PRODUCT DATA TABLE --------------------------------
+
+{% docs lp_product_code %}
+The code specified in the Merchant Portal against the product.
+{% enddocs %}
+
+{% docs lp_product_description %}
+The description specified in the Merchant Portal during the product creation.
+{% enddocs %}
+
+{% docs lp_product_type %}
+The name of the product type.
+
+Possible values:
+* `CAPPING`
+* `DISCOUNT`
+* `PURCHASE`
 {% enddocs %}
