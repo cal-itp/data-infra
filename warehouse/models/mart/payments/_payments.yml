@@ -245,6 +245,12 @@ models:
         description: '{{ doc("lp_settlement_debit_amount") }}'
       - name: settlement_credit_amount
         description: '{{ doc("lp_settlement_credit_amount") }}'
+      - name: aggregation_is_settled
+        description: '{{ doc("lp_aggregation_is_settled") }}'
+      - name: debit_is_settled
+        description: '{{ doc("lp_debit_is_settled") }}'
+      - name: credit_is_settled
+        description: '{{ doc("lp_credit_is_settled") }}'
 
   - name: fct_payments_settlements
     description: Littlepay settlements (completed transactions.)
@@ -256,7 +262,7 @@ models:
       - *organization_source_record_id
       - name: end_of_month_date
         description: |
-          The last day of the month of the settlement_requested_date_time_utc.
+          The last day of the month of the record_updated_timestamp_utc.
           This column is primarily for use in BI tooling to support consistent dates across activity types.
       - *participant_id
       - name: aggregation_id
@@ -287,10 +293,20 @@ models:
         description: '{{ doc("lp_littlepay_reference_number") }}'
       - name: external_reference_number
         description: '{{ doc("lp_external_reference_number") }}'
-      - name: settlement_requested_date_time_utc
-        description: '{{ doc("lp_settlement_requested_date_time_utc") }}'
+      - name: record_updated_timestamp_utc
+        description: '{{ doc("lp_record_updated_timestamp_utc") }}'
       - name: acquirer
         description: '{{ doc("lp_acquirer") }}'
+      - name: acquirer_response_rrn
+        description: '{{ doc("lp_acquirer_response_rrn") }}'
+      - name: settlement_status
+        description: '{{ doc("lp_settlement_status") }}'
+      - name: request_created_timestamp_utc
+        description: '{{ doc("lp_request_created_timestamp_utc") }}'
+      - name: response_created_timestamp_utc
+        description: '{{ doc("lp_response_created_timestamp_utc") }}'
+      - name: refund_id
+        description: '{{ doc("lp_refund_id") }}'
 
   - name: fct_elavon__transactions
     description: Transactions processed by Elavon
