@@ -212,6 +212,8 @@ Time settlement response was created.
 
 {% docs lp_refund_id %}
 Populated if the settlement is a refund; can be used when linking to the refunds table.
+{% enddocs %}
+
 -------------------------------- MICROPAYMENTS TABLE --------------------------------
 
 {% docs lp_transaction_time %}
