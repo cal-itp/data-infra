@@ -6,13 +6,13 @@ models:
       Littlepay micropayments.
     columns:
       - name: micropayment_id
-        description: From payments.micropayments.micropayment_id
+        description: '{{ doc("lp_micropayment_id") }}'
         tests:
           - not_null
           - unique_proportion:
               at_least: 0.999
       - name: aggregation_id
-        description: Aggregation ID for this micropayment. Can be used to map to subsequent aggregation processing steps.
+        description: '{{ doc("lp_aggregation_id") }}'
         tests:
           - not_null
           - relationships:
@@ -29,9 +29,9 @@ models:
         name: participant_id
         description: '{{ doc("lp_participant_id") }}'
       - name: funding_source_vault_id
-        description: From payments.micropayments.funding_source_vault_id (by participant_id).
+        description: '{{ doc("lp_funding_source_vault_id") }}'
       - name: customer_id
-        description: From payments.micropayments.customer_id (by participant_id).
+        description: '{{ doc("lp_customer_id") }}'
       - name: principal_customer_id
         description: From payments.customer_funding_source.principal_customer_id (by participant_id).
       - name: bin
@@ -47,31 +47,31 @@ models:
       - name: form_factor
         description: From payments.customer_funding_source.form_factor
       - name: charge_amount
-        description: From payments.micropayments.charge_amount
+        description: '{{ doc("lp_charge_amount") }}'
       - name: refund_amount
         description: If there is a refund micropayment associated with the trip, the charge_amount on that refund
       - name: nominal_amount
-        description: From payments.micropayments.nominal_amount
+        description: '{{ doc("lp_nominal_amount") }}'
       - name: charge_type
         description: From payments.micropayments.charge_type
       - name: adjustment_id
-        description: From payments.micropayments.adjustment_id
+        description: '{{ doc("lp_adjustment_id") }}'
       - name: adjustment_type
-        description: From payments.micropayment_adjustments.type
+        description: '{{ doc("lp_adj_type") }}'
       - name: adjustment_time_period_type
-        description: From payments.micropayment_adjustments.time_period_type
+        description: '{{ doc("lp_adj_time_period_type") }}'
       - name: adjustment_description
-        description: From payments.micropayment_adjustments.description
+        description: '{{ doc("lp_adj_description") }}'
       - name: adjustment_amount
-        description: From payments.micropayment_adjustments.amount
+        description: '{{ doc("lp_adj_amount") }}'
       - name: product_id
-        description: From payments.micropayment_adjustments.product_id
+        description: '{{ doc("lp_product_id") }}'
       - name: product_code
-        description: From payments.product_data.product_code
+        description: '{{ doc("lp_product_code") }}'
       - name: product_description
-        description: From payments.product_data.product_description
+        description: '{{ doc("lp_product_description") }}'
       - name: product_type
-        description: From payments.product_data.product_type
+        description: '{{ doc("lp_product_type") }}'
       - name: route_id
         description: The route_id of the first tap transaction with a non-unknown route_id, else unknown ('Route Z')
       - name: route_long_name

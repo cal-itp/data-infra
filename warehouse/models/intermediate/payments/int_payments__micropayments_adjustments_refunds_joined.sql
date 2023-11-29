@@ -3,6 +3,13 @@ WITH debit_micropayments AS (
     WHERE type = 'DEBIT'
 ),
 
+-- micropayments that don't appear in the cleaned table are subject to issue #647
+-- they are pending payments that incorrectly had a different micropayment ID created from their associated completed payment
+valid_micropayment_ids AS (
+    SELECT DISTINCT micropayment_id
+    FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
+),
+
 adjustments AS (
     SELECT * FROM {{ ref('stg_littlepay__micropayment_adjustments') }}
     -- we only want adjustments that were actually applied
@@ -54,11 +61,14 @@ int_payments__micropayments_adjustments_refunds_joined AS (
         -- there is a bug where some refunds' micropayment IDs don't map back correctly to their associated micropayment
         -- in those cases, if there's only one micropayment in the aggregation, we can impute that the aggregation refund applies just to the one micropayment
         CASE
-            WHEN micropayments_per_aggregation.aggregation_micropayment_ct = 1 AND individual_refunds.proposed_amount IS NULL THEN aggregation_refunds.total_refund_activity_amount_dollars
+            WHEN micropayments_per_aggregation.aggregation_micropayment_ct = 1
+                AND individual_refunds.proposed_amount IS NULL
+                    THEN aggregation_refunds.total_refund_activity_amount_dollars
             ELSE individual_refunds.proposed_amount
         END AS micropayment_refund_amount,
         aggregation_refunds.total_refund_activity_amount_dollars AS aggregation_refund_amount
     FROM debit_micropayments
+    INNER JOIN valid_micropayment_ids USING (micropayment_id)
     LEFT JOIN adjustments USING (participant_id, micropayment_id)
     LEFT JOIN products USING (participant_id, product_id)
     LEFT JOIN individual_refunds USING (participant_id, micropayment_id, aggregation_id)

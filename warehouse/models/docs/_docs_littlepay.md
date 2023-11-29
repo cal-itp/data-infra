@@ -20,11 +20,13 @@ Littlepay identifier for the participant (transit agency) associated with this e
 Identifies the customer associated with this payment activity or entity.
 A customer ID does not necessarily uniquely identify an individual person
 or payment card.
+These IDs can appear across `participant_id`s, so there may be cases where you need to use both `participant_id` and `customer_id` to join to the correct instance.
 {% enddocs %}
 
 {% docs lp_funding_source_vault_id %}
 Identifies the funding source (for example, card) that a micropayment will be charged to. This is always the card that was tapped.
-A registered customer can have multiple funding sources linked to it.
+A registered customer can have multiple funding sources linked to them.
+These IDs can appear across `participant_id`s, so there may be cases where you need to use both `participant_id` and `funding_source_vault_id` to join to the correct instance.
 {% enddocs %}
 
 {% docs lp_adjustment_id %}
