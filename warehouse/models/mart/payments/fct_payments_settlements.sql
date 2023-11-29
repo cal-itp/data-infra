@@ -46,7 +46,6 @@ join_orgs AS (
         AND CAST(impute_settlement_type.record_updated_timestamp_utc AS TIMESTAMP) BETWEEN orgs._valid_from AND orgs._valid_to
 ),
 
--- TODO: add "new schema" columns that are present only for ATN as of 10/6/23
 fct_payments_settlements AS (
     SELECT
         organization_name,

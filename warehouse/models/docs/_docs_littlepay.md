@@ -82,6 +82,24 @@ Numbers in this column are negative because they represent amounts credited (ref
 i.e., these values represent costs for the participant (agency).
 {% enddocs %}
 
+{% docs lp_aggregation_is_settled %}
+Boolean indicating whether all settlements in this aggregation have `settlement_status = SETTLED`.
+`settlement_status` is only available for all agencies starting on November 28, 2023 so
+this field does not account for activity before that date and aggregations that only contain activity before that date have nulls in this field.
+{% enddocs %}
+
+{% docs lp_debit_is_settled %}
+Same as `aggregation_is_settled` but only includes the aggregation's debit (fare payment) settlements.
+{% enddocs %}
+
+{% docs lp_credit_is_settled %}
+Same as `aggregation_is_settled` but only includes the aggregation's credit (refund) settlements.
+If there is no credit activity for the aggregation, this field is null.
+(So, a null in this field can mean either that there was no credit activity at all or that all credit
+activity was prior to November 28, 2023.)
+{% enddocs %}
+
+
 ---------------- SETTLEMENTS TABLE ----------------
 
 {% docs lp_settlement_id %}
