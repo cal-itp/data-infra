@@ -11,7 +11,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('product_id') }} AS product_id,
         {{ trim_make_empty_string_null('type') }} AS type,
         {{ trim_make_empty_string_null('description') }} AS description,
-        {{ trim_make_empty_string_null('amount') }} AS amount,
+        CAST({{ trim_make_empty_string_null('amount') }} AS NUMERIC) AS amount,
         {{ trim_make_empty_string_null('time_period_type') }} AS time_period_type,
         {{ safe_cast('applied', type_boolean()) }} AS applied,
         {{ trim_make_empty_string_null('zone_ids_used') }} AS zone_ids_used,

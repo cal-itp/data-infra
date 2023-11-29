@@ -24,7 +24,7 @@ models:
         name: participant_id
         description: '{{ doc("lp_participant_id") }}'
       - name: micropayment_id
-        description: '{{ doc("micropayment_adjustments_micropayment_id") }}'
+        description: '{{ doc("lp_micropayment_id") }}'
       - name: littlepay_transaction_id_1
         description: Unique tap ID generated for the "on" transaction by Littlepay upon receipt of a tap to the Device API.
       - name: littlepay_transaction_id_2
@@ -388,6 +388,12 @@ models:
       - *_content_hash
 
   - name: stg_littlepay__micropayment_adjustments
+    description: |
+      Only adjustments with `applied = True` were actually applied;
+      there may be adjustments present for which a micropayment qualified but
+      which were not actually applied (for example, if a micropayment
+      is eligible for multiple products, adjustments will be present for
+      each applicable product but only one will be applied.)
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -404,34 +410,25 @@ models:
             - zone_ids_used
     columns:
       - name: adjustment_id
-        description: '{{ doc("micropayment_adjustments_adjustment_id") }}'
+        description: '{{ doc("lp_adjustment_id") }}'
       - name: micropayment_id
-        description: '{{ doc("micropayment_adjustments_micropayment_id") }}'
+        description: '{{ doc("lp_micropayment_id") }}'
         tests:
           - unique:
               where: applied
       - *participant_id
       - name: customer_id
-        description: Identifies the customer that the adjustment belongs to.
+        description: '{{ doc("lp_customer_id") }}'
       - name: product_id
-        description: Identifies the product that was used to adjust the micropayment.
+        description: '{{ doc("lp_product_id") }}'
       - name: type
-        description: |
-          The type of product / rule that created the adjustment. Additional values may be added over time.
-
-          Possible values:
-          * `MULTI_DAY_CAP`
-          * `DAILY_CAP`
-          * `WEEKLY_CAP`
+        description: '{{ doc("lp_adj_type") }}'
       - name: description
-        description: General description of the reason the adjustment was created.
+        description: '{{ doc("lp_adj_description") }}'
       - name: amount
-        description: The amount deducted from the `nominal_amount` to arrive at the `charge_amount` for the micropayment being adjusted.
+        description: '{{ doc("lp_adj_amount") }}'
       - name: time_period_type
-        description: |
-          Indicates whether the travel was determined to have occurred during a peak or off-peak period for the purposes of capping.
-
-          Possible values are `PEAK` and `OFFPEAK`.
+        description: '{{ doc("lp_adj_time_period_type") }}'
       - name: applied
         description: If `TRUE`, then the adjustment to the micropayment has been applied.
       - name: incentive_product_id
@@ -474,49 +471,31 @@ models:
     description: This model makes the assumption that, in the case of duplicated micropayment_id values, the one with the latest transaction_time in the latest export file takes precedence.
     columns:
       - name: micropayment_id
-        description: '{{ doc("micropayments_micropayment_id") }}'
+        description: '{{ doc("lp_micropayment_id") }}'
         tests:
           - not_null
           - unique
       - name: aggregation_id
-        description: Identifies the aggregation that the micropayment belongs to.
+        description: '{{ doc("lp_aggregation_id") }}'
       - *participant_id
       - name: customer_id
-        description: Identifies the customer that the micropayment belongs to.
+        description: '{{ doc("lp_customer_id") }}'
       - name: funding_source_vault_id
-        description: |
-          Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped.
-
-          A registered customer can have multiple funding sources linked to it. This field can be used to join to the `customer_funding_source` feed.
+        description: '{{ doc("lp_funding_source_vault_id") }}'
       - name: transaction_time
-        description: |
-          The date and time when the micropayment was created.
-
-          For variable fare (tap on/tap off), the micropayment will not be created until the tap off occurs.
-
-          The date reflects the processing time by Littlepay, rather than the event time; that is, when the related taps occurred.
+        description: '{{ doc("lp_transaction_time") }}'
       - name: payment_liability
-        description: |
-          Indicates who would be liable to absorb the cost if the micropayment was declined by the issuer when an authorisation is attempted.
-
-          Possible values are `ISSUER` or `OPERATOR`.
+        description: '{{ doc("lp_payment_liability") }}'
       - name: charge_amount
-        description: The amount that will be credited to or debited from the funding source. This may be lower than the nominal amount if adjustments have been applied. nominal_amount Decimal The amount that would be charged if no adjustments were to be applied.
+        description: '{{ doc("lp_charge_amount") }}'
+      - name: nominal_amount
+        description: '{{ doc("lp_nominal_amount") }}'
       - name: currency_code
-        description: ISO 4217 numeric code representing the currency that the `charge_amount` and `nominal_amount` are denominated in.
+        description: '{{ doc("lp_currency_code") }}'
       - name: type
-        description: |
-          Indicates the type of fare that the micropayment charge represents.
-
-          Transaction type. Possible values are `CREDIT` or `DEBIT`. The value Will be `DEBIT` if `charge_amount >= 0.00`
+        description: '{{ doc("lp_mp_type") }}'
       - name: charge_type
-        description: |
-          Possible values:
-          * `RETAIL_FARE`
-          * `FLAT_FARE`
-          * `COMPLETE_VARIABLE_FARE`
-          * `INCOMPLETE_VARIABLE_FARE`
-          * `REFUND`
+        description: '{{ doc("lp_charge_type") }}'
       - *lp_export_date
       - *lp_export_ts
       - *lp_line_number
@@ -528,7 +507,7 @@ models:
     columns:
       - *participant_id
       - name: product_id
-        description: '{{ doc("product_data_product_id") }}'
+        description: '{{ doc("lp_product_id") }}'
         tests:
           - not_null
           - unique
@@ -540,17 +519,11 @@ models:
 
           The `original_version_id` may differs from the `previous_version_id` if the product has been updated more than once.
       - name: product_code
-        description: The code specified in the Merchant Portal against the product.
+        description: '{{ doc("lp_product_code") }}'
       - name: product_description
-        description: The description specified in the Merchant Portal during the product creation.
+        description: '{{ doc("lp_product_description") }}'
       - name: product_type
-        description: |
-          The name of the product type.
-
-          Possible values:
-          * `CAPPING`
-          * `DISCOUNT`
-          * `PURCHASE`
+        description: '{{ doc("lp_product_type") }}'
       - name: activation_type
         description: The type of customers the product will be actioned for.
       - name: product_status

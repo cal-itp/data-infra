@@ -138,12 +138,14 @@ models:
 
           A single aggregation can have multiple refunds.
       - name: micropayment_id
-        description: Uniquely identifies the micropayment.
+        description: |
+          Uniquely identifies the micropayment being refunded.
+          For some agencies, this mapping fails due to upstream data issues and `aggregation_id` must be used as a fallback.
       - *participant_id
       - name: customer_id
         description: Identifies the customer that the micropayment belongs to.
       - name: refund_amount
-        description: The actual amount refunded to the customer.
+        description: The amount of the transaction remaining after the refund has been applied (transaction_amount - proposed_amount.)
       - name: transaction_date
         description: Settlement transaction date (if micropayment was settled before refund)
       - name: settlement_id
@@ -159,7 +161,7 @@ models:
       - name: transaction_amount
         description: The amount of the original fare.
       - name: proposed_amount
-        description: The amount equalling `transaction_amount - refund_amount`.
+        description: The amount to be refunded to the customer.
       - name: status
         description: |
           The status of the refund.
@@ -236,6 +238,7 @@ models:
       This model provides a summary of `refund_amount` grouped by `aggregation_id` and `retrieval_reference_number`,
       as well as sums by `approval_status` (APPROVED, REFUSED, AWAITING, NULL)
     columns:
+      - *participant_id
       - name: aggregation_id
         description: |
           The aggregation that contains the refund.
@@ -256,3 +259,54 @@ models:
         description: The sum of refund_amount where approval_status is AWAITING.
       - name: null_approval_status_amount
         description: The sum of refund_amount where approval_status is NULL.
+
+  - name: int_payments__micropayments_adjustments_refunds_joined
+    description: |
+      Summarizing micropayment information across the source micropayment,
+      any applied adjustments (ex. fare capping), and any associated refunds.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "micropayment_refund_amount <= charge_amount"
+    columns:
+      - *participant_id
+      - name: micropayment_id
+        description: '{{ doc("lp_micropayment_id") }}'
+        tests:
+          - not_null
+          - unique
+      - name: aggregation_id
+        description: '{{ doc("lp_aggregation_id") }}'
+      - name: funding_source_vault_id
+        description: '{{ doc("lp_funding_source_vault_id") }}'
+      - name: customer_id
+        description: '{{ doc("lp_customer_id") }}'
+      - name: charge_amount
+        description: '{{ doc("lp_charge_amount") }}'
+      - name: nominal_amount
+        description: '{{ doc("lp_nominal_amount") }}'
+      - name: charge_type
+        description: '{{ doc("lp_charge_type") }}'
+      - name: transaction_time
+        description: '{{ doc("lp_transaction_time") }}'
+      - name: adjustment_id
+        description: '{{ doc("lp_adjustment_id") }}'
+      - name: adjustment_type
+        description: '{{ doc("lp_adj_type") }}'
+      - name: adjustment_time_period_type
+        description: '{{ doc("lp_adj_time_period_type") }}'
+      - name: adjustment_description
+        description: '{{ doc("lp_adj_description") }}'
+      - name: adjustment_amount
+        description: '{{ doc("lp_adj_amount") }}'
+      - name: product_id
+        description: '{{ doc("lp_product_id") }}'
+      - name: product_code
+        description: '{{ doc("lp_product_code") }}'
+      - name: product_description
+        description: '{{ doc("lp_product_description") }}'
+      - name: product_type
+        description: '{{ doc("lp_product_type") }}'
+      - name: micropayment_refund_amount
+        description: '{{ doc("lp_micropayment_refund_amount") }}'
+      - name: aggregation_refund_amount
+        description: '{{ doc("lp_aggregation_refund_amount") }}'

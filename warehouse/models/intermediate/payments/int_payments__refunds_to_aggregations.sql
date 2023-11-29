@@ -7,26 +7,29 @@ WITH refunds AS (
 
 summarize_by_type AS (
     SELECT
+        participant_id,
         aggregation_id,
         retrieval_reference_number,
         approval_status,
         SUM(proposed_amount) AS proposed_refund_amount,
     FROM refunds
-    GROUP BY 1, 2, 3
+    GROUP BY 1, 2, 3, 4
 ),
 
 -- group again to get overall summary across types
 summarize_overall AS (
     SELECT
+        participant_id,
         aggregation_id,
         retrieval_reference_number,
         SUM(proposed_refund_amount) AS proposed_refund_amount,
     FROM summarize_by_type
-    GROUP BY 1, 2
+    GROUP BY 1, 2, 3
 ),
 
 int_payments__refunds_to_aggregations AS (
     SELECT
+        summary.participant_id,
         summary.aggregation_id,
         summary.retrieval_reference_number,
         --should this be renamed?

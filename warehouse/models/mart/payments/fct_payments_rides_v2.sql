@@ -24,19 +24,14 @@ payments_entity_mapping AS (
     SELECT * FROM {{ ref('payments_entity_mapping') }}
 ),
 
-stg_littlepay__micropayments AS (
+micropayments AS (
     SELECT *
-    FROM {{ ref('stg_littlepay__micropayments') }}
+    FROM {{ ref('int_payments__micropayments_adjustments_refunds_joined') }}
 ),
 
 int_littlepay__cleaned_micropayment_device_transactions AS (
     SELECT *
     FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
-),
-
-stg_littlepay__micropayment_adjustments AS (
-    SELECT *
-    FROM {{ ref('stg_littlepay__micropayment_adjustments') }}
 ),
 
 stg_littlepay__device_transactions AS (
@@ -83,53 +78,6 @@ participants_to_routes_and_agency AS (
     LEFT JOIN dim_agency AS a
         ON r.agency_id = a.agency_id
             AND r.feed_key = a.feed_key
-),
-
--- micropayments that don't appear in the cleaned table are subject to issue #647
--- they are pending payments that incorrectly had a different micropayment ID created from their associated completed payment
-valid_micropayments AS (
-    SELECT DISTINCT micropayment_id
-    FROM int_littlepay__cleaned_micropayment_device_transactions
-),
-
-debited_micropayments AS (
-    SELECT *
-    FROM stg_littlepay__micropayments
-    INNER JOIN valid_micropayments USING(micropayment_id)
-    WHERE type = 'DEBIT'
-),
-
-refunded_micropayments AS (
-    SELECT
-
-        m_debit.micropayment_id,
-        m_credit.charge_amount AS refund_amount
-
-    FROM debited_micropayments AS m_debit
-    INNER JOIN int_littlepay__cleaned_micropayment_device_transactions AS mds
-        ON m_debit.micropayment_id = mds.micropayment_id
-    INNER JOIN int_littlepay__cleaned_micropayment_device_transactions AS dt_credit
-        ON mds.littlepay_transaction_id = dt_credit.littlepay_transaction_id
-    INNER JOIN stg_littlepay__micropayments AS m_credit
-        ON dt_credit.micropayment_id = m_credit.micropayment_id
-    WHERE m_credit.type = 'CREDIT'
-        AND m_credit.charge_type = 'refund'
-),
-
-applied_adjustments AS (
-    SELECT
-
-        participant_id,
-        micropayment_id,
-        product_id,
-        adjustment_id,
-        type,
-        time_period_type,
-        description,
-        amount
-
-    FROM stg_littlepay__micropayment_adjustments
-    WHERE applied IS True
 ),
 
 initial_transactions AS (
@@ -230,14 +178,15 @@ join_table AS (
         v.form_factor,
 
         m.charge_amount,
-        mr.refund_amount,
+        m.micropayment_refund_amount AS refund_amount,
+        m.aggregation_refund_amount,
         m.nominal_amount,
         m.charge_type,
-        a.adjustment_id,
-        a.type AS adjustment_type,
-        a.time_period_type AS adjustment_time_period_type,
-        a.description AS adjustment_description,
-        CAST(a.amount AS NUMERIC) AS adjustment_amount,
+        m.adjustment_id,
+        m.adjustment_type,
+        m.adjustment_time_period_type,
+        m.adjustment_description,
+        m.adjustment_amount,
         p.product_id,
         p.product_code,
         p.product_description,
@@ -283,9 +232,7 @@ join_table AS (
         t2.geography AS off_geography,
         COALESCE(t1.route_id, t2.route_id) AS route_id
 
-    FROM debited_micropayments AS m
-    LEFT JOIN refunded_micropayments AS mr
-        ON m.micropayment_id = mr.micropayment_id
+    FROM micropayments AS m
     LEFT JOIN int_littlepay__customers AS c
         ON m.customer_id = c.customer_id
         AND m.participant_id = c.participant_id
@@ -300,12 +247,9 @@ join_table AS (
     LEFT JOIN second_transactions AS t2
         ON m.participant_id = t2.participant_id
             AND m.micropayment_id = t2.micropayment_id
-    LEFT JOIN applied_adjustments AS a
-        ON m.participant_id = a.participant_id
-            AND m.micropayment_id = a.micropayment_id
     LEFT JOIN stg_littlepay__product_data AS p
         ON m.participant_id = p.participant_id
-            AND a.product_id = p.product_id
+            AND m.product_id = p.product_id
     LEFT JOIN participants_to_routes_and_agency AS r
         ON r.littlepay_participant_id = m.participant_id
             -- here, can just use t1 because transaction date will be populated
