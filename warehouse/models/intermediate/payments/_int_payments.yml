@@ -310,3 +310,10 @@ models:
         description: '{{ doc("lp_micropayment_refund_amount") }}'
       - name: aggregation_refund_amount
         description: '{{ doc("lp_aggregation_refund_amount") }}'
+  - name: int_payments__matched_device_transactions
+    columns:
+      - name: littlepay_transaction_id
+        description: '{{ doc("device_transactions_littlepay_transaction_id") }}'
+        tests:
+          - not_null
+          - unique

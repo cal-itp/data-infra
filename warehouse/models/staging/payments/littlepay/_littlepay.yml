@@ -140,17 +140,6 @@ models:
           - not_null
       - name: earliest_tap
 
-  - name: int_littlepay__device_transaction_types
-    columns:
-      - name: littlepay_transaction_id
-        description: '{{ doc("device_transactions_littlepay_transaction_id") }}'
-        tests:
-          - not_null
-          - unique_proportion:
-              at_least: 0.999
-      - name: transaction_type
-      - name: pending
-
   - name: stg_littlepay__authorisations
     columns:
       - *participant_id

@@ -29,19 +29,9 @@ micropayments AS (
     FROM {{ ref('int_payments__micropayments_adjustments_refunds_joined') }}
 ),
 
-int_littlepay__cleaned_micropayment_device_transactions AS (
+int_payments__matched_device_transactions AS (
     SELECT *
-    FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
-),
-
-stg_littlepay__device_transactions AS (
-    SELECT *
-    FROM {{ ref('stg_littlepay__device_transactions') }}
-),
-
-int_littlepay__device_transaction_types AS (
-    SELECT *
-    FROM {{ ref('int_littlepay__device_transaction_types') }}
+    FROM {{ ref('int_payments__matched_device_transactions') }}
 ),
 
 int_littlepay__customers AS (
@@ -78,84 +68,6 @@ participants_to_routes_and_agency AS (
     LEFT JOIN dim_agency AS a
         ON r.agency_id = a.agency_id
             AND r.feed_key = a.feed_key
-),
-
-initial_transactions AS (
-    SELECT
-        mdt.*,
-
-        dt.participant_id,
-        dt.customer_id,
-        dt.device_transaction_id,
-        dt.device_id,
-        dt.device_id_issuer,
-        dt.type,
-        dt.transaction_outcome,
-        dt.transaction_deny_reason,
-        dt.transaction_date_time_utc,
-        dt.location_scheme,
-        dt.location_name,
-        dt.zone_id,
-        dt.mode,
-        dt.direction,
-        dt.vehicle_id,
-        dt.granted_zone_ids,
-        dt.onward_zone_ids,
-        dt.latitude,
-        dt.longitude,
-        dt.transaction_date_time_pacific,
-        dt.route_id,
-        dt.location_id,
-        dt.geography,
-
-        dtt.transaction_type,
-        dtt.pending
-
-    FROM int_littlepay__cleaned_micropayment_device_transactions AS mdt
-    INNER JOIN stg_littlepay__device_transactions AS dt
-        ON mdt.littlepay_transaction_id = dt.littlepay_transaction_id
-    INNER JOIN int_littlepay__device_transaction_types AS dtt
-        ON mdt.littlepay_transaction_id = dtt.littlepay_transaction_id
-    WHERE dtt.transaction_type IN ('single', 'on')
-),
-
-second_transactions AS (
-    SELECT
-        mdt.*,
-
-        dt.participant_id,
-        dt.customer_id,
-        dt.device_transaction_id,
-        dt.device_id,
-        dt.device_id_issuer,
-        dt.type,
-        dt.transaction_outcome,
-        dt.transaction_deny_reason,
-        dt.transaction_date_time_utc,
-        dt.location_scheme,
-        dt.location_name,
-        dt.zone_id,
-        dt.mode,
-        dt.direction,
-        dt.vehicle_id,
-        dt.granted_zone_ids,
-        dt.onward_zone_ids,
-        dt.latitude,
-        dt.longitude,
-        dt.transaction_date_time_pacific,
-        dt.route_id,
-        dt.location_id,
-        dt.geography,
-
-        dtt.transaction_type,
-        dtt.pending
-
-    FROM int_littlepay__cleaned_micropayment_device_transactions AS mdt
-    INNER JOIN stg_littlepay__device_transactions AS dt
-        ON mdt.littlepay_transaction_id = dt.littlepay_transaction_id
-    INNER JOIN int_littlepay__device_transaction_types AS dtt
-        ON mdt.littlepay_transaction_id = dtt.littlepay_transaction_id
-    WHERE dtt.transaction_type = 'off'
 ),
 
 join_table AS (
@@ -197,40 +109,33 @@ join_table AS (
         r.route_short_name,
         r.agency_id,
         r.agency_name,
-        t1.direction,
-        t1.vehicle_id,
-        t1.littlepay_transaction_id,
-
---         Tap on or single transaction info
-        t1.device_id,
-        t1.transaction_type,
-        t1.transaction_outcome,
-        t1.transaction_date_time_utc,
-        t1.transaction_date_time_pacific,
-        t1.location_id,
-        t1.location_name,
-        t1.latitude,
-
-        -- should we remove latitute and longitude in favor
-        -- of on_latitude and on_longitude
-        t1.longitude,
-        t1.latitude AS on_latitude,
-        t1.longitude AS on_longitude,
-        t1.geography AS on_geography,
-        t2.littlepay_transaction_id AS off_littlepay_transaction_id,
-
-        -- Tap off transaction info
-        t2.device_id AS off_device_id,
-        t2.transaction_type AS off_transaction_type,
-        t2.transaction_outcome AS off_transaction_outcome,
-        t2.transaction_date_time_utc AS off_transaction_date_time_utc,
-        t2.transaction_date_time_pacific AS off_transaction_date_time_pacific,
-        t2.location_id AS off_location_id,
-        t2.location_name AS off_location_name,
-        t2.latitude AS off_latitude,
-        t2.longitude AS off_longitude,
-        t2.geography AS off_geography,
-        COALESCE(t1.route_id, t2.route_id) AS route_id
+        device_transactions.route_id,
+        device_transactions.direction,
+        device_transactions.vehicle_id,
+        device_transactions.littlepay_transaction_id,
+        device_transactions.device_id,
+        device_transactions.transaction_type,
+        device_transactions.transaction_outcome,
+        device_transactions.transaction_date_time_utc,
+        device_transactions.transaction_date_time_pacific,
+        device_transactions.location_id,
+        device_transactions.location_name,
+        -- TODO: these lat/long values are repeated (with and without on_ prefix)
+        device_transactions.latitude,
+        device_transactions.longitude,
+        device_transactions.on_latitude,
+        device_transactions.on_longitude,
+        device_transactions.on_geography,
+        device_transactions.off_device_id,
+        device_transactions.off_transaction_type,
+        device_transactions.off_transaction_outcome,
+        device_transactions.off_transaction_date_time_utc,
+        device_transactions.off_transaction_date_time_pacific,
+        device_transactions.off_location_id,
+        device_transactions.off_location_name,
+        device_transactions.off_latitude,
+        device_transactions.off_longitude,
+        device_transactions.off_geography,
 
     FROM micropayments AS m
     LEFT JOIN int_littlepay__customers AS c
@@ -241,12 +146,9 @@ join_table AS (
         AND m.participant_id = v.participant_id
         AND m.transaction_time >= v.calitp_valid_at
         AND m.transaction_time < v.calitp_invalid_at
-    LEFT JOIN initial_transactions AS t1
-        ON m.participant_id = t1.participant_id
-            AND m.micropayment_id = t1.micropayment_id
-    LEFT JOIN second_transactions AS t2
-        ON m.participant_id = t2.participant_id
-            AND m.micropayment_id = t2.micropayment_id
+    LEFT JOIN int_payments__matched_device_transactions AS device_transactions
+        ON m.participant_id = device_transactions.participant_id
+            AND m.micropayment_id = device_transactions.micropayment_id
     LEFT JOIN stg_littlepay__product_data AS p
         ON m.participant_id = p.participant_id
             AND m.product_id = p.product_id

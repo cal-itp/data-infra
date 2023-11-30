@@ -1,18 +1,12 @@
-WITH initial_transactions AS (
+WITH device_transactions AS (
     SELECT *
-    FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
-    INNER JOIN {{ ref('stg_littlepay__device_transactions') }} USING (littlepay_transaction_id)
-    INNER JOIN {{ ref('int_littlepay__device_transaction_types') }} USING (littlepay_transaction_id)
-    WHERE transaction_type = 'on'
+    FROM {{ ref('stg_littlepay__device_transactions') }}
 ),
 
-second_transactions AS (
+pairs AS (
     SELECT *
-    FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
-    INNER JOIN {{ ref('stg_littlepay__device_transactions') }} USING (littlepay_transaction_id)
-    INNER JOIN {{ ref('int_littlepay__device_transaction_types') }} USING (littlepay_transaction_id)
-    WHERE transaction_type = 'off'
-),
+    FROM {{ ref('int_payments__matched_device_transactions') }}
+)
 
 joined_transactions AS (
     SELECT
@@ -43,8 +37,9 @@ joined_transactions AS (
         (t1.direction != t2.direction AND (t1.direction IS NOT NULL OR t2.direction IS NOT NULL)) AS has_mismatched_direction,
         (t1.vehicle_id != t2.vehicle_id AND (t1.vehicle_id IS NOT NULL OR t2.vehicle_id IS NOT NULL)) AS has_mismatched_vehicle_id
 
-    FROM initial_transactions AS t1
-    INNER JOIN second_transactions AS t2 USING (participant_id, micropayment_id)
+    FROM pairs
+    LEFT JOIN device_transactions AS t1
+    INNER JOIN device_transactions AS t2 USING (participant_id, micropayment_id)
 ),
 
 int_device_transaction_pairs_common_fields AS (
