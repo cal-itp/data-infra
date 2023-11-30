@@ -1,7 +1,7 @@
 operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__AMPLITUDE_BENEFITS_EVENTS') }}"
 source_objects:
-  - "304109/*.json.gz" # 304109 is the project id from Amplitude
+  - "304110/*.json.gz" # 304110 is the project id from Amplitude for the Benefits Production app
 destination_project_dataset_table: "external_amplitude.benefits_events"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
