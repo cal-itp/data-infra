@@ -312,3 +312,121 @@ Possible values:
 * `DISCOUNT`
 * `PURCHASE`
 {% enddocs %}
+
+-------------------------------- PAIRED DEVICE TRANSACTIONS TABLE --------------------------------
+
+{% docs lp_paired_first_transaction_id %}
+The littlepay_transaction_id of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_transaction_route_id %}
+The route_id of the first tap transaction with a non-empty route_id. 'Route Z' indicates route is unknown.
+{% enddocs %}
+
+{% docs lp_paired_first_direction %}
+The direction of (the vehicle for) the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_vehicle_id %}
+The vehicle_id of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_device_id %}
+The device_id of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_transaction_type %}
+The transaction_type of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_transaction_outcome %}
+The transaction_outcome of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_transaction_date_time_utc %}
+The transaction_date_time_utc of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_transaction_date_time_pacific %}
+The transaction_date_time_pacific of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_location_id %}
+The location_id of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_location_name %}
+The location_name of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_latitude %}
+The latitude of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_longitude %}
+The longitude of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_geography %}
+First tap transaction's latitude and longitude combined into a GEOGRAPHY data type.
+{% enddocs %}
+
+{% docs lp_paired_second_transaction_id %}
+The littlepay_transaction_id of the second tap transaction (if there is one)
+{% enddocs %}
+
+{% docs lp_paired_second_device_id %}
+The device_id of the second tap transaction (if there is one)
+{% enddocs %}
+
+{% docs lp_paired_second_transaction_type %}
+The transaction_type of the second tap transaction (if there is one)
+{% enddocs %}
+
+{% docs lp_paired_second_transaction_outcome %}
+The transaction_outcome of the second tap transaction (if there is one)
+{% enddocs %}
+
+{% docs lp_paired_second_transaction_date_time_utc %}
+The transaction_date_time_utc of the second tap transaction (if there is one)
+{% enddocs %}
+
+{% docs lp_paired_second_transaction_date_time_pacific %}
+The transaction_date_time_pacific of the second tap transaction (if there is one)
+{% enddocs %}
+
+{% docs lp_paired_second_location_id %}
+The location_id of the second tap transaction (if there is one)
+{% enddocs %}
+
+{% docs lp_paired_second_location_name %}
+The location_name of the second tap transaction (if there is one)
+{% enddocs %}
+
+{% docs lp_paired_second_latitude %}
+The latitude of the second tap transaction (if there is one)
+{% enddocs %}
+
+{% docs lp_paired_second_longitude %}
+The longitude of the second tap transaction (if there is one)
+{% enddocs %}
+
+{% docs lp_paired_second_geography %}
+Second tap transaction's latitude and longitude combined into a GEOGRAPHY data type (if second tap present and latitude and longitude are populated).
+{% enddocs %}
+
+{% docs lp_paired_duration %}
+For variable fare journeys with two taps, the duration in minutes between the first (on) and second (off) taps.
+{% enddocs %}
+
+{% docs lp_paired_distance %}
+For variable fare journeys with two taps where geography information is populated, the distance in meters between the first (on) and second (off) taps. This is a "shortest distance" calculation modeled on a perfect sphere using BigQuery's built-in [ST_DISTANCE function](https://cloud.google.com/bigquery/docs/reference/standard-sql/geography_functions#st_distance) and does not reflect the path that the vehicle actually followed.
+{% enddocs %}
+
+{% docs lp_paired_first_transaction_date %}
+The date (Pacific Time) of the first tap transaction
+{% enddocs %}
+
+{% docs lp_paired_first_day_of_week %}
+Pacific Time day of week value of the first tap transaction represented as an integer in the range [1,7] with `Sunday = 1`.
+{% enddocs %}
