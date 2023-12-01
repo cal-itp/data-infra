@@ -74,4 +74,3 @@ select * FROM all_2022
 UNION ALL
 
 select * from data_2023
-
