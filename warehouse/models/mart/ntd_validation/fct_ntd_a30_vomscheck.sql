@@ -19,5 +19,3 @@ WITH rr20f_180 as (
 )
 
 SELECT * from rr20f_180
-
-
