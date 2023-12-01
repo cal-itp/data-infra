@@ -40,6 +40,8 @@ match_ids AS (
 
 int_payments__matched_device_transactions AS (
     SELECT
+        first_tap.participant_id,
+        pairs.micropayment_id,
         COALESCE(first_tap.route_id, second_tap.route_id) AS route_id,
         first_tap.direction,
         first_tap.vehicle_id,
@@ -67,6 +69,14 @@ int_payments__matched_device_transactions AS (
         second_tap.latitude AS off_latitude,
         second_tap.longitude AS off_longitude,
         second_tap.geography AS off_geography,
+        DATETIME_DIFF(
+            second_tap.transaction_date_time_pacific,
+            first_tap.transaction_date_time_pacific,
+            MINUTE
+        ) AS duration,
+        ST_DISTANCE(first_tap.geography, second_tap.geography) AS distance_meters,
+        SAFE_CAST(first_tap.transaction_date_time_pacific AS DATE) AS transaction_date_pacific,
+        EXTRACT(DAYOFWEEK FROM first_tap.transaction_date_time_pacific) AS day_of_week
     FROM match_ids AS pairs
     LEFT JOIN stg_littlepay__device_transactions AS first_tap
         ON pairs.littlepay_transaction_id = first_tap.littlepay_transaction_id

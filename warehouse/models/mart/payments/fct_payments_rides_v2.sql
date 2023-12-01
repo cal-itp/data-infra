@@ -51,64 +51,64 @@ stg_littlepay__product_data AS (
 
 participants_to_routes_and_agency AS (
     SELECT
-        pf.littlepay_participant_id,
-        f.date,
-        r.route_id,
-        r.route_short_name,
-        r.route_long_name,
-        a.agency_id,
-        a.agency_name,
-    FROM payments_entity_mapping AS pf
-    LEFT JOIN dim_gtfs_datasets d
-        ON pf.gtfs_dataset_source_record_id = d.source_record_id
-    LEFT JOIN fct_daily_schedule_feeds AS f
-        ON d.key = f.gtfs_dataset_key
-    LEFT JOIN dim_routes AS r
-        ON f.feed_key = r.feed_key
-    LEFT JOIN dim_agency AS a
-        ON r.agency_id = a.agency_id
-            AND r.feed_key = a.feed_key
+        map.littlepay_participant_id,
+        feeds.date,
+        routes.route_id,
+        routes.route_short_name,
+        routes.route_long_name,
+        agency.agency_id,
+        agency.agency_name,
+    FROM payments_entity_mapping AS map
+    LEFT JOIN dim_gtfs_datasets AS gtfs
+        ON map.gtfs_dataset_source_record_id = gtfs.source_record_id
+    LEFT JOIN fct_daily_schedule_feeds AS feeds
+        ON gtfs.key = feeds.gtfs_dataset_key
+    LEFT JOIN dim_routes AS routes
+        ON feeds.feed_key = routes.feed_key
+    LEFT JOIN dim_agency AS agency
+        ON routes.agency_id = agency.agency_id
+            AND routes.feed_key = agency.feed_key
 ),
 
-join_table AS (
+fct_payments_rides_v2 AS (
     SELECT
 
-        m.participant_id,
-        m.micropayment_id,
-        m.aggregation_id,
+        micropayments.participant_id,
+        micropayments.micropayment_id,
+        micropayments.aggregation_id,
 
         -- Customer and funding source information
-        m.funding_source_vault_id,
-        m.customer_id,
-        c.principal_customer_id,
-        c.earliest_tap,
-        v.bin,
-        v.masked_pan,
-        v.card_scheme,
-        v.issuer,
-        v.issuer_country,
-        v.form_factor,
+        micropayments.funding_source_vault_id,
+        micropayments.customer_id,
+        customers.principal_customer_id,
+        customers.earliest_tap,
+        vaults.bin,
+        vaults.masked_pan,
+        vaults.card_scheme,
+        vaults.issuer,
+        vaults.issuer_country,
+        COALESCE(vaults.form_factor, "Unidentified") AS form_factor,
 
-        m.charge_amount,
-        m.micropayment_refund_amount AS refund_amount,
-        m.aggregation_refund_amount,
-        m.nominal_amount,
-        m.charge_type,
-        m.adjustment_id,
-        m.adjustment_type,
-        m.adjustment_time_period_type,
-        m.adjustment_description,
-        m.adjustment_amount,
-        p.product_id,
-        p.product_code,
-        p.product_description,
-        p.product_type,
+        micropayments.charge_amount,
+        micropayments.micropayment_refund_amount AS refund_amount,
+        micropayments.aggregation_refund_amount,
+        micropayments.nominal_amount,
+        micropayments.charge_type,
+        micropayments.adjustment_id,
+        micropayments.adjustment_type,
+        micropayments.adjustment_time_period_type,
+        micropayments.adjustment_description,
+        micropayments.adjustment_amount,
+        products.product_id,
+        products.product_code,
+        products.product_description,
+        products.product_type,
 
---         Common transaction info
-        r.route_long_name,
-        r.route_short_name,
-        r.agency_id,
-        r.agency_name,
+        -- Common transaction info
+        routes.route_long_name,
+        routes.route_short_name,
+        routes.agency_id,
+        routes.agency_name,
         device_transactions.route_id,
         device_transactions.direction,
         device_transactions.vehicle_id,
@@ -136,50 +136,33 @@ join_table AS (
         device_transactions.off_latitude,
         device_transactions.off_longitude,
         device_transactions.off_geography,
+        device_transactions.duration,
+        device_transactions.distance_meters,
+        device_transactions.transaction_date_pacific,
+        device_transactions.day_of_week
 
-    FROM micropayments AS m
-    LEFT JOIN int_littlepay__customers AS c
-        ON m.customer_id = c.customer_id
-        AND m.participant_id = c.participant_id
-    LEFT JOIN int_littlepay__customer_funding_source_vaults AS v
-        ON m.funding_source_vault_id = v.funding_source_vault_id
-        AND m.participant_id = v.participant_id
-        AND m.transaction_time >= v.calitp_valid_at
-        AND m.transaction_time < v.calitp_invalid_at
+    FROM micropayments
+    LEFT JOIN int_littlepay__customers AS customers
+        ON micropayments.customer_id = customers.customer_id
+        AND micropayments.participant_id = customers.participant_id
+    LEFT JOIN int_littlepay__customer_funding_source_vaults AS vaults
+        ON micropayments.funding_source_vault_id = vaults.funding_source_vault_id
+        AND micropayments.participant_id = vaults.participant_id
+        AND micropayments.transaction_time >= vaults.calitp_valid_at
+        AND micropayments.transaction_time < vaults.calitp_invalid_at
     LEFT JOIN int_payments__matched_device_transactions AS device_transactions
-        ON m.participant_id = device_transactions.participant_id
-            AND m.micropayment_id = device_transactions.micropayment_id
-    LEFT JOIN stg_littlepay__product_data AS p
-        ON m.participant_id = p.participant_id
-            AND m.product_id = p.product_id
-    LEFT JOIN participants_to_routes_and_agency AS r
-        ON r.littlepay_participant_id = m.participant_id
+        ON micropayments.participant_id = device_transactions.participant_id
+            AND micropayments.micropayment_id = device_transactions.micropayment_id
+    LEFT JOIN stg_littlepay__product_data AS products
+        ON micropayments.participant_id = products.participant_id
+            AND micropayments.product_id = products.product_id
+    LEFT JOIN participants_to_routes_and_agency AS routes
+        ON routes.littlepay_participant_id = micropayments.participant_id
             -- here, can just use t1 because transaction date will be populated
             -- (don't have to handle unkowns the way we do with route_id)
-            AND EXTRACT(DATE FROM TIMESTAMP(t1.transaction_date_time_utc)) = r.date
-            AND r.route_id = COALESCE(t1.route_id, t2.route_id)
+            AND EXTRACT(DATE FROM TIMESTAMP(device_transactions.transaction_date_time_utc)) = routes.date
+            AND routes.route_id = device_transactions.route_id
 
-),
-
-fct_payments_rides_v2 AS (
-    SELECT
-
-        * EXCEPT(form_factor),
-        CASE
-            WHEN form_factor IS NULL THEN 'Unidentified'
-            WHEN form_factor = '' THEN 'Unidentified'
-            ELSE form_factor
-            END AS form_factor,
-        DATETIME_DIFF(
-            off_transaction_date_time_pacific,
-            transaction_date_time_pacific,
-            MINUTE
-        ) AS duration,
-        ST_DISTANCE(on_geography, off_geography) AS distance_meters,
-        SAFE_CAST(transaction_date_time_pacific AS DATE) AS transaction_date_pacific,
-        EXTRACT(DAYOFWEEK FROM transaction_date_time_pacific) AS day_of_week
-
-    FROM join_table
 )
 
 SELECT * FROM fct_payments_rides_v2
