@@ -2,3 +2,19 @@ version: 2
 
 models:
   - name: fct_ntd_rr20_service_checks
+    description: |
+      Runs validation checks on the RR-20 service data. Source data is int_ntd_rr20_service_ratios.
+      This model is still in python but should be converted to SQL as time allows.
+  - name: fct_ntd_a30_vomscheck
+    description: |
+      Runs various checks on VOMS data submitted to NTD, that are also in the file voms_inventory_check.py.
+      Since we don't have the Revenue Inventory table from Black Cat yet, we cannot do all of the checks.
+      TO DO: add when vehicle inventory becomes available.
+  - name: fct_ntd_rr20_equal_totals_check
+    description: |
+      Runs various validation checks that compare total funding amounts reported in different places.
+      For NTD validation error ID #s rr20f_0010a, rr20f_001c
+  - name: fct_ntd_rr20_funds_checks
+    description: |
+      Runs various validation checks on specific RR-20 funding source data.
+      For NTD validation error ID #s rr20f_070, rr20f_066, rr20f_065, rr20f_013, rr20f_068, rr20f_024
