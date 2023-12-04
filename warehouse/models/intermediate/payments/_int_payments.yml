@@ -386,3 +386,30 @@ models:
         description: '{{ doc("lp_paired_first_transaction_date") }}'
       - name: day_of_week
         description: '{{ doc("lp_paired_first_day_of_week") }}'
+
+  - name: int_payments__cleaned_micropayment_device_transactions
+    description: |
+      This model drops invalid `littlepay_transaction_id` values associated with
+      erroneous micropayment records.
+      It also annotates micropayment device transactions with the type and charge type
+      of the associated micropayment to assist in later modeling.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - micropayment_id
+            - littlepay_transaction_id
+    columns:
+      - name: micropayment_id
+        description: '{{ doc("lp_micropayment_id") }}'
+      - *participant_id
+      - name: littlepay_transaction_id
+        description: '{{ doc("lp_littlepay_transaction_id") }}'
+        tests:
+          - not_null
+          - unique:
+              config:
+                where: micropayment_type != "CREDIT"
+      - name: micropayment_charge_type
+        description: '{{ doc("lp_charge_type") }}'
+      - name: micropayment_type
+        description: '{{ doc("lp_mp_type") }}'

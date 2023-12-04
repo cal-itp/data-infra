@@ -1,7 +1,7 @@
 {{ config(materialized = "table") }}
 
 WITH micropayment_device_transactions AS (
-    SELECT * FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
+    SELECT * FROM {{ ref('int_payments__cleaned_micropayment_device_transactions') }}
 ),
 
 micropayments_refunds AS (

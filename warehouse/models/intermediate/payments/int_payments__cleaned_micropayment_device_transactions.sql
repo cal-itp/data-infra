@@ -8,9 +8,21 @@ stg_littlepay__micropayments AS (
 
 deduped_micropayment_device_transaction_ids AS (
     SELECT DISTINCT
+
         littlepay_transaction_id,
         micropayment_id
     FROM stg_littlepay__micropayment_device_transactions
+),
+
+join_transactions_to_micropayments AS (
+    SELECT DISTINCT
+        littlepay_transaction_id,
+        micropayment_id,
+        charge_type,
+        type,
+    FROM deduped_micropayment_device_transaction_ids
+    INNER JOIN stg_littlepay__micropayments
+        USING(micropayment_id)
 ),
 
 -- Some transactions are associated with more than one DEBIT micropayment. This
@@ -21,33 +33,33 @@ deduped_micropayment_device_transaction_ids AS (
 -- See https://github.com/cal-itp/data-infra/ISsues/647 for the explanation.
 invalid_micropayment_device_transaction_ids AS (
     SELECT
-        littlepay_transaction_id,
-        first_micropayment.micropayment_id
-
-    FROM deduped_micropayment_device_transaction_ids AS micropayment_device_transaction
-    INNER JOIN stg_littlepay__micropayments AS first_micropayment
-        ON micropayment_device_transaction.micropayment_id = first_micropayment.micropayment_id
-
-    INNER JOIN deduped_micropayment_device_transaction_ids AS second_micropayment_device_transaction USING (littlepay_transaction_id)
+        first_transaction.littlepay_transaction_id,
+        first_transaction.micropayment_id
+    FROM join_transactions_to_micropayments AS first_transaction
+    INNER JOIN deduped_micropayment_device_transaction_ids AS second_micropayment_device_transaction
+        USING (littlepay_transaction_id)
     INNER JOIN stg_littlepay__micropayments AS second_micropayment
         ON second_micropayment_device_transaction.micropayment_id = second_micropayment.micropayment_id
-
-    WHERE first_micropayment.micropayment_id != second_micropayment.micropayment_id
-        AND first_micropayment.charge_type = 'pending_charge_fare'
+    WHERE first_transaction.micropayment_id != second_micropayment.micropayment_id
+        AND first_transaction.charge_type = 'pending_charge_fare'
         AND second_micropayment.charge_type = 'complete_variable_fare'
 ),
 
 cleaned_micropayment_device_transaction_ids AS (
     SELECT
         littlepay_transaction_id,
-        micropayment_id
+        micropayment_id,
+        charge_type AS micropayment_charge_type,
+        type AS micropayment_type,
     FROM deduped_micropayment_device_transaction_ids
     LEFT JOIN invalid_micropayment_device_transaction_ids AS invalid
+        USING (littlepay_transaction_id, micropayment_id)
+    LEFT JOIN join_transactions_to_micropayments
         USING (littlepay_transaction_id, micropayment_id)
     WHERE invalid.littlepay_transaction_id IS null
 ),
 
-int_littlepay__cleaned_micropayment_device_transactions AS (
+int_payments__cleaned_micropayment_device_transactions AS (
 
     SELECT DISTINCT *
     FROM stg_littlepay__micropayment_device_transactions
@@ -55,4 +67,4 @@ int_littlepay__cleaned_micropayment_device_transactions AS (
         USING (littlepay_transaction_id, micropayment_id)
 )
 
-SELECT * FROM int_littlepay__cleaned_micropayment_device_transactions
+SELECT * FROM int_payments__cleaned_micropayment_device_transactions

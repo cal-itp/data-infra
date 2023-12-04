@@ -4,8 +4,8 @@
     )
 }}
 
-WITH int_littlepay__cleaned_micropayment_device_transactions AS (
-    SELECT * FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
+WITH int_payments__cleaned_micropayment_device_transactions AS (
+    SELECT * FROM {{ ref('int_payments__cleaned_micropayment_device_transactions') }}
 ),
 
 stg_littlepay__device_transactions AS (
@@ -17,7 +17,7 @@ valid_transactions AS (
   SELECT
     *,
     ROW_NUMBER() OVER(PARTITION BY micropayment_id ORDER BY transaction_date_time_utc) AS row_num
-  FROM int_littlepay__cleaned_micropayment_device_transactions
+  FROM int_payments__cleaned_micropayment_device_transactions
   INNER JOIN stg_littlepay__device_transactions USING (littlepay_transaction_id)
 ),
 
