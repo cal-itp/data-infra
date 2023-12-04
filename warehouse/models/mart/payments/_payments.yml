@@ -143,8 +143,9 @@ models:
       - name: distance_meters
         description: '{{ doc("lp_paired_distance") }}'
       - name: transaction_date_pacific
+        description: '{{ doc("lp_paired_first_transaction_date") }}'
       - name: day_of_week
-        description: Day of week value of the transaction in the range [1,7] with Sunday as the first day of the week.
+        description: '{{ doc("lp_paired_first_day_of_week") }}'
 
   - name: fct_payments_aggregations
     description: |
