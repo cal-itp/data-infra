@@ -1,3 +1,9 @@
+{{
+  config(
+    materialized = 'table',
+    )
+}}
+
 WITH stg_littlepay__micropayment_device_transactions AS (
     SELECT * FROM {{ ref('stg_littlepay__micropayment_device_transactions') }}
 ),
