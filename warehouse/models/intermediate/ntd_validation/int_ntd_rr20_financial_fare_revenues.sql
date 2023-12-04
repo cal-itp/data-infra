@@ -1,4 +1,4 @@
--- need fare rev and upt for each year. didn't write check correctly the first time
+-- need fare rev and upt for each year. 
 
 WITH fare_rev_2023 as (
   select 
