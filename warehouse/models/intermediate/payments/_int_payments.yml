@@ -413,7 +413,7 @@ models:
         description: '{{ doc("lp_charge_type") }}'
       - name: micropayment_type
         description: '{{ doc("lp_mp_type") }}'
-  - name: int_device_transaction_pairs_common_fields
+  - name: int_payments__device_transaction_pairs_common_fields
     description: |
       This model contains matched pairs of device transactions (i.e., tap on/tap off pairs) with flags for cases where there are differing attributes
       between the two taps that may indicate a data quality or validity issue, for example when there is a different
@@ -464,7 +464,7 @@ models:
       - name: has_mismatched_mode
       - name: has_mismatched_direction
       - name: has_mismatched_vehicle_id
-  - name: int_littlepay__customer_funding_source_vaults
+  - name: int_payments__customer_funding_source_vaults
     description: |
       Derived from customer_funding_source records.
       funding_source_vault_id values can appear across multiple participants, so this
@@ -503,7 +503,7 @@ models:
       - name: form_factor
         description: Form factor describing the contactless EMV device of the funding source.
 
-  - name: int_littlepay__customers
+  - name: int_payments__customers
     description: |
       Derived from customer_funding_source records.
       This table most importantly serves as a mapping from each customer_id to a

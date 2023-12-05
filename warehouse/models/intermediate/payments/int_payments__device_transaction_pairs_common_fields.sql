@@ -44,7 +44,7 @@ joined_transactions AS (
     ON pairs.off_littlepay_transaction_id = tap_off.littlepay_transaction_id
 ),
 
-int_device_transaction_pairs_common_fields AS (
+int_payments__device_transaction_pairs_common_fields AS (
 
     SELECT *
     FROM joined_transactions
@@ -56,4 +56,4 @@ int_device_transaction_pairs_common_fields AS (
         OR has_mismatched_vehicle_id
 )
 
-SELECT * FROM int_device_transaction_pairs_common_fields
+SELECT * FROM int_payments__device_transaction_pairs_common_fields

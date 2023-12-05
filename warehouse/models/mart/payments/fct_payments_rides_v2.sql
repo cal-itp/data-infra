@@ -34,14 +34,14 @@ int_payments__matched_device_transactions AS (
     FROM {{ ref('int_payments__matched_device_transactions') }}
 ),
 
-int_littlepay__customers AS (
+int_payments__customers AS (
     SELECT *
-    FROM {{ ref('int_littlepay__customers') }}
+    FROM {{ ref('int_payments__customers') }}
 ),
 
-int_littlepay__customer_funding_source_vaults AS (
+int_payments__customer_funding_source_vaults AS (
     SELECT *
-    FROM {{ ref('int_littlepay__customer_funding_source_vaults') }}
+    FROM {{ ref('int_payments__customer_funding_source_vaults') }}
 ),
 
 stg_littlepay__product_data AS (
@@ -143,10 +143,10 @@ fct_payments_rides_v2 AS (
         device_transactions.day_of_week
 
     FROM micropayments
-    LEFT JOIN int_littlepay__customers AS customers
+    LEFT JOIN int_payments__customers AS customers
         ON micropayments.customer_id = customers.customer_id
         AND micropayments.participant_id = customers.participant_id
-    LEFT JOIN int_littlepay__customer_funding_source_vaults AS vaults
+    LEFT JOIN int_payments__customer_funding_source_vaults AS vaults
         ON micropayments.funding_source_vault_id = vaults.funding_source_vault_id
         AND micropayments.participant_id = vaults.participant_id
         AND micropayments.transaction_time >= vaults.calitp_valid_at
