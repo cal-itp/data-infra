@@ -16,7 +16,7 @@ deduped_by_vault_and_extract AS (
     QUALIFY ROW_NUMBER() OVER (PARTITION BY participant_id, funding_source_vault_id, littlepay_export_ts ORDER BY funding_source_id) = 1
 ),
 
-int_littlepay__customer_funding_source_vaults AS (
+int_payments__customer_funding_source_vaults AS (
     SELECT
         participant_id,
         funding_source_id,
@@ -53,4 +53,4 @@ int_littlepay__customer_funding_source_vaults AS (
         ORDER BY littlepay_export_ts)
 )
 
-SELECT * FROM int_littlepay__customer_funding_source_vaults
+SELECT * FROM int_payments__customer_funding_source_vaults

@@ -19,6 +19,8 @@ sources:
 
 models:
   - name: int_device_transaction_pairs_common_fields
+    description: |
+      This model contains
     columns:
       - &participant_id
         name: participant_id
@@ -135,7 +137,9 @@ models:
 
   - name: stg_littlepay__authorisations
     columns:
-      - *participant_id
+      - &participant_id
+        name: participant_id
+        description: '{{ doc("lp_participant_id") }}'
       - name: aggregation_id
         description: The aggregation that is being authorised. A single aggregation can have multiple authorisations. The authorisations that are submitted depend on the scheme and the result of the initial authorisation (if declined, debt recovery authorisations may be performed).
       - name: acquirer_id

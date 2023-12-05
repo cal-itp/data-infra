@@ -413,3 +413,117 @@ models:
         description: '{{ doc("lp_charge_type") }}'
       - name: micropayment_type
         description: '{{ doc("lp_mp_type") }}'
+  - name: int_device_transaction_pairs_common_fields
+    description: |
+      This model contains matched pairs of device transactions (i.e., tap on/tap off pairs) with flags for cases where there are differing attributes
+      between the two taps that may indicate a data quality or validity issue, for example when there is a different
+      customer or vehicle ID between the two taps.
+    columns:
+      - *participant_id
+      - name: micropayment_id
+        description: '{{ doc("lp_micropayment_id") }}'
+      - name: littlepay_transaction_id_1
+        description: Unique tap ID generated for the "on" transaction by Littlepay upon receipt of a tap to the Device API.
+      - name: littlepay_transaction_id_2
+        description: Unique tap ID generated for the "off" transaction by Littlepay upon receipt of a tap to the Device API.
+      - name: customer_id_1
+        description: Unique identifier representing the customer that belongs to the "on" transaction's customer funding source.
+      - name: customer_id_2
+        description: Unique identifier representing the customer that belongs to the "off" transaction's customer funding source.
+      - name: device_id_1
+        description: The unique identifier of the device that was tapped for the "on" transaction.
+      - name: device_id_2
+        description: The unique identifier of the device that was tapped for the "off" transaction.
+      - name: device_id_issuer_1
+        description: The entity that issued the device ID for the "on" transaction.
+      - name: device_id_issuer_2
+        description: The entity that issued the device ID for the "off" transaction.
+      - name: route_id_1
+        description: The route identifier provided by the device for the "on" transaction.
+      - name: route_id_2
+        description: The route identifier provided by the device for the "off" transaction.
+      - name: mode_1
+        description: |
+          The mode of transport for the "on transaction.
+
+          Possible values are `bus` and `train`.
+      - name: mode_2
+        description: |
+          The mode of transport for the "off" transaction.
+
+          Possible values are `bus` and `train`.
+      - name: direction_1
+      - name: direction_2
+      - name: vehicle_id_1
+        description: An identifier for the vehicle the "on" transaction took place on. This ID is unique to the participant.
+      - name: vehicle_id_2
+        description: An identifier for the vehicle the "off" transaction took place on. This ID is unique to the participant.
+      - name: has_mismatched_customer_id
+      - name: has_mismatched_device_id_issuer
+      - name: has_mismatched_route_id
+      - name: has_mismatched_mode
+      - name: has_mismatched_direction
+      - name: has_mismatched_vehicle_id
+  - name: int_littlepay__customer_funding_source_vaults
+    description: |
+      Derived from customer_funding_source records.
+      funding_source_vault_id values can appear across multiple participants, so this
+      table is unique at the funding_source_vault_id + participant_id level.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: calitp_valid_at
+          upper_bound_column: calitp_invalid_at
+          partition_by: funding_source_vault_id, participant_id
+          gaps: not_allowed
+          zero_length_range_allowed: true
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - participant_id
+            - funding_source_id
+    columns:
+      - name: funding_source_id
+        tests:
+          - not_null
+      - name: customer_id
+        description: '{{ doc("customer_funding_source_customer_id") }}'
+      - name: funding_source_vault_id
+        description: Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped. A registered customer can have multiple funding sources linked to them.
+      - name: principal_customer_id
+        description: '{{ doc("customer_funding_source_principal_customer_id") }}'
+      - name: bin
+        description: First six numbers of the PAN.
+      - name: masked_pan
+        description: First six and last four numbers of the PAN.
+      - name: card_scheme
+        description: Card scheme of this funding source. One of (`VISA`, `MASTERCARD`).
+      - name: issuer
+        description: Name of the card issuer.
+      - name: issuer_country
+        description: Country that the card issuer belongs to.
+      - name: form_factor
+        description: Form factor describing the contactless EMV device of the funding source.
+
+  - name: int_littlepay__customers
+    description: |
+      Derived from customer_funding_source records.
+      This table most importantly serves as a mapping from each customer_id to a
+      principal or canonical customer_id. Each customer_id with the same
+      principal_customer_id should be assumed to be the same person. A customer_id
+      should only have one principal_customer_id.
+      customer_id values can appear across multiple participants, so this
+      table is unique at the customer_id + participant_id level.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - participant_id
+            - customer_id
+    columns:
+      - name: customer_id
+        description: '{{ doc("customer_funding_source_customer_id") }}'
+        tests:
+          - not_null
+      - name: principal_customer_id
+        description: '{{ doc("customer_funding_source_principal_customer_id") }}'
+        tests:
+          - not_null
+      - name: earliest_tap
