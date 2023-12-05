@@ -113,6 +113,7 @@ fct_payments_rides_v2 AS (
         device_transactions.direction,
         device_transactions.vehicle_id,
         device_transactions.littlepay_transaction_id,
+        device_transactions.off_littlepay_transaction_id,
         device_transactions.device_id,
         device_transactions.transaction_type,
         device_transactions.transaction_outcome,

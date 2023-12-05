@@ -40,12 +40,13 @@ match_ids AS (
 
 int_payments__matched_device_transactions AS (
     SELECT
-        first_tap.participant_id,
+        pairs.littlepay_transaction_id,
+        pairs.off_littlepay_transaction_id,
         pairs.micropayment_id,
+        first_tap.participant_id,
         COALESCE(first_tap.route_id, second_tap.route_id) AS route_id,
         first_tap.direction,
         first_tap.vehicle_id,
-        first_tap.littlepay_transaction_id,
         first_tap.device_id,
         first_tap.type AS transaction_type,
         first_tap.transaction_outcome,
