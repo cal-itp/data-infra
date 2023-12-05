@@ -324,7 +324,10 @@ models:
         description: '{{ doc("lp_paired_first_transaction_id") }}'
         tests:
           - not_null
-          - unique
+          # refunds cause duplicates; ignore them here
+          - unique:
+              config:
+                where: micropayment_type != "CREDIT"
       - name: route_id
         description: '{{ doc("lp_paired_transaction_route_id") }}'
       - name: direction

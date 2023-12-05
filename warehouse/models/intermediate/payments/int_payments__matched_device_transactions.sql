@@ -25,6 +25,7 @@ match_ids AS (
   SELECT
     tap_on.participant_id,
     tap_on.micropayment_id,
+    tap_on.micropayment_type,
     tap_on.littlepay_transaction_id,
     tap_off.littlepay_transaction_id AS off_littlepay_transaction_id
   FROM valid_transactions AS tap_on
@@ -43,6 +44,7 @@ int_payments__matched_device_transactions AS (
         pairs.littlepay_transaction_id,
         pairs.off_littlepay_transaction_id,
         pairs.micropayment_id,
+        pairs.micropayment_type,
         first_tap.participant_id,
         COALESCE(first_tap.route_id, second_tap.route_id) AS route_id,
         first_tap.direction,
