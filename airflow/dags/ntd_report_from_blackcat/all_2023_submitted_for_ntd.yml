@@ -1,7 +1,0 @@
-operator: operators.BlackCatApiToGCSOperator
-
-bucket: "gs://calitp-ntd-report-validation"
-api_url: "https://services.blackcattransit.com/api/APIModules/GetNTDReportsByYear/BCG_CA/2023"
-api_tablename: "2023_NTDReporting" 
-form: "all"
-bq_table_name: "2023_ntdreports"

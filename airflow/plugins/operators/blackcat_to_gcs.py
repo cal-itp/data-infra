@@ -1,24 +1,27 @@
-from calitp_data_infra.storage import get_fs, make_name_bq_safe
-from airflow.models import BaseOperator
-from pydantic import BaseModel
+import gzip
+import logging
+import os
 from typing import Optional
+
 import pandas as pd
 import pendulum
 import requests
-import logging
-import gzip
-import os
-import re
+from calitp_data_infra.storage import get_fs, make_name_bq_safe
+from pydantic import BaseModel
+
+from airflow.models import BaseOperator
+
 
 def write_to_log(logfilename):
-    '''
+    """
     Creates a logger object that outputs to a log file, to the filename specified,
     and also streams to console.
-    '''
+    """
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
-    formatter = logging.Formatter(f'%(asctime)s:%(levelname)s: %(message)s',
-                                  datefmt='%y-%m-%d %H:%M:%S')
+    formatter = logging.Formatter(
+        "%(asctime)s:%(levelname)s: %(message)s", datefmt="%y-%m-%d %H:%M:%S"
+    )
     file_handler = logging.FileHandler(logfilename)
     file_handler.setFormatter(formatter)
     stream_handler = logging.StreamHandler()
@@ -34,20 +37,20 @@ def write_to_log(logfilename):
 class BlackCatApiExtract(BaseModel):
     api_url: str
     form: str
-    api_tablename: str
-    bq_table_name: str
+    api_tablename_suffix: str
+    bq_table_name_suffix: str
     data: Optional[pd.DataFrame]
     logger: Optional[logging.Logger]
     extract_time: Optional[pendulum.DateTime]
 
-    logger = write_to_log('load_bc_apidata_output.log')
+    logger = write_to_log("load_bc_apidata_output.log")
     extract_time = pendulum.now()
-    
+
     # pydantic doesn't know dataframe type
     # see https://stackoverflow.com/a/69200069
     class Config:
         arbitrary_types_allowed = True
-    
+
     def fetch_from_bc_api(self):
         """Download a BlackCat table as a DataFrame.
 
@@ -65,19 +68,23 @@ class BlackCatApiExtract(BaseModel):
             2. rename fields
             3. apply column prefix (to columns not renamed by 1 or 2)
         """
-        
+
         self.logger.info(
-            f"Downloading BlackCat data for {self.extract_time.format('YYYY')}_{self.bq_table_name}."
+            f"Downloading BlackCat data for {self.extract_time.format('YYYY')}_{self.bq_table_name_suffix}."
         )
-        response = requests.get(self.api_url, verify=False)
-        blob = response.json()  
-        
+        # will automatically add the current year to the API url so that it ends with "/YYYY".
+        url = self.api_url + self.extract_time.format("YYYY")
+        response = requests.get(url)
+        blob = response.json()
+
         raw_df = pd.json_normalize(blob)
-        raw_df['ReportLastModifiedDate'] = raw_df['ReportLastModifiedDate'].astype('datetime64[ns]')
+        raw_df["ReportLastModifiedDate"] = raw_df["ReportLastModifiedDate"].astype(
+            "datetime64[ns]"
+        )
 
         self.data = raw_df.rename(make_name_bq_safe, axis="columns")
         self.logger.info(
-            f"Downloaded {self.extract_time.format('YYYY')}_{self.bq_table_name} data with {len(self.data)} rows!"
+            f"Downloaded {self.bq_table_name_suffix} data for {self.extract_time.format('YYYY')} with {len(self.data)} rows!"
         )
 
     def make_hive_path(self, form: str, bucket: str):
@@ -85,22 +92,23 @@ class BlackCatApiExtract(BaseModel):
             raise ValueError(
                 "An extract time must be set before a hive path can be generated."
             )
-        bq_form_name = (
-            str.lower(form).replace("-", "")
-        )
+        bq_form_name = str.lower(form).replace("-", "")
         return os.path.join(
             bucket,
-            f"{bq_form_name}_{self.api_tablename}",
+            f"{bq_form_name}_{self.api_tablename_suffix}",
+            f"year={self.extract_time.format('YYYY')}",
             f"dt={self.extract_time.to_date_string()}",
             f"ts={self.extract_time.to_iso8601_string()}",
-            f"{bq_form_name}_{self.bq_table_name}.jsonl.gz",
+            f"{bq_form_name}_{self.bq_table_name_suffix}.jsonl.gz",
         )
 
     def save_to_gcs(self, fs, bucket):
         hive_path = self.make_hive_path(self.form, bucket)
         self.logger.info(f"Uploading to GCS at {hive_path}")
         if len(self.data) == 0:
-            self.logger.info(f"There is no data for {self.api_tablename}, not saving anything. Pipeline exiting.")
+            self.logger.info(
+                f"There is no data for {self.api_tablename_suffix} for {self.extract_time.format('YYYY')}, not saving anything. Pipeline exiting."
+            )
             pass
         else:
             fs.pipe(
@@ -118,30 +126,31 @@ class BlackCatApiToGCSOperator(BaseOperator):
         bucket,
         api_url,
         form,
-        api_tablename,
-        bq_table_name,
+        api_tablename_suffix,
+        bq_table_name_suffix,
         **kwargs,
     ):
         """An operator that downloads all data from a BlackCat API
             and saves it as one JSON file hive-partitioned by date in Google Cloud
-            Storage (GCS). Each org's data will be in 1 row, and for each separate table in the API, 
-            a nested column will hold all of it's data. 
+            Storage (GCS). Each org's data will be in 1 row, and for each separate table in the API,
+            a nested column will hold all of it's data.
 
         Args:
             bucket (str): GCS bucket where the scraped BlackCat report will be saved.
-            api_url (str): The URL to hit that gets the data.
-            api_tablename (str): The table that should be extracted from the BlackCat API. 
+            api_url (str): The URL to hit that gets the data. This is dynamically appended with the current year, so that
+             ... in 2023 it will pull data from the ".../2023" url and in 2024, ".../2024" etc.
+            api_tablename_suffix (str): The table that should be extracted from the BlackCat API.
                 MUST MATCH THE API JSON EXACTLY
-            bq_table_name (str): The table name that will be given in BigQuery. Appears in the GCS bucket path and the filename.
-            form: the NTD form that this report belongs to. E.g., RR-20, A-10, etc.                
+            bq_table_name_suffix (str): The table name that will be given in BigQuery. Appears in the GCS bucket path and the filename.
+            form: the NTD form that this report belongs to. E.g., RR-20, A-10, etc. Since it's all forms, here it's "all"
         """
         self.bucket = bucket
         # Instantiating an instance of the BlackCatApiExtract()
         self.extract = BlackCatApiExtract(
             api_url=api_url,
             form=form,
-            api_tablename=api_tablename,
-            bq_table_name=bq_table_name,
+            api_tablename_suffix=api_tablename_suffix,
+            bq_table_name_suffix=bq_table_name_suffix,
         )
 
         super().__init__(**kwargs)
