@@ -66,6 +66,8 @@ repos:
     hooks:
     - id: mdformat
       # list of exclusions: https://stackoverflow.com/a/75560858
+      # mdformat does not play nice with GitHub callouts: https://github.com/orgs/community/discussions/16925
+      # so skip README files that use them
       exclude: 'README.md|warehouse/.*'
       args: ["--number"]
       additional_dependencies:
