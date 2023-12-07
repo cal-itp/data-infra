@@ -6,34 +6,40 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 
 ## Repository Structure
 
-- [./airflow](./airflow) contains the local dev setup and source code for Airflow DAGs (i.e. ETL)
-- [./ci](./ci) contains continuous integration and deployment scripts using GitHub actions.
+- [./airflow](./airflow) contains the local dev setup and source code for Airflow DAGs (i.e. ETL).
+- [./ci](./ci) contains continuous integration and deployment scripts using GitHub Actions.
 - [./docs](./docs) builds the [docs site](https://docs.calitp.org/data-infra).
 - [./kubernetes](./kubernetes) contains helm charts, scripts and more for deploying apps/services (e.g. Metabase, JupyterHub) on our kubernetes cluster.
 - [./images](./images) contains images we build and deploy for use by services such as JupyterHub.
 - [./services](./services) contains apps that we write and deploy to kubernetes.
 - [./warehouse](./warehouse) contains our dbt project that builds and tests models in the BigQuery warehouse.
 
-## Contributing
+## Contributing / Getting Started 
 
-- Follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard for all commits
-- Use Conventional Commit format for PR titles
+### Pre-commit
+
+This repository uses pre-commit hooks to format code, including [Black](https://black.readthedocs.io/en/stable/index.html). This ensures baseline consistency in code formatting.
+
+> [!IMPORTANT]  
+> Before contributing to this project, please install pre-commit locally by running `pip install pre-commit` and `pre-commit install` in the root of the repo. 
+
+Once installed, pre-commit checks will run before you can make commits locally. If a pre-commit check fails, it will need to be addressed before you can make your commit. Many formatting issues are fixed automatically within the pre-commit actions, so check the changes made by pre-commit on failure -- they may have automatically addressed the issues that caused the failure, in which case you can simply re-add the files, re-attempt the commit, and the checks will then succeed. 
+
+Installing pre-commit locally saves time dealing with formatting issues on pull requests. There is a [GitHub Action](./.github/workflows/lint.yml)
+that runs pre-commit on all files, not just changed ones, as part of our continuous integration. 
+
+> [!NOTE]  
+> [SQLFluff](https://sqlfluff.com/) is currently disabled in the CI run due to flakiness, but it will still lint any SQL files you attempt to commit locally. You will need to manually correct SQLFluff errors because we found that SQLFluff's automated fixes could be too aggressive and could change the meaning and function of affected code. 
+
+
+### Repo norms and expectations
+
+#### Pull requests
 - Use GitHub's *draft* status to indicate PRs that are not ready for review/merging
 - Do not use GitHub's "update branch" button or merge the `main` branch back into a PR branch to update it. Instead, rebase PR branches to update them and resolve any merge conflicts.
 - We use GitHub's "code owners" functionality to designate a person or group of people who are in the line of approval for changes to some parts of this repository - if one or more people are automatically tagged as reviewers by GitHub when you create a PR, an approving review from at least one of them is required to merge. This does not automatically place the PR review in somebody's list of priorities, so please reach out to a reviewer to get eyes on your PR if it's time-sensitive.
 
-## Linting and type-checking
-
-### pre-commit
-
-This repository pre-commit hooks to format code, including black. To install
-pre-commit locally, run `pip install pre-commit` & `pre-commit install`
-in the root of the repo. There is a [GitHub Action](./.github/workflows/lint.yml)
-that runs pre-commit on all files, not just changed ones. sqlfluff is currently
-disabled in the CI run due to flakiness, but it will still lint any SQL files
-you attempt to commit locally.
-
-### mypy
+#### mypy
 
 We encourage mypy compliance for Python when possible, though we do not
 currently run mypy on Airflow DAGs. All service and job images do pass mypy,
@@ -52,7 +58,7 @@ and `shapely` (until stubs are available, if ever). We recommend including
 comments where additional asserts or other weird-looking code exist to make mypy
 happy.
 
-## Configuration via Environment Variables
+#### Configuration via Environment Variables
 
 Generally we try to configure things via environment variables. In the Kubernetes
 world, these get configured via Kustomize overlays ([example](./kubernetes/apps/overlays/gtfs-rt-archiver-v3-prod/archiver-channel-vars.yaml)).
