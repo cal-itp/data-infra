@@ -1,0 +1,412 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-report-validation
+prefix_bucket: false
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_blackcat.all_ntdreports
+  LIMIT 1;
+source_objects:
+  - "all_NTDReporting/*.jsonl.gz"
+destination_project_dataset_table: "external_blackcat.all_ntdreports"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "all_NTDReporting/{year:STRING}/{dt:DATE}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: reportid
+    type: INTEGER
+  - name: organization
+    type: STRING
+  - name: reportperiod
+    type: INTEGER
+  - name: reportstatus
+    type: STRING
+  - name: reportlastmodifieddate
+    type: INTEGER
+  - name: ntdreportingstationsandmaintenance_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+      - name: Id
+        type: INTEGER
+      - name: ServiceMode
+        type: STRING
+      - name: ReportId
+        type: INTEGER
+      - name: PTOwnedByServiceProvider
+        type: FLOAT
+      - name: PTOwnedByPublicAgency
+        type: FLOAT
+      - name: PTLeasedByServiceProvider
+        type: FLOAT
+      - name: PTLeasedByPublicAgency
+        type: FLOAT
+      - name: DOOwned
+        type: FLOAT
+      - name: DOLeasedByPublicAgency
+        type: FLOAT
+      - name: DOLeasedFromPrivateEntity
+        type: FLOAT
+      - name: LastModifiedDate
+        type: TIMESTAMP
+  - name: ntdtransitassetmanagementa15_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: Id
+      type: INTEGER
+    - name: FacilityId
+      type: INTEGER
+    - name: ReportId
+      type: INTEGER
+    - name: FacilityName
+      type: STRING
+    - name: PrimaryMode
+      type: STRING
+    - name: FacilityClass
+      type: STRING
+    - name: FacilityType
+      type: STRING
+    - name: YearBuilt
+      type: INTEGER
+    - name: Size
+      type: STRING
+    - name: DOTCapitalResponsibility
+      type: FLOAT
+    - name: OrganizationCapitalResponsibility
+      type: FLOAT
+    - name: ConditionAssessment
+      type: FLOAT
+    - name: ConditionAssessmentDate
+      type: TIMESTAMP
+    - name: SectionOfLargerFacility
+      type: BOOLEAN
+    - name: Latitude
+      type: STRING
+    - name: LatitudeDirection
+      type: STRING
+    - name: Longitude
+      type: STRING
+    - name: LongitudeDirection
+      type: STRING
+    - name: SecondaryMode
+      type: STRING
+    - name: PrivateMode
+      type: STRING
+  - name: ntdassetandresourceinfo_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: Id
+      type: INTEGER
+    - name: VehicleId
+      type: INTEGER
+    - name: ReportId
+      type: INTEGER
+    - name: VehicleStatus
+      type: STRING
+    - name: Vin
+      type: INTEGER
+    - name: NTDID
+      type: STRING
+    - name: ADAAccess
+      type: BOOLEAN
+    - name: VehicleType
+      type: STRING
+    - name: FuelType
+      type: STRING
+    - name: FundSource
+      type: STRING
+    - name: AverageEstimatedServiceYearsWhenNew
+      type: INTEGER
+    - name: AverageExpirationYearsWhenNew
+      type: INTEGER
+    - name: VehicleYear
+      type: INTEGER
+    - name: UsefulLifeYearsRemaining
+      type: INTEGER
+    - name: VehicleLength
+      type: FLOAT
+    - name: SeatingCapacity
+      type: INTEGER
+    - name: OwnershipType
+      type: STRING
+    - name: ModesOperatedDisplayText
+      type: STRING
+    - name: ModesOperatedFullText
+      type: STRING
+    - name: LastModifiedDate
+      type: TIMESTAMP
+  - name: ntdreportingp10_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: Id
+      type: INTEGER
+    - name: ReportId
+      type: INTEGER
+    - name: OrgId
+      type: INTEGER
+    - name: UserId
+      type: STRING
+    - name: FirstName
+      type: STRING
+    - name: LastName
+      type: STRING
+    - name: FullName
+      type: RECORD
+      fields:
+      - name: id
+        type: INTEGER
+      - name: Text
+        type: STRING
+      - name: Value
+        type: STRING
+      - name: Group
+        type: STRING
+      - name: BoolValue
+        type: BOOLEAN
+    - name: PrimaryPhone
+      type: STRING
+    - name: Email
+      type: STRING
+    - name: LastModifiedDate
+      type: TIMESTAMP
+  - name: ntdreportingp20_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: Id
+      type: INTEGER
+    - name: ReportId
+      type: INTEGER
+    - name: ServiceMode
+      type: STRING
+    - name: TypeOfService
+      type: STRING
+    - name: CommitmentDate
+      type: STRING
+    - name: StartDate
+      type: STRING
+    - name: EndDate
+      type: STRING
+    - name: LastModifiedDate
+      type: TIMESTAMP
+  - name: ntdreportingp50_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: Id
+      type: INTEGER
+    - name: ReportId
+      type: INTEGER
+    - name: Mode
+      type: RECORD
+      fields:
+      - name: id
+        type: STRING
+      - name: Text
+        type: STRING
+      - name: Value
+        type: STRING
+      - name: Group
+        type: STRING
+      - name: BoolValue
+        type: BOOLEAN
+    - name: Type
+      type: RECORD
+      fields:
+      - name: id
+        type: STRING
+      - name: Text
+        type: STRING
+      - name: Value
+        type: STRING
+      - name: Group
+        type: STRING
+      - name: BoolValue
+        type: BOOLEAN
+    - name: WebLink
+      type: STRING
+    - name: FilePath
+      type: STRING
+    - name: LastModifiedDate
+      type: TIMESTAMP
+  - name: ntdreportinga35_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: Id
+      type: INTEGER
+    - name: ReportId
+      type: INTEGER
+    - name: EquipmentName
+      type: STRING
+    - name: EquipmentId
+      type: INTEGER
+    - name: VehicleType
+      type: STRING
+    - name: PrimaryMode
+      type: STRING
+    - name: SecondaryMode
+      type: STRING
+    - name: TotalVehicles
+      type: STRING
+    - name: UsefulLifeBenchmark
+      type: BOOLEAN
+    - name: YearOfManufacture
+      type: INTEGER
+    - name: TransitAgencyCapitalResponsibility
+      type: FLOAT
+    - name: EstimatedCost
+      type: FLOAT
+    - name: YearDollarsEstimatedCost
+      type: INTEGER
+    - name: UsefulLifeYearsBenchMark
+      type: INTEGER
+    - name: UsefulLifeYearsRemaining
+      type: INTEGER
+    - name: LastModifiedDate
+      type: TIMESTAMP
+  - name: ntdreportingrr20_intercity_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: Id
+      type: INTEGER
+    - name: ItemId
+      type: INTEGER
+    - name: ReportId
+      type: INTEGER
+    - name: Item
+      type: STRING
+    - name: Type
+      type: STRING
+    - name: OperationsExpended
+      type: FLOAT
+    - name: CapitalExpended
+      type: FLOAT
+    - name: Description
+      type: STRING
+    - name: AnnualVehicleRevMiles
+      type: INTEGER
+    - name: RegularUnlinkedPassengerTrips
+      type: INTEGER
+    - name: LastModifiedDate
+      type: TIMESTAMP
+  - name: ntdreportingrr20_rural_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: Id
+      type: INTEGER
+    - name: ReportId
+      type: INTEGER
+    - name: Item
+      type: STRING
+    - name: Revenue
+      type: STRING
+    - name: Type
+      type: STRING
+    - name: CssClass
+      type: STRING
+    - name: OperationsExpended
+      type: FLOAT
+    - name: CapitalExpended
+      type: FLOAT
+    - name: Description
+      type: STRING
+    - name: AnnualVehicleRevMiles
+      type: INTEGER
+    - name: AnnualVehicleRevHours
+      type: INTEGER
+    - name: AnnualUnlinkedPassTrips
+      type: INTEGER
+    - name: AnnualVehicleMaxService
+      type: INTEGER
+    - name: SponsoredServiceUPT
+      type: INTEGER
+    - name: Quantity
+      type: INTEGER
+    - name: LastModifiedDate
+      type: TIMESTAMP
+  - name: ntdreportingrr20_urban_tribal_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: Id
+      type: INTEGER
+    - name: ItemId
+      type: INTEGER
+    - name: ReportId
+      type: INTEGER
+    - name: Item
+      type: STRING
+    - name: OperationsExpended
+      type: FLOAT
+    - name: CapitalExpended
+      type: FLOAT
+    - name: Description
+      type: STRING
+    - name: LastModifiedDate
+      type: TIMESTAMP
+  - name: ntdreportingtamnarrative_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: Id
+      type: INTEGER
+    - name: ReportId
+      type: INTEGER
+    - name: Type
+      type: STRING
+    - name: Category
+      type: STRING
+    - name: VehiclesInAssetClass
+      type: INTEGER
+    - name: VehiclesExceededULBTAMPlan
+      type: INTEGER
+    - name: TAMPlanGoalsDescription
+      type: STRING
+    - name: VehiclesToBeRetiredBeyondULB
+      type: INTEGER
+    - name: VehiclesPastULBInTAM
+      type: INTEGER
+    - name: LastModifiedDate
+      type: TIMESTAMP
+  - name: ss60_data
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: Id
+      type: INTEGER
+    - name: ItemId
+      type: INTEGER
+    - name: ReportId
+      type: INTEGER
+    - name: Item
+      type: STRING
+    - name: Type
+      type: STRING
+    - name: CssClass
+      type: STRING
+    - name: TransitVehicleAssualts
+      type: INTEGER
+    - name: RevenueFacilityAssualts
+      type: INTEGER
+    - name: NonRevenueFacilityAssualts
+      type: INTEGER
+    - name: OtherLocationAssualts
+      type: INTEGER
+    - name: MajorEvents
+      type: INTEGER
+    - name: Fatalities
+      type: INTEGER
+    - name: Injuries
+      type: INTEGER
+    - name: Quantity
+      type: STRING
+    - name: LastModifiedDate
+      type: TIMESTAMP
