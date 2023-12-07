@@ -14,7 +14,7 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 - [./services](./services) contains apps that we write and deploy to kubernetes.
 - [./warehouse](./warehouse) contains our dbt project that builds and tests models in the BigQuery warehouse.
 
-## Contributing / Getting Started 
+## Contributing
 
 ### Pre-commit
 
@@ -31,15 +31,12 @@ that runs pre-commit on all files, not just changed ones, as part of our continu
 > [!NOTE]  
 > [SQLFluff](https://sqlfluff.com/) is currently disabled in the CI run due to flakiness, but it will still lint any SQL files you attempt to commit locally. You will need to manually correct SQLFluff errors because we found that SQLFluff's automated fixes could be too aggressive and could change the meaning and function of affected code. 
 
-
-### Repo norms and expectations
-
-#### Pull requests
+### Pull requests
 - Use GitHub's *draft* status to indicate PRs that are not ready for review/merging
 - Do not use GitHub's "update branch" button or merge the `main` branch back into a PR branch to update it. Instead, rebase PR branches to update them and resolve any merge conflicts.
 - We use GitHub's "code owners" functionality to designate a person or group of people who are in the line of approval for changes to some parts of this repository - if one or more people are automatically tagged as reviewers by GitHub when you create a PR, an approving review from at least one of them is required to merge. This does not automatically place the PR review in somebody's list of priorities, so please reach out to a reviewer to get eyes on your PR if it's time-sensitive.
 
-#### mypy
+### mypy
 
 We encourage mypy compliance for Python when possible, though we do not
 currently run mypy on Airflow DAGs. All service and job images do pass mypy,
@@ -58,7 +55,7 @@ and `shapely` (until stubs are available, if ever). We recommend including
 comments where additional asserts or other weird-looking code exist to make mypy
 happy.
 
-#### Configuration via Environment Variables
+### Configuration via Environment Variables
 
 Generally we try to configure things via environment variables. In the Kubernetes
 world, these get configured via Kustomize overlays ([example](./kubernetes/apps/overlays/gtfs-rt-archiver-v3-prod/archiver-channel-vars.yaml)).
