@@ -24,9 +24,10 @@ schema_fields:
   - name: reportstatus
     type: STRING
   - name: reportlastmodifieddate
-    type: TIMESTAMP
+    type: INTEGER
   - name: ntdreportingstationsandmaintenance_data
     type: RECORD
+    mode: REPEATED
     fields:
       - name: Id
         type: INTEGER
@@ -52,6 +53,7 @@ schema_fields:
         type: TIMESTAMP
   - name: ntdtransitassetmanagementa15_data
     type: RECORD
+    mode: REPEATED
     fields:
     - name: Id
       type: INTEGER
@@ -77,16 +79,16 @@ schema_fields:
       type: FLOAT
     - name: ConditionAssessment
       type: FLOAT
-    - name: ConditionAssessment
+    - name: ConditionAssessmentDate
       type: TIMESTAMP
     - name: SectionOfLargerFacility
       type: BOOLEAN
     - name: Latitude
-      type: FLOAT
+      type: STRING
     - name: LatitudeDirection
       type: STRING
     - name: Longitude
-      type: FLOAT
+      type: STRING
     - name: LongitudeDirection
       type: STRING
     - name: SecondaryMode
@@ -95,6 +97,7 @@ schema_fields:
       type: STRING
   - name: ntdassetandresourceinfo_data
     type: RECORD
+    mode: REPEATED
     fields:
     - name: Id
       type: INTEGER
@@ -138,6 +141,7 @@ schema_fields:
       type: TIMESTAMP
   - name: ntdreportingp10_data
     type: RECORD
+    mode: REPEATED
     fields:
     - name: Id
       type: INTEGER
@@ -172,6 +176,7 @@ schema_fields:
       type: TIMESTAMP
   - name: ntdreportingp20_data
     type: RECORD
+    mode: REPEATED
     fields:
     - name: Id
       type: INTEGER
@@ -191,6 +196,7 @@ schema_fields:
       type: TIMESTAMP
   - name: ntdreportingp50_data
     type: RECORD
+    mode: REPEATED
     fields:
     - name: Id
       type: INTEGER
@@ -230,6 +236,7 @@ schema_fields:
       type: TIMESTAMP
   - name: ntdreportinga35_data
     type: RECORD
+    mode: REPEATED
     fields:
     - name: Id
       type: INTEGER
@@ -248,7 +255,7 @@ schema_fields:
     - name: TotalVehicles
       type: STRING
     - name: UsefulLifeBenchmark
-      type: INTEGER
+      type: BOOLEAN
     - name: YearOfManufacture
       type: INTEGER
     - name: TransitAgencyCapitalResponsibility
@@ -265,6 +272,7 @@ schema_fields:
       type: TIMESTAMP
   - name: ntdreportingrr20_intercity_data
     type: RECORD
+    mode: REPEATED
     fields:
     - name: Id
       type: INTEGER
@@ -290,6 +298,7 @@ schema_fields:
       type: TIMESTAMP
   - name: ntdreportingrr20_rural_data
     type: RECORD
+    mode: REPEATED
     fields:
     - name: Id
       type: INTEGER
@@ -325,6 +334,7 @@ schema_fields:
       type: TIMESTAMP
   - name: ntdreportingrr20_urban_tribal_data
     type: RECORD
+    mode: REPEATED
     fields:
     - name: Id
       type: INTEGER
@@ -344,6 +354,7 @@ schema_fields:
       type: TIMESTAMP
   - name: ntdreportingtamnarrative_data
     type: RECORD
+    mode: REPEATED
     fields:
     - name: Id
       type: INTEGER
@@ -367,6 +378,7 @@ schema_fields:
       type: TIMESTAMP
   - name: ss60_data
     type: RECORD
+    mode: REPEATED
     fields:
     - name: Id
       type: INTEGER
