@@ -13,8 +13,8 @@ def write_to_log(logfilename):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter(
-        f"%(asctime)s:%(levelname)s: %(message)s",  # noqa: F541
-        datefmt="%y-%m-%d %H:%M:%S",  # noqa: F541
+        f"%(asctime)s:%(levelname)s: %(message)s",  # noqa: F541, E231
+        datefmt="%y-%m-%d %H:%M:%S",  # noqa: F541, E231
     )
     file_handler = logging.FileHandler(logfilename)
     file_handler.setFormatter(formatter)

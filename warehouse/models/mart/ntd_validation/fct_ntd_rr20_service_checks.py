@@ -14,8 +14,8 @@ def write_to_log(logfilename):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter(
-        f"%(asctime)s:%(levelname)s: %(message)s",  # noqa: F541
-        datefmt="%y-%m-%d %H:%M:%S",  # noqa: F541
+        f"%(asctime)s:%(levelname)s: %(message)s",  # noqa: F541, E231
+        datefmt="%y-%m-%d %H:%M:%S",  # noqa: F541, E231
     )
     file_handler = logging.FileHandler(logfilename)
     file_handler.setFormatter(formatter)
@@ -77,14 +77,14 @@ def check_rr20_ratios(df, variable, threshold, this_year, last_year, logger):
                         result = "fail"
                         check_name = f"{variable}"
                         mode = mode
-                        description = f"The {variable} for {mode} has changed from last year by > = {threshold*100}%, please provide a narrative justification."
+                        description = f"The {variable} for {mode} has changed from last year by > = {threshold * 100}%, please provide a narrative justification."
                     elif (value_lastyr != 0) and abs(
                         (value_lastyr - value_thisyr) / value_lastyr
                     ) >= threshold:
                         result = "fail"
                         check_name = f"{variable}"
                         mode = mode
-                        description = f"The {variable} for {mode} has changed from last year by {round(abs((value_lastyr - value_thisyr)/value_lastyr)*100, 1)}%, please provide a narrative justification."
+                        description = f"The {variable} for {mode} has changed from last year by {round(abs((value_lastyr - value_thisyr) / value_lastyr) * 100, 1)}%, please provide a narrative justification."
                     else:
                         result = "pass"
                         check_name = f"{variable}"
@@ -193,14 +193,14 @@ def check_single_number(
                         result = "fail"
                         check_name = f"{variable}"
                         mode = mode
-                        description = f"The {variable} for {mode} was 0 last year and has changed by > = {threshold*100}%, please provide a narrative justification."
+                        description = f"The {variable} for {mode} was 0 last year and has changed by > = {threshold * 100}%, please provide a narrative justification."
                     elif (value_lastyr != 0) and abs(
                         (value_lastyr - value_thisyr) / value_lastyr
                     ) >= threshold:
                         result = "fail"
                         check_name = f"{variable}"
                         mode = mode
-                        description = f"The {variable} for {mode} has changed from last year by {round(abs((value_lastyr - value_thisyr)/value_lastyr)*100, 1)}%; please provide a narrative justification."
+                        description = f"The {variable} for {mode} has changed from last year by {round(abs((value_lastyr - value_thisyr) / value_lastyr) * 100, 1)}%; please provide a narrative justification."  # noqa: E702
                     else:
                         result = "pass"
                         check_name = f"{variable}"
