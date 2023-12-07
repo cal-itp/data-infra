@@ -1,9 +1,5 @@
 import logging
 
-import pandas as pd  # noqa: F401
-import pyspark  # noqa: F401
-import pyspark.sql.functions as F  # noqa: F401
-
 
 def write_to_log(logfilename):
     """
@@ -28,31 +24,6 @@ def write_to_log(logfilename):
     return logger
 
 
-def make_ratio_cols(df, numerator, denominator, col_name, logger, operation="sum"):
-    if col_name is not None:
-        # If a user specify a column name, use it
-        # Raise error if the column already exists
-        if col_name in df.columns:
-            logger.info(f"Dataframe already has column '{col_name}'")
-            raise ValueError(f"Dataframe already has column '{col_name}'")
-
-        else:
-            _col_name = col_name
-
-    if operation == "sum":
-        df = df.groupby(["organization", "mode", "fiscal_year"]).apply(
-            lambda x: x.assign(
-                **{_col_name: lambda x: x[numerator].sum() / x[denominator]}
-            )
-        )
-    # else do not sum the numerator columns
-    else:
-        df = df.groupby(["organization", "mode", "fiscal_year"]).apply(
-            lambda x: x.assign(**{_col_name: lambda x: x[numerator] / x[denominator]})
-        )
-    return df
-
-
 def model(dbt, session):
     # Set up the logger object
     logger = write_to_log("rr20_servicechecks_log.log")
@@ -60,27 +31,61 @@ def model(dbt, session):
     # Load data from BigQuery - pass in the dbt model that we draw from.
     allyears = dbt.ref("int_ntd_rr20_service_alldata")
     allyears = allyears.toPandas()
+    logger.info("Service data loaded!")
 
     # Calculate needed ratios, added as new columns
     numeric_columns = allyears.select_dtypes(include=["number"]).columns
-    allyears[numeric_columns] = allyears[numeric_columns].fillna(0)
+    allyears[numeric_columns] = allyears[numeric_columns].fillna(
+        value=0, inplace=False, axis=1
+    )
 
-    allyears = make_ratio_cols(
-        allyears, "Total_Annual_Expenses_By_Mode", "Annual_VRH", "cost_per_hr", logger
+    # Cost per hr
+    allyears2 = (
+        allyears.groupby(["organization", "mode", "fiscal_year"], dropna=False)
+        .apply(
+            lambda x: x.assign(
+                cost_per_hr=x["Total_Annual_Expenses_By_Mode"] / x["Annual_VRH"]
+            )
+        )
+        .reset_index(drop=True)
     )
-    allyears = make_ratio_cols(allyears, "Annual_VRM", "VOMX", "miles_per_veh", logger)
-    allyears = make_ratio_cols(
-        allyears,
-        "Total_Annual_Expenses_By_Mode",
-        "Annual_UPT",
-        "fare_rev_per_trip",
-        logger,
+    # Miles per vehicle
+    allyears2 = (
+        allyears2.groupby(["organization", "mode", "fiscal_year"], dropna=False)
+        .apply(
+            lambda x: x.assign(
+                miles_per_veh=lambda x: x["Annual_VRM"].sum() / x["VOMX"]
+            )
+        )
+        .reset_index(drop=True)
     )
-    allyears = make_ratio_cols(
-        allyears, "Annual_VRM", "Annual_VRH", "rev_speed", logger, operation="mean"
+    # Fare revenues
+    allyears2 = (
+        allyears2.groupby(["organization", "mode", "fiscal_year"], dropna=False)
+        .apply(
+            lambda x: x.assign(
+                fare_rev_per_trip=lambda x: x["Fare_Revenues"].sum() / x["Annual_UPT"]
+            )
+        )
+        .reset_index(drop=True)
     )
-    allyears = make_ratio_cols(
-        allyears, "Annual_UPT", "Annual_VRH", "trips_per_hr", logger, operation="mean"
+    # Revenue Speed
+    allyears2 = (
+        allyears2.groupby(["organization", "mode", "fiscal_year"], dropna=False)
+        .apply(
+            lambda x: x.assign(rev_speed=lambda x: x["Annual_VRM"] / x["Annual_VRH"])
+        )
+        .reset_index(drop=True)
     )
+    # Trips per hr
+    allyears2 = (
+        allyears2.groupby(["organization", "mode", "fiscal_year"], dropna=False)
+        .apply(
+            lambda x: x.assign(trips_per_hr=lambda x: x["Annual_UPT"] / x["Annual_VRH"])
+        )
+        .reset_index(drop=True)
+    )
+
+    logger.info("Ratios calculated!")
 
     return allyears

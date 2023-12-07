@@ -23,5 +23,5 @@ SELECT
   a30.ModesOperatedDisplayText as modes_operated_display_text,
   a30.ModesOperatedFullText as modes_operated_full_text,
   a30.LastModifiedDate as last_modified_date
-FROM {{ source('ntd_report_validation', 'all_2023_ntdreports') }},
-  UNNEST(`ntdassetandresourceinfo_data`) as `a30`
+FROM {{ source('ntd_report_validation', 'all_ntdreports') }},
+ UNNEST(`ntdassetandresourceinfo_data`) as `a30`

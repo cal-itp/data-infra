@@ -273,5 +273,5 @@ def model(dbt, session):
 
     logger.info(f"RR-20 service data checks conducted on {this_date} is complete!")
 
-    # Part 2: send table to BigQuery
+    # Send table to BigQuery
     return rr20_checks

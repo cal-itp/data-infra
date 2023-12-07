@@ -1,3 +1,3 @@
 SELECT
     Organization as organization
-FROM blackcat_raw.2023_organizations
+FROM `cal-itp-data-infra.blackcat_raw.2023_organizations`

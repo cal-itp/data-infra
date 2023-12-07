@@ -14,5 +14,5 @@ SELECT
   a10.DOLeasedByPublicAgency as do_leased_by_public_agency,
   a10.DOLeasedFromPrivateEntity as do_leased_from_private_entity,
   a10.LastModifiedDate as last_modified_date
-FROM {{ source('ntd_report_validation', 'all_2023_ntdreports') }},
-  UNNEST(`ntdreportingstationsandmaintenance_data`) as `a10`
+FROM {{ source('ntd_report_validation', 'all_ntdreports') }},
+ UNNEST(`ntdreportingstationsandmaintenance_data`) as `a10`
