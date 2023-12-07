@@ -3,6 +3,7 @@ repos:
     rev: v4.4.0
     hooks:
       - id: trailing-whitespace
+        exclude_types: ['markdown']
       - id: end-of-file-fixer
         exclude_types: ['jupyter']
       - id: check-yaml
@@ -64,7 +65,8 @@ repos:
     rev: 0.7.16
     hooks:
     - id: mdformat
-      exclude: ^warehouse/(?!README.md)
+      # list of exclusions: https://stackoverflow.com/a/75560858
+      exclude: 'README.md|warehouse/.*'
       args: ["--number"]
       additional_dependencies:
       - mdformat-gfm
