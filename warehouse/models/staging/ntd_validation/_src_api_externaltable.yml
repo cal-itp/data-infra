@@ -8,4 +8,4 @@ sources:
     database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
     schema: external_blackcat
     tables:
-      - name: all_2023_ntdreports
+      - name: all_ntdreports

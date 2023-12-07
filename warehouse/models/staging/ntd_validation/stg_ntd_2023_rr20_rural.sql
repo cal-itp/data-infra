@@ -19,5 +19,5 @@ SELECT
   ntdreportingrr20_rural_data.SponsoredServiceUPT as sponsored_service_upt,
   ntdreportingrr20_rural_data.Quantity as quantity,
   ntdreportingrr20_rural_data.LastModifiedDate as last_modified_date
-FROM {{ source('ntd_report_validation', 'all_2023_ntdreports') }},
-  UNNEST(`ntdreportingrr20_rural_data`) as `ntdreportingrr20_rural_data`
+FROM {{ source('ntd_report_validation', 'all_ntdreports') }},
+ UNNEST(`ntdreportingrr20_rural_data`) as `ntdreportingrr20_rural_data`
