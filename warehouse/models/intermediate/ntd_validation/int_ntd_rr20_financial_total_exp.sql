@@ -37,7 +37,7 @@ total_cap_exp_byfunds_2023 as (
      group by organization, api_report_period
 )
 
-SELECT 
+SELECT
     total_operations_exp_2023.*,
     total_capital_exp_bymode_2023.Total_Annual_Cap_Expenses_byMode,
     total_operations_rev_2023.Total_Annual_Op_Revenues_Expended,

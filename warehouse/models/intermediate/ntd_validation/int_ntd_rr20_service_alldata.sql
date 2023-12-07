@@ -6,10 +6,10 @@
 --- We are *assuming* that data in 2024 and onwards will be the same format as 2023
 --- If you get errors in 2024, check which columns may differ and read errors carefully.
 
----TO DO: insert parameter for loop, for each year, do what 2023 is doing, 
+---TO DO: insert parameter for loop, for each year, do what 2023 is doing,
 --- and at the end, add another union statement
 with data_2023 as (
-    select 
+    select
     organization,
     api_report_period as fiscal_year,
     item as mode,
@@ -17,7 +17,6 @@ with data_2023 as (
     CASE
         WHEN description = "Operating Expenses" THEN operations_expended
         WHEN description = "Capital Expenses" THEN capital_expended
-        ELSE Null
     END as Total_Annual_Expenses_By_Mode,
     annual_vehicle_rev_miles as Annual_VRM,
     annual_vehicle_rev_hours as Annual_VRH,
@@ -29,7 +28,7 @@ with data_2023 as (
 ),
 
 service2022 as (
-    select 
+    select
     Organization_Legal_Name as organization,
     Fiscal_Year as  fiscal_year,
     Mode as mode,
@@ -42,7 +41,7 @@ service2022 as (
 ),
 
 expenses2022 as (
-    select 
+    select
     Organization_Legal_Name as organization,
     Fiscal_Year as  fiscal_year,
     Operating_Capital as operating_capital,
@@ -63,7 +62,7 @@ all_2022 as (
         service2022.Sponsored_UPT,
         service2022.VOMX
 from service2022
-FULL OUTER JOIN expenses2022 
+FULL OUTER JOIN expenses2022
     ON service2022.organization = expenses2022.organization
     AND service2022.fiscal_year = expenses2022.fiscal_year
     AND service2022.mode = expenses2022.mode

@@ -1,3 +1,3 @@
 SELECT
-    Organization as organization 
+    Organization as organization
 FROM blackcat_raw.2023_organizations

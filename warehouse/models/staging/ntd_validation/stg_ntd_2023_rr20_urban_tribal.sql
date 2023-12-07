@@ -1,4 +1,4 @@
-SELECT 
+SELECT
   organization,
   reportstatus as api_report_status,
   TIMESTAMP_MILLIS(reportlastmodifieddate) as api_report_last_modified_date,
@@ -11,6 +11,6 @@ SELECT
   ntdreportingrr20_urban_tribal_data.CapitalExpended as capital_expended,
   ntdreportingrr20_urban_tribal_data.Description as description,
   ntdreportingrr20_urban_tribal_data.LastModifiedDate as last_modified_date
-FROM {{ source('ntd_report_validation', 'all_2023_ntdreports') }}
+FROM {{ source('ntd_report_validation', 'all_2023_ntdreports') }},
 -- `cal-itp-data-infra-staging.external_blackcat.all_2023_ntdreports`
-, UNNEST (`ntdreportingrr20_urban_tribal_data`) as `ntdreportingrr20_urban_tribal_data`
+  UNNEST(`ntdreportingrr20_urban_tribal_data`) as `ntdreportingrr20_urban_tribal_data`
