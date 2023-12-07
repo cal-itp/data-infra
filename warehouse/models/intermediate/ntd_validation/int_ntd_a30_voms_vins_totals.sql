@@ -6,14 +6,14 @@ with voms_rr20 as (
     select organization,
     fiscal_year,
     AVG(VOMX) as rr20_voms
-    FROM {{ ref('int_ntd_rr20_service_alldata') }} 
+    FROM {{ ref('int_ntd_rr20_service_alldata') }}
     GROUP BY organization, fiscal_year
 ),
 
 vins_a30 as (
     SELECT organization,
     api_report_period as fiscal_year,
-    COUNT (DISTINCT VIN) as a30_vin_n
+    COUNT(DISTINCT VIN) as a30_vin_n
     FROM {{ ref('stg_ntd_2023_a30_assetandresourceinfo') }}
     GROUP BY organization, fiscal_year
 )

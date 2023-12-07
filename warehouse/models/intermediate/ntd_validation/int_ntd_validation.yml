@@ -2,18 +2,18 @@ version: 2
 
 models:
   - name: int_ntd_rr20_financial_fare_revenues
-    description: | 
+    description: |
       Setting up the RR-20 data for comparing fare revenues to previous year
     # tests:
     #   - dbt_utils.expression_is_true:
     #       expression: 'status != {{ guidelines_to_be_assessed_status() }}'
     # columns:
   - name: int_ntd_rr20_financial_specific_funds
-    description: | 
+    description: |
       Setting up the RR-20 data for comparing specific funding sources - the 5311 funds, and Other directly generated funds
       For NTD validation error ID #s RR20F-070, RR20F-065, RR20F-068, RR20F-066, RR20F-013
   - name: int_ntd_rr20_financial_total_exp
-    description: | 
+    description: |
       Setting up the RR-20 data for comparing totals, for operating and capital expenses, reported in different ares of the RR-20
       For NTD validation error ID #s RR20F-001OA, RR20F-001C, RR20F-182
   - name: int_ntd_rr20_service_alldata
@@ -21,7 +21,7 @@ models:
       Combines 2023 and 2022 data in preparation for doing NTD validation checks.
       The 2022 data was *not* from the API and so formatted differently
       We are *assuming* that data in 2024 and onwards will be the same format as 2023
-      If you get errors in 2024, check which columns may differ and read errors carefully. 
+      If you get errors in 2024, check which columns may differ and read errors carefully.
   - name: int_ntd_rr20_service_ratios
     description: |
       makes ratios for validation checks
