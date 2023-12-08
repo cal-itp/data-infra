@@ -7,7 +7,6 @@ default_args:
     depends_on_past: False
     start_date: "2021-04-15"
     email:
-      - "laurie.m@jarv.us"
       - "andrew.v@jarv.us"
       - "jameelah.y@jarv.us"
     email_on_failure: True

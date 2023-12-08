@@ -27,7 +27,7 @@ def get_engine(max_bytes=None, project="cal-itp-data-infra"):
     # Note that we should be able to add location as a uri parameter, but
     # it is not being picked up, so passing as a separate argument for now.
     return create_engine(
-        f"bigquery://{project}/?maximum_bytes_billed={max_bytes}",
+        f"bigquery://{project}/?maximum_bytes_billed={max_bytes}",  # noqa: E231
         location=CALITP_BQ_LOCATION,
         credentials_path=cred_path,
     )

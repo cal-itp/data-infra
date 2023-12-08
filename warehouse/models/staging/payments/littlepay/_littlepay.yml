@@ -20,9 +20,11 @@ sources:
 models:
   - name: int_device_transaction_pairs_common_fields
     columns:
-      - name: participant_id
+      - &participant_id
+        name: participant_id
+        description: '{{ doc("lp_participant_id") }}'
       - name: micropayment_id
-        description: '{{ doc("micropayment_adjustments_micropayment_id") }}'
+        description: '{{ doc("lp_micropayment_id") }}'
       - name: littlepay_transaction_id_1
         description: Unique tap ID generated for the "on" transaction by Littlepay upon receipt of a tap to the Device API.
       - name: littlepay_transaction_id_2
@@ -77,18 +79,23 @@ models:
   - name: int_littlepay__customer_funding_source_vaults
     description: |
       Derived from customer_funding_source records.
+      funding_source_vault_id values can appear across multiple participants, so this
+      table is unique at the funding_source_vault_id + participant_id level.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: calitp_valid_at
           upper_bound_column: calitp_invalid_at
-          partition_by: funding_source_vault_id
+          partition_by: funding_source_vault_id, participant_id
           gaps: not_allowed
           zero_length_range_allowed: true
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - participant_id
+            - funding_source_id
     columns:
       - name: funding_source_id
         tests:
           - not_null
-          - unique
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
       - name: funding_source_vault_id
@@ -115,11 +122,18 @@ models:
       principal or canonical customer_id. Each customer_id with the same
       principal_customer_id should be assumed to be the same person. A customer_id
       should only have one principal_customer_id.
+      customer_id values can appear across multiple participants, so this
+      table is unique at the customer_id + participant_id level.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - participant_id
+            - customer_id
     columns:
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
         tests:
-          - unique
+          - not_null
       - name: principal_customer_id
         description: '{{ doc("customer_funding_source_principal_customer_id") }}'
         tests:
@@ -138,17 +152,8 @@ models:
       - name: pending
 
   - name: stg_littlepay__authorisations
-    tests:
-      - &littlepay_uniqueness
-        dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - instance
-            - extract_filename
-            - ts
-            - _line_number
     columns:
-      - name: participant_id
-        description: Identifies the participant that the authorisation belongs to.
+      - *participant_id
       - name: aggregation_id
         description: The aggregation that is being authorised. A single aggregation can have multiple authorisations. The authorisations that are submitted depend on the scheme and the result of the initial authorisation (if declined, debt recovery authorisations may be performed).
       - name: acquirer_id
@@ -167,10 +172,45 @@ models:
       - name: status
         description: Status of authorisation. One of (`Authorised`, `Declined`, `Failed`, `Invalid`, `Lost`, `Stolen`, `Unavailable`, `Unknown`, `Verified`)
       - name: authorisation_date_time_utc
+      - &lp_export_date
+        name: littlepay_export_date
+        description: |
+          Date of the source file from Littlepay. Date is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - &lp_export_ts
+        name: littlepay_export_ts
+        description: |
+          Timestamp of the source file from Littlepay. Timestamp is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - &lp_line_number
+        name: _line_number
+        description: |
+          Line number of this row in the source file.
+          Some line numbers may be missing because we drop extra copies of rows that are full duplicates of another row.
+      - &payments_input_row_key
+        name: _key
+        description: |
+          Synthetic key composed of Littlepay file date and line number to uniquely identify a row within source data.
+        tests:
+          - not_null
+          - unique
+      - name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+        tests:
+          - not_null
+          - unique_proportion:
+              at_least: 0.999
+          - relationships:
+              to: ref('int_payments__authorisations_deduped')
+              field: _payments_key
+      - &_content_hash
+        name: _content_hash
+        description: |
+          Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
+          Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
 
   - name: stg_littlepay__customer_funding_source
-    tests:
-      - *littlepay_uniqueness
     columns:
       - name: littlepay_export_ts
         description: Export timestamp parsed from filename.
@@ -196,8 +236,7 @@ models:
         description: Form factor describing the contactless EMV device of the funding source.
       - name: principal_customer_id
         description: '{{ doc("customer_funding_source_principal_customer_id") }}'
-      - name: participant_id
-        description: The participant ID that uniquely identifies each participant.
+      - *participant_id
       - name: calitp_funding_source_id_ranking_size
         description: The number of records on which the `funding_source_id` shows up in the table
       - name: calitp_funding_source_id_rank
@@ -210,10 +249,20 @@ models:
         description: The number of records on which the `customer_id` shows up in the table
       - name: calitp_customer_id_rank
         description: A ranking of the records using the `customer_id`, ordered newest to oldest
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - &payments_key_full_uniqueness
+        name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+        tests:
+          - not_null
+          - unique
+      - *_content_hash
 
   - name: stg_littlepay__device_transaction_purchases
-    tests:
-      - *littlepay_uniqueness
     columns:
       - name: littlepay_transaction_id
         description: Unique tap ID generated by Littlepay upon receipt of a tap to the Device API.
@@ -236,10 +285,14 @@ models:
         description: The value of the purchase. The value may be adjusted by capping rules or tap-off.
       - name: transaction_time
         description: The time transaction was created.
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *payments_key_full_uniqueness
+      - *_content_hash
 
   - name: stg_littlepay__device_transactions
-    tests:
-      - *littlepay_uniqueness
     description: In the case of duplicated littlepay_transaction_id values, the one with the latest transaction_date_time_utc in the latest export file takes precedence.
     columns:
       - name: customer_id
@@ -273,15 +326,26 @@ models:
           The longitude of the vehicle, in decimal degrees, where the device transaction took place.
 
           If the device does not support GPS, then this field will not be included.
+      - name: geography
+        description: |
+          Latitude and longitude combined into a geography point type.
       - name: mode
         description: |
           The mode of transport.
 
           Possible values are `bus` and `train`.
       - name: onward_zone_ids
-        description: ""
-      - name: participant_id
-        description: The unique identifier of the participant that the device belongs to.
+        description: |
+          Zones passed for incomplete variable trips.
+
+          Can be a comma-separated string.
+      - name: processed_timestamp_utc
+        description: |
+          Timestamp of when the device data was processed by Littlepay.
+
+          The difference between this field and transaction_date_time_utc can be sizeable when data
+          is sent by the customer via the Back Office API
+      - *participant_id
       - name: route_id
         description: The route identifier provided by the device.
       - name: transaction_date_time_utc
@@ -316,10 +380,21 @@ models:
         description: The zone identifier provided by the device.
       - name: transaction_date_time_pacific
         description: The date and time that the customer tapped on the device (in Pacific time instead of UTC).
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *payments_key_full_uniqueness
+      - *_content_hash
 
   - name: stg_littlepay__micropayment_adjustments
+    description: |
+      Only adjustments with `applied = True` were actually applied;
+      there may be adjustments present for which a micropayment qualified but
+      which were not actually applied (for example, if a micropayment
+      is eligible for multiple products, adjustments will be present for
+      each applicable product but only one will be applied.)
     tests:
-      - *littlepay_uniqueness
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - micropayment_id
@@ -332,38 +407,28 @@ models:
             - amount
             - time_period_type
             - applied
-            - zone_ids_us
+            - zone_ids_used
     columns:
       - name: adjustment_id
-        description: '{{ doc("micropayment_adjustments_adjustment_id") }}'
+        description: '{{ doc("lp_adjustment_id") }}'
       - name: micropayment_id
-        description: '{{ doc("micropayment_adjustments_micropayment_id") }}'
+        description: '{{ doc("lp_micropayment_id") }}'
         tests:
           - unique:
               where: applied
-      - name: participant_id
-        description: Identifies the participant that the adjustment belongs to.
+      - *participant_id
       - name: customer_id
-        description: Identifies the customer that the adjustment belongs to.
+        description: '{{ doc("lp_customer_id") }}'
       - name: product_id
-        description: Identifies the product that was used to adjust the micropayment.
+        description: '{{ doc("lp_product_id") }}'
       - name: type
-        description: |
-          The type of product / rule that created the adjustment. Additional values may be added over time.
-
-          Possible values:
-          * `MULTI_DAY_CAP`
-          * `DAILY_CAP`
-          * `WEEKLY_CAP`
+        description: '{{ doc("lp_adj_type") }}'
       - name: description
-        description: General description of the reason the adjustment was created.
+        description: '{{ doc("lp_adj_description") }}'
       - name: amount
-        description: The amount deducted from the `nominal_amount` to arrive at the `charge_amount` for the micropayment being adjusted.
+        description: '{{ doc("lp_adj_amount") }}'
       - name: time_period_type
-        description: |
-          Indicates whether the travel was determined to have occurred during a peak or off-peak period for the purposes of capping.
-
-          Possible values are `PEAK` and `OFFPEAK`.
+        description: '{{ doc("lp_adj_time_period_type") }}'
       - name: applied
         description: If `TRUE`, then the adjustment to the micropayment has been applied.
       - name: incentive_product_id
@@ -371,10 +436,14 @@ models:
           The ID of the product with the incentive that was applied to micropayments.
 
           Same ID as `product_id`.
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *payments_key_full_uniqueness
+      - *_content_hash
 
   - name: stg_littlepay__micropayment_device_transactions
-    tests:
-      - *littlepay_uniqueness
     columns:
       - name: littlepay_transaction_id
         description: |
@@ -383,66 +452,62 @@ models:
           For 'tap on, tap off' integrations, merchants will see two transactions for each micropayment.
       - name: micropayment_id
         description: The micropayment that the transaction is associated with.
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *payments_key_full_uniqueness
+      - *_content_hash
 
   - name: stg_littlepay__micropayments
     tests:
-      - *littlepay_uniqueness
+      - &littlepay_uniqueness
+        dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - instance
+            - extract_filename
+            - ts
+            - _line_number
     description: This model makes the assumption that, in the case of duplicated micropayment_id values, the one with the latest transaction_time in the latest export file takes precedence.
     columns:
       - name: micropayment_id
-        description: '{{ doc("micropayments_micropayment_id") }}'
+        description: '{{ doc("lp_micropayment_id") }}'
         tests:
           - not_null
           - unique
       - name: aggregation_id
-        description: Identifies the aggregation that the micropayment belongs to.
-      - name: participant_id
-        description: Identifies the participant that the micropayment belongs to.
+        description: '{{ doc("lp_aggregation_id") }}'
+      - *participant_id
       - name: customer_id
-        description: Identifies the customer that the micropayment belongs to.
+        description: '{{ doc("lp_customer_id") }}'
       - name: funding_source_vault_id
-        description: |
-          Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped.
-
-          A registered customer can have multiple funding sources linked to it. This field can be used to join to the `customer_funding_source` feed.
+        description: '{{ doc("lp_funding_source_vault_id") }}'
       - name: transaction_time
-        description: |
-          The date and time when the micropayment was created.
-
-          For variable fare (tap on/tap off), the micropayment will not be created until the tap off occurs.
-
-          The date reflects the processing time by Littlepay, rather than the event time; that is, when the related taps occurred.
+        description: '{{ doc("lp_transaction_time") }}'
       - name: payment_liability
-        description: |
-          Indicates who would be liable to absorb the cost if the micropayment was declined by the issuer when an authorisation is attempted.
-
-          Possible values are `ISSUER` or `OPERATOR`.
+        description: '{{ doc("lp_payment_liability") }}'
       - name: charge_amount
-        description: The amount that will be credited to or debited from the funding source. This may be lower than the nominal amount if adjustments have been applied. nominal_amount Decimal The amount that would be charged if no adjustments were to be applied.
+        description: '{{ doc("lp_charge_amount") }}'
+      - name: nominal_amount
+        description: '{{ doc("lp_nominal_amount") }}'
       - name: currency_code
-        description: ISO 4217 numeric code representing the currency that the `charge_amount` and `nominal_amount` are denominated in.
+        description: '{{ doc("lp_currency_code") }}'
       - name: type
-        description: |
-          Indicates the type of fare that the micropayment charge represents.
-
-          Transaction type. Possible values are `CREDIT` or `DEBIT`. The value Will be `DEBIT` if `charge_amount >= 0.00`
+        description: '{{ doc("lp_mp_type") }}'
       - name: charge_type
-        description: |
-          Possible values:
-          * `RETAIL_FARE`
-          * `FLAT_FARE`
-          * `COMPLETE_VARIABLE_FARE`
-          * `INCOMPLETE_VARIABLE_FARE`
-          * `REFUND`
+        description: '{{ doc("lp_charge_type") }}'
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *_content_hash
+      - *payments_key_full_uniqueness
 
   - name: stg_littlepay__product_data
-    tests:
-      - *littlepay_uniqueness
     columns:
-      - name: participant_id
-        description: Identifies the participant that the micropayment belongs to.
+      - *participant_id
       - name: product_id
-        description: '{{ doc("product_data_product_id") }}'
+        description: '{{ doc("lp_product_id") }}'
         tests:
           - not_null
           - unique
@@ -454,17 +519,11 @@ models:
 
           The `original_version_id` may differs from the `previous_version_id` if the product has been updated more than once.
       - name: product_code
-        description: The code specified in the Merchant Portal against the product.
+        description: '{{ doc("lp_product_code") }}'
       - name: product_description
-        description: The description specified in the Merchant Portal during the product creation.
+        description: '{{ doc("lp_product_description") }}'
       - name: product_type
-        description: |
-          The name of the product type.
-
-          Possible values:
-          * `CAPPING`
-          * `DISCOUNT`
-          * `PURCHASE`
+        description: '{{ doc("lp_product_type") }}'
       - name: activation_type
         description: The type of customers the product will be actioned for.
       - name: product_status
@@ -526,7 +585,7 @@ models:
         description: The number of free transfers after the initial tap.
       - name: capping_time_zone
         description: The time zone where the capping product was used.
-      - name: capping_overlap
+      - name: capping_overlap_time
         description: The time a customer can overlap within a 24-hour period.
       - name: capping_application_level
         description: This is the customer level tapping as customers can have multiple cards (physical / digital).
@@ -572,6 +631,12 @@ models:
         description: |
           Configuration type for the incentive.
           Possible values are `DAILY_TABLE` or `ZONE_TRIANGLE`.
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *payments_key_full_uniqueness
+      - *_content_hash
 
   - name: stg_littlepay__refunds
     tests:
@@ -587,8 +652,11 @@ models:
           authorisations that are submitted depend on the scheme and the result
           of the initial authorisation. For example, if an authorisation is declined,
           then a debt recovery authorisation may be performed.
-      - name: participant_id
-        description: Identifies the participant that the micropayment belongs to.
+        tests:
+          - relationships:
+              to: ref('int_payments__refunds_deduped')
+              field: aggregation_id
+      - *participant_id
       - name: customer_id
         description: Identifies the customer that the micropayment belongs to.
       - name: micropayment_id
@@ -620,6 +688,10 @@ models:
           Uniquely identifies a card transaction, based on the ISO 8583 standard. The value is generated during authorisation.
 
           If the acquirer is Elavon, this value will be split between `littlepay_reference_number` and `external_reference_number`.
+        tests:
+          - relationships:
+              to: ref('int_payments__refunds_deduped')
+              field: retrieval_reference_number
       - name: littlepay_reference_number
         description: |
           Uniquely identifies a card transaction.
@@ -655,49 +727,53 @@ models:
         description: This field is not in use.
       - name: settlement_response_text
         description: This field is not in use.
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *_content_hash
+      - *payments_key_full_uniqueness
 
   - name: stg_littlepay__settlements
     tests:
       - *littlepay_uniqueness
     columns:
       - name: settlement_id
-        description: A unique identifier for each settlement.
-      - name: participant_id
-        description: The unique identifier of the participant that the device belongs to.
+        description: '{{ doc("lp_settlement_id") }}'
+      - *participant_id
       - name: aggregation_id
-        description: Identifies the aggregation that the micropayment belongs to.
+        description: '{{ doc("lp_aggregation_id") }}'
       - name: customer_id
-        description: Identifies the customer that the micropayment belongs to.
+        description: '{{ doc("lp_customer_id") }}'
       - name: funding_source_id
-        description: |
-          Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped.
-
-          A registered customer can have multiple funding sources linked to it. This field can be used to join to the `customer_funding_source` feed.
+        description: '{{ doc("lp_funding_source_id") }}'
       - name: settlement_type
-        description: |
-          Type of settlement that occurred. Possible values are `DEBIT` or `CREDIT`.
-
-          If refunding a micropayment that has already been settled, the value will be `CREDIT`.
+        description: '{{ doc("lp_settlement_type") }}'
       - name: transaction_amount
-        description: The settlement amount.
-      - name: currency_code
-        description: ISO 4217 numeric currency code for the amount that was requested to be settled.
+        description: '{{ doc("lp_transaction_amount") }}'
       - name: retrieval_reference_number
-        description: |
-          Uniquely identifies a card transaction, based on the ISO 8583 standard.
-
-          If the acquirer is Elavon, this value will be split between `littlepay_reference_number` and `external_reference_number`.
+        description: '{{ doc("lp_retrieval_reference_number") }}'
       - name: littlepay_reference_number
-        description: |
-          Uniquely identifies a card transaction.
-
-          If the acquirer is Elavon, then this key will contain the first part of the string from `retrieval_reference_number`.
+        description: '{{ doc("lp_littlepay_reference_number") }}'
       - name: external_reference_number
-        description: |
-          Uniquely identifies a card transaction.
-
-          If the acquirer is Elavon, then this key will contain the second part of the string from `retrieval_reference_number`.
-      - name: settlement_requested_date_time_utc
-        description: Timestamp of when the settlement request was submitted to the acquirer.
+        description: '{{ doc("lp_external_reference_number") }}'
+      - name: record_updated_timestamp_utc
+        description: '{{ doc("lp_record_updated_timestamp_utc") }}'
       - name: acquirer
-        description: Identifies the acquirer used to settle the transaction.
+        description: '{{ doc("lp_acquirer") }}'
+      - name: acquirer_response_rrn
+        description: '{{ doc("lp_acquirer_response_rrn") }}'
+      - name: settlement_status
+        description: '{{ doc("lp_settlement_status") }}'
+      - name: request_created_timestamp_utc
+        description: '{{ doc("lp_request_created_timestamp_utc") }}'
+      - name: response_created_timestamp_utc
+        description: '{{ doc("lp_response_created_timestamp_utc") }}'
+      - name: refund_id
+        description: '{{ doc("lp_refund_id") }}'
+      - *lp_export_date
+      - *lp_export_ts
+      - *lp_line_number
+      - *payments_input_row_key
+      - *_content_hash
+      - *payments_key_full_uniqueness

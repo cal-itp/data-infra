@@ -30,7 +30,7 @@ def email_failures(task_instance: TaskInstance, execution_date, **kwargs):
     The following agency GTFS feeds could not be extracted on {execution_date}:
 
     {html_report}
-    """
+    """  # noqa: E231,E241
 
     if os.environ["AIRFLOW_ENV"] == "development":
         print(
@@ -40,7 +40,6 @@ def email_failures(task_instance: TaskInstance, execution_date, **kwargs):
     else:
         send_email(
             to=[
-                "laurie.m@jarv.us",
                 "andrew.v@jarv.us",
                 "evan.siroky@dot.ca.gov",
                 "hunter.owens@dot.ca.gov",

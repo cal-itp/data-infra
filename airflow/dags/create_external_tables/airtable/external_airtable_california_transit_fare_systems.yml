@@ -41,7 +41,7 @@ schema_fields:
     type: FLOAT
   - name: ticket_validation
     mode: NULLABLE
-    type: STRING
+    type: JSON
   - name: electronic_fare_program
     mode: NULLABLE
     type: STRING
@@ -50,10 +50,10 @@ schema_fields:
     type: FLOAT
   - name: ticket_media
     mode: NULLABLE
-    type: STRING
+    type: JSON
   - name: ticket_pass_sales_methods
     mode: NULLABLE
-    type: STRING
+    type: JSON
   - name: pass_price_min
     mode: NULLABLE
     type: FLOAT
@@ -101,7 +101,7 @@ schema_fields:
     type: STRING
   - name: reduced_fare_categories
     mode: NULLABLE
-    type: STRING
+    type: JSON
   - name: itp_id
     mode: NULLABLE
     type: FLOAT
@@ -116,13 +116,73 @@ schema_fields:
     type: STRING
   - name: payment_accepted
     mode: NULLABLE
-    type: STRING
+    type: JSON
   - name: fare_capping
     mode: NULLABLE
-    type: STRING
+    type: JSON
   - name: fare_system
     mode: NULLABLE
     type: STRING
   - name: id
+    mode: NULLABLE
+    type: STRING
+  - name: fare_products
+    mode: REPEATED
+    type: STRING
+  - name: youth_specific_fare
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: free_fare
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: distance_fares
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: zone_fares
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: route_fares
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: market_based_fares
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: num_reduced_fare_categories
+    mode: NULLABLE
+    type: STRING
+  - name: intra_system_xfer_discounts
+    mode: NULLABLE
+    type: STRING
+  - name: intra_system_xfer_time
+    mode: NULLABLE
+    type: STRING
+  - name: intra_system_xfer_cost
+    mode: NULLABLE
+    type: STRING
+  - name: interagency_xfer_discounts
+    mode: NULLABLE
+    type: STRING
+  - name: interagency_xfer_systems
+    mode: NULLABLE
+    type: STRING
+  - name: interagency_xfer_notes
+    mode: NULLABLE
+    type: STRING
+  - name: fare_products_notes
+    mode: NULLABLE
+    type: STRING
+  - name: fare_account
+    mode: NULLABLE
+    type: STRING
+  - name: fare_media
+    mode: REPEATED
+    type: STRING
+  - name: smartcard_discount
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: fare_product_price_min
+    mode: NULLABLE
+    type: STRING
+  - name: fare_product_price_max
     mode: NULLABLE
     type: STRING

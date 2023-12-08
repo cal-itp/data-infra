@@ -43,7 +43,7 @@ Both of these tasks can fire if the archiver is only partially degraded, but the
 We log errors and exceptions (both caught and uncaught) to our [Sentry instance](https://sentry.calitp.org/) via the [Python SDK for Sentry](https://github.com/getsentry/sentry-python). Common problems include:
 
 - Failure to connect to Redis following a node upgrade; this is typically fixed by [restarting the archiver](#restarting-the-archiver).
-- `RTFetchException`, a custom class specific to failures during feed download; these can be provider-side (i.e. the agency/vendor) or consumer-side (i.e. us) and are usually fixed (if possible) by [changing download configurations](#fixing-download-configurations). Common examples (and HTTP error code if relevant) include:
+- `RTFetchException`, a custom class specific to failures during feed download; these can be provider-side (i.e. the agency/vendor) or consumer-side (i.e. us) and are usually fixed (if possible) by [changing download configurations](#changing-download-configurations). Common examples (and HTTP error code if relevant) include:
   - Missing or invalid authentication (401/403)
   - Changed URLs (404)
   - Intermittent outages/errors (may be a ConnectionError or a 500 response)

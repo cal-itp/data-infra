@@ -104,7 +104,7 @@ def convert_gtfs_datasets_to_download_configs(task_instance, execution_date, **k
 
     valid, invalid, skipped = gtfs_datasets_to_extract_configs(extract)
 
-    msg = f"{len(extract.records)=} {len(valid)=} {len(skipped)=} {len(invalid)=}"
+    msg = f"{len(extract.records)=} {len(valid)=} {len(skipped)=} {len(invalid)=}"  # noqa: E225
     print(msg)
 
     print("Invalid records:")

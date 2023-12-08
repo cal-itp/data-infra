@@ -14,3 +14,31 @@ hive_options:
   mode: AUTO
   require_partition_filter: false
   source_uri_prefix: "california_transit__funding_programs/"
+schema_fields:
+  - name: id
+    type: STRING
+    mode: NULLABLE
+  - name: full_name
+    type: STRING
+    mode: NULLABLE
+  - name: program
+    type: STRING
+    mode: NULLABLE
+  - name: program_information
+    type: STRING
+    mode: NULLABLE
+  - name: program_informatiom
+    type: STRING
+    mode: NULLABLE
+  - name: services
+    type: STRING
+    mode: REPEATED
+  - name: organization
+    type: STRING
+    mode: REPEATED
+  - name: category
+    type: STRING
+    mode: NULLABLE
+  - name: drmt_data
+    type: STRING
+    mode: REPEATED

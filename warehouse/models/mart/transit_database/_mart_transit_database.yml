@@ -74,7 +74,8 @@ models:
     tests: *mutually_exclusive_ranges
     columns:
       - *key
-      - name: ntd_id
+      - &org_ntd_id
+        name: ntd_id
         description: |
           The organization's ID in the National Transit Database / FTA agency ID number.
           Data entry processes / sources of truth for this field have changed over time.
@@ -155,7 +156,8 @@ models:
         description: |
           Formula in source system returns true value under same conditions as `public_currently_operating`
           plus additional requirement that service has `fixed_route = true` (for organizations, only at least one managed service must meet this criterion).
-      - name: is_public_entity
+      - &org_is_public_entity
+        name: is_public_entity
         description: |
           Formula in source system returns true if the `organization_type` column has been set to one of the following:
             City/Town,
@@ -535,6 +537,44 @@ models:
       - name: _is_current
       - name: _valid_from
       - name: _valid_to
+  - name: dim_mobility_mart_providers
+    description: |-
+      Listing of all Transit Agencies (TAs) in California with respective data fields needed for the Mobility Marketplace provider map. The number of TAs in this table should match up with the number of TAs that service California as per the National Transit Database (NTD).
+
+      Some information in this table may not be directly related to the TA itself, but rather the parent organization that the TA belongs to. Columns that are affected by this logic are:
+
+      - counties_served
+      - funding_sources
+      - gtfs_schedule_uris
+    columns:
+      - name: agency_name
+        description: The name of the TA as specified in NTD.
+      - <<: *org_ntd_id
+        tests:
+          - not_null
+          - unique
+      - name: hq_city
+        description: The city where this TA's headquarters is located.
+      - name: hq_county
+        description: The county where this TA's headquarters is located.
+      - name: counties_served
+        description: A semi-colon delimited list of counties that are serviced by the parent organization this TA belongs to; this TA may not service all counties listed.
+      - name: agency_website
+        description: The website for this TA.
+      - name: caltrans_district_id
+      - name: caltrans_district_name
+      - *org_is_public_entity
+      - <<: *public_currently_operating
+        name: is_publicly_operating
+      - name: funding_sources
+        description: A semi-colon delimted list of numerical funding program names that this TA's parent organization receives; all non-numerical (e.g. `Public`, `Caltrans`) funding programs are excluded in this column.
+      - name: vehicles_at_max_service
+        description: (abbreviated as "voms") The number of revenue vehicles operated to meet the annual maximum service requirement. This is the revenue vehicle count during the peak season of the year on the week and day that maximum service is provided.
+      - name: on_demand_vehicles_at_max_service
+        description: |-
+          (abbreviated as "voms_dr") The number of revenue vehicles operated to meet the annual maximum service requirement for NTD categories: Demand Response (DR) and Demand Response Taxi (DT).
+      - name: gtfs_schedule_uris
+        description: A semi-colon delimited list of URLs for GTFS schedules this TA's parent organization has under its umbrella of services; there may be feeds that do not belong to this TA but instead from a sibling service provider within the same parent organization.
   - name: bridge_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.
@@ -892,7 +932,6 @@ models:
       - name: qc__num_issue_types
       - name: qc_checks
       - name: waiting_on_someone_other_than_transit_data_quality_
-      - name: caltrans_district__from_operating_county_geographies___from_services_
       - name: is_open
       - name: last_update
       - name: last_update_month

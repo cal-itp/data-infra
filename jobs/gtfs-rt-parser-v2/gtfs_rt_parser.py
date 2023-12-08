@@ -769,7 +769,7 @@ def main(
         typer.secho(f"missing: {files_missing_metadata}")
         typer.secho(f"invalid: {files_invalid_metadata}")
         raise RuntimeError(
-            f"too many files have missing/invalid metadata; {total - len(files)} of {total}"
+            f"too many files have missing/invalid metadata; {total - len(files)} of {total}"  # noqa: E702
         )
 
     if not files:
@@ -893,7 +893,7 @@ def main(
 
     if exceptions:
         exc_str = "\n".join(str(tup) for tup in exceptions)
-        msg = f"got {len(exceptions)} exceptions from processing {len(aggregations_to_process)} feeds:\n{exc_str}"
+        msg = f"got {len(exceptions)} exceptions from processing {len(aggregations_to_process)} feeds:\n{exc_str}"  # noqa: E231
         typer.secho(msg, err=True, fg=typer.colors.RED)
         raise RuntimeError(msg)
 

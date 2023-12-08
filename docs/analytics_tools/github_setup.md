@@ -106,3 +106,29 @@ After completing this section, you will also enjoy various extensions in Jupyter
   - multiple options on SNOW, ultimately want IT to install from [here](https://git-scm.com/downloads)
 - Visual Studio Code
   - be sure to pick Visual Studio [_Code_](https://code.visualstudio.com/Download)
+
+### Initial Setup
+
+First, find where Git Bash lives on your system. You might have a desktop shortcut, or you can find it via the Start Menu or Program Files. Start Git Bash, and setup an SSH key per the [generic GitHub instructions](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) (the Jupyter instructions above won't work since we don't have the `gh` GitHub CLI here).
+
+- This will be a new SSH key unique to this machine, it's ok to have multiple
+- The default file locations from the docs are OK
+- Setting a passphrase is entirely optional, can press enter at the prompt for no passphrase
+
+Also take this time to configure your [global username](https://docs.github.com/en/get-started/getting-started-with-git/setting-your-username-in-git) and [email](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address) to avoid complications later.
+
+### Filesystem Notes
+
+Git Bash creates what looks like a little Unix filesystem on your Windows PC, but it's a little hard to use. Rather than try to navigate around the filesystem from Git Bash, we find it easiest to first navigate to the folder you want to use Git in via File Explorer, then right-click and use the "Git Bash here" option.
+
+### Cloning a Repository
+
+First, decide where you'd like to put your Git repositories on your local system. For example, you could create a new folder within My Documents called "git".
+
+Navigate to your desired folder using File Explorer, and right-click then select "Git Bash here".
+
+Git Bash should start at the correct location on your filesystem, and you can immediately clone a repo using the same instructions as for Jupyter: [Cloning a Repository](cloning-a-repository).
+
+### Visual Studio Code
+
+After confirming that the basics work, you might prefer to use VS Code to handle your Git needs on your PC. See [here](https://code.visualstudio.com/docs/sourcecontrol/overview) for details on using Git functionality within VS Code.

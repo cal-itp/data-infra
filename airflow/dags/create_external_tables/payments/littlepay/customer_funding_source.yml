@@ -30,5 +30,7 @@ schema_fields:
     type: STRING
   - name: principal_customer_id
     type: STRING
+  - name: participant_id
+    type: STRING
   - name: _line_number
     type: STRING

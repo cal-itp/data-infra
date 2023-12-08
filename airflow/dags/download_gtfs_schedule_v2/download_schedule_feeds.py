@@ -172,7 +172,7 @@ def download_all(task_instance, execution_date, **kwargs):
     success_rate = len(result.successes) / len(configs)
     if success_rate < GTFS_FEED_LIST_ERROR_THRESHOLD:
         raise RuntimeError(
-            f"Success rate: {success_rate:.3f} was below error threshold: {GTFS_FEED_LIST_ERROR_THRESHOLD}"
+            f"Success rate: {success_rate:.3f} was below error threshold: {GTFS_FEED_LIST_ERROR_THRESHOLD}"  # noqa: E231
         )
 
 

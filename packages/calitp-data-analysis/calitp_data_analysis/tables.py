@@ -109,7 +109,7 @@ class TableFactory:
                 </tr>
                 {table_body_html}
             </table>
-            """
+            """  # noqa: E221,E222
 
 
 tbls = AutoTable(

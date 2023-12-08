@@ -1,0 +1,18 @@
+description: "Process BigQuery tables into Excel files, save in GCS"
+schedule_interval: "0 20 * * 1" #8 pm every Monday
+tags:
+  - ntd, blackcat
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: "2023-10-02"
+    catchup: False
+    email:
+      - "kim.engie@slalom.com"
+      - "christian.suyat@dot.ca.gov"
+      - "katrina.kaiser@dot.ca.gov"
+    email_on_failure: True
+    pool: default_pool
+    concurrency: 50
+wait_for_defaults:
+    timeout: 3600

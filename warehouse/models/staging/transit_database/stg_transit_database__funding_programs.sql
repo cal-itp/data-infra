@@ -12,7 +12,7 @@ stg_transit_database__funding_programs AS (
         id,
         {{ trim_make_empty_string_null(column_name = "program") }} AS program,
         full_name,
-        program_informatiom,
+        COALESCE(program_information, program_informatiom) AS program_information,
         services,
         organization,
         category,

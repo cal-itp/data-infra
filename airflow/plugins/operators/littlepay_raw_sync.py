@@ -117,7 +117,8 @@ def sync_file(
         )
         try:
             metadata_str = fs.getxattr(
-                path=f"gs://{fileinfo.name}", attr=PARTITIONED_ARTIFACT_METADATA_KEY
+                path=f"gs://{fileinfo.name}",  # noqa: E231
+                attr=PARTITIONED_ARTIFACT_METADATA_KEY,
             )
         except KeyError:
             print(f"metadata missing on {fileinfo.name}")
@@ -207,7 +208,7 @@ class LittlepayRawSync(BaseOperator):
             raise RuntimeError("failed to page fully through bucket")
 
         print(
-            f"Found {len(files)} source files in {self.src_bucket}; diffing and copying to {RawLittlepayFileExtract.bucket}."
+            f"Found {len(files)} source files in {self.src_bucket}; diffing and copying to {RawLittlepayFileExtract.bucket}."  # noqa: E702
         )
 
         fs = get_fs()

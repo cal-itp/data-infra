@@ -39,7 +39,7 @@ def log_failure_to_slack(context):
     Try {ti.try_number} of {ti.max_tries}
 
     <{ti.log_url}| Check Log >
-    """
+    """  # noqa: E221, E222
         requests.post(slack_url, json={"text": message})
 
     # This is very broad but we want to try to log _any_ exception to slack

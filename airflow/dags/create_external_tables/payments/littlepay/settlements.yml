@@ -28,9 +28,23 @@ schema_fields:
     type: STRING
   - name: external_reference_number
     type: STRING
+  - name: acquirer
+    type: STRING
   - name: settlement_requested_date_time_utc
     type: STRING
-  - name: acquirer
+  - name: record_updated_timestamp_utc
+    type: STRING
+  - name: settlement_type
+    type: STRING
+  - name: acquirer_response_rrn
+    type: STRING
+  - name: settlement_status
+    type: STRING
+  - name: request_created_timestamp_utc
+    type: STRING
+  - name: response_created_timestamp_utc
+    type: STRING
+  - name: refund_id
     type: STRING
   - name: _line_number
     type: STRING

@@ -27,7 +27,7 @@ if __name__ == "__main__":
             prefix = f"gtfs_{model}__"
             df.write(col.docblock(prefix=prefix))
 
-            doc_ref = f'{{{{ doc("{prefix}{col.name}") }}}}'
+            doc_ref = f'{{{{ doc("{prefix}{col.name}") }}}}'  # noqa: E201,E202
 
             extras: Dict[str, Any] = {
                 "description": f"'{doc_ref}'",

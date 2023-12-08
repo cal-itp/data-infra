@@ -115,16 +115,30 @@ The `join` gdf looks like this. We lost Stores 4 (Eagleton) and 7 (Indianapolis)
 We want to count the number of Paunch Burger locations and their total sales within each District.
 
 ```
-summary = join.pivot_table(index = ['District', 'Geometry_y],
+
+summary = join.pivot_table(
+    index = ['District'],
     values = ['Store', 'Sales_millions'],
-    aggfunc = {'Store': 'count', 'Sales_millions': 'sum'}).reset_index()
+    aggfunc = {'Store': 'count', 'Sales_millions': 'sum'}
+).reset_index()
 
 OR
 
-summary = join.groupby(['District', 'Geometry_y']).agg({'Store': 'count',
-    'Sales_millions': 'sum'}).reset_index()
+summary = (join.groupby(['District'])
+            .agg({
+                'Store': 'count',
+                'Sales_millions': 'sum'}
+            ).reset_index()
+          )
 
-summary.rename(column = {'Geometry_y': 'Geometry'}, inplace = True)
+# Make sure to merge in district geometry again
+summary = pd.merge(
+    gdf,
+    summary,
+    on = 'District',
+    how = 'inner'
+)
+
 summary
 ```
 
@@ -146,7 +160,7 @@ summary.to_file(driver = 'ESRI Shapefile',
 
 ## Buffers
 
-Buffers are areas of a certain distance around a given point, line, or polygon. Buffers are used to determine <i> proximity </i>. A 5 mile buffer around a point would be a circle of 5 mile radius centered at the point. This [ESRI page](http://desktop.arcgis.com/en/arcmap/10.3/tools/analysis-toolbox/buffer.htm) shows how buffers for points, lines, and polygons look.
+Buffers are areas of a certain distance around a given point, line, or polygon. Buffers are used to determine <i> proximity</i>. A 5 mile buffer around a point would be a circle of 5 mile radius centered at the point. This [ESRI page](http://desktop.arcgis.com/en/arcmap/10.3/tools/analysis-toolbox/buffer.htm) shows how buffers for points, lines, and polygons look.
 
 Some examples of questions that buffers help answer are:
 
@@ -202,11 +216,17 @@ homes_buffer['geometry'] = homes.geometry.buffer(two_miles)
 Do a spatial join between `locations` and `homes_buffer`. Repeat the process of spatial join and aggregation in Python as illustrated in the previous section (spatial join and dissolve in ArcGIS).
 
 ```
-sjoin = gpd.sjoin(locations, homes_buffer, how = 'inner', predicate = 'intersects')
+sjoin = gpd.sjoin(
+    locations,
+    homes_buffer,
+    how = 'inner',
+    predicate = 'intersects'
+)
+
 sjoin
 ```
 
-`sjoin` looks like this.
+`sjoin` looks like this (without `Geometry_y` column). Using `how='left' or how='inner'` will show `Geometry_x` as the resulting geometry column, while using `how = 'right'` would show `Geometry_y` as the resulting geometry column. Only one geometry column is returned in a spatial join, but you have the flexibility in determining which one it is by changing `how=`.
 
 - Geometry_x is the point geometry from our left df `locations`.
 - Geometry_y is the polygon geometry from our right df `homes_buffer`.

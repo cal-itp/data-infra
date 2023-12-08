@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "calitp-data-analysis"
-version = "2023.7.31"
+version = "2023.9.18"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
 authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
 
@@ -13,6 +13,12 @@ sqlalchemy-bigquery = "^1.6.1"
 pandas-gbq = "^0.19.1"
 pandas = "<2" # keep us below pandas 2.0 since pandas-gbq does not specify, and siuba errors currently
 gcsfs = "!=2022.7.1"
+altair = "^5.1.1"
+dask-geopandas = "0.2.0"
+geopandas = "^0.14.0"
+requests = "^2.31.0"
+dask = "~2022.8"
+shapely = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"

@@ -10,7 +10,6 @@ default_args:
       - "andrew.v@jarv.us"
       - "evan.siroky@dot.ca.gov"
       - "jameelah.y@jarv.us"
-      - "laurie.m@jarv.us"
       - "soren.s@jarv.us"
     email_on_failure: True
     email_on_retry: False

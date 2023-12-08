@@ -44,7 +44,6 @@ jobs:
         publish_dir: docs/_build/html
         publish_branch: gh-pages
 
-    # Preview on PRs
     - name: Deploy docs preview to Netlify
       if: ${{ github.ref != 'refs/heads/main' }}
       run: |

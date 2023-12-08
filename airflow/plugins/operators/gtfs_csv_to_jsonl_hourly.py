@@ -194,7 +194,7 @@ def parse_files(period: pendulum.Period, input_table_name: str, gtfs_filename: s
         success_rate = len(result.successes) / len(files)
         if success_rate < GTFS_PARSE_ERROR_THRESHOLD:
             raise RuntimeError(
-                f"Success rate: {success_rate:.3f} was below error threshold: {GTFS_PARSE_ERROR_THRESHOLD}"
+                f"Success rate: {success_rate:.3f} was below error threshold: {GTFS_PARSE_ERROR_THRESHOLD}"  # noqa: E231
             )
 
 

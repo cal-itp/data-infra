@@ -82,8 +82,13 @@ Dataframe #3: `council_boundaries` (geospatial)
 First, merge `paunch_locations` with `council_population` using the `CD` column, which they have in common.
 
 ```
-merge1 = pd.merge(paunch_locations, council_population, on = 'CD',
-    how = 'inner', validate = 'm:1')
+merge1 = pd.merge(
+    paunch_locations,
+    council_population,
+    on = 'CD',
+    how = 'inner',
+    validate = 'm:1'
+)
 
 # m:1 many-to-1 merge means that CD appears multiple times in
 # paunch_locations, but only once in council_population.
@@ -92,8 +97,14 @@ merge1 = pd.merge(paunch_locations, council_population, on = 'CD',
 Next, merge `merge1` and `council_boundaries`. Columns don't have to have the same names to be matched on, as long as they hold the same values.
 
 ```
-merge2 = pd.merge(merge1, council_boundaries, left_on = 'CD',
-    right_on = 'District', how = 'left', validate = 'm:1')
+merge2 = pd.merge(
+    merge1,
+    council_boundaries,
+    left_on = 'CD',
+    right_on = 'District',
+    how = 'left',
+    validate = 'm:1'
+)
 ```
 
 Here are some things to know about `merge2`:
@@ -247,7 +258,7 @@ sales_group = []
 
 for row in paunch_locations['Sales_millions']:
     # If sales are more than $3M, but less than $5M, tag as moderate.
-    if (row >= 3) & (row <= 5) :
+    if (row >= 3) and (row <= 5):
         sales_group.append('moderate')
     # If sales are more than $5M, tag as high.
     elif row >=5:
@@ -255,6 +266,7 @@ for row in paunch_locations['Sales_millions']:
     # Anything else, aka, if sales are less than $3M, tag as low.
     else:
         sales_group.append('low')
+
 
 paunch_locations['sales_group'] = sales_group
 
@@ -279,14 +291,22 @@ To answer the question of how many Paunch Burger locations there are per Council
 
 ```
 # Method #1: groupby and agg
-pivot = merge2.groupby(['CD', 'Geometry_y']).agg({'Sales_millions': 'sum',
-     'Store': 'count', 'Population': 'mean'}).reset_index()
+pivot = (merge2.groupby(['CD'])
+        .agg({'Sales_millions': 'sum',
+              'Store': 'count',
+              'Population': 'mean'}
+             ).reset_index()
+        )
 
 # Method #2: pivot table
-pivot = merge2.pivot_table(index= ['CD', 'Geometry_y'],
-    values = ['Sales_millions', 'Store', 'Population'],
-    aggfunc= {'Sales_millions': 'sum', 'Store': 'count',
-        'Population': 'mean'}).reset_index()
+pivot = merge2.pivot_table(
+        index= ['CD'],
+        values = ['Sales_millions', 'Store', 'Population'],
+        aggfunc= {
+            'Sales_millions': 'sum',
+            'Store': 'count',
+            'Population': 'mean'}
+       ).reset_index()
 
     # to only find one type of summary statistic, use aggfunc = 'sum'
 
@@ -296,11 +316,11 @@ pivot = merge2.pivot_table(index= ['CD', 'Geometry_y'],
 
 `pivot` looks like this:
 
-| CD  | Geometry_y | Sales_millions | Store | Council_Member  | Population |
-| --- | ---------- | -------------- | ----- | --------------- | ---------- |
-| 1   | polygon    | $9             | 2     | Leslie Knope    | 1,500      |
-| 2   | polygon    | $8.5           | 2     | Jeremy Jamm     | 2,000      |
-| 3   | polygon    | $2.5           | 1     | Douglass Howser | 2,250      |
+| CD  | Sales_millions | Store | Council_Member  | Population |
+| --- | -------------- | ----- | --------------- | ---------- |
+| 1   | $9             | 2     | Leslie Knope    | 1,500      |
+| 2   | $8.5           | 2     | Jeremy Jamm     | 2,000      |
+| 3   | $2.5           | 1     | Douglass Howser | 2,250      |
 
 ## Export Aggregated Output
 

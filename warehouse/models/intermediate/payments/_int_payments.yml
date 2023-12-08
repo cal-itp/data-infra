@@ -1,0 +1,312 @@
+version: 2
+
+models:
+  - name: int_payments__authorisations_deduped
+    description: |
+      This model deduplicates authorisations rows with duplicate `_payments_key` values that require additional handling
+      beyond what is covered in the staging model, essentially rows that require a join for deduplication.
+      Columns have the same meanings as in the upstream staging model.
+      The most important test for this model is on the upstream staging model: to ensure that no
+      `_payments_key` values are fully dropped betweeen that model and this one (i.e., to ensure
+      that all rows dropped do in fact have a duplicate and no authorisations are lost.)
+    columns:
+      - name: request_type
+        tests:
+          - accepted_values:
+              values: ['AUTHORISATION', 'DEBT_RECOVERY_AUTHCHECK', 'DEBT_RECOVERY_REVERSAL', 'CARD_CHECK']
+      - name: aggregation_id
+        tests:
+          - relationships:
+              to: ref('int_payments__latest_authorisations_by_aggregation')
+              field: aggregation_id
+              config:
+                # there is a single update from 2021 where there's only one update with a null status
+                # we're comfortable letting this row get dropped
+                where: "_key != '60e1a87f2cafe52c08589cb13fb39707'"
+  - name: int_payments__latest_authorisations_by_aggregation
+    description: |
+      This model contains only the most recent authorisations data per `aggregation_id`.
+      Many aggregations pass through a few different authorisations (for example, perhaps a card check
+      before getting authorised, or multiple debt recovery attempts.) This model keeps only the most
+      recent row according to `authorisation_date_time_utc`.
+    columns:
+      - &aggregation_pk
+        name: aggregation_id
+        description: |
+          ID of the aggregation being summarized. An aggregation can contain or be associated with multiple
+          micropayment, authorisation, and settlement events. It represents the unit at which settlement occurs
+          (so multiple settlement events only occur for a single aggregation if there are refunds against the original settlement.)
+        tests:
+          - not_null
+          - unique
+      - name: currency_code
+        tests:
+          - accepted_values:
+              values: [840]
+              quote: false
+      - name: final_authorisation_has_null_status
+        descrpition: |
+          A boolean flag that identifies aggregations for which the chosen "latest" authorisation
+          is older than a more recent record with a null status
+  - name: int_payments__settlements_to_aggregations
+    description: |
+      This model contains Littlepay settlements aggregated to the `aggregation_id + retrieval_reference_number` level.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - aggregation_id
+            - retrieval_reference_number
+      - dbt_utils.expression_is_true:
+          expression: "debit_amount + credit_amount = net_settled_amount_dollars"
+      - dbt_utils.expression_is_true:
+          expression: "contains_refund = (credit_amount < 0)"
+    columns:
+      - *aggregation_pk
+      - name: retrieval_reference_number
+        tests:
+          - not_null
+          - unique
+      - &participant_id
+        name: participant_id
+        description: '{{ doc("lp_participant_id") }}'
+      - name: contains_imputed_type
+        description: '{{ doc("lp_settlement_contains_imputed_type") }}'
+      - name: contains_refund
+        description: '{{ doc("lp_settlement_contains_refund") }}'
+      - name: latest_update_timestamp
+        description: '{{ doc("lp_settlement_latest_update_timestamp") }}'
+      - name: net_settled_amount_dollars
+        description: '{{ doc("lp_net_settled_amount_dollars") }}'
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: debit_amount
+        description: '{{ doc("lp_settlement_debit_amount") }}'
+      - name: credit_amount
+        description: '{{ doc("lp_settlement_credit_amount") }}'
+      - name: aggregation_is_settled
+        description: '{{ doc("lp_aggregation_is_settled") }}'
+      - name: debit_is_settled
+        description: '{{ doc("lp_debit_is_settled") }}'
+      - name: credit_is_settled
+        description: '{{ doc("lp_credit_is_settled") }}'
+  - name: int_payments__micropayments_to_aggregations
+    description: |
+      Littlepay micropayments grouped to the aggregation (`aggregation_id`) level.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "total_nominal_amount_dollars >= net_micropayment_amount_dollars"
+    columns:
+      - *participant_id
+      - *aggregation_pk
+      - name: net_micropayment_amount_dollars
+        description: '{{ doc("lp_net_micropayment_amount_dollars") }}'
+      - name: total_nominal_amount_dollars
+        description: '{{ doc("lp_total_nominal_amount_dollars") }}'
+      - name: latest_transaction_time
+        description: '{{ doc("lp_mp_latest_transaction_time") }}'
+      - name: num_micropayments
+        description: '{{ doc("lp_num_micropayments") }}'
+      - name: contains_pre_settlement_refund
+        description: '{{ doc("lp_contains_pre_settlement_refund") }}'
+      - name: contains_variable_fare
+        description: '{{ doc("lp_contains_variable_fare") }}'
+      - name: contains_flat_fare
+        description: '{{ doc("lp_contains_flat_fare") }}'
+      - name: contains_pending_charge
+        description: '{{ doc("lp_contains_pending_charge") }}'
+      - name: contains_adjusted_micropayment
+        description: '{{ doc("lp_contains_adjusted_micropayment") }}'
+  - name: int_payments__refunds_deduped
+    description: |
+      This model is a union of refunds found both in `stg_littlepay__refunds` and `stg_littlepay__micropayments`.
+      It includes deduplication of refunds that appear multiple times with multiple statuses, to only take the most recent status,
+      and also deduplicates based on `coalesced_id` which is `retrieval_reference_number` or `aggregation_id` if `retrieval_reference_number` is `NULL`.
+
+      Columns have the same meanings as in the upstream staging model.
+
+      The most important test for this model is on the upstream staging model: to ensure that no
+      `retrieval_reference_number` or `aggregation_id` values are fully dropped betweeen that model and this one (i.e., to ensure
+      that all rows dropped do in fact have a duplicate and no refunds are lost.)
+    columns:
+      - name: refund_id
+        description: The unique identifier for each requested refund.
+      - name: aggregation_id
+        description: |
+          The aggregation that contains the refund.
+
+          A single aggregation can have multiple refunds.
+      - name: micropayment_id
+        description: |
+          Uniquely identifies the micropayment being refunded.
+          For some agencies, this mapping fails due to upstream data issues and `aggregation_id` must be used as a fallback.
+      - *participant_id
+      - name: customer_id
+        description: Identifies the customer that the micropayment belongs to.
+      - name: refund_amount
+        description: The amount of the transaction remaining after the refund has been applied (transaction_amount - proposed_amount.)
+      - name: transaction_date
+        description: Settlement transaction date (if micropayment was settled before refund)
+      - name: settlement_id
+        description: The unique identifier for each settlement requested to the acquirer.
+      - name: retrieval_reference_number
+        description: |
+          Uniquely identifies a card transaction, based on the ISO 8583 standard. The value is generated during authorisation.
+
+          If the acquirer is Elavon, this value will be split between `littlepay_reference_number` and `external_reference_number`.
+      - name: coalesced_id
+        description: |
+          Unique identifier consisting of `retrieval_reference_number` or `aggregation_id` if `retrieval_reference_number` is `NULL`.
+      - name: transaction_amount
+        description: The amount of the original fare.
+      - name: proposed_amount
+        description: The amount to be refunded to the customer.
+      - name: status
+        description: |
+          The status of the refund.
+
+          Possible values are `SENT_FOR_SETTLEMENT` or `SETTLED`.
+      - name: initiator
+        description: The user who initiated the refund request.
+      - name: reason
+        description: The reason given for requesting the refund.
+      - name: approval_status
+        description: |
+          The status of the approval request.
+
+          If the refund was initiated by the merchant, then the request is automatically approved.
+
+          Possible values are `Approved` or `Pending Approval`.
+      - name: issuer
+        description: The user that approved the refund.
+      - name: issuer_comment
+        description: This field is not in use.
+      - name: created_time
+        description: The time the request was created.
+      - name: approved_time
+        description: The time the approval was processed.
+      - name: settlement_status
+        description: |
+          The status of the refund.
+
+          Possible values are `Sent for Settlement` or `Settled`.
+      - name: settlement_status_time
+        description: The time the refund was settled.
+      - name: settlement_reason_code
+        description: This field is not in use.
+      - name: settlement_response_text
+        description: This field is not in use.
+      - &lp_line_number
+        name: _line_number
+        description: |
+          Line number of this row in the source file.
+          Some line numbers may be missing because we drop extra copies of rows that are full duplicates of another row.
+      - name: currency_code
+        description: ISO 4217 numeric currency code for the amount that was requested to be settled.
+      - name: instance
+      - name: extract_filename
+      - name: ts
+      - &lp_export_ts
+        name: littlepay_export_ts
+        description: |
+          Timestamp of the source file from Littlepay. Timestamp is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - &lp_export_date
+        name: littlepay_export_date
+        description: |
+          Date of the source file from Littlepay. Date is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - &_content_hash
+        name: _content_hash
+        description: |
+          Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
+          Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
+      - &payments_input_row_key
+        name: _key
+        description: |
+          Synthetic key composed of Littlepay file date and line number to uniquely identify a row within source data.
+      - name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+      - name: source_table
+        description: |
+          The table the refund was initially present in (either `stg_littlepay__refunds` or `stg_littlepay__micropayments`)
+
+  - name: int_payments__refunds_to_aggregations
+    description: |
+      This model provides a summary of `refund_amount` grouped by `aggregation_id` and `retrieval_reference_number`,
+      as well as sums by `approval_status` (APPROVED, REFUSED, AWAITING, NULL)
+    columns:
+      - *participant_id
+      - name: aggregation_id
+        description: |
+          The aggregation that contains the refund.
+
+          A single aggregation can have multiple refunds.
+      - name: retrieval_reference_number
+        description: |
+          Uniquely identifies a card transaction, based on the ISO 8583 standard. The value is generated during authorisation.
+
+          If the acquirer is Elavon, this value will be split between `littlepay_reference_number` and `external_reference_number`.
+      - name: total_refund_activity_amount_dollars
+        description: The sum of refund_amount across all approval_statuses.
+      - name: approved_amount
+        description: The sum of refund_amount where approval_status is APPROVED.
+      - name: refused_amount
+        description: The sum of refund_amount where approval_status is REFUSED.
+      - name: awaiting_amount
+        description: The sum of refund_amount where approval_status is AWAITING.
+      - name: null_approval_status_amount
+        description: The sum of refund_amount where approval_status is NULL.
+
+  - name: int_payments__micropayments_adjustments_refunds_joined
+    description: |
+      Summarizing micropayment information across the source micropayment,
+      any applied adjustments (ex. fare capping), and any associated refunds.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "micropayment_refund_amount <= charge_amount"
+    columns:
+      - *participant_id
+      - name: micropayment_id
+        description: '{{ doc("lp_micropayment_id") }}'
+        tests:
+          - not_null
+          - unique
+      - name: aggregation_id
+        description: '{{ doc("lp_aggregation_id") }}'
+      - name: funding_source_vault_id
+        description: '{{ doc("lp_funding_source_vault_id") }}'
+      - name: customer_id
+        description: '{{ doc("lp_customer_id") }}'
+      - name: charge_amount
+        description: '{{ doc("lp_charge_amount") }}'
+      - name: nominal_amount
+        description: '{{ doc("lp_nominal_amount") }}'
+      - name: charge_type
+        description: '{{ doc("lp_charge_type") }}'
+      - name: transaction_time
+        description: '{{ doc("lp_transaction_time") }}'
+      - name: adjustment_id
+        description: '{{ doc("lp_adjustment_id") }}'
+      - name: adjustment_type
+        description: '{{ doc("lp_adj_type") }}'
+      - name: adjustment_time_period_type
+        description: '{{ doc("lp_adj_time_period_type") }}'
+      - name: adjustment_description
+        description: '{{ doc("lp_adj_description") }}'
+      - name: adjustment_amount
+        description: '{{ doc("lp_adj_amount") }}'
+      - name: product_id
+        description: '{{ doc("lp_product_id") }}'
+      - name: product_code
+        description: '{{ doc("lp_product_code") }}'
+      - name: product_description
+        description: '{{ doc("lp_product_description") }}'
+      - name: product_type
+        description: '{{ doc("lp_product_type") }}'
+      - name: micropayment_refund_amount
+        description: '{{ doc("lp_micropayment_refund_amount") }}'
+      - name: aggregation_refund_amount
+        description: '{{ doc("lp_aggregation_refund_amount") }}'

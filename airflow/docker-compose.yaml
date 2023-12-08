@@ -83,6 +83,8 @@ x-airflow-common:
     CALITP_BUCKET__ELAVON_RAW: "gs://test-calitp-elavon-raw"
     CALITP_BUCKET__ELAVON_PARSED: "gs://test-calitp-elavon-parsed"
     CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://test-calitp-gtfs-download-config"
+    CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_PROD_SOURCE: "gs://calitp-gtfs-download-config"
+    CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_TEST_DESTINATION: "gs://test-calitp-gtfs-download-config"
     CALITP_BUCKET__GTFS_RT_RAW: "gs://test-calitp-gtfs-rt-raw-v2"
     CALITP_BUCKET__GTFS_RT_PARSED: "gs://test-calitp-gtfs-rt-parsed"
     CALITP_BUCKET__GTFS_RT_VALIDATION: "gs://test-calitp-gtfs-rt-validation"

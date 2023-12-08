@@ -11,11 +11,10 @@ The section below outlines our team's primary meetings and their purposes, as we
 
 **New analysts**, look out for these meetings to be added to your calendar.
 
-| Name                     | Cadence              | Description                                                                                                       |
-| ------------------------ | -------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **Technical Onboarding** | Week 1 <br/> 40 Mins | To ensure access to tools and go over best practices.                                                             |
-| **Data Office Hours**    | Tues <br/> 50 Mins   | An opportunity to learn about our software tools, ask technical questions and get code debugging help from peers. |
-| **Analyst Team Meeting** | Thurs <br/> 45 Mins  | Branch meeting to share your screen and discuss what you've been working on.                                      |
+| Name                     | Cadence              | Description                                                                  |
+| ------------------------ | -------------------- | ---------------------------------------------------------------------------- |
+| **Technical Onboarding** | Week 1 <br/> 40 Mins | To ensure access to tools and go over best practices.                        |
+| **Analyst Team Meeting** | Thurs <br/> 45 Mins  | Branch meeting to share your screen and discuss what you've been working on. |
 
 (slack-intro)=
 
@@ -52,8 +51,6 @@ The screencast below introduces:
 
 ### GitHub Analytics Repo
 
-#### Using the data-analyses Repo
-
-This is our main data analysis repository, for sharing quick reports and works in progress. Get set up on GitHub and clone the data-analyses repository [using this link](committing-from-jupyterhub).
+The `data-analyses` repo is our main data analysis repository, for sharing quick reports and works in progress. Get set up on GitHub and clone the data-analyses repository [using this link](committing-from-jupyterhub).
 
 For collaborative short-term tasks, create a new folder and work off a separate branch.

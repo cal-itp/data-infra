@@ -223,7 +223,7 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
         ]
         if missing:
             raise ValueError(
-                f"all partition names must exist as fields or properties; missing {missing}"
+                f"all partition names must exist as fields or properties; missing {missing}"  # noqa: E702
             )
         return values
 
@@ -315,7 +315,7 @@ def fetch_all_in_partition(
 
         if not isinstance(bucket, str):
             raise TypeError(
-                f"must either pass bucket, or the bucket must resolve to a string; got {type(bucket)}"
+                f"must either pass bucket, or the bucket must resolve to a string; got {type(bucket)}"  # noqa: E702
             )
 
     if not table:
@@ -323,7 +323,7 @@ def fetch_all_in_partition(
 
         if not isinstance(table, str):
             raise TypeError(
-                f"must either pass table, or the table must resolve to a string; got {type(table)}"
+                f"must either pass table, or the table must resolve to a string; got {type(table)}"  # noqa: E702
             )
 
     prefix = "/".join(
@@ -396,7 +396,7 @@ class GCSFileInfo(GCSBaseInfo):
 
     @property
     def path(self) -> str:
-        return f"gs://{self.bucket}/{self.name}"
+        return f"gs://{self.bucket}/{self.name}"  # noqa: E231
 
     @property
     def partition(self) -> Dict[str, str]:
@@ -486,7 +486,7 @@ def get_latest(
 
         if not isinstance(bucket, str):
             raise TypeError(
-                f"must either pass bucket, or the bucket must resolve to a string; got {type(bucket)}"
+                f"must either pass bucket, or the bucket must resolve to a string; got {type(bucket)}"  # noqa: E702
             )
 
     if not table:
@@ -494,7 +494,7 @@ def get_latest(
 
         if not isinstance(table, str):
             raise TypeError(
-                f"must either pass table, or the table must resolve to a string; got {type(table)}"
+                f"must either pass table, or the table must resolve to a string; got {type(table)}"  # noqa: E702
             )
 
     if not partition_names:
@@ -502,7 +502,7 @@ def get_latest(
 
         if not isinstance(partition_names, list):
             raise TypeError(
-                f"must either pass partition names, or the partition names must resolve to a list; got {type(partition_names)}"
+                f"must either pass partition names, or the partition names must resolve to a list; got {type(partition_names)}"  # noqa: E702
             )
 
     latest = get_latest_file(
@@ -520,7 +520,8 @@ def get_latest(
     return cls(
         **json.loads(
             get_fs().getxattr(
-                path=f"gs://{latest.name}", attr=PARTITIONED_ARTIFACT_METADATA_KEY
+                path=f"gs://{latest.name}",  # noqa: E231
+                attr=PARTITIONED_ARTIFACT_METADATA_KEY,
             )
         )
     )
@@ -755,7 +756,7 @@ def download_feed(
     if disposition_header:
         if disposition_header.startswith("filename="):
             # sorry; cgi won't parse unless it's prefixed with the disposition type
-            disposition_header = f"attachment; {disposition_header}"
+            disposition_header = f"attachment; {disposition_header}"  # noqa: E702
         _, params = cgi.parse_header(disposition_header)
         disposition_filename = params.get("filename")
     else:

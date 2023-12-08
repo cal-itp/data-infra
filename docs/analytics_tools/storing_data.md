@@ -63,7 +63,7 @@ import geopandas as gpd
 import gcsfs
 import pandas as pd
 
-from calitp_data.storage import get_fs
+from calitp_data_analysis import get_fs
 fs = get_fs()
 ```
 
@@ -112,12 +112,12 @@ gdf.to_parquet("./my-geoparqet.parquet")
 fs.put("./my-geoparquet.parquet", f"{GCS_FOLDER}my-geoparquet.parquet")
 ```
 
-Or, use the `shared_utils` package.
+Or, use the `calitp_data_analysis` package that lives in [data-infra](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis)
 
 ```python
-import shared_utils
+from calitp_data_analysis import utils
 
-shared_utils.utils.geoparquet_gcs_export(
+utils.geoparquet_gcs_export(
     gdf,
     GCS_FOLDER,
     "my-geoparquet"
@@ -132,21 +132,21 @@ Refer to the [data catalogs doc](catalogue-cloud-storage) to list a zipped shape
 
 Refer to the [data catalogs doc](catalogue-cloud-storage) to list a GeoJSON, and read in the GeoJSON with the `intake` method. GeoJSONs saved in GCS cannot be read in directly using `geopandas`.
 
-Use the `shared_utils` package to read in or export geojsons.
+Use the `calitp_data_analysis` package to read in or export geojsons.
 
 ```python
-import shared_utils
+from calitp_data_analysis import utils
 
 GCS_FOLDER = "gs://calitp-analytics-data/data-analyses/task-subfolder/"
 
-gdf = shared_utils.utils.read_geojson(
+gdf = utils.read_geojson(
     GCS_FOLDER,
     "my-geojson.geojson",
     geojson_type = "geojson",
     save_locally = True
 )
 
-shared_utils.utils.geojson_gcs_export(
+utils.geojson_gcs_export(
     gdf,
     GCS_FOLDER,
     "my-geojson.geojson",

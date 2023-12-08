@@ -14,6 +14,10 @@ schema_fields:
     type: STRING
   - name: product_id
     type: STRING
+  - name: previous_version_id
+    type: STRING
+  - name: original_version_id
+    type: STRING
   - name: product_code
     type: STRING
   - name: product_description
@@ -24,6 +28,8 @@ schema_fields:
     type: STRING  # (Customer, Card)
   - name: product_status
     type: STRING  # (Active, Inactive)
+  - name: superseded
+    type: STRING
   - name: created_date
     type: STRING
   - name: capping_type
@@ -48,6 +54,8 @@ schema_fields:
     type: STRING
   - name: weekly_cap_start_day
     type: STRING  # (Monday, Sunday)
+  - name: weekly_cap_end_day
+    type: STRING
   - name: number_of_days_in_cap_window
     type: STRING
   - name: capping_duration
@@ -56,9 +64,31 @@ schema_fields:
     type: STRING
   - name: capping_time_zone
     type: STRING
-  - name: capping_overlap
+  - name: capping_overlap_time
     type: STRING
   - name: capping_application_level
     type: STRING  # (Customer, Card)
+  - name: route_capping_enabled
+    type: STRING
+  - name: routes
+    type: STRING
+  - name: zoned_capping_enabled
+    type: BOOLEAN
+  - name: zoned_capping_mode
+    type: STRING
+  - name: zoned_capping_pricing_type
+    type: STRING
+  - name: on_peak_zones
+    type: STRING
+  - name: off_peak_zones
+    type: STRING
+  - name: incentive_enabled
+    type: BOOLEAN
+  - name: incentive_type
+    type: STRING
+  - name: discount_qualifier
+    type: STRING
+  - name: configuration
+    type: STRING
   - name: _line_number
     type: STRING

@@ -11,7 +11,104 @@ sources:
 
 models:
   - name: stg_elavon__transactions
-    description: Transactions processed by Elavon
+    description: Transactions processed by Elavon, cleaned and deduped.
+    columns:
+      - name: payment_reference
+      - name: payment_date
+      - name: account_number
+      - name: routing_number
+      - name: fund_amt
+      - name: batch_reference
+      - name: batch_type
+      - name: customer_batch_reference
+      - name: customer_name
+      - name: merchant_number
+      - name: external_mid
+      - name: store_number
+      - name: chain
+      - name: batch_amt
+      - name: amount
+      - name: surchg_amount
+      - name: convnce_amt
+      - name: card_type
+      - name: charge_type
+      - name: charge_type_description
+      - name: card_plan
+      - name: card_no
+      - name: chk_num
+      - name: transaction_date
+      - name: settlement_date
+      - name: authorization_code
+      - name: chargeback_control_no
+      - name: roc_text
+      - name: trn_aci
+      - name: card_scheme_ref
+      - name: trn_ref_num
+      - name: settlement_method
+      - name: currency_code
+      - name: cb_acq_ref_id
+      - name: chgbk_rsn_code
+      - name: chgbk_rsn_desc
+      - name: mer_ref
+      - name: purch_id
+      - name: cust_cod
+      - name: trn_arn
+      - name: term_id
+      - name: ent_num
+      - name: dt
+      - name: execution_ts
+
+  - name: int_elavon__billing_transactions
+    description: Billing-specific transactions processed by Elavon
+    columns:
+      - name: payment_reference
+      - name: payment_date
+      - name: account_number
+      - name: routing_number
+      - name: fund_amt
+      - name: batch_reference
+      - name: batch_type
+      - name: customer_batch_reference
+      - name: customer_name
+      - name: merchant_number
+      - name: external_mid
+      - name: store_number
+      - name: chain
+      - name: batch_amt
+      - name: amount
+      - name: surchg_amount
+      - name: convnce_amt
+      - name: card_type
+      - name: charge_type
+      - name: charge_type_description
+      - name: card_plan
+      - name: card_no
+      - name: chk_num
+      - name: transaction_date
+      - name: settlement_date
+      - name: authorization_code
+      - name: chargeback_control_no
+      - name: roc_text
+      - name: trn_aci
+      - name: card_scheme_ref
+      - name: trn_ref_num
+      - name: settlement_method
+      - name: currency_code
+      - name: cb_acq_ref_id
+      - name: chgbk_rsn_code
+      - name: chgbk_rsn_desc
+      - name: mer_ref
+      - name: purch_id
+      - name: cust_cod
+      - name: trn_arn
+      - name: term_id
+      - name: ent_num
+      - name: dt
+      - name: execution_ts
+
+
+  - name: int_elavon__deposit_transactions
+    description: Deposit-specific transactions processed by Elavon
     columns:
       - name: payment_reference
       - name: payment_date
