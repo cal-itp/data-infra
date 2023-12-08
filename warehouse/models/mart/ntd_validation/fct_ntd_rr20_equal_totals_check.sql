@@ -14,6 +14,7 @@ WITH rr20f_0010a as (
         END as description,
     CONCAT("Total_Annual_Revenues_Expended = $", CAST(ROUND(Total_Annual_Op_Revenues_Expended,0) AS STRING),
             ",Total_Annual_Expenses_by_Mode = $", CAST(ROUND(Total_Annual_Op_Expenses_by_Mode,0) AS STRING)) as value_checked,
+    "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     FROM {{ ref('int_ntd_rr20_financial_total_exp') }}
 ),
@@ -31,6 +32,7 @@ rr20f_001c as(
         END as description,
     CONCAT("Total_Annual_Cap_Expenses_byMode = $", CAST(ROUND(Total_Annual_Cap_Expenses_byMode,0) AS STRING),
             ",Total_Annual_Cap_Expenses_byFunds = $", CAST(ROUND(Total_Annual_Cap_Expenses_byFunds,0) AS STRING)) as value_checked,
+    "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     FROM {{ ref('int_ntd_rr20_financial_total_exp') }}
 )

@@ -14,6 +14,7 @@ WITH rr20f_180 as (
     END as description,
     CONCAT("RR-20 VOMS = ", CAST(ROUND(rr20_voms, 1) AS STRING),
             "# A-30 VINs = ", CAST(ROUND(a30_vin_n, 1) AS STRING)) AS value_checked,
+    "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     FROM {{ ref('int_ntd_a30_voms_vins_totals') }}
 )

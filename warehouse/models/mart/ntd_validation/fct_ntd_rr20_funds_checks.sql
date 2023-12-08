@@ -13,6 +13,7 @@ WITH rr20f_070 as (
         ELSE ""
         END AS description,
     CONCAT("2023 = ", CAST(ROUND(FTA_Formula_Grants_for_Rural_Areas_5311_2023,0) AS STRING)) as value_checked,
+    "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     from {{ ref('int_ntd_rr20_financial_specific_funds') }}
 ),
@@ -38,6 +39,7 @@ rr20f_066  as (
         END AS description,
     CONCAT("2022 = ", CAST(ROUND(FTA_Formula_Grants_for_Rural_Areas_5311_2022,0) AS STRING),
             "2023 = ", CAST(ROUND(FTA_Formula_Grants_for_Rural_Areas_5311_2023,0) AS STRING)) as value_checked,
+    "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     from {{ ref('int_ntd_rr20_financial_specific_funds') }}
 ),
@@ -59,6 +61,7 @@ rr20f_065 as (
         END AS description,
     CONCAT("2022 = ", CAST(ROUND(FTA_Formula_Grants_for_Rural_Areas_5311_2022,0) AS STRING),
             "2023 = ", CAST(ROUND(FTA_Formula_Grants_for_Rural_Areas_5311_2023,0) AS STRING)) as value_checked,
+    "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     from {{ ref('int_ntd_rr20_financial_specific_funds') }}
 ),
@@ -80,6 +83,7 @@ rr20f_013 as (
         END AS description,
     CONCAT("2022 = ", CAST(ROUND(Other_Directly_Generated_Funds_2022,0) AS STRING),
             "2023 = ", CAST(ROUND(Other_Directly_Generated_Funds_2023,0) AS STRING)) as value_checked,
+    "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     from {{ ref('int_ntd_rr20_financial_specific_funds') }}
 ),
@@ -96,6 +100,7 @@ rr20f_068 as (
         ELSE ""
         END AS description,
     CONCAT("2023 = ", CAST(ROUND(FTA_Formula_Grants_for_Rural_Areas_5311_2023,0) AS STRING)) as value_checked,
+    "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     from {{ ref('int_ntd_rr20_financial_specific_funds') }}
 ),
@@ -112,6 +117,7 @@ rr20f_024 as (
         ELSE ""
         END AS description,
     CONCAT("2023 = ", CAST(ROUND(Local_Funds_2023) AS STRING)) as value_checked,
+    "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     from {{ ref('int_ntd_rr20_financial_specific_funds') }}
 )
