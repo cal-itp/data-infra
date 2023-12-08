@@ -18,7 +18,7 @@ models:
     description: |
       Runs various validation checks on specific RR-20 funding source data.
       For NTD validation error ID #s rr20f_070, rr20f_066, rr20f_065, rr20f_013, rr20f_068, rr20f_024
-  - name: fct_ntd_a10_facilitiescheck.sql
+  - name: fct_ntd_a10_facilitiescheck
     description: |
       Runs various validation checks on specific A-10 facilities source data.
       For NTD validation error ID #s a10_032, a10_030
