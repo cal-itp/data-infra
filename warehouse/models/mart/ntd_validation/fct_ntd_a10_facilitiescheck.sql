@@ -9,6 +9,7 @@ WITH a10_032 as (
         THEN "Fail"
         ELSE "Pass"
     END as check_status,
+    CONCAT("Total facilities = ", CAST(ROUND(total_facilities, 2) AS string)) AS value_checked,
     CASE WHEN MOD(CAST(ROUND(total_facilities, 1) as numeric), 1) != 0
         THEN "The reported total facilities do not add up to a whole number. Please explain."
         ELSE ""
@@ -25,6 +26,7 @@ a10_030 as (
         THEN "Fail"
         ELSE "Pass"
     END as check_status,
+    CONCAT("Total facilities = ", CAST(ROUND(total_facilities, 2) AS string)) AS value_checked,
     CASE WHEN ROUND(total_facilities, 1) = 0
         THEN "There are no reported facilities. Please explain."
         ELSE ""
