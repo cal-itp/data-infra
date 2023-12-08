@@ -2,9 +2,38 @@
 
 We have an [alert](https://monitoring.calitp.org/alerting/grafana/Geo72Nf4z/view) that will trigger when any Kubernetes volume is more than 80% full, placing a message in the #data-infra-alerts channel of the Cal-ITP Slack group. The resolution path will depend on the affected service.
 
-> After following any of these specific runbook sections, check the Disk Usage section of the general [Kubernetes dashboard](https://monitoring.calitp.org/d/oWe9aYxmk/1-kubernetes-deployment-statefulset-daemonset-metrics) in Grafana to verify the disk space consumption has decreased to a safe level for any impacted volumes. The alert should also show as resolved in Slack a couple minutes after recovery.
+After following any of these specific runbook sections, check the Disk Usage section of the general [Kubernetes dashboard](https://monitoring.calitp.org/d/oWe9aYxmk/1-kubernetes-deployment-statefulset-daemonset-metrics) in Grafana to verify the disk space consumption has decreased to a safe level for any impacted volumes. The alert should also show as resolved in Slack a couple minutes after recovery.
 
-## ZooKeeper
+## Identifying affected service
+
+In the expanded details for the alert message posted to Slack, look for a line indicating the `persistentvolumeclaim` (PVC), e.g.
+
+```console
+persistentvolumeclaim=sentry-clickhouse-data-sentry-clickhouse-1,
+```
+
+Using Lens, you can easily track down what service this PVC is associated with by first opening the **Storage** > **Persistent Volume Claims** section in Lens, then finding or searching for the named PVC. Once found, you can click the associated **Pod** and the **Controlled By** field will tell you what higher-level `Deployment` or `StatefulSet` that pod was created by—telling you which service is affected. The PVC shown above, for example, leads to the `StatefulSet` named `sentry-clickhouse`.
+
+## Possible actions
+
+In any case of disk usage reaching capacity, there are two approaches to resolving the issue:
+
+- Reduce disk usage
+- Increase disk capacity
+
+Some services are designed to be able to operate within finite storage and may need intervention to help them do that, see the [Service-specific additional steps](#service-specific-additional-steps) section below for guidance on some such services.
+
+If however you determine that the growth in disk usage is likely legitimate and consisting of data we generally want to retain, it may just be time to increase the requested disk size for the affected volume.
+
+## Increasing disk capacity
+
+In a pinch, you can edit a PVC directly in Kubernetes to see if that resolves an issue. After a PVC's request size is increased, the pod it is bound too will need to be manually destroyed and then the new requested size will be applied by the cloud provider's storage controlled before the volume gets re-bound to the next instance of the pod. It may be additionally necessary to shell into the pod or node it's hosted on and execute `resize2fs` on the mounted volume to resize the filesystem within the volume to fill the newly available space.
+
+However it is important to apply the new requested disk capacity value upstream in source control so that future syncs from GitHub to Kubernetes will not reset it. This typically involved identifying the relevant Helm chart and configuration value to change within one of this repositories Helm values YAML files. [PR #3170](https://github.com/cal-itp/data-infra/pull/3170) provides an example of this being done for the Clickhouse data volume.
+
+## Service-specific additional steps
+
+### ZooKeeper
 
 [ZooKeeper](https://zookeeper.apache.org/) is deployed as part of our Sentry Helm chart. While autopurge should be enabled as part of the deployment values, we've had issues with it not working in the past. The following process will remove old logs and snapshots.
 
@@ -12,7 +41,7 @@ We have an [alert](https://monitoring.calitp.org/alerting/grafana/Geo72Nf4z/view
 2. Execute the cleanup script `./opt/bitnami/zookeeper/bin/zkCleanup.sh -n <count>`; `count` must be at least 3.
    1. If the executable does not exist in this location, you can find it with `find . -name zkCleanup.sh`.
 
-## Kafka
+### Kafka
 
 The [Kafka](https://kafka.apache.org/) pods themselves can have unbound disk space usage if they are not properly configured to drop old data quickly enough. This can cascade into a variety of issues, such as [snuba](https://getsentry.github.io/snuba/architecture/overview.html) workers being unable to actually pull events from Kafka, leading to a scenario that cannot recover without intervention. This list of steps is for resetting one particular service, consumer group, and topic, so it may need to be performed multiple times.
 
@@ -20,7 +49,7 @@ The [Kafka](https://kafka.apache.org/) pods themselves can have unbound disk spa
 
 As a temporary measure, you can increase the capacity of the persistent volume of the pod having issues. You can either edit the persistent volume YAML directly, or run `helm upgrade sentry apps/charts/sentry -n sentry -f apps/values/sentry_sensitive.yaml -f apps/charts/sentry/values.yaml --debug` after setting a larger volume size in `values.yaml`. Either way, you will likely have to restart the pod to let the change take effect.
 
-> The rest of these instructions are relevant not just for disk space issues, but also for resolving a common cause of failing consumers. For instance, when Sentry experiences issues for more than a fleeting moment, sometimes internal logging can get backed up when the service recovers. Two Kubernetes workloads, `sentry-snuba-subscription-consumer-events` and `sentry-snuba-subscription-consumer-transactions`, are both particularly susceptible to these sorts of errors, which correspond to a message of "Broker: Offset out of range" when clicking through to the "App Errors" tab for a failing pod in the Google Cloud Console UI.
+The rest of these instructions are relevant not just for disk space issues, but also for resolving a common cause of failing consumers. For instance, when Sentry experiences issues for more than a fleeting moment, sometimes internal logging can get backed up when the service recovers. Two Kubernetes workloads, `sentry-snuba-subscription-consumer-events` and `sentry-snuba-subscription-consumer-transactions`, are both particularly susceptible to these sorts of errors, which correspond to a message of "Broker: Offset out of range" when clicking through to the "App Errors" tab for a failing pod in the Google Cloud Console UI.
 
 1. Check if there are any failing consumer pods in [Workloads](https://console.cloud.google.com/kubernetes/workload?project=cal-itp-data-infra); you can use a failing pod's logs to identify its topic and potentially its consumer group. To resolve the issue, we need to reset the offset for the Kafka consumer groups and topics associated with these workloads.
 2. Access the Kafka service directly via kubectl (in this example, we're logging into the `sentry-kafka` workload via a pod named `sentry-kafka-0`, but any pod for a given Kafka workload will do the trick): `kubectl exec --stdin --tty sentry-kafka-0 -n sentry -- bash`
