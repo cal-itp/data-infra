@@ -12,6 +12,8 @@ Some of the key attributes of our approach:
 
 While many of the key elements of our architecture are common to most of our data sources, each data source has some unique aspects as well. [This spreadsheet](https://docs.google.com/spreadsheets/d/1bv1K5lZMnq1eCSZRy3sPd3MgbdyghrMl4u8HvjNjWPw/edit#gid=0) details overviews by data source, outlining the specific code/resources that correspond to each step in the general data flow shown below.
 
+(data-ingest-diagram)=
+
 ## Data ingest diagram
 
 ```{mermaid}
