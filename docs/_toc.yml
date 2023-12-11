@@ -47,7 +47,6 @@ parts:
           - file: architecture/data
       - file: airflow/dags-maintenance
       - file: transit_database/transitdatabase
-      - file: common_developer_workflows/common-developer-workflows
   - caption: Contribute to the Docs!
     chapters:
       - file: contribute/overview
