@@ -24,7 +24,11 @@ hive_options:   # this section provides information about how hive-partitioning 
   mode: CUSTOM  # options are CUSTOM and AUTO. if CUSTOM, you need to define the hive partitions and their datatypes in the source_uri_prefix below; if you use AUTO, you only need to provide the top-level directory in the source_uri_prefix
   require_partition_filter: false   # default is true: if true, users will have to provide a filter to query this data; false is usually fine except for very large data like GTFS-RT
   source_uri_prefix: "<the top level folder name within your bucket that should be used for this external table (should match what's entered in source_objects above)>/{<if CUSTOM under mode above: hive partition name: hive partition data type like 'dt:DATE'>}"    # this tells the hive partitioning where to look. if mode = CUSTOM, should be something like "my_data/{dt:DATE}/{ts:TIMESTAMP}/{some_label:STRING}/" with the entire hive path defined; if mode = AUTO, should be like "my_data/"
-schema_fields:  # here you fill in the schema of the actual files, which will become the schema of the external table. make one list item per column that you want to be available in BigQuery. if there are columns in the source data that you don't want in BigQuery, you don't have to include them here. hive partition path elements (like "date", if present) will be added as columns automatically and should not be specified here.
+schema_fields:  # here you fill in the schema of the actual files, which will become the schema of the external table
+# make one list item per column that you want to be available in BigQuery
+# if there are columns in the source data that you don't want in BigQuery, you don't have to include them here
+# hive partition path elements (like "date", if present) will be added as columns automatically and should not be specified here
+# if you don't specify a schema, BigQuery will attempt to auto-detect the schema: https://cloud.google.com/bigquery/docs/schema-detect#schema_auto-detection_for_external_data_sources
   - name: <column_name>     # this should match the key name for this data in the source JSONL file; see https://cloud.google.com/bigquery/docs/schemas#column_names for BQ naming rules
     mode: <column mode>     # see https://cloud.google.com/bigquery/docs/schemas#modes
     type: <column data type>    # see https://cloud.google.com/bigquery/docs/schemas#standard_sql_data_types
@@ -32,3 +36,13 @@ schema_fields:  # here you fill in the schema of the actual files, which will be
     mode: <second column mode>
     type: <second column data type>
 ```
+
+## Testing
+
+When testing external table creation locally, pay attention to test environment details:
+* Check the `prefix_bucket` setting in your external table DAG task YAML. If `prefix_bucket` is `true`, a local Airflow run will look for a `test-` prefixed bucket and will point the external table at that test data. 
+   * If there is test data in the `test-` bucket with a different schema than you want for the external table (for example, if during ingest development someone was changing individual field data types), that may cause errors and you may need to delete the test data with the outdated schema. 
+   * There will usually be less data present in a `test-` bucket than in production and data that is present may be unrepresentative or out of date.
+* External tables created by local Airflow will be created in the `cal-itp-data-infra-staging` environment. 
+   * If you're trying to test dbt changes that rely on unmerged external tables changes, you can set the `DBT_SOURCE_DATABASE` environment variable to `cal-itp-data-infra-staging`. This will cause the dbt project to use the staging environment's externabl tables. If the staging external tables are pointed at a `test-` buckets (as described in the bullet above), then the dbt project will run on that test data, which may lead to unexpected results. 
+   * For this reason, it is often easier to make external tables updates in one pull request, get that approved and merged, and then make dbt changes once the external tables are already updated in production so you can test on the production source data.
