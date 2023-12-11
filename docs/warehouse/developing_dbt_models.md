@@ -10,6 +10,10 @@ Information related to contributing to the [Cal-ITP dbt project](https://github.
 
 The [Cal-ITP dbt project](https://github.com/cal-itp/data-infra/tree/main/warehouse) runs every day, [orchestrated by Airflow](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse). When the dbt project runs, it refreshes all the data in the warehouse by running all the queries within the project in order based on the dependencies defined between models. For example, if model B depends on model A, the project will execute model A before model B. 
 
+### dbt project structure
+
+The dbt project (specifically [the `models/` directory](https://github.com/cal-itp/data-infra/tree/main/warehouse/models)) is broken out into data processing stages, broadly according to the [standard outlined by dbt](https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview#guide-structure-overview). You can read dbt documentation on the purpose of [staging](https://docs.getdbt.com/best-practices/how-we-structure/2-staging#staging-models), [intermediate](https://docs.getdbt.com/best-practices/how-we-structure/3-intermediate#intermediate-models), and [mart](https://docs.getdbt.com/best-practices/how-we-structure/4-marts#marts-models) models. 
+
 ## Resources
 
 - If you have questions specific to our project or you encounter any issues when developing, please bring those questions to the [`#data-warehouse-devs`](https://cal-itp.slack.com/archives/C050ZNDUL21) or [`#data-office-hours`](https://cal-itp.slack.com/archives/C02KH3DGZL7) Cal-ITP Slack channels. Working through questions "in public" helps build shared knowledge that's searchable later on.
