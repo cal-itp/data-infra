@@ -12,7 +12,7 @@ In the expanded details for the alert message posted to Slack, look for a line i
 persistentvolumeclaim=sentry-clickhouse-data-sentry-clickhouse-1,
 ```
 
-Using Lens, you can easily track down what service this PVC is associated with by first opening the **Storage** > **Persistent Volume Claims** section in Lens, then finding or searching for the named PVC. Once found, you can click the associated **Pod** and the **Controlled By** field will tell you what higher-level `Deployment` or `StatefulSet` that pod was created by—telling you which service is affected. The PVC shown above, for example, leads to the `StatefulSet` named `sentry-clickhouse`.
+If you're using [Lens](https://k8slens.dev/), you can easily track down what service this PVC is associated with by first opening the **Storage** > **Persistent Volume Claims** section in Lens, then finding or searching for the named PVC. Once found, you can click the associated **Pod** and the **Controlled By** field will tell you what higher-level `Deployment` or `StatefulSet` that pod was created by—telling you which service is affected. The PVC shown above, for example, leads to the `StatefulSet` named `sentry-clickhouse`.
 
 ## Possible actions
 
@@ -27,9 +27,9 @@ If however you determine that the growth in disk usage is likely legitimate and 
 
 ## Increasing disk capacity
 
-In a pinch, you can edit a PVC directly in Kubernetes to see if that resolves an issue. After a PVC's request size is increased, the pod it is bound too will need to be manually destroyed and then the new requested size will be applied by the cloud provider's storage controlled before the volume gets re-bound to the next instance of the pod. It may be additionally necessary to shell into the pod or node it's hosted on and execute `resize2fs` on the mounted volume to resize the filesystem within the volume to fill the newly available space.
+In a pinch, you can edit a PVC directly in Kubernetes to see if that resolves an issue. After a PVC's request size is increased, the pod it is bound to will need to be manually destroyed and then the new requested size will be applied by the cloud provider's storage controlled before the volume gets re-bound to the next instance of the pod. It may be additionally necessary to shell into the pod or node it's hosted on and execute `resize2fs` on the mounted volume to resize the filesystem within the volume to fill the newly available space.
 
-However it is important to apply the new requested disk capacity value upstream in source control so that future syncs from GitHub to Kubernetes will not reset it. This typically involved identifying the relevant Helm chart and configuration value to change within one of this repositories Helm values YAML files. [PR #3170](https://github.com/cal-itp/data-infra/pull/3170) provides an example of this being done for the Clickhouse data volume.
+However, it is important to apply the new requested disk capacity value upstream in source control so that future syncs from GitHub to Kubernetes will not reset it. This typically involved identifying the relevant Helm chart and configuration value to change within one of this repositories Helm values YAML files. [PR #3170](https://github.com/cal-itp/data-infra/pull/3170) provides an example of this being done for the Clickhouse data volume.
 
 ## Service-specific additional steps
 
