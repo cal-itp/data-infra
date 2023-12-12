@@ -126,6 +126,8 @@ If you're bringing in data that is similar to existing data (for example, a new 
 
 To determine the best storage location for your raw data (especially if it requires manual curation), consult the [Data Storage Guidance within the Cal-ITP Data Pipeline Google Doc](https://docs.google.com/document/d/1-l6c99UUZ0o3Ln9S_CAt7iitGHvriewWhKDftESE2Dw/edit).
 
+The [Should it be a dbt model?](tool_choice) docs section also has some guidance about when a data pipeline should be created.
+
 ### Bring data into Google Cloud Storage
 
 We store our raw, un-transformed data in Google Cloud Storage to ensure that we can always recover the raw data if needed.
@@ -154,5 +156,3 @@ External tables are created by the [`create_external_tables` Airflow DAG](https:
 ### dbt modeling
 
 Considerations for dbt modeling are outlined on the [Developing models in dbt](developing-dbt-models) page.
-
-If you are creating a new mart for your new data source, you will need to add your mart to `dbt_project.yml` for the associated dataset to get created in BigQuery (otherwise your mart tables will appear in the `staging` dataset by default). For an example, see [data-infra PR #3172](https://github.com/cal-itp/data-infra/pull/3172).

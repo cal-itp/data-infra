@@ -14,6 +14,16 @@ The [Cal-ITP dbt project](https://github.com/cal-itp/data-infra/tree/main/wareho
 
 The dbt project (specifically [the `models/` directory](https://github.com/cal-itp/data-infra/tree/main/warehouse/models)) is broken out into data processing stages, broadly according to the [standard outlined by dbt](https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview#guide-structure-overview). You can read dbt documentation on the purpose of [staging](https://docs.getdbt.com/best-practices/how-we-structure/2-staging#staging-models), [intermediate](https://docs.getdbt.com/best-practices/how-we-structure/3-intermediate#intermediate-models), and [mart](https://docs.getdbt.com/best-practices/how-we-structure/4-marts#marts-models) models. 
 
+Project level configuration lives in two separate places:
+* `dbt_project.yml` ([dbt documentation](https://docs.getdbt.com/reference/dbt_project.yml), [our file](https://github.com/cal-itp/data-infra/blob/main/warehouse/dbt_project.yml)): This contains information about the dbt project structure, for example configuring how the folder structure should be interpreted.
+* `profiles.yml` ([dbt documentation](https://docs.getdbt.com/docs/core/connect-data-platform/profiles.yml), [production file (should be used for prod runs only)](https://github.com/cal-itp/data-infra/blob/main/warehouse/profiles.yml), [template for local/testing use](https://github.com/cal-itp/data-infra/tree/main/warehouse#clone-and-install-the-warehouse-project)): This contains information about how the dbt project should connect to our cloud warehouse (BigQuery) and configures settings associated with that database connection, for example, what the query timeout should be.
+
+```{note}
+The relationship between a folder in `warehouse/models/` and a dataset/schema in BigQuery is configured via [dbt_project.yml](https://github.com/cal-itp/data-infra/blob/main/warehouse/dbt_project.yml) in the `models` section. The `warehouse/models/some_data/my_table.sql` file will not correspond to `calitp-data-infra.some_data.my_table` in BigQuery unless configured to do so; all models are created in the `staging` dataset by default (so, without that configuration, the table would be created in `calitp-data-infra.staging.my_table`).
+
+For an example creating a new entry in `dbt_project.yml` for a new mart dataset, see [data-infra PR #3172](https://github.com/cal-itp/data-infra/pull/3172).
+```
+
 ## Resources
 
 - If you have questions specific to our project or you encounter any issues when developing, please bring those questions to the [`#data-warehouse-devs`](https://cal-itp.slack.com/archives/C050ZNDUL21) or [`#data-office-hours`](https://cal-itp.slack.com/archives/C02KH3DGZL7) Cal-ITP Slack channels. Working through questions "in public" helps build shared knowledge that's searchable later on.
