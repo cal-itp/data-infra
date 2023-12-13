@@ -8,12 +8,13 @@ WITH rr20f_0010a as (
         THEN "Fail"
         ELSE "Pass"
         END as check_status,
+    CONCAT("Total_Annual_Revenues_Expended = $", CAST(ROUND(Total_Annual_Op_Revenues_Expended,0) AS STRING),
+            ",Total_Annual_Expenses_by_Mode = $", CAST(ROUND(Total_Annual_Op_Expenses_by_Mode,0) AS STRING)) as value_checked,
     CASE WHEN (ROUND(Total_Annual_Op_Revenues_Expended,0) != ROUND(Total_Annual_Op_Expenses_by_Mode,0))
         THEN "Total_Annual_Revenues_Expended should, but does not, equal Total_Annual_Expenses_by_Mode. Please provide a narrative justification."
         ELSE ""
         END as description,
-    CONCAT("Total_Annual_Revenues_Expended = $", CAST(ROUND(Total_Annual_Op_Revenues_Expended,0) AS STRING),
-            ",Total_Annual_Expenses_by_Mode = $", CAST(ROUND(Total_Annual_Op_Expenses_by_Mode,0) AS STRING)) as value_checked,
+    "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     FROM {{ ref('int_ntd_rr20_financial_total_exp') }}
 ),
@@ -25,12 +26,13 @@ rr20f_001c as(
         THEN "Fail"
         ELSE "Pass"
         END as check_status,
+    CONCAT("Total_Annual_Cap_Expenses_byMode = $", CAST(ROUND(Total_Annual_Cap_Expenses_byMode,0) AS STRING),
+            ",Total_Annual_Cap_Expenses_byFunds = $", CAST(ROUND(Total_Annual_Cap_Expenses_byFunds,0) AS STRING)) as value_checked,
     CASE WHEN (ROUND(Total_Annual_Cap_Expenses_byMode,0) != ROUND(Total_Annual_Cap_Expenses_byFunds,0))
         THEN "The sum of Total Expenses for all modes for Uses of Capital does not equal the sum of all values entered for Directly Generated, Non-Federal and Federal Government Funds for Uses of Capital. Please revise or explain."
         ELSE ""
         END as description,
-    CONCAT("Total_Annual_Cap_Expenses_byMode = $", CAST(ROUND(Total_Annual_Cap_Expenses_byMode,0) AS STRING),
-            ",Total_Annual_Cap_Expenses_byFunds = $", CAST(ROUND(Total_Annual_Cap_Expenses_byFunds,0) AS STRING)) as value_checked,
+    "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     FROM {{ ref('int_ntd_rr20_financial_total_exp') }}
 )
