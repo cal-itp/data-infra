@@ -102,3 +102,9 @@ sentry:
       enabled: false
     zookeeper:
       enabled: true
+
+  clickhouse:
+    clickhouse:
+      persistentVolumeClaim:
+        dataPersistentVolume:
+          storage: "50Gi"
