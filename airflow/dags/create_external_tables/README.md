@@ -15,10 +15,10 @@ post_hook: |    # this is optional; can provide an example query to check that e
   SELECT *
   FROM `{{ get_project_id() }}`.<your dataset as defined below under destination_project_dataset_table>.<your table name as defined below under destination_project_dataset_table>
   LIMIT 1;
-source_objects: # this tells the external table which path to look in for the objects that will be queryable through this external table  
-  - "<the top level folder name within your bucket that should be used for this external table like my_data>/*.jsonl.gz"     
+source_objects: # this tells the external table which path & file format to look in for the objects that will be queryable through this external table 
+  - "<the top level folder name within your bucket that should be used for this external table like my_data>/*.<your file extension, most likely '.jsonl.gz'>"     
 destination_project_dataset_table: "<desired dataset name like external_my_data_source>.<desired table name, may be like topic_name__specific_data_name>"   # this defines the external table name (dataset and table name) through which the data will be accessible in BigQuery
-source_format: NEWLINE_DELIMITED_JSON   # file format of raw data; generally should not change
+source_format: NEWLINE_DELIMITED_JSON   # file format of raw data; generally should not change -- allowable options are specified here: https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#ExternalDataConfiguration.FIELDS.source_format
 use_bq_client: true     # this option only exists for backwards compatibility; should always be true for new tables
 hive_options:   # this section provides information about how hive-partitioning is used
   mode: CUSTOM  # options are CUSTOM and AUTO. if CUSTOM, you need to define the hive partitions and their datatypes in the source_uri_prefix below; if you use AUTO, you only need to provide the top-level directory in the source_uri_prefix

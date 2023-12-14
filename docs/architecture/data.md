@@ -130,7 +130,7 @@ The [Should it be a dbt model?](tool_choice) docs section also has some guidance
 
 ### Bring data into Google Cloud Storage
 
-We store our raw, un-transformed data in Google Cloud Storage to ensure that we can always recover the raw data if needed.
+We store our raw, un-transformed data in Google Cloud Storage, usually in perpetuity, to ensure that we can always recover the raw data if needed.
 
 We store data in [hive-partitioned buckets](https://cloud.google.com/bigquery/docs/hive-partitioned-queries#supported_data_layouts) so that data is clearly labeled and partitioned for better performance. We use UTC dates and timestamps in hive paths (for example, for the timestamp of the data extract) for consistency.
 
@@ -140,16 +140,16 @@ The [Airflow README in the data-infra repo](https://github.com/cal-itp/data-infr
 
 We often bring data into our environment in two steps, created as two separate Airflow [DAGs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html):
 
-- **Sync the fully-raw data in its original format:** See for example the changes in the `airflow/dags/sync_elavon` directory in [data-infra PR #2376](https://github.com/cal-itp/data-infra/pull/2376/files). We do this to preserve the raw data in its original form. This data might be saved in a `calitp-<your-data-source>-raw` bucket.
+- **Sync the fully-raw data in its original format:** See for example the changes in the `airflow/dags/sync_elavon` directory in [data-infra PR #2376](https://github.com/cal-itp/data-infra/pull/2376/files) (note: this example is typical in terms of its overall structure and use of Cal-ITP storage classes and methods, but the specifics of how to access and request the upstream data source will vary). We do this to preserve the raw data in its original form. This data might be saved in a `calitp-<your-data-source>-raw` bucket.
 - **Convert the saved raw data into a BigQuery-readable gzipped JSONL file:** See for example the changes in the `airflow/dags/parse_elavon` directory in [data-infra PR #2376](https://github.com/cal-itp/data-infra/pull/2376/files). This prepares the data is to be read into BigQuery. **Conversion here should be limited to the bare minimum needed to make the data BigQuery-compatible, for example converting column names that would be invalid in BigQuery and changing the file type to gzipped JSONL.** This data might be saved in a `calitp-<your-data-source>-parsed` bucket.
 
 ```{note}
-When you merge a pull request creating a new Airflow DAG, that DAG will be paused by default. To start the DAG, someone will need to log into the Airflow UI and unpause the DAG. 
+When you merge a pull request creating a new Airflow DAG, that DAG will be paused by default. To start the DAG, someone will need to log into [the Airflow UI (requires Composer access in Cal-ITP Google Cloud Platform instance)](https://o1d2fa0877cf3fb10p-tp.appspot.com/home) and unpause the DAG. 
 ```
 
 ### Create external tables
 
-We use [external tables](https://cloud.google.com/bigquery/docs/external-data-sources#external_tables) to allow BigQuery to query data stored in Google Cloud Storage. External tables do not move data into BigQuery, they simply define the data schema which BigQuery can then use to access the data still stored in Google Cloud Storage.
+We use [external tables](https://cloud.google.com/bigquery/docs/external-data-sources#external_tables) to allow BigQuery to query data stored in Google Cloud Storage. External tables do not move data into BigQuery; they simply define the data schema which BigQuery can then use to access the data still stored in Google Cloud Storage.
 
 External tables are created by the [`create_external_tables` Airflow DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/create_external_tables) using the [ExternalTable custom operator](https://github.com/cal-itp/data-infra/blob/main/airflow/plugins/operators/external_table.py). Testing guidance and example YAML for how to create your external table is provided in the [Airflow DAG documentation](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/create_external_tables#create_external_tables).
 
