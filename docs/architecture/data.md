@@ -124,7 +124,7 @@ If you're bringing in data that is similar to existing data (for example, a new 
 
 ### Determine upstream source type
 
-To determine the best storage location for your raw data (especially if it requires manual curation), consult the [Data Storage Guidance within the Cal-ITP Data Pipeline Google Doc](https://docs.google.com/document/d/1-l6c99UUZ0o3Ln9S_CAt7iitGHvriewWhKDftESE2Dw/edit).
+To determine the best storage location for your raw data (especially if it requires manual curation), consult the [Data Collection and Storage Guidance within the Cal-ITP Data Pipeline Google Doc](https://docs.google.com/document/d/1-l6c99UUZ0o3Ln9S_CAt7iitGHvriewWhKDftESE2Dw/edit).
 
 The [Should it be a dbt model?](tool_choice) docs section also has some guidance about when a data pipeline should be created.
 
