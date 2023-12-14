@@ -236,6 +236,11 @@ def model(dbt, session):
     allyears = dbt.ref("int_ntd_rr20_service_ratios")
     allyears = allyears.toPandas()
 
+    numeric_columns = allyears.select_dtypes(include=["number"]).columns
+    allyears[numeric_columns] = allyears[numeric_columns].fillna(
+        value=0, inplace=False, axis=1
+    )
+
     # Run validation checks
     cph_checks = check_rr20_ratios(
         allyears, "cost_per_hr", 0.30, this_year, last_year, logger
