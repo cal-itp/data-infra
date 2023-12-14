@@ -65,7 +65,16 @@ stg_littlepay__settlements AS (
         acquirer,
         refund_id,
         acquirer_response_rrn,
-        settlement_status,
+        -- manual backfill of ccjpa data for specific reporting needs
+        -- information on how to backfill comes from manual LP extracts provided by Rebel
+        CASE
+            WHEN _key IN ("4e0bf943884f81fd6e524f4e175139c0", "910e0fe9c6f78de301b69f35798ec613", "8df624e5048128983c9693faaa32f27d", "67e002b1be3f07b2c06b4335364d7fde", "f658f3201463764ceea23816e9c27a54")
+                THEN "REJECTED"
+            WHEN participant_id = "ccjpa"
+                AND littlepay_export_date < "2023-11-28"
+                THEN "SETTLED"
+            ELSE settlement_status
+        END AS settlement_status,
         request_created_timestamp_utc,
         response_created_timestamp_utc,
         _line_number,

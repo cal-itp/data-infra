@@ -212,6 +212,8 @@ The status of the settlement. Options are:
 * `REJECTED`
 * `SETTLED`
 * `FAILED` - an error occurred during processing
+This field was not added for all agencies until late November 2023, so
+this field will be missing (null) for most rows before then. 
 {% enddocs %}
 
 {% docs lp_request_created_timestamp_utc %}
