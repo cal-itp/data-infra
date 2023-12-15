@@ -67,3 +67,5 @@ models:
         schema: mart_payments
       benefits:
         schema: mart_benefits
+      ntd_validation:
+        schema: mart_ntd_validation

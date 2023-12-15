@@ -63,9 +63,6 @@ x-airflow-common:
     CALITP_BQ_MAX_BYTES: 10000000000
     CALITP_SLACK_URL: ${CALITP_SLACK_URL}
 
-    CALITP_AMPLITUDE_BENEFITS_API_KEY: ${CALITP_AMPLITUDE_BENEFITS_API_KEY}
-    CALITP_AMPLITUDE_BENEFITS_SECRET_KEY: ${CALITP_AMPLITUDE_BENEFITS_SECRET_KEY}
-
     # connections - required to allow local testing of pod operators
     # see https://stackoverflow.com/a/55064944/1144523
     AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: "google-cloud-platform://:@:?extra__google_cloud_platform__project=cal-itp-data-infra"
