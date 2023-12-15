@@ -7,7 +7,7 @@ WITH debit_micropayments AS (
 -- they are pending payments that incorrectly had a different micropayment ID created from their associated completed payment
 valid_micropayment_ids AS (
     SELECT DISTINCT micropayment_id
-    FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
+    FROM {{ ref('int_payments__cleaned_micropayment_device_transactions') }}
 ),
 
 adjustments AS (

@@ -19,7 +19,7 @@ models:
               to: ref('fct_payments_aggregations')
               field: aggregation_id
       - name: littlepay_transaction_id
-        description: The littlepay_transaction_id of the first tap transaction
+        description: '{{ doc("lp_paired_first_transaction_id") }}'
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.998
@@ -75,7 +75,7 @@ models:
       - name: product_type
         description: '{{ doc("lp_product_type") }}'
       - name: route_id
-        description: The route_id of the first tap transaction with a non-unknown route_id, else unknown ('Route Z')
+        description: '{{ doc("lp_paired_transaction_route_id") }}'
       - name: route_long_name
         description: The route_long_name of the first tap transaction
       - name: route_short_name
@@ -88,57 +88,64 @@ models:
       - name: agency_name
         description: Full name of the transit agency.
       - name: direction
-        description: The direction of the first tap transaction
+        description: '{{ doc("lp_paired_first_direction") }}'
       - name: vehicle_id
-        description: The vehicle_id of the first tap transaction
+        description: '{{ doc("lp_paired_first_vehicle_id") }}'
       - name: device_id
-        description: The device_id of the first tap transaction
+        description: '{{ doc("lp_paired_first_device_id") }}'
       - name: transaction_type
-        description: The transaction_type of the first tap transaction
+        description: '{{ doc("lp_paired_first_transaction_type") }}'
       - name: transaction_outcome
-        description: The transaction_outcome of the first tap transaction
+        description: '{{ doc("lp_paired_first_transaction_outcome") }}'
       - name: transaction_date_time_utc
-        description: The transaction_date_time_utc of the first tap transaction
+        description: '{{ doc("lp_paired_first_transaction_date_time_utc") }}'
       - name: transaction_date_time_pacific
-        description: The transaction_date_time_pacific of the first tap transaction
+        description: '{{ doc("lp_paired_first_transaction_date_time_pacific") }}'
       - name: location_id
-        description: The location_id of the first tap transaction
+        description: '{{ doc("lp_paired_first_location_id") }}'
       - name: location_name
-        description: The location_name of the first tap transaction
+        description: '{{ doc("lp_paired_first_location_name") }}'
       - name: latitude
-        description: The latitude of the first tap transaction
+        description: '{{ doc("lp_paired_first_latitude") }}'
       - name: longitude
-        description: The longitude of the first tap transaction
-      - name: off_littlepay_transaction_id
-        description: The littlepay_transaction_id of the second tap transaction (if there is one)
-      - name: off_device_id
-        description: The device_id of the second tap transaction (if there is one)
-      - name: off_transaction_type
-        description: The transaction_type of the second tap transaction (if there is one)
-      - name: off_transaction_outcome
-        description: The transaction_outcome of the second tap transaction (if there is one)
-      - name: off_transaction_date_time_utc
-        description: The transaction_date_time_utc of the second tap transaction (if there is one)
-      - name: off_transaction_date_time_pacific
-        description: The transaction_date_time_pacific of the second tap transaction (if there is one)
-      - name: off_location_id
-        description: The location_id of the second tap transaction (if there is one)
-      - name: off_location_name
-        description: The location_name of the second tap transaction (if there is one)
-      - name: off_latitude
-        description: The latitude of the second tap transaction (if there is one)
-      - name: off_longitude
-        description: The longitude of the second tap transaction (if there is one)
-      - name: earliest_tap
+        description: '{{ doc("lp_paired_first_longitude") }}'
       - name: on_latitude
+        description: '{{ doc("lp_paired_first_latitude") }}'
       - name: on_longitude
+        description: '{{ doc("lp_paired_first_longitude") }}'
+      - name: off_littlepay_transaction_id
+        description: '{{ doc("lp_paired_second_transaction_id") }}'
+      - name: off_device_id
+        description: '{{ doc("lp_paired_second_device_id") }}'
+      - name: off_transaction_type
+        description: '{{ doc("lp_paired_second_transaction_type") }}'
+      - name: off_transaction_outcome
+        description: '{{ doc("lp_paired_second_transaction_outcome") }}'
+      - name: off_transaction_date_time_utc
+        description: '{{ doc("lp_paired_second_transaction_date_time_utc") }}'
+      - name: off_transaction_date_time_pacific
+        description: '{{ doc("lp_paired_second_transaction_date_time_pacific") }}'
+      - name: off_location_id
+        description: '{{ doc("lp_paired_second_location_id") }}'
+      - name: off_location_name
+        description: '{{ doc("lp_paired_second_location_name") }}'
+      - name: off_latitude
+        description: '{{ doc("lp_paired_second_latitude") }}'
+      - name: off_longitude
+        description: '{{ doc("lp_paired_second_longitude") }}'
+      - name: earliest_tap
       - name: on_geography
+        description: '{{ doc("lp_paired_first_geography") }}'
       - name: off_geography
+        description: '{{ doc("lp_paired_second_geography") }}'
       - name: duration
+        description: '{{ doc("lp_paired_duration") }}'
       - name: distance_meters
+        description: '{{ doc("lp_paired_distance") }}'
       - name: transaction_date_pacific
+        description: '{{ doc("lp_paired_first_transaction_date") }}'
       - name: day_of_week
-        description: Day of week value of the transaction in the range [1,7] with Sunday as the first day of the week.
+        description: '{{ doc("lp_paired_first_day_of_week") }}'
 
   - name: fct_payments_aggregations
     description: |

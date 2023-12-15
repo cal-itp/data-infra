@@ -24,7 +24,7 @@ find_earliest_tap AS (
 
 ),
 
-int_littlepay__customers AS (
+int_payments__customers AS (
     SELECT
         t1.participant_id,
         t1.customer_id,
@@ -34,4 +34,4 @@ int_littlepay__customers AS (
     LEFT JOIN find_earliest_tap AS t2 USING (customer_id, participant_id)
 )
 
-SELECT * FROM int_littlepay__customers
+SELECT * FROM int_payments__customers
