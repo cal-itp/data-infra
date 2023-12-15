@@ -28,7 +28,7 @@ fct_transit_data_quality_issues AS (
         qc_checks,
         waiting_on_someone_other_than_transit_data_quality_,
         is_open,
-        last_update,
+        last_modified,
         last_update_month,
         last_update_year,
         status_notes,

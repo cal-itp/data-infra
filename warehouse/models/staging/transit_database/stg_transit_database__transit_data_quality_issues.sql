@@ -25,7 +25,7 @@ stg_transit_database__transit_data_quality_issues AS (
         waiting_on_someone_other_than_transit_data_quality_,
         caltrans_district__from_operating_county_geographies___from_services_,
         is_open,
-        last_update,
+        last_modified,
         last_update_month,
         last_update_year,
         status_notes,

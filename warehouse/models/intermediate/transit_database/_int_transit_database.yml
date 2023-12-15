@@ -75,7 +75,7 @@ models:
       - name: waiting_on_someone_other_than_transit_data_quality_
       - name: caltrans_district__from_operating_county_geographies___from_services_
       - name: is_open
-      - name: last_update
+      - name: last_modified
       - name: last_update_month
       - name: last_update_year
       - name: status_notes
