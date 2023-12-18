@@ -1,6 +1,6 @@
 # Deployed services
 
-Here is a list of services that are deployed as part of the Cal-ITP project.
+Here is a list of services that are deployed as part of the Cal-ITP project. This change is made for testing purposes.
 
 | Name             | Function                                                                                                                                                                                 | URL                                            | Source code                                                                                         | K8s namespace      | Development/test environment? | Type?                      |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------ | ----------------------------- | -------------------------- |
