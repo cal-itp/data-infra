@@ -4,6 +4,26 @@
 
 Information related to contributing to the [Cal-ITP dbt project](https://github.com/cal-itp/data-infra/tree/main/warehouse).
 
+## What is dbt?
+
+[dbt](https://docs.getdbt.com/docs/introduction#the-power-of-dbt) is the tool we use to manage the data models (tables and views) in our BigQuery data warehouse. We use dbt to define the SQL code that creates our data models, to manage dependencies between models, to document models, and to test models. 
+
+The [Cal-ITP dbt project](https://github.com/cal-itp/data-infra/tree/main/warehouse) runs every day, [orchestrated by Airflow](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse). When the dbt project runs, it refreshes all the data in the warehouse by running all the queries within the project in order based on the dependencies defined between models. For example, if model B depends on model A, the project will execute model A before model B. 
+
+### dbt project structure
+
+The dbt project (specifically [the `models/` directory](https://github.com/cal-itp/data-infra/tree/main/warehouse/models)) is broken out into data processing stages, broadly according to the [standard outlined by dbt](https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview#guide-structure-overview). You can read dbt documentation on the purpose of [staging](https://docs.getdbt.com/best-practices/how-we-structure/2-staging#staging-models), [intermediate](https://docs.getdbt.com/best-practices/how-we-structure/3-intermediate#intermediate-models), and [mart](https://docs.getdbt.com/best-practices/how-we-structure/4-marts#marts-models) models. 
+
+Project level configuration lives in two separate places:
+* `dbt_project.yml` ([dbt documentation](https://docs.getdbt.com/reference/dbt_project.yml), [our file](https://github.com/cal-itp/data-infra/blob/main/warehouse/dbt_project.yml)): This contains information about the dbt project structure, for example configuring how the folder structure should be interpreted.
+* `profiles.yml` ([dbt documentation](https://docs.getdbt.com/docs/core/connect-data-platform/profiles.yml), [production file (should be used for prod runs only)](https://github.com/cal-itp/data-infra/blob/main/warehouse/profiles.yml), [template for local/testing use](https://github.com/cal-itp/data-infra/tree/main/warehouse#clone-and-install-the-warehouse-project)): This contains information about how the dbt project should connect to our cloud warehouse (BigQuery) and configures settings associated with that database connection, for example, what the query timeout should be.
+
+```{note}
+The relationship between a folder in `warehouse/models/` and a dataset/schema in BigQuery is configured via [dbt_project.yml](https://github.com/cal-itp/data-infra/blob/main/warehouse/dbt_project.yml) in the `models` section. The `warehouse/models/some_data/my_table.sql` file will not correspond to `calitp-data-infra.some_data.my_table` in BigQuery unless configured to do so; all models are created in the `staging` dataset by default (so, without that configuration, the table would be created in `calitp-data-infra.staging.my_table`).
+
+For an example creating a new entry in `dbt_project.yml` for a new mart dataset, see [data-infra PR #3172](https://github.com/cal-itp/data-infra/pull/3172).
+```
+
 ## Resources
 
 - If you have questions specific to our project or you encounter any issues when developing, please bring those questions to the [`#data-warehouse-devs`](https://cal-itp.slack.com/archives/C050ZNDUL21) or [`#data-office-hours`](https://cal-itp.slack.com/archives/C02KH3DGZL7) Cal-ITP Slack channels. Working through questions "in public" helps build shared knowledge that's searchable later on.
@@ -26,11 +46,11 @@ This section describes the high-level mechanics/process of the developer workflo
 **Please read the [next section](developing_dbt_models#modeling-considerations) for things you should consider from the data modeling perspective.**
 ```
 
-To test your work while developing dbt models, you can edit the `.sql` files for your models, save your changes, and then [run the model from the command line](https://github.com/cal-itp/data-infra/tree/main/warehouse#dbt-commands) to execute the SQL you updated.
+To develop dbt models, you can edit the `.sql` files for your models, save your changes, and then [run the model from the command line](https://github.com/cal-itp/data-infra/tree/main/warehouse#dbt-commands) to execute the SQL you updated.
 
 To inspect tables as you are working, the fastest method is usually to run some manual test queries or "preview" the tables in the [BigQuery user interface](https://console.cloud.google.com/bigquery?project=cal-itp-data-infra-staging). You can also use something like [`pandas.read_gbq`](https://pandas.pydata.org/docs/reference/api/pandas.read_gbq.html) to perform example queries in a notebook.
 
-When you run dbt commands locally on JupyterHub, your models will be created in the `cal-itp-data-infra-staging.<your name>_<dbt folder name, like mart_gtfs>` BigQuery dataset. Note that this is in the `cal-itp-data-infra-staging` Google Cloud Platform project, *not* the production `cal-itp-data-infra` project.
+When you run dbt commands locally or on JupyterHub, your models will be created in the `cal-itp-data-infra-staging.<your name>_<dbt folder name, like mart_gtfs>` BigQuery dataset. Note that this is in the `cal-itp-data-infra-staging` Google Cloud Platform project, *not* the production `cal-itp-data-infra` project.
 
 Once your models are working the way you want and you have added all necessary documentation and tests in YAML files ([see below](developing_dbt_models#modeling-considerations) for more on modeling, documentation, and testing considerations), you are ready to merge.
 
