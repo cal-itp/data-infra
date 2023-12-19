@@ -1,6 +1,10 @@
 # Deployed services
 
-Here is a list of services that are deployed as part of the Cal-ITP project.
+Many services are deployed as part of the Cal-ITP ecosystem, maintained directly by Cal-ITP contributors and orchestrated via Google Kubernetes Engine or published via Netlify.
+
+With the exception of Airflow, which is [managed via Google Cloud Composer](../../airflow/README.md#upgrading-airflow-itself), changes to the services discussed here are deployed via CI/CD processes that run automatically when new code is merged to the relevant Cal-ITP repository. These CI/CD processes are not all identical - different services have different testing steps that run when a pull request is opened against the services's code. Some services undergo a full test deployment when a PR is opened, some report the changes that a subject [Helm chart](https://helm.sh/docs/topics/charts/) will undergo upon merge, and some just perform basic linting.
+
+READMEs describing the individual testing and deployment process for each service are linked in the below table, and [the CI README](../../ci/README.md) provides some more general context for Kubernetes-based deployments.
 
 | Name             | Function                                                                                                                                                                                 | URL                                            | Source code                                                                                         | K8s namespace      | Development/test environment? | Type?                      |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------ | ----------------------------- | -------------------------- |
@@ -32,8 +36,7 @@ flowchart TD
             airflow_dags
             airflow_plugins
         end
-        subgraph data_infra_apps_cluster[ ]
-            data_infra_apps_label[data-infra-apps]
+        subgraph data_infra_apps_cluster[data-infra-apps]
             subgraph rt_archiver[GTFS-RT Archiver]
                 rt_archiver_label[<a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3'>RT archiver</a>]
                 prod_rt_archiver[gtfs-rt-v3 archiver]
