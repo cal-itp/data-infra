@@ -1,4 +1,4 @@
-# Deployed services and sites
+# Deployed Services and Sites
 
 Many services and websites are deployed as part of the Cal-ITP ecosystem, maintained directly by Cal-ITP contributors and orchestrated via Google Kubernetes Engine or published via Netlify or GitHub Pages.
 
