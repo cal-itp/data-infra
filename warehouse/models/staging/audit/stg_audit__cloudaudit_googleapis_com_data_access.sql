@@ -16,7 +16,61 @@
 WITH latest AS (
     {% set yesterday = modules.datetime.date.today() - modules.datetime.timedelta(days=1) %}
 
-    SELECT *
+    SELECT
+        -- This was previously a SELECT *, but changes to the audit logs required us to align old
+        -- columns (including nested fields) with new ones in late 2023 for the 90-day lookback to
+        -- work as expected. A SELECT * can likely be restored by March of 2024.
+        logname,
+        STRUCT(
+            resource.type,
+            STRUCT(
+                resource.labels.dataset_id,
+                resource.labels.project_id,
+                resource.labels.location
+            )
+            AS labels
+        )
+        AS resource,
+        STRUCT(
+            protopayload_auditlog.servicename,
+            protopayload_auditlog.methodname,
+            protopayload_auditlog.resourcename,
+            protopayload_auditlog.resourcelocation,
+            protopayload_auditlog.numresponseitems,
+            protopayload_auditlog.status,
+            STRUCT(
+                protopayload_auditlog.authenticationinfo.principalemail,
+                protopayload_auditlog.authenticationinfo.authorityselector,
+                protopayload_auditlog.authenticationinfo.serviceaccountkeyname,
+                protopayload_auditlog.authenticationinfo.serviceaccountdelegationinfo,
+                protopayload_auditlog.authenticationinfo.principalsubject
+            )
+            AS authenticationinfo,
+            protopayload_auditlog.authorizationinfo,
+            protopayload_auditlog.policyviolationinfo,
+            STRUCT(
+                protopayload_auditlog.requestmetadata.callerip,
+                protopayload_auditlog.requestmetadata.callersupplieduseragent,
+                protopayload_auditlog.requestmetadata.callernetwork,
+                protopayload_auditlog.requestmetadata.requestattributes,
+                protopayload_auditlog.requestmetadata.destinationattributes
+            )
+            AS requestmetadata,
+            protopayload_auditlog.metadatajson
+        )
+        AS protopayload_auditlog,
+        textpayload,
+        timestamp,
+        receivetimestamp,
+        severity,
+        insertid,
+        httprequest,
+        operation,
+        trace,
+        spanid,
+        tracesampled,
+        sourcelocation,
+        split,
     FROM cal-itp-data-infra.audit.cloudaudit_googleapis_com_data_access_{{ yesterday.strftime('%Y%m%d') }}
 ),
 
@@ -30,7 +84,61 @@ everything AS ( -- noqa: ST03
 
     {% set current = modules.datetime.date.today() - modules.datetime.timedelta(days=day) %}
 
-    SELECT *
+    SELECT
+        -- This was previously a SELECT *, but changes to the audit logs required us to align old
+        -- columns (including nested fields) with new ones in late 2023 for the 90-day lookback to
+        -- work as expected. A SELECT * can likely be restored by March of 2024.
+        logname,
+        STRUCT(
+            resource.type,
+            STRUCT(
+                resource.labels.dataset_id,
+                resource.labels.project_id,
+                resource.labels.location
+            )
+            AS labels
+        )
+        AS resource,
+        STRUCT(
+            protopayload_auditlog.servicename,
+            protopayload_auditlog.methodname,
+            protopayload_auditlog.resourcename,
+            protopayload_auditlog.resourcelocation,
+            protopayload_auditlog.numresponseitems,
+            protopayload_auditlog.status,
+            STRUCT(
+                protopayload_auditlog.authenticationinfo.principalemail,
+                protopayload_auditlog.authenticationinfo.authorityselector,
+                protopayload_auditlog.authenticationinfo.serviceaccountkeyname,
+                protopayload_auditlog.authenticationinfo.serviceaccountdelegationinfo,
+                protopayload_auditlog.authenticationinfo.principalsubject
+            )
+            AS authenticationinfo,
+            protopayload_auditlog.authorizationinfo,
+            protopayload_auditlog.policyviolationinfo,
+            STRUCT(
+                protopayload_auditlog.requestmetadata.callerip,
+                protopayload_auditlog.requestmetadata.callersupplieduseragent,
+                protopayload_auditlog.requestmetadata.callernetwork,
+                protopayload_auditlog.requestmetadata.requestattributes,
+                protopayload_auditlog.requestmetadata.destinationattributes
+            )
+            AS requestmetadata,
+            protopayload_auditlog.metadatajson
+        )
+        AS protopayload_auditlog,
+        textpayload,
+        timestamp,
+        receivetimestamp,
+        severity,
+        insertid,
+        httprequest,
+        operation,
+        trace,
+        spanid,
+        tracesampled,
+        sourcelocation,
+        split,
     FROM cal-itp-data-infra.audit.cloudaudit_googleapis_com_data_access_{{ current.strftime('%Y%m%d') }}
     {% if not loop.last %}
     UNION ALL
