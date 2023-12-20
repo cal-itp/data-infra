@@ -55,9 +55,13 @@ flowchart TD
 
     subgraph netlify[ ]
         netlify_label[Netlify]
-        data_infra_docs[<a href='https://docs.calitp.org/data-infra'>data-infra Docs</a>]
         reports_website[<a href='https://reports.calitp.org'>California GTFS Quality Dashboard</a>]
         analysis_portfolio[<a href='https://analysis.calitp.org'>Cal-ITP Analysis Portfolio</a>]
+    end
+
+    subgraph github_pages[ ]
+        github_pages_label[GitHub Pages]
+        data_infra_docs[<a href='https://docs.calitp.org/data-infra'>data-infra Docs</a>]
     end
 
 data_infra_repo --> airflow_dags
@@ -74,5 +78,5 @@ reports_repo --> reports_website
 
 classDef default fill:white, color:black, stroke:black, stroke-width:1px
 classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
-class repos_label,kubernetes_label,netlify_label group_labelstyle
+class repos_label,kubernetes_label,netlify_label,github_pages_label group_labelstyle
 ```
