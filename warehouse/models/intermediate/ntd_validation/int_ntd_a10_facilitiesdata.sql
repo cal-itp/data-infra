@@ -14,8 +14,11 @@ SELECT
     + COALESCE(ROUND(do_owned, 2), 0)
     + COALESCE(ROUND(do_leased_by_public_agency,2), 0)
     + COALESCE(ROUND(do_leased_from_private_entity, 2), 0)
-    as total_facilities
-FROM {{ ref('stg_ntd_2023_a10') }}
+    as total_facilities,
+    MAX(api_report_last_modified_date) as max_api_report_last_modified_date
+FROM {{ ref('stg_ntd_a10') }}
+WHERE api_report_period = 2023
+GROUP BY organization, api_report_period, service_mode, total_facilities
 ),
 
 collapsed_fac as (

@@ -14,7 +14,7 @@ vins_a30 as (
     SELECT organization,
     api_report_period as fiscal_year,
     COUNT(DISTINCT VIN) as a30_vin_n
-    FROM {{ ref('stg_ntd_2023_a30_assetandresourceinfo') }}
+    FROM {{ ref('stg_ntd_a30_assetandresourceinfo') }}
     GROUP BY organization, fiscal_year
 )
 
