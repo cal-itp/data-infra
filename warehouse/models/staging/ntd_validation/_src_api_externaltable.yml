@@ -5,6 +5,7 @@ sources:
     description: |
       Data from BlackCat API. Each org's data is be in 1 row, and for each separate table in the API,
             a nested column holds all of it's data.
+            NOTE: all of the snapshots of the API data that are stored in Google Cloud, are viewed together in this ONE table.
     database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
     schema: external_blackcat
     tables:

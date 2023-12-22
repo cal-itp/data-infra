@@ -14,11 +14,14 @@ WITH longform_2023 AS (
       REPLACE(
         REPLACE(item, 'FTA Formula Grants for Rural Areas (§5311)', 'FTA_Formula_Grants_for_Rural_Areas_5311'),
         'Other Directly Generated Funds', 'Other_Directly_Generated_Funds'),
-    'Local Funds', 'Local_Funds') as item
-     FROM {{ ref('stg_ntd_2023_rr20_rural') }}
-     WHERE item LIKE "%Directly Generated Funds%"
+    'Local Funds', 'Local_Funds') as item,
+    MAX(api_report_last_modified_date) as max_api_report_last_modified_date
+     FROM {{ ref('stg_ntd_rr20_rural') }}
+     WHERE (item LIKE "%Directly Generated Funds%"
       OR item LIKE "%Formula Grants for Rural Areas%"
-      OR item LIKE "Local Funds"
+      OR item LIKE "Local Funds")
+      AND api_report_period = 2023
+    GROUP BY organization, fiscal_year, total_expended, item
 ),
 wide_2023 AS (
     SELECT * FROM
