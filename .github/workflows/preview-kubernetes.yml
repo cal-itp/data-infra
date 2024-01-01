@@ -3,11 +3,15 @@ name: Show diff for release channel
 on:
   pull_request:
     branches:
-      - 'releases/*'
-    types:
-      - opened
-      - synchronize
-      - reopened
+      - 'main'
+    paths:
+      - '.holo/config.toml'
+      - '.holo/sources/jarvus-cluster-template.toml'
+      - '.holo/branches/releases/**'
+      - '.github/workflows/service-*'
+      - 'ci/**'
+      - 'kubernetes/apps/**'
+      - 'kubernetes/system/**'
 
 env:
   GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_TOKEN }}
@@ -22,9 +26,7 @@ jobs:
       USE_GKE_GCLOUD_AUTH_PLUGIN: True
     steps:
       # Setup
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
       - uses: 'google-github-actions/auth@v2'
         with:
@@ -36,6 +38,18 @@ jobs:
           cluster_name: ${{ env.GKE_NAME }}
           location: ${{ env.GKE_REGION }}
       - run: curl -sSL https://install.python-poetry.org | python -
+      - name: Set up hologit
+        env:
+          BIO_RELEASE: 1.6.821
+        run: |
+          curl -LO "https://github.com/biome-sh/biome/releases/download/$BIO_RELEASE/bio-$BIO_RELEASE-x86_64-linux.tar.gz"
+          tar xzvf "bio-$BIO_RELEASE-x86_64-linux.tar.gz"
+          sudo mv bio /usr/local/bin/bio
+          sudo bio pkg install --binlink jarvus/hologit
+
+      # Render Kubernetes content with parent underlay and checkout
+      - run: git holo project release-candidate --commit-to=kubernetes
+      - run: git checkout kubernetes
 
       # Diff and write back to PR
       - id: diff
