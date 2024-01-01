@@ -208,7 +208,7 @@ def diff(
             full_diff += result.stdout
 
     msg = (
-        f"```{full_diff}```"
+        f"```diff\n{full_diff}\n```"
         if full_diff
         else f"No {driver if driver else 'manifest'} changes found for {c.calitp_config.channel}.\n"
     )
