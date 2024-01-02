@@ -102,7 +102,32 @@ def check_rr20_ratios(df, variable, threshold, this_year, last_year, logger):
                     output.append(output_line)
         else:
             logger.info(f"There is no data for {agency}")
-    checks = pd.DataFrame(output).sort_values(by="Organization")
+
+    if len(output) == 0:
+        logger.info(f"There is no data for {this_year} for {variable}. Ending check.")
+        checks = pd.DataFrame(
+            data=[
+                [
+                    "All",
+                    variable,
+                    "",
+                    0,
+                    "None",
+                    f"There is no data for {variable} for {this_year}.",
+                ]
+            ],
+            columns=[
+                "Organization",
+                "name_of_check",
+                "mode",
+                "value_checked",
+                "check_status",
+                "Description",
+            ],
+        )
+    else:
+        checks = pd.DataFrame(output).sort_values(by="Organization")
+
     return checks
 
 
@@ -119,7 +144,10 @@ def check_single_number(
     agencies = df["organization"].unique()
     output = []
     for agency in agencies:
-        if len(df[df["organization"] == agency]) > 0:
+        if len(df[df["organization"] == agency]) <= 0:
+            logger.info(f"There is no data for {agency}")
+            pass
+        else:
             logger.info(f"Checking {agency} for {variable} info.")
             # Check whether data for both years is present, if so perform prior yr comparison.
             if (
@@ -216,15 +244,40 @@ def check_single_number(
                         "Description": description,
                     }
                     output.append(output_line)
-        else:
-            logger.info(f"There is no data for {agency}")
-    checks = pd.DataFrame(output).sort_values(by="Organization")
+
+            else:
+                pass
+
+    if len(output) == 0:
+        logger.info(f"There is no data for {this_year} for {variable}. Ending check.")
+        checks = pd.DataFrame(
+            data=[
+                [
+                    "All",
+                    variable,
+                    "",
+                    0,
+                    "None",
+                    f"There is no data for {variable} for {this_year}.",
+                ]
+            ],
+            columns=[
+                "Organization",
+                "name_of_check",
+                "mode",
+                "value_checked",
+                "check_status",
+                "Description",
+            ],
+        )
+    else:
+        checks = pd.DataFrame(output).sort_values(by="Organization")
     return checks
 
 
 def model(dbt, session):
     # Set up the logger object
-    logger = write_to_log("rr20_ftc_servicechecks_log.log")
+    logger = write_to_log("rr20_fct_servicechecks_log.log")
 
     this_year = datetime.datetime.now().year
     last_year = this_year - 1
@@ -275,8 +328,9 @@ def model(dbt, session):
         ],
         ignore_index=True,
     ).sort_values(by="Organization")
+    rr20_checks["date_checked"] = this_date
 
     logger.info(f"RR-20 service data checks conducted on {this_date} is complete!")
 
-    # Send table to BigQuery
+    # Send table to BigQuery, if there's data
     return rr20_checks
