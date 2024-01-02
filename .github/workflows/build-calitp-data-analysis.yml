@@ -30,7 +30,7 @@ jobs:
       - uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
-      - uses: google-github-actions/setup-gcloud@v1
+      - uses: google-github-actions/setup-gcloud@v2
       - name: Run checks
         run: |
           curl -sSL https://install.python-poetry.org | python -
