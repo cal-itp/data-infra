@@ -47,6 +47,9 @@ jobs:
           sudo mv bio /usr/local/bin/bio
           sudo bio pkg install --binlink jarvus/hologit
 
+          git config user.name "Github Action $GITHUB_JOB"
+          git config user.email "$(whoami)@$(uname -n)"
+
       # Render Kubernetes content with parent underlay and checkout
       - run: git holo project release-candidate --commit-to=kubernetes
       - run: git checkout kubernetes
