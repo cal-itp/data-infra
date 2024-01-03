@@ -108,3 +108,6 @@ sentry:
       persistentVolumeClaim:
         dataPersistentVolume:
           storage: "50Gi"
+
+  hooks:
+    activeDeadlineSeconds: 1200
