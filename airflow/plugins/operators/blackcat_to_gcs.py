@@ -77,15 +77,21 @@ class BlackCatApiExtract(BaseModel):
         response = requests.get(url)
         blob = response.json()
 
-        raw_df = pd.json_normalize(blob)
-        raw_df["ReportLastModifiedDate"] = raw_df["ReportLastModifiedDate"].astype(
-            "datetime64[ns]"
-        )
+        raw_df = pd.json_normalize(blob)  # if no data, it will be an empty df
+        if raw_df is None or len(raw_df) == 0:
+            self.logger.info(
+                f"There is no data to download for {self.extract_time.format('YYYY')}. Ending pipeline."
+            )
+            pass
+        else:
+            raw_df["ReportLastModifiedDate"] = raw_df["ReportLastModifiedDate"].astype(
+                "datetime64[ns]"
+            )
 
-        self.data = raw_df.rename(make_name_bq_safe, axis="columns")
-        self.logger.info(
-            f"Downloaded {self.bq_table_name_suffix} data for {self.extract_time.format('YYYY')} with {len(self.data)} rows!"
-        )
+            self.data = raw_df.rename(make_name_bq_safe, axis="columns")
+            self.logger.info(
+                f"Downloaded {self.bq_table_name_suffix} data for {self.extract_time.format('YYYY')} with {len(self.data)} rows!"
+            )
 
     def make_hive_path(self, form: str, bucket: str):
         if not self.extract_time:
@@ -105,7 +111,7 @@ class BlackCatApiExtract(BaseModel):
     def save_to_gcs(self, fs, bucket):
         hive_path = self.make_hive_path(self.form, bucket)
         self.logger.info(f"Uploading to GCS at {hive_path}")
-        if len(self.data) == 0:
+        if (self.data is None) or (len(self.data) == 0):
             self.logger.info(
                 f"There is no data for {self.api_tablename_suffix} for {self.extract_time.format('YYYY')}, not saving anything. Pipeline exiting."
             )
