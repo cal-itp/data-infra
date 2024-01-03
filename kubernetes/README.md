@@ -138,7 +138,7 @@ At the time of this writing, a JupyterHub deployment is available at [https://no
 - `ingress.hosts`
 - `ingress.tls.hosts`
 
-# Backups
+## Backups
 
 For most of our backups we utilize [Restic](https://restic.readthedocs.io/en/latest/010_introduction.html); this section uses the Metabase database backup as an example.
 
