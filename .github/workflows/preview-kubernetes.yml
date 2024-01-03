@@ -51,7 +51,7 @@ jobs:
           git config user.email "$(whoami)@$(uname -n)"
 
       # Render Kubernetes content with parent underlay and checkout
-      - run: git holo project release-candidate --commit-to=kubernetes
+      - run: git holo project kubernetes-workspace --commit-to=kubernetes
       - run: git checkout kubernetes
 
       # Diff and write back to PR
