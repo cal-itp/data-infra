@@ -26,10 +26,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: google-github-actions/setup-gcloud@v0
+      - uses: 'google-github-actions/auth@v2'
         with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+      - uses: google-github-actions/setup-gcloud@v2
       - run: gcloud components install gke-gcloud-auth-plugin
       - uses: google-github-actions/get-gke-credentials@v1
         with:
