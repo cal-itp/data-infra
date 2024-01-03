@@ -136,8 +136,8 @@ class AirtableToGCSOperator(BaseOperator):
             air_table_name (str): The table name that should be extracted from the
                 Airtable Base
             personal_access_token (str, optional): The personal access token to use when downloading from airtable.
-                This can be someone's personal PAT. If not provided, the environment
-                variable of `CALITP_AIRTABLE_PERSONAL_ACCESS_TOKEN` is used.
+                This can be someone's personal PAT. If not provided, the Secret Manager
+                value for `CALITP_AIRTABLE_PERSONAL_ACCESS_TOKEN` is used.
         """
         self.bucket = bucket
         self.extract = AirtableExtract(
