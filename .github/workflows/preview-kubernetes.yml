@@ -60,10 +60,8 @@ jobs:
         shell: bash
         working-directory: ci
         run: |
-          export RELEASE_CHANNEL=${GITHUB_BASE_REF#releases/}
-          printf 'WORKFLOW: service-release-diff; RELEASE_CHANNEL=%s\n' "$RELEASE_CHANNEL"
           poetry install
-          poetry run invoke diff -f "./channels/$RELEASE_CHANNEL.yaml" --outfile=diff.md
+          poetry run invoke diff -f "./channels/prod.yaml" --outfile=diff.md
 
       - uses: peter-evans/find-comment@v2
         id: fc
