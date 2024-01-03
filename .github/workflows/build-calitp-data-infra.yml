@@ -47,7 +47,7 @@ jobs:
         run: |
           poetry config repositories.test-pypi https://test.pypi.org/legacy/
           poetry config pypi-token.test-pypi $POETRY_TEST_PYPI_TOKEN_PYPI
-          poetry publish -r test-pypi --skip-existing
+          poetry publish -r test-pypi
         env:
           POETRY_TEST_PYPI_TOKEN_PYPI: ${{ secrets.TEST_PYPI_CALITP_DATA_INFRA_TOKEN }}
       - if: ${{ github.ref == 'refs/heads/main' }}
