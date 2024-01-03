@@ -1,4 +1,4 @@
-name: Show diff for release channel
+name: Generate diff of Kubernetes changes
 
 on:
   pull_request:
