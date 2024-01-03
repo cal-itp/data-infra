@@ -99,8 +99,6 @@ calitp:
       namespace: sentry
       helm_name: sentry
       helm_chart: kubernetes/apps/charts/sentry
-      secret_helm_values:
-        - sentry_sentry-sensitive-helm-values
       secrets:
         - sentry_sentry-secret
         - sentry_sentry-sentry-postgresql
