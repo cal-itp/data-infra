@@ -6,7 +6,7 @@ import pandas as pd
 import pendulum
 from calitp_data_infra.auth import get_secret_by_name
 from calitp_data_infra.storage import get_fs, make_name_bq_safe
-from pyairtable import Table
+from pyairtable import Api
 from pydantic import BaseModel
 
 from airflow.models import BaseOperator
@@ -53,7 +53,7 @@ class AirtableExtract(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
-    def fetch_from_airtable(self, api_key):
+    def fetch_from_airtable(self, personal_access_token):
         """Download an Airtable table as a DataFrame.
 
         Note that airtable records have rows structured as follows:
@@ -69,7 +69,9 @@ class AirtableExtract(BaseModel):
         print(
             f"Downloading airtable data for {self.air_base_name}.{self.air_table_name}"
         )
-        all_rows = Table(api_key, self.air_base_id, self.air_table_name).all()
+
+        api = Api(personal_access_token)
+        all_rows = api.table(self.air_base_id, self.air_table_name).all()
         self.extract_time = pendulum.now()
 
         raw_df = pd.DataFrame(
@@ -120,7 +122,7 @@ class AirtableToGCSOperator(BaseOperator):
         air_base_id,
         air_base_name,
         air_table_name,
-        api_key=None,
+        personal_access_token=None,
         **kwargs,
     ):
         """An operator that downloads data from an Airtable base
@@ -133,9 +135,9 @@ class AirtableToGCSOperator(BaseOperator):
             air_base_name (str): The string name of the Base.
             air_table_name (str): The table name that should be extracted from the
                 Airtable Base
-            api_key (str, optional): The API key to use when downloading from airtable.
-                This can be someone's personal API key. If not provided, the environment
-                variable of `CALITP_AIRTABLE_API_KEY` is used.
+            personal_access_token (str, optional): The personal access token to use when downloading from airtable.
+                This can be someone's personal PAT. If not provided, the environment
+                variable of `CALITP_AIRTABLE_PERSONAL_ACCESS_TOKEN` is used.
         """
         self.bucket = bucket
         self.extract = AirtableExtract(
@@ -143,13 +145,15 @@ class AirtableToGCSOperator(BaseOperator):
             air_base_name=air_base_name,
             air_table_name=air_table_name,
         )
-        self.api_key = api_key
+        self.personal_access_token = personal_access_token
 
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
-        api_key = self.api_key or get_secret_by_name("CALITP_AIRTABLE_API_KEY")
-        self.extract.fetch_from_airtable(api_key)
+        personal_access_token = self.personal_access_token or get_secret_by_name(
+            "CALITP_AIRTABLE_PERSONAL_ACCESS_TOKEN"
+        )
+        self.extract.fetch_from_airtable(personal_access_token)
         fs = get_fs()
         # inserts into xcoms
         return self.extract.save_to_gcs(fs, self.bucket)
