@@ -8,7 +8,7 @@ on:
       - '.holo/config.toml'
       - '.holo/sources/jarvus-cluster-template.toml'
       - '.holo/branches/releases/**'
-      - '.github/workflows/service-*'
+      - '.github/workflows/*-kubernetes.yml'
       - 'ci/**'
       - 'kubernetes/apps/**'
       - 'kubernetes/system/**'
