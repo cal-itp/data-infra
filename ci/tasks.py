@@ -218,7 +218,8 @@ def diff(
                             str(chart_path),
                             f"--namespace={release.namespace}",
                             values_str,
-                            "-C 5",  # only include 5 lines of context
+                            "-C 5", # only include 5 lines of context
+                            "--no-hooks", # exclude hooks that get recreated every upgrade from diff
                         ]
                     ),
                     warn=True,
