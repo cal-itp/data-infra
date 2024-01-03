@@ -231,11 +231,18 @@ def diff(
         if result.stdout:
             full_diff += result.stdout
 
-    msg = (
-        f"```diff\n{full_diff}```\n"
-        if full_diff
-        else f"No {driver if driver else 'manifest'} changes found for {c.calitp_config.channel}.\n"
+    msg = "\n\n".join(
+        [
+            "The following changes will be applied to the production Kubernetes cluster upon merge.",
+            "**BE AWARE** this may not reveal changes that have been manually applied to the cluster getting undone—applying manual changes to the cluster should be avoided.",
+            (
+                f"```diff\n{full_diff}```\n"
+                if full_diff
+                else f"No {driver if driver else 'manifest'} changes found for {c.calitp_config.channel}.\n"
+            )
+        ]
     )
+
     if outfile:
         print(f"writing {len(msg)=} to {outfile}", flush=True)
         with open(outfile, "w") as f:

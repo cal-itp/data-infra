@@ -15,6 +15,9 @@ The workflows described above also define their triggers. In general, developer 
 1. Check out a feature branch
 2. Put up a PR for that feature branch, targeting `main`
    - `preview-kubernetes` will run and add a comment showing the diff of changes that will affect the production Kubernetes cluster
+
+      **BE AWARE**: This diff may *NOT* reveal any changes that have been manually applied to the cluster being undone. The `helm diff` plugin used under the hood compares the new manifests against the saved snapshot of the last ones Helm deployed rather than the current state of the cluster. It has to work that way because that most accurately reflects how helm will apply the changes. This is why it is important to avoid making manual changes to the cluster.
+
 3. Merge the PR
    - `deploy-kubernetes` will run and deploy to `prod` this time
 
