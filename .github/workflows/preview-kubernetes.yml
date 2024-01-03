@@ -75,5 +75,5 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.number }}
-          body-file: "ci/diff.txt"
+          body-file: "ci/diff.md"
           edit-mode: replace
