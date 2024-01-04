@@ -177,7 +177,8 @@ models:
       - name: end_of_month_date_utc
         description: |
           The last day of the month of the aggregation_datetime in UTC.
-          This column is primarily for use in BI tooling to support consistent dates across activity types.
+          This column preserves the end of month date value for the original UTC date as received by Littlepay, however,
+          `end_of_month_date_pacific` is primarily used in BI tooling instead to support consistent dates across activity types.
           Aggregation activity happens throughout the month.
         tests:
           - not_null
@@ -283,7 +284,8 @@ models:
       - name: end_of_month_date_utc
         description: |
           The last day of the month of the record_updated_timestamp_utc.
-          This column is primarily for use in BI tooling to support consistent dates across activity types.
+          This column preserves the end of month date value for the original UTC date as received by Littlepay, however,
+          `end_of_month_date_pacific` is primarily used in BI tooling instead to support consistent dates across activity types.
       - *participant_id
       - name: aggregation_id
         description: '{{ doc("lp_aggregation_id") }}'
