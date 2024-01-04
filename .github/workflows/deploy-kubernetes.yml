@@ -1,4 +1,4 @@
-name: Generate diff of Kubernetes changes
+name: Deploy Kubernetes changes
 
 on:
   push:
@@ -17,7 +17,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_TOKEN }}
 
 jobs:
-  preview-kubernetes:
+  deploy-kubernetes:
     runs-on: ubuntu-latest
     env:
       CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
