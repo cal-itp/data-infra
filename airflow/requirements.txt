@@ -1,4 +1,4 @@
-calitp-data-infra==2023.7.25
+calitp-data-infra==2024.1.3
 gusty==0.6.0
 pyairtable==1.0.0
 typer==0.4.1
