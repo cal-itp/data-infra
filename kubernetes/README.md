@@ -8,6 +8,19 @@ We deploy our applications and services to a Google Kubernetes Engine cluster. I
 
 A [glossary](#Glossary) exists at the end of this document.
 
+## GitOps
+
+The workflows described above also define their triggers. In general, developer workflows should follow these steps.
+
+1. Check out a feature branch
+2. Put up a PR for that feature branch, targeting `main`
+   - `preview-kubernetes` will run and add a comment showing the diff of changes that will affect the production Kubernetes cluster
+
+      **BE AWARE**: This diff may *NOT* reveal any changes that have been manually applied to the cluster being undone. The `helm diff` plugin used under the hood compares the new manifests against the saved snapshot of the last ones Helm deployed rather than the current state of the cluster. It has to work that way because that most accurately reflects how helm will apply the changes. This is why it is important to avoid making manual changes to the cluster.
+
+3. Merge the PR
+   - `deploy-kubernetes` will run and deploy to `prod` this time
+
 ## Cluster Administration
 
 We do not currently use Terraform to manage our cluster, nodepools, etc. and major changes to the cluster are unlikely to be necessary, but we do have some bash scripts that can help with tasks such as creating new node pools or creating a test cluster.
@@ -128,7 +141,7 @@ At the time of this writing, a JupyterHub deployment is available at [https://no
 - `ingress.hosts`
 - `ingress.tls.hosts`
 
-# Backups
+## Backups
 
 For most of our backups we utilize [Restic](https://restic.readthedocs.io/en/latest/010_introduction.html); this section uses the Metabase database backup as an example.
 

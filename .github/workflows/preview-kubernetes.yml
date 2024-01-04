@@ -1,19 +1,23 @@
-name: Show diff for release channel
+name: Generate diff of Kubernetes changes
 
 on:
   pull_request:
     branches:
-      - 'releases/*'
-    types:
-      - opened
-      - synchronize
-      - reopened
+      - 'main'
+    paths:
+      - '.holo/config.toml'
+      - '.holo/sources/jarvus-cluster-template.toml'
+      - '.holo/branches/releases/**'
+      - '.github/workflows/*-kubernetes.yml'
+      - 'ci/**'
+      - 'kubernetes/apps/**'
+      - 'kubernetes/system/**'
 
 env:
   GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_TOKEN }}
 
 jobs:
-  release:
+  preview-kubernetes:
     runs-on: ubuntu-latest
     env:
       CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
@@ -22,9 +26,7 @@ jobs:
       USE_GKE_GCLOUD_AUTH_PLUGIN: True
     steps:
       # Setup
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
       - uses: 'google-github-actions/auth@v2'
         with:
@@ -36,6 +38,21 @@ jobs:
           cluster_name: ${{ env.GKE_NAME }}
           location: ${{ env.GKE_REGION }}
       - run: curl -sSL https://install.python-poetry.org | python -
+      - name: Set up hologit
+        env:
+          BIO_RELEASE: 1.6.821
+        run: |
+          curl -LO "https://github.com/biome-sh/biome/releases/download/v${BIO_RELEASE}/bio-${BIO_RELEASE}-x86_64-linux.tar.gz"
+          tar xzvf "bio-${BIO_RELEASE}-x86_64-linux.tar.gz"
+          sudo mv bio /usr/local/bin/bio
+          sudo bio pkg install --binlink jarvus/hologit
+
+          git config user.name "Github Action $GITHUB_JOB"
+          git config user.email "$(whoami)@$(uname -n)"
+
+      # Render Kubernetes content with parent underlay and checkout
+      - run: git holo project kubernetes-workspace --commit-to=kubernetes
+      - run: git checkout kubernetes
 
       # Diff and write back to PR
       - id: diff
@@ -43,10 +60,8 @@ jobs:
         shell: bash
         working-directory: ci
         run: |
-          export RELEASE_CHANNEL=${GITHUB_BASE_REF#releases/}
-          printf 'WORKFLOW: service-release-diff; RELEASE_CHANNEL=%s\n' "$RELEASE_CHANNEL"
           poetry install
-          poetry run invoke diff -f "./channels/$RELEASE_CHANNEL.yaml" --outfile=diff.txt
+          poetry run invoke diff -f "./channels/prod.yaml" --outfile=diff.md
 
       - uses: peter-evans/find-comment@v2
         id: fc
@@ -58,5 +73,5 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.number }}
-          body-file: "ci/diff.txt"
+          body-file: "ci/diff.md"
           edit-mode: replace

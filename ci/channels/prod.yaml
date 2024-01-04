@@ -26,6 +26,8 @@ calitp:
       namespace: jupyterhub
       helm_name: jupyterhub
       helm_chart: kubernetes/apps/charts/jupyterhub
+      secret_helm_values:
+        - jupyterhub_jupyterhub-sensitive-helm-values
       secrets:
         - jupyterhub_jupyterhub-gcloud-service-key
         - jupyterhub_jupyterhub-github-config

@@ -22,4 +22,4 @@ docker build -t ghcr.io/cal-itp/data-infra/dask:[NEW VERSION TAG] .
 docker push ghcr.io/cal-itp/data-infra/dask:[NEW VERSION TAG]
 ```
 
-After deploying, you will likely need to change references to the version of the image in use by Kubernetes-managed services, such as [here](../../kubernetes/apps/charts/dask/values.yaml). See [our GitHub workflows documentation](../../.github/workflows#service-yml-workflows) for how to manage deployment of updated Kubernetes services and their associated workloads.
+After deploying, you will likely need to change references to the version of the image in use by Kubernetes-managed services, such as [here](../../kubernetes/apps/charts/dask/values.yaml). See [our GitHub workflows documentation](../../kubernetes/README.md#gitops) for how to manage deployment of updated Kubernetes services and their associated workloads.

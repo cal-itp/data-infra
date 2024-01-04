@@ -81,6 +81,7 @@ sentry:
       days: 30
     postProcessForwardTransactions:
       replicas: 2
+    existingSecret: sentry-sentry-secret
 
   snuba:
     subscriptionConsumerTransactions:
@@ -108,3 +109,6 @@ sentry:
       persistentVolumeClaim:
         dataPersistentVolume:
           storage: "50Gi"
+
+  hooks:
+    activeDeadlineSeconds: 1200
