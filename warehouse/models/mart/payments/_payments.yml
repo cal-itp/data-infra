@@ -167,10 +167,18 @@ models:
         description: |
           `source_record_id` of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
           The mapping of organization records to payments entities is manually maintained in a seed file.
-      - name: end_of_month_date
+      - name: end_of_month_date_pacific
         description: |
-          The last day of the month of the aggregation_datetime.
+          The last day of the month of the aggregation_datetime in Pacific Time (involves conversion of aggregation_datetime to Pacific Time).
           This column is primarily for use in BI tooling to support consistent dates across activity types.
+          Aggregation activity happens throughout the month.
+        tests:
+          - not_null
+      - name: end_of_month_date_utc
+        description: |
+          The last day of the month of the aggregation_datetime in UTC.
+          This column preserves the end of month date value for the original UTC date as received by Littlepay, however,
+          `end_of_month_date_pacific` is primarily used in BI tooling instead to support consistent dates across activity types.
           Aggregation activity happens throughout the month.
         tests:
           - not_null
@@ -269,10 +277,15 @@ models:
         description: '{{ doc("lp_settlement_id") }}'
       - *organization_name
       - *organization_source_record_id
-      - name: end_of_month_date
+      - name: end_of_month_date_pacific
+        description: |
+          The last day of the month in Pacific Time (involves conversion of record_updated_timestamp_utc to Pacific Time).
+          This column is primarily for use in BI tooling to support consistent dates across activity types.
+      - name: end_of_month_date_utc
         description: |
           The last day of the month of the record_updated_timestamp_utc.
-          This column is primarily for use in BI tooling to support consistent dates across activity types.
+          This column preserves the end of month date value for the original UTC date as received by Littlepay, however,
+          `end_of_month_date_pacific` is primarily used in BI tooling instead to support consistent dates across activity types.
       - *participant_id
       - name: aggregation_id
         description: '{{ doc("lp_aggregation_id") }}'
