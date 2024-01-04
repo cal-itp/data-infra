@@ -167,7 +167,7 @@ models:
         description: |
           `source_record_id` of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
           The mapping of organization records to payments entities is manually maintained in a seed file.
-      - name: end_of_month_date
+      - name: end_of_month_date_pacific
         description: |
           The last day of the month of the aggregation_datetime in Pacific Time (involves conversion of aggregation_datetime to Pacific Time).
           This column is primarily for use in BI tooling to support consistent dates across activity types.
@@ -276,7 +276,7 @@ models:
         description: '{{ doc("lp_settlement_id") }}'
       - *organization_name
       - *organization_source_record_id
-      - name: end_of_month_date
+      - name: end_of_month_date_pacific
         description: |
           The last day of the month in Pacific Time (involves conversion of record_updated_timestamp_utc to Pacific Time).
           This column is primarily for use in BI tooling to support consistent dates across activity types.

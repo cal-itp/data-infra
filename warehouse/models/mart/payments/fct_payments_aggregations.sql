@@ -68,7 +68,7 @@ fct_payments_aggregations AS (
         participant_id,
         organization_name,
         organization_source_record_id,
-        LAST_DAY(EXTRACT(DATE FROM aggregation_datetime AT TIME ZONE "America/Los_Angeles"), MONTH) AS end_of_month_date,
+        LAST_DAY(EXTRACT(DATE FROM aggregation_datetime AT TIME ZONE "America/Los_Angeles"), MONTH) AS end_of_month_date_pacific,
         LAST_DAY(EXTRACT(DATE FROM aggregation_datetime), MONTH) AS end_of_month_date_utc,
         aggregation_id,
         has_micropayment,

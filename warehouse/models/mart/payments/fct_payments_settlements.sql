@@ -69,7 +69,7 @@ fct_payments_settlements AS (
             WHEN settlement_type = "CREDIT" THEN -1*(transaction_amount)
             WHEN settlement_type = "DEBIT" THEN transaction_amount
         END AS transaction_amount,
-        LAST_DAY(EXTRACT(DATE FROM record_updated_timestamp_utc AT TIME ZONE "America/Los_Angeles"), MONTH) AS end_of_month_date,
+        LAST_DAY(EXTRACT(DATE FROM record_updated_timestamp_utc AT TIME ZONE "America/Los_Angeles"), MONTH) AS end_of_month_date_pacific,
         LAST_DAY(EXTRACT(DATE FROM record_updated_timestamp_utc), MONTH) AS end_of_month_date_utc,
         imputed_type,
         acquirer,
