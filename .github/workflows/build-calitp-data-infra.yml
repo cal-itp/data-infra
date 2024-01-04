@@ -53,4 +53,4 @@ jobs:
       - if: ${{ github.ref == 'refs/heads/main' }}
         run: poetry publish --skip-existing
         env:
-          POETRY_TEST_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_CALITP_DATA_INFRA_TOKEN }}
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_CALITP_DATA_INFRA_TOKEN }}
