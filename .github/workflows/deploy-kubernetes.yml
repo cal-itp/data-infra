@@ -54,12 +54,10 @@ jobs:
       - run: git holo project kubernetes-workspace --commit-to=kubernetes
       - run: git checkout kubernetes
 
-      # Diff and write back to PR
-      - id: diff
-        name: Run poetry invoke
-        shell: bash
+      # Invoke deployment tasks
+      - run: poetry install
         working-directory: ci
-        run: |
-          poetry install
-          poetry run invoke secrets -f "./channels/prod.yaml"
-          poetry run invoke release -f "./channels/prod.yaml"
+      - run: poetry run invoke secrets -f "./channels/prod.yaml"
+        working-directory: ci
+      - run: poetry run invoke release -f "./channels/prod.yaml"
+        working-directory: ci
