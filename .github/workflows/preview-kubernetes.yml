@@ -55,14 +55,10 @@ jobs:
       - run: git checkout kubernetes
 
       # Diff and write back to PR
-      - id: diff
-        name: Run poetry invoke
-        shell: bash
+      - run: poetry install
         working-directory: ci
-        run: |
-          poetry install
-          poetry run invoke diff -f "./channels/prod.yaml" --outfile=diff.md
-
+      - run: poetry run invoke diff -f "./channels/prod.yaml" --outfile=diff.md
+        working-directory: ci
       - uses: peter-evans/find-comment@v2
         id: fc
         with:
