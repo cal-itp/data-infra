@@ -291,6 +291,7 @@ def release(
                         "--install",
                         f"--namespace {release.namespace}",
                         values_str,
+                        "--reset-values",  # prevent use of stored value overrides from previous releases
                         f"--timeout {release.timeout}" if release.timeout else "",
                     ]
                 )
