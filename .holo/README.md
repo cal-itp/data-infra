@@ -15,4 +15,4 @@ By projecting this holobranch in GitHub Actions, a tree containing only the code
 as well as Kubernetes code from the upstream [cluster-template](https://github.com/JarvusInnovations/cluster-template)
 repository is generated.
 
-See [`ci/README.md`](../ci/README.md) for details on the pull request workflow for previewing and deploying Kubernetes changes.
+See [`kubernetes/README.md`](../kubernetes/README.md#gitops) for details on the pull request workflow for previewing and deploying Kubernetes changes.
