@@ -201,7 +201,7 @@ def diff(
                         f"--values={c.calitp_config.git_root / Path(values_file)}"
                         for values_file in release.helm_values
                     ]
-                ).join(
+                    +
                     [
                         f"--values={secret_path}"
                         for secret_path in secret_helm_value_paths
