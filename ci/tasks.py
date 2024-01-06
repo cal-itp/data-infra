@@ -275,26 +275,20 @@ def release(
             c.run(f"helm dependency update {chart_path}", warn=True)
             values_str = " ".join(
                 [
-                    f"--values {c.calitp_config.git_root / Path(values_file)}"
+                    f"--values={c.calitp_config.git_root / Path(values_file)}"
                     for values_file in release.helm_values
                 ]
             )
-            result: Result = c.run(f"kubectl get ns {release.namespace}")
-            verb = "upgrade"
-
-            if result.exited != 0:
-                # namespace does not exist yet
-                c.run(f"kubectl create ns {release.namespace}")
-                verb = "install"
 
             assert release.helm_name is not None
             c.run(
                 " ".join(
                     [
                         "helm",
-                        verb,
+                        "upgrade",
                         release.helm_name,
                         str(chart_path),
+                        "--install",
                         f"--namespace {release.namespace}",
                         values_str,
                         f"--timeout {release.timeout}" if release.timeout else "",
