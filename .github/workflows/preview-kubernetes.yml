@@ -7,7 +7,7 @@ on:
     paths:
       - '.holo/config.toml'
       - '.holo/sources/jarvus-cluster-template.toml'
-      - '.holo/branches/releases/**'
+      - '.holo/branches/kubernetes-workspace/**'
       - '.github/workflows/*-kubernetes.yml'
       - 'ci/**'
       - 'kubernetes/apps/**'
