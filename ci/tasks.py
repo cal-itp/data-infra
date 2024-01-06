@@ -220,6 +220,7 @@ def diff(
                             values_str,
                             "-C 5",  # only include 5 lines of context
                             "--no-hooks",  # exclude hooks that get recreated every upgrade from diff
+                            "--reset-values",  # prevent use of stored value overrides from previous releases
                         ]
                     ),
                     warn=True,
