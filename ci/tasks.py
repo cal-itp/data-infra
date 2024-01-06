@@ -201,8 +201,7 @@ def diff(
                         f"--values={c.calitp_config.git_root / Path(values_file)}"
                         for values_file in release.helm_values
                     ]
-                ).join(
-                    [
+                    + [
                         f"--values={secret_path}"
                         for secret_path in secret_helm_value_paths
                     ]
@@ -220,6 +219,7 @@ def diff(
                             values_str,
                             "-C 5",  # only include 5 lines of context
                             "--no-hooks",  # exclude hooks that get recreated every upgrade from diff
+                            "--reset-values",  # prevent use of stored value overrides from previous releases
                         ]
                     ),
                     warn=True,
@@ -263,6 +263,8 @@ def release(
     assert c.calitp_config.git_root is not None
     actual_driver = ReleaseDriver[driver] if driver else None
 
+    secrets_client = secretmanager.SecretManagerServiceClient()
+
     for release in get_releases(c, driver=actual_driver, app=app):
         if release.driver == ReleaseDriver.kustomize:
             assert release.kustomize_dir is not None
@@ -272,33 +274,48 @@ def release(
             assert release.helm_chart is not None
             chart_path = c.calitp_config.git_root / Path(release.helm_chart)
             c.run(f"helm dependency update {chart_path}", warn=True)
-            values_str = " ".join(
-                [
-                    f"--values {c.calitp_config.git_root / Path(values_file)}"
-                    for values_file in release.helm_values
-                ]
-            )
-            result: Result = c.run(f"kubectl get ns {release.namespace}")
-            verb = "upgrade"
 
-            if result.exited != 0:
-                # namespace does not exist yet
-                c.run(f"kubectl create ns {release.namespace}")
-                verb = "install"
+            with tempfile.TemporaryDirectory() as tmpdir:
+                secret_helm_value_paths = []
+                for secret_helm_values in release.secret_helm_values:
+                    secret_path = Path(tmpdir) / Path(f"{secret_helm_values}.yaml")
+                    name = f"projects/1005246706141/secrets/{secret_helm_values}/versions/latest"
+                    secret_contents = secrets_client.access_secret_version(
+                        request={"name": name}
+                    ).payload.data.decode("UTF-8")
 
-            assert release.helm_name is not None
-            c.run(
-                " ".join(
+                    with open(secret_path, "w") as f:
+                        f.write(secret_contents)
+
+                    secret_helm_value_paths.append(secret_path)
+                    print(f"Downloaded secret helm values: {secret_path}", flush=True)
+
+                values_str = " ".join(
                     [
-                        "helm",
-                        verb,
-                        release.helm_name,
-                        str(chart_path),
-                        f"--namespace {release.namespace}",
-                        values_str,
-                        f"--timeout {release.timeout}" if release.timeout else "",
+                        f"--values={c.calitp_config.git_root / Path(values_file)}"
+                        for values_file in release.helm_values
+                    ]
+                    + [
+                        f"--values={secret_path}"
+                        for secret_path in secret_helm_value_paths
                     ]
                 )
-            )
+
+                assert release.helm_name is not None
+                c.run(
+                    " ".join(
+                        [
+                            "helm",
+                            "upgrade",
+                            release.helm_name,
+                            str(chart_path),
+                            "--install",
+                            f"--namespace {release.namespace}",
+                            values_str,
+                            "--reset-values",  # prevent use of stored value overrides from previous releases
+                            f"--timeout {release.timeout}" if release.timeout else "",
+                        ]
+                    )
+                )
         else:
             _assert_never(release.driver)
