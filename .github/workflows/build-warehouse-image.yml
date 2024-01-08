@@ -60,7 +60,7 @@ jobs:
           glob: '*.json'
           destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/target/'
       # Only do visualization if we actually changed models and we are merging against main
-      - uses: tj-actions/changed-files@v35
+      - uses: tj-actions/changed-files@v41
         if: ${{ github.event_name == 'pull_request' }}
         id: changed-files-warehouse
         with:
@@ -87,7 +87,7 @@ jobs:
     needs: [check]
     steps:
       - uses: actions/checkout@v3
-      - uses: tj-actions/changed-files@v35
+      - uses: tj-actions/changed-files@v41
         with:
           files: |
             warehouse/Dockerfile
