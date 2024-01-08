@@ -14,7 +14,7 @@ extract_trip_date_types AS (
     SELECT
 
         CASE
-            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 4 THEN "OWL"
+            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 4 THEN "OWL_CHANGE_DO_NOT_MERGE"
             WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 7 THEN "Early AM"
             WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 10 THEN "AM Peak"
             WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 15 THEN "Midday"
