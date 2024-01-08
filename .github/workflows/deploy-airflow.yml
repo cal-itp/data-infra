@@ -23,7 +23,7 @@ jobs:
       - uses: google-github-actions/setup-gcloud@v2
 
       # Only update requirements if they have changed; Composer throws an error if there are no changes to apply
-      - uses: tj-actions/changed-files@v35
+      - uses: tj-actions/changed-files@v41
         if: ${{ github.ref == 'refs/heads/main' }}
         id: changed-requirements
         with:
