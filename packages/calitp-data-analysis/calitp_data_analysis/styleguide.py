@@ -39,8 +39,6 @@ axisColor = "#cbcbcb"
 guideLabelColor = "#474747"
 guideTitleColor = "#333"
 blackTitle = "#333"
-font = "Raleway"
-labelFont = "Nunito Sans"
 backgroundColor = "white"
 
 PALETTE = {
@@ -61,8 +59,6 @@ PALETTE = {
 
 
 def calitp_theme(
-    font: str = font,
-    labelFont: str = labelFont,
     font_size: int = font_size,
     chart_width: int = chart_width,
     chart_height: int = chart_height,
@@ -74,11 +70,6 @@ def calitp_theme(
     backgroundColor: str = backgroundColor,
     PALETTE: dict = PALETTE,
 ):
-    # Typography
-    # At Urban it's the same font for all text but it's good to keep them separate in case you want to change one later.
-    labelFont = labelFont
-    sourceFont = labelFont
-
     return {
         # width and height are configured outside the config dict because they are Chart configurations/properties not chart-elements' configurations/properties.
         "width": chart_width,  # from the guide
@@ -87,15 +78,10 @@ def calitp_theme(
         "config": {
             "title": {
                 "fontSize": font_size,
-                "font": font,
                 "anchor": "middle",
                 "fontColor": blackTitle,
                 "fontWeight": "bold",  # 300 was default. can also use lighter, bold, normal, bolder
                 "offset": 20,
-            },
-            "header": {
-                "labelFont": labelFont,
-                "titleFont": font,
             },
             "axis": {
                 "domain": True,
@@ -122,11 +108,9 @@ def calitp_theme(
                 "sequential": PALETTE["sequential"],
             },
             "legend": {
-                "labelFont": labelFont,
                 "labelFontSize": 11,
                 "symbolType": "square",
                 "symbolSize": 30,  # default
-                "titleFont": font,
                 "titleFontSize": 14,
                 "titlePadding": 10,
                 "padding": 1,
@@ -171,7 +155,6 @@ def calitp_theme(
             },
             "shape": {"stroke": markColor},
             "text": {
-                "font": sourceFont,
                 "color": markColor,
                 "fontSize": 11,
                 "align": "center",
@@ -197,17 +180,15 @@ def calitp_theme(
 # Apply top-level chart config but do not set properties (before hconcat, vconcat, etc)
 def apply_chart_config(chart: alt.Chart) -> alt.Chart:
     chart = (
-        chart.configure(background=backgroundColor, font=font)
+        chart.configure(background=backgroundColor)
         .configure_axis(
             domainColor=axisColor,
             grid=True,
             gridColor=axisColor,
             gridWidth=1,
             labelColor=guideLabelColor,
-            labelFont=labelFont,
             labelFontSize=10,
             titleColor=guideTitleColor,
-            titleFont=font,
             tickColor=axisColor,
             tickSize=10,
             titleFontSize=12,
@@ -216,22 +197,18 @@ def apply_chart_config(chart: alt.Chart) -> alt.Chart:
         )
         .configure_axisBand(grid=False)
         .configure_title(
-            font=font,
             fontSize=font_size,
             anchor="middle",
             fontWeight=300,
             offset=20,
         )
-        .configure_header(labelFont=labelFont, titleFont=font)
         .configure_legend(
             labelColor=blackTitle,
-            labelFont=labelFont,
             labelFontSize=11,
             padding=1,
             symbolSize=30,
             symbolType="square",
             titleColor=blackTitle,
-            titleFont=font,
             titleFontSize=14,
             titlePadding=10,
             labelLimit=0,
