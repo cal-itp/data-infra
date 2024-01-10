@@ -18,7 +18,7 @@ elavon_littlepay__transaction_reconciliation AS (
         t1.retrieval_reference_number AS littlepay_retrieval_reference_number,
         t1.littlepay_reference_number AS littlepay_reference_number,
         t1.external_reference_number AS littlepay_external_reference_number,
-        t1.settlement_requested_date_time_utc AS littlepay_settlement_requested_date_time_utc,
+        t1.record_updated_timestamp_utc AS littlepay_record_updated_timestamp_utc,
         t1.transaction_amount AS littlepay_transaction_amount,
 
         t2.amount AS elavon_amount,

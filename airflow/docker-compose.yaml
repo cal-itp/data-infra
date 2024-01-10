@@ -63,9 +63,6 @@ x-airflow-common:
     CALITP_BQ_MAX_BYTES: 10000000000
     CALITP_SLACK_URL: ${CALITP_SLACK_URL}
 
-    CALITP_AMPLITUDE_BENEFITS_API_KEY: ${CALITP_AMPLITUDE_BENEFITS_API_KEY}
-    CALITP_AMPLITUDE_BENEFITS_SECRET_KEY: ${CALITP_AMPLITUDE_BENEFITS_SECRET_KEY}
-
     # connections - required to allow local testing of pod operators
     # see https://stackoverflow.com/a/55064944/1144523
     AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: "google-cloud-platform://:@:?extra__google_cloud_platform__project=cal-itp-data-infra"
@@ -83,6 +80,8 @@ x-airflow-common:
     CALITP_BUCKET__ELAVON_RAW: "gs://test-calitp-elavon-raw"
     CALITP_BUCKET__ELAVON_PARSED: "gs://test-calitp-elavon-parsed"
     CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://test-calitp-gtfs-download-config"
+    CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_PROD_SOURCE: "gs://calitp-gtfs-download-config"
+    CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_TEST_DESTINATION: "gs://test-calitp-gtfs-download-config"
     CALITP_BUCKET__GTFS_RT_RAW: "gs://test-calitp-gtfs-rt-raw-v2"
     CALITP_BUCKET__GTFS_RT_PARSED: "gs://test-calitp-gtfs-rt-parsed"
     CALITP_BUCKET__GTFS_RT_VALIDATION: "gs://test-calitp-gtfs-rt-validation"

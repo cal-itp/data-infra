@@ -14,15 +14,19 @@ clean_columns AS (
         {{ trim_make_empty_string_null('littlepay_reference_number') }} AS littlepay_reference_number,
         {{ trim_make_empty_string_null('external_reference_number') }} AS external_reference_number,
         {{ trim_make_empty_string_null('settlement_type') }} AS settlement_type,
-        -- as of 10/6/23, only ATN has record_updated_timestamp_utc
+        -- prior to 11/28/23, only ATN had record_updated_timestamp_utc
         -- per communication from LP, that column is the new name of settlement_requested_date_time_utc
         COALESCE(
-            {{ safe_cast('settlement_requested_date_time_utc', type_timestamp()) }},
-            {{ safe_cast('record_updated_timestamp_utc', type_timestamp()) }}
-            ) AS settlement_requested_date_time_utc,
+            {{ safe_cast('record_updated_timestamp_utc', type_timestamp()) }},
+            {{ safe_cast('settlement_requested_date_time_utc', type_timestamp()) }}
+            ) AS record_updated_timestamp_utc,
         {{ trim_make_empty_string_null('acquirer') }} AS acquirer,
+        {{ trim_make_empty_string_null('refund_id') }} AS refund_id,
+        {{ safe_cast('request_created_timestamp_utc', type_timestamp()) }} AS request_created_timestamp_utc,
+        {{ safe_cast('response_created_timestamp_utc', type_timestamp()) }} AS response_created_timestamp_utc,
+        {{ trim_make_empty_string_null('acquirer_response_rrn') }} AS acquirer_response_rrn,
+        {{ trim_make_empty_string_null('settlement_status') }} AS settlement_status,
         CAST(_line_number AS INTEGER) AS _line_number,
-        -- TODO: add "new schema" columns that are present only for ATN as of 10/6/23
         `instance`,
         extract_filename,
         ts,
@@ -31,7 +35,7 @@ clean_columns AS (
         {{ dbt_utils.generate_surrogate_key(['participant_id',
         'settlement_id', 'aggregation_id', 'customer_id', 'funding_source_id', 'transaction_amount',
         'retrieval_reference_number', 'littlepay_reference_number', 'external_reference_number',
-        'settlement_type', 'settlement_requested_date_time_utc', 'acquirer']) }} AS _content_hash,
+        'settlement_type', 'record_updated_timestamp_utc', 'acquirer']) }} AS _content_hash,
     FROM source
 ),
 
@@ -57,10 +61,23 @@ stg_littlepay__settlements AS (
         littlepay_reference_number,
         external_reference_number,
         settlement_type,
-        settlement_requested_date_time_utc,
+        record_updated_timestamp_utc,
         acquirer,
+        refund_id,
+        acquirer_response_rrn,
+        -- manual backfill of ccjpa data for specific reporting needs
+        -- information on how to backfill comes from manual LP extracts provided by Rebel
+        CASE
+            WHEN _key IN ("4e0bf943884f81fd6e524f4e175139c0", "910e0fe9c6f78de301b69f35798ec613", "8df624e5048128983c9693faaa32f27d", "67e002b1be3f07b2c06b4335364d7fde", "f658f3201463764ceea23816e9c27a54", "5878d1e840d94938d8fd2f1d33d44f1d", "df5c48e3d9d21f20be7da9d5973d1b8e", "58f6955a6b52f5b12d0999bcccb712fb", "6724c21016dc153517bc0b55fe4bc6b2")
+                THEN "REJECTED"
+            WHEN participant_id = "ccjpa"
+                AND littlepay_export_date < "2023-11-28"
+                THEN "SETTLED"
+            ELSE settlement_status
+        END AS settlement_status,
+        request_created_timestamp_utc,
+        response_created_timestamp_utc,
         _line_number,
-        -- TODO: add "new schema" columns that are present only for ATN as of 10/6/23
         `instance`,
         extract_filename,
         ts,

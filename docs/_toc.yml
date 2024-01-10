@@ -44,6 +44,7 @@ parts:
       - file: architecture/architecture_overview
         sections:
           - file: architecture/services
+          - file: architecture/images_and_packages
           - file: architecture/data
       - file: airflow/dags-maintenance
       - file: transit_database/transitdatabase

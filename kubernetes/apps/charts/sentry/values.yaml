@@ -29,7 +29,6 @@ sentry:
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/ingress.allow-http: "false"
-      nginx.ingress.kubernetes.io/use-regex: "true"
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hostname: sentry.calitp.org
     additionalHostNames:
@@ -81,6 +80,7 @@ sentry:
       days: 30
     postProcessForwardTransactions:
       replicas: 2
+    existingSecret: sentry-sentry-secret
 
   snuba:
     subscriptionConsumerTransactions:
@@ -102,3 +102,12 @@ sentry:
       enabled: false
     zookeeper:
       enabled: true
+
+  clickhouse:
+    clickhouse:
+      persistentVolumeClaim:
+        dataPersistentVolume:
+          storage: "50Gi"
+
+  hooks:
+    activeDeadlineSeconds: 1200

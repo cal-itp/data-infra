@@ -68,7 +68,8 @@ fct_payments_aggregations AS (
         participant_id,
         organization_name,
         organization_source_record_id,
-        LAST_DAY(EXTRACT(DATE FROM aggregation_datetime), MONTH) AS end_of_month_date,
+        LAST_DAY(EXTRACT(DATE FROM aggregation_datetime AT TIME ZONE "America/Los_Angeles"), MONTH) AS end_of_month_date_pacific,
+        LAST_DAY(EXTRACT(DATE FROM aggregation_datetime), MONTH) AS end_of_month_date_utc,
         aggregation_id,
         has_micropayment,
         has_authorisation,
@@ -88,13 +89,17 @@ fct_payments_aggregations AS (
         request_type AS latest_authorisation_request_type,
         transaction_amount AS authorisation_transaction_amount,
         status AS latest_authorisation_status,
+        final_authorisation_has_null_status,
         authorisation_date_time_utc AS latest_authorisation_update_datetime,
         contains_imputed_type AS settlement_contains_imputed_type,
         latest_update_timestamp AS latest_settlement_update_datetime,
         net_settled_amount_dollars,
         contains_refund AS settlement_contains_refund,
         debit_amount AS settlement_debit_amount,
-        credit_amount AS settlement_credit_amount
+        credit_amount AS settlement_credit_amount,
+        aggregation_is_settled,
+        debit_is_settled,
+        credit_is_settled
     FROM join_orgs
 )
 

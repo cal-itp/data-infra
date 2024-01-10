@@ -6,26 +6,34 @@ models:
       Littlepay micropayments.
     columns:
       - name: micropayment_id
-        description: From payments.micropayments.micropayment_id
+        description: '{{ doc("lp_micropayment_id") }}'
         tests:
           - not_null
           - unique_proportion:
               at_least: 0.999
-      - name: littlepay_transaction_id
-        description: The littlepay_transaction_id of the first tap transaction
+      - name: aggregation_id
+        description: '{{ doc("lp_aggregation_id") }}'
         tests:
           - not_null
+          - relationships:
+              to: ref('fct_payments_aggregations')
+              field: aggregation_id
+      - name: littlepay_transaction_id
+        description: '{{ doc("lp_paired_first_transaction_id") }}'
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.998
           - unique_proportion:
               at_least: 0.999
       - &participant_id
         name: participant_id
         description: '{{ doc("lp_participant_id") }}'
       - name: funding_source_vault_id
-        description: From payments.micropayments.funding_source_vault_id
+        description: '{{ doc("lp_funding_source_vault_id") }}'
       - name: customer_id
-        description: From payments.micropayments.customer_id
+        description: '{{ doc("lp_customer_id") }}'
       - name: principal_customer_id
-        description: From payments.customer_funding_source.principal_customer_id
+        description: From payments.customer_funding_source.principal_customer_id (by participant_id).
       - name: bin
         description: From payments.customer_funding_source.bin
       - name: masked_pan
@@ -39,33 +47,35 @@ models:
       - name: form_factor
         description: From payments.customer_funding_source.form_factor
       - name: charge_amount
-        description: From payments.micropayments.charge_amount
+        description: '{{ doc("lp_charge_amount") }}'
       - name: refund_amount
-        description: If there is a refund micropayment associated with the trip, the charge_amount on that refund
+        description: '{{ doc("lp_micropayment_refund_amount") }}'
+      - name: aggregation_refund_amount
+        description: '{{ doc("lp_aggregation_refund_amount") }}'
       - name: nominal_amount
-        description: From payments.micropayments.nominal_amount
+        description: '{{ doc("lp_nominal_amount") }}'
       - name: charge_type
         description: From payments.micropayments.charge_type
       - name: adjustment_id
-        description: From payments.micropayments.adjustment_id
+        description: '{{ doc("lp_adjustment_id") }}'
       - name: adjustment_type
-        description: From payments.micropayment_adjustments.type
+        description: '{{ doc("lp_adj_type") }}'
       - name: adjustment_time_period_type
-        description: From payments.micropayment_adjustments.time_period_type
+        description: '{{ doc("lp_adj_time_period_type") }}'
       - name: adjustment_description
-        description: From payments.micropayment_adjustments.description
+        description: '{{ doc("lp_adj_description") }}'
       - name: adjustment_amount
-        description: From payments.micropayment_adjustments.amount
+        description: '{{ doc("lp_adj_amount") }}'
       - name: product_id
-        description: From payments.micropayment_adjustments.product_id
+        description: '{{ doc("lp_product_id") }}'
       - name: product_code
-        description: From payments.product_data.product_code
+        description: '{{ doc("lp_product_code") }}'
       - name: product_description
-        description: From payments.product_data.product_description
+        description: '{{ doc("lp_product_description") }}'
       - name: product_type
-        description: From payments.product_data.product_type
+        description: '{{ doc("lp_product_type") }}'
       - name: route_id
-        description: The route_id of the first tap transaction with a non-unknown route_id, else unknown ('Route Z')
+        description: '{{ doc("lp_paired_transaction_route_id") }}'
       - name: route_long_name
         description: The route_long_name of the first tap transaction
       - name: route_short_name
@@ -78,57 +88,64 @@ models:
       - name: agency_name
         description: Full name of the transit agency.
       - name: direction
-        description: The direction of the first tap transaction
+        description: '{{ doc("lp_paired_first_direction") }}'
       - name: vehicle_id
-        description: The vehicle_id of the first tap transaction
+        description: '{{ doc("lp_paired_first_vehicle_id") }}'
       - name: device_id
-        description: The device_id of the first tap transaction
+        description: '{{ doc("lp_paired_first_device_id") }}'
       - name: transaction_type
-        description: The transaction_type of the first tap transaction
+        description: '{{ doc("lp_paired_first_transaction_type") }}'
       - name: transaction_outcome
-        description: The transaction_outcome of the first tap transaction
+        description: '{{ doc("lp_paired_first_transaction_outcome") }}'
       - name: transaction_date_time_utc
-        description: The transaction_date_time_utc of the first tap transaction
+        description: '{{ doc("lp_paired_first_transaction_date_time_utc") }}'
       - name: transaction_date_time_pacific
-        description: The transaction_date_time_pacific of the first tap transaction
+        description: '{{ doc("lp_paired_first_transaction_date_time_pacific") }}'
       - name: location_id
-        description: The location_id of the first tap transaction
+        description: '{{ doc("lp_paired_first_location_id") }}'
       - name: location_name
-        description: The location_name of the first tap transaction
+        description: '{{ doc("lp_paired_first_location_name") }}'
       - name: latitude
-        description: The latitude of the first tap transaction
+        description: '{{ doc("lp_paired_first_latitude") }}'
       - name: longitude
-        description: The longitude of the first tap transaction
-      - name: off_littlepay_transaction_id
-        description: The littlepay_transaction_id of the second tap transaction (if there is one)
-      - name: off_device_id
-        description: The device_id of the second tap transaction (if there is one)
-      - name: off_transaction_type
-        description: The transaction_type of the second tap transaction (if there is one)
-      - name: off_transaction_outcome
-        description: The transaction_outcome of the second tap transaction (if there is one)
-      - name: off_transaction_date_time_utc
-        description: The transaction_date_time_utc of the second tap transaction (if there is one)
-      - name: off_transaction_date_time_pacific
-        description: The transaction_date_time_pacific of the second tap transaction (if there is one)
-      - name: off_location_id
-        description: The location_id of the second tap transaction (if there is one)
-      - name: off_location_name
-        description: The location_name of the second tap transaction (if there is one)
-      - name: off_latitude
-        description: The latitude of the second tap transaction (if there is one)
-      - name: off_longitude
-        description: The longitude of the second tap transaction (if there is one)
-      - name: earliest_tap
+        description: '{{ doc("lp_paired_first_longitude") }}'
       - name: on_latitude
+        description: '{{ doc("lp_paired_first_latitude") }}'
       - name: on_longitude
+        description: '{{ doc("lp_paired_first_longitude") }}'
+      - name: off_littlepay_transaction_id
+        description: '{{ doc("lp_paired_second_transaction_id") }}'
+      - name: off_device_id
+        description: '{{ doc("lp_paired_second_device_id") }}'
+      - name: off_transaction_type
+        description: '{{ doc("lp_paired_second_transaction_type") }}'
+      - name: off_transaction_outcome
+        description: '{{ doc("lp_paired_second_transaction_outcome") }}'
+      - name: off_transaction_date_time_utc
+        description: '{{ doc("lp_paired_second_transaction_date_time_utc") }}'
+      - name: off_transaction_date_time_pacific
+        description: '{{ doc("lp_paired_second_transaction_date_time_pacific") }}'
+      - name: off_location_id
+        description: '{{ doc("lp_paired_second_location_id") }}'
+      - name: off_location_name
+        description: '{{ doc("lp_paired_second_location_name") }}'
+      - name: off_latitude
+        description: '{{ doc("lp_paired_second_latitude") }}'
+      - name: off_longitude
+        description: '{{ doc("lp_paired_second_longitude") }}'
+      - name: earliest_tap
       - name: on_geography
+        description: '{{ doc("lp_paired_first_geography") }}'
       - name: off_geography
+        description: '{{ doc("lp_paired_second_geography") }}'
       - name: duration
+        description: '{{ doc("lp_paired_duration") }}'
       - name: distance_meters
+        description: '{{ doc("lp_paired_distance") }}'
       - name: transaction_date_pacific
+        description: '{{ doc("lp_paired_first_transaction_date") }}'
       - name: day_of_week
-        description: Day of week value of the transaction in the range [1,7] with Sunday as the first day of the week.
+        description: '{{ doc("lp_paired_first_day_of_week") }}'
 
   - name: fct_payments_aggregations
     description: |
@@ -150,10 +167,18 @@ models:
         description: |
           `source_record_id` of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
           The mapping of organization records to payments entities is manually maintained in a seed file.
-      - name: end_of_month_date
+      - name: end_of_month_date_pacific
         description: |
-          The last day of the month of the aggregation_datetime.
+          The last day of the month of the aggregation_datetime in Pacific Time (involves conversion of aggregation_datetime to Pacific Time).
           This column is primarily for use in BI tooling to support consistent dates across activity types.
+          Aggregation activity happens throughout the month.
+        tests:
+          - not_null
+      - name: end_of_month_date_utc
+        description: |
+          The last day of the month of the aggregation_datetime in UTC.
+          This column preserves the end of month date value for the original UTC date as received by Littlepay, however,
+          `end_of_month_date_pacific` is primarily used in BI tooling instead to support consistent dates across activity types.
           Aggregation activity happens throughout the month.
         tests:
           - not_null
@@ -217,6 +242,10 @@ models:
       - name: latest_authorisation_status
         description: |
           Status of the most recent authorisation associated with this aggregation.
+      - name: final_authorisation_has_null_status
+        description: |
+          Indicates the existence of another authorisation record, not represented directly here,
+          which occured after the "latest" authorisation in an aggregation but had a null status.
       - name: latest_authorisation_update_datetime
         description: |
           `authorisation_date_time_utc` of the most recent authorisation associated with this aggregation.
@@ -233,6 +262,12 @@ models:
         description: '{{ doc("lp_settlement_debit_amount") }}'
       - name: settlement_credit_amount
         description: '{{ doc("lp_settlement_credit_amount") }}'
+      - name: aggregation_is_settled
+        description: '{{ doc("lp_aggregation_is_settled") }}'
+      - name: debit_is_settled
+        description: '{{ doc("lp_debit_is_settled") }}'
+      - name: credit_is_settled
+        description: '{{ doc("lp_credit_is_settled") }}'
 
   - name: fct_payments_settlements
     description: Littlepay settlements (completed transactions.)
@@ -240,16 +275,23 @@ models:
     columns:
       - name: settlement_id
         description: '{{ doc("lp_settlement_id") }}'
-      - name: end_of_month_date
+      - *organization_name
+      - *organization_source_record_id
+      - name: end_of_month_date_pacific
         description: |
-          The last day of the month of the settlement_requested_date_time_utc.
+          The last day of the month in Pacific Time (involves conversion of record_updated_timestamp_utc to Pacific Time).
           This column is primarily for use in BI tooling to support consistent dates across activity types.
+      - name: end_of_month_date_utc
+        description: |
+          The last day of the month of the record_updated_timestamp_utc.
+          This column preserves the end of month date value for the original UTC date as received by Littlepay, however,
+          `end_of_month_date_pacific` is primarily used in BI tooling instead to support consistent dates across activity types.
       - *participant_id
       - name: aggregation_id
         description: '{{ doc("lp_aggregation_id") }}'
         tests:
             - relationships:
-                to: ref('int_payments__settlements_to_aggregations')
+                to: ref('fct_payments_aggregations')
                 field: aggregation_id
       - name: customer_id
         description: '{{ doc("lp_customer_id") }}'
@@ -263,167 +305,369 @@ models:
           settlements missing a type in the raw data.
       - name: transaction_amount
         description: Settlement amount in dollars. Negative for credit (refund) settlements.
-      - name: currency_code
-        description: '{{ doc("lp_currency_code") }}'
       - name: retrieval_reference_number
         description: '{{ doc("lp_retrieval_reference_number") }}'
         tests:
             - relationships:
-                to: ref('int_payments__settlements_to_aggregations')
-                field: retrieval_reference_number
+                to: ref('fct_payments_aggregations')
+                field: settlement_retrieval_reference_number
       - name: littlepay_reference_number
         description: '{{ doc("lp_littlepay_reference_number") }}'
       - name: external_reference_number
         description: '{{ doc("lp_external_reference_number") }}'
-      - name: settlement_requested_date_time_utc
-        description: '{{ doc("lp_settlement_requested_date_time_utc") }}'
+      - name: record_updated_timestamp_utc
+        description: '{{ doc("lp_record_updated_timestamp_utc") }}'
       - name: acquirer
         description: '{{ doc("lp_acquirer") }}'
+      - name: acquirer_response_rrn
+        description: '{{ doc("lp_acquirer_response_rrn") }}'
+      - name: settlement_status
+        description: '{{ doc("lp_settlement_status") }}'
+      - name: request_created_timestamp_utc
+        description: '{{ doc("lp_request_created_timestamp_utc") }}'
+      - name: response_created_timestamp_utc
+        description: '{{ doc("lp_response_created_timestamp_utc") }}'
+      - name: refund_id
+        description: '{{ doc("lp_refund_id") }}'
 
   - name: fct_elavon__transactions
     description: Transactions processed by Elavon
     columns:
       - *organization_name
       - *organization_source_record_id
-      - name: end_of_month_date
+      - &elavon_end_of_month_date
+        name: end_of_month_date
         description: |
-          The last day of the month associated with this activity.
-          For deposit activity, this is the last day of the month of the settlement date.
-          For billing activity, this is the last day of the month of the payment date.
+          The last day of the month of the payment_date associated with this activity.
           This column is primarily for use in BI tooling to support consistent dates across activity types.
           Billing activity generally occurs only once per month, at the end of the month, while deposit
           activity happens throughout the month.
         tests:
           - not_null
-      - name: payment_reference
+      - &elavon_lp_participant_id
+        name: littlepay_participant_id
+        description: |
+          The Littlepay-assigned `participant_id` value that corresponds to this customer name/merchant number.
+          If null, this customer/merchant's activity is not associated with Littlepay (for example, office or
+          online sales not processed by Littlepay).
+      - &payment_reference
+        name: payment_reference
         description: |
           Unique number assigned to every "Fund Event" (ACH Payment/Withdrawal, Wire Transfer, Invoice)
-      - name: payment_date
+      - &payment_date
+        name: payment_date
         description: |
           Date the Elavon system created and transmitted the Fund Event
-      - name: account_number
+      - &account_number
+        name: account_number
         description: |
           Deposit Account Number of the Customer to which the Fund Event is directed
-      - name: routing_number
+      - &routing_number
+        name: routing_number
         description: |
           Federal Reserve assigned routing number to the financial institution receiving the Fund Event
-      - name: fund_amt
+      - &fund_amt
+        name: fund_amt
         description: |
           The amount of the Fund Event (ACH Payment/Withdrawal, Wire  Transfer, Invoice)
-      - name: batch_reference
+      - &batch_reference
+        name: batch_reference
         description: |
           Elavon system generated number assigned to payment batches within the Fund Event
-      - name: batch_type
+      - &batch_type
+        name: batch_type
         description: |
           Detailed record tag identifying "D" = Deposit;  "C" = Chargeback; "B" =  Billing; "A" = Adjustment
-      - name: customer_batch_reference
+      - &customer_batch_reference
+        name: customer_batch_reference
         description: |
           Point-of-Sale location reference associated with the settled batch of transactions
-      - name: customer_name
+      - &customer_name
+        name: customer_name
         description: |
           Doing Business As (DBA) Name
-      - name: merchant_number
+      - &merchant_number
+        name: merchant_number
         description: |
           Internal Merchant Identification Number
-      - name: external_mid
+      - &external_mid
+        name: external_mid
         description: |
           Customer Facing Merchant Identification Number
-      - name: store_number
+      - &store_number
+        name: store_number
         description: |
           Optional "Store" number assigned to the DBA/MID Location
-      - name: chain
+      - &chain
+        name: chain
         description: |
           Organizational hierarchy within Elavon assigned with DBA/MID locations
-      - name: batch_amt
+      - &batch_amt
+        name: batch_amt
         description: |
           Amount of the transactions grouped in batch(s) by DBA/MID location
-      - name: amount
+      - &amount
+        name: amount
         description: |
           Transaction record amount
-      - name: surchg_amount
+      - &surchg_amount
+        name: surchg_amount
         description: |
           Surcharge Amount charged on transaction (if applicable)
-      - name: convnce_amt
+      - &convnce_amt
+        name: convnce_amt
         description: |
           Convenience Fee charged on transaction (If Applicable)
-      - name: card_type
+      - &card_type
+        name: card_type
         description: |
           Card scheme defined type of card (consumer credit, consumer debit, etc.)
-      - name: charge_type
+      - &charge_type
+        name: charge_type
         description: |
           Unique Interchange product determined by Card Type, and method of processing
-      - name: charge_type_description
+      - &charge_type_description
+        name: charge_type_description
         description: |
           Long (32 byte) Description of the Interchange Product
-      - name: card_plan
+      - &card_plan
+        name: card_plan
         description: |
           High-level scheme tag (VISA, MasterCard, Discover, AMEX, Pulse, Union Pay, etc.)
-      - name: card_no
+      - &card_no
+        name: card_no
         description: |
           Masked number of the cardholder account
-      - name: chk_num
+      - &chk_num
+        name: chk_num
         description: |
           Check Number, entered at POS
-      - name: transaction_date
+      - &transaction_date
+        name: transaction_date
         description: |
           The calendar day the transaction was processed
-      - name: settlement_date
+      - &settlement_date
+        name: settlement_date
         description: |
           The calendar day the transaction was batched and electronically deposited
-      - name: authorization_code
+      - &authorization_code
+        name: authorization_code
         description: |
           The six-digit "APPROVED" reference associated with the purchase transaction
-      - name: chargeback_control_no
+      - &chargeback_control_no
+        name: chargeback_control_no
         description: |
           The "Case ID" of the cardholder's chargeback action
-      - name: roc_text
+      - &roc_text
+        name: roc_text
         description: |
           Record of Charges - customer assigned reference ("Loyalty/Invoice") tag assigned to the transaction - alpha/numeric
-      - name: trn_aci
+      - &trn_aci
+        name: trn_aci
         description: |
           Authorization Characteristics Indicator -- unique VISA term indicative of certain Interchange qualification
-      - name: card_scheme_ref
+      - &card_scheme_ref
+        name: card_scheme_ref
         description: |
           The card scheme reference identifier, can be used to trace a transaction from point of sale through the chargeback process
-      - name: trn_ref_num
+      - &trn_ref_num
+        name: trn_ref_num
         description: |
           Elavon system assigned transaction reference tag
         tests:
           - unique
-      - name: settlement_method
+      - &settlement_method
+        name: settlement_method
         description: |
           Defines how payment was funded ACH, Wire Transfer or Invoice
-      - name: currency_code
+      - &currency_code
+        name: currency_code
         description: |
           The ISO currency the payment was funded in
-      - name: cb_acq_ref_id
+      - &cb_acq_ref_id
+        name: cb_acq_ref_id
         description: |
           The unique reference number generated by and Elavon and sent back to the card associations on each transaction applied for identification on chargeback records.
 
           This is the original transaction ARN value.
-      - name: chgbk_rsn_code
+      - &chgbk_rsn_code
+        name: chgbk_rsn_code
         description: |
           The reason associated with a cardholder chargeback action
-      - name: chgbk_rsn_desc
+      - &chgbk_rsn_desc
+        name: chgbk_rsn_desc
         description: |
           The reason description associated with a cardholder chargeback action
-      - name: mer_ref
+      - &mer_ref
+        name: mer_ref
         description: |
           Unique Customer Defined field- Numeric Only
-      - name: purch_id
+      - &purch_id
+        name: purch_id
         description: |
           Merchant identifier on the purchase (Car Rental Agreement, Hotel Folio, Order/Invoice number, or Other ID) sent to the card issuer
-      - name: cust_cod
+      - &cust_cod
+        name: cust_cod
         description: |
           The cardholder identified reference value, required in Commercial Purchase Card transactions, e.g. Purchase Order Number.
-      - name: trn_arn
+      - &trn_arn
+        name: trn_arn
         description: |
           A unique reference number generated by Elavon and sent to the card associations on each transaction
-      - name: term_id
+      - &term_id
+        name: term_id
         description: |
           Terminal Identification Number
-      - name: ent_num
+      - &ent_num
+        name: ent_num
         description: |
           Entity Number within Elavon's Hierarchy
-      - name: dt
-      - name: execution_ts
+      - &dt
+        name: dt
+      - &execution_ts
+        name: execution_ts
+  - name: fct_payments_billing_transactions
+    description: |
+      Billing batch transactions data from Elavon.
+      Each row is a single billing transaction.
+      Billing transactions are batched according to customer-level settings; they generally
+      cannot be mapped back to individual deposit or fare (point of sale) transactions.
+    columns:
+      - *payment_reference
+      - *payment_date
+      - *elavon_end_of_month_date
+      - *organization_name
+      - *organization_source_record_id
+      - *elavon_lp_participant_id
+      - *fund_amt
+      - *batch_reference
+      - *batch_type
+      - *customer_name
+      - *merchant_number
+      - *external_mid
+      - *chain
+      - *batch_amt
+      - *amount
+      - *card_type
+      - *charge_type
+      - *charge_type_description
+      - *card_plan
+      - *settlement_method
+      - *currency_code
+      - *ent_num
+      - *dt
+      - *execution_ts
+  - name: fct_payments_deposit_transactions
+    description: |
+      Deposit transactions data from Elavon.
+      Each row is an individual deposit (sale) transaction.
+    columns:
+      - *elavon_end_of_month_date
+      - *organization_name
+      - *organization_source_record_id
+      - *elavon_lp_participant_id
+      - *payment_reference
+      - *payment_date
+      - *fund_amt
+      - *batch_reference
+      - *batch_type
+      - *customer_batch_reference
+      - *customer_name
+      - *merchant_number
+      - *external_mid
+      - *store_number
+      - *chain
+      - *batch_amt
+      - *amount
+      - *card_type
+      - *charge_type
+      - *charge_type_description
+      - *card_plan
+      - *transaction_date
+      - *settlement_date
+      - *authorization_code
+      - *roc_text
+      - *trn_aci
+      - *card_scheme_ref
+      - *trn_ref_num
+      - *settlement_method
+      - *currency_code
+      - *mer_ref
+      - *purch_id
+      - *cust_cod
+      - *trn_arn
+      - *term_id
+      - *ent_num
+      - *dt
+      - *execution_ts
+  - name: fct_payments_chargeback_transactions
+    description: |
+      Chargeback transactions data from Elavon.
+      Each row is an individual chargeback transaction.
+    columns:
+      - *elavon_end_of_month_date
+      - *organization_name
+      - *organization_source_record_id
+      - *elavon_lp_participant_id
+      - *payment_reference
+      - *payment_date
+      - *fund_amt
+      - *batch_reference
+      - *batch_type
+      - *customer_name
+      - *merchant_number
+      - *external_mid
+      - *chargeback_control_no
+      - *roc_text
+      - *cb_acq_ref_id
+      - *chgbk_rsn_code
+      - *chgbk_rsn_desc
+      - *chain
+      - *batch_amt
+      - *amount
+      - *card_type
+      - *charge_type
+      - *charge_type_description
+      - *card_plan
+      - *transaction_date
+      - *trn_aci
+      - *card_scheme_ref
+      - *trn_ref_num
+      - *settlement_method
+      - *currency_code
+      - *trn_arn
+      - *ent_num
+      - *dt
+      - *execution_ts
+  - name: fct_payments_adjustment_transactions
+    description: |
+      Adjustment transactions data from Elavon.
+      Each row is an individual adjustment transaction.
+    columns:
+      - *elavon_end_of_month_date
+      - *organization_name
+      - *organization_source_record_id
+      - *elavon_lp_participant_id
+      - *payment_reference
+      - *payment_date
+      - *fund_amt
+      - *batch_reference
+      - *batch_type
+      - *customer_name
+      - *merchant_number
+      - *external_mid
+      - *chain
+      - *batch_amt
+      - *amount
+      - *card_type
+      - *charge_type
+      - *charge_type_description
+      - *card_plan
+      - *card_scheme_ref
+      - *trn_ref_num
+      - *settlement_method
+      - *currency_code
+      - *trn_arn
+      - *ent_num
+      - *dt
+      - *execution_ts
