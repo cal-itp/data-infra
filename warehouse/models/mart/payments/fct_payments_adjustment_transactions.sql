@@ -1,3 +1,6 @@
+{{ config(materialized = 'table',
+    post_hook="{{ payments_elavon_row_access_policy() }}") }}
+
 WITH adjustments AS ( -- noqa: ST03
     SELECT *
     FROM {{ ref('stg_elavon__transactions') }}

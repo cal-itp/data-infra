@@ -33,9 +33,9 @@ filter using (
 ) }};
 
 {{ create_row_access_policy(
-filter_column = 'participant_id',
-filter_value = 'sbmtd',
-principals = ['serviceAccount:sbmtd-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+    filter_column = 'participant_id',
+    filter_value = 'sbmtd',
+    principals = ['serviceAccount:sbmtd-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
 {{ create_row_access_policy(
@@ -77,6 +77,82 @@ principals = ['serviceAccount:sbmtd-payments-user@cal-itp-data-infra.iam.gservic
 {{ create_row_access_policy(
     filter_column = 'participant_id',
     filter_value = 'atn',
+    principals = ['serviceAccount:atn-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
+                  'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
+                  'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
+                  'group:cal-itp@jarv.us',
+                  'domain:calitp.org',
+                  'user:angela@compiler.la',
+                  'user:easall@gmail.com',
+                  'user:jeremyscottowades@gmail.com',
+                 ]
+) }};
+-- TODO: In the last policy of the macro call above, see if we can get the prod warehouse service account out of context
+{% endmacro %}
+
+{% macro payments_elavon_row_access_policy() %}
+
+{{ create_row_access_policy(
+    filter_column = 'Monterey-Salinas Transit',
+    filter_value = 'mst',
+    principals = ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Sacramento Regional Transit District',
+    principals = ['serviceAccount:sacrt-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Santa Barbara Metropolitan Transit District',
+    principals = ['serviceAccount:sbmtd-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Santa Barbara County Association of Governments',
+    principals = ['serviceAccount:clean-air-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}   ;
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Capitol Corridor Joint Powers Authority',
+    principals = ['serviceAccount:ccjpa-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Humboldt Transit Authority',
+    principals = ['serviceAccount:humboldt-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Lake Transit Authority',
+    principals = ['serviceAccount:lake-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Mendocino Transit Authority',
+    principals = ['serviceAccount:mendocino-transit-authority@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Redwood Coast Transit Authority',
+    principals = ['serviceAccount:redwood-coast-transit@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Anaheim Transportation Network',
     principals = ['serviceAccount:atn-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
