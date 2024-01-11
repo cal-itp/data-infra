@@ -488,7 +488,7 @@ def _publish_exposure(
                                 )
                         except requests.exceptions.RequestException as e:
                             print(e)
-                            pass
+                            continue
 
                     else:
                         typer.secho(
