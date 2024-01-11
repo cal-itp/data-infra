@@ -18,7 +18,7 @@ filter using (
 )
 {% endmacro %}
 
-{% macro payments_row_access_policy() %}
+{% macro payments_littlepay_row_access_policy() %}
 
 {{ create_row_access_policy(
     filter_column = 'participant_id',
