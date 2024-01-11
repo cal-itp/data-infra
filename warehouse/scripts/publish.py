@@ -477,14 +477,21 @@ def _publish_exposure(
 
                     if publish:
                         typer.secho(publish_msg, fg=typer.colors.GREEN)
-                        with open(fpath, "rb") as fp:
-                            upload_to_ckan(
-                                url=destination.url,
-                                fname=fname,
-                                fsize=fsize,
-                                file=fp,
-                                resource_id=resource.id,
+                        try:
+                            with open(fpath, "rb") as fp:
+                                upload_to_ckan(
+                                    url=destination.url,
+                                    fname=fname,
+                                    fsize=fsize,
+                                    file=fp,
+                                    resource_id=resource.id,
+                                )
+                        except requests.exceptions.HTTPError as e:
+                            typer.secho(
+                                f"Failed to upload to {fpath} due to error: {e}",
+                                fg=typer.colors.RED,
                             )
+
                     else:
                         typer.secho(
                             f"would be {publish_msg} if --publish",
