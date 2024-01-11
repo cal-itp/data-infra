@@ -486,9 +486,11 @@ def _publish_exposure(
                                     file=fp,
                                     resource_id=resource.id,
                                 )
-                        except requests.exceptions.RequestException as e:
-                            print(e)
-                            continue
+                        except requests.exceptions.HTTPError as e:
+                            typer.secho(
+                                f"Failed to upload to {fpath} due to error: {e}",
+                                fg=typer.colors.RED,
+                            )
 
                     else:
                         typer.secho(
