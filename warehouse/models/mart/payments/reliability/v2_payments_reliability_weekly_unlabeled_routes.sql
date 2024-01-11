@@ -1,3 +1,6 @@
+{{ config(materialized = 'table',
+    post_hook="{{ payments_littlepay_row_access_policy() }}") }}
+
 WITH payments_rides AS (
     SELECT * FROM {{ ref('fct_payments_rides_v2') }}
 ),
