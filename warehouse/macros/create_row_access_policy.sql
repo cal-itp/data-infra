@@ -86,9 +86,6 @@ filter using (
                   'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
                   'group:cal-itp@jarv.us',
                   'domain:calitp.org',
-                  'user:angela@compiler.la',
-                  'user:easall@gmail.com',
-                  'user:jeremyscottowades@gmail.com',
                  ]
 ) }};
 -- TODO: In the last policy of the macro call above, see if we can get the prod warehouse service account out of context
@@ -162,9 +159,6 @@ filter using (
                   'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
                   'group:cal-itp@jarv.us',
                   'domain:calitp.org',
-                  'user:angela@compiler.la',
-                  'user:easall@gmail.com',
-                  'user:jeremyscottowades@gmail.com',
                  ]
 ) }};
 -- TODO: In the last policy of the macro call above, see if we can get the prod warehouse service account out of context
