@@ -1,6 +1,5 @@
-{{ config(
-    post_hook="{{ payments_row_access_policy() }}"
-) }}
+{{ config(materialized = 'table',
+    post_hook="{{ payments_littlepay_row_access_policy() }}") }}
 
 WITH
 

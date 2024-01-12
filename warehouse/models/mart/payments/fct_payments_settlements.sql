@@ -1,5 +1,5 @@
 {{ config(materialized = 'table',
-    post_hook="{{ payments_row_access_policy() }}") }}
+    post_hook="{{ payments_littlepay_row_access_policy() }}") }}
 
 WITH settlements AS (
     SELECT *

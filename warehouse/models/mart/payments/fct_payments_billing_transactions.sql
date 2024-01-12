@@ -1,3 +1,6 @@
+{{ config(materialized = 'table',
+    post_hook="{{ payments_elavon_row_access_policy() }}") }}
+
 WITH billing AS ( -- noqa: ST03
     SELECT *
     FROM {{ ref('int_elavon__billing_transactions') }}
