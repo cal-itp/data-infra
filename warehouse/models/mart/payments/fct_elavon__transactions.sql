@@ -1,4 +1,5 @@
-{{ config(materialized='table') }}
+{{ config(materialized = 'table',
+    post_hook="{{ payments_elavon_row_access_policy() }}") }}
 
 WITH
 
