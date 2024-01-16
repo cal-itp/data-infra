@@ -94,8 +94,8 @@ filter using (
 {% macro payments_elavon_row_access_policy() %}
 
 {{ create_row_access_policy(
-    filter_column = 'Monterey-Salinas Transit',
-    filter_value = 'mst',
+    filter_column = 'organization_name',
+    filter_value = 'Monterey-Salinas Transit',
     principals = ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
