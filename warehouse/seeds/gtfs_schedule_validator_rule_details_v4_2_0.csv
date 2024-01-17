@@ -48,7 +48,7 @@ location_without_parent_station,A location that must have `parent_station` field
 missing_bike_allowance,Ferry trips should include bike allowance information.,v4.2.0,WARNING
 missing_calendar_and_calendar_date_files,Missing GTFS files `calendar.txt` and `calendar_dates.txt`.,v4.2.0,ERROR
 missing_feed_contact_email_and_url,Best Practices for `feed_info.txt` suggest providing at least one of `feed_contact_email` and `feed_contact_url`.,v4.2.0,WARNING
-missing_feed_info_date,One of `feed_start_date` or `feed_end_date` is specified, but not both.,v4.2.0,WARNING
+missing_feed_info_date,One of `feed_start_date` or `feed_end_date` is specified but not both.,v4.2.0,WARNING
 missing_level_id,`stops.level_id` is conditionally required.,v4.2.0,ERROR
 missing_recommended_column,A recommended column is missing in the input file.,v4.2.0,WARNING
 missing_recommended_field,A recommended field is missing.,v4.2.0,WARNING
