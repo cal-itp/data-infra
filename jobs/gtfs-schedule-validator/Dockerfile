@@ -24,6 +24,10 @@ COPY ./gtfs-validator-4.0.0-cli.jar ${V4_VALIDATOR_JAR}
 ENV V4_1_VALIDATOR_JAR=/gtfs-validator-4.1.0-cli.jar
 COPY ./gtfs-validator-4.1.0-cli.jar ${V4_1_VALIDATOR_JAR}
 
+# v4.2.0 from https://github.com/MobilityData/gtfs-validator/releases/download/v4.2.0/gtfs-validator-4.2.0-cli.jar
+ENV V4_2_VALIDATOR_JAR=/gtfs-validator-4.2.0-cli.jar
+COPY ./gtfs-validator-4.2.0-cli.jar ${V4_2_VALIDATOR_JAR}
+
 WORKDIR /app
 
 COPY ./pyproject.toml /app/pyproject.toml

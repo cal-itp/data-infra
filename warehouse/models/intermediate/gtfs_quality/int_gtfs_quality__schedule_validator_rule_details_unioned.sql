@@ -5,6 +5,7 @@ WITH unioned AS (
             ref('gtfs_schedule_validator_rule_details_v3_1_1'),
             ref('gtfs_schedule_validator_rule_details_v4_0_0'),
             ref('gtfs_schedule_validator_rule_details_v4_1_0'),
+            ref('gtfs_schedule_validator_rule_details_v4_2_0'),
         ],
     ) }}
 ),

@@ -1,0 +1,122 @@
+code,human_readable_description,version,severity
+attribution_without_role,Attribution with no role.,v4.2.0,WARNING
+block_trips_with_overlapping_stop_times,Trips with the same block id have overlapping stop times.,v4.2.0,ERROR
+csv_parsing_failed,Parsing of a CSV file failed.,v4.2.0,ERROR
+decreasing_or_equal_stop_time_distance,Decreasing or equal `shape_dist_traveled` in `stop_times.txt`.,v4.2.0,ERROR
+decreasing_shape_distance,Decreasing `shape_dist_traveled` in `shapes.txt`.,v4.2.0,ERROR
+duplicate_fare_media,Two distinct fare media have the same fare media name and type.,v4.2.0,WARNING
+duplicate_key,Duplicated entity.,v4.2.0,ERROR
+duplicate_route_name,Two distinct routes have either the same `route_short_name` the same `route_long_name` or the same combination of `route_short_name` and `route_long_name`.,v4.2.0,WARNING
+duplicated_column,Duplicated column in CSV.,v4.2.0,ERROR
+empty_column_name,A column name is empty.,v4.2.0,ERROR
+empty_file,A CSV file is empty.,v4.2.0,ERROR
+empty_row,A row in thei nput file has only spaces.,v4.2.0,WARNING
+equal_shape_distance_diff_coordinates,Two consecutive points have equal `shape_dist_traveled` and different lat/lon coordinates in `shapes.txt`.,v4.2.0,ERROR
+equal_shape_distance_same_coordinates,Two consecutive points have equal `shape_dist_traveled` and the same lat/lon coordinates in `shapes.txt`.,v4.2.0,WARNING
+expired_calendar,Dataset should not contain date ranges for services that have already expired.,v4.2.0,WARNING
+fare_transfer_rule_duration_limit_type_without_duration_limit,A row from GTFS file `fare_transfer_rules.txt` has a defined `duration_limit_type` field but no `duration_limit` specified.,v4.2.0,ERROR
+fare_transfer_rule_duration_limit_without_type,A row from GTFS file `fare_transfer_rules.txt` has a defined `duration_limit` field but no `duration_limit_type` specified.,v4.2.0,ERROR
+fare_transfer_rule_invalid_transfer_count,A row from GTFS file `fare_transfer_rules.txt` has a defined `transfer_count` with an invalid value.,v4.2.0,ERROR
+fare_transfer_rule_missing_transfer_count,A row from `fare_transfer_rules.txt` has `from_leg_group_id` equal to `to_leg_group_id` but has no `transfer_count` specified.,v4.2.0,ERROR
+fare_transfer_rule_with_forbidden_transfer_count,A row from `fare_transfer_rules.txt` has `from_leg_group_id` not equal to `to_leg_group_id` but has `transfer_count` specified.,v4.2.0,ERROR
+fast_travel_between_consecutive_stops,A transit vehicle moves too fast between two consecutive stops.,v4.2.0,WARNING
+fast_travel_between_far_stops,A transit vehicle moves too fast between two far stops.,v4.2.0,WARNING
+feed_expiration_date30_days,Dataset should cover at least the next 30 days of service.,v4.2.0,WARNING
+feed_expiration_date7_days,Dataset should be valid for at least the next 7 days.,v4.2.0,WARNING
+feed_info_lang_and_agency_lang_mismatch,Mismatching feed and agency language fields.,v4.2.0,WARNING
+foreign_key_violation,Wrong foreign key.,v4.2.0,ERROR
+i_o_error,Error in IO operation.,v4.2.0,ERROR
+inconsistent_agency_lang,Inconsistent language among agencies.,v4.2.0,WARNING
+inconsistent_agency_timezone,Inconsistent Timezone among agencies.,v4.2.0,ERROR
+invalid_color,A field contains an invalid color value.,v4.2.0,ERROR
+invalid_currency,A field contains a wrong currency code.,v4.2.0,ERROR
+invalid_currency_amount,A currency amount field has a value that does not match the format of its corresponding currency code field.,v4.2.0,ERROR
+invalid_date,A field cannot be parsed as date.,v4.2.0,ERROR
+invalid_email,A field contains a malformed email address.,v4.2.0,ERROR
+invalid_float,A field cannot be parsed as a floating point number.,v4.2.0,ERROR
+invalid_input_files_in_subfolder,At least 1 GTFS file is in a subfolder.,v4.2.0,ERROR
+invalid_integer,A field cannot be parsed as an integer.,v4.2.0,ERROR
+invalid_language_code,A field contains a wrong language code.,v4.2.0,ERROR
+invalid_phone_number,A field contains a malformed phone number.,v4.2.0,ERROR
+invalid_row_length,Invalid csv row length.,v4.2.0,ERROR
+invalid_time,A field cannot be parsed as time.,v4.2.0,ERROR
+invalid_timezone,A field cannot be parsed as a timezone.,v4.2.0,ERROR
+invalid_url,A field contains a malformed URL.,v4.2.0,ERROR
+leading_or_trailing_whitespaces,The value in CSV file has leading or trailing whitespaces.,v2.4.0,WARNING
+location_with_unexpected_stop_time,A location in `stops.txt` that is not a stop is referenced by some `stop_times.stop_id`.,v4.2.0,ERROR
+location_without_parent_station,A location that must have `parent_station` field does not have it.,v4.2.0,ERROR
+missing_bike_allowance,Ferry trips should include bike allowance information.,v4.2.0,WARNING
+missing_calendar_and_calendar_date_files,Missing GTFS files `calendar.txt` and `calendar_dates.txt`.,v4.2.0,ERROR
+missing_feed_contact_email_and_url,Best Practices for `feed_info.txt` suggest providing at least one of `feed_contact_email` and `feed_contact_url`.,v4.2.0,WARNING
+missing_feed_info_date,One of `feed_start_date` or `feed_end_date` is specified, but not both.,v4.2.0,WARNING
+missing_level_id,`stops.level_id` is conditionally required.,v4.2.0,ERROR
+missing_recommended_column,A recommended column is missing in the input file.,v4.2.0,WARNING
+missing_recommended_field,A recommended field is missing.,v4.2.0,WARNING
+missing_recommended_file,A recommended file is missing.,v4.2.0,WARNING
+missing_required_column,A required column is missing in the input file.,v4.2.0,ERROR
+missing_required_field,A required field is missing.,v4.2.0,ERROR
+missing_required_file,A required file is missing.,v4.2.0,ERROR
+missing_stop_name,`stops.stop_name` is required for `location_type` equal to `0` `1` or `2`.,v4.2.0,ERROR
+missing_timepoint_value,`stop_times.timepoint` value is missing for a record.,v4.2.0,WARNING
+missing_trip_edge,Missing trip edge `arrival_time` or `departure_time`.,v4.2.0,ERROR
+mixed_case_recommended_field,This field has customer-facing text and should use Mixed Case (should contain upper and lower case letters).,v4.2.0,WARNING
+more_than_one_entity,More than one row in CSV.,v4.2.0,WARNING
+new_line_in_value,New line or carriage return in a value in CSV file.,v4.2.0,ERROR
+non_ascii_or_non_printable_char,Non ascii or non printable char in ID field.,v4.2.0,WARNING
+number_out_of_range,Out of range value.,v4.2.0,ERROR
+overlapping_frequency,Trip frequencies overlap.,v4.2.0,ERROR
+pathway_dangling_generic_node,A generic node has only one incident location in a pathway graph.,v4.2.0,WARNING
+pathway_loop,A pathway starts and ends at the same location.,v4.2.0,WARNING
+pathway_to_platform_with_boarding_areas,A pathway has an endpoint that is a platform which has boarding areas.,v4.2.0,ERROR
+pathway_to_wrong_location_type,A pathway has an endpoint that is a station.,v4.2.0,ERROR
+pathway_unreachable_location,A location is not reachable at least in one direction: from the entrances or to the exits.,v4.2.0,ERROR
+platform_without_parent_station,A platform has no `parent_station` field set.,v4.2.0,INFO
+point_near_origin,A point is too close to origin `(0 0)`.,v4.2.0,ERROR
+point_near_pole,A point is too close to the North or South Pole.,v4.2.0,ERROR
+route_both_short_and_long_name_missing,Both `route_short_name` and `route_long_name` are missing for a route.,v4.2.0,ERROR
+route_color_contrast,Insufficient route color contrast.,v4.2.0,WARNING
+route_long_name_contains_short_name,Long name should not contain short name for a single route.,v4.2.0,WARNING
+route_short_name_too_long,Short name of a route is too long (more than 12 characters).,v4.2.0,WARNING
+runtime_exception_in_loader_error,RuntimeException while loading GTFS dataset in memory.,v4.2.0,ERROR
+runtime_exception_in_validator_error,RuntimeException while validating GTFS archive.,v4.2.0,ERROR
+same_name_and_description_for_route,Same name and description for route.,v4.2.0,WARNING
+same_name_and_description_for_stop,Same name and description for stop.,v4.2.0,WARNING
+same_route_and_agency_url,Same `routes.route_url` and `agency.agency_url`.,v4.2.0,WARNING
+same_stop_and_agency_url,Same `stops.stop_url` and `agency.agency_url`.,v4.2.0,WARNING
+same_stop_and_route_url,Same `stops.stop_url` and `routes.route_url`.,v4.2.0,WARNING
+start_and_end_range_equal,Two date or time fields are equal.,v4.2.0,ERROR
+start_and_end_range_out_of_order,Two date or time fields are out of order.,v4.2.0,ERROR
+station_with_parent_station,A station has `parent_station` field set.,v4.2.0,ERROR
+stop_has_too_many_matches_for_shape,Stop entry that has many potential matches to the trip\u0027s path of travel as defined by the shape entry in `shapes.txt`.,v4.2.0,WARNING
+stop_time_timepoint_without_times,`arrival_time` or `departure_time` not specified for timepoint.,v4.2.0,ERROR
+stop_time_with_arrival_before_previous_departure_time,Backwards time travel between stops in `stop_times.txt`,v4.2.0,ERROR
+stop_time_with_only_arrival_or_departure_time,Missing `stop_times.arrival_time` or `stop_times.departure_time`.,v4.2.0,ERROR
+stop_too_far_from_shape,Stop too far from trip shape.,v4.2.0,WARNING
+stop_too_far_from_shape_using_user_distance,Stop time too far from shape.,v4.2.0,WARNING
+stop_without_location,`stop_lat` and/or `stop_lon` is missing for stop with `location_type` equal to`0` `1` or `2`,v4.2.0,ERROR
+stop_without_stop_time,A stop in `stops.txt` is not referenced by any `stop_times.stop_id`.,v4.2.0,WARNING
+stop_without_zone_id,Stop without value for `stops.zone_id`.,v4.2.0,ERROR
+stops_match_shape_out_of_order,Two stop entries are different than their arrival-departure order defined by `shapes.txt`.,v4.2.0,WARNING
+thread_execution_error,ExecutionException during multithreaded validation,v4.2.0,ERROR
+timeframe_only_start_or_end_time_specified,A row from `timeframes.txt` was found with only one of `start_time` and `end_time` specified.,v4.2.0,ERROR
+timeframe_overlap,Two entries in `timeframes.txt` with the same `timeframe_group_id` and `service_id` have overlapping time intervals.,v4.2.0,ERROR
+timeframe_start_or_end_time_greater_than_twenty_four_hours,A time in `timeframes.txt` is greater than `24:00:00`.,v4.2.0,ERROR
+too_many_rows,A CSV file has too many rows.,v4.2.0,ERROR
+transfer_with_invalid_stop_location_type,A stop id field from GTFS file `transfers.txt` references a stop that has a `location_type` other than 0 or 1 (aka Stop/Platform or Station).,v4.2.0,ERROR
+transfer_with_invalid_trip_and_route,A trip id field from GTFS file `transfers.txt` references a route that does not match its `trips.txt` `route_id`.,v4.2.0,ERROR
+transfer_with_invalid_trip_and_stop,A trip id field from GTFS file `transfers.txt` references a stop that is not included in the referenced trip\u0027s stop-times.,v4.2.0,ERROR
+transfer_with_suspicious_mid_trip_in_seat,A trip id field from GTFS file `transfers.txt` with an in-seat transfer type references a stop that is not in the expected position in the trip\u0027s stop-times.,v4.2.0,WARNING
+translation_foreign_key_violation,An entity with the given `record_id` and `record_sub_id` cannot be found in the referenced table.,v4.2.0,ERROR
+translation_unexpected_value,A field in a translations row has value but must be empty.,v4.2.0,ERROR
+translation_unknown_table_name,A translation references an unknown or missing GTFS table.,v4.2.0,WARNING
+trip_coverage_not_active_for_next7_days,Trips data should be valid for at least the next seven days.,v4.2.0,WARNING
+trip_distance_exceeds_shape_distance,The distance traveled by a trip should be less or equal to the max length of its shape.,v4.2.0,ERROR
+u_r_i_syntax_error,A string could not be parsed as a URI reference.,v4.2.0,ERROR
+unexpected_enum_value,An enum has an unexpected value.,v4.2.0,WARNING
+unknown_column,A column name is unknown.,v4.2.0,INFO
+unknown_file,A file is unknown,v4.2.0,INFO
+unusable_trip,Trips must have more than one stop to be usable.,v4.2.0,WARNING
+unused_parent_station,Unused parent station.,v4.2.0,INFO
+unused_shape,Shape is not used in GTFS file `trips.txt`.,v4.2.0,WARNING
+unused_trip,Trip is not be used in `stop_times.txt`,v4.2.0,WARNING
+wrong_parent_location_type,Incorrect type of the parent location.,v4.2.0,ERROR
