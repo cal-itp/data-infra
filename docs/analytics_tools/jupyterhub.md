@@ -16,11 +16,12 @@ Analyses on JupyterHub are accomplished using notebooks, which allow users to mi
 2. [Logging in to JupyterHub](#logging-in-to-jupyterhub)
 3. [Connecting to the Warehouse](#connecting-to-the-warehouse)
 4. [Increasing the Query Limit](#increasing-the-query-limit)
-5. [Querying with SQL in JupyterHub](querying-sql-jupyterhub)
-6. [Saving Code to Github](saving-code-jupyter)
-7. [Environment Variables](#environment-variables)
-8. [Jupyter Notebook Best Practices](notebook-shortcuts)
-9. [Developing warehouse models in Jupyter](jupyterhub-warehouse)
+5. [Increase the User Storage Limit](#increasing-the-storage-limit)
+6. [Querying with SQL in JupyterHub](querying-sql-jupyterhub)
+7. [Saving Code to Github](saving-code-jupyter)
+8. [Environment Variables](#environment-variables)
+9. [Jupyter Notebook Best Practices](notebook-shortcuts)
+10. [Developing warehouse models in Jupyter](jupyterhub-warehouse)
 
 ## Using JupyterHub
 
@@ -76,6 +77,14 @@ tbls._init()
 ```
 
 (querying-sql-jupyterhub)=
+
+### Increasing the Storage Limit
+
+By default, new JupyterHub instances are subject to a 10GB storage limit. This setting comes from the underlying infrastructure configuration, and requires some interaction with Kubernetes Engine in Google Cloud to modify.
+
+If a JupyterHub user experienced an error indicating `no space left on device` or similar, their provisioned storage likely needs to be increased. This can be done from within the Storage section of [the Google Kubernetes Engine web UI](https://console.cloud.google.com/kubernetes/list/overview?project=cal-itp-data-infra). Click into the "claim-[username]" entry associated with the user (*not* the "pvc-[abc123]" persistent volume associated with that entry), navigate to the "YAML" tab, and change the storage resource request under `spec` and the storage capacity limit under `status`.
+
+100GB should generally be more than enough for a given user - if somebody's storage has already been set to 100GB and they hit a space limit again, that may indicate a need to clean up past work rather than a need to increase available storage.
 
 ### Querying with SQL in JupyterHub
 
@@ -157,7 +166,7 @@ GITHUB_API_KEY = os.environ["GITHUB_API_KEY"]
 
 External resources:
 
-- [Cheat Sheet - Jupyter Notebook ](https://defkey.com/jupyter-notebook-shortcuts?pdf=true&modifiedDate=20200909T053706)
+- [Cheat Sheet - Jupyter Notebook](https://defkey.com/jupyter-notebook-shortcuts?pdf=true&modifiedDate=20200909T053706)
 - [Using Markdown in Jupyter Notebook](https://www.datacamp.com/community/tutorials/markdown-in-jupyter-notebook)
 
 (jupyterhub-warehouse)=
