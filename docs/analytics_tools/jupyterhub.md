@@ -84,6 +84,8 @@ By default, new JupyterHub instances are subject to a 10GB storage limit. This s
 
 If a JupyterHub user experienced an error indicating `no space left on device` or similar, their provisioned storage likely needs to be increased. This can be done from within the Storage section of [the Google Kubernetes Engine web UI](https://console.cloud.google.com/kubernetes/list/overview?project=cal-itp-data-infra). Click into the "claim-[username]" entry associated with the user (*not* the "pvc-[abc123]" persistent volume associated with that entry), navigate to the "YAML" tab, and change the storage resource request under `spec` and the storage capacity limit under `status`.
 
+After making the configuration change in GKE, shut down and restart the user's JupyterHub instance. If the first restart attempt times out, try again once or twice - it can take a moment for the scaleup to complete and properly link the storage volume to the JupyterHub instance.
+
 100GB should generally be more than enough for a given user - if somebody's storage has already been set to 100GB and they hit a space limit again, that may indicate a need to clean up past work rather than a need to increase available storage.
 
 ### Querying with SQL in JupyterHub
