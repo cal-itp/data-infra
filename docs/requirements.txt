@@ -7,3 +7,6 @@ sphinxcontrib-mermaid==0.8.1
 # Temporary pinning of older sphinxcontrib-[xyz] reqs until we use Sphinx 5.0.0 or higher
 sphinxcontrib-applehelp==1.0.4
 sphinxcontrib-devhelp==1.0.2
+sphinxcontrib-htmlhelp==2.0.1
+sphinxcontrib-qthelp==1.0.3
+sphinxcontrib-serializinghtml==1.1.5
