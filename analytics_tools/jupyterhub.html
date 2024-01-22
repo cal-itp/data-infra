@@ -570,6 +570,11 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#increasing-the-storage-limit">
+     Increasing the Storage Limit
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#querying-with-sql-in-jupyterhub">
      Querying with SQL in JupyterHub
     </a>
@@ -647,6 +652,11 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#increasing-the-storage-limit">
+     Increasing the Storage Limit
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#querying-with-sql-in-jupyterhub">
      Querying with SQL in JupyterHub
     </a>
@@ -697,6 +707,7 @@
 <li><p><a class="reference external" href="#logging-in-to-jupyterhub">Logging in to JupyterHub</a></p></li>
 <li><p><a class="reference external" href="#connecting-to-the-warehouse">Connecting to the Warehouse</a></p></li>
 <li><p><a class="reference external" href="#increasing-the-query-limit">Increasing the Query Limit</a></p></li>
+<li><p><a class="reference external" href="#increasing-the-storage-limit">Increase the User Storage Limit</a></p></li>
 <li><p><a class="reference internal" href="#querying-sql-jupyterhub"><span class="std std-ref">Querying with SQL in JupyterHub</span></a></p></li>
 <li><p><a class="reference internal" href="#saving-code-jupyter"><span class="std std-ref">Saving Code to Github</span></a></p></li>
 <li><p><a class="reference external" href="#environment-variables">Environment Variables</a></p></li>
@@ -746,8 +757,15 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 </pre></div>
 </div>
 </div>
+<div class="section" id="increasing-the-storage-limit">
+<span id="querying-sql-jupyterhub"></span><h3>Increasing the Storage Limit<a class="headerlink" href="#increasing-the-storage-limit" title="Permalink to this headline">¶</a></h3>
+<p>By default, new JupyterHub instances are subject to a 10GB storage limit. This setting comes from the underlying infrastructure configuration, and requires some interaction with Kubernetes Engine in Google Cloud to modify.</p>
+<p>If a JupyterHub user experiences an error indicating <code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">space</span> <span class="pre">left</span> <span class="pre">on</span> <span class="pre">device</span></code> or similar, their provisioned storage likely needs to be increased. This can be done from within the Storage section of <a class="reference external" href="https://console.cloud.google.com/kubernetes/list/overview?project=cal-itp-data-infra">the Google Kubernetes Engine web UI</a>. Click into the “claim-[username]” entry associated with the user (<em>not</em> the “pvc-[abc123]” persistent volume associated with that entry), navigate to the “YAML” tab, and change the storage resource request under <code class="docutils literal notranslate"><span class="pre">spec</span></code> and the storage capacity limit under <code class="docutils literal notranslate"><span class="pre">status</span></code>.</p>
+<p>After making the configuration change in GKE, shut down and restart the user’s JupyterHub instance. If the first restart attempt times out, try again once or twice - it can take a moment for the scaleup to complete and properly link the storage volume to the JupyterHub instance.</p>
+<p>100GB should generally be more than enough for a given user - if somebody’s storage has already been set to 100GB and they hit a space limit again, that may indicate a need to clean up past work rather than a need to increase available storage.</p>
+</div>
 <div class="section" id="querying-with-sql-in-jupyterhub">
-<span id="querying-sql-jupyterhub"></span><h3>Querying with SQL in JupyterHub<a class="headerlink" href="#querying-with-sql-in-jupyterhub" title="Permalink to this headline">¶</a></h3>
+<h3>Querying with SQL in JupyterHub<a class="headerlink" href="#querying-with-sql-in-jupyterhub" title="Permalink to this headline">¶</a></h3>
 <p>JupyterHub makes it easy to query SQL in the notebooks.</p>
 <p>To query SQL, simply import the below at the top of your notebook:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">calitp_data_analysis.magics</span>
@@ -809,7 +827,7 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 <span id="notebook-shortcuts"></span><h3>Jupyter Notebook Best Practices<a class="headerlink" href="#jupyter-notebook-best-practices" title="Permalink to this headline">¶</a></h3>
 <p>External resources:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://defkey.com/jupyter-notebook-shortcuts?pdf=true&amp;modifiedDate=20200909T053706">Cheat Sheet - Jupyter Notebook </a></p></li>
+<li><p><a class="reference external" href="https://defkey.com/jupyter-notebook-shortcuts?pdf=true&amp;modifiedDate=20200909T053706">Cheat Sheet - Jupyter Notebook</a></p></li>
 <li><p><a class="reference external" href="https://www.datacamp.com/community/tutorials/markdown-in-jupyter-notebook">Using Markdown in Jupyter Notebook</a></p></li>
 </ul>
 </div>
