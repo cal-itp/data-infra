@@ -6,10 +6,12 @@ on:
       - 'main'
     paths:
       - '.github/workflows/build-calitp-data-infra.yml'
+      - 'packages/calitp-data-infra/pyproject.toml'
       - 'packages/calitp-data-infra/calitp_data_infra/**'
   pull_request:
     paths:
       - '.github/workflows/build-calitp-data-infra.yml'
+      - 'packages/calitp-data-infra/pyproject.toml'
       - 'packages/calitp-data-infra/calitp_data_infra/**'
 
 concurrency:
