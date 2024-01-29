@@ -190,7 +190,7 @@ While most Python packages an analyst uses come in JupyterHub, there may be addi
 
 Adapted from [this Slack thread](https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809).
 
-1. Make the changes you want in the `calitp-data-analysis` folder inside `packages` [here](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis).
+1. Make the changes you want in the `calitp-data-analysis` folder inside `packages` [here](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis). If you are only changing package metadata (author information, package description, etc.) without changing the function of the package itself, that information lives in `pyproject.toml` rather than in the `calitp-data-analysis` subfolder.
    - If you are adding a new function that relies on a package that isn't already a dependency, run `poetry add <package name>` after changing directories to `data-infra/packages/calitp_data_analysis`. Check this [Jupyter image file](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml) for the version number associated with the package, because you should specify the version.
      - For example, your function relies on `dask`. In the Jupyter image file, the version is `dask = "~2022.8"` so run `poetry add dask==~2022.8` in the terminal.
    - You may also have run `poetry install mypy`. `mypy` is a package that audits all the functions. [Read more about it here.](https://mypy-lang.org/)
