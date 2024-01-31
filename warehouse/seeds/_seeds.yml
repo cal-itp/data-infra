@@ -1,6 +1,21 @@
 version: 2
 
 seeds:
+  - name: ccjpa_miles_traveled
+    description: |
+      A matrix of the distance between origin/destination pairs for CCJPA stations in miles.
+    columns:
+      - name: location_name
+        description: On location in the O/D pair
+        tests:
+          - unique
+      - name: off_location_name
+        description: Off location in the O/D pair
+        tests:
+          - unique
+      - name: distance_miles
+        description: Distance in miles between location_name and off_location_name.
+
   - name: payments_entity_mapping
     columns:
       - name: gtfs_dataset_source_record_id
