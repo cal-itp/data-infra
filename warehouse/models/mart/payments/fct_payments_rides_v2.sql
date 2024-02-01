@@ -23,10 +23,6 @@ payments_entity_mapping AS (
     SELECT * FROM {{ ref('payments_entity_mapping') }}
 ),
 
-ccjpa_miles_traveled AS (
-    SELECT * FROM {{ ref('ccjpa_miles_traveled') }}
-),
-
 micropayments AS (
     SELECT *
     FROM {{ ref('int_payments__micropayments_adjustments_refunds_joined') }}
@@ -72,20 +68,6 @@ participants_to_routes_and_agency AS (
     LEFT JOIN dim_agency AS agency
         ON routes.agency_id = agency.agency_id
             AND routes.feed_key = agency.feed_key
-),
-
-device_transactions_with_ccjpa_distance AS (
-
-    SELECT
-
-        device_transactions.*,
-
-        ccjpa_miles_traveled.distance_miles AS ccjpa_distance_miles
-
-    FROM int_payments__matched_device_transactions AS device_transactions
-    LEFT JOIN ccjpa_miles_traveled ON (device_transactions.location_name = ccjpa_miles_traveled.location_name)
-        AND (device_transactions.off_location_name = ccjpa_miles_traveled.off_location_name)
-
 ),
 
 fct_payments_rides_v2 AS (
@@ -159,7 +141,7 @@ fct_payments_rides_v2 AS (
         device_transactions.distance_meters,
         device_transactions.transaction_date_pacific,
         device_transactions.day_of_week,
-        device_transactions.ccjpa_distance_miles
+        device_transactions.distance_miles
 
     FROM micropayments
     LEFT JOIN int_payments__customers AS customers
@@ -170,7 +152,7 @@ fct_payments_rides_v2 AS (
         AND micropayments.participant_id = vaults.participant_id
         AND micropayments.transaction_time >= vaults.calitp_valid_at
         AND micropayments.transaction_time < vaults.calitp_invalid_at
-    LEFT JOIN device_transactions_with_ccjpa_distance AS device_transactions
+    LEFT JOIN int_payments__matched_device_transactions AS device_transactions
         ON micropayments.participant_id = device_transactions.participant_id
             AND micropayments.micropayment_id = device_transactions.micropayment_id
     LEFT JOIN stg_littlepay__product_data AS products

@@ -389,6 +389,8 @@ models:
         description: '{{ doc("lp_paired_first_transaction_date") }}'
       - name: day_of_week
         description: '{{ doc("lp_paired_first_day_of_week") }}'
+      - name: distance_miles
+        description: The distance between location_name and off_location_name (in miles)
 
   - name: int_payments__cleaned_micropayment_device_transactions
     description: |
