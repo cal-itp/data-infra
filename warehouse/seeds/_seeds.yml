@@ -1,9 +1,9 @@
 version: 2
 
 seeds:
-  - name: ccjpa_miles_traveled
+  - name: miles_traveled
     description: |
-      A matrix of the distance between origin/destination pairs for CCJPA stations in miles.
+      A matrix of the distance between origin/destination pairs in miles.
     columns:
       - name: location_name
         description: On location in the O/D pair
