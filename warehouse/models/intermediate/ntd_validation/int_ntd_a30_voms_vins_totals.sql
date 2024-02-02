@@ -6,7 +6,7 @@ with voms_rr20 as (
     select organization,
     fiscal_year,
     AVG(VOMX) as rr20_voms
-    FROM {{ ref('int_ntd_rr20_service_alldata') }}
+    FROM {{ ref('int_ntd_rr20_service_1alldata') }}
     GROUP BY organization, fiscal_year
 ),
 

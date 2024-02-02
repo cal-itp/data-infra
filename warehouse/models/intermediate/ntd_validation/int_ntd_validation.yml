@@ -16,14 +16,23 @@ models:
     description: |
       Setting up the RR-20 data for comparing totals, for operating and capital expenses, reported in different ares of the RR-20
       For NTD validation error ID #s RR20F-001OA, RR20F-001C, RR20F-182
-  - name: int_ntd_rr20_service_alldata
+  - name: int_ntd_rr20_service_1alldata
     description: |
-      Combines 2023 and 2022 data in preparation for doing NTD validation checks.
+      1st intermediate cleaning step for service data. Combines 2023 and 2022 data in preparation for doing NTD validation checks.
       The 2022 data was *not* from the API and so formatted differently
       We are *assuming* that data in 2024 and onwards will be the same format as 2023
       If you get errors in 2024, check which columns may differ and read errors carefully.
-  - name: int_ntd_rr20_service_ratios
+      NOTE!!!! You must add in the 2024 data when it is available with another CTE. IF NOT THERE WILL BE NO 2024 DATA CHECKED.
+  - name: int_ntd_rr20_service_2ratioslong
     description: |
-      makes ratios for validation checks
+      2nd intermediate cleaning step for service data. Calculates all needed NTD metrics that are ratios of two other values. E.g., cost per hour,
+      miles_per_veh,fare_rev_per_trip,rev_speed,trips_per_hr.
+      NOTE this only works because there is ONE row per org, year, mode.
+      If this ever changes or gets duplicated upstream, then these calculations will be off.
+  - name: int_ntd_rr20_service_3ratios_wide
+    description: |
+      3rd intermediate cleaning step for service data. Pivots data from the 2nd cleaning step (above) from longform to wide form.
+      NOTE!!!! A column for 2024 has already been added, but in 2025 and beyond you must go in and add a column for the year of interest
+      e.g., 2025, (and up to you to delete any columns you don't want, e.g. 2022)
     config:
       materialized: table
