@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2023.8.1"
+version = "2024.2.5"
 description = ""
-authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
+authors = ["Soren Spicknall <soren.s@jarv.us>"]
 
 [tool.poetry.dependencies]
 python = "~3.9"
