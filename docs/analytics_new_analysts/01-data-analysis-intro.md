@@ -4,8 +4,8 @@
 
 Below are Python tutorials covering the basics of data cleaning and wrangling. [Chris Albon's guide](https://chrisalbon.com/#python) is particularly helpful. Rather than reinventing the wheel, this tutorial instead highlights specific methods and operations that might make your life easier as a data analyst.
 
-- [Import and export data in Python](#import-and-export-data-in-python)
-- [Merge tabular and geospatial data](#merge-tabular-and-geospatial-data)
+- [Import and export data in Python](#data-analysis-import-and-export-data-in-python)
+- [Merge tabular and geospatial data](#data-analysis-merge-tabular-and-geospatial-data)
 - [Functions](#functions)
 - [Grouping](#grouping)
 - [Aggregating](#aggregating)
@@ -19,9 +19,9 @@ import pandas as pd
 import geopandas as gpd
 ```
 
-(import-and-export-data-in-python)=
+(data-analysis-import-and-export-data-in-python)=
 
-## Import and Export Data in Python
+## Import and Export Data in Python for Data Analysis
 
 ### **Local files**
 
@@ -47,9 +47,9 @@ df.to_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.csv')
 
 Refer to the [Data Management best practices](data-management-page) and [Basics of Working with Geospatial Data](geo-intro) for additional information on importing various file types.
 
-(merge-tabular-and-geospatial-data)=
+(data-analysis-merge-tabular-and-geospatial-data)=
 
-## Merge Tabular and Geospatial Data
+## Merge Tabular and Geospatial Data for Data Analysis
 
 Merging data from multiple sources creates one large dataframe (df) to perform data analysis. Let's say there are 3 sources of data that need to be merged:
 

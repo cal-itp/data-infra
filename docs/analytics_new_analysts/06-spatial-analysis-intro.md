@@ -6,7 +6,7 @@ Place matters. That's why data analysis often includes a geospatial or geographi
 
 Below are short demos of common techniques to help get you started with exploring your geospatial data.
 
-- [Merge tabular and geospatial data](#merge-tabular-and-geospatial-data)
+- [Merge tabular and geospatial data](#spatial-analysis-merge-tabular-and-geospatial-data)
 - [Attach geographic characteristics to all points or lines that fall within a boundary (spatial join and dissolve)](#attach-geographic-characteristics-to-all-points-or-lines-that-fall-within-a-boundary)
 - [Aggregate and calculate summary statistics](#aggregate-and-calculate-summary-statistics)
 - [Buffers](#buffers)
@@ -19,9 +19,9 @@ import pandas as pd
 import geopandas as gpd
 ```
 
-(merge-tabular-and-geospatial-data)=
+(spatial-analysis-merge-tabular-and-geospatial-data)=
 
-## Merge Tabular and Geospatial Data
+## Merge Tabular and Geospatial Data for Spatial Analysis
 
 We have two files: Council District boundaries (geospatial) and population values (tabular). Through visual inspection, we know that `CD` and `District` are columns that help us make this match.
 

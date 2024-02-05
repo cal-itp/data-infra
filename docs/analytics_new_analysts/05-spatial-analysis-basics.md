@@ -6,7 +6,7 @@ Place matters. That's why data analysis often includes a geospatial or geographi
 
 Below are short demos for getting started:
 
-- [Import and export data in Python](#import-and-export-data-in-python)
+- [Import and export data in Python](#spatial-analysis-import-and-export-data-in-python)
 - [Setting and projecting coordinate reference system](#setting-and-projecting-coordinate-reference-system)
 
 ## Getting Started
@@ -17,9 +17,9 @@ import pandas as pd
 import geopandas as gpd
 ```
 
-(import-and-export-data-in-python)=
+(spatial-analysis-import-and-export-data-in-python)=
 
-## Import and Export Data in Python
+## Import and Export Data in Python for Spatial Analysis
 
 ### **Local files**
 
