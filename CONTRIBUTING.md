@@ -1,7 +1,7 @@
 # Contribution guidelines
 
 These guidelines are meant to provide a foundation for collaboration in Cal-ITP's data services repos,
-primarily [#data-infra](https://github.com/cal-itp/data-infra).
+primarily [data-infra](https://github.com/cal-itp/data-infra).
 
 ## Issues
 

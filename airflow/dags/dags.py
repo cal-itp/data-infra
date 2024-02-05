@@ -7,7 +7,7 @@ from gusty import create_dag
 
 import airflow  # noqa
 
-# pointed at #data-infra-notify as of 2022-02-01
+# pointed at #alerts-data-infra as of 2024-02-05
 CALITP_SLACK_URL_KEY = "CALITP_SLACK_URL"
 
 # DAG Directories =============================================================
