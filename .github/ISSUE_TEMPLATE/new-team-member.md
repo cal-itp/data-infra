@@ -36,7 +36,7 @@ Slack Username:
 
 - [ ] Added to Slack channels:
 
-  - [ ] #data-analyses
+  - [ ] #data-analysis
   - [ ] #data-office-hours
   - [ ] #data
   - [ ] #ct-bdat-internal

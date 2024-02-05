@@ -1,6 +1,6 @@
 # Transit Database (Airtable)
 
-The Cal-ITP Airtable Transit Database stores key relationships about how transit services are organized and operated in California as well as how well they are performing. See Evan or post in the `#airtable-data` Slack channel to get a link and gain access.
+The Cal-ITP Airtable Transit Database stores key relationships about how transit services are organized and operated in California as well as how well they are performing. See Evan or post in the `#data-airtable` Slack channel to get a link and gain access.
 
 Important Airtable documentation is maintained elsewhere:
 

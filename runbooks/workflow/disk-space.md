@@ -1,6 +1,6 @@
 # Resolving Disk Space Usage and Pod Offset Errors
 
-We have an [alert](https://monitoring.calitp.org/alerting/grafana/Geo72Nf4z/view) that will trigger when any Kubernetes volume is more than 80% full, placing a message in the #data-infra-alerts channel of the Cal-ITP Slack group. The resolution path will depend on the affected service.
+We have an [alert](https://monitoring.calitp.org/alerting/grafana/Geo72Nf4z/view) that will trigger when any Kubernetes volume is more than 80% full, placing a message in the `#alerts-data-infra` channel of the Cal-ITP Slack group. The resolution path will depend on the affected service.
 
 After following any of these specific runbook sections, check the Disk Usage section of the general [Kubernetes dashboard](https://monitoring.calitp.org/d/oWe9aYxmk/1-kubernetes-deployment-statefulset-daemonset-metrics) in Grafana to verify the disk space consumption has decreased to a safe level for any impacted volumes. The alert should also show as resolved in Slack a couple minutes after recovery.
 
