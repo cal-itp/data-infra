@@ -6,10 +6,12 @@ on:
       - 'main'
     paths:
       - '.github/workflows/build-calitp-data-analysis.yml'
+      - 'packages/calitp-data-analysis/pyproject.toml'
       - 'packages/calitp-data-analysis/calitp_data_analysis/**'
   pull_request:
     paths:
       - '.github/workflows/build-calitp-data-analysis.yml'
+      - 'packages/calitp-data-analysis/pyproject.toml'
       - 'packages/calitp-data-analysis/calitp_data_analysis/**'
 
 concurrency:
