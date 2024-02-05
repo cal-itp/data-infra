@@ -99,9 +99,9 @@ If you discover merge conflicts and they are within a single notebook that only 
 
 - From the command line, run `git merge main`. This should show you the conflict.
 - From here, there are two options depending on what version of the notebook you'd like to keep.
-    - To keep the version on your branch, run:<br/>
+  - To keep the version on your branch, run:<br/>
     `git checkout --ours path/to/notebook.ipynb`
-    - To keep the remote version, run:<br/>
+  - To keep the remote version, run:<br/>
     `git checkout --theirs path/to/notebook.ipynb`
 - From here, just add the file and commit with a message as you normally would and the conflict should be fixed in your Pull Request.
 

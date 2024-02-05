@@ -195,8 +195,8 @@ Here are a few example `data-infra` PRs that added columns to existing models:
 
 - [PR #2778](https://github.com/cal-itp/data-infra/pull/2778) is a simple example of adding a column that already exists in staging to a mart table.
 - For intermediate examples of adding a column in a staging table and propagating it through a few different downstream models, see
-    - [PR #2768](https://github.com/cal-itp/data-infra/pull/2768)
-    - [PR #2601](https://github.com/cal-itp/data-infra/pull/2686)
+  - [PR #2768](https://github.com/cal-itp/data-infra/pull/2768)
+  - [PR #2601](https://github.com/cal-itp/data-infra/pull/2686)
 - [PR #2383](https://github.com/cal-itp/data-infra/pull/2383) adds a column to Airtable data end-to-end (starting from the raw data/external tables; this involves non-dbt code).
 
 #### Example new model PRs
@@ -205,8 +205,8 @@ Here are a few `data-infra` PRs that created brand new models:
 
 - [PR #2686](https://github.com/cal-itp/data-infra/pull/2686) created a new model based on existing warehouse data.
 - For examples of adding models to dbt end-to-end (starting from raw data/external tables; this involves non-dbt code), see:
-    - [PR #2509](https://github.com/cal-itp/data-infra/pull/2509)
-    - [PR #2781](https://github.com/cal-itp/data-infra/pull/2781)
+  - [PR #2509](https://github.com/cal-itp/data-infra/pull/2509)
+  - [PR #2781](https://github.com/cal-itp/data-infra/pull/2781)
 
 (test-changes)=
 
@@ -293,7 +293,7 @@ To confirm that the grain is what you expect, you should check whether an antici
           <column 3>,
           COUNT(*) AS ct
       FROM tbl
-      -- adjust this based on the number of columns that make the composite unique key
+    -- adjust this based on the number of columns that make the composite unique key
       GROUP BY 1, 2, 3
       HAVING ct > 1
   )
@@ -317,11 +317,11 @@ If the model takes more than 100 GB to build, or if test queries seem to be read
 Below are a few options to improve performance. [Data infra PR #2711](https://github.com/cal-itp/data-infra/pull/2711) has examples of several different types of performance interventions.
 
 - If the model is expensive to **build**: First, try to figure out what specific steps are expensive. You can run individual portions of your model SQL in the BigQuery console to assess the performance of individual [CTEs](https://docs.getdbt.com/terms/cte).
-    - If the model involves transformations on a lot of data that doesn't need to be reprocessed every day, you may want to make the model [incremental](https://docs.getdbt.com/docs/build/incremental-models). You can run `poetry run dbt ls -s config.materialized:incremental --resource-type model` to see examples of other incremental models in the repo.
-    - If the model reads data from an expensive parent table, you may want to consider leveraging clustering or partitioning on that parent table to make a join or select more efficient. See [this comment on data infra PR #2743](https://github.com/cal-itp/data-infra/pull/2743#pullrequestreview-1570532320) for an example of a case where changing a join condition was a more appropriate performance intervention than making the table incremental.
+  - If the model involves transformations on a lot of data that doesn't need to be reprocessed every day, you may want to make the model [incremental](https://docs.getdbt.com/docs/build/incremental-models). You can run `poetry run dbt ls -s config.materialized:incremental --resource-type model` to see examples of other incremental models in the repo.
+  - If the model reads data from an expensive parent table, you may want to consider leveraging clustering or partitioning on that parent table to make a join or select more efficient. See [this comment on data infra PR #2743](https://github.com/cal-itp/data-infra/pull/2743#pullrequestreview-1570532320) for an example of a case where changing a join condition was a more appropriate performance intervention than making the table incremental.
 - If the model is expensive to **query**: The main interventions to make a model more efficient to query involve changing the data storage.
-    - Consider storing it as a [table rather than a view](https://docs.getdbt.com/docs/build/materializations).
-    - If the model is already a table, you can consider [partitioning](https://cloud.google.com/bigquery/docs/partitioned-tables) or [clustering](https://cloud.google.com/bigquery/docs/clustered-tables#when_to_use_clustering) on columns that will commonly be used as filters.
+  - Consider storing it as a [table rather than a view](https://docs.getdbt.com/docs/build/materializations).
+  - If the model is already a table, you can consider [partitioning](https://cloud.google.com/bigquery/docs/partitioned-tables) or [clustering](https://cloud.google.com/bigquery/docs/clustered-tables#when_to_use_clustering) on columns that will commonly be used as filters.
 
 ```{warning}
 Incremental models have two different run modes: **full refreshes** (which re-process all historical data available) and **incremental runs** that load data in batches based on your incremental logic. These two modes run different code.

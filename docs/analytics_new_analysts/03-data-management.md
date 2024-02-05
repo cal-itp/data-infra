@@ -7,18 +7,18 @@ Data Management is hard, and before you know it, you end up with `final_final_fi
 Below is a series of tips, tricks and use-cases for managing data throughout the lifecycle of a projects.
 
 - [Reading and Writing Data](#reading-and-writing-data)
-    - [GCS](#gcs)
-    - [Local Folders](#local-folders)
+  - [GCS](#gcs)
+  - [Local Folders](#local-folders)
 - [Formats and Use-Cases](#formats-and-use-cases)
-    - [CSVs](#csvs)
-    - [Excel / XLSX](#excel)
-    - [Parquet](#parquet)
-    - [Feather Files](#feather-files)
-    - [GeoJSON](#geojson)
-    - [Shapefiles](#shapefiles)
-    - [PBF (Protocolbuffer Binary Format)](#pbf-protocolbuffer-binary-format)
-    - [Databases](#databases)
-    - [Pickles](#pickles)
+  - [CSVs](#csvs)
+  - [Excel / XLSX](#excel)
+  - [Parquet](#parquet)
+  - [Feather Files](#feather-files)
+  - [GeoJSON](#geojson)
+  - [Shapefiles](#shapefiles)
+  - [PBF (Protocolbuffer Binary Format)](#pbf-protocolbuffer-binary-format)
+  - [Databases](#databases)
+  - [Pickles](#pickles)
 
 (reading-and-writing-data)=
 

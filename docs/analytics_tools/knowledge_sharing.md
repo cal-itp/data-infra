@@ -5,18 +5,18 @@
 Here are some resources data analysts have collected and referenced, that will hopefully help you out in your work. Have something you want to share? Create a new markdown file, add it [to the example report folder](https://github.com/cal-itp/data-analyses/tree/main/example_report), and [message Amanda.](https://app.slack.com/client/T014965JTHA/C013N8GELLF/user_profile/U02PCTPSZ8A)
 
 - [Data Analysis](#data-analysis)
-    - [Python](#python)
-    - [Pandas](#pandas)
-    - [Summarizing](#summarizing)
-    - [Merging](#merging)
-    - [Dates](#dates)
-    - [Monetary Values](#monetary-values)
+  - [Python](#python)
+  - [Pandas](#pandas)
+  - [Summarizing](#summarizing)
+  - [Merging](#merging)
+  - [Dates](#dates)
+  - [Monetary Values](#monetary-values)
 - [Visualizations](#visualization)
-    - [Charts](#charts)
-    - [Maps](#maps)
-    - [DataFrames](#dataframes)
-    - [Ipywidgets](#ipywidgets)
-    - [Markdown](#markdown)
+  - [Charts](#charts)
+  - [Maps](#maps)
+  - [DataFrames](#dataframes)
+  - [Ipywidgets](#ipywidgets)
+  - [Markdown](#markdown)
 
 (data-analysis)=
 
@@ -49,16 +49,16 @@ Here are some resources data analysts have collected and referenced, that will h
 - [Groupby and calculate a new value, then use that value within your DataFrame.](https://stackoverflow.com/questions/35640364/python-pandas-max-value-in-a-group-as-a-new-column)
 - [Explanation of the split-apply-combine paradigm.](https://stackoverflow.com/questions/30244952/how-do-i-create-a-new-column-from-the-output-of-pandas-groupby-sum)
 - [Pandas profiling tool: creates html reports from DataFrames.](https://github.com/ydataai/pandas-profiling)
-    - [Examples](https://pandas-profiling.ydata.ai/examples/master/census/census_report.html)
+  - [Examples](https://pandas-profiling.ydata.ai/examples/master/census/census_report.html)
 
 (merging)=
 
 ### Merging
 
 - When working with data sets where the "merge on" column is a string data type, it can be difficult to get the DataFrames to join. For example, df1 lists <i>County of Sonoma, Human Services Department, Adult and Aging Division</i>, but df2 references the same department as: <i>County of Sonoma (Human Services Department) </i>.
-    - Potential Solution #1: [fill in a column in one DataFrame that has a partial match with the string values in another one.](https://stackoverflow.com/questions/61811137/based-on-partial-string-match-fill-one-data-frame-column-from-another-dataframe)
-    - Potential Solution #2: [use the package fuzzymatcher. This will require you to carefully comb through for any bad matches.](https://pbpython.com/record-linking.html)
-    - Potential Solution #3: [if you don't have too many values, use a dictionary.](https://github.com/cal-itp/data-analyses/blob/main/drmt_grants/TIRCP_functions.py#:~:text=%23%23%23%20RECIPIENTS%20%23%23%23,%7D)
+  - Potential Solution #1: [fill in a column in one DataFrame that has a partial match with the string values in another one.](https://stackoverflow.com/questions/61811137/based-on-partial-string-match-fill-one-data-frame-column-from-another-dataframe)
+  - Potential Solution #2: [use the package fuzzymatcher. This will require you to carefully comb through for any bad matches.](https://pbpython.com/record-linking.html)
+  - Potential Solution #3: [if you don't have too many values, use a dictionary.](https://github.com/cal-itp/data-analyses/blob/main/drmt_grants/TIRCP_functions.py#:~:text=%23%23%23%20RECIPIENTS%20%23%23%23,%7D)
 
 (dates)=
 
@@ -82,7 +82,7 @@ df['financial_year'] = df['base_date'].map(lambda x: x.year if x.month > 3 else 
 ### Monetary Values
 
 - [Reformat values that are in scientific notation into millions or thousands.](https://github.com/d3/d3-format)
-    - [Example in notebook.](https://github.com/cal-itp/data-analyses/blob/30de5cd2fed3a37e2c9cfb661929252ad76f6514/dla/e76_obligated_funds/_dla_utils.py#L221)
+  - [Example in notebook.](https://github.com/cal-itp/data-analyses/blob/30de5cd2fed3a37e2c9cfb661929252ad76f6514/dla/e76_obligated_funds/_dla_utils.py#L221)
 
 ```python
     x=alt.X("Funding Amount", axis=alt.Axis(format="$.2s", title="Obligated Funding ($2021)"))
@@ -177,8 +177,8 @@ def add_tooltip(chart, tooltip1, tooltip2):
 
 - Create tabs to switch between different views.
 - [Stack Overflow Help.](https://stackoverflow.com/questions/50842160/how-to-display-matplotlib-plots-in-a-jupyter-tab-widget)
-    - [Notebook example.](https://github.com/cal-itp/data-analyses/blob/main/dla/e76_obligated_funds/charting_function_work.ipynb?short_path=1c01de9#L302333)
-    - [Example on Ipywidgets docs page.](https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20List.html#Tabs)
+  - [Notebook example.](https://github.com/cal-itp/data-analyses/blob/main/dla/e76_obligated_funds/charting_function_work.ipynb?short_path=1c01de9#L302333)
+  - [Example on Ipywidgets docs page.](https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20List.html#Tabs)
 
 (markdown)=
 
