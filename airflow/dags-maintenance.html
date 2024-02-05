@@ -669,7 +669,7 @@
 <p>We use <a class="reference external" href="https://airflow.apache.org/">Airflow</a> to orchestrate our data ingest processes. This page describes how to handle cases where an Airflow <a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/tasks.html">DAG task</a> fails. For general information about Airflow development, see the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/README.md">Airflow README in the data-infra GitHub repo</a>.</p>
 <div class="section" id="monitoring-dags">
 <h2>Monitoring DAGs<a class="headerlink" href="#monitoring-dags" title="Permalink to this headline">¶</a></h2>
-<p>When an Airflow DAG task fails, it will alert to the <code class="docutils literal notranslate"><span class="pre">#data-infra-alerts</span></code> channel in Slack.</p>
+<p>When an Airflow DAG task fails, it will alert to the <code class="docutils literal notranslate"><span class="pre">#alerts-data-infra</span></code> channel in Slack.</p>
 <p>In that case, someone should respond according to the considerations described below and in each individual DAG’s documentation (available in <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags">each DAG subdirectory</a> in the <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> GitHub repository).</p>
 <div class="section" id="considerations-for-re-running-or-clearing-dags">
 <h3>Considerations for re-running or clearing DAGs<a class="headerlink" href="#considerations-for-re-running-or-clearing-dags" title="Permalink to this headline">¶</a></h3>
