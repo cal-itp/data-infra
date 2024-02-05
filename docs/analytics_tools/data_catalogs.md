@@ -38,7 +38,7 @@ Data analysts tend to load their data from many heterogeneous sources (Databases
 
 `intake-dcat` is a tool for allowing intake to more easily interact with DCAT catalogs commonly found on open data portals.
 
-Refer to this [sample-catalog.yml](sample-catalog) to see how various data sources and file types are documented. Each dataset is given a human-readable name, with optional metadata associated.
+Refer to this [sample-catalog.yml](#sample-data-catalog) to see how various data sources and file types are documented. Each dataset is given a human-readable name, with optional metadata associated.
 
 File types that work within GCS buckets, URLs, or DCATs (open data catalogs):
 

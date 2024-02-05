@@ -77,7 +77,7 @@ df['n_days_between'] = (df['prepared_date'] - df.shift(1)['prepared_date']).dt.d
 df['financial_year'] = df['base_date'].map(lambda x: x.year if x.month > 3 else x.year-1)
 ```
 
-(monetary-values)-
+(monetary-values)=
 
 ### Monetary Values
 
@@ -141,7 +141,7 @@ def adjust_prices(df):
 - [Manually concatenate a bar chart and line chart to create a dual axis graph.](https://github.com/altair-viz/altair/issues/1934)
 - [Adjust the time units of a datetime column for an axis.](https://altair-viz.github.io/user_guide/transform/timeunit.html)
 - [Label the lines on a line chart.](https://stackoverflow.com/questions/61194028/adding-labels-at-end-of-line-chart-in-altair)
-- [Layer altair charts, lose color with no encoding, workaround to get different colors to appear on legend.](altair-viz/altair#1099)
+- [Layer altair charts, lose color with no encoding, workaround to get different colors to appear on legend.](https://github.com/altair-viz/altair/issues/1099)
 - [Add regression line to scatterplot.](https://stackoverflow.com/questions/61447422/quick-way-to-visualise-multiple-columns-in-altair-with-regression-lines)
 - [Adjust scales for axes to be the min and max values.](https://stackoverflow.com/questions/62281179/how-to-adjust-scale-ranges-in-altair)
 - [Resolving the error 'TypeError: Object of type 'Timestamp' is not JSON serializable'](https://github.com/altair-viz/altair/issues/1355)

@@ -25,13 +25,15 @@ Our team uses Google Cloud Storage (GCS) buckets, specifically the `calitp-analy
 2. [Storing New Data - Screencast](#storing-new-data-screencast)
 3. [Uploading Data from a Notebook](#uploading-from-notebook)
    <br> - [Tabular Data](#tabular-data)
-   <br> - [Parquet](#parquet)
+   <br> - [Parquet](#storing-data-parquet)
    <br> - [CSV](#csv)
    <br> - [Geospatial Data](#geospatial-data)
    <br> - [Geoparquet](#geoparquet)
    <br> - [Zipped shapefile](#zipped-shapefile)
-   <br> - [GeoJSON](#geojson)
+   <br> - [GeoJSON](#storing-data-geojson)
 4. [Uploading data in Google Cloud Storage](#in-gcs)
+
+(introduction)=
 
 ## Introduction
 
@@ -44,7 +46,7 @@ In order to save data being used in a report, you can use two methods:
 
 Watch the screencast below and read the additional information to begin.
 
-**Note**: To access Google Cloud Storage you will need to have set up your Google authentication. If you have yet to do so, [follow these instructions](connecting-to-warehouse).
+**Note**: To access Google Cloud Storage you will need to have set up your Google authentication. If you have yet to do so, [follow these instructions](https://docs.calitp.org/data-infra/analytics_tools/notebooks.html#connecting-to-warehouse).
 
 (storing-new-data-screencast)=
 
@@ -73,7 +75,7 @@ fs = get_fs()
 
 While GCS can store CSVs, parquets, Excel spreadsheets, etc, parquets are the preferred file type. Interacting with tabular datasets in GCS is fairly straightforward and is handled well by `pandas`.
 
-(parquet)=
+(storing-data-parquet)=
 
 #### Parquet
 
@@ -138,13 +140,13 @@ utils.geoparquet_gcs_export(
 
 #### Zipped Shapefile
 
-Refer to the [data catalogs doc](catalogue-cloud-storage) to list a zipped shapefile, and read in the zipped shapefile with the `intake` method. Zipped shapefiles saved in GCS cannot be read in directly using `geopandas`.
+Refer to the [data catalogs doc](data-catalogs) to list a zipped shapefile, and read in the zipped shapefile with the `intake` method. Zipped shapefiles saved in GCS cannot be read in directly using `geopandas`.
 
-(geojson)=
+(storing-data-geojson)=
 
 #### GeoJSON
 
-Refer to the [data catalogs doc](catalogue-cloud-storage) to list a GeoJSON, and read in the GeoJSON with the `intake` method. GeoJSONs saved in GCS cannot be read in directly using `geopandas`.
+Refer to the [data catalogs doc](data-catalogs) to list a GeoJSON, and read in the GeoJSON with the `intake` method. GeoJSONs saved in GCS cannot be read in directly using `geopandas`.
 
 Use the `calitp_data_analysis` package to read in or export geojsons.
 

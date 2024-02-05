@@ -17,7 +17,7 @@ Doing work locally and pushing directly from the command line is a similar workf
    - [External Git Resources](#external-git-resources)
    - [Committing in the Github User Interface](#pushing-drag-drop)
 
-(committing-from-jupyterhub)=
+(project-workflow)=
 
 ## Project Workflow
 
@@ -63,6 +63,8 @@ Read more about the differences between `rebase` and `merge`:
 - [Stack Overflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios)
   <br>
 
+(rebase)=
+
 #### Rebase
 
 Rebasing is an important tool to be familiar with and introduce into your workflow. The video and instructions below help to provide information on how to begin using it in your collaborations with the team.
@@ -79,6 +81,8 @@ A rebase might be preferred, especially if all your work is contained on your br
 6. At this point, the rebase may be successful, or you will have to address any conflicts! If you want to abort, use `git rebase --abort`. Changes in scripts will be easy to resolve, but notebook conflicts are difficult. If conflicts are easily resolved, open the file, make the changes, then `git add` the file(s), and `git rebase --continue`.
 7. Make any commits you want (from step 1) with `git add`, `git commit -m "commit message"`
 8. Force-push those changes to complete the rebase and rewrite the commit history: `git push origin my-new-branch -f`
+
+(merge)=
 
 #### Merge
 
