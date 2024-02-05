@@ -1,0 +1,307 @@
+location_name,off_location_name,distance_miles
+Auburn-Conheim,Berkeley,118.1
+Auburn-Conheim,Davis,48.9
+Auburn-Conheim,Emeryville,119.8
+Auburn-Conheim,Fairfield-Vacaville,70.6
+Auburn-Conheim,Fremont,149.9
+Auburn-Conheim,Great America-Santa Clara,161.3
+Auburn-Conheim,Hayward,138
+Auburn-Conheim,Martinez,92.6
+Auburn-Conheim,Oakland Coliseum,129.9
+Auburn-Conheim,Oakland Jack London,124.9
+Auburn-Conheim,Richmond,112.3
+Auburn-Conheim,Rocklin,13.6
+Auburn-Conheim,Roseville,17.9
+Auburn-Conheim,Sacramento,35.4
+Auburn-Conheim,San Jose,168.3
+Auburn-Conheim,Suisun-Fairfield,75.4
+Auburn-Conheim,University-Santa Clara,165.8
+Berkeley,Auburn-Conheim,118.1
+Berkeley,Davis,69.2
+Berkeley,Emeryville,1.7
+Berkeley,Fairfield-Vacaville,47.5
+Berkeley,Fremont,31.8
+Berkeley,Great America-Santa Clara,43.2
+Berkeley,Hayward,19.9
+Berkeley,Martinez,25.5
+Berkeley,Oakland Coliseum,11.8
+Berkeley,Oakland Jack London,6.8
+Berkeley,Richmond,5.8
+Berkeley,Rocklin,104.5
+Berkeley,Roseville,100.2
+Berkeley,Sacramento,82.7
+Berkeley,San Jose,50.2
+Berkeley,Suisun-Fairfield,42.7
+Berkeley,University-Santa Clara,47.7
+Davis,Auburn-Conheim,48.9
+Davis,Berkeley,69.2
+Davis,Emeryville,70.9
+Davis,Fairfield-Vacaville,21.7
+Davis,Fremont,101
+Davis,Great America-Santa Clara,112.4
+Davis,Hayward,89.1
+Davis,Martinez,43.7
+Davis,Oakland Coliseum,81
+Davis,Oakland Jack London,76
+Davis,Richmond,63.4
+Davis,Rocklin,35.3
+Davis,Roseville,31
+Davis,Sacramento,13.5
+Davis,San Jose,119.4
+Davis,Suisun-Fairfield,26.5
+Davis,University-Santa Clara,116.9
+Emeryville,Auburn-Conheim,119.8
+Emeryville,Berkeley,1.7
+Emeryville,Davis,70.9
+Emeryville,Fairfield-Vacaville,49.2
+Emeryville,Fremont,30.1
+Emeryville,Great America-Santa Clara,41.5
+Emeryville,Hayward,18.2
+Emeryville,Martinez,27.2
+Emeryville,Oakland Coliseum,10.1
+Emeryville,Oakland Jack London,5.1
+Emeryville,Richmond,7.5
+Emeryville,Rocklin,106.2
+Emeryville,Roseville,101.9
+Emeryville,Sacramento,84.4
+Emeryville,San Jose,48.5
+Emeryville,Suisun-Fairfield,44.4
+Emeryville,University-Santa Clara,46
+Fairfield-Vacaville,Auburn-Conheim,70.6
+Fairfield-Vacaville,Berkeley,47.5
+Fairfield-Vacaville,Davis,21.7
+Fairfield-Vacaville,Emeryville,49.2
+Fairfield-Vacaville,Fremont,79.3
+Fairfield-Vacaville,Great America-Santa Clara,90.7
+Fairfield-Vacaville,Hayward,67.4
+Fairfield-Vacaville,Martinez,22
+Fairfield-Vacaville,Oakland Coliseum,59.3
+Fairfield-Vacaville,Oakland Jack London,54.3
+Fairfield-Vacaville,Richmond,41.7
+Fairfield-Vacaville,Rocklin,57
+Fairfield-Vacaville,Roseville,52.7
+Fairfield-Vacaville,Sacramento,35.2
+Fairfield-Vacaville,San Jose,97.7
+Fairfield-Vacaville,Suisun-Fairfield,4.8
+Fairfield-Vacaville,University-Santa Clara,95.2
+Fremont,Auburn-Conheim,149.9
+Fremont,Berkeley,31.8
+Fremont,Davis,101
+Fremont,Emeryville,30.1
+Fremont,Fairfield-Vacaville,79.3
+Fremont,Great America-Santa Clara,11.4
+Fremont,Hayward,11.9
+Fremont,Martinez,57.3
+Fremont,Oakland Coliseum,20
+Fremont,Oakland Jack London,25
+Fremont,Richmond,37.6
+Fremont,Rocklin,136.3
+Fremont,Roseville,132
+Fremont,Sacramento,114.5
+Fremont,San Jose,18.4
+Fremont,Suisun-Fairfield,74.5
+Fremont,University-Santa Clara,15.9
+Great America-Santa Clara,Auburn-Conheim,161.3
+Great America-Santa Clara,Berkeley,43.2
+Great America-Santa Clara,Davis,112.4
+Great America-Santa Clara,Emeryville,41.5
+Great America-Santa Clara,Fairfield-Vacaville,90.7
+Great America-Santa Clara,Fremont,11.4
+Great America-Santa Clara,Hayward,23.3
+Great America-Santa Clara,Martinez,68.7
+Great America-Santa Clara,Oakland Coliseum,31.4
+Great America-Santa Clara,Oakland Jack London,36.4
+Great America-Santa Clara,Richmond,49
+Great America-Santa Clara,Rocklin,147.7
+Great America-Santa Clara,Roseville,143.4
+Great America-Santa Clara,Sacramento,125.9
+Great America-Santa Clara,San Jose,7
+Great America-Santa Clara,Suisun-Fairfield,85.9
+Great America-Santa Clara,University-Santa Clara,4.5
+Hayward,Auburn-Conheim,138
+Hayward,Berkeley,19.9
+Hayward,Davis,89.1
+Hayward,Emeryville,18.2
+Hayward,Fairfield-Vacaville,67.4
+Hayward,Fremont,11.9
+Hayward,Great America-Santa Clara,23.3
+Hayward,Martinez,45.4
+Hayward,Oakland Coliseum,8.1
+Hayward,Oakland Jack London,13.1
+Hayward,Richmond,25.7
+Hayward,Rocklin,124.4
+Hayward,Roseville,120.1
+Hayward,Sacramento,102.6
+Hayward,San Jose,30.3
+Hayward,Suisun-Fairfield,62.6
+Hayward,University-Santa Clara,27.8
+Martinez,Auburn-Conheim,92.6
+Martinez,Berkeley,25.5
+Martinez,Davis,43.7
+Martinez,Emeryville,27.2
+Martinez,Fairfield-Vacaville,22
+Martinez,Fremont,57.3
+Martinez,Great America-Santa Clara,68.7
+Martinez,Hayward,45.4
+Martinez,Oakland Coliseum,37.3
+Martinez,Oakland Jack London,32.3
+Martinez,Richmond,19.7
+Martinez,Rocklin,79
+Martinez,Roseville,74.7
+Martinez,Sacramento,57.2
+Martinez,San Jose,75.7
+Martinez,Suisun-Fairfield,17.2
+Martinez,University-Santa Clara,73.2
+Oakland Coliseum,Auburn-Conheim,129.9
+Oakland Coliseum,Berkeley,11.8
+Oakland Coliseum,Davis,81
+Oakland Coliseum,Emeryville,10.1
+Oakland Coliseum,Fairfield-Vacaville,59.3
+Oakland Coliseum,Fremont,20
+Oakland Coliseum,Great America-Santa Clara,31.4
+Oakland Coliseum,Hayward,8.1
+Oakland Coliseum,Martinez,37.3
+Oakland Coliseum,Oakland Jack London,5
+Oakland Coliseum,Richmond,17.6
+Oakland Coliseum,Rocklin,116.3
+Oakland Coliseum,Roseville,112
+Oakland Coliseum,Sacramento,94.5
+Oakland Coliseum,San Jose,38.4
+Oakland Coliseum,Suisun-Fairfield,54.5
+Oakland Coliseum,University-Santa Clara,35.9
+Oakland Jack London,Auburn-Conheim,124.9
+Oakland Jack London,Berkeley,6.8
+Oakland Jack London,Davis,76
+Oakland Jack London,Emeryville,5.1
+Oakland Jack London,Fairfield-Vacaville,54.3
+Oakland Jack London,Fremont,25
+Oakland Jack London,Great America-Santa Clara,36.4
+Oakland Jack London,Hayward,13.1
+Oakland Jack London,Martinez,32.3
+Oakland Jack London,Oakland Coliseum,5
+Oakland Jack London,Richmond,12.6
+Oakland Jack London,Rocklin,111.3
+Oakland Jack London,Roseville,107
+Oakland Jack London,Sacramento,89.5
+Oakland Jack London,San Jose,43.4
+Oakland Jack London,Suisun-Fairfield,49.5
+Oakland Jack London,University-Santa Clara,40.9
+Richmond,Auburn-Conheim,112.3
+Richmond,Berkeley,5.8
+Richmond,Davis,63.4
+Richmond,Emeryville,7.5
+Richmond,Fairfield-Vacaville,41.7
+Richmond,Fremont,37.6
+Richmond,Great America-Santa Clara,49
+Richmond,Hayward,25.7
+Richmond,Martinez,19.7
+Richmond,Oakland Coliseum,17.6
+Richmond,Oakland Jack London,12.6
+Richmond,Rocklin,98.7
+Richmond,Roseville,94.4
+Richmond,Sacramento,76.9
+Richmond,San Jose,56
+Richmond,Suisun-Fairfield,36.9
+Richmond,University-Santa Clara,53.5
+Rocklin,Auburn-Conheim,13.6
+Rocklin,Berkeley,104.5
+Rocklin,Davis,35.3
+Rocklin,Emeryville,106.2
+Rocklin,Fairfield-Vacaville,57
+Rocklin,Fremont,136.3
+Rocklin,Great America-Santa Clara,147.7
+Rocklin,Hayward,124.4
+Rocklin,Martinez,79
+Rocklin,Oakland Coliseum,116.3
+Rocklin,Oakland Jack London,111.3
+Rocklin,Richmond,98.7
+Rocklin,Roseville,4.3
+Rocklin,Sacramento,21.8
+Rocklin,San Jose,154.7
+Rocklin,Suisun-Fairfield,61.8
+Rocklin,University-Santa Clara,152.2
+Roseville,Auburn-Conheim,17.9
+Roseville,Berkeley,100.2
+Roseville,Davis,31
+Roseville,Emeryville,101.9
+Roseville,Fairfield-Vacaville,52.7
+Roseville,Fremont,132
+Roseville,Great America-Santa Clara,143.4
+Roseville,Hayward,120.1
+Roseville,Martinez,74.7
+Roseville,Oakland Coliseum,112
+Roseville,Oakland Jack London,107
+Roseville,Richmond,94.4
+Roseville,Rocklin,4.3
+Roseville,Sacramento,17.5
+Roseville,San Jose,150.4
+Roseville,Suisun-Fairfield,57.5
+Roseville,University-Santa Clara,147.9
+Sacramento,Auburn-Conheim,35.4
+Sacramento,Berkeley,82.7
+Sacramento,Davis,13.5
+Sacramento,Emeryville,84.4
+Sacramento,Fairfield-Vacaville,35.2
+Sacramento,Fremont,114.5
+Sacramento,Great America-Santa Clara,125.9
+Sacramento,Hayward,102.6
+Sacramento,Martinez,57.2
+Sacramento,Oakland Coliseum,94.5
+Sacramento,Oakland Jack London,89.5
+Sacramento,Richmond,76.9
+Sacramento,Rocklin,21.8
+Sacramento,Roseville,17.5
+Sacramento,San Jose,132.9
+Sacramento,Suisun-Fairfield,40
+Sacramento,University-Santa Clara,130.4
+San Jose,Auburn-Conheim,168.3
+San Jose,Berkeley,50.2
+San Jose,Davis,119.4
+San Jose,Emeryville,48.5
+San Jose,Fairfield-Vacaville,97.7
+San Jose,Fremont,18.4
+San Jose,Great America-Santa Clara,7
+San Jose,Hayward,30.3
+San Jose,Martinez,75.7
+San Jose,Oakland Coliseum,38.4
+San Jose,Oakland Jack London,43.4
+San Jose,Richmond,56
+San Jose,Rocklin,154.7
+San Jose,Roseville,150.4
+San Jose,Sacramento,132.9
+San Jose,Suisun-Fairfield,92.9
+San Jose,University-Santa Clara,2.5
+Suisun-Fairfield,Auburn-Conheim,75.4
+Suisun-Fairfield,Berkeley,42.7
+Suisun-Fairfield,Davis,26.5
+Suisun-Fairfield,Emeryville,44.4
+Suisun-Fairfield,Fairfield-Vacaville,4.8
+Suisun-Fairfield,Fremont,74.5
+Suisun-Fairfield,Great America-Santa Clara,85.9
+Suisun-Fairfield,Hayward,62.6
+Suisun-Fairfield,Martinez,17.2
+Suisun-Fairfield,Oakland Coliseum,54.5
+Suisun-Fairfield,Oakland Jack London,49.5
+Suisun-Fairfield,Richmond,36.9
+Suisun-Fairfield,Rocklin,61.8
+Suisun-Fairfield,Roseville,57.5
+Suisun-Fairfield,Sacramento,40
+Suisun-Fairfield,San Jose,92.9
+Suisun-Fairfield,University-Santa Clara,90.4
+University-Santa Clara,Auburn-Conheim,165.8
+University-Santa Clara,Berkeley,47.7
+University-Santa Clara,Davis,116.9
+University-Santa Clara,Emeryville,46
+University-Santa Clara,Fairfield-Vacaville,95.2
+University-Santa Clara,Fremont,15.9
+University-Santa Clara,Great America-Santa Clara,4.5
+University-Santa Clara,Hayward,27.8
+University-Santa Clara,Martinez,73.2
+University-Santa Clara,Oakland Coliseum,35.9
+University-Santa Clara,Oakland Jack London,40.9
+University-Santa Clara,Richmond,53.5
+University-Santa Clara,Rocklin,152.2
+University-Santa Clara,Roseville,147.9
+University-Santa Clara,Sacramento,130.4
+University-Santa Clara,San Jose,2.5
+University-Santa Clara,Suisun-Fairfield,90.4
