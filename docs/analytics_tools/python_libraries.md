@@ -27,11 +27,11 @@ The following libraries are available and recommended for use by Cal-ITP data an
    <br> - [Basic Query](#basic-query)
    <br> - [Collect Query Results](#collect-query-results)
    <br> - [Show Query SQL](#show-query-sql)
-   <br> - [More siuba Resources](more-siuba-resources)
-4. [pandas](pandas-resources)
+   <br> - [More siuba Resources](#more-siuba-resources)
+4. [pandas](#pandas-resources)
 5. [Add New Packages](#add-new-packages)
 6. [Updating calitp-data-analysis](#updating-calitp-data-analysis)
-7. [Appendix: calitp-data-infra](appendix)
+7. [Appendix: calitp-data-infra](#appendix)
 
 (shared-utils)=
 
@@ -43,13 +43,13 @@ A set of shared utility functions can also be installed, similarly to any Python
 
 - Navigate to the package folder: `cd data-analyses/_shared_utils`
 - Use the make command to run through conda install and pip install: `make setup_env`
-  - Note: you may need to select Kernel -> Restart Kernel from the top menu after make setup_env in order to successfully import shared_utils
+    - Note: you may need to select Kernel -> Restart Kernel from the top menu after make setup_env in order to successfully import shared_utils
 - Alternative: add an `alias` to your `.bash_profile`:
-  - In terminal use `cd` to navigate to the home directory (not a repository)
-  - Type `nano .bash_profile` to open the .bash_profile in a text editor
-  - Add a line at end: `alias go='cd ~/data-analyses/portfolio && pip install -r requirements.txt && cd ../_shared_utils && make setup_env && cd ..'`
-  - Exit with Ctrl+X, hit yes, then hit enter at the filename prompt
-  - Restart your server; you can check your changes with `cat .bash_profile`
+    - In terminal use `cd` to navigate to the home directory (not a repository)
+    - Type `nano .bash_profile` to open the .bash_profile in a text editor
+    - Add a line at end: `alias go='cd ~/data-analyses/portfolio && pip install -r requirements.txt && cd ../_shared_utils && make setup_env && cd ..'`
+    - Exit with Ctrl+X, hit yes, then hit enter at the filename prompt
+    - Restart your server; you can check your changes with `cat .bash_profile`
 
 ### In notebook
 
@@ -116,6 +116,8 @@ It supports most [pandas Series methods](https://pandas.pydata.org/pandas-docs/s
 The examples below go through the basics of using siuba, collecting a database query to a local DataFrame,
 and showing SQL test queries that siuba code generates.
 
+(basic-query)=
+
 ### Basic query
 
 ```{code-cell}
@@ -130,6 +132,8 @@ from siuba import _, filter, count, collect, show_query
 )
 ```
 
+(collect-query-results)=
+
 ### Collect query results
 
 Note that siuba by default prints out a preview of the SQL query results.
@@ -142,6 +146,8 @@ tbl_agency_names = tbls.mart_gtfs.dim_agency() >> collect()
 tbl_agency_names.head()
 
 ```
+
+(show-query-sql)=
 
 ### Show query SQL
 
@@ -171,6 +177,8 @@ Note that here the pandas Series method `str.contains` corresponds to `regexp_co
 The library pandas is very commonly used in data analysis, and the external resources below provide a brief overview of it's use.
 
 - [Cheat Sheet - pandas](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
+
+(add-new-packages)=
 
 ## Add New Packages
 

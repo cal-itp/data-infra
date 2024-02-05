@@ -22,8 +22,8 @@ Our team uses Google Cloud Storage (GCS) buckets, specifically the `calitp-analy
 ## Table of Contents
 
 1. [Introduction](#introduction)
-2. [Storing New Data - Screencast](storing-new-data-screencast)
-3. [Uploading Data from a Notebook](uploading-from-notebook)
+2. [Storing New Data - Screencast](#storing-new-data-screencast)
+3. [Uploading Data from a Notebook](#uploading-from-notebook)
    <br> - [Tabular Data](#tabular-data)
    <br> - [Parquet](#parquet)
    <br> - [CSV](#csv)
@@ -31,7 +31,7 @@ Our team uses Google Cloud Storage (GCS) buckets, specifically the `calitp-analy
    <br> - [Geoparquet](#geoparquet)
    <br> - [Zipped shapefile](#zipped-shapefile)
    <br> - [GeoJSON](#geojson)
-4. [Uploading data in Google Cloud Storage](in-gcs)
+4. [Uploading data in Google Cloud Storage](#in-gcs)
 
 ## Introduction
 
@@ -67,9 +67,13 @@ from calitp_data_analysis import get_fs
 fs = get_fs()
 ```
 
+(tabular-data)=
+
 ### Tabular Data
 
 While GCS can store CSVs, parquets, Excel spreadsheets, etc, parquets are the preferred file type. Interacting with tabular datasets in GCS is fairly straightforward and is handled well by `pandas`.
+
+(parquet)=
 
 #### Parquet
 
@@ -83,6 +87,8 @@ df = pd.read_parquet('gs://calitp-analytics-data/data-analyses/task-subfolder/te
 df.to_parquet('gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet')
 ```
 
+(csv)=
+
 #### CSV
 
 ```python
@@ -91,9 +97,13 @@ df = pd.read_csv('gs://calitp-analytics-data/data-analyses/task-subfolder/test.c
 df.to_csv('gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet')
 ```
 
+(geospatial-data)=
+
 ### Geospatial Data
 
 Geospatial data may require a little extra work, due to how `geopandas` and GCS interacts.
+
+(geoparquet)=
 
 #### Geoparquet
 
@@ -124,9 +134,13 @@ utils.geoparquet_gcs_export(
 )
 ```
 
+(zipped-shapefile)=
+
 #### Zipped Shapefile
 
 Refer to the [data catalogs doc](catalogue-cloud-storage) to list a zipped shapefile, and read in the zipped shapefile with the `intake` method. Zipped shapefiles saved in GCS cannot be read in directly using `geopandas`.
+
+(geojson)=
 
 #### GeoJSON
 
@@ -158,6 +172,6 @@ utils.geojson_gcs_export(
 
 ## Uploading data in Google Cloud Storage
 
-You can access the cloud bucket from the web from https://console.cloud.google.com/storage/browser/calitp-analytics-data.
+You can access the cloud bucket from the web from [https://console.cloud.google.com/storage/browser/calitp-analytics-data](https://console.cloud.google.com/storage/browser/calitp-analytics-data).
 
 See the above screencast for a walkthrough of using the bucket.

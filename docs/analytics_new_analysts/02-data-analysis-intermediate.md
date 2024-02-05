@@ -10,11 +10,13 @@ After polishing off the [intro tutorial](pandas-intro), you're ready to devour s
 
 ## Getting Started
 
-```
+```python
 import numpy as np
 import pandas as pd
 import geopandas as gpd
 ```
+
+(create-a-new-column-using-a-dictionary-to-map-the-values)=
 
 ### Create a New Column Using a Dictionary to Map the Values
 
@@ -33,7 +35,7 @@ Sometimes, you want to create a new column by converting one set of values into 
 
 [Quick refresher on functions](pandas-intro)
 
-```
+```python
 # Create a function called state_abbrev.
 def state_abbrev(row):
     # The find function returns the index of where 'Indiana' is found in
@@ -56,7 +58,7 @@ df['State'] = df.apply(state_abbrev, axis = 1)
 
 But, writing a function could take up a lot of space, especially with all the if-elif-else statements. Alternatively, a dictionary would also work. We could use a dictionary and map the four different city-state values into the state abbreviation.
 
-```
+```python
 state_abbrev1 = {'Eagleton, Indiana': 'IN', 'South Carolina': 'SC',
                 'Michigan': 'MI', 'Partridge, Minnesota': 'MN'}
 
@@ -65,7 +67,7 @@ df['State'] = df.Birthplace.map(state_abbrev1)
 
 But, if we wanted to avoid writing out all the possible combinations, we would first extract the *state* portion of the city-state text. Then we could map the state's full name with its abbreviation.
 
-```
+```python
 # The split function splits at the comma and expand the columns.
 # Everything is stored in a new df called 'fullname'.
 fullname = df['Birthplace'].str.split(",", expand = True)
@@ -101,11 +103,13 @@ All 3 methods would give us this `df`:
 | Ann Perkins   | Michigan             | MI    |
 | Ben Wyatt     | Partridge, Minnesota | MN    |
 
+(loop-over-columns-with-a-dictionary)=
+
 ### Loop over Columns with a Dictionary
 
 If there are operations or data transformations that need to be performed on multiple columns, the best way to do that is with a loop.
 
-```
+```python
 columns = ['colA', 'colB', 'colC']
 
 for c in columns:
@@ -114,6 +118,8 @@ for c in columns:
     # Multiply all columns by 0.5
     df[c] = df[c] * 0.5
 ```
+
+(loop-over-dataframes-with-a-dictionary)=
 
 ### Loop over Dataframes with a Dictionary
 
@@ -138,7 +144,7 @@ This type of question is perfect for a loop. Each df will be spatially joined to
 | Entertainment 720 | x2        | y2       | 1              | Point(x2, y2) |
 | Rent-A-Swag       | x3        | y3       | 4              | Point(x3, y3) |
 
-```
+```python
 # Save our existing dfs into a dictionary. The business df is named
 # 'pawnee"; the tom df is named 'tom'.
 dfs = {'pawnee': business, 'tom': tom}
@@ -166,7 +172,7 @@ for key, value in dfs.items():
 
 Now, our `summary_dfs` dictionary contains 2 items, which are the 2 dataframes with everything aggregated.
 
-```
+```python
 # To view the contents of this dictionary
 for key, value in summary_dfs.items():
     display(key)

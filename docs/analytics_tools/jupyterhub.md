@@ -23,11 +23,15 @@ Analyses on JupyterHub are accomplished using notebooks, which allow users to mi
 09. [Jupyter Notebook Best Practices](notebook-shortcuts)
 10. [Developing warehouse models in Jupyter](jupyterhub-warehouse)
 
+(using-jupyterhub)=
+
 ## Using JupyterHub
 
 For Python users, we have deployed a cloud-based instance of JupyterHub to make creating, using, and sharing notebooks easy.
 
 This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.
+
+(logging-in-to-jupyterhub)=
 
 ### Logging in to JupyterHub
 
@@ -35,7 +39,7 @@ JupyterHub currently lives at [notebooks.calitp.org](https://notebooks.calitp.or
 
 Note: you will need to have been added to the Cal-ITP organization on GitHub to obtain access. If you have yet to be added to the organization and need to be, ask in the `#services-team` channel in Slack.
 
-(connecting-to-warehouse)=
+(connecting-to-the-warehouse)=
 
 ### Connecting to the Warehouse
 
@@ -63,6 +67,8 @@ gcloud auth application-default login
 
 If you are still not able to connect, make sure you have the suite of permissions associated with other analysts.
 
+(increasing-the-query-limit)=
+
 ### Increasing the Query Limit
 
 By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into `DatabaseError: 500 Query exceeded limit for bytes billed` should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit, add and execute the following in your notebook:
@@ -76,7 +82,7 @@ os.environ["CALITP_BQ_MAX_BYTES"] = str(20_000_000_000)
 tbls._init()
 ```
 
-(querying-sql-jupyterhub)=
+(increasing-the-storage-limit)=
 
 ### Increasing the Storage Limit
 
@@ -87,6 +93,8 @@ If a JupyterHub user experiences an error indicating `no space left on device` o
 After making the configuration change in GKE, shut down and restart the user's JupyterHub instance. If the first restart attempt times out, try again once or twice - it can take a moment for the scaleup to complete and properly link the storage volume to the JupyterHub instance.
 
 100GB should generally be more than enough for a given user - if somebody's storage has already been set to 100GB and they hit a space limit again, that may indicate a need to clean up past work rather than a need to increase available storage.
+
+(querying-sql-jupyterhub)=
 
 ### Querying with SQL in JupyterHub
 
@@ -130,6 +138,8 @@ Use [this link](committing-from-jupyterhub) to navigate to the `Saving Code` sec
 - [Adding a GitHub SSH Key to Jupyter](authenticating-github-jupyter)
 - [Persisting your SSH Key and Enabling Extensions](persisting-ssh-and-extensions)
 - [Cloning a Repository](cloning-a-repository)
+
+(environment-variables)=
 
 ### Environment Variables
 

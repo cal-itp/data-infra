@@ -13,11 +13,13 @@ Below are short demos of common techniques to help get you started with explorin
 
 ## Getting Started
 
-```
+```python
 # Import Python packages
 import pandas as pd
 import geopandas as gpd
 ```
+
+(merge-tabular-and-geospatial-data)=
 
 ## Merge Tabular and Geospatial Data
 
@@ -41,7 +43,7 @@ We have two files: Council District boundaries (geospatial) and population value
 
 We could merge these two dfs using the District and CD columns. If our left df is a geodataframe (gdf), then our merged df will also be a gdf.
 
-```
+```python
 merge = pd.merge(gdf, df, left_on = 'District', right_on = 'CD')
 merge
 ```
@@ -52,13 +54,15 @@ merge
 | 2        | polygon  | 2   | Jeremy Jamm     | 2,000      |
 | 3        | polygon  | 3   | Douglass Howser | 2,250      |
 
+(attach-geographic-characteristics-to-all-points-or-lines-that-fall-within-a-boundary)=
+
 ## Attach Geographic Characteristics to All Points or Lines That Fall Within a Boundary
 
 Sometimes with a point shapefile (list of lat/lon points), we want to count how many points fall within the boundary. Unlike the previous example, these points aren't attached with Council District information, so we need to generate that ourselves.
 
 The ArcGIS equivalent of this is a **spatial join** between the point and polygon shapefiles, then **dissolving** to calculate summary statistics.
 
-```
+```python
 locations = gpd.read_file('../folder/paunch_burger_locations.geojson')
 gdf = gpd.read_file('../folder/council_boundaries.geojson')
 
@@ -91,7 +95,7 @@ gdf = gdf.to_crs('EPSG:4326')
 
 A spatial join finds the Council District the location falls within and attaches that information.
 
-```
+```python
 join = gpd.sjoin(locations, gdf, how = 'inner', predicate = 'intersects')
 
 # how = 'inner' means that we only want to keep observations that matched,
@@ -110,11 +114,13 @@ The `join` gdf looks like this. We lost Stores 4 (Eagleton) and 7 (Indianapolis)
 | 5     | Pawnee | $4             | (x5, y5)   | 1        | polygon    |
 | 6     | Pawnee | $6             | (x6, y6)   | 2        | polygon    |
 
+(aggregate-and-calculate-summary-statistics)=
+
 ## Aggregate and Calculate Summary Statistics
 
 We want to count the number of Paunch Burger locations and their total sales within each District.
 
-```
+```python
 
 summary = join.pivot_table(
     index = ['District'],
@@ -150,13 +156,15 @@ summary
 
 By keeping the `Geometry` column, we're able to export this as a GeoJSON or shapefile.
 
-```
+```python
 summary.to_file(driver = 'GeoJSON',
     filename = '../folder/pawnee_sales_by_district.geojson')
 
 summary.to_file(driver = 'ESRI Shapefile',
     filename = '../folder/pawnee_sales_by_district.shp')
 ```
+
+(buffers)=
 
 ## Buffers
 
@@ -193,7 +201,7 @@ We start with two point shapefiles: `locations` (Paunch Burger locations) and `h
 
 First, prepare our point gdf and change it to the right projection. Pawnee is in Indiana, so we'll use EPSG:2965.
 
-```
+```python
 # Use NAD83/Indiana East projection (units are in feet)
 homes = homes.to_crs('EPSG:2965')
 locations = locations.to_crs('EPSG:2965')
@@ -201,7 +209,7 @@ locations = locations.to_crs('EPSG:2965')
 
 Next, draw a 2 mile buffer around `homes`.
 
-```
+```python
 # Make a copy of the homes gdf
 homes_buffer = homes.copy()
 
@@ -215,7 +223,7 @@ homes_buffer['geometry'] = homes.geometry.buffer(two_miles)
 
 Do a spatial join between `locations` and `homes_buffer`. Repeat the process of spatial join and aggregation in Python as illustrated in the previous section (spatial join and dissolve in ArcGIS).
 
-```
+```python
 sjoin = gpd.sjoin(
     locations,
     homes_buffer,
@@ -240,7 +248,7 @@ sjoin
 
 Count the number of Paunch Burger locations for each friend.
 
-```
+```python
 count = sjoin.pivot_table(index = 'Name',
     values = 'Store', aggfunc = 'count').reset_index()
 

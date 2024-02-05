@@ -6,15 +6,16 @@ Information related to contributing to the [Cal-ITP dbt project](https://github.
 
 ## What is dbt?
 
-[dbt](https://docs.getdbt.com/docs/introduction#the-power-of-dbt) is the tool we use to manage the data models (tables and views) in our BigQuery data warehouse. We use dbt to define the SQL code that creates our data models, to manage dependencies between models, to document models, and to test models. 
+[dbt](https://docs.getdbt.com/docs/introduction#the-power-of-dbt) is the tool we use to manage the data models (tables and views) in our BigQuery data warehouse. We use dbt to define the SQL code that creates our data models, to manage dependencies between models, to document models, and to test models.
 
-The [Cal-ITP dbt project](https://github.com/cal-itp/data-infra/tree/main/warehouse) runs every day, [orchestrated by Airflow](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse). When the dbt project runs, it refreshes all the data in the warehouse by running all the queries within the project in order based on the dependencies defined between models. For example, if model B depends on model A, the project will execute model A before model B. 
+The [Cal-ITP dbt project](https://github.com/cal-itp/data-infra/tree/main/warehouse) runs every day, [orchestrated by Airflow](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse). When the dbt project runs, it refreshes all the data in the warehouse by running all the queries within the project in order based on the dependencies defined between models. For example, if model B depends on model A, the project will execute model A before model B.
 
 ### dbt project structure
 
-The dbt project (specifically [the `models/` directory](https://github.com/cal-itp/data-infra/tree/main/warehouse/models)) is broken out into data processing stages, broadly according to the [standard outlined by dbt](https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview#guide-structure-overview). You can read dbt documentation on the purpose of [staging](https://docs.getdbt.com/best-practices/how-we-structure/2-staging#staging-models), [intermediate](https://docs.getdbt.com/best-practices/how-we-structure/3-intermediate#intermediate-models), and [mart](https://docs.getdbt.com/best-practices/how-we-structure/4-marts#marts-models) models. 
+The dbt project (specifically [the `models/` directory](https://github.com/cal-itp/data-infra/tree/main/warehouse/models)) is broken out into data processing stages, broadly according to the [standard outlined by dbt](https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview#guide-structure-overview). You can read dbt documentation on the purpose of [staging](https://docs.getdbt.com/best-practices/how-we-structure/2-staging#staging-models), [intermediate](https://docs.getdbt.com/best-practices/how-we-structure/3-intermediate#intermediate-models), and [mart](https://docs.getdbt.com/best-practices/how-we-structure/4-marts#marts-models) models.
 
 Project level configuration lives in two separate places:
+
 * `dbt_project.yml` ([dbt documentation](https://docs.getdbt.com/reference/dbt_project.yml), [our file](https://github.com/cal-itp/data-infra/blob/main/warehouse/dbt_project.yml)): This contains information about the dbt project structure, for example configuring how the folder structure should be interpreted.
 * `profiles.yml` ([dbt documentation](https://docs.getdbt.com/docs/core/connect-data-platform/profiles.yml), [production file (should be used for prod runs only)](https://github.com/cal-itp/data-infra/blob/main/warehouse/profiles.yml), [template for local/testing use](https://github.com/cal-itp/data-infra/tree/main/warehouse#clone-and-install-the-warehouse-project)): This contains information about how the dbt project should connect to our cloud warehouse (BigQuery) and configures settings associated with that database connection, for example, what the query timeout should be.
 
@@ -43,7 +44,7 @@ We recommend that everyone who does dbt development joins the  [`#data-warehouse
 
 ```{admonition} See next section for modeling considerations
 This section describes the high-level mechanics/process of the developer workflow to edit the dbt project.
-**Please read the [next section](developing_dbt_models#modeling-considerations) for things you should consider from the data modeling perspective.**
+**Please read the [next section](#modeling-considerations) for things you should consider from the data modeling perspective.**
 ```
 
 To develop dbt models, you can edit the `.sql` files for your models, save your changes, and then [run the model from the command line](https://github.com/cal-itp/data-infra/tree/main/warehouse#dbt-commands) to execute the SQL you updated.
@@ -52,7 +53,7 @@ To inspect tables as you are working, the fastest method is usually to run some 
 
 When you run dbt commands locally or on JupyterHub, your models will be created in the `cal-itp-data-infra-staging.<your name>_<dbt folder name, like mart_gtfs>` BigQuery dataset. Note that this is in the `cal-itp-data-infra-staging` Google Cloud Platform project, *not* the production `cal-itp-data-infra` project.
 
-Once your models are working the way you want and you have added all necessary documentation and tests in YAML files ([see below](developing_dbt_models#modeling-considerations) for more on modeling, documentation, and testing considerations), you are ready to merge.
+Once your models are working the way you want and you have added all necessary documentation and tests in YAML files ([see below](#modeling-considerations) for more on modeling, documentation, and testing considerations), you are ready to merge.
 
 Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against `main` when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging.
 
@@ -194,8 +195,8 @@ Here are a few example `data-infra` PRs that added columns to existing models:
 
 - [PR #2778](https://github.com/cal-itp/data-infra/pull/2778) is a simple example of adding a column that already exists in staging to a mart table.
 - For intermediate examples of adding a column in a staging table and propagating it through a few different downstream models, see
-  - [PR #2768](https://github.com/cal-itp/data-infra/pull/2768)
-  - [PR #2601](https://github.com/cal-itp/data-infra/pull/2686)
+    - [PR #2768](https://github.com/cal-itp/data-infra/pull/2768)
+    - [PR #2601](https://github.com/cal-itp/data-infra/pull/2686)
 - [PR #2383](https://github.com/cal-itp/data-infra/pull/2383) adds a column to Airtable data end-to-end (starting from the raw data/external tables; this involves non-dbt code).
 
 #### Example new model PRs
@@ -204,8 +205,8 @@ Here are a few `data-infra` PRs that created brand new models:
 
 - [PR #2686](https://github.com/cal-itp/data-infra/pull/2686) created a new model based on existing warehouse data.
 - For examples of adding models to dbt end-to-end (starting from raw data/external tables; this involves non-dbt code), see:
-  - [PR #2509](https://github.com/cal-itp/data-infra/pull/2509)
-  - [PR #2781](https://github.com/cal-itp/data-infra/pull/2781)
+    - [PR #2509](https://github.com/cal-itp/data-infra/pull/2509)
+    - [PR #2781](https://github.com/cal-itp/data-infra/pull/2781)
 
 (test-changes)=
 
@@ -316,11 +317,11 @@ If the model takes more than 100 GB to build, or if test queries seem to be read
 Below are a few options to improve performance. [Data infra PR #2711](https://github.com/cal-itp/data-infra/pull/2711) has examples of several different types of performance interventions.
 
 - If the model is expensive to **build**: First, try to figure out what specific steps are expensive. You can run individual portions of your model SQL in the BigQuery console to assess the performance of individual [CTEs](https://docs.getdbt.com/terms/cte).
-  - If the model involves transformations on a lot of data that doesn't need to be reprocessed every day, you may want to make the model [incremental](https://docs.getdbt.com/docs/build/incremental-models). You can run `poetry run dbt ls -s config.materialized:incremental --resource-type model` to see examples of other incremental models in the repo.
-  - If the model reads data from an expensive parent table, you may want to consider leveraging clustering or partitioning on that parent table to make a join or select more efficient. See [this comment on data infra PR #2743](https://github.com/cal-itp/data-infra/pull/2743#pullrequestreview-1570532320) for an example of a case where changing a join condition was a more appropriate performance intervention than making the table incremental.
+    - If the model involves transformations on a lot of data that doesn't need to be reprocessed every day, you may want to make the model [incremental](https://docs.getdbt.com/docs/build/incremental-models). You can run `poetry run dbt ls -s config.materialized:incremental --resource-type model` to see examples of other incremental models in the repo.
+    - If the model reads data from an expensive parent table, you may want to consider leveraging clustering or partitioning on that parent table to make a join or select more efficient. See [this comment on data infra PR #2743](https://github.com/cal-itp/data-infra/pull/2743#pullrequestreview-1570532320) for an example of a case where changing a join condition was a more appropriate performance intervention than making the table incremental.
 - If the model is expensive to **query**: The main interventions to make a model more efficient to query involve changing the data storage.
-  - Consider storing it as a [table rather than a view](https://docs.getdbt.com/docs/build/materializations).
-  - If the model is already a table, you can consider [partitioning](https://cloud.google.com/bigquery/docs/partitioned-tables) or [clustering](https://cloud.google.com/bigquery/docs/clustered-tables#when_to_use_clustering) on columns that will commonly be used as filters.
+    - Consider storing it as a [table rather than a view](https://docs.getdbt.com/docs/build/materializations).
+    - If the model is already a table, you can consider [partitioning](https://cloud.google.com/bigquery/docs/partitioned-tables) or [clustering](https://cloud.google.com/bigquery/docs/clustered-tables#when_to_use_clustering) on columns that will commonly be used as filters.
 
 ```{warning}
 Incremental models have two different run modes: **full refreshes** (which re-process all historical data available) and **incremental runs** that load data in batches based on your incremental logic. These two modes run different code.

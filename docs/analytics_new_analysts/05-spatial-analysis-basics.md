@@ -63,6 +63,8 @@ utils.geoparquet_gcs_export(gdf, GCS_FILE_PATH, FILE_NAME)
 
 Additional general information about various file types can be found in the [Data Management section](data-management-page).
 
+(setting-and-projecting-coordinate-reference-system)=
+
 ## Setting and Projecting Coordinate Reference System
 
 A coordinate reference system (CRS) tells geopandas how to plot the coordinates on the Earth. Starting with a shapefile usually means that the CRS is already set. In that case, we are interested in re-projecting the gdf to a different CRS. The CRS is chosen specific to a region (i.e., USA, Southern California, New York, etc) or for its map units (i.e., decimal degrees, US feet, meters, etc). Map units that are US feet or meters are easier to work when it comes to defining distances (100 ft buffer, etc).

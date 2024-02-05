@@ -47,6 +47,8 @@ df.to_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.csv')
 
 Refer to the [Data Management best practices](data-management-page) and [Basics of Working with Geospatial Data](geo-intro) for additional information on importing various file types.
 
+(merge-tabular-and-geospatial-data)=
+
 ## Merge Tabular and Geospatial Data
 
 Merging data from multiple sources creates one large dataframe (df) to perform data analysis. Let's say there are 3 sources of data that need to be merged:
@@ -124,6 +126,8 @@ Here are some things to know about `merge2`:
 | 3     | Pawnee | $2.5           | 3   | (x3, y3)   | Douglass Howser | 2,250      | polygon    |
 | 5     | Pawnee | $4             | 1   | (x5, y5)   | Leslie Knope    | 1,500      | polygon    |
 | 6     | Pawnee | $6             | 2   | (x6, y6)   | Jeremy Jamm     | 2,000      | polygon    |
+
+(functions)=
 
 ## Functions
 
@@ -220,6 +224,8 @@ df
 | Jet Black Pope             | 4     | 2008      |
 | Nothing Rhymes with Orange | 6     | 2008      |
 
+(grouping)=
+
 ## Grouping
 
 Sometimes it's necessary to create a new column to group together certain values of a column. Here are two ways to accomplish this:
@@ -285,6 +291,8 @@ paunch_locations
 | 6     | Pawnee       | $6             | 2   | (x6, y6) | high        |
 | 7     | Indianapolis | $7             |     | (x7, y7) | high        |
 
+(aggregating)=
+
 ## Aggregating
 
 One of the most common form of summary statistics is aggregating by groups. In Excel, it's called a pivot table. In ArcGIS, it's doing a dissolve and calculating summary statistics. There are two ways to do it in Python: `groupby` and `agg` or `pivot_table`.
@@ -323,6 +331,8 @@ pivot = merge2.pivot_table(
 | 1   | $9             | 2     | Leslie Knope    | 1,500      |
 | 2   | $8.5           | 2     | Jeremy Jamm     | 2,000      |
 | 3   | $2.5           | 1     | Douglass Howser | 2,250      |
+
+(export-aggregated-output)=
 
 ## Export Aggregated Output
 

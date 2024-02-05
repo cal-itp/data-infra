@@ -10,6 +10,8 @@
    - [Cloning a Repository](cloning-a-repository)
 2. [Onboarding Setup (Caltrans Windows PC)](#onboarding-setup-ct)
 
+(onboarding-setup)=
+
 ## Onboarding Setup (JupyterHub)
 
 We'll work through getting set up with SSH and GitHub on JupyterHub and cloning one GitHub repo. This is the first task you'll need to complete before contributing code. Repeat the steps in [Cloning a Repository](cloning-a-repository) for other repos.
