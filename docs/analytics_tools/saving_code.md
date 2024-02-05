@@ -37,6 +37,8 @@ In the `data-analyses` repo, separate analysis tasks live in their own directori
 10. Go back to `main` and update your local to match the remote: `git switch main`, `git pull origin main`
 11. Once you've merged your branch into `main` and deleted it from the remote, you can delete your branch locally: `git branch -d my-new-branch`. You can reuse the branch name later.
 
+(pulling-and-pushing-changes)=
+
 ## Pulling and Pushing Changes
 
 Especially when you have a collaborator working on the same branch, you want to regularly sync your work with what's been committed by your collaborator. Doing this frequently allows you to stay in sync, and avoid unnecessary merge conflicts.
