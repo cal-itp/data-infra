@@ -23,6 +23,19 @@ def sanitize_file_path(file_name: str) -> str:
     return str(Path(file_name).stem)
 
 
+def parse_file_directory(file_name: str) -> str:
+    """
+    Grab the directory of the filename.
+    For GCS bucket, we do not want '.' as the parent
+    directory, we want to parse and put together the
+    GCS filepath correctly.
+    """
+    if str(Path(file_name).parent) != ".":
+        return str(Path(file_name).parent)
+    else:
+        return ""
+
+
 def geoparquet_gcs_export(
     gdf: Union[gpd.GeoDataFrame, dg.GeoDataFrame],
     gcs_file_path: str,
@@ -39,20 +52,25 @@ def geoparquet_gcs_export(
     file_name: str
                 Filename, with or without .parquet.
     """
-    file_name_sanitized = sanitize_file_path(file_name)
+    # Parse out file_name into stem (file_name_sanitized)
+    # and parent (file_directory_sanitized)
+    file_name_sanitized = Path(sanitize_file_path(file_name))
+    file_directory_sanitized = parse_file_directory(file_name)
+
+    # Make sure GCS path includes the directory we want the file to go to
+    expanded_gcs = f"{Path(gcs_file_path).joinpath(file_directory_sanitized)}/"
+    expanded_gcs = str(expanded_gcs).replace("gs:/", "gs://")
 
     if isinstance(gdf, dg.GeoDataFrame):
-        gdf.to_parquet(
-            f"{gcs_file_path}{file_name_sanitized}", overwrite=True, **kwargs
-        )
+        gdf.to_parquet(f"{expanded_gcs}{file_name_sanitized}", overwrite=True, **kwargs)
 
     else:
-        gdf.to_parquet(f"./{file_name_sanitized}.parquet", **kwargs)
+        gdf.to_parquet(f"{file_name_sanitized}.parquet", **kwargs)
         fs.put(
-            f"./{file_name_sanitized}.parquet",
-            f"{gcs_file_path}{file_name_sanitized}.parquet",
+            f"{file_name_sanitized}.parquet",
+            f"{str(expanded_gcs)}{file_name_sanitized}.parquet",
         )
-        os.remove(f"./{file_name_sanitized}.parquet", **kwargs)
+        os.remove(f"{file_name_sanitized}.parquet", **kwargs)
 
 
 def geojson_gcs_export(
