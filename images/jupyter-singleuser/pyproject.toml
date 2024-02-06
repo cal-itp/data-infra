@@ -66,7 +66,6 @@ nbformat = "^5.8.0"
 papermill = "^2.4.0"
 python-slugify = "^6.1.1"
 pyaml = "^21.10.1"
-# must wait on https://github.com/pydata/pydata-sphinx-theme/issues/1253 to upgrade
 jupyter-book = "^1.0.0"
 
 [build-system]
