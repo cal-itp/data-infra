@@ -56,7 +56,7 @@ html_theme_options = {
 }
 html_title = "Cal-ITP Data Services"
 jupyter_cache = ""
-jupyter_execute_notebooks = "force"
+nb_execution_mode = "force"
 language = None
 latex_engine = "pdflatex"
 myst_enable_extensions = [

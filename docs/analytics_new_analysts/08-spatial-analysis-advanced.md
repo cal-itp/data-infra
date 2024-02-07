@@ -11,13 +11,15 @@ Below are more detailed explanations for dealing with geometry in Python.
 
 ## Getting Started
 
-```
+```python
 # Import Python packages
 import pandas as pd
 import geopandas as gpd
 from shapely.geometry import Point
 from geoalchemy2 import WKTElement
 ```
+
+(types-of-geometric-shapes)=
 
 ## Types of Geometric Shapes
 
@@ -31,6 +33,8 @@ There are six possible geometric shapes that are represented in geospatial data.
 - `MultiPolygon`: collection of polygons, which can be disconnected or overlapping from each other
 
 The ArcGIS equivalent of these are just points, lines, and polygons.
+
+(geometry-in-memory-and-in-databases)=
 
 ## Geometry In-Memory and in Databases
 
@@ -49,7 +53,7 @@ To summarize:
 | Local Python session, in-memory     | shapely        | shapely object: Point, LineString, Polygon and Multi equivalents | CRS is usually set, but most likely will still need to re-project your CRS using EPSG |
 | Database (PostGIS, SpatiaLite, etc) | geoalchemy     | WKT or WKB                                                       | define the SRID                                                                       |
 
-```
+```python
 # Set the SRID
 srid = 4326
 df = df.dropna(subset=['lat', 'lon'])

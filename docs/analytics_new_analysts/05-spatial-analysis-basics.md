@@ -6,24 +6,26 @@ Place matters. That's why data analysis often includes a geospatial or geographi
 
 Below are short demos for getting started:
 
-- [Import and export data in Python](#import-and-export-data-in-python)
+- [Import and export data in Python](#spatial-analysis-import-and-export-data-in-python)
 - [Setting and projecting coordinate reference system](#setting-and-projecting-coordinate-reference-system)
 
 ## Getting Started
 
-```
+```python
 # Import Python packages
 import pandas as pd
 import geopandas as gpd
 ```
 
-## Import and Export Data in Python
+(spatial-analysis-import-and-export-data-in-python)=
+
+## Import and Export Data in Python for Spatial Analysis
 
 ### **Local files**
 
 We import a tabular dataframe `my_csv.csv` and a geodataframe `my_geojson.geojson` or `my_shapefile.shp`.
 
-```
+```python
 df = pd.read_csv('../folder/my_csv.csv')
 
 # GeoJSON
@@ -41,7 +43,7 @@ gdf.to_file(driver = 'ESRI Shapefile', filename = '../folder/my_shapefile.shp' )
 
 To read in our dataframe (df) and geodataframe (gdf) from GCS:
 
-```
+```python
 GCS_BUCKET = 'gs://calitp-analytics-data/data-analyses/bucket_name/'
 
 df = pd.read_csv(f'{GCS_BUCKET}my-csv.csv')
@@ -60,6 +62,8 @@ utils.geoparquet_gcs_export(gdf, GCS_FILE_PATH, FILE_NAME)
 ```
 
 Additional general information about various file types can be found in the [Data Management section](data-management-page).
+
+(setting-and-projecting-coordinate-reference-system)=
 
 ## Setting and Projecting Coordinate Reference System
 
@@ -86,7 +90,7 @@ In ArcGIS, layers must have the same geographic coordinate system and projected 
 
 In Python, the `geometry` column holds information about the geographic coordinate system and its projection. All gdfs must be set to the same CRS before performing any spatial operations between them. Changing `geometry` from WGS84 to CA State Plane is a datum transformation (WGS84 to NAD83) and projection to CA State Plane Zone 5.
 
-```
+```python
 # Check to see what the CRS is
 gdf.crs
 
@@ -105,7 +109,7 @@ There are [lots of different CRS available](https://epsg.io). The most common on
 | 2229 | CA State Plane Zone 5 | US feet         |
 | 3310 | CA Albers             | meters          |
 
-```
+```python
 # If the CRS is not set after checking it with gdf.crs
 
 gdf = gdf.set_crs('EPSG:4326')
