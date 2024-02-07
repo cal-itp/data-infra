@@ -1,914 +1,551 @@
 
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" data-content_root="../" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>Developing models in dbt &#8212; Cal-ITP Data Services</title>
-    
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    
-      
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
-    
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
     <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-SZB618VNBZ');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-SZB618VNBZ');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'warehouse/developing_dbt_models';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Adding Ad-Hoc Data to the Warehouse" href="adding_oneoff_data.html" />
     <link rel="prev" title="What is an agency?" href="what_is_agency.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
-<script>
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){ dataLayer.push(arguments); }
-                    gtag('js', new Date());
-                    gtag('config', 'G-SZB618VNBZ');
-                </script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
-    
-    <div class="container-fluid" id="banner"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
 
-    <div class="container-xl">
-      <div class="row">
-          
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
       
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
         
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
       
-      
-      <img src="../_static/calitp_logo_MAIN.png" class="logo" alt="logo">
-      
-      
-      <h1 class="site-logo" id="site-title">Cal-ITP Data Services</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Data Services Documentation
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Analysts
- </span>
-</p>
+    
+    
+    <img src="../_static/calitp_logo_MAIN.png" class="logo__image only-light" alt="Cal-ITP Data Services - Home"/>
+    <script>document.write(`<img src="../_static/calitp_logo_MAIN.png" class="logo__image only-dark" alt="Cal-ITP Data Services - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Data Services Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysts</span></p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_welcome/overview.html">
-   Welcome!
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_welcome/what_is_calitp.html">
-     Cal-ITP Project Information
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_welcome/how_we_work.html">
-     How We Work
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../analytics_onboarding/overview.html">
-   Technical Onboarding
-  </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_tools/overview.html">
-   Introduction to Analytics Tools
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/github_setup.html">
-     GitHub Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/tools_quick_links.html">
-     Tools Quick Links
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/bi_dashboards.html">
-     Business Insights &amp; Dashboards
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/jupyterhub.html">
-     JupyterHub
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/local_oracle_db_connections.html">
-     Local Oracle Database Connections
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/python_libraries.html">
-     Useful Python Libraries
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/scripts.html">
-     Scripts
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/rt_analysis.html">
-     RT Analysis Module
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/saving_code.html">
-     Saving Code
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/storing_data.html">
-     Storing Data During Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/data_catalogs.html">
-     Using Data Catalogs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/knowledge_sharing.html">
-     Helpful Links
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_new_analysts/overview.html">
-   Tutorials for New Python Users
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/01-data-analysis-intro.html">
-     Data Analysis: Intro
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/02-data-analysis-intermediate.html">
-     Data Analysis: Intermediate
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/03-data-management.html">
-     Data Management
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/04-notebooks.html">
-     Working with Jupyter notebooks
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/05-spatial-analysis-basics.html">
-     Working with Geospatial Data: Basics
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/06-spatial-analysis-intro.html">
-     Working with Geospatial Data: Intro
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/07-spatial-analysis-intermediate.html">
-     Working with Geospatial Data: Intermediate
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/08-spatial-analysis-advanced.html">
-     Working with Geospatial Data: Advanced
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
-   Introduction to the Warehouse
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="warehouse_starter_kit.html">
-     Warehouse: Where to Begin
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="navigating_dbt_docs.html">
-     Navigating the dbt Docs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="what_is_agency.html">
-     What is an
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       agency
-      </span>
-     </code>
-     ?
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Developing models in dbt
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="adding_oneoff_data.html">
-     Adding Ad-Hoc Data to the Warehouse
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="what_is_gtfs.html">
-     What is GTFS, anyway?
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../publishing/overview.html">
-   Where can I publish data?
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/1_publishing_principles.html">
-     Data Publishing Principles
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/2_static_files.html">
-     Static Visualizations
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/3_github_pages.html">
-     HTML Visualizations
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/4_analytics_portfolio_site.html">
-     The Cal-ITP Analytics Portfolio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/5_notebooks_styling.html">
-     Getting Notebooks Ready for the Portfolio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/6_metabase.html">
-     Metabase
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/7_gcs.html">
-     GCS
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/8_ckan.html">
-     Publishing data to California Open Data aka CKAN
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/9_geoportal.html">
-     Publishing data to California State Geoportal
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_welcome/overview.html">Welcome!</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_welcome/what_is_calitp.html">Cal-ITP Project Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_welcome/how_we_work.html">How We Work</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Developers
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../architecture/architecture_overview.html">
-   Architecture Overview
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/services.html">
-     Deployed Services and Sites
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/images_and_packages.html">
-     Published Images and Packages
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/data.html">
-     Data pipelines
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../airflow/dags-maintenance.html">
-   Airflow Operational Considerations
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../transit_database/transitdatabase.html">
-   Transit Database (Airtable)
-  </a>
- </li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../analytics_onboarding/overview.html">Technical Onboarding</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_tools/overview.html">Introduction to Analytics Tools</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/github_setup.html">GitHub Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/tools_quick_links.html">Tools Quick Links</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/bi_dashboards.html">Business Insights &amp; Dashboards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/jupyterhub.html">JupyterHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/local_oracle_db_connections.html">Local Oracle Database Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/python_libraries.html">Useful Python Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/scripts.html">Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/rt_analysis.html">RT Analysis Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/saving_code.html">Saving Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/storing_data.html">Storing Data During Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/data_catalogs.html">Using Data Catalogs</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/knowledge_sharing.html">Helpful Links</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Contribute to the Docs!
- </span>
-</p>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_new_analysts/overview.html">Tutorials for New Python Users</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/01-data-analysis-intro.html">Data Analysis: Intro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/02-data-analysis-intermediate.html">Data Analysis: Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/03-data-management.html">Data Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/04-notebooks.html">Working with Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/05-spatial-analysis-basics.html">Working with Geospatial Data: Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/06-spatial-analysis-intro.html">Working with Geospatial Data: Intro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/07-spatial-analysis-intermediate.html">Working with Geospatial Data: Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/08-spatial-analysis-advanced.html">Working with Geospatial Data: Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="overview.html">Introduction to the Warehouse</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="warehouse_starter_kit.html">Warehouse: Where to Begin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="navigating_dbt_docs.html">Navigating the dbt Docs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="what_is_agency.html">What is an <code class="docutils literal notranslate"><span class="pre">agency</span></code>?</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Developing models in dbt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adding_oneoff_data.html">Adding Ad-Hoc Data to the Warehouse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="what_is_gtfs.html">What is GTFS, anyway?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../publishing/overview.html">Where can I publish data?</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/1_publishing_principles.html">Data Publishing Principles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/2_static_files.html">Static Visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/3_github_pages.html">HTML Visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/4_analytics_portfolio_site.html">The Cal-ITP Analytics Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/5_notebooks_styling.html">Getting Notebooks Ready for the Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/6_metabase.html">Metabase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/7_gcs.html">GCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/8_ckan.html">Publishing data to California Open Data aka CKAN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/9_geoportal.html">Publishing data to California State Geoportal</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../contribute/overview.html">
-   Getting Started
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/contribute-best-practices.html">
-     Best Practices
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/submitting_changes.html">
-     Submitting Changes
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/content_types.html">
-     Common Content
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../architecture/architecture_overview.html">Architecture Overview</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/services.html">Deployed Services and Sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/images_and_packages.html">Published Images and Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/data.html">Data pipelines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../airflow/dags-maintenance.html">Airflow Operational Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transit_database/transitdatabase.html">Transit Database (Airtable)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contribute to the Docs!</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../contribute/overview.html">Getting Started</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/contribute-best-practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/submitting_changes.html">Submitting Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/content_types.html">Common Content</a></li>
+</ul>
+</li>
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
+      </div>
+      
+      <main id="main-content" class="bd-main">
         
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/warehouse/developing_dbt_models.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
     </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/developing_dbt_models.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra/issues/new?title=Issue%20on%20page%20%2Fwarehouse/developing_dbt_models.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/cal-itp/data-infra/"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fwarehouse/developing_dbt_models.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/developing_dbt_models.md"><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
-    </div>
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/warehouse/developing_dbt_models.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
 
-            <!-- Launch buttons -->
 
-        </div>
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Developing models in dbt</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div>
+                <h2> Contents </h2>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
+            <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#what-is-dbt">
-   What is dbt?
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dbt-project-structure">
-     dbt project structure
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#resources">
-   Resources
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-to-contribute-to-the-dbt-project">
-   How to contribute to the dbt project
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#getting-started">
-     Getting started
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#developer-workflow">
-     Developer workflow
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#video-walkthrough">
-       Video walkthrough
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#modeling-considerations">
-   Modeling considerations
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#identify-bug">
-     Identify the cause of your bug
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#should-it-be-a-dbt-model">
-     Should it be a dbt model?
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#what-is-the-grain-of-your-model">
-     What is the grain of your model?
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#is-there-already-a-model-with-this-grain">
-     Is there already a model with this grain?
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#make-your-changes">
-     Make your changes
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#example-bug-fix-prs">
-       Example bug fix PRs
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#example-new-column-prs">
-       Example new column PRs
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#example-new-model-prs">
-       Example new model PRs
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#test-your-changes">
-     Test your changes
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#column-values">
-       Column values
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#row-count-and-uniqueness">
-       Row count and uniqueness
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#performance">
-       Performance
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#downstream-impacts">
-       Downstream impacts
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#other-considerations">
-       Other considerations
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#add-dbt-tests-and-documentation">
-     Add dbt tests and documentation
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dbt-tests">
-       dbt tests
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#documentation">
-       Documentation
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#merge-your-changes">
-     Merge your changes
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#incremental-models">
-   Incremental models
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#helpful-talks-and-presentations">
-   Helpful talks and presentations
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dbt-at-cal-itp-introduction">
-     dbt at Cal-ITP introduction
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#coalesce">
-     Coalesce
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-dbt">What is dbt?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dbt-project-structure">dbt project structure</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute-to-the-dbt-project">How to contribute to the dbt project</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting started</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-workflow">Developer workflow</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#video-walkthrough">Video walkthrough</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-considerations">Modeling considerations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-bug">Identify the cause of your bug</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#should-it-be-a-dbt-model">Should it be a dbt model?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-grain-of-your-model">What is the grain of your model?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#is-there-already-a-model-with-this-grain">Is there already a model with this grain?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-your-changes">Make your changes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-bug-fix-prs">Example bug fix PRs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-new-column-prs">Example new column PRs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-new-model-prs">Example new model PRs</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-your-changes">Test your changes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#column-values">Column values</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#row-count-and-uniqueness">Row count and uniqueness</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#performance">Performance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#downstream-impacts">Downstream impacts</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#other-considerations">Other considerations</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-dbt-tests-and-documentation">Add dbt tests and documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dbt-tests">dbt tests</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#merge-your-changes">Merge your changes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#incremental-models">Incremental models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#helpful-talks-and-presentations">Helpful talks and presentations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dbt-at-cal-itp-introduction">dbt at Cal-ITP introduction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coalesce">Coalesce</a></li>
+</ul>
+</li>
+</ul>
             </nav>
         </div>
     </div>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Developing models in dbt</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#what-is-dbt">
-   What is dbt?
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dbt-project-structure">
-     dbt project structure
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#resources">
-   Resources
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-to-contribute-to-the-dbt-project">
-   How to contribute to the dbt project
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#getting-started">
-     Getting started
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#developer-workflow">
-     Developer workflow
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#video-walkthrough">
-       Video walkthrough
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#modeling-considerations">
-   Modeling considerations
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#identify-bug">
-     Identify the cause of your bug
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#should-it-be-a-dbt-model">
-     Should it be a dbt model?
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#what-is-the-grain-of-your-model">
-     What is the grain of your model?
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#is-there-already-a-model-with-this-grain">
-     Is there already a model with this grain?
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#make-your-changes">
-     Make your changes
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#example-bug-fix-prs">
-       Example bug fix PRs
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#example-new-column-prs">
-       Example new column PRs
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#example-new-model-prs">
-       Example new model PRs
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#test-your-changes">
-     Test your changes
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#column-values">
-       Column values
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#row-count-and-uniqueness">
-       Row count and uniqueness
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#performance">
-       Performance
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#downstream-impacts">
-       Downstream impacts
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#other-considerations">
-       Other considerations
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#add-dbt-tests-and-documentation">
-     Add dbt tests and documentation
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dbt-tests">
-       dbt tests
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#documentation">
-       Documentation
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#merge-your-changes">
-     Merge your changes
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#incremental-models">
-   Incremental models
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#helpful-talks-and-presentations">
-   Helpful talks and presentations
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dbt-at-cal-itp-introduction">
-     dbt at Cal-ITP introduction
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#coalesce">
-     Coalesce
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
 
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            
-              <div>
+              
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="developing-models-in-dbt">
-<span id="developing-dbt-models"></span><h1>Developing models in dbt<a class="headerlink" href="#developing-models-in-dbt" title="Permalink to this headline">¶</a></h1>
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="developing-models-in-dbt">
+<span id="developing-dbt-models"></span><h1>Developing models in dbt<a class="headerlink" href="#developing-models-in-dbt" title="Link to this heading">#</a></h1>
 <p>Information related to contributing to the <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse">Cal-ITP dbt project</a>.</p>
-<div class="section" id="what-is-dbt">
-<h2>What is dbt?<a class="headerlink" href="#what-is-dbt" title="Permalink to this headline">¶</a></h2>
+<section id="what-is-dbt">
+<h2>What is dbt?<a class="headerlink" href="#what-is-dbt" title="Link to this heading">#</a></h2>
 <p><a class="reference external" href="https://docs.getdbt.com/docs/introduction#the-power-of-dbt">dbt</a> is the tool we use to manage the data models (tables and views) in our BigQuery data warehouse. We use dbt to define the SQL code that creates our data models, to manage dependencies between models, to document models, and to test models.</p>
 <p>The <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse">Cal-ITP dbt project</a> runs every day, <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse">orchestrated by Airflow</a>. When the dbt project runs, it refreshes all the data in the warehouse by running all the queries within the project in order based on the dependencies defined between models. For example, if model B depends on model A, the project will execute model A before model B.</p>
-<div class="section" id="dbt-project-structure">
-<h3>dbt project structure<a class="headerlink" href="#dbt-project-structure" title="Permalink to this headline">¶</a></h3>
+<section id="dbt-project-structure">
+<h3>dbt project structure<a class="headerlink" href="#dbt-project-structure" title="Link to this heading">#</a></h3>
 <p>The dbt project (specifically <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse/models">the <code class="docutils literal notranslate"><span class="pre">models/</span></code> directory</a>) is broken out into data processing stages, broadly according to the <a class="reference external" href="https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview#guide-structure-overview">standard outlined by dbt</a>. You can read dbt documentation on the purpose of <a class="reference external" href="https://docs.getdbt.com/best-practices/how-we-structure/2-staging#staging-models">staging</a>, <a class="reference external" href="https://docs.getdbt.com/best-practices/how-we-structure/3-intermediate#intermediate-models">intermediate</a>, and <a class="reference external" href="https://docs.getdbt.com/best-practices/how-we-structure/4-marts#marts-models">mart</a> models.</p>
 <p>Project level configuration lives in two separate places:</p>
 <ul class="simple">
@@ -920,49 +557,49 @@
 <p>The relationship between a folder in <code class="docutils literal notranslate"><span class="pre">warehouse/models/</span></code> and a dataset/schema in BigQuery is configured via <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/dbt_project.yml">dbt_project.yml</a> in the <code class="docutils literal notranslate"><span class="pre">models</span></code> section. The <code class="docutils literal notranslate"><span class="pre">warehouse/models/some_data/my_table.sql</span></code> file will not correspond to <code class="docutils literal notranslate"><span class="pre">calitp-data-infra.some_data.my_table</span></code> in BigQuery unless configured to do so; all models are created in the <code class="docutils literal notranslate"><span class="pre">staging</span></code> dataset by default (so, without that configuration, the table would be created in <code class="docutils literal notranslate"><span class="pre">calitp-data-infra.staging.my_table</span></code>).</p>
 <p>For an example creating a new entry in <code class="docutils literal notranslate"><span class="pre">dbt_project.yml</span></code> for a new mart dataset, see <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/3172">data-infra PR #3172</a>.</p>
 </div>
-</div>
-</div>
-<div class="section" id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>If you have questions specific to our project or you encounter any issues when developing, please bring those questions to the <a class="reference external" href="https://cal-itp.slack.com/archives/C050ZNDUL21"><code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code></a> or <a class="reference external" href="https://cal-itp.slack.com/archives/C02KH3DGZL7"><code class="docutils literal notranslate"><span class="pre">#data-office-hours</span></code></a> Cal-ITP Slack channels. Working through questions “in public” helps build shared knowledge that’s searchable later on.</p></li>
-<li><p>For Cal-ITP-specific data warehouse documentation, including high-level concepts and naming conventions, see <a class="reference external" href="https://dbt-docs.calitp.org/#%21/overview">our Cal-ITP dbt documentation site</a>. This documentation is automatically generated by dbt, and incorporates the table- and column-level documentation that developers enter in YAML files in the dbt project.</p></li>
+<li><p>For Cal-ITP-specific data warehouse documentation, including high-level concepts and naming conventions, see <a class="reference external" href="https://dbt-docs.calitp.org/#!/overview">our Cal-ITP dbt documentation site</a>. This documentation is automatically generated by dbt, and incorporates the table- and column-level documentation that developers enter in YAML files in the dbt project.</p></li>
 <li><p>For general dbt concepts (for example, <a class="reference external" href="https://docs.getdbt.com/docs/build/models">models</a>, dbt <a class="reference external" href="https://docs.getdbt.com/guides/advanced/using-jinja">Jinja</a> or <a class="reference external" href="https://docs.getdbt.com/docs/build/tests">tests</a>), see the <a class="reference external" href="https://docs.getdbt.com/docs/introduction">general dbt documentation site</a>.</p></li>
 <li><p>For general SQL or BigQuery concepts (for example, <a class="reference external" href="https://cloud.google.com/bigquery/docs/tables-intro">tables</a>, <a class="reference external" href="https://cloud.google.com/bigquery/docs/views-intro">views</a>, or <a class="reference external" href="https://cloud.google.com/bigquery/docs/reference/standard-sql/window-function-calls">window functions</a>), see the <a class="reference external" href="https://cloud.google.com/bigquery/docs">BigQuery docs site</a>.</p></li>
 </ul>
-</div>
-<div class="section" id="how-to-contribute-to-the-dbt-project">
-<h2>How to contribute to the dbt project<a class="headerlink" href="#how-to-contribute-to-the-dbt-project" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="getting-started">
-<h3>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="how-to-contribute-to-the-dbt-project">
+<h2>How to contribute to the dbt project<a class="headerlink" href="#how-to-contribute-to-the-dbt-project" title="Link to this heading">#</a></h2>
+<section id="getting-started">
+<h3>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h3>
 <p>To get set up to contribute to the dbt project via JupyterHub, follow <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/README.md#setting-up-the-project-in-your-jupyterhub-personal-server">the README in the data-infra repo warehouse folder</a>. If you hit any trouble with setup, let folks know in the <a class="reference external" href="https://cal-itp.slack.com/archives/C050ZNDUL21"><code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code></a> or <a class="reference external" href="https://cal-itp.slack.com/archives/C02KH3DGZL7"><code class="docutils literal notranslate"><span class="pre">#data-office-hours</span></code></a> Cal-ITP Slack channels.</p>
 <p>We recommend that everyone who does dbt development joins the  <a class="reference external" href="https://cal-itp.slack.com/archives/C050ZNDUL21"><code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code></a> channel in the Cal-ITP Slack to ask questions, collaborate, and build shared knowledge.</p>
-</div>
-<div class="section" id="developer-workflow">
-<h3>Developer workflow<a class="headerlink" href="#developer-workflow" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="developer-workflow">
+<h3>Developer workflow<a class="headerlink" href="#developer-workflow" title="Link to this heading">#</a></h3>
 <div class="admonition-see-next-section-for-modeling-considerations admonition">
 <p class="admonition-title">See next section for modeling considerations</p>
 <p>This section describes the high-level mechanics/process of the developer workflow to edit the dbt project.
-<strong>Please read the <a class="reference external" href="developing_dbt_models#modeling-considerations">next section</a> for things you should consider from the data modeling perspective.</strong></p>
+<strong>Please read the <a class="reference internal" href="#modeling-considerations">next section</a> for things you should consider from the data modeling perspective.</strong></p>
 </div>
 <p>To develop dbt models, you can edit the <code class="docutils literal notranslate"><span class="pre">.sql</span></code> files for your models, save your changes, and then <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse#dbt-commands">run the model from the command line</a> to execute the SQL you updated.</p>
 <p>To inspect tables as you are working, the fastest method is usually to run some manual test queries or “preview” the tables in the <a class="reference external" href="https://console.cloud.google.com/bigquery?project=cal-itp-data-infra-staging">BigQuery user interface</a>. You can also use something like <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.read_gbq.html"><code class="docutils literal notranslate"><span class="pre">pandas.read_gbq</span></code></a> to perform example queries in a notebook.</p>
 <p>When you run dbt commands locally or on JupyterHub, your models will be created in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging.&lt;your</span> <span class="pre">name&gt;_&lt;dbt</span> <span class="pre">folder</span> <span class="pre">name,</span> <span class="pre">like</span> <span class="pre">mart_gtfs&gt;</span></code> BigQuery dataset. Note that this is in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging</span></code> Google Cloud Platform project, <em>not</em> the production <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra</span></code> project.</p>
-<p>Once your models are working the way you want and you have added all necessary documentation and tests in YAML files (<a class="reference external" href="developing_dbt_models#modeling-considerations">see below</a> for more on modeling, documentation, and testing considerations), you are ready to merge.</p>
+<p>Once your models are working the way you want and you have added all necessary documentation and tests in YAML files (<a class="reference internal" href="#modeling-considerations">see below</a> for more on modeling, documentation, and testing considerations), you are ready to merge.</p>
 <p>Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against <code class="docutils literal notranslate"><span class="pre">main</span></code> when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging.</p>
-<div class="section" id="video-walkthrough">
-<h4>Video walkthrough<a class="headerlink" href="#video-walkthrough" title="Permalink to this headline">¶</a></h4>
+<section id="video-walkthrough">
+<h4>Video walkthrough<a class="headerlink" href="#video-walkthrough" title="Link to this heading">#</a></h4>
 <p>For an example of working with dbt in JupyterHub, see the recording of the <a class="reference external" href="https://drive.google.com/file/d/1NDh_4u0-ROsH0w8J3Z1ccn_ICLAHtDhX/view?usp=drive_link">original onboarding call in April 2023 (requires Cal-ITP Google Drive access).</a> A few notes on this video:</p>
 <ul class="simple">
 <li><p>The documentation shown is an older version of this docs page; the information shared verbally is correct but the page has been updated.</p></li>
 <li><p>The bug encountered towards the end of the video (that prevented us from running dbt tests) has been fixed.</p></li>
 <li><p>The code owners mentioned in the video have changed; consult in Slack for process guidance.</p></li>
 </ul>
-</div>
-</div>
-</div>
-<div class="section" id="modeling-considerations">
-<span id="id1"></span><h2>Modeling considerations<a class="headerlink" href="#modeling-considerations" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+</section>
+<section id="modeling-considerations">
+<span id="id1"></span><h2>Modeling considerations<a class="headerlink" href="#modeling-considerations" title="Link to this heading">#</a></h2>
 <p>When developing or updating dbt models, there are some considerations which may differ from a notebook-based analysis. These can be thought of as a checklist or decision tree of questions that you should run through whenever you are editing or creating a dbt model. Longer explanations of each item are included below.</p>
 <div class="mermaid">
             flowchart TD
@@ -995,12 +632,12 @@ change_models --&gt; test_changes
 test_changes -- identify issues--&gt; change_models
 test_changes -- no issues --&gt; tests_and_docs
 tests_and_docs --&gt; merge_model_changes
-        </div><div class="section" id="identify-bug">
-<span id="identify-the-cause-of-your-bug"></span><h3>Identify the cause of your bug<a class="headerlink" href="#identify-bug" title="Permalink to this headline">¶</a></h3>
+        </div><section id="identify-bug">
+<span id="identify-the-cause-of-your-bug"></span><h3>Identify the cause of your bug<a class="headerlink" href="#identify-bug" title="Link to this heading">#</a></h3>
 <div class="admonition-example-bug-troubleshooting-walkthroughs admonition">
 <p class="admonition-title">Example bug troubleshooting walkthroughs</p>
 <p>Here is a series of recordings showing a workflow for debugging a failing dbt test. The resulting PR is <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2892">#2892</a>.</p>
-<ol class="simple">
+<ol class="arabic simple">
 <li><p><a class="reference external" href="https://www.loom.com/share/0bf1eaa6d3374be782eb18859f24e08f?sid=0ab9251a-723d-4a5a-9d77-0be3b116a021">Find the compiled test SQL</a></p></li>
 <li><p><a class="reference external" href="https://www.loom.com/share/e57a163ecd8c4b15af0959fb0b4ab3eb?sid=36b5cf66-9832-4538-8813-c3dd982e6a77">Run the test SQL</a></p></li>
 <li><p><a class="reference external" href="https://www.loom.com/share/cf82e6a7ab824d8dbd572d9371ccf6dc?sid=9d31aa40-ff34-4c34-9fd9-22985c7c57e4">Confirm the nature of the problem</a></p></li>
@@ -1021,10 +658,10 @@ tests_and_docs --&gt; merge_model_changes
 <p>When you <code class="docutils literal notranslate"><span class="pre">dbt</span> <span class="pre">compile</span></code> locally, you will compile SQL that’s pointed at the staging project and your namespaced dataset. Make sure to change those references when you run the compiled SQL. So, <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging.laurie_mart_gtfs.fct_scheduled_trips</span></code> would become <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra.mart_gtfs.fct_scheduled_trips</span></code>.</p>
 </div>
 <p>If you noticed an issue that wasn’t caused by a failing test, you can start with the model that you noticed the problem in.</p>
-<p>In either case, you may need to consider upstream models. To identify your model’s parents, you can look at the <a class="reference external" href="https://dbt-docs.calitp.org/#%21/overview">dbt docs website</a> page for your model. <a class="reference external" href="https://docs.getdbt.com/docs/collaborate/documentation#navigating-the-documentation-site">See the dbt docs</a> for how to look at the model’s lineage. You can modify the model selector in the bottom middle to just <code class="docutils literal notranslate"><span class="pre">+&lt;your</span> <span class="pre">model</span> <span class="pre">name&gt;</span></code> to only see the model’s parents. You can also run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">+&lt;your</span> <span class="pre">model&gt;</span> <span class="pre">--resource-type</span> <span class="pre">model</span></code> to see a model’s parents just on the command line. Try to figure out where the root cause of the problem is occurring. This may involve running ad-hoc SQL queries to inspect the models involved.</p>
-</div>
-<div class="section" id="should-it-be-a-dbt-model">
-<span id="tool-choice"></span><h3>Should it be a dbt model?<a class="headerlink" href="#should-it-be-a-dbt-model" title="Permalink to this headline">¶</a></h3>
+<p>In either case, you may need to consider upstream models. To identify your model’s parents, you can look at the <a class="reference external" href="https://dbt-docs.calitp.org/#!/overview">dbt docs website</a> page for your model. <a class="reference external" href="https://docs.getdbt.com/docs/collaborate/documentation#navigating-the-documentation-site">See the dbt docs</a> for how to look at the model’s lineage. You can modify the model selector in the bottom middle to just <code class="docutils literal notranslate"><span class="pre">+&lt;your</span> <span class="pre">model</span> <span class="pre">name&gt;</span></code> to only see the model’s parents. You can also run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">+&lt;your</span> <span class="pre">model&gt;</span> <span class="pre">--resource-type</span> <span class="pre">model</span></code> to see a model’s parents just on the command line. Try to figure out where the root cause of the problem is occurring. This may involve running ad-hoc SQL queries to inspect the models involved.</p>
+</section>
+<section id="should-it-be-a-dbt-model">
+<span id="tool-choice"></span><h3>Should it be a dbt model?<a class="headerlink" href="#should-it-be-a-dbt-model" title="Link to this heading">#</a></h3>
 <p>Changes to dbt models are likely to be appropriate when one or more of the following is true:</p>
 <ul class="simple">
 <li><p>There is a consistent or ongoing need for this data. dbt can ensure that transformations are performed consistently at scale, every day.</p></li>
@@ -1036,36 +673,36 @@ tests_and_docs --&gt; merge_model_changes
 <li><p>You are doing exploratory data analysis, especially on inconsistently-constructed data. It will almost always be faster to do initial exploration of data via Jupyter/Python than in SQL. If you only plan to use the data for a short period of time, or plan to reshape it many speculatively before you settle on a more long-lived form, you probably don’t need to represent it with a dbt model quite yet.</p></li>
 <li><p>You want to apply a simple transformation (for example, a grouped summary or filter) to answer a specific question. In this case, it may be more appropriate to create a Metabase dashboard with the desired transformations.</p></li>
 </ul>
-</div>
-<div class="section" id="what-is-the-grain-of-your-model">
-<span id="model-grain"></span><h3>What is the grain of your model?<a class="headerlink" href="#what-is-the-grain-of-your-model" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="what-is-the-grain-of-your-model">
+<span id="model-grain"></span><h3>What is the grain of your model?<a class="headerlink" href="#what-is-the-grain-of-your-model" title="Link to this heading">#</a></h3>
 <p><a class="reference external" href="https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/grain/"><em>Grain</em> means “what does a row represent”</a>. For example, for: Do you want one row per route per day? One row per fare transaction? One row per organization per month?</p>
 <p>This concept of grain can be one of the biggest differences between notebook-based analysis and warehouse analytics engineering. In notebooks, you may be making a lot of transformations and saving each step out as its own dataframe, and you may use functions for reusable transformation steps. In warehouse development, we want to be focused on making reusable models where the data itself is the common building block across analyses. That often means trying to make only one table in the warehouse for each grain, regardless of how many different types of analysis it might be used for.</p>
-</div>
-<div class="section" id="is-there-already-a-model-with-this-grain">
-<span id="grain-exists"></span><h3>Is there already a model with this grain?<a class="headerlink" href="#is-there-already-a-model-with-this-grain" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="is-there-already-a-model-with-this-grain">
+<span id="grain-exists"></span><h3>Is there already a model with this grain?<a class="headerlink" href="#is-there-already-a-model-with-this-grain" title="Link to this heading">#</a></h3>
 <p>If there is already a model with the grain you are targeting, you should almost always add new columns to that existing model rather than making a new model with the same grain.</p>
 <div class="admonition-example-fct-scheduled-trips admonition">
 <p class="admonition-title">Example: fct_scheduled_trips</p>
-<p>Consider <a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.fct_scheduled_trips"><code class="docutils literal notranslate"><span class="pre">fct_scheduled_trips</span></code></a>. This is our core trip-level table. Every scheduled trip should have a row in this model and attributes that you might want from that trip should be present for easy access. As a result, this table has a lot of columns, because when we need new information about trips, we add it here.  For example, when we wanted to fix time zone handling for trips, we <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2457">added those columns</a> instead of creating a new model.</p>
+<p>Consider <a class="reference external" href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_scheduled_trips"><code class="docutils literal notranslate"><span class="pre">fct_scheduled_trips</span></code></a>. This is our core trip-level table. Every scheduled trip should have a row in this model and attributes that you might want from that trip should be present for easy access. As a result, this table has a lot of columns, because when we need new information about trips, we add it here.  For example, when we wanted to fix time zone handling for trips, we <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2457">added those columns</a> instead of creating a new model.</p>
 </div>
-<p>To figure out if there is a model with your desired grain, you can <a class="reference external" href="https://dbt-docs.calitp.org/#%21/overview">search the dbt docs</a> for relevant terms. For example, if you want a table of routes, you can search “routes” to see what models already exist. You can also explore the dependency tree for a related table (like <code class="docutils literal notranslate"><span class="pre">dim_routes</span></code>) to see if you can find a table that looks like it has the right grain. You can also see <a class="reference external" href="https://dbt-docs.calitp.org/#%21/overview">our dbt docs homepage</a> for a discussion of table naming conventions to interpret dimension, fact, and bridge tables.</p>
+<p>To figure out if there is a model with your desired grain, you can <a class="reference external" href="https://dbt-docs.calitp.org/#!/overview">search the dbt docs</a> for relevant terms. For example, if you want a table of routes, you can search “routes” to see what models already exist. You can also explore the dependency tree for a related table (like <code class="docutils literal notranslate"><span class="pre">dim_routes</span></code>) to see if you can find a table that looks like it has the right grain. You can also see <a class="reference external" href="https://dbt-docs.calitp.org/#!/overview">our dbt docs homepage</a> for a discussion of table naming conventions to interpret dimension, fact, and bridge tables.</p>
 <p>For dimensions you may need to think more about whether you are truly making a new dimension, or whether you are simply applying a filter on an existing dimension (for example, <code class="docutils literal notranslate"><span class="pre">dim_bus_vehicles</span></code> could be a subset of an existing <code class="docutils literal notranslate"><span class="pre">dim_vehicles</span></code> dimension model, in which case you could just add a boolean column <code class="docutils literal notranslate"><span class="pre">is_bus</span></code> on <code class="docutils literal notranslate"><span class="pre">dim_vehicles</span></code> rather than making a new dedicated model.)</p>
-</div>
-<div class="section" id="make-your-changes">
-<span id="change-models"></span><h3>Make your changes<a class="headerlink" href="#make-your-changes" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="make-your-changes">
+<span id="change-models"></span><h3>Make your changes<a class="headerlink" href="#make-your-changes" title="Link to this heading">#</a></h3>
 <p>The kind of changes you make will depend on what you’ve discovered in previous steps. Fixing a bug might involve changing model SQL, changing tests to reflect a new understanding, or something else. Adding a column might involve a simple change on one model or require updating several parent models. Creating a new model for brand new data may involve a new external table or it might be a straightforward transformation just in the mart. Some examples of different types of changes are listed below.</p>
 <p>If you find yourself making big changes that seem likely to significantly affect other users, you may need to step back and convene a conversation to make sure that everyone is on board; see for example <a class="reference external" href="https://docs.google.com/document/d/1F4METWYNip5nobcPZSUg-5XGtC1XX1hWMQfEmERPPd4/edit#heading=h.dsfdelw2zz3n">this Google Doc about Airtable schema changes</a> where stakeholders confirmed how they wanted to handle schema changes in the warehouse. The <a class="reference internal" href="#model-downstream-impacts"><span class="std std-ref">downstream impacts section below</span></a> has suggestions for how to assess the impacts of your changes.</p>
-<div class="section" id="example-bug-fix-prs">
-<h4>Example bug fix PRs<a class="headerlink" href="#example-bug-fix-prs" title="Permalink to this headline">¶</a></h4>
+<section id="example-bug-fix-prs">
+<h4>Example bug fix PRs<a class="headerlink" href="#example-bug-fix-prs" title="Link to this heading">#</a></h4>
 <p>Here are a few example <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> PRs that fixed past bugs:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2076">PR #2076</a> fixed two bugs: There was a hardcoded incorrect value in our SQL that was causing Sundays to not appear in our scheduled service index (SQL syntax bug), and there was a bug in how we were handling the relationship between <code class="docutils literal notranslate"><span class="pre">calendar_dates</span></code> and <code class="docutils literal notranslate"><span class="pre">calendar</span></code> (GTFS logic bug).</p></li>
 <li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2623">PR #2623</a> fixed bugs caused by unexpected calendar data from a producer.</p></li>
 </ul>
-</div>
-<div class="section" id="example-new-column-prs">
-<h4>Example new column PRs<a class="headerlink" href="#example-new-column-prs" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="example-new-column-prs">
+<h4>Example new column PRs<a class="headerlink" href="#example-new-column-prs" title="Link to this heading">#</a></h4>
 <p>Here are a few example <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> PRs that added columns to existing models:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2778">PR #2778</a> is a simple example of adding a column that already exists in staging to a mart table.</p></li>
@@ -1077,9 +714,9 @@ tests_and_docs --&gt; merge_model_changes
 </li>
 <li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2383">PR #2383</a> adds a column to Airtable data end-to-end (starting from the raw data/external tables; this involves non-dbt code).</p></li>
 </ul>
-</div>
-<div class="section" id="example-new-model-prs">
-<h4>Example new model PRs<a class="headerlink" href="#example-new-model-prs" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="example-new-model-prs">
+<h4>Example new model PRs<a class="headerlink" href="#example-new-model-prs" title="Link to this heading">#</a></h4>
 <p>Here are a few <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> PRs that created brand new models:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2686">PR #2686</a> created a new model based on existing warehouse data.</p></li>
@@ -1090,10 +727,10 @@ tests_and_docs --&gt; merge_model_changes
 </ul>
 </li>
 </ul>
-</div>
-</div>
-<div class="section" id="test-your-changes">
-<span id="test-changes"></span><h3>Test your changes<a class="headerlink" href="#test-your-changes" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="test-your-changes">
+<span id="test-changes"></span><h3>Test your changes<a class="headerlink" href="#test-your-changes" title="Link to this heading">#</a></h3>
 <p>Once you have made some changes, it is important to test them.</p>
 <div class="admonition-different-types-of-testing admonition">
 <p class="admonition-title">Different types of testing</p>
@@ -1101,8 +738,8 @@ tests_and_docs --&gt; merge_model_changes
 </div>
 <p>The first step is running your changes in the test/staging environment. You can run a command like <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">run</span> <span class="pre">-s</span> <span class="pre">+&lt;your</span> <span class="pre">model&gt;</span></code> to run your model and its antecedents.  Your models will be created in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging.&lt;your</span> <span class="pre">name&gt;_&lt;dbt</span> <span class="pre">folder</span> <span class="pre">name,</span> <span class="pre">like</span> <span class="pre">mart_gtfs&gt;</span></code> BigQuery dataset. Note that this is in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging</span></code> Google Cloud Platform project, <em>not</em> the production <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra</span></code> project.</p>
 <p>What to test/check will vary based on what you’re doing, but below are some example things to consider.</p>
-<div class="section" id="column-values">
-<h4>Column values<a class="headerlink" href="#column-values" title="Permalink to this headline">¶</a></h4>
+<section id="column-values">
+<h4>Column values<a class="headerlink" href="#column-values" title="Link to this heading">#</a></h4>
 <p>Are the values in your column/model what you expect? For example, are there nulls? Does the column have all the values you anticipated (for example, if you have a day of the week column, is data from all 7 days present)? If it’s numeric, what are the minimum and maximum values; do they make sense (for example, if you have a percentage column, is it always between 0 and 100)? What is the most common value?</p>
 <ul>
 <li><p>To check nulls:</p>
@@ -1136,9 +773,9 @@ tests_and_docs --&gt; merge_model_changes
 </div>
 </li>
 </ul>
-</div>
-<div class="section" id="row-count-and-uniqueness">
-<h4>Row count and uniqueness<a class="headerlink" href="#row-count-and-uniqueness" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="row-count-and-uniqueness">
+<h4>Row count and uniqueness<a class="headerlink" href="#row-count-and-uniqueness" title="Link to this heading">#</a></h4>
 <p>To confirm that the grain is what you expect, you should check whether an anticipated unique key is actually unique. For example, if you were making a daily shapes table, you might expect that <code class="docutils literal notranslate"><span class="pre">date</span> <span class="pre">+</span> <span class="pre">feed_key</span> <span class="pre">+</span> <span class="pre">shape_id</span></code> would be unique. Similarly, you should have a ballpark idea of the order of magnitude of the number of rows you expect. If you’re making a yearly organizations table and your table has a million rows, something is likely off. Some example queries could be:</p>
 <ul>
 <li><p>To check row count:</p>
@@ -1166,7 +803,7 @@ tests_and_docs --&gt; merge_model_changes
 <span class="w">        </span><span class="o">&lt;</span><span class="k">column</span><span class="w"> </span><span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span>
 <span class="w">        </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ct</span>
 <span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">tbl</span>
-<span class="w">    </span><span class="c1">-- adjust this based on the number of columns that make the composite unique key</span>
+<span class="w">  </span><span class="c1">-- adjust this based on the number of columns that make the composite unique key</span>
 <span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span>
 <span class="w">    </span><span class="k">HAVING</span><span class="w"> </span><span class="n">ct</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span>
 <span class="p">)</span>
@@ -1179,9 +816,9 @@ tests_and_docs --&gt; merge_model_changes
 </div>
 </li>
 </ul>
-</div>
-<div class="section" id="performance">
-<h4>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="performance">
+<h4>Performance<a class="headerlink" href="#performance" title="Link to this heading">#</a></h4>
 <p>While testing, you should keep an eye on the performance (cost/data efficiency) of the model:</p>
 <ul class="simple">
 <li><p>When you run the dbt model locally, look at how many bytes are billed to build the model(s).</p></li>
@@ -1209,24 +846,24 @@ tests_and_docs --&gt; merge_model_changes
 <p>Incremental models have two different run modes: <strong>full refreshes</strong> (which re-process all historical data available) and <strong>incremental runs</strong> that load data in batches based on your incremental logic. These two modes run different code.</p>
 <p>If you make your table incremental, you should make sure to run both a full refresh (use the <code class="docutils literal notranslate"><span class="pre">--full-refresh</span></code> flag) and an incremental run (after the table has already been built once; no flag) in your testing to ensure that both are working as expected.</p>
 </div>
-</div>
-<div class="section" id="downstream-impacts">
-<span id="model-downstream-impacts"></span><h4>Downstream impacts<a class="headerlink" href="#downstream-impacts" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="downstream-impacts">
+<span id="model-downstream-impacts"></span><h4>Downstream impacts<a class="headerlink" href="#downstream-impacts" title="Link to this heading">#</a></h4>
 <p>Another important consideration is the potential downstream impacts of your changes, particularly if you are changing existing models.</p>
 <p>You can run dbt tests on the downstream models using <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">test</span> <span class="pre">-s</span> <span class="pre">&lt;your_model&gt;+</span></code>. You should make sure that your changes do not cause new test failures in downstream models.</p>
 <p>Check which models are downstream of your changes using <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">&lt;your_model&gt;+</span> <span class="pre">--resource-type</span> <span class="pre">model</span></code>. If your model has a lot of descendents, consider performing additional tests to ensure that your changes will not cause problems downstream.</p>
 <p>To check for impacts on defined downstream artifacts (like the reports site and open data publishing), you can check which <a class="reference external" href="https://docs.getdbt.com/docs/build/exposures">exposures</a> are downstream of your model using <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">&lt;your_model&gt;+</span> <span class="pre">--resource-type</span> <span class="pre">exposure</span></code>.</p>
-</div>
-<div class="section" id="other-considerations">
-<h4>Other considerations<a class="headerlink" href="#other-considerations" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="other-considerations">
+<h4>Other considerations<a class="headerlink" href="#other-considerations" title="Link to this heading">#</a></h4>
 <p>Other questions will be more specific to your changes or goals, but it’s usually a good idea to take a second and brainstorm things that you would expect to be true and check whether your model reflects them. For example, we expect more trip activity during AM/PM peak periods than in the middle of the night; is that true in your model? What is the balance of weekend to weekday activity in your model, and does it make sense for the context?</p>
-</div>
-</div>
-<div class="section" id="add-dbt-tests-and-documentation">
-<span id="tests-and-docs"></span><h3>Add dbt tests and documentation<a class="headerlink" href="#add-dbt-tests-and-documentation" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="add-dbt-tests-and-documentation">
+<span id="tests-and-docs"></span><h3>Add dbt tests and documentation<a class="headerlink" href="#add-dbt-tests-and-documentation" title="Link to this heading">#</a></h3>
 <p>Once you are satisfied with your changes, you should add tests and documentation, both of which are vital to keeping the project maintainable over time.</p>
-<div class="section" id="dbt-tests">
-<span id="id2"></span><h4>dbt tests<a class="headerlink" href="#dbt-tests" title="Permalink to this headline">¶</a></h4>
+<section id="dbt-tests">
+<span id="id2"></span><h4>dbt tests<a class="headerlink" href="#dbt-tests" title="Link to this heading">#</a></h4>
 <p><a class="reference external" href="https://docs.getdbt.com/docs/build/tests">dbt tests</a> help us ensure baseline model validity and guarantees over time (for example: “this ID is unique”). A dbt test failure should be something that you’d want to fix quickly to ensure models work for downstream users. So, <strong>a test failure should be something you’d want to act on</strong> by doing something like fixing, dropping, or adding a warning flag on failing rows. A test can also be thought of an assertion: a not-null test on a column asserts that that column is never null.</p>
 <p>dbt tests are run every day in Airflow and alert when models fail. Because they run every day and execute SQL code, there is some tradeoff with cost: we don’t want to test too excessively because that could become wasteful.</p>
 <p>We usually prefer to have tests on <a class="reference external" href="https://docs.getdbt.com/docs/build/materializations">tables (rather than views)</a> for cost reasons. Most tables, especially in mart datasets, should have at least a primary key test that tests that there is a unique, non-null column; this is one way to monitor that the <a class="reference internal" href="#model-grain"><span class="std std-ref">grain</span></a> of the model is stable and is not being violated.</p>
@@ -1235,31 +872,31 @@ tests_and_docs --&gt; merge_model_changes
 <p class="admonition-title">Make sure your tests pass!</p>
 <p>After you add your tests, you should make sure they pass by running <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">test</span> <span class="pre">-s</span> <span class="pre">&lt;your_model&gt;</span></code>. If your tests don’t pass, you should <a class="reference internal" href="#identify-bug"><span class="std std-ref">figure out why</span></a> and <a class="reference internal" href="#change-models"><span class="std std-ref">make changes</span></a> until they do.</p>
 </div>
-</div>
-<div class="section" id="documentation">
-<h4>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="documentation">
+<h4>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h4>
 <p><a class="reference external" href="https://docs.getdbt.com/docs/collaborate/documentation">Documentation in dbt</a> helps different data users collaborate by explaining what a given model or column is. Documentation should answer the question: <strong>What information would someone else need to use this model/column effectively?</strong> All models should have a description and most columns should too.</p>
 <p>Try to write a description that will make sense to future readers. It is helpful to be specific, for example saying “April 2023” instead of “now” or “current”.</p>
 <p>Model documentation should make the <a class="reference internal" href="#model-grain"><span class="std std-ref">grain</span></a> clear.</p>
-</div>
-</div>
-<div class="section" id="merge-your-changes">
-<span id="merge-model-changes"></span><h3>Merge your changes<a class="headerlink" href="#merge-your-changes" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="merge-your-changes">
+<span id="merge-model-changes"></span><h3>Merge your changes<a class="headerlink" href="#merge-your-changes" title="Link to this heading">#</a></h3>
 <p>Once you have finished work, you should make a PR to get your changes merged into <code class="docutils literal notranslate"><span class="pre">main</span></code>. PRs that sit and become stale may become problematic if other people make changes to models before they merge that cause them to behave unexpectedly.</p>
 <p>Once your changes merge, if they will impact other users (for example by changing a high-traffic model), you may want to announce your changes on Slack in  <a class="reference external" href="https://cal-itp.slack.com/archives/C050ZNDUL21"><code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code></a>, <a class="reference external" href="https://cal-itp.slack.com/archives/C02H6JUSS9L"><code class="docutils literal notranslate"><span class="pre">#data-analysis</span></code></a>, or a similar channel.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><a class="reference external" href="https://docs.getdbt.com/docs/build/incremental-models">Incremental models</a> downstream of your changes may require a <strong>full refresh</strong> after your changes merge.</p>
 <p>To check for incremental models downstream of your model, run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">&lt;your_model&gt;+,config.materialized:incremental</span> <span class="pre">--resource-type</span> <span class="pre">model</span></code>. If you need to refresh incremental models:</p>
-<ol class="simple">
+<ol class="arabic simple">
 <li><p>Wait for the <a class="reference external" href="https://github.com/cal-itp/data-infra/actions/workflows/build-dbt.yml">build-dbt</a> GitHub action associated with your PR to complete after you merge.</p></li>
 <li><p>Go into the <a class="reference external" href="https://o1d2fa0877cf3fb10p-tp.appspot.com/home">Airflow UI</a> and go to the <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh">transform_warehouse_full_refresh DAG</a>. <strong>Specify appropriate model selectors to only refresh models that were affected by your changes</strong> and then run the DAG task.</p></li>
 </ol>
 </div>
-</div>
-</div>
-<div class="section" id="incremental-models">
-<h2>Incremental models<a class="headerlink" href="#incremental-models" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="incremental-models">
+<h2>Incremental models<a class="headerlink" href="#incremental-models" title="Link to this heading">#</a></h2>
 <p><a class="reference external" href="https://docs.getdbt.com/docs/build/incremental-models">Incremental models</a> are one of the trickier concepts to learn in dbt and in our warehouse. By default, dbt models process all of the available data identified by the SQL queries within them and essentially re-create each model from scratch every day. Incremental models are designed to process smaller batches of data and <strong>update</strong> existing models, rather than creating the model from scratch. This is helpful for large data (like GTFS RT and GTFS schedule stop times) where re-processing all of history every day is expensive.</p>
 <div class="admonition-computational-cost-vs-complexity-cost-trade-off admonition">
 <p class="admonition-title">Computational cost vs. complexity cost trade-off</p>
@@ -1273,23 +910,23 @@ tests_and_docs --&gt; merge_model_changes
 <p class="admonition-title">Identifying incremental models in your dependency tree</p>
 <p>If you’re trying to identify whether there are incremental models in the dependency tree of a model you’re working with, you can use the following command (run from the <code class="docutils literal notranslate"><span class="pre">warehouse</span></code> directory in the data infra repo): <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">+&lt;your_model&gt;+,config.materialized:incremental</span> <span class="pre">--resource-type</span> <span class="pre">model</span></code>.</p>
 </div>
-</div>
-<div class="section" id="helpful-talks-and-presentations">
-<h2>Helpful talks and presentations<a class="headerlink" href="#helpful-talks-and-presentations" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="dbt-at-cal-itp-introduction">
-<h3>dbt at Cal-ITP introduction<a class="headerlink" href="#dbt-at-cal-itp-introduction" title="Permalink to this headline">¶</a></h3>
-<p>In 2022, Laurie <a class="reference external" href="https://cal-itp.slack.com/archives/C02NJRV9QUB/p1651082191730229?thread_ts=1650648699.809809&amp;cid=C02NJRV9QUB">gave a lunch and learn</a> about why we are using dbt at Cal-ITP.</p>
-</div>
-<div class="section" id="coalesce">
-<h3>Coalesce<a class="headerlink" href="#coalesce" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="helpful-talks-and-presentations">
+<h2>Helpful talks and presentations<a class="headerlink" href="#helpful-talks-and-presentations" title="Link to this heading">#</a></h2>
+<section id="dbt-at-cal-itp-introduction">
+<h3>dbt at Cal-ITP introduction<a class="headerlink" href="#dbt-at-cal-itp-introduction" title="Link to this heading">#</a></h3>
+<p>In 2022, Laurie <a class="reference external" href="https://cal-itp.slack.com/archives/C02NJRV9QUB/p1651082191730229?thread_ts=1650648699.809809&amp;amp;cid=C02NJRV9QUB">gave a lunch and learn</a> about why we are using dbt at Cal-ITP.</p>
+</section>
+<section id="coalesce">
+<h3>Coalesce<a class="headerlink" href="#coalesce" title="Link to this heading">#</a></h3>
 <p>Some folks from Data Services attended Coalesce (dbt’s conference) in 2022 and thought the following talks may be of interest:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.youtube.com/watch?v=EYdb1x1cO9U&amp;list=PL0QYlrC86xQlj9UDGiEwhXQuSjuSyPJHl&amp;index=66">The accidental analytics engineer by Michael Chow</a> - this talk outlines some differences Michael has experienced between R/tidyverse and dbt/MDS (modern data stack) approaches to working with data</p></li>
-<li><p><a class="reference external" href="https://www.youtube.com/watch?v=0SDp1yTK2zc&amp;list=PL0QYlrC86xQlj9UDGiEwhXQuSjuSyPJHl&amp;index=112">dbt and MDS in small-batch academic research</a> - this talk outlines some benefits this researcher found to using dbt in an academic context; note that he uses DuckDB (instead of BigQuery)</p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=EYdb1x1cO9U&amp;amp;list=PL0QYlrC86xQlj9UDGiEwhXQuSjuSyPJHl&amp;amp;index=66">The accidental analytics engineer by Michael Chow</a> - this talk outlines some differences Michael has experienced between R/tidyverse and dbt/MDS (modern data stack) approaches to working with data</p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=0SDp1yTK2zc&amp;amp;list=PL0QYlrC86xQlj9UDGiEwhXQuSjuSyPJHl&amp;amp;index=112">dbt and MDS in small-batch academic research</a> - this talk outlines some benefits this researcher found to using dbt in an academic context; note that he uses DuckDB (instead of BigQuery)</p></li>
 </ul>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1303,7 +940,7 @@ tests_and_docs --&gt; merge_model_changes
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./warehouse"
         },
         predefinedOutput: true
@@ -1311,44 +948,148 @@ tests_and_docs --&gt; merge_model_changes
     </script>
     <script>kernelName = 'python3'</script>
 
-              </div>
+                </article>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="what_is_agency.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">What is an <code class="docutils literal notranslate"><span class="pre">agency</span></code>?</p>
-        </div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="what_is_agency.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">What is an <code class="docutils literal notranslate"><span class="pre">agency</span></code>?</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="adding_oneoff_data.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="adding_oneoff_data.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Adding Ad-Hoc Data to the Warehouse</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
+                </footer>
+              
+            </div>
             
-        </div>
-    </div>
-    <footer class="footer">
-  <p>
-    
-      By Cal-ITP<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-      </div>
-    </div>
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-dbt">What is dbt?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dbt-project-structure">dbt project structure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute-to-the-dbt-project">How to contribute to the dbt project</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting started</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-workflow">Developer workflow</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#video-walkthrough">Video walkthrough</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-considerations">Modeling considerations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-bug">Identify the cause of your bug</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#should-it-be-a-dbt-model">Should it be a dbt model?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-grain-of-your-model">What is the grain of your model?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#is-there-already-a-model-with-this-grain">Is there already a model with this grain?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-your-changes">Make your changes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-bug-fix-prs">Example bug fix PRs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-new-column-prs">Example new column PRs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-new-model-prs">Example new model PRs</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-your-changes">Test your changes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#column-values">Column values</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#row-count-and-uniqueness">Row count and uniqueness</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#performance">Performance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#downstream-impacts">Downstream impacts</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#other-considerations">Other considerations</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-dbt-tests-and-documentation">Add dbt tests and documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dbt-tests">dbt tests</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#merge-your-changes">Merge your changes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#incremental-models">Incremental models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#helpful-talks-and-presentations">Helpful talks and presentations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dbt-at-cal-itp-introduction">dbt at Cal-ITP introduction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coalesce">Coalesce</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <div class="footer-item">
+    
+<p class="component-author">
+By Cal-ITP
+</p>
 
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>

@@ -1,767 +1,547 @@
 
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" data-content_root="../" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>Helpful Links &#8212; Cal-ITP Data Services</title>
-    
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    
-      
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
-    
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
     <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-SZB618VNBZ');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-SZB618VNBZ');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'analytics_tools/knowledge_sharing';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Tutorials for New Python Users" href="../analytics_new_analysts/overview.html" />
     <link rel="prev" title="Using Data Catalogs" href="data_catalogs.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
-<script>
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){ dataLayer.push(arguments); }
-                    gtag('js', new Date());
-                    gtag('config', 'G-SZB618VNBZ');
-                </script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
-    
-    <div class="container-fluid" id="banner"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
 
-    <div class="container-xl">
-      <div class="row">
-          
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
       
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
         
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
       
-      
-      <img src="../_static/calitp_logo_MAIN.png" class="logo" alt="logo">
-      
-      
-      <h1 class="site-logo" id="site-title">Cal-ITP Data Services</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Data Services Documentation
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Analysts
- </span>
-</p>
+    
+    
+    <img src="../_static/calitp_logo_MAIN.png" class="logo__image only-light" alt="Cal-ITP Data Services - Home"/>
+    <script>document.write(`<img src="../_static/calitp_logo_MAIN.png" class="logo__image only-dark" alt="Cal-ITP Data Services - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Data Services Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysts</span></p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_welcome/overview.html">
-   Welcome!
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_welcome/what_is_calitp.html">
-     Cal-ITP Project Information
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_welcome/how_we_work.html">
-     How We Work
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../analytics_onboarding/overview.html">
-   Technical Onboarding
-  </a>
- </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
-   Introduction to Analytics Tools
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="github_setup.html">
-     GitHub Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="tools_quick_links.html">
-     Tools Quick Links
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="bi_dashboards.html">
-     Business Insights &amp; Dashboards
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="jupyterhub.html">
-     JupyterHub
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="local_oracle_db_connections.html">
-     Local Oracle Database Connections
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="python_libraries.html">
-     Useful Python Libraries
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="scripts.html">
-     Scripts
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="rt_analysis.html">
-     RT Analysis Module
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="saving_code.html">
-     Saving Code
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="storing_data.html">
-     Storing Data During Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="data_catalogs.html">
-     Using Data Catalogs
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Helpful Links
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_new_analysts/overview.html">
-   Tutorials for New Python Users
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/01-data-analysis-intro.html">
-     Data Analysis: Intro
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/02-data-analysis-intermediate.html">
-     Data Analysis: Intermediate
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/03-data-management.html">
-     Data Management
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/04-notebooks.html">
-     Working with Jupyter notebooks
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/05-spatial-analysis-basics.html">
-     Working with Geospatial Data: Basics
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/06-spatial-analysis-intro.html">
-     Working with Geospatial Data: Intro
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/07-spatial-analysis-intermediate.html">
-     Working with Geospatial Data: Intermediate
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/08-spatial-analysis-advanced.html">
-     Working with Geospatial Data: Advanced
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../warehouse/overview.html">
-   Introduction to the Warehouse
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/warehouse_starter_kit.html">
-     Warehouse: Where to Begin
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/navigating_dbt_docs.html">
-     Navigating the dbt Docs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/what_is_agency.html">
-     What is an
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       agency
-      </span>
-     </code>
-     ?
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/developing_dbt_models.html">
-     Developing models in dbt
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/adding_oneoff_data.html">
-     Adding Ad-Hoc Data to the Warehouse
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/what_is_gtfs.html">
-     What is GTFS, anyway?
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../publishing/overview.html">
-   Where can I publish data?
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/1_publishing_principles.html">
-     Data Publishing Principles
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/2_static_files.html">
-     Static Visualizations
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/3_github_pages.html">
-     HTML Visualizations
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/4_analytics_portfolio_site.html">
-     The Cal-ITP Analytics Portfolio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/5_notebooks_styling.html">
-     Getting Notebooks Ready for the Portfolio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/6_metabase.html">
-     Metabase
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/7_gcs.html">
-     GCS
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/8_ckan.html">
-     Publishing data to California Open Data aka CKAN
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/9_geoportal.html">
-     Publishing data to California State Geoportal
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_welcome/overview.html">Welcome!</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_welcome/what_is_calitp.html">Cal-ITP Project Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_welcome/how_we_work.html">How We Work</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Developers
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../architecture/architecture_overview.html">
-   Architecture Overview
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/services.html">
-     Deployed Services and Sites
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/images_and_packages.html">
-     Published Images and Packages
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/data.html">
-     Data pipelines
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../airflow/dags-maintenance.html">
-   Airflow Operational Considerations
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../transit_database/transitdatabase.html">
-   Transit Database (Airtable)
-  </a>
- </li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../analytics_onboarding/overview.html">Technical Onboarding</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="overview.html">Introduction to Analytics Tools</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="github_setup.html">GitHub Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_quick_links.html">Tools Quick Links</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bi_dashboards.html">Business Insights &amp; Dashboards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jupyterhub.html">JupyterHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_oracle_db_connections.html">Local Oracle Database Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_libraries.html">Useful Python Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html">Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rt_analysis.html">RT Analysis Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="saving_code.html">Saving Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storing_data.html">Storing Data During Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_catalogs.html">Using Data Catalogs</a></li>
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Helpful Links</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Contribute to the Docs!
- </span>
-</p>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_new_analysts/overview.html">Tutorials for New Python Users</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/01-data-analysis-intro.html">Data Analysis: Intro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/02-data-analysis-intermediate.html">Data Analysis: Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/03-data-management.html">Data Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/04-notebooks.html">Working with Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/05-spatial-analysis-basics.html">Working with Geospatial Data: Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/06-spatial-analysis-intro.html">Working with Geospatial Data: Intro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/07-spatial-analysis-intermediate.html">Working with Geospatial Data: Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/08-spatial-analysis-advanced.html">Working with Geospatial Data: Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../warehouse/overview.html">Introduction to the Warehouse</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/warehouse_starter_kit.html">Warehouse: Where to Begin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/navigating_dbt_docs.html">Navigating the dbt Docs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/what_is_agency.html">What is an <code class="docutils literal notranslate"><span class="pre">agency</span></code>?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/developing_dbt_models.html">Developing models in dbt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/adding_oneoff_data.html">Adding Ad-Hoc Data to the Warehouse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/what_is_gtfs.html">What is GTFS, anyway?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../publishing/overview.html">Where can I publish data?</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/1_publishing_principles.html">Data Publishing Principles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/2_static_files.html">Static Visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/3_github_pages.html">HTML Visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/4_analytics_portfolio_site.html">The Cal-ITP Analytics Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/5_notebooks_styling.html">Getting Notebooks Ready for the Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/6_metabase.html">Metabase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/7_gcs.html">GCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/8_ckan.html">Publishing data to California Open Data aka CKAN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/9_geoportal.html">Publishing data to California State Geoportal</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../contribute/overview.html">
-   Getting Started
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/contribute-best-practices.html">
-     Best Practices
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/submitting_changes.html">
-     Submitting Changes
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/content_types.html">
-     Common Content
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../architecture/architecture_overview.html">Architecture Overview</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/services.html">Deployed Services and Sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/images_and_packages.html">Published Images and Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/data.html">Data pipelines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../airflow/dags-maintenance.html">Airflow Operational Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transit_database/transitdatabase.html">Transit Database (Airtable)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contribute to the Docs!</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../contribute/overview.html">Getting Started</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/contribute-best-practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/submitting_changes.html">Submitting Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/content_types.html">Common Content</a></li>
+</ul>
+</li>
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
+      </div>
+      
+      <main id="main-content" class="bd-main">
         
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/analytics_tools/knowledge_sharing.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
     </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_tools/knowledge_sharing.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra/issues/new?title=Issue%20on%20page%20%2Fanalytics_tools/knowledge_sharing.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/cal-itp/data-infra/"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_tools/knowledge_sharing.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_tools/knowledge_sharing.md"><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
-    </div>
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/analytics_tools/knowledge_sharing.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
 
-            <!-- Launch buttons -->
 
-        </div>
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Helpful Links</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div>
+                <h2> Contents </h2>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
+            <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data-analysis">
-   Data Analysis
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#python">
-     Python
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#pandas">
-     Pandas
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#summarizing">
-     Summarizing
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#merging">
-     Merging
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dates">
-     Dates
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#monetary-values">
-     Monetary Values
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#visualization">
-   Visualization
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#charts">
-     Charts
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#altair">
-       Altair
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#maps">
-     Maps
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dataframes">
-     DataFrames
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#ipywidgets">
-     ipywidgets
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#tabs">
-       Tabs
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#markdown">
-     Markdown
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-analysis">Data Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python">Python</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pandas">Pandas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summarizing">Summarizing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#merging">Merging</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dates">Dates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monetary-values">Monetary Values</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">Visualization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#charts">Charts</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#altair">Altair</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maps">Maps</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataframes">DataFrames</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ipywidgets">ipywidgets</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tabs">Tabs</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#markdown">Markdown</a></li>
+</ul>
+</li>
+</ul>
             </nav>
         </div>
     </div>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Helpful Links</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data-analysis">
-   Data Analysis
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#python">
-     Python
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#pandas">
-     Pandas
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#summarizing">
-     Summarizing
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#merging">
-     Merging
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dates">
-     Dates
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#monetary-values">
-     Monetary Values
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#visualization">
-   Visualization
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#charts">
-     Charts
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#altair">
-       Altair
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#maps">
-     Maps
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dataframes">
-     DataFrames
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#ipywidgets">
-     ipywidgets
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#tabs">
-       Tabs
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#markdown">
-     Markdown
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
 
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            
-              <div>
+              
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="helpful-links">
-<span id="knowledge-sharing"></span><h1>Helpful Links<a class="headerlink" href="#helpful-links" title="Permalink to this headline">¶</a></h1>
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="helpful-links">
+<span id="knowledge-sharing"></span><h1>Helpful Links<a class="headerlink" href="#helpful-links" title="Link to this heading">#</a></h1>
 <p>Here are some resources data analysts have collected and referenced, that will hopefully help you out in your work. Have something you want to share? Create a new markdown file, add it <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/example_report">to the example report folder</a>, and <a class="reference external" href="https://app.slack.com/client/T014965JTHA/C013N8GELLF/user_profile/U02PCTPSZ8A">message Amanda.</a></p>
 <ul class="simple">
-<li><p><a class="reference external" href="#data-analysis">Data Analysis</a></p>
+<li><p><a class="reference internal" href="#data-analysis">Data Analysis</a></p>
 <ul>
-<li><p><a class="reference external" href="#python">Python</a></p></li>
-<li><p><a class="reference external" href="#pandas">Pandas</a></p></li>
-<li><p><a class="reference external" href="#summarizing">Summarizing</a></p></li>
-<li><p><a class="reference external" href="#merging">Merging</a></p></li>
-<li><p><a class="reference external" href="#dates">Dates</a></p></li>
-<li><p><a class="reference external" href="#monetary-values">Monetary Values</a></p></li>
+<li><p><a class="reference internal" href="#python">Python</a></p></li>
+<li><p><a class="reference internal" href="#pandas">Pandas</a></p></li>
+<li><p><a class="reference internal" href="#summarizing">Summarizing</a></p></li>
+<li><p><a class="reference internal" href="#merging">Merging</a></p></li>
+<li><p><a class="reference internal" href="#dates">Dates</a></p></li>
+<li><p><a class="reference internal" href="#monetary-values">Monetary Values</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference external" href="#visualization">Visualizations</a></p>
+<li><p><a class="reference internal" href="#visualization">Visualizations</a></p>
 <ul>
-<li><p><a class="reference external" href="#charts">Charts</a></p></li>
-<li><p><a class="reference external" href="#maps">Maps</a></p></li>
-<li><p><a class="reference external" href="#dataframes">DataFrames</a></p></li>
-<li><p><a class="reference external" href="#ipywidgets">Ipywidgets</a></p></li>
-<li><p><a class="reference external" href="#markdown">Markdown</a></p></li>
+<li><p><a class="reference internal" href="#charts">Charts</a></p></li>
+<li><p><a class="reference internal" href="#maps">Maps</a></p></li>
+<li><p><a class="reference internal" href="#dataframes">DataFrames</a></p></li>
+<li><p><a class="reference internal" href="#ipywidgets">Ipywidgets</a></p></li>
+<li><p><a class="reference internal" href="#markdown">Markdown</a></p></li>
 </ul>
 </li>
 </ul>
-<div class="section" id="data-analysis">
-<h2>Data Analysis<a class="headerlink" href="#data-analysis" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="python">
-<h3>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
+<section id="data-analysis">
+<span id="id1"></span><h2>Data Analysis<a class="headerlink" href="#data-analysis" title="Link to this heading">#</a></h2>
+<section id="python">
+<span id="id2"></span><h3>Python<a class="headerlink" href="#python" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://composingprograms.com/">Composing Programs: comprehensive Python course</a></p></li>
 <li><p><a class="reference external" href="https://book.pythontips.com/en/latest/index.html">Intermediate Python: tips for improving your programs</a></p></li>
@@ -770,18 +550,18 @@
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/41125909/python-find-elements-in-one-list-that-are-not-in-the-other">Find the elements that are in one list, but not in another list.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/4841436/what-exactly-does-do">What does += do?</a></p></li>
 </ul>
-</div>
-<div class="section" id="pandas">
-<h3>Pandas<a class="headerlink" href="#pandas" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="pandas">
+<span id="id3"></span><h3>Pandas<a class="headerlink" href="#pandas" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html">Turn columns into dummy variables.</a></p></li>
 <li><p><a class="reference external" href="https://xlsxwriter.readthedocs.io/example_pandas_multiple.html">Export multiple dataframes into their own sheets to a single Excel workbook.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/38783027/jupyter-notebook-display-two-pandas-tables-side-by-side">Display multiple dataframes side by side.</a></p></li>
 <li><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/options.html">Display all rows or columns of a dataframe in the notebook</a></p></li>
 </ul>
-</div>
-<div class="section" id="summarizing">
-<h3>Summarizing<a class="headerlink" href="#summarizing" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="summarizing">
+<span id="id4"></span><h3>Summarizing<a class="headerlink" href="#summarizing" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/35640364/python-pandas-max-value-in-a-group-as-a-new-column">Groupby and calculate a new value, then use that value within your DataFrame.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/30244952/how-do-i-create-a-new-column-from-the-output-of-pandas-groupby-sum">Explanation of the split-apply-combine paradigm.</a></p></li>
@@ -791,9 +571,9 @@
 </ul>
 </li>
 </ul>
-</div>
-<div class="section" id="merging">
-<h3>Merging<a class="headerlink" href="#merging" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="merging">
+<span id="id5"></span><h3>Merging<a class="headerlink" href="#merging" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>When working with data sets where the “merge on” column is a string data type, it can be difficult to get the DataFrames to join. For example, df1 lists <i>County of Sonoma, Human Services Department, Adult and Aging Division</i>, but df2 references the same department as: <i>County of Sonoma (Human Services Department) </i>.</p>
 <ul>
@@ -803,25 +583,25 @@
 </ul>
 </li>
 </ul>
-</div>
-<div class="section" id="dates">
-<h3>Dates<a class="headerlink" href="#dates" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="dates">
+<span id="id6"></span><h3>Dates<a class="headerlink" href="#dates" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://towardsdatascience.com/all-the-pandas-shift-you-should-know-for-data-analysis-791c1692b5e">Use shift to calculate the number of days between two dates.</a></p></li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;n_days_between&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;prepared_date&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="s1">&#39;prepared_date&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">days</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;n_days_between&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;prepared_date&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="s1">&#39;prepared_date&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">days</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/59181855/get-the-financial-year-from-a-date-in-a-pandas-dataframe-and-add-as-new-column">Assign fiscal year to a date.</a></p></li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure your column is a date time object</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure your column is a date time object</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;financial_year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;base_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">month</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="monetary-values">
-<h3>Monetary Values<a class="headerlink" href="#monetary-values" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="monetary-values">
+<span id="id7"></span><h3>Monetary Values<a class="headerlink" href="#monetary-values" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/d3/d3-format">Reformat values that are in scientific notation into millions or thousands.</a></p>
 <ul>
@@ -829,14 +609,14 @@
 </ul>
 </li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">&quot;Funding Amount&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$.2s&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Obligated Funding ($2021)&quot;</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">&quot;Funding Amount&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$.2s&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Obligated Funding ($2021)&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/41271673/format-numbers-in-a-python-pandas-dataframe-as-currency-in-thousands-or-millions">Reformat values from 19000000 to $19.0M.</a></p></li>
 <li><p>Adjust for inflation.</p></li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Must install and import cpi package for the function to work.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Must install and import cpi package for the function to work.</span>
 <span class="k">def</span> <span class="nf">adjust_prices</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="n">cols</span> <span class="o">=</span>  <span class="p">[</span><span class="s2">&quot;total_requested&quot;</span><span class="p">,</span>
            <span class="s2">&quot;fed_requested&quot;</span><span class="p">,</span>
@@ -872,51 +652,51 @@
     <span class="k">return</span> <span class="n">df</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="visualization">
-<h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="charts">
-<h3>Charts<a class="headerlink" href="#charts" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="altair">
-<h4>Altair<a class="headerlink" href="#altair" title="Permalink to this headline">¶</a></h4>
+</section>
+</section>
+<section id="visualization">
+<span id="id8"></span><h2>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">#</a></h2>
+<section id="charts">
+<span id="id9"></span><h3>Charts<a class="headerlink" href="#charts" title="Link to this heading">#</a></h3>
+<section id="altair">
+<h4>Altair<a class="headerlink" href="#altair" title="Link to this heading">#</a></h4>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/altair-viz/altair/issues/1934">Manually concatenate a bar chart and line chart to create a dual axis graph.</a></p></li>
 <li><p><a class="reference external" href="https://altair-viz.github.io/user_guide/transform/timeunit.html">Adjust the time units of a datetime column for an axis.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/61194028/adding-labels-at-end-of-line-chart-in-altair">Label the lines on a line chart.</a></p></li>
-<li><p><a class="reference external" href="altair-viz/altair#1099">Layer altair charts, lose color with no encoding, workaround to get different colors to appear on legend.</a></p></li>
+<li><p><a class="reference external" href="https://github.com/altair-viz/altair/issues/1099">Layer altair charts, lose color with no encoding, workaround to get different colors to appear on legend.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/61447422/quick-way-to-visualise-multiple-columns-in-altair-with-regression-lines">Add regression line to scatterplot.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/62281179/how-to-adjust-scale-ranges-in-altair">Adjust scales for axes to be the min and max values.</a></p></li>
 <li><p><a class="reference external" href="https://github.com/altair-viz/altair/issues/1355">Resolving the error ‘TypeError: Object of type ‘Timestamp’ is not JSON serializable’</a></p></li>
 <li><p><a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/460e9fc8f4311e90d9c647e149a23a9e38035394/Agreement_Overlap/Visuals.ipynb">Manually sort a legend.</a></p></li>
 <li><p>Add tooltip to chart functions.</p></li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_tooltip</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">tooltip1</span><span class="p">,</span> <span class="n">tooltip2</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_tooltip</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">tooltip1</span><span class="p">,</span> <span class="n">tooltip2</span><span class="p">):</span>
     <span class="n">chart</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">chart</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">tooltip</span><span class="o">=</span> <span class="p">[</span><span class="n">tooltip1</span><span class="p">,</span><span class="n">tooltip2</span><span class="p">]))</span>
     <span class="k">return</span> <span class="n">chart</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="maps">
-<h3>Maps<a class="headerlink" href="#maps" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="maps">
+<span id="id10"></span><h3>Maps<a class="headerlink" href="#maps" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://nbviewer.org/github/python-visualization/folium/blob/v0.2.0/examples/Colormaps.ipynb">Examples of folium, branca, and color maps.</a></p></li>
 <li><p><a class="reference external" href="https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.explore.html">Quick interactive maps with Geopandas.gdf.explore()</a></p></li>
 </ul>
-</div>
-<div class="section" id="dataframes">
-<h3>DataFrames<a class="headerlink" href="#dataframes" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="dataframes">
+<span id="id11"></span><h3>DataFrames<a class="headerlink" href="#dataframes" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/style.html">Styling dataframes with HTML.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/56647813/perform-operations-after-styling-in-a-dataframe">After styling a DataFrame, you will have to access the underlying data with .data</a>.</p></li>
 </ul>
-</div>
-<div class="section" id="ipywidgets">
-<h3>ipywidgets<a class="headerlink" href="#ipywidgets" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="tabs">
-<h4>Tabs<a class="headerlink" href="#tabs" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="ipywidgets">
+<span id="id12"></span><h3>ipywidgets<a class="headerlink" href="#ipywidgets" title="Link to this heading">#</a></h3>
+<section id="tabs">
+<h4>Tabs<a class="headerlink" href="#tabs" title="Link to this heading">#</a></h4>
 <ul class="simple">
 <li><p>Create tabs to switch between different views.</p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/50842160/how-to-display-matplotlib-plots-in-a-jupyter-tab-widget">Stack Overflow Help.</a></p>
@@ -926,19 +706,19 @@
 </ul>
 </li>
 </ul>
-</div>
-</div>
-<div class="section" id="markdown">
-<h3>Markdown<a class="headerlink" href="#markdown" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="markdown">
+<span id="id13"></span><h3>Markdown<a class="headerlink" href="#markdown" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.pluralsight.com/guides/working-tables-github-markdown">Create a markdown table.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/2822089/how-to-link-to-part-of-the-same-document-in-markdown">Add a table of content that links to headers throughout a markdown file.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/32563078/how-link-to-any-local-file-with-markdown-syntax?rq=1">Add links to local files.</a></p></li>
 <li><p><a class="reference external" href="https://datascienceparichay.com/article/insert-image-in-a-jupyter-notebook/">Direct embed an image.</a></p></li>
 </ul>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -952,7 +732,7 @@
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./analytics_tools"
         },
         predefinedOutput: true
@@ -960,44 +740,125 @@
     </script>
     <script>kernelName = 'python3'</script>
 
-              </div>
+                </article>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="data_catalogs.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Using Data Catalogs</p>
-        </div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="data_catalogs.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Using Data Catalogs</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="../analytics_new_analysts/overview.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="../analytics_new_analysts/overview.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Tutorials for New Python Users</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
+                </footer>
+              
+            </div>
             
-        </div>
-    </div>
-    <footer class="footer">
-  <p>
-    
-      By Cal-ITP<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-      </div>
-    </div>
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-analysis">Data Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python">Python</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pandas">Pandas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summarizing">Summarizing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#merging">Merging</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dates">Dates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monetary-values">Monetary Values</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">Visualization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#charts">Charts</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#altair">Altair</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maps">Maps</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataframes">DataFrames</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ipywidgets">ipywidgets</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tabs">Tabs</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#markdown">Markdown</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <div class="footer-item">
+    
+<p class="component-author">
+By Cal-ITP
+</p>
 
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>

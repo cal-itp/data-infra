@@ -1,789 +1,542 @@
 
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" data-content_root="../" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>Useful Python Libraries &#8212; Cal-ITP Data Services</title>
-    
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    
-      
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
-    
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
     <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-SZB618VNBZ');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-SZB618VNBZ');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'analytics_tools/python_libraries';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Scripts" href="scripts.html" />
     <link rel="prev" title="Local Oracle Database Connections" href="local_oracle_db_connections.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
-<script>
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){ dataLayer.push(arguments); }
-                    gtag('js', new Date());
-                    gtag('config', 'G-SZB618VNBZ');
-                </script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
-    
-    <div class="container-fluid" id="banner"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
 
-    <div class="container-xl">
-      <div class="row">
-          
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
       
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
         
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
       
-      
-      <img src="../_static/calitp_logo_MAIN.png" class="logo" alt="logo">
-      
-      
-      <h1 class="site-logo" id="site-title">Cal-ITP Data Services</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Data Services Documentation
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Analysts
- </span>
-</p>
+    
+    
+    <img src="../_static/calitp_logo_MAIN.png" class="logo__image only-light" alt="Cal-ITP Data Services - Home"/>
+    <script>document.write(`<img src="../_static/calitp_logo_MAIN.png" class="logo__image only-dark" alt="Cal-ITP Data Services - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Data Services Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysts</span></p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_welcome/overview.html">
-   Welcome!
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_welcome/what_is_calitp.html">
-     Cal-ITP Project Information
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_welcome/how_we_work.html">
-     How We Work
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../analytics_onboarding/overview.html">
-   Technical Onboarding
-  </a>
- </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
-   Introduction to Analytics Tools
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="github_setup.html">
-     GitHub Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="tools_quick_links.html">
-     Tools Quick Links
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="bi_dashboards.html">
-     Business Insights &amp; Dashboards
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="jupyterhub.html">
-     JupyterHub
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="local_oracle_db_connections.html">
-     Local Oracle Database Connections
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Useful Python Libraries
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="scripts.html">
-     Scripts
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="rt_analysis.html">
-     RT Analysis Module
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="saving_code.html">
-     Saving Code
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="storing_data.html">
-     Storing Data During Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="data_catalogs.html">
-     Using Data Catalogs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="knowledge_sharing.html">
-     Helpful Links
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_new_analysts/overview.html">
-   Tutorials for New Python Users
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/01-data-analysis-intro.html">
-     Data Analysis: Intro
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/02-data-analysis-intermediate.html">
-     Data Analysis: Intermediate
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/03-data-management.html">
-     Data Management
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/04-notebooks.html">
-     Working with Jupyter notebooks
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/05-spatial-analysis-basics.html">
-     Working with Geospatial Data: Basics
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/06-spatial-analysis-intro.html">
-     Working with Geospatial Data: Intro
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/07-spatial-analysis-intermediate.html">
-     Working with Geospatial Data: Intermediate
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/08-spatial-analysis-advanced.html">
-     Working with Geospatial Data: Advanced
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../warehouse/overview.html">
-   Introduction to the Warehouse
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/warehouse_starter_kit.html">
-     Warehouse: Where to Begin
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/navigating_dbt_docs.html">
-     Navigating the dbt Docs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/what_is_agency.html">
-     What is an
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       agency
-      </span>
-     </code>
-     ?
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/developing_dbt_models.html">
-     Developing models in dbt
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/adding_oneoff_data.html">
-     Adding Ad-Hoc Data to the Warehouse
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/what_is_gtfs.html">
-     What is GTFS, anyway?
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../publishing/overview.html">
-   Where can I publish data?
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/1_publishing_principles.html">
-     Data Publishing Principles
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/2_static_files.html">
-     Static Visualizations
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/3_github_pages.html">
-     HTML Visualizations
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/4_analytics_portfolio_site.html">
-     The Cal-ITP Analytics Portfolio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/5_notebooks_styling.html">
-     Getting Notebooks Ready for the Portfolio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/6_metabase.html">
-     Metabase
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/7_gcs.html">
-     GCS
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/8_ckan.html">
-     Publishing data to California Open Data aka CKAN
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/9_geoportal.html">
-     Publishing data to California State Geoportal
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_welcome/overview.html">Welcome!</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_welcome/what_is_calitp.html">Cal-ITP Project Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_welcome/how_we_work.html">How We Work</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Developers
- </span>
-</p>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../analytics_onboarding/overview.html">Technical Onboarding</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="overview.html">Introduction to Analytics Tools</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="github_setup.html">GitHub Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_quick_links.html">Tools Quick Links</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bi_dashboards.html">Business Insights &amp; Dashboards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jupyterhub.html">JupyterHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_oracle_db_connections.html">Local Oracle Database Connections</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Useful Python Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.html">Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rt_analysis.html">RT Analysis Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="saving_code.html">Saving Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storing_data.html">Storing Data During Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_catalogs.html">Using Data Catalogs</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="knowledge_sharing.html">Helpful Links</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_new_analysts/overview.html">Tutorials for New Python Users</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/01-data-analysis-intro.html">Data Analysis: Intro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/02-data-analysis-intermediate.html">Data Analysis: Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/03-data-management.html">Data Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/04-notebooks.html">Working with Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/05-spatial-analysis-basics.html">Working with Geospatial Data: Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/06-spatial-analysis-intro.html">Working with Geospatial Data: Intro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/07-spatial-analysis-intermediate.html">Working with Geospatial Data: Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/08-spatial-analysis-advanced.html">Working with Geospatial Data: Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../warehouse/overview.html">Introduction to the Warehouse</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/warehouse_starter_kit.html">Warehouse: Where to Begin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/navigating_dbt_docs.html">Navigating the dbt Docs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/what_is_agency.html">What is an <code class="docutils literal notranslate"><span class="pre">agency</span></code>?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/developing_dbt_models.html">Developing models in dbt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/adding_oneoff_data.html">Adding Ad-Hoc Data to the Warehouse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/what_is_gtfs.html">What is GTFS, anyway?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../publishing/overview.html">Where can I publish data?</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/1_publishing_principles.html">Data Publishing Principles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/2_static_files.html">Static Visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/3_github_pages.html">HTML Visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/4_analytics_portfolio_site.html">The Cal-ITP Analytics Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/5_notebooks_styling.html">Getting Notebooks Ready for the Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/6_metabase.html">Metabase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/7_gcs.html">GCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/8_ckan.html">Publishing data to California Open Data aka CKAN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/9_geoportal.html">Publishing data to California State Geoportal</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../architecture/architecture_overview.html">
-   Architecture Overview
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/services.html">
-     Deployed Services and Sites
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/images_and_packages.html">
-     Published Images and Packages
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/data.html">
-     Data pipelines
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../airflow/dags-maintenance.html">
-   Airflow Operational Considerations
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../transit_database/transitdatabase.html">
-   Transit Database (Airtable)
-  </a>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../architecture/architecture_overview.html">Architecture Overview</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/services.html">Deployed Services and Sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/images_and_packages.html">Published Images and Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/data.html">Data pipelines</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Contribute to the Docs!
- </span>
-</p>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../airflow/dags-maintenance.html">Airflow Operational Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transit_database/transitdatabase.html">Transit Database (Airtable)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contribute to the Docs!</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../contribute/overview.html">
-   Getting Started
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/contribute-best-practices.html">
-     Best Practices
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/submitting_changes.html">
-     Submitting Changes
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/content_types.html">
-     Common Content
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../contribute/overview.html">Getting Started</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/contribute-best-practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/submitting_changes.html">Submitting Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/content_types.html">Common Content</a></li>
+</ul>
+</li>
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="../_sources/analytics_tools/python_libraries.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/analytics_tools/python_libraries.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+</nav></div>
     </div>
-</div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/cal-itp/data-infra/"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_tools/python_libraries.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_tools/python_libraries.md"><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
     </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_tools/python_libraries.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra/issues/new?title=Issue%20on%20page%20%2Fanalytics_tools/python_libraries.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
 
-            <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/cal-itp/data-infra/main?urlpath=tree/docs/analytics_tools/python_libraries.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/analytics_tools/python_libraries.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
     </div>
+  
 </div>
+</div>
+              
+              
 
-        </div>
-
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Useful Python Libraries</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div>
+                <h2> Contents </h2>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
+            <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#table-of-contents">
-   Table of Contents
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#shared-utils">
-   shared utils
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#in-terminal">
-     In terminal
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#in-notebook">
-     In notebook
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#calitp-data-analysis">
-   calitp-data-analysis
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#import-tbls">
-     import tbls
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#query-sql">
-     query_sql
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#siuba">
-   siuba
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#basic-query">
-     Basic query
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#collect-query-results">
-     Collect query results
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#show-query-sql">
-     Show query SQL
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#more-siuba-resources">
-     More siuba Resources
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#pandas">
-   pandas
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#add-new-packages">
-   Add New Packages
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#updating-calitp-data-analysis">
-   Updating calitp-data-analysis
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#appendix-calitp-data-infra">
-   Appendix: calitp-data-infra
-  </a>
- </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shared-utils">shared utils</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-terminal">In terminal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-notebook">In notebook</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calitp-data-analysis">calitp-data-analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-tbls">import tbls</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#query-sql">query_sql</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#siuba">siuba</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-query">Basic query</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collect-query-results">Collect query results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#show-query-sql">Show query SQL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#more-siuba-resources">More siuba Resources</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pandas">pandas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-new-packages">Add New Packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#updating-calitp-data-analysis">Updating calitp-data-analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-calitp-data-infra">Appendix: calitp-data-infra</a></li>
+</ul>
             </nav>
         </div>
     </div>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Useful Python Libraries</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#table-of-contents">
-   Table of Contents
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#shared-utils">
-   shared utils
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#in-terminal">
-     In terminal
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#in-notebook">
-     In notebook
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#calitp-data-analysis">
-   calitp-data-analysis
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#import-tbls">
-     import tbls
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#query-sql">
-     query_sql
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#siuba">
-   siuba
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#basic-query">
-     Basic query
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#collect-query-results">
-     Collect query results
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#show-query-sql">
-     Show query SQL
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#more-siuba-resources">
-     More siuba Resources
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#pandas">
-   pandas
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#add-new-packages">
-   Add New Packages
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#updating-calitp-data-analysis">
-   Updating calitp-data-analysis
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#appendix-calitp-data-infra">
-   Appendix: calitp-data-infra
-  </a>
- </li>
-</ul>
 
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            
-              <div>
+              
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="useful-python-libraries">
-<span id="python-libraries"></span><h1>Useful Python Libraries<a class="headerlink" href="#useful-python-libraries" title="Permalink to this headline">¶</a></h1>
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="useful-python-libraries">
+<span id="python-libraries"></span><h1>Useful Python Libraries<a class="headerlink" href="#useful-python-libraries" title="Link to this heading">#</a></h1>
 <p>The following libraries are available and recommended for use by Cal-ITP data analysts. Our JupyterHub environment comes with all of these installed already, except for <code class="docutils literal notranslate"><span class="pre">calitp-data-infra</span></code>. A full list of the packages included in the system image that underpins our JupyterHub environment can be found (and updated when needed) <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml">here</a>.</p>
-<div class="section" id="table-of-contents">
-<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
-<ol class="simple">
-<li><p><a class="reference external" href="#shared-utils">shared utils</a></p></li>
-<li><p><a class="reference external" href="#calitp-data-analysis">calitp-data-analysis</a></p></li>
-<li><p><a class="reference external" href="#siuba">siuba</a>
-<br> - <a class="reference external" href="#basic-query">Basic Query</a>
-<br> - <a class="reference external" href="#collect-query-results">Collect Query Results</a>
-<br> - <a class="reference external" href="#show-query-sql">Show Query SQL</a>
-<br> - <a class="reference internal" href="#more-siuba-resources"><span class="std std-ref">More siuba Resources</span></a></p></li>
-<li><p><a class="reference internal" href="#pandas-resources"><span class="std std-ref">pandas</span></a></p></li>
-<li><p><a class="reference external" href="#add-new-packages">Add New Packages</a></p></li>
-<li><p><a class="reference external" href="#updating-calitp-data-analysis">Updating calitp-data-analysis</a></p></li>
-<li><p><a class="reference internal" href="#appendix"><span class="std std-ref">Appendix: calitp-data-infra</span></a></p></li>
+<section id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#shared-utils">shared utils</a></p></li>
+<li><p><a class="reference internal" href="#calitp-data-analysis">calitp-data-analysis</a></p></li>
+<li><p><a class="reference internal" href="#siuba">siuba</a>
+<br> - <a class="reference internal" href="#basic-query">Basic Query</a>
+<br> - <a class="reference internal" href="#collect-query-results">Collect Query Results</a>
+<br> - <a class="reference internal" href="#show-query-sql">Show Query SQL</a>
+<br> - <a class="reference internal" href="#more-siuba-resources">More siuba Resources</a></p></li>
+<li><p><a class="reference internal" href="#pandas-resources">pandas</a></p></li>
+<li><p><a class="reference internal" href="#add-new-packages">Add New Packages</a></p></li>
+<li><p><a class="reference internal" href="#updating-calitp-data-analysis">Updating calitp-data-analysis</a></p></li>
+<li><p><a class="reference internal" href="#appendix">Appendix: calitp-data-infra</a></p></li>
 </ol>
-</div>
-<div class="section" id="shared-utils">
-<span id="id1"></span><h2>shared utils<a class="headerlink" href="#shared-utils" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="shared-utils">
+<span id="id1"></span><h2>shared utils<a class="headerlink" href="#shared-utils" title="Link to this heading">#</a></h2>
 <p>A set of shared utility functions can also be installed, similarly to any Python library. The <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> are stored in two places: <a class="reference external" href="https://github.com/cal-itp/data-analyses/shared_utils">here</a> in <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code>, which houses functions that are more likely to be updated. Shared functions that are updated less frequently are housed <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis">here</a> in the <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> package in <code class="docutils literal notranslate"><span class="pre">data-infra</span></code>. Generalized functions for analysis are added as collaborative work evolves so we aren’t constantly reinventing the wheel.</p>
-<div class="section" id="in-terminal">
-<h3>In terminal<a class="headerlink" href="#in-terminal" title="Permalink to this headline">¶</a></h3>
+<section id="in-terminal">
+<h3>In terminal<a class="headerlink" href="#in-terminal" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Navigate to the package folder: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">data-analyses/_shared_utils</span></code></p></li>
 <li><p>Use the make command to run through conda install and pip install: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setup_env</span></code></p>
@@ -801,22 +554,22 @@
 </ul>
 </li>
 </ul>
-</div>
-<div class="section" id="in-notebook">
-<h3>In notebook<a class="headerlink" href="#in-notebook" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="in-notebook">
+<h3>In notebook<a class="headerlink" href="#in-notebook" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis</span> <span class="kn">import</span> <span class="n">geography_utils</span>
 
 <span class="n">geography_utils</span><span class="o">.</span><span class="n">WGS84</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/starter_kit">data-analyses/starter_kit</a> for examples on how to use <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> for general functions, charts, and maps.</p>
-</div>
-</div>
-<div class="section" id="calitp-data-analysis">
-<span id="id2"></span><h2>calitp-data-analysis<a class="headerlink" href="#calitp-data-analysis" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="calitp-data-analysis">
+<span id="id2"></span><h2>calitp-data-analysis<a class="headerlink" href="#calitp-data-analysis" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> is an internal library of utility functions used to access our warehouse data for analysis purposes.</p>
-<div class="section" id="import-tbls">
-<h3>import tbls<a class="headerlink" href="#import-tbls" title="Permalink to this headline">¶</a></h3>
+<section id="import-tbls">
+<h3>import tbls<a class="headerlink" href="#import-tbls" title="Link to this heading">#</a></h3>
 <p>Most notably, you can include <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">tbls</span></code> at the top of your notebook to import a table from the warehouse in the form of a <code class="docutils literal notranslate"><span class="pre">tbls</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
 </pre></div>
@@ -892,9 +645,9 @@
     </tr>
     <tr>
       <th>1</th>
-      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
-      <td>93c44e614219c41696a8148018c1d83b</td>
-      <td>f87ac9abe81a7548325423ede69c3b86</td>
+      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
+      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
+      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
       <td>LAX FlyAway</td>
       <td>None</td>
       <td>http://www.LAXFlyAway.org</td>
@@ -904,32 +657,13 @@
       <td>None</td>
       <td>None</td>
       <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-09</td>
-      <td>2022-09-09 00:00:56+00:00</td>
+      <td>2022-05-14</td>
+      <td>2022-05-14 00:01:18+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>56112d81d62d71d408ea0247309178e4</td>
-      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
-      <td>21fa0b125d801eb5058da2ec5d748bda</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-15</td>
-      <td>2022-09-15 14:59:54.274779+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>3</th>
       <td>033d018b031002914fbfa48c872d4a65</td>
       <td>8f5e204872e6b7034479a6d11502547b</td>
       <td>3d30b02b9008f788eb89c41c137786c1</td>
@@ -948,10 +682,10 @@
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>4</th>
-      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
-      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
-      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
+      <th>3</th>
+      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
+      <td>93c44e614219c41696a8148018c1d83b</td>
+      <td>f87ac9abe81a7548325423ede69c3b86</td>
       <td>LAX FlyAway</td>
       <td>None</td>
       <td>http://www.LAXFlyAway.org</td>
@@ -961,8 +695,27 @@
       <td>None</td>
       <td>None</td>
       <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-05-14</td>
-      <td>2022-05-14 00:01:18+00:00</td>
+      <td>2022-09-09</td>
+      <td>2022-09-09 00:00:56+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>282b4e07171c48ac08162e0dc8749066</td>
+      <td>18fcf47148228c7b56c19726c854054b</td>
+      <td>9b8e9b8befe560293a6c5b38dc19ffbb</td>
+      <td>MT</td>
+      <td>None</td>
+      <td>http://www.mantecatransit.com</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(209) 456-8000</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
+      <td>2021-07-28</td>
+      <td>2021-07-28 13:56:16+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -970,9 +723,9 @@
 </table>
 </div><p># .. may have more rows</p></div></div></div>
 </div>
-</div>
-<div class="section" id="query-sql">
-<h3>query_sql<a class="headerlink" href="#query-sql" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="query-sql">
+<h3>query_sql<a class="headerlink" href="#query-sql" title="Link to this heading">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">query_sql</span></code> is another useful function to use inside of JupyterHub notebooks to turn a SQL query into a pandas DataFrame.</p>
 <p>As an example, in a notebook:</p>
 <div class="cell docutils container">
@@ -1058,9 +811,9 @@
     </tr>
     <tr>
       <th>1</th>
-      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
-      <td>93c44e614219c41696a8148018c1d83b</td>
-      <td>f87ac9abe81a7548325423ede69c3b86</td>
+      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
+      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
+      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
       <td>LAX FlyAway</td>
       <td>None</td>
       <td>http://www.LAXFlyAway.org</td>
@@ -1070,32 +823,13 @@
       <td>None</td>
       <td>None</td>
       <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-09</td>
-      <td>2022-09-09 00:00:56+00:00</td>
+      <td>2022-05-14</td>
+      <td>2022-05-14 00:01:18+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>56112d81d62d71d408ea0247309178e4</td>
-      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
-      <td>21fa0b125d801eb5058da2ec5d748bda</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-15</td>
-      <td>2022-09-15 14:59:54.274779+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>3</th>
       <td>033d018b031002914fbfa48c872d4a65</td>
       <td>8f5e204872e6b7034479a6d11502547b</td>
       <td>3d30b02b9008f788eb89c41c137786c1</td>
@@ -1114,10 +848,10 @@
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>4</th>
-      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
-      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
-      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
+      <th>3</th>
+      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
+      <td>93c44e614219c41696a8148018c1d83b</td>
+      <td>f87ac9abe81a7548325423ede69c3b86</td>
       <td>LAX FlyAway</td>
       <td>None</td>
       <td>http://www.LAXFlyAway.org</td>
@@ -1127,8 +861,27 @@
       <td>None</td>
       <td>None</td>
       <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-05-14</td>
-      <td>2022-05-14 00:01:18+00:00</td>
+      <td>2022-09-09</td>
+      <td>2022-09-09 00:00:56+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>282b4e07171c48ac08162e0dc8749066</td>
+      <td>18fcf47148228c7b56c19726c854054b</td>
+      <td>9b8e9b8befe560293a6c5b38dc19ffbb</td>
+      <td>MT</td>
+      <td>None</td>
+      <td>http://www.mantecatransit.com</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(209) 456-8000</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
+      <td>2021-07-28</td>
+      <td>2021-07-28 13:56:16+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -1136,17 +889,17 @@
 </table>
 </div></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="siuba">
-<span id="id3"></span><h2>siuba<a class="headerlink" href="#siuba" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="siuba">
+<span id="id3"></span><h2>siuba<a class="headerlink" href="#siuba" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">siuba</span></code> is a tool that allows the same analysis code to run on a pandas DataFrame,
 as well as generate SQL for different databases.
 It supports most <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/series.html">pandas Series methods</a> analysts use. See the <a class="reference external" href="https://siuba.readthedocs.io">siuba docs</a> for more information.</p>
 <p>The examples below go through the basics of using siuba, collecting a database query to a local DataFrame,
 and showing SQL test queries that siuba code generates.</p>
-<div class="section" id="basic-query">
-<h3>Basic query<a class="headerlink" href="#basic-query" title="Permalink to this headline">¶</a></h3>
+<section id="basic-query">
+<span id="id4"></span><h3>Basic query<a class="headerlink" href="#basic-query" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
@@ -1190,36 +943,36 @@ and showing SQL test queries that siuba code generates.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>8f5949d03a0cb1243ac9301df8adef14</td>
+      <td>4697bb52eb4da8bcff925f503a623326</td>
       <td>1</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>b01a3ce6ba2e972a6acc08574a3e06a9</td>
+      <td>a64532640829f3eae9129cd5d5e9590b</td>
       <td>1</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>f4095db9282b859842d338f5db032561</td>
+      <td>b01a3ce6ba2e972a6acc08574a3e06a9</td>
       <td>1</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>cae827cd30737d76600b13970dde458a</td>
+      <td>e839b5cbcd5b29a16c2ac4d40cd4439d</td>
       <td>1</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>4697bb52eb4da8bcff925f503a623326</td>
+      <td>023ec6a2b6246ad996abcb5aefedc068</td>
       <td>1</td>
     </tr>
   </tbody>
 </table>
 </div><p># .. may have more rows</p></div></div></div>
 </div>
-</div>
-<div class="section" id="collect-query-results">
-<h3>Collect query results<a class="headerlink" href="#collect-query-results" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="collect-query-results">
+<span id="id5"></span><h3>Collect query results<a class="headerlink" href="#collect-query-results" title="Link to this heading">#</a></h3>
 <p>Note that siuba by default prints out a preview of the SQL query results.
 In order to fetch the results of the query as a pandas DataFrame, run <code class="docutils literal notranslate"><span class="pre">collect()</span></code>.</p>
 <div class="cell docutils container">
@@ -1290,9 +1043,9 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
     </tr>
     <tr>
       <th>1</th>
-      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
-      <td>93c44e614219c41696a8148018c1d83b</td>
-      <td>f87ac9abe81a7548325423ede69c3b86</td>
+      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
+      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
+      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
       <td>LAX FlyAway</td>
       <td>None</td>
       <td>http://www.LAXFlyAway.org</td>
@@ -1302,32 +1055,13 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <td>None</td>
       <td>None</td>
       <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-09</td>
-      <td>2022-09-09 00:00:56+00:00</td>
+      <td>2022-05-14</td>
+      <td>2022-05-14 00:01:18+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>56112d81d62d71d408ea0247309178e4</td>
-      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
-      <td>21fa0b125d801eb5058da2ec5d748bda</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-15</td>
-      <td>2022-09-15 14:59:54.274779+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>3</th>
       <td>033d018b031002914fbfa48c872d4a65</td>
       <td>8f5e204872e6b7034479a6d11502547b</td>
       <td>3d30b02b9008f788eb89c41c137786c1</td>
@@ -1346,10 +1080,10 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>4</th>
-      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
-      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
-      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
+      <th>3</th>
+      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
+      <td>93c44e614219c41696a8148018c1d83b</td>
+      <td>f87ac9abe81a7548325423ede69c3b86</td>
       <td>LAX FlyAway</td>
       <td>None</td>
       <td>http://www.LAXFlyAway.org</td>
@@ -1359,8 +1093,27 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <td>None</td>
       <td>None</td>
       <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-05-14</td>
-      <td>2022-05-14 00:01:18+00:00</td>
+      <td>2022-09-09</td>
+      <td>2022-09-09 00:00:56+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>282b4e07171c48ac08162e0dc8749066</td>
+      <td>18fcf47148228c7b56c19726c854054b</td>
+      <td>9b8e9b8befe560293a6c5b38dc19ffbb</td>
+      <td>MT</td>
+      <td>None</td>
+      <td>http://www.mantecatransit.com</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(209) 456-8000</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
+      <td>2021-07-28</td>
+      <td>2021-07-28 13:56:16+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -1368,9 +1121,9 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 </table>
 </div></div></div>
 </div>
-</div>
-<div class="section" id="show-query-sql">
-<h3>Show query SQL<a class="headerlink" href="#show-query-sql" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="show-query-sql">
+<span id="id6"></span><h3>Show query SQL<a class="headerlink" href="#show-query-sql" title="Link to this heading">#</a></h3>
 <p>While <code class="docutils literal notranslate"><span class="pre">collect()</span></code> fetches query results, <code class="docutils literal notranslate"><span class="pre">show_query()</span></code> prints out the SQL code that siuba generates.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1429,44 +1182,25 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
   <tbody>
     <tr>
       <th>0</th>
-      <td>b7aba0d9631f4978a1778a4527b9dc62</td>
-      <td>b0e8c947748d71e0bfa038d470ffd2c2</td>
-      <td>0637217a45e976c6c80d21ae2367c5fb</td>
+      <td>6ef00206641f97e0e6d2fd19f21ac9c0</td>
+      <td>56b61b5baea7c4768dd8939d3612296f</td>
+      <td>1819d162df24993e08dd9d308edbad84</td>
       <td>960</td>
       <td>Madera Metro</td>
-      <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
       <td>America/Los_Angeles</td>
       <td>en</td>
       <td>(559) 661-RIDE (7433)</td>
-      <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
       <td>None</td>
       <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2021-07-17</td>
-      <td>2021-07-17 00:13:13+00:00</td>
+      <td>2024-02-01</td>
+      <td>2024-02-01 03:00:21.894200+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>5510fd5cfd5718d36c5cea9efc61b05e</td>
-      <td>267a1b2a19b0526a5086cded02ba3325</td>
-      <td>2716d91a7c0f05036fd7d593a6980ec4</td>
-      <td>960</td>
-      <td>Madera Metro</td>
-      <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(559) 661-RIDE (7433)</td>
-      <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2022-12-16</td>
-      <td>2022-12-16 03:00:27.604217+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>9e1782ca894aff6f1a20d273002b31a8</td>
       <td>46bb281dadd29531a7208ddb2d4ad911</td>
       <td>eb45540bc9b652b8ec24a952481dadc4</td>
@@ -1485,10 +1219,10 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>3</th>
-      <td>775d1b8c065a397b32e7ecfc72d5d6e7</td>
-      <td>cfe46fa3d9321606d251d13168498d03</td>
-      <td>a6975de68648952eda4d63b6f6d09985</td>
+      <th>2</th>
+      <td>0782ef40776b4ad8fba49ca86a375e5a</td>
+      <td>621d37259d6a5a7f641fd5a6e8a747f7</td>
+      <td>30a2d5133c29abfbdc9e504bef2830e9</td>
       <td>960</td>
       <td>Madera Metro</td>
       <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
@@ -1498,16 +1232,35 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
       <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
       <td>None</td>
       <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2021-08-13</td>
-      <td>2021-08-13 00:18:57+00:00</td>
+      <td>2023-04-08</td>
+      <td>2023-04-08 03:00:20.134144+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>65ce81af96c6e1bbe1e8b34e9c6cd1bf</td>
+      <td>a51fc5abab3caa0f0adc09c2ad04ffe6</td>
+      <td>4f9efa4176247918b04f6c7ec3926b35</td>
+      <td>960</td>
+      <td>Madera Metro</td>
+      <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(559) 661-RIDE (7433)</td>
+      <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
+      <td>2021-04-16</td>
+      <td>2021-04-16 00:01:13+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>3d00853c3a6634cba7a650b240057e0d</td>
-      <td>45be61a1cffaca77873a82d81b83f4fa</td>
-      <td>995bc341c731451ec41fcdceb1a83586</td>
+      <td>8a786d43a3c1e8e620355a06d50a31b6</td>
+      <td>36fde7eedc560e48670dcde339e7e93d</td>
+      <td>9cb8e2f18ab3055f8b927f01ad57045b</td>
       <td>960</td>
       <td>Madera Metro</td>
       <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
@@ -1517,8 +1270,8 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
       <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
       <td>None</td>
       <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2022-08-17</td>
-      <td>2022-08-17 00:01:19+00:00</td>
+      <td>2021-06-24</td>
+      <td>2021-06-24 00:09:42+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -1527,44 +1280,41 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
 </div><p># .. may have more rows</p></div></div></div>
 </div>
 <p>Note that here the pandas Series method <code class="docutils literal notranslate"><span class="pre">str.contains</span></code> corresponds to <code class="docutils literal notranslate"><span class="pre">regexp_contains</span></code> in Google BigQuery.</p>
-</div>
-<div class="section" id="more-siuba-resources">
-<span id="id4"></span><h3>More siuba Resources<a class="headerlink" href="#more-siuba-resources" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="more-siuba-resources">
+<span id="id7"></span><h3>More siuba Resources<a class="headerlink" href="#more-siuba-resources" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://siuba.readthedocs.io">siuba docs</a></p></li>
 <li><p><a class="reference external" href="https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf">‘Tidy Tuesday’ live analyses with siuba</a></p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="pandas">
-<span id="pandas-resources"></span><h2>pandas<a class="headerlink" href="#pandas" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="pandas">
+<span id="pandas-resources"></span><h2>pandas<a class="headerlink" href="#pandas" title="Link to this heading">#</a></h2>
 <p>The library pandas is very commonly used in data analysis, and the external resources below provide a brief overview of it’s use.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf">Cheat Sheet - pandas</a></p></li>
 </ul>
-</div>
-<div class="section" id="add-new-packages">
-<h2>Add New Packages<a class="headerlink" href="#add-new-packages" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="add-new-packages">
+<span id="id8"></span><h2>Add New Packages<a class="headerlink" href="#add-new-packages" title="Link to this heading">#</a></h2>
 <p>While most Python packages an analyst uses come in JupyterHub, there may be additional packages you’ll want to use in your analysis.</p>
 <ul class="simple">
-<li><p>Install <a class="reference external" href="#shared-utils">shared utility functions</a>,</p></li>
+<li><p>Install <a class="reference internal" href="#shared-utils">shared utility functions</a>,</p></li>
 <li><p>Change directory into the project task’s subfolder and add <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> and/or <code class="docutils literal notranslate"><span class="pre">conda-requirements.txt</span></code></p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> and/or <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">--yes</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">--file</span> <span class="pre">conda-requirements.txt</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="updating-calitp-data-analysis">
-<span id="id5"></span><h2>Updating calitp-data-analysis<a class="headerlink" href="#updating-calitp-data-analysis" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="updating-calitp-data-analysis">
+<span id="id9"></span><h2>Updating calitp-data-analysis<a class="headerlink" href="#updating-calitp-data-analysis" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> is a <a class="reference external" href="https://pypi.org/project/calitp-data-analysis/">package</a> that lives <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis">here</a> in the <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> repo. Follow the steps below update to the package.</p>
 <p><b>Steps </b></p>
 <p>Adapted from <a class="reference external" href="https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809">this Slack thread</a>.</p>
-<ol class="simple">
+<ol class="arabic simple">
 <li><p>Make the changes you want in the <code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> folder inside <code class="docutils literal notranslate"><span class="pre">packages</span></code> <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis">here</a>. If you are only changing package metadata (author information, package description, etc.) without changing the function of the package itself, that information lives in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> rather than in the <code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> subfolder.</p>
 <ul class="simple">
-<li><p>If you are adding a new function that relies on a package that isn’t already a dependency, run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">add</span> <span class="pre">&lt;package</span> <span class="pre">name&gt;</span></code> after changing directories to <code class="docutils literal notranslate"><span class="pre">data-infra/packages/calitp_data_analysis</span></code>. Check this <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml">Jupyter image file</a> for the version number associated with the package, because you should specify the version.</p>
-<ul>
+<li><p>If you are adding a new function that relies on a package that isn’t already a dependency, run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">add</span> <span class="pre">&lt;package</span> <span class="pre">name&gt;</span></code> after changing directories to <code class="docutils literal notranslate"><span class="pre">data-infra/packages/calitp_data_analysis</span></code>. Check this <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml">Jupyter image file</a> for the version number associated with the package, because you should specify the version.</p></li>
 <li><p>For example, your function relies on <code class="docutils literal notranslate"><span class="pre">dask</span></code>. In the Jupyter image file, the version is <code class="docutils literal notranslate"><span class="pre">dask</span> <span class="pre">=</span> <span class="pre">&quot;~2022.8&quot;</span></code> so run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">add</span> <span class="pre">dask==~2022.8</span></code> in the terminal.</p></li>
-</ul>
-</li>
 <li><p>You may also have run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span> <span class="pre">mypy</span></code>. <code class="docutils literal notranslate"><span class="pre">mypy</span></code> is a package that audits all the functions. <a class="reference external" href="https://mypy-lang.org/">Read more about it here.</a></p></li>
 </ul>
 </li>
@@ -1572,11 +1322,8 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
 <li><p>Open a new pull request and make sure the new version date appears on the <a class="reference external" href="https://test.pypi.org/project/calitp-data-analysis/">test version page</a>.</p>
 <ul class="simple">
 <li><p>The new version date may not show up on the test page due to errors. Check the GitHub Action page of your pull request to see the errors that have occurred.</p></li>
-<li><p>If you run into the error message like this, <code class="docutils literal notranslate"><span class="pre">error:</span> <span class="pre">Skipping</span> <span class="pre">analyzing</span> <span class="pre">&quot;dask_geopandas&quot;:</span> <span class="pre">module</span> <span class="pre">is</span> <span class="pre">installed,</span> <span class="pre">but</span> <span class="pre">missing</span> <span class="pre">library</span> <span class="pre">stubs</span> <span class="pre">or</span> <span class="pre">py.typed</span> <span class="pre">marker</span>&#160; <span class="pre">[import]</span></code> go to your <code class="docutils literal notranslate"><span class="pre">.py</span></code> file and add <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code> behind the package import.</p>
-<ul>
+<li><p>If you run into the error message like this, <code class="docutils literal notranslate"><span class="pre">error:</span> <span class="pre">Skipping</span> <span class="pre">analyzing</span> <span class="pre">&quot;dask_geopandas&quot;:</span> <span class="pre">module</span> <span class="pre">is</span> <span class="pre">installed,</span> <span class="pre">but</span> <span class="pre">missing</span> <span class="pre">library</span> <span class="pre">stubs</span> <span class="pre">or</span> <span class="pre">py.typed</span> <span class="pre">marker</span>&#160; <span class="pre">[import]</span></code> go to your <code class="docutils literal notranslate"><span class="pre">.py</span></code> file and add <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code> behind the package import.</p></li>
 <li><p>To fix the error above, change <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">dask_geopandas</span> <span class="pre">as</span> <span class="pre">dg</span></code> to <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">dask_geopandas</span> <span class="pre">as</span> <span class="pre">dg</span>&#160; <span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code>.</p></li>
-</ul>
-</li>
 <li><p>It is encouraged to make changes in a set of smaller commits. For example, add all the necessary packages with <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">&lt;package</span></code> first, fix any issues flagged by <code class="docutils literal notranslate"><span class="pre">mypy</span></code>, and finally address any additional issues.</p></li>
 </ul>
 </li>
@@ -1593,13 +1340,13 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
 <li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2944">Pull Request #2994</a></p></li>
 <li><p><a class="reference external" href="https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809">Slack thread</a></p></li>
 </ul>
-</div>
-<div class="section" id="appendix-calitp-data-infra">
-<span id="appendix"></span><h2>Appendix: calitp-data-infra<a class="headerlink" href="#appendix-calitp-data-infra" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="appendix-calitp-data-infra">
+<span id="appendix"></span><h2>Appendix: calitp-data-infra<a class="headerlink" href="#appendix-calitp-data-infra" title="Link to this heading">#</a></h2>
 <p>The <a class="reference external" href="https://pypi.org/project/calitp-data-infra/">calitp-data-infra</a> package, used primarily by warehouse mainainers and data pipeline developers, includes utilities that analysts will likely not need need to interact with directly (and therefore generally won’t need to install), but which may be helpful to be aware of. For instance, the <code class="docutils literal notranslate"><span class="pre">get_secret_by_name()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_secrets_by_label()</span></code> functions in <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-infra/calitp_data_infra/auth.py">the package’s <code class="docutils literal notranslate"><span class="pre">auth</span></code> module</a> are used to interact with Google’s <a class="reference external" href="https://console.cloud.google.com/security/secret-manager">Secret Manager</a>, the service that securely stores API keys and other sensitive information that underpins many of our data syncs.</p>
 <p>You can read more about the <code class="docutils literal notranslate"><span class="pre">calitp-data-infra</span></code> Python package <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-infra#readme">here</a>.</p>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1613,7 +1360,7 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./analytics_tools"
         },
         predefinedOutput: true
@@ -1621,44 +1368,124 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
     </script>
     <script>kernelName = 'python3'</script>
 
-              </div>
+                </article>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="local_oracle_db_connections.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Local Oracle Database Connections</p>
-        </div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="local_oracle_db_connections.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Local Oracle Database Connections</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="scripts.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="scripts.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Scripts</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
+                </footer>
+              
+            </div>
             
-        </div>
-    </div>
-    <footer class="footer">
-  <p>
-    
-      By Cal-ITP<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-      </div>
-    </div>
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shared-utils">shared utils</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-terminal">In terminal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-notebook">In notebook</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calitp-data-analysis">calitp-data-analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-tbls">import tbls</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#query-sql">query_sql</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#siuba">siuba</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-query">Basic query</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collect-query-results">Collect query results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#show-query-sql">Show query SQL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#more-siuba-resources">More siuba Resources</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pandas">pandas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-new-packages">Add New Packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#updating-calitp-data-analysis">Updating calitp-data-analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-calitp-data-infra">Appendix: calitp-data-infra</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <div class="footer-item">
+    
+<p class="component-author">
+By Cal-ITP
+</p>
 
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>

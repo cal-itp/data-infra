@@ -10,11 +10,15 @@
 - [Daily](#daily)
 - [Other](#other)
 
+(links)=
+
 ## Important Links
 
 - [DBT Docs Cal-ITP](https://dbt-docs.calitp.org/#!/overview) contains information on all the tables in the warehouse.
 - [Example notebook](https://github.com/cal-itp/data-analyses/blob/main/starter_kit/gtfs_utils_v2_examples.ipynb)
   uses functions in `shared_utils.gtfs_utils_v2` that query some of the tables below.
+
+(trips)=
 
 ## Trips
 
@@ -27,6 +31,8 @@ On a given day:
   - Realtime observations of trips to get a full picture of what occurred.
   - Find a trip's start time, where it went, and which route it is associated with.
 
+(shapes)=
+
 ## Shapes
 
 - [fct_daily_scheduled_shapes](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_scheduled_shapes)
@@ -34,6 +40,8 @@ On a given day:
   - Contains `point` geometry, so you can see the length and location of a route a provider can run on a given date.
   - Each shape has its own `shape_id` and `shape_array_key`.
   - An express version and the regular version of a route are considered two different shapes.
+
+(daily)=
 
 ## Daily
 
@@ -52,6 +60,8 @@ For a given day:
   - Use `gtfs_utils_v2.schedule_daily_feed_to_organization()` to find feed names, regional feed type, and gtfs dataset key.
   - Please note,the `name` column returned from the function above refers to a name of the feed, not to a provider.
   - Use `gtfs_utils_v2.schedule_daily_feed_to_organization()` to find regional feed type, gtfs dataset key, and feed type for an organization.
+
+(other)=
 
 ### Other
 

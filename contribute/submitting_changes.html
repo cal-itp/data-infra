@@ -1,688 +1,515 @@
 
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" data-content_root="../" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>Submitting Changes &#8212; Cal-ITP Data Services</title>
-    
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    
-      
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
-    
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
     <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-SZB618VNBZ');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-SZB618VNBZ');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'contribute/submitting_changes';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Common Content" href="content_types.html" />
     <link rel="prev" title="Best Practices" href="contribute-best-practices.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
-<script>
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){ dataLayer.push(arguments); }
-                    gtag('js', new Date());
-                    gtag('config', 'G-SZB618VNBZ');
-                </script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
-    
-    <div class="container-fluid" id="banner"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
 
-    <div class="container-xl">
-      <div class="row">
-          
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
       
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
         
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
       
-      
-      <img src="../_static/calitp_logo_MAIN.png" class="logo" alt="logo">
-      
-      
-      <h1 class="site-logo" id="site-title">Cal-ITP Data Services</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Data Services Documentation
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Analysts
- </span>
-</p>
+    
+    
+    <img src="../_static/calitp_logo_MAIN.png" class="logo__image only-light" alt="Cal-ITP Data Services - Home"/>
+    <script>document.write(`<img src="../_static/calitp_logo_MAIN.png" class="logo__image only-dark" alt="Cal-ITP Data Services - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Data Services Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysts</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_welcome/overview.html">
-   Welcome!
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_welcome/what_is_calitp.html">
-     Cal-ITP Project Information
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_welcome/how_we_work.html">
-     How We Work
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../analytics_onboarding/overview.html">
-   Technical Onboarding
-  </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_tools/overview.html">
-   Introduction to Analytics Tools
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/github_setup.html">
-     GitHub Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/tools_quick_links.html">
-     Tools Quick Links
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/bi_dashboards.html">
-     Business Insights &amp; Dashboards
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/jupyterhub.html">
-     JupyterHub
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/local_oracle_db_connections.html">
-     Local Oracle Database Connections
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/python_libraries.html">
-     Useful Python Libraries
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/scripts.html">
-     Scripts
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/rt_analysis.html">
-     RT Analysis Module
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/saving_code.html">
-     Saving Code
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/storing_data.html">
-     Storing Data During Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/data_catalogs.html">
-     Using Data Catalogs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/knowledge_sharing.html">
-     Helpful Links
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_new_analysts/overview.html">
-   Tutorials for New Python Users
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/01-data-analysis-intro.html">
-     Data Analysis: Intro
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/02-data-analysis-intermediate.html">
-     Data Analysis: Intermediate
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/03-data-management.html">
-     Data Management
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/04-notebooks.html">
-     Working with Jupyter notebooks
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/05-spatial-analysis-basics.html">
-     Working with Geospatial Data: Basics
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/06-spatial-analysis-intro.html">
-     Working with Geospatial Data: Intro
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/07-spatial-analysis-intermediate.html">
-     Working with Geospatial Data: Intermediate
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/08-spatial-analysis-advanced.html">
-     Working with Geospatial Data: Advanced
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../warehouse/overview.html">
-   Introduction to the Warehouse
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/warehouse_starter_kit.html">
-     Warehouse: Where to Begin
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/navigating_dbt_docs.html">
-     Navigating the dbt Docs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/what_is_agency.html">
-     What is an
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       agency
-      </span>
-     </code>
-     ?
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/developing_dbt_models.html">
-     Developing models in dbt
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/adding_oneoff_data.html">
-     Adding Ad-Hoc Data to the Warehouse
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/what_is_gtfs.html">
-     What is GTFS, anyway?
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../publishing/overview.html">
-   Where can I publish data?
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/1_publishing_principles.html">
-     Data Publishing Principles
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/2_static_files.html">
-     Static Visualizations
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/3_github_pages.html">
-     HTML Visualizations
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/4_analytics_portfolio_site.html">
-     The Cal-ITP Analytics Portfolio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/5_notebooks_styling.html">
-     Getting Notebooks Ready for the Portfolio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/6_metabase.html">
-     Metabase
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/7_gcs.html">
-     GCS
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/8_ckan.html">
-     Publishing data to California Open Data aka CKAN
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/9_geoportal.html">
-     Publishing data to California State Geoportal
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_welcome/overview.html">Welcome!</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_welcome/what_is_calitp.html">Cal-ITP Project Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_welcome/how_we_work.html">How We Work</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Developers
- </span>
-</p>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../analytics_onboarding/overview.html">Technical Onboarding</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_tools/overview.html">Introduction to Analytics Tools</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/github_setup.html">GitHub Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/tools_quick_links.html">Tools Quick Links</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/bi_dashboards.html">Business Insights &amp; Dashboards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/jupyterhub.html">JupyterHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/local_oracle_db_connections.html">Local Oracle Database Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/python_libraries.html">Useful Python Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/scripts.html">Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/rt_analysis.html">RT Analysis Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/saving_code.html">Saving Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/storing_data.html">Storing Data During Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/data_catalogs.html">Using Data Catalogs</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/knowledge_sharing.html">Helpful Links</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_new_analysts/overview.html">Tutorials for New Python Users</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/01-data-analysis-intro.html">Data Analysis: Intro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/02-data-analysis-intermediate.html">Data Analysis: Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/03-data-management.html">Data Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/04-notebooks.html">Working with Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/05-spatial-analysis-basics.html">Working with Geospatial Data: Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/06-spatial-analysis-intro.html">Working with Geospatial Data: Intro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/07-spatial-analysis-intermediate.html">Working with Geospatial Data: Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/08-spatial-analysis-advanced.html">Working with Geospatial Data: Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../warehouse/overview.html">Introduction to the Warehouse</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/warehouse_starter_kit.html">Warehouse: Where to Begin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/navigating_dbt_docs.html">Navigating the dbt Docs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/what_is_agency.html">What is an <code class="docutils literal notranslate"><span class="pre">agency</span></code>?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/developing_dbt_models.html">Developing models in dbt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/adding_oneoff_data.html">Adding Ad-Hoc Data to the Warehouse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/what_is_gtfs.html">What is GTFS, anyway?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../publishing/overview.html">Where can I publish data?</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/1_publishing_principles.html">Data Publishing Principles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/2_static_files.html">Static Visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/3_github_pages.html">HTML Visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/4_analytics_portfolio_site.html">The Cal-ITP Analytics Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/5_notebooks_styling.html">Getting Notebooks Ready for the Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/6_metabase.html">Metabase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/7_gcs.html">GCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/8_ckan.html">Publishing data to California Open Data aka CKAN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/9_geoportal.html">Publishing data to California State Geoportal</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../architecture/architecture_overview.html">
-   Architecture Overview
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/services.html">
-     Deployed Services and Sites
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/images_and_packages.html">
-     Published Images and Packages
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/data.html">
-     Data pipelines
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../airflow/dags-maintenance.html">
-   Airflow Operational Considerations
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../transit_database/transitdatabase.html">
-   Transit Database (Airtable)
-  </a>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../architecture/architecture_overview.html">Architecture Overview</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/services.html">Deployed Services and Sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/images_and_packages.html">Published Images and Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/data.html">Data pipelines</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Contribute to the Docs!
- </span>
-</p>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../airflow/dags-maintenance.html">Airflow Operational Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transit_database/transitdatabase.html">Transit Database (Airtable)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contribute to the Docs!</span></p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
-   Getting Started
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="contribute-best-practices.html">
-     Best Practices
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Submitting Changes
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="content_types.html">
-     Common Content
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="overview.html">Getting Started</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="contribute-best-practices.html">Best Practices</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Submitting Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content_types.html">Common Content</a></li>
+</ul>
+</li>
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
+      </div>
+      
+      <main id="main-content" class="bd-main">
         
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/contribute/submitting_changes.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
     </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra/edit/main/docs/contribute/submitting_changes.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra/issues/new?title=Issue%20on%20page%20%2Fcontribute/submitting_changes.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/cal-itp/data-infra/"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fcontribute/submitting_changes.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/contribute/submitting_changes.md"><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
-    </div>
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/contribute/submitting_changes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
 
-            <!-- Launch buttons -->
 
-        </div>
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Submitting Changes</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div>
+                <h2> Contents </h2>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
+            <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#making-changes-and-merging-prs">
-   Making Changes and Merging PRs
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#using-git-command-line">
-     Using Git (Command Line)
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#using-the-github-user-interface-website">
-     Using the GitHub User Interface (Website)
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#navigate-to-github-and-make-changes">
-       Navigate to GitHub and make changes
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#commit-your-changes-and-create-a-new-branch">
-       Commit your changes and create a new branch
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#create-a-pull-request-for-review-and-merging">
-       Create a Pull Request for review and merging
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#github-docs-action">
-   GitHub Docs Action
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#what-is-the-github-docs-action">
-     What is the GitHub Docs Action?
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#how-is-the-docs-github-action-triggered">
-     How is the docs GitHub action triggered?
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-do-i-preview-my-docs-change">
-   How do I preview my docs change?
-  </a>
- </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-changes-and-merging-prs">Making Changes and Merging PRs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-git-command-line">Using Git (Command Line)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-github-user-interface-website">Using the GitHub User Interface (Website)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#navigate-to-github-and-make-changes">Navigate to GitHub and make changes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#commit-your-changes-and-create-a-new-branch">Commit your changes and create a new branch</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-pull-request-for-review-and-merging">Create a Pull Request for review and merging</a></li>
 </ul>
-
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-docs-action">GitHub Docs Action</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-github-docs-action">What is the GitHub Docs Action?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-is-the-docs-github-action-triggered">How is the docs GitHub action triggered?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-preview-my-docs-change">How do I preview my docs change?</a></li>
+</ul>
             </nav>
         </div>
     </div>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Submitting Changes</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#making-changes-and-merging-prs">
-   Making Changes and Merging PRs
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#using-git-command-line">
-     Using Git (Command Line)
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#using-the-github-user-interface-website">
-     Using the GitHub User Interface (Website)
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#navigate-to-github-and-make-changes">
-       Navigate to GitHub and make changes
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#commit-your-changes-and-create-a-new-branch">
-       Commit your changes and create a new branch
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#create-a-pull-request-for-review-and-merging">
-       Create a Pull Request for review and merging
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#github-docs-action">
-   GitHub Docs Action
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#what-is-the-github-docs-action">
-     What is the GitHub Docs Action?
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#how-is-the-docs-github-action-triggered">
-     How is the docs GitHub action triggered?
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-do-i-preview-my-docs-change">
-   How do I preview my docs change?
-  </a>
- </li>
-</ul>
 
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            
-              <div>
+              
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="submitting-changes">
-<span id="id1"></span><h1>Submitting Changes<a class="headerlink" href="#submitting-changes" title="Permalink to this headline">¶</a></h1>
-<ol class="simple">
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="submitting-changes">
+<span id="id1"></span><h1>Submitting Changes<a class="headerlink" href="#submitting-changes" title="Link to this heading">#</a></h1>
+<ol class="arabic simple">
 <li><p><a class="reference internal" href="#docs-changes"><span class="std std-ref">Making Changes and Merging PRs</span></a></p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#docs-changes-git"><span class="std std-ref">Using Git (Command Line)</span></a></p></li>
@@ -693,11 +520,11 @@
 <li><p><a class="reference internal" href="#docs-preview"><span class="std std-ref">How do I preview my docs change?</span></a></p>
 </li>
 </ol>
-<div class="section" id="making-changes-and-merging-prs">
-<span id="docs-changes"></span><h2>Making Changes and Merging PRs<a class="headerlink" href="#making-changes-and-merging-prs" title="Permalink to this headline">¶</a></h2>
+<section id="making-changes-and-merging-prs">
+<span id="docs-changes"></span><h2>Making Changes and Merging PRs<a class="headerlink" href="#making-changes-and-merging-prs" title="Link to this heading">#</a></h2>
 <p>There are two common ways to make changes to the docs. For those not used to using Git or the command line use the instructions for the <a class="reference internal" href="#docs-changes-github"><span class="std std-ref">GitHub website</span></a>.</p>
-<div class="section" id="using-git-command-line">
-<span id="docs-changes-git"></span><h3>Using Git (Command Line)<a class="headerlink" href="#using-git-command-line" title="Permalink to this headline">¶</a></h3>
+<section id="using-git-command-line">
+<span id="docs-changes-git"></span><h3>Using Git (Command Line)<a class="headerlink" href="#using-git-command-line" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Follow the <a class="reference external" href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> standard for all commits and PR titles</p>
 <ul>
@@ -742,20 +569,20 @@
 <li><p>Once you have created a PR and it has been reviewed and approved, beyond any requested changes, you will be notified that your work has been merged into the live documentation!</p>
 </li>
 </ul>
-</div>
-<div class="section" id="using-the-github-user-interface-website">
-<span id="docs-changes-github"></span><h3>Using the GitHub User Interface (Website)<a class="headerlink" href="#using-the-github-user-interface-website" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="using-the-github-user-interface-website">
+<span id="docs-changes-github"></span><h3>Using the GitHub User Interface (Website)<a class="headerlink" href="#using-the-github-user-interface-website" title="Link to this heading">#</a></h3>
 <p>These documents are currently editable on GitHub’s website. Read the instructions below to use the GitHub website to make changes.</p>
-<div class="section" id="navigate-to-github-and-make-changes">
-<h4>Navigate to GitHub and make changes<a class="headerlink" href="#navigate-to-github-and-make-changes" title="Permalink to this headline">¶</a></h4>
+<section id="navigate-to-github-and-make-changes">
+<h4>Navigate to GitHub and make changes<a class="headerlink" href="#navigate-to-github-and-make-changes" title="Link to this heading">#</a></h4>
 <ul class="simple">
 <li><p>Click the GitHub icon in the top right corner of the page you’d like to edit and choose <code class="docutils literal notranslate"><span class="pre">Suggest</span> <span class="pre">Edit</span></code>.</p></li>
 <li><p>Make changes on that page with your desired <a class="reference internal" href="content_types.html#content-types"><span class="std std-ref">content types</span></a>.
 <img alt="Collection Matrix" src="../_images/suggest-edit.png" /></p></li>
 </ul>
-</div>
-<div class="section" id="commit-your-changes-and-create-a-new-branch">
-<h4>Commit your changes and create a new branch<a class="headerlink" href="#commit-your-changes-and-create-a-new-branch" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="commit-your-changes-and-create-a-new-branch">
+<h4>Commit your changes and create a new branch<a class="headerlink" href="#commit-your-changes-and-create-a-new-branch" title="Link to this heading">#</a></h4>
 <ul class="simple">
 <li><p>On the page that you’ve edited, navigate to the bottom and find where it says <code class="docutils literal notranslate"><span class="pre">Commit</span> <span class="pre">changes</span></code>.</p></li>
 <li><p>Add a short title and description for your changes <strong>(1)</strong>.</p>
@@ -767,9 +594,9 @@
 <li><p>Select <code class="docutils literal notranslate"><span class="pre">Commit</span> <span class="pre">Changes</span></code>. This will take you to a new page to create a <code class="docutils literal notranslate"><span class="pre">Pull</span> <span class="pre">Request</span></code>, the mechanism that will allow your new work to be added to the docs.
 <img alt="Collection Matrix" src="../_images/commit-screenshot.png" /></p></li>
 </ul>
-</div>
-<div class="section" id="create-a-pull-request-for-review-and-merging">
-<h4>Create a Pull Request for review and merging<a class="headerlink" href="#create-a-pull-request-for-review-and-merging" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="create-a-pull-request-for-review-and-merging">
+<h4>Create a Pull Request for review and merging<a class="headerlink" href="#create-a-pull-request-for-review-and-merging" title="Link to this heading">#</a></h4>
 <ul class="simple">
 <li><p>After committing your changes you will be brought to another page to create a PR.</p></li>
 <li><p>Give your PR a descriptive title that has a prefix of <code class="docutils literal notranslate"><span class="pre">docs(subject-area):</span></code> as according to the Conventional Commits standard  <strong>(1)</strong>.</p></li>
@@ -786,27 +613,27 @@
 <li><p>Once you have created a PR and it has been reviewed and approved, beyond any requested changes, you will be notified that your work has been merged into the live documentation!</p>
 </li>
 </ul>
-</div>
-</div>
-</div>
-<div class="section" id="github-docs-action">
-<span id="docs-gh-action"></span><h2>GitHub Docs Action<a class="headerlink" href="#github-docs-action" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="what-is-the-github-docs-action">
-<h3>What is the GitHub Docs Action?<a class="headerlink" href="#what-is-the-github-docs-action" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+</section>
+<section id="github-docs-action">
+<span id="docs-gh-action"></span><h2>GitHub Docs Action<a class="headerlink" href="#github-docs-action" title="Link to this heading">#</a></h2>
+<section id="what-is-the-github-docs-action">
+<h3>What is the GitHub Docs Action?<a class="headerlink" href="#what-is-the-github-docs-action" title="Link to this heading">#</a></h3>
 <p>The action is an automated service provided by GitHub that ensures suggested additions are in the proper syntax and facilitates the <a class="reference internal" href="#docs-preview"><span class="std std-ref">preview of your changes</span></a>. You can see if this action was successful at the bottom of your docs PR.
 <img alt="Collection Matrix" src="../_images/gh-action.png" /></p>
-</div>
-<div class="section" id="how-is-the-docs-github-action-triggered">
-<h3>How is the docs GitHub action triggered?<a class="headerlink" href="#how-is-the-docs-github-action-triggered" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="how-is-the-docs-github-action-triggered">
+<h3>How is the docs GitHub action triggered?<a class="headerlink" href="#how-is-the-docs-github-action-triggered" title="Link to this heading">#</a></h3>
 <p>Our GitHub action is triggered on pushes to the <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> repository related to the <code class="docutils literal notranslate"><span class="pre">docs</span></code> directory.</p>
-</div>
-</div>
-<div class="section" id="how-do-i-preview-my-docs-change">
-<span id="docs-preview"></span><h2>How do I preview my docs change?<a class="headerlink" href="#how-do-i-preview-my-docs-change" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="how-do-i-preview-my-docs-change">
+<span id="docs-preview"></span><h2>How do I preview my docs change?<a class="headerlink" href="#how-do-i-preview-my-docs-change" title="Link to this heading">#</a></h2>
 <p>Once the GitHub action has run and all tests have passed a ‘Netlify’ preview link will be generated. You can find this link in the comments of your PR. Follow that link to preview your changes.
 <img alt="Collection Matrix" src="../_images/netlify-link.png" /></p>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -820,7 +647,7 @@
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./contribute"
         },
         predefinedOutput: true
@@ -828,44 +655,118 @@
     </script>
     <script>kernelName = 'python3'</script>
 
-              </div>
+                </article>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="contribute-best-practices.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Best Practices</p>
-        </div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="contribute-best-practices.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Best Practices</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="content_types.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="content_types.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Common Content</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
+                </footer>
+              
+            </div>
             
-        </div>
-    </div>
-    <footer class="footer">
-  <p>
-    
-      By Cal-ITP<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-      </div>
-    </div>
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-changes-and-merging-prs">Making Changes and Merging PRs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-git-command-line">Using Git (Command Line)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-github-user-interface-website">Using the GitHub User Interface (Website)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#navigate-to-github-and-make-changes">Navigate to GitHub and make changes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#commit-your-changes-and-create-a-new-branch">Commit your changes and create a new branch</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-pull-request-for-review-and-merging">Create a Pull Request for review and merging</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-docs-action">GitHub Docs Action</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-github-docs-action">What is the GitHub Docs Action?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-is-the-docs-github-action-triggered">How is the docs GitHub action triggered?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-preview-my-docs-change">How do I preview my docs change?</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <div class="footer-item">
+    
+<p class="component-author">
+By Cal-ITP
+</p>
 
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>

@@ -10,14 +10,14 @@ Doing work locally and pushing directly from the command line is a similar workf
 
 1. What's a typical [project workflow](#project-workflow)?
 2. Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
-   - The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
+   - The `main` branch is ahead, and I want to [sync my branch with `main`](#rebase-and-merge)
    - [Rebase](#rebase) or [merge](#merge)
-   - Options to [Resolve Merge Conflicts](resolve-merge-conflicts)
+   - Options to [Resolve Merge Conflicts](#resolve-merge-conflicts)
 3. [Other Common GitHub Commands](#other-common-github-commands)
-   - [External Git Resources](external-git-resources)
+   - [External Git Resources](#external-git-resources)
    - [Committing in the Github User Interface](#pushing-drag-drop)
 
-(committing-from-jupyterhub)=
+(project-workflow)=
 
 ## Project Workflow
 
@@ -30,12 +30,14 @@ In the `data-analyses` repo, separate analysis tasks live in their own directori
 03. Do some work...add, delete, rename files, etc
 04. See all the status changes to your files: `git status`
 05. When you're ready to save some of that work, stage the files you want to commit with `git add foldername/notebook1.ipynb foldername/script1.py`. To stage all the files, use `git add .`.
-06. Once you are ready to commit, add a commit message to associate with all the changes: `git commit -m "exploratory work" `
+06. Once you are ready to commit, add a commit message to associate with all the changes: `git commit -m "exploratory work"`
 07. Push those changes from local to remote branch (note: branch is `my-new-branch` and not `main`): `git push origin my-new-branch`.
 08. To review a log of past commits: `git log`
 09. When you are ready to merge all the commits into `main`, open a pull request (PR) on the remote repository, and merge it in!
 10. Go back to `main` and update your local to match the remote: `git switch main`, `git pull origin main`
 11. Once you've merged your branch into `main` and deleted it from the remote, you can delete your branch locally: `git branch -d my-new-branch`. You can reuse the branch name later.
+
+(pulling-and-pushing-changes)=
 
 ## Pulling and Pushing Changes
 
@@ -63,6 +65,8 @@ Read more about the differences between `rebase` and `merge`:
 - [Stack Overflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios)
   <br>
 
+(rebase)=
+
 #### Rebase
 
 Rebasing is an important tool to be familiar with and introduce into your workflow. The video and instructions below help to provide information on how to begin using it in your collaborations with the team.
@@ -79,6 +83,8 @@ A rebase might be preferred, especially if all your work is contained on your br
 6. At this point, the rebase may be successful, or you will have to address any conflicts! If you want to abort, use `git rebase --abort`. Changes in scripts will be easy to resolve, but notebook conflicts are difficult. If conflicts are easily resolved, open the file, make the changes, then `git add` the file(s), and `git rebase --continue`.
 7. Make any commits you want (from step 1) with `git add`, `git commit -m "commit message"`
 8. Force-push those changes to complete the rebase and rewrite the commit history: `git push origin my-new-branch -f`
+
+(merge)=
 
 #### Merge
 
@@ -104,6 +110,8 @@ If you discover merge conflicts and they are within a single notebook that only 
   - To keep the remote version, run:<br/>
     `git checkout --theirs path/to/notebook.ipynb`
 - From here, just add the file and commit with a message as you normally would and the conflict should be fixed in your Pull Request.
+
+(other-common-github-commands)=
 
 ## Other Common GitHub Commands
 

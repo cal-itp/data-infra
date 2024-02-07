@@ -1,692 +1,519 @@
 
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" data-content_root="../" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>Transit Database (Airtable) &#8212; Cal-ITP Data Services</title>
-    
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    
-      
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
-    
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
     <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-SZB618VNBZ');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-SZB618VNBZ');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'transit_database/transitdatabase';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Getting Started" href="../contribute/overview.html" />
     <link rel="prev" title="Airflow Operational Considerations" href="../airflow/dags-maintenance.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
-<script>
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){ dataLayer.push(arguments); }
-                    gtag('js', new Date());
-                    gtag('config', 'G-SZB618VNBZ');
-                </script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
-    
-    <div class="container-fluid" id="banner"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
 
-    <div class="container-xl">
-      <div class="row">
-          
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
       
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
         
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
       
-      
-      <img src="../_static/calitp_logo_MAIN.png" class="logo" alt="logo">
-      
-      
-      <h1 class="site-logo" id="site-title">Cal-ITP Data Services</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Data Services Documentation
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Analysts
- </span>
-</p>
+    
+    
+    <img src="../_static/calitp_logo_MAIN.png" class="logo__image only-light" alt="Cal-ITP Data Services - Home"/>
+    <script>document.write(`<img src="../_static/calitp_logo_MAIN.png" class="logo__image only-dark" alt="Cal-ITP Data Services - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Data Services Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysts</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_welcome/overview.html">
-   Welcome!
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_welcome/what_is_calitp.html">
-     Cal-ITP Project Information
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_welcome/how_we_work.html">
-     How We Work
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../analytics_onboarding/overview.html">
-   Technical Onboarding
-  </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_tools/overview.html">
-   Introduction to Analytics Tools
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/github_setup.html">
-     GitHub Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/tools_quick_links.html">
-     Tools Quick Links
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/bi_dashboards.html">
-     Business Insights &amp; Dashboards
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/jupyterhub.html">
-     JupyterHub
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/local_oracle_db_connections.html">
-     Local Oracle Database Connections
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/python_libraries.html">
-     Useful Python Libraries
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/scripts.html">
-     Scripts
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/rt_analysis.html">
-     RT Analysis Module
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/saving_code.html">
-     Saving Code
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/storing_data.html">
-     Storing Data During Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/data_catalogs.html">
-     Using Data Catalogs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_tools/knowledge_sharing.html">
-     Helpful Links
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics_new_analysts/overview.html">
-   Tutorials for New Python Users
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/01-data-analysis-intro.html">
-     Data Analysis: Intro
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/02-data-analysis-intermediate.html">
-     Data Analysis: Intermediate
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/03-data-management.html">
-     Data Management
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/04-notebooks.html">
-     Working with Jupyter notebooks
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/05-spatial-analysis-basics.html">
-     Working with Geospatial Data: Basics
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/06-spatial-analysis-intro.html">
-     Working with Geospatial Data: Intro
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/07-spatial-analysis-intermediate.html">
-     Working with Geospatial Data: Intermediate
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_new_analysts/08-spatial-analysis-advanced.html">
-     Working with Geospatial Data: Advanced
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../warehouse/overview.html">
-   Introduction to the Warehouse
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/warehouse_starter_kit.html">
-     Warehouse: Where to Begin
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/navigating_dbt_docs.html">
-     Navigating the dbt Docs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/what_is_agency.html">
-     What is an
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       agency
-      </span>
-     </code>
-     ?
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/developing_dbt_models.html">
-     Developing models in dbt
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/adding_oneoff_data.html">
-     Adding Ad-Hoc Data to the Warehouse
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/what_is_gtfs.html">
-     What is GTFS, anyway?
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../publishing/overview.html">
-   Where can I publish data?
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/1_publishing_principles.html">
-     Data Publishing Principles
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/2_static_files.html">
-     Static Visualizations
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/3_github_pages.html">
-     HTML Visualizations
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/4_analytics_portfolio_site.html">
-     The Cal-ITP Analytics Portfolio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/5_notebooks_styling.html">
-     Getting Notebooks Ready for the Portfolio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/6_metabase.html">
-     Metabase
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/7_gcs.html">
-     GCS
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/8_ckan.html">
-     Publishing data to California Open Data aka CKAN
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../publishing/sections/9_geoportal.html">
-     Publishing data to California State Geoportal
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_welcome/overview.html">Welcome!</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_welcome/what_is_calitp.html">Cal-ITP Project Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_welcome/how_we_work.html">How We Work</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Developers
- </span>
-</p>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../analytics_onboarding/overview.html">Technical Onboarding</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_tools/overview.html">Introduction to Analytics Tools</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/github_setup.html">GitHub Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/tools_quick_links.html">Tools Quick Links</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/bi_dashboards.html">Business Insights &amp; Dashboards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/jupyterhub.html">JupyterHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/local_oracle_db_connections.html">Local Oracle Database Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/python_libraries.html">Useful Python Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/scripts.html">Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/rt_analysis.html">RT Analysis Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/saving_code.html">Saving Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/storing_data.html">Storing Data During Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/data_catalogs.html">Using Data Catalogs</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../analytics_tools/knowledge_sharing.html">Helpful Links</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../analytics_new_analysts/overview.html">Tutorials for New Python Users</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/01-data-analysis-intro.html">Data Analysis: Intro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/02-data-analysis-intermediate.html">Data Analysis: Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/03-data-management.html">Data Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/04-notebooks.html">Working with Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/05-spatial-analysis-basics.html">Working with Geospatial Data: Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/06-spatial-analysis-intro.html">Working with Geospatial Data: Intro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/07-spatial-analysis-intermediate.html">Working with Geospatial Data: Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analytics_new_analysts/08-spatial-analysis-advanced.html">Working with Geospatial Data: Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../warehouse/overview.html">Introduction to the Warehouse</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/warehouse_starter_kit.html">Warehouse: Where to Begin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/navigating_dbt_docs.html">Navigating the dbt Docs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/what_is_agency.html">What is an <code class="docutils literal notranslate"><span class="pre">agency</span></code>?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/developing_dbt_models.html">Developing models in dbt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/adding_oneoff_data.html">Adding Ad-Hoc Data to the Warehouse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../warehouse/what_is_gtfs.html">What is GTFS, anyway?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../publishing/overview.html">Where can I publish data?</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/1_publishing_principles.html">Data Publishing Principles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/2_static_files.html">Static Visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/3_github_pages.html">HTML Visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/4_analytics_portfolio_site.html">The Cal-ITP Analytics Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/5_notebooks_styling.html">Getting Notebooks Ready for the Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/6_metabase.html">Metabase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/7_gcs.html">GCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/8_ckan.html">Publishing data to California Open Data aka CKAN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../publishing/sections/9_geoportal.html">Publishing data to California State Geoportal</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../architecture/architecture_overview.html">
-   Architecture Overview
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/services.html">
-     Deployed Services and Sites
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/images_and_packages.html">
-     Published Images and Packages
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../architecture/data.html">
-     Data pipelines
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../airflow/dags-maintenance.html">
-   Airflow Operational Considerations
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Transit Database (Airtable)
-  </a>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../architecture/architecture_overview.html">Architecture Overview</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/services.html">Deployed Services and Sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/images_and_packages.html">Published Images and Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/data.html">Data pipelines</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Contribute to the Docs!
- </span>
-</p>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../airflow/dags-maintenance.html">Airflow Operational Considerations</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Transit Database (Airtable)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contribute to the Docs!</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../contribute/overview.html">
-   Getting Started
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/contribute-best-practices.html">
-     Best Practices
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/submitting_changes.html">
-     Submitting Changes
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/content_types.html">
-     Common Content
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../contribute/overview.html">Getting Started</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/contribute-best-practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/submitting_changes.html">Submitting Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contribute/content_types.html">Common Content</a></li>
+</ul>
+</li>
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
+      </div>
+      
+      <main id="main-content" class="bd-main">
         
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/transit_database/transitdatabase.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
     </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra/edit/main/docs/transit_database/transitdatabase.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cal-itp/data-infra/issues/new?title=Issue%20on%20page%20%2Ftransit_database/transitdatabase.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/cal-itp/data-infra/"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Ftransit_database/transitdatabase.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/transit_database/transitdatabase.md"><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
-    </div>
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/transit_database/transitdatabase.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
 
-            <!-- Launch buttons -->
 
-        </div>
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Transit Database (Airtable)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div>
+                <h2> Contents </h2>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
+            <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#primary-keys">
-   Primary Keys
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#importing-airtable-data-into-the-cal-itp-data-warehouse">
-   Importing Airtable data into the Cal-ITP data warehouse
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#gotchas">
-     Gotchas
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#foreign-keys-and-bridge-tables">
-       Foreign keys and bridge tables
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#synced-tables">
-       Synced tables
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#entity-relationship-diagrams">
-   Entity Relationship Diagrams
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#california-transit">
-     California Transit
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#transit-stacks">
-     Transit Stacks
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dashboards">
-   Dashboards
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dags-maintenance">
-   DAGs Maintenance
-  </a>
- </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#primary-keys">Primary Keys</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-airtable-data-into-the-cal-itp-data-warehouse">Importing Airtable data into the Cal-ITP data warehouse</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gotchas">Gotchas</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#foreign-keys-and-bridge-tables">Foreign keys and bridge tables</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#synced-tables">Synced tables</a></li>
 </ul>
-
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entity-relationship-diagrams">Entity Relationship Diagrams</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#california-transit">California Transit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transit-stacks">Transit Stacks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dashboards">Dashboards</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dags-maintenance">DAGs Maintenance</a></li>
+</ul>
             </nav>
         </div>
     </div>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Transit Database (Airtable)</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#primary-keys">
-   Primary Keys
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#importing-airtable-data-into-the-cal-itp-data-warehouse">
-   Importing Airtable data into the Cal-ITP data warehouse
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#gotchas">
-     Gotchas
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#foreign-keys-and-bridge-tables">
-       Foreign keys and bridge tables
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#synced-tables">
-       Synced tables
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#entity-relationship-diagrams">
-   Entity Relationship Diagrams
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#california-transit">
-     California Transit
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#transit-stacks">
-     Transit Stacks
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dashboards">
-   Dashboards
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dags-maintenance">
-   DAGs Maintenance
-  </a>
- </li>
-</ul>
 
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            
-              <div>
+              
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="transit-database-airtable">
-<h1>Transit Database (Airtable)<a class="headerlink" href="#transit-database-airtable" title="Permalink to this headline">¶</a></h1>
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="transit-database-airtable">
+<h1>Transit Database (Airtable)<a class="headerlink" href="#transit-database-airtable" title="Link to this heading">#</a></h1>
 <p>The Cal-ITP Airtable Transit Database stores key relationships about how transit services are organized and operated in California as well as how well they are performing. See Evan or post in the <code class="docutils literal notranslate"><span class="pre">#data-airtable</span></code> Slack channel to get a link and gain access.</p>
 <p>Important Airtable documentation is maintained elsewhere:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://docs.google.com/document/d/1KvlYRYB8cnyTOkT1Q0BbBmdQNguK_AMzhSV5ELXiZR4/edit#heading=h.u7y2eosf0i1d">Airtable Data Documentation Google Doc</a> - documentation of specific fields in Airtable</p></li>
-<li><p><a class="reference external" href="https://docs.google.com/document/d/1IO8x9-31LjwmlBDH0Jri-uWI7Zygi_IPc9nqd7FPEQM/edit">California Transit Data - Operating Procedures Google Doc</a> -  outlines the processes by which Airtable data is maintained</p></li>
+<li><p><a class="reference external" href="https://docs.google.com/document/d/1IO8x9-31LjwmlBDH0Jri-uWI7Zygi_IPc9nqd7FPEQM/edit#">California Transit Data - Operating Procedures Google Doc</a> -  outlines the processes by which Airtable data is maintained</p></li>
 </ul>
 <p>In addition, some documentation is available automatically within Airtable (these require Airtable authentication to access):</p>
 <ul class="simple">
@@ -694,35 +521,35 @@
 <li><p>When looking at a base, there is an <code class="docutils literal notranslate"><span class="pre">Extensions</span></code> tab at the far upper right corner (below the share, notifications, and user icons). If you click that, an extensions sidebar will open. In that sidebar, there is an extension called <code class="docutils literal notranslate"><span class="pre">Base</span> <span class="pre">schema</span></code> (you may have to open it fullscreen to actually see it.) This extension will let you see an auto-generated visualization of the technical relationships among fields in the base.</p></li>
 </ul>
 <p>Cal-ITP uses two main Airtable bases:</p>
-<table class="colwidths-auto table">
+<table class="table">
 <thead>
-<tr class="row-odd"><th class="text-align:left head"><p><strong>Base</strong></p></th>
-<th class="text-align:left head"><p><strong>Description</strong></p></th>
+<tr class="row-odd"><th class="head text-left"><p><strong>Base</strong></p></th>
+<th class="head text-left"><p><strong>Description</strong></p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td class="text-align:left"><p><a class="reference external" href="#california-transit"><strong>California Transit</strong></a></p></td>
-<td class="text-align:left"><p>Defines key organizational relationships and properties. Organizations, geography, funding programs,  transit services, service characteristics, transit datasets such as GTFS, and the intersection between transit datasets and services.</p></td>
+<tr class="row-even"><td class="text-left"><p><a class="reference internal" href="#california-transit"><strong>California Transit</strong></a></p></td>
+<td class="text-left"><p>Defines key organizational relationships and properties. Organizations, geography, funding programs,  transit services, service characteristics, transit datasets such as GTFS, and the intersection between transit datasets and services.</p></td>
 </tr>
-<tr class="row-odd"><td class="text-align:left"><p><a class="reference external" href="#transit-technology-stacks"><strong>Transit Technology Stacks</strong></a></p></td>
-<td class="text-align:left"><p>Defines operational setups at transit provider organizations. Defines relationships between vendor organizations, transit provider and operator organizations, products, contracts to provide products, transit stack components, and how they relate to one-another.</p></td>
+<tr class="row-odd"><td class="text-left"><p><a class="reference internal" href="#transit-technology-stacks"><strong>Transit Technology Stacks</strong></a></p></td>
+<td class="text-left"><p>Defines operational setups at transit provider organizations. Defines relationships between vendor organizations, transit provider and operator organizations, products, contracts to provide products, transit stack components, and how they relate to one-another.</p></td>
 </tr>
 </tbody>
 </table>
 <p>The rest of this page outlines stray technical considerations associated with Airtable and its ingestion into the data warehouse.</p>
-<div class="section" id="primary-keys">
-<h2>Primary Keys<a class="headerlink" href="#primary-keys" title="Permalink to this headline">¶</a></h2>
+<section id="primary-keys">
+<h2>Primary Keys<a class="headerlink" href="#primary-keys" title="Link to this heading">#</a></h2>
 <p>Airtable forces the use of the left-most field as the primary key of the database: the field that must be referenced in other tables, similar to a VLOOKUP in a spreadsheet. Unlike many databases, Airtable doesn’t enforce uniqueness in the values of the primary key field.  Instead, it assigns it an underlying and mostly hidden unique <a class="reference external" href="https://support.airtable.com/hc/en-us/articles/360051564873-Record-ID"><code class="docutils literal notranslate"><span class="pre">RECORD</span> <span class="pre">ID</span></code></a>, which can be exposed by creating a formula field to reference it.</p>
-</div>
-<div class="section" id="importing-airtable-data-into-the-cal-itp-data-warehouse">
-<h2>Importing Airtable data into the Cal-ITP data warehouse<a class="headerlink" href="#importing-airtable-data-into-the-cal-itp-data-warehouse" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="importing-airtable-data-into-the-cal-itp-data-warehouse">
+<h2>Importing Airtable data into the Cal-ITP data warehouse<a class="headerlink" href="#importing-airtable-data-into-the-cal-itp-data-warehouse" title="Link to this heading">#</a></h2>
 <p>We ingest data from Airtable into the Cal-ITP data warehouse. For an overview of the data ingest process/architecture, see <a class="reference internal" href="../architecture/data.html#architecture-data"><span class="std std-ref">the pipeline architecture documentation</span></a>. For pointers to where Airtable-specific code and artifacts, see <a class="reference external" href="https://docs.google.com/spreadsheets/d/1bv1K5lZMnq1eCSZRy3sPd3MgbdyghrMl4u8HvjNjWPw/edit#gid=0">the pipeline reference Google Sheet</a>.</p>
 <p>To ingest a new Airtable table or base and make it available in the warehouse, you need to make updates throughout the data ingest flow, from the Airtable scraper Airflow DAG all the way to dbt mart tables. See <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2781">data infra PR #2781</a> for an example of what this can look like. Ingesting new columns in an existing table is similar; see <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2383">data infra PR #2383</a> for an example.</p>
-<div class="section" id="gotchas">
-<h3>Gotchas<a class="headerlink" href="#gotchas" title="Permalink to this headline">¶</a></h3>
+<section id="gotchas">
+<h3>Gotchas<a class="headerlink" href="#gotchas" title="Link to this heading">#</a></h3>
 <p>Bringing Airtable data into the warehouse can involve a few tricky situations. Here are a few we’ve encountered so far, with suggested resolutions.</p>
-<div class="section" id="foreign-keys-and-bridge-tables">
-<h4>Foreign keys and bridge tables<a class="headerlink" href="#foreign-keys-and-bridge-tables" title="Permalink to this headline">¶</a></h4>
+<section id="foreign-keys-and-bridge-tables">
+<h4>Foreign keys and bridge tables<a class="headerlink" href="#foreign-keys-and-bridge-tables" title="Link to this heading">#</a></h4>
 <p>Airtable allows users to define links between tables, to create relationships between records of different types. In the Airtable UI, these links display the primary field for the linked record in the relevant column (so, for example, the <code class="docutils literal notranslate"><span class="pre">Services.provider</span></code> column contains an organization’s name like <code class="docutils literal notranslate"><span class="pre">City</span> <span class="pre">of</span> <span class="pre">Anaheim</span></code>.) However, these foreign key links are exported via the Airtable API as an array of the back-end record IDs (so, instead of a single organization name like <code class="docutils literal notranslate"><span class="pre">City</span> <span class="pre">of</span> <span class="pre">Anaheim</span></code>, that <code class="docutils literal notranslate"><span class="pre">Services.provider</span></code> field will appear as an array containing a record ID, like <code class="docutils literal notranslate"><span class="pre">[rec0123asdf]</span></code>.) It does this even if the given field only ever contains exactly one foreign key (i.e., it turns it into an array even if all the arrays have only one entry.)</p>
 <p>This means:</p>
 <ul class="simple">
@@ -734,42 +561,42 @@
 <li><p>Most Airtable data is treated as dimensions (i.e., entities that we version over time)</p></li>
 <li><p>Some Airtable data contains many-to-many relationships</p></li>
 </ul>
-<p>The mechanism that we have used to deal with both of these is the <strong>bridge table</strong>, <a class="reference external" href="https://dbt-docs.calitp.org/#%21/overview">described in our dbt docs</a>. The bridge table stores the foreign key pairs to allow you to traverse a relationship, instead of trying to store these on each of the tables in the relationship itself. Trying to store the foreign keys on the tables directly opens you up to issues:</p>
+<p>The mechanism that we have used to deal with both of these is the <strong>bridge table</strong>, <a class="reference external" href="https://dbt-docs.calitp.org/#!/overview">described in our dbt docs</a>. The bridge table stores the foreign key pairs to allow you to traverse a relationship, instead of trying to store these on each of the tables in the relationship itself. Trying to store the foreign keys on the tables directly opens you up to issues:</p>
 <ul class="simple">
 <li><p>You have to either store the foreign keys as an array or change the cardinality of the table (to account for the fact that one record may need to store multiple foreign keys, either to capture versioning on the foreign table or to capture relationships with multiple records). Metabase does not natively allow unnesting arrays to do joins in the GUI query editor, so we try to have non-array foreign keys in mart tables.</p></li>
 <li><p>You risk infinite loops if you try to version a record that includes a versioned foreign key on both sides of the relationship (which is how Airtable stores these relationships). For example, you have an organization and a service that are linked, with both containing a foreign key to the other. An attribute is changed on the service, creating a new versioned key. You need to add that new versioned service key to the organization record. But now that has triggered a change on the organization record, which makes a new versioned key on the organization record. So now you have to update the organization versioned key on the service record. And thus to infinity. Another solution here is to only store the relationship on one side, but then you still have the first problem of arrays and cardinality.</p></li>
 </ul>
 <p>Bridge tables do introduce some complexity in handling fanout from joins, but they remove that complexity from the dimension tables themselves. Another solution would be to only store the unversioned natural key for the foreign key, in which case you would only need bridge tables for true many-to-many relationships (to handle the array/cardinality issue), but that would still create fanout without the explicit artifact of the bridge table to help troubleshoot.</p>
-</div>
-<div class="section" id="synced-tables">
-<h4>Synced tables<a class="headerlink" href="#synced-tables" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="synced-tables">
+<h4>Synced tables<a class="headerlink" href="#synced-tables" title="Link to this heading">#</a></h4>
 <p>Airtable allows you to “sync” a table from one base to another, where it appears with all the data from its source location and can be linked to records in the second base. An example in our Airtable is the <code class="docutils literal notranslate"><span class="pre">California</span> <span class="pre">Transit.organizations</span></code> table is synced to <code class="docutils literal notranslate"><span class="pre">Transit</span> <span class="pre">Technology</span> <span class="pre">Stacks.organizations</span></code>; you will see a little lightning icon to show that it is a synced table.</p>
 <p>This requires special handling when importing to the warehouse, because Airtable assigns new back-end record IDs in the synced table, which means that foreign keys to the synced table in the second base will not match record IDs in the source table. We resolve this by mapping all foreign keys to point to the source table in a base layer in dbt. See <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2781">data infra PR #2781</a> for an example.</p>
-</div>
-</div>
-</div>
-<div class="section" id="entity-relationship-diagrams">
-<h2>Entity Relationship Diagrams<a class="headerlink" href="#entity-relationship-diagrams" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+</section>
+<section id="entity-relationship-diagrams">
+<h2>Entity Relationship Diagrams<a class="headerlink" href="#entity-relationship-diagrams" title="Link to this heading">#</a></h2>
 <p>The following entity relationship diagrams were last updated in 2022 but are preserved for general reference purposes.</p>
-<div class="section" id="california-transit">
-<h3>California Transit<a class="headerlink" href="#california-transit" title="Permalink to this headline">¶</a></h3>
+<section id="california-transit">
+<span id="id1"></span><h3>California Transit<a class="headerlink" href="#california-transit" title="Link to this heading">#</a></h3>
 <p><a class="reference external" href="https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqVVEtv4jAQ_iuWz0W9c1stbbWHbhFw5DLEEzJax07HDqss4b_vOCQQXlLLBSX6XuP5nL3OvEE91cgzgi1DuXZKfh-8BUf_IJJ36tBOJn6vlsg7ynCq1roEB1sMa_0ltK-QIT6C-w7-FvMwgwgBY6Jk3oW6_BalYm_q7HuUemMpFEfOY9b4XaJRUBUwuqj8GO3zu9btQxEwJTkKEZnc9sta7a3W-_zjebGa_1C5ZxULVJIO0sN3RCRQolYWnEt5oI6FZ4rNQ9VHw7bqp69dbN7QS6OqounlCwTzWQPLwGgUuUHnCq3atgs4t5DhhYbBkDFtMKiso0ws7tCKkoQqjwFG8V4l77KR4y0HxeuRoaosiVr05wL0vQ3D8kc9Pu4dIoMLFAer3qx2Rk5tzilu2V2C9oKcC-DUzQUZ5AV-1sRYpiLdml1mS6QXS1uSwsbm5HLDsvLvgtCwA5Pt93czX3ck_Y3oX6WLkTQYc4tZlBVtmsF7dHGG2e4wKS2mrJiCkM8VXkH4c_c8Bep3GJ7_ehaAPxXiFdG8Y2TKwtCoq5t7bkIqJqOVne5QiaLnCE7mO9v_Xs1-SUMGpXEJQtIqvDXinueUEdgEV0acujz6SZco3SIj38h90ltrcSxxrY8xcqhtTE4HgdaVEPHFUPSsp5FrfNJyjfyycdnwfMT0H1s9zcEGPPwHJNjt_A"><img alt="" src="https://mermaid.ink/img/pako:eNqVVEtv4jAQ_iuWz0W9c1stbbWHbhFw5DLEEzJax07HDqss4b_vOCQQXlLLBSX6XuP5nL3OvEE91cgzgi1DuXZKfh-8BUf_IJJ36tBOJn6vlsg7ynCq1roEB1sMa_0ltK-QIT6C-w7-FvMwgwgBY6Jk3oW6_BalYm_q7HuUemMpFEfOY9b4XaJRUBUwuqj8GO3zu9btQxEwJTkKEZnc9sta7a3W-_zjebGa_1C5ZxULVJIO0sN3RCRQolYWnEt5oI6FZ4rNQ9VHw7bqp69dbN7QS6OqounlCwTzWQPLwGgUuUHnCq3atgs4t5DhhYbBkDFtMKiso0ws7tCKkoQqjwFG8V4l77KR4y0HxeuRoaosiVr05wL0vQ3D8kc9Pu4dIoMLFAer3qx2Rk5tzilu2V2C9oKcC-DUzQUZ5AV-1sRYpiLdml1mS6QXS1uSwsbm5HLDsvLvgtCwA5Pt93czX3ck_Y3oX6WLkTQYc4tZlBVtmsF7dHGG2e4wKS2mrJiCkM8VXkH4c_c8Bep3GJ7_ehaAPxXiFdG8Y2TKwtCoq5t7bkIqJqOVne5QiaLnCE7mO9v_Xs1-SUMGpXEJQtIqvDXinueUEdgEV0acujz6SZco3SIj38h90ltrcSxxrY8xcqhtTE4HgdaVEPHFUPSsp5FrfNJyjfyycdnwfMT0H1s9zcEGPPwHJNjt_A" /></a></p>
 <p><a class="reference external" href="https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqVVEtv4jAQ_iuWz0W9c1stbbWHbhFw5DLEEzJax07HDqss4b_vOCQQXlLLBSX6XuP5nL3OvEE91cgzgi1DuXZKfh-8BUf_IJJ36tBOJn6vlsg7ynCq1roEB1sMa_0ltK-QIT6C-w7-FvMwgwgBY6Jk3oW6_BalYm_q7HuUemMpFEfOY9b4XaJRUBUwuqj8GO3zu9btQxEwJTkKEZnc9sta7a3W-_zjebGa_1C5ZxULVJIO0sN3RCRQolYWnEt5oI6FZ4rNQ9VHw7bqp69dbN7QS6OqounlCwTzWQPLwGgUuUHnCq3atgs4t5DhhYbBkDFtMKiso0ws7tCKkoQqjwFG8V4l77KR4y0HxeuRoaosiVr05wL0vQ3D8kc9Pu4dIoMLFAer3qx2Rk5tzilu2V2C9oKcC-DUzQUZ5AV-1sRYpiLdml1mS6QXS1uSwsbm5HLDsvLvgtCwA5Pt93czX3ck_Y3oX6WLkTQYc4tZlBVtmsF7dHGG2e4wKS2mrJiCkM8VXkH4c_c8Bep3GJ7_ehaAPxXiFdG8Y2TKwtCoq5t7bkIqJqOVne5QiaLnCE7mO9v_Xs1-SUMGpXEJQtIqvDXinueUEdgEV0acujz6SZco3SIj38h90ltrcSxxrY8xcqhtTE4HgdaVEPHFUPSsp5FrfNJyjfyycdnwfMT0H1s9zcEGPPwHJNjt_A">editable source</a></p>
-</div>
-<div class="section" id="transit-stacks">
-<h3>Transit Stacks<a class="headerlink" href="#transit-stacks" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="transit-stacks">
+<span id="transit-technology-stacks"></span><h3>Transit Stacks<a class="headerlink" href="#transit-stacks" title="Link to this heading">#</a></h3>
 <p><a class="reference external" href="https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqdk7tuwzAMRX9F0JzH7jXp0ClF09ELITGyAFs0KClFG-ffS7_6SNu0iEbp3MtLSjppQxZ1oZG3HhxDUwYla8cOgn-F5ClEde6WSzqpPfLRGyxUqRsI4DCW-kecBnxDITGY1PP0HP4PV1Tb6_QDk80jHLGuB3jEp4wbaloKGJIoVqvuS3YfVY5oVSLV1hDWYy9rapEh4Vz3N6NPpcUoSlQF8bqoU-8bk0wa9cH9JbwYi-hapqO3ffaKKbvqo-9HrMcRVb79ZtZ1Q4rL_d50x975AEOcOJ4rMwNzulvNn4Adpht9pwlsIcHeVNhA73gfxSUENEmGkKOkLrVe6Aa5AW_lHZ9651InEchV9hKLB8j1UPMsaG6t3PKd9YlYFweoIy405ET7l2B0kTjjDE0_YqLOb7JEHuQ"><img alt="" src="https://mermaid.ink/img/pako:eNqdk7tuwzAMRX9F0JzH7jXp0ClF09ELITGyAFs0KClFG-ffS7_6SNu0iEbp3MtLSjppQxZ1oZG3HhxDUwYla8cOgn-F5ClEde6WSzqpPfLRGyxUqRsI4DCW-kecBnxDITGY1PP0HP4PV1Tb6_QDk80jHLGuB3jEp4wbaloKGJIoVqvuS3YfVY5oVSLV1hDWYy9rapEh4Vz3N6NPpcUoSlQF8bqoU-8bk0wa9cH9JbwYi-hapqO3ffaKKbvqo-9HrMcRVb79ZtZ1Q4rL_d50x975AEOcOJ4rMwNzulvNn4Adpht9pwlsIcHeVNhA73gfxSUENEmGkKOkLrVe6Aa5AW_lHZ9651InEchV9hKLB8j1UPMsaG6t3PKd9YlYFweoIy405ET7l2B0kTjjDE0_YqLOb7JEHuQ" /></a></p>
 <p><a class="reference external" href="https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqdk7tuwzAMRX9F0JzH7jXp0ClF09ELITGyAFs0KClFG-ffS7_6SNu0iEbp3MtLSjppQxZ1oZG3HhxDUwYla8cOgn-F5ClEde6WSzqpPfLRGyxUqRsI4DCW-kecBnxDITGY1PP0HP4PV1Tb6_QDk80jHLGuB3jEp4wbaloKGJIoVqvuS3YfVY5oVSLV1hDWYy9rapEh4Vz3N6NPpcUoSlQF8bqoU-8bk0wa9cH9JbwYi-hapqO3ffaKKbvqo-9HrMcRVb79ZtZ1Q4rL_d50x975AEOcOJ4rMwNzulvNn4Adpht9pwlsIcHeVNhA73gfxSUENEmGkKOkLrVe6Aa5AW_lHZ9651InEchV9hKLB8j1UPMsaG6t3PKd9YlYFweoIy405ET7l2B0kTjjDE0_YqLOb7JEHuQ">editable source</a></p>
-</div>
-</div>
-<div class="section" id="dashboards">
-<h2>Dashboards<a class="headerlink" href="#dashboards" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="dags-maintenance">
-<h2>DAGs Maintenance<a class="headerlink" href="#dags-maintenance" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="dashboards">
+<h2>Dashboards<a class="headerlink" href="#dashboards" title="Link to this heading">#</a></h2>
+</section>
+<section id="dags-maintenance">
+<h2>DAGs Maintenance<a class="headerlink" href="#dags-maintenance" title="Link to this heading">#</a></h2>
 <p>You can find further information on DAGs maintenance for Transit Database data <a class="reference internal" href="../airflow/dags-maintenance.html#dags-maintenance"><span class="std std-ref">on this page</span></a>.</p>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -783,7 +610,7 @@
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./transit_database"
         },
         predefinedOutput: true
@@ -791,44 +618,118 @@
     </script>
     <script>kernelName = 'python3'</script>
 
-              </div>
+                </article>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="../airflow/dags-maintenance.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Airflow Operational Considerations</p>
-        </div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../airflow/dags-maintenance.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Airflow Operational Considerations</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="../contribute/overview.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="../contribute/overview.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Getting Started</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
+                </footer>
+              
+            </div>
             
-        </div>
-    </div>
-    <footer class="footer">
-  <p>
-    
-      By Cal-ITP<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-      </div>
-    </div>
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#primary-keys">Primary Keys</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-airtable-data-into-the-cal-itp-data-warehouse">Importing Airtable data into the Cal-ITP data warehouse</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gotchas">Gotchas</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#foreign-keys-and-bridge-tables">Foreign keys and bridge tables</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#synced-tables">Synced tables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entity-relationship-diagrams">Entity Relationship Diagrams</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#california-transit">California Transit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transit-stacks">Transit Stacks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dashboards">Dashboards</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dags-maintenance">DAGs Maintenance</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <div class="footer-item">
+    
+<p class="component-author">
+By Cal-ITP
+</p>
 
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>
