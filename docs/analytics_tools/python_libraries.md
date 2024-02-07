@@ -220,6 +220,7 @@ Adapted from [this](https://cal-itp.slack.com/archives/C02KH3DGZL7/p169447004057
 
 5. Update the new version number in the `data-infra` repository [here](https://github.com/cal-itp/data-infra/blob/main/images/dask/requirements.txt#L30), [here](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml#L48), [here](https://github.com/cal-itp/data-infra/blob/main/docs/requirements.txt), and anywhere else you find a reference to the old version of the package. You'll also want to do the same for any other Cal-ITP repositories that reference the `calitp-data-analysis` package.
 
+   - When yu update the [jupyter-singleuser toml](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml#L48), make sure to run `poetry add calitp-data-analysis==<new version here>` and commit the updated `poetry.lock` file.
    - As of writing, the only other repository that references to the package version is [reports](https://github.com/cal-itp/reports).
 
 <b>Resources</b>
