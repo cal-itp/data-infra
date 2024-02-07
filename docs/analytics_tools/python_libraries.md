@@ -196,7 +196,7 @@ While most Python packages an analyst uses come in JupyterHub, there may be addi
 
 <b>Steps </b>
 
-Adapted from [this](https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809) and [this Slack thread](https://cal-itp.slack.com/archives/C02KH3DGZL7/p1707252389227829).
+Adapted from [this Slack thread](https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809).
 
 1. Make the changes you want in the `calitp-data-analysis` folder inside `packages` [here](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis). If you are only changing package metadata (author information, package description, etc.) without changing the function of the package itself, that information lives in `pyproject.toml` rather than in the `calitp-data-analysis` subfolder.
 
@@ -205,7 +205,7 @@ Adapted from [this](https://cal-itp.slack.com/archives/C02KH3DGZL7/p169447004057
    - You may also have run `poetry install mypy`. `mypy` is a package that audits Python files for information related to data types, and you can [read more about it here](https://mypy-lang.org/).
     - `mypy` is one of the standard development dependencies for the `calitp-data-analysis package`, defined in the `pyproject.toml` file for the package, so to install it you can run `poetry install` in `packages/calitp-data-analysis/` (which will also install the other package dependencies). To use `mypy`, run `poetry run mypy [file or directory name you're interested in checking]`.
     - `mypy` is generally run in CI when a PR is opened, as part of build tasks. You can see it called [here](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/build-calitp-data-analysis.yml#L40) for this package in `build-calitp-data-analysis.yml`. Within the PR, the "Test, visualize, and build calitp-data-analysis" CI workflow will fail if problems are found.
-    - More helpful hints for [passing mypy in our repo](https://github.com/cal-itp/data-infra/blob/main/README.md#mypy).
+    - More helpful hints for [passing mypy in our repo](https://github.com/cal-itp/data-infra/blob/main/README.md#mypy). 
     
 2. Each time you update the package, you must also update the version number. We use dates to reflect which version we are on. Update the version in [pyproject.toml](https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-analysis/pyproject.toml#L3) that lives in `calitp-data-analysis` to either today's date or a future date.
 3. Open a new pull request and make sure the new version date appears on the [test version page](https://test.pypi.org/project/calitp-data-analysis/).
@@ -214,7 +214,7 @@ Adapted from [this](https://cal-itp.slack.com/archives/C02KH3DGZL7/p169447004057
    - To fix the error above, change `import dask_geopandas as dg` to `import dask_geopandas as dg  # type: ignore`.
    - It is encouraged to make changes in a set of smaller commits. For example, add all the necessary packages with `poetry run <package` first, fix any issues flagged by `mypy`, and finally address any additional issues.
 4. Merge the PR. Once it is merged in, the [actual package](https://pypi.org/project/calitp-data-analysis/) will display the new version number. To make sure everything works as expected, run `pip install calitp-data-analysis==<new version here>` in a cell of Jupyter notebook and import a package (or two) such as `from calitp_data_analysis import styleguide`.
-5. Update the new version number in the `data-infra` repository [here](https://github.com/cal-itp/data-infra/blob/main/images/dask/requirements.txt#L30), [here](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml#L48), [here](https://github.com/cal-itp/data-infra/blob/main/docs/requirements.txt), and anywhere else you find a reference to the old version of the package. You'll also want to do the same for any other Cal-ITP repositories that reference the `calitp-data-analysis` package.
+5. Update the new version number in the `data-infra` repository [here](https://github.com/cal-itp/data-infra/blob/main/images/dask/requirements.txt#L30), [here](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml#L48), [here](https://github.com/cal-itp/data-infra/blob/main/docs/requirements.txt), and anywhere else you find a reference to the old version of the package. You'll also want to do the same for any other Cal-ITP repositories that reference the calitp-data-analysis package.
    - As of writing, the only other repository that references to the package version is [reports](https://github.com/cal-itp/reports).
 
 <b>Resources</b>
