@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2024.2.5"
+version = "2024.2.6"
 description = ""
 authors = ["Soren Spicknall <soren.s@jarv.us>"]
 
