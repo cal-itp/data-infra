@@ -1,4 +1,4 @@
-description: "Runs dbt with --full-refresh; use this to refresh/rebuild/backfill incremental models."
+description: "Runs dbt with --full-refresh; this is a weekly run on Sundays to ensure non-RT incremental models are up-to-date. Run in conjunction with transform_warehouse_sunday_select_rt."
 schedule_interval: "0 10 * * 0"
 tags:
   - all_gusty_features
