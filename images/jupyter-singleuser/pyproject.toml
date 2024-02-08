@@ -45,7 +45,7 @@ ydata-profiling = {extras = ["notebook"], version = "^4.0.0"}
 statsmodels = "<0.13.3 || >0.13.3,<0.13.4 || >0.13.4,<0.13.5 || >0.13.5"
 pendulum = "^2.1.2"
 numba = "^0.56.4"
-calitp-data-analysis = "2023.9.18"
+calitp-data-analysis = "2024.2.6"
 calitp-map-utils = "2023.8.1"
 jupyter-book = "1.0.0"
 
