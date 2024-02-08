@@ -11,7 +11,7 @@ arguments:
   - '--no-dbt-run'
   - '--dbt-test'
   - '--select'
-  - "{{ dag_run.conf.get('dbt_select', '') }}"
+  - 'gtfs_rt_external_tables+'
   - '--dbt-vars'
   - "{{ dag_run.conf.get('dbt_vars', '') }}"
 
