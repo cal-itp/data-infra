@@ -10,7 +10,7 @@ def get_secret_by_name(
     client=secretmanager.SecretManagerServiceClient(),
 ) -> str:
     version = f"{project}/secrets/{name}/versions/latest"
-    response = client.access_secret_version(version)
+    response = client.access_secret_version(name=version)
     return response.payload.data.decode("UTF-8").strip()
 
 
@@ -24,7 +24,7 @@ def get_secrets_by_label(
     for secret in client.list_secrets(parent=project):
         if label in secret.labels:
             version = f"{secret.name}/versions/latest"
-            response = client.access_secret_version(version)
+            response = client.access_secret_version(name=version)
             secret_values[secret.name.split("/")[-1]] = response.payload.data.decode(
                 "UTF-8"
             ).strip()
