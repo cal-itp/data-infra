@@ -27,7 +27,7 @@ After that, you should create a sync task (configured via a small YAML file) in 
 
 [This pull request](https://github.com/cal-itp/data-infra/pull/2928/files) demonstrates all four of the code changes involved in this setup process (though the row-level access policy setting is now in a macro [here](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql#L21), rather than in the `fct_payments_rides_v2` model).
 
-After these steps are completed, the new Littlepay account's data should start flowing after the [Littlepay sync DAG](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/sync_littlepay/grid), the [Littlepay parse DAG](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/parse_littlepay/grid), the [external table Airflow DAG](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/create_external_tables/grid), and the [warehouse transformation DAG](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/transform_warehouse/grid) all run.
+After these steps are completed, the new Littlepay account's data should start flowing after the [Littlepay sync DAG](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/dags/sync_littlepay/grid), the [Littlepay parse DAG](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/dags/parse_littlepay/grid), the [external table Airflow DAG](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/dags/create_external_tables/grid), and the [warehouse transformation DAG](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/dags/transform_warehouse/grid) all run.
 
 ## Rotating Littlepay AWS Keys
 

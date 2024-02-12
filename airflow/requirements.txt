@@ -1,4 +1,4 @@
-calitp-data-infra==2024.1.3
+calitp-data-infra==2024.2.12.post1
 gusty==0.6.0
 pyairtable==2.2.1
 pydantic==1.9
