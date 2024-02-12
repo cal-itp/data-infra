@@ -81,7 +81,7 @@ docker-compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly va
 
 ## Deploying Changes to Production
 
-We have a [GitHub Action](../.github/workflows/deploy-airflow.yml) that runs when PRs touching this directory merge to the `main` branch. The GitHub Action updates the requirements sourced from [requirements.txt](./requirements.txt) and syncs the [DAGs](./dags) and [plugins](./plugins) directories to the bucket that Composer watches for code/data to parse. As of 2023-07-18, this bucket is `us-west2-calitp-airflow2-pr-171e4e47-bucket`.
+We have a [GitHub Action](../.github/workflows/deploy-airflow.yml) that runs when PRs touching this directory merge to the `main` branch. The GitHub Action updates the requirements sourced from [requirements.txt](./requirements.txt) and syncs the [DAGs](./dags) and [plugins](./plugins) directories to the bucket that Composer watches for code/data to parse. As of 2024-02-12, this bucket is `us-west2-calitp-airflow2-pr-88ca8ec6-bucket`.
 
 ### Upgrading Airflow Itself
 

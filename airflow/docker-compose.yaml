@@ -105,7 +105,7 @@ x-airflow-common:
     GRAAS_SERVER_URL: $GRAAS_SERVER_URL
 
     # Composer variables for kubernetes
-    POD_CLUSTER_NAME: "us-west2-calitp-airflow2-pr-171e4e47-gke"
+    POD_CLUSTER_NAME: "us-west2-calitp-airflow2-pr-88ca8ec6-gke"
     POD_LOCATION: "us-west2-a"
     AIRFLOW_ENV: "development"
     CALITP_USER: "pipeline"

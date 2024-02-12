@@ -37,4 +37,4 @@ jobs:
           gsutil -m rsync -d -c -r airflow/dags gs://$AIRFLOW_BUCKET/dags
           gsutil -m rsync -d -c -r airflow/plugins gs://$AIRFLOW_BUCKET/plugins
         env:
-          AIRFLOW_BUCKET: "us-west2-calitp-airflow2-pr-171e4e47-bucket"
+          AIRFLOW_BUCKET: "us-west2-calitp-airflow2-pr-88ca8ec6-bucket"

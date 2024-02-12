@@ -22,7 +22,7 @@ metadata and a data dictionary.
 
 ## What is the publication script?
 
-The publication script [publish.py](https://github.com/cal-itp/data-infra/blob/main/warehouse/scripts/publish.py), typically used within the [publish_open_data Airflow workflow](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/publish_open_data/grid), relies on a [dbt exposure](https://docs.getdbt.com/docs/build/exposures) to determine what to publish - in practice, that exposure is titled `california_open_data`. The tables included in that exposure, their CKAN destinations, and their published descriptions are defined in [\_gtfs_schedule_latest.yml](https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs_schedule_latest/_gtfs_schedule_latest.yml) under the `exposures` heading.
+The publication script [publish.py](https://github.com/cal-itp/data-infra/blob/main/warehouse/scripts/publish.py), typically used within the [publish_open_data Airflow workflow](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/dags/publish_open_data/grid), relies on a [dbt exposure](https://docs.getdbt.com/docs/build/exposures) to determine what to publish - in practice, that exposure is titled `california_open_data`. The tables included in that exposure, their CKAN destinations, and their published descriptions are defined in [\_gtfs_schedule_latest.yml](https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs_schedule_latest/_gtfs_schedule_latest.yml) under the `exposures` heading.
 
 By default, the columns of a table included in the exposure are _not_ published on the portal. This is to prevent fields that are useful for internal data management but are hard to interpret for public users, like `_is_current`, from being included in the open data portal. Columns meant for publication are explicitly included in publication via the dbt `meta` tag `publish.include: true`, which you can see on various columns of the models in the same YAML file where the exposure itself is defined.
 
@@ -55,7 +55,7 @@ artifacts in `target/` from a `dbt run` or `dbt compile`.
 poetry run python scripts/publish.py document-exposure california_open_data
 ```
 
-Each day, a new version of `manifest.json` is automatically generated for tables in the production warehouse by the `dbt_run_and_upload_artifacts` job in [the `transform_warehouse` DAG](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/transform_warehouse/grid), and placed inside the `calitp-dbt-artifacts` GCS bucket. If you intend to generate new documentation locally, you'll need to generate a new `manifest.json` locally first.
+Each day, a new version of `manifest.json` is automatically generated for tables in the production warehouse by the `dbt_run_and_upload_artifacts` job in [the `transform_warehouse` DAG](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/dags/transform_warehouse/grid), and placed inside the `calitp-dbt-artifacts` GCS bucket. If you intend to generate new documentation locally, you'll need to generate a new `manifest.json` locally first.
 
 ### Create dataset and metadata
 
@@ -98,7 +98,7 @@ For example:
 
 If you are using dbt-based publishing, the `publish_exposure` subcommand of `publish.py`
 will query BigQuery, write out CSV files, and upload those files to CKAN.
-[An Airflow job](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/publish_open_data/grid) refreshes/updates the data at a specified
+[An Airflow job](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/dags/publish_open_data/grid) refreshes/updates the data at a specified
 frequency, or the publication script can be run manually. By default, the `--no-publish` flag is set, executing a dry run. You can also write to GCS without uploading to CKAN by manually entering an arbitrary bucket destination.
 
 The weekly publishing Airflow job supports referencing `gs://` paths for the manifest, which is used to determine which tables and columns to publish; by default, the script will read the latest manifest in GCS uploaded by the `dbt_run_and_upload_artifacts` Airflow job.
