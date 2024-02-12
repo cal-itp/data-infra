@@ -1,5 +1,5 @@
 operator: 'operators.PodOperator'
-name: 'dbt-test'
+name: 'dbt-run-and-upload-artifacts'
 image: 'ghcr.io/cal-itp/data-infra/warehouse:{{ image_tag() }}'
 
 cmds:
@@ -7,16 +7,17 @@ cmds:
 arguments:
   - '/app/scripts/run_and_upload.py'
   - 'run'
-  - '--no-dbt-seed'
-  - '--no-dbt-run'
-  - '--dbt-test'
+  - '--dbt-docs'
+  - '--save-artifacts'
+  - '--deploy-docs'
+  - '--sync-metabase'
   - '--select'
-  - 'gtfs_rt_external_tables+'
+  - 'source:gtfs_rt_external+'
   - '--dbt-vars'
   - "{{ dag_run.conf.get('dbt_vars', '') }}"
 
 dependencies:
-  - dbt_run_and_upload_artifacts
+  - dbt_test_exclude_rt
 trigger_rule: all_done
 
 is_delete_operator_pod: true
@@ -25,6 +26,7 @@ is_gke: true
 pod_location: us-west1
 cluster_name: data-infra-apps
 namespace: airflow-jobs
+priority_class_name: dbt-high-priority
 
 env_vars:
   AIRFLOW_ENV: "{{ env_var('AIRFLOW_ENV') }}"
@@ -32,7 +34,10 @@ env_vars:
   BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
   DBT_PROJECT_DIR: /app
   DBT_PROFILE_DIR: /app
+  DBT_DATABASE: "{{ get_project_id() }}"
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
+  MB_HOST: https://dashboards.calitp.org
+  NETLIFY_SITE_ID: cal-itp-dbt-docs
   SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
   SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
 
@@ -41,6 +46,18 @@ secrets:
     deploy_target: /secrets/jobs-data/
     secret: jobs-data
     key: service-account.json
+  - deploy_type: env
+    deploy_target: MB_USER
+    secret: jobs-data
+    key: metabase-user
+  - deploy_type: env
+    deploy_target: MB_PASSWORD
+    secret: jobs-data
+    key: metabase-password
+  - deploy_type: env
+    deploy_target: NETLIFY_AUTH_TOKEN
+    secret: jobs-data
+    key: netlify-auth-token
 
 k8s_resources:
   request_memory: 2.0Gi
