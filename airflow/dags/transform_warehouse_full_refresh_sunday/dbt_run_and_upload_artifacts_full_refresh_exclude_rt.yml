@@ -15,7 +15,7 @@ arguments:
   - '--select'
   - "{{ dag_run.conf.get('dbt_select_statement', '') }}"
   - '--exclude'
-  - 'gtfs_rt_external_tables+'
+  - 'source:external_gtfs_rt+ source:gtfs_rt_external_tables+'
 
 is_delete_operator_pod: true
 get_logs: true

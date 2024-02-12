@@ -13,7 +13,7 @@ arguments:
   - '--select'
   - "{{ dag_run.conf.get('dbt_select_statement', '') }}"
   - '--exclude'
-  - 'source:gtfs_rt_external+ source:gtfs_rt_external_tables+'
+  - 'source:external_gtfs_rt+ source:gtfs_rt_external_tables+'
 
 dependencies:
   - dbt_run_and_upload_artifacts_full_refresh_exclude_rt

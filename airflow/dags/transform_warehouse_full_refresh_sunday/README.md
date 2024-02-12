@@ -8,13 +8,13 @@ To be cost-effective, it only runs a `dbt run --full-refresh` on non-RT data, an
 
 The dependencies are configured in this order:
 * `dbt_run_and_upload_artifacts_full_refresh_exclude_rt`
-  * full-refresh run of only non-RT data (`--exclude source:gtfs_rt_external+ source:gtfs_rt_external_tables+`)
+  * full-refresh run of only non-RT data (`--exclude source:external_gtfs_rt+ source:gtfs_rt_external_tables+`)
 * `dbt_test_exclude_rt`
-  * tests only non-RT data (`--exclude source:gtfs_rt_external+ source:gtfs_rt_external_tables+`)
+  * tests only non-RT data (`--exclude source:external_gtfs_rt+ source:gtfs_rt_external_tables+`)
 * `dbt_run_and_upload_artifacts_select_rt`
-  * normal dbt run of RT data (`--select source:gtfs_rt_external+`)
+  * normal dbt run of RT data (`--select source:external_gtfs_rt+`)
 * `dbt_test_select_rt`
-  * test only non-RT data (`--select source:gtfs_rt_external+`)
+  * test only non-RT data (`--select source:external_gtfs_rt+`)
 
 This DAG has some special considerations:
 
