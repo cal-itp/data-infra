@@ -890,7 +890,7 @@ tests_and_docs --&gt; merge_model_changes
 <p>To check for incremental models downstream of your model, run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">dbt</span> <span class="pre">ls</span> <span class="pre">-s</span> <span class="pre">&lt;your_model&gt;+,config.materialized:incremental</span> <span class="pre">--resource-type</span> <span class="pre">model</span></code>. If you need to refresh incremental models:</p>
 <ol class="arabic simple">
 <li><p>Wait for the <a class="reference external" href="https://github.com/cal-itp/data-infra/actions/workflows/build-dbt.yml">build-dbt</a> GitHub action associated with your PR to complete after you merge.</p></li>
-<li><p>Go into the <a class="reference external" href="https://o1d2fa0877cf3fb10p-tp.appspot.com/home">Airflow UI</a> and go to the <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh">transform_warehouse_full_refresh DAG</a>. <strong>Specify appropriate model selectors to only refresh models that were affected by your changes</strong> and then run the DAG task.</p></li>
+<li><p>Go into the <a class="reference external" href="https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/home">Airflow UI</a> and go to the <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh">transform_warehouse_full_refresh DAG</a>. <strong>Specify appropriate model selectors to only refresh models that were affected by your changes</strong> and then run the DAG task.</p></li>
 </ol>
 </div>
 </section>
