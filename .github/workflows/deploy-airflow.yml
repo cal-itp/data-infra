@@ -30,7 +30,7 @@ jobs:
           files: 'airflow/requirements.txt'
       - id: install-python-dependencies
         if: steps.changed-requirements.outputs.any_changed == 'true'
-        run: gcloud composer environments update calitp-airflow2-prod --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra
+        run: gcloud composer environments update calitp-airflow2-prod-composer2-patch --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra
 
       - name: Push Airflow code to GCS
         run: |
