@@ -205,14 +205,14 @@ files = [
 
 [[package]]
 name = "calitp-data-infra"
-version = "2024.2.12"
+version = "2024.2.12.post1"
 description = "Shared code for developing data pipelines that process Cal-ITP data."
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.10"
 files = [
-    {file = "calitp_data_infra-2024.2.12-py3-none-any.whl", hash = "sha256:f0588c983346d6f6bb3d0c87de8474577eabd011150ab86c56df8b5c0a4d9f0c"},
-    {file = "calitp_data_infra-2024.2.12.tar.gz", hash = "sha256:6205cdb6bc3c062ca53b4b156c9d1a8a30d6b3fb03e452d6a41b029ccc2879ec"},
+    {file = "calitp_data_infra-2024.2.12.post1-py3-none-any.whl", hash = "sha256:388d18d1e305e7b56cd2821892ba538e58a9eac2418ac018838c316980efe434"},
+    {file = "calitp_data_infra-2024.2.12.post1.tar.gz", hash = "sha256:743640b6d97154311f1e06cb9068ea98a60afe3f0e5aa7050d3bdf5562617c90"},
 ]
 
 [package.dependencies]
@@ -2222,4 +2222,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.10"
-content-hash = "3fc60713e876bf0de25a42ffb2c207e51e6e6351012c89998215278d2c854310"
+content-hash = "bd810979e1a2855c45e5f29448450f727eeecc8d996f0dc12b7f8fe1942783a4"

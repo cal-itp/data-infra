@@ -205,14 +205,14 @@ files = [
 
 [[package]]
 name = "calitp-data-infra"
-version = "2024.2.12"
+version = "2024.2.12.post1"
 description = "Shared code for developing data pipelines that process Cal-ITP data."
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.10"
 files = [
-    {file = "calitp_data_infra-2024.2.12-py3-none-any.whl", hash = "sha256:f0588c983346d6f6bb3d0c87de8474577eabd011150ab86c56df8b5c0a4d9f0c"},
-    {file = "calitp_data_infra-2024.2.12.tar.gz", hash = "sha256:6205cdb6bc3c062ca53b4b156c9d1a8a30d6b3fb03e452d6a41b029ccc2879ec"},
+    {file = "calitp_data_infra-2024.2.12.post1-py3-none-any.whl", hash = "sha256:388d18d1e305e7b56cd2821892ba538e58a9eac2418ac018838c316980efe434"},
+    {file = "calitp_data_infra-2024.2.12.post1.tar.gz", hash = "sha256:743640b6d97154311f1e06cb9068ea98a60afe3f0e5aa7050d3bdf5562617c90"},
 ]
 
 [package.dependencies]
@@ -1616,4 +1616,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "07720c6d3235c17e2ef50c040178ed609610fc9c803148cee0add464784eac19"
+content-hash = "35389ecaa0a30f85cd3cd5d087cf802ebcb7ff888b90065269373c0707565923"
