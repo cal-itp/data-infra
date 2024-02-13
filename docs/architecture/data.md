@@ -144,7 +144,7 @@ We often bring data into our environment in two steps, created as two separate A
 - **Convert the saved raw data into a BigQuery-readable gzipped JSONL file:** See for example the changes in the `airflow/dags/parse_elavon` directory in [data-infra PR #2376](https://github.com/cal-itp/data-infra/pull/2376/files). This prepares the data is to be read into BigQuery. **Conversion here should be limited to the bare minimum needed to make the data BigQuery-compatible, for example converting column names that would be invalid in BigQuery and changing the file type to gzipped JSONL.** This data might be saved in a `calitp-<your-data-source>-parsed` bucket.
 
 ```{note}
-When you merge a pull request creating a new Airflow DAG, that DAG will be paused by default. To start the DAG, someone will need to log into [the Airflow UI (requires Composer access in Cal-ITP Google Cloud Platform instance)](https://o1d2fa0877cf3fb10p-tp.appspot.com/home) and unpause the DAG. 
+When you merge a pull request creating a new Airflow DAG, that DAG will be paused by default. To start the DAG, someone will need to log into [the Airflow UI (requires Composer access in Cal-ITP Google Cloud Platform instance)](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/home) and unpause the DAG. 
 ```
 
 ### Create external tables

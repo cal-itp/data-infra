@@ -4,7 +4,7 @@ FROM apache/airflow:2.4.3-python3.8
 USER root
 
 RUN apt-get update \
-  && apt-get install -y git libmysqlclient-dev gcc libpq-dev \
+  && apt-get install -y git default-libmysqlclient-dev gcc libpq-dev \
   && rm -rf /var/lib/apt/lists/*
 
 RUN curl https://sdk.cloud.google.com > install.sh \
@@ -15,8 +15,8 @@ RUN gcloud components install gke-gcloud-auth-plugin
 
 USER airflow
 
-COPY requirements-composer-1.20.6-airflow-2.4.3.txt /tmp/requirements-composer-1.20.6-airflow-2.4.3.txt
-RUN pip install --no-cache-dir --user -r /tmp/requirements-composer-1.20.6-airflow-2.4.3.txt
+COPY requirements-composer-2.6.0-airflow-2.5.3.txt /tmp/requirements-composer-2.6.0-airflow-2.5.3.txt
+RUN pip install --no-cache-dir --user -r /tmp/requirements-composer-2.6.0-airflow-2.5.3.txt
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir --user -r /tmp/requirements.txt

@@ -30,11 +30,11 @@ jobs:
           files: 'airflow/requirements.txt'
       - id: install-python-dependencies
         if: steps.changed-requirements.outputs.any_changed == 'true'
-        run: gcloud composer environments update calitp-airflow2-prod --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra
+        run: gcloud composer environments update calitp-airflow2-prod-composer2-patch --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra
 
       - name: Push Airflow code to GCS
         run: |
           gsutil -m rsync -d -c -r airflow/dags gs://$AIRFLOW_BUCKET/dags
           gsutil -m rsync -d -c -r airflow/plugins gs://$AIRFLOW_BUCKET/plugins
         env:
-          AIRFLOW_BUCKET: "us-west2-calitp-airflow2-pr-171e4e47-bucket"
+          AIRFLOW_BUCKET: "us-west2-calitp-airflow2-pr-88ca8ec6-bucket"
