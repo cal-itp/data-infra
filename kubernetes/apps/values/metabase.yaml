@@ -1,6 +1,6 @@
 images:
   metabase:
-    src: metabase/metabase:v0.46.6.1
+    src: metabase/metabase:v0.48.3
 
 workloads:
   metabase:
