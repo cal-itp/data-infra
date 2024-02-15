@@ -21,13 +21,13 @@ python-slugify = "^6.1.2"
 sentry-sdk = "^1.9.8"
 backoff = "^2.2.1"
 gcsfs = "^2023.1.0"
-dbt-metabase = "^0.9.14"
+dbt-metabase = "0.10.3"
 networkx = {version = "<3", extras = ["default"]}
-# from https://github.com/pygraphviz/pygraphviz/issues/398#issuecomment-1450367670
+# from https://github.com/pygraphviz/pygraphvibz/issues/398#issuecomment-1450367670
 # May need to run these after `brew install graphviz` when installing on macOS
 # export CFLAGS="-I $(brew --prefix graphviz)/include"
 # export LDFLAGS="-L $(brew --prefix graphviz)/lib"
-pygraphviz = "^1.10"
+pygraphviz = "1.11"
 palettable = "^3.3.0"
 metabase-api = "^0.3.0"
 # fiona 1.9 requires gdal 3 which ubuntu does not install yet
