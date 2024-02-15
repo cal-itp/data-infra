@@ -23,7 +23,7 @@ backoff = "^2.2.1"
 gcsfs = "^2023.1.0"
 dbt-metabase = "0.10.3"
 networkx = {version = "<3", extras = ["default"]}
-# from https://github.com/pygraphviz/pygraphvibz/issues/398#issuecomment-1450367670
+# from https://github.com/pygraphviz/pygraphviz/issues/398#issuecomment-1450367670
 # May need to run these after `brew install graphviz` when installing on macOS
 # export CFLAGS="-I $(brew --prefix graphviz)/include"
 # export LDFLAGS="-L $(brew --prefix graphviz)/lib"
