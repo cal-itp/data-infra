@@ -1,4 +1,4 @@
-description: "Runs dbt with --full-refresh; this is a weekly run on Sundays to ensure non-RT incremental models are up-to-date. Run in conjunction with transform_warehouse_sunday_select_rt."
+description: "Runs non-RT incremental tables with dbt run --full-refresh and RT tables with dbt run, also tests the warehouse; this is a weekly run on Sundays to ensure non-RT incremental models are up-to-date."
 schedule_interval: "0 10 * * 0"
 tags:
   - all_gusty_features
