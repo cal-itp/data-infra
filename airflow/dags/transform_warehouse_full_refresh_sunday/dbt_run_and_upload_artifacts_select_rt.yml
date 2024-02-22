@@ -1,5 +1,5 @@
 operator: 'operators.PodOperator'
-name: 'dbt-run-and-upload-artifacts'
+name: 'dbt_run_and_upload_artifacts_select_rt'
 image: 'ghcr.io/cal-itp/data-infra/warehouse:{{ image_tag() }}'
 
 cmds:
