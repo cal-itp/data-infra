@@ -18,6 +18,9 @@ schema_fields:
   - name: id
     type: STRING
     mode: NULLABLE
+  - name: name
+    type: STRING
+    mode: NULLABLE
   - name: operator
     type: STRING
     mode: NULLABLE
