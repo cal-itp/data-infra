@@ -20,4 +20,4 @@ schema_fields:
     mode: NULLABLE
   - name: operator
     type: STRING
-    mode: REPEATED
+    mode: NULLABLE
