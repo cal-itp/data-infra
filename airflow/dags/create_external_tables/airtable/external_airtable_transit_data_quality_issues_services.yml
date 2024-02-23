@@ -14,3 +14,10 @@ hive_options:
   require_partition_filter: false
   mode: AUTO
   source_uri_prefix: "transit_data_quality_issues__services/"
+schema_fields:
+  - name: id
+    type: STRING
+    mode: NULLABLE
+  - name: operator
+    type: STRING
+    mode: REPEATED
