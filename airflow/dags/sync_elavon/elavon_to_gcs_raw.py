@@ -12,7 +12,6 @@ from calitp_data_infra.storage import get_fs
 CALITP__ELAVON_SFTP_HOSTNAME = os.environ["CALITP__ELAVON_SFTP_HOSTNAME"]
 CALITP__ELAVON_SFTP_PORT = os.environ["CALITP__ELAVON_SFTP_PORT"]
 CALITP__ELAVON_SFTP_USERNAME = os.environ["CALITP__ELAVON_SFTP_USERNAME"]
-CALITP__ELAVON_SFTP_PASSWORD = get_secret_by_name("CALITP__ELAVON_SFTP_PASSWORD")
 CALITP_BUCKET__ELAVON_RAW = os.environ["CALITP_BUCKET__ELAVON_RAW"]
 
 
@@ -29,7 +28,7 @@ def mirror_raw_files_from_elavon():
         hostname=CALITP__ELAVON_SFTP_HOSTNAME,
         port=CALITP__ELAVON_SFTP_PORT,
         username=CALITP__ELAVON_SFTP_USERNAME,
-        password=CALITP__ELAVON_SFTP_PASSWORD,
+        password=get_secret_by_name("CALITP__ELAVON_SFTP_PASSWORD"),
     )
 
     # Create SFTP client and navigate to data directory
