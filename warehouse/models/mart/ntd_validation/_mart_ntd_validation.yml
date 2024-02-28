@@ -3,8 +3,8 @@ version: 2
 models:
   - name: fct_ntd_rr20_service_checks
     description: |
-      Runs validation checks on the RR-20 service data. Source data is int_ntd_rr20_service_ratios.
-      This model is still in python but should be converted to SQL as time allows.
+      Runs validation checks on the RR-20 service data. Source data is int_ntd_rr20_service_3ratios_wide.
+      NOTE: This model uses "this_year" and "last_year" as dynamic variables based on the date on which it is run.
   - name: fct_ntd_a30_vomscheck
     description: |
       Runs various checks on VOMS data submitted to NTD, that are also in the file voms_inventory_check.py.

@@ -8,4 +8,4 @@ SELECT
     Fare_Revenues / NULLIF(Annual_UPT,0) as fare_rev_per_trip,
     Annual_VRM / NULLIF(Annual_VRH,0) as rev_speed,
     Annual_UPT / NULLIF(Annual_VRH,0) as trips_per_hr
-FROM {{ ref('int_ntd_rr20_service_alldata') }}
+FROM {{ ref('int_ntd_rr20_service_1alldata') }}
