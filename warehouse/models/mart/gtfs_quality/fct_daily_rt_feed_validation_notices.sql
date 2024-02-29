@@ -32,7 +32,7 @@ fct_daily_rt_feed_validation_notices AS (
         codes.code,
         codes.description,
         codes.is_critical,
-        -- TODO: at some point, these codes will be versioned by validator version
+        -- The active validator version is consistent at any given time, so this choice logic is safe
         ARRAY_AGG(DISTINCT notices.gtfs_validator_version IGNORE NULLS)[OFFSET(0)] AS gtfs_validator_version,
         SUM(daily_feeds.parse_success_file_count) / COUNT(daily_feeds.key) AS parsed_files,
         COUNT(DISTINCT outcomes.extract_ts) AS validated_extracts,
