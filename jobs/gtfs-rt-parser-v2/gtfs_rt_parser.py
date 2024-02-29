@@ -50,6 +50,12 @@ from google.transit import gtfs_realtime_pb2  # type: ignore
 from pydantic import BaseModel, Field, validator
 from tqdm import tqdm
 
+"""
+If a new version of the validator is published one day, we'll likely want to do what we
+do for GTFS schedule data - keep multiple versions of the jar and choose between them
+programmatically based on operational dates. For example:
+https://github.com/cal-itp/data-infra/blob/main/jobs/gtfs-schedule-validator/gtfs_schedule_validator_hourly.py#L151-L162
+"""
 RT_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_RT_VALIDATOR_JAR"
 JAR_DEFAULT = typer.Option(
     os.environ.get(RT_VALIDATOR_JAR_LOCATION_ENV_KEY),
