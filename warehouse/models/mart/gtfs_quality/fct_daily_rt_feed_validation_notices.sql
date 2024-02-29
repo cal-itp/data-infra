@@ -50,7 +50,6 @@ fct_daily_rt_feed_validation_notices AS (
     LEFT JOIN notices
         ON outcomes.extract_ts = notices.ts
         AND outcomes.base64_url = notices.base64_url
-        AND codes.code = notices.error_message_validation_rule_error_id
     GROUP BY 1, 2, 3, 4, 5, 6
 )
 
