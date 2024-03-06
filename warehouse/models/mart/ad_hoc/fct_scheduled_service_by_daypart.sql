@@ -47,7 +47,6 @@ extract_trip_date_types AS (
         service_hours
 
     FROM fct_scheduled_trips
-    WHERE hour IS NOT NULL AND service_hours IS NOT NULL
 
 ),
 
@@ -111,6 +110,8 @@ fct_scheduled_service_by_daypart AS (
         ttl_service_hours
 
     FROM daypart_aggregations
+    WHERE hour IS NOT NULL AND ttl_service_hours IS NOT NULL
+
 )
 
 SELECT * FROM fct_scheduled_service_by_daypart
