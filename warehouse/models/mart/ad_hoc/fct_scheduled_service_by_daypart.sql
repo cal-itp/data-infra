@@ -4,9 +4,22 @@ WITH dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
+-- keep the most recent of month_last_day
+feeds AS (
+    SELECT
+        gtfs_dataset_key as gtfs_key,
+        MAX(LAST_DAY(date, MONTH)) as max_date
+    FROM {{ ref('fct_daily_schedule_feeds') }}
+    WHERE date = LAST_DAY(date, MONTH)
+    GROUP BY 1
+),
+
 fct_scheduled_trips AS (
     SELECT *
     FROM {{ ref('fct_scheduled_trips') }}
+    INNER JOIN feeds
+        ON feeds.gtfs_key = fct_scheduled_trips.gtfs_dataset_key
+    WHERE fct_scheduled_trips.service_date <= feeds.max_date
 ),
 
 extract_trip_date_types AS (
@@ -14,7 +27,7 @@ extract_trip_date_types AS (
     SELECT
 
         CASE
-            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 4 THEN "OWL"
+            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 4 THEN "Owl"
             WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 7 THEN "Early AM"
             WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 10 THEN "AM Peak"
             WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 15 THEN "Midday"
@@ -34,6 +47,7 @@ extract_trip_date_types AS (
         service_hours
 
     FROM fct_scheduled_trips
+    WHERE hour IS NOT NULL AND service_hours IS NOT NULL
 
 ),
 
