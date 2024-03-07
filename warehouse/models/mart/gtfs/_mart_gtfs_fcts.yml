@@ -2123,6 +2123,10 @@ models:
     description: |
       An aggregation of GTFS schedule service by day and time characteristics.
     columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `source_record_id`, `route_id`, `month`, `year`, and `time_of_day`.
+        tests: *primary_key_tests
       - name: name
       - name: source_record_id
       - name: route_id
