@@ -81,7 +81,6 @@ daypart_aggregations AS (
         route_short_name,
         route_long_name,
         time_of_day,
-        hour,
         month,
         year,
         day_type,
@@ -90,7 +89,7 @@ daypart_aggregations AS (
         SUM(service_hours) AS ttl_service_hours
 
     FROM service_with_daypart
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
 ),
 
 fct_scheduled_service_by_daypart AS (
@@ -102,15 +101,13 @@ fct_scheduled_service_by_daypart AS (
         route_short_name,
         route_long_name,
         time_of_day,
-        hour,
         month,
-        year,
         day_type,
         n_trips,
         ttl_service_hours
 
     FROM daypart_aggregations
-    WHERE hour IS NOT NULL AND ttl_service_hours IS NOT NULL
+    WHERE ttl_service_hours IS NOT NULL
 
 )
 

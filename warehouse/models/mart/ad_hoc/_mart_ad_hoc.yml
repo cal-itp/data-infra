@@ -13,9 +13,6 @@ models:
       - name: time_of_day
         description: |
           Categorized based on the Pacific Time departure of the trip's first departure.
-      - name: hour
-        description: |
-          Hour of the Pacific Time departure of the trip's first departure.
       - name: month
         description: |
           Actual calendar month (Pacific Time dates) in which this service was scheduled to occur.
@@ -28,4 +25,8 @@ models:
           This means that overnight service is associated with the calendar date on which it was scheduled,
           even if it was associated with the prior `service_date` by the agency.
       - name: n_trips
+        description: |
+          Total trips that occurred for the route for this month and `time_of_day`.
       - name: ttl_service_hours
+        description: |
+          Total scheduled service hours that occurred for the route for this month and `time_of_day`.
