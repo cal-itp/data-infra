@@ -92,7 +92,7 @@ daypart_aggregations AS (
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
 ),
 
-fct_scheduled_service_by_daypart AS (
+fct_monthly_route_service_by_timeofday AS (
     SELECT
 
         name,
@@ -111,4 +111,4 @@ fct_scheduled_service_by_daypart AS (
 
 )
 
-SELECT * FROM fct_scheduled_service_by_daypart
+SELECT * FROM fct_monthly_route_service_by_timeofday
