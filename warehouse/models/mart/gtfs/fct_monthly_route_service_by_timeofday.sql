@@ -102,6 +102,7 @@ fct_monthly_route_service_by_timeofday AS (
         route_long_name,
         time_of_day,
         month,
+        year,
         day_type,
         n_trips,
         ttl_service_hours
