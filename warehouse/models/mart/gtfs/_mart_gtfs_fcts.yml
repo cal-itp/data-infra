@@ -2125,7 +2125,7 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `source_record_id`, `route_id`, `month`, `year`, and `time_of_day`.
+          Synthetic primary key constructed from `source_record_id`, `route_id`, `month`, `year`, `day_type`, and `time_of_day`.
         tests: *primary_key_tests
       - name: name
       - name: source_record_id
@@ -2143,12 +2143,12 @@ models:
           Actual calendar year (Pacific Time dates) in which this service was scheduled to occur.
       - name: day_type
         description: |
-          Actual calendar day type (Pacific Time dates) in which this service was scheduled to occur.
+          Actual calendar day type (Pacific Time dates) in which this service was scheduled to occur (Monday, Tuesday, etc).
           This means that overnight service is associated with the calendar date on which it was scheduled,
           even if it was associated with the prior `service_date` by the agency.
       - name: n_trips
         description: |
-          Total trips that occurred for the route for this month and `time_of_day`.
+          Total trips that occurred for the route for this month, `day_type` and `time_of_day`.
       - name: ttl_service_hours
         description: |
-          Total scheduled service hours that occurred for the route for this month and `time_of_day`.
+          Total scheduled service hours that occurred for the route for this month, `day_type`, and `time_of_day`.
