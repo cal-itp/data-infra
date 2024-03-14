@@ -1,8 +1,14 @@
 {{
     config(
         materialized='incremental',
-        unique_key = 'key',
-        cluster_by = ['service_date', 'base64_url'],
+        incremental_strategy='insert_overwrite',
+        partition_by = {
+            'field': 'dt',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by=['service_date', 'base64_url'],
+        on_schema_change='append_new_columns'
     )
 }}
 

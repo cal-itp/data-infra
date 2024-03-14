@@ -354,15 +354,7 @@ models:
       level.
     columns:
       - name: key
-        description: |
-          Synthetic primary key.
-        tests:
-          - unique:
-              config:
-                where: '__rt_sampled__'
-          - not_null:
-              config:
-                where: '__rt_sampled__'
+        tests: *almost_unique_rt_key_tests
       - <<: *rt_trip_id
         tests:
           - not_null:
