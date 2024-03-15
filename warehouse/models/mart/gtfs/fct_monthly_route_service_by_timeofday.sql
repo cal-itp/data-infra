@@ -94,7 +94,7 @@ daypart_aggregations AS (
 
 fct_monthly_route_service_by_timeofday AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['source_record_id', 'route_id', 'route_short_name', 'route_long_Name', 'day_type', 'month', 'year', 'time_of_day']) }} AS key,
+       {{ dbt_utils.generate_surrogate_key(['source_record_id', 'route_id', 'route_short_name', 'route_long_name', 'time_of_day', 'month', 'year', 'day_type']) }} AS key,
         name,
         source_record_id,
         route_id,

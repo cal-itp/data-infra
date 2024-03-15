@@ -2125,7 +2125,7 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `source_record_id`, `route_id`, `month`, `year`, `day_type`, and `time_of_day`.
+          Synthetic primary key constructed from `source_record_id`, `route_id`, `route_short_name`, `route_long_name`, `time_of_day`, `month`, `year`, and `day_type`.
         tests: *primary_key_tests
       - name: name
       - name: source_record_id
