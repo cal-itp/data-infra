@@ -3129,24 +3129,28 @@ test = ["coverage", "ipykernel", "pre-commit", "pytest (>=7.0)", "pytest-console
 
 [[package]]
 name = "jupyter-server-proxy"
-version = "4.0.0"
-description = "A JupyterLab extension accompanying the PyPI package jupyter-server-proxy adding launcher items for configured server processes."
+version = "4.1.1"
+description = "A Jupyter server extension to run additional processes and proxy to them that comes bundled JupyterLab extension to launch pre-defined processes."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jupyter_server_proxy-4.0.0-py3-none-any.whl", hash = "sha256:8075afce3465a5e987e43ec837c307f9b9ac7398ebcff497abf1f51303d23470"},
-    {file = "jupyter_server_proxy-4.0.0.tar.gz", hash = "sha256:f5dc12dd204baca71b013df3522c14403692a2d37cb7adcd77851dbab71533b5"},
+    {file = "jupyter_server_proxy-4.1.1-py3-none-any.whl", hash = "sha256:effe041a6771c179045ee3ceaa08993f50feaaeca7ce11e04d8178a215673b7a"},
+    {file = "jupyter_server_proxy-4.1.1.tar.gz", hash = "sha256:b9c6a945b10fa5373c1caa3f6481ce334b1bbe8946b48c8cb9f97097e26a8512"},
 ]
 
 [package.dependencies]
 aiohttp = "*"
 importlib-metadata = {version = ">=4.8.3", markers = "python_version < \"3.10\""}
 jupyter-server = ">=1.0"
-simpervisor = ">=0.4"
+simpervisor = ">=1.0"
+tornado = ">=5.1"
+traitlets = ">=4.2.1"
 
 [package.extras]
-acceptance = ["jupyter-server-proxy[test]", "notebook (<7)", "robotframework-jupyterlibrary (>=0.4.2)"]
-test = ["pytest", "pytest-cov", "pytest-html"]
+acceptance = ["jupyter-server-proxy[test]", "robotframework-jupyterlibrary (>=0.4.2)"]
+classic = ["jupyter-server (<2)", "jupyterlab (>=3.0.0,<4.0.0a0)", "notebook (<7.0.0a0)"]
+lab = ["jupyter-server (>=2)", "jupyterlab (>=4.0.5,<5.0.0a0)", "nbclassic", "notebook (>=7)"]
+test = ["pytest", "pytest-asyncio", "pytest-cov", "pytest-html"]
 
 [[package]]
 name = "jupyterlab"
