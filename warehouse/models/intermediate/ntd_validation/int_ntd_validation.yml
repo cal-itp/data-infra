@@ -14,7 +14,7 @@ models:
       For NTD validation error ID #s RR20F-070, RR20F-065, RR20F-068, RR20F-066, RR20F-013
   - name: int_ntd_rr20_financial_total_exp
     description: |
-      Setting up the RR-20 data for comparing totals, for operating and capital expenses, reported in different ares of the RR-20
+      Setting up the RR-20 data for comparing totals, for operating and capital expenses, reported in different areas of the RR-20
       For NTD validation error ID #s RR20F-001OA, RR20F-001C, RR20F-182
   - name: int_ntd_rr20_service_1alldata
     description: |
