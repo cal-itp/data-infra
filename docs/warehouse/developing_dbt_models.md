@@ -6,15 +6,16 @@ Information related to contributing to the [Cal-ITP dbt project](https://github.
 
 ## What is dbt?
 
-[dbt](https://docs.getdbt.com/docs/introduction#the-power-of-dbt) is the tool we use to manage the data models (tables and views) in our BigQuery data warehouse. We use dbt to define the SQL code that creates our data models, to manage dependencies between models, to document models, and to test models. 
+[dbt](https://docs.getdbt.com/docs/introduction#the-power-of-dbt) is the tool we use to manage the data models (tables and views) in our BigQuery data warehouse. We use dbt to define the SQL code that creates our data models, to manage dependencies between models, to document models, and to test models.
 
-The [Cal-ITP dbt project](https://github.com/cal-itp/data-infra/tree/main/warehouse) runs every day, [orchestrated by Airflow](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse). When the dbt project runs, it refreshes all the data in the warehouse by running all the queries within the project in order based on the dependencies defined between models. For example, if model B depends on model A, the project will execute model A before model B. 
+The [Cal-ITP dbt project](https://github.com/cal-itp/data-infra/tree/main/warehouse) runs every day, [orchestrated by Airflow](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse). When the dbt project runs, it refreshes all the data in the warehouse by running all the queries within the project in order based on the dependencies defined between models. For example, if model B depends on model A, the project will execute model A before model B.
 
 ### dbt project structure
 
-The dbt project (specifically [the `models/` directory](https://github.com/cal-itp/data-infra/tree/main/warehouse/models)) is broken out into data processing stages, broadly according to the [standard outlined by dbt](https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview#guide-structure-overview). You can read dbt documentation on the purpose of [staging](https://docs.getdbt.com/best-practices/how-we-structure/2-staging#staging-models), [intermediate](https://docs.getdbt.com/best-practices/how-we-structure/3-intermediate#intermediate-models), and [mart](https://docs.getdbt.com/best-practices/how-we-structure/4-marts#marts-models) models. 
+The dbt project (specifically [the `models/` directory](https://github.com/cal-itp/data-infra/tree/main/warehouse/models)) is broken out into data processing stages, broadly according to the [standard outlined by dbt](https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview#guide-structure-overview). You can read dbt documentation on the purpose of [staging](https://docs.getdbt.com/best-practices/how-we-structure/2-staging#staging-models), [intermediate](https://docs.getdbt.com/best-practices/how-we-structure/3-intermediate#intermediate-models), and [mart](https://docs.getdbt.com/best-practices/how-we-structure/4-marts#marts-models) models.
 
 Project level configuration lives in two separate places:
+
 * `dbt_project.yml` ([dbt documentation](https://docs.getdbt.com/reference/dbt_project.yml), [our file](https://github.com/cal-itp/data-infra/blob/main/warehouse/dbt_project.yml)): This contains information about the dbt project structure, for example configuring how the folder structure should be interpreted.
 * `profiles.yml` ([dbt documentation](https://docs.getdbt.com/docs/core/connect-data-platform/profiles.yml), [production file (should be used for prod runs only)](https://github.com/cal-itp/data-infra/blob/main/warehouse/profiles.yml), [template for local/testing use](https://github.com/cal-itp/data-infra/tree/main/warehouse#clone-and-install-the-warehouse-project)): This contains information about how the dbt project should connect to our cloud warehouse (BigQuery) and configures settings associated with that database connection, for example, what the query timeout should be.
 
@@ -43,7 +44,7 @@ We recommend that everyone who does dbt development joins the  [`#data-warehouse
 
 ```{admonition} See next section for modeling considerations
 This section describes the high-level mechanics/process of the developer workflow to edit the dbt project.
-**Please read the [next section](developing_dbt_models#modeling-considerations) for things you should consider from the data modeling perspective.**
+**Please read the [next section](#modeling-considerations) for things you should consider from the data modeling perspective.**
 ```
 
 To develop dbt models, you can edit the `.sql` files for your models, save your changes, and then [run the model from the command line](https://github.com/cal-itp/data-infra/tree/main/warehouse#dbt-commands) to execute the SQL you updated.
@@ -52,7 +53,7 @@ To inspect tables as you are working, the fastest method is usually to run some 
 
 When you run dbt commands locally or on JupyterHub, your models will be created in the `cal-itp-data-infra-staging.<your name>_<dbt folder name, like mart_gtfs>` BigQuery dataset. Note that this is in the `cal-itp-data-infra-staging` Google Cloud Platform project, *not* the production `cal-itp-data-infra` project.
 
-Once your models are working the way you want and you have added all necessary documentation and tests in YAML files ([see below](developing_dbt_models#modeling-considerations) for more on modeling, documentation, and testing considerations), you are ready to merge.
+Once your models are working the way you want and you have added all necessary documentation and tests in YAML files ([see below](#modeling-considerations) for more on modeling, documentation, and testing considerations), you are ready to merge.
 
 Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against `main` when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging.
 
@@ -292,7 +293,7 @@ To confirm that the grain is what you expect, you should check whether an antici
           <column 3>,
           COUNT(*) AS ct
       FROM tbl
-      -- adjust this based on the number of columns that make the composite unique key
+    -- adjust this based on the number of columns that make the composite unique key
       GROUP BY 1, 2, 3
       HAVING ct > 1
   )
@@ -388,7 +389,7 @@ Once your changes merge, if they will impact other users (for example by changin
 To check for incremental models downstream of your model, run `poetry run dbt ls -s <your_model>+,config.materialized:incremental --resource-type model`. If you need to refresh incremental models:
 1. Wait for the [build-dbt](https://github.com/cal-itp/data-infra/actions/workflows/build-dbt.yml) GitHub action associated with your PR to complete after you merge.
 
-2. Go into the [Airflow UI](https://o1d2fa0877cf3fb10p-tp.appspot.com/home) and go to the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh). **Specify appropriate model selectors to only refresh models that were affected by your changes** and then run the DAG task.
+2. Go into the [Airflow UI](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/home) and go to the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh). **Specify appropriate model selectors to only refresh models that were affected by your changes** and then run the DAG task.
 ```
 
 ## Incremental models

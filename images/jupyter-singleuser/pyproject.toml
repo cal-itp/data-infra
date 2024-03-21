@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2023.8.1"
+version = "2024.2.5"
 description = ""
-authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
+authors = ["Soren Spicknall <soren.s@jarv.us>"]
 
 [tool.poetry.dependencies]
 python = "~3.9"
@@ -45,8 +45,9 @@ ydata-profiling = {extras = ["notebook"], version = "^4.0.0"}
 statsmodels = "<0.13.3 || >0.13.3,<0.13.4 || >0.13.4,<0.13.5 || >0.13.5"
 pendulum = "^2.1.2"
 numba = "^0.56.4"
-calitp-data-analysis = "2023.9.18"
+calitp-data-analysis = "2024.2.6"
 calitp-map-utils = "2023.8.1"
+jupyter-book = "1.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.0"
@@ -65,8 +66,7 @@ nbformat = "^5.8.0"
 papermill = "^2.4.0"
 python-slugify = "^6.1.1"
 pyaml = "^21.10.1"
-# must wait on https://github.com/pydata/pydata-sphinx-theme/issues/1253 to upgrade
-jupyter-book = "^0.12.2"
+jupyter-book = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

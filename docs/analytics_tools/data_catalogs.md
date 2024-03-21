@@ -30,13 +30,15 @@ Each task sub-folder within the `data-analyses` repo should come with its own da
 3. [Google Cloud Storage](#google-cloud-storage) (GCS) Buckets
 4. [Sample Data Catalog](#sample-data-catalog)
 
+(intake)=
+
 ### Intake
 
 Data analysts tend to load their data from many heterogeneous sources (Databases, CSVs, JSON, etc), but at the end of the day, they often end up with the data in dataframes or numpy arrays. One tool for managing that in Python is the relatively new project `intake`. Intake provides a way to make data catalogs can then be used load sources into dataframes and arrays. These catalogs are plain text and can then be versioned and published, allowing for more ergonomic documentation of the data sources used for a project.
 
 `intake-dcat` is a tool for allowing intake to more easily interact with DCAT catalogs commonly found on open data portals.
 
-Refer to this [sample-catalog.yml](sample-catalog) to see how various data sources and file types are documented. Each dataset is given a human-readable name, with optional metadata associated.
+Refer to this [sample-catalog.yml](#sample-data-catalog) to see how various data sources and file types are documented. Each dataset is given a human-readable name, with optional metadata associated.
 
 File types that work within GCS buckets, URLs, or DCATs (open data catalogs):
 
@@ -54,13 +56,15 @@ catalog = intake.open_catalog("./sample-catalog.yml")
 catalog = intake.open_catalog("./*.yml")
 ```
 
+(open-data-portals)=
+
 ### Open Data Portals
 
 Open data portals (such as the CA Open Data Portal and CA Geoportal) usually provide a DCAT catalog for their datasets, including links for downloading them and metadata describing them. Many civic data analysis projects end up using these open datasets. When they do, it should be clearly documented.
 
 - To input a dataset from an open data portal, find the dataset's identifier for the `catalog.yml`.
-- Ex: The URL for CA Open Data Portal is: https://data.ca.gov.
-- Navigate to the corresponding `data.json` file at https://data.ca.gov/data.json
+- Ex: The URL for CA Open Data Portal is: [https://data.ca.gov](https://data.ca.gov).
+- Navigate to the corresponding `data.json` file at [https://data.ca.gov/data.json](https://data.ca.gov/data.json).
 - Each dataset has associated metadata, including `accessURL`, `landingPage`, etc. Find the dataset's `identifier`, and input that as the catalog item.
 
 ```yaml
@@ -79,7 +83,7 @@ To import this dataset as a dataframe within the notebook:
 df = catalog.ca_open_data.cdcr_population_covid_tracking.read()
 ```
 
-(catalogue-cloud-storage)=
+(google-cloud-storage)=
 
 ### Google Cloud Storage
 
@@ -124,7 +128,7 @@ gdf1 = catalog.test_zipped_shapefile.read()
 gdf2 = catalog.test_geoparquet.read()
 ```
 
-(sample-catalog)=
+(sample-data-catalog)=
 
 # Sample Data Catalog
 

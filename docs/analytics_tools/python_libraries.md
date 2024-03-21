@@ -27,11 +27,11 @@ The following libraries are available and recommended for use by Cal-ITP data an
    <br> - [Basic Query](#basic-query)
    <br> - [Collect Query Results](#collect-query-results)
    <br> - [Show Query SQL](#show-query-sql)
-   <br> - [More siuba Resources](more-siuba-resources)
-4. [pandas](pandas-resources)
+   <br> - [More siuba Resources](#more-siuba-resources)
+4. [pandas](#pandas-resources)
 5. [Add New Packages](#add-new-packages)
 6. [Updating calitp-data-analysis](#updating-calitp-data-analysis)
-7. [Appendix: calitp-data-infra](appendix)
+7. [Appendix: calitp-data-infra](#appendix)
 
 (shared-utils)=
 
@@ -116,6 +116,8 @@ It supports most [pandas Series methods](https://pandas.pydata.org/pandas-docs/s
 The examples below go through the basics of using siuba, collecting a database query to a local DataFrame,
 and showing SQL test queries that siuba code generates.
 
+(basic-query)=
+
 ### Basic query
 
 ```{code-cell}
@@ -130,6 +132,8 @@ from siuba import _, filter, count, collect, show_query
 )
 ```
 
+(collect-query-results)=
+
 ### Collect query results
 
 Note that siuba by default prints out a preview of the SQL query results.
@@ -142,6 +146,8 @@ tbl_agency_names = tbls.mart_gtfs.dim_agency() >> collect()
 tbl_agency_names.head()
 
 ```
+
+(show-query-sql)=
 
 ### Show query SQL
 
@@ -172,6 +178,8 @@ The library pandas is very commonly used in data analysis, and the external reso
 
 - [Cheat Sheet - pandas](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
 
+(add-new-packages)=
+
 ## Add New Packages
 
 While most Python packages an analyst uses come in JupyterHub, there may be additional packages you'll want to use in your analysis.
@@ -188,20 +196,31 @@ While most Python packages an analyst uses come in JupyterHub, there may be addi
 
 <b>Steps </b>
 
-Adapted from [this Slack thread](https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809).
+Adapted from [this](https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809) and [this Slack thread](https://cal-itp.slack.com/archives/C02KH3DGZL7/p1707252389227829).
 
-1. Make the changes you want in the `calitp-data-analysis` folder inside `packages` [here](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis).
+1. Make the changes you want in the `calitp-data-analysis` folder inside `packages` [here](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis). If you are only changing package metadata (author information, package description, etc.) without changing the function of the package itself, that information lives in `pyproject.toml` rather than in the `calitp-data-analysis` subfolder.
+
    - If you are adding a new function that relies on a package that isn't already a dependency, run `poetry add <package name>` after changing directories to `data-infra/packages/calitp_data_analysis`. Check this [Jupyter image file](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml) for the version number associated with the package, because you should specify the version.
-     - For example, your function relies on `dask`. In the Jupyter image file, the version is `dask = "~2022.8"` so run `poetry add dask==~2022.8` in the terminal.
-   - You may also have run `poetry install mypy`. `mypy` is a package that audits all the functions. [Read more about it here.](https://mypy-lang.org/)
+   - For example, your function relies on `dask`. In the Jupyter image file, the version is `dask = "~2022.8"` so run `poetry add dask==~2022.8` in the terminal.
+   - You may also have run `poetry install mypy`. `mypy` is a package that audits Python files for information related to data types, and you can [read more about it here](https://mypy-lang.org/).
+   - `mypy` is a package that audits Python files for information related to data types, and you can [read more about it here](https://mypy-lang.org/). `mypy` is one of the standard development dependencies for the `calitp-data-analysis package`, defined in the `pyproject.toml` file for the package, so to install it you can run `poetry install` in `packages/calitp-data-analysis/` (which will also install the other package dependencies). To use `mypy`, run `poetry run mypy [file or directory name you're interested in checking]`.
+   - `mypy` is generally run in CI when a PR is opened, as part of build tasks. You can see it called [here](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/build-calitp-data-analysis.yml#L40) for this package in `build-calitp-data-analysis.yml`. Within the PR, the "Test, visualize, and build calitp-data-analysis" CI workflow will fail if problems are found.
+   - More helpful hints for [passing mypy in our repo](https://github.com/cal-itp/data-infra/blob/main/README.md#mypy).
+
 2. Each time you update the package, you must also update the version number. We use dates to reflect which version we are on. Update the version in [pyproject.toml](https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-analysis/pyproject.toml#L3) that lives in `calitp-data-analysis` to either today's date or a future date.
+
 3. Open a new pull request and make sure the new version date appears on the [test version page](https://test.pypi.org/project/calitp-data-analysis/).
+
    - The new version date may not show up on the test page due to errors. Check the GitHub Action page of your pull request to see the errors that have occurred.
    - If you run into the error message like this, `error: Skipping analyzing "dask_geopandas": module is installed, but missing library stubs or py.typed marker  [import]` go to your `.py` file and add `# type: ignore` behind the package import.
-     - To fix the error above, change `import dask_geopandas as dg` to `import dask_geopandas as dg  # type: ignore`.
+   - To fix the error above, change `import dask_geopandas as dg` to `import dask_geopandas as dg  # type: ignore`.
    - It is encouraged to make changes in a set of smaller commits. For example, add all the necessary packages with `poetry run <package` first, fix any issues flagged by `mypy`, and finally address any additional issues.
+
 4. Merge the PR. Once it is merged in, the [actual package](https://pypi.org/project/calitp-data-analysis/) will display the new version number. To make sure everything works as expected, run `pip install calitp-data-analysis==<new version here>` in a cell of Jupyter notebook and import a package (or two) such as `from calitp_data_analysis import styleguide`.
-5. Update the new version number in the `data-infra` repository [here](https://github.com/cal-itp/data-infra/blob/main/images/dask/requirements.txt#L30), [here](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml#L48), [here](https://github.com/cal-itp/data-infra/blob/main/docs/requirements.txt), and anywhere else you find a reference to the old version of the package. You'll also want to do the same for any other Cal-ITP repositories that reference the calitp-data-analysis package.
+
+5. Update the new version number in the `data-infra` repository [here](https://github.com/cal-itp/data-infra/blob/main/images/dask/requirements.txt#L30), [here](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml#L48), [here](https://github.com/cal-itp/data-infra/blob/main/docs/requirements.txt), and anywhere else you find a reference to the old version of the package. You'll also want to do the same for any other Cal-ITP repositories that reference the `calitp-data-analysis` package.
+
+   - When yu update the [jupyter-singleuser toml](https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml#L48), make sure to run `poetry add calitp-data-analysis==<new version here>` and commit the updated `poetry.lock` file.
    - As of writing, the only other repository that references to the package version is [reports](https://github.com/cal-itp/reports).
 
 <b>Resources</b>

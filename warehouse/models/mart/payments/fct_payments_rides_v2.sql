@@ -31,6 +31,7 @@ micropayments AS (
 int_payments__matched_device_transactions AS (
     SELECT *
     FROM {{ ref('int_payments__matched_device_transactions') }}
+
 ),
 
 int_payments__customers AS (
@@ -139,7 +140,8 @@ fct_payments_rides_v2 AS (
         device_transactions.duration,
         device_transactions.distance_meters,
         device_transactions.transaction_date_pacific,
-        device_transactions.day_of_week
+        device_transactions.day_of_week,
+        device_transactions.distance_miles
 
     FROM micropayments
     LEFT JOIN int_payments__customers AS customers

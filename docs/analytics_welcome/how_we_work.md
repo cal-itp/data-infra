@@ -51,6 +51,6 @@ The screencast below introduces:
 
 ### GitHub Analytics Repo
 
-The `data-analyses` repo is our main data analysis repository, for sharing quick reports and works in progress. Get set up on GitHub and clone the data-analyses repository [using this link](committing-from-jupyterhub).
+The `data-analyses` repo is our main data analysis repository, for sharing quick reports and works in progress. Get set up on GitHub and clone the data-analyses repository [using this link](saving-code-jupyter).
 
 For collaborative short-term tasks, create a new folder and work off a separate branch.

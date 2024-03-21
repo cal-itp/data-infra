@@ -24,6 +24,8 @@ This document is meant to outline some recommendations for how to best use noteb
 - [Prose and Documentation](#prose-and-documentation)
 - [Data Access](#data-access)
 
+(notebooks-and-reproducibility)=
+
 ## Notebooks and Reproducibility
 
 [Scientific](https://arxiv.org/abs/1605.04339)
@@ -56,6 +58,8 @@ if a notebook analysis cannot be run without human intervention, it is not repro
 
 This all can be summarized as "restart and run all, or it didn't happen."
 
+(notebooks-and-version-control)=
+
 ## Notebooks and Version Control
 
 Jupyter notebooks are stored as JSON documents.
@@ -82,6 +86,8 @@ There are a few things that can be done to mitigate this:
    Often such code is best removed from the interactive notebook environment and put in plain-text scripts,
    where it can be more easily automated and tracked.
 
+(prose-and-documentation)=
+
 ## Prose and Documentation
 
 One of the best features about notebooks is that they allow for richer content than normal scripts.
@@ -98,6 +104,8 @@ One of the most remarkable findings of this study was just how many notebooks in
 
 Over a quarter of notebooks include no prose.
 We should endeavor to *not* be in that first bin.
+
+(data-access)=
 
 ## Data Access
 

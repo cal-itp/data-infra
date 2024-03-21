@@ -1,12 +1,3 @@
-calitp-data-analysis==2023.9.18
-jupyter-book==0.12.0
-# Temporary pinning of pydata-sphinx-theme to workaround Sphinx 4.3.0 error
-# https://github.com/pydata/pydata-sphinx-theme/issues/508
-pydata-sphinx-theme==0.7.2
+calitp-data-analysis==2024.2.6
+jupyter-book==1.0.0
 sphinxcontrib-mermaid==0.8.1
-# Temporary pinning of older sphinxcontrib-[xyz] reqs until we use Sphinx 5.0.0 or higher
-sphinxcontrib-applehelp==1.0.4
-sphinxcontrib-devhelp==1.0.2
-sphinxcontrib-htmlhelp==2.0.1
-sphinxcontrib-qthelp==1.0.3
-sphinxcontrib-serializinghtml==1.1.5

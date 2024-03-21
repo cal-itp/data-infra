@@ -6,7 +6,7 @@ We use [Airflow](https://airflow.apache.org/) to orchestrate our data ingest pro
 
 ## Monitoring DAGs
 
-When an Airflow DAG task fails, it will alert to the `#data-infra-alerts` channel in Slack.
+When an Airflow DAG task fails, it will alert to the `#alerts-data-infra` channel in Slack.
 
 In that case, someone should respond according to the considerations described below and in each individual DAG's documentation (available in [each DAG subdirectory](https://github.com/cal-itp/data-infra/tree/main/airflow/dags) in the `data-infra` GitHub repository).
 

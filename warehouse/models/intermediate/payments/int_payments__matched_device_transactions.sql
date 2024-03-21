@@ -12,6 +12,10 @@ stg_littlepay__device_transactions AS (
     SELECT * FROM {{ ref('stg_littlepay__device_transactions') }}
 ),
 
+miles_traveled AS (
+    SELECT * FROM {{ ref('miles_traveled') }}
+),
+
 -- we only want transactions associated with valid micropayments
 valid_transactions AS (
   SELECT
@@ -79,12 +83,17 @@ int_payments__matched_device_transactions AS (
         ) AS duration,
         ST_DISTANCE(first_tap.geography, second_tap.geography) AS distance_meters,
         SAFE_CAST(first_tap.transaction_date_time_pacific AS DATE) AS transaction_date_pacific,
-        EXTRACT(DAYOFWEEK FROM first_tap.transaction_date_time_pacific) AS day_of_week
+        EXTRACT(DAYOFWEEK FROM first_tap.transaction_date_time_pacific) AS day_of_week,
+        miles_traveled.distance_miles
+
     FROM match_ids AS pairs
     LEFT JOIN stg_littlepay__device_transactions AS first_tap
         ON pairs.littlepay_transaction_id = first_tap.littlepay_transaction_id
     LEFT JOIN stg_littlepay__device_transactions AS second_tap
         ON pairs.off_littlepay_transaction_id = second_tap.littlepay_transaction_id
+    LEFT JOIN miles_traveled ON (first_tap.location_name = miles_traveled.location_name)
+        AND (second_tap.location_name = miles_traveled.off_location_name)
+
 )
 
 SELECT * FROM int_payments__matched_device_transactions

@@ -1,0 +1,18 @@
+description: "Runs non-RT incremental tables with dbt run --full-refresh and RT tables with dbt run, also tests the warehouse; this is a weekly run on Sundays to ensure non-RT incremental models are up-to-date."
+schedule_interval: "0 14 * * 0"
+tags:
+  - all_gusty_features
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: !days_ago 1
+    email:
+      - "evan.siroky@dot.ca.gov"
+      - "hunter.owens@dot.ca.gov"
+    email_on_failure: True
+    email_on_retry: False
+    retries: 0
+    retry_delay: !timedelta 'minutes: 2'
+    concurrency: 50
+    #sla: !timedelta 'hours: 2'
+latest_only: True

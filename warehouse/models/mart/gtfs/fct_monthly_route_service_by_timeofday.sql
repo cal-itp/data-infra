@@ -4,9 +4,22 @@ WITH dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
+-- keep the most recent of month_last_day
+feeds AS (
+    SELECT
+        gtfs_dataset_key as gtfs_key,
+        MAX(LAST_DAY(date, MONTH)) as max_date
+    FROM {{ ref('fct_daily_schedule_feeds') }}
+    WHERE date = LAST_DAY(date, MONTH)
+    GROUP BY 1
+),
+
 fct_scheduled_trips AS (
     SELECT *
     FROM {{ ref('fct_scheduled_trips') }}
+    INNER JOIN feeds
+        ON feeds.gtfs_key = fct_scheduled_trips.gtfs_dataset_key
+    WHERE fct_scheduled_trips.service_date <= feeds.max_date
 ),
 
 extract_trip_date_types AS (
@@ -14,7 +27,7 @@ extract_trip_date_types AS (
     SELECT
 
         CASE
-            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 4 THEN "OWL"
+            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 4 THEN "Owl"
             WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 7 THEN "Early AM"
             WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 10 THEN "AM Peak"
             WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 15 THEN "Midday"
@@ -68,7 +81,6 @@ daypart_aggregations AS (
         route_short_name,
         route_long_name,
         time_of_day,
-        hour,
         month,
         year,
         day_type,
@@ -77,19 +89,18 @@ daypart_aggregations AS (
         SUM(service_hours) AS ttl_service_hours
 
     FROM service_with_daypart
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
 ),
 
-fct_scheduled_service_by_daypart AS (
+fct_monthly_route_service_by_timeofday AS (
     SELECT
-
+       {{ dbt_utils.generate_surrogate_key(['source_record_id', 'route_id', 'route_short_name', 'route_long_name', 'time_of_day', 'month', 'year', 'day_type']) }} AS key,
         name,
         source_record_id,
         route_id,
         route_short_name,
         route_long_name,
         time_of_day,
-        hour,
         month,
         year,
         day_type,
@@ -97,6 +108,8 @@ fct_scheduled_service_by_daypart AS (
         ttl_service_hours
 
     FROM daypart_aggregations
+    WHERE ttl_service_hours IS NOT NULL
+
 )
 
-SELECT * FROM fct_scheduled_service_by_daypart
+SELECT * FROM fct_monthly_route_service_by_timeofday

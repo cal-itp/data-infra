@@ -216,21 +216,21 @@ files = [
 
 [[package]]
 name = "calitp-data-infra"
-version = "2024.1.3"
+version = "2024.2.12.post1"
 description = "Shared code for developing data pipelines that process Cal-ITP data."
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.10"
 files = [
-    {file = "calitp_data_infra-2024.1.3-py3-none-any.whl", hash = "sha256:7e4afd38290038249d4f4ecb2ae76f6118eab4e424da10410f9c2495a7510437"},
-    {file = "calitp_data_infra-2024.1.3.tar.gz", hash = "sha256:cf6743107c9b3f4e19dc008aa4c65b97625cb629d878a5c3c6e5ec1409b10d53"},
+    {file = "calitp_data_infra-2024.2.12.post1-py3-none-any.whl", hash = "sha256:388d18d1e305e7b56cd2821892ba538e58a9eac2418ac018838c316980efe434"},
+    {file = "calitp_data_infra-2024.2.12.post1.tar.gz", hash = "sha256:743640b6d97154311f1e06cb9068ea98a60afe3f0e5aa7050d3bdf5562617c90"},
 ]
 
 [package.dependencies]
 backoff = ">=2.2.1,<3.0.0"
 gcsfs = "!=2022.7.1"
 google-api-core = ">=1.31.4"
-google-cloud-secret-manager = ">=1.0.0,<1.1.0"
+google-cloud-secret-manager = "2.16.4"
 humanize = ">=4.6.0,<5.0.0"
 pendulum = ">=2.1.2,<3.0.0"
 pydantic = ">=1.9,<1.10"
@@ -596,20 +596,21 @@ grpc = ["grpcio (>=1.38.0,<2.0dev)"]
 
 [[package]]
 name = "google-cloud-secret-manager"
-version = "1.0.2"
-description = "Secret Manager API API client library"
+version = "2.16.4"
+description = "Google Cloud Secret Manager API client library"
 category = "main"
 optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
+python-versions = ">=3.7"
 files = [
-    {file = "google-cloud-secret-manager-1.0.2.tar.gz", hash = "sha256:dfe561c11904adc5692bde12c6da5e82b07f096e7863baf795381042689588e6"},
-    {file = "google_cloud_secret_manager-1.0.2-py2.py3-none-any.whl", hash = "sha256:d3041bee17c6765194672147e57538a72f7e9637d5f8bb04450972ddce5fa512"},
+    {file = "google-cloud-secret-manager-2.16.4.tar.gz", hash = "sha256:371dc72f9145af323e8a813c8e50380e6ac4bd6a5dbcd42dcf3162d8f37e5080"},
+    {file = "google_cloud_secret_manager-2.16.4-py2.py3-none-any.whl", hash = "sha256:5031c45dd84dc584d91ee0baae2bbd5df6710efe0c42719ee370a3ab62aaf618"},
 ]
 
 [package.dependencies]
-google-api-core = {version = ">=1.31.5,<2.0.0 || >2.3.0,<3.0.0dev", extras = ["grpc"]}
-grpc-google-iam-v1 = ">=0.12.3,<0.13dev"
-protobuf = "<4.0.0dev"
+google-api-core = {version = ">=1.34.0,<2.0.0 || >=2.11.0,<3.0.0dev", extras = ["grpc"]}
+grpc-google-iam-v1 = ">=0.12.4,<1.0.0dev"
+proto-plus = ">=1.22.0,<2.0.0dev"
+protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
 
 [[package]]
 name = "google-cloud-storage"
@@ -1319,6 +1320,24 @@ files = [
 twisted = ["twisted"]
 
 [[package]]
+name = "proto-plus"
+version = "1.23.0"
+description = "Beautiful, Pythonic protocol buffers."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "proto-plus-1.23.0.tar.gz", hash = "sha256:89075171ef11988b3fa157f5dbd8b9cf09d65fffee97e29ce403cd8defba19d2"},
+    {file = "proto_plus-1.23.0-py3-none-any.whl", hash = "sha256:a829c79e619e1cf632de091013a4173deed13a55f326ef84f05af6f50ff4c82c"},
+]
+
+[package.dependencies]
+protobuf = ">=3.19.0,<5.0.0dev"
+
+[package.extras]
+testing = ["google-api-core[grpc] (>=1.31.5)"]
+
+[[package]]
 name = "protobuf"
 version = "3.20.3"
 description = "Protocol Buffers"
@@ -1927,4 +1946,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "ef442a3e7b29351d0923a8c3d710e3bb3ea4e18f858b107e6a80f73298807f26"
+content-hash = "99e5e913c192d9044cefd71827f2d1561303703306812a4c0b4570e1418c0cfd"
