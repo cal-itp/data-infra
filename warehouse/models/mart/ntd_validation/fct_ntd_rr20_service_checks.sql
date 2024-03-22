@@ -128,7 +128,7 @@ rr20f_179 as (
 rr20f_139 as (
     select
     organization,
-    "RR20F-139: Vehicle Revenue Miles change" as name_of_check,
+    "RR20F-139: Vehicle Revenue Miles (VRM) % change" as name_of_check,
     mode,
     {{this_year}} as year_of_data,
     CASE WHEN (vrm_{{this_year}} IS NULL OR vrm_{{this_year}} = 0 ) AND PARSE_DATE('%Y', CAST({{start_date}} AS STRING)) < CAST(CONCAT({{this_year}}, "-10-31") AS DATE) THEN "Did Not Run"
@@ -287,6 +287,40 @@ rr20f_171 as (
     "" as Agency_Response,
     CURRENT_TIMESTAMP() AS date_checked
     from {{ ref('int_ntd_rr20_service_3ratios_wide') }}
+),
+rr20f_143 as (
+    select
+    organization,
+    "RR20F-143: Vehicle Revenue Miles (VRM) change from zero" as name_of_check,
+    mode,
+    {{this_year}} as year_of_data,
+    CASE WHEN (ROUND(vrm_{{this_year}}) =0 AND ROUND(vrm_{{last_year}}) != 0 AND PARSE_DATE('%Y', CAST({{start_date}} AS STRING)) > CAST(CONCAT({{this_year}}, "-10-31") AS DATE))
+            OR (ROUND(vrm_{{this_year}}) !=0 AND ROUND(vrm_{{this_year}}) IS NOT NULL AND ROUND(voms_{{last_year}}) = 0)
+            THEN "Fail"
+        WHEN (vrm_{{this_year}} IS NULL OR vrm_{{this_year}}=0) AND PARSE_DATE('%Y', CAST({{start_date}} AS STRING)) < CAST(CONCAT({{this_year}}, "-10-31") AS DATE)
+            THEN "Did Not Run"
+        WHEN (vrm_{{last_year}} IS NULL OR vrm_{{last_year}}=0) AND PARSE_DATE('%Y', CAST({{start_date}} AS STRING)) < CAST(CONCAT({{last_year}}, "-10-31") AS DATE)
+            THEN "Did Not Run"
+        ELSE "Pass"
+        END as check_status,
+    CONCAT({{this_year}}, " = ", CAST(ROUND(vrm_{{this_year}}) AS STRING),
+            ", ", {{last_year}}, " = ", CAST(ROUND(vrm_{{last_year}}) AS STRING),
+            "chg = ",
+          CAST(ROUND((ROUND(vrm_{{this_year}},1) - ROUND(vrm_{{last_year}},1))/ABS(ROUND(vrm_{{this_year}},1)) * 100,1) AS STRING),
+          "%"
+    ) as value_checked,
+    CASE WHEN (ROUND(vrm_{{this_year}}) =0 AND ROUND(vrm_{{last_year}}) != 0 AND PARSE_DATE('%Y', CAST({{start_date}} AS STRING)) > CAST(CONCAT({{this_year}}, "-10-31") AS DATE))
+            OR (ROUND(vrm_{{this_year}}) !=0 AND ROUND(vrm_{{this_year}}) IS NOT NULL AND ROUND(vrm_{{last_year}}) = 0)
+            THEN "The Vehicle Revenue Miles (VRM) for this mode has changed either to or from 0 compared to last year, please provide a narrative justification."
+        WHEN (vrm_{{this_year}} IS NULL OR vrm_{{this_year}}=0) AND PARSE_DATE('%Y', CAST({{start_date}} AS STRING)) < CAST(CONCAT({{this_year}}, "-10-31") AS DATE)
+            THEN CONCAT("No data but this check was run before the NTD submission due date in ",{{this_year}}, " for VOMS.")
+        WHEN (vrm_{{last_year}} IS NULL OR vrm_{{last_year}}=0) AND PARSE_DATE('%Y', CAST({{start_date}} AS STRING)) < CAST(CONCAT({{last_year}}, "-10-31") AS DATE)
+            THEN CONCAT("No data but this check was run before the NTD submission due date in ",{{last_year}}, " for VOMS.")
+        ELSE ""
+        END AS description,
+    "" as Agency_Response,
+    CURRENT_TIMESTAMP() AS date_checked
+    from {{ ref('int_ntd_rr20_service_3ratios_wide') }}
 )
 
 
@@ -319,3 +353,7 @@ SELECT * FROM rr20f_179
 UNION ALL
 
 SELECT * FROM rr20f_171
+
+UNION ALL
+
+SELECT * FROM rr20f_143
