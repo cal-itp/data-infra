@@ -10,7 +10,6 @@ repos:
         args: ["--unsafe"]
         exclude: 'kubernetes/apps/charts/.*'
       - id: check-added-large-files
-        args: ['--maxkb=50000']
     # TODO: could we use ruff to replace flake8/isort and maybe black?
   - repo: https://github.com/pycqa/flake8
     rev: 6.0.0
