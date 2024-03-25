@@ -22,3 +22,12 @@ available version of the validator. Instead, we use extract dates to determine w
 version of the validator was correct to use at the time the data was created. That way,
 we don't "punish" older data for not conforming to expectations that changed in the time
 since data creation.
+
+## Upgrading the Schedule Validator Version tips
+If you run into trouble when adding the new validator jar, it's because the default set for check-added-large-files in our pre-commit config which is a relatively low 500Kb. It's more meant as an alarm for local development than as an enforcement mechanism.
+You can make one commit that adds the jar and temporarily adds a higher file size threshold to the pre-commit config [like this one](https://github.com/cal-itp/data-infra/pull/2893/commits/7d40c81f2f5a2622123d4ac5dbbb064eb35565c6) and then a second commit that removes the threshold modification [like this one](https://github.com/cal-itp/data-infra/pull/2893/commits/1ec4e4a1f30ac95b9c0edffcf1f2b12e53e40733). That'll get the file through.
+
+You will need to parse the rules.json from the mobility validator.  [Here is a gist to help](https://gist.github.com/vevetron/7d4bbebd2f1d524728d5349293906e3a).
+
+Here is a command to test
+docker-compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly validate_gtfs_schedule 2024-03-22T18:00:00

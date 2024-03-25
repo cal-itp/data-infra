@@ -162,9 +162,12 @@ def execute_schedule_validator(
     elif extract_ts.date() < pendulum.Date(2024, 1, 20):
         versioned_jar_path = V4_1_VALIDATOR_JAR
         validator_version = "v4.1.0"
-    else:
+    elif extract_ts.date() < pendulum.Date(2024, 3, 21):
         versioned_jar_path = V4_2_VALIDATOR_JAR
         validator_version = "v4.2.0"
+    else:
+        versioned_jar_path = V5_VALIDATOR_JAR
+        validator_version = "v5.0.0"
 
     assert versioned_jar_path
 
