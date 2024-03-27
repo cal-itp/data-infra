@@ -48,6 +48,7 @@ numba = "^0.56.4"
 calitp-data-analysis = "2024.2.6"
 calitp-map-utils = "2023.8.1"
 jupyter-book = "1.0.0"
+jupyter-server-proxy = "^4.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.0"
