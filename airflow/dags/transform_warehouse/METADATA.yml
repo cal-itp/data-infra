@@ -1,5 +1,5 @@
 description: "Builds and tests the warehouse, and uploads artifacts"
-schedule_interval: "0 14 * * 1-6"
+schedule_interval: "0 14 * * *"
 tags:
   - all_gusty_features
 default_args:
