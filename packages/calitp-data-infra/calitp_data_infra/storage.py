@@ -58,7 +58,13 @@ def get_fs(gcs_project="", **kwargs):
 def make_name_bq_safe(name: str):
     """Replace non-word characters.
     See: https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical#identifiers.
+    Add underscore if starts with a number.  Also sometimes excel has columns names that are
+    all numbers, not even strings of numbers (ﾉﾟ0ﾟ)ﾉ~
     """
+    if type(name) != str:
+        name = str(name)
+    if name[:1].isdigit():
+        name = "_" + name
     return str.lower(re.sub("[^\w]", "_", name))  # noqa: W605
 
 
