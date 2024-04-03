@@ -79,6 +79,8 @@ docker-compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly va
 
 - `docker-compose up` exits with code 137 - Check that Docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.
 
+- When testings new an updated `requirements.txt`, you might not see packages update.  You may need to run `docker-compose down --rmi all` to clear out older docker images and recreate with `docker build . --no-cache`.
+
 ## Deploying Changes to Production
 
 We have a [GitHub Action](../.github/workflows/deploy-airflow.yml) that runs when PRs touching this directory merge to the `main` branch. The GitHub Action updates the requirements sourced from [requirements.txt](./requirements.txt) and syncs the [DAGs](./dags) and [plugins](./plugins) directories to the bucket that Composer watches for code/data to parse. As of 2024-02-12, this bucket is `us-west2-calitp-airflow2-pr-88ca8ec6-bucket`.
