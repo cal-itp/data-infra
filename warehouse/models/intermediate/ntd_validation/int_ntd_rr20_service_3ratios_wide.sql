@@ -1,9 +1,4 @@
--- DECLARE check_period STRING;
--- SET check_period = CONCAT(EXTRACT(YEAR from CURRENT_DATE()), ", ", EXTRACT(YEAR from CURRENT_DATE()) - 1);
-
--- DECLARE query STRING;
--- SET query = CONCAT(
-  with longform as (
+with longform as (
     select
     organization,
     -- CAST(fiscal_year as STRING) as fiscal_year,

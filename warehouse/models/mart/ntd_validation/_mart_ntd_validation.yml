@@ -5,6 +5,7 @@ models:
     description: |
       Runs validation checks on the RR-20 service data. Source data is int_ntd_rr20_service_3ratios_wide.
       NOTE: This model uses "this_year" and "last_year" as dynamic variables based on the date on which it is run.
+      For NTD validation error ID #s rr20f_005, rr20f_146, rr20f_139, rr20f_008, rr20f_137, rr20f_154, rr20f_179, rr20f_171, rr20f_143
   - name: fct_ntd_a30_vomscheck
     description: |
       Runs various checks on VOMS data submitted to NTD, that are also in the file voms_inventory_check.py.

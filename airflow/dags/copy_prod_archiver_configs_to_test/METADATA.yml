@@ -5,7 +5,7 @@ tags:
 default_args:
     owner: airflow
     depends_on_past: False
-    start_date: !days_ago 1
+    start_date: "2024-03-24"
     email:
       - "evan.siroky@dot.ca.gov"
       - "hunter.owens@dot.ca.gov"
