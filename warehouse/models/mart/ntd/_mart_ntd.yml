@@ -1,4 +1,4 @@
-version: 2
+version: 3
 
 models:
   - name: dim_annual_ntd_agency_information
@@ -37,3 +37,24 @@ models:
       - name: _is_current
         tests:
           - not_null
+  - name: dim_monthly_ntd_ridership_with_adjustments_upt
+    description: |
+      Extracts of the NTD Monthly Ridership with adjustments - UPT tab
+      For example, the Feb 2024 dataset is found at https://www.transit.dot.gov/sites/fta.dot.gov/files/2024-04/February%202024%20Complete%20Monthly%20Ridership%20%28with%20adjustments%20and%20estimates%29_240402_0.xlsx.
+    columns:
+      - name: uza_name
+      - name: uace_cd
+      - name: dt
+      - name: ts
+      - name: year
+      - name: ntd_id
+      - name: reporter_type
+      - name: agency
+      - name: STATUS
+      - name: MODE
+      - name: _3_mode
+      - name: tos
+      - name: legacy_ntd_id
+      - name: period_month
+      - name: period_year
+      - name: value

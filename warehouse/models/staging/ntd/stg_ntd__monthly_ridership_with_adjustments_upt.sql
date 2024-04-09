@@ -1,0 +1,27 @@
+{{ config(materialized='table') }}
+with stg_ntd__monthly_ridership_with_adjustments_upt AS (
+    {{ dbt_utils.unpivot(
+        cast_to = 'int',
+        relation = source('ntd_data_products', 'monthly_ridership_with_adjustments_upt'),
+        exclude = ["uza_name","uace_cd","dt","ts","year","ntd_id","reporter_type","agency","status","mode","_3_mode","tos","legacy_ntd_id"],
+        field_name = 'period',
+        value_name = 'value'
+    ) }}
+)
+SELECT
+    uza_name,
+        uace_cd,
+        dt,
+        ts,
+        year,
+        ntd_id,
+        reporter_type,
+        agency,
+        STATUS,
+        MODE,
+        _3_mode,
+        tos,
+        legacy_ntd_id,
+        period,
+        value
+FROM stg_ntd__monthly_ridership_with_adjustments_upt

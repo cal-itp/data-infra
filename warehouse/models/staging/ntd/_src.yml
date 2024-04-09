@@ -7,3 +7,4 @@ sources:
     schema: external_ntd_data_products
     tables:
       - name: annual_database_agency_information
+      - name: monthly_ridership_with_adjustments_upt

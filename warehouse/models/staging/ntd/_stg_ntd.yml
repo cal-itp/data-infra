@@ -1,4 +1,4 @@
-version: 2
+version: 3
 
 models:
   - name: stg_ntd__annual_database_agency_information
@@ -12,3 +12,4 @@ models:
       - name: ntd_id
         tests:
           - not_null
+  - name: stg_ntd__monthly_ridership_with_adjustments_upt
