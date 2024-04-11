@@ -1,27 +1,13 @@
-{{ config(materialized='table') }}
-with stg_ntd__monthly_ridership_with_adjustments_upt AS (
-    {{ dbt_utils.unpivot(
-        cast_to = 'int',
-        relation = source('ntd_data_products', 'monthly_ridership_with_adjustments_upt'),
-        exclude = ["uza_name","uace_cd","dt","ts","year","ntd_id","reporter_type","agency","status","mode","_3_mode","tos","legacy_ntd_id"],
-        field_name = 'period',
-        value_name = 'value'
-    ) }}
+-- {{ config(materialized='table') }}
+
+with source as (
+  select * from {{ source('ntd_data_products', 'monthly_ridership_with_adjustments_upt') }}
+),
+stg_ntd__monthly_ridership_with_adjustments_upt AS(
+
+    SELECT *
+    FROM source
+    -- we can have old months data in the source so this gets only the latest extract
+    QUALIFY DENSE_RANK() OVER (ORDER BY ts DESC) = 1
 )
-SELECT
-    uza_name,
-        uace_cd,
-        dt,
-        ts,
-        year,
-        ntd_id,
-        reporter_type,
-        agency,
-        STATUS,
-        MODE,
-        _3_mode,
-        tos,
-        legacy_ntd_id,
-        period,
-        value
-FROM stg_ntd__monthly_ridership_with_adjustments_upt
+Select * FROM stg_ntd__monthly_ridership_with_adjustments_upt

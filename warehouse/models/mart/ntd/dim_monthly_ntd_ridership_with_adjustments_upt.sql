@@ -1,3 +1,4 @@
+{{ config(materialized='table') }}
 WITH dim_monthly_ntd_ridership_with_adjustments_upt AS (
     SELECT *
     FROM {{ ref('int_ntd__monthly_ridership_with_adjustments_upt') }}
