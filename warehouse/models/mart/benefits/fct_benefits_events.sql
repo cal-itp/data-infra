@@ -129,7 +129,7 @@ fct_old_enrollments AS (
   WHERE client_event_time >= '2021-12-08T08:00:00Z'
     and client_event_time < '2022-08-29T07:00:00Z'
     and (region = 'California' or region is null)
-    and (city <> 'Los Angeles' or city is null)
+    and (city != 'Los Angeles' or city is null)
     and event_type = 'viewed page'
     and event_properties_path = '/enrollment/success'
 )
