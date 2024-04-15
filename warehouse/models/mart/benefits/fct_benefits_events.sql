@@ -127,6 +127,59 @@ fct_dmv_events AS (
     "senior" as user_properties_eligibility_types
   FROM fct_old_enrollments
   WHERE client_event_time < '2022-08-12T07:00:00Z'
+),
+fct_login_events AS (
+  SELECT
+    app,
+    device_id,
+    user_id,
+    client_event_time,
+    event_id,
+    session_id,
+    "returned enrollment" as event_type,
+    version_name,
+    os_name,
+    os_version,
+    device_family,
+    device_type,
+    country,
+    language,
+    library,
+    city,
+    region,
+    event_time,
+    client_upload_time,
+    server_upload_time,
+    server_received_time,
+    amplitude_id,
+    start_version,
+    uuid,
+    processed_time,
+    event_properties_auth_provider,
+    event_properties_card_tokenize_func,
+    event_properties_card_tokenize_url,
+    "OAuth claims via Login.gov" as event_properties_eligibility_verifier,
+    event_properties_error.name,
+    event_properties_error.status,
+    event_properties_error.sub,
+    event_properties_href,
+    event_properties_language,
+    event_properties_origin,
+    event_properties_path,
+    "5170d37b-43d5-4049-899c-b4d850e14990" as event_properties_payment_group,
+    "success" as event_properties_status,
+    "Monterey-Salinas Transit" as event_properties_transit_agency,
+    "senior" as event_properties_eligibility_types,
+    "OAuth claims via Login.gov" as user_properties_eligibility_verifier,
+    user_properties_initial_referrer,
+    user_properties_initial_referring_domain,
+    "Monterey-Salinas Transit" as user_properties_transit_agency,
+    user_properties_user_agent,
+    user_properties_referrer,
+    user_properties_referring_domain,
+    "senior" as user_properties_eligibility_types
+  FROM fct_old_enrollments
+  WHERE client_event_time >= '2022-08-12T07:00:00Z'
 )
 
 SELECT * FROM fct_benefits_events
