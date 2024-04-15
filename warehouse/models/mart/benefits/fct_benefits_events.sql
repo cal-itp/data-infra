@@ -99,7 +99,7 @@ fct_old_enrollments AS (
       WHEN client_event_time < '2022-08-12T07:00:00Z'
         THEN "DMV"
       WHEN client_event_time >= '2022-08-12T07:00:00Z'
-        THEN "OAuth claims via Login.gov"
+        THEN "(MST) CDT claims via Login.gov"
     END as event_properties_eligibility_verifier,
     event_properties_error.name,
     event_properties_error.status,
@@ -116,7 +116,7 @@ fct_old_enrollments AS (
       WHEN client_event_time < '2022-08-12T07:00:00Z'
         THEN "DMV"
       WHEN client_event_time >= '2022-08-12T07:00:00Z'
-        THEN "OAuth claims via Login.gov"
+        THEN "(MST) CDT claims via Login.gov"
     END as user_properties_eligibility_verifier,
     user_properties_initial_referrer,
     user_properties_initial_referring_domain,
