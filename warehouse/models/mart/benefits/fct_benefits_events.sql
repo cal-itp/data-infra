@@ -64,6 +64,16 @@ WITH fct_benefits_events AS (
         {{ json_extract_flattened_column('user_properties', 'eligibility_types') }}
 
     FROM {{ ref('stg_amplitude__benefits_events') }}
+),
+fct_old_enrollments AS (
+  SELECT *
+  FROM fct_benefits_events
+  WHERE client_event_time >= '2021-12-08T08:00:00Z' 
+    and client_event_time < '2022-08-29T07:00:00Z'
+    and (region = 'California' or region is null)
+    and (city <> 'Los Angeles' or city is null)
+    and event_type = 'viewed page'
+    and event_properties_path = '/enrollment/success'
 )
 
 SELECT * FROM fct_benefits_events
