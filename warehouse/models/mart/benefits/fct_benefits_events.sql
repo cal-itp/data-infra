@@ -135,3 +135,5 @@ fct_old_enrollments AS (
 )
 
 SELECT * FROM fct_benefits_events
+UNION DISTINCT
+SELECT * FROM fct_old_enrollments
