@@ -41,6 +41,7 @@ V3_VALIDATOR_JAR = os.getenv("V3_VALIDATOR_JAR")
 V4_VALIDATOR_JAR = os.getenv("V4_VALIDATOR_JAR")
 V4_1_VALIDATOR_JAR = os.getenv("V4_1_VALIDATOR_JAR")
 V4_2_VALIDATOR_JAR = os.getenv("V4_2_VALIDATOR_JAR")
+V5_VALIDATOR_JAR = os.getenv("V5_VALIDATOR_JAR")
 
 JAR_DEFAULT = typer.Option(
     default=os.environ.get(SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY),
@@ -161,9 +162,12 @@ def execute_schedule_validator(
     elif extract_ts.date() < pendulum.Date(2024, 1, 20):
         versioned_jar_path = V4_1_VALIDATOR_JAR
         validator_version = "v4.1.0"
-    else:
+    elif extract_ts.date() < pendulum.Date(2024, 3, 27):
         versioned_jar_path = V4_2_VALIDATOR_JAR
         validator_version = "v4.2.0"
+    else:
+        versioned_jar_path = V5_VALIDATOR_JAR
+        validator_version = "v5.0.0"
 
     assert versioned_jar_path
 
@@ -181,7 +185,6 @@ def execute_schedule_validator(
 
     report_path = Path(output_dir) / "report.json"
     system_errors_path = Path(output_dir) / "system_errors.json"
-
     log(f"executing schedule validator: {' '.join(args)}", pbar=pbar)
     subprocess.run(
         args,

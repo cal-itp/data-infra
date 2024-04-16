@@ -92,13 +92,12 @@ Code changes require building and pushing a new Docker image, as well as applyin
 
 1. Make code changes and increment version in `pyproject.toml`
    1. Ex. `poetry version 2023.4.10`
-2. Change image tag version in the environments `kustomization.yaml`.
-   1. Ex. change the value of `newTag` to '`2023.4.10'`
-3. `docker build ... & docker push ...` (*from within the archiver directory*) or wait for [build-gtfs-rt-archiver-v3-image](../../.github/workflows/build-gtfs-rt-archiver-v3-image.yml) GitHub Action to run after merge to main
+2. `docker build ... & docker push ...` (*from within the archiver directory*) or wait for [build-gtfs-rt-archiver-v3-image](../../.github/workflows/build-gtfs-rt-archiver-v3-image.yml) GitHub Action to run after merge to main
    1. Ex. `docker build -t ghcr.io/cal-itp/data-infra/gtfs-rt-archiver-v3:2023.4.10 . && docker push ghcr.io/cal-itp/data-infra/gtfs-rt-archiver-v3:2023.4.10`
    2. To push from your local machine, you must have [authenticated to ghcr.io](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry)
-4. Finally, apply changes using `kubectl` as described above.
-   1. Currently, the image is built/pushed on merges to main but the Kubernetes manifests are not applied.
+3. Change image tag version in the environments `kustomization.yaml`.
+   1. Ex. change the value of `newTag` to '`2023.4.10'`
+4. Finally, apply changes in production by opening and merging a second PR that includes the `kustomization.yaml` changes.
 
 ### Changing download configurations
 
