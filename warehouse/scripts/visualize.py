@@ -291,7 +291,7 @@ def ci_report(
     ).result
 
 
-    if len(modified_models > 0):
+    if len(modified_models) > 0:
         typer.secho(f"Visualizing the following models: {modified_models}")
         assert isinstance(modified_models, list)
         viz(
