@@ -290,10 +290,9 @@ def ci_report(
         ]
     ).result
 
-
-    if len(modified_models) > 0:
-        typer.secho(f"Visualizing the following models: {modified_models}")
-        assert isinstance(modified_models, list)
+    typer.secho(f"Visualizing the following models: {modified_models}")
+    assert isinstance(modified_models, list)
+    if isinstance(modified_models, list) and len(modified_models) > 0:
         viz(
             ArtifactType.manifest,
             include=modified_models,
