@@ -1,4 +1,4 @@
-version: 3
+version: 2
 
 models:
   - name: stg_ntd__annual_database_agency_information

@@ -1,4 +1,4 @@
-version: 3
+version: 2
 
 models:
   - name: dim_annual_ntd_agency_information
