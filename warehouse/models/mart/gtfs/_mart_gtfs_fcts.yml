@@ -1,4 +1,269 @@
-version: 2
+version: 3
+
+x-common-fields:
+  - &base64_url
+    name: base64_url
+    description: '{{ doc("base64_url") }}'
+  - &rt_schedule_base64_url
+    name: schedule_base64_url
+    description: |
+       URL-safe base64-encoded URL of the schedule feed used to validate
+       this RT feed.
+  - &feed_key
+    name: feed_key
+    description: '{{ doc("gtfs_schedule_feed_key") }}'
+    tests:
+      - not_null
+      - relationships:
+          to: ref('dim_schedule_feeds')
+          field: key
+  - &gtfs_dataset_key_errorif
+    name: gtfs_dataset_key
+    description: '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
+    tests:
+      - not_null:
+        config:
+          error_if: ">10000"
+      - relationships:
+          to: ref('dim_gtfs_datasets')
+          field: key
+          config:
+          # there are a dozen rows of SMART transit which was deleted from Airtable
+          # this will work without exception once the Airtable dim is historical;
+          # this threshold may need to increase if the backfill occurs prior to that
+            error_if: ">20"
+  - &feed_timezone_no_tests
+    name: feed_timezone
+    description: '{{ doc("gtfs_schedule_feed_timezone") }}'
+  - &gtfs_rt_dataset_key
+    name: gtfs_dataset_key
+    description: |
+      Foreign key to the associated GTFS dataset record.
+    tests:
+      - not_null:
+          config:
+            where: '__rt_sampled__'
+      - relationships:
+          to: ref('dim_gtfs_datasets')
+          field: key
+          config:
+            # there are a dozen rows of SMART transit which was deleted from Airtable
+            # this will work without exception once the Airtable dim is historical;
+            # this threshold may need to increase if the backfill occurs prior to that
+            error_if: ">20"
+            where: '__rt_sampled__'
+  - &gtfs_rt_dt
+    name: dt
+    description: |
+      Date (UTC) on which this data was scraped. A value for this field
+      must be provided when querying this model due to data size.
+  - &gtfs_rt_hour
+    name: hour
+    description: |
+      The starting timestamp for the hour (UTC) in which this data was scraped.
+      Example value: '2023-06-14T15:00:00+00:00'. Adding a filter on this can
+      further improve performance.
+  - &gtfs_rt_extract_ts
+    name: _extract_ts
+    description: |
+        Timestamp at which this message was scraped. More specifically, this
+        identifies the individual "tick" for which this data was collected.
+        These value are pinned to `:00`, `:20`, `:40` second values (to ensure
+        consistency), but there can be some slippage between the `_extract_ts`
+        and the time that the data was actually requested.
+  - &gtfs_rt_config_extract_ts
+    name: _config_extract_ts
+    description: |
+      The timestamp at which the GTFS data config for this download was extracted.
+      This will correspond to the `ts` value for the associated Airtable data
+      extract.
+      Note that there may not be a corresponding value in `dim_gtfs_datasets` with
+      this value in `_valid_from`, because this value updates every time that the
+      Airtable data extract runs, whereas `dim_gtfs_datasets` has versioning applied
+      and `_valid_from` only updates when an attribute within the record actually
+      changes.
+  - &gtfs_rt_name
+    name: gtfs_dataset_name
+    description: |
+      Name from the associated GTFS dataset record.
+  - &gtfs_rt_schedule_dataset_key
+    name: schedule_gtfs_dataset_key
+    description: |
+      The foreign key to `dim_gtfs_datasets` for the GTFS schedule dataset record associated with this GTFS RT dataset for validation purposes.
+    tests:
+      - relationships:
+          to: ref('dim_gtfs_datasets')
+          field: key
+          config:
+            where: '__rt_sampled__'
+  - &rt_service_date
+    name: service_date
+    description: |
+      Attempt to identify the `service_date` (corresponding to the related
+      schedule feed) for trip activity referenced in a GTFS RT feed. It uses
+      the following fallback logic:
+      * If `trip_start_date` is populated, use that. This is assumed to be
+      provided with respect to `schedule_feed_timezone`.
+      * Otherwise, for trip updates and vehicle positions, if `trip_update_timestamp`
+      or `vehicle_timestamp` (respectively) are populated, convert that
+      to the `schedule_feed_timezone` and extract the date from that.
+      * Otherwise, use `header_timestamp` converted to `schedule_feed_timezone`
+      and extract the date.
+      * Finally (and this generally should not happen, since `header_timestamp`
+      should be populated), fall back to `_extract_ts` converted to `schedule_feed_timezone` and extract the date.
+  - &rt_schedule_base64_url
+    name: schedule_base64_url
+    description: |
+      URL-safe base64-encoded URL of the schedule feed used to validate
+      this RT feed.
+  - &gtfs_rt_schedule_dataset_name
+    name: schedule_name
+    description: |
+      Name of the GTFS schedule dataset used to validate this GTFS RT dataset.
+  - &gtfs_rt_schedule_feed_key
+    name: schedule_feed_key
+    description: |
+      Foreign key to `dim_schedule_feeds` for the GTFS schedule feed associated
+      with the GTFS schedule dataset that is used to validate this GTFS RT data.
+      This is the schedule feed version that was in effect at the time the GTFS RT
+      data was scraped. If this is null, we did not download GTFS schedule data
+      associated with the dataset used to validate this GTFS RT data. This could
+      happen because of download failures (for example, a temporary technical issue)
+      or because of issues with the GTFS dataset associations upstream.
+    tests:
+      - relationships:
+          to: ref('dim_schedule_feeds')
+          field: key
+          config:
+            where: '__rt_sampled__'
+  - &gtfs_rt_schedule_feed_timezone
+    name: schedule_feed_timezone
+    description: |
+      The `feed_timezone` of the feed referenced by `schedule_feed_key`.
+      This information is required to match trips from GTFS RT to
+      their scheduled counterparts, so that the date/time data from the RT feed
+      can be interpreted within the appropriate time zone to align with its schedule.
+  - &rt_trip_start_time_interval
+    name: trip_start_time_interval
+    description: &rt_trip_start_time_interval_desc |
+      `trip_start_time` converted to a BigQuery INTERVAL type to allow handling for times after midnight.
+      See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
+      *Note: If the interval is longer than 24 hours and `trip_start_date` is not populated, the interpretation for this
+      field becomes unclear.*
+  - &rt_header_timestamp
+    name: header_timestamp
+    description: |
+      See: https://gtfs.org/realtime/reference/#message-feedheader.
+      Field has been converted to TIMESTAMP type for convenience.
+  - &rt_header_incrementality
+    name: header_incrementality
+    description: |
+      See: https://gtfs.org/realtime/reference/#message-feedheader.
+  - &rt_header_version
+    name: header_version
+    description: |
+      See: https://gtfs.org/realtime/reference/#message-feedheader.
+  - &rt_id
+    name: id
+    description: |
+      See: https://gtfs.org/realtime/reference/#message-feedentity.
+  - &rt_vehicle_id
+    name: vehicle_id
+    description: |
+      `id` provided in the RT message vehicle descriptor.
+      See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+  - &rt_vehicle_label
+    name: vehicle_label
+    description: |
+      `label` provided in the RT message vehicle descriptor.
+      See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+  - &rt_vehicle_license_plate
+    name: vehicle_license_plate
+    description: |
+      `license_plate` provided in the RT message vehicle descriptor.
+      See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+  - &rt_vehicle_wheelchair_accessible
+    name: vehicle_wheelchair_accessible
+    description: |
+      `wheelchair_accessible` value provided in the RT message vehicle descriptor.
+      See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+  - &rt_trip_id
+    name: trip_id
+    description: |
+      `trip_id` provided in the RT message trip descriptor.
+      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+      for details on how to interpret this field and how it corresponds to GTFS schedule data.
+  - &rt_trip_route_id
+    name: trip_route_id
+    description: |
+      `route_id` provided in the RT message trip descriptor.
+      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+      for details on how to interpret this field and how it corresponds to GTFS schedule data.
+  - &rt_trip_direction_id
+    name: trip_direction_id
+    description: |
+      `direction_id` provided in the RT message trip descriptor.
+      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor.
+  - &rt_trip_start_time
+    name: trip_start_time
+    description: &rt_trip_start_time_desc |
+      `start_time` provided in the RT message trip descriptor.
+      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+      for details on how to interpret this field.
+  - &rt_trip_start_date
+    name: trip_start_date
+    description: &rt_trip_start_date_desc |
+      `start_date` provided in the RT message trip descriptor.
+      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+      for details on how to interpret this field.
+  - &rt_trip_schedule_relationship
+    name: trip_schedule_relationship
+    description: |
+      `schedule_relationship` provided in the RT message trip descriptor.
+      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+      for details on how to interpret this field.
+  - &_header_message_age
+    name: _header_message_age
+    description: |
+      Difference between `_extract_ts` (time at which we scraped the message) and
+      `header_timestamp` (timestamp of overall message from producer; see
+      https://gtfs.org/realtime/reference/#message-feedheader).
+      Because of delay in the request process, the actual scrape request may occur
+      up to a few seconds after `_extract_ts`, and it may take time for the producer
+      to respond to the request, so this field should only be interpreted as accurate
+      within 3-4 seconds (do not try to do extremely precise measurements below that
+      level.)
+  - &gtfs_dataset_key
+    name: gtfs_dataset_key
+    description: *gtfs_dataset_key_desc
+    tests:
+      - dbt_utils.not_null_proportion:
+        # TODO: raise back to .999 after some time getting new data - was .998 because
+        # old data pipeline produced more nulls
+        at_least: 0.998
+      - relationships:
+        to: ref('dim_gtfs_datasets')
+        field: key
+        config:
+          # there are a dozen rows of SMART transit which was deleted from Airtable
+          # this will work without exception once the Airtable dim is historical;
+          # this threshold may need to increase if the backfill occurs prior to that
+          error_if: ">20"
+  - &service_date_for_summaries
+    name: service_date
+    description: |
+      Agency-defined service date on which this service level was present.
+      This respects the agency's definition of a service day, which may not
+      correspond to a calendar date or even a 24-hour period.
+      See https://gtfs.org/schedule/reference/#field-types for the GTFS
+      Schedule definition of a "date" data type or `fct_scheduled_trips` for
+      more dates that can be associated with trip activity.
+
+      This date is used so that this table's service summaries correspond to the
+      service levels that an agency might describe on a given (service) date, even
+      if that does not correspond to the actual calendar date on which the
+      given trip activity occurred.
+
 
 models:
   - name: fct_daily_schedule_feeds
@@ -16,48 +281,15 @@ models:
       - name: date
         description: |
           Date on which the given feed was active at noon Pacific Time.
-      - &feed_key
-        name: feed_key
-        description: |
-          Foreign key to the `dim_schedule_feeds` table.
-        tests:
-          - not_null
-          - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
-      - &gtfs_dataset_key_errorif
-        name: gtfs_dataset_key
-        description: &gtfs_dataset_key_desc |
-          Foreign key to the associated GTFS dataset record.
-          Because GTFS data was downloaded in the v1 pipeline before
-          `gtfs dataset` records were being archived in the warehouse,
-          it is possible for GTFS data to be associated with a GTFS dataset
-          record that was not yet in effect at the time the data was downloaded.
-          (So, you may see GTFS data from January 2022 associated with a GTFS dataset
-          record that does not take effect until July 2022.)
-          This is done for convenience to facilitate labeling of older data (the alternative
-          would be failing to join and making it essentially impossible to label
-          historical GTFS data with their associated transit database records).
-        tests:
-          - not_null:
-              config:
-                error_if: ">10000"
-          - relationships:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              config:
-                # there are a dozen rows of SMART transit which was deleted from Airtable
-                # this will work without exception once the Airtable dim is historical;
-                # this threshold may need to increase if the backfill occurs prior to that
-                error_if: ">20"
-      - &feed_timezone_no_tests
-        name: feed_timezone
-        description: '{{ doc("gtfs_schedule_feed_timezone") }}'
+      - *feed_key
+      - *gtfs_dataset_key_errorif
+      - *base64_url
+      - *feed_timezone_no_tests
 
   - name: fct_schedule_feed_downloads
     description: |
-      Each row is an instance of a download attempt, uniquely identified by base64_url and
-      timestamp.
+      Each row is an instance of a download attempt, uniquely identified by
+      base64_url and timestamp.
     columns:
       - name: key
         description: |
@@ -77,10 +309,7 @@ models:
       - name: ts
         description: |
           Timestamp at which this feed download attempt occurred.
-      - &base64_url
-        name: base64_url
-        description: |
-          Base 64 encoded URL from which this data was scraped.
+      - *base64_url
       - name: download_success
         description: '{{ doc("download_success") }}'
       - name: download_exception
@@ -114,129 +343,24 @@ models:
               where: '__rt_sampled__'
           - not_null:
               where: '__rt_sampled__'
-      - &gtfs_rt_dataset_key
-        name: gtfs_dataset_key
-        description: |
-          Foreign key to the associated GTFS dataset record.
-        tests:
-          - not_null:
-              config:
-                where: '__rt_sampled__'
-          - relationships:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              config:
-                # there are a dozen rows of SMART transit which was deleted from Airtable
-                # this will work without exception once the Airtable dim is historical;
-                # this threshold may need to increase if the backfill occurs prior to that
-                error_if: ">20"
-                where: '__rt_sampled__'
-      - &gtfs_rt_dt
-        name: dt
-        description: |
-          Date (UTC) on which this data was scraped. A value for this field must be provided when querying this model due
-          to data size.
-      - &gtfs_rt_hour
-        name: hour
-        description: |
-          The starting timestamp for the hour (UTC) in which this data was scraped.
-          Example value: '2023-06-14T15:00:00+00:00'. Adding a filter on this can further improve performance.
+      - *gtfs_rt_dataset_key
+      - *gtfs_rt_dt
+      - *gtfs_rt_hour
       - *base64_url
-      - &gtfs_rt_extract_ts
-        name: _extract_ts
-        description: |
-            Timestamp at which this message was scraped. More specifically, this identifies the individual "tick" for
-            which this data was collected.
-            These value are pinned to `:00`, `:20`, `:40` second values (to ensure consistency), but there can be some slippage
-            between the `_extract_ts` and the time that the data was actually requested.
-      - &gtfs_rt_config_extract_ts
-        name: _config_extract_ts
-        description: |
-          The timestamp at which the GTFS data config for this download was extracted. This will correspond to the
-          `ts` value for the associated Airtable data extract.
-          Note that there may not be a corresponding value in `dim_gtfs_datasets` with this value in `_valid_from`, because this
-          value updates every time that the Airtable data extract runs, whereas `dim_gtfs_datasets` has versioning applied
-          and `_valid_from` only updates when an attribute within the record actually changes.
-      - &gtfs_rt_name
-        name: gtfs_dataset_name
-        description: |
-          Name from the associated GTFS dataset record.
-      - &gtfs_rt_schedule_dataset_key
-        name: schedule_gtfs_dataset_key
-        description: |
-          The foreign key to `dim_gtfs_datasets` for the GTFS schedule dataset record associated with this GTFS RT dataset for validation purposes.
-        tests:
-          - relationships:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              config:
-                where: '__rt_sampled__'
-      - &rt_service_date
-        name: service_date
-        description: |
-          Attempt to identify the `service_date` (corresponding to the related schedule feed) for trip activity referenced in a
-          GTFS RT feed. It uses the following fallback logic:
-          * If `trip_start_date` is populated, use that. This is assumed to be provided with respect to `schedule_feed_timezone`.
-          * Otherwise, for trip updates and vehicle positions, if `trip_update_timestamp` or `vehicle_timestamp` (respectively) are populated, convert that
-          to the `schedule_feed_timezone` and extract the date from that.
-          * Otherwise, use `header_timestamp` converted to `schedule_feed_timezone` and extract the date.
-          * Finally (and this generally should not happen, since `header_timestamp` should be populated), fall back to `_extract_ts` converted to `schedule_feed_timezone` and extract the date.
-      - &rt_schedule_base64_url
-        name: schedule_base64_url
-        description: |
-          URL-safe base64-encoded URL of the schedule feed used to validate
-          this RT feed.
-      - &gtfs_rt_schedule_dataset_name
-        name: schedule_name
-        description: |
-          Name of the GTFS schedule dataset used to validate this GTFS RT dataset.
-      - &gtfs_rt_schedule_feed_key
-        name: schedule_feed_key
-        description: |
-          Foreign key to `dim_schedule_feeds` for the GTFS schedule feed associated with the
-          GTFS schedule dataset that is used to validate this GTFS RT data.
-          This is the schedule feed version that was in effect at the time the GTFS RT data
-          was scraped.
-          If this is null, we did not download GTFS schedule data associated with the dataset used
-          to validate this GTFS RT data. This could happen because of download failures (for example, a temporary technical issue) or
-          because of issues with the GTFS dataset associations upstream.
-        tests:
-          - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
-              config:
-                where: '__rt_sampled__'
-      - &gtfs_rt_schedule_feed_timezone
-        name: schedule_feed_timezone
-        description: |
-          The `feed_timezone` of the feed referenced by `schedule_feed_key`.
-          This information is required to match trips from GTFS RT to
-          their scheduled counterparts, so that the date/time data from the RT feed
-          can be interpreted within the appropriate time zone to align with its schedule.
-      - &rt_trip_start_time_interval
-        name: trip_start_time_interval
-        description: &rt_trip_start_time_interval_desc |
-          `trip_start_time` converted to a BigQuery INTERVAL type to allow handling for times after midnight.
-          See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
-          *Note: If the interval is longer than 24 hours and `trip_start_date` is not populated, the interpretation for this
-          field becomes unclear.*
-      - &rt_header_timestamp
-        name: header_timestamp
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-          Field has been converted to TIMESTAMP type for convenience.
-      - &rt_header_incrementality
-        name: header_incrementality
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-      - &rt_header_version
-        name: header_version
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-      - &rt_id
-        name: id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedentity.
+      - *gtfs_rt_extract_ts
+      - *gtfs_rt_config_extract_ts
+      - *gtfs_rt_name
+      - *gtfs_rt_schedule_dataset_key
+      - *rt_service_date
+      - *rt_schedule_base64_url
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *gtfs_rt_schedule_feed_timezone
+      - *rt_trip_start_time_interval
+      - *rt_header_timestamp
+      - *rt_header_incrementality
+      - *rt_header_version
+      - *rt_id
       - name: trip_update_timestamp
         description: |
           `timestamp` provided in this trip update message.
@@ -245,85 +369,27 @@ models:
         description: |
           `delay` provided in this trip update message.
           See: https://gtfs.org/realtime/reference/#message-tripupdate.
-      - &rt_vehicle_id
-        name: vehicle_id
-        description: |
-          `id` provided in the RT message vehicle descriptor.
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-      - &rt_vehicle_label
-        name: vehicle_label
-        description: |
-          `label` provided in the RT message vehicle descriptor.
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-      - &rt_vehicle_license_plate
-        name: vehicle_license_plate
-        description: |
-          `license_plate` provided in the RT message vehicle descriptor.
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-      - &rt_vehicle_wheelchair_accessible
-        name: vehicle_wheelchair_accessible
-        description: |
-          `wheelchair_accessible` value provided in the RT message vehicle descriptor.
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-      - &rt_trip_id
-        name: trip_id
-        description: |
-          `trip_id` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field and how it corresponds to GTFS schedule data.
-      - &rt_trip_route_id
-        name: trip_route_id
-        description: |
-          `route_id` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field and how it corresponds to GTFS schedule data.
-      - &rt_trip_direction_id
-        name: trip_direction_id
-        description: |
-          `direction_id` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - &rt_trip_start_time
-        name: trip_start_time
-        description: &rt_trip_start_time_desc |
-          `start_time` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - &rt_trip_start_date
-        name: trip_start_date
-        description: &rt_trip_start_date_desc |
-          `start_date` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - &rt_trip_schedule_relationship
-        name: trip_schedule_relationship
-        description: |
-          `schedule_relationship` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
+      - *rt_vehicle_id
+      - *rt_vehicle_label
+      - *rt_vehicle_license_plate
+      - *rt_vehicle_wheelchair_accessible
+      - *rt_trip_id
+      - *rt_trip_route_id
+      - *rt_trip_direction_id
+      - *rt_trip_start_time
+      - *rt_trip_start_date
+      - *rt_trip_schedule_relationship
       - name: stop_time_updates
         description: |
           See https://gtfs.org/realtime/reference/#message-stoptimeupdate.
-      - &_header_message_age
-        name: _header_message_age
-        description: |
-          Difference between `_extract_ts` (time at which we scraped the message) and `header_timestamp` (timestamp
-          of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader).
-          Because of delay in the request process, the actual scrape request may occur up to a few
-          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
-          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
-          measurements below that level.)
+      - *_header_message_age
       - name: _trip_update_message_age
         description: |
-          Difference between `_extract_ts` (time at which we scraped the message) and `trip_update_timestamp` (timestamp
-          of individual trip update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
-          Because of delay in the request process, the actual scrape request may occur up to a few
-          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
-          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
-          measurements below that level.)
+          Difference between `_extract_ts` (time at which we scraped the message) and `trip_update_timestamp` (timestamp of individual trip update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
+          Because of delay in the request process, the actual scrape request may occur up to a few seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise measurements below that level.)
       - name: _trip_update_message_age_vs_header
         description: |
-          Difference between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
-          and `trip_update_timestamp` (timestamp of individual trip_update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
+          Difference between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader) and `trip_update_timestamp` (timestamp of individual trip_update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
 
   - name: fct_stop_time_updates
     description: |
@@ -386,12 +452,8 @@ models:
       - *_header_message_age
       - name: _vehicle_message_age
         description: |
-          Difference in seconds between `_extract_ts` (time at which we scraped the message) and `vehicle_timestamp` (timestamp
-          of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
-          Because of delay in the request process, the actual scrape request may occur up to a few
-          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
-          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
-          measurements below that level.)
+          Difference in seconds between `_extract_ts` (time at which we scraped the message) and `vehicle_timestamp` (timestamp of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
+          Because of delay in the request process, the actual scrape request may occur up to a few seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise measurements below that level.)
       - name: _vehicle_message_age_vs_header
         description: |
           Difference in seconds between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
@@ -477,22 +539,7 @@ models:
       description: Count of files where parsing failed, but a file was present.
       tests:
         - not_null
-    - &gtfs_dataset_key
-      name: gtfs_dataset_key
-      description: *gtfs_dataset_key_desc
-      tests:
-        - dbt_utils.not_null_proportion:
-            # TODO: raise back to .999 after some time getting new data - was .998 because
-            # old data pipeline produced more nulls
-            at_least: 0.998
-        - relationships:
-            to: ref('dim_gtfs_datasets')
-            field: key
-            config:
-              # there are a dozen rows of SMART transit which was deleted from Airtable
-              # this will work without exception once the Airtable dim is historical;
-              # this threshold may need to increase if the backfill occurs prior to that
-              error_if: ">20"
+    - *gtfs_dataset_key
     - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
       description: |
         Foreign key for the GTFS dataset record of the GTFS schedule dataset that
@@ -524,25 +571,12 @@ models:
       - dbt_utils.expression_is_true:
           expression: "ttl_service_hours >= 0"
     columns:
-      - &service_date_for_summaries
-        name: service_date
-        description: |
-          Agency-defined service date on which this service level was present.
-          This respects the agency's definition of a service day, which may not correspond to
-          a calendar date or even a 24-hour period.
-          See https://gtfs.org/schedule/reference/#field-types for the GTFS
-          Schedule definition of a "date" data type or `fct_scheduled_trips` for
-          more dates that can be associated with trip activity.
-
-          This date is used so that this table's service summaries correspond to the
-          service levels that an agency might describe on a given (service) date, even
-          if that does not correspond to the actual calendar date on which the
-          given trip activity occurred.
-        tests:
-          - not_null
+      - *service_date_for_summaries
       - *feed_key
       - name: ttl_service_hours
         description: Total service hours across entire feed on date; can be 0 if no service
+      - name: gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
       - name: n_trips
         description: Total number of trips ran on date; can be 0 if no scheduled trips
       - name: first_departure_sec
@@ -557,27 +591,32 @@ models:
           Total number of routes that had trips scheduled on this day; can be 0 if no scheduled trips
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `num_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
-          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+          Rows with `true` in this column indicate that the columns in this table
+          that are aggregated from
+          stop times data (`n_stops`, `num_stop_times`,  `trip_first_departure_sec`,
+          `trip_last_arrival_sec`, and `service_hours`) contain at least one row that
+          had a duplicate primary key in the source stop times data.
 
-          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
-          in the input data. This indicates that data quality issues were present in the stop times data
-          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence`
+          pair that was not unique in the input data. This indicates that data quality
+          issues were present in the stop times data that is being summarized here, and
+          counts may be inflated due to multiple rows with identical identifiers.
       - name: contains_warning_duplicate_trip_primary_key
         description: |
-          Rows with `true` in this column indicate that `dim_trips` contains duplicates of this trip primary key.
-
+          Rows with `true` in this column indicate that `dim_trips` contains duplicates
+          of this trip primary key.
           i.e., `trip_id` is duplicated within an individual feed instance.
       - name: contains_warning_missing_foreign_key_stop_id
         description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `num_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
-          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+          Rows with `true` in this column indicate that the columns in this table that
+          are aggregated from stop times data (`n_stops`, `num_stop_times`,
+          `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a missing `stop_id`
+          foreign key in the source stops data.
 
-          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
-          in the input data. This indicates that data quality issues were present in the stop times data
-          that is being summarized here.
+          I.e., at least one row being aggregated had a `stop_id` foreign key that
+          was missing in the input data. This indicates that data quality issues were
+          present in the stop times data that is being summarized here.
   - name: fct_hourly_rt_feed_files
     description: |
       An hourly count of the files that were downloaded each day per feed.
@@ -622,7 +661,8 @@ models:
       - name: hr_23
       - name: gtfs_dataset_key
         description: |
-          The primary key for the record in `dim_gtfs_datasets` associated with this feed.
+          The primary key for the record in `dim_gtfs_datasets` associated with
+          this feed.
   - name: fct_hourly_rt_feed_files_success
     description: |
       The proportion of downloaded files that were successfully parsed as GTFS-RT.
@@ -641,7 +681,8 @@ models:
           The proportion of files successfully downloaded on this day for this URL
       - name: hr_0
         description: |
-          The proportion of files successfully downloaded for this URL in the 0 hour UTC
+          The proportion of files successfully downloaded for this URL in the 0
+          hour UTC
       - name: hr_1
       - name: hr_2
       - name: hr_3

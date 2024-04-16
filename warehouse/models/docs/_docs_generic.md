@@ -27,3 +27,7 @@ If download attempt failed, lists the exception that was encountered.
 {% docs unzip_exception %}
 If unzip attempt failed, lists the exception that was encountered.
 {% enddocs %}
+
+{% docs base64_url %}
+Base 64 encoded URL from which this data was scraped.
+{% enddocs %}
