@@ -82,17 +82,13 @@ models:
         description: |
           Base 64 encoded URL from which this data was scraped.
       - name: download_success
-        description: |
-          Boolean indicating whether this download attempt was successful.
+        description: '{{ doc("download_success") }}'
       - name: download_exception
-        description: |
-          If download attempt failed, lists the exception that was encountered.
+        description: '{{ doc("download_exception") }}'
       - name: unzip_success
-        description: |
-          Boolean indicating whether this unzip attempt was successful.
+        description: '{{ doc("unzip_success") }}'
       - name: unzip_exception
-        description: |
-          If unzip attempt failed, lists the exception that was encountered.
+        description: '{{ doc("unzip_exception") }}'
       - name: zipfile_extract_md5hash
         description: '{{ doc("column_zipfile_md5_hash") }}'
       - name: zipfile_files

@@ -100,6 +100,12 @@ models:
               where: "key != '6368fe701bdd68c4f521751a9a222a10'"
           - not_null
       - *base64_url
+      - name: download_success
+        description: '{{ doc("download_success") }}'
+      - name: unzip_success
+        description: '{{ doc("unzip_success") }}'
+      - name: zipfile_extract_md5hash
+        description: '{{ doc("column_zipfile_md5_hash") }}'
       - name: _valid_from
         description: '{{ doc("column_valid_from") }}'
       - name: _valid_to
@@ -110,6 +116,7 @@ models:
         description: '{{ doc("gtfs_schedule_feed_timezone") }}'
         tests:
           - not_null
+      - *schedule_dim_dt
 
   - name: dim_agency
     description: |
@@ -256,6 +263,7 @@ models:
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
+      - *base64_url
       - *_feed_valid_from
       - *feed_timezone_no_tests
 
