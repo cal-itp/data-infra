@@ -152,76 +152,48 @@ x-common-fields:
       field becomes unclear.*
   - &rt_header_timestamp
     name: header_timestamp
-    description: |
-      See: https://gtfs.org/realtime/reference/#message-feedheader.
-      Field has been converted to TIMESTAMP type for convenience.
+    description: '{{ doc("rt_feed_header__timestamp") }}'
   - &rt_header_incrementality
     name: header_incrementality
-    description: |
-      See: https://gtfs.org/realtime/reference/#message-feedheader.
+    description: '{{ doc("rt_feed_header__incrementality") }}'
   - &rt_header_version
     name: header_version
-    description: |
-      See: https://gtfs.org/realtime/reference/#message-feedheader.
+    description: '{{ doc("rt_feed_header__version") }}'
   - &rt_id
     name: id
-    description: |
-      See: https://gtfs.org/realtime/reference/#message-feedentity.
+    description: '{{ doc("rt_feed_entity__id") }}'
   - &rt_vehicle_id
     name: vehicle_id
-    description: |
-      `id` provided in the RT message vehicle descriptor.
-      See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+    description: '{{ doc("rt_vehicle_descriptor__id") }}'
   - &rt_vehicle_label
     name: vehicle_label
-    description: |
-      `label` provided in the RT message vehicle descriptor.
-      See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+    description: '{{ doc("rt_vehicle_descriptor__label") }}'
   - &rt_vehicle_license_plate
     name: vehicle_license_plate
-    description: |
-      `license_plate` provided in the RT message vehicle descriptor.
-      See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+    description: '{{ doc("rt_vehicle_descriptor__license_plate") }}'
   - &rt_vehicle_wheelchair_accessible
     name: vehicle_wheelchair_accessible
-    description: |
-      `wheelchair_accessible` value provided in the RT message vehicle descriptor.
-      See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+    description: '{{ doc("rt_vehicle_descriptor__wheelchair_accessible") }}'
   - &rt_trip_id
     name: trip_id
-    description: |
-      `trip_id` provided in the RT message trip descriptor.
-      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-      for details on how to interpret this field and how it corresponds to GTFS schedule data.
+    description: '{{ doc("rt_trip_descriptor__trip_id") }}'
   - &rt_trip_route_id
     name: trip_route_id
-    description: |
-      `route_id` provided in the RT message trip descriptor.
-      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-      for details on how to interpret this field and how it corresponds to GTFS schedule data.
+    description: '{{ doc("rt_trip_descriptor__route_id") }}'
   - &rt_trip_direction_id
     name: trip_direction_id
-    description: |
-      `direction_id` provided in the RT message trip descriptor.
-      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor.
+    description: '{{ doc("rt_trip_descriptor__direction_id") }}'
   - &rt_trip_start_time
     name: trip_start_time
     description: &rt_trip_start_time_desc |
-      `start_time` provided in the RT message trip descriptor.
-      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-      for details on how to interpret this field.
+      '{{ doc("rt_trip_descriptor__start_time") }}'
   - &rt_trip_start_date
     name: trip_start_date
     description: &rt_trip_start_date_desc |
-      `start_date` provided in the RT message trip descriptor.
-      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-      for details on how to interpret this field.
+      '{{ doc("rt_vehicle_descriptor__wheelchair_accessible") }}'
   - &rt_trip_schedule_relationship
     name: trip_schedule_relationship
-    description: |
-      `schedule_relationship` provided in the RT message trip descriptor.
-      See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-      for details on how to interpret this field.
+    description: '{{ doc("rt_trip_descriptor__start_date") }}'
   - &_header_message_age
     name: _header_message_age
     description: |
