@@ -549,7 +549,7 @@ models:
       - *gtfs_rt_schedule_feed_timezone
       - *_header_message_age
       - name: _vehicle_message_age
-        description: '{{ doc("gtfs_vehicle_message_age") }}'
+        description: '{{ doc("column_vehicle_message_age") }}'
       - name: _vehicle_message_age_vs_header
         description: |
           '{{ doc("column_vehicle_message_age_vs_header") }}'
