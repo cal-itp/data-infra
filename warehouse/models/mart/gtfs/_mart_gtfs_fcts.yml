@@ -3,12 +3,7 @@ version: 2
 x-common-fields:
   - &base64_url
     name: base64_url
-    description: '{{ doc("base64_url") }}'
-  - &rt_schedule_base64_url
-    name: schedule_base64_url
-    description: |
-       URL-safe base64-encoded URL of the schedule feed used to validate
-       this RT feed.
+    description: '{{ doc("column_base64_url") }}'
   - &feed_key
     name: feed_key
     description: '{{ doc("gtfs_schedule_feed_key") }}'
@@ -17,6 +12,12 @@ x-common-fields:
       - relationships:
           to: ref('dim_schedule_feeds')
           field: key
+  - &feed_timezone_no_tests
+    name: feed_timezone
+    description: '{{ doc("gtfs_schedule_feed_timezone") }}'
+  - &feed_type
+    name: feed_type
+    description: '{{ doc("gtfs_rt_feed_type") }}'
   - &gtfs_dataset_key_errorif
     name: gtfs_dataset_key
     description: &gtfs_dataset_key_desc |
@@ -34,9 +35,7 @@ x-common-fields:
             # historical; this threshold may need to increase if the backfill
             # occurs prior to that
             error_if: ">20"
-  - &feed_timezone_no_tests
-    name: feed_timezone
-    description: '{{ doc("gtfs_schedule_feed_timezone") }}'
+
   - &gtfs_rt_dataset_key
     name: gtfs_dataset_key
     description: |
@@ -55,139 +54,11 @@ x-common-fields:
             # occurs prior to that
             error_if: ">20"
             where: '__rt_sampled__'
-  - &gtfs_rt_dt
-    name: dt
-    description: |
-      Date (UTC) on which this data was scraped. A value for this field
-      must be provided when querying this model due to data size.
-  - &gtfs_rt_hour
-    name: hour
-    description: |
-      The starting timestamp for the hour (UTC) in which this data was scraped.
-      Example value: '2023-06-14T15:00:00+00:00'. Adding a filter on this can
-      further improve performance.
-  - &gtfs_rt_extract_ts
-    name: _extract_ts
-    description: '{{ doc("column_rt_extract_ts") }}'
-  - &gtfs_rt_config_extract_ts
-    name: _config_extract_ts
-    description: '{{ doc("column_rt_config_extract_ts") }}'
   - &gtfs_rt_name
     name: gtfs_dataset_name
     description: |
       Name from the associated GTFS dataset record.
-  - &gtfs_rt_schedule_dataset_key
-    name: schedule_gtfs_dataset_key
-    description: |
-      The foreign key to `dim_gtfs_datasets` for the GTFS schedule dataset
-      record associated with this GTFS RT dataset for validation purposes.
-    tests:
-      - relationships:
-          to: ref('dim_gtfs_datasets')
-          field: key
-          config:
-            where: '__rt_sampled__'
-  - &rt_service_date
-    name: service_date
-    description: |
-      Attempt to identify the `service_date` (corresponding to the related
-      schedule feed) for trip activity referenced in a GTFS RT feed. It uses
-      the following fallback logic:
-      * If `trip_start_date` is populated, use that. This is assumed to be
-      provided with respect to `schedule_feed_timezone`.
-      * Otherwise, for trip updates and vehicle positions, if
-      `trip_update_timestamp` or `vehicle_timestamp` (respectively) are
-      populated, convert that to the `schedule_feed_timezone` and extract the
-      date from that.
-      * Otherwise, use `header_timestamp` converted to `schedule_feed_timezone`
-      and extract the date.
-      * Finally (and this generally should not happen, since `header_timestamp`
-      should be populated), fall back to `_extract_ts` converted to
-      `schedule_feed_timezone` and extract the date.
-  - &gtfs_rt_schedule_dataset_name
-    name: schedule_name
-    description: |
-      Name of the GTFS schedule dataset used to validate this GTFS RT dataset.
-  - &gtfs_rt_schedule_feed_key
-    name: schedule_feed_key
-    description: |
-      Foreign key to `dim_schedule_feeds` for the GTFS schedule feed associated
-      with the GTFS schedule dataset that is used to validate this GTFS RT data.
-      This is the schedule feed version that was in effect at the time the GTFS
-      RT data was scraped. If this is null, we did not download GTFS schedule
-      data associated with the dataset used to validate this GTFS RT data.
-      This could happen because of download failures (for example, a temporary
-      technical issue) or because of issues with the GTFS dataset associations
-      upstream.
-    tests:
-      - relationships:
-          to: ref('dim_schedule_feeds')
-          field: key
-          config:
-            where: '__rt_sampled__'
-  - &gtfs_rt_schedule_feed_timezone
-    name: schedule_feed_timezone
-    description: |
-      The `feed_timezone` of the feed referenced by `schedule_feed_key`.
-      This information is required to match trips from GTFS RT to their
-      scheduled counterparts, so that the date/time data from the RT feed can be
-      interpreted within the appropriate time zone to align with its schedule.
-  - &rt_trip_start_time_interval
-    name: trip_start_time_interval
-    description: &rt_trip_start_time_interval_desc |
-      `trip_start_time` converted to a BigQuery INTERVAL type to allow handling
-      for times after midnight.
-      See https://gtfs.org/schedule/reference/#field-types for how time strings
-      are defined in GTFS.
-      *Note: If the interval is longer than 24 hours and `trip_start_date` is
-      not populated, the interpretation for this field becomes unclear.*
-  - &rt_header_timestamp
-    name: header_timestamp
-    description: '{{ doc("rt_feed_header__timestamp") }}'
-  - &rt_header_incrementality
-    name: header_incrementality
-    description: '{{ doc("rt_feed_header__incrementality") }}'
-  - &rt_header_version
-    name: header_version
-    description: '{{ doc("rt_feed_header__version") }}'
-  - &rt_id
-    name: id
-    description: '{{ doc("rt_feed_entity__id") }}'
-  - &rt_vehicle_id
-    name: vehicle_id
-    description: '{{ doc("rt_vehicle_descriptor__id") }}'
-  - &rt_vehicle_label
-    name: vehicle_label
-    description: '{{ doc("rt_vehicle_descriptor__label") }}'
-  - &rt_vehicle_license_plate
-    name: vehicle_license_plate
-    description: '{{ doc("rt_vehicle_descriptor__license_plate") }}'
-  - &rt_vehicle_wheelchair_accessible
-    name: vehicle_wheelchair_accessible
-    description: '{{ doc("rt_vehicle_descriptor__wheelchair_accessible") }}'
-  - &rt_trip_id
-    name: trip_id
-    description: '{{ doc("rt_trip_descriptor__trip_id") }}'
-  - &rt_trip_route_id
-    name: trip_route_id
-    description: '{{ doc("rt_trip_descriptor__route_id") }}'
-  - &rt_trip_direction_id
-    name: trip_direction_id
-    description: '{{ doc("rt_trip_descriptor__direction_id") }}'
-  - &rt_trip_start_time
-    name: trip_start_time
-    description: &rt_trip_start_time_desc |
-      '{{ doc("rt_trip_descriptor__start_time") }}'
-  - &rt_trip_start_date
-    name: trip_start_date
-    description: &rt_trip_start_date_desc |
-      '{{ doc("rt_trip_descriptor__start_date") }}'
-  - &rt_trip_schedule_relationship
-    name: trip_schedule_relationship
-    description: '{{ doc("rt_trip_descriptor__schedule_relationship") }}'
-  - &_header_message_age
-    name: _header_message_age
-    description: '{{ doc("column_header_message_age") }}'
+
   - &gtfs_dataset_key
     name: gtfs_dataset_key
     description: *gtfs_dataset_key_desc
@@ -205,6 +76,245 @@ x-common-fields:
             # historical; this threshold may need to increase if the backfill
             # occurs prior to that
             error_if: ">20"
+
+
+    ## shared schedule to RT
+  - &gtfs_rt_schedule_dataset_key
+    name: schedule_gtfs_dataset_key
+    description: '{{ doc("column_rt_schedule_dataset_key") }}'
+    tests:
+      - relationships:
+          to: ref('dim_gtfs_datasets')
+          field: key
+          config:
+            where: '__rt_sampled__'
+  - &gtfs_rt_schedule_dataset_name
+    name: schedule_name
+    description: '{{ doc("column_rt_schedule_dataset_name") }}'
+  - &gtfs_rt_schedule_feed_key
+    name: schedule_feed_key
+    description: '{{ doc("column_rt_schedule_feed_key") }}'
+    tests:
+      - relationships:
+          to: ref('dim_schedule_feeds')
+          field: key
+          config:
+            where: '__rt_sampled__'
+  - &gtfs_rt_schedule_feed_timezone
+    name: schedule_feed_timezone
+    description: '{{ doc("column_rt_schedule_feed_timezone") }}'
+  - &rt_schedule_base64_url
+    name: schedule_base64_url
+    description: '{{ doc("column_rt_schedule_base64_url") }}'
+
+
+  - &gtfs_rt_dt
+    name: dt
+    description: |
+      Date (UTC) on which this data was scraped. A value for this field
+      must be provided when querying this model due to data size.
+  - &gtfs_rt_hour
+    name: hour
+    description: |
+      The starting timestamp for the hour (UTC) in which this data was scraped.
+      Example value: '2023-06-14T15:00:00+00:00'. Adding a filter on this can
+      further improve performance.
+  - &gtfs_rt_extract_ts
+    name: _extract_ts
+    description: '{{ doc("column_extract_ts") }}'
+  - &gtfs_rt_config_extract_ts
+    name: _config_extract_ts
+    description: '{{ doc("column_config_extract_ts") }}'
+
+
+  - &rt_service_date
+    name: service_date
+    description: |
+      Attempt to identify the `service_date` (corresponding to the related
+      schedule feed) for trip activity referenced in a GTFS RT feed. It uses
+      the following fallback logic:
+      * If `trip_start_date` is populated, use that. This is assumed to be
+      provided with respect to `schedule_feed_timezone`.
+      * Otherwise, for trip updates and vehicle positions, if
+      `trip_update_timestamp` or `vehicle_timestamp` (respectively) are
+      populated, convert that to the `schedule_feed_timezone` and extract the
+      date from that.
+      * Otherwise, use `header_timestamp` converted to `schedule_feed_timezone`
+      and extract the date.
+      * Finally (and this generally should not happen, since `header_timestamp`
+      should be populated), fall back to `_extract_ts` converted to
+      `schedule_feed_timezone` and extract the date.
+  - &rt_trip_start_time_interval
+    name: trip_start_time_interval
+    description: &rt_trip_start_time_interval_desc |
+      `trip_start_time` converted to a BigQuery INTERVAL type to allow handling
+      for times after midnight.
+      See https://gtfs.org/schedule/reference/#field-types for how time strings
+      are defined in GTFS.
+      *Note: If the interval is longer than 24 hours and `trip_start_date` is
+      not populated, the interpretation for this field becomes unclear.*
+  - &rt_header_timestamp
+    name: header_timestamp
+    description: '{{ doc("gtfs_feed_header__timestamp") }}'
+  - &rt_header_incrementality
+    name: header_incrementality
+    description: '{{ doc("gtfs_feed_header__incrementality") }}'
+  - &rt_header_version
+    name: header_version
+    description: '{{ doc("gtfs_feed_header__version") }}'
+  - &rt_id
+    name: id
+    description: '{{ doc("gtfs_feed_entity__id") }}'
+  - &rt_vehicle_id
+    name: vehicle_id
+    description: '{{ doc("gtfs_vehicle_descriptor__id") }}'
+  - &rt_vehicle_label
+    name: vehicle_label
+    description: '{{ doc("gtfs_vehicle_descriptor__label") }}'
+  - &rt_vehicle_license_plate
+    name: vehicle_license_plate
+    description: '{{ doc("gtfs_vehicle_descriptor__license_plate") }}'
+  - &rt_vehicle_wheelchair_accessible
+    name: vehicle_wheelchair_accessible
+    description: '{{ doc("gtfs_vehicle_descriptor__wheelchair_accessible") }}'
+  - &rt_trip_id
+    name: trip_id
+    description: '{{ doc("gtfs_trip_descriptor__trip_id") }}'
+  - &rt_trip_route_id
+    name: trip_route_id
+    description: '{{ doc("gtfs_trip_descriptor__route_id") }}'
+  - &rt_trip_direction_id
+    name: trip_direction_id
+    description: '{{ doc("gtfs_trip_descriptor__direction_id") }}'
+  - &rt_trip_start_time
+    name: trip_start_time
+    description: &rt_trip_start_time_desc |
+      '{{ doc("gtfs_trip_descriptor__start_time") }}'
+  - &rt_trip_start_date
+    name: trip_start_date
+    description: &rt_trip_start_date_desc |
+      '{{ doc("gtfs_trip_descriptor__start_date") }}'
+  - &rt_trip_schedule_relationship
+    name: trip_schedule_relationship
+    description: '{{ doc("gtfs_trip_descriptor__schedule_relationship") }}'
+
+  - &min_extract_ts
+    name: min_extract_ts
+    description: |
+      Timestamp of the first extract (i.e. the time at which we downloaded
+      this feed extract) of the entity being summarized.
+      For RT, our extracts are pinned to 20 second intervals,
+      i.e. :00, :20, :40.
+  - &max_extract_ts
+    name: max_extract_ts
+    description: |
+      Timestamp of the last extract (i.e. the time at which we downloaded
+      this feed extract) of the entity being summarized.
+      For RT, our extracts are pinned to 20 second intervals,
+      i.e. :00, :20, :40.
+  - &extract_duration_minutes
+    name: extract_duration_minutes
+    description: |
+      The difference between `max_extract_ts` and `min_extract_ts` in
+      minutes, representing the duration of time for which this entity was
+      present in message responses we received from the agency.
+      Note that the entity may not have been present in every message
+      between the minimum and maximum timestamps, and therefore may not have
+      been present continuously for the duration listed here.
+  - &min_extract_ts_local_tz
+    name: min_extract_datetime_local_tz
+    description: |
+      `min_extract_ts` converted to a DATETIME type in
+      `schedule_feed_timezone`.
+  - &max_extract_ts_local_tz
+    name: max_extract_datetime_local_tz
+    description: |
+      `max_extract_ts` converted to a DATETIME type in
+      `schedule_feed_timezone`.
+  - &min_extract_ts_pacific
+    name: min_extract_datetime_pacific
+    description: |
+      `min_extract_ts` converted to a DATETIME type in the
+      "America/Los_Angeles" time zone.
+  - &max_extract_ts_pacific
+    name: max_extract_datetime_pacific
+    description: |
+      `max_extract_ts` converted to a DATETIME type in the
+      "America/Los_Angeles" time zone.
+
+  - &_header_message_age
+    name: _header_message_age
+    description: '{{ doc("column_header_message_age") }}'
+  - &min_header_timestamp
+    name: min_header_timestamp
+    description: |
+      Earliest header timestamp of a message referencing this entity.
+  - &max_header_timestamp
+    name: max_header_timestamp
+    description: |
+      Latest header timestamp of a message referencing this entity.
+  - &header_duration_minutes
+    name: header_duration_minutes
+    description: |
+      The difference between `max_header_timestamp` and
+      `min_header_timestamp` in minutes, representing the duration of time
+      for which this entity was present in the messages produced by the
+      agency.
+      Note that the entity may not have been present in every message
+      between the minimum and maximum timestamps, and therefore may not have
+      been present continuously for the duration listed here.
+  - &min_header_local_tz
+    name: min_header_datetime_local_tz
+    description: |
+      `min_header_timestamp` converted to a DATETIME type in
+      `schedule_feed_timezone`.
+  - &max_header_local_tz
+    name: max_header_datetime_local_tz
+    description: |
+      `max_header_timestamp` converted to a DATETIME type in
+      `schedule_feed_timezone`.
+  - &min_header_pacific
+    name: min_header_datetime_pacific
+    description: |
+      `min_header_timestamp` converted to a DATETIME type in the
+      "America/Los_Angeles" time zone.
+  - &max_header_pacific
+    name: max_header_datetime_pacific
+    description: |
+      `max_header_timestamp` converted to a DATETIME type in the
+      "America/Los_Angeles" time zone.
+
+  - &num_distinct_extract_ts
+    name: num_distinct_extract_ts
+    description: |
+      Distinct count of `_extract_ts` values for messages being summarized
+      here (`_extract_ts` represents the instant at which we attempted to
+      scrape data for this feed.)
+      This is the count of distinct messages in which this entity appeared.
+      If you divide this value by `extract_duration_minutes`, you would
+      get a count of how many messages per minute this entity was present for,
+      which can help give a sense for how continuously this entity was updated.
+      This number should be equal to `num_distinct_message_keys`.
+  - &num_distinct_header_timestamps
+    name: num_distinct_header_timestamps
+    description: |
+      Distinct count of header timestamps for messages being summarized
+      (https://gtfs.org/realtime/reference/#message-feedheader).
+  - &num_distinct_message_keys
+    name: num_distinct_message_keys
+    description: |
+      Distinct count of message keys being summarized here (message keys are
+      the synthetic keys we generate for an individual RT message response.)
+      This is the count of distinct messages in which this entity appeared.
+      If you divide this value by `extract_duration_minutes`, you would get
+      a count of how many messages per minute this entity was present for,
+      which can help give a sense for how continuously this trip was updated.
+      This number should be equal to `num_distinct_extract_ts`.
+
+
+
+
+
   - &service_date_for_summaries
     name: service_date
     description: |
@@ -267,13 +377,13 @@ models:
           Timestamp at which this feed download attempt occurred.
       - *base64_url
       - name: download_success
-        description: '{{ doc("download_success") }}'
+        description: '{{ doc("column_download_success") }}'
       - name: download_exception
-        description: '{{ doc("download_exception") }}'
+        description: '{{ doc("column_download_exception") }}'
       - name: unzip_success
-        description: '{{ doc("unzip_success") }}'
+        description: '{{ doc("column_unzip_success") }}'
       - name: unzip_exception
-        description: '{{ doc("unzip_exception") }}'
+        description: '{{ doc("column_unzip_exception") }}'
       - name: zipfile_extract_md5hash
         description: '{{ doc("column_zipfile_md5_hash") }}'
       - name: zipfile_files
@@ -319,9 +429,9 @@ models:
       - *rt_header_version
       - *rt_id
       - name: trip_update_timestamp
-        description: '{{ doc("rt_trip_update__timestamp") }}'
+        description: '{{ doc("gtfs_trip_update__timestamp") }}'
       - name: trip_update_delay
-        description: '{{ doc("rt_trip_update__delay") }}'
+        description: '{{ doc("gtfs_trip_update__delay") }}'
       - *rt_vehicle_id
       - *rt_vehicle_label
       - *rt_vehicle_license_plate
@@ -404,7 +514,7 @@ models:
       - *gtfs_rt_schedule_feed_timezone
       - *_header_message_age
       - name: _vehicle_message_age
-        description: '{{ doc("column_vehicle_message_age") }}'
+        description: '{{ doc("gtfs_vehicle_message_age") }}'
       - name: _vehicle_message_age_vs_header
         description: |
           '{{ doc("column_vehicle_message_age_vs_header") }}'
@@ -419,20 +529,20 @@ models:
       - *rt_id
       - name: current_stop_sequence
         description: |
-          '{{ doc("rt_vehicle_position__current_stop_sequence") }}'
+          '{{ doc("gtfs_vehicle_position__current_stop_sequence") }}'
       - name: stop_id
-        description: '{{ doc("rt_vehicle_position__stop_id") }}'
+        description: '{{ doc("gtfs_vehicle_position__stop_id") }}'
       - name: current_status
-        description: '{{ doc("rt_vehicle_position__current_status") }}'
+        description: '{{ doc("gtfs_vehicle_position__current_status") }}'
       - name: vehicle_timestamp
-        description: '{{ doc("rt_vehicle_position__timestamp") }}'
+        description: '{{ doc("gtfs_vehicle_position__timestamp") }}'
       - name: congestion_level
-        description: '{{ doc("rt_vehicle_position__congestion_level") }}'
+        description: '{{ doc("gtfs_vehicle_position__congestion_level") }}'
       - name: occupancy_status
-        description: '{{ doc("rt_vehicle_position__occupancy_status") }}'
+        description: '{{ doc("gtfs_vehicle_position__occupancy_status") }}'
       - name: occupancy_percentage
         description: |
-          '{{ doc("rt_vehicle_position__occupancy_percentage") }}'
+          '{{ doc("gtfs_vehicle_position__occupancy_percentage") }}'
       - *rt_vehicle_id
       - *rt_vehicle_label
       - *rt_vehicle_license_plate
@@ -444,15 +554,15 @@ models:
       - *rt_trip_start_date
       - *rt_trip_schedule_relationship
       - name: position_latitude
-        description: '{{ doc("rt_position__latitude") }}'
+        description: '{{ doc("gtfs_position__latitude") }}'
       - name: position_longitude
-        description: '{{ doc("rt_position__longitude") }}'
+        description: '{{ doc("gtfs_position__longitude") }}'
       - name: position_bearing
-        description: '{{ doc("rt_position__bearing") }}'
+        description: '{{ doc("gtfs_position__bearing") }}'
       - name: position_odometer
-        description: '{{ doc("rt_position__odometer") }}'
+        description: '{{ doc("gtfs_position__odometer") }}'
       - name: position_speed
-        description: '{{ doc("rt_position__speed") }}'
+        description: '{{ doc("gtfs_position__speed") }}'
 
   - name: fct_daily_rt_feed_files
     description: |
@@ -465,9 +575,7 @@ models:
     - <<: *base64_url
       tests:
         - not_null
-    - &feed_type
-      name: feed_type
-      description: '{{ doc("rt_feed_type") }}'
+    - *feed_type
     - name: parse_success_file_count
       description: |
         Count of files successfully parsed. Target is 4,320 (one file every
@@ -480,17 +588,13 @@ models:
         - not_null
     - *gtfs_dataset_key
     - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
-      description: |
-        Foreign key for the GTFS dataset record of the GTFS schedule dataset
-        that should be used to validate this realtime dataset.
+      description: '{{ doc("column_rt_schedule_dataset_key") }}'
       tests:
           - relationships:
               to: ref('dim_gtfs_datasets')
               field: key
     - name: schedule_feed_key
-      description: |
-        Foreign key for the GTFS schedule feed version for this date / RT feed
-        pair.
+      description: '{{ doc("column_rt_schedule_feed_key") }}'
       tests:
           - relationships:
               to: ref('dim_schedule_feeds')
@@ -690,28 +794,28 @@ models:
       - *rt_header_version
       - *rt_id
       - name: active_period
-        description: '{{ doc("rt_alert__active_period") }}'
+        description: '{{ doc("gtfs_alert__active_period") }}'
       - name: informed_entity
-        description: '{{ doc("rt_alert__informed_entity") }}'
+        description: '{{ doc("gtfs_alert__informed_entity") }}'
       - name: cause
-        description: '{{ doc("rt_alert__cause") }}'
+        description: '{{ doc("gtfs_alert__cause") }}'
       - name: effect
-        description: '{{ doc("rt_alert__effect") }}'
+        description: '{{ doc("gtfs_alert__effect") }}'
       - name: url
-        description: '{{ doc("rt_alert__url") }}'
+        description: '{{ doc("gtfs_alert__url") }}'
       - name: header_text
-        description: '{{ doc("rt_alert__header_text") }}'
+        description: '{{ doc("gtfs_alert__header_text") }}'
       - name: description_text
-        description: '{{ doc("rt_alert__description_text") }}'
+        description: '{{ doc("gtfs_alert__description_text") }}'
       - name: tts_header_text
         description: |
-          '{{ doc("rt_alert__tts_header_text") }}'
+          '{{ doc("gtfs_alert__tts_header_text") }}'
       - name: tts_description_text
         description: |
-          '{{ doc("rt_alert__tts_description_text") }}'
+          '{{ doc("gtfs_alert__tts_description_text") }}'
       - name: severity_level
         description: |
-          '{{ doc("rt_alert__severity_level") }}'
+          '{{ doc("gtfs_alert__severity_level") }}'
       - *_header_message_age
   - name: fct_service_alerts_messages_unnested
     description: |
@@ -767,34 +871,34 @@ models:
       - *rt_header_version
       - *rt_id
       - name: url_text
-        description: '{{ doc("rt_translation__text") }}'
+        description: '{{ doc("gtfs_translation__text") }}'
       - name: url_language
-        description: '{{ doc("rt_translation__language") }}'
+        description: '{{ doc("gtfs_translation__language") }}'
       - name: header_text_text
-        description: '{{ doc("rt_alert__header_text") }}'
+        description: '{{ doc("gtfs_alert__header_text") }}'
       - name: header_text_language
-        description: '{{ doc("rt_translation__language") }}'
+        description: '{{ doc("gtfs_translation__language") }}'
       - name: description_text_text
-        description: '{{ doc("rt_alert__description_text") }}'
+        description: '{{ doc("gtfs_alert__description_text") }}'
       - name: description_text_language
-        description: '{{ doc("rt_translation__language") }}'
+        description: '{{ doc("gtfs_translation__language") }}'
       - name: tts_header_text_text
-        description: '{{ doc("rt_alert__tts_header_text") }}'
+        description: '{{ doc("gtfs_alert__tts_header_text") }}'
       - name: tts_header_text_language
-        description: '{{ doc("rt_translation__language") }}'
+        description: '{{ doc("gtfs_translation__language") }}'
       - name: tts_description_text_text
-        description: '{{ doc("rt_alert__tts_description_text") }}'
+        description: '{{ doc("gtfs_alert__tts_description_text") }}'
       - name: tts_description_text_language
-        description: '{{ doc("rt_translation__language") }}'
+        description: '{{ doc("gtfs_translation__language") }}'
       - name: agency_id
-        description: '{{ doc("rt_entity_selector__agency_id") }}'
+        description: '{{ doc("gtfs_entity_selector__agency_id") }}'
       - name: route_id
-        description: '{{ doc("rt_entity_selector__route_id") }}'
+        description: '{{ doc("gtfs_entity_selector__route_id") }}'
       - name: route_type
-        description: '{{ doc("rt_entity_selector__route_type") }}'
+        description: '{{ doc("gtfs_entity_selector__route_type") }}'
       - name: direction_id
         description: |
-          '{{ doc("rt_entity_selector__direction_id") }}'
+          '{{ doc("gtfs_entity_selector__direction_id") }}'
       - *rt_trip_id
       - *rt_trip_route_id
       - *rt_trip_direction_id
@@ -802,11 +906,11 @@ models:
       - *rt_trip_start_date
       - *rt_trip_schedule_relationship
       - name: stop_id
-        description: '{{ doc("rt_entity_selector__stop_id") }}'
+        description: '{{ doc("gtfs_entity_selector__stop_id") }}'
       - name: active_period_start
-        description: '{{ doc("rt_time_range__start") }}'
+        description: '{{ doc("gtfs_time_range__start") }}'
       - name: active_period_end
-        description: '{{ doc("rt_time_range__end") }}'
+        description: '{{ doc("gtfs_time_range__end") }}'
       - name: active_period_start_ts
         description: |
           `active_period_start` converted to a TIMESTAMP data type.
@@ -869,113 +973,24 @@ models:
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_date
-      - &min_extract_ts
-        name: min_extract_ts
-        description: &rt_min_extract_ts_desc |
-          Timestamp of the first extract (i.e. the time at which
-          we downloaded this feed extract) of the entity being summarized.
-          For RT, our extracts are pinned to 20 second intervals,
-          i.e. :00, :20, :40.
-      - &max_extract_ts
-        name: max_extract_ts
-        description: &max_extract_ts_desc |
-          Timestamp of the last extract (i.e. the time at which
-          we downloaded this feed extract) of the entity being summarized.
-          For RT, our extracts are pinned to 20 second intervals,
-          i.e. :00, :20, :40.
-      - &extract_duration_minutes
-        name: extract_duration_minutes
-        description: |
-          The difference between `max_extract_ts` and `min_extract_ts` in
-          minutes, representing the duration of time for which this entity was
-          present in message responses we received from the agency.
-          Note that the entity may not have been present in every message
-          between the minimum and maximum timestamps, and therefore may not have
-          been present continuously for the duration listed here.
-      - &header_duration_minutes
-        name: header_duration_minutes
-        description: |
-          The difference between `max_header_timestamp` and
-          `min_header_timestamp` in minutes, representing the duration of time
-          for which this entity was present in the messages produced by the
-          agency.
-          Note that the entity may not have been present in every message
-          between the minimum and maximum timestamps, and therefore may not have
-          been present continuously for the duration listed here.
-      - &min_extract_ts_local_tz
-        name: min_extract_datetime_local_tz
-        description: |
-          `min_extract_ts` converted to a DATETIME type in
-          `schedule_feed_timezone`.
-      - &max_extract_ts_local_tz
-        name: max_extract_datetime_local_tz
-        description: |
-          `max_extract_ts` converted to a DATETIME type in
-          `schedule_feed_timezone`.
-      - &min_extract_ts_pacific
-        name: min_extract_datetime_pacific
-        description: |
-          `min_extract_ts` converted to a DATETIME type in the
-          "America/Los_Angeles" time zone.
-      - &max_extract_ts_pacific
-        name: max_extract_datetime_pacific
-        description: |
-          `max_extract_ts` converted to a DATETIME type in the
-          "America/Los_Angeles" time zone.
-      - &min_header_timestamp
-        name: min_header_timestamp
-        description: |
-          Earliest header timestamp of a message referencing this entity.
-      - &max_header_timestamp
-        name: max_header_timestamp
-        description: |
-          Latest header timestamp of a message referencing this entity.
-      - &min_header_local_tz
-        name: min_header_datetime_local_tz
-        description: |
-          `min_header_timestamp` converted to a DATETIME type in
-          `schedule_feed_timezone`.
-      - &max_header_local_tz
-        name: max_header_datetime_local_tz
-        description: |
-          `max_header_timestamp` converted to a DATETIME type in
-          `schedule_feed_timezone`.
-      - &min_header_pacific
-        name: min_header_datetime_pacific
-        description: |
-          `min_header_timestamp` converted to a DATETIME type in the
-          "America/Los_Angeles" time zone.
-      - &max_header_pacific
-        name: max_header_datetime_pacific
-        description: |
-          `max_header_timestamp` converted to a DATETIME type in the
-          "America/Los_Angeles" time zone.
-      - &num_distinct_header_timestamps
-        name: num_distinct_header_timestamps
-        description: |
-          Distinct count of header timestamps for messages being summarized
-          (https://gtfs.org/realtime/reference/#message-feedheader).
-      - &num_distinct_message_keys
-        name: num_distinct_message_keys
-        description: |
-          Distinct count of message keys being summarized here (message keys are
-          the synthetic keys we generate for an individual RT message response.)
-          This is the count of distinct messages in which this entity appeared.
-          If you divide this value by `extract_duration_minutes`, you would get
-          a count of how many messages per minute this entity was present for,
-          which can help give a sense for how continuously this trip was updated.
-          This number should be equal to `num_distinct_extract_ts`.
-      - &num_distinct_extract_ts
-        name: num_distinct_extract_ts
-        description: |
-          Distinct count of `_extract_ts` values for messages being summarized
-          here (`_extract_ts` represents the instant at which we attempted to
-          scrape data for this feed.)
-          This is the count of distinct messages in which this entity appeared.
-          If you divide this value by `extract_duration_minutes`, you would
-          get a count of how many messages per minute this entity was present for,
-          which can help give a sense for how continuously this entity was updated.
-          This number should be equal to `num_distinct_message_keys`.
+      - *min_extract_ts
+      - *max_extract_ts
+      - *extract_duration_minutes
+      - *header_duration_minutes
+      - *min_extract_ts_local_tz
+      - *max_extract_ts_local_tz
+      - *min_extract_ts_pacific
+      - *max_extract_ts_pacific
+      - *min_header_timestamp
+      - *max_header_timestamp
+      - *min_header_local_tz
+      - *max_header_local_tz
+      - *min_header_pacific
+      - *max_header_pacific
+      - *num_distinct_header_timestamps
+      - *num_distinct_message_keys
+      - *num_distinct_extract_ts
+
   - name: fct_daily_scheduled_shapes
     description: |
       Each row is a summary of trip activity by shape for a given feed on a
@@ -2293,8 +2308,8 @@ models:
           scheduled to occur.
       - name: day_type
         description: |
-          Actual calendar day type (Pacific Time dates) in which this service was scheduled to
-          occur (Monday, Tuesday, etc).
+          Actual calendar day type (Pacific Time dates) in which this service was
+          scheduled to occur (Monday, Tuesday, etc).
           This means that overnight service is associated with the calendar date
           on which it was scheduled, even if it was associated with the prior
           `service_date` by the agency.
