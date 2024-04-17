@@ -23,15 +23,15 @@ x-common-fields:
       '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
     tests:
       - not_null:
-        config:
-          error_if: ">10000"
+          config:
+            error_if: ">10000"
       - relationships:
           to: ref('dim_gtfs_datasets')
           field: key
           config:
-          # there are a dozen rows of SMART transit which was deleted from Airtable
-          # this will work without exception once the Airtable dim is historical;
-          # this threshold may need to increase if the backfill occurs prior to that
+            # there are a dozen rows of SMART transit which was deleted from Airtable
+            # this will work without exception once the Airtable dim is historical;
+            # this threshold may need to increase if the backfill occurs prior to that
             error_if: ">20"
   - &feed_timezone_no_tests
     name: feed_timezone
