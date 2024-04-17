@@ -59,8 +59,7 @@ x-common-fields:
       - not_null
   - &feed_key
     name: feed_key
-    description: |
-      Foreign key to the `dim_schedule_feeds` table.
+    description: '{{ doc("gtfs_schedule_feed_key") }}'
     tests:
       - not_null
       - relationships:

@@ -1,4 +1,4 @@
-version: 3
+version: 2
 
 x-common-fields:
   - &base64_url
@@ -19,7 +19,8 @@ x-common-fields:
           field: key
   - &gtfs_dataset_key_errorif
     name: gtfs_dataset_key
-    description: '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
+    description: &gtfs_dataset_key_desc |
+      '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
     tests:
       - not_null:
         config:
@@ -65,23 +66,10 @@ x-common-fields:
       further improve performance.
   - &gtfs_rt_extract_ts
     name: _extract_ts
-    description: |
-        Timestamp at which this message was scraped. More specifically, this
-        identifies the individual "tick" for which this data was collected.
-        These value are pinned to `:00`, `:20`, `:40` second values (to ensure
-        consistency), but there can be some slippage between the `_extract_ts`
-        and the time that the data was actually requested.
+    description: '{{ doc("column_rt_extract_ts") }}'
   - &gtfs_rt_config_extract_ts
     name: _config_extract_ts
-    description: |
-      The timestamp at which the GTFS data config for this download was extracted.
-      This will correspond to the `ts` value for the associated Airtable data
-      extract.
-      Note that there may not be a corresponding value in `dim_gtfs_datasets` with
-      this value in `_valid_from`, because this value updates every time that the
-      Airtable data extract runs, whereas `dim_gtfs_datasets` has versioning applied
-      and `_valid_from` only updates when an attribute within the record actually
-      changes.
+    description: '{{ doc("column_rt_config_extract_ts") }}'
   - &gtfs_rt_name
     name: gtfs_dataset_name
     description: |
@@ -111,11 +99,6 @@ x-common-fields:
       and extract the date.
       * Finally (and this generally should not happen, since `header_timestamp`
       should be populated), fall back to `_extract_ts` converted to `schedule_feed_timezone` and extract the date.
-  - &rt_schedule_base64_url
-    name: schedule_base64_url
-    description: |
-      URL-safe base64-encoded URL of the schedule feed used to validate
-      this RT feed.
   - &gtfs_rt_schedule_dataset_name
     name: schedule_name
     description: |
@@ -190,21 +173,13 @@ x-common-fields:
   - &rt_trip_start_date
     name: trip_start_date
     description: &rt_trip_start_date_desc |
-      '{{ doc("rt_vehicle_descriptor__wheelchair_accessible") }}'
+      '{{ doc("rt_trip_descriptor__start_date") }}'
   - &rt_trip_schedule_relationship
     name: trip_schedule_relationship
-    description: '{{ doc("rt_trip_descriptor__start_date") }}'
+    description: '{{ doc("rt_trip_descriptor__schedule_relationship") }}'
   - &_header_message_age
     name: _header_message_age
-    description: |
-      Difference between `_extract_ts` (time at which we scraped the message) and
-      `header_timestamp` (timestamp of overall message from producer; see
-      https://gtfs.org/realtime/reference/#message-feedheader).
-      Because of delay in the request process, the actual scrape request may occur
-      up to a few seconds after `_extract_ts`, and it may take time for the producer
-      to respond to the request, so this field should only be interpreted as accurate
-      within 3-4 seconds (do not try to do extremely precise measurements below that
-      level.)
+    description: '{{ doc("column_header_message_age") }}'
   - &gtfs_dataset_key
     name: gtfs_dataset_key
     description: *gtfs_dataset_key_desc
@@ -334,13 +309,9 @@ models:
       - *rt_header_version
       - *rt_id
       - name: trip_update_timestamp
-        description: |
-          `timestamp` provided in this trip update message.
-          See: https://gtfs.org/realtime/reference/#message-tripupdate.
+        description: '{{ doc("rt_trip_update__timestamp") }}'
       - name: trip_update_delay
-        description: |
-          `delay` provided in this trip update message.
-          See: https://gtfs.org/realtime/reference/#message-tripupdate.
+        description: '{{ doc("rt_trip_update__delay") }}'
       - *rt_vehicle_id
       - *rt_vehicle_label
       - *rt_vehicle_license_plate
@@ -356,12 +327,10 @@ models:
           See https://gtfs.org/realtime/reference/#message-stoptimeupdate.
       - *_header_message_age
       - name: _trip_update_message_age
-        description: |
-          Difference between `_extract_ts` (time at which we scraped the message) and `trip_update_timestamp` (timestamp of individual trip update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
-          Because of delay in the request process, the actual scrape request may occur up to a few seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise measurements below that level.)
+        description: '{{ doc("column_trip_update_message_age") }}'
       - name: _trip_update_message_age_vs_header
         description: |
-          Difference between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader) and `trip_update_timestamp` (timestamp of individual trip_update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
+          '{{ doc("column_trip_update_message_age_vs_header") }}'
 
   - name: fct_stop_time_updates
     description: |
@@ -381,6 +350,7 @@ models:
       - *gtfs_rt_schedule_feed_key
       - *gtfs_rt_schedule_feed_timezone
       - *_header_message_age
+
   - name: fct_vehicle_locations
     description: |
       De-duped vehicle positions, removing redundant/duplicated positions
@@ -423,13 +393,10 @@ models:
       - *gtfs_rt_schedule_feed_timezone
       - *_header_message_age
       - name: _vehicle_message_age
-        description: |
-          Difference in seconds between `_extract_ts` (time at which we scraped the message) and `vehicle_timestamp` (timestamp of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
-          Because of delay in the request process, the actual scrape request may occur up to a few seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise measurements below that level.)
+        description: '{{ doc("column_vehicle_message_age") }}'
       - name: _vehicle_message_age_vs_header
         description: |
-          Difference in seconds between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
-          and `vehicle_timestamp` (timestamp of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
+          '{{ doc("column_vehicle_message_age_vs_header") }}'
       - name: gtfs_dataset_name
         description: |
           String name of the GTFS dataset of which this message is a part.
@@ -440,53 +407,40 @@ models:
       - *rt_id
       - name: current_stop_sequence
         description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+          '{{ doc("rt_vehicle_position__current_stop_sequence") }}'
       - name: stop_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+        description: '{{ doc("rt_vehicle_position__stop_id") }}'
       - name: current_status
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+        description: '{{ doc("rt_vehicle_position__current_status") }}'
       - name: vehicle_timestamp
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
-          Field has been converted to TIMESTAMP type for convenience.
+        description: '{{ doc("rt_vehicle_position__timestamp") }}'
       - name: congestion_level
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+        description: '{{ doc("rt_vehicle_position__congestion_level") }}'
       - name: occupancy_status
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+        description: '{{ doc("rt_vehicle_position__occupancy_status") }}'
       - name: occupancy_percentage
         description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+          '{{ doc("rt_vehicle_position__occupancy_percentage") }}'
       - *rt_vehicle_id
       - *rt_vehicle_label
       - *rt_vehicle_license_plate
       - *rt_vehicle_wheelchair_accessible
       - *rt_trip_id
       - *rt_trip_route_id
-      - name: trip_direction_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - *rt_trip_direction_id
       - *rt_trip_start_time
       - *rt_trip_start_date
       - *rt_trip_schedule_relationship
       - name: position_latitude
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-position.
+        description: '{{ doc("rt_position__latitude") }}'
       - name: position_longitude
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-position.
+        description: '{{ doc("rt_position__longitude") }}'
       - name: position_bearing
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-position.
+        description: '{{ doc("rt_position__bearing") }}'
       - name: position_odometer
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-position.
+        description: '{{ doc("rt_position__odometer") }}'
       - name: position_speed
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-position.
+        description: '{{ doc("rt_position__speed") }}'
 
   - name: fct_daily_rt_feed_files
     description: |
@@ -501,8 +455,7 @@ models:
         - not_null
     - &feed_type
       name: feed_type
-      description: |
-        One of `service_alerts`, `vehicle_positions`, and `trip_updates`.
+      description: '{{ doc("rt_feed_type") }}'
     - name: parse_success_file_count
       description: Count of files successfully parsed. Target is 4,320 (one file every 20 seconds.)
       tests:
@@ -715,41 +668,35 @@ models:
       - *rt_header_version
       - *rt_id
       - name: active_period
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("rt_alert__active_period") }}'
       - name: informed_entity
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("rt_alert__informed_entity") }}'
       - name: cause
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("rt_alert__cause") }}'
       - name: effect
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("rt_alert__effect") }}'
       - name: url
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("rt_alert__url") }}'
       - name: header_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("rt_alert__header_text") }}'
       - name: description_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("rt_alert__description_text") }}'
       - name: tts_header_text
         description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+          '{{ doc("rt_alert__tts_header_text") }}'
       - name: tts_description_text
         description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+          '{{ doc("rt_alert__tts_description_text") }}'
       - name: severity_level
         description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+          '{{ doc("rt_alert__severity_level") }}'
       - *_header_message_age
   - name: fct_service_alerts_messages_unnested
     description: |
-      This table contains GTFS RT service alerts messages with all elements (informed entities,
-      active periods, and translations) unnested, so each row is a message / entity / active period /
-      translation combination. It has been filtered so that only one translation (the one with highest likelihood
+      This table contains GTFS RT service alerts messages with all elements
+      (informed entities, active periods, and translations) unnested, so each row
+      is a message / entity / active period / translation combination. It has been
+      filtered so that only one translation (the one with highest likelihood
       of being in English) appears per message.
       Therefore one row here should correspond to one actual "alert" (counting alerts
       that apply to different entities or different time periods as distinct.)
@@ -796,47 +743,34 @@ models:
       - *rt_header_version
       - *rt_id
       - name: url_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("rt_translation__text") }}'
       - name: url_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("rt_translation__language") }}'
       - name: header_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("rt_alert__header_text") }}'
       - name: header_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("rt_translation__language") }}'
       - name: description_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("rt_alert__description_text") }}'
       - name: description_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("rt_translation__language") }}'
       - name: tts_header_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("rt_alert__tts_header_text") }}'
       - name: tts_header_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("rt_translation__language") }}'
       - name: tts_description_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("rt_alert__tts_description_text") }}'
       - name: tts_description_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("rt_translation__language") }}'
       - name: agency_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-entityselector.
+        description: '{{ doc("rt_entity_selector__agency_id") }}'
       - name: route_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-entityselector.
+        description: '{{ doc("rt_entity_selector__route_id") }}'
       - name: route_type
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-entityselector.
+        description: '{{ doc("rt_entity_selector__route_type") }}'
       - name: direction_id
         description: |
-          See: https://gtfs.org/realtime/reference/#message-entityselector.
+          '{{ doc("rt_entity_selector__direction_id") }}'
       - *rt_trip_id
       - *rt_trip_route_id
       - *rt_trip_direction_id
@@ -844,14 +778,11 @@ models:
       - *rt_trip_start_date
       - *rt_trip_schedule_relationship
       - name: stop_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-entityselector.
+        description: '{{ doc("rt_entity_selector__stop_id") }}'
       - name: active_period_start
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-timerange.
+        description: '{{ doc("rt_time_range__start") }}'
       - name: active_period_end
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-timerange.
+        description: '{{ doc("rt_time_range__end") }}'
       - name: active_period_start_ts
         description: |
           `active_period_start` converted to a TIMESTAMP data type.
