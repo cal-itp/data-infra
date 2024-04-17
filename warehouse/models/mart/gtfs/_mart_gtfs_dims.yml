@@ -486,31 +486,45 @@ models:
       - *_feed_valid_from
       - *feed_timezone_no_tests
       - name: start_time_interval
-        description: &time_interval_desc |
+        description: |
           This is a calculated field that does not appear directly in GTFS.
-          It converts `start_time` or `end_time` to a BigQuery INTERVAL type,
+          It converts `start_time` to a BigQuery INTERVAL type,
           which allows us to treat the field as a duration after twelve hours
           before noon (usually midnight) and thus handle times past the following
           midnight (like `25:40:00`).
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS
           defines its "Time" type.
       - name: end_time_interval
-        description: *time_interval_desc
+        description: |
+          This is a calculated field that does not appear directly in GTFS.
+          It converts `end_time` to a BigQuery INTERVAL type,
+          which allows us to treat the field as a duration after twelve hours
+          before noon (usually midnight) and thus handle times past the following
+          midnight (like `25:40:00`).
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS
+          defines its "Time" type.
       - name: start_time_sec
-        description: &time_sec_desc |
+        description: |
           This is a calculated field that does not come from GTFS - it is not
           a timestamp and can't be treated as such.
-          Represents `start_time` or `end_time` as a total number of seconds
-          after twelve hoursbefore noon (usually midnight) of the first day of
+          Represents `start_time` as a total number of seconds
+          after twelve hours before noon (usually midnight) of the first day of
           the given trip.
           For example, `start_time = 21:30:45` would lead to
           `start_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
-          Or, `end_time = 21:30:45` would lead to
-          `end_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps
           that wrap past midnight like `25:40:00`, which are allowed in GTFS.
       - name: end_time_sec
-        description: *time_sec_desc
+        description: |
+          This is a calculated field that does not come from GTFS - it is not
+          a timestamp and can't be treated as such.
+          Represents `end_time` as a total number of seconds
+          after twelve hours before noon (usually midnight) of the first day of
+          the given trip.
+          For example, `end_time = 21:30:45` would lead to
+          `end_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps
+          that wrap past midnight like `25:40:00`, which are allowed in GTFS.
 
   - name: dim_levels
     description: |

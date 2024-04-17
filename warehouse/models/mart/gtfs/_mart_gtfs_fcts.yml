@@ -1,6 +1,9 @@
 version: 2
 
 x-common-fields:
+  # Roughly alphabetical + category (feed_*, rt_* original defs, schedule to RT)
+  # datetime column wrangling (min/max/local tz, pacific),
+  # summary stats (num_distinct_*)
   - &base64_url
     name: base64_url
     description: '{{ doc("column_base64_url") }}'
@@ -35,7 +38,6 @@ x-common-fields:
             # historical; this threshold may need to increase if the backfill
             # occurs prior to that
             error_if: ">20"
-
   - &gtfs_rt_dataset_key
     name: gtfs_dataset_key
     description: |
@@ -58,7 +60,6 @@ x-common-fields:
     name: gtfs_dataset_name
     description: |
       Name from the associated GTFS dataset record.
-
   - &gtfs_dataset_key
     name: gtfs_dataset_key
     description: *gtfs_dataset_key_desc
@@ -76,9 +77,6 @@ x-common-fields:
             # historical; this threshold may need to increase if the backfill
             # occurs prior to that
             error_if: ">20"
-
-
-    ## shared schedule to RT
   - &gtfs_rt_schedule_dataset_key
     name: schedule_gtfs_dataset_key
     description: '{{ doc("column_rt_schedule_dataset_key") }}'
@@ -106,8 +104,50 @@ x-common-fields:
   - &rt_schedule_base64_url
     name: schedule_base64_url
     description: '{{ doc("column_rt_schedule_base64_url") }}'
+  - &trip_instance_key
+    name: trip_instance_key
+    description: |
+      A trip level identifier that uniquely identifies an individual trip
+      across feed types (schedule, trip updates, vehicle positions, service
+      alerts).
 
-
+      Composite of:
+      - base64 URL of associated schedule feed
+      - service date
+      - trip_id
+      - iteration number, which attempts to normalize trip start times
+    tests:
+      - not_null
+      - unique_proportion:
+          at_least: 0.9999
+  - &rt_trip_summary_key
+    name: key
+    description: |
+      Composite of calculated service date, URL, trip ID, and trip start time.
+    tests:
+      - not_null
+      - unique_proportion:
+          at_least: 0.9999
+  - &rt_iteration_num
+    name: iteration_num
+    description: |
+      0-based ordered count of `trip_start_time` values for this `trip_id`
+      on this `service_date`. Ex.: If a given `trip_id` appears with
+      `trip_start_time` values of "12:05:10" and "14:40:00", the first will
+      have `iteration_num` of 0 and the second will have `iteration_num`
+      of 1.
+      This helps normalize the following cases:
+      - For frequency-based trips: `trip_start_time` in RT data may not
+      align exactly with the start time of any individual iteration in the
+      schedule data (especially if `frequencies.exact_times` = 1 in
+      schedule), so this field normalizes
+      - Across RT feeds: We have seen cases where, for example, the trip
+      updates feed provides `trip_start_time` (even for non-frequency-based
+      trips) but the vehicle positions feed does not (the field is null).
+      We can calculate a `iteration_num` of 0 for both feeds to account for
+      this difference, because it is likely a byproduct of technical
+      implementation rather than a true indication that the two represent
+      different trips.
   - &gtfs_rt_dt
     name: dt
     description: |
@@ -125,8 +165,6 @@ x-common-fields:
   - &gtfs_rt_config_extract_ts
     name: _config_extract_ts
     description: '{{ doc("column_config_extract_ts") }}'
-
-
   - &rt_service_date
     name: service_date
     description: |
@@ -197,7 +235,6 @@ x-common-fields:
   - &rt_trip_schedule_relationship
     name: trip_schedule_relationship
     description: '{{ doc("gtfs_trip_descriptor__schedule_relationship") }}'
-
   - &min_extract_ts
     name: min_extract_ts
     description: |
@@ -241,7 +278,6 @@ x-common-fields:
     description: |
       `max_extract_ts` converted to a DATETIME type in the
       "America/Los_Angeles" time zone.
-
   - &_header_message_age
     name: _header_message_age
     description: '{{ doc("column_header_message_age") }}'
@@ -283,7 +319,6 @@ x-common-fields:
     description: |
       `max_header_timestamp` converted to a DATETIME type in the
       "America/Los_Angeles" time zone.
-
   - &num_distinct_extract_ts
     name: num_distinct_extract_ts
     description: |
@@ -310,10 +345,6 @@ x-common-fields:
       a count of how many messages per minute this entity was present for,
       which can help give a sense for how continuously this trip was updated.
       This number should be equal to `num_distinct_extract_ts`.
-
-
-
-
 
   - &service_date_for_summaries
     name: service_date
@@ -507,7 +538,11 @@ models:
       - *rt_service_date
       - *gtfs_rt_extract_ts
       - *gtfs_rt_config_extract_ts
-      - *gtfs_rt_name
+      - <<: *gtfs_rt_name
+        description: |
+          String name of the GTFS dataset of which this message is a part.
+          This field is provided for human readability and should not be
+          used as a join key.
       - *gtfs_rt_schedule_dataset_key
       - *gtfs_rt_schedule_dataset_name
       - *gtfs_rt_schedule_feed_key
@@ -518,11 +553,6 @@ models:
       - name: _vehicle_message_age_vs_header
         description: |
           '{{ doc("column_vehicle_message_age_vs_header") }}'
-      - name: gtfs_dataset_name
-        description: |
-          String name of the GTFS dataset of which this message is a part.
-          This field is provided for human readability and should not be used
-          as a join key.
       - *rt_header_timestamp
       - *rt_header_incrementality
       - *rt_header_version
@@ -1219,49 +1249,11 @@ models:
 
     columns:
       # keys and identifiers
-      - &trip_instance_key
-        name: trip_instance_key
-        description: |
-          A trip level identifier that uniquely identifies an individual trip
-          across feed types (schedule, trip updates, vehicle positions, service
-          alerts).
-          Composite of:
-            - base64 URL of associated schedule feed
-            - service date
-            - trip_id
-            - iteration number, which attempts to normalize trip start times
-        tests:
-          - not_null
-          - unique_proportion:
-              at_least: 0.9999
+      - *trip_instance_key
       - *rt_service_date
-      - &rt_trip_schedule_base64_url
-        name: schedule_base64_url
-        description: |
-          URL-safe base64-encoded URL of the schedule feed associated with
-          the RT feed(s) in which this trip appeared. This is the schedule
-          feed used to validate the associated RT feed(s).
+      - *rt_schedule_base64_url
       - *rt_trip_id
-      - &rt_iteration_num
-        name: iteration_num
-        description: |
-          0-based ordered count of `trip_start_time` values for this `trip_id`
-          on this `service_date`. Ex.: If a given `trip_id` appears with
-          `trip_start_time` values of "12:05:10" and "14:40:00", the first will
-          have `iteration_num` of 0 and the second will have `iteration_num`
-          of 1.
-          This helps normalize the following cases:
-          - For frequency-based trips: `trip_start_time` in RT data may not
-          align exactly with the start time of any individual iteration in the
-          schedule data (especially if `frequencies.exact_times` = 1 in
-          schedule), so this field normalizes
-          - Across RT feeds: We have seen cases where, for example, the trip
-          updates feed provides `trip_start_time` (even for non-frequency-based
-          trips) but the vehicle positions feed does not (the field is null).
-          We can calculate a `iteration_num` of 0 for both feeds to account for
-          this difference, because it is likely a byproduct of technical
-          implementation rather than a true indication that the two represent
-          different trips.
+      - *rt_iteration_num
       - name: tu_name
         description: |
           Name from the trip updates GTFS dataset record associated
@@ -1951,18 +1943,11 @@ models:
           expression: "NOT (EXTRACT(HOUR FROM trip_start_time_interval) > 24 AND trip_start_date IS NULL)"
           severity: warn
     columns:
-      - &rt_trip_summary_key
-        name: key
-        description: |
-          Composite of calculated service date, URL, trip ID, and trip start time.
-        tests:
-          - not_null
-          - unique_proportion:
-              at_least: 0.9999
+      - *rt_trip_summary_key
       - *trip_instance_key
       - *rt_service_date
       - *base64_url
-      - *rt_trip_schedule_base64_url
+      - *rt_schedule_base64_url
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_time_interval
@@ -2146,7 +2131,7 @@ models:
       - &rt_trip_num_distinct_updates
         name: num_distinct_updates
         description: *rt_trip_num_distinct_updates_desc
-      - *rt_trip_schedule_base64_url
+      - *rt_schedule_base64_url
 
   - name: fct_vehicle_positions_trip_summaries
     description: |
@@ -2172,7 +2157,7 @@ models:
       - *gtfs_rt_schedule_feed_timezone
       - *rt_service_date
       - *base64_url
-      - *rt_trip_schedule_base64_url
+      - *rt_schedule_base64_url
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_date

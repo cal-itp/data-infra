@@ -1,5 +1,9 @@
 Docs related to traversing the GTFS quartets (schedule columns used to populate, interpret, or validate RT tables)
 
+{% docs gtfs_dataset_name %}
+Name from the associated GTFS dataset record.  
+{% enddocs %}
+
 {% docs column_rt_schedule_dataset_key %}
 The foreign key to `dim_gtfs_datasets` for the GTFS schedule dataset
 record associated with this GTFS RT dataset for validation purposes.
