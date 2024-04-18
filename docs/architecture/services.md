@@ -89,7 +89,7 @@ A subset of our services and sites send error information to the Cal-ITP Sentry 
 
 ### Cost and performance monitoring
 
-In addition to standard Google Cloud tooling for monitoring specific services like Kubernetes Enginer, Composer, and BigQuery, we maintain a couple dashboards that can make it easier to glean at-at-glance insights and report topline information to stakeholders who don't have the time, access, or knowledge to dig into GCP monitoring directly.
+In addition to standard Google Cloud tooling for monitoring specific services like Kubernetes Engine, Composer, and BigQuery, we maintain a couple dashboards that can make it easier to glean at-at-glance insights and report topline information to stakeholders who don't have the time, access, or knowledge to dig into GCP monitoring directly.
 
 The [BigQuery overview dashboard](https://dashboards.calitp.org/dashboard/76-bigquery-overview-dashboard?principal_email_substring=&time_window=past7days) gives a detailed view of daily and monthly BigQuery costs, and helps identify tables and dbt models that are producing greater build costs, reference costs, and query costs than others.
 
