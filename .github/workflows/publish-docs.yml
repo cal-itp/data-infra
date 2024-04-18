@@ -28,7 +28,7 @@ jobs:
     - uses: google-github-actions/setup-gcloud@v2
 
     - name: Build jupyter book
-      run: jb build docs --warningiserror --keep-going -v # set doc to fail on any sphinx warning
+      run: jb build docs --warningiserror --keep-going -vvv # set doc to fail on any sphinx warning
     - uses: actions/upload-artifact@v2
       if: always()
       with:
