@@ -53,6 +53,10 @@ This documentation outlines two ways to think of this system and its components 
 - [Services](services) that are deployed and maintained (ex. Metabase, JupyterHub, etc.)
 - [Data pipelines](data) to ingest specific types of data (ex. GTFS Schedule, Payments, etc.)
 
+Outside of this documentation, several READMEs cover initial development environment setup for new users. The [/warehouse README](https://github.com/cal-itp/data-infra/blob/main/warehouse) and the [/airflow README](https://github.com/cal-itp/data-infra/blob/main/airflow) in the Cal-ITP data-infra GitHub repository are both essential starting points for getting up and running as a contributor to the Cal-ITP code base. The [repository-level README](https://github.com/cal-itp/data-infra) covers some important configuration steps and social practices for contributors.
+
+NOTE: sections of the /warehouse README discussing installation and use of JupyterHub are likely to be less relevant to infrastructure, pipeline, package, image, and service development than they are for analysts who work primarily with the warehouse - most contributors performing "development" work on Cal-ITP tools and infrastructure use a locally installed IDE like VS Code rather than relying on the hosted JupyterHub environemnt for that work, since that environment is tailored to analysis tasks and is somewhat limited for development and testing tasks. Some documentation on this site and in the repository has a shared audience of developers and analysts, and as such you can expect that documentation to make occasional reference to JupyterHub even if it's not a core requirement for the type of work being discussed.
+
 ## Environments
 
 Across both data and services, we often have a "production" (live, end-user-facing) environment and some type of testing, staging, or development environment.
