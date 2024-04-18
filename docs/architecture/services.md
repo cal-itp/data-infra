@@ -4,7 +4,7 @@ Many services and websites are deployed as part of the Cal-ITP ecosystem, mainta
 
 With the exception of Airflow, which is [managed via Google Cloud Composer](https://github.com/cal-itp/data-infra/tree/main/airflow#upgrading-airflow-itself), changes to the services discussed here are deployed via CI/CD processes that run automatically when new code is merged to the relevant Cal-ITP repository. These CI/CD processes are not all identical - different services have different testing steps that run when a pull request is opened against the services's code. Some services undergo a full test deployment when a PR is opened, some report the changes that a subject [Helm chart](https://helm.sh/docs/topics/charts/) will undergo upon merge, and some just perform basic linting.
 
-READMEs describing the individual testing and deployment process for each service are linked in the below table, and [the CI README](https://github.com/cal-itp/data-infra/tree/main/ci/README.md) provides some more general context for Kubernetes-based deployments. Many services are [monitored via Sentry](#monitoring-running-services).
+READMEs describing the individual testing and deployment process for each service are linked in the below table, and [the CI README](https://github.com/cal-itp/data-infra/tree/main/ci/README.md) provides some more general context for Kubernetes-based deployments. Many services are [monitored via Sentry](#error-monitoring-through-sentry).
 
 | Name              | Function                                                                                                                                                                                 | URL                                                                                       | Source code and README (if present)                                                                 | K8s namespace      | Development/test environment?    | Service Type                   |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------ | -------------------------------- | ------------------------------ |
@@ -83,4 +83,14 @@ class repos_label,kubernetes_label,netlify_label,github_pages_label group_labels
 
 ## Monitoring running services
 
+### Error monitoring through Sentry
+
 A subset of our services and sites send error information to the Cal-ITP Sentry instance, which groups errors based on criteria we define in order to identify and track new errors, regressions, and intermittent service issues. A runbook is available [here](https://github.com/cal-itp/data-infra/blob/main/runbooks/workflow/sentry-triage.md) which discusses daily triage of events logged in Sentry, and general documentation for self-hosted instances of Sentry like ours is available [here](https://develop.sentry.dev/self-hosted/).
+
+### Cost and performance monitoring
+
+In addition to standard Google Cloud tooling for monitoring specific services like Kubernetes Enginer, Composer, and BigQuery, we maintain a couple dashboards that can make it easier to glean at-at-glance insights and report topline information to stakeholders who don't have the time, access, or knowledge to dig into GCP monitoring directly.
+
+The [BigQuery overview dashboard](https://dashboards.calitp.org/dashboard/76-bigquery-overview-dashboard?principal_email_substring=&time_window=past7days) gives a detailed view of daily and monthly BigQuery costs, and helps identify tables and dbt models that are producing greater build costs, reference costs, and query costs than others.
+
+In a prior staffing configuration, a person was assigned to fill the [Cal-ITP System Performance and Outcomes Monitoring dashboard](https://dashboards.calitp.org/dashboard/138-cal-itp-system-performance-and-outcomes-monitoring?single_date=2023-06-22) and use it to populate the metrics in the spreadsheet linked within the dashboard each Friday. Checks were recommended to occur on Fridays because for one of the metrics, Google auto-bins 7 day periods to Friday-Thursday. This dashboard and spreadsheet could be re-activated if desired.
