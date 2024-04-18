@@ -1,7 +1,7 @@
 # Sentry triage
 
-> Important Sentry concepts:
->
+Sentry is a fully-featured tool for monitoring appliction errors and other targeted events in deployed services and sites. We self-host an instance of Sentry on Cal-ITP infrastructure, available [here](https://sentry.calitp.org/). To make use of the tool to its fullest extent, please read up on some important Sentry concepts:
+
 > - [Issue states](https://docs.sentry.io/product/issues/states-triage/)
 > - [Fingerprinting and grouping](https://docs.sentry.io/product/sentry-basics/grouping-and-fingerprints/)
 > - [Merging issues](https://docs.sentry.io/product/data-management-settings/event-grouping/merging-issues/)
