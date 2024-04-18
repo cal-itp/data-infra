@@ -4,7 +4,7 @@ Many services and websites are deployed as part of the Cal-ITP ecosystem, mainta
 
 With the exception of Airflow, which is [managed via Google Cloud Composer](https://github.com/cal-itp/data-infra/tree/main/airflow#upgrading-airflow-itself), changes to the services discussed here are deployed via CI/CD processes that run automatically when new code is merged to the relevant Cal-ITP repository. These CI/CD processes are not all identical - different services have different testing steps that run when a pull request is opened against the services's code. Some services undergo a full test deployment when a PR is opened, some report the changes that a subject [Helm chart](https://helm.sh/docs/topics/charts/) will undergo upon merge, and some just perform basic linting.
 
-READMEs describing the individual testing and deployment process for each service are linked in the below table, and [the CI README](https://github.com/cal-itp/data-infra/tree/main/ci/README.md) provides some more general context for Kubernetes-based deployments.
+READMEs describing the individual testing and deployment process for each service are linked in the below table, and [the CI README](https://github.com/cal-itp/data-infra/tree/main/ci/README.md) provides some more general context for Kubernetes-based deployments. Many services are [monitored via Sentry](#monitoring-running-services).
 
 | Name              | Function                                                                                                                                                                                 | URL                                                                                       | Source code and README (if present)                                                                 | K8s namespace      | Development/test environment?    | Service Type                   |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------ | -------------------------------- | ------------------------------ |
@@ -80,3 +80,7 @@ classDef default fill:white, color:black, stroke:black, stroke-width:1px
 classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
 class repos_label,kubernetes_label,netlify_label,github_pages_label group_labelstyle
 ```
+
+## Monitoring running services
+
+A subset of our services and sites send error information to the Cal-ITP Sentry instance, which groups errors based on criteria we define in order to identify and track new errors, regressions, and intermittent service issues. A runbook is available [here](https://github.com/cal-itp/data-infra/blob/main/runbooks/workflow/sentry-triage.md) which discusses daily triage of events logged in Sentry, and general documentation for self-hosted instances of Sentry like ours is available [here](https://develop.sentry.dev/self-hosted/).
