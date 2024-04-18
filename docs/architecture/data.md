@@ -2,12 +2,18 @@
 
 # Data pipelines
 
-In general, our data ingest follows versions of the pattern diagrammed below. For an example PR that ingests a brand new data source from scratch, see [data infra PR #2376](https://github.com/cal-itp/data-infra/pull/2376).
+In general, our data ingest follows customized versions of a consistent pattern:
 
-Some of the key attributes of our approach:
+1. Sync raw data into Google Cloud Storage (GCS), and parse it into a BigQuery-readable form
+2. Create [external tables](https://cloud.google.com/bigquery/docs/external-tables) in BigQuery that read the parsed data from GCS
+3. Model and transform the resulting tables using [dbt](https://docs.getdbt.com/docs/introduction)
 
-- We generate an [`outcomes`](https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-infra/calitp_data_infra/storage.py#L418) file describing whether scrape, parse, or validate operations were successful. This makes operation outcomes visible in BigQuery, so they can be analyzed (for example: how long has the download operation for X feed been failing?)
-- We try to limit the amount of manipulation in Airflow tasks to the bare minimum to make the data legible to BigQuery (for example, replace illegal column names that would break the external tables.) We use gzipped JSONL files in GCS as our default parsed data format.
+That pattern is diagrammed and discussed in more detail below. For an example PR that ingests a brand new data source from scratch, see [data infra PR #2376](https://github.com/cal-itp/data-infra/pull/2376).
+
+Some of the key attributes of our approach, shared across data sources:
+
+- We generate an [`outcomes`](https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-infra/calitp_data_infra/storage.py#L372) file at each ingestion step describing whether scrape, parse, or validate operations were successful. This makes operation outcomes visible in BigQuery, so they can be analyzed (for example: how long has the download operation for X feed been failing?)
+- We try to limit the amount of data manipulation in Airflow tasks to the bare minimum required to make the data legible to BigQuery (for example, replace illegal column names that would break the external tables.) We use gzipped JSONL files in GCS as our default parsed data format. Data transformation is generally handled downstream via dbt, rather than as part of the initial pipeline.
 - [External tables](https://cloud.google.com/bigquery/docs/external-data-sources#external_tables) provide the interface between ingested data and BigQuery modeling/transformations.
 
 While many of the key elements of our architecture are common to most of our data sources, each data source has some unique aspects as well. [This spreadsheet](https://docs.google.com/spreadsheets/d/1bv1K5lZMnq1eCSZRy3sPd3MgbdyghrMl4u8HvjNjWPw/edit#gid=0) details overviews by data source, outlining the specific code/resources that correspond to each step in the general data flow shown below.
@@ -119,40 +125,40 @@ class gcs_label1,gcs_label2,gcs_label3,bq_label1,bq_label2 group_labelstyle
 Adding a new data source based on the architecture described above involves several steps, outlined below.
 
 ```{note}
-If you're bringing in data that is similar to existing data (for example, a new subset of an existing dataset like a new Airtable or Littlepay table), you should follow the existing pattern for that dataset. [This spreadsheet](https://docs.google.com/spreadsheets/d/1bv1K5lZMnq1eCSZRy3sPd3MgbdyghrMl4u8HvjNjWPw/edit#gid=0) gives overviews of some prominent existing data sources, outlining the specific code/resources that correspond to each step in the [general data flow](data-ingest-diagram) for that data source.
+If you're bringing in data that is similar to existing data (for example, a new subset of an existing dataset like a new Airtable or Littlepay table), you should follow the existing patterns for that dataset. [This spreadsheet](https://docs.google.com/spreadsheets/d/1bv1K5lZMnq1eCSZRy3sPd3MgbdyghrMl4u8HvjNjWPw/edit#gid=0) gives overviews of some prominent existing data sources, outlining the specific code/resources that correspond to each step in the [general data flow](data-ingest-diagram) for that data source.
 ```
 
-### Determine upstream source type
+### 0. Decide on an approach
 
-To determine the best storage location for your raw data (especially if it requires manual curation), consult the [Data Collection and Storage Guidance within the Cal-ITP Data Pipeline Google Doc](https://docs.google.com/document/d/1-l6c99UUZ0o3Ln9S_CAt7iitGHvriewWhKDftESE2Dw/edit).
+To determine the most appropriate ingest approach and storage location for your raw data (especially if that data requires manual curation), consult the [Data Collection and Storage Guidance within the Cal-ITP Data Pipeline Google Doc](https://docs.google.com/document/d/1-l6c99UUZ0o3Ln9S_CAt7iitGHvriewWhKDftESE2Dw/edit).
 
 The [Should it be a dbt model?](tool_choice) docs section also has some guidance about when a data pipeline should be created.
 
-### Bring data into Google Cloud Storage
+### 1. Bring data into Google Cloud Storage
 
-We store our raw, un-transformed data in Google Cloud Storage, usually in perpetuity, to ensure that we can always recover the raw data if needed.
+We store our raw, un-transformed data in Google Cloud Storage, usually in perpetuity, to ensure that we can always recover the raw data if needed. This allows us to fully re-process and re-transform historical data as needed rather than relying solely on old dashboards and reports, a powerful tool to create new uses for old data over time.
 
-We store data in [hive-partitioned buckets](https://cloud.google.com/bigquery/docs/hive-partitioned-queries#supported_data_layouts) so that data is clearly labeled and partitioned for better performance. We use UTC dates and timestamps in hive paths (for example, for the timestamp of the data extract) for consistency.
+We store data in [hive-partitioned buckets](https://cloud.google.com/bigquery/docs/hive-partitioned-queries#supported_data_layouts) so that data is clearly labeled and partitioned for better performance - discussed more in the next section. We use UTC dates and timestamps in hive paths (for example, for the timestamp of the data extract) for consistency across all data sources in the ecosystem.
 
 You will need to set up a way to bring your raw data into the Cal-ITP Google Cloud Storage environment. Most commonly, we use [Airflow](https://airflow.apache.org/) for this.
 
-The [Airflow README in the data-infra repo](https://github.com/cal-itp/data-infra/tree/main/airflow#readme) has information about how to set up Airflow locally for testing and how the Airflow project is structured.
+The [Airflow README in the data-infra repo](https://github.com/cal-itp/data-infra/tree/main/airflow#readme) has information about how to set up Airflow locally for testing and how the Cal-ITP Airflow project is structured.
 
 We often bring data into our environment in two steps, created as two separate Airflow [DAGs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html):
 
 - **Sync the fully-raw data in its original format:** See for example the changes in the `airflow/dags/sync_elavon` directory in [data-infra PR #2376](https://github.com/cal-itp/data-infra/pull/2376/files) (note: this example is typical in terms of its overall structure and use of Cal-ITP storage classes and methods, but the specifics of how to access and request the upstream data source will vary). We do this to preserve the raw data in its original form. This data might be saved in a `calitp-<your-data-source>-raw` bucket.
-- **Convert the saved raw data into a BigQuery-readable gzipped JSONL file:** See for example the changes in the `airflow/dags/parse_elavon` directory in [data-infra PR #2376](https://github.com/cal-itp/data-infra/pull/2376/files). This prepares the data is to be read into BigQuery. **Conversion here should be limited to the bare minimum needed to make the data BigQuery-compatible, for example converting column names that would be invalid in BigQuery and changing the file type to gzipped JSONL.** This data might be saved in a `calitp-<your-data-source>-parsed` bucket.
+- **Convert the saved raw data into a BigQuery-readable gzipped JSONL file:** See for example the changes in the `airflow/dags/parse_elavon` directory in [data-infra PR #2376](https://github.com/cal-itp/data-infra/pull/2376/files). This prepares the data is to be read into BigQuery. **Conversion here should be limited to the bare minimum needed to make the data BigQuery-compatible - converting column names that would be invalid in BigQuery, changing the file type to gzipped JSONL, etc.** Note that conversion to JSONL is widespread across Cal-ITP pipelines because that data format is easy to read by BigQuery external tables in the next step of the ingest process, while also supporting complex or nested data structures. This data might be saved in a `calitp-<your-data-source>-parsed` bucket.
 
 ```{note}
 When you merge a pull request creating a new Airflow DAG, that DAG will be paused by default. To start the DAG, someone will need to log into [the Airflow UI (requires Composer access in Cal-ITP Google Cloud Platform instance)](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/home) and unpause the DAG. 
 ```
 
-### Create external tables
+### 2. Create external tables
 
-We use [external tables](https://cloud.google.com/bigquery/docs/external-data-sources#external_tables) to allow BigQuery to query data stored in Google Cloud Storage. External tables do not move data into BigQuery; they simply define the data schema which BigQuery can then use to access the data still stored in Google Cloud Storage.
+We use [external tables](https://cloud.google.com/bigquery/docs/external-data-sources#external_tables) to allow BigQuery to query data stored in Google Cloud Storage. External tables do not move data into BigQuery; they simply define the data schema which BigQuery can then use to access the data still stored in Google Cloud Storage. Because we used Hive-partitioned file naming conventions in the previous step, BigQuery can save significant resources when querying external tables by targeting only a subset of the simulated subfolders in a given GCS bucket when corresponding filters are applied (like a filter on a "dt" field represented in a partition).
 
 External tables are created by the [`create_external_tables` Airflow DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/create_external_tables) using the [ExternalTable custom operator](https://github.com/cal-itp/data-infra/blob/main/airflow/plugins/operators/external_table.py). Testing guidance and example YAML for how to create your external table is provided in the [Airflow DAG documentation](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/create_external_tables#create_external_tables).
 
-### dbt modeling
+### 3. dbt modeling
 
-Considerations for dbt modeling are outlined on the [Developing models in dbt](developing-dbt-models) page.
+After reading the parsed raw files into external tables, those external tables are generally not queried directly by analysts or by dashboards. Instead, they are made useful through modeling and transformations managed by dbt, a tool that enhances SQL-based workflows with concepts from software engineering, like version control. Guidance for dbt modeling is outlined on the [Developing models in dbt](developing-dbt-models) page of this docs site.
