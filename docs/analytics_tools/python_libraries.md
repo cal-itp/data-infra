@@ -139,21 +139,11 @@ from siuba import _, filter, count, collect, show_query
 Note that siuba by default prints out a preview of the SQL query results.
 In order to fetch the results of the query as a pandas DataFrame, run `collect()`.
 
-```{code-cell}
-tbl_agency_names = tbls.mart_gtfs.dim_agency() >> collect()
-
-# Use pandas .head() method to show first 5 rows of data
-tbl_agency_names.head()
-
-```
-
 (show-query-sql)=
 
 ### Show query SQL
 
 While `collect()` fetches query results, `show_query()` prints out the SQL code that siuba generates.
-
-
 
 Note that here the pandas Series method `str.contains` corresponds to `regexp_contains` in Google BigQuery.
 
