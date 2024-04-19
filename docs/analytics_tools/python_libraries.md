@@ -53,6 +53,11 @@ A set of shared utility functions can also be installed, similarly to any Python
 
 ### In notebook
 
+```python
+from calitp_data_analysis import geography_utils
+
+geography_utils.WGS84
+```
 
 See [data-analyses/starter_kit](https://github.com/cal-itp/data-analyses/tree/main/starter_kit) for examples on how to use `shared_utils` for general functions, charts, and maps.
 
@@ -148,13 +153,7 @@ tbl_agency_names.head()
 
 While `collect()` fetches query results, `show_query()` prints out the SQL code that siuba generates.
 
-```{code-cell}
-(tbls.mart_gtfs.dim_agency()
-  >> filter(_.agency_name.str.contains("Metro"))
-  >> show_query(simplify=True)
-)
 
-```
 
 Note that here the pandas Series method `str.contains` corresponds to `regexp_contains` in Google BigQuery.
 
