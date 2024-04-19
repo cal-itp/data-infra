@@ -53,11 +53,6 @@ A set of shared utility functions can also be installed, similarly to any Python
 
 ### In notebook
 
-```python
-from calitp_data_analysis import geography_utils
-
-geography_utils.WGS84
-```
 
 See [data-analyses/starter_kit](https://github.com/cal-itp/data-analyses/tree/main/starter_kit) for examples on how to use `shared_utils` for general functions, charts, and maps.
 
