@@ -93,14 +93,6 @@ As an example, in a notebook:
 from calitp_data_analysis.sql import query_sql
 ```
 
-```{code-cell}
-df_dim_agency = query_sql("""
-SELECT
-    *
-FROM `mart_gtfs.dim_agency`
-LIMIT 10""", as_df=True)
-```
-
 (siuba)=
 
 ## siuba
