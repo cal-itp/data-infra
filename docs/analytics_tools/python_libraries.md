@@ -101,10 +101,6 @@ FROM `mart_gtfs.dim_agency`
 LIMIT 10""", as_df=True)
 ```
 
-```{code-cell}
-df_dim_agency.head()
-```
-
 (siuba)=
 
 ## siuba
