@@ -120,18 +120,6 @@ and showing SQL test queries that siuba code generates.
 
 ### Basic query
 
-```{code-cell}
-from calitp_data_analysis.tables import tbls
-from siuba import _, filter, count, collect, show_query
-
-# query agency information, then filter for a single gtfs feed,
-# and then count how often each feed key occurs
-(tbls.mart_gtfs.dim_agency()
-    >> filter(_.agency_id == 'BA', _.base64_url == 'aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1SRw==')
-    >> count(_.feed_key)
-)
-```
-
 (collect-query-results)=
 
 ### Collect query results
