@@ -1,6 +1,4 @@
 sqlalchemy-bigquery==1.10.0
 calitp-data-analysis==2024.3.27
-myst-nb==1.0.0
-sphinx==7.2.6
 jupyter-book==1.0.0
 sphinxcontrib-mermaid==0.8.1
