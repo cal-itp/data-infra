@@ -82,8 +82,6 @@ The following entity relationship diagrams were last updated in 2022 but are pre
 
 [editable source](https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqdk7tuwzAMRX9F0JzH7jXp0ClF09ELITGyAFs0KClFG-ffS7_6SNu0iEbp3MtLSjppQxZ1oZG3HhxDUwYla8cOgn-F5ClEde6WSzqpPfLRGyxUqRsI4DCW-kecBnxDITGY1PP0HP4PV1Tb6_QDk80jHLGuB3jEp4wbaloKGJIoVqvuS3YfVY5oVSLV1hDWYy9rapEh4Vz3N6NPpcUoSlQF8bqoU-8bk0wa9cH9JbwYi-hapqO3ffaKKbvqo-9HrMcRVb79ZtZ1Q4rL_d50x975AEOcOJ4rMwNzulvNn4Adpht9pwlsIcHeVNhA73gfxSUENEmGkKOkLrVe6Aa5AW_lHZ9651InEchV9hKLB8j1UPMsaG6t3PKd9YlYFweoIy405ET7l2B0kTjjDE0_YqLOb7JEHuQ)
 
-## Dashboards
-
 ## DAGs Maintenance
 
-You can find further information on DAGs maintenance for Transit Database data [on this page](dags-maintenance).
+You can find further information on how to maintain the DAGs for Transit Database data [on this page](dags-maintenance), which covers general Airflow maintenance and troubleshooting patterns.
