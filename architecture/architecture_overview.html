@@ -43,7 +43,7 @@
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
@@ -545,6 +545,8 @@ class ingestion_label,modeling_label,analysis_label group_labelstyle
 <li><p><a class="reference internal" href="services.html"><span class="doc std std-doc">Services</span></a> that are deployed and maintained (ex. Metabase, JupyterHub, etc.)</p></li>
 <li><p><a class="reference internal" href="data.html"><span class="doc std std-doc">Data pipelines</span></a> to ingest specific types of data (ex. GTFS Schedule, Payments, etc.)</p></li>
 </ul>
+<p>Outside of this documentation, several READMEs cover initial development environment setup for new users. The <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse">/warehouse README</a> and the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow">/airflow README</a> in the Cal-ITP data-infra GitHub repository are both essential starting points for getting up and running as a contributor to the Cal-ITP code base. The <a class="reference external" href="https://github.com/cal-itp/data-infra">repository-level README</a> covers some important configuration steps and social practices for contributors.</p>
+<p>NOTE: sections of the /warehouse README discussing installation and use of JupyterHub are likely to be less relevant to infrastructure, pipeline, package, image, and service development than they are for analysts who work primarily with tables in the warehouse - most contributors performing “development” work on Cal-ITP tools and infrastructure use a locally installed IDE like VS Code rather than relying on the hosted JupyterHub environment for that work, since that environment is tailored to analysis tasks and is somewhat limited for development and testing tasks. Some documentation on this site and in the repository has a shared audience of developers and analysts, and as such you can expect that documentation to make occasional reference to JupyterHub even if it’s not a core requirement for the type of work being discussed.</p>
 <section id="environments">
 <h2>Environments<a class="headerlink" href="#environments" title="Link to this heading">#</a></h2>
 <p>Across both data and services, we often have a “production” (live, end-user-facing) environment and some type of testing, staging, or development environment.</p>

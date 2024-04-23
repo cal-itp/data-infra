@@ -43,7 +43,7 @@
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
@@ -487,7 +487,6 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-clear-a-dag-or-dag-task">How to clear a DAG or DAG task</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-dags">Deprecated DAGs</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#podoperators"><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code></a></li>
@@ -551,24 +550,14 @@ document.write(`
 <p>Failures can be cleared (re-run) via the Airflow user interface (<a class="reference external" href="https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra&amp;amp;supportedpurview=project">accessible via Composer here</a>.)</p>
 <p><a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/stable/ui.html">This Airflow guide</a> can help you use and interpret the Airflow UI.</p>
 </section>
-<section id="deprecated-dags">
-<h3>Deprecated DAGs<a class="headerlink" href="#deprecated-dags" title="Link to this heading">#</a></h3>
-<p>The following DAGs may still be listed in the Airflow UI even though they are <strong>deprecated or indefinitely paused</strong>. They never need to be re-run. (They show up in the UI because the Airflow database has historical DAG/task entries even though the code has been deleted.)</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">amplitude_benefits</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">check_data_freshness</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">load-sentry-rtfetchexception-events</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">unzip_and_validate_gtfs_schedule</span></code></p></li>
-</ul>
-</section>
 </section>
 <section id="podoperators">
 <h2><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code><a class="headerlink" href="#podoperators" title="Link to this heading">#</a></h2>
-<p>When restarting a failed <code class="docutils literal notranslate"><span class="pre">PodOperator</span></code> run, check the logs before restarting. If the logs show any indication that the prior run’s pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the pod associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. If you don’t know how to check a pod status, please ask in the <code class="docutils literal notranslate"><span class="pre">#data-infra</span></code> channel on Slack before proceeding.</p>
+<p>When restarting a failed run of a DAG that utilizes a <code class="docutils literal notranslate"><span class="pre">PodOperator</span></code>, check the logs before restarting. If the logs show any indication that the prior run’s pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/">Kubernetes pod</a> associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. Users with proper access to Kubernetes Engine in Google Cloud can check for any <a class="reference external" href="https://console.cloud.google.com/kubernetes/workload/overview?project=cal-itp-data-infra&amp;amp;pli=1&amp;amp;pageState=(%22savedViews%22:(%22i%22:%229699ac902c0a41ae918282ebfa4f5fb2%22,%22c%22:%5B%5D,%22n%22:%5B%5D),%22workload_list_table%22:(%22p%22:0))">live workloads</a> that correspond to the pod referenced in the failed Airflow task’s run logs.</p>
 </section>
 <section id="backfilling-from-the-command-line">
 <h2>Backfilling from the command line<a class="headerlink" href="#backfilling-from-the-command-line" title="Link to this heading">#</a></h2>
-<p>From time-to-time some DAGs may need to be re-ran in order to populate new data.</p>
+<p>From time to time some DAGs may need to be re-run in order to populate new data.</p>
 <p>Subject to the considerations outlined above, backfilling can be performed by clearing historical runs in the web interface, or via the CLI:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>gcloud<span class="w"> </span>composer<span class="w"> </span>environments<span class="w"> </span>run<span class="w"> </span>calitp-airflow-prod<span class="w"> </span>--location<span class="o">=</span>us-west2<span class="w"> </span>backfill<span class="w"> </span>--<span class="w"> </span>--start_date<span class="w"> </span><span class="m">2021</span>-04-18<span class="w"> </span>--end_date<span class="w"> </span><span class="m">2021</span>-11-03<span class="w"> </span>-x<span class="w"> </span>--reset_dagruns<span class="w"> </span>-y<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;gtfs_schedule_history_load&quot;</span><span class="w"> </span>-i<span class="w"> </span>gtfs_loader
 </pre></div>
@@ -647,7 +636,6 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-clear-a-dag-or-dag-task">How to clear a DAG or DAG task</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-dags">Deprecated DAGs</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#podoperators"><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code></a></li>

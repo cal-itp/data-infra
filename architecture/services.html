@@ -43,7 +43,7 @@
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
@@ -481,6 +481,11 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-and-deployments-unless-otherwise-specified-deployments-occur-via-github-actions">Code and deployments (unless otherwise specified, deployments occur via GitHub Actions)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-running-services">Monitoring running services</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-monitoring-through-sentry">Error monitoring through Sentry</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cost-and-performance-monitoring">Cost and performance monitoring</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -496,7 +501,7 @@ document.write(`
 <h1>Deployed Services and Sites<a class="headerlink" href="#deployed-services-and-sites" title="Link to this heading">#</a></h1>
 <p>Many services and websites are deployed as part of the Cal-ITP ecosystem, maintained directly by Cal-ITP contributors and orchestrated via Google Kubernetes Engine or published via Netlify or GitHub Pages.</p>
 <p>With the exception of Airflow, which is <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow#upgrading-airflow-itself">managed via Google Cloud Composer</a>, changes to the services discussed here are deployed via CI/CD processes that run automatically when new code is merged to the relevant Cal-ITP repository. These CI/CD processes are not all identical - different services have different testing steps that run when a pull request is opened against the services’s code. Some services undergo a full test deployment when a PR is opened, some report the changes that a subject <a class="reference external" href="https://helm.sh/docs/topics/charts/">Helm chart</a> will undergo upon merge, and some just perform basic linting.</p>
-<p>READMEs describing the individual testing and deployment process for each service are linked in the below table, and <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/ci/README.md">the CI README</a> provides some more general context for Kubernetes-based deployments.</p>
+<p>READMEs describing the individual testing and deployment process for each service are linked in the below table, and <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/ci/README.md">the CI README</a> provides some more general context for Kubernetes-based deployments. Many services are monitored via Sentry, discussed in <a class="reference internal" href="#error-monitoring-through-sentry">a later section</a>.</p>
 <table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
@@ -651,6 +656,19 @@ classDef default fill:white, color:black, stroke:black, stroke-width:1px
 classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
 class repos_label,kubernetes_label,netlify_label,github_pages_label group_labelstyle
         </div></section>
+<section id="monitoring-running-services">
+<h2>Monitoring running services<a class="headerlink" href="#monitoring-running-services" title="Link to this heading">#</a></h2>
+<section id="error-monitoring-through-sentry">
+<span id="id1"></span><h3>Error monitoring through Sentry<a class="headerlink" href="#error-monitoring-through-sentry" title="Link to this heading">#</a></h3>
+<p>A subset of our services and sites send error information to the Cal-ITP Sentry instance, which groups errors based on criteria we define in order to identify and track new errors, regressions, and intermittent service issues. A runbook is available <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/runbooks/workflow/sentry-triage.md">here</a> which discusses daily triage of events logged in Sentry, and general documentation for self-hosted instances of Sentry like ours is available <a class="reference external" href="https://develop.sentry.dev/self-hosted/">here</a>.</p>
+</section>
+<section id="cost-and-performance-monitoring">
+<h3>Cost and performance monitoring<a class="headerlink" href="#cost-and-performance-monitoring" title="Link to this heading">#</a></h3>
+<p>In addition to standard Google Cloud tooling for monitoring specific services like Kubernetes Engine, Composer, and BigQuery, we maintain a couple dashboards that can make it easier to glean at-at-glance insights and report topline information to stakeholders who don’t have the time, access, or knowledge to dig into GCP monitoring directly.</p>
+<p>The <a class="reference external" href="https://dashboards.calitp.org/dashboard/76-bigquery-overview-dashboard?principal_email_substring=&amp;amp;time_window=past7days">BigQuery overview dashboard</a> gives a detailed view of daily and monthly BigQuery costs, and helps identify tables and dbt models that are producing greater build costs, reference costs, and query costs than others.</p>
+<p>In a prior staffing configuration, a person was assigned to fill the <a class="reference external" href="https://dashboards.calitp.org/dashboard/138-cal-itp-system-performance-and-outcomes-monitoring?single_date=2023-06-22">Cal-ITP System Performance and Outcomes Monitoring dashboard</a> and use it to populate the metrics in the spreadsheet linked within the dashboard each Friday. Checks were recommended to occur on Fridays because for one of the metrics, Google auto-bins 7 day periods to Friday-Thursday. This dashboard and spreadsheet could be re-activated if desired.</p>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -718,6 +736,11 @@ class repos_label,kubernetes_label,netlify_label,github_pages_label group_labels
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-and-deployments-unless-otherwise-specified-deployments-occur-via-github-actions">Code and deployments (unless otherwise specified, deployments occur via GitHub Actions)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-running-services">Monitoring running services</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-monitoring-through-sentry">Error monitoring through Sentry</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cost-and-performance-monitoring">Cost and performance monitoring</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

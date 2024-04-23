@@ -43,7 +43,7 @@
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
@@ -482,10 +482,10 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-ingest-diagram">Data ingest diagram</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-new-data-source">Adding a new data source</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determine-upstream-source-type">Determine upstream source type</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bring-data-into-google-cloud-storage">Bring data into Google Cloud Storage</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-external-tables">Create external tables</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dbt-modeling">dbt modeling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decide-on-an-approach">0. Decide on an approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bring-data-into-google-cloud-storage">1. Bring data into Google Cloud Storage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-external-tables">2. Create external tables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dbt-modeling">3. dbt modeling</a></li>
 </ul>
 </li>
 </ul>
@@ -501,11 +501,17 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="data-pipelines">
 <span id="architecture-data"></span><h1>Data pipelines<a class="headerlink" href="#data-pipelines" title="Link to this heading">#</a></h1>
-<p>In general, our data ingest follows versions of the pattern diagrammed below. For an example PR that ingests a brand new data source from scratch, see <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2376">data infra PR #2376</a>.</p>
-<p>Some of the key attributes of our approach:</p>
+<p>In general, our data ingest follows customized versions of a consistent pattern:</p>
+<ol class="arabic simple">
+<li><p>Sync raw data into Google Cloud Storage (GCS), and parse it into a BigQuery-readable form</p></li>
+<li><p>Create <a class="reference external" href="https://cloud.google.com/bigquery/docs/external-tables">external tables</a> in BigQuery that read the parsed data from GCS</p></li>
+<li><p>Model and transform the resulting tables using <a class="reference external" href="https://docs.getdbt.com/docs/introduction">dbt</a></p></li>
+</ol>
+<p>That pattern is diagrammed and discussed in more detail below. For an example PR that ingests a brand new data source from scratch, see <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2376">data infra PR #2376</a>.</p>
+<p>Some of the key attributes of our approach, shared across data sources:</p>
 <ul class="simple">
-<li><p>We generate an <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-infra/calitp_data_infra/storage.py#L418"><code class="docutils literal notranslate"><span class="pre">outcomes</span></code></a> file describing whether scrape, parse, or validate operations were successful. This makes operation outcomes visible in BigQuery, so they can be analyzed (for example: how long has the download operation for X feed been failing?)</p></li>
-<li><p>We try to limit the amount of manipulation in Airflow tasks to the bare minimum to make the data legible to BigQuery (for example, replace illegal column names that would break the external tables.) We use gzipped JSONL files in GCS as our default parsed data format.</p></li>
+<li><p>We generate an <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-infra/calitp_data_infra/storage.py#L372"><code class="docutils literal notranslate"><span class="pre">outcomes</span></code></a> file at each ingestion step describing whether scrape, parse, or validate operations were successful. This makes operation outcomes visible in BigQuery, so they can be analyzed (for example: how long has the download operation for X feed been failing?)</p></li>
+<li><p>We try to limit the amount of data manipulation in Airflow tasks to the bare minimum required to make the data legible to BigQuery (for example, replace illegal column names that would break the external tables.) We use gzipped JSONL files in GCS as our default parsed data format. Data transformation is generally handled downstream via dbt, rather than as part of the initial pipeline.</p></li>
 <li><p><a class="reference external" href="https://cloud.google.com/bigquery/docs/external-data-sources#external_tables">External tables</a> provide the interface between ingested data and BigQuery modeling/transformations.</p></li>
 </ul>
 <p>While many of the key elements of our architecture are common to most of our data sources, each data source has some unique aspects as well. <a class="reference external" href="https://docs.google.com/spreadsheets/d/1bv1K5lZMnq1eCSZRy3sPd3MgbdyghrMl4u8HvjNjWPw/edit#gid=0">This spreadsheet</a> details overviews by data source, outlining the specific code/resources that correspond to each step in the general data flow shown below.</p>
@@ -613,23 +619,23 @@ class gcs_label1,gcs_label2,gcs_label3,bq_label1,bq_label2 group_labelstyle
 <p>Adding a new data source based on the architecture described above involves several steps, outlined below.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you’re bringing in data that is similar to existing data (for example, a new subset of an existing dataset like a new Airtable or Littlepay table), you should follow the existing pattern for that dataset. <a class="reference external" href="https://docs.google.com/spreadsheets/d/1bv1K5lZMnq1eCSZRy3sPd3MgbdyghrMl4u8HvjNjWPw/edit#gid=0">This spreadsheet</a> gives overviews of some prominent existing data sources, outlining the specific code/resources that correspond to each step in the <a class="reference internal" href="#data-ingest-diagram"><span class="std std-ref">general data flow</span></a> for that data source.</p>
+<p>If you’re bringing in data that is similar to existing data (for example, a new subset of an existing dataset like a new Airtable or Littlepay table), you should follow the existing patterns for that dataset. <a class="reference external" href="https://docs.google.com/spreadsheets/d/1bv1K5lZMnq1eCSZRy3sPd3MgbdyghrMl4u8HvjNjWPw/edit#gid=0">This spreadsheet</a> gives overviews of some prominent existing data sources, outlining the specific code/resources that correspond to each step in the <a class="reference internal" href="#data-ingest-diagram"><span class="std std-ref">general data flow</span></a> for that data source.</p>
 </div>
-<section id="determine-upstream-source-type">
-<h3>Determine upstream source type<a class="headerlink" href="#determine-upstream-source-type" title="Link to this heading">#</a></h3>
-<p>To determine the best storage location for your raw data (especially if it requires manual curation), consult the <a class="reference external" href="https://docs.google.com/document/d/1-l6c99UUZ0o3Ln9S_CAt7iitGHvriewWhKDftESE2Dw/edit">Data Collection and Storage Guidance within the Cal-ITP Data Pipeline Google Doc</a>.</p>
+<section id="decide-on-an-approach">
+<h3>0. Decide on an approach<a class="headerlink" href="#decide-on-an-approach" title="Link to this heading">#</a></h3>
+<p>To determine the most appropriate ingest approach and storage location for your raw data (especially if that data requires manual curation), consult the <a class="reference external" href="https://docs.google.com/document/d/1-l6c99UUZ0o3Ln9S_CAt7iitGHvriewWhKDftESE2Dw/edit">Data Collection and Storage Guidance within the Cal-ITP Data Pipeline Google Doc</a>.</p>
 <p>The <a class="reference internal" href="../warehouse/developing_dbt_models.html#tool-choice"><span class="std std-ref">Should it be a dbt model?</span></a> docs section also has some guidance about when a data pipeline should be created.</p>
 </section>
 <section id="bring-data-into-google-cloud-storage">
-<h3>Bring data into Google Cloud Storage<a class="headerlink" href="#bring-data-into-google-cloud-storage" title="Link to this heading">#</a></h3>
-<p>We store our raw, un-transformed data in Google Cloud Storage, usually in perpetuity, to ensure that we can always recover the raw data if needed.</p>
-<p>We store data in <a class="reference external" href="https://cloud.google.com/bigquery/docs/hive-partitioned-queries#supported_data_layouts">hive-partitioned buckets</a> so that data is clearly labeled and partitioned for better performance. We use UTC dates and timestamps in hive paths (for example, for the timestamp of the data extract) for consistency.</p>
+<h3>1. Bring data into Google Cloud Storage<a class="headerlink" href="#bring-data-into-google-cloud-storage" title="Link to this heading">#</a></h3>
+<p>We store our raw, un-transformed data in Google Cloud Storage, usually in perpetuity, to ensure that we can always recover the raw data if needed. This allows us to fully re-process and re-transform historical data as needed rather than relying solely on old dashboards and reports, a powerful tool to create new uses for old data over time.</p>
+<p>We store data in <a class="reference external" href="https://cloud.google.com/bigquery/docs/hive-partitioned-queries#supported_data_layouts">hive-partitioned buckets</a> so that data is clearly labeled and partitioned for better performance - discussed more in the next section. We use UTC dates and timestamps in hive paths (for example, for the timestamp of the data extract) for consistency across all data sources in the ecosystem.</p>
 <p>You will need to set up a way to bring your raw data into the Cal-ITP Google Cloud Storage environment. Most commonly, we use <a class="reference external" href="https://airflow.apache.org/">Airflow</a> for this.</p>
-<p>The <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow#readme">Airflow README in the data-infra repo</a> has information about how to set up Airflow locally for testing and how the Airflow project is structured.</p>
+<p>The <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow#readme">Airflow README in the data-infra repo</a> has information about how to set up Airflow locally for testing and how the Cal-ITP Airflow project is structured.</p>
 <p>We often bring data into our environment in two steps, created as two separate Airflow <a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html">DAGs</a>:</p>
 <ul class="simple">
 <li><p><strong>Sync the fully-raw data in its original format:</strong> See for example the changes in the <code class="docutils literal notranslate"><span class="pre">airflow/dags/sync_elavon</span></code> directory in <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2376/files">data-infra PR #2376</a> (note: this example is typical in terms of its overall structure and use of Cal-ITP storage classes and methods, but the specifics of how to access and request the upstream data source will vary). We do this to preserve the raw data in its original form. This data might be saved in a <code class="docutils literal notranslate"><span class="pre">calitp-&lt;your-data-source&gt;-raw</span></code> bucket.</p></li>
-<li><p><strong>Convert the saved raw data into a BigQuery-readable gzipped JSONL file:</strong> See for example the changes in the <code class="docutils literal notranslate"><span class="pre">airflow/dags/parse_elavon</span></code> directory in <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2376/files">data-infra PR #2376</a>. This prepares the data is to be read into BigQuery. <strong>Conversion here should be limited to the bare minimum needed to make the data BigQuery-compatible, for example converting column names that would be invalid in BigQuery and changing the file type to gzipped JSONL.</strong> This data might be saved in a <code class="docutils literal notranslate"><span class="pre">calitp-&lt;your-data-source&gt;-parsed</span></code> bucket.</p></li>
+<li><p><strong>Convert the saved raw data into a BigQuery-readable gzipped JSONL file:</strong> See for example the changes in the <code class="docutils literal notranslate"><span class="pre">airflow/dags/parse_elavon</span></code> directory in <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2376/files">data-infra PR #2376</a>. This prepares the data is to be read into BigQuery. <strong>Conversion here should be limited to the bare minimum needed to make the data BigQuery-compatible - converting column names that would be invalid in BigQuery, changing the file type to gzipped JSONL, etc.</strong> Note that conversion to JSONL is widespread across Cal-ITP pipelines because that data format is easy to read by BigQuery external tables in the next step of the ingest process, while also supporting complex or nested data structures. This data might be saved in a <code class="docutils literal notranslate"><span class="pre">calitp-&lt;your-data-source&gt;-parsed</span></code> bucket.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -637,13 +643,13 @@ class gcs_label1,gcs_label2,gcs_label3,bq_label1,bq_label2 group_labelstyle
 </div>
 </section>
 <section id="create-external-tables">
-<h3>Create external tables<a class="headerlink" href="#create-external-tables" title="Link to this heading">#</a></h3>
-<p>We use <a class="reference external" href="https://cloud.google.com/bigquery/docs/external-data-sources#external_tables">external tables</a> to allow BigQuery to query data stored in Google Cloud Storage. External tables do not move data into BigQuery; they simply define the data schema which BigQuery can then use to access the data still stored in Google Cloud Storage.</p>
+<h3>2. Create external tables<a class="headerlink" href="#create-external-tables" title="Link to this heading">#</a></h3>
+<p>We use <a class="reference external" href="https://cloud.google.com/bigquery/docs/external-data-sources#external_tables">external tables</a> to allow BigQuery to query data stored in Google Cloud Storage. External tables do not move data into BigQuery; they simply define the data schema which BigQuery can then use to access the data still stored in Google Cloud Storage. Because we used Hive-partitioned file naming conventions in the previous step, BigQuery can save significant resources when querying external tables by targeting only a subset of the simulated subfolders in a given GCS bucket when corresponding filters are applied (like a filter on a “dt” field represented in a partition).</p>
 <p>External tables are created by the <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags/create_external_tables"><code class="docutils literal notranslate"><span class="pre">create_external_tables</span></code> Airflow DAG</a> using the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/plugins/operators/external_table.py">ExternalTable custom operator</a>. Testing guidance and example YAML for how to create your external table is provided in the <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags/create_external_tables#create_external_tables">Airflow DAG documentation</a>.</p>
 </section>
 <section id="dbt-modeling">
-<h3>dbt modeling<a class="headerlink" href="#dbt-modeling" title="Link to this heading">#</a></h3>
-<p>Considerations for dbt modeling are outlined on the <a class="reference internal" href="../warehouse/developing_dbt_models.html#developing-dbt-models"><span class="std std-ref">Developing models in dbt</span></a> page.</p>
+<h3>3. dbt modeling<a class="headerlink" href="#dbt-modeling" title="Link to this heading">#</a></h3>
+<p>After reading the parsed raw files into external tables, those external tables are generally not queried directly by analysts or by dashboards. Instead, they are made useful through modeling and transformations managed by dbt, a tool that enhances SQL-based workflows with concepts from software engineering, like version control. Guidance for dbt modeling is outlined on the <a class="reference internal" href="../warehouse/developing_dbt_models.html#developing-dbt-models"><span class="std std-ref">Developing models in dbt</span></a> page of this docs site.</p>
 </section>
 </section>
 </section>
@@ -714,10 +720,10 @@ class gcs_label1,gcs_label2,gcs_label3,bq_label1,bq_label2 group_labelstyle
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-ingest-diagram">Data ingest diagram</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-new-data-source">Adding a new data source</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determine-upstream-source-type">Determine upstream source type</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bring-data-into-google-cloud-storage">Bring data into Google Cloud Storage</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-external-tables">Create external tables</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dbt-modeling">dbt modeling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decide-on-an-approach">0. Decide on an approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bring-data-into-google-cloud-storage">1. Bring data into Google Cloud Storage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-external-tables">2. Create external tables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dbt-modeling">3. dbt modeling</a></li>
 </ul>
 </li>
 </ul>
