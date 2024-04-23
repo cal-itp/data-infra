@@ -45,3 +45,8 @@ This is guaranteed to be a file that is listed in the GTFS
 spec at gtfs.org, for example "shapes".
 This should be used for analysis and filtering.
 {% enddocs %}
+
+{% docs column_pct_sucesss %}
+Successes as a percent of total files (`count_successes` / `count_files` * 100).
+If this is a value less than 100, indicates that file conversion failed for some files in this feed.
+{% enddocs %}

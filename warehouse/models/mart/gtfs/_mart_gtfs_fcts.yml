@@ -235,6 +235,90 @@ x-common-fields:
   - &rt_trip_schedule_relationship
     name: trip_schedule_relationship
     description: '{{ doc("gtfs_trip_descriptor__schedule_relationship") }}'
+  - &rt_agency_id
+    name: agency_id
+    description: '{{ doc("gtfs_entity_selector__agency_id") }}'
+  - &rt_route_id
+    name: route_id
+    description: '{{ doc("gtfs_entity_selector__route_id") }}'
+  - &rt_route_type
+    name: route_type
+    description: '{{ doc("gtfs_entity_selector__route_type") }}'
+  - &rt_direction_id
+    name: direction_id
+    description: '{{ doc("gtfs_entity_selector__direction_id") }}'
+  - &rt_stop_id
+    name: stop_id
+    description: '{{ doc("gtfs_entity_selector__stop_id") }}'
+  - &rt_trip_update_timestamp
+    name: trip_update_timestamp
+    description: '{{ doc("gtfs_trip_update__timestamp") }}'
+  - &rt_trip_update_delay
+    name: trip_update_delay
+    description: '{{ doc("gtfs_trip_update__delay") }}'
+  - &rt_active_period_start
+    name: active_period_start
+    description: '{{ doc("gtfs_time_range__start") }}'
+  - &rt_active_period_end
+    name: active_period_end
+    description: '{{ doc("gtfs_time_range__end") }}'
+  - &rt_vp_current_stop_sequence
+    name: current_stop_sequence
+    description: '{{ doc("gtfs_vehicle_position__current_stop_sequence") }}'
+  - &rt_vp_stop_id # distinguish from stop_time_updates__stop_id
+    name: stop_id
+    description: '{{ doc("gtfs_vehicle_position__stop_id") }}'
+  - &rt_current_status:
+    name: current_status
+    description: '{{ doc("gtfs_vehicle_position__current_status") }}'
+  - &rt_vehicle_timestamp
+    name: vehicle_timestamp
+    description: '{{ doc("gtfs_vehicle_position__timestamp") }}'
+  - &rt_congestion_level
+    name: congestion_level
+    description: '{{ doc("gtfs_vehicle_position__congestion_level") }}'
+  - &rt_occupancy_status
+    name: occupancy_status
+    description: '{{ doc("gtfs_vehicle_position__occupancy_status") }}'
+  - &rt_occupancy_percentage
+    name: occupancy_percentage
+    description: |
+      '{{ doc("gtfs_vehicle_position__occupancy_percentage") }}'
+  - &rt_stu_stop_sequence
+    name: stop_sequence
+    description: '{{ doc("gtfs_stop_time_update__stop_sequence") }}'
+  - &rt_stu_stop_id
+    name: stop_id
+    description: '{{ doc("gtfs_stop_time_update__stop_id") }}'
+  - &rt_stu_schedule_relationship
+    name: schedule_relationship
+    description: '{{ doc("gtfs_stop_time_update__schedule_relationship") }}'
+  - &rt_active_period_start_ts
+    name: active_period_start_ts
+    description: |
+      `active_period_start` converted to a TIMESTAMP data type.
+      If `active_period_start` is null, will be midnight on January 1, 1900.
+      The spec (https://gtfs.org/realtime/reference/#message-alert) outlines
+      two cases:
+        1. If one of active period start/end is populated but the other is
+        not, the other should be treated as +/- infinity
+        2. If neither is populated, assume that the message is active while
+        it is present in the feed
+      Imputing these timestamp versions of the columns to be far future/past
+      covers both cases for our use cases.TIMESTAMP
+  - &rt_active_period_end_ts
+    name: active_period_end_ts
+    description: |
+      `active_period_end` converted to a  data type.
+      If `active_period_end` is null, will be midnight on January 1, 2099.
+      The spec (https://gtfs.org/realtime/reference/#message-alert) outlines
+      two cases:
+        1. If one of active period start/end is populated but the other is
+        not, the other should be treated as +/- infinity
+        2. If neither is populated, assume that the message is active while
+        it is present in the feed
+      Imputing these timestamp versions of the columns to be far future/past
+      covers both cases for our use cases.
   - &min_extract_ts
     name: min_extract_ts
     description: |
@@ -319,6 +403,12 @@ x-common-fields:
     description: |
       `max_header_timestamp` converted to a DATETIME type in the
       "America/Los_Angeles" time zone.
+  - &_trip_update_message_age
+    name: _trip_update_message_age
+    description: '{{ doc("column_trip_update_message_age") }}'
+  - &_trip_update_message_age_vs_header
+    name: _trip_update_message_age_vs_header
+    description: '{{ doc("column_trip_update_message_age_vs_header") }}'
   - &num_distinct_extract_ts
     name: num_distinct_extract_ts
     description: |
@@ -392,9 +482,7 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url` and `ts`.
         tests: *primary_key_tests
-      - name: feed_key
-        description: |
-          Foreign key to the `dim_schedule_feeds` table.
+      - <<: *feed_key
         tests:
           - not_null:
               config:
@@ -411,6 +499,8 @@ models:
         description: '{{ doc("column_download_success") }}'
       - name: download_exception
         description: '{{ doc("column_download_exception") }}'
+      - name: last_modified_timestamp
+        description: Feed last modified string converted to TIMESTAMP data type.
       - name: unzip_success
         description: '{{ doc("column_unzip_success") }}'
       - name: unzip_exception
@@ -421,6 +511,8 @@ models:
         description: '{{ doc("column_zipfile_files") }}'
       - name: zipfile_dirs
         description: '{{ doc("column_zipfile_dirs") }}'
+      - name: pct_files_successfully_parsed
+        description: '{{ doc("column_pct_sucesss") }}'
 
   - name: fct_trip_updates_messages
     description: |
@@ -459,10 +551,8 @@ models:
       - *rt_header_incrementality
       - *rt_header_version
       - *rt_id
-      - name: trip_update_timestamp
-        description: '{{ doc("gtfs_trip_update__timestamp") }}'
-      - name: trip_update_delay
-        description: '{{ doc("gtfs_trip_update__delay") }}'
+      - *rt_trip_update_timestamp
+      - *rt_trip_update_delay
       - *rt_vehicle_id
       - *rt_vehicle_label
       - *rt_vehicle_license_plate
@@ -477,11 +567,8 @@ models:
         description: |
           See https://gtfs.org/realtime/reference/#message-stoptimeupdate.
       - *_header_message_age
-      - name: _trip_update_message_age
-        description: '{{ doc("column_trip_update_message_age") }}'
-      - name: _trip_update_message_age_vs_header
-        description: |
-          '{{ doc("column_trip_update_message_age_vs_header") }}'
+      - *_trip_update_message_age
+      - *_trip_update_message_age_vs_header
 
   - name: fct_stop_time_updates
     description: |
@@ -497,10 +584,50 @@ models:
       - *gtfs_rt_config_extract_ts
       - *gtfs_rt_name
       - *gtfs_rt_schedule_dataset_key
+      - *rt_schedule_base64_url
       - *gtfs_rt_schedule_dataset_name
       - *gtfs_rt_schedule_feed_key
       - *gtfs_rt_schedule_feed_timezone
+      - *rt_service_date
       - *_header_message_age
+      - *_trip_update_message_age
+      - *_trip_update_message_age_vs_header
+      - *rt_header_timestamp
+      - *rt_header_version
+      - *rt_header_incrementality
+      - *rt_id
+      - *rt_trip_update_timestamp
+      - *rt_trip_update_delay
+      - *rt_vehicle_id
+      - *rt_vehicle_label
+      - *rt_vehicle_license_plate
+      - *rt_vehicle_wheelchair_accessible
+      - *rt_trip_id
+      - *rt_trip_route_id
+      - *rt_trip_direction_id
+      - *rt_trip_start_time
+      - *rt_trip_start_time_interval
+      - *rt_trip_start_date
+      - *rt_trip_schedule_relationship
+      - name: _trip_updates_message_key
+        description: |
+          Synthetic primary key constructed from `base64_url`, `extract_ts`,
+          entity `id`, `vehicle_id`, and `trip_id`.
+      - *rt_stu_stop_sequence
+      - *rt_stu_stop_id
+      - name: arrival_delay
+        description: '{{ doc("gtfs_stop_time_event__delay") }}'
+      - name: arrival_time
+        description: '{{ doc("gtfs_stop_time_event__time") }}'
+      - name: arrival_uncertainty
+        description: '{{ doc("gtfs_stop_time_event__uncertainty") }}'
+      - name: departure_delay
+        description: '{{ doc("gtfs_stop_time_event__delay") }}'
+      - name: departure_time
+        description: '{{ doc("gtfs_stop_time_event__time") }}'
+      - name: departure_uncertainty
+        description: '{{ doc("gtfs_stop_time_event__uncertainty") }}'
+      - *rt_stu_schedule_relationship
 
   - name: fct_vehicle_locations
     description: |
@@ -789,6 +916,7 @@ models:
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with
           this feed.
+
   - name: fct_service_alerts_messages
     description: |
       Each row is a message received from a service alerts GTFS RT feed.
@@ -920,51 +1048,21 @@ models:
         description: '{{ doc("gtfs_alert__tts_description_text") }}'
       - name: tts_description_text_language
         description: '{{ doc("gtfs_translation__language") }}'
-      - name: agency_id
-        description: '{{ doc("gtfs_entity_selector__agency_id") }}'
-      - name: route_id
-        description: '{{ doc("gtfs_entity_selector__route_id") }}'
-      - name: route_type
-        description: '{{ doc("gtfs_entity_selector__route_type") }}'
-      - name: direction_id
-        description: |
-          '{{ doc("gtfs_entity_selector__direction_id") }}'
+      - *rt_agency_id
+      - *rt_route_id
+      - *rt_route_type
+      - *rt_direction_id
       - *rt_trip_id
       - *rt_trip_route_id
       - *rt_trip_direction_id
       - *rt_trip_start_time
       - *rt_trip_start_date
       - *rt_trip_schedule_relationship
-      - name: stop_id
-        description: '{{ doc("gtfs_entity_selector__stop_id") }}'
-      - name: active_period_start
-        description: '{{ doc("gtfs_time_range__start") }}'
-      - name: active_period_end
-        description: '{{ doc("gtfs_time_range__end") }}'
-      - name: active_period_start_ts
-        description: |
-          `active_period_start` converted to a TIMESTAMP data type.
-          If `active_period_start` is null, will be midnight on January 1, 1900.
-          The spec (https://gtfs.org/realtime/reference/#message-alert) outlines
-          two cases:
-            1. If one of active period start/end is populated but the other is
-            not, the other should be treated as +/- infinity
-            2. If neither is populated, assume that the message is active while
-            it is present in the feed
-          Imputing these timestamp versions of the columns to be far future/past
-          covers both cases for our use cases.
-      - name: active_period_end_ts
-        description: |
-          `active_period_end` converted to a TIMESTAMP data type.
-          If `active_period_end` is null, will be midnight on January 1, 2099.
-          The spec (https://gtfs.org/realtime/reference/#message-alert) outlines
-          two cases:
-            1. If one of active period start/end is populated but the other is
-            not, the other should be treated as +/- infinity
-            2. If neither is populated, assume that the message is active while
-            it is present in the feed
-          Imputing these timestamp versions of the columns to be far future/past
-          covers both cases for our use cases.
+      - *rt_stop_id
+      - *rt_active_period_start
+      - *rt_active_period_end
+      - *rt_active_period_start_ts
+      - *rt_active_period_end_ts
       - *rt_trip_start_time_interval
       - name: trip_start_time
         description: |
@@ -975,6 +1073,7 @@ models:
           *Note: If this is larger than 86,400 (the number of seconds in one day)
           and `trip_start_date` is not populated, the interpretation for this
           field becomes unclear.*
+
   - name: fct_daily_service_alerts
     description: |
       Each row is a daily summary of a service alert.
@@ -1000,9 +1099,31 @@ models:
           - not_null
       - *base64_url
       - *gtfs_rt_schedule_feed_timezone
+      - name: id
+        description: '{{ doc("gtfs_feed_entity__id") }}'
+      - name: cause
+        description: '{{ doc("gtfs_alert__cause") }}'
+      - name: effect
+        description: '{{ doc("gtfs_alert__effect") }}'
+      - name: header
+        description: '{{ doc("gtfs_alert__header_text") }}'
+      - name: description
+        description: '{{ doc("gtfs_alert__description_text") }}'
       - *rt_trip_id
+      - *rt_trip_route_id
+      - *rt_trip_direction_id
       - *rt_trip_start_time
       - *rt_trip_start_date
+      - *rt_trip_schedule_relationship
+      - *rt_agency_id
+      - *rt_route_id
+      - *rt_route_type
+      - *rt_direction_id
+      - *rt_stop_id
+      - *rt_active_period_start
+      - *rt_active_period_end
+      - *rt_active_period_start_ts
+      - *rt_active_period_end_ts
       - *min_extract_ts
       - *max_extract_ts
       - *extract_duration_minutes
@@ -1589,6 +1710,7 @@ models:
           - not_null
       - *feed_key
       - name: name
+      - *base64_url
       - name: regional_feed_type
         description: |
           Describes whether this feed is a combined regional feed or has a
