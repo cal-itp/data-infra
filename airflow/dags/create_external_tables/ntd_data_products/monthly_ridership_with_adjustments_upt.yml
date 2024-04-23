@@ -1,6 +1,5 @@
 operator: operators.ExternalTable
 bucket: gs://calitp-ntd-data-products
-# bucket: gs://test-calitp-ntd-data-products
 prefix_bucket: true
 post_hook: |
   SELECT *
