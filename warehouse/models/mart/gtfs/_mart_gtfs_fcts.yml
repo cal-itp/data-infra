@@ -420,6 +420,13 @@ x-common-fields:
       get a count of how many messages per minute this entity was present for,
       which can help give a sense for how continuously this entity was updated.
       This number should be equal to `num_distinct_message_keys`.
+  - &_vehicle_message_age
+    name: _vehicle_message_age
+    description: '{{ doc("column_vehicle_message_age") }}'
+  - &_vehicle_message_age_vs_header
+    name: _vehicle_message_age_vs_header
+    description: |
+      '{{ doc("column_vehicle_message_age_vs_header") }}'
   - &num_distinct_header_timestamps
     name: num_distinct_header_timestamps
     description: |
@@ -636,12 +643,78 @@ models:
       level.
     columns:
       - name: key
+        description: |
+          Synthetic primary key constructed of `service_date`, `base64_url`,
+          `location_timestamp`, `vehicle_id`,
+          `vehicle_label`, `trip_id`, and `trip_start_time`.
         tests: *almost_unique_rt_key_tests
+      - *gtfs_rt_dataset_key
+      - *gtfs_rt_dt
+      - *rt_service_date
+      - *gtfs_rt_hour
+      - *base64_url
+      - *gtfs_rt_extract_ts
+      - *gtfs_rt_config_extract_ts
+      - *gtfs_rt_name
+      - *gtfs_rt_schedule_dataset_key
+      - *rt_schedule_base64_url
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *gtfs_rt_schedule_feed_timezone
+      - *_header_message_age
+      - *_vehicle_message_age
+      - *rt_header_timestamp
+      - *rt_header_version
+      - *rt_header_incrementality
+      - *rt_id
+      - *rt_vp_current_stop_sequence
+      - *rt_vp_stop_id
+      - *rt_current_status
+      - *rt_vehicle_timestamp
+      - *rt_congestion_level
+      - *rt_occupancy_status
+      - *rt_occupancy_percentage
+      - *rt_vehicle_id
+      - *rt_vehicle_label
+      - *rt_vehicle_license_plate
+      - *rt_vehicle_wheelchair_accessible
       - <<: *rt_trip_id
         tests:
           - not_null:
               config:
                 where: '__rt_sampled__'
+      - *rt_trip_route_id
+      - *rt_trip_direction_id
+      - *rt_trip_start_time
+      - *rt_trip_start_time_interval
+      - *rt_trip_start_date
+      - *rt_trip_schedule_relationship
+      - &rt_position_latitude
+        name: position_latitude
+        description: '{{ doc("gtfs_position__latitude") }}'
+      - &rt_position_longitude
+        name: position_longitude
+        description:  '{{ doc("gtfs_position__longitude") }}'
+      - &rt_position_bearing
+        name: position_bearing
+        description:  '{{ doc("gtfs_position__bearing") }}'
+      - &rt_position_odometer
+        name: position_odometer
+        description:  '{{ doc("gtfs_position__odometer") }}'
+      - &rt_position_speed
+        name: position_speed
+        description:  '{{ doc("gtfs_position__speed") }}'
+      - name: location_timestamp
+        description: Vehicle timestamp or header timestamp
+      - name: vehicle_trip_key
+        description: |
+          Composite of service_date, URL, vehicle_id, vehicle_label,
+          trip_id, and trip_start_time.
+      - name: next_location_key
+        description: Key for the next vehicle timestamp's location
+      - name: location
+        description: GEOGPOINT created by the position latitute and longitude
+      - *trip_instance_key
 
   - name: fct_vehicle_positions_messages
     description: |
@@ -675,31 +748,19 @@ models:
       - *gtfs_rt_schedule_feed_key
       - *gtfs_rt_schedule_feed_timezone
       - *_header_message_age
-      - name: _vehicle_message_age
-        description: '{{ doc("column_vehicle_message_age") }}'
-      - name: _vehicle_message_age_vs_header
-        description: |
-          '{{ doc("column_vehicle_message_age_vs_header") }}'
+      - *_vehicle_message_age
+      - *_vehicle_message_age_vs_header
       - *rt_header_timestamp
       - *rt_header_incrementality
       - *rt_header_version
       - *rt_id
-      - name: current_stop_sequence
-        description: |
-          '{{ doc("gtfs_vehicle_position__current_stop_sequence") }}'
-      - name: stop_id
-        description: '{{ doc("gtfs_vehicle_position__stop_id") }}'
-      - name: current_status
-        description: '{{ doc("gtfs_vehicle_position__current_status") }}'
-      - name: vehicle_timestamp
-        description: '{{ doc("gtfs_vehicle_position__timestamp") }}'
-      - name: congestion_level
-        description: '{{ doc("gtfs_vehicle_position__congestion_level") }}'
-      - name: occupancy_status
-        description: '{{ doc("gtfs_vehicle_position__occupancy_status") }}'
-      - name: occupancy_percentage
-        description: |
-          '{{ doc("gtfs_vehicle_position__occupancy_percentage") }}'
+      - *rt_vp_current_stop_sequence
+      - *rt_vp_stop_id
+      - *rt_current_status
+      - *rt_vehicle_timestamp
+      - *rt_congestion_level
+      - *rt_occupancy_status
+      - *rt_occupancy_percentage
       - *rt_vehicle_id
       - *rt_vehicle_label
       - *rt_vehicle_license_plate
@@ -708,18 +769,14 @@ models:
       - *rt_trip_route_id
       - *rt_trip_direction_id
       - *rt_trip_start_time
+      - *rt_trip_start_time_interval
       - *rt_trip_start_date
       - *rt_trip_schedule_relationship
-      - name: position_latitude
-        description: '{{ doc("gtfs_position__latitude") }}'
-      - name: position_longitude
-        description: '{{ doc("gtfs_position__longitude") }}'
-      - name: position_bearing
-        description: '{{ doc("gtfs_position__bearing") }}'
-      - name: position_odometer
-        description: '{{ doc("gtfs_position__odometer") }}'
-      - name: position_speed
-        description: '{{ doc("gtfs_position__speed") }}'
+      - *rt_position_latitude
+      - *rt_position_longitude
+      - *rt_position_bearing
+      - *rt_position_odometer
+      - *rt_position_speed
 
   - name: fct_daily_rt_feed_files
     description: |
@@ -1099,8 +1156,7 @@ models:
           - not_null
       - *base64_url
       - *gtfs_rt_schedule_feed_timezone
-      - name: id
-        description: '{{ doc("gtfs_feed_entity__id") }}'
+      - *rt_id
       - name: cause
         description: '{{ doc("gtfs_alert__cause") }}'
       - name: effect
