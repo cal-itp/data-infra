@@ -268,7 +268,7 @@ x-common-fields:
   - &rt_vp_stop_id # distinguish from stop_time_updates__stop_id
     name: stop_id
     description: '{{ doc("gtfs_vehicle_position__stop_id") }}'
-  - &rt_current_status:
+  - &rt_current_status
     name: current_status
     description: '{{ doc("gtfs_vehicle_position__current_status") }}'
   - &rt_vehicle_timestamp
@@ -644,9 +644,9 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed of `service_date`, `base64_url`,
-          `location_timestamp`, `vehicle_id`,
-          `vehicle_label`, `trip_id`, and `trip_start_time`.
+          Synthetic primary key constructed from `service_date`, `base64_url`,
+          `location_timestamp`, `vehicle_id`, `vehicle_label`,
+          `trip_id`, and `trip_start_time`.
         tests: *almost_unique_rt_key_tests
       - name: gtfs_dataset_key
         description: *gtfs_dataset_key_desc
@@ -695,16 +695,16 @@ models:
         description: '{{ doc("gtfs_position__latitude") }}'
       - &rt_position_longitude
         name: position_longitude
-        description:  '{{ doc("gtfs_position__longitude") }}'
+        description: '{{ doc("gtfs_position__longitude") }}'
       - &rt_position_bearing
         name: position_bearing
-        description:  '{{ doc("gtfs_position__bearing") }}'
+        description: '{{ doc("gtfs_position__bearing") }}'
       - &rt_position_odometer
         name: position_odometer
-        description:  '{{ doc("gtfs_position__odometer") }}'
+        description: '{{ doc("gtfs_position__odometer") }}'
       - &rt_position_speed
         name: position_speed
-        description:  '{{ doc("gtfs_position__speed") }}'
+        description: '{{ doc("gtfs_position__speed") }}'
       - name: location_timestamp
         description: Vehicle timestamp or header timestamp
       - name: vehicle_trip_key
@@ -712,7 +712,7 @@ models:
           Composite of service_date, URL, vehicle_id, vehicle_label,
           trip_id, and trip_start_time.
       - name: next_location_key
-        description: Key for the next vehicle timestamp's location
+        description: Location key for the next vehicle timestamp.
       - name: location
         description: GEOGPOINT created by the position latitute and longitude
       - *trip_instance_key
