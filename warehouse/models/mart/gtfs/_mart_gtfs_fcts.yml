@@ -995,7 +995,6 @@ models:
       - *gtfs_rt_dataset_key
       - *gtfs_rt_dt
       - *gtfs_rt_hour
-      - *base64_url
       - *rt_schedule_base64_url
       - *gtfs_rt_extract_ts
       - *gtfs_rt_config_extract_ts
@@ -1012,9 +1011,11 @@ models:
         description: '{{ doc("gtfs_alert__active_period") }}'
       - name: informed_entity
         description: '{{ doc("gtfs_alert__informed_entity") }}'
-      - name: cause
+      - &rt_cause
+        name: cause
         description: '{{ doc("gtfs_alert__cause") }}'
-      - name: effect
+      - &rt_effect
+        name: effect
         description: '{{ doc("gtfs_alert__effect") }}'
       - name: url
         description: '{{ doc("gtfs_alert__url") }}'
@@ -1032,6 +1033,7 @@ models:
         description: |
           '{{ doc("gtfs_alert__severity_level") }}'
       - *_header_message_age
+
   - name: fct_service_alerts_messages_unnested
     description: |
       This table contains GTFS RT service alerts messages with all elements
@@ -1077,6 +1079,7 @@ models:
       - *gtfs_rt_config_extract_ts
       - *gtfs_rt_name
       - *gtfs_rt_schedule_dataset_key
+      - *rt_schedule_base64_url
       - *gtfs_rt_schedule_dataset_name
       - *gtfs_rt_schedule_feed_key
       - *gtfs_rt_schedule_feed_timezone
@@ -1085,6 +1088,8 @@ models:
       - *rt_header_incrementality
       - *rt_header_version
       - *rt_id
+      - *rt_cause
+      - *rt_effect
       - name: url_text
         description: '{{ doc("gtfs_translation__text") }}'
       - name: url_language
@@ -1724,10 +1729,31 @@ models:
       - *gtfs_rt_config_extract_ts
       - *gtfs_rt_name
       - *gtfs_rt_schedule_dataset_key
+      - *rt_schedule_base64_url
       - *gtfs_rt_schedule_dataset_name
       - *gtfs_rt_schedule_feed_key
       - *gtfs_rt_schedule_feed_timezone
+      - *rt_service_date
       - *_header_message_age
+      - *_trip_update_message_age
+      - *_trip_update_message_age_vs_header
+      - *rt_header_timestamp
+      - *rt_header_version
+      - *rt_header_incrementality
+      - *rt_id
+      - *rt_trip_update_timestamp
+      - *rt_trip_update_delay
+      - *rt_vehicle_id
+      - *rt_vehicle_label
+      - *rt_vehicle_license_plate
+      - *rt_vehicle_wheelchair_accessible
+      - *rt_trip_id
+      - *rt_trip_route_id
+      - *rt_trip_direction_id
+      - *rt_trip_start_time
+      - *rt_trip_start_time_interval
+      - *rt_trip_start_date
+      - *rt_trip_schedule_relationship
 
   - name: fct_scheduled_trips
     description: |
