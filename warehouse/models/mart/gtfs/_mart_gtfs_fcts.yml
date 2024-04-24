@@ -648,7 +648,8 @@ models:
           `location_timestamp`, `vehicle_id`,
           `vehicle_label`, `trip_id`, and `trip_start_time`.
         tests: *almost_unique_rt_key_tests
-      - *gtfs_rt_dataset_key
+      - name: gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
       - *gtfs_rt_dt
       - *rt_service_date
       - *gtfs_rt_hour
