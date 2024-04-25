@@ -66,9 +66,23 @@ def main(
     validated_url = parse_obj_as(HttpUrl, file_url)
     typer.secho(f"reading file from url {validated_url}", fg=typer.colors.MAGENTA)
     start = pendulum.now(tz="Etc/UTC")
-    df_dict = pd.read_excel(
-        requests.get(validated_url).content, sheet_name=None, engine="openpyxl"
+
+    excel_content = requests.get(validated_url).content
+
+    # Save initial excel files to the bucket as "raw"
+    excel_extract = NtdDataProductExtract(
+        product=product + "_raw",
+        ts=start,
+        year=year,
+        file_url=validated_url,
+        filename=f"{product}_raw.xlsx",
     )
+    typer.secho(
+        f"saving {humanize.naturalsize(len(excel_content))} bytes to {excel_extract.path}"
+    )
+    excel_extract.save_content(fs=get_fs(), content=excel_content)
+
+    df_dict = pd.read_excel(excel_content, sheet_name=None, engine="openpyxl")
 
     # Rename all columns in dictonary, then fix the key(tab) name of the dictionary
     for key, df in df_dict.items():
