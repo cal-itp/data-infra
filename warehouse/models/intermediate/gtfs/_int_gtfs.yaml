@@ -44,9 +44,7 @@ models:
         description: |
           Number of total file conversions attempted for this feed.
       - name: pct_success
-        description: |
-          Successes as a percent of total files (`count_successes` / `count_files` * 100).
-          If this is a value less than 100, indicates that file conversion failed for some files in this feed.
+        description: '{{ doc("column_pct_sucesss") }}'
 
   - name: int_gtfs_schedule__long_calendar
     description: |

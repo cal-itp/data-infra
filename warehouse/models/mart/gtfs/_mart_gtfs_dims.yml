@@ -3,14 +3,16 @@ version: 2
 x-common-fields:
   - &base64_url
     name: base64_url
-    description: |
-      Base 64 encoded URL from which this data was scraped.
+    description: '{{ doc("column_base64_url") }}'
   - &warning_duplicate_gtfs_key
     name: warning_duplicate_gtfs_key
     description: |
-      Flags rows with a duplicate _gtfs_key; e.g. area_id duplicates would result in _gtfs_key duplicates within a feed version.
-      Treat these rows with caution as they can cause fanout when joining on natural (i.e. GTFS) keys.
-      This column is tested to be majority false (i.e. sanity-check that most records are unique).
+      Flags rows with a duplicate _gtfs_key; e.g. area_id duplicates would result
+      in _gtfs_key duplicates within a feed version.
+      Treat these rows with caution as they can cause fanout when joining on
+      natural (i.e. GTFS) keys.
+      This column is tested to be majority false (i.e. sanity-check that most
+      records are unique).
     tests:
       - not_null
       - dbt_expectations.expect_column_most_common_value_to_be_in_set:
@@ -23,44 +25,52 @@ x-common-fields:
   - &schedule_dim_pk
     name: key
     description: |
-      Synthetic primary key constructed from `feed_key` and `_line_number`. This key is intended to identify
-      an actual _row_ in the GTFS source data, rather than a GTFS entity described in that row. See
-      _gtfs_key as a single key derived from the "natural" key of the entity.
+      Synthetic primary key constructed from `feed_key` and `_line_number`.
+      This key is intended to identify an actual _row_ in the GTFS source data,
+      rather than a GTFS entity described in that row. See _gtfs_key as a single
+      key derived from the "natural" key of the entity.
     tests:
       - not_null
       - unique
   - &schedule_dim_gtfs_key
     name: _gtfs_key
-    description:
-      Synthetic primary natural key constructed from the model's GTFS specification uniqueness.
+    description: |
+      Synthetic primary natural key constructed from the model's GTFS
+      specification uniqueness.
     tests:
       - not_null
       - unique:
-          # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-          # and at that point can move the &primary_key_tests anchor up to here
-          # (until exclusion is dropped, this exclusion condition is different because it's for key instead of feed_key)
+          # TODO: remove this once we deal with Auburn feed that has
+          # tab-delimited files and at that point can move the
+          # &primary_key_tests anchor up to here (until exclusion is dropped,
+          # this exclusion condition is different because it's for key instead
+          # of feed_key)
           where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
   - &schedule_dim_gtfs_key_with_dupe_flag
     <<: *schedule_dim_gtfs_key
     tests:
       - not_null
       - unique:
-          # TODO: remove feed_key filter once we deal with Auburn feed that has tab-delimited files
+          # TODO: remove feed_key filter once we deal with Auburn feed that has
+          # tab-delimited files
           where: "NOT warning_duplicate_gtfs_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
   - &schedule_dim_dt
     name: _dt
-    description: Date of the feed version (i.e. date from _feed_valid_from in UTC); used for upstream partition elimination.
+    description: |
+      Date of the feed version (i.e. date from _feed_valid_from in UTC); used for
+      upstream partition elimination.
     tests:
       - not_null
   - &schedule_dim_line_number
     name: _line_number
-    description: Line number of this record in the original Schedule file; used for incremental materialization.
+    description: |
+      Line number of this record in the original Schedule file; used for
+      incremental materialization.
     tests:
       - not_null
   - &feed_key
     name: feed_key
-    description: |
-      Foreign key to the `dim_schedule_feeds` table.
+    description: '{{ doc("gtfs_schedule_feed_key") }}'
     tests:
       - not_null
       - relationships:
@@ -71,17 +81,22 @@ x-common-fields:
 models:
   - name: dim_schedule_feeds
     description: |
-      Each row is a "feed", representing a unique zipfile version associated with the same GTFS dataset record
-      that was successfully downloaded and has data in the warehouse.
-      When data fails to download, we do not interpolate it unless an identical zipfile is subsequently
-      downloaded. So for example, say we download zipfile A from URL X on January 1, then the download
-      or unzip operation fails for any reason on January 2, and then we download zipfile A from URL X
-      again on January 3. If you check this table on January 3 before the new data has appeared in the
-      warehouse, it will show zipfile A has expired on January 2. But once the same zipfile is ingested
-      again, if you check on January 4, we will show that zipfile A was continuously in effect
-      January 1-3. The reason for this is that if a new zipfile version B were to be uploaded on January 3,
-      we would want to correctly say that we don't know what was in effect on January 2.
-      This table should be used to understand "versions" of constituent data like routes, trips, etc.
+      Each row is a "feed", representing a unique zipfile version associated with
+      the same GTFS dataset record that was successfully downloaded and has data
+      in the warehouse.
+      When data fails to download, we do not interpolate it unless an identical
+      zipfile is subsequently downloaded. So for example, say we download
+      zipfile A from URL X on January 1, then the download or unzip operation
+      fails for any reason on January 2, and then we download zipfile A from
+      URL X again on January 3. If you check this table on January 3 before the
+      new data has appeared in the warehouse, it will show zipfile A has expired
+      on January 2. But once the same zipfile is ingested again, if you check on
+      January 4, we will show that zipfile A was continuously in effect
+      January 1-3. The reason for this is that if a new zipfile version B were to
+      be uploaded on January 3, we would want to correctly say that we don't know
+      what was in effect on January 2.
+      This table should be used to understand "versions" of constituent data like
+      routes, trips, etc.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
@@ -94,12 +109,20 @@ models:
           Synthetic primary key constructed from `base64_url` and `_valid_from`.
         tests:
           - unique:
-              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-              # and at that point can move the &primary_key_tests anchor up to here
-              # (until exclusion is dropped, this exclusion condition is different because it's for key instead of feed_key)
+          # TODO: remove this once we deal with Auburn feed that has
+          # tab-delimited files and at that point can move the
+          # &primary_key_tests anchor up to here (until exclusion is dropped,
+          # this exclusion condition is different because it's for key instead
+          # of feed_key)
               where: "key != '6368fe701bdd68c4f521751a9a222a10'"
           - not_null
       - *base64_url
+      - name: download_success
+        description: '{{ doc("column_download_success") }}'
+      - name: unzip_success
+        description: '{{ doc("column_unzip_success") }}'
+      - name: zipfile_extract_md5hash
+        description: '{{ doc("column_zipfile_md5_hash") }}'
       - name: _valid_from
         description: '{{ doc("column_valid_from") }}'
       - name: _valid_to
@@ -110,6 +133,7 @@ models:
         description: '{{ doc("gtfs_schedule_feed_timezone") }}'
         tests:
           - not_null
+      - *schedule_dim_dt
 
   - name: dim_agency
     description: |
@@ -138,7 +162,8 @@ models:
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
         tests: &not_null_warn
         - not_null:
-            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+            # TODO: remove feed_key filter once we deal with Auburn feed that has
+            # tab-delimited files
             where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
             config:
               severity: warn
@@ -152,7 +177,8 @@ models:
         description: '{{ doc("gtfs_agency__agency_email") }}'
       - &_feed_valid_from
         name: _feed_valid_from
-        description: Should not be used; exists to faciliate incremental materialization.
+        description: |
+          Should not be used; exists to faciliate incremental materialization.
       - &feed_timezone_no_tests
         name: feed_timezone
         description: '{{ doc("gtfs_schedule_feed_timezone") }}'
@@ -173,7 +199,8 @@ models:
         description: '{{ doc("gtfs_areas__area_id") }}'
         tests: &not_null_error
           - not_null:
-              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+              # TODO: remove feed_key filter once we deal with Auburn feed that has
+              # tab-delimited files
               where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - name: area_name
         description: '{{ doc("gtfs_areas__area_name") }}'
@@ -192,7 +219,8 @@ models:
           - not_null
           - unique:
               where: "NOT warning_duplicate_gtfs_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
-      # attribution_id is optional in the GTFS spec, so the flag is present on most/all rows
+      # attribution_id is optional in the GTFS spec, so the flag is present
+      # on most/all rows
       - <<: *warning_duplicate_gtfs_key
         tests:
           - not_null
@@ -256,6 +284,7 @@ models:
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
+      - *base64_url
       - *_feed_valid_from
       - *feed_timezone_no_tests
 
@@ -458,32 +487,44 @@ models:
       - *feed_timezone_no_tests
       - name: start_time_interval
         description: |
-          This is a calculated field that does not appear directly in GTFS. It converts `start_time`
-          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
-          and thus handle times past the following midnight (like `25:40:00`).
-          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+          This is a calculated field that does not appear directly in GTFS.
+          It converts `start_time` to a BigQuery INTERVAL type,
+          which allows us to treat the field as a duration after twelve hours
+          before noon (usually midnight) and thus handle times past the following
+          midnight (like `25:40:00`).
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS
+          defines its "Time" type.
       - name: end_time_interval
         description: |
-          This is a calculated field that does not appear directly in GTFS. It converts `end_time`
-          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
-          and thus handle times past the following midnight (like `25:40:00`).
-          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+          This is a calculated field that does not appear directly in GTFS.
+          It converts `end_time` to a BigQuery INTERVAL type,
+          which allows us to treat the field as a duration after twelve hours
+          before noon (usually midnight) and thus handle times past the following
+          midnight (like `25:40:00`).
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS
+          defines its "Time" type.
       - name: start_time_sec
         description: |
-          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
-
-          Represents `start_time` as a total number of seconds after twelve hours before noon (usually midnight) of the first day of the given trip.
-          For example, `start_time = 21:30:45` would lead to `start_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
-          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
-          `25:40:00`, which are allowed in GTFS.
+          This is a calculated field that does not come from GTFS - it is not
+          a timestamp and can't be treated as such.
+          Represents `start_time` as a total number of seconds
+          after twelve hours before noon (usually midnight) of the first day of
+          the given trip.
+          For example, `start_time = 21:30:45` would lead to
+          `start_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps
+          that wrap past midnight like `25:40:00`, which are allowed in GTFS.
       - name: end_time_sec
         description: |
-          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
-
-          Represents `end_time` as a total number of seconds after twelve hours before noon (usually midnight) of the first day of the given trip.
-          For example, `end_time = 21:30:45` would lead to `end_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
-          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
-          `25:40:00`, which are allowed in GTFS.
+          This is a calculated field that does not come from GTFS - it is not
+          a timestamp and can't be treated as such.
+          Represents `end_time` as a total number of seconds
+          after twelve hours before noon (usually midnight) of the first day of
+          the given trip.
+          For example, `end_time = 21:30:45` would lead to
+          `end_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps
+          that wrap past midnight like `25:40:00`, which are allowed in GTFS.
 
   - name: dim_levels
     description: |
@@ -715,8 +756,10 @@ models:
         description: GEOGPOINT created by the stop latitute and longitude
       - name: warning_missing_primary_key
         description: |
-          Rows with `true` in this column are missing a `stop_id`, the primary key for this table (i.e., `stop_id` was not provided in the raw data).
-          These rows will fail to join with other tables from their feed because they cannot be referenced by a foreign key elsewhere.
+          Rows with `true` in this column are missing a `stop_id`, the primary
+          key for this table (i.e., `stop_id` was not provided in the raw data).
+          These rows will fail to join with other tables from their feed because
+          they cannot be referenced by a foreign key elsewhere.
       - name: stop_timezone_coalesced
         description: '{{ doc("gtfs_schedule_stop_timezone_coalesced") }}'
         tests:
@@ -838,8 +881,10 @@ models:
       - *feed_timezone_no_tests
       - name: warning_duplicate_gtfs_key
         description: |
-          Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
-          instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+          Rows with `true` in this column have a duplicate primary key; i.e.,
+          `trip_id` is duplicated within an individual feed
+          instance and `key` will also be duplicated as a result. Treat these rows
+          with caution. They will cause fanout in joins.
 
   - name: dim_calendar
     description: |
@@ -915,8 +960,9 @@ models:
       Cleaned GTFS schedule stop_times data.
       See https://gtfs.org/schedule/reference/#stop_timestxt for specification.
       Note that fields associated with GTFS-Flex v2 are only partially supported;
-      see https://github.com/cal-itp/data-infra/issues/2574 for implementation status in the
-      Cal-ITP data warehouse and https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md
+      see https://github.com/cal-itp/data-infra/issues/2574 for implementation
+      status in the Cal-ITP data warehouse and
+      https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md
       for the Flex v2 specification.
     tests:
       - dbt_utils.expression_is_true:
@@ -964,47 +1010,62 @@ models:
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
       - name: warning_duplicate_gtfs_key
         description: |
-          Rows with `true` in this column have a duplicate primary key; i.e., the given `trip_id`
-          / `stop_sequence` pair is duplicated within an individual feed instance and `key` will
-          also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+          Rows with `true` in this column have a duplicate primary key; i.e., the
+          given `trip_id` / `stop_sequence` pair is duplicated within an individual
+          feed instance and `key` will also be duplicated as a result. Treat these
+          rows with caution. They will cause fanout in joins.
       - name: warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column are missing the required `stop_id` value.
           This means they will fail to join with `stop` related information.
       - name: arrival_sec
         description: |
-          This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
+          This is a calculated field that does not appear directly in GTFS -
+          it is not a timestamp and can't be treated as such.
 
-          Represents `arrival_time` as a total number of seconds after twelve hours before noon (usually midnight) on the first day of the given trip.
-          For example, `arrival_time = 21:30:45` would lead to `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
-          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
-          `25:40:00`, which are allowed in GTFS.
+          Represents `arrival_time` as a total number of seconds after twelve
+          hours before noon (usually midnight) on the first day of the given trip.
+          For example, `arrival_time = 21:30:45` would lead to
+          `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps
+          that wrap past midnight like `25:40:00`, which are allowed in GTFS.
 
-          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS
+          defines its "Time" type.
       - name: departure_sec
         description: |
-          This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
+          This is a calculated field that does not appear directly in GTFS -
+          it is not a timestamp and can't be treated as such.
 
-          Represents `departure_time` as a total number of seconds after twelve hours before noon (usually midnight) on the first day of the given trip.
-          For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
-          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
-          `25:40:00`, which are allowed in GTFS.
+          Represents `departure_time` as a total number of seconds after twelve
+          hours before noon (usually midnight) on the first day of the given trip.
+          For example, `arrival_time = 21:30:45` would lead to
+          `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps
+          that wrap past midnight like `25:40:00`, which are allowed in GTFS.
 
-          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS
+          defines its "Time" type.
       - name: arrival_time_interval
         description: |
-          This is a calculated field that does not appear directly in GTFS. It converts `arrival_time`
-          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
-          and thus handle times past the following midnight (like `25:40:00`).
+          This is a calculated field that does not appear directly in GTFS. It
+          converts `arrival_time` to a BigQuery INTERVAL type, which allows us to
+          treat the field as a duration after twelve hours before noon
+          (usually midnight) and thus handle times past the following midnight
+          (like `25:40:00`).
 
-          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS
+          defines its "Time" type.
       - name: departure_time_interval
         description: |
-          This is a calculated field that does not appear directly in GTFS. It converts `arrival_time`
-          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
-          and thus handle times past the following midnight (like `25:40:00`).
+          This is a calculated field that does not appear directly in GTFS. It
+          converts `departure_time` to a BigQuery INTERVAL type, which allows us to
+          treat the field as a duration after twelve hours before noon
+          (usually midnight) and thus handle times past the following midnight
+          (like `25:40:00`).
 
-          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS
+          defines its "Time" type.
       - *_feed_valid_from
       - *feed_timezone_no_tests
       - name: start_pickup_drop_off_window
@@ -1025,38 +1086,58 @@ models:
         description: '{{ doc("gtfs_stop_times__drop_off_booking_rule_id") }}'
       - name: start_pickup_drop_off_window_sec
         description: |
-          This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
+          This is a calculated field that does not appear directly in GTFS -
+          it is not a timestamp and can't be treated as such.
 
-          Represents `start_pickup_drop_off_window` as a total number of seconds after twelve hours before noon (usually midnight) on the first day of the given trip.
-          For example, `start_pickup_drop_off_window = 21:30:45` would lead to `start_pickup_drop_off_window_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
-          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
-          `25:40:00`, which are allowed in GTFS.
+          Represents `start_pickup_drop_off_window` as a total number of seconds
+          after twelve hours before noon (usually midnight) on the first day of
+          the given trip.
+          For example, `start_pickup_drop_off_window = 21:30:45` would lead to
+          `start_pickup_drop_off_window_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that
+          wrap past midnight like `25:40:00`, which are allowed in GTFS.
 
-          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS
+          defines its "Time" type.
       - name: end_pickup_drop_off_window_sec
         description: |
-          This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
+          This is a calculated field that does not appear directly in GTFS -
+          it is not a timestamp and can't be treated as such.
 
-          Represents `end_pickup_drop_off_window` as a total number of seconds after twelve hours before noon (usually midnight) on the first day of the given trip.
-          For example, `end_pickup_drop_off_window = 21:30:45` would lead to `end_pickup_drop_off_window_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
-          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
-          `25:40:00`, which are allowed in GTFS.
+          Represents `start_pickup_drop_off_window` as a total number of seconds
+          after twelve hours before noon (usually midnight) on the first day of
+          the given trip.
+          For example, `end_pickup_drop_off_window = 21:30:45` would lead to
+          `end_pickup_drop_off_window_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that
+          wrap past midnight like `25:40:00`, which are allowed in GTFS.
 
-          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS
+          defines its "Time" type.
       - name: start_pickup_drop_off_window_interval
         description: |
-          This is a calculated field that does not appear directly in GTFS. It converts `start_pickup_drop_off_window`
-          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
-          and thus handle times past the following midnight (like `25:40:00`).
+          This is a calculated field that does not appear directly in GTFS -
+          it is not a timestamp and can't be treated as such.
 
-          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+          Represents `start_pickup_drop_off_window` to a BigQuery INTERVAL type,
+          which allows us to treat the field as a duration after twelve hours
+          before noon (usually midnight) and thus handle times past the following
+          midnight (like `25:40:00`)
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS
+          defines its "Time" type.
       - name: end_pickup_drop_off_window_interval
         description: |
-          This is a calculated field that does not appear directly in GTFS. It converts `end_pickup_drop_off_window`
-          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
-          and thus handle times past the following midnight (like `25:40:00`).
+          This is a calculated field that does not appear directly in GTFS -
+          it is not a timestamp and can't be treated as such.
 
-          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+          Represents `end_pickup_drop_off_window` to a BigQuery INTERVAL type,
+          which allows us to treat the field as a duration after twelve hours
+          before noon (usually midnight) and thus handle times past the following
+          midnight (like `25:40:00`)
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS
+          defines its "Time" type.
     meta:
       publish.gis_coordinate_system_epsg: WGS84
 
