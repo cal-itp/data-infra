@@ -11,15 +11,15 @@ The following folder contains the project level directory for all our [Apache Ai
 
 The DAGs for this project are stored and version controlled in the `dags` folder. Each DAG has its own `README` with further information about its specific purpose and considerations. We use [gusty](https://github.com/pipeline-tools/gusty) to simplify DAG management.
 
-Each DAG folder contains a [`METADATA.yml` file](https://github.com/pipeline-tools/gusty#metadata) that contains overall DAG settings, including the DAG's schedule (if any).
+Each DAG folder contains a [`METADATA.yml` file](https://github.com/pipeline-tools/gusty#metadata) that contains overall DAG settings, including the DAG's schedule (if any). Schedules are generally specified in cron format, and the Airflow scheduler uses the internal concept of a [data interval](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html#data-interval) to determine whether to kick off a DAG when scheduled. Some additional reading on the interaction between crontab values and Airflow's DAG start logic can be found in [this blog post](https://whigy.medium.com/why-my-scheduled-dag-does-not-run-9e2811b5030b).
 
-The logs are stored locally in the `logs` folder. You should be unable to add files here but the folder utilizes [a .gitkeep file](https://stackoverflow.com/a/7229996) so that it is consistently avaliable when testing and debugging.
+When developing locally, logs for DAG runs are stored in the `logs` subfolder. You should be unable to add files here but the folder utilizes [a .gitkeep file](https://stackoverflow.com/a/7229996) so that it is consistently avaliable when testing and debugging.
 
-Finally, Airflow plugins can be found in `plugins`; this includes general utility functions as well as custom [operator](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/operators.html) definitions.
+Finally, Airflow plugins can be found in the `plugins` subfolder; this includes general utility functions as well as custom [operator](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/operators.html) definitions.
 
 ## Testing Changes
 
-This project is developed using Docker and docker-compose, and we test most changes via a local version of Airflow that is simialrly configured to the production Composer-managed Airflow instance. Before getting started, please make sure you have [installed Docker on your system](https://docs.docker.com/get-docker/). Docker will need to be running at the time you run any `docker-compose` commands from the console.
+This project is developed using Docker and docker-compose, and we test most changes via a local version of Airflow that is similarly configured to the production Composer-managed Airflow instance - its dependencies are based on the dependency list from the Composer-managed production Airflow instance, copied into a file named `requirements-composer-[x.y.z]-airflow[a.b.c].txt`. Before getting started, please make sure you have [installed Docker on your system](https://docs.docker.com/get-docker/). Docker will need to be running at the time you run any `docker-compose` commands from the console.
 
 To test any changes you've made to DAGs, operators, etc., you'll need to follow a few setup steps:
 
@@ -56,7 +56,13 @@ You may execute DAGs via the web UI, or specify individual tasks via the CLI:
 docker-compose run airflow tasks test download_gtfs_schedule_v2 download_schedule_feeds 2022-04-01T00:00:00
 ```
 
-Additional reading about this setup can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html)
+If a DAG you intend to run locally relies on secrets stored in Google Secret Manager, the Google account you authenticated with will need IAM permissions of "Secret Manager Secret Accessor" or above to access those secrets.
+
+If you locally run any tasks that dispatch requests to use Kubernetes compute resources (i.e. any tasks that use PodOperators), the Google account you authenticated with will need to have access to Google Kubernetes Engine, which is most commonly granted via the "Kubernetes Engine Developer" IAM permission.
+
+Uncommon or new use cases, like implementing Python models, may also require additional IAM permissions related to the specific services a developer wishes to access from their local development environment.
+
+Additional reading about general Airflow setup via Docker can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html).
 
 ### PodOperators
 
@@ -79,7 +85,11 @@ docker-compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly va
 
 - `docker-compose up` exits with code 137 - Check that Docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.
 
-- When testings new an updated `requirements.txt`, you might not see packages update.  You may need to run `docker-compose down --rmi all` to clear out older docker images and recreate with `docker build . --no-cache`.
+- When testing a new or updated `requirements.txt`, you might not see packages update. You may need to run `docker-compose down --rmi all` to clear out older docker images and recreate with `docker build . --no-cache`.
+
+- If a task does not start when expected, it may not have access to its designated [pool](https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/pools.html). Pools can be created and managed in Airflow on a page accessed via the Admin -> Pools menu option. A DAG's pool can be accessed via its DAG Details page, and is generally defined in the `default_args` section of the DAG's `METADATA.yml` file.
+
+- If a task is producing errors but not producing complete logs for troubleshooting, or if it's reporting a memory issue, you may need to increase the RAM given by default to the Docker virtual machine that Airflow runs on. In Docker Desktop this setting can be accessed via the Preferences -> Advanced menu, and requires a restart of the VM to take effect.
 
 ## Deploying Changes to Production
 
