@@ -56,7 +56,7 @@ You may execute DAGs via the web UI, or specify individual tasks via the CLI:
 docker-compose run airflow tasks test download_gtfs_schedule_v2 download_schedule_feeds 2022-04-01T00:00:00
 ```
 
-If a DAG you intend to run locally relies on secrets stored in Google Secret Manager, the Google account you authenticated with will need IAM permissions of "Secret Manager Secret Accessor" or above to access those secrets.
+If a DAG you intend to run locally relies on secrets stored in Google Secret Manager, the Google account you authenticated with will need IAM permissions of "Secret Manager Secret Accessor" or above to access those secrets. Some nonessential secrets are not set via Google Secret Manager, so if you monitor Airflow logs while the application is running, you may see occasional warnings (rather than errors) about missing variables like CALITP_SLACK_URL that can be ignored unless you're specifically testing features that rely on those variables.
 
 If you locally run any tasks that dispatch requests to use Kubernetes compute resources (i.e. any tasks that use PodOperators), the Google account you authenticated with will need to have access to Google Kubernetes Engine, which is most commonly granted via the "Kubernetes Engine Developer" IAM permission.
 

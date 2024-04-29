@@ -27,14 +27,14 @@ are already configured/installed.
 
 3. Execute `poetry install` to create a virtual environment and install requirements.
 
-> [!NOTE]  
-> If you run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
->
-> ```bash
-> export CFLAGS="-I $(brew --prefix graphviz)/include"
-> export LDFLAGS="-L $(brew --prefix graphviz)/lib"
-> poetry install
-> ```
+    > [!NOTE]  
+    > If you run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
+    >
+    > ```bash
+    > export CFLAGS="-I $(brew --prefix graphviz)/include"
+    > export LDFLAGS="-L $(brew --prefix graphviz)/lib"
+    > poetry install
+    > ```
 
 4. Execute `poetry run dbt deps` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`).
 
@@ -59,18 +59,17 @@ are already configured/installed.
 
    See [the dbt docs on profiles.yml](https://docs.getdbt.com/dbt-cli/configure-your-profile) for more background on this file.
 
-> [!NOTE]  
-> This default profile template will set a maximum bytes billed of 2 TB; no models should fail with the default lookbacks in our development environment, even with a full refresh. You can override this limit during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
+    > [!NOTE]  
+    > This default profile template will set a maximum bytes billed of 2 TB; no models should fail with the default lookbacks in our development environment, even with a full refresh. You can override this limit during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
+    >
+    > [!WARNING]  
+    > If you receive a warning similar to the following, do **NOT** overwrite the file. This is a sign that you do not have a `DBT_PROFILES_DIR` variable available in your environment and need to address that first (see step 5).
+    >
+    > ```text
+    > The profile calitp_warehouse already exists in /data-infra/warehouse/profiles.yml. Continue and overwrite it? [y/N]:
+    > ```
 
-
-> [!WARNING]  
-> If you receive a warning similar to the following, do **NOT** overwrite the file. This is a sign that you do not have a `DBT_PROFILES_DIR` variable available in your environment and need to address that first (see step 5).
->
-> ```text
-> The profile calitp_warehouse already exists in /data-infra/warehouse/profiles.yml. Continue and overwrite it? [y/N]:
-> ```
-
-7. Check whether `~/.dbt/profiles.yml` was successfully created, e.g. `cat ~/.dbt/profiles.yml`. If you encountered an error, you may create it by hand and fill it with the same content:
+7. Check whether `~/.dbt/profiles.yml` was successfully created, e.g. `cat ~/.dbt/profiles.yml`. If you encountered an error, you may create it by hand and fill it with the same content - this will point your models at BigQuery datasets (schemas) in the `cal-itp-data-infra-staging` project that are prefixed with your name, where operations on them will not impact production data:
 
    ```yaml
    calitp_warehouse:
@@ -102,7 +101,7 @@ are already configured/installed.
 
 8. Finally, test your connection to our staging BigQuery project with `poetry run dbt debug`. You should see output similar to the following.
 
-   ```
+   ```bash
    ➜  warehouse git:(jupyterhub-dbt) ✗ poetry run dbt debug
    16:50:15  Running with dbt=1.4.5
    dbt version: 1.4.5
@@ -180,7 +179,7 @@ You can enable [displaying hidden folders/files in macOS Finder](https://www.mac
 
 > [!NOTE]  
 > These instructions assume you are on macOS, but are largely similar for other operating systems. Most \*nix OSes will have a package manager that you should use instead of Homebrew.
-
+>
 > [!NOTE]  
 > If you get `Operation not permitted` when attempting to use the terminal, you may need to [fix your terminal permissions](https://osxdaily.com/2018/10/09/fix-operation-not-permitted-terminal-error-macos/)
 
