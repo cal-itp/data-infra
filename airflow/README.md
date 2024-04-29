@@ -13,7 +13,7 @@ The DAGs for this project are stored and version controlled in the `dags` folder
 
 Each DAG folder contains a [`METADATA.yml` file](https://github.com/pipeline-tools/gusty#metadata) that contains overall DAG settings, including the DAG's schedule (if any). Schedules are generally specified in cron format, and the Airflow scheduler uses the internal concept of a [data interval](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html#data-interval) to determine whether to kick off a DAG when scheduled. Some additional reading on the interaction between crontab values and Airflow's DAG start logic can be found in [this blog post](https://whigy.medium.com/why-my-scheduled-dag-does-not-run-9e2811b5030b).
 
-When developing locally, logs for DAG runs are stored in the `logs` subfolder. You should be unable to add files here but the folder utilizes [a .gitkeep file](https://stackoverflow.com/a/7229996) so that it is consistently avaliable when testing and debugging.
+When developing locally, logs for DAG runs are stored in the `logs` subfolder. You should be unable to add files here, but the folder utilizes [a .gitkeep file](https://stackoverflow.com/a/7229996) so that it is consistently avaliable when testing and debugging.
 
 Finally, Airflow plugins can be found in the `plugins` subfolder; this includes general utility functions as well as custom [operator](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/operators.html) definitions.
 
