@@ -44,22 +44,13 @@ Failures can be cleared (re-run) via the Airflow user interface ([accessible via
 
 [This Airflow guide](https://airflow.apache.org/docs/apache-airflow/stable/ui.html) can help you use and interpret the Airflow UI.
 
-### Deprecated DAGs
-
-The following DAGs may still be listed in the Airflow UI even though they are **deprecated or indefinitely paused**. They never need to be re-run. (They show up in the UI because the Airflow database has historical DAG/task entries even though the code has been deleted.)
-
-- `amplitude_benefits`
-- `check_data_freshness`
-- `load-sentry-rtfetchexception-events`
-- `unzip_and_validate_gtfs_schedule`
-
 ## `PodOperators`
 
-When restarting a failed `PodOperator` run, check the logs before restarting. If the logs show any indication that the prior run's pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the pod associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. If you don't know how to check a pod status, please ask in the `#data-infra` channel on Slack before proceeding.
+When restarting a failed run of a DAG that utilizes a `PodOperator`, check the logs before restarting. If the logs show any indication that the prior run's pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the [Kubernetes pod](https://kubernetes.io/docs/concepts/workloads/pods/) associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. Users with proper access to Kubernetes Engine in Google Cloud can check for any [live workloads](<https://console.cloud.google.com/kubernetes/workload/overview?project=cal-itp-data-infra&pli=1&pageState=(%22savedViews%22:(%22i%22:%229699ac902c0a41ae918282ebfa4f5fb2%22,%22c%22:%5B%5D,%22n%22:%5B%5D),%22workload_list_table%22:(%22p%22:0))>) that correspond to the pod referenced in the failed Airflow task's run logs.
 
 ## Backfilling from the command line
 
-From time-to-time some DAGs may need to be re-ran in order to populate new data.
+From time to time some DAGs may need to be re-run in order to populate new data.
 
 Subject to the considerations outlined above, backfilling can be performed by clearing historical runs in the web interface, or via the CLI:
 

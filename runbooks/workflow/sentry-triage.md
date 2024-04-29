@@ -1,12 +1,12 @@
 # Sentry triage
 
-> Important Sentry concepts:
->
+Sentry is a powerful tool for monitoring appliction errors and other targeted events in deployed services and sites. We self-host an instance of Sentry on Cal-ITP infrastructure, available [here](https://sentry.calitp.org/). To make use of the tool to its fullest extent, please read up on some important Sentry concepts:
+
 > - [Issue states](https://docs.sentry.io/product/issues/states-triage/)
 > - [Fingerprinting and grouping](https://docs.sentry.io/product/sentry-basics/grouping-and-fingerprints/)
 > - [Merging issues](https://docs.sentry.io/product/data-management-settings/event-grouping/merging-issues/)
 
-Once a day, the person responsible for triage should check Sentry for new and current issues. There are two separate things to check:
+When we encounter a new application error in an application monitored by Sentry, an alert is generated in the #alerts-data-infra channel in the Cal-ITP Slack group. In addition to checking on those errors, it is valuable to regularly check Sentry for new and current issues, ideally daily. There are two separate things to check:
 
 - All **new issues** from the past 24 hours. An issue is a top-level error/failure/warning, and a new issue represents something we have't seen before (as opposed to a new event instance of an issue that's been occurring for a while). These should be top priority to investigate since they represent net-new problems.
 
@@ -23,11 +23,11 @@ Categorize the issues/events identified and perform relevant steps if the issue 
 
 ## GitHub issues
 
-When creating GitHub issues from Sentry:
+Sentry includes push-button functionality to generate GitHub issues directly from a Sentry issue page. When creating GitHub issues from Sentry:
 
 - Verify that no secrets or other sensitive information is contained in the generated issue body. Sentry's data masking is not perfect (and we may make a configuration mistake), so it's good to double-check.
 
-- Clean up the issue so that someone looking at it later will understand what the error actually is. The auto-generated issues will only contain the exception text and a link back to Sentry; making a more human-friendly issue title and description is helpful.
+- Clean up the issue so that someone looking at it later will understand what the error actually is. The auto-generated issues produced by Sentry will only contain the exception text and a link back to Sentry; making a more human-friendly issue title and description is helpful.
 
 ## Issue types
 
@@ -61,7 +61,3 @@ This category primarily includes unhandled data processing exceptions (e.g. RTFe
   1. Create a GitHub issue to update the fingerprint, usually adding additional values to the fingerprint to distinguish between different errors.
   2. For example, you may want to split up an issue by feed URL, which would mean adding the feed URL to the fingerprint.
   3. When the new fingerprint has been deployed, _resolve_ the existing issue since it should no longer appear.
-
-## Additional Triage Task: Friday Performance Check
-
-Each Friday, the person assigned to Sentry triage should use the [Cal-ITP System Performance and Outcomes Monitoring dashboard](https://dashboards.calitp.org/dashboard/138-cal-itp-system-performance-and-outcomes-monitoring?single_date=2023-06-22) to populate the metrics in the spreadsheet linked within the dashboard. (Checks recommended to occur on Fridays because for one of the metrics, Google auto-bins 7 day periods to Friday-Thursday.)

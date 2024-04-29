@@ -1,11 +1,470 @@
 version: 2
 
+x-common-fields:
+  # Roughly alphabetical + category (feed_*, rt_* original defs, schedule to RT)
+  # datetime column wrangling (min/max/local tz, pacific),
+  # summary stats (num_distinct_*)
+  - &base64_url
+    name: base64_url
+    description: '{{ doc("column_base64_url") }}'
+  - &feed_key
+    name: feed_key
+    description: '{{ doc("gtfs_schedule_feed_key") }}'
+    tests:
+      - not_null
+      - relationships:
+          to: ref('dim_schedule_feeds')
+          field: key
+  - &feed_timezone_no_tests
+    name: feed_timezone
+    description: '{{ doc("gtfs_schedule_feed_timezone") }}'
+  - &feed_type
+    name: feed_type
+    description: '{{ doc("gtfs_rt_feed_type") }}'
+  - &gtfs_dataset_key_errorif
+    name: gtfs_dataset_key
+    description: &gtfs_dataset_key_desc |
+      '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
+    tests:
+      - not_null:
+          config:
+            error_if: ">10000"
+      - relationships:
+          to: ref('dim_gtfs_datasets')
+          field: key
+          config:
+            # there are a dozen rows of SMART transit which was deleted from
+            # Airtable this will work without exception once the Airtable dim is
+            # historical; this threshold may need to increase if the backfill
+            # occurs prior to that
+            error_if: ">20"
+  - &gtfs_rt_dataset_key
+    name: gtfs_dataset_key
+    description: |
+      Foreign key to the associated GTFS dataset record.
+    tests:
+      - not_null:
+          config:
+            where: '__rt_sampled__'
+      - relationships:
+          to: ref('dim_gtfs_datasets')
+          field: key
+          config:
+            # there are a dozen rows of SMART transit which was deleted from
+            # Airtable this will work without exception once the Airtable dim is
+            # historical; this threshold may need to increase if the backfill
+            # occurs prior to that
+            error_if: ">20"
+            where: '__rt_sampled__'
+  - &gtfs_rt_name
+    name: gtfs_dataset_name
+    description: |
+      Name from the associated GTFS dataset record.
+  - &gtfs_dataset_key
+    name: gtfs_dataset_key
+    description: *gtfs_dataset_key_desc
+    tests:
+      - dbt_utils.not_null_proportion:
+          # TODO: raise back to .999 after some time getting new data -
+          # was .998 because old data pipeline produced more nulls
+          at_least: 0.998
+      - relationships:
+          to: ref('dim_gtfs_datasets')
+          field: key
+          config:
+            # there are a dozen rows of SMART transit which was deleted from
+            # Airtable this will work without exception once the Airtable dim is
+            # historical; this threshold may need to increase if the backfill
+            # occurs prior to that
+            error_if: ">20"
+  - &gtfs_rt_schedule_dataset_key
+    name: schedule_gtfs_dataset_key
+    description: '{{ doc("column_rt_schedule_dataset_key") }}'
+    tests:
+      - relationships:
+          to: ref('dim_gtfs_datasets')
+          field: key
+          config:
+            where: '__rt_sampled__'
+  - &gtfs_rt_schedule_dataset_name
+    name: schedule_name
+    description: '{{ doc("column_rt_schedule_dataset_name") }}'
+  - &gtfs_rt_schedule_feed_key
+    name: schedule_feed_key
+    description: '{{ doc("column_rt_schedule_feed_key") }}'
+    tests:
+      - relationships:
+          to: ref('dim_schedule_feeds')
+          field: key
+          config:
+            where: '__rt_sampled__'
+  - &gtfs_rt_schedule_feed_timezone
+    name: schedule_feed_timezone
+    description: '{{ doc("column_rt_schedule_feed_timezone") }}'
+  - &rt_schedule_base64_url
+    name: schedule_base64_url
+    description: '{{ doc("column_rt_schedule_base64_url") }}'
+  - &trip_instance_key
+    name: trip_instance_key
+    description: |
+      A trip level identifier that uniquely identifies an individual trip
+      across feed types (schedule, trip updates, vehicle positions, service
+      alerts).
+
+      Composite of:
+      - base64 URL of associated schedule feed
+      - service date
+      - trip_id
+      - iteration number, which attempts to normalize trip start times
+    tests:
+      - not_null
+      - unique_proportion:
+          at_least: 0.9999
+  - &rt_trip_summary_key
+    name: key
+    description: |
+      Composite of calculated service date, URL, trip ID, and trip start time.
+    tests:
+      - not_null
+      - unique_proportion:
+          at_least: 0.9999
+  - &rt_iteration_num
+    name: iteration_num
+    description: |
+      0-based ordered count of `trip_start_time` values for this `trip_id`
+      on this `service_date`. Ex.: If a given `trip_id` appears with
+      `trip_start_time` values of "12:05:10" and "14:40:00", the first will
+      have `iteration_num` of 0 and the second will have `iteration_num`
+      of 1.
+      This helps normalize the following cases:
+      - For frequency-based trips: `trip_start_time` in RT data may not
+      align exactly with the start time of any individual iteration in the
+      schedule data (especially if `frequencies.exact_times` = 1 in
+      schedule), so this field normalizes
+      - Across RT feeds: We have seen cases where, for example, the trip
+      updates feed provides `trip_start_time` (even for non-frequency-based
+      trips) but the vehicle positions feed does not (the field is null).
+      We can calculate a `iteration_num` of 0 for both feeds to account for
+      this difference, because it is likely a byproduct of technical
+      implementation rather than a true indication that the two represent
+      different trips.
+  - &gtfs_rt_dt
+    name: dt
+    description: |
+      Date (UTC) on which this data was scraped. A value for this field
+      must be provided when querying this model due to data size.
+  - &gtfs_rt_hour
+    name: hour
+    description: |
+      The starting timestamp for the hour (UTC) in which this data was scraped.
+      Example value: '2023-06-14T15:00:00+00:00'. Adding a filter on this can
+      further improve performance.
+  - &gtfs_rt_extract_ts
+    name: _extract_ts
+    description: '{{ doc("column_extract_ts") }}'
+  - &gtfs_rt_config_extract_ts
+    name: _config_extract_ts
+    description: '{{ doc("column_config_extract_ts") }}'
+  - &rt_service_date
+    name: service_date
+    description: |
+      Attempt to identify the `service_date` (corresponding to the related
+      schedule feed) for trip activity referenced in a GTFS RT feed. It uses
+      the following fallback logic:
+      * If `trip_start_date` is populated, use that. This is assumed to be
+      provided with respect to `schedule_feed_timezone`.
+      * Otherwise, for trip updates and vehicle positions, if
+      `trip_update_timestamp` or `vehicle_timestamp` (respectively) are
+      populated, convert that to the `schedule_feed_timezone` and extract the
+      date from that.
+      * Otherwise, use `header_timestamp` converted to `schedule_feed_timezone`
+      and extract the date.
+      * Finally (and this generally should not happen, since `header_timestamp`
+      should be populated), fall back to `_extract_ts` converted to
+      `schedule_feed_timezone` and extract the date.
+  - &rt_trip_start_time_interval
+    name: trip_start_time_interval
+    description: &rt_trip_start_time_interval_desc |
+      `trip_start_time` converted to a BigQuery INTERVAL type to allow handling
+      for times after midnight.
+      See https://gtfs.org/schedule/reference/#field-types for how time strings
+      are defined in GTFS.
+      *Note: If the interval is longer than 24 hours and `trip_start_date` is
+      not populated, the interpretation for this field becomes unclear.*
+  - &rt_header_timestamp
+    name: header_timestamp
+    description: '{{ doc("gtfs_feed_header__timestamp") }}'
+  - &rt_header_incrementality
+    name: header_incrementality
+    description: '{{ doc("gtfs_feed_header__incrementality") }}'
+  - &rt_header_version
+    name: header_version
+    description: '{{ doc("gtfs_feed_header__version") }}'
+  - &rt_id
+    name: id
+    description: '{{ doc("gtfs_feed_entity__id") }}'
+  - &rt_vehicle_id
+    name: vehicle_id
+    description: '{{ doc("gtfs_vehicle_descriptor__id") }}'
+  - &rt_vehicle_label
+    name: vehicle_label
+    description: '{{ doc("gtfs_vehicle_descriptor__label") }}'
+  - &rt_vehicle_license_plate
+    name: vehicle_license_plate
+    description: '{{ doc("gtfs_vehicle_descriptor__license_plate") }}'
+  - &rt_vehicle_wheelchair_accessible
+    name: vehicle_wheelchair_accessible
+    description: '{{ doc("gtfs_vehicle_descriptor__wheelchair_accessible") }}'
+  - &rt_trip_id
+    name: trip_id
+    description: '{{ doc("gtfs_trip_descriptor__trip_id") }}'
+  - &rt_trip_route_id
+    name: trip_route_id
+    description: '{{ doc("gtfs_trip_descriptor__route_id") }}'
+  - &rt_trip_direction_id
+    name: trip_direction_id
+    description: '{{ doc("gtfs_trip_descriptor__direction_id") }}'
+  - &rt_trip_start_time
+    name: trip_start_time
+    description: &rt_trip_start_time_desc |
+      '{{ doc("gtfs_trip_descriptor__start_time") }}'
+  - &rt_trip_start_date
+    name: trip_start_date
+    description: &rt_trip_start_date_desc |
+      '{{ doc("gtfs_trip_descriptor__start_date") }}'
+  - &rt_trip_schedule_relationship
+    name: trip_schedule_relationship
+    description: '{{ doc("gtfs_trip_descriptor__schedule_relationship") }}'
+  - &rt_agency_id
+    name: agency_id
+    description: '{{ doc("gtfs_entity_selector__agency_id") }}'
+  - &rt_route_id
+    name: route_id
+    description: '{{ doc("gtfs_entity_selector__route_id") }}'
+  - &rt_route_type
+    name: route_type
+    description: '{{ doc("gtfs_entity_selector__route_type") }}'
+  - &rt_direction_id
+    name: direction_id
+    description: '{{ doc("gtfs_entity_selector__direction_id") }}'
+  - &rt_stop_id
+    name: stop_id
+    description: '{{ doc("gtfs_entity_selector__stop_id") }}'
+  - &rt_trip_update_timestamp
+    name: trip_update_timestamp
+    description: '{{ doc("gtfs_trip_update__timestamp") }}'
+  - &rt_trip_update_delay
+    name: trip_update_delay
+    description: '{{ doc("gtfs_trip_update__delay") }}'
+  - &rt_active_period_start
+    name: active_period_start
+    description: '{{ doc("gtfs_time_range__start") }}'
+  - &rt_active_period_end
+    name: active_period_end
+    description: '{{ doc("gtfs_time_range__end") }}'
+  - &rt_vp_current_stop_sequence
+    name: current_stop_sequence
+    description: '{{ doc("gtfs_vehicle_position__current_stop_sequence") }}'
+  - &rt_vp_stop_id # distinguish from stop_time_updates__stop_id
+    name: stop_id
+    description: '{{ doc("gtfs_vehicle_position__stop_id") }}'
+  - &rt_current_status
+    name: current_status
+    description: '{{ doc("gtfs_vehicle_position__current_status") }}'
+  - &rt_vehicle_timestamp
+    name: vehicle_timestamp
+    description: '{{ doc("gtfs_vehicle_position__timestamp") }}'
+  - &rt_congestion_level
+    name: congestion_level
+    description: '{{ doc("gtfs_vehicle_position__congestion_level") }}'
+  - &rt_occupancy_status
+    name: occupancy_status
+    description: '{{ doc("gtfs_vehicle_position__occupancy_status") }}'
+  - &rt_occupancy_percentage
+    name: occupancy_percentage
+    description: |
+      '{{ doc("gtfs_vehicle_position__occupancy_percentage") }}'
+  - &rt_stu_stop_sequence
+    name: stop_sequence
+    description: '{{ doc("gtfs_stop_time_update__stop_sequence") }}'
+  - &rt_stu_stop_id
+    name: stop_id
+    description: '{{ doc("gtfs_stop_time_update__stop_id") }}'
+  - &rt_stu_schedule_relationship
+    name: schedule_relationship
+    description: '{{ doc("gtfs_stop_time_update__schedule_relationship") }}'
+  - &rt_active_period_start_ts
+    name: active_period_start_ts
+    description: |
+      `active_period_start` converted to a TIMESTAMP data type.
+      If `active_period_start` is null, will be midnight on January 1, 1900.
+      The spec (https://gtfs.org/realtime/reference/#message-alert) outlines
+      two cases:
+        1. If one of active period start/end is populated but the other is
+        not, the other should be treated as +/- infinity
+        2. If neither is populated, assume that the message is active while
+        it is present in the feed
+      Imputing these timestamp versions of the columns to be far future/past
+      covers both cases for our use cases.TIMESTAMP
+  - &rt_active_period_end_ts
+    name: active_period_end_ts
+    description: |
+      `active_period_end` converted to a  data type.
+      If `active_period_end` is null, will be midnight on January 1, 2099.
+      The spec (https://gtfs.org/realtime/reference/#message-alert) outlines
+      two cases:
+        1. If one of active period start/end is populated but the other is
+        not, the other should be treated as +/- infinity
+        2. If neither is populated, assume that the message is active while
+        it is present in the feed
+      Imputing these timestamp versions of the columns to be far future/past
+      covers both cases for our use cases.
+  - &min_extract_ts
+    name: min_extract_ts
+    description: |
+      Timestamp of the first extract (i.e. the time at which we downloaded
+      this feed extract) of the entity being summarized.
+      For RT, our extracts are pinned to 20 second intervals,
+      i.e. :00, :20, :40.
+  - &max_extract_ts
+    name: max_extract_ts
+    description: |
+      Timestamp of the last extract (i.e. the time at which we downloaded
+      this feed extract) of the entity being summarized.
+      For RT, our extracts are pinned to 20 second intervals,
+      i.e. :00, :20, :40.
+  - &extract_duration_minutes
+    name: extract_duration_minutes
+    description: |
+      The difference between `max_extract_ts` and `min_extract_ts` in
+      minutes, representing the duration of time for which this entity was
+      present in message responses we received from the agency.
+      Note that the entity may not have been present in every message
+      between the minimum and maximum timestamps, and therefore may not have
+      been present continuously for the duration listed here.
+  - &min_extract_ts_local_tz
+    name: min_extract_datetime_local_tz
+    description: |
+      `min_extract_ts` converted to a DATETIME type in
+      `schedule_feed_timezone`.
+  - &max_extract_ts_local_tz
+    name: max_extract_datetime_local_tz
+    description: |
+      `max_extract_ts` converted to a DATETIME type in
+      `schedule_feed_timezone`.
+  - &min_extract_ts_pacific
+    name: min_extract_datetime_pacific
+    description: |
+      `min_extract_ts` converted to a DATETIME type in the
+      "America/Los_Angeles" time zone.
+  - &max_extract_ts_pacific
+    name: max_extract_datetime_pacific
+    description: |
+      `max_extract_ts` converted to a DATETIME type in the
+      "America/Los_Angeles" time zone.
+  - &_header_message_age
+    name: _header_message_age
+    description: '{{ doc("column_header_message_age") }}'
+  - &min_header_timestamp
+    name: min_header_timestamp
+    description: |
+      Earliest header timestamp of a message referencing this entity.
+  - &max_header_timestamp
+    name: max_header_timestamp
+    description: |
+      Latest header timestamp of a message referencing this entity.
+  - &header_duration_minutes
+    name: header_duration_minutes
+    description: |
+      The difference between `max_header_timestamp` and
+      `min_header_timestamp` in minutes, representing the duration of time
+      for which this entity was present in the messages produced by the
+      agency.
+      Note that the entity may not have been present in every message
+      between the minimum and maximum timestamps, and therefore may not have
+      been present continuously for the duration listed here.
+  - &min_header_local_tz
+    name: min_header_datetime_local_tz
+    description: |
+      `min_header_timestamp` converted to a DATETIME type in
+      `schedule_feed_timezone`.
+  - &max_header_local_tz
+    name: max_header_datetime_local_tz
+    description: |
+      `max_header_timestamp` converted to a DATETIME type in
+      `schedule_feed_timezone`.
+  - &min_header_pacific
+    name: min_header_datetime_pacific
+    description: |
+      `min_header_timestamp` converted to a DATETIME type in the
+      "America/Los_Angeles" time zone.
+  - &max_header_pacific
+    name: max_header_datetime_pacific
+    description: |
+      `max_header_timestamp` converted to a DATETIME type in the
+      "America/Los_Angeles" time zone.
+  - &_trip_update_message_age
+    name: _trip_update_message_age
+    description: '{{ doc("column_trip_update_message_age") }}'
+  - &_trip_update_message_age_vs_header
+    name: _trip_update_message_age_vs_header
+    description: '{{ doc("column_trip_update_message_age_vs_header") }}'
+  - &num_distinct_extract_ts
+    name: num_distinct_extract_ts
+    description: |
+      Distinct count of `_extract_ts` values for messages being summarized
+      here (`_extract_ts` represents the instant at which we attempted to
+      scrape data for this feed.)
+      This is the count of distinct messages in which this entity appeared.
+      If you divide this value by `extract_duration_minutes`, you would
+      get a count of how many messages per minute this entity was present for,
+      which can help give a sense for how continuously this entity was updated.
+      This number should be equal to `num_distinct_message_keys`.
+  - &_vehicle_message_age
+    name: _vehicle_message_age
+    description: '{{ doc("column_vehicle_message_age") }}'
+  - &_vehicle_message_age_vs_header
+    name: _vehicle_message_age_vs_header
+    description: |
+      '{{ doc("column_vehicle_message_age_vs_header") }}'
+  - &num_distinct_header_timestamps
+    name: num_distinct_header_timestamps
+    description: |
+      Distinct count of header timestamps for messages being summarized
+      (https://gtfs.org/realtime/reference/#message-feedheader).
+  - &num_distinct_message_keys
+    name: num_distinct_message_keys
+    description: |
+      Distinct count of message keys being summarized here (message keys are
+      the synthetic keys we generate for an individual RT message response.)
+      This is the count of distinct messages in which this entity appeared.
+      If you divide this value by `extract_duration_minutes`, you would get
+      a count of how many messages per minute this entity was present for,
+      which can help give a sense for how continuously this trip was updated.
+      This number should be equal to `num_distinct_extract_ts`.
+
+  - &service_date_for_summaries
+    name: service_date
+    description: |
+      Agency-defined service date on which this service level was present.
+      This respects the agency's definition of a service day, which may not
+      correspond to a calendar date or even a 24-hour period.
+      See https://gtfs.org/schedule/reference/#field-types for the GTFS
+      Schedule definition of a "date" data type or `fct_scheduled_trips` for
+      more dates that can be associated with trip activity.
+
+      This date is used so that this table's service summaries correspond to the
+      service levels that an agency might describe on a given (service) date,
+      even if that does not correspond to the actual calendar date on which the
+      given trip activity occurred.
+
+
 models:
   - name: fct_daily_schedule_feeds
     description: |
-      Each row is a unique date / feed pair, where the feed is the feed version that was in effect at
-      noon Pacific Time on that date. This is intended to make it clear what feed version to use
-      to analyze a given date.
+      Each row is a unique date / feed pair, where the feed is the feed version
+      that was in effect at noon Pacific Time on that date. This is intended to
+      make it clear what feed version to use to analyze a given date.
     columns:
       - name: key
         description: |
@@ -16,56 +475,21 @@ models:
       - name: date
         description: |
           Date on which the given feed was active at noon Pacific Time.
-      - &feed_key
-        name: feed_key
-        description: |
-          Foreign key to the `dim_schedule_feeds` table.
-        tests:
-          - not_null
-          - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
-      - &gtfs_dataset_key_errorif
-        name: gtfs_dataset_key
-        description: &gtfs_dataset_key_desc |
-          Foreign key to the associated GTFS dataset record.
-          Because GTFS data was downloaded in the v1 pipeline before
-          `gtfs dataset` records were being archived in the warehouse,
-          it is possible for GTFS data to be associated with a GTFS dataset
-          record that was not yet in effect at the time the data was downloaded.
-          (So, you may see GTFS data from January 2022 associated with a GTFS dataset
-          record that does not take effect until July 2022.)
-          This is done for convenience to facilitate labeling of older data (the alternative
-          would be failing to join and making it essentially impossible to label
-          historical GTFS data with their associated transit database records).
-        tests:
-          - not_null:
-              config:
-                error_if: ">10000"
-          - relationships:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              config:
-                # there are a dozen rows of SMART transit which was deleted from Airtable
-                # this will work without exception once the Airtable dim is historical;
-                # this threshold may need to increase if the backfill occurs prior to that
-                error_if: ">20"
-      - &feed_timezone_no_tests
-        name: feed_timezone
-        description: '{{ doc("gtfs_schedule_feed_timezone") }}'
+      - *feed_key
+      - *gtfs_dataset_key_errorif
+      - *base64_url
+      - *feed_timezone_no_tests
 
   - name: fct_schedule_feed_downloads
     description: |
-      Each row is an instance of a download attempt, uniquely identified by base64_url and
-      timestamp.
+      Each row is an instance of a download attempt, uniquely identified by
+      base64_url and timestamp.
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `base64_url` and `ts`.
         tests: *primary_key_tests
-      - name: feed_key
-        description: |
-          Foreign key to the `dim_schedule_feeds` table.
+      - <<: *feed_key
         tests:
           - not_null:
               config:
@@ -77,35 +501,33 @@ models:
       - name: ts
         description: |
           Timestamp at which this feed download attempt occurred.
-      - &base64_url
-        name: base64_url
-        description: |
-          Base 64 encoded URL from which this data was scraped.
+      - *base64_url
       - name: download_success
-        description: |
-          Boolean indicating whether this download attempt was successful.
+        description: '{{ doc("column_download_success") }}'
       - name: download_exception
-        description: |
-          If download attempt failed, lists the exception that was encountered.
+        description: '{{ doc("column_download_exception") }}'
+      - name: last_modified_timestamp
+        description: Feed last modified string converted to TIMESTAMP data type.
       - name: unzip_success
-        description: |
-          Boolean indicating whether this unzip attempt was successful.
+        description: '{{ doc("column_unzip_success") }}'
       - name: unzip_exception
-        description: |
-          If unzip attempt failed, lists the exception that was encountered.
+        description: '{{ doc("column_unzip_exception") }}'
       - name: zipfile_extract_md5hash
         description: '{{ doc("column_zipfile_md5_hash") }}'
       - name: zipfile_files
         description: '{{ doc("column_zipfile_files") }}'
       - name: zipfile_dirs
         description: '{{ doc("column_zipfile_dirs") }}'
+      - name: pct_files_successfully_parsed
+        description: '{{ doc("column_pct_sucesss") }}'
 
   - name: fct_trip_updates_messages
     description: |
       Each row is a message received from a trip updates GTFS RT feed.
-      See https://gtfs.org/realtime/reference/#message-tripupdate for information
-      about message structure.
-      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      See https://gtfs.org/realtime/reference/#message-tripupdate for
+      information about message structure.
+      Due to data size, this table **must** be queried with a date filter
+      (like `WHERE dt = 'YYYY-MM-DD'`).
       Hour filters will also further improve performance.
     columns:
       - name: key
@@ -118,216 +540,42 @@ models:
               where: '__rt_sampled__'
           - not_null:
               where: '__rt_sampled__'
-      - &gtfs_rt_dataset_key
-        name: gtfs_dataset_key
-        description: |
-          Foreign key to the associated GTFS dataset record.
-        tests:
-          - not_null:
-              config:
-                where: '__rt_sampled__'
-          - relationships:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              config:
-                # there are a dozen rows of SMART transit which was deleted from Airtable
-                # this will work without exception once the Airtable dim is historical;
-                # this threshold may need to increase if the backfill occurs prior to that
-                error_if: ">20"
-                where: '__rt_sampled__'
-      - &gtfs_rt_dt
-        name: dt
-        description: |
-          Date (UTC) on which this data was scraped. A value for this field must be provided when querying this model due
-          to data size.
-      - &gtfs_rt_hour
-        name: hour
-        description: |
-          The starting timestamp for the hour (UTC) in which this data was scraped.
-          Example value: '2023-06-14T15:00:00+00:00'. Adding a filter on this can further improve performance.
+      - *gtfs_rt_dataset_key
+      - *gtfs_rt_dt
+      - *gtfs_rt_hour
       - *base64_url
-      - &gtfs_rt_extract_ts
-        name: _extract_ts
-        description: |
-            Timestamp at which this message was scraped. More specifically, this identifies the individual "tick" for
-            which this data was collected.
-            These value are pinned to `:00`, `:20`, `:40` second values (to ensure consistency), but there can be some slippage
-            between the `_extract_ts` and the time that the data was actually requested.
-      - &gtfs_rt_config_extract_ts
-        name: _config_extract_ts
-        description: |
-          The timestamp at which the GTFS data config for this download was extracted. This will correspond to the
-          `ts` value for the associated Airtable data extract.
-          Note that there may not be a corresponding value in `dim_gtfs_datasets` with this value in `_valid_from`, because this
-          value updates every time that the Airtable data extract runs, whereas `dim_gtfs_datasets` has versioning applied
-          and `_valid_from` only updates when an attribute within the record actually changes.
-      - &gtfs_rt_name
-        name: gtfs_dataset_name
-        description: |
-          Name from the associated GTFS dataset record.
-      - &gtfs_rt_schedule_dataset_key
-        name: schedule_gtfs_dataset_key
-        description: |
-          The foreign key to `dim_gtfs_datasets` for the GTFS schedule dataset record associated with this GTFS RT dataset for validation purposes.
-        tests:
-          - relationships:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              config:
-                where: '__rt_sampled__'
-      - &rt_service_date
-        name: service_date
-        description: |
-          Attempt to identify the `service_date` (corresponding to the related schedule feed) for trip activity referenced in a
-          GTFS RT feed. It uses the following fallback logic:
-          * If `trip_start_date` is populated, use that. This is assumed to be provided with respect to `schedule_feed_timezone`.
-          * Otherwise, for trip updates and vehicle positions, if `trip_update_timestamp` or `vehicle_timestamp` (respectively) are populated, convert that
-          to the `schedule_feed_timezone` and extract the date from that.
-          * Otherwise, use `header_timestamp` converted to `schedule_feed_timezone` and extract the date.
-          * Finally (and this generally should not happen, since `header_timestamp` should be populated), fall back to `_extract_ts` converted to `schedule_feed_timezone` and extract the date.
-      - &rt_schedule_base64_url
-        name: schedule_base64_url
-        description: |
-          URL-safe base64-encoded URL of the schedule feed used to validate
-          this RT feed.
-      - &gtfs_rt_schedule_dataset_name
-        name: schedule_name
-        description: |
-          Name of the GTFS schedule dataset used to validate this GTFS RT dataset.
-      - &gtfs_rt_schedule_feed_key
-        name: schedule_feed_key
-        description: |
-          Foreign key to `dim_schedule_feeds` for the GTFS schedule feed associated with the
-          GTFS schedule dataset that is used to validate this GTFS RT data.
-          This is the schedule feed version that was in effect at the time the GTFS RT data
-          was scraped.
-          If this is null, we did not download GTFS schedule data associated with the dataset used
-          to validate this GTFS RT data. This could happen because of download failures (for example, a temporary technical issue) or
-          because of issues with the GTFS dataset associations upstream.
-        tests:
-          - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
-              config:
-                where: '__rt_sampled__'
-      - &gtfs_rt_schedule_feed_timezone
-        name: schedule_feed_timezone
-        description: |
-          The `feed_timezone` of the feed referenced by `schedule_feed_key`.
-          This information is required to match trips from GTFS RT to
-          their scheduled counterparts, so that the date/time data from the RT feed
-          can be interpreted within the appropriate time zone to align with its schedule.
-      - &rt_trip_start_time_interval
-        name: trip_start_time_interval
-        description: &rt_trip_start_time_interval_desc |
-          `trip_start_time` converted to a BigQuery INTERVAL type to allow handling for times after midnight.
-          See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
-          *Note: If the interval is longer than 24 hours and `trip_start_date` is not populated, the interpretation for this
-          field becomes unclear.*
-      - &rt_header_timestamp
-        name: header_timestamp
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-          Field has been converted to TIMESTAMP type for convenience.
-      - &rt_header_incrementality
-        name: header_incrementality
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-      - &rt_header_version
-        name: header_version
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedheader.
-      - &rt_id
-        name: id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-feedentity.
-      - name: trip_update_timestamp
-        description: |
-          `timestamp` provided in this trip update message.
-          See: https://gtfs.org/realtime/reference/#message-tripupdate.
-      - name: trip_update_delay
-        description: |
-          `delay` provided in this trip update message.
-          See: https://gtfs.org/realtime/reference/#message-tripupdate.
-      - &rt_vehicle_id
-        name: vehicle_id
-        description: |
-          `id` provided in the RT message vehicle descriptor.
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-      - &rt_vehicle_label
-        name: vehicle_label
-        description: |
-          `label` provided in the RT message vehicle descriptor.
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-      - &rt_vehicle_license_plate
-        name: vehicle_license_plate
-        description: |
-          `license_plate` provided in the RT message vehicle descriptor.
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-      - &rt_vehicle_wheelchair_accessible
-        name: vehicle_wheelchair_accessible
-        description: |
-          `wheelchair_accessible` value provided in the RT message vehicle descriptor.
-          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-      - &rt_trip_id
-        name: trip_id
-        description: |
-          `trip_id` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field and how it corresponds to GTFS schedule data.
-      - &rt_trip_route_id
-        name: trip_route_id
-        description: |
-          `route_id` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field and how it corresponds to GTFS schedule data.
-      - &rt_trip_direction_id
-        name: trip_direction_id
-        description: |
-          `direction_id` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - &rt_trip_start_time
-        name: trip_start_time
-        description: &rt_trip_start_time_desc |
-          `start_time` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - &rt_trip_start_date
-        name: trip_start_date
-        description: &rt_trip_start_date_desc |
-          `start_date` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
-      - &rt_trip_schedule_relationship
-        name: trip_schedule_relationship
-        description: |
-          `schedule_relationship` provided in the RT message trip descriptor.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
-          for details on how to interpret this field.
+      - *gtfs_rt_extract_ts
+      - *gtfs_rt_config_extract_ts
+      - *gtfs_rt_name
+      - *gtfs_rt_schedule_dataset_key
+      - *rt_service_date
+      - *rt_schedule_base64_url
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *gtfs_rt_schedule_feed_timezone
+      - *rt_trip_start_time_interval
+      - *rt_header_timestamp
+      - *rt_header_incrementality
+      - *rt_header_version
+      - *rt_id
+      - *rt_trip_update_timestamp
+      - *rt_trip_update_delay
+      - *rt_vehicle_id
+      - *rt_vehicle_label
+      - *rt_vehicle_license_plate
+      - *rt_vehicle_wheelchair_accessible
+      - *rt_trip_id
+      - *rt_trip_route_id
+      - *rt_trip_direction_id
+      - *rt_trip_start_time
+      - *rt_trip_start_date
+      - *rt_trip_schedule_relationship
       - name: stop_time_updates
         description: |
           See https://gtfs.org/realtime/reference/#message-stoptimeupdate.
-      - &_header_message_age
-        name: _header_message_age
-        description: |
-          Difference between `_extract_ts` (time at which we scraped the message) and `header_timestamp` (timestamp
-          of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader).
-          Because of delay in the request process, the actual scrape request may occur up to a few
-          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
-          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
-          measurements below that level.)
-      - name: _trip_update_message_age
-        description: |
-          Difference between `_extract_ts` (time at which we scraped the message) and `trip_update_timestamp` (timestamp
-          of individual trip update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
-          Because of delay in the request process, the actual scrape request may occur up to a few
-          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
-          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
-          measurements below that level.)
-      - name: _trip_update_message_age_vs_header
-        description: |
-          Difference between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
-          and `trip_update_timestamp` (timestamp of individual trip_update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
+      - *_header_message_age
+      - *_trip_update_message_age
+      - *_trip_update_message_age_vs_header
 
   - name: fct_stop_time_updates
     description: |
@@ -343,10 +591,51 @@ models:
       - *gtfs_rt_config_extract_ts
       - *gtfs_rt_name
       - *gtfs_rt_schedule_dataset_key
+      - *rt_schedule_base64_url
       - *gtfs_rt_schedule_dataset_name
       - *gtfs_rt_schedule_feed_key
       - *gtfs_rt_schedule_feed_timezone
+      - *rt_service_date
       - *_header_message_age
+      - *_trip_update_message_age
+      - *_trip_update_message_age_vs_header
+      - *rt_header_timestamp
+      - *rt_header_version
+      - *rt_header_incrementality
+      - *rt_id
+      - *rt_trip_update_timestamp
+      - *rt_trip_update_delay
+      - *rt_vehicle_id
+      - *rt_vehicle_label
+      - *rt_vehicle_license_plate
+      - *rt_vehicle_wheelchair_accessible
+      - *rt_trip_id
+      - *rt_trip_route_id
+      - *rt_trip_direction_id
+      - *rt_trip_start_time
+      - *rt_trip_start_time_interval
+      - *rt_trip_start_date
+      - *rt_trip_schedule_relationship
+      - name: _trip_updates_message_key
+        description: |
+          Synthetic primary key constructed from `base64_url`, `extract_ts`,
+          entity `id`, `vehicle_id`, and `trip_id`.
+      - *rt_stu_stop_sequence
+      - *rt_stu_stop_id
+      - name: arrival_delay
+        description: '{{ doc("gtfs_stop_time_event__delay") }}'
+      - name: arrival_time
+        description: '{{ doc("gtfs_stop_time_event__time") }}'
+      - name: arrival_uncertainty
+        description: '{{ doc("gtfs_stop_time_event__uncertainty") }}'
+      - name: departure_delay
+        description: '{{ doc("gtfs_stop_time_event__delay") }}'
+      - name: departure_time
+        description: '{{ doc("gtfs_stop_time_event__time") }}'
+      - name: departure_uncertainty
+        description: '{{ doc("gtfs_stop_time_event__uncertainty") }}'
+      - *rt_stu_schedule_relationship
+
   - name: fct_vehicle_locations
     description: |
       De-duped vehicle positions, removing redundant/duplicated positions
@@ -354,19 +643,87 @@ models:
       level.
     columns:
       - name: key
+        description: |
+          Synthetic primary key constructed from `service_date`, `base64_url`,
+          `location_timestamp`, `vehicle_id`, `vehicle_label`,
+          `trip_id`, and `trip_start_time`.
         tests: *almost_unique_rt_key_tests
+      - name: gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - *gtfs_rt_dt
+      - *rt_service_date
+      - *gtfs_rt_hour
+      - *base64_url
+      - *gtfs_rt_extract_ts
+      - *gtfs_rt_config_extract_ts
+      - *gtfs_rt_name
+      - *gtfs_rt_schedule_dataset_key
+      - *rt_schedule_base64_url
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *gtfs_rt_schedule_feed_timezone
+      - *_header_message_age
+      - *_vehicle_message_age
+      - *rt_header_timestamp
+      - *rt_header_version
+      - *rt_header_incrementality
+      - *rt_id
+      - *rt_vp_current_stop_sequence
+      - *rt_vp_stop_id
+      - *rt_current_status
+      - *rt_vehicle_timestamp
+      - *rt_congestion_level
+      - *rt_occupancy_status
+      - *rt_occupancy_percentage
+      - *rt_vehicle_id
+      - *rt_vehicle_label
+      - *rt_vehicle_license_plate
+      - *rt_vehicle_wheelchair_accessible
       - <<: *rt_trip_id
         tests:
           - not_null:
               config:
                 where: '__rt_sampled__'
+      - *rt_trip_route_id
+      - *rt_trip_direction_id
+      - *rt_trip_start_time
+      - *rt_trip_start_time_interval
+      - *rt_trip_start_date
+      - *rt_trip_schedule_relationship
+      - &rt_position_latitude
+        name: position_latitude
+        description: '{{ doc("gtfs_position__latitude") }}'
+      - &rt_position_longitude
+        name: position_longitude
+        description: '{{ doc("gtfs_position__longitude") }}'
+      - &rt_position_bearing
+        name: position_bearing
+        description: '{{ doc("gtfs_position__bearing") }}'
+      - &rt_position_odometer
+        name: position_odometer
+        description: '{{ doc("gtfs_position__odometer") }}'
+      - &rt_position_speed
+        name: position_speed
+        description: '{{ doc("gtfs_position__speed") }}'
+      - name: location_timestamp
+        description: Vehicle timestamp or header timestamp
+      - name: vehicle_trip_key
+        description: |
+          Composite of service_date, URL, vehicle_id, vehicle_label,
+          trip_id, and trip_start_time.
+      - name: next_location_key
+        description: Location key for the next vehicle timestamp.
+      - name: location
+        description: GEOGPOINT created by the position latitute and longitude
+      - *trip_instance_key
 
   - name: fct_vehicle_positions_messages
     description: |
       Each row is a message received from a vehicle positions GTFS RT feed.
       See https://gtfs.org/realtime/reference/#message-vehicleposition for information
       about message structure.
-      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Due to data size, this table **must** be queried with a date filter
+      (like `WHERE dt = 'YYYY-MM-DD'`).
       Hour filters will also further improve performance.
     columns:
       - name: key
@@ -382,81 +739,45 @@ models:
       - *rt_service_date
       - *gtfs_rt_extract_ts
       - *gtfs_rt_config_extract_ts
-      - *gtfs_rt_name
+      - <<: *gtfs_rt_name
+        description: |
+          String name of the GTFS dataset of which this message is a part.
+          This field is provided for human readability and should not be
+          used as a join key.
       - *gtfs_rt_schedule_dataset_key
       - *gtfs_rt_schedule_dataset_name
       - *gtfs_rt_schedule_feed_key
       - *gtfs_rt_schedule_feed_timezone
       - *_header_message_age
-      - name: _vehicle_message_age
-        description: |
-          Difference in seconds between `_extract_ts` (time at which we scraped the message) and `vehicle_timestamp` (timestamp
-          of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
-          Because of delay in the request process, the actual scrape request may occur up to a few
-          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
-          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
-          measurements below that level.)
-      - name: _vehicle_message_age_vs_header
-        description: |
-          Difference in seconds between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
-          and `vehicle_timestamp` (timestamp of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
-      - name: gtfs_dataset_name
-        description: |
-          String name of the GTFS dataset of which this message is a part.
-          This field is provided for human readability and should not be used as a join key.
+      - *_vehicle_message_age
+      - *_vehicle_message_age_vs_header
       - *rt_header_timestamp
       - *rt_header_incrementality
       - *rt_header_version
       - *rt_id
-      - name: current_stop_sequence
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
-      - name: stop_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
-      - name: current_status
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
-      - name: vehicle_timestamp
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
-          Field has been converted to TIMESTAMP type for convenience.
-      - name: congestion_level
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
-      - name: occupancy_status
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
-      - name: occupancy_percentage
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - *rt_vp_current_stop_sequence
+      - *rt_vp_stop_id
+      - *rt_current_status
+      - *rt_vehicle_timestamp
+      - *rt_congestion_level
+      - *rt_occupancy_status
+      - *rt_occupancy_percentage
       - *rt_vehicle_id
       - *rt_vehicle_label
       - *rt_vehicle_license_plate
       - *rt_vehicle_wheelchair_accessible
       - *rt_trip_id
       - *rt_trip_route_id
-      - name: trip_direction_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - *rt_trip_direction_id
       - *rt_trip_start_time
+      - *rt_trip_start_time_interval
       - *rt_trip_start_date
       - *rt_trip_schedule_relationship
-      - name: position_latitude
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-position.
-      - name: position_longitude
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-position.
-      - name: position_bearing
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-position.
-      - name: position_odometer
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-position.
-      - name: position_speed
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-position.
+      - *rt_position_latitude
+      - *rt_position_longitude
+      - *rt_position_bearing
+      - *rt_position_odometer
+      - *rt_position_speed
 
   - name: fct_daily_rt_feed_files
     description: |
@@ -469,45 +790,26 @@ models:
     - <<: *base64_url
       tests:
         - not_null
-    - &feed_type
-      name: feed_type
-      description: |
-        One of `service_alerts`, `vehicle_positions`, and `trip_updates`.
+    - *feed_type
     - name: parse_success_file_count
-      description: Count of files successfully parsed. Target is 4,320 (one file every 20 seconds.)
+      description: |
+        Count of files successfully parsed. Target is 4,320 (one file every
+        20 seconds.)
       tests:
         - not_null
     - name: parse_failure_file_count
       description: Count of files where parsing failed, but a file was present.
       tests:
         - not_null
-    - &gtfs_dataset_key
-      name: gtfs_dataset_key
-      description: *gtfs_dataset_key_desc
-      tests:
-        - dbt_utils.not_null_proportion:
-            # TODO: raise back to .999 after some time getting new data - was .998 because
-            # old data pipeline produced more nulls
-            at_least: 0.998
-        - relationships:
-            to: ref('dim_gtfs_datasets')
-            field: key
-            config:
-              # there are a dozen rows of SMART transit which was deleted from Airtable
-              # this will work without exception once the Airtable dim is historical;
-              # this threshold may need to increase if the backfill occurs prior to that
-              error_if: ">20"
+    - *gtfs_dataset_key
     - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
-      description: |
-        Foreign key for the GTFS dataset record of the GTFS schedule dataset that
-        should be used to validate this realtime dataset.
+      description: '{{ doc("column_rt_schedule_dataset_key") }}'
       tests:
           - relationships:
               to: ref('dim_gtfs_datasets')
               field: key
     - name: schedule_feed_key
-      description: |
-        Foreign key for the GTFS schedule feed version for this date / RT feed pair.
+      description: '{{ doc("column_rt_schedule_feed_key") }}'
       tests:
           - relationships:
               to: ref('dim_schedule_feeds')
@@ -515,11 +817,12 @@ models:
 
   - name: fct_daily_feed_scheduled_service_summary
     description: |
-      Daily service totals by feed. Each row is a date / feed pair where that feed
-      was online on that date (corresponds to `fct_daily_schedule_feeds`).
+      Daily service totals by feed. Each row is a date / feed pair where that
+      feed was online on that date (corresponds to `fct_daily_schedule_feeds`).
       This means there are feeds present with 0 `ttl_service_hours`.
-      Service summary is based on `fct_scheduled_trips`, grouped to the feed level
-      (a feed with no trips in `fct_scheduled_trips` will have 0s here for the summary columns.)
+      Service summary is based on `fct_scheduled_trips`, grouped to the feed
+      level (a feed with no trips in `fct_scheduled_trips` will have 0s here for
+      the summary columns.)
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -528,25 +831,13 @@ models:
       - dbt_utils.expression_is_true:
           expression: "ttl_service_hours >= 0"
     columns:
-      - &service_date_for_summaries
-        name: service_date
-        description: |
-          Agency-defined service date on which this service level was present.
-          This respects the agency's definition of a service day, which may not correspond to
-          a calendar date or even a 24-hour period.
-          See https://gtfs.org/schedule/reference/#field-types for the GTFS
-          Schedule definition of a "date" data type or `fct_scheduled_trips` for
-          more dates that can be associated with trip activity.
-
-          This date is used so that this table's service summaries correspond to the
-          service levels that an agency might describe on a given (service) date, even
-          if that does not correspond to the actual calendar date on which the
-          given trip activity occurred.
-        tests:
-          - not_null
+      - *service_date_for_summaries
       - *feed_key
       - name: ttl_service_hours
-        description: Total service hours across entire feed on date; can be 0 if no service
+        description: |
+          Total service hours across entire feed on date; can be 0 if no service
+      - name: gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
       - name: n_trips
         description: Total number of trips ran on date; can be 0 if no scheduled trips
       - name: first_departure_sec
@@ -558,30 +849,38 @@ models:
           Total number of stop events observed; can be 0 if not scheduled trips
       - name: n_routes
         description: |
-          Total number of routes that had trips scheduled on this day; can be 0 if no scheduled trips
+          Total number of routes that had trips scheduled on this day; can be 0
+          if no scheduled trips
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `num_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
-          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+          Rows with `true` in this column indicate that the columns in this table
+          that are aggregated from stop times data (`n_stops`, `num_stop_times`,
+          `trip_first_departure_sec`, `trip_last_arrival_sec`, and
+          `service_hours`) contain at least one row that had a duplicate primary
+          key in the source stop times data.
 
-          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
-          in the input data. This indicates that data quality issues were present in the stop times data
-          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence`
+          pair that was not unique in the input data. This indicates that data
+          quality issues were present in the stop times data that is being
+          summarized here, and counts may be inflated due to multiple rows with
+          identical identifiers.
       - name: contains_warning_duplicate_trip_primary_key
         description: |
-          Rows with `true` in this column indicate that `dim_trips` contains duplicates of this trip primary key.
-
+          Rows with `true` in this column indicate that `dim_trips` contains
+          duplicates of this trip primary key.
           i.e., `trip_id` is duplicated within an individual feed instance.
       - name: contains_warning_missing_foreign_key_stop_id
         description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `num_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
-          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+          Rows with `true` in this column indicate that the columns in this table
+          that are aggregated from stop times data (`n_stops`, `num_stop_times`,
+          `trip_first_departure_sec`, `trip_last_arrival_sec`, and
+          `service_hours`) contain at least one row that had a missing `stop_id`
+          foreign key in the source stops data.
 
-          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
-          in the input data. This indicates that data quality issues were present in the stop times data
-          that is being summarized here.
+          I.e., at least one row being aggregated had a `stop_id` foreign key
+          that was missing in the input data. This indicates that data quality
+          issues were present in the stop times data that is being summarized here.
+
   - name: fct_hourly_rt_feed_files
     description: |
       An hourly count of the files that were downloaded each day per feed.
@@ -626,7 +925,8 @@ models:
       - name: hr_23
       - name: gtfs_dataset_key
         description: |
-          The primary key for the record in `dim_gtfs_datasets` associated with this feed.
+          The primary key for the record in `dim_gtfs_datasets` associated with
+          this feed.
   - name: fct_hourly_rt_feed_files_success
     description: |
       The proportion of downloaded files that were successfully parsed as GTFS-RT.
@@ -645,7 +945,8 @@ models:
           The proportion of files successfully downloaded on this day for this URL
       - name: hr_0
         description: |
-          The proportion of files successfully downloaded for this URL in the 0 hour UTC
+          The proportion of files successfully downloaded for this URL in the 0
+          hour UTC
       - name: hr_1
       - name: hr_2
       - name: hr_3
@@ -671,13 +972,16 @@ models:
       - name: hr_23
       - name: gtfs_dataset_key
         description: |
-          The primary key for the record in `dim_gtfs_datasets` associated with this feed.
+          The primary key for the record in `dim_gtfs_datasets` associated with
+          this feed.
+
   - name: fct_service_alerts_messages
     description: |
       Each row is a message received from a service alerts GTFS RT feed.
       See https://gtfs.org/realtime/reference/#message-alert for information
       about message structure.
-      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Due to data size, this table **must** be queried with a date filter
+      (like `WHERE dt = 'YYYY-MM-DD'`).
       Hour filters will also further improve performance.
     columns:
       - name: key
@@ -692,7 +996,6 @@ models:
       - *gtfs_rt_dataset_key
       - *gtfs_rt_dt
       - *gtfs_rt_hour
-      - *base64_url
       - *rt_schedule_base64_url
       - *gtfs_rt_extract_ts
       - *gtfs_rt_config_extract_ts
@@ -706,45 +1009,44 @@ models:
       - *rt_header_version
       - *rt_id
       - name: active_period
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("gtfs_alert__active_period") }}'
       - name: informed_entity
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: cause
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: effect
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("gtfs_alert__informed_entity") }}'
+      - &rt_cause
+        name: cause
+        description: '{{ doc("gtfs_alert__cause") }}'
+      - &rt_effect
+        name: effect
+        description: '{{ doc("gtfs_alert__effect") }}'
       - name: url
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("gtfs_alert__url") }}'
       - name: header_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("gtfs_alert__header_text") }}'
       - name: description_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+        description: '{{ doc("gtfs_alert__description_text") }}'
       - name: tts_header_text
         description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+          '{{ doc("gtfs_alert__tts_header_text") }}'
       - name: tts_description_text
         description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+          '{{ doc("gtfs_alert__tts_description_text") }}'
       - name: severity_level
         description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
+          '{{ doc("gtfs_alert__severity_level") }}'
       - *_header_message_age
+
   - name: fct_service_alerts_messages_unnested
     description: |
-      This table contains GTFS RT service alerts messages with all elements (informed entities,
-      active periods, and translations) unnested, so each row is a message / entity / active period /
-      translation combination. It has been filtered so that only one translation (the one with highest likelihood
-      of being in English) appears per message.
-      Therefore one row here should correspond to one actual "alert" (counting alerts
-      that apply to different entities or different time periods as distinct.)
-      See: https://gtfs.org/realtime/reference/#message-alert for field definitions.
+      This table contains GTFS RT service alerts messages with all elements
+      (informed entities, active periods, and translations) unnested, so each
+      row is a message / entity / active period / translation combination.
+      It has been filtered so that only one translation (the one with highest
+      likelihood of being in English) appears per message.
+      Therefore one row here should correspond to one actual "alert" (counting
+      alerts that apply to different entities or different time periods as
+      distinct.)
+      See: https://gtfs.org/realtime/reference/#message-alert for
+      field definitions.
     tests:
       - dbt_utils.expression_is_true:
           expression: "active_period_start <= active_period_end"
@@ -752,8 +1054,8 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `service_alerts_message_key` along with the active period
-          and informed entities.
+          Synthetic primary key constructed from `service_alerts_message_key`
+          along with the active period and informed entities.
         tests: *rt_primary_key_tests
       - name: service_alert_message_key
         description: |
@@ -778,6 +1080,7 @@ models:
       - *gtfs_rt_config_extract_ts
       - *gtfs_rt_name
       - *gtfs_rt_schedule_dataset_key
+      - *rt_schedule_base64_url
       - *gtfs_rt_schedule_dataset_name
       - *gtfs_rt_schedule_feed_key
       - *gtfs_rt_schedule_feed_timezone
@@ -786,87 +1089,54 @@ models:
       - *rt_header_incrementality
       - *rt_header_version
       - *rt_id
+      - *rt_cause
+      - *rt_effect
       - name: url_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("gtfs_translation__text") }}'
       - name: url_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("gtfs_translation__language") }}'
       - name: header_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("gtfs_alert__header_text") }}'
       - name: header_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("gtfs_translation__language") }}'
       - name: description_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("gtfs_alert__description_text") }}'
       - name: description_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("gtfs_translation__language") }}'
       - name: tts_header_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("gtfs_alert__tts_header_text") }}'
       - name: tts_header_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("gtfs_translation__language") }}'
       - name: tts_description_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+        description: '{{ doc("gtfs_alert__tts_description_text") }}'
       - name: tts_description_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: agency_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-entityselector.
-      - name: route_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-entityselector.
-      - name: route_type
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-entityselector.
-      - name: direction_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-entityselector.
+        description: '{{ doc("gtfs_translation__language") }}'
+      - *rt_agency_id
+      - *rt_route_id
+      - *rt_route_type
+      - *rt_direction_id
       - *rt_trip_id
       - *rt_trip_route_id
       - *rt_trip_direction_id
       - *rt_trip_start_time
       - *rt_trip_start_date
       - *rt_trip_schedule_relationship
-      - name: stop_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-entityselector.
-      - name: active_period_start
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-timerange.
-      - name: active_period_end
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-timerange.
-      - name: active_period_start_ts
-        description: |
-          `active_period_start` converted to a TIMESTAMP data type.
-          If `active_period_start` is null, will be midnight on January 1, 1900.
-          The spec (https://gtfs.org/realtime/reference/#message-alert) outlines two cases:
-            1. If one of active period start/end is populated but the other is not, the other should be treated as +/- infinity
-            2. If neither is populated, assume that the message is active while it is present in the feed
-          Imputing these timestamp versions of the columns to be far future/past covers both cases for our use cases.
-      - name: active_period_end_ts
-        description: |
-          `active_period_end` converted to a TIMESTAMP data type.
-          If `active_period_end` is null, will be midnight on January 1, 2099.
-          The spec (https://gtfs.org/realtime/reference/#message-alert) outlines two cases:
-            1. If one of active period start/end is populated but the other is not, the other should be treated as +/- infinity
-            2. If neither is populated, assume that the message is active while it is present in the feed
-          Imputing these timestamp versions of the columns to be far future/past covers both cases for our use cases.
+      - *rt_stop_id
+      - *rt_active_period_start
+      - *rt_active_period_end
+      - *rt_active_period_start_ts
+      - *rt_active_period_end_ts
       - *rt_trip_start_time_interval
       - name: trip_start_time
         description: |
-          `trip_start_time` converted to a number of seconds after twelve hours before noon (usually midnight)
-          on `service_date`.
-          See https://gtfs.org/schedule/reference/#field-types for how time strings are defined in GTFS.
-          *Note: If this is larger than 86,400 (the number of seconds in one day) and `trip_start_date` is not populated, the interpretation for this
+          `trip_start_time` converted to a number of seconds after twelve hours
+          before noon (usually midnight) on `service_date`.
+          See https://gtfs.org/schedule/reference/#field-types for how time
+          strings are defined in GTFS.
+          *Note: If this is larger than 86,400 (the number of seconds in one day)
+          and `trip_start_date` is not populated, the interpretation for this
           field becomes unclear.*
+
   - name: fct_daily_service_alerts
     description: |
       Each row is a daily summary of a service alert.
@@ -875,11 +1145,12 @@ models:
         * Message content (header, description, cause, effect)
         * Informed entity (agencies, routes, stops, trips)
         * Active period (start/end date)
-      So an individual alert message can yield multiple rows in this table if it includes multiple informed entities or active periods.
+      So an individual alert message can yield multiple rows in this table if it
+      includes multiple informed entities or active periods.
 
-      Caveat on uniqueness: We have a very small number of duplicate `key` values,
-      specifically they can occur on days where the URL or time zone for a given feed change because
-      of how the keys are generated upstream.
+      Caveat on uniqueness: We have a very small number of duplicate `key`
+      values, specifically they can occur on days where the URL or time zone for
+      a given feed change because of how the keys are generated upstream.
     columns:
       - name: key
         description: |
@@ -891,106 +1162,59 @@ models:
           - not_null
       - *base64_url
       - *gtfs_rt_schedule_feed_timezone
+      - *rt_id
+      - name: cause
+        description: '{{ doc("gtfs_alert__cause") }}'
+      - name: effect
+        description: '{{ doc("gtfs_alert__effect") }}'
+      - name: header
+        description: '{{ doc("gtfs_alert__header_text") }}'
+      - name: description
+        description: '{{ doc("gtfs_alert__description_text") }}'
       - *rt_trip_id
+      - *rt_trip_route_id
+      - *rt_trip_direction_id
       - *rt_trip_start_time
       - *rt_trip_start_date
-      - &min_extract_ts
-        name: min_extract_ts
-        description: &rt_min_extract_ts_desc |
-          Timestamp of the first extract (i.e. the time at which
-          we downloaded this feed extract) of the entity being summarized.
-          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
-      - &max_extract_ts
-        name: max_extract_ts
-        description: &max_extract_ts_desc |
-          Timestamp of the last extract (i.e. the time at which
-          we downloaded this feed extract) of the entity being summarized.
-          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
-      - &extract_duration_minutes
-        name: extract_duration_minutes
-        description: |
-          The difference between `max_extract_ts` and `min_extract_ts` in minutes,
-          representing the duration of time for which this entity was present in message responses we received from the agency.
-          Note that the entity may not have been present in every message between the minimum and maximum
-          timestamps, and therefore may not have been present continuously for the
-          duration listed here.
-      - &header_duration_minutes
-        name: header_duration_minutes
-        description: |
-          The difference between `max_header_timestamp` and `min_header_timestamp` in minutes,
-          representing the duration of time for which this entity was present in the messages produced by the agency.
-          Note that the entity may not have been present in every message between the minimum and maximum
-          timestamps, and therefore may not have been present continuously for the
-          duration listed here.
-      - &min_extract_ts_local_tz
-        name: min_extract_datetime_local_tz
-        description: |
-          `min_extract_ts` converted to a DATETIME type in `schedule_feed_timezone`.
-      - &max_extract_ts_local_tz
-        name: max_extract_datetime_local_tz
-        description: |
-          `max_extract_ts` converted to a DATETIME type in `schedule_feed_timezone`.
-      - &min_extract_ts_pacific
-        name: min_extract_datetime_pacific
-        description: |
-          `min_extract_ts` converted to a DATETIME type in the "America/Los_Angeles" time zone.
-      - &max_extract_ts_pacific
-        name: max_extract_datetime_pacific
-        description: |
-          `max_extract_ts` converted to a DATETIME type in the "America/Los_Angeles" time zone.
-      - &min_header_timestamp
-        name: min_header_timestamp
-        description: Earliest header timestamp of a message referencing this entity.
-      - &max_header_timestamp
-        name: max_header_timestamp
-        description: Latest header timestamp of a message referencing this entity.
-      - &min_header_local_tz
-        name: min_header_datetime_local_tz
-        description: |
-          `min_header_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
-      - &max_header_local_tz
-        name: max_header_datetime_local_tz
-        description: |
-          `max_header_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
-      - &min_header_pacific
-        name: min_header_datetime_pacific
-        description: |
-          `min_header_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
-      - &max_header_pacific
-        name: max_header_datetime_pacific
-        description: |
-          `max_header_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
-      - &num_distinct_header_timestamps
-        name: num_distinct_header_timestamps
-        description: Distinct count of header timestamps for messages being summarized (https://gtfs.org/realtime/reference/#message-feedheader).
-      - &num_distinct_message_keys
-        name: num_distinct_message_keys
-        description: |
-          Distinct count of message keys being summarized here (message keys are the synthetic
-          keys we generate for an individual RT message response.)
-          This is the count of distinct messages in which this entity appeared.
-          If you divide this value by `extract_duration_minutes`, you would
-          get a count of how many messages per minute this entity was present for,
-          which can help give a sense for how continuously this trip was updated.
-          This number should be equal to `num_distinct_extract_ts`.
-      - &num_distinct_extract_ts
-        name: num_distinct_extract_ts
-        description: |
-          Distinct count of `_extract_ts` values for messages being summarized here (`_extract_ts` represents
-          the instant at which we attempted to scrape data for this feed.)
-          This is the count of distinct messages in which this entity appeared.
-          If you divide this value by `extract_duration_minutes`, you would
-          get a count of how many messages per minute this entity was present for,
-          which can help give a sense for how continuously this entity was updated.
-          This number should be equal to `num_distinct_message_keys`.
+      - *rt_trip_schedule_relationship
+      - *rt_agency_id
+      - *rt_route_id
+      - *rt_route_type
+      - *rt_direction_id
+      - *rt_stop_id
+      - *rt_active_period_start
+      - *rt_active_period_end
+      - *rt_active_period_start_ts
+      - *rt_active_period_end_ts
+      - *min_extract_ts
+      - *max_extract_ts
+      - *extract_duration_minutes
+      - *header_duration_minutes
+      - *min_extract_ts_local_tz
+      - *max_extract_ts_local_tz
+      - *min_extract_ts_pacific
+      - *max_extract_ts_pacific
+      - *min_header_timestamp
+      - *max_header_timestamp
+      - *min_header_local_tz
+      - *max_header_local_tz
+      - *min_header_pacific
+      - *max_header_pacific
+      - *num_distinct_header_timestamps
+      - *num_distinct_message_keys
+      - *num_distinct_extract_ts
+
   - name: fct_daily_scheduled_shapes
     description: |
-      Each row is a summary of trip activity by shape for a given feed on a given agency-defined `service_date`.
-      For the relationship between a shape, a trip, and its stops, see: https://gtfs.org/schedule/reference/#shapestxt.
+      Each row is a summary of trip activity by shape for a given feed on a
+      given agency-defined `service_date`.
+      For the relationship between a shape, a trip, and its stops, see:
+      https://gtfs.org/schedule/reference/#shapestxt.
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `activity_date`, `shape_id`, and `shape_array_key`.
+          Synthetic primary key constructed from `activity_date`, `shape_id`,
+          and `shape_array_key`.
         tests:
           - unique:
               where: "not contains_warning_duplicate_trip_primary_key"
@@ -1008,41 +1232,59 @@ models:
         description: Ordered array of WKT points that describe this shape.
       - name: shape_first_departure_datetime_pacific
         description: |
-          The datetime, in the "America/Los_Angeles" time zone, of the first stop departure for a trip on this shape on this `service_date`.
-          This field can help contextualize the actual trip activity times that are grouped under this `service_date`.
-          The date portion of this datetime may not correspond to the `service_date` and the gap
-          between `shape_first_departure_datetime_pacific` and `shape_last_arrival_datetime_pacific`
-          could potentially be greater than 24 hours; see `service_date` for more documentation on how
-          `service_date` is defined and why it does not necessarily correspond to a calendar date or 24 hour period.
+          The datetime, in the "America/Los_Angeles" time zone, of the first
+          stop departure for a trip on this shape on this `service_date`.
+          This field can help contextualize the actual trip activity times that
+          are grouped under this `service_date`.
+          The date portion of this datetime may not correspond to the
+          `service_date` and the gap between
+          `shape_first_departure_datetime_pacific` and
+          `shape_last_arrival_datetime_pacific` could potentially be greater
+          than 24 hours; see `service_date` for more documentation on how
+          `service_date` is defined and why it does not necessarily correspond
+          to a calendar date or 24 hour period.
       - name: shape_last_arrival_datetime_pacific
         description: |
-          The datetime, in the "America/Los_Angeles" time zone, of the last stop arrival for a trip on this shape on this `service_date`.
-          This field can help contextualize the actual trip activity times that are grouped under this `service_date`.
-          The date portion of this datetime may not correspond to the `service_date` and the gap
-          between `shape_first_departure_datetime_pacific` and `shape_last_arrival_datetime_pacific`
-          could potentially be greater than 24 hours; see `service_date` for more documentation on how
-          `service_date` is defined and why it does not necessarily correspond to a calendar date or 24 hour period.
+          The datetime, in the "America/Los_Angeles" time zone, of the last stop
+          arrival for a trip on this shape on this `service_date`.
+          This field can help contextualize the actual trip activity times that
+          are grouped under this `service_date`.
+          The date portion of this datetime may not correspond to the
+          `service_date` and the gap
+          between `shape_first_departure_datetime_pacific` and
+          `shape_last_arrival_datetime_pacific`could potentially be greater
+          than 24 hours; see `service_date` for more documentation on how
+          `service_date` is defined and why it does not necessarily correspond
+          to a calendar date or 24 hour period.
       - name: contains_warning_duplicate_trip_primary_key
         description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          trips data (`stop_event_count`, `route_type_0_count`, `route_type_1_count`, `route_type_2_count`, `route_type_3_count`,
-          `route_type_4_count`, `route_type_5_count`, `route_type_6_count`, `route_type_7_count`, `route_type_11_count`,
-          `route_type_12_count`) contain at least one row that had a duplicate primary key in the source trips data.
+          Rows with `true` in this column indicate that the columns in this table
+          that are aggregated from trips data (`stop_event_count`,
+          `route_type_0_count`, `route_type_1_count`, `route_type_2_count`,
+          `route_type_3_count`, `route_type_4_count`, `route_type_5_count`,
+          `route_type_6_count`, `route_type_7_count`, `route_type_11_count`,
+          `route_type_12_count`) contain at least one row that had a duplicate
+          primary key in the source trips data.
 
-          I.e., at least one row being aggregated had a `feed_key` / `trip_id` pair that was not unique
-          in the input data. This indicates that data quality issues were present in the trips data
-          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+          I.e., at least one row being aggregated had a `feed_key` / `trip_id`
+          pair that was not unique in the input data. This indicates that data
+          quality issues were present in the trips data that is being summarized
+          here, and counts may be inflated due to multiple rows with identical
+          identifiers.
   - name: fct_daily_scheduled_stops
     description: |
-      Each row is a summary of trip activity by stop for a given feed on a given agency-defined `service_date`.
+      Each row is a summary of trip activity by stop for a given feed on a
+      given agency-defined `service_date`.
 
-      A stop here is defined within an individual feed so each real-world stop will have one row
-      per feed in which it appears. This means an individual real-world stop location may appear in this table multiple times
-      if it is served by multiple agencies or served by an agency with multiple feeds.
+      A stop here is defined within an individual feed so each real-world stop
+      will have one row per feed in which it appears. This means an individual
+      real-world stop location may appear in this table multiple times if it is
+      served by multiple agencies or served by an agency with multiple feeds.
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `stop_arrival_date_pacific` and `stop_key`.
+          Synthetic primary key constructed from `stop_arrival_date_pacific` and
+          `stop_key`.
         tests:
           - unique:
               where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
@@ -1053,10 +1295,12 @@ models:
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
       - name: stop_event_count
-        description: The number of stop events associated with this stop on the given date.
+        description: |
+          The number of stop events associated with this stop on the given date.
       - name: route_type_0
         description: |
-          The count of stop events associated with route_type 0 - Tram, Streetcar, Light rail
+          The count of stop events associated with route_type 0 - Tram,
+          Streetcar, Light rail
       - name: route_type_1
         description: |
           The count of stop events associated with route_type 1 - Subway, Metro
@@ -1074,7 +1318,8 @@ models:
           The count of stop events associated with route_type 5 - Cable Tram
       - name: route_type_6
         description: |
-          The count of stop events associated with route_type 6 - Aerial lift, suspended cable car (e.g., gondola lift, aerial tramway)
+          The count of stop events associated with route_type 6 - Aerial lift,
+          suspended cable car (e.g., gondola lift, aerial tramway)
       - name: route_type_7
         description: |
           The count of stop events associated with route_type 7 - Cable Tram
@@ -1089,20 +1334,30 @@ models:
           The count of stop events associated with a `stop_id` that had a null `route_type` value in `dim_routes`
       - name: first_stop_arrival_datetime_pacific
         description: |
-          The datetime, in the "America/Los_Angeles" time zone, of the first arrival at this stop on this `service_date`.
-          This field can help contextualize the actual trip activity times that are grouped under this `service_date`.
-          The date portion of this datetime may not correspond to the `service_date` and the gap
-          between `first_stop_arrival_datetime_pacific` and `last_stop_departure_datetime_pacific`
-          could potentially be greater than 24 hours; see `service_date` for more documentation on how
-          `service_date` is defined and why it does not necessarily correspond to a calendar date or 24 hour period.
+          The datetime, in the "America/Los_Angeles" time zone, of the first
+          arrival at this stop on this `service_date`.
+          This field can help contextualize the actual trip activity times that
+          are grouped under this `service_date`.
+          The date portion of this datetime may not correspond to the
+          `service_date` and the gap between
+          `first_stop_arrival_datetime_pacific` and
+          `last_stop_departure_datetime_pacific`could potentially be greater
+          than 24 hours; see `service_date` for more documentation on how
+          `service_date` is defined and why it does not necessarily correspond
+          to a calendar date or 24 hour period.
       - name: last_stop_departure_datetime_pacific
         description: |
-          The datetime, in the "America/Los_Angeles" time zone, of the last departure from this stop on this `service_date`.
-          This field can help contextualize the actual trip activity times that are grouped under this `service_date`.
-          The date portion of this datetime may not correspond to the `service_date` and the gap
-          between `first_stop_arrival_datetime_pacific` and `last_stop_departure_datetime_pacific`
-          could potentially be greater than 24 hours; see `service_date` for more documentation on how
-          `service_date` is defined and why it does not necessarily correspond to a calendar date or 24 hour period.
+          The datetime, in the "America/Los_Angeles" time zone, of the last
+          departure from this stop on this `service_date`.
+          This field can help contextualize the actual trip activity times that
+          are grouped under this `service_date`.
+          The date portion of this datetime may not correspond to the
+          `service_date` and the gap between
+          `first_stop_arrival_datetime_pacific` and
+          `last_stop_departure_datetime_pacific`could potentially be greater
+          than 24 hours; see `service_date` for more documentation on how
+          `service_date` is defined and why it does not necessarily correspond
+          to a calendar date or 24 hour period.
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
@@ -1115,14 +1370,19 @@ models:
           that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
       - name: contains_warning_duplicate_trip_primary_key
         description: |
-          Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          trips data (`stop_event_count`, `route_type_0_count`, `route_type_1_count`, `route_type_2_count`, `route_type_3_count`,
-          `route_type_4_count`, `route_type_5_count`, `route_type_6_count`, `route_type_7_count`, `route_type_11_count`,
-          `route_type_12_count`) contain at least one row that had a duplicate primary key in the source trips data.
+          Rows with `true` in this column indicate that the columns in this
+          table that are aggregated from trips data (`stop_event_count`,
+          `route_type_0_count`, `route_type_1_count`, `route_type_2_count`,
+          `route_type_3_count`, `route_type_4_count`, `route_type_5_count`,
+          `route_type_6_count`, `route_type_7_count`, `route_type_11_count`,
+          `route_type_12_count`) contain at least one row that had a duplicate
+          primary key in the source trips data.
 
-          I.e., at least one row being aggregated had a `feed_key` / `trip_id` pair that was not unique
-          in the input data. This indicates that data quality issues were present in the trips data
-          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+          I.e., at least one row being aggregated had a `feed_key` / `trip_id`
+          pair that was not unique in the input data. This indicates that data
+          quality issues were present in the trips data that is being summarized
+          here, and counts may be inflated due to multiple rows with identical
+          identifiers.
       - name: contains_warning_duplicate_stop_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_stops;
@@ -1155,58 +1415,35 @@ models:
 
   - name: fct_observed_trips
     description: |
-      Joined model of observed trips across trip updates and vehicle positions RT feeds related to the same
-      schedule feed. There will be one row per `trip_instance_key` (see caveat below).
+      Joined model of observed trips across trip updates and vehicle positions
+      RT feeds related to the same schedule feed. There will be one row per
+      `trip_instance_key` (see caveat below).
 
-      Columns prefixed with `tu_` or `vp_` reference respectively the trip updates or vehicle positions
-      value for the given attribute. If these are null, it may be because the given trip did not appear in the
+      Columns prefixed with `tu_` or `vp_` reference respectively the trip
+      updates or vehicle positions value for the given attribute. If these are
+      null, it may be because the given trip did not appear in the
       given feed type or, for optional values, it may simply be because the value was
       not populated for the given feed.
 
-      Caveat on uniqueness: We have a very small number of duplicate `trip_instance_key` values,
-      specifically they can occur on days where the URL or time zone for a given feed change because
-      of how the keys are generated upstream.
+      Caveat on uniqueness: We have a very small number of duplicate
+      `trip_instance_key` values, specifically they can occur on days where the
+      URL or time zone for a given feed change because of how the keys are
+      generated upstream.
 
     columns:
       # keys and identifiers
-      - &trip_instance_key
-        name: trip_instance_key
-        description: |
-          A trip level identifier that uniquely identifies an individual trip across feed types (schedule, trip updates, vehicle positions, service alerts).
-          Composite of:
-            - base64 URL of associated schedule feed
-            - service date
-            - trip_id
-            - iteration number, which attempts to normalize trip start times
-        tests:
-          - not_null
-          - unique_proportion:
-              at_least: 0.9999
+      - *trip_instance_key
       - *rt_service_date
-      - &rt_trip_schedule_base64_url
-        name: schedule_base64_url
-        description: |
-          URL-safe base64-encoded URL of the schedule feed associated with
-          the RT feed(s) in which this trip appeared. This is the schedule
-          feed used to validate the associated RT feed(s).
+      - *rt_schedule_base64_url
       - *rt_trip_id
-      - &rt_iteration_num
-        name: iteration_num
-        description: |
-          0-based ordered count of `trip_start_time` values for this `trip_id` on this
-          `service_date`. Ex.: If a given `trip_id` appears with `trip_start_time` values of "12:05:10" and "14:40:00",
-          the first will have `iteration_num` of 0 and the second will have `iteration_num` of 1.
-          This helps normalize the following cases:
-          - For frequency-based trips: `trip_start_time` in RT data may not align exactly with the start time of any individual iteration in the schedule data (especially if `frequencies.exact_times` = 1 in schedule), so this field normalizes
-          - Across RT feeds: We have seen cases where, for example, the trip updates feed provides `trip_start_time` (even for non-frequency-based trips)
-          but the vehicle positions feed does not (the field is null). We can calculate a `iteration_num` of 0 for both
-          feeds to account for this difference, because it is likely a byproduct of technical implementation
-          rather than a true indication that the two represent different trips.
+      - *rt_iteration_num
       - name: tu_name
         description: |
           Name from the trip updates GTFS dataset record associated
-          with this trip. If null, this trip did not appear in a trip updates feed.
-          This field is provided for convenience and should not be used as a join key.
+          with this trip. If null, this trip did not appear in a trip updates
+          feed.
+          This field is provided for convenience and should not be used as a
+          join key.
         tests:
           - not_null:
               config:
@@ -1214,8 +1451,10 @@ models:
       - name: vp_name
         description: |
           Name from the vehicle positions GTFS dataset record associated
-          with this trip. If null, this trip did not appear in a vehicle positions feed.
-          This field is provided for convenience and should not be used as a join key.
+          with this trip. If null, this trip did not appear in a vehicle
+          positions feed.
+          This field is provided for convenience and should not be used as a
+          join key.
         tests:
           - not_null:
               config:
@@ -1227,24 +1466,30 @@ models:
       - name: appeared_in_tu
         description: |
           Boolean for whether this trip appeared in a trip updates feed.
-          Can be false either because there is no trip updates feed for this data (see `dim_provider_gtfs_data` to confirm)
-          or because there is a trip updates feed but this trip did not appear within it.
+          Can be false either because there is no trip updates feed for this
+          data (see `dim_provider_gtfs_data` to confirm) or because there is a
+          trip updates feed but this trip did not appear within it.
       - name: appeared_in_vp
         description: |
           Boolean for whether this trip appeared in a vehicle positions feed.
-          Can be false either because there is no vehicle positions feed for this data (see `dim_provider_gtfs_data` to confirm)
-          or because there is a vehicle positions feed but this trip did not appear within it.
+          Can be false either because there is no vehicle positions feed for
+          this data (see `dim_provider_gtfs_data` to confirm) or because there is
+          a vehicle positions feed but this trip did not appear within it.
       - name: warning_multiple_route_ids
         description: |
           Boolean for whether either of the following conditions is met:
-          * Any RT feed in which this trip appeared had `warning_multiple_route_ids` set to true
-          * The trip appeared in multiple RT feeds and the feeds have different `trip_route_ids` values
+          * Any RT feed in which this trip appeared had
+          `warning_multiple_route_ids` set to true
+          * The trip appeared in multiple RT feeds and the feeds have different
+          `trip_route_ids` values
           A "true" value in this column means a row should be treated with caution.
       - name: warning_multiple_direction_ids
         description: |
           Boolean for whether either of the following conditions is met:
-          * Any RT feed in which this trip appeared had `warning_multiple_direction_ids` set to true
-          * The trip appeared in multiple RT feeds and the feeds have different `trip_direction_ids` values
+          * Any RT feed in which this trip appeared had
+          `warning_multiple_direction_ids` set to true
+          * The trip appeared in multiple RT feeds and the feeds have different
+          `trip_direction_ids` values
           A "true" value in this column means a row should be treated with caution.
       # foreign keys
       - name: tu_gtfs_dataset_key
@@ -1294,120 +1539,142 @@ models:
       - name: tu_min_ts
         description: &rt_trip_min_ts_desc |
           Earliest timestamp associated with this trip.
-          If trip update timestamp or vehicle timestamps are available, this will be the earliest
-          trip update or vehicle timestamp for a message containing this trip.
-          If not, this will be the earliest header timestamp  for a message containing
-          this trip.
-          If header timestamp is not available (should never occur), this
-          will be the earliest `_extract_ts` for a message containing
-          this trip.
+          If trip update timestamp or vehicle timestamps are available, this
+          will be the earliest trip update or vehicle timestamp for a message
+          containing this trip.
+          If not, this will be the earliest header timestamp  for a message
+          containing this trip.
+          If header timestamp is not available (should never occur), this will
+          be the earliest `_extract_ts` for a message containing this trip.
       - name: tu_max_ts
         description: &rt_trip_max_ts_desc |
           Latest timestamp associated with this trip.
-          If trip update timestamp or vehicle timestamps are available, this will be the latest
-          trip update or vehicle timestamp for a message containing this trip.
-          If not, this will be the latest header timestamp  for a message containing
+          If trip update timestamp or vehicle timestamps are available, this will
+          be the latest trip update or vehicle timestamp for a message containing
           this trip.
+          If not, this will be the latest header timestamp  for a message
+          containing this trip.
           If header timestamp is not available (should never occur), this
-          will be the latest `_extract_ts` for a message containing
-          this trip.
+          will be the latest `_extract_ts` for a message containing this trip.
       - name: tu_min_datetime_pacific
         description: &rt_trip_min_datetime_pacific_desc |
           Earliest Pacific datetime associated with this trip.
-          If trip update timestamp or vehicle timestamps are available, this will be the
-          earliest trip update or vehicle timestamp for a message containing this trip, converted to a
-          datetime in the "US/Los_Angeles" time zone.
-          If not, this will be the earliest header timestamp  for a message containing
-          this trip, converted to a datetime in the "US/Los_Angeles" time zone.
+          If trip update timestamp or vehicle timestamps are available, this will
+          be the earliest trip update or vehicle timestamp for a message
+          containing this trip, converted to a datetime in the "US/Los_Angeles"
+          time zone.
+          If not, this will be the earliest header timestamp  for a message
+          containing this trip, converted to a datetime in the "US/Los_Angeles"
+          time zone.
           If header timestamp is not available (should never occur), this
           will be the earliest `_extract_ts` for a message containing
           this trip, converted to a datetime in the "US/Los_Angeles" time zone.
       - name: tu_max_datetime_pacific
         description: &rt_trip_max_datetime_pacific_desc |
           Latest Pacific datetime associated with this trip.
-          If trip update timestamp or vehicle timestamps are available, this will be the
-          latest trip update or vehicle timestamp for a message containing this trip, converted to a
-          datetime in the "US/Los_Angeles" time zone.
-          If not, this will be the latest header timestamp  for a message containing
-          this trip, converted to a datetime in the "US/Los_Angeles" time zone.
+          If trip update timestamp or vehicle timestamps are available, this
+          will be the latest trip update or vehicle timestamp for a message
+          containing this trip, converted to a datetime in the
+          "US/Los_Angeles" time zone.
+          If not, this will be the latest header timestamp  for a message
+          containing this trip, converted to a datetime in the "US/Los_Angeles"
+          time zone.
           If header timestamp is not available (should never occur), this
           will be the latest `_extract_ts` for a message containing
           this trip, converted to a datetime in the "US/Los_Angeles" time zone.
       - name: tu_num_distinct_extract_ts
         description: &rt_trip_num_distinct_extract_ts_desc |
-          The number of distinct extracts in our pipeline in which this trip occurred.
-          If the feed publisher updates data less frequently than every 20 seconds (our
-          scrape frequency) then identical data can appear in multiple extracts,
-          so this does not necessarily represent the number of unique actual data values.
+          The number of distinct extracts in our pipeline in which this trip
+          occurred.
+          If the feed publisher updates data less frequently than every 20 seconds
+          (our scrape frequency) then identical data can appear in multiple
+          extracts, so this does not necessarily represent the number of unique
+          actual data values.
       - name: tu_num_distinct_updates
         description: &rt_trip_num_distinct_updates_desc |
-          The number of distinct producer-produced timestamps for messages containing this trip.
-          If trip update or vehicle timestamps are available, use the count of distinct
-          values of that timestamp. Otherwise use count of distinct header timestamps
-          for messages containing this trip.
+          The number of distinct producer-produced timestamps for messages
+          containing this trip.
+          If trip update or vehicle timestamps are available, use the count of
+          distinct values of that timestamp. Otherwise use count of distinct
+          header timestamps for messages containing this trip.
           This should generally reflect how many distinct data updates there were
           for this trip in our data, though note that the producer timestamps
           can increment without the actual data values changing.
       - name: tu_trip_route_ids
         description: &rt_trip_route_ids_desc |
-          Pipe (`|`) delimited list of distinnct `route_id` values provided in the RT message trip descriptor
-          for messages containing this trip on this `service_date`.
-          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
-          that likely indicates some level of data corruption.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          Pipe (`|`) delimited list of distinnct `route_id` values provided in
+          the RT message trip descriptor for messages containing this trip on
+          this `service_date`.
+          There should generally only be one value here; if there are multiple
+          values (delimited by a pipe `|`) that likely indicates some level of
+          data corruption.
+          See the specification documentation at
+          https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret `trip_route_id` in general.
       - name: tu_trip_direction_ids
         description: &rt_trip_direction_ids_desc |
-          Pipe (`|`) delimited list of distinnct `direction_id` values provided in the RT message trip descriptor
-          for messages containing this trip on this `service_date`.
-          There should generally only be one value here; if there are multiple values (delimited by a pipe `|`)
-          that likely indicates some level of data corruption.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          Pipe (`|`) delimited list of distinnct `direction_id` values provided
+          in the RT message trip descriptor for messages containing this trip on
+          this `service_date`.
+          There should generally only be one value here; if there are multiple
+          values (delimited by a pipe `|`) that likely indicates some level of
+          data corruption.
+          See the specification documentation at
+          https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret `trip_direction_id` in general.
       - name: tu_trip_schedule_relationships
         description: &rt_trip_schedule_relationships_desc |
-          Pipe (`|`) delimited list of distinct `trip_schedule_relationship` values provided in the RT message trip descriptor
-          for messages containing this trip on this `service_date`.
-          Values are listed in alphabetical order, not the chronological order in which they appeared. So if a trip starts as scheduled
-          and then is canceled, this field will read "CANCELED|SCHEDULED" (Canceled first because it is first alphabetically.)
-          There are valid reasons to have multiple values in this field, for example if a trip was scheduled
-          but later is updated to canceled.
-          See the specification documentation at https://gtfs.org/realtime/reference/#message-tripdescriptor
+          Pipe (`|`) delimited list of distinct `trip_schedule_relationship`
+          values provided in the RT message trip descriptor for messages
+          containing this trip on this `service_date`.
+          Values are listed in alphabetical order, not the chronological order
+          in which they appeared. So if a trip starts as scheduled
+          and then is canceled, this field will read "CANCELED|SCHEDULED"
+          (Canceled first because it is first alphabetically.)
+          There are valid reasons to have multiple values in this field, for
+          example if a trip was scheduled but later is updated to canceled.
+          See the specification documentation at
+          https://gtfs.org/realtime/reference/#message-tripdescriptor
           for details on how to interpret this field.
       - name: tu_max_delay
         description: Maximum observed delay for this trip.
       - name: tu_num_skipped_stops
         description: &tu_num_skipped_stops_desc |
-          Distinct count of stop_ids in messages where the stop time update schedule_relationship was SKIPPED
-          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate; this is
-          different than the overall trip-level schedule relationship).
+          Distinct count of stop_ids in messages where the stop time update
+          schedule_relationship was SKIPPED
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
       - name: tu_num_canceled_stops
         description: &tu_num_canceled_stops_desc |
-          Distinct count of stop_ids in messages where the stop time update schedule_relationship was CANCELED
-          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate; this is
-          different than the overall trip-level schedule relationship).
+          Distinct count of stop_ids in messages where the stop time update
+          schedule_relationship was CANCELED
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
       - name: tu_num_added_stops
         description: &tu_num_added_stops_desc |
-          Distinct count of stop_ids in messages where the stop time update schedule_relationship was ADDED
-          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate; this is
-          different than the overall trip-level schedule relationship).
+          Distinct count of stop_ids in messages where the stop time update
+          schedule_relationship was ADDED
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
       - name: tu_num_scheduled_stops
         description: &tu_num_scheduled_stops_desc |
-          Distinct count of stop_ids in messages where the stop time update schedule_relationship was SCHEDULED
-          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate; this is
-          different than the overall trip-level schedule relationship).
+          Distinct count of stop_ids in messages where the stop time update
+          schedule_relationship was SCHEDULED
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
       - name: tu_num_scheduled_canceled_added_stops
         description: |
           Sum of counts of scheduled, canceled, and added stops.
           Included for backwards compatibility with a downstream guideline check.
       - name: tu_num_distinct_message_ids
         description: &rt_num_distinct_message_ids |
-          Distinct count of top-level ids (https://gtfs.org/realtime/reference/#message-feedentity)
+          Distinct count of top-level ids
+          (https://gtfs.org/realtime/reference/#message-feedentity)
           in which this entity appeared.
           This is meant to identify a given entity across messages, so the
           count should usually be 1; some feeds change the ID based on technical
-          implementation so that it changes for example once a trip actually begins
-          its run.
+          implementation so that it changes for example once a trip actually
+          begins its run.
       # vehicle position facts
       - name: vp_trip_start_time
         description: *rt_trip_start_time_desc
@@ -1450,7 +1717,8 @@ models:
 
   - name: fct_trip_updates_no_stop_times
     description: |
-      Incrementally materialize trip update messages without stop times; this reduces the data size by about 90%.
+      Incrementally materialize trip update messages without stop times;
+      this reduces the data size by about 90%.
     columns:
       - name: key
         tests: *almost_unique_rt_key_tests
@@ -1462,31 +1730,59 @@ models:
       - *gtfs_rt_config_extract_ts
       - *gtfs_rt_name
       - *gtfs_rt_schedule_dataset_key
+      - *rt_schedule_base64_url
       - *gtfs_rt_schedule_dataset_name
       - *gtfs_rt_schedule_feed_key
       - *gtfs_rt_schedule_feed_timezone
+      - *rt_service_date
       - *_header_message_age
+      - *_trip_update_message_age
+      - *_trip_update_message_age_vs_header
+      - *rt_header_timestamp
+      - *rt_header_version
+      - *rt_header_incrementality
+      - *rt_id
+      - *rt_trip_update_timestamp
+      - *rt_trip_update_delay
+      - *rt_vehicle_id
+      - *rt_vehicle_label
+      - *rt_vehicle_license_plate
+      - *rt_vehicle_wheelchair_accessible
+      - *rt_trip_id
+      - *rt_trip_route_id
+      - *rt_trip_direction_id
+      - *rt_trip_start_time
+      - *rt_trip_start_time_interval
+      - *rt_trip_start_date
+      - *rt_trip_schedule_relationship
 
   - name: fct_scheduled_trips
     description: |
-      A table showing all trips that were scheduled according to GTFS schedule data.
+      A table showing all trips that were scheduled according to GTFS schedule
+      data.
       If a `service_date`, `trip_key` pair is present in this table,
       it means that that `trip_key` was scheduled to occur on that `service_date`.
-      Specifically, it means that the associated `service_id` was active and had service
-      scheduled. Dates where a `service_id` was active but not scheduled (for example,
-      weekend dates within a weekday service's effective dates) are not listed in this table.
+      Specifically, it means that the associated `service_id` was active and had
+      service scheduled. Dates where a `service_id` was active but not scheduled
+      (for example, weekend dates within a weekday service's effective dates)
+      are not listed in this table.
 
-      The GTFS standard allows for a trip's scheduled stop activity to occur more than 24 hours after the beginning of the
-      associated `service_date`. See https://gtfs.org/schedule/reference/#field-types for the GTFS definitions of times and dates.
+      The GTFS standard allows for a trip's scheduled stop activity to occur
+      more than 24 hours after the beginning of the associated `service_date`.
+      See https://gtfs.org/schedule/reference/#field-types for the GTFS
+      definitions of times and dates.
 
-      Additionally, different feeds use different time zones (see: https://gtfs.org/schedule/reference/#agencytxt
+      Additionally, different feeds use different time zones
+      (see: https://gtfs.org/schedule/reference/#agencytxt
       and https://gtfs.org/schedule/reference/#stopstxt).
 
-      For this reason, this table contains multiple date and time labels associated with a given trip.
-      Please consult each individual column's definition for guidance on which field is
-      most appropriate for your use case.
+      For this reason, this table contains multiple date and time labels
+      associated with a given trip.
+      Please consult each individual column's definition for guidance on which
+      field is most appropriate for your use case.
 
-      This table only contains service through the date (UTC) on which the table was most recently run.
+      This table only contains service through the date (UTC) on which the table
+      was most recently run.
     # TODO: a test that one of trip_first_departure_sec and trip_start_pickup_drop_off_window_sec is populated
     # as of May 2023 this test would fail because we have Flex feeds that use incorrect column names so both fields are null
     columns:
@@ -1497,15 +1793,18 @@ models:
           - not_null
       - *feed_key
       - name: name
+      - *base64_url
       - name: regional_feed_type
         description: |
-          Describes whether this feed is a combined regional feed or has a relation
-          to a combined regional feed in some manner.
-          For example for MTC 511, the combined regional feed has type "Combined
-          Regional Feed", and the MTC-published subfeeds have type "Regional Subfeed".
-          If you are performing an analysis where using a regional combined feed is
-          inappropriate (even though that is the customer-facing data), this field can
-          help you assess other alternative feeds for the same services and organizations.
+          Describes whether this feed is a combined regional feed or has a
+          relation to a combined regional feed in some manner.
+          For example for MTC 511, the combined regional feed has type
+          "Combined Regional Feed", and the MTC-published subfeeds have type
+          "Regional Subfeed".
+          If you are performing an analysis where using a regional combined feed
+          is inappropriate (even though that is the customer-facing data), this
+          field can help you assess other alternative feeds for the same services
+          and organizations.
           Not specified (null) for feeds with no relationship to regional feeds.
       - name: service_date
         description: |
@@ -1519,11 +1818,13 @@ models:
           * Join with other internal-to-GTFS data that is keyed by service date
 
           This field should not be used to:
-          * Filter trip activity by calendar date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+          * Filter trip activity by calendar date (because this does not
+          necessarily reflect the local date on which the trip activity actually
+          occurred)
       - name: service_id
         description: |
-          Service ID from calendar or calendar_dates that determines that this trip
-          has service on this date.
+          Service ID from calendar or calendar_dates that determines that this
+          trip has service on this date.
       - name: trip_key
         description: Foreign key to dim_trips.
         tests:
@@ -1581,17 +1882,19 @@ models:
           `gtfs dataset` records were being archived in the warehouse,
           it is possible for GTFS data to be associated with a GTFS dataset
           record that was not yet in effect at the time the data was downloaded.
-          (So, you may see GTFS data from January 2022 associated with a GTFS dataset
-          record that does not take effect until July 2022.)
-          This is done for convenience to facilitate labeling of older data (the alternative
-          would be failing to join and making it essentially impossible to label
-          historical GTFS data with their associated transit database records).
+          (So, you may see GTFS data from January 2022 associated with a GTFS
+          dataset record that does not take effect until July 2022.)
+          This is done for convenience to facilitate labeling of older data
+          (the alternative would be failing to join and making it essentially
+          impossible to label historical GTFS data with their associated transit
+          database records).
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: contains_warning_duplicate_trip_primary_key
         description: |
-          Rows with `true` in this column have a duplicate primary key in dim_trips;
-          i.e., `trip_id` is duplicated within an individual feed instance.
+          Rows with `true` in this column have a duplicate primary key in
+          dim_trips; i.e., `trip_id` is duplicated within an individual feed
+          instance.
           Treat these rows with caution.
       - name: num_distinct_stops_served
         description: '{{ doc("column_num_distinct_stops_served") }}'
@@ -1599,22 +1902,25 @@ models:
         description: '{{ doc("column_num_stop_times") }}'
       - name: trip_first_departure_sec
         description: |
-          The number of seconds after 12 hours before noon (usually midnight) on `service_date`
-          in `feed_timezone` at which this trip's first stop departure occurred.
+          The number of seconds after 12 hours before noon (usually midnight)
+          on `service_date` in `feed_timezone` at which this trip's first stop
+          departure occurred.
 
-          This field is used upstream of this table to make generic service determinations
-          in tables where we don't have a specific date assigned yet (for example, within
-          stop_times.) Downstream of this table, now that specific dates are associated
-          with the trips, this field should not be used.
+          This field is used upstream of this table to make generic service
+          determinations in tables where we don't have a specific date assigned
+          yet (for example, within stop_times.) Downstream of this table, now
+          that specific dates are associated with the trips, this field should
+          not be used.
       - name: trip_last_arrival_sec
         description: |
-          The number of seconds after midnight on `service_day` in `feed_timezone` at
-          which this trip's last stop arrival occurred.
+          The number of seconds after midnight on `service_day` in `feed_timezone`
+          at which this trip's last stop arrival occurred.
 
-          This field is used upstream of this table to make generic service determinations
-          in tables where we don't have a specific date assigned yet (for example, within
-          stop_times.) Downstream of this table, now that specific dates are associated
-          with the trips, this field should not be used.
+          This field is used upstream of this table to make generic service
+          determinations in tables where we don't have a specific date assigned
+          yet (for example, within stop_times.) Downstream of this table, now
+          that specific dates are associated with the trips, this field should
+          not be used.
       - name: service_hours
         description: '{{ doc("column_service_hours") }}'
       - name: flex_service_hours
@@ -1629,15 +1935,18 @@ models:
         description: '{{ doc("column_trip_end_timezone") }}'
       - name: trip_first_departure_ts
         description: |
-          The timestamp (non-localized, absolute) at which this trip's first departure occurred.
+          The timestamp (non-localized, absolute) at which this trip's first
+          departure occurred.
 
           This field should be used to:
           * Identify all activity that was happening at a specific instant in time
           * Calculate durations or identify relative ordering of events
 
           This field should not be used to:
-          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
-          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+          * Bucket events by time of day (because this does not reflect the time
+          zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect
+          the local date on which the trip activity actually occurred)
       - name: trip_last_arrival_ts
         description: |
           The timestamp (non-localized, absolute) at which this trip's last stop arrival occurred.
@@ -1647,13 +1956,16 @@ models:
           * Calculate durations or identify relative ordering of events
 
           This field should not be used to:
-          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
-          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+          * Bucket events by time of day (because this does not reflect the time
+          zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect
+          the local date on which the trip activity actually occurred)
       - name: trip_start_date_pacific
         description: |
           The "America/Los_Angeles" time zone date on which this trip began.
-          There are some feeds with activity that does not occur within this time zone,
-          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+          There are some feeds with activity that does not occur within this time
+          zone, but we assume that for analysis purposes it is preferable to
+          standardize to California's time zone.
 
           This field should be used to:
           * Filter trip activity by date
@@ -1665,9 +1977,11 @@ models:
 
       - name: trip_first_departure_datetime_pacific
         description: |
-          The "America/Los_Angeles" time zone date and time of this trip's first departure.
-          There are some feeds with activity that does not occur within this time zone,
-          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+          The "America/Los_Angeles" time zone date and time of this trip's
+          first departure.
+          There are some feeds with activity that does not occur within this
+          time zone, but we assume that for analysis purposes it is preferable
+          to standardize to California's time zone.
 
           This field should be used to:
           * Filter trip activity by date and time
@@ -1680,7 +1994,8 @@ models:
 
       - name: trip_last_arrival_datetime_pacific
         description: |
-          The "America/Los_Angeles" time zone date and time of this trip's last arrival.
+          The "America/Los_Angeles" time zone date and time of this trip's
+          last arrival.
           See trip_first_departure_datetime_pacific for usage notes.
       - name: trip_start_date_local_tz
         description: |
@@ -1689,15 +2004,18 @@ models:
           it may be preferable to use this rather than trip_start_date_pacific.
       - name: trip_first_departure_datetime_local_tz
         description: |
-          The local (`trip_start_timezone`) datetime of this trip's first departure.
+          The local (`trip_start_timezone`) datetime of this trip's first
+          departure.
           If you are specifically concerned with activity outside of California,
-          it may be preferable to use this rather than trip_first_departure_datetime_pacific.
+          it may be preferable to use this rather than
+          trip_first_departure_datetime_pacific.
 
       - name: trip_last_arrival_datetime_local_tz
         description: |
           The local (`trip_end_timezone`) datetime of this trip's last arrival.
           If you are specifically concerned with activity outside of California,
-          it may be preferable to use this rather than trip_last_arrival_datetime_pacific.
+          it may be preferable to use this rather than
+          trip_last_arrival_datetime_pacific.
       - *feed_timezone_no_tests
       - name: frequencies_defined_trip
         description: '{{ doc("column_frequencies_defined_trip") }}'
@@ -1723,7 +2041,8 @@ models:
         description: '{{ doc("column_num_departure_times_populated_stop_times") }}'
       - name: trip_first_start_pickup_drop_off_window_ts
         description: |
-          The timestamp (non-localized, absolute) at which this trip's first pickup/drop off window started.
+          The timestamp (non-localized, absolute) at which this trip's first
+          pickup/drop off window started.
           Only populated for flexible trips.
 
           This field should be used to:
@@ -1731,11 +2050,13 @@ models:
           * Calculate durations or identify relative ordering of events
 
           This field should not be used to:
-          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
+          * Bucket events by time of day (because this does not reflect the time
+          zone in which the trip activity actually occurred)
           * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
       - name: trip_last_end_pickup_drop_off_window_ts
         description: |
-          The timestamp (non-localized, absolute) at which this trip's last pickup/drop off window ended.
+          The timestamp (non-localized, absolute) at which this trip's last
+          pickup/drop off window ended.
           Only populated for flexible trips.
 
           This field should be used to:
@@ -1743,14 +2064,18 @@ models:
           * Calculate durations or identify relative ordering of events
 
           This field should not be used to:
-          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
-          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+          * Bucket events by time of day (because this does not reflect the time
+          zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect
+          the local date on which the trip activity actually occurred)
       - name: trip_first_start_pickup_drop_off_window_date_pacific
         description: |
-          The "America/Los_Angeles" time zone date on which this trip's first pickup/drop off window started.
+          The "America/Los_Angeles" time zone date on which this trip's first
+          pickup/drop off window started.
           Only populated for flexible trips.
-          There are some feeds with activity that does not occur within this time zone,
-          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+          There are some feeds with activity that does not occur within this time
+          zone, but we assume that for analysis purposes it is preferable to
+          standardize to California's time zone.
 
           This field should be used to:
           * Filter trip activity by date
@@ -1762,10 +2087,12 @@ models:
 
       - name: trip_first_start_pickup_drop_off_window_datetime_pacific
         description: |
-          The "America/Los_Angeles" time zone date and time of the beginning of this trip's first pickup/drop off window.
+          The "America/Los_Angeles" time zone date and time of the beginning of
+          this trip's first pickup/drop off window.
           Only populated for flexible trips.
-          There are some feeds with activity that does not occur within this time zone,
-          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+          There are some feeds with activity that does not occur within this time
+          zone, but we assume that for analysis purposes it is preferable to
+          standardize to California's time zone.
 
           This field should be used to:
           * Filter trip activity by date and time
@@ -1778,25 +2105,31 @@ models:
 
       - name: trip_last_end_pickup_drop_off_window_pacific
         description: |
-          The "America/Los_Angeles" time zone date and time at which this trip's last pickup/drop off window ended.
+          The "America/Los_Angeles" time zone date and time at which this trip's
+          last pickup/drop off window ended.
           Only populated for flexible trips.
-          See trip_first_start_pickup_drop_off_window_datetime_pacific for usage notes.
+          See trip_first_start_pickup_drop_off_window_datetime_pacific for usage
+          notes.
       - name: trip_first_start_pickup_drop_off_window_date_local_tz
         description: |
-          The local (`trip_start_timezone`) date of the beginning of this trip's first pickup/drop off window.
+          The local (`trip_start_timezone`) date of the beginning of this trip's
+          first pickup/drop off window.
           Only populated for flexible trips.
           If you are specifically concerned with activity outside of California,
-          it may be preferable to use this rather than trip_first_start_pickup_drop_off_window_date_pacific.
+          it may be preferable to use this rather than
+          trip_first_start_pickup_drop_off_window_date_pacific.
       - name: trip_first_start_pickup_drop_off_window_datetime_local_tz
         description: |
-          The local (`trip_start_timezone`) datetime of this trip's first pickup/drop off window.
+          The local (`trip_start_timezone`) datetime of this trip's first
+          pickup/drop off window.
           Only populated for flexible trips.
           If you are specifically concerned with activity outside of California,
           it may be preferable to use this rather than trip_first_departure_datetime_pacific.
 
       - name: trip_last_end_pickup_drop_off_window_datetime_local_tz
         description: |
-          The local (`trip_end_timezone`) datetime at which this trip's last pickup/drop off window ended.
+          The local (`trip_end_timezone`) datetime at which this trip's last
+          pickup/drop off window ended.
           Only populated for flexible trips.
           If you are specifically concerned with activity outside of California,
           it may be preferable to use this rather than trip_last_end_pickup_drop_off_window_datetime_pacific.
@@ -1805,7 +2138,8 @@ models:
     description: |
       Summarizes trips observed in service alert messages.
       This table does not include service alerts that select non-trip entities.
-      This table will only include rows for trips where the alert specifically applies to that trip.
+      This table will only include rows for trips where the alert specifically
+      applies to that trip.
       So, for example, if there is a service alert for Route A on a given date,
       this table will *not* include all trips on Route A for that date.
     tests:
@@ -1814,17 +2148,11 @@ models:
           expression: "NOT (EXTRACT(HOUR FROM trip_start_time_interval) > 24 AND trip_start_date IS NULL)"
           severity: warn
     columns:
-      - &rt_trip_summary_key
-        name: key
-        description: Composite of calculated service date, URL, trip ID, and trip start time.
-        tests:
-          - not_null
-          - unique_proportion:
-              at_least: 0.9999
+      - *rt_trip_summary_key
       - *trip_instance_key
       - *rt_service_date
       - *base64_url
-      - *rt_trip_schedule_base64_url
+      - *rt_schedule_base64_url
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_time_interval
@@ -1848,15 +2176,19 @@ models:
       - &warning_multiple_route_ids
         name: warning_multiple_route_ids
         description: |
-          Boolean for whether there is a pipe character present in `trip_route_ids`, indicating
-          multiple routes associated with the same trip which represents a data integrity issue.
-          A "true" value in this column means a row should be treated with caution.
+          Boolean for whether there is a pipe character present in
+          `trip_route_ids`, indicating multiple routes associated with the same
+          trip which represents a data integrity issue.
+          A "true" value in this column means a row should be treated with
+          caution.
       - &warning_multiple_direction_ids
         name: warning_multiple_direction_ids
         description: |
-          Boolean for whether there is a pipe character present in `trip_direction_ids`, indicating
-          multiple directions associated with the same trip which represents a data integrity issue.
-          A "true" value in this column means a row should be treated with caution.
+          Boolean for whether there is a pipe character present in
+          `trip_direction_ids`, indicating multiple directions associated with
+          the same trip which represents a data integrity issue.
+          A "true" value in this column means a row should be treated with
+          caution.
       - *gtfs_rt_schedule_feed_timezone
       - &num_distinct_message_ids
         name: num_distinct_message_ids
@@ -1892,17 +2224,21 @@ models:
       - *max_header_pacific
       - name: alert_content_array
         description: |
-          An array containing a unique STRUCTs of `message_id`, `cause`, `effect`, `header`, and `description`.
+          An array containing a unique STRUCTs of `message_id`, `cause`,
+          `effect`, `header`, and `description`.
           This is the actual alert content associated with this trip.
-          An individual trip can be associated with multiple alerts so this array can contain multiple distinct structs.
+          An individual trip can be associated with multiple alerts so this
+          array can contain multiple distinct structs.
 
   - name: fct_trip_updates_summaries
     description: |
-      Summarizes trips observed in trip update messages, as long as trip_id was populated.
+      Summarizes trips observed in trip update messages, as long as trip_id was
+      populated.
 
-      Caveat on uniqueness: We have a very small number of duplicate `trip_instance_key` and `key` values,
-      specifically they can occur on days where the URL or time zone for a given feed change because
-      of how the keys are generated upstream.
+      Caveat on uniqueness: We have a very small number of duplicate
+      `trip_instance_key` and `key` values, specifically they can occur on days
+      where the URL or time zone for a given  feed change because of how the keys
+      are generated upstream.
     tests:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
@@ -1934,7 +2270,9 @@ models:
       - *num_distinct_message_keys
       - *num_distinct_extract_ts
       - name: num_distinct_trip_update_timestamps
-        description: Distinct count of trip update timestamps from the feed (https://gtfs.org/realtime/reference/#message-tripupdate).
+        description: |
+          Distinct count of trip update timestamps from the feed
+          (https://gtfs.org/realtime/reference/#message-tripupdate).
       - *min_extract_ts
       - *max_extract_ts
       - *extract_duration_minutes
@@ -1950,28 +2288,36 @@ models:
       - *min_header_pacific
       - *max_header_pacific
       - name: min_trip_update_timestamp
-        description: Earliest trip update timestamp of a message referencing this trip.
+        description: |
+          Earliest trip update timestamp of a message referencing this trip.
       - name: max_trip_update_timestamp
-        description: Latest trip update timestamp of a message referencing this trip.
+        description: |
+          Latest trip update timestamp of a message referencing this trip.
       - name: trip_update_duration_minutes
         description: |
-          The difference between `max_trip_update_timestamp` and `min_trip_update_timestamp` in minutes,
-          representing the duration of time for which this trip was present in the trip-specific messages produced by the agency.
-          Note that the trip may not have been present in every message between the minimum and maximum
-          timestamps, and therefore may not have been present continuously for the
-          duration listed here.
+          The difference between `max_trip_update_timestamp` and
+          `min_trip_update_timestamp` in minutes, representing the duration of
+          time for which this trip was present in the trip-specific messages
+          produced by the agency.
+          Note that the trip may not have been present in every message between
+          the minimum and maximum timestamps, and therefore may not have been
+          present continuously for the duration listed here.
       - name: min_trip_update_datetime_local_tz
         description: |
-          `min_trip_update_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
+          `min_trip_update_timestamp` converted to a DATETIME type in
+          `schedule_feed_timezone`.
       - name: max_trip_update_datetime_local_tz
         description: |
-          `max_trip_update_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
+          `max_trip_update_timestamp` converted to a DATETIME type in
+          `schedule_feed_timezone`.
       - name: min_trip_update_datetime_pacific
         description: |
-          `min_trip_update_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+          `min_trip_update_timestamp` converted to a DATETIME type in the
+          "America/Los_Angeles" time zone.
       - name: max_trip_update_datetime_pacific
         description: |
-          `max_trip_update_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+          `max_trip_update_timestamp` converted to a DATETIME type in the
+          "America/Los_Angeles" time zone.
       - name: max_delay
         description: Maximium observed delay for this trip during this day.
       - name: num_distinct_skipped_stops
@@ -1990,15 +2336,17 @@ models:
       - &rt_trip_num_distinct_updates
         name: num_distinct_updates
         description: *rt_trip_num_distinct_updates_desc
-      - *rt_trip_schedule_base64_url
+      - *rt_schedule_base64_url
 
   - name: fct_vehicle_positions_trip_summaries
     description: |
-      Summarizes trips observed in vehicle position messages, as long as trip_id was populated.
+      Summarizes trips observed in vehicle position messages, as long as
+      trip_id was populated.
 
-      Caveat on uniqueness: We have a very small number of duplicate `trip_instance_key` and `key` values,
-      specifically they can occur on days where the URL or time zone for a given feed change because
-      of how the keys are generated upstream.
+      Caveat on uniqueness: We have a very small number of duplicate
+      `trip_instance_key` and `key` values, specifically they can occur on days
+      where the URL or time zone for a given feed change because of how the keys
+      are generated upstream.
     tests:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
@@ -2014,7 +2362,7 @@ models:
       - *gtfs_rt_schedule_feed_timezone
       - *rt_service_date
       - *base64_url
-      - *rt_trip_schedule_base64_url
+      - *rt_schedule_base64_url
       - *rt_trip_id
       - *rt_trip_start_time
       - *rt_trip_start_date
@@ -2031,7 +2379,9 @@ models:
       - *num_distinct_message_keys
       - *num_distinct_extract_ts
       - name: num_distinct_vehicle_timestamps
-        description: Distinct count of vehicle timestamps from the feed (https://gtfs.org/realtime/reference/#message-vehicleposition).
+        description: |
+          Distinct count of vehicle timestamps from the feed
+          (https://gtfs.org/realtime/reference/#message-vehicleposition).
       - *min_extract_ts
       - *max_extract_ts
       - *extract_duration_minutes
@@ -2047,28 +2397,36 @@ models:
       - *min_header_pacific
       - *max_header_pacific
       - name: min_vehicle_timestamp
-        description: Earliest vehicle timestamp of a message referencing this trip.
+        description: |
+          Earliest vehicle timestamp of a message referencing this trip.
       - name: max_vehicle_timestamp
-        description: Latest vehicle timestamp of a message referencing this trip.
+        description: |
+          Latest vehicle timestamp of a message referencing this trip.
       - name: vehicle_duration_minutes
         description: |
-          The difference between `max_vehicle_timestamp` and `min_vehicle_timestamp` in minutes,
-          representing the duration of time for which this trip was present in the trip-specific messages produced by the agency.
-          Note that the trip may not have been present in every message between the minimum and maximum
-          timestamps, and therefore may not have been present continuously for the
-          duration listed here.
+          The difference between `max_vehicle_timestamp` and
+          `min_vehicle_timestamp` in minutes, representing the duration of time
+          for which this trip was present in the trip-specific messages produced
+          by the agency.
+          Note that the trip may not have been present in every message between
+          the minimum and maximum timestamps, and therefore may not have been
+          present continuously for the duration listed here.
       - name: min_vehicle_datetime_local_tz
         description: |
-          `min_vehicle_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
+          `min_vehicle_timestamp` converted to a DATETIME type in
+          `schedule_feed_timezone`.
       - name: max_vehicle_datetime_local_tz
         description: |
-          `max_vehicle_timestamp` converted to a DATETIME type in `schedule_feed_timezone`.
+          `max_vehicle_timestamp` converted to a DATETIME type in
+          `schedule_feed_timezone`.
       - name: min_vehicle_datetime_pacific
         description: |
-          `min_vehicle_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+          `min_vehicle_timestamp` converted to a DATETIME type in the
+          "America/Los_Angeles" time zone.
       - name: max_vehicle_datetime_pacific
         description: |
-          `max_vehicle_timestamp` converted to a DATETIME type in the "America/Los_Angeles" time zone.
+          `max_vehicle_timestamp` converted to a DATETIME type in the
+          "America/Los_Angeles" time zone.
       - name: first_position
         description: *vp_first_position_desc
       - name: last_position
@@ -2081,13 +2439,13 @@ models:
       - *rt_trip_num_distinct_updates
   - name: fct_monthly_routes
     description: |
-      An aggregation of GTFS schedule routes with trip activity in a given month,
-      where the shape with the most trips is associated.
+      An aggregation of GTFS schedule routes with trip activity in a given
+      month, where the shape with the most trips is associated.
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `base64_url`, `route_id`, `month`,
-          and `year`.
+          Synthetic primary key constructed from `base64_url`, `route_id`,
+          `month`, and `year`.
         tests: *primary_key_tests
       - name: source_record_id
         description: |
@@ -2111,8 +2469,8 @@ models:
           to look up feed and GTFS dataset attributes.
       - name: pt_array
         description: |
-          Array of points describing this shape, looked up from `dim_shapes_arrays`
-          via `shape_array_key`.
+          Array of points describing this shape, looked up from
+          `dim_shapes_arrays` via `shape_array_key`.
   - name: fct_monthly_route_service_by_timeofday
     description: |
       An aggregation of GTFS schedule service by day and time characteristics.
@@ -2136,17 +2494,20 @@ models:
           Actual calendar month (Pacific Time dates) in which this service was scheduled to occur.
       - name: year
         description: |
-          Actual calendar year (Pacific Time dates) in which this service was scheduled to occur.
+          Actual calendar year (Pacific Time dates) in which this service was
+          scheduled to occur.
       - name: day_type
         description: |
-          Actual calendar day type (Pacific Time dates) in which this service was scheduled to
-          occur (Monday, Tuesday, etc).
-          This means that overnight service is associated with the calendar date on which it was
-          scheduled, even if it was associated with the prior `service_date` by the agency.
+          Actual calendar day type (Pacific Time dates) in which this service was
+          scheduled to occur (Monday, Tuesday, etc).
+          This means that overnight service is associated with the calendar date
+          on which it was scheduled, even if it was associated with the prior
+          `service_date` by the agency.
       - name: n_trips
         description: |
-          Total trips that occurred for the route for this month, `day_type` and `time_of_day`.
+          Total trips that occurred for the route for this month, `day_type` and
+          `time_of_day`.
       - name: ttl_service_hours
         description: |
-          Total scheduled service hours that occurred for the route for this month, `day_type`,
-          and `time_of_day`.
+          Total scheduled service hours that occurred for the route for this
+          month, `day_type`, and `time_of_day`.

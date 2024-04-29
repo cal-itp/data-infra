@@ -4,7 +4,7 @@ Within Cal-ITP, we publish several Python packages and Docker images that are th
 
 Some images and packages manage dependencies via traditional requirements.txt files, and some manage dependencies via [Poetry `pyproject.toml` files](https://python-poetry.org/docs/pyproject/). Please refer to Poetry documentation for successful management of pyproject dependencies.
 
-READMEs describing the individual testing and publication process for each image and package are linked in the below table.
+READMEs describing the individual testing and publication process for each image and package are linked in the below table. A detailed guide for updating the calitp-data-analysis package is available [here](https://docs.calitp.org/data-infra/analytics_tools/python_libraries.html#updating-calitp-data-analysis), written for an analyst audience.
 
 | Name                    | Function                                                                                                                              | Source Code                                                                                      | README                                                                        | Publication URL                                            | Type           |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- | ---------------------------------------------------------- | -------------- |
