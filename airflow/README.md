@@ -19,7 +19,7 @@ Finally, Airflow plugins can be found in the `plugins` subfolder; this includes 
 
 ## Testing Changes
 
-This project is developed using Docker and docker-compose, and we test most changes via a local version of Airflow that is similarly configured to the production Composer-managed Airflow instance - its dependencies are based on the dependency list from the Composer-managed production Airflow instance, copied into a file named `requirements-composer-[x.y.z]-airflow[a.b.c].txt`. Before getting started, please make sure you have [installed Docker on your system](https://docs.docker.com/get-docker/). Docker will need to be running at the time you run any `docker-compose` commands from the console.
+This project is developed using Docker and docker-compose, and we test most changes via a local version of Airflow that is similarly configured to the production Composer-managed Airflow instance - its dependencies are based on the dependency list from the Composer-managed production Airflow instance, copied into a file named `requirements-composer-[x.y.z]-airflow-[a.b.c].txt`. Before getting started, please make sure you have [installed Docker on your system](https://docs.docker.com/get-docker/). Docker will need to be running at the time you run any `docker-compose` commands from the console.
 
 To test any changes you've made to DAGs, operators, etc., you'll need to follow a few setup steps:
 
