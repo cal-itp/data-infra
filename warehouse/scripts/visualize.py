@@ -292,11 +292,12 @@ def ci_report(
 
     typer.secho(f"Visualizing the following models: {modified_models}")
     assert isinstance(modified_models, list)
-    viz(
-        ArtifactType.manifest,
-        include=modified_models,
-        output=Path("./target/dag.png"),
-    )
+    if isinstance(modified_models, list) and len(modified_models) > 0:
+        viz(
+            ArtifactType.manifest,
+            include=modified_models,
+            output=Path("./target/dag.png"),
+        )
 
     env = Environment(
         loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")),

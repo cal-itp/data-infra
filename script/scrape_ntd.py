@@ -8,7 +8,19 @@ from the data set page. For example, the 2021 agency
 database page is https://www.transit.dot.gov/ntd/data-product/2021-annual-database-agency-information
 but the actual file is https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-10/2021%20Agency%20Information.xlsx
 which is linked in the HTML page.
+
+When testing, add these lines and comment one out in your bash_profile.
+export CALITP_BUCKET__NTD_DATA_PRODUCTS=gs://calitp-ntd-data-products
+export CALITP_BUCKET__NTD_DATA_PRODUCTS=gs://test-calitp-ntd-data-products
+
+Sample Commands:
+poetry install
+then
+poetry run python scrape_ntd.py annual-database-agency-information 2021 https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-10/2021%20Agency%20Information.xlsx
+poetry run python scrape_ntd.py monthly-ridership-with-adjustments 2024 https://www.transit.dot.gov/sites/fta.dot.gov/files/2024-04/February%202024%20Complete%20Monthly%20Ridership%20%28with%20adjustments%20and%20estimates%29_240402_0.xlsx
+
 """
+
 import gzip
 import os
 from typing import ClassVar, List
@@ -54,26 +66,50 @@ def main(
     validated_url = parse_obj_as(HttpUrl, file_url)
     typer.secho(f"reading file from url {validated_url}", fg=typer.colors.MAGENTA)
     start = pendulum.now(tz="Etc/UTC")
-    df = pd.read_excel(requests.get(validated_url).content).rename(
-        make_name_bq_safe, axis="columns"
-    )
-    typer.secho(
-        f"read {df.shape[0]} rows and {df.shape[1]} columns", fg=typer.colors.MAGENTA
-    )
 
-    gzipped_content = gzip.compress(df.to_json(orient="records", lines=True).encode())
+    excel_content = requests.get(validated_url).content
 
-    extract = NtdDataProductExtract(
-        product=product,
+    # Save initial excel files to the bucket as "raw"
+    excel_extract = NtdDataProductExtract(
+        product=product + "_raw",
         ts=start,
         year=year,
         file_url=validated_url,
-        filename=f"{product}.jsonl.gz",
+        filename=f"{product}_raw.xlsx",
     )
     typer.secho(
-        f"saving {humanize.naturalsize(len(gzipped_content))} bytes to {extract.path}"
+        f"saving {humanize.naturalsize(len(excel_content))} bytes to {excel_extract.path}"
     )
-    extract.save_content(fs=get_fs(), content=gzipped_content)
+    excel_extract.save_content(fs=get_fs(), content=excel_content)
+
+    df_dict = pd.read_excel(excel_content, sheet_name=None, engine="openpyxl")
+
+    # Rename all columns in dictonary, then fix the key(tab) name of the dictionary
+    for key, df in df_dict.items():
+        df = df.rename(make_name_bq_safe, axis="columns")
+        typer.secho(
+            f"read {df.shape[0]} rows and {df.shape[1]} columns",
+            fg=typer.colors.MAGENTA,
+        )
+
+        gzipped_content = gzip.compress(
+            df.to_json(orient="records", lines=True).encode()
+        )
+
+        tab_name = ""
+        if len(df_dict.keys()) > 1:
+            tab_name = "/" + make_name_bq_safe(key)
+        extract = NtdDataProductExtract(
+            product=product + tab_name,
+            ts=start,
+            year=year,
+            file_url=validated_url,
+            filename=f"{product}.jsonl.gz",
+        )
+        typer.secho(
+            f"saving {humanize.naturalsize(len(gzipped_content))} bytes to {extract.path}"
+        )
+        extract.save_content(fs=get_fs(), content=gzipped_content)
 
 
 if __name__ == "__main__":

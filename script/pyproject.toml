@@ -12,7 +12,7 @@ requests = "^2.28.2"
 jsonschema = "^4.17.3"
 typer = "^0.7.0"
 openpyxl = "^3.1.0"
-calitp-data-infra = "2024.2.12.post1"
+calitp-data-infra = "2024.4.1"
 
 [tool.poetry.dev-dependencies]
 mypy = "^1.0.0"
