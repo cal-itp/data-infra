@@ -87,7 +87,7 @@ docker-compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly va
 
 - When testing a new or updated `requirements.txt`, you might not see packages update. You may need to run `docker-compose down --rmi all` to clear out older docker images and recreate with `docker build . --no-cache`.
 
-- If a task does not start when expected, it may not have access to its designated [pool](https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/pools.html). Pools can be created and managed in Airflow on a page accessed via the Admin -> Pools menu option. A DAG's pool can be accessed via its DAG Details page, and is generally defined in the `default_args` section of the DAG's `METADATA.yml` file.
+- If a task does not start when expected, its designated [pool](https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/pools.html) may not have been created locally. Pools can be created and managed in Airflow on a page accessed via the Admin -> Pools menu option. A DAG's designated pool can typically be found on its DAG Details page, and is generally defined in the `default_args` section of the DAG's `METADATA.yml` file.
 
 - If a task is producing errors but not producing complete logs for troubleshooting, or if it's reporting a memory issue, you may need to increase the RAM given by default to the Docker virtual machine that Airflow runs on. In Docker Desktop this setting can be accessed via the Preferences -> Advanced menu, and requires a restart of the VM to take effect.
 
