@@ -6,9 +6,8 @@ with
 select
     uza_name,
     uace_cd,
-    dt,
+    _dt,
     ts,
-    year,
     ntd_id,
     reporter_type,
     agency,

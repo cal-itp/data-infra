@@ -50,7 +50,7 @@ models:
       Extracts of the NTD Monthly Ridership with adjustments - UPT tab
 
       For example, the Feb 2024 dataset is found at
-      https://www.transit.dot.gov/sites/fta.dot.gov/files/2024-04/February%202024%20Complete%20Monthly%20Ridership%20%28with%20adjustments%20and%20estimates%29_240402_0.xlsx.
+      https://www.transit.dot.gov/ntd/data-product/monthly-module-adjusted-data-release.
 
 
       A Master File of all properties that currently report or reported monthly
@@ -146,14 +146,10 @@ models:
       - name: uace_cd
         description: "Urban Area Census Code (UACE)  – A unique numeric identifier
           associated with the 2020 urban areas as defined by the U.S. Census. "
-      - name: dt
+      - name: _dt
         description: ""
       - name: ts
         description: ""
-      - name: year
-        tests:
-          - not_null
-        description: Manually entered during ingestion
       - name: ntd_id
         description: NTD ID – The Transit Property’s NTD identification number in the
           Next Generation NTD Database

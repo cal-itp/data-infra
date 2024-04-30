@@ -28,10 +28,10 @@ with
         select
             uza_name,
             uace_cd,
-            dt,
+            dt as _dt,
             ts,
             year,
-            ntd_id,
+            format("%06d", cast(ntd_id as int64)) as ntd_id,
             reporter_type,
             agency,
             mode_type_of_service_status,
