@@ -101,9 +101,9 @@ fct_old_enrollments AS (
       WHEN client_event_time >= '2022-08-12T07:00:00Z'
         THEN "(MST) CDT claims via Login.gov"
     END as event_properties_eligibility_verifier,
-    event_properties_error.name,
-    event_properties_error.status,
-    event_properties_error.sub,
+    event_properties_error_name,
+    event_properties_error_status,
+    event_properties_error_sub,
     event_properties_href,
     event_properties_language,
     event_properties_origin,
