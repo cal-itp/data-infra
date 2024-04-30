@@ -1,5 +1,24 @@
 # Getting Notebooks Ready for the Portfolio
 
+- [See a sample parameterized notebook here.](https://github.com/cal-itp/data-analyses/blob/main/starter_kit/parameterized_notebook.ipynb)
+
+## Packages to include
+
+- Add these packages that turn the notebook into a portfolio.
+- Order matters, %%capture must go first!
+- Suppress warnings from displaying in the portfolio site (`shared_utils`).
+
+```
+# Include this in the cell where packages are imported
+
+%%capture
+
+import warnings
+warnings.filterwarnings('ignore')
+
+import calitp_data_analysis.magics
+```
+
 ## Headers
 
 ### Parameterized Titles
@@ -10,7 +29,7 @@
 
 ### Consecutive Headers
 
-- Headers must move consecutively in Markdown cells. No skipping!
+- Headers must move consecutively in Markdown cells or the parameterized notebook will not generate. No skipping!
 
 ```
 # Notebook Title
@@ -28,6 +47,12 @@
 ### Capturing Parameters
 
 - If you're using a heading, you can either use HTML or capture the parameter and inject.
+- Create a code cell in which your parameter will be captured. Make sure the `parameter` tag for the cell is turned on.
+
+```
+ # parameters cell for local
+ district_number = "4"
+```
 
 - HTML - this option works when you run your notebook locally.
 
@@ -54,18 +79,6 @@
   ```
   ## District {district_number}
   ```
-
-### Suppress Warnings
-
-- Suppress warnings from displaying in the portfolio site (`shared_utils`).
-
-```
-# Include this in the cell where packages are imported
-
-%%capture
-import warnings
-warnings.filterwarnings('ignore')
-```
 
 ## Narrative
 

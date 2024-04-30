@@ -15,7 +15,7 @@ You can find the Cal-ITP Analytics Portfolio at [analysis.calitp.org](https://an
 
 Before executing the build, there are a few prior steps you need to do.
 
-1. Set up netlify key:
+1. Set up netlify key/make sure your Netlify token is up to date:
 
    - Install netlify: `npm install -g netlify-cli`
    - Navigate to your main directory
