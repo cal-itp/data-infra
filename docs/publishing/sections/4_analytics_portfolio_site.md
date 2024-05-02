@@ -30,10 +30,17 @@ Before executing the build, there are a few prior steps you need to do.
    - For the changes to take effect, open a new terminal or run `source ~/.bash_profile`
      - Back in your terminal, enter `env | grep NETLIFY` to see that your Netlify token is there
 
-2. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
+2. Create a `README.md` file in the repo where your work lies.
+
+   - Your file should always be titled as `README.md` and not other variants such as `README_gtfs.md` because the portfolio can only take a `README.md` file.
+   - If you do accidentally create a `README.md` file with extra strings, you can fix this by taking the following steps:
+     - `git rm portfolio/my_analysis/README_accidentally_named_something_else.md`
+     - `rm portfolio/my_analysis/_build/html/README_accidentally_named_something.html`. We use `rm` because \_build/html folder is not checked into GitHub
+     - `python portfolio/portfolio.py build my_report --no-execute-papermill --deploy` to rerun the portfolio to incorporate only the new changes to your `README.md` if the other pages are correct.
+
+3. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
 
    - This `.yml` file will include the directory to the notebook(s) you want to publish.
-   - Note, your `README` should always be titled as `README.md` and not other variants such as `README_gtfs.md`. The portfolio can only take a `README.md` file.
    - Name your `.yml` file. For now we will use `my_report.yml` as an example.
    - The structure of your `.yml` file depends on the type of your analysis:
      - If you have one parameterized notebook with **one parameter**:
@@ -131,7 +138,7 @@ Before executing the build, there are a few prior steps you need to do.
 
    - By running `--deploy`, you are deploying the changes to display in the Analytics Portfolio.
    - **Note:** The `my_report` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
-   - If you have already deployed but want to make changes to the README, run: `python portfolio/portfolio.py build my_report --papermill-no-execute`
+   - If you have already deployed but want to make changes to the README, run: `python portfolio/portfolio.py build my_report --no-execute-papermill --deploy`
      - Running this is helpful for larger outputs or if you are updating the README.
 
 3. Once this runs, you can check the preview link at the bottom of the output. It should look something like:
