@@ -33,6 +33,7 @@ Before executing the build, there are a few prior steps you need to do.
 2. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
 
    - This `.yml` file will include the directory to the notebook(s) you want to publish.
+   - Note, your `README` should always be titled as `README.md` and not other variants such as `README_gtfs.md`. The portfolio can only take a `README.md` file.
    - Name your `.yml` file. For now we will use `my_report.yml` as an example.
    - The structure of your `.yml` file depends on the type of your analysis:
      - If you have one parameterized notebook with **one parameter**:

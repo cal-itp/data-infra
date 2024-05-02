@@ -4,9 +4,8 @@
 
 ## Packages to include
 
-- Add these packages that turn the notebook into a portfolio.
-- Order matters, %%capture must go first!
-- Suppress warnings from displaying in the portfolio site (`shared_utils`).
+- Order matters, %%capture must go first.
+- `warnings.filterwarnings('ignore')` warnings from displaying in the portfolio site (`shared_utils`).
 
 ```
 # Include this in the cell where packages are imported
@@ -23,7 +22,7 @@ import calitp_data_analysis.magics
 
 ### Parameterized Titles
 
-- If you're parameterizing the notebook, the first Markdown cell must include parameters to inject.
+- When parameterizing a notebook, the first Markdown cell must include parameters to inject.
   - Ex: If `district` is one of the parameters in your `sites/my_report.yml`, a header Markdown cell could be `# District {district} Analysis`.
   - Note: The site URL is constructed from the original notebook name and the parameter in the JupyterBook build: `0_notebook_name__district_x_analysis.html`
 
@@ -46,13 +45,13 @@ import calitp_data_analysis.magics
 
 ### Capturing Parameters
 
-- If you're using a heading, you can either use HTML or capture the parameter and inject.
 - Create a code cell in which your parameter will be captured. Make sure the `parameter` tag for the cell is turned on.
 
 ```
- # parameters cell for local
  district_number = "4"
 ```
+
+- If you're using a heading, you can either use HTML or capture the parameter and inject.
 
 - HTML - this option works when you run your notebook locally.
 
