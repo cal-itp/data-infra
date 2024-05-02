@@ -16,7 +16,7 @@ select
     _3_mode,
     tos,
     legacy_ntd_id,
-    period_month,
     period_year,
+    period_month,
     upt,
 from dim_monthly_ntd_ridership_with_adjustments_upt
