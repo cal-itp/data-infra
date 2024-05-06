@@ -13,3 +13,6 @@ models:
         tests:
           - not_null
   - name: stg_ntd__monthly_ridership_with_adjustments_upt
+  - name: stg_ntd__monthly_ridership_with_adjustments_vrm
+  - name: stg_ntd__monthly_ridership_with_adjustments_vrh
+  - name: stg_ntd__monthly_ridership_with_adjustments_voms

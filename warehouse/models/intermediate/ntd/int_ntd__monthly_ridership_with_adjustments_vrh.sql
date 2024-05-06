@@ -3,7 +3,7 @@ with
         {{
             dbt_utils.unpivot(
                 cast_to="int",
-                relation=ref("stg_ntd__monthly_ridership_with_adjustments_upt"),
+                relation=ref("stg_ntd__monthly_ridership_with_adjustments_vrh"),
                 exclude=[
                     "uza_name",
                     "uace_cd",
@@ -20,11 +20,11 @@ with
                     "legacy_ntd_id",
                 ],
                 field_name="period",
-                value_name="upt",
+                value_name="vrh",
             )
         }}
     ),
-    int_ntd__monthly_ridership_with_adjustments_upt as (
+    int_ntd__monthly_ridership_with_adjustments_vrh as (
         select
             uza_name,
             format("%05d", cast(uace_cd as int64)) as uace_cd,
@@ -41,7 +41,7 @@ with
             tos,
             split(period, '_')[offset(2)] as period_year,
             split(period, '_')[offset(1)] as period_month,
-            upt
+            vrh
         from source_pivoted
         where
             mode in (
@@ -69,4 +69,4 @@ with
             )
     )
 select *
-from int_ntd__monthly_ridership_with_adjustments_upt
+from int_ntd__monthly_ridership_with_adjustments_vrh

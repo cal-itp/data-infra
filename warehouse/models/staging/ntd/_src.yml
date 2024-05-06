@@ -8,3 +8,6 @@ sources:
     tables:
       - name: annual_database_agency_information
       - name: monthly_ridership_with_adjustments_upt
+      - name: monthly_ridership_with_adjustments_vrm
+      - name: monthly_ridership_with_adjustments_vrh
+      - name: monthly_ridership_with_adjustments_voms
