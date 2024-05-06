@@ -31,7 +31,7 @@ with
             dt as _dt,
             ts,
             year,
-            format("%06d", cast(ntd_id as int64)) as ntd_id,
+            format("%05d", cast(ntd_id as int64)) as ntd_id,
             legacy_ntd_id,
             reporter_type,
             agency,
