@@ -1,0 +1,16 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-data-products
+prefix_bucket: true
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd_data_products.monthly_ridership_with_adjustments_vrh
+  LIMIT 1;
+source_objects:
+  - "monthly-ridership-with-adjustments/vrh/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd_data_products.monthly_ridership_with_adjustments_vrh"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "monthly-ridership-with-adjustments/vrh/{dt:DATE}/{ts:TIMESTAMP}/{year:INTEGER}/"

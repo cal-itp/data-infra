@@ -1,7 +1,7 @@
 {{ config(materialized="table") }}
 with
-    dim_monthly_ntd_ridership_with_adjustments_upt as (
-        select * from {{ ref("int_ntd__monthly_ridership_with_adjustments_upt") }}
+    dim_monthly_ntd_ridership_with_adjustments as (
+        select * from {{ ref("int_ntd__monthly_ridership_with_adjustments_joined") }}
     )
 select
     uza_name,
@@ -9,6 +9,7 @@ select
     _dt,
     ts,
     ntd_id,
+    year,
     reporter_type,
     agency,
     mode_type_of_service_status,
@@ -19,4 +20,7 @@ select
     period_year,
     period_month,
     upt,
-from dim_monthly_ntd_ridership_with_adjustments_upt
+    vrm,
+    vrh,
+    voms
+from dim_monthly_ntd_ridership_with_adjustments
