@@ -30,7 +30,7 @@ feed_has_fares AS (
                              )) AS has_fares
       FROM files
      WHERE parse_success
-       AND feed_key IS NOT null
+       AND feed_key IS NOT NULL
      GROUP BY feed_key
 ),
 

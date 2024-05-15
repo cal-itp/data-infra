@@ -1,0 +1,10 @@
+[sqlfluff]
+dialect = bigquery
+exclude_rules = AL09,L003,L010,L011,L022,L036,L038,L039,L059,L016,L029,L027,L032,L034,L014,L042,L055,L064,AM04,ST09
+ignore = templating, parsing
+
+# Optional: If you have a specific dbt profile you want to use:
+profiles_dir = ./warehouse/
+
+[sqlfluff:templater:dbt]
+project_dir = ./warehouse/models/
