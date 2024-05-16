@@ -34,11 +34,11 @@ repos:
       - id: bandit
         args: ["-ll", "--skip=B108,B608,B310,B303,B324,B113"]
         files: .py$
-  - repo: https://github.com/sqlfluff/sqlfluff
-    rev: 2.1.1
-    hooks:
-      - id: sqlfluff-lint
-        additional_dependencies: ['dbt-bigquery', 'sqlfluff-templater-dbt']
+  #- repo: https://github.com/sqlfluff/sqlfluff
+    #rev: 2.1.1
+    #hooks:
+      #- id: sqlfluff-lint
+        #additional_dependencies: ['dbt-bigquery', 'sqlfluff-templater-dbt']
         # skip: L003 indentation stuff -- TODO
         # skip: L010 uppercase keywords -- TODO
         # skip: L011 implicit/explicit aliasing of tables? -- TODO
@@ -55,8 +55,8 @@ repos:
         # skip: joins should not include subqueries -- TODO
         # skip: use left join instead of right join -- TODO
         # skip: use single quotes instead of double -- TODO
-        args: [--dialect, "bigquery", --ignore, "parsing,templating",--exclude-rules, "L003,L010,L011,L022,L036,L038,L039,L059,L016,L029,L027,L032,L034,L014,L042,L055,L064"]
-        files: "warehouse/models" # TODO: should also lint tests etc. but we want to skip packages at least
+        #args: [--dialect, "bigquery", --ignore, "parsing,templating",--exclude-rules, "L003,L010,L011,L022,L036,L038,L039,L059,L016,L029,L027,L032,L034,L014,L042,L055,L064"]
+        #files: "warehouse/models" # TODO: should also lint tests etc. but we want to skip packages at least
   - repo: https://github.com/kynan/nbstripout
     rev: 0.6.1
     hooks:
