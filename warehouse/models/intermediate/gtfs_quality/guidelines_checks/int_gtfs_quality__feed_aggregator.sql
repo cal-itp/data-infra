@@ -40,7 +40,7 @@ int_gtfs_quality__feed_aggregator AS (
                 AND check IN ({{ schedule_feed_on_transitland() }}, {{ schedule_feed_on_mobility_database() }})
                     THEN
                         CASE
-                            WHEN daily_scraped_urls.aggregator IS NOT null THEN {{ guidelines_pass_status() }}
+                            WHEN daily_scraped_urls.aggregator IS NOT NULL THEN {{ guidelines_pass_status() }}
                             WHEN guideline_index.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                             WHEN daily_scraped_urls.aggregator IS NULL THEN {{ guidelines_fail_status() }}
                         END
@@ -48,7 +48,7 @@ int_gtfs_quality__feed_aggregator AS (
                 AND check IN ({{ trip_updates_feed_on_transitland() }}, {{ trip_updates_feed_on_mobility_database() }})
                    THEN
                     CASE
-                            WHEN daily_scraped_urls.aggregator IS NOT null THEN {{ guidelines_pass_status() }}
+                            WHEN daily_scraped_urls.aggregator IS NOT NULL THEN {{ guidelines_pass_status() }}
                             WHEN guideline_index.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                             WHEN daily_scraped_urls.aggregator IS NULL THEN {{ guidelines_fail_status() }}
                         END
@@ -56,7 +56,7 @@ int_gtfs_quality__feed_aggregator AS (
                 AND check IN ({{ vehicle_positions_feed_on_transitland() }}, {{ vehicle_positions_feed_on_mobility_database() }})
                     THEN
                         CASE
-                            WHEN daily_scraped_urls.aggregator IS NOT null THEN {{ guidelines_pass_status() }}
+                            WHEN daily_scraped_urls.aggregator IS NOT NULL THEN {{ guidelines_pass_status() }}
                             WHEN guideline_index.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                             WHEN daily_scraped_urls.aggregator IS NULL THEN {{ guidelines_fail_status() }}
                         END
@@ -64,7 +64,7 @@ int_gtfs_quality__feed_aggregator AS (
                 AND check IN ({{ service_alerts_feed_on_transitland() }}, {{ service_alerts_feed_on_mobility_database() }})
                     THEN
                         CASE
-                            WHEN daily_scraped_urls.aggregator IS NOT null THEN {{ guidelines_pass_status() }}
+                            WHEN daily_scraped_urls.aggregator IS NOT NULL THEN {{ guidelines_pass_status() }}
                             WHEN guideline_index.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                             WHEN daily_scraped_urls.aggregator IS NULL THEN {{ guidelines_fail_status() }}
                         END

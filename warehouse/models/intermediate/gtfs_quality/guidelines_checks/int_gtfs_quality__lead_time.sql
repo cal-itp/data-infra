@@ -47,7 +47,7 @@ scheduled_trips_version_history AS (
       INNER JOIN feed_version_history t3
         ON t3.feed_key = t1.feed_key
     -- Since we are comparing feeds with their previous version, omit the initial version of every feed - no comparison is possible
-     WHERE t3.prev_feed_key IS NOT null
+     WHERE t3.prev_feed_key IS NOT NULL
 ),
 
 -- The self-outer-join, with all of the coalescing, allows us to see:
@@ -83,9 +83,9 @@ improper_trips_updates AS (
   SELECT base64_url,
          feed_key,
           -- A new trip is being added
-         COUNT(CASE WHEN prev_trip_id IS null THEN 1 END) AS trip_added,
+         COUNT(CASE WHEN prev_trip_id IS NULL THEN 1 END) AS trip_added,
           -- An existing trip is being removed
-         COUNT(CASE WHEN trip_id IS null THEN 1 END) AS trip_removed,
+         COUNT(CASE WHEN trip_id IS NULL THEN 1 END) AS trip_removed,
           -- A trip's stop times are being changed
          COUNT(CASE WHEN trip_stop_times_hash != prev_trip_stop_times_hash THEN 1 END) AS stop_times_changed,
           -- A trip's stop location is being changed
