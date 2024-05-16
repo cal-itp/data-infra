@@ -13,7 +13,7 @@ tts_issue_feeds AS (
    SELECT
        feed_key,
            -- When there is no tts_stop_name field for a given stop_name, or tts_stop_name is identical to stop_name, we proceed to run a few tests
-        COUNTIF((tts_stop_name IS null OR tts_stop_name = stop_name)
+        COUNTIF((tts_stop_name IS NULL OR tts_stop_name = stop_name)
          AND (
             -- Test 1: check for abbreviations that need to be spelled out, including directions (n, sb) and ROW types (st, rd)
             ---- EXISTS function returns true if the stop_name contains any of the listed "no-no words", and false if not

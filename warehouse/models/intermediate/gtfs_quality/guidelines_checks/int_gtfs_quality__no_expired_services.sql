@@ -45,7 +45,7 @@ daily_earliest_service_expiration AS (
         feed_key,
         MIN(service_end_date) AS earliest_service_end_date
    FROM feed_service_expiration
-  WHERE service_id IS NOT null
+  WHERE service_id IS NOT NULL
   GROUP BY 1
 ),
 

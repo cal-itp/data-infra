@@ -20,7 +20,7 @@ check_cts AS (
     FROM trip_check_cts
     LEFT JOIN stop_check_cts
         ON trip_check_cts.service_date = stop_check_cts.service_date
-    ORDER BY service_date DESC
+    ORDER BY service_date DESC --noqa: AM06
 )
 
 SELECT *
