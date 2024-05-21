@@ -45,6 +45,264 @@ models:
       - name: _is_current
         tests:
           - not_null
+  - name: dim_annual_ntd_agency_service
+    description: >-
+      Contains operating statistics reported by mode and type of service.
+      Categorized by vehicles operated and vehicles available in maximum service
+      by day and time period.
+
+      Source document:
+      https://www.transit.dot.gov/ntd/data-product/2022-annual-database-service
+    columns:
+      - name: _dt
+      - name: year
+        description: The year this data was added to the mart and thus the ntd_id's year
+          as well.
+      - name: state_parent_ntd_id
+      - name: ntd_id
+      - name: agency_name
+      - name: reporter_type
+      - name: subrecipient_type
+      - name: reporting_module
+      - name: mode
+        description: The mode of service operated under the contract. A contractor can
+          operate more than one mode/TOS under a contract (only one B-30 for
+          that contractor).
+      - name: tos
+        description: The type of service operated under the contract.
+      - name: time_period
+      - name: time_service_begins
+        description: >
+          Start of transit service, i.e. the time when the first revenue service
+          vehicle leaves the garage or point of dispatch.
+      - name: time_service_ends
+        description: "End of night transit service; i.e. the time when a revenue service
+          vehicle returns to the garage or point of dispatch "
+      - name: vehicles_passenger_cars_operated_in_maximum_service
+      - name: vehicles_passenger_cars_available_for_maximum_service
+      - name: trains_in_operation
+        description: >
+          The maximum number of trains actually operated to provide service on
+          an average weekday, average Saturday and average Sunday.
+      - name: vehicles_passenger_cars_in_operation
+        description: >
+          The maximum number of vehicles or passenger cars actually operated to
+          provide service on an average weekday, average Saturday and average
+          Sunday.
+      - name: actual_vehicles_passenger_car_miles
+        description: >-
+          The miles that vehicles or passenger cars travel while in revenue
+          service (actual passenger car revenue miles) plus deadhead miles.
+          Actual vehicle or passenger car miles include:
+
+          • Revenue service
+
+          • Deadhead
+
+          Actual vehicle or passenger car miles exclude:
+
+          • Hours for charter services
+
+          2015 NTD Glossary
+
+          • Operator training
+
+          • Vehicle maintenance testing
+
+          • Fueling
+      - name: actual_vehicles_passenger_car_revenue_miles
+        description: >-
+          The miles that vehicles or passenger cars travel while in revenue
+          service. Vehicle or Passenger car revenue miles include:
+
+          • Revenue service
+
+          • Layover/recovery time
+
+          • Passenger loading time
+
+          Vehicle or Passenger car revenue miles exclude:
+
+          • Deadhead
+
+          • Operator training
+
+          • Vehicle maintenance tests
+
+          • Charter services
+      - name: actual_vehicle_passenger_deadhead_miles
+      - name: scheduled_actual_vehicle_passenger_car_revenue_miles
+        description: The anticipated revenue service to be completed by passenger cars
+          if there were no missed trips for the average weekday, average
+          Saturday, average Sunday and Annual Total. Excludes any deadhead and
+          additional services performed.
+      - name: actual_vehicle_passenger_car_hours
+        description: >-
+          The miles that vehicles or passenger cars travel while in revenue
+          service (actual passenger car revenue miles) plus deadhead miles.
+          Actual vehicle or passenger car miles include:
+
+          • Revenue service
+
+          • Deadhead
+
+          Actual vehicle or passenger car miles exclude:
+
+          • Hours for charter services
+
+          2015 NTD Glossary
+
+          • Operator training
+
+          • Vehicle maintenance testing
+
+          • Fueling
+      - name: actual_vehicle_passenger_car_revenue_hours
+        description: >-
+          The hours that vehicles or passenger cars travel while in revenue
+          service. Vehicle or Passenger car revenue hours include:
+
+          • Revenue service
+
+          • Layover/recovery time
+
+          • Passenger loading time
+
+          Vehicle or Passenger car revenue hours exclude:
+
+          • Deadhead
+
+          • Operator training
+
+          • Vehicle maintenance tests
+
+          • School Bus and Charter services
+      - name: actual_vehicle_passenger_car_deadhead_hours
+      - name: charter_service_hours
+        description: >-
+          "The total hours operated by revenue vehicles while in charter
+          service. Charter service hours include:
+
+          • Hours operated while carrying passengers for hire, and
+
+          • Associated deadhead hours "
+      - name: school_bus_hours
+        description: "The vehicle hours of travel by revenue vehicles while serving as a
+          school bus. School bus hours are only hours where a bus is primarily
+          or solely dedicated to carrying school passengers. "
+      - name: train_miles
+        description: >-
+          The miles that trains travel while in revenue service (actual train
+          revenue miles) plus deadhead miles. Actual train miles include:
+
+          • Revenue service
+
+          • Deadhead
+
+          Actual train miles exclude:
+
+          • Miles for charter services
+
+          • Operator training
+
+          • Vehicle maintenance testing
+      - name: train_revenue_miles
+        description: >-
+          The miles that trains travel while in revenue service. Train revenue
+          miles include:
+
+          • Revenue service
+
+          Train revenue miles exclude:
+
+          • Deadhead
+
+          • Training operators prior to revenue service
+
+          • Vehicle maintenance vehicle tests
+
+          • Charter services
+      - name: train_deadhead_miles
+      - name: train_hours
+        description: >-
+          The hours that trains travel while in revenue service (actual train
+          revenue hours) plus deadhead hours. Actual train hours include:
+
+          • Revenue service
+
+          • Deadhead
+
+          • Layover/recovery time Actual train hours exclude:
+
+          • Hours for charter services
+
+          • Operator training
+
+          • Vehicle maintenance testing
+      - name: train_revenue_hours
+        description: >-
+          The hours that trains travel while in revenue service. Train revenue
+          hours include:
+
+          • Revenue service
+
+          • Layover/recovery time Train revenue hours exclude:
+
+          • Deadhead
+
+          • Training operators prior to revenue service
+
+          • Vehicle maintenance tests
+
+          • Charter services
+      - name: train_deadhead_hours
+      - name: unlinked_passenger_trips__upt_
+        description: "The number of passengers who board public transportation vehicles.
+          Passengers are counted each time they board a vehicle no matter how
+          many vehicles they use to travel from their origin to their
+          destination. "
+      - name: ada_upt
+        description: The number of passengers who board public transportation vehicles
+          for complementary paratransit services (demand response (DR))
+          associated or attributed to the Americans with Disabilities Act of
+          1990 (ADA) compliance requirements. The number of ADA unlinked
+          passenger trips (UPT) should be less than or equal to the total number
+          of unlinked passenger trips. These trips are reported only for the DR
+          mode. ADA-related service reported to the National Transit Database
+          (NTD) should not include any categorical service (i.e. services that
+          are not available to the general public such as Medicaid,
+          Meals-On-Wheels, Head Start, sheltered workshops, independent living
+          centers, etc.) Also not included is service funded by the New Freedom
+          program.
+      - name: sponsored_service_upt
+        description: Public transportation services that are paid, in whole or in part,
+          directly to the transit provider by a third party. Transit providers
+          may offer these services as part of a Coordinated Human Services
+          Transportation Plan. Common sponsors include the Veterans
+          Administration, Medicare, sheltered workshops, the Association for
+          Retarded Citizens-Arc, Assisted Living Centers, and Head Start
+          programs.
+      - name: passenger_miles
+        description: Passenger Miles Traveled (PMT) - Average Weekday Schedule-The sum
+          of the distances ridden by each passenger
+      - name: days_of_service_operated
+        description: "Days Operated - Total Weekday Schedule\tSee: Form S-10, Service
+          Operated (Days), Days Operated - Annual Total"
+      - name: days_not_operated_due_to_strikes
+        description: Days Not Operated (Strikes) - Total Weekday Schedule	The number of
+          weekdays, Saturdays and Sundays that service did not operate due to
+          transit labor strikes.
+      - name: strike_comment
+        description: Description of Days Not Operated Due To Strikes.
+      - name: days_not_operated_due_to_emergencies
+        description: The number of weekdays, Saturdays and Sundays that service did not
+          operate due to officially declared emergencies.
+      - name: emergency_comment
+        description: Description of Days Not Operated Due to Emergency
+      - name: non_statutory_mixed_traffic
+        description: Miles of roadway used by BRT routes that are not recognized by FTA
+          as BRT for funding purposes.
+      - name: drm_mixed_traffic_row
   - name: dim_monthly_ntd_ridership_with_adjustments
     description: >-
       Extracts of the NTD Monthly Ridership with adjustments - VRM, VOMS, VRH,
