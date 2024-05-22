@@ -28,7 +28,7 @@ Slack Username:
 
 - [ ] JupyterLab
 
-- [ ] Google Cloud Console and Google Big Query privileges
+- [ ] Google IAM (Cloud and BQ)
 
 - [ ] Metabase
 
