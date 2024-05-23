@@ -77,21 +77,15 @@ Once the old node pool is removed from the array, it can be drained and deleted 
 
 Cluster workloads are divided into two classes:
 
-1. Apps are the workloads that users actually care about; this includes deployed "applications" such as the GTFS-RT archiver but also includes "services" like Grafana and Sentry. These workloads are deployed using `invoke` as defined in the [ci](../ci/) folder.
+1. Apps are the workloads that users actually care about; this includes deployed "applications" such as the GTFS-RT archiver but also includes "services" like Grafana and Sentry.
 
 2. System workloads are used to support running applications. This includes items such as an ingress controller, HTTPS certificate manager, etc. The system deploy command is run at cluster create time, but when new system workloads are added it may need to be run again.
 
-   ```bash
-   kubectl apply -k kubernetes/system
-   ```
+Changes to workloads should be deployed by opening a pull request according to the [GitOps](#gitops) section above.
 
 ## JupyterHub
 
-JupyterHub is a good example of an application using a Helm chart that is ultimately exposed to the outside internet for user access. In general, any non-secret changes to the chart can be accomplished by modifying the chart's `values.yaml` and running the `invoke release` specific to JupyterHub.
-
-```
-poetry run invoke release -f channels/prod.yaml --app=jupyterhub
-```
+JupyterHub is a good example of an application using a Helm chart that is ultimately exposed to the outside internet for user access. In general, any non-secret changes to the chart can be accomplished by modifying the chart's `values.yaml`.
 
 ### Secrets
 
