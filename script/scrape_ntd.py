@@ -9,6 +9,16 @@ database page is https://www.transit.dot.gov/ntd/data-product/2021-annual-databa
 but the actual file is https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-10/2021%20Agency%20Information.xlsx
 which is linked in the HTML page.
 
+Datasets:
+https://www.transit.dot.gov/ntd/data-product/2021-annual-database-agency-information
+Contains basic contact and agency information for each NTD reporter.
+
+https://www.transit.dot.gov/ntd/data-product/2022-annual-database-service
+Contains operating statistics reported by mode and type of service. Categorized by vehicles operated and vehicles available in maximum service by day and time period.
+
+https://www.transit.dot.gov/ntd/data-product/monthly-module-adjusted-data-release
+Monthly ridership
+
 When testing, add these lines and comment one out in your bash_profile.
 export CALITP_BUCKET__NTD_DATA_PRODUCTS=gs://calitp-ntd-data-products
 export CALITP_BUCKET__NTD_DATA_PRODUCTS=gs://test-calitp-ntd-data-products
