@@ -23,14 +23,13 @@ Slack Username:
 
   - [ ] Organization: Cal-ITP
   - [ ] Team: warehouse-users and warehouse-contributors
-  - [ ] Update code references to designated hand-off staff or hello@calitp.org
+  - [ ] Update or remove code references to designated hand-off staff or hello@calitp.org
   - [ ] Remove administrative privileges / pull request approvals
-
-- [ ] JupyterLab
 
 - [ ] Google IAM (Cloud and BQ)
 
 - [ ] Metabase
+- [ ] Airtable
 
 - [ ] Meeting invites:
 
