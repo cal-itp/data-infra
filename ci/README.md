@@ -11,11 +11,9 @@ The tasks are defined in `tasks.py` and configuration in `invoke.yaml`; config v
 are specific to our defined tasks.
 
 Run `poetry run invoke -l` to list the available commands, and `poetry run invoke -h <command>` to get more detailed help for each individual command.
-Individual release channels/environments are config files that are passed to invoke. For example, to deploy to test:
+Individual release channels/environments are config files that are passed to invoke.
 
-```bash
-poetry run invoke release -f channels/test.yaml
-```
+In general, pyinvoke commands are not intended to be run locally, but rather via GitHub Actions in respose to pull requests (i.e. GitOps)
 
 ## GitOps
 
