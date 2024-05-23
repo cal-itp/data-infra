@@ -7,10 +7,6 @@ on:
     paths:
       - '.github/workflows/build-jupyter-singleuser-image.yml'
       - 'images/jupyter-singleuser/**'
-  pull_request:
-    paths:
-      - '.github/workflows/build-jupyter-singleuser-image.yml'
-      - 'images/jupyter-singleuser/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
