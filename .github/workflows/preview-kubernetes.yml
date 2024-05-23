@@ -57,7 +57,7 @@ jobs:
       # Diff and write back to PR
       - run: poetry install
         working-directory: ci
-      - run: poetry run invoke diff -f "./channels/prod.yaml" --outfile=diff.md
+      - run: poetry run invoke diff -f "./kubernetes-workloads.yaml" --outfile=diff.md
         working-directory: ci
       - uses: peter-evans/find-comment@v2
         id: fc

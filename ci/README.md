@@ -1,7 +1,7 @@
 # CI - deploys via pyinvoke
 
 This folder contains code and YAML that drives the deployments of Kubernetes-based applications and services. For example,
-a deployment named `archiver` is configured in [the prod channel](./channels/prod.yaml) and is ultimatedly deployed
+a deployment named `archiver` is configured in [the prod channel](./kubernetes-workloads.yaml) and is ultimatedly deployed
 by `invoke` (see below) calling `kubectl` commands.
 
 ## invoke (aka pyinvoke)
