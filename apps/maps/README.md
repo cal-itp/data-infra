@@ -15,8 +15,7 @@ data validation as well as Typescript types for type-hinting in the Svelte app. 
 a few CLI commands to facilitate validating pre-existing data with those types and/or generate a quick URL
 with state for testing.
 
-TODO: a GitHub Action workflow exists to build the package, but it does not currently publish to pypi; right now
-that is done manually with `poetry publish`.
+A GitHub Action workflow exists to build the package and publish it to PyPi. Be sure to bump the version date in `pyproject.toml` in any pull request that updates the library.
 
 ## Developing the maps app
 
