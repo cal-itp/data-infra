@@ -1,4 +1,4 @@
-FROM jupyter/datascience-notebook:python-3.9
+FROM jupyter/datascience-notebook:python-3.11.6
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
