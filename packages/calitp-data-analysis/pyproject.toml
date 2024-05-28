@@ -1,16 +1,16 @@
 [tool.poetry]
 name = "calitp-data-analysis"
-version = "2024.5.24b"
+version = "2024.5.28"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
 authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
 
 [tool.poetry.dependencies]
 python = "~3.11"
 ipython = "^8.9.0"
-siuba = "0.4.2"
+siuba = "0.4.2" # pinned because new versions might need better sqlalchemy
 jinja2 = "^3.1.3"
 sqlalchemy-bigquery = "^1.6.1"
-sqlalchemy = "1.4.46" #sqlalchemy over 2.0 errors our .sql code
+sqlalchemy = "1.4.46" # pinned because 2.0 breaks the sql.py file
 pandas-gbq = "^0.19.1"
 pandas = "<2" # keep us below pandas 2.0 since pandas-gbq does not specify, and siuba errors currently
 gcsfs = "!=2022.7.1"
