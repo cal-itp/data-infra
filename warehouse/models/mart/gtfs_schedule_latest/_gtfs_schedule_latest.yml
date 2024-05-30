@@ -81,8 +81,10 @@ models:
       ckan.authority: https://gtfs.org/schedule/reference/#areastxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *feed_key
       - *base64_url
+      - *schedule_dim_dt
       - name: area_id
         description: '{{ doc("gtfs_areas__area_id") }}'
         meta:
@@ -92,6 +94,7 @@ models:
         meta:
           publish.include: true
       - *_feed_valid_from
+      - *schedule_dim_line_number
       - *feed_timezone
 
   - name: dim_attributions_latest
@@ -312,6 +315,7 @@ models:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_leg_rulestxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *feed_key
       - *base64_url
       - name: leg_group_id
@@ -334,7 +338,9 @@ models:
         description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
         meta:
           publish.include: true
+      - *schedule_dim_dt
       - *_feed_valid_from
+      - *schedule_dim_line_number
       - *feed_timezone
 
   - name: dim_fare_media_latest
@@ -348,6 +354,7 @@ models:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_mediatxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *feed_key
       - *base64_url
       - name: fare_media_id
@@ -362,7 +369,9 @@ models:
         description: '{{ doc("gtfs_fare_media__fare_media_type") }}'
         meta:
           publish.include: true
+      - *schedule_dim_dt
       - *_feed_valid_from
+      - *schedule_dim_line_number
       - *feed_timezone
 
   - name: dim_fare_products_latest
@@ -376,6 +385,7 @@ models:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_productstxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *feed_key
       - *base64_url
       - name: fare_product_id
@@ -398,7 +408,9 @@ models:
         description: '{{ doc("gtfs_fare_products__currency") }}'
         meta:
           publish.include: true
+      - *schedule_dim_dt
       - *_feed_valid_from
+      - *schedule_dim_line_number
       - *feed_timezone
 
   - name: dim_fare_rules_latest
@@ -452,6 +464,7 @@ models:
       ckan.authority: https://gtfs.org/schedule/reference/#fare_transfer_rulestxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *feed_key
       - *base64_url
       - name: from_leg_group_id
@@ -482,7 +495,10 @@ models:
         description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
         meta:
           publish.include: true
+      - *warning_duplicate_gtfs_key
+      - *schedule_dim_dt
       - *_feed_valid_from
+      - *schedule_dim_line_number
       - *feed_timezone
 
   - name: dim_feed_info_latest
@@ -815,6 +831,7 @@ models:
       ckan.authority: https://gtfs.org/schedule/reference/#stop_areastxt
     columns:
       - *schedule_dim_pk
+      - *schedule_dim_gtfs_key
       - *feed_key
       - *base64_url
       - name: area_id
@@ -825,7 +842,9 @@ models:
         description: '{{ doc("gtfs_stop_areas__stop_id") }}'
         meta:
           publish.include: true
+      - *schedule_dim_dt
       - *_feed_valid_from
+      - *schedule_dim_line_number
       - *feed_timezone
 
   - name: dim_stop_times_latest
@@ -1043,6 +1062,8 @@ models:
           ckan.length: 7
           ckan.precision: 3
           publish.include: true
+      - name: pt_geom
+        description: GEOGPOINT created by the stop latitute and longitude
       - name: zone_id
         description: '{{ doc("gtfs_stops__zone_id") }}'
         meta:
@@ -1079,6 +1100,12 @@ models:
       - *feed_timezone
       - name: stop_timezone_coalesced
       - *warning_duplicate_gtfs_key
+      - name: warning_missing_primary_key
+        description: |
+          Rows with `true` in this column are missing a `stop_id`, the primary
+          key for this table (i.e., `stop_id` was not provided in the raw data).
+          These rows will fail to join with other tables from their feed because
+          they cannot be referenced by a foreign key elsewhere.
 
   - name: dim_transfers_latest
     description: |
@@ -1274,7 +1301,7 @@ exposures:
       - ref("dim_trips_latest")
 
     owner:
-      email: soren.s@jarv.us
+      email: hello@calitp.org
 
     meta:
       methodology: |
@@ -1440,7 +1467,7 @@ exposures:
     depends_on:
       - ref("dim_shapes_arrays_latest")
     owner:
-      email: andrew.v@jarv.us
+      email: hello@calitp.org
     meta:
       destinations:
         - type: tiles

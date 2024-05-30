@@ -57,7 +57,7 @@ jobs:
       # Invoke deployment tasks
       - run: poetry install
         working-directory: ci
-      - run: poetry run invoke secrets -f "./channels/prod.yaml"
+      - run: poetry run invoke secrets -f "./kubernetes-workloads.yaml"
         working-directory: ci
-      - run: poetry run invoke release -f "./channels/prod.yaml"
+      - run: poetry run invoke release -f "./kubernetes-workloads.yaml"
         working-directory: ci

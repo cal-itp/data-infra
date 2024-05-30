@@ -12,6 +12,7 @@ models:
       - name: ntd_id
         tests:
           - not_null
+  - name: stg_ntd__annual_database_service
   - name: stg_ntd__monthly_ridership_with_adjustments_upt
   - name: stg_ntd__monthly_ridership_with_adjustments_vrm
   - name: stg_ntd__monthly_ridership_with_adjustments_vrh
