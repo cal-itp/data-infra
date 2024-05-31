@@ -1,16 +1,34 @@
 # Getting Notebooks Ready for the Portfolio
 
+- [See a sample parameterized notebook here.](https://github.com/cal-itp/data-analyses/blob/main/starter_kit/parameterized_notebook.ipynb)
+
+## Packages to include
+
+- Order matters, %%capture must go first.
+- `warnings.filterwarnings('ignore')` warnings from displaying in the portfolio site (`shared_utils`).
+
+```
+# Include this in the cell where packages are imported
+
+%%capture
+
+import warnings
+warnings.filterwarnings('ignore')
+
+import calitp_data_analysis.magics
+```
+
 ## Headers
 
 ### Parameterized Titles
 
-- If you're parameterizing the notebook, the first Markdown cell must include parameters to inject.
+- When parameterizing a notebook, the first Markdown cell must include parameters to inject.
   - Ex: If `district` is one of the parameters in your `sites/my_report.yml`, a header Markdown cell could be `# District {district} Analysis`.
   - Note: The site URL is constructed from the original notebook name and the parameter in the JupyterBook build: `0_notebook_name__district_x_analysis.html`
 
 ### Consecutive Headers
 
-- Headers must move consecutively in Markdown cells. No skipping!
+- Headers must move consecutively in Markdown cells or the parameterized notebook will not generate. No skipping!
 
 ```
 # Notebook Title
@@ -26,6 +44,12 @@
   ```
 
 ### Capturing Parameters
+
+- Create a code cell in which your parameter will be captured. Make sure the `parameter` tag for the cell is turned on.
+
+```
+ district_number = "4"
+```
 
 - If you're using a heading, you can either use HTML or capture the parameter and inject.
 
@@ -54,18 +78,6 @@
   ```
   ## District {district_number}
   ```
-
-### Suppress Warnings
-
-- Suppress warnings from displaying in the portfolio site (`shared_utils`).
-
-```
-# Include this in the cell where packages are imported
-
-%%capture
-import warnings
-warnings.filterwarnings('ignore')
-```
 
 ## Narrative
 
