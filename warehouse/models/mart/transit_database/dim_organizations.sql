@@ -32,9 +32,11 @@ dim_organizations AS (
             WHEN _valid_from >= '2023-05-23' THEN raw_ntd_id
             ELSE ntd_to_org.ntd_id
         END AS ntd_id,
+        IF(LENGTH(ntd_id) >= 10,
+            SUBSTR(ntd_id, -5),
+            ntd_id) AS ntd_id_2022,
         public_currently_operating,
         public_currently_operating_fixed_route,
-
         _is_current,
         _valid_from,
         _valid_to
