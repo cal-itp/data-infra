@@ -79,10 +79,14 @@ models:
         description: |
           The organization's ID in the National Transit Database / FTA agency ID number.
           Data entry processes / sources of truth for this field have changed over time.
-          As of May 2023, the source is the `raw_ntd_id` field in the Airtable `organizations` table;
+          As of May 2023, the source is the `raw_ntd_id` field in the Airtable `organizations` table
+          which is derived from 2021 ntd ids;
           for records before May 2023, sources were some combination of the `NTD agency info` table in
           Airtable and the `ntd_agency_to_organizations` CSV seed file in this dbt project (now
           renamed to `_deprecated__ntd_agency_to_organizations`).
+      - name: ntd_id_2022
+        description: |
+          Just pulls out the 5 digit component of the raw_ntd_id
       - name: name
         description: Organization name
       - name: organization_type
