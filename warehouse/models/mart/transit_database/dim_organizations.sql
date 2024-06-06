@@ -8,10 +8,18 @@ ntd_agency_to_organization AS (
     SELECT * FROM {{ ref('_deprecated__ntd_agency_to_organization') }}
 ),
 
+
+bridge_ntd_organization AS (
+    SELECT
+        CAST(ntd_id AS STRING) as test_ntd_id,
+        source_record_id
+    FROM {{ ref('ntd_id_to_source_record_id') }}
+),
+
 dim_organizations AS (
     SELECT
         key,
-        source_record_id,
+        COALESCE(dim.source_record_id, bridge_ntd_organization.source_record_id) AS source_record_id,
         name,
         organization_type,
         roles,
@@ -35,6 +43,7 @@ dim_organizations AS (
         IF(LENGTH(ntd_id) >= 10,
             SUBSTR(ntd_id, -5),
             ntd_id) AS ntd_id_2022,
+        test_ntd_id,
         public_currently_operating,
         public_currently_operating_fixed_route,
         _is_current,
@@ -42,8 +51,10 @@ dim_organizations AS (
         _valid_to
 
     FROM dim
-    LEFT JOIN ntd_agency_to_organization ntd_to_org
+    LEFT JOIN ntd_agency_to_organization AS ntd_to_org
         ON source_record_id = ntd_to_org.organization_record_id
+    LEFT JOIN bridge_ntd_organization
+        ON dim.source_record_id = bridge_ntd_organization.source_record_id
 )
 
 SELECT * FROM dim_organizations

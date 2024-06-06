@@ -208,3 +208,9 @@ seeds:
       - name: organization_name
         tests:
           - unique
+  - name: ntd_id_to_source_record_id
+    description: |
+      test crosswalk from ntd_id_2022 to (organization)_source_record_id
+    columns:
+      - name: ntd_id
+      - name: source_record_id
