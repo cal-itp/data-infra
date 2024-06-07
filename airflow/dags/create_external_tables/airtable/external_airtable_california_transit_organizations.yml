@@ -254,3 +254,6 @@ schema_fields:
   - name: raw_ntd_id
     type: STRING
     mode: NULLABLE
+  - name: ntd_id_2022
+    type: STRING
+    mode: NULLABLE

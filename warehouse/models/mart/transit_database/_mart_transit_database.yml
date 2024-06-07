@@ -86,7 +86,7 @@ models:
           renamed to `_deprecated__ntd_agency_to_organizations`).
       - name: ntd_id_2022
         description: |
-          Just pulls out the 5 digit component of the raw_ntd_id
+          Pulled from airtable, the 5 digit component of raw_ntd_id
       - name: name
         description: Organization name
       - name: organization_type
