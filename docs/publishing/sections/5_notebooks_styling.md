@@ -65,7 +65,7 @@ These are a set of principles to adhere to when writing the narrative content in
   - A good rule of thumb is to start with 1 extra decimal place than what is present in the other columns when deriving statistics (averages, percentiles), and decide from there if you want to round up.
     - An average of `$100,000.0` can simply be rounded to `$100,000`.
     - An average of 5.2 mi might be left as is.
-  - National Institutes of Health [Rounding Rules](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4483789/table/ARCHDISCHILD2014) (full [article](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4483789/#:~:text=Ideally%20data%20should%20be%20rounded,might%20call%20it%20Goldilocks%20rounding.&text=The%20European%20Association%20of%20Science,2%E2%80%933%20effective%20digits%E2%80%9D.))
+  - National Institutes of Health [Rounding Rules](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4483789/#:~:text=Ideally%20data%20should%20be%20rounded,might%20call%20it%20Goldilocks%20rounding.&text=The%20European%20Association%20of%20Science,2%E2%80%933%20effective%20digits%E2%80%9D.)
 
 - Additional references: [American Psychological Association (APA) style](https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf), and [Purdue](https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_numbers_statistics.html)
 
@@ -88,14 +88,5 @@ These are a set of principles to adhere to when writing the narrative content in
     df = pd.merge(df,
                 route_names,
                 on = ["calitp_itp_id", "route_id"]
-    )
-
-
-    agency_names = portfolio_utils.add_agency_name()
-
-    # Merge in the operator's name using calitp_itp_id
-    df = pd.merge(df,
-                agency_names,
-                on = "calitp_itp_id"
     )
     ```
