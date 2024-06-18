@@ -8,7 +8,7 @@ After your Jupyter Notebook, README.md, and `.yml` files are setup properly, it'
 
 **Note:** The build command must be run from the root of the repo at `~/data-analyses`!
 
-1. Navigate back to the repo data-analyses and install the portfolio requirements with
+1. Navigate back to the `~/data-analyses` and install the portfolio requirements with
    `pip install -r portfolio/requirements.txt`
 2. Then run `python portfolio/portfolio.py build my_report` to build your report
    - **Note:** `my_report.yml` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
@@ -44,6 +44,8 @@ After your Jupyter Notebook, README.md, and `.yml` files are setup properly, it'
     - Pass-through flag to papermill; if true, papermill will not actually execute cells.
   - `--execute-papermill / --no-execute-papermill`
     - If false, will skip calls to papermill
+    - For example, if only the `README.md` is updated but the notebooks have remained the same, you would run
+      `python portfolio/portfolio.py build my_report --no-execute-papermill --deploy`.
   - `--no-stderr / --no-no-stderr`
     - If true, will clear stderr stream for cell outputs
   - `--continue-on-error / --no-continue-on-error`
@@ -51,7 +53,7 @@ After your Jupyter Notebook, README.md, and `.yml` files are setup properly, it'
 
 ## Adding to the Makefile
 
-Another way to write to the Analytics Portfolio is to use the Makefile and run
+Another and more efficient way to write to the Analytics Portfolio is to use the Makefile and run
 `make build_my_report -f Makefile` in data-analyses
 
 Example makefile in [`cal-itp/data-analyses`](https://github.com/cal-itp/data-analyses/blob/main/Makefile):
