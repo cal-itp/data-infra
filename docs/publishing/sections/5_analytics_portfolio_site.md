@@ -10,7 +10,9 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 
 ## Netlify Setup
 
-Netlify is the platform turns our Jupyter Notebooks uploaded to GitHub into a full website. You must set up netlify key and/or make sure your Netlify token is up to date:
+Netlify is the platform turns our Jupyter Notebooks uploaded to GitHub into a full website.
+
+To setup your netlify key:
 
 - Install netlify: `npm install -g netlify-cli`
 - Navigate to your main directory
@@ -25,6 +27,10 @@ Netlify is the platform turns our Jupyter Notebooks uploaded to GitHub into a fu
 - For the changes to take effect, open a new terminal or run `source ~/.bash_profile`
   - Back in your terminal, enter `env | grep NETLIFY` to see that your Netlify token is there
 
+To make sure your Netlify token is up to date:
+
+- COMING SOON
+
 ## File Setup
 
 In order to publish to analysis.calitp.org, you need to create two different files.
@@ -34,9 +40,9 @@ In order to publish to analysis.calitp.org, you need to create two different fil
 
 ### README.md
 
-Create a `README.md` file in the repo where your work lies to detail the purpose of your website, methologies, relevant links, instructions, and more.
+Create a `README.md` file in the repo where your work lies. This serves to detail purpose of your website, methologies, relevant links, instructions, and more. However, this also forms the landing page of your website.
 
-- Your file should <b>always</b> be titled as `README.md`. No other variants such as `README_gtfs.md` or `read me.md` or ` README.md`. The portfolio can only take a `README.md` file when generating the landing page of your website.
+- Your file should <b>always</b> be titled as `README.md`. No other variants such as `README_gtfs.md` or `read me.md` or ` README.md` are allowed. The portfolio can only take a `README.md` when generating the landing page of your website.
 - If you do accidentally create a `README.md` file with extra strings, you can fix this by taking the following steps:
   - `git rm portfolio/my_analysis/README_accidentally_named_something_else.md`
   - `rm portfolio/my_analysis/_build/html/README_accidentally_named_something.html`. We use `rm` because \_build/html folder is not checked into GitHub
@@ -44,17 +50,18 @@ Create a `README.md` file in the repo where your work lies to detail the purpose
 
 ### YML
 
-A `.yml` specifies the parameter you want your notebook to iterate over.  For example, the [DLA Grant Analysis's`.yml`](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/dla.yml) runs the same notebook for each of the 12 Caltrans districts and the districts are also listed on the \[left hand side\]((https://dla--cal-itp-data-analyses.netlify.app/readme) to form the "Table of Contents."
+Each `.yml` file creates a new site on the [Portfolio's Index Page](https://analysis.calitp.org/), so every project needs its own file. DLA Grant Analysis, SB125 Route Illustrations, and Active Transportation Program all have their own `.yml` file.
 
-Because each `.yml` file creates a new site on the [Portfolio's Index Page](https://analysis.calitp.org/), so every project needs its own file. DLA Grant Analysis, SB125 Route Illustrations, and Active Transportation Program all have their own `.yml` file.
+All the `.yml` files live here at [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
 
-The `.yml` files live here at [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
-
-To create a `yml` file:
+Here's how to create a `yml` file:
 
 - Include the directory to the notebook(s) you want to publish.
+
 - Name your `.yml` file. For now we will use `my_report.yml` as an example.
+
 - The structure of your `.yml` file depends on the type of your analysis:
+
   - If you have one parameterized notebook with **one parameter**:
 
     - Example: [dla.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/dla.yml)
@@ -70,11 +77,18 @@ To create a `yml` file:
          - params:
               district_parameter: 1
               district_title: District 1
+         - params:
+              district_parameter: 2
+              district_title: District 2
+        and so on...
+        - params:
+              district_parameter: 12
+              district_title: District 12
     ```
 
   - If you have a parameterized notebook with **multiple parameters**:
 
-    - Example: [rt.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/rt.yml). You can automate making a `.yml` file using a script, [example here](https://github.com/cal-itp/data-analyses/blob/main/gtfs_digest/deploy_portfolio_yaml.py).
+    - Example: [rt.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/rt.yml). You can also automate making a `.yml` file using a script, [example here](https://github.com/cal-itp/data-analyses/blob/main/gtfs_digest/deploy_portfolio_yaml.py).
 
     ```
     title: My Analyses
@@ -131,7 +145,7 @@ To create a `yml` file:
 
 ## Building and Deploying your Report
 
-After your Jupyter Notebook, README.md, and `.yml` files are setup properly, it's time to deploy your work to the Portfolio!
+After your Jupyter Notebook (refer to the previous section), `README.md`, and `.yml` files are setup properly, it's time to deploy your work to the Portfolio!
 
 ### Build your Report
 
@@ -139,7 +153,7 @@ After your Jupyter Notebook, README.md, and `.yml` files are setup properly, it'
 
 1. Navigate back to the `~/data-analyses` and install the portfolio requirements with
    `pip install -r portfolio/requirements.txt`
-2. Then run `python portfolio/portfolio.py build my_report` to build your report
+2. Run `python portfolio/portfolio.py build my_report` to build your report
    - **Note:** `my_report.yml` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
    - Your build will be located in: `data-analyses/portfolio/my_report/_build/html/index.html`
 3. Add the files using `git add` and commit your progress!
@@ -164,9 +178,11 @@ After your Jupyter Notebook, README.md, and `.yml` files are setup properly, it'
 
 5. Your notebook should now be displayed in the [Cal-ITP Analytics Portfolio](https://analysis.calitp.org/)
 
+   - If your work isn't showing up on the Index page above, run `python portfolio/portfolio.py index --deploy --prod` to add it.
+
 ### Other Specifications
 
-- You also have the option to specify: run `python portfolio/portfolio.py build --help` to see the following options:
+- You also have the option to specify after the initial `python portfolio/portfolio.py build my_report [specification goes here]`: run `python portfolio/portfolio.py build --help` to see the following options:
   - `--deploy / --no-deploy`
     - deploy this component to netlify.
   - `--prepare-only / --no-prepare-only`
