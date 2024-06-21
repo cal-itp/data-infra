@@ -446,6 +446,8 @@ models:
       - name: legacy_ntd_id
         description: Legacy NTD ID – The Transit Property’s NTD identification number in
           the Legacy NTD Database
+      - name: period_year_month
+        description: ""
       - name: period_month
         description: ""
       - name: period_year

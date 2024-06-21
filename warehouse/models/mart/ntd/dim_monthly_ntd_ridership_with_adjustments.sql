@@ -17,6 +17,7 @@ select
     _3_mode,
     tos,
     legacy_ntd_id,
+    concat(period_year, '-',  lpad(period_month, 2, '0')) as period_year_month,
     period_year,
     period_month,
     upt,
