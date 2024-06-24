@@ -7,7 +7,6 @@ default_args:
     depends_on_past: False
     start_date: "2022-09-12"
     email:
-      - "andrew.v@jarv.us"
       - "eric.dasmalchi@dot.ca.gov"
     email_on_failure: True
     email_on_retry: False

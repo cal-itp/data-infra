@@ -7,9 +7,8 @@ default_args:
     depends_on_past: False
     start_date: "2021-04-15"
     email:
-      - "andrew.v@jarv.us"
-      - "jameelah.y@jarv.us"
-    email_on_failure: True
+      - "hello@calitp.org"
+    email_on_failure: False
     email_on_retry: False
     max_active_dag_runs: 6
     retries: 1
