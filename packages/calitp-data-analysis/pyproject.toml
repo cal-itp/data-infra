@@ -2,7 +2,7 @@
 name = "calitp-data-analysis"
 version = "2024.5.28"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
-authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
+authors = ["Andrew Vaccaro"]
 
 [tool.poetry.dependencies]
 python = "~3.11"

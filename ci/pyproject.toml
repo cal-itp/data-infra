@@ -2,7 +2,7 @@
 name = "ci"
 version = "0.1.0"
 description = ""
-authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
+authors = ["Andrew Vaccaro"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

@@ -2,7 +2,7 @@
 name = "calitp-data-infra"
 version = "2024.4.1"
 description = "Shared code for developing data pipelines that process Cal-ITP data."
-authors = ["Andrew Vaccaro <andrew.v@jarv.us>"]
+authors = ["Andrew Vaccaro"]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.10"

@@ -7,11 +7,8 @@ default_args:
     depends_on_past: False
     start_date: "2022-09-14"
     email:
-      - "andrew.v@jarv.us"
-      - "evan.siroky@dot.ca.gov"
-      - "hunter.owens@dot.ca.gov"
-      - "jameelah.y@jarv.us"
-    email_on_failure: True
+      - "hello@calitp.org"
+    email_on_failure: False
     email_on_retry: False
     max_active_dag_runs: 6
     retries: 1
