@@ -41,7 +41,6 @@ def email_failures(task_instance: TaskInstance, execution_date, **kwargs):
         send_email(
             to=[
                 "evan.siroky@dot.ca.gov",
-                "vivek.bansal@dot.ca.gov",
             ],
             html_content=html_content,
             subject=(
