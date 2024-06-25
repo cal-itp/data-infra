@@ -116,7 +116,7 @@ display(HTML(<h1>First Header</h1>) display(HTML(<h3>Next Header</h3>))
 
 ### Page Titles
 
-Markdown cells of the <i>H1</i> type creates the titles of our website, not the `.yml` file. Let's use [SB125 Route Illustrations](https://sb125-route-illustrations--cal-itp-data-analyses.netlify.app/readme) to demostrate this.
+Markdown cells of the <i>H1</i> type creates the titles of our website, not the `.yml` file. Let's use [SB125 Route Illustrations](https://sb125-route-illustrations--cal-itp-data-analyses.netlify.app/readme) to demonstrate this.
 
 - We can see that the [yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/sb125_route_illustrations.yml) file lists the abbreviated county names as the parameter.
   <img src="section4_image5.png" width="350" />
