@@ -1,6 +1,13 @@
 # Getting Notebooks Ready for the Portfolio
 
-We want all the content on our [portfolio](https://analysis.calitp.org/) to be consistent and tidy. Below are some guidelines for you to follow when creating the Jupyter Notebooks.
+Depending on the complexity of your visualizations, you may want to produce
+a full website composed of multiple notebooks and/or the same notebook that is rerun across different parameters.
+
+For these situations, the [Jupyter Book-based](https://jupyterbook.org/en/stable/intro.html)
+[publishing framework](https://github.com/cal-itp/data-analyses/tree/main/portfolio)
+present in the data-analyses repo is your friend. You can find the Cal-ITP Analytics Portfolio at [analysis.calitp.org](https://analysis.calitp.org).
+
+We want all the content on our portfolio to be consistent. Below are guidelines for you to follow when creating the Jupyter Notebooks.
 
 ## Narrative
 
@@ -55,8 +62,8 @@ These are a set of principles to adhere to when writing the narrative content in
 
 - Integers when referencing dates, times, etc
 
-  - 2020 for year, not 2020.0 (coerce to int64 or Int64 in `pandas`; Int64 are nullable integers, which allow for NaNs to appear alongside integers)
-  - 1 hr 20 min, not 1.33 hr (use best judgment to decide what's easier for readers to interpret)
+  - 2020 for year, not 2020.0. Ccoerce to int64 or Int64 in `pandas`; Int64 are nullable integers, which allow for NaNs to appear alongside integers.
+  - 1 hr 20 min, not 1.33 hr. Use your best judgment to decide what's easier for readers to interpret.
 
 - Round at the end of the analysis. Use best judgment to decide on significant digits. National Institutes of Health has a guide on [Rounding Rules](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4483789/#:~:text=Ideally%20data%20should%20be%20rounded,might%20call%20it%20Goldilocks%20rounding.&text=The%20European%20Association%20of%20Science,2%E2%80%933%20effective%20digits%E2%80%9D.).
 
@@ -64,9 +71,9 @@ These are a set of principles to adhere to when writing the narrative content in
   - Too few decimal places may not give enough detail to distinguish between categories or ranges.
   - A good rule of thumb is to start with 1 extra decimal place than what is present in the other columns when deriving statistics (averages, percentiles), and decide from there if you want to round up.
     - An average of `$100,000.0` can simply be rounded to `$100,000`.
-    - An average of 5.2 mi might be left as is.
+    - An average of 5.2 miles might be left as is.
 
-- Additional references: [American Psychological Association (APA) style](https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf) and [Purdue](https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_numbers_statistics.html).
+- Additional references we recommend are from the [American Psychological Association (APA)](https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf) and [Purdue University](https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_numbers_statistics.html).
 
 ## Standard Names
 
@@ -89,7 +96,7 @@ These are a set of principles to adhere to when writing the narrative content in
 
 ## Accessibility
 
-It's important to make our content as user-friendly as possible. Here are a few options to consider.
+It's important to make our content as user-friendly as possible. Here are a few things to consider.
 
 - Use a color palette that is color-blind friendly. There is no standard palette for now, so use your best judgement. There are many resources online such as [this one from the University of California, Santa Barbara](https://www.nceas.ucsb.edu/sites/default/files/2022-06/Colorblind%20Safe%20Color%20Schemes.pdf).
 - Add tooltips to your visualizations so users can find more detail.
@@ -121,17 +128,26 @@ Markdown cells of the <i>H1</i> type creates the titles of our website, not the 
 - We can see that the [yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/sb125_route_illustrations.yml) file lists the abbreviated county names as the parameter.
   ![example yml file](../assets/section4_image5.png)
 
-- However, the titles and headers in the notebook are the fully spelled out conunty names.
+- However, the titles and headers in the notebook are the fully spelled out county names.
   ![rendered notebook](../assets/section4_image3.png)
 
 - This is due to the fact that  the parameter is mapped to another variable in the [notebook](https://github.com/cal-itp/data-analyses/blob/main/sb125_analyses/path_examples_tttf4/path_examples.ipynb).
   ![notebook heading](../assets/section4_image4.png)
 
+## Last Checks
+
+Your notebook is all ready to be published. However, it never hurts to double check your work once more. Here are some things to look over once more.
+
+- All your values are formatted properly. Currencies should have $ and percentages should have %.
+- The titles of your visualizations make sense and have the correct capitalizations.
+- The legends of your visualizations are not cutoff horizontally or vertically. If you have many values in your legend, Altair will truncate them.
+- The values in your visualizations are sorted properly. For example, if you use the string column of `month` with values January, February, etc in the x-axis of an Altair chart, Altair will sort these months alphabetically.
+- If you are displaying a Pandas dataframe, consider styling it. You can look through the [Pandas' website](https://pandas.pydata.org/pandas-docs/stable/user_guide/style.html) for inspiration. We also have a [function](https://github.com/cal-itp/data-analyses/blob/main/_shared_utils/shared_utils/portfolio_utils.py#L96) in our `portfolio_utils` that styles and formats a dataframe.
+- Look at your notebook(s) on your laptop versus a monitor.
+
 ## Getting Ready for Parameterization
 
-Now that your notebook is styled appropriately, setting up your Jupyter Notebook to be parameterized and published to the portflio requires a few extra steps.
-
-The instructions below are also detailed in this [sample parameterized notebook here.](https://github.com/cal-itp/data-analyses/blob/main/starter_kit/parameterized_notebook.ipynb)
+If you plan to rerun the same Jupyter Notebook over a set of different parameters, you need to setup your Jupyter Notebook in a particular way.
 
 ### Step 1: Packages to include
 
@@ -147,6 +163,7 @@ warnings.filterwarnings('ignore')
 
 import calitp_data_analysis.magics
 
+all your other packages go here
 ```
 
 ### Capturing Parameters

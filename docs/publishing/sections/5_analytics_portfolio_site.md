@@ -2,18 +2,13 @@
 
 # The Cal-ITP Analytics Portfolio
 
-Depending on the complexity of your visualizations, you may want to produce
-a full website composed of multiple notebooks and/or the same notebook that is rerun across different parameters.
-For these situations, the [Jupyter Book-based](https://jupyterbook.org/en/stable/intro.html)
-[publishing framework](https://github.com/cal-itp/data-analyses/tree/main/portfolio)
-present in the data-analyses repo is your friend. You can find the Cal-ITP Analytics Portfolio at [analysis.calitp.org](https://analysis.calitp.org).
-
 ## Netlify Setup
 
 Netlify is the platform turns our Jupyter Notebooks uploaded to GitHub into a full website.
 
 To setup your netlify key:
 
+- Ask in Slack/Teams for a Netlify key if you don't have one yet.
 - Install netlify: `npm install -g netlify-cli`
 - Navigate to your main directory
 - Edit your bash profile using Nano:
@@ -40,9 +35,10 @@ In order to publish to analysis.calitp.org, you need to create two different fil
 
 ### README.md
 
-Create a `README.md` file in the repo where your work lies. This serves to detail purpose of your website, methologies, relevant links, instructions, and more. However, this also forms the landing page of your website.
+Create a `README.md` file in the repo where your work lies. This also forms the landing page of your website.
 
 - Your file should <b>always</b> be titled as `README.md`. No other variants such as `README_gtfs.md` or `read me.md` or ` README.md` are allowed. The portfolio can only take a `README.md` when generating the landing page of your website.
+- The `README.md` is the first thing the audience will see when they visit your website. Therefore, this page should contain content such as the goal of your work, the methodology you used, relevant links, and more. [Here](https://github.com/cal-itp/data-analyses/blob/main/portfolio/template_README.md) is a template for you to populate.
 - If you do accidentally create a `README.md` file with extra strings, you can fix this by taking the following steps:
   - `git rm portfolio/my_analysis/README_accidentally_named_something_else.md`
   - `rm portfolio/my_analysis/_build/html/README_accidentally_named_something.html`. We use `rm` because \_build/html folder is not checked into GitHub
@@ -160,9 +156,9 @@ After your Jupyter Notebook (refer to the previous section), `README.md`, and `.
 
 ### Deploy your Report
 
-1. Make sure you are in the root of the data-analyses repo: `~/data-analyses`
+1. Make sure you are in the root of the data-analyses repo: `~/data-analyses`.
 
-2. Run `python portfolio/portfolio.py build my_report --deploy`
+2. Run `python portfolio/portfolio.py build my_report --deploy`.
 
    - By running `--deploy`, you are deploying the changes to display in the Analytics Portfolio.
    - **Note:** The `my_report` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
@@ -182,7 +178,7 @@ After your Jupyter Notebook (refer to the previous section), `README.md`, and `.
 
 ### Other Specifications
 
-- You also have the option to specify after the initial `python portfolio/portfolio.py build my_report [specification goes here]`: run `python portfolio/portfolio.py build --help` to see the following options:
+- You also have the option to specify after the initial `python portfolio/portfolio.py build my_report [specification goes here]` command: run `python portfolio/portfolio.py build --help` to see the following options:
   - `--deploy / --no-deploy`
     - deploy this component to netlify.
   - `--prepare-only / --no-prepare-only`
@@ -199,9 +195,9 @@ After your Jupyter Notebook (refer to the previous section), `README.md`, and `.
 ### Adding to the Makefile
 
 Another and more efficient way to write to the Analytics Portfolio is to use the Makefile and run
-`make build_my_report -f Makefile` in data-analyses
+`make build_my_report -f Makefile` in the `data-analyses` repo.
 
-Example makefile in [`cal-itp/data-analyses`](https://github.com/cal-itp/data-analyses/blob/main/Makefile):
+Here's an example makefile in [`cal-itp/data-analyses`](https://github.com/cal-itp/data-analyses/blob/main/Makefile):
 
 ```
 build_my_reports:
