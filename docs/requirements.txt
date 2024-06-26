@@ -2,3 +2,4 @@ sqlalchemy-bigquery==1.10.0
 calitp-data-analysis==2024.3.27
 jupyter-book==1.0.0
 sphinxcontrib-mermaid==0.8.1
+numpy<2
