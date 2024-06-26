@@ -116,16 +116,16 @@ display(HTML(<h1>First Header</h1>) display(HTML(<h3>Next Header</h3>))
 
 ### Page Titles
 
-Markdown cells of the <i>H1</i> type creates the titles of our website, not the `.yml` file. Let's use [SB125 Route Illustrations](https://sb125-route-illustrations--cal-itp-data-analyses.netlify.app/readme) to demostrate this.
+Markdown cells of the <i>H1</i> type creates the titles of our website, not the `.yml` file. Let's use [SB125 Route Illustrations](https://sb125-route-illustrations--cal-itp-data-analyses.netlify.app/readme) to demonstrate this.
 
 - We can see that the [yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/sb125_route_illustrations.yml) file lists the abbreviated county names as the parameter.
-  <img src="section4_image5.png" width="350" />
+  ![example yml file](../assets/section4_image5.png)
 
 - However, the titles and headers in the notebook are the fully spelled out conunty names.
-  <img src="section4_image3.png" width="350" />
+  ![rendered notebook](../assets/section4_image3.png)
 
 - This is due to the fact that  the parameter is mapped to another variable in the [notebook](https://github.com/cal-itp/data-analyses/blob/main/sb125_analyses/path_examples_tttf4/path_examples.ipynb).
-  <img src="section4_image4.png" width="350" />
+  ![notebook heading](../assets/section4_image4.png)
 
 ## Getting Ready for Parameterization
 
@@ -163,8 +163,10 @@ Please note:
 - The site URL is constructed from the original notebook name and the parameter in the JupyterBook build: `0_notebook_name__district_x_analysis.html`
 - This Markdown cell also creates the navigation on the lefthand side. Without this, the notebooks will be parameterized but then there'd be no table contents to list out the pages for people to see.
   - Any styling (italicizing, bolding, changing the colors) you use in the markdown cell below will reflect in the Table of Contents.
+
   - Below, you can see District 1: Eureka is displayed as the first header and is also the page's name in the Table of Content. Observe that the because the `# District` is bolded, the names on the left bar are also bolded.
-  - <img src="section4_image1.png" width="400" />
+
+    ![header format](../assets/section4_image1.png)
 
 #### Code Cell:
 
@@ -173,13 +175,18 @@ You will need to create two separate code cells that take on the parameter. Let'
 - Code Cell #1:
 
   - Add in your parameter and set it equal to any valid value.
+
   - Comment out the cell.
+
   - This is how your code cell should look:
+
     ```
     # district = "4"
     ```
+
   - Turn on the parameter tag: go to the code cell go to the upper right hand corner -> click on the gears -> go to "Cell Tags" -> Add Tag + -> add a tag called "parameters" -> click on the new "parameters" tag to ensure a checkmark shows up and it turns dark gray.
-  - <img src="section4_image2.png" width="250" />
+
+    ![parameters tag](../assets/section4_image2.png)
 
 - Code Cell #2:
 

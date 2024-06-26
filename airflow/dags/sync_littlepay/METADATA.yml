@@ -7,10 +7,8 @@ default_args:
     depends_on_past: False
     start_date: !days_ago 1
     email:
-      - "andrew.v@jarv.us"
-      - "jameelah.y@jarv.us"
-      - "laurie.m@jarv.us"
-    email_on_failure: True
+      - "hello@calitp.org"
+    email_on_failure: False
     email_on_retry: False
     retries: 0
     retry_delay: !timedelta 'minutes: 2'
