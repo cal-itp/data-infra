@@ -7,7 +7,7 @@ For these situations, the [Jupyter Book-based](https://jupyterbook.org/en/stable
 [publishing framework](https://github.com/cal-itp/data-analyses/tree/main/portfolio)
 present in the data-analyses repo is your friend. You can find the Cal-ITP Analytics Portfolio at [analysis.calitp.org](https://analysis.calitp.org).
 
-We want all the content on our portfolio to be consistent. Below are guidelines for you to follow when creating the Jupyter Notebooks.
+We want all the content in our portfolio to be consistent. Below are guidelines for you to follow when creating the Jupyter Notebooks.
 
 ## Narrative
 
@@ -22,7 +22,7 @@ from IPython.display import Markdown
 display(Markdown(f"The value of {variable} is {value}."))
 ```
 
-- **Use f-strings to fill in variables and values instead of hard-coding them**
+- Use f-strings to fill in variables and values instead of hard-coding them.
   - Turn anything that runs in a loop or relies on a function into a variable.
   - Use functions to grab those values for a specific entity (operator, district), rather than hard-coding the values into the narrative.
 
@@ -168,7 +168,7 @@ all your other packages go here
 
 ### Capturing Parameters
 
-When parameterizing a notebook, there are 2 places in which the parameter must be injected. Let's say you want to run your notebook twelve times for each of the twelve Caltrans districts. `district` is the parameter.
+When parameterizing a notebook, there are 2 places in which the parameter must be injected. Let's say you want to run your notebook twelve times for each of the twelve Caltrans districts. The column `district` is the parameter.
 
 #### Header:
 

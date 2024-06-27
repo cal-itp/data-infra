@@ -2,6 +2,8 @@
 
 # The Cal-ITP Analytics Portfolio
 
+Now that your notebook(s) are portfolio-ready, it's time to publish your work to the portfolio!
+
 ## Netlify Setup
 
 Netlify is the platform turns our Jupyter Notebooks uploaded to GitHub into a full website.
@@ -21,10 +23,6 @@ To setup your netlify key:
     - Type `N` to discard your changes and exit
 - For the changes to take effect, open a new terminal or run `source ~/.bash_profile`
   - Back in your terminal, enter `env | grep NETLIFY` to see that your Netlify token is there
-
-To make sure your Netlify token is up to date:
-
-- COMING SOON
 
 ## File Setup
 
