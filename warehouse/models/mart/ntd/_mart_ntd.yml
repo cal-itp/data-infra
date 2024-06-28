@@ -68,6 +68,8 @@ models:
         description: The mode of service operated under the contract. A contractor can
           operate more than one mode/TOS under a contract (only one B-30 for
           that contractor).
+      - name: service_type
+        description: A summarization of modes into Fixed Route and Demand Response
       - name: tos
         description: The type of service operated under the contract.
       - name: time_period
@@ -436,6 +438,8 @@ models:
           NTD recognizes a number of different modes including Motorbus (MB),
           Heavy Rail (HR), Light Rail (LR), and Demand Response (DR), among
           others.
+      - name: service_type
+        description: A summarization of modes into Fixed Route and Demand Response
       - name: _3_mode
         description: 3 Mode - A grouping of modes based upon whether the mode operates
           on rail, is a bus mode, is ferry boat service or other.
@@ -446,6 +450,8 @@ models:
       - name: legacy_ntd_id
         description: Legacy NTD ID – The Transit Property’s NTD identification number in
           the Legacy NTD Database
+      - name: period_year_month
+        description: ""
       - name: period_month
         description: ""
       - name: period_year
