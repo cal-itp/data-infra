@@ -521,7 +521,7 @@ a full website composed of multiple notebooks and/or the same notebook that is r
 <p>For these situations, the <a class="reference external" href="https://jupyterbook.org/en/stable/intro.html">Jupyter Book-based</a>
 <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/portfolio">publishing framework</a>
 present in the data-analyses repo is your friend. You can find the Cal-ITP Analytics Portfolio at <a class="reference external" href="https://analysis.calitp.org">analysis.calitp.org</a>.</p>
-<p>We want all the content on our portfolio to be consistent. Below are guidelines for you to follow when creating the Jupyter Notebooks.</p>
+<p>We want all the content in our portfolio to be consistent. Below are guidelines for you to follow when creating the Jupyter Notebooks.</p>
 <section id="narrative">
 <h2>Narrative<a class="headerlink" href="#narrative" title="Link to this heading">#</a></h2>
 <ul class="simple">
@@ -539,7 +539,7 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>Use f-strings to fill in variables and values instead of hard-coding them</strong></p>
+<li><p>Use f-strings to fill in variables and values instead of hard-coding them.</p>
 <ul>
 <li><p>Turn anything that runs in a loop or relies on a function into a variable.</p></li>
 <li><p>Use functions to grab those values for a specific entity (operator, district), rather than hard-coding the values into the narrative.</p></li>
@@ -702,7 +702,7 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 </section>
 <section id="capturing-parameters">
 <h3>Capturing Parameters<a class="headerlink" href="#capturing-parameters" title="Link to this heading">#</a></h3>
-<p>When parameterizing a notebook, there are 2 places in which the parameter must be injected. Let’s say you want to run your notebook twelve times for each of the twelve Caltrans districts. <code class="docutils literal notranslate"><span class="pre">district</span></code> is the parameter.</p>
+<p>When parameterizing a notebook, there are 2 places in which the parameter must be injected. Let’s say you want to run your notebook twelve times for each of the twelve Caltrans districts. The column <code class="docutils literal notranslate"><span class="pre">district</span></code> is the parameter.</p>
 <section id="header">
 <h4>Header:<a class="headerlink" href="#header" title="Link to this heading">#</a></h4>
 <p>The first Markdown cell must include parameters to inject.You could set your header Markdown cell as:
