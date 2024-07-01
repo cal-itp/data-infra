@@ -68,6 +68,7 @@ models:
         description: The mode of service operated under the contract. A contractor can
           operate more than one mode/TOS under a contract (only one B-30 for
           that contractor).
+      - name: mode_full_name
       - name: tos
         description: The type of service operated under the contract.
       - name: time_period

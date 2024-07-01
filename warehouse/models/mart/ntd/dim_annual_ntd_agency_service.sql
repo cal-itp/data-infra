@@ -2,8 +2,11 @@
 with source as (
         select * from {{ ref("stg_ntd__annual_database_service") }}
     ),
+ntd_modes as (
+    select * from {{ ref("int_ntd__modes") }}
+),
 
-dim_annual_ntd_agency_service AS (
+dim_annual_ntd_agency_service as (
     SELECT
         _dt,
         year,
@@ -14,6 +17,7 @@ dim_annual_ntd_agency_service AS (
         subrecipient_type,
         reporting_module,
         mode,
+        n.ntd_mode_full_name as mode_full_name,
         tos,
         time_period,
         time_service_begins,
@@ -48,6 +52,9 @@ dim_annual_ntd_agency_service AS (
         emergency_comment,
         non_statutory_mixed_traffic,
         drm_mixed_traffic_row,
-    FROM source
+    FROM source s
+    LEFT JOIN ntd_modes n
+    ON
+    s.mode = n.ntd_mode_abbreviation
 )
 SELECT * FROM dim_annual_ntd_agency_service
