@@ -14,6 +14,11 @@ dim_annual_ntd_agency_service AS (
         subrecipient_type,
         reporting_module,
         mode,
+        CASE
+            WHEN mode IN ('AR', 'CC', 'CR', 'HR', 'YR', 'IP', 'LR', 'MG', 'SR', 'TR', 'MB', 'RB', 'CB', 'TB', 'FB', 'IP') THEN 'Fixed Route'
+            WHEN mode IN ('DR', 'DT', 'VP', 'JT', 'PB') THEN 'Demand Response'
+            ELSE 'Unknown' -- mode is null sometimes
+        END AS service_type,
         tos,
         time_period,
         time_service_begins,
