@@ -2,8 +2,11 @@
 with source as (
         select * from {{ ref("stg_ntd__annual_database_service") }}
     ),
+ntd_modes as (
+    select * from {{ ref("int_ntd__modes") }}
+),
 
-dim_annual_ntd_agency_service AS (
+dim_annual_ntd_agency_service as (
     SELECT
         _dt,
         year,
@@ -14,6 +17,7 @@ dim_annual_ntd_agency_service AS (
         subrecipient_type,
         reporting_module,
         mode,
+        n.ntd_mode_full_name as mode_full_name,
         CASE
             WHEN mode IN ('AR', 'CC', 'CR', 'HR', 'YR', 'IP', 'LR', 'MG', 'SR', 'TR', 'MB', 'RB', 'CB', 'TB', 'FB', 'IP') THEN 'Fixed Route'
             WHEN mode IN ('DR', 'DT', 'VP', 'JT', 'PB') THEN 'Demand Response'
@@ -53,6 +57,9 @@ dim_annual_ntd_agency_service AS (
         emergency_comment,
         non_statutory_mixed_traffic,
         drm_mixed_traffic_row,
-    FROM source
+    FROM source s
+    LEFT JOIN ntd_modes n
+    ON
+    s.mode = n.ntd_mode_abbreviation
 )
 SELECT * FROM dim_annual_ntd_agency_service

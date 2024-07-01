@@ -16,6 +16,17 @@ seeds:
       - name: distance_miles
         description: Distance in miles between location_name and off_location_name.
 
+  - name: ntd_modes_to_full_names
+    description: |
+      A list of ntd 2 letter mode codes and their full names
+    columns:
+      - name: ntd_mode_abbreviation
+        description: The two letter abbreviation mode
+        tests:
+          - unique
+      - name: ntd_mode_full_name
+        description: The mode's full name
+
   - name: payments_entity_mapping
     columns:
       - name: gtfs_dataset_source_record_id
