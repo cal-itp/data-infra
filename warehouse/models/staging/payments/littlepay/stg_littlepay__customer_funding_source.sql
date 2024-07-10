@@ -11,7 +11,10 @@ clean_columns AS (
         {{ trim_make_empty_string_null('masked_pan') }} AS masked_pan,
         {{ trim_make_empty_string_null('card_scheme') }} AS card_scheme,
         {{ trim_make_empty_string_null('issuer') }} AS issuer,
-        {{ trim_make_empty_string_null('issuer_country') }} AS issuer_country,
+        CASE
+          WHEN {{ trim_make_empty_string_null('issuer_country') }} = 'UNITED STATES OF AMERICA (THE)' THEN 'UNITED STATES'
+        ELSE {{ trim_make_empty_string_null('issuer_country') }}
+        END AS issuer_country,
         {{ trim_make_empty_string_null('form_factor') }} AS form_factor,
         {{ trim_make_empty_string_null('principal_customer_id') }} AS principal_customer_id,
         -- some early/historical rows are missing participant ID
