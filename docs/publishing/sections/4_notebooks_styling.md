@@ -12,42 +12,47 @@ We want all the content in our portfolio to be consistent. Below are guidelines 
 ## Narrative
 
 - Narrative content can be done in Markdown cells or code cells.
+
   - Markdown cells should be used when there are no variables to inject.
   - Code cells should be used to write narrative whenever variables constructed from f-strings are used.
+
 - Markdown cells can inject f-strings if it's plain Markdown (not a heading) using `display(Markdown())` in a code cell.
 
-```
-from IPython.display import Markdown
+  ```python
+  from IPython.display import Markdown
 
-display(Markdown(f"The value of {variable} is {value}."))
-```
+  display(Markdown(f"The value of {variable} is {value}."))
+  ```
 
 - Use f-strings to fill in variables and values instead of hard-coding them.
+
   - Turn anything that runs in a loop or relies on a function into a variable.
+
   - Use functions to grab those values for a specific entity (operator, district), rather than hard-coding the values into the narrative.
 
-```
-n_routes = (df[df.organization_name == operator]
-            .route_id.nunique()
+    ```python
+    n_routes = (df[df.organization_name == operator]
+                .route_id.nunique()
+                )
+
+
+    n_parallel = (df[
+                (df.organization_name == operator) &
+                (df.parallel==1)]
+                .route_id.nunique()
+                )
+
+    display(
+        Markdown(
+            f"**Bus routes in service: {n_routes}**"
+            "<br>**Parallel routes** to State Highway Network (SHN): "
+            f"**{n_parallel} routes**"
             )
-
-
-n_parallel = (df[
-            (df.organization_name == operator) &
-            (df.parallel==1)]
-            .route_id.nunique()
-            )
-
-display(
-    Markdown(
-        f"**Bus routes in service: {n_routes}**"
-        "<br>**Parallel routes** to State Highway Network (SHN): "
-        f"**{n_parallel} routes**"
-        )
-)
-```
+    )
+    ```
 
 - Stay away from loops if you need to use headers.
+
   - You will need to create Markdown cells for headers or else JupyterBook will not build correctly. For parameterized notebooks, this is an acceptable trade-off.
   - For unparameterized notebooks, you may want use `display(HTML())`.
   - Caveat: Using `display(HTML())` means you'll lose the table of contents navigation in the top right corner in the JupyterBook build.
@@ -78,11 +83,11 @@ These are a set of principles to adhere to when writing the narrative content in
 ## Standard Names
 
 - GTFS data in our warehouse stores information on operators, routes, and stops.
-- Analysts should reference the operator name, route name, and Caltrans district the same way across analyses.
+- Analysts should reference route name and Caltrans district the same way across analyses.
   - Caltrans District: 7 should be referred to as `07 - Los Angeles`
   - Between `route_short_name`, `route_long_name`, `route_desc`, which one should be used to describe `route_id`? Use `shared_utils.portfolio_utils`, which relies on regular expressions, to select the most human-readable route name.
 - Use [`shared_utils.portfolio_utils`](https://github.com/cal-itp/data-analyses/blob/main/_shared_utils/shared_utils/portfolio_utils.py) to help you grab the right names to use. Sample code below.
-  ```
+  ```python
   from shared_utils import portfolio_utils
 
   route_names = portfolio_utils.add_route_name()
@@ -98,8 +103,8 @@ These are a set of principles to adhere to when writing the narrative content in
 
 It's important to make our content as user-friendly as possible. Here are a few things to consider.
 
-- Use a color palette that is color-blind friendly. There is no standard palette for now, so use your best judgement. There are many resources online such as [this one from the University of California, Santa Barbara](https://www.nceas.ucsb.edu/sites/default/files/2022-06/Colorblind%20Safe%20Color%20Schemes.pdf).
-- Add tooltips to your visualizations so users can find more detail.
+- Use a color palette that is color-blind friendly. There is no standard palette, so use your best judgement. There are many palettes online such as [these ones from the University of California, Santa Barbara](https://www.nceas.ucsb.edu/sites/default/files/2022-06/Colorblind%20Safe%20Color%20Schemes.pdf) for you to choose from.
+- Add tooltips to your visualizations.
 - Add `.interactive()` behind `Altair` charts which allow viewers to zoom in and out.
 
 ## Headers
@@ -108,7 +113,7 @@ It's important to make our content as user-friendly as possible. Here are a few 
 
 Headers must move consecutively in Markdown cells or the parameterized notebook will not generate. No skipping!
 
-```
+```python
 # Notebook Title
 ## First Section
 ## Second Section
@@ -117,7 +122,7 @@ Headers must move consecutively in Markdown cells or the parameterized notebook 
 
 To get around consecutive headers, you can use `display(HTML())`.
 
-```
+```python
 display(HTML(<h1>First Header</h1>) display(HTML(<h3>Next Header</h3>))
 ```
 
@@ -136,7 +141,7 @@ Markdown cells of the <i>H1</i> type creates the titles of our website, not the 
 
 ## Last Checks
 
-Your notebook is all ready to be published. However, it never hurts to double check your work once more. Here are some things to look over once more.
+Your notebook is all ready to be published. However, it never hurts to do some final checks once more.
 
 - All your values are formatted properly. Currencies should have $ and percentages should have %.
 - The titles of your visualizations make sense and have the correct capitalizations.
@@ -149,11 +154,11 @@ Your notebook is all ready to be published. However, it never hurts to double ch
 
 If you plan to rerun the same Jupyter Notebook over a set of different parameters, you need to setup your Jupyter Notebook in a particular way.
 
-### Step 1: Packages to include
+### Packages to include
 
-Copy and paste this code block below as shown for every notebook for the portfolio. Order matters, %%capture <b>must</b> go first.
+Copy and paste this code block below as shown for every notebook for the portfolio. Order matters, `%%capture` <b>must</b> go first.
 
-```
+```python
 # Include this in the cell where packages are imported
 
 %%capture
@@ -170,10 +175,9 @@ all your other packages go here
 
 When parameterizing a notebook, there are 2 places in which the parameter must be injected. Let's say you want to run your notebook twelve times for each of the twelve Caltrans districts. The column `district` is the parameter.
 
-#### Header:
+#### Header
 
-The first Markdown cell must include parameters to inject.You could set your header Markdown cell as:
-`# District {district} Analysis`.
+The first Markdown cell <b>must</b> include parameters to inject. Using the same example above, you could set your header Markdown cell to be `# District {district} Analysis` which would generate the title `District 1 Analysis` for District 1.
 
 Please note:
 
@@ -185,19 +189,19 @@ Please note:
 
     ![header format](../assets/section4_image1.png)
 
-#### Code Cell:
+#### Code Cell
 
 You will need to create two separate code cells that take on the parameter. Let's use `district` as an example parameter once again.
 
-- Code Cell #1:
+- <b>Code Cell #1</b>
 
   - Add in your parameter and set it equal to any valid value.
 
   - Comment out the cell.
 
-  - This is how your code cell should look:
+  - This is how your code cell should look.
 
-    ```
+    ```python
     # district = "4"
     ```
 
@@ -205,19 +209,22 @@ You will need to create two separate code cells that take on the parameter. Let'
 
     ![parameters tag](../assets/section4_image2.png)
 
-- Code Cell #2:
+- <b>Code Cell #2</b>
 
   - Input the same parameter without any assigned value with `%%capture_parameters` at the top.
-  - This is how your code cell should look:
-    ```
-    %%capture_parameters
-    district
-    ```
+  - Your code cell should look <b>exactly</b> like this or else your notebook won't parameterize.
+    - Do not add any additional lines of code.
+    - Do not add commented out code such as `# Comment this back in` in this cell.
 
-#### If you're using a heading, you can either use HTML or capture the parameter and inject.
+  ```python
+   %%capture_parameters
+   district
+  ```
+
+#### If you're using a heading, you can either use HTML or capture the parameter and inject
 
 - HTML - this option works when you run your notebook locally.
-  ```
+  ```python
   from IPython.display import HTML
 
   display(HTML(f"<h3>Header with {variable}</h3>"))
