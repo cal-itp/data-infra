@@ -159,8 +159,6 @@ If you plan to rerun the same Jupyter Notebook over a set of different parameter
 Copy and paste this code block below as shown for every notebook for the portfolio. Order matters, `%%capture` <b>must</b> go first.
 
 ```python
-# Include this in the cell where packages are imported
-
 %%capture
 
 import warnings
@@ -168,7 +166,9 @@ warnings.filterwarnings('ignore')
 
 import calitp_data_analysis.magics
 
-all your other packages go here
+# All your other packages go here
+import pandas as pd
+import utils 
 ```
 
 ### Capturing Parameters
@@ -199,7 +199,7 @@ You will need to create two separate code cells that take on the parameter. Let'
 
   - Comment out the cell.
 
-  - This is how your code cell should look.
+  - This is how your code cell must look.
 
     ```python
     # district = "4"
@@ -212,7 +212,7 @@ You will need to create two separate code cells that take on the parameter. Let'
 - <b>Code Cell #2</b>
 
   - Input the same parameter without any assigned value with `%%capture_parameters` at the top.
-  - Your code cell should look <b>exactly</b> like this or else your notebook won't parameterize.
+  - Your code cell  must <b>exactly</b> like this or else your notebook won't parameterize.
     - Do not add any additional lines of code.
     - Do not add commented out code such as `# Comment this back in` in this cell.
 

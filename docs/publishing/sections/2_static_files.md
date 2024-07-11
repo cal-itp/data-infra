@@ -57,9 +57,19 @@ subprocess.run([
 ])
 ```
 
-A Jupyter Notebook can be converted to PDF for email distribution in a few different ways. You might wonder why we don't suggest simply doing  `File -> Save and Export Notebook As -> PDF`. We don't recommend this method because it leaves all your code cells visible, which usually isn't desirable.
+Or you can try:
 
-All the code below are to be pasted into the <b>terminal</b>. For more information about `nbconvert`
+```python
+# Execute NB
+jupyter nbconvert --to notebook --execute --inplace my_notebook.ipynb
+    
+# Convert NB to HTML then to PDF
+jupyter nbconvert --to html --no-input --no-prompt my_notebook.ipynb
+```
+
+You can also convert a Jupyter Notebook to PDF for distribution in a few different ways. You might wonder why we don't suggest simply doing  `File -> Save and Export Notebook As -> PDF`. We don't recommend this method because it leaves all your code cells visible, which usually isn't desirable.
+
+All the code below are to be pasted into the <b>terminal</b>.
 
 - The PDF generated has a very academic look, similar to a LaTex document.
 
@@ -93,7 +103,7 @@ weasyprint my_notebook.html my_notebook.pdf
 
 - There are assignments that require you to rerun the same notebook for different values and save each of these new notebooks in PDF format. This  essentially combines parameterization principles using `papermill`  with the `weasyprint` steps above. You can reference the code that was used to generate the CSIS scorecards [here](https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/run_papermill.py). This script iterates over [this notebook](https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/sb1_scorecard.ipynb) to produce 50+ PDF files for each of the nominated projects.
 
-  Briefly, the script above:
+  Briefly, the script above does the following:
 
   - Automates the naming of the new PDF files by taking away punctuation that isn't allowed.
   - Saves the notebook as html files.
