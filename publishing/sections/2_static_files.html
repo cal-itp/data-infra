@@ -547,22 +547,73 @@ to be self-contained and can be sent via email or similar.</p>
 <span class="p">])</span>
 </pre></div>
 </div>
-<p>A Jupyter Notebook can be converted to PDF for email distribution with:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Similar as converting to HTML, but change the output_format</span>
-<span class="c1"># shell out, run NB Convert</span>
-<span class="n">OUTPUT_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;PDFviaHTML&#39;</span>
-<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span>
-    <span class="s2">&quot;jupyter&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;nbconvert&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;--to&quot;</span><span class="p">,</span>
-    <span class="n">OUTPUT_FORMAT</span><span class="p">,</span>
-    <span class="s2">&quot;--no-input&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;--no-prompt&quot;</span><span class="p">,</span>
-    <span class="sa">f</span><span class="s2">&quot;../</span><span class="si">{</span><span class="n">OUTPUT_FILENAME</span><span class="si">}</span><span class="s2">.ipynb&quot;</span><span class="p">,</span>
-<span class="p">])</span>
-
+<p>Or you can try:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Execute NB</span>
+<span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">notebook</span> <span class="o">--</span><span class="n">execute</span> <span class="o">--</span><span class="n">inplace</span> <span class="n">my_notebook</span><span class="o">.</span><span class="n">ipynb</span>
+    
+<span class="c1"># Convert NB to HTML then to PDF</span>
+<span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">html</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="nb">input</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">prompt</span> <span class="n">my_notebook</span><span class="o">.</span><span class="n">ipynb</span>
 </pre></div>
 </div>
+<p>You can also convert a Jupyter Notebook to PDF for distribution in a few different ways. You might wonder why we don’t suggest simply doing  <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">-&gt;</span> <span class="pre">Save</span> <span class="pre">and</span> <span class="pre">Export</span> <span class="pre">Notebook</span> <span class="pre">As</span> <span class="pre">-&gt;</span> <span class="pre">PDF</span></code>. We don’t recommend this method because it leaves all your code cells visible, which usually isn’t desirable.</p>
+<p>All the code below are to be pasted into the <b>terminal</b>.</p>
+<ul class="simple">
+<li><p>The PDF generated has a very academic look, similar to a LaTex document.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert your original notebook</span>
+<span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">pdf</span> <span class="n">my_notebook</span><span class="o">.</span><span class="n">ipynb</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Nbconvert</span></code> also has configuration options available. <a class="reference external" href="https://nbconvert.readthedocs.io/en/latest/config_options.html">Read about them here.</a></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hide all the code cells by adding --no-input</span>
+<span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">pdf</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="nb">input</span> <span class="n">my_notebook</span><span class="o">.</span><span class="n">ipynb</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>For a less academic look, you can convert your notebook into html before using <code class="docutils literal notranslate"><span class="pre">weasyprint</span></code>. This might cause blank pages to appear, typically at the beginning of your PDF. You will need to manually remove them using Adobe.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure to install `weasyprint`</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">WeasyPrint</span>
+
+<span class="c1"># Execute NB</span>
+<span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">notebook</span> <span class="o">--</span><span class="n">execute</span> <span class="o">--</span><span class="n">inplace</span> <span class="n">my_notebook</span><span class="o">.</span><span class="n">ipynb</span>
+    
+<span class="c1"># Convert NB to HTML then to PDF</span>
+<span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">html</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="nb">input</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">prompt</span> <span class="n">my_notebook</span><span class="o">.</span><span class="n">ipynb</span>
+
+<span class="c1"># Convert to PDF</span>
+<span class="n">weasyprint</span> <span class="n">my_notebook</span><span class="o">.</span><span class="n">html</span> <span class="n">my_notebook</span><span class="o">.</span><span class="n">pdf</span>
+</pre></div>
+</div>
+<ul>
+<li><p>There are assignments that require you to rerun the same notebook for different values and save each of these new notebooks in PDF format. This  essentially combines parameterization principles using <code class="docutils literal notranslate"><span class="pre">papermill</span></code>  with the <code class="docutils literal notranslate"><span class="pre">weasyprint</span></code> steps above. You can reference the code that was used to generate the CSIS scorecards <a class="reference external" href="https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/run_papermill.py">here</a>. This script iterates over <a class="reference external" href="https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/sb1_scorecard.ipynb">this notebook</a> to produce 50+ PDF files for each of the nominated projects.</p>
+<p>Briefly, the script above does the following:</p>
+<ul class="simple">
+<li><p>Automates the naming of the new PDF files by taking away punctuation that isn’t allowed.</p></li>
+<li><p>Saves the notebook as html files.</p></li>
+<li><p>Converts the html files to PDF.</p></li>
+<li><p>Saves each PDF to the folder (organized by district) to our GCS.</p></li>
+<li><p>Deletes irrelevant files.</p></li>
+</ul>
+</li>
+<li><p>Here are some tips and tricks when converting notebooks to HTML before PDF conversions.</p>
+<ul>
+<li><p>Any formatting should be done in HTML/CSS first.</p></li>
+<li><p>To create page breaks, add the following in a <b>Markdown</b> cell with however many <code class="docutils literal notranslate"><span class="pre">&lt;br&gt;</span></code> tags you’d like.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Follow the writing, rounding, and visualization ideas outlined in <a class="reference external" href="https://docs.calitp.org/data-infra/publishing/sections/4_notebooks_styling.html">Getting Notebooks Ready for the Portfolio</a> section.</p></li>
+</ul>
+</li>
+</ul>
 </section>
 </section>
 

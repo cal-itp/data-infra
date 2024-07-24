@@ -494,11 +494,11 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#last-checks">Last Checks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-ready-for-parameterization">Getting Ready for Parameterization</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-packages-to-include">Step 1: Packages to include</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#packages-to-include">Packages to include</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#capturing-parameters">Capturing Parameters</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#header">Header:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#code-cell">Code Cell:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-re-using-a-heading-you-can-either-use-html-or-capture-the-parameter-and-inject">If you’re using a heading, you can either use HTML or capture the parameter and inject.</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#header">Header</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#code-cell">Code Cell</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-re-using-a-heading-you-can-either-use-html-or-capture-the-parameter-and-inject">If you’re using a heading, you can either use HTML or capture the parameter and inject</a></li>
 </ul>
 </li>
 </ul>
@@ -524,29 +524,25 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 <p>We want all the content in our portfolio to be consistent. Below are guidelines for you to follow when creating the Jupyter Notebooks.</p>
 <section id="narrative">
 <h2>Narrative<a class="headerlink" href="#narrative" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Narrative content can be done in Markdown cells or code cells.</p>
 <ul>
+<li><p>Narrative content can be done in Markdown cells or code cells.</p>
+<ul class="simple">
 <li><p>Markdown cells should be used when there are no variables to inject.</p></li>
 <li><p>Code cells should be used to write narrative whenever variables constructed from f-strings are used.</p></li>
 </ul>
 </li>
-<li><p>Markdown cells can inject f-strings if it’s plain Markdown (not a heading) using <code class="docutils literal notranslate"><span class="pre">display(Markdown())</span></code> in a code cell.</p></li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span>
+<li><p>Markdown cells can inject f-strings if it’s plain Markdown (not a heading) using <code class="docutils literal notranslate"><span class="pre">display(Markdown())</span></code> in a code cell.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span>
 
 <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The value of </span><span class="si">{</span><span class="n">variable</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
-<ul class="simple">
+</li>
 <li><p>Use f-strings to fill in variables and values instead of hard-coding them.</p>
 <ul>
 <li><p>Turn anything that runs in a loop or relies on a function into a variable.</p></li>
-<li><p>Use functions to grab those values for a specific entity (operator, district), rather than hard-coding the values into the narrative.</p></li>
-</ul>
-</li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n_routes</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">organization_name</span> <span class="o">==</span> <span class="n">operator</span><span class="p">]</span>
+<li><p>Use functions to grab those values for a specific entity (operator, district), rather than hard-coding the values into the narrative.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_routes</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">organization_name</span> <span class="o">==</span> <span class="n">operator</span><span class="p">]</span>
             <span class="o">.</span><span class="n">route_id</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
             <span class="p">)</span>
 
@@ -566,9 +562,11 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 <span class="p">)</span>
 </pre></div>
 </div>
-<ul class="simple">
+</li>
+</ul>
+</li>
 <li><p>Stay away from loops if you need to use headers.</p>
-<ul>
+<ul class="simple">
 <li><p>You will need to create Markdown cells for headers or else JupyterBook will not build correctly. For parameterized notebooks, this is an acceptable trade-off.</p></li>
 <li><p>For unparameterized notebooks, you may want use <code class="docutils literal notranslate"><span class="pre">display(HTML())</span></code>.</p></li>
 <li><p>Caveat: Using <code class="docutils literal notranslate"><span class="pre">display(HTML())</span></code> means you’ll lose the table of contents navigation in the top right corner in the JupyterBook build.</p></li>
@@ -610,14 +608,14 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 <h2>Standard Names<a class="headerlink" href="#standard-names" title="Link to this heading">#</a></h2>
 <ul>
 <li><p>GTFS data in our warehouse stores information on operators, routes, and stops.</p></li>
-<li><p>Analysts should reference the operator name, route name, and Caltrans district the same way across analyses.</p>
+<li><p>Analysts should reference route name and Caltrans district the same way across analyses.</p>
 <ul class="simple">
 <li><p>Caltrans District: 7 should be referred to as <code class="docutils literal notranslate"><span class="pre">07</span> <span class="pre">-</span> <span class="pre">Los</span> <span class="pre">Angeles</span></code></p></li>
 <li><p>Between <code class="docutils literal notranslate"><span class="pre">route_short_name</span></code>, <code class="docutils literal notranslate"><span class="pre">route_long_name</span></code>, <code class="docutils literal notranslate"><span class="pre">route_desc</span></code>, which one should be used to describe <code class="docutils literal notranslate"><span class="pre">route_id</span></code>? Use <code class="docutils literal notranslate"><span class="pre">shared_utils.portfolio_utils</span></code>, which relies on regular expressions, to select the most human-readable route name.</p></li>
 </ul>
 </li>
 <li><p>Use <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/_shared_utils/shared_utils/portfolio_utils.py"><code class="docutils literal notranslate"><span class="pre">shared_utils.portfolio_utils</span></code></a> to help you grab the right names to use. Sample code below.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shared_utils</span> <span class="kn">import</span> <span class="n">portfolio_utils</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shared_utils</span> <span class="kn">import</span> <span class="n">portfolio_utils</span>
 
 <span class="n">route_names</span> <span class="o">=</span> <span class="n">portfolio_utils</span><span class="o">.</span><span class="n">add_route_name</span><span class="p">()</span>
 
@@ -635,8 +633,8 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 <h2>Accessibility<a class="headerlink" href="#accessibility" title="Link to this heading">#</a></h2>
 <p>It’s important to make our content as user-friendly as possible. Here are a few things to consider.</p>
 <ul class="simple">
-<li><p>Use a color palette that is color-blind friendly. There is no standard palette for now, so use your best judgement. There are many resources online such as <a class="reference external" href="https://www.nceas.ucsb.edu/sites/default/files/2022-06/Colorblind%20Safe%20Color%20Schemes.pdf">this one from the University of California, Santa Barbara</a>.</p></li>
-<li><p>Add tooltips to your visualizations so users can find more detail.</p></li>
+<li><p>Use a color palette that is color-blind friendly. There is no standard palette, so use your best judgement. There are many palettes online such as <a class="reference external" href="https://www.nceas.ucsb.edu/sites/default/files/2022-06/Colorblind%20Safe%20Color%20Schemes.pdf">these ones from the University of California, Santa Barbara</a> for you to choose from.</p></li>
+<li><p>Add tooltips to your visualizations.</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">.interactive()</span></code> behind <code class="docutils literal notranslate"><span class="pre">Altair</span></code> charts which allow viewers to zoom in and out.</p></li>
 </ul>
 </section>
@@ -645,14 +643,14 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 <section id="consecutive-order">
 <h3>Consecutive Order<a class="headerlink" href="#consecutive-order" title="Link to this heading">#</a></h3>
 <p>Headers must move consecutively in Markdown cells or the parameterized notebook will not generate. No skipping!</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Notebook Title</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Notebook Title</span>
 <span class="c1">## First Section</span>
 <span class="c1">## Second Section</span>
 <span class="c1">### Another subheading</span>
 </pre></div>
 </div>
 <p>To get around consecutive headers, you can use <code class="docutils literal notranslate"><span class="pre">display(HTML())</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">First</span> <span class="n">Header</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span><span class="p">)</span> <span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="n">Next</span> <span class="n">Header</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">First</span> <span class="n">Header</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span><span class="p">)</span> <span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="n">Next</span> <span class="n">Header</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span><span class="p">))</span>
 </pre></div>
 </div>
 </section>
@@ -671,7 +669,7 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 </section>
 <section id="last-checks">
 <h2>Last Checks<a class="headerlink" href="#last-checks" title="Link to this heading">#</a></h2>
-<p>Your notebook is all ready to be published. However, it never hurts to double check your work once more. Here are some things to look over once more.</p>
+<p>Your notebook is all ready to be published. However, it never hurts to do some final checks once more.</p>
 <ul class="simple">
 <li><p>All your values are formatted properly. Currencies should have $ and percentages should have %.</p></li>
 <li><p>The titles of your visualizations make sense and have the correct capitalizations.</p></li>
@@ -684,19 +682,19 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 <section id="getting-ready-for-parameterization">
 <h2>Getting Ready for Parameterization<a class="headerlink" href="#getting-ready-for-parameterization" title="Link to this heading">#</a></h2>
 <p>If you plan to rerun the same Jupyter Notebook over a set of different parameters, you need to setup your Jupyter Notebook in a particular way.</p>
-<section id="step-1-packages-to-include">
-<h3>Step 1: Packages to include<a class="headerlink" href="#step-1-packages-to-include" title="Link to this heading">#</a></h3>
-<p>Copy and paste this code block below as shown for every notebook for the portfolio. Order matters, %%capture <b>must</b> go first.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Include this in the cell where packages are imported</span>
-
-<span class="o">%%</span><span class="n">capture</span>
+<section id="packages-to-include">
+<h3>Packages to include<a class="headerlink" href="#packages-to-include" title="Link to this heading">#</a></h3>
+<p>Copy and paste this code block below as shown for every notebook for the portfolio. Order matters, <code class="docutils literal notranslate"><span class="pre">%%capture</span></code> <b>must</b> go first.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">capture</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">calitp_data_analysis.magics</span>
 
-<span class="nb">all</span> <span class="n">your</span> <span class="n">other</span> <span class="n">packages</span> <span class="n">go</span> <span class="n">here</span>
+<span class="c1"># All your other packages go here</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">utils</span> 
 </pre></div>
 </div>
 </section>
@@ -704,9 +702,8 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 <h3>Capturing Parameters<a class="headerlink" href="#capturing-parameters" title="Link to this heading">#</a></h3>
 <p>When parameterizing a notebook, there are 2 places in which the parameter must be injected. Let’s say you want to run your notebook twelve times for each of the twelve Caltrans districts. The column <code class="docutils literal notranslate"><span class="pre">district</span></code> is the parameter.</p>
 <section id="header">
-<h4>Header:<a class="headerlink" href="#header" title="Link to this heading">#</a></h4>
-<p>The first Markdown cell must include parameters to inject.You could set your header Markdown cell as:
-<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">District</span> <span class="pre">{district}</span> <span class="pre">Analysis</span></code>.</p>
+<h4>Header<a class="headerlink" href="#header" title="Link to this heading">#</a></h4>
+<p>The first Markdown cell <b>must</b> include parameters to inject. Using the same example above, you could set your header Markdown cell to be <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">District</span> <span class="pre">{district}</span> <span class="pre">Analysis</span></code> which would generate the title <code class="docutils literal notranslate"><span class="pre">District</span> <span class="pre">1</span> <span class="pre">Analysis</span></code> for District 1.</p>
 <p>Please note:</p>
 <ul>
 <li><p>The site URL is constructed from the original notebook name and the parameter in the JupyterBook build: <code class="docutils literal notranslate"><span class="pre">0_notebook_name__district_x_analysis.html</span></code></p></li>
@@ -721,15 +718,15 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 </ul>
 </section>
 <section id="code-cell">
-<h4>Code Cell:<a class="headerlink" href="#code-cell" title="Link to this heading">#</a></h4>
+<h4>Code Cell<a class="headerlink" href="#code-cell" title="Link to this heading">#</a></h4>
 <p>You will need to create two separate code cells that take on the parameter. Let’s use <code class="docutils literal notranslate"><span class="pre">district</span></code> as an example parameter once again.</p>
 <ul>
-<li><p>Code Cell #1:</p>
+<li><p><b>Code Cell #1</b></p>
 <ul>
 <li><p>Add in your parameter and set it equal to any valid value.</p></li>
 <li><p>Comment out the cell.</p></li>
-<li><p>This is how your code cell should look:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># district = &quot;4&quot;</span>
+<li><p>This is how your code cell must look.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># district = &quot;4&quot;</span>
 </pre></div>
 </div>
 </li>
@@ -738,24 +735,43 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 </li>
 </ul>
 </li>
-<li><p>Code Cell #2:</p>
+<li><p><b>Code Cell #2</b></p>
 <ul>
-<li><p>Input the same parameter without any assigned value with <code class="docutils literal notranslate"><span class="pre">%%capture_parameters</span></code> at the top.</p></li>
-<li><p>This is how your code cell should look:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">capture_parameters</span>
+<li><p>Input the same parameter without an assigned value with <code class="docutils literal notranslate"><span class="pre">%%capture_parameters</span></code> at the top.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">capture_parameters</span>
 <span class="n">district</span>
 </pre></div>
 </div>
+</li>
+<li><p>Even commented out code before <code class="docutils literal notranslate"><span class="pre">%%capture_parameters</span></code> will cause the parameterization process to fail.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This notebook will fail to parameterize because here&#39;s a comment.</span>
+<span class="c1"># Here&#39;s another comment.</span>
+<span class="o">%%</span><span class="n">capture_parameters</span>
+<span class="n">district</span>
+</pre></div>
+</div>
+</li>
+<li><p>Notes</p>
+<ul>
+<li><p>You can add more code like this sample below, just as long as <code class="docutils literal notranslate"><span class="pre">%%capture_parameters</span></code> still remains the first line of code in the cell.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>  <span class="o">%%</span><span class="n">capture_parameters</span>
+  <span class="n">human_date</span> <span class="o">=</span> <span class="n">analysis_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%B </span><span class="si">%d</span><span class="s1"> %Y (%A)&#39;</span><span class="p">)</span>
+  <span class="n">human_date</span>
+</pre></div>
+</div>
+</li>
+<li><p>You can have multiple <code class="docutils literal notranslate"><span class="pre">%%capture_parameters</span></code> cell in your notebook <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/ca_transit_speed_maps/speedmaps.ipynb">like this example</a>.</p></li>
+</ul>
 </li>
 </ul>
 </li>
 </ul>
 </section>
 <section id="if-you-re-using-a-heading-you-can-either-use-html-or-capture-the-parameter-and-inject">
-<h4>If you’re using a heading, you can either use HTML or capture the parameter and inject.<a class="headerlink" href="#if-you-re-using-a-heading-you-can-either-use-html-or-capture-the-parameter-and-inject" title="Link to this heading">#</a></h4>
+<h4>If you’re using a heading, you can either use HTML or capture the parameter and inject<a class="headerlink" href="#if-you-re-using-a-heading-you-can-either-use-html-or-capture-the-parameter-and-inject" title="Link to this heading">#</a></h4>
 <ul>
 <li><p>HTML - this option works when you run your notebook locally.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
 <span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;h3&gt;Header with </span><span class="si">{</span><span class="n">variable</span><span class="si">}</span><span class="s2">&lt;/h3&gt;&quot;</span><span class="p">))</span>
 </pre></div>
@@ -842,11 +858,11 @@ present in the data-analyses repo is your friend. You can find the Cal-ITP Analy
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#last-checks">Last Checks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-ready-for-parameterization">Getting Ready for Parameterization</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-packages-to-include">Step 1: Packages to include</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#packages-to-include">Packages to include</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#capturing-parameters">Capturing Parameters</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#header">Header:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#code-cell">Code Cell:</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-re-using-a-heading-you-can-either-use-html-or-capture-the-parameter-and-inject">If you’re using a heading, you can either use HTML or capture the parameter and inject.</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#header">Header</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#code-cell">Code Cell</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-re-using-a-heading-you-can-either-use-html-or-capture-the-parameter-and-inject">If you’re using a heading, you can either use HTML or capture the parameter and inject</a></li>
 </ul>
 </li>
 </ul>
