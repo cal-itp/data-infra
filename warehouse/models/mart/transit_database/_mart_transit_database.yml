@@ -911,6 +911,7 @@ models:
           `issue_creation_time` and `resolution_date` fields present in the source data to time-bound
           data validity. This field records the active GTFS dataset key mapped to the issue at the
           time it was resolved.
+      - name: gtfs_dataset_name
       - name: gtfs_dataset_source_record_id
       - name: status
       - name: issue__
@@ -927,6 +928,7 @@ models:
           data validity. This field records the active service key mapped to the issue at the time it
           was resolved.
       - name: service_source_record_id
+      - name: service_name
       - name: resolution_date
       - name: assignee
       - name: issue_creation_time
