@@ -23,11 +23,11 @@ unnested AS (
     SELECT
         id,
         description,
-        issue_type_key,
-        gtfs_dataset_key,
+        gtfs_datasets[SAFE_OFFSET(0)] as gtfs_dataset_key,
         status,
         issue__,
-        service_key,
+        issue_type[SAFE_OFFSET(0)] AS issue_type_key,
+        services[SAFE_OFFSET(0)] AS service_key,
         resolution_date,
         assignee,
         issue_creation_time,
@@ -47,10 +47,7 @@ unnested AS (
         outreach_status,
         should_wait_until,
         dt
-    FROM stg_transit_database__transit_data_quality_issues,
-    UNNEST(gtfs_datasets) AS gtfs_dataset_key,
-    UNNEST(services) AS service_key,
-    UNNEST(issue_type) AS issue_type_key
+    FROM stg_transit_database__transit_data_quality_issues
 ),
 
 joins AS (
@@ -114,11 +111,13 @@ int_transit_database__transit_data_quality_issues AS (
         issue_type_name,
         gtfs_dataset_key_at_creation,
         gtfs_dataset_key_at_resolution,
+        gtfs_dataset_name,
         gtfs_dataset_source_record_id,
         status,
         issue__,
         service_key_at_creation,
         service_key_at_resolution,
+        service_name,
         service_source_record_id,
         resolution_date,
         assignee,

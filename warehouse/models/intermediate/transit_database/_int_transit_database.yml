@@ -60,10 +60,12 @@ models:
       - name: issue_type_key
       - name: gtfs_dataset_key_at_creation
       - name: gtfs_dataset_key_at_resolution
+      - name: gtfs_dataset_name
       - name: status
       - name: issue__
       - name: service_key_at_creation
       - name: service_key_at_resolution
+      - name: service_name
       - name: resolution_date
       - name: assignee
       - name: issue_creation_time
