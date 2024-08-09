@@ -28,7 +28,7 @@ Below we've provided some examples of commons types of content for quick use. To
 3. [Non-executing Code](non-executing-code)
 4. [Internal References and Cross References](internal-refs)
 5. Need a node graph to illustrate a complex flow or process? Try mermaid ([documentation here](https://mermaid.js.org/intro/)).
-    (executing-code)=
+   (executing-code)=
 
 ### Executing Code
 
