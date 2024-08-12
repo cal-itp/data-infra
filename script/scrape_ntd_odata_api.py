@@ -69,31 +69,31 @@ class NtdDataProductExtract(PartitionedGCSArtifact):
 
 
 def main(
-    # product: str,
-    # year: int,
+    product: str,
+    year: int,
     api_endpoint: str,
 ):
     # validated_url = parse_obj_as(HttpUrl, file_url)
-    # typer.secho(f"reading file from url {validated_url}", fg=typer.colors.MAGENTA)
-    # start = pendulum.now(tz="Etc/UTC")
+    typer.secho(f"reading file from url {api_endpoint}", fg=typer.colors.MAGENTA)
+    start = pendulum.now(tz="Etc/UTC")
     api_endpoint = "https://data.transportation.gov/api/odata/v4/" + api_endpoint
 
     api_content = requests.get(api_endpoint).content
-    print(api_content)
-    # # Save initial excel files to the bucket as "raw"
-    # api_extract = NtdDataProductExtract(
-    #     product=product + "_raw",
-    #     ts=start,
-    #     year=year,
-    #     file_url=validated_url,
-    #     filename=f"{product}_raw.xlsx",
-    # )
-    # typer.secho(
-    #     f"saving {humanize.naturalsize(len(excel_content))} bytes to {excel_extract.path}"
-    # )
-    # excel_extract.save_content(fs=get_fs(), content=excel_content)
+    #print(api_content)
+    # Save initial excel files to the bucket as "raw"
+    api_extract = NtdDataProductExtract(
+        product=product + "_raw",
+        ts=start,
+        year=year,
+        file_url=api_endpoint,
+        filename=f"{product}_raw.json",
+    )
+    typer.secho(
+        f"saving {humanize.naturalsize(len(api_content))} bytes to {api_extract.path}"
+    )
+    api_extract.save_content(fs=get_fs(), content=api_content)
 
-    # df_dict = pd.read_excel(excel_content, sheet_name=None, engine="openpyxl")
+    #df_dict = pd.read_excel(excel_content, sheet_name=None, engine="openpyxl")
 
     # Rename all columns in dictonary, then fix the key(tab) name of the dictionary
     # for key, df in df_dict.items():
