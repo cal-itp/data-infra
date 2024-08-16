@@ -1,0 +1,3 @@
+operator: operators.NtdDataProductAPIOperator
+
+bucket: "gs://test-calitp-ntd-data-products"
