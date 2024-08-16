@@ -1,0 +1,16 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-test-ntd-data-products
+prefix_bucket: true
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd_api_products.employees_by_agency_2022
+  LIMIT 1;
+source_objects:
+  - "employees_by_agency_2022/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd_api_products.employees_by_agency_2022"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "employees_by_agency_2022/{year:INTEGER}/{dt:DATE}/{ts:TIMESTAMP}"
