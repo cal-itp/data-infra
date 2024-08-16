@@ -82,6 +82,7 @@ filter using (
 
 {{ create_row_access_policy(
     principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
+                  'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
                   'group:cal-itp@jarv.us',
@@ -156,6 +157,7 @@ filter using (
 
 {{ create_row_access_policy(
     principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
+                  'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
                   'group:cal-itp@jarv.us',
