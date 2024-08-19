@@ -14,6 +14,8 @@ jupyterhub:
       limit: 10G
       # Very roughly I have seen most usage in the 2-3GB range
       guarantee: 3G
+    storage:
+      capacity: 32Gi
     cpu:
       # this is to put 2 pods per e2-highmem-2 which has 1.93 allocatable
       guarantee: 0.7
@@ -49,10 +51,11 @@ jupyterhub:
         authenticator_class: github
         Authenticator:
           admin_users:
-            - atvaccaro
-            - machow
+            - vevetron
+            - tiffanychu90
             - themightchris
-            - lottspot
+            - evansiroky
+            - charlie-costanzo
     # holds github OAuth creds
     existingSecret: jupyterhub-github-config
   ingress:
