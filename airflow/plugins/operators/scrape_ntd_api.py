@@ -2,7 +2,8 @@ import csv
 import gzip
 import logging
 import os
-import re
+
+# import re
 from typing import Optional
 
 import pendulum
@@ -126,8 +127,8 @@ class NtdDataProductAPIOperator(BaseOperator):
         """
         self.bucket = bucket
 
-        if self.bucket and os.environ["AIRFLOW_ENV"] == "development":
-            self.bucket = re.sub(r"gs://([\w-]+)", r"gs://test-\1", self.bucket)
+        # if self.bucket and os.environ["AIRFLOW_ENV"] == "development":
+        #     self.bucket = re.sub(r"gs://([\w-]+)", r"gs://test-\1", self.bucket)
 
         super().__init__(**kwargs)
 

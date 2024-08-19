@@ -1,3 +1,3 @@
 operator: operators.NtdDataProductAPIOperator
 
-bucket: "gs://calitp-ntd-data-products"
+bucket: "gs://calitp-ntd-api-products"
