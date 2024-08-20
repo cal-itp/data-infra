@@ -170,3 +170,6 @@ schema_fields:
   - name: manual_check__grading_scheme_v1
     type: STRING
     mode: NULLABLE
+  - name: private_dataset
+    type: BOOLEAN
+    mode: NULLABLE
