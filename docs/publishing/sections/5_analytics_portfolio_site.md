@@ -41,6 +41,7 @@ Create a `README.md` file in the repo where your work lies. This also forms the 
   - `git rm portfolio/my_analysis/README_accidentally_named_something_else.md`
   - `rm portfolio/my_analysis/_build/html/README_accidentally_named_something.html`. We use `rm` because \_build/html folder is not checked into GitHub
   - `python portfolio/portfolio.py build my_report --no-execute-papermill --deploy` to rerun the portfolio to incorporate only the new changes to your `README.md` if the other pages are correct.
+- Need a node graph to illustrate where your data comes from and how it's processed? Try mermaid ([documentation here](https://mermaid.js.org/intro/)). See published [GTFS Digest](https://gtfs-digest--cal-itp-data-analyses.netlify.app/readme) for a current example.
 
 ### YML
 
