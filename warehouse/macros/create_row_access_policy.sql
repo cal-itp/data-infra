@@ -82,9 +82,11 @@ filter using (
 
 {{ create_row_access_policy(
     principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
+                  'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
                   'group:cal-itp@jarv.us',
+                  'group:mov-project-team@jarv.us',
                   'domain:calitp.org',
                  ]
 ) }};
@@ -155,9 +157,11 @@ filter using (
 
 {{ create_row_access_policy(
     principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
+                  'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
                   'group:cal-itp@jarv.us',
+                  'group:mov-project-team@jarv.us',
                   'domain:calitp.org',
                  ]
 ) }};
