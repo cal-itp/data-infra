@@ -1,0 +1,38 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "funding_sources_state/2022/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "funding_sources_state/2022/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.2022__funding_sources_state"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__funding_sources_state LIMIT 1;
+schema_fields:
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: city
+    type: STRING
+  - name: general_funds
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
+  - name: organization_type
+    type: STRING
+  - name: reduced_reporter_funds
+    type: STRING
+  - name: report_year
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: state
+    type: STRING
+  - name: total
+    type: STRING
+  - name: transportation_funds
+    type: STRING

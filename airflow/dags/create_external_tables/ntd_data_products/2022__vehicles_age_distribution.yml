@@ -1,0 +1,82 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "vehicles_age_distribution/2022/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "vehicles_age_distribution/2022/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.2022__vehicles_age_distribution"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__vehicles_age_distribution LIMIT 1;
+schema_fields:
+  - name: _0
+    type: STRING
+  - name: _1
+    type: STRING
+  - name: _10
+    type: STRING
+  - name: _11
+    type: STRING
+  - name: _12
+    type: STRING
+  - name: _13_15
+    type: STRING
+  - name: _16_20
+    type: STRING
+  - name: _2
+    type: STRING
+  - name: _21_25
+    type: STRING
+  - name: _26_30
+    type: STRING
+  - name: _3
+    type: STRING
+  - name: _31_60
+    type: STRING
+  - name: _4
+    type: STRING
+  - name: _5
+    type: STRING
+  - name: _6
+    type: STRING
+  - name: _60
+    type: STRING
+  - name: _7
+    type: STRING
+  - name: _8
+    type: STRING
+  - name: _9
+    type: STRING
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: average_age_of_fleet_in_years
+    type: STRING
+  - name: average_lifetime_miles_per
+    type: STRING
+  - name: city
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
+  - name: organization_type
+    type: STRING
+  - name: primary_uza_population
+    type: STRING
+  - name: report_year
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: state
+    type: STRING
+  - name: total_vehicles
+    type: STRING
+  - name: uace_code
+    type: STRING
+  - name: uza_name
+    type: STRING
+  - name: vehicle_type
+    type: STRING

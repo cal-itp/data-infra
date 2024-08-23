@@ -1,0 +1,62 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "breakdowns_by_agency/2022/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "breakdowns_by_agency/2022/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.2022__breakdowns_by_agency"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__breakdowns_by_agency LIMIT 1;
+schema_fields:
+  - name: count_major_mechanical_failures_questionable
+    type: NUMERIC
+  - name: count_other_mechanical_failures_questionable
+    type: NUMERIC
+  - name: count_total_mechanical_failures_questionable
+    type: NUMERIC
+  - name: count_train_miles_questionable
+    type: NUMERIC
+  - name: count_train_revenue_miles_questionable
+    type: NUMERIC
+  - name: count_vehicle_passenger_car_miles_questionable
+    type: NUMERIC
+  - name: max_agency
+    type: STRING
+  - name: max_agency_voms
+    type: NUMERIC
+  - name: max_city
+    type: STRING
+  - name: max_organization_type
+    type: STRING
+  - name: max_primary_uza_population
+    type: NUMERIC
+  - name: max_reporter_type
+    type: STRING
+  - name: max_state
+    type: STRING
+  - name: max_uace_code
+    type: STRING
+  - name: max_uza_name
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
+  - name: report_year
+    type: NUMERIC
+  - name: sum_major_mechanical_failures
+    type: NUMERIC
+  - name: sum_other_mechanical_failures
+    type: NUMERIC
+  - name: sum_total_mechanical_failures
+    type: NUMERIC
+  - name: sum_train_miles
+    type: NUMERIC
+  - name: sum_train_revenue_miles
+    type: NUMERIC
+  - name: sum_vehicle_passenger_car_miles
+    type: NUMERIC
+  - name: sum_vehicle_passenger_car_revenue
+    type: NUMERIC

@@ -1,0 +1,76 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "service_by_mode_and_time_period/2022/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "service_by_mode_and_time_period/2022/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.2022__service_by_mode_and_time_period"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__service_by_mode_and_time_period LIMIT 1;
+schema_fields:
+  - name: _5_digit_ntd_id
+    type: STRING
+  - name: actual_vehicles_passenger_car_deadhead_hours
+    type: STRING
+  - name: actual_vehicles_passenger_car_hours
+    type: STRING
+  - name: actual_vehicles_passenger_car_miles
+    type: STRING
+  - name: actual_vehicles_passenger_car_revenue_hours
+    type: STRING
+  - name: actual_vehicles_passenger_car_revenue_miles
+    type: STRING
+  - name: actual_vehicles_passenger_deadhead_miles
+    type: STRING
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: average_speed
+    type: STRING
+  - name: city
+    type: STRING
+  - name: directional_route_miles
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: mode_name
+    type: STRING
+  - name: mode_voms
+    type: STRING
+  - name: organization_type
+    type: STRING
+  - name: passenger_miles
+    type: STRING
+  - name: passengers_per_hour
+    type: STRING
+  - name: report_year
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: scheduled_vehicles_passenger_car_revenue_miles
+    type: STRING
+  - name: sponsored_service_upt
+    type: STRING
+  - name: state
+    type: STRING
+  - name: time_period
+    type: STRING
+  - name: train_hours
+    type: STRING
+  - name: train_miles
+    type: STRING
+  - name: train_revenue_hours
+    type: STRING
+  - name: train_revenue_miles
+    type: STRING
+  - name: trains_in_operation
+    type: STRING
+  - name: type_of_service
+    type: STRING
+  - name: unlinked_passenger_trips_upt
+    type: STRING

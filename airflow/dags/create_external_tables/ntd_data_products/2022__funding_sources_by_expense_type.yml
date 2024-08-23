@@ -1,0 +1,44 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "funding_sources_by_expense_type/2022/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "funding_sources_by_expense_type/2022/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.2022__funding_sources_by_expense_type"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__funding_sources_by_expense_type LIMIT 1;
+schema_fields:
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: city
+    type: STRING
+  - name: fares_and_other_directly
+    type: NUMERIC
+  - name: federal
+    type: NUMERIC
+  - name: fund_expenditure_type
+    type: STRING
+  - name: local
+    type: NUMERIC
+  - name: ntd_id
+    type: NUMERIC
+  - name: organization_type
+    type: STRING
+  - name: report_year
+    type: NUMERIC
+  - name: reporter_type
+    type: STRING
+  - name: state
+    type: STRING
+  - name: state_1
+    type: NUMERIC
+  - name: taxes_fees_levied_by_transit
+    type: NUMERIC
+  - name: total
+    type: NUMERIC

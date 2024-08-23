@@ -1,0 +1,60 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "capital_expenses_for_existing_service/2022/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "capital_expenses_for_existing_service/2022/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.2022__capital_expenses_for_existing_service"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__capital_expenses_for_existing_service LIMIT 1;
+schema_fields:
+  - name: form_type
+    type: STRING
+  - name: max_agency
+    type: STRING
+  - name: max_agency_voms
+    type: STRING
+  - name: max_city
+    type: STRING
+  - name: max_organization_type
+    type: STRING
+  - name: max_primary_uza_population
+    type: STRING
+  - name: max_reporter_type
+    type: STRING
+  - name: max_state
+    type: STRING
+  - name: max_uace_code
+    type: STRING
+  - name: max_uza_name
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
+  - name: report_year
+    type: NUMERIC
+  - name: sum_administrative_buildings
+    type: NUMERIC
+  - name: sum_communication_information
+    type: NUMERIC
+  - name: sum_fare_collection_equipment
+    type: NUMERIC
+  - name: sum_guideway
+    type: NUMERIC
+  - name: sum_maintenance_buildings
+    type: NUMERIC
+  - name: sum_other
+    type: NUMERIC
+  - name: sum_other_vehicles
+    type: NUMERIC
+  - name: sum_passenger_vehicles
+    type: NUMERIC
+  - name: sum_reduced_reporter
+    type: NUMERIC
+  - name: sum_stations
+    type: NUMERIC
+  - name: sum_total
+    type: NUMERIC
