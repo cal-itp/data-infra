@@ -1,7 +1,9 @@
 version: 2
 
 models:
-
+  - name: fct_dailytrip_updates_vehicle_positions_completeness
+    description: |
+      A daily model of how many trips had either a single trip update or a single vehicle position message
   - name: fct_daily_rt_feed_validation_notices
     description: |
       A daily model of validation notices found per feed. Data
