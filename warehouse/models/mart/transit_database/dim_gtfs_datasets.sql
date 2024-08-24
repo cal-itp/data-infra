@@ -31,6 +31,7 @@ dim_gtfs_datasets AS (
         manual_check__localized_stop_tts,
         manual_check__grading_scheme_v1,
         base64_url,
+        private_dataset,
         _is_current,
         _valid_from,
         _valid_to
