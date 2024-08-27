@@ -1,5 +1,6 @@
 config:
-  lokiAddress: http://loki.monitoring-loki.svc.cluster.local:3100/loki/api/v1/push
+  clients:
+    - url: http://loki.monitoring-loki.svc.cluster.local:3100/loki/api/v1/push
 
 tolerations:
 
