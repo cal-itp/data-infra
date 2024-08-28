@@ -31,3 +31,4 @@ grafana.ini:
     password: $__env{POSTGRES_PASSWORD}
   server:
     domain: monitoring.calitp.org
+    root_url: https://monitoring.calitp.org/
