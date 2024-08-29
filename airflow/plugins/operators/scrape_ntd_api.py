@@ -94,7 +94,7 @@ class NtdDataProductAPIExtract(BaseModel):
             f"year={self.extract_time.format('YYYY')}",
             f"dt={self.extract_time.to_date_string()}",
             f"ts={self.extract_time.to_iso8601_string()}",
-            f"{self.product_short}_{self.year}_raw.csv.gz",
+            f"{self.product_short}_{self.year}.csv.gz",
             # f"{self.product_short}_{self.year}_raw.jsonl.gz",
         )
 
