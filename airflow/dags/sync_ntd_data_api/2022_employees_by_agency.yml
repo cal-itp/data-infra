@@ -1,0 +1,9 @@
+operator: operators.NtdDataProductAPIOperator
+
+bucket: "gs://calitp-ntd-api-products"
+year: "2022"
+product_long: "Employees (By Agency)"
+product_short: "employees_by_agency"
+root_url: "https://data.transportation.gov/resource/"
+endpoint_id: "brbd-9azc"
+file_format: ".csv"
