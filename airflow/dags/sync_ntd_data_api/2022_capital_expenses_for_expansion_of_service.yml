@@ -3,7 +3,7 @@ operator: operators.NtdDataProductAPIOperator
 bucket: 'gs://calitp-ntd-api-products'
 year: '2022'
 product_long: 'Capital Expenses (for Expansion of Service)'
-product_short: 'capital_expenses_for_expansion of_service'
+product_short: 'capital_expenses_for_expansion_of_service'
 root_url: 'https://data.transportation.gov/resource/'
 endpoint_id: 'nvgd-g6pj'
 file_format: '.csv'
