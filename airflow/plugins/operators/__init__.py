@@ -8,3 +8,4 @@ from operators.littlepay_raw_sync import LittlepayRawSync
 from operators.littlepay_to_jsonl import LittlepayToJSONL
 from operators.pod_operator import PodOperator
 from operators.scrape_ntd_api import NtdDataProductAPIOperator
+from operators.scrape_ntd_xlsx import NtdDataProductXLSXOperator

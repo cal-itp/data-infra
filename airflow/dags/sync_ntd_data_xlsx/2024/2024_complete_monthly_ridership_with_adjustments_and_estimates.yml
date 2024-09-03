@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductXLSXOperator
+
+raw_bucket: 'gs://calitp-ntd-xlsx-products-raw'
+clean_bucket: 'gs://calitp-ntd-xlsx-products-clean'
+product_short: 'complete_monthly_ridership_with_adjustments_and_estimates'
+year: '2024'
+file_url: 'https://www.transit.dot.gov/sites/fta.dot.gov/files/2024-08/June%202024%20Complete%20Monthly%20Ridership%20%28with%20adjustments%20and%20estimates%29_240801.xlsx'
