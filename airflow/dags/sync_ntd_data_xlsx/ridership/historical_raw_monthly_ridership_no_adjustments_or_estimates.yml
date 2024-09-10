@@ -1,0 +1,5 @@
+operator: operators.NtdDataProductXLSXOperator
+
+product: 'raw_monthly_ridership_no_adjustments_or_estimates'
+xlsx_file_url: 'https://www.transit.dot.gov/sites/fta.dot.gov/files/2024-09/S%26S%20Time%20Series-May%202024-Major%20Only_240903.xlsx'
+year: 'historical'
