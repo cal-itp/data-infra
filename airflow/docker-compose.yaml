@@ -124,7 +124,6 @@ x-airflow-common:
     - ./logs:/opt/airflow/gcs/logs
     - ./plugins:/opt/airflow/gcs/plugins
     - ./data:/opt/airflow/gcs/data
-    - ./data:/opt/airflow/data
     - ./tests:/opt/airflow/gcs/tests
     - $HOME/.config/gcloud:/home/airflow/.config/gcloud # Windows users: replace $HOME/.config with ${APPDATA}
       #- $HOME/.kube:/home/airflow/.kube
