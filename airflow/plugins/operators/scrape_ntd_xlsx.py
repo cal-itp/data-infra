@@ -46,21 +46,34 @@ class NtdDataProductXLSXExtractRaw(PartitionedGCSArtifact):
 
         typer.secho(f"reading file from url {validated_url}", fg=typer.colors.MAGENTA)
 
-        excel_content = requests.get(validated_url).content
+        """
+        From here:
+        need to figure out logging, replace secho, add more for the requests
+        need to figure out if moving to one class is possible
+        need to finalize naming conventions
+        need to do all of this for API
+        """
 
-        if excel_content is None or len(excel_content) == 0:
-            typer.secho(
-                f"There is no data to download for {self.year} / {self.product}. Ending pipeline.",
-                fg=typer.colors.MAGENTA,
-            )
-            pass
-        else:
-            typer.secho(
-                f"Downloaded {self.product} data for {self.year} with {len(excel_content)} rows!",
-                fg=typer.colors.MAGENTA,
-            )
+        try:
+            excel_content = requests.get(validated_url).content
 
-            return excel_content
+            if excel_content is None or len(excel_content) == 0:
+                typer.secho(
+                    f"There is no data to download for {self.year} / {self.product}. Ending pipeline.",
+                    fg=typer.colors.MAGENTA,
+                )
+                pass
+            else:
+                typer.secho(
+                    f"Downloaded {self.product} data for {self.year} with {len(excel_content)} rows!",
+                    fg=typer.colors.MAGENTA,
+                )
+
+                return excel_content
+
+        except requests.exceptions.RequestException as e:
+            # need to figure out logging quick
+            print(f"An error occurred: {e}")
 
 
 class NtdDataProductXLSXExtractClean(PartitionedGCSArtifact):
