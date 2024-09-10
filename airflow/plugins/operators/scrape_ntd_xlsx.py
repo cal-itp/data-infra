@@ -122,33 +122,7 @@ class NtdDataProductXLSXOperator(BaseOperator):
         excel_data = BytesIO(excel_content)
         df_dict = pd.read_excel(excel_data, sheet_name=None, engine="openpyxl")
 
-        if len(df_dict.keys()) > 1:
-            for key, df in df_dict.items():
-                df = df.rename(make_name_bq_safe, axis="columns")
-                typer.secho(
-                    f"read {df.shape[0]} rows and {df.shape[1]} columns",
-                    fg=typer.colors.MAGENTA,
-                )
-
-                self.clean_gzipped_content = gzip.compress(
-                    df.to_json(orient="records", lines=True).encode()
-                )
-
-                tab_name = ""
-
-                tab_name = make_name_bq_safe(key)
-
-                self.clean_excel_extract = NtdDataProductXLSXExtractClean(
-                    year=self.year,
-                    product=self.product + "/" + tab_name,
-                    filename=f"{self.year}__{self.product}__{tab_name}.jsonl.gz",
-                )
-
-                self.clean_excel_extract.save_content(
-                    fs=get_fs(), content=self.clean_gzipped_content
-                )
-
-        else:
+        for key, df in df_dict.items():
             df = df.rename(make_name_bq_safe, axis="columns")
             typer.secho(
                 f"read {df.shape[0]} rows and {df.shape[1]} columns",
