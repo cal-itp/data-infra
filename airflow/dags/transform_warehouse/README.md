@@ -6,6 +6,10 @@ This DAG orchestrates the running of the Cal-ITP dbt project and deployment of a
 
 This DAG has some special considerations:
 
+- The schedule interval is 14:00 UTC Mondays to Saturdays. Mondays will be actually running the data interval for the previous Saturday-Sunday.
+
+- This DAG should not run on Sundays because of the other DAG `transform_warehouse_full_refresh_sunday`.
+
 - If a task fails, look carefully before assuming that clearing the task will help. If the failure was caused by a `DbtModelError`, there is an issue with the SQL or data in an individual model and clearing the task will not help until that issue is fixed.
 
 - While this DAG does not have any formal dependencies on other DAGs, the data transformations within the dbt project do depend on successful upstream data capture and parsing.
