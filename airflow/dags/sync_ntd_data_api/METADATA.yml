@@ -1,5 +1,5 @@
-description: "Scrape NTD endpoints from DOT API"
-schedule_interval: null
+description: "Scrape NTD endpoints from DOT API monthly"
+schedule_interval: "0 11 * * *" #11 am first of every month
 tags:
   - all_gusty_features
 default_args:

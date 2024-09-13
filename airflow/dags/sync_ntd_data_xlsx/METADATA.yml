@@ -1,5 +1,5 @@
-description: "Scrape NTD endpoints from DOT XLSX format"
-schedule_interval: null
+description: "Scrape NTD endpoints from DOT XLSX format monthly"
+schedule_interval: "0 12 * * *"
 tags:
   - all_gusty_features
 default_args:
