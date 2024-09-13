@@ -4,6 +4,9 @@ LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
 RUN apt-get update && apt-get install -y libunwind-dev liblz4-dev
 
+COPY ./ssl /usr/local/share/ca-certificates/custom
+RUN update-ca-certificates
+
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:${PATH}"
 
