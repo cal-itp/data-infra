@@ -1,158 +1,125 @@
-# import csv
+# import os
 import gzip
-
-# import json
 import logging
-import os
+from typing import ClassVar, List  # , Optional
 
-# import re
-from typing import Optional
-
+import pandas as pd  # type: ignore
 import pendulum
 import requests
-from calitp_data_infra.storage import get_fs  # type: ignore
-from pydantic import BaseModel  # , Json
+
+# import typer
+from calitp_data_infra.storage import PartitionedGCSArtifact, get_fs  # type: ignore
+from pydantic import HttpUrl, parse_obj_as
 
 from airflow.models import BaseOperator  # type: ignore
 
+# Restore for prod
+# API_BUCKET = os.environ["CALITP_BUCKET__NTD_API_DATA_PRODUCTS"]
 
-def write_to_log(logfilename):
-    """
-    Creates a logger object that outputs to a log file, to the filename specified,
-    and also streams to console.
-    """
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
-    formatter = logging.Formatter(
-        "%(asctime)s:%(levelname)s: %(message)s", datefmt="%y-%m-%d %H:%M:%S"
-    )
-    file_handler = logging.FileHandler(logfilename)
-    file_handler.setFormatter(formatter)
-    stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(formatter)
-
-    if not logger.hasHandlers():
-        logger.addHandler(file_handler)
-        logger.addHandler(stream_handler)
-
-    return logger
+API_BUCKET = "gs://calitp-ntd-api-products"
 
 
-class NtdDataProductAPIExtract(BaseModel):
+class NtdDataProductAPIExtract(PartitionedGCSArtifact):
+    bucket: ClassVar[str]
     year: str
-    product_short: str
+    product: str
+    execution_ts: pendulum.DateTime = pendulum.now()
+    dt: pendulum.Date = execution_ts.date()
     root_url: str
     endpoint_id: str
     file_format: str
-    data: Optional[bytes]
+    partition_names: ClassVar[List[str]] = ["dt", "execution_ts"]
 
-    logger: Optional[logging.Logger]
-    extract_time: Optional[pendulum.DateTime]
+    @property
+    def table(self) -> str:
+        return self.product
 
-    logger = write_to_log("load_ntd_api_output.log")
-    extract_time = pendulum.now()
+    @property
+    def filename(self) -> str:
+        return self.table
 
-    # pydantic doesn't know dataframe type
-    # see https://stackoverflow.com/a/69200069
     class Config:
         arbitrary_types_allowed = True
 
     def fetch_from_ntd_api(self):
         """ """
 
-        self.logger.info(
-            f"Downloading NTD data for {self.year} / {self.product_short}."
-        )
+        logging.info(f"Downloading NTD data for {self.year} / {self.product}.")
 
-        url = self.root_url + self.endpoint_id + self.file_format + "?$limit=5000000"
-        response = requests.get(url).content
-        # decoded_response = response.decode("utf-8")
-        # load_response_json = json.loads(decode_respose)
-        # json_filepath = f"{self.endpoint_id}_data.jsonl"
-
-        if response is None or len(response) == 0:
-            self.logger.info(
-                f"There is no data to download for {self.year} / {self.product_short}. Ending pipeline."
-            )
-            pass
-        else:
-            # self.data = decoded_response
-            self.data = response
-
-            self.logger.info(
-                f"Downloaded {self.product_short} data for {self.year} with {len(self.data)} rows!"
+        try:
+            url = (
+                self.root_url + self.endpoint_id + self.file_format + "?$limit=5000000"
             )
 
-    def make_hive_path(self, product_short: str, bucket: str):
-        if not self.extract_time:
-            raise ValueError(
-                "An extract time must be set before a hive path can be generated."
-            )
-        return os.path.join(
-            bucket,
-            f"{self.product_short}_{self.year}",
-            f"year={self.extract_time.format('YYYY')}",
-            f"dt={self.extract_time.to_date_string()}",
-            f"ts={self.extract_time.to_iso8601_string()}",
-            f"{self.product_short}_{self.year}.csv.gz",
-            # f"{self.product_short}_{self.year}_raw.jsonl.gz",
-        )
+            validated_url = parse_obj_as(HttpUrl, url)
 
-    def save_to_gcs(self, fs, bucket):
-        """ """
-        hive_path = self.make_hive_path(self.product_short, bucket)
-        self.logger.info(f"Uploading to GCS at {hive_path}")
+            response = requests.get(validated_url).content
 
-        if self.data is None:  # or (len(self.data) == 0):
-            self.logger.info(
-                f"There is no data for {self.year} / {self.product_short}, not saving anything. Pipeline exiting."
-            )
-            pass
-        else:
-            fs.pipe(hive_path, gzip.compress(self.data))  # .encode()
-        return hive_path
+            if response is None or len(response) == 0:
+                logging.info(
+                    f"There is no data to download for {self.year} / {self.product}. Ending pipeline."
+                )
+
+                pass
+            else:
+                logging.info(
+                    f"Downloaded {self.product} data for {self.year} with {len(response)} rows!"
+                )
+
+                return response
+
+        except requests.exceptions.RequestException as e:
+            logging.info(f"An error occurred: {e}")
+
+            raise
+
+
+class CSVExtract(NtdDataProductAPIExtract):
+    bucket = API_BUCKET
 
 
 class NtdDataProductAPIOperator(BaseOperator):
-    template_fields = ("bucket",)
+    template_fields = ("year", "product", "root_url", "endpoint_id", "file_format")
 
     def __init__(
         self,
-        bucket,
         year,
-        product_short,
+        product,
         root_url,
         endpoint_id,
         file_format,
         **kwargs,
     ):
-        self.bucket = bucket
+        self.year = year
+        self.product = product
+        self.root_url = root_url
+        self.endpoint_id = endpoint_id
+        self.file_format = file_format
         """An operator that downloads all data from a NTD API
-            and saves it as one JSON file hive-partitioned by date in Google Cloud
-            Storage (GCS). DELETE:(Each org's data will be in 1 row, and for each separate table in the API,
-            a nested column will hold all of it's data.)
-
-        Args:
-            bucket (str): GCS bucket where the scraped NTD data will be saved.
+            and saves it as one CSV file hive-partitioned by date in Google Cloud
         """
 
-        # if self.bucket and os.environ["AIRFLOW_ENV"] == "development":
-        #     self.bucket = re.sub(r"gs://([\w-]+)", r"gs://test-\1", self.bucket)
-
-        # Instantiating an instance of the NtdDataProductAPIExtract()
-        self.extract = NtdDataProductAPIExtract(
-            year=year,
-            product_short=product_short,
-            root_url=root_url,
-            endpoint_id=endpoint_id,
-            file_format=file_format,
+        # Save CSV files to the bucket
+        self.extract = CSVExtract(
+            year=self.year,
+            product=self.product + "/" + self.year,
+            root_url=self.root_url,
+            endpoint_id=self.endpoint_id,
+            file_format=self.file_format,
+            filename=f"{self.year}__{self.product}.jsonl.gz",
         )
 
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
-        fs = get_fs()
+        api_content = self.extract.fetch_from_ntd_api()
 
-        self.extract.fetch_from_ntd_api()
-        # inserts into xcoms
-        return self.extract.save_to_gcs(fs, self.bucket)
+        decode_api_content = api_content.decode("utf-8")
+
+        df = pd.read_json(decode_api_content)
+
+        self.gzipped_content = gzip.compress(
+            df.to_json(orient="records", lines=True).encode()
+        )
+
+        self.extract.save_content(fs=get_fs(), content=self.gzipped_content)

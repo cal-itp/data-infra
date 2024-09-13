@@ -1,9 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-bucket: 'gs://calitp-ntd-api-products'
-year: '2022'
-product_long: 'Service (by Mode)'
-product_short: 'service_by_mode'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: '4fir-qbim'
-file_format: '.csv'

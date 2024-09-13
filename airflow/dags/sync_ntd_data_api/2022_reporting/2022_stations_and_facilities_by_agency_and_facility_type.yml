@@ -1,9 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-bucket: 'gs://calitp-ntd-api-products'
-year: '2022'
-product_long: 'Stations and Facilities (by Agency and Facility Type)'
-product_short: 'stations_and_facilities_by_agency_and_facility_type'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'aqct-knjk'
-file_format: '.csv'

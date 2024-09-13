@@ -1,9 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-bucket: 'gs://calitp-ntd-api-products'
-year: '2022'
-product_long: 'Funding Sources (Local)'
-product_short: 'funding_sources_local'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: '8tvb-ywj3'
-file_format: '.csv'

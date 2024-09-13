@@ -1,9 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-bucket: 'gs://calitp-ntd-api-products'
-year: '2022'
-product_long: 'Track & Roadway (Guideway Age Distribution)'
-product_short: 'track_and_roadway_guideway_age_distribution'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'j9q7-53ae'
-file_format: '.csv'

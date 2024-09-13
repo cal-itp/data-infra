@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: '2022'
+product: 'funding_sources_directly_generated'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: 'yuaq-zdvc'
+file_format: '.json'

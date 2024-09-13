@@ -1,9 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-bucket: 'gs://calitp-ntd-api-products'
-year: '2022'
-product_long: 'Funding Sources (Taxes Levied by Agency)'
-product_short: 'funding_sources_taxes_levied_by_agency'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'c8k8-y2cj'
-file_format: '.csv'

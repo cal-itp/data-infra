@@ -1,9 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-bucket: 'gs://calitp-ntd-api-products'
-year: '2022'
-product_long: 'Maintenance Facilities (by Agency)'
-product_short: 'maintenance_facilities_by_agency'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 's68b-wvgx'
-file_format: '.csv'

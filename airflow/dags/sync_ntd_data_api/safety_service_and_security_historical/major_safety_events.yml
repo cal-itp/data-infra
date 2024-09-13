@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: 'historical'
+product: 'major_safety_events'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: '9ivb-8ae9'
+file_format: '.json'

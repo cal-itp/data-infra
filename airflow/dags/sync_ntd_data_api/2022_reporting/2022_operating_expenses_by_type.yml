@@ -1,9 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-bucket: 'gs://calitp-ntd-api-products'
-year: '2022'
-product_long: 'Operating Expenses (by Type)'
-product_short: 'operating_expenses_by_type'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'j5uj-anzx'
-file_format: '.csv'

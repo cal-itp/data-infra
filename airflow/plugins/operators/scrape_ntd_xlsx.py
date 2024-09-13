@@ -20,8 +20,8 @@ from pydantic import HttpUrl, parse_obj_as
 from airflow.models import BaseOperator  # type: ignore
 
 # Restore for prod
-# RAW_XLSX_BUCKET = os.environ["RAW_XLSX_BUCKET"]
-# CLEAN_XLSX_BUCKET = os.environ["CLEAN_XLSX_BUCKET"]
+# RAW_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"]
+# CLEAN_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"]
 
 RAW_XLSX_BUCKET = "gs://calitp-ntd-xlsx-products-raw"
 CLEAN_XLSX_BUCKET = "gs://calitp-ntd-xlsx-products-clean"

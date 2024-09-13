@@ -1,9 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-bucket: 'gs://calitp-ntd-api-products'
-year: 'historical'
-product_long: 'FRA Regulated Mode Major Security Events'
-product_short: 'FRA_regulated_mode_major_security_events'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: '65fa-qbkf'
-file_format: '.csv'

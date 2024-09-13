@@ -1,9 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-bucket: 'gs://calitp-ntd-api-products'
-year: '2022'
-product_long: 'Service (by Mode and Time Period)'
-product_short: 'service_by_mode_and_time_period'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'wwdp-t4re'
-file_format: '.csv'

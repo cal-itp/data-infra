@@ -1,9 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-bucket: 'gs://calitp-ntd-api-products'
-year: '2022'
-product_long: 'Vehicles (Age Distribution)'
-product_short: 'vehicles_age_distribution'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: '6abt-uhgq'
-file_format: '.csv'
