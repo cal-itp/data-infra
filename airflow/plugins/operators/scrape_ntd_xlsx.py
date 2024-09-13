@@ -3,7 +3,7 @@ import gzip
 # import os
 import logging
 from io import BytesIO
-from typing import ClassVar, List
+from typing import ClassVar, List  # Optional
 
 import pandas as pd  # type: ignore
 import pendulum
@@ -28,7 +28,7 @@ CLEAN_XLSX_BUCKET = "gs://calitp-ntd-xlsx-products-clean"
 
 
 class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = RAW_XLSX_BUCKET
+    bucket: ClassVar[str]
     year: str
     product: str
     execution_ts: pendulum.DateTime = pendulum.now()
@@ -75,6 +75,14 @@ class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
             raise
 
 
+class RawExtract(NtdDataProductXLSXExtract):
+    bucket = RAW_XLSX_BUCKET
+
+
+class CleanExtract(NtdDataProductXLSXExtract):
+    bucket = CLEAN_XLSX_BUCKET
+
+
 class NtdDataProductXLSXOperator(BaseOperator):
     template_fields = ("year", "product", "xlsx_file_url")
 
@@ -89,12 +97,12 @@ class NtdDataProductXLSXOperator(BaseOperator):
         self.product = product
         self.xlsx_file_url = xlsx_file_url
 
-        # Save initial excel files to the bucket as "raw"
-        self.raw_excel_extract = NtdDataProductXLSXExtract(
-            year=year,
-            product=product + "_raw",
+        # Save initial excel files to the raw bucket
+        self.raw_excel_extract = RawExtract(
+            year=self.year,
+            product=self.product + "_raw" + "/" + self.year,
             file_url=self.xlsx_file_url,
-            filename=f"{year}__{product}_raw.xlsx",
+            filename=f"{self.year}__{self.product}_raw.xlsx",
         )
 
         super().__init__(**kwargs)
@@ -125,9 +133,10 @@ class NtdDataProductXLSXOperator(BaseOperator):
 
             tab_name = make_name_bq_safe(key)
 
-            self.clean_excel_extract = NtdDataProductXLSXExtract(
+            # Save clean gzipped jsonl files to the clean bucket
+            self.clean_excel_extract = CleanExtract(
                 year=self.year,
-                product=self.product + "/" + tab_name,
+                product=self.product + "/" + self.year + "/" + tab_name,
                 filename=f"{self.year}__{self.product}__{tab_name}.jsonl.gz",
             )
 
