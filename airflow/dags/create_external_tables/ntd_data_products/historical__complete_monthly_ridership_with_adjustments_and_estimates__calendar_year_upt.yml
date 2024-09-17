@@ -1,0 +1,83 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-xlsx-products-clean
+prefix_bucket: false
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_upt
+  LIMIT 1;
+source_objects:
+  - "complete_monthly_ridership_with_adjustments_and_estimates/historical/calendar_year_upt/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_upt"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "complete_monthly_ridership_with_adjustments_and_estimates/historical/calendar_year_upt/"
+schema_fields:
+  - name: ntd_id
+    type: NUMERIC
+  - name: legacy_ntd_id
+    type: STRING
+  - name: agency
+    type: STRING
+  - name: mode_type_of_service_status
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: uace_cd
+    type: NUMERIC
+  - name: uza_name
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: tos
+    type: STRING
+  - name: _3_mode
+    type: STRING
+  - name: _2002
+    type: FLOAT
+  - name: _2003
+    type: FLOAT
+  - name: _2004
+    type: FLOAT
+  - name: _2005
+    type: FLOAT
+  - name: _2006
+    type: FLOAT
+  - name: _2007
+    type: FLOAT
+  - name: _2008
+    type: FLOAT
+  - name: _2009
+    type: FLOAT
+  - name: _2010
+    type: FLOAT
+  - name: _2011
+    type: FLOAT
+  - name: _2012
+    type: FLOAT
+  - name: _2013
+    type: FLOAT
+  - name: _2014
+    type: FLOAT
+  - name: _2015
+    type: FLOAT
+  - name: _2016
+    type: FLOAT
+  - name: _2017
+    type: FLOAT
+  - name: _2018
+    type: FLOAT
+  - name: _2019
+    type: FLOAT
+  - name: _2020
+    type: FLOAT
+  - name: _2021
+    type: FLOAT
+  - name: _2022
+    type: FLOAT
+  - name: _2023
+    type: FLOAT
+  - name: _2024
+    type: FLOAT
