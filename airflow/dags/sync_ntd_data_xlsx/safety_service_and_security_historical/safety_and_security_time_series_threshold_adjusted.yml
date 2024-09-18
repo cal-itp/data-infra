@@ -1,5 +1,0 @@
-operator: operators.NtdDataProductXLSXOperator
-
-product: 'safety_and_security_time_series_threshold_adjusted'
-xlsx_file_url: 'https://www.transit.dot.gov/sites/fta.dot.gov/files/2024-09/S%26S%20Time%20Series-May%202024_240903.xlsx'
-year: 'historical'
