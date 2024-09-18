@@ -69,7 +69,7 @@ class NtdDataProductAPIExtract(PartitionedGCSArtifact):
             raise
 
 
-class CSVExtract(NtdDataProductAPIExtract):
+class JSONExtract(NtdDataProductAPIExtract):
     bucket = API_BUCKET
 
 
@@ -91,11 +91,11 @@ class NtdDataProductAPIOperator(BaseOperator):
         self.endpoint_id = endpoint_id
         self.file_format = file_format
         """An operator that downloads all data from a NTD API
-            and saves it as one CSV file hive-partitioned by date in Google Cloud
+            and saves it as one JSONL file, hive-partitioned by date in Google Cloud
         """
 
-        # Save CSV files to the bucket
-        self.extract = CSVExtract(
+        # Save JSON files to the bucket
+        self.extract = JSONExtract(
             year=self.year,
             product=self.product + "/" + self.year,
             root_url=self.root_url,
