@@ -1,15 +1,12 @@
 import gzip
-
-# import os
 import logging
+import os
 from io import BytesIO
 from typing import ClassVar, List  # Optional
 
 import pandas as pd  # type: ignore
 import pendulum
 import requests
-
-# import typer
 from calitp_data_infra.storage import (  # type: ignore
     PartitionedGCSArtifact,
     get_fs,
@@ -19,12 +16,8 @@ from pydantic import HttpUrl, parse_obj_as
 
 from airflow.models import BaseOperator  # type: ignore
 
-# Restore for prod
-# RAW_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"]
-# CLEAN_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"]
-
-RAW_XLSX_BUCKET = "gs://calitp-ntd-xlsx-products-raw"
-CLEAN_XLSX_BUCKET = "gs://calitp-ntd-xlsx-products-clean"
+RAW_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"]
+CLEAN_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"]
 
 
 class NtdDataProductXLSXExtract(PartitionedGCSArtifact):

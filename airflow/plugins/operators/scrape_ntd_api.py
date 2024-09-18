@@ -1,22 +1,17 @@
-# import os
 import gzip
 import logging
+import os
 from typing import ClassVar, List  # , Optional
 
 import pandas as pd  # type: ignore
 import pendulum
 import requests
-
-# import typer
 from calitp_data_infra.storage import PartitionedGCSArtifact, get_fs  # type: ignore
 from pydantic import HttpUrl, parse_obj_as
 
 from airflow.models import BaseOperator  # type: ignore
 
-# Restore for prod
-# API_BUCKET = os.environ["CALITP_BUCKET__NTD_API_DATA_PRODUCTS"]
-
-API_BUCKET = "gs://calitp-ntd-api-products"
+API_BUCKET = os.environ["CALITP_BUCKET__NTD_API_DATA_PRODUCTS"]
 
 
 class NtdDataProductAPIExtract(PartitionedGCSArtifact):
