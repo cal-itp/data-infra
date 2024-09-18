@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: 'historical'
+product: 'monthly_modal_time_series_safety_and_service'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: '65fa-qbkf'
+file_format: '.json'

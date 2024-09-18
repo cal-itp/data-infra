@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: '2022'
+product: 'maintenance_facilities'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: '9yj4-fiiz'
+file_format: '.json'

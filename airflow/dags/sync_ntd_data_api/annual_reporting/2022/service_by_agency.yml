@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: '2022'
+product: 'service_by_agency'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: '6y83-7vuw'
+file_format: '.json'

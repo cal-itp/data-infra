@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: '2022'
+product: 'fuel_and_energy'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: '8ehq-7his'
+file_format: '.json'
