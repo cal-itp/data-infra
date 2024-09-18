@@ -1,0 +1,145 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-xlsx-products-clean
+prefix_bucket: false
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd__ridership.historical__safety_and_security_time_series_threshold_adjusted__data
+  LIMIT 1;
+source_objects:
+  - "safety_and_security_time_series_threshold_adjusted/historical/data/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd__ridership.historical__safety_and_security_time_series_threshold_adjusted__data"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "safety_and_security_time_series_threshold_adjusted/historical/data/"
+schema_fields:
+  - name: year
+    type: NUMERIC
+  - name: ntd_id
+    type: NUMERIC
+  - name: agency
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: tos
+    type: STRING
+  - name: city
+    type: STRING
+  - name: state
+    type: STRING
+  - name: uace_cd
+    type: NUMERIC
+  - name: uza_name
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: upt
+    type: NUMERIC
+  - name: vehicle_pass_car_revenue_miles
+    type: NUMERIC
+  - name: vrh
+    type: NUMERIC
+  - name: voms
+    type: NUMERIC
+  - name: events_collisions_with_motor_vehicle
+    type: NUMERIC
+  - name: events_collisions_with_person
+    type: NUMERIC
+  - name: events_collisions_with_fixed_object
+    type: NUMERIC
+  - name: events_collisions_with_rail_vehicle
+    type: NUMERIC
+  - name: events_collisions_with_bus_vehicle
+    type: NUMERIC
+  - name: events_collisions_with_other
+    type: NUMERIC
+  - name: events_collisions_collision_total
+    type: NUMERIC
+  - name: events_collisions_derailment_total
+    type: NUMERIC
+  - name: events_collisions_fire_total
+    type: NUMERIC
+  - name: events_collisions_security_total
+    type: NUMERIC
+  - name: events_collisions_assault_events_involving_transit_workers
+    type: NUMERIC
+  - name: events_collisions_other_assault_events
+    type: NUMERIC
+  - name: events_collisions_other_security_events
+    type: NUMERIC
+  - name: events_collisions_noc_total
+    type: NUMERIC
+  - name: events_collisions_event_total
+    type: NUMERIC
+  - name: fatalities_passenger
+    type: NUMERIC
+  - name: fatalities_people_waiting_or_leaving
+    type: NUMERIC
+  - name: fatalities_operator
+    type: NUMERIC
+  - name: fatalities_employee
+    type: NUMERIC
+  - name: fatalities_total_employee
+    type: NUMERIC
+  - name: fatalities_other_worker
+    type: NUMERIC
+  - name: fatalities_bicyclist
+    type: NUMERIC
+  - name: fatalities_ped_in_crossing
+    type: NUMERIC
+  - name: fatalities_ped_not_in_crossing
+    type: NUMERIC
+  - name: fatalities_ped_crossing_tracks
+    type: NUMERIC
+  - name: fatalities_ped_walking_along_tracks
+    type: NUMERIC
+  - name: fatalities_other_vehicle_occupant
+    type: NUMERIC
+  - name: fatalities_other
+    type: NUMERIC
+  - name: fatalities_trespasser
+    type: NUMERIC
+  - name: fatalities_suicide
+    type: NUMERIC
+  - name: fatalities_total_other
+    type: NUMERIC
+  - name: fatalities_total_fatalities
+    type: NUMERIC
+  - name: injuries_passenger
+    type: NUMERIC
+  - name: injuries_people_waiting_or_leaving
+    type: NUMERIC
+  - name: injuries_operator
+    type: NUMERIC
+  - name: injuries_employee
+    type: NUMERIC
+  - name: injuries_total_employee
+    type: NUMERIC
+  - name: injuries_other_worker
+    type: NUMERIC
+  - name: injuries_bicyclist
+    type: NUMERIC
+  - name: injuries_ped_in_crossing
+    type: NUMERIC
+  - name: injuries_ped_not_in_crossing
+    type: NUMERIC
+  - name: injuries_ped_crossing_tracks
+    type: NUMERIC
+  - name: injuries_ped_walking_along_tracks
+    type: NUMERIC
+  - name: injuries_other_vehicle_occupant
+    type: NUMERIC
+  - name: injuries_other
+    type: NUMERIC
+  - name: injuries_trespasser
+    type: NUMERIC
+  - name: injuries_suicide
+    type: NUMERIC
+  - name: injuries_total_other
+    type: NUMERIC
+  - name: injuries_total_injuries
+    type: NUMERIC
+  - name: injuries_serious_injuries
+    type: NUMERIC

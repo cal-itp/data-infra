@@ -1,0 +1,205 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-xlsx-products-clean
+prefix_bucket: false
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd__ridership.historical__safety_and_security_major_event_time_series__summary
+  LIMIT 1;
+source_objects:
+  - "safety_and_security_major_event_time_series/historical/summary/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd__ridership.historical__safety_and_security_major_event_time_series__summary"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "safety_and_security_major_event_time_series/historical/summary/"
+schema_fields:
+  - name: mode
+    type: STRING
+  - name: year
+    type: NUMERIC
+  - name: upt
+    type: NUMERIC
+  - name: vehicle_pass_car_revenue_miles
+    type: NUMERIC
+  - name: vrh
+    type: NUMERIC
+  - name: voms
+    type: NUMERIC
+  - name: events_collision_total
+    type: NUMERIC
+  - name: events_derailment_total
+    type: NUMERIC
+  - name: events_fire_total
+    type: NUMERIC
+  - name: events_security_total
+    type: NUMERIC
+  - name: events_assaults_homicides_on_transit_workers
+    type: NUMERIC
+  - name: events_other_assaults_homicides
+    type: NUMERIC
+  - name: events_other_security_event_count
+    type: NUMERIC
+  - name: events_noc_total
+    type: NUMERIC
+  - name: events_event_total
+    type: NUMERIC
+  - name: fatalities_passenger
+    type: NUMERIC
+  - name: fatalities_people_waiting_or_leaving
+    type: NUMERIC
+  - name: fatalities_operator
+    type: NUMERIC
+  - name: fatalities_employee
+    type: NUMERIC
+  - name: fatalities_total_employee
+    type: NUMERIC
+  - name: fatalities_other_worker
+    type: NUMERIC
+  - name: fatalities_bicyclist
+    type: NUMERIC
+  - name: fatalities_ped_in_crossing
+    type: NUMERIC
+  - name: fatalities_ped_not_in_crossing
+    type: NUMERIC
+  - name: fatalities_ped_crossing_tracks
+    type: NUMERIC
+  - name: fatalities_ped_walking_along_tracks
+    type: NUMERIC
+  - name: fatalities_other_vehicle_occupant
+    type: NUMERIC
+  - name: fatalities_other
+    type: NUMERIC
+  - name: fatalities_trespasser
+    type: NUMERIC
+  - name: fatalities_suicide
+    type: NUMERIC
+  - name: fatalities_total_other
+    type: NUMERIC
+  - name: fatalities_total_fatalities
+    type: NUMERIC
+  - name: injuries_passenger
+    type: NUMERIC
+  - name: injuries_people_waiting_or_leaving
+    type: NUMERIC
+  - name: injuries_operator
+    type: NUMERIC
+  - name: injuries_employee
+    type: NUMERIC
+  - name: injuries_total_employee
+    type: NUMERIC
+  - name: injuries_other_worker
+    type: NUMERIC
+  - name: injuries_bicyclist
+    type: NUMERIC
+  - name: injuries_ped_in_crossing
+    type: NUMERIC
+  - name: injuries_ped_not_in_crossing
+    type: NUMERIC
+  - name: injuries_ped_crossing_tracks
+    type: NUMERIC
+  - name: injuries_ped_walking_along_tracks
+    type: NUMERIC
+  - name: injuries_other_vehicle_occupant
+    type: NUMERIC
+  - name: injuries_other
+    type: NUMERIC
+  - name: injuries_trespasser
+    type: NUMERIC
+  - name: injuries_suicide
+    type: NUMERIC
+  - name: injuries_total_other
+    type: NUMERIC
+  - name: injuries_total_injuries
+    type: NUMERIC
+  - name: injuries_serious_injuries
+    type: NUMERIC
+  - name: average_service_ratios_revenue_speed_vrm_vrh
+    type: NUMERIC
+  - name: average_service_ratios_trips_per_hour_upt_vrh
+    type: NUMERIC
+  - name: average_event_rates_per_100m_vrm_collision_total
+    type: NUMERIC
+  - name: average_event_rates_per_100m_vrm_derailment_total
+    type: NUMERIC
+  - name: average_event_rates_per_100m_vrm_fire_total
+    type: NUMERIC
+  - name: average_event_rates_per_100m_vrm_security_total
+    type: NUMERIC
+  - name: average_event_rates_per_100m_vrm_assaults_homicides_on_transit_workers_other_assaults_homicides
+    type: NUMERIC
+  - name: average_event_rates_per_100m_vrm_other_security_event_count
+    type: NUMERIC
+  - name: average_event_rates_per_100m_vrm_noc_total
+    type: NUMERIC
+  - name: average_event_rates_per_100m_vrm_event_total
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_passenger
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_people_waiting_or_leaving
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_operator
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_employee
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_total_employee
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_other_worker
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_bicyclist
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_ped_in_crossing
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_ped_not_in_crossing
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_ped_crossing_tracks
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_ped_walking_along_tracks
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_other_vehicle_occupant
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_other
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_trespasser
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_suicide
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_total_other
+    type: NUMERIC
+  - name: average_fatality_rates_per_100m_vrm_total_fatalities
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_passenger
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_people_waiting_or_leaving
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_operator
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_employee
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_total_employee
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_other_worker
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_bicyclist
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_ped_in_crossing
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_ped_not_in_crossing
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_ped_crossing_tracks
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_ped_walking_along_tracks
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_other_vehicle_occupant
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_other
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_trespasser
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_suicide
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_total_other
+    type: NUMERIC
+  - name: average_injury_rates_per_100m_vrm_total_injuries
+    type: NUMERIC
