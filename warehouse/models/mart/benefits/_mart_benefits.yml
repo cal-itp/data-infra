@@ -84,7 +84,13 @@ models:
       - name: event_properties_transit_agency
         description: The `transit_agency` value from the `event_properties` column
       - name: event_properties_eligibility_types
-        description: A semi-colon delimited list of `eligibility_types` values from the `event_properties` column
+        description: A semi-colon delimited list of `enrollment_flows` values from the `event_properties` column
+        deprecated:
+          enabled: true
+          reason: "This column is deprecated, use `event_properties_enrollment_flows` instead"
+          date: "2024-09-19"
+      - name: event_properties_enrollment_flows
+        description: A semi-colon delimited list of `enrollment_flows` values from the `event_properties` column
       - name: user_properties_eligibility_verifier
         description: The `eligibility_verifier` value from the `user_properties` column
       - name: user_properties_initial_referrer
@@ -100,4 +106,10 @@ models:
       - name: user_properties_user_agent
         description: The `user_agent` value from the `user_properties` column
       - name: user_properties_eligibility_types
-        description: A semi-colon delimited list of `eligibility_types` values from the `user_properties` column
+        description: A semi-colon delimited list of `enrollment_flows` values from the `user_properties` column
+        deprecated:
+          enabled: true
+          reason: "This column is deprecated, use `user_properties_enrollment_flows` instead"
+          date: "2024-09-19"
+      - name: user_properties_enrollment_flows
+        description: A semi-colon delimited list of `enrollment_flows` values from the `user_properties` column
