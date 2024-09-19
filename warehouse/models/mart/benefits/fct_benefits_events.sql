@@ -9,7 +9,11 @@ WITH fct_benefits_events AS (
         client_event_time,
         event_id,
         session_id,
-        event_type,
+        case
+          when event_type = "selected eligibility verifier"
+            then "selected enrollment flow"
+          else event_type
+        end as event_type,
         version_name,
         os_name,
         os_version,
