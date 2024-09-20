@@ -1,0 +1,140 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "fra_regulated_mode_major_security_events/historical/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "fra_regulated_mode_major_security_events/historical/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.historical__fra_regulated_mode_major_security_events"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.historical__fra_regulated_mode_major_security_events LIMIT 1;
+schema_fields:
+  - name: agency
+    type: STRING
+  - name: approximate_address
+    type: STRING
+  - name: bicyclist_fatalities
+    type: STRING
+  - name: bicyclist_injuries
+    type: STRING
+  - name: bicyclist_serious_injuries
+    type: STRING
+  - name: event_location
+    type: STRING
+  - name: event_type
+    type: STRING
+  - name: fixed_route_flag
+    type: STRING
+  - name: incident_date
+    type: STRING
+  - name: incident_description
+    type: STRING
+  - name: incident_number
+    type: STRING
+  - name: incident_time
+    type: STRING
+  - name: intentional_y_n
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
+  - name: number_of_transit_vehicles
+    type: STRING
+  - name: number_of_vehicles_involved
+    type: STRING
+  - name: occupant_of_other_vehicle
+    type: STRING
+  - name: occupant_of_other_vehicle_1
+    type: STRING
+  - name: occupant_of_other_vehicle_2
+    type: STRING
+  - name: other_fatalities
+    type: STRING
+  - name: other_injuries
+    type: STRING
+  - name: other_serious_injuries
+    type: STRING
+  - name: other_worker_fatalities
+    type: STRING
+  - name: other_worker_injuries
+    type: STRING
+  - name: other_worker_serious_injuries
+    type: STRING
+  - name: pedestrian_crossing_tracks
+    type: STRING
+  - name: pedestrian_crossing_tracks_1
+    type: STRING
+  - name: pedestrian_crossing_tracks_2
+    type: STRING
+  - name: pedestrian_in_crosswalk
+    type: STRING
+  - name: pedestrian_in_crosswalk_1
+    type: STRING
+  - name: pedestrian_in_crosswalk_2
+    type: STRING
+  - name: pedestrian_not_in_crosswalk
+    type: STRING
+  - name: pedestrian_not_in_crosswalk_1
+    type: STRING
+  - name: pedestrian_not_in_crosswalk_2
+    type: STRING
+  - name: pedestrian_walking_along
+    type: STRING
+  - name: pedestrian_walking_along_1
+    type: STRING
+  - name: pedestrian_walking_along_2
+    type: STRING
+  - name: people_waiting_or_leaving
+    type: STRING
+  - name: people_waiting_or_leaving_1
+    type: STRING
+  - name: people_waiting_or_leaving_2
+    type: STRING
+  - name: person_list
+    type: STRING
+  - name: property_damage
+    type: STRING
+  - name: rail_bus_ferry
+    type: STRING
+  - name: safety_security
+    type: STRING
+  - name: self_evacuation_y_n
+    type: STRING
+  - name: suicide_fatalities
+    type: STRING
+  - name: suicide_injuries
+    type: STRING
+  - name: suicide_serious_injuries
+    type: STRING
+  - name: total_fatalities
+    type: STRING
+  - name: total_injuries
+    type: STRING
+  - name: towed_y_n
+    type: STRING
+  - name: transit_employee_fatalities
+    type: STRING
+  - name: transit_employee_injuries
+    type: STRING
+  - name: transit_employee_serious
+    type: STRING
+  - name: transit_vehicle_operator
+    type: STRING
+  - name: transit_vehicle_operator_1
+    type: STRING
+  - name: transit_vehicle_operator_2
+    type: STRING
+  - name: transit_vehicle_rider
+    type: STRING
+  - name: transit_vehicle_rider_injuries
+    type: STRING
+  - name: transit_vehicle_rider_serious
+    type: STRING
+  - name: type_of_service
+    type: STRING
+  - name: year
+    type: STRING
