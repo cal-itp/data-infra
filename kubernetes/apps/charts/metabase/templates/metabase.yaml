@@ -8,6 +8,8 @@ metadata:
     name: metabase
 spec:
   replicas: {{ .Values.workloads.metabase.replicas }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       name: metabase
