@@ -1,0 +1,200 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "vehicles_type_count_by_agency/2022/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "vehicles_type_count_by_agency/2022/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.2022__vehicles_type_count_by_agency"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__vehicles_type_count_by_agency LIMIT 1;
+schema_fields:
+  - name: aerial_tram
+    type: STRING
+  - name: aerial_tram_rptulb
+    type: STRING
+  - name: aerial_tram_ulb
+    type: STRING
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: articulated_bus
+    type: STRING
+  - name: articulated_bus_ulb
+    type: STRING
+  - name: articulated_busrptulb
+    type: STRING
+  - name: automated_guideway_vehicle
+    type: STRING
+  - name: automated_guideway_vehicle_1
+    type: STRING
+  - name: automated_guideway_vehicle_2
+    type: STRING
+  - name: automobile
+    type: STRING
+  - name: automobile_ulb
+    type: STRING
+  - name: automobilerptulb
+    type: STRING
+  - name: automobiles
+    type: STRING
+  - name: automobiles_ulb
+    type: STRING
+  - name: bus
+    type: STRING
+  - name: bus_ulb
+    type: STRING
+  - name: busrptulb
+    type: STRING
+  - name: cable_car
+    type: STRING
+  - name: cable_car_rptulb
+    type: STRING
+  - name: cable_car_ulb
+    type: STRING
+  - name: city
+    type: STRING
+  - name: commuter_rail_passenger_coach
+    type: STRING
+  - name: commuter_rail_passenger_coach_1
+    type: STRING
+  - name: commuter_rail_passenger_coach_2
+    type: STRING
+  - name: commuter_rail_self_propelled
+    type: STRING
+  - name: commuter_rail_self_propelled_1
+    type: STRING
+  - name: commuter_rail_self_propelled_2
+    type: STRING
+  - name: cutaway
+    type: STRING
+  - name: cutaway_ulb
+    type: STRING
+  - name: cutawayrptulb
+    type: STRING
+  - name: double_decker_bus
+    type: STRING
+  - name: double_decker_bus_ulb
+    type: STRING
+  - name: double_decker_busrptulb
+    type: STRING
+  - name: ferryboat
+    type: STRING
+  - name: ferryboat_rptulb
+    type: STRING
+  - name: ferryboat_ulb
+    type: STRING
+  - name: heavy_rail_passenger_car
+    type: STRING
+  - name: heavy_rail_passenger_car_1
+    type: STRING
+  - name: heavy_rail_passenger_car_2
+    type: STRING
+  - name: inclined_plane
+    type: STRING
+  - name: inclined_plane_rptulb
+    type: STRING
+  - name: inclined_plane_ulb
+    type: STRING
+  - name: light_rail_vehicle
+    type: STRING
+  - name: light_rail_vehicle_rptulb
+    type: STRING
+  - name: light_rail_vehicle_ulb
+    type: STRING
+  - name: locomotive
+    type: STRING
+  - name: locomotive_rptulb
+    type: STRING
+  - name: locomotive_ulb
+    type: STRING
+  - name: minivan
+    type: STRING
+  - name: minivan_ulb
+    type: STRING
+  - name: minivanrptulb
+    type: STRING
+  - name: monorail
+    type: STRING
+  - name: monorail_ulb
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
+  - name: organization_type
+    type: STRING
+  - name: other
+    type: STRING
+  - name: other_rptulb
+    type: STRING
+  - name: other_ulb
+    type: STRING
+  - name: over_the_road_bus
+    type: STRING
+  - name: over_the_road_bus_ulb
+    type: STRING
+  - name: over_the_road_busrptulb
+    type: STRING
+  - name: report_year
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: school_bus
+    type: STRING
+  - name: school_bus_ulb
+    type: STRING
+  - name: schoolbusrptulb
+    type: STRING
+  - name: sport_utility_vehicle
+    type: STRING
+  - name: sport_utility_vehicle_rptulb
+    type: STRING
+  - name: sport_utility_vehicle_ulb
+    type: STRING
+  - name: state
+    type: STRING
+  - name: steel_wheel_vehicles
+    type: STRING
+  - name: steel_wheel_vehicles_ulb
+    type: STRING
+  - name: streetcar
+    type: STRING
+  - name: streetcar_rptulb
+    type: STRING
+  - name: streetcar_ulb
+    type: STRING
+  - name: total_revenue_vehicles
+    type: STRING
+  - name: total_revenue_vehicles_ulb
+    type: STRING
+  - name: total_rptulb
+    type: STRING
+  - name: total_service_vehicles
+    type: STRING
+  - name: total_service_vehicles_ulb
+    type: STRING
+  - name: trolleybus
+    type: STRING
+  - name: trolleybus_ulb
+    type: STRING
+  - name: trolleybusrptulb
+    type: STRING
+  - name: trucks_and_other_rubber_tire
+    type: STRING
+  - name: trucks_and_other_rubber_tire_1
+    type: STRING
+  - name: van
+    type: STRING
+  - name: van_ulb
+    type: STRING
+  - name: vanrptulb
+    type: STRING
+  - name: vintage_historic_trolley
+    type: STRING
+  - name: vintage_historic_trolley_1
+    type: STRING
+  - name: vintage_historic_trolley_2
+    type: STRING

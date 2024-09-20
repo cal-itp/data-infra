@@ -1,0 +1,62 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "metrics/2022/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "metrics/2022/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.2022__metrics"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__metrics LIMIT 1;
+schema_fields:
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: city
+    type: STRING
+  - name: cost_per_hour
+    type: STRING
+  - name: cost_per_passenger
+    type: STRING
+  - name: cost_per_passenger_mile
+    type: STRING
+  - name: fare_revenues_earned
+    type: STRING
+  - name: fare_revenues_per_total
+    type: STRING
+  - name: fare_revenues_per_unlinked
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: mode_name
+    type: STRING
+  - name: mode_voms
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
+  - name: organization_type
+    type: STRING
+  - name: passenger_miles
+    type: STRING
+  - name: passengers_per_hour
+    type: STRING
+  - name: report_year
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: state
+    type: STRING
+  - name: total_operating_expenses
+    type: STRING
+  - name: type_of_service
+    type: STRING
+  - name: unlinked_passenger_trips
+    type: STRING
+  - name: vehicle_revenue_hours
+    type: STRING
+  - name: vehicle_revenue_miles
+    type: STRING
