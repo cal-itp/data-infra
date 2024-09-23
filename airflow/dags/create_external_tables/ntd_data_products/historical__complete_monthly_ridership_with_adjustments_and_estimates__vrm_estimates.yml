@@ -1,0 +1,33 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-xlsx-products-clean
+prefix_bucket: false
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm_estimates
+  LIMIT 1;
+source_objects:
+  - "complete_monthly_ridership_with_adjustments_and_estimates/historical/vrm_estimates/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm_estimates"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "complete_monthly_ridership_with_adjustments_and_estimates/historical/vrm_estimates/"
+schema_fields:
+  - name: top_150
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
+  - name: agency
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: tos
+    type: STRING
+  - name: month
+    type: STRING
+  - name: year
+    type: NUMERIC
+  - name: estimated_vrm
+    type: NUMERIC

@@ -1,0 +1,577 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-xlsx-products-clean
+prefix_bucket: false
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates__vrh
+  LIMIT 1;
+source_objects:
+  - "complete_monthly_ridership_with_adjustments_and_estimates/historical/vrh/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates__vrh"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "complete_monthly_ridership_with_adjustments_and_estimates/historical/vrh/"
+schema_fields:
+  - name: ntd_id
+    type: NUMERIC
+  - name: legacy_ntd_id
+    type: STRING
+  - name: agency
+    type: STRING
+  - name: mode_type_of_service_status
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: uace_cd
+    type: NUMERIC
+  - name: uza_name
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: tos
+    type: STRING
+  - name: _3_mode
+    type: STRING
+  - name: _1_2002
+    type: NUMERIC
+  - name: _2_2002
+    type: NUMERIC
+  - name: _3_2002
+    type: NUMERIC
+  - name: _4_2002
+    type: NUMERIC
+  - name: _5_2002
+    type: NUMERIC
+  - name: _6_2002
+    type: NUMERIC
+  - name: _7_2002
+    type: NUMERIC
+  - name: _8_2002
+    type: NUMERIC
+  - name: _9_2002
+    type: NUMERIC
+  - name: _10_2002
+    type: NUMERIC
+  - name: _11_2002
+    type: NUMERIC
+  - name: _12_2002
+    type: NUMERIC
+  - name: _1_2003
+    type: NUMERIC
+  - name: _2_2003
+    type: NUMERIC
+  - name: _3_2003
+    type: NUMERIC
+  - name: _4_2003
+    type: NUMERIC
+  - name: _5_2003
+    type: NUMERIC
+  - name: _6_2003
+    type: NUMERIC
+  - name: _7_2003
+    type: NUMERIC
+  - name: _8_2003
+    type: NUMERIC
+  - name: _9_2003
+    type: NUMERIC
+  - name: _10_2003
+    type: NUMERIC
+  - name: _11_2003
+    type: NUMERIC
+  - name: _12_2003
+    type: NUMERIC
+  - name: _1_2004
+    type: NUMERIC
+  - name: _2_2004
+    type: NUMERIC
+  - name: _3_2004
+    type: NUMERIC
+  - name: _4_2004
+    type: NUMERIC
+  - name: _5_2004
+    type: NUMERIC
+  - name: _6_2004
+    type: NUMERIC
+  - name: _7_2004
+    type: NUMERIC
+  - name: _8_2004
+    type: NUMERIC
+  - name: _9_2004
+    type: NUMERIC
+  - name: _10_2004
+    type: NUMERIC
+  - name: _11_2004
+    type: NUMERIC
+  - name: _12_2004
+    type: NUMERIC
+  - name: _1_2005
+    type: NUMERIC
+  - name: _2_2005
+    type: NUMERIC
+  - name: _3_2005
+    type: NUMERIC
+  - name: _4_2005
+    type: NUMERIC
+  - name: _5_2005
+    type: NUMERIC
+  - name: _6_2005
+    type: NUMERIC
+  - name: _7_2005
+    type: NUMERIC
+  - name: _8_2005
+    type: NUMERIC
+  - name: _9_2005
+    type: NUMERIC
+  - name: _10_2005
+    type: NUMERIC
+  - name: _11_2005
+    type: NUMERIC
+  - name: _12_2005
+    type: NUMERIC
+  - name: _1_2006
+    type: NUMERIC
+  - name: _2_2006
+    type: NUMERIC
+  - name: _3_2006
+    type: NUMERIC
+  - name: _4_2006
+    type: NUMERIC
+  - name: _5_2006
+    type: NUMERIC
+  - name: _6_2006
+    type: NUMERIC
+  - name: _7_2006
+    type: NUMERIC
+  - name: _8_2006
+    type: NUMERIC
+  - name: _9_2006
+    type: NUMERIC
+  - name: _10_2006
+    type: NUMERIC
+  - name: _11_2006
+    type: NUMERIC
+  - name: _12_2006
+    type: NUMERIC
+  - name: _1_2007
+    type: NUMERIC
+  - name: _2_2007
+    type: NUMERIC
+  - name: _3_2007
+    type: NUMERIC
+  - name: _4_2007
+    type: NUMERIC
+  - name: _5_2007
+    type: NUMERIC
+  - name: _6_2007
+    type: NUMERIC
+  - name: _7_2007
+    type: NUMERIC
+  - name: _8_2007
+    type: NUMERIC
+  - name: _9_2007
+    type: NUMERIC
+  - name: _10_2007
+    type: NUMERIC
+  - name: _11_2007
+    type: NUMERIC
+  - name: _12_2007
+    type: NUMERIC
+  - name: _1_2008
+    type: NUMERIC
+  - name: _2_2008
+    type: NUMERIC
+  - name: _3_2008
+    type: NUMERIC
+  - name: _4_2008
+    type: NUMERIC
+  - name: _5_2008
+    type: NUMERIC
+  - name: _6_2008
+    type: NUMERIC
+  - name: _7_2008
+    type: NUMERIC
+  - name: _8_2008
+    type: NUMERIC
+  - name: _9_2008
+    type: NUMERIC
+  - name: _10_2008
+    type: NUMERIC
+  - name: _11_2008
+    type: NUMERIC
+  - name: _12_2008
+    type: NUMERIC
+  - name: _1_2009
+    type: NUMERIC
+  - name: _2_2009
+    type: NUMERIC
+  - name: _3_2009
+    type: NUMERIC
+  - name: _4_2009
+    type: NUMERIC
+  - name: _5_2009
+    type: NUMERIC
+  - name: _6_2009
+    type: NUMERIC
+  - name: _7_2009
+    type: NUMERIC
+  - name: _8_2009
+    type: NUMERIC
+  - name: _9_2009
+    type: NUMERIC
+  - name: _10_2009
+    type: NUMERIC
+  - name: _11_2009
+    type: NUMERIC
+  - name: _12_2009
+    type: NUMERIC
+  - name: _1_2010
+    type: NUMERIC
+  - name: _2_2010
+    type: NUMERIC
+  - name: _3_2010
+    type: NUMERIC
+  - name: _4_2010
+    type: NUMERIC
+  - name: _5_2010
+    type: NUMERIC
+  - name: _6_2010
+    type: NUMERIC
+  - name: _7_2010
+    type: NUMERIC
+  - name: _8_2010
+    type: NUMERIC
+  - name: _9_2010
+    type: NUMERIC
+  - name: _10_2010
+    type: NUMERIC
+  - name: _11_2010
+    type: NUMERIC
+  - name: _12_2010
+    type: NUMERIC
+  - name: _1_2011
+    type: NUMERIC
+  - name: _2_2011
+    type: NUMERIC
+  - name: _3_2011
+    type: NUMERIC
+  - name: _4_2011
+    type: NUMERIC
+  - name: _5_2011
+    type: NUMERIC
+  - name: _6_2011
+    type: NUMERIC
+  - name: _7_2011
+    type: NUMERIC
+  - name: _8_2011
+    type: NUMERIC
+  - name: _9_2011
+    type: NUMERIC
+  - name: _10_2011
+    type: NUMERIC
+  - name: _11_2011
+    type: NUMERIC
+  - name: _12_2011
+    type: NUMERIC
+  - name: _1_2012
+    type: NUMERIC
+  - name: _2_2012
+    type: NUMERIC
+  - name: _3_2012
+    type: NUMERIC
+  - name: _4_2012
+    type: NUMERIC
+  - name: _5_2012
+    type: NUMERIC
+  - name: _6_2012
+    type: NUMERIC
+  - name: _7_2012
+    type: NUMERIC
+  - name: _8_2012
+    type: NUMERIC
+  - name: _9_2012
+    type: NUMERIC
+  - name: _10_2012
+    type: NUMERIC
+  - name: _11_2012
+    type: NUMERIC
+  - name: _12_2012
+    type: NUMERIC
+  - name: _1_2013
+    type: NUMERIC
+  - name: _2_2013
+    type: NUMERIC
+  - name: _3_2013
+    type: NUMERIC
+  - name: _4_2013
+    type: NUMERIC
+  - name: _5_2013
+    type: NUMERIC
+  - name: _6_2013
+    type: NUMERIC
+  - name: _7_2013
+    type: NUMERIC
+  - name: _8_2013
+    type: NUMERIC
+  - name: _9_2013
+    type: NUMERIC
+  - name: _10_2013
+    type: NUMERIC
+  - name: _11_2013
+    type: NUMERIC
+  - name: _12_2013
+    type: NUMERIC
+  - name: _1_2014
+    type: NUMERIC
+  - name: _2_2014
+    type: NUMERIC
+  - name: _3_2014
+    type: NUMERIC
+  - name: _4_2014
+    type: NUMERIC
+  - name: _5_2014
+    type: NUMERIC
+  - name: _6_2014
+    type: NUMERIC
+  - name: _7_2014
+    type: NUMERIC
+  - name: _8_2014
+    type: NUMERIC
+  - name: _9_2014
+    type: NUMERIC
+  - name: _10_2014
+    type: NUMERIC
+  - name: _11_2014
+    type: NUMERIC
+  - name: _12_2014
+    type: NUMERIC
+  - name: _1_2015
+    type: NUMERIC
+  - name: _2_2015
+    type: NUMERIC
+  - name: _3_2015
+    type: NUMERIC
+  - name: _4_2015
+    type: NUMERIC
+  - name: _5_2015
+    type: NUMERIC
+  - name: _6_2015
+    type: NUMERIC
+  - name: _7_2015
+    type: NUMERIC
+  - name: _8_2015
+    type: NUMERIC
+  - name: _9_2015
+    type: NUMERIC
+  - name: _10_2015
+    type: NUMERIC
+  - name: _11_2015
+    type: NUMERIC
+  - name: _12_2015
+    type: NUMERIC
+  - name: _1_2016
+    type: NUMERIC
+  - name: _2_2016
+    type: NUMERIC
+  - name: _3_2016
+    type: NUMERIC
+  - name: _4_2016
+    type: NUMERIC
+  - name: _5_2016
+    type: NUMERIC
+  - name: _6_2016
+    type: NUMERIC
+  - name: _7_2016
+    type: NUMERIC
+  - name: _8_2016
+    type: NUMERIC
+  - name: _9_2016
+    type: NUMERIC
+  - name: _10_2016
+    type: NUMERIC
+  - name: _11_2016
+    type: NUMERIC
+  - name: _12_2016
+    type: NUMERIC
+  - name: _1_2017
+    type: NUMERIC
+  - name: _2_2017
+    type: NUMERIC
+  - name: _3_2017
+    type: NUMERIC
+  - name: _4_2017
+    type: NUMERIC
+  - name: _5_2017
+    type: NUMERIC
+  - name: _6_2017
+    type: NUMERIC
+  - name: _7_2017
+    type: NUMERIC
+  - name: _8_2017
+    type: NUMERIC
+  - name: _9_2017
+    type: NUMERIC
+  - name: _10_2017
+    type: NUMERIC
+  - name: _11_2017
+    type: NUMERIC
+  - name: _12_2017
+    type: NUMERIC
+  - name: _1_2018
+    type: NUMERIC
+  - name: _2_2018
+    type: NUMERIC
+  - name: _3_2018
+    type: NUMERIC
+  - name: _4_2018
+    type: NUMERIC
+  - name: _5_2018
+    type: NUMERIC
+  - name: _6_2018
+    type: NUMERIC
+  - name: _7_2018
+    type: NUMERIC
+  - name: _8_2018
+    type: NUMERIC
+  - name: _9_2018
+    type: NUMERIC
+  - name: _10_2018
+    type: NUMERIC
+  - name: _11_2018
+    type: NUMERIC
+  - name: _12_2018
+    type: NUMERIC
+  - name: _1_2019
+    type: NUMERIC
+  - name: _2_2019
+    type: NUMERIC
+  - name: _3_2019
+    type: NUMERIC
+  - name: _4_2019
+    type: NUMERIC
+  - name: _5_2019
+    type: NUMERIC
+  - name: _6_2019
+    type: NUMERIC
+  - name: _7_2019
+    type: NUMERIC
+  - name: _8_2019
+    type: NUMERIC
+  - name: _9_2019
+    type: NUMERIC
+  - name: _10_2019
+    type: NUMERIC
+  - name: _11_2019
+    type: NUMERIC
+  - name: _12_2019
+    type: NUMERIC
+  - name: _1_2020
+    type: NUMERIC
+  - name: _2_2020
+    type: NUMERIC
+  - name: _3_2020
+    type: NUMERIC
+  - name: _4_2020
+    type: NUMERIC
+  - name: _5_2020
+    type: NUMERIC
+  - name: _6_2020
+    type: NUMERIC
+  - name: _7_2020
+    type: NUMERIC
+  - name: _8_2020
+    type: NUMERIC
+  - name: _9_2020
+    type: NUMERIC
+  - name: _10_2020
+    type: NUMERIC
+  - name: _11_2020
+    type: NUMERIC
+  - name: _12_2020
+    type: NUMERIC
+  - name: _1_2021
+    type: NUMERIC
+  - name: _2_2021
+    type: NUMERIC
+  - name: _3_2021
+    type: NUMERIC
+  - name: _4_2021
+    type: NUMERIC
+  - name: _5_2021
+    type: NUMERIC
+  - name: _6_2021
+    type: NUMERIC
+  - name: _7_2021
+    type: NUMERIC
+  - name: _8_2021
+    type: NUMERIC
+  - name: _9_2021
+    type: NUMERIC
+  - name: _10_2021
+    type: NUMERIC
+  - name: _11_2021
+    type: NUMERIC
+  - name: _12_2021
+    type: NUMERIC
+  - name: _1_2022
+    type: NUMERIC
+  - name: _2_2022
+    type: NUMERIC
+  - name: _3_2022
+    type: NUMERIC
+  - name: _4_2022
+    type: NUMERIC
+  - name: _5_2022
+    type: NUMERIC
+  - name: _6_2022
+    type: NUMERIC
+  - name: _7_2022
+    type: NUMERIC
+  - name: _8_2022
+    type: NUMERIC
+  - name: _9_2022
+    type: NUMERIC
+  - name: _10_2022
+    type: NUMERIC
+  - name: _11_2022
+    type: NUMERIC
+  - name: _12_2022
+    type: NUMERIC
+  - name: _1_2023
+    type: NUMERIC
+  - name: _2_2023
+    type: NUMERIC
+  - name: _3_2023
+    type: NUMERIC
+  - name: _4_2023
+    type: NUMERIC
+  - name: _5_2023
+    type: NUMERIC
+  - name: _6_2023
+    type: NUMERIC
+  - name: _7_2023
+    type: NUMERIC
+  - name: _8_2023
+    type: NUMERIC
+  - name: _9_2023
+    type: NUMERIC
+  - name: _10_2023
+    type: NUMERIC
+  - name: _11_2023
+    type: NUMERIC
+  - name: _12_2023
+    type: NUMERIC
+  - name: _1_2024
+    type: NUMERIC
+  - name: _2_2024
+    type: NUMERIC
+  - name: _3_2024
+    type: NUMERIC
+  - name: _4_2024
+    type: NUMERIC
+  - name: _5_2024
+    type: NUMERIC
+  - name: _6_2024
+    type: NUMERIC
