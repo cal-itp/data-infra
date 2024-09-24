@@ -15,13 +15,13 @@ schema_fields:
   - name: max_agency
     type: STRING
   - name: max_agency_voms
-    type: STRING
+    type: NUMERIC
   - name: max_city
     type: STRING
   - name: max_organization_type
     type: STRING
   - name: max_primary_uza_population
-    type: STRING
+    type: NUMERIC
   - name: max_reporter_type
     type: STRING
   - name: max_state
@@ -31,40 +31,40 @@ schema_fields:
   - name: max_uza_name
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: report_year
     type: STRING
   - name: sum_casualty_and_liability
-    type: STRING
+    type: NUMERIC
   - name: sum_fringe_benefits
-    type: STRING
+    type: NUMERIC
   - name: sum_fuel_and_lube
-    type: STRING
+    type: NUMERIC
   - name: sum_miscellaneous
-    type: STRING
+    type: NUMERIC
   - name: sum_operator_paid_absences
-    type: STRING
+    type: NUMERIC
   - name: sum_operators_wages
-    type: STRING
+    type: NUMERIC
   - name: sum_other_materials_supplies
-    type: STRING
+    type: NUMERIC
   - name: sum_other_paid_absences
-    type: STRING
+    type: NUMERIC
   - name: sum_other_salaries_wages
-    type: STRING
+    type: NUMERIC
   - name: sum_purchased_transportation
-    type: STRING
+    type: NUMERIC
   - name: sum_reduced_reporter_expenses
-    type: STRING
+    type: NUMERIC
   - name: sum_separate_report_amount
-    type: STRING
+    type: NUMERIC
   - name: sum_services
-    type: STRING
+    type: NUMERIC
   - name: sum_taxes
-    type: STRING
+    type: NUMERIC
   - name: sum_tires
-    type: STRING
+    type: NUMERIC
   - name: sum_total
-    type: STRING
+    type: NUMERIC
   - name: sum_utilities
-    type: STRING
+    type: NUMERIC

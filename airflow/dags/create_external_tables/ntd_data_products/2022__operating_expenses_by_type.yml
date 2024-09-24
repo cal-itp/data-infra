@@ -17,62 +17,96 @@ schema_fields:
   - name: agency_voms
     type: NUMERIC
   - name: casualty_and_liability
+    type: NUMERIC
+  - name: casualty_and_liability_1
     type: STRING
   - name: city
     type: STRING
   - name: fringe_benefits
+    type: NUMERIC
+  - name: fringe_benefits_questionable
     type: STRING
   - name: fuel_and_lube
+    type: NUMERIC
+  - name: fuel_and_lube_questionable
     type: STRING
   - name: miscellaneous
+    type: NUMERIC
+  - name: miscellaneous_questionable
     type: STRING
   - name: mode
     type: STRING
   - name: mode_name
     type: STRING
   - name: mode_voms
-    type: STRING
-  - name: ntd_id
     type: NUMERIC
+  - name: ntd_id
+    type: STRING
   - name: operator_paid_absences
+    type: NUMERIC
+  - name: operator_paid_absences_1
     type: STRING
   - name: operators_wages
+    type: NUMERIC
+  - name: operators_wages_questionable
     type: STRING
   - name: organization_type
     type: STRING
   - name: other_materials_supplies
+    type: NUMERIC
+  - name: other_materials_supplies_1
     type: STRING
   - name: other_paid_absences
     type: STRING
+  - name: other_paid_absences_1
+    type: STRING
   - name: other_salaries_wages
+    type: NUMERIC
+  - name: other_salaries_wages_1
     type: STRING
   - name: primary_uza_population
-    type: STRING
+    type: NUMERIC
   - name: purchased_transportation
+    type: NUMERIC
+  - name: purchased_transportation_1
     type: STRING
   - name: reduced_reporter_expenses
+    type: NUMERIC
+  - name: reduced_reporter_expenses_1
     type: STRING
   - name: report_year
     type: STRING
   - name: reporter_type
     type: STRING
   - name: separate_report_amount
+    type: NUMERIC
+  - name: separate_report_amount_1
     type: STRING
   - name: services
+    type: NUMERIC
+  - name: services_questionable
     type: STRING
   - name: state
     type: STRING
   - name: taxes
+    type: NUMERIC
+  - name: taxes_questionable
     type: STRING
   - name: tires
+    type: NUMERIC
+  - name: tires_questionable
     type: STRING
   - name: total
+    type: NUMERIC
+  - name: total_questionable
     type: STRING
   - name: type_of_service
     type: STRING
   - name: uace_code
     type: STRING
   - name: utilities
+    type: NUMERIC
+  - name: utilities_questionable
     type: STRING
   - name: uza_name
     type: STRING

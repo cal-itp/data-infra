@@ -13,23 +13,23 @@ prefix_bucket: false
 post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__stations_by_mode_and_age LIMIT 1;
 schema_fields:
   - name: _1940s
-    type: STRING
+    type: NUMERIC
   - name: _1950s
-    type: STRING
+    type: NUMERIC
   - name: _1960s
-    type: STRING
+    type: NUMERIC
   - name: _1970s
-    type: STRING
+    type: NUMERIC
   - name: _1980s
-    type: STRING
+    type: NUMERIC
   - name: _1990s
-    type: STRING
+    type: NUMERIC
   - name: _2000s
-    type: STRING
+    type: NUMERIC
   - name: _2010s
-    type: STRING
+    type: NUMERIC
   - name: _2020s
-    type: STRING
+    type: NUMERIC
   - name: agency
     type: STRING
   - name: agency_voms
@@ -43,15 +43,15 @@ schema_fields:
   - name: modes
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: organization_type
     type: STRING
   - name: pre1940
-    type: STRING
+    type: NUMERIC
   - name: primary_uza_population
     type: NUMERIC
   - name: report_year
-    type: NUMERIC
+    type: STRING
   - name: reporter_type
     type: STRING
   - name: state

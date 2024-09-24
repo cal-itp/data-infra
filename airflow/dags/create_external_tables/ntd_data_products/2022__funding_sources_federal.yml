@@ -25,7 +25,7 @@ schema_fields:
   - name: fta_urbanized_area_formula
     type: NUMERIC
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: organization_type
     type: STRING
   - name: other_dot_funds
@@ -34,11 +34,17 @@ schema_fields:
     type: NUMERIC
   - name: other_fta_funds
     type: NUMERIC
-  - name: report_year
+  - name: primary_uza_population
     type: NUMERIC
+  - name: report_year
+    type: STRING
   - name: reporter_type
     type: STRING
   - name: state
     type: STRING
   - name: total_federal_funds
     type: NUMERIC
+  - name: uace_code
+    type: STRING
+  - name: uza_name
+    type: STRING
