@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: external_ntd_ridership
+  - name: external_ntd__ridership
     description: |
       The tables in this schema comprise the tabs found in the `complete_monthly_ridership_with_adjustments_and_estimates`
       historical NTD ridership XLSX file, found at https://www.transit.dot.gov/ntd/ntd-data.
@@ -17,7 +17,7 @@ sources:
       to prior months in the calendar year made by the transit properties. In some cases, this may include revisions to data
       from previous report years.
     database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
-    schema: external_ntd_ridership
+    schema: external_ntd__ridership
     tables:
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_upt
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_vrm
