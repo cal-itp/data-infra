@@ -1,0 +1,11 @@
+version: 2
+models:
+  - name: dim_agency_service__annual
+  - name: dim_agency_service__average_typical_saturday
+  - name: dim_agency_service__average_typical_sunday
+  - name: dim_agency_service__average_typical_weekday
+  - name: dim_agency_service__average_weekday_am_peak
+  - name: dim_agency_service__average_weekday_midday
+  - name: dim_agency_service__average_weekday_other
+  - name: dim_agency_service__average_weekday_pm_peak
+  - name: dim_agency_service__null_time_period
