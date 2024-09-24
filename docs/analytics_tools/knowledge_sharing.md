@@ -26,7 +26,7 @@ Here are some resources data analysts have collected and referenced, that will h
 
 ### Python
 
-- [Composing Programs: comprehensive Python course](https://composingprograms.com/)
+- [Composing Programs: comprehensive Python course](https://www.composingprograms.com/)
 - [Intermediate Python: tips for improving your programs](https://book.pythontips.com/en/latest/index.html)
 - [Stop Python from executing code when a module is imported.](https://stackoverflow.com/questions/6523791/why-is-python-running-my-module-when-i-import-it-and-how-do-i-stop-it)
 - [Loop through 2 lists with zip in parallel.](https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel)
