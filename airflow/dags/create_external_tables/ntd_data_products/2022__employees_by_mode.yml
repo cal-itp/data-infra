@@ -41,9 +41,9 @@ schema_fields:
   - name: mode
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: report_year
-    type: NUMERIC
+    type: STRING
   - name: sum_total_employee_count
     type: NUMERIC
   - name: sum_total_hours

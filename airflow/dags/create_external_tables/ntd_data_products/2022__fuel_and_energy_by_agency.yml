@@ -19,7 +19,7 @@ schema_fields:
   - name: max_agency
     type: STRING
   - name: max_agency_voms
-    type: STRING
+    type: NUMERIC
   - name: max_city
     type: STRING
   - name: max_organization_type
@@ -35,9 +35,9 @@ schema_fields:
   - name: max_uza_name
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: report_year
-    type: NUMERIC
+    type: STRING
   - name: sum_bio_diesel_gal
     type: NUMERIC
   - name: sum_compressed_natural_gas

@@ -13,188 +13,194 @@ prefix_bucket: false
 post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__vehicles_type_count_by_agency LIMIT 1;
 schema_fields:
   - name: aerial_tram
-    type: STRING
+    type: NUMERIC
   - name: aerial_tram_rptulb
-    type: STRING
+    type: NUMERIC
   - name: aerial_tram_ulb
-    type: STRING
+    type: NUMERIC
   - name: agency
     type: STRING
   - name: agency_voms
     type: NUMERIC
   - name: articulated_bus
-    type: STRING
+    type: NUMERIC
   - name: articulated_bus_ulb
-    type: STRING
+    type: NUMERIC
   - name: articulated_busrptulb
-    type: STRING
+    type: NUMERIC
   - name: automated_guideway_vehicle
-    type: STRING
+    type: NUMERIC
   - name: automated_guideway_vehicle_1
-    type: STRING
+    type: NUMERIC
   - name: automated_guideway_vehicle_2
-    type: STRING
+    type: NUMERIC
   - name: automobile
-    type: STRING
+    type: NUMERIC
   - name: automobile_ulb
-    type: STRING
+    type: NUMERIC
   - name: automobilerptulb
-    type: STRING
+    type: NUMERIC
   - name: automobiles
-    type: STRING
+    type: NUMERIC
   - name: automobiles_ulb
-    type: STRING
+    type: NUMERIC
   - name: bus
-    type: STRING
+    type: NUMERIC
   - name: bus_ulb
-    type: STRING
+    type: NUMERIC
   - name: busrptulb
-    type: STRING
+    type: NUMERIC
   - name: cable_car
-    type: STRING
+    type: NUMERIC
   - name: cable_car_rptulb
-    type: STRING
+    type: NUMERIC
   - name: cable_car_ulb
-    type: STRING
+    type: NUMERIC
   - name: city
     type: STRING
   - name: commuter_rail_passenger_coach
-    type: STRING
-  - name: commuter_rail_passenger_coach_1
-    type: STRING
-  - name: commuter_rail_passenger_coach_2
-    type: STRING
-  - name: commuter_rail_self_propelled
-    type: STRING
-  - name: commuter_rail_self_propelled_1
-    type: STRING
-  - name: commuter_rail_self_propelled_2
-    type: STRING
-  - name: cutaway
-    type: STRING
-  - name: cutaway_ulb
-    type: STRING
-  - name: cutawayrptulb
-    type: STRING
-  - name: double_decker_bus
-    type: STRING
-  - name: double_decker_bus_ulb
-    type: STRING
-  - name: double_decker_busrptulb
-    type: STRING
-  - name: ferryboat
-    type: STRING
-  - name: ferryboat_rptulb
-    type: STRING
-  - name: ferryboat_ulb
-    type: STRING
-  - name: heavy_rail_passenger_car
-    type: STRING
-  - name: heavy_rail_passenger_car_1
-    type: STRING
-  - name: heavy_rail_passenger_car_2
-    type: STRING
-  - name: inclined_plane
-    type: STRING
-  - name: inclined_plane_rptulb
-    type: STRING
-  - name: inclined_plane_ulb
-    type: STRING
-  - name: light_rail_vehicle
-    type: STRING
-  - name: light_rail_vehicle_rptulb
-    type: STRING
-  - name: light_rail_vehicle_ulb
-    type: STRING
-  - name: locomotive
-    type: STRING
-  - name: locomotive_rptulb
-    type: STRING
-  - name: locomotive_ulb
-    type: STRING
-  - name: minivan
-    type: STRING
-  - name: minivan_ulb
-    type: STRING
-  - name: minivanrptulb
-    type: STRING
-  - name: monorail
-    type: STRING
-  - name: monorail_ulb
-    type: STRING
-  - name: ntd_id
     type: NUMERIC
+  - name: commuter_rail_passenger_coach_1
+    type: NUMERIC
+  - name: commuter_rail_passenger_coach_2
+    type: NUMERIC
+  - name: commuter_rail_self_propelled
+    type: NUMERIC
+  - name: commuter_rail_self_propelled_1
+    type: NUMERIC
+  - name: commuter_rail_self_propelled_2
+    type: NUMERIC
+  - name: cutaway
+    type: NUMERIC
+  - name: cutaway_ulb
+    type: NUMERIC
+  - name: cutawayrptulb
+    type: NUMERIC
+  - name: double_decker_bus
+    type: NUMERIC
+  - name: double_decker_bus_ulb
+    type: NUMERIC
+  - name: double_decker_busrptulb
+    type: NUMERIC
+  - name: ferryboat
+    type: NUMERIC
+  - name: ferryboat_rptulb
+    type: NUMERIC
+  - name: ferryboat_ulb
+    type: NUMERIC
+  - name: heavy_rail_passenger_car
+    type: NUMERIC
+  - name: heavy_rail_passenger_car_1
+    type: NUMERIC
+  - name: heavy_rail_passenger_car_2
+    type: NUMERIC
+  - name: inclined_plane
+    type: NUMERIC
+  - name: inclined_plane_rptulb
+    type: NUMERIC
+  - name: inclined_plane_ulb
+    type: NUMERIC
+  - name: light_rail_vehicle
+    type: NUMERIC
+  - name: light_rail_vehicle_rptulb
+    type: NUMERIC
+  - name: light_rail_vehicle_ulb
+    type: NUMERIC
+  - name: locomotive
+    type: NUMERIC
+  - name: locomotive_rptulb
+    type: NUMERIC
+  - name: locomotive_ulb
+    type: NUMERIC
+  - name: minivan
+    type: NUMERIC
+  - name: minivan_ulb
+    type: NUMERIC
+  - name: minivanrptulb
+    type: NUMERIC
+  - name: monorail
+    type: NUMERIC
+  - name: monorail_ulb
+    type: NUMERIC
+  - name: ntd_id
+    type: STRING
   - name: organization_type
     type: STRING
   - name: other
-    type: STRING
+    type: NUMERIC
   - name: other_rptulb
-    type: STRING
+    type: NUMERIC
   - name: other_ulb
-    type: STRING
+    type: NUMERIC
   - name: over_the_road_bus
-    type: STRING
+    type: NUMERIC
   - name: over_the_road_bus_ulb
-    type: STRING
+    type: NUMERIC
   - name: over_the_road_busrptulb
-    type: STRING
+    type: NUMERIC
+  - name: primary_uza_population
+    type: NUMERIC
   - name: report_year
     type: STRING
   - name: reporter_type
     type: STRING
   - name: school_bus
-    type: STRING
+    type: NUMERIC
   - name: school_bus_ulb
-    type: STRING
+    type: NUMERIC
   - name: schoolbusrptulb
-    type: STRING
+    type: NUMERIC
   - name: sport_utility_vehicle
-    type: STRING
+    type: NUMERIC
   - name: sport_utility_vehicle_rptulb
-    type: STRING
+    type: NUMERIC
   - name: sport_utility_vehicle_ulb
-    type: STRING
+    type: NUMERIC
   - name: state
     type: STRING
   - name: steel_wheel_vehicles
-    type: STRING
+    type: NUMERIC
   - name: steel_wheel_vehicles_ulb
-    type: STRING
+    type: NUMERIC
   - name: streetcar
-    type: STRING
+    type: NUMERIC
   - name: streetcar_rptulb
-    type: STRING
+    type: NUMERIC
   - name: streetcar_ulb
-    type: STRING
+    type: NUMERIC
   - name: total_revenue_vehicles
-    type: STRING
+    type: NUMERIC
   - name: total_revenue_vehicles_ulb
-    type: STRING
+    type: NUMERIC
   - name: total_rptulb
-    type: STRING
+    type: NUMERIC
   - name: total_service_vehicles
-    type: STRING
+    type: NUMERIC
   - name: total_service_vehicles_ulb
-    type: STRING
+    type: NUMERIC
   - name: trolleybus
-    type: STRING
+    type: NUMERIC
   - name: trolleybus_ulb
-    type: STRING
+    type: NUMERIC
   - name: trolleybusrptulb
-    type: STRING
+    type: NUMERIC
   - name: trucks_and_other_rubber_tire
-    type: STRING
+    type: NUMERIC
   - name: trucks_and_other_rubber_tire_1
+    type: NUMERIC
+  - name: uace_code
+    type: STRING
+  - name: uza_name
     type: STRING
   - name: van
-    type: STRING
+    type: NUMERIC
   - name: van_ulb
-    type: STRING
+    type: NUMERIC
   - name: vanrptulb
-    type: STRING
+    type: NUMERIC
   - name: vintage_historic_trolley
-    type: STRING
+    type: NUMERIC
   - name: vintage_historic_trolley_1
-    type: STRING
+    type: NUMERIC
   - name: vintage_historic_trolley_2
-    type: STRING
+    type: NUMERIC

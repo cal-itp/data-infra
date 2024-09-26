@@ -19,34 +19,54 @@ schema_fields:
   - name: city
     type: STRING
   - name: facility_maintenance
+    type: NUMERIC
+  - name: facility_maintenance_1
     type: STRING
   - name: general_administration
+    type: NUMERIC
+  - name: general_administration_1
     type: STRING
   - name: mode
     type: STRING
   - name: mode_name
     type: STRING
   - name: mode_voms
-    type: STRING
-  - name: ntd_id
     type: NUMERIC
+  - name: ntd_id
+    type: STRING
   - name: organization_type
     type: STRING
+  - name: primary_uza_population
+    type: NUMERIC
   - name: reduced_reporter_expenses
+    type: NUMERIC
+  - name: reduced_reporter_expenses_1
     type: STRING
   - name: report_year
     type: STRING
   - name: reporter_type
     type: STRING
   - name: separate_report_amount
+    type: NUMERIC
+  - name: separate_report_amount_1
     type: STRING
   - name: state
     type: STRING
   - name: total
+    type: NUMERIC
+  - name: total_questionable
     type: STRING
   - name: type_of_service
     type: STRING
   - name: vehicle_maintenance
+    type: NUMERIC
+  - name: vehicle_maintenance_1
     type: STRING
   - name: vehicle_operations
+    type: NUMERIC
+  - name: vehicle_operations_1
+    type: STRING
+  - name: uace_code
+    type: STRING
+  - name: uza_name
     type: STRING

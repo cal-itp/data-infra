@@ -15,13 +15,13 @@ schema_fields:
   - name: max_agency
     type: STRING
   - name: max_agency_voms
-    type: STRING
+    type: NUMERIC
   - name: max_city
     type: STRING
   - name: max_organization_type
     type: STRING
   - name: max_primary_uza_population
-    type: STRING
+    type: NUMERIC
   - name: max_reporter_type
     type: STRING
   - name: max_state
@@ -31,30 +31,30 @@ schema_fields:
   - name: max_uza_name
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: report_year
     type: STRING
   - name: sum_200_to_300_vehicles
-    type: STRING
+    type: NUMERIC
   - name: sum_heavy_maintenance_facilities
-    type: STRING
+    type: NUMERIC
   - name: sum_leased_by_pt_provider
-    type: STRING
+    type: NUMERIC
   - name: sum_leased_by_public_agency
-    type: STRING
+    type: NUMERIC
   - name: sum_leased_from_a_private_entity
-    type: STRING
+    type: NUMERIC
   - name: sum_leased_from_a_public_entity
-    type: STRING
+    type: NUMERIC
   - name: sum_over_300_vehicles
-    type: STRING
+    type: NUMERIC
   - name: sum_owned
-    type: STRING
+    type: NUMERIC
   - name: sum_owned_by_pt_provider
-    type: STRING
+    type: NUMERIC
   - name: sum_owned_by_public_agency
-    type: STRING
+    type: NUMERIC
   - name: sum_total_facilities
-    type: STRING
+    type: NUMERIC
   - name: sum_under_200_vehicles
-    type: STRING
+    type: NUMERIC

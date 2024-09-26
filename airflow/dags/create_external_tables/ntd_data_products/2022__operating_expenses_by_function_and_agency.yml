@@ -12,20 +12,16 @@ destination_project_dataset_table: "external_ntd__annual_reporting.2022__operati
 prefix_bucket: false
 post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__operating_expenses_by_function_and_agency LIMIT 1;
 schema_fields:
-  - name: Agency
+  - name: agency
     type: STRING
-  - name: City
-    type: STRING
-  - name: State
-    type: STRING
-  - name: Total
+  - name: city
     type: STRING
   - name: max_agency_voms
-    type: STRING
+    type: NUMERIC
   - name: max_organization_type
     type: STRING
   - name: max_primary_uza_population
-    type: STRING
+    type: NUMERIC
   - name: max_reporter_type
     type: STRING
   - name: max_uace_code
@@ -33,18 +29,22 @@ schema_fields:
   - name: max_uza_name
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: report_year
     type: STRING
+  - name: state
+    type: STRING
   - name: sum_facility_maintenance
-    type: STRING
+    type: NUMERIC
   - name: sum_general_administration
-    type: STRING
+    type: NUMERIC
   - name: sum_reduced_reporter_expenses
-    type: STRING
+    type: NUMERIC
   - name: sum_separate_report_amount
-    type: STRING
+    type: NUMERIC
   - name: sum_vehicle_maintenance
-    type: STRING
+    type: NUMERIC
   - name: sum_vehicle_operations
-    type: STRING
+    type: NUMERIC
+  - name: total
+    type: NUMERIC

@@ -43,9 +43,9 @@ schema_fields:
   - name: max_uza_name
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: report_year
-    type: NUMERIC
+    type: STRING
   - name: sum_major_mechanical_failures
     type: NUMERIC
   - name: sum_other_mechanical_failures

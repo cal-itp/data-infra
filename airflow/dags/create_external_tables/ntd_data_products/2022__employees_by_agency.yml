@@ -41,21 +41,21 @@ schema_fields:
   - name: count_vehicle_operations_hours_q
     type: NUMERIC
   - name: max_agency_voms_1
-    type: STRING
+    type: NUMERIC
   - name: max_city_1
     type: STRING
   - name: max_mode_voms
     type: NUMERIC
   - name: max_ntd_id
-    type: NUMERIC
-  - name: max_primary_uza_population_1
     type: STRING
+  - name: max_primary_uza_population_1
+    type: NUMERIC
   - name: max_state_1
     type: STRING
   - name: max_uza_name_1
     type: STRING
   - name: report_year
-    type: NUMERIC
+    type: STRING
   - name: sum_total_hours
     type: NUMERIC
   - name: total_employees

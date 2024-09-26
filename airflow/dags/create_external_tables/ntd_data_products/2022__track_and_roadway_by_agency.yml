@@ -15,13 +15,13 @@ schema_fields:
   - name: max_agency
     type: STRING
   - name: max_agency_voms
-    type: STRING
+    type: NUMERIC
   - name: max_city
     type: STRING
   - name: max_organization_type
     type: STRING
   - name: max_primary_uza_population
-    type: STRING
+    type: NUMERIC
   - name: max_reporter_type
     type: STRING
   - name: max_state
@@ -31,48 +31,48 @@ schema_fields:
   - name: max_uza_name
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: report_year
     type: STRING
   - name: sum_at_grade_ballast_including
-    type: STRING
+    type: NUMERIC
   - name: sum_at_grade_in_street_embedded
-    type: STRING
+    type: NUMERIC
   - name: sum_below_grade_bored_or_blasted
-    type: STRING
+    type: NUMERIC
   - name: sum_below_grade_cut_and_cover
-    type: STRING
+    type: NUMERIC
   - name: sum_below_grade_retained_cut
-    type: STRING
+    type: NUMERIC
   - name: sum_below_grade_submerged_tube
-    type: STRING
+    type: NUMERIC
   - name: sum_controlled_access_high
-    type: STRING
+    type: NUMERIC
   - name: sum_double_crossover
-    type: STRING
+    type: NUMERIC
   - name: sum_elevated_concrete
-    type: STRING
+    type: NUMERIC
   - name: sum_elevated_retained_fill
-    type: STRING
+    type: NUMERIC
   - name: sum_elevated_steel_viaduct_or
-    type: STRING
+    type: NUMERIC
   - name: sum_exclusive_fixed_guideway
-    type: STRING
+    type: NUMERIC
   - name: sum_exclusive_high_intensity
-    type: STRING
+    type: NUMERIC
   - name: sum_grade_crossings
-    type: STRING
+    type: NUMERIC
   - name: sum_lapped_turnout
-    type: STRING
+    type: NUMERIC
   - name: sum_rail_crossings
-    type: STRING
+    type: NUMERIC
   - name: sum_single_crossover
-    type: STRING
+    type: NUMERIC
   - name: sum_single_turnout
-    type: STRING
+    type: NUMERIC
   - name: sum_slip_switch
-    type: STRING
+    type: NUMERIC
   - name: sum_total_miles
-    type: STRING
+    type: NUMERIC
   - name: sum_total_track_miles
-    type: STRING
+    type: NUMERIC
