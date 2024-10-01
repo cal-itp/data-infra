@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: stg_ntd_annual_data__2022__stations_and_facilities_by_agency_and_facility_type
+  - name: stg_ntd_annual_data__2022__stations_by_mode_and_age
+  - name: stg_ntd_annual_data__2022__operating_expenses_by_function
+  - name: stg_ntd_annual_data__2022__operating_expenses_by_function_and_agency
+  - name: stg_ntd_annual_data__2022__operating_expenses_by_type
+  - name: stg_ntd_annual_data__2022__operating_expenses_by_type_and_agency
+  - name: stg_ntd_annual_data__2022__vehicles_age_distribution
+  - name: stg_ntd_annual_data__2022__vehicles_type_count_by_agency
+  - name: stg_ntd_annual_data__2022__service_by_mode_and_time_period
+  - name: stg_ntd_annual_data__2022__service_by_mode
+  - name: stg_ntd_annual_data__2022__service_by_agency
+  - name: stg_ntd_annual_data__2022__track_and_roadway_by_mode
+  - name: stg_ntd_annual_data__2022__track_and_roadway_guideway_age_distribution
+  - name: stg_ntd_annual_data__2022__track_and_roadway_by_agency
+  - name: stg_ntd_annual_data__2022__metrics
+  - name: stg_ntd_annual_data__2022__funding_sources_by_expense_type
+  - name: stg_ntd_annual_data__2022__funding_sources_directly_generated
+  - name: stg_ntd_annual_data__2022__funding_sources_taxes_levied_by_agency
+  - name: stg_ntd_annual_data__2022__funding_sources_local
+  - name: stg_ntd_annual_data__2022__funding_sources_state
+  - name: stg_ntd_annual_data__2022__funding_sources_federal
+  - name: stg_ntd_annual_data__2022__maintenance_facilities
+  - name: stg_ntd_annual_data__2022__maintenance_facilities_by_agency
+  - name: stg_ntd_annual_data__2022__fuel_and_energy
+  - name: stg_ntd_annual_data__2022__fuel_and_energy_by_agency
+  - name: stg_ntd_annual_data__2022__employees_by_mode_and_employee_type
+  - name: stg_ntd_annual_data__2022__employees_by_mode
+  - name: stg_ntd_annual_data__2022__employees_by_agency
+  - name: stg_ntd_annual_data__2022__capital_expenses_by_capital_use
+  - name: stg_ntd_annual_data__2022__capital_expenses_by_mode
+  - name: stg_ntd_annual_data__2022__capital_expenses_for_existing_service
+  - name: stg_ntd_annual_data__2022__capital_expenses_for_expansion_of_service
+  - name: stg_ntd_annual_data__2022__breakdowns
+  - name: stg_ntd_annual_data__2022__breakdowns_by_agency

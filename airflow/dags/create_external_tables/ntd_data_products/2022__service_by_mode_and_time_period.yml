@@ -1,0 +1,152 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "service_by_mode_and_time_period/2022/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "service_by_mode_and_time_period/2022/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.2022__service_by_mode_and_time_period"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__service_by_mode_and_time_period LIMIT 1;
+schema_fields:
+  - name: _5_digit_ntd_id
+    type: STRING
+  - name: actual_vehicles_passenger_car_deadhead_hours
+    type: NUMERIC
+  - name: actual_vehicles_passenger_car_hours
+    type: NUMERIC
+  - name: actual_vehicles_passenger_car_miles
+    type: NUMERIC
+  - name: actual_vehicles_passenger_car_revenue_hours
+    type: NUMERIC
+  - name: actual_vehicles_passenger_car_revenue_miles
+    type: NUMERIC
+  - name: actual_vehicles_passenger_deadhead_miles
+    type: NUMERIC
+  - name: ada_upt
+    type: NUMERIC
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: aptl_questionable
+    type: STRING
+  - name: average_passenger_trip_length_aptl_
+    type: NUMERIC
+  - name: average_speed
+    type: NUMERIC
+  - name: average_speed_questionable
+    type: STRING
+  - name: brt_non_statutory_mixed_traffic
+    type: NUMERIC
+  - name: city
+    type: STRING
+  - name: charter_service_hours
+    type: NUMERIC
+  - name: days_of_service_operated
+    type: NUMERIC
+  - name: days_not_operated_strikes
+    type: NUMERIC
+  - name: days_not_operated_emergencies
+    type: NUMERIC
+  - name: deadhead_hours_questionable
+    type: STRING
+  - name: deadhead_miles_questionable
+    type: STRING
+  - name: directional_route_miles
+    type: NUMERIC
+  - name: directional_route_miles_questionable
+    type: STRING
+  - name: mixed_traffic_right_of_way
+    type: NUMERIC
+  - name: mode
+    type: STRING
+  - name: mode_name
+    type: STRING
+  - name: mode_voms
+    type: NUMERIC
+  - name: mode_voms_questionable
+    type: STRING
+  - name: organization_type
+    type: STRING
+  - name: passenger_miles
+    type: NUMERIC
+  - name: passenger_miles_questionable
+    type: STRING
+  - name: passengers_per_hour
+    type: NUMERIC
+  - name: passengers_per_hour_questionable
+    type: STRING
+  - name: primary_uza_area_sq_miles
+    type: NUMERIC
+  - name: primary_uza_code
+    type: NUMERIC
+  - name: primary_uza_name
+    type: STRING
+  - name: primary_uza_population
+    type: NUMERIC
+  - name: report_year
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: scheduled_revenue_miles_questionable
+    type: STRING
+  - name: scheduled_vehicles_passenger_car_revenue_miles
+    type: NUMERIC
+  - name: school_bus_hours
+    type: NUMERIC
+  - name: service_area_population
+    type: NUMERIC
+  - name: service_area_sq_miles
+    type: NUMERIC
+  - name: sponsored_service_upt
+    type: NUMERIC
+  - name: state
+    type: STRING
+  - name: time_period
+    type: STRING
+  - name: time_service_begins
+    type: STRING
+  - name: time_service_ends
+    type: STRING
+  - name: train_deadhead_hours
+    type: NUMERIC
+  - name: train_deadhead_miles
+    type: NUMERIC
+  - name: train_hours
+    type: NUMERIC
+  - name: train_hours_questionable
+    type: STRING
+  - name: trains_in_operation
+    type: NUMERIC
+  - name: trains_in_operation_questionable
+    type: STRING
+  - name: train_miles
+    type: NUMERIC
+  - name: train_miles_questionable
+    type: STRING
+  - name: train_revenue_hours
+    type: NUMERIC
+  - name: train_revenue_hours_questionable
+    type: STRING
+  - name: train_revenue_miles
+    type: NUMERIC
+  - name: train_revenue_miles_questionable
+    type: STRING
+  - name: type_of_service
+    type: STRING
+  - name: unlinked_passenger_trips_upt
+    type: NUMERIC
+  - name: unlinked_passenger_trips_questionable
+    type: STRING
+  - name: vehicle_hours_questionable
+    type: STRING
+  - name: vehicle_miles_questionable
+    type: STRING
+  - name: vehicle_revenue_hours_questionable
+    type: STRING
+  - name: vehicle_revenue_miles_questionable
+    type: STRING

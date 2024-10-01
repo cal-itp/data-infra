@@ -92,12 +92,11 @@ Code changes require building and pushing a new Docker image, as well as applyin
 
 1. Make code changes and increment version in `pyproject.toml`
    1. Ex. `poetry version 2023.4.10`
-2. `docker build ... & docker push ...` (*from within the archiver directory*) or wait for [build-gtfs-rt-archiver-v3-image](../../.github/workflows/build-gtfs-rt-archiver-v3-image.yml) GitHub Action to run after merge to main
-   1. Ex. `docker build -t ghcr.io/cal-itp/data-infra/gtfs-rt-archiver-v3:2023.4.10 . && docker push ghcr.io/cal-itp/data-infra/gtfs-rt-archiver-v3:2023.4.10`
-   2. To push from your local machine, you must have [authenticated to ghcr.io](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry)
-3. Change image tag version in the environments `kustomization.yaml`.
-   1. Ex. change the value of `newTag` to '`2023.4.10'`
-4. Finally, apply changes in production by opening and merging a second PR that includes the `kustomization.yaml` changes.
+2. Open a pull request and verify that the test container image build succeeds
+3. Merge the pull request and obtain the new image tag from the GitHub Actions build output or from <https://github.com/cal-itp/data-infra/pkgs/container/data-infra%2Fgtfs-rt-archiver-v3>
+4. Change image tag version in the environments `kustomization.yaml`.
+   1. Ex. change the value of `newTag` to '`2023.4.10-a66f90'`
+5. Finally, apply changes in production by opening and merging a second PR that includes the `kustomization.yaml` changes.
 
 ### Changing download configurations
 

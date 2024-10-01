@@ -2,6 +2,7 @@ WITH
 unfiltered_entries_latest AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
     WHERE _is_current
+        AND private_dataset IS NOT TRUE
 ),
 
 bridge_schedule_dataset_for_validation AS (

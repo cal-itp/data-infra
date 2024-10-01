@@ -1,0 +1,30 @@
+version: 2
+
+sources:
+  - name: external_ntd__ridership
+    description: |
+      The tables in this schema comprise the tabs found in the `complete_monthly_ridership_with_adjustments_and_estimates`
+      historical NTD ridership XLSX file, found at https://www.transit.dot.gov/ntd/ntd-data.
+      This data contains monthly-updated service information reported by urban Full Reporters.
+      This data release includes data values which differ from the  Raw Database Time Series (no adjustments or estimates) as follows:
+      - Adjustments to historical data (report year 2002 to 2011) for specific agencies which
+        changed data collection methodology and required data adjustments as a result (see Read Me tab for details).
+      - Estimates for recent months where no data is reported by an active NTD
+        reporter (i.e., an estimate due to delinquent report submission). These estimates are based on mode-level ridership
+        growth estimates developed by FTA. The strength of each estimate improves when the population of agencies reporting
+        in the prior period is larger.
+      This file will be updated periodically by FTA to include data for subsequent months, and to incorporate revisions
+      to prior months in the calendar year made by the transit properties. In some cases, this may include revisions to data
+      from previous report years.
+    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    schema: external_ntd__ridership
+    tables:
+      - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_upt
+      - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_vrm
+      - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__master
+      - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__upt
+      - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__upt_estimates
+      - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__voms
+      - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__vrh
+      - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm
+      - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm_estimates

@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: '2022'
+product: 'funding_sources_federal'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: 'qpjk-b3zw'
+file_format: '.json'

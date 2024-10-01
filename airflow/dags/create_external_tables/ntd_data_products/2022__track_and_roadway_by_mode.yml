@@ -1,0 +1,126 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "track_and_roadway_by_mode/2022/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "track_and_roadway_by_mode/2022/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.2022__track_and_roadway_by_mode"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__track_and_roadway_by_mode LIMIT 1;
+schema_fields:
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: at_grade_ballast_including
+    type: NUMERIC
+  - name: at_grade_ballast_including_1
+    type: STRING
+  - name: at_grade_in_street_embedded
+    type: NUMERIC
+  - name: at_grade_in_street_embedded_1
+    type: STRING
+  - name: below_grade_bored_or_blasted
+    type: NUMERIC
+  - name: below_grade_bored_or_blasted_1
+    type: STRING
+  - name: below_grade_cut_and_cover
+    type: NUMERIC
+  - name: below_grade_cut_and_cover_1
+    type: STRING
+  - name: below_grade_retained_cut
+    type: NUMERIC
+  - name: below_grade_retained_cut_1
+    type: STRING
+  - name: below_grade_submerged_tube
+    type: NUMERIC
+  - name: below_grade_submerged_tube_1
+    type: STRING
+  - name: city
+    type: STRING
+  - name: controlled_access_high
+    type: NUMERIC
+  - name: controlled_access_high_1
+    type: STRING
+  - name: double_crossover
+    type: NUMERIC
+  - name: double_crossover_q
+    type: STRING
+  - name: elevated_concrete
+    type: NUMERIC
+  - name: elevated_concrete_q
+    type: STRING
+  - name: elevated_retained_fill
+    type: NUMERIC
+  - name: elevated_retained_fill_q
+    type: STRING
+  - name: elevated_steel_viaduct_or
+    type: NUMERIC
+  - name: elevated_steel_viaduct_or_1
+    type: STRING
+  - name: exclusive_fixed_guideway
+    type: NUMERIC
+  - name: exclusive_fixed_guideway_1
+    type: STRING
+  - name: exclusive_high_intensity
+    type: NUMERIC
+  - name: exclusive_high_intensity_1
+    type: STRING
+  - name: grade_crossings
+    type: NUMERIC
+  - name: grade_crossings_q
+    type: STRING
+  - name: lapped_turnout
+    type: NUMERIC
+  - name: lapped_turnout_q
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: mode_name
+    type: STRING
+  - name: mode_voms
+    type: NUMERIC
+  - name: ntd_id
+    type: STRING
+  - name: organization_type
+    type: STRING
+  - name: primary_uza_population
+    type: NUMERIC
+  - name: rail_crossings
+    type: NUMERIC
+  - name: rail_crossings_q
+    type: STRING
+  - name: report_year
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: single_crossover
+    type: NUMERIC
+  - name: single_crossover_q
+    type: STRING
+  - name: single_turnout
+    type: NUMERIC
+  - name: single_turnout_q
+    type: STRING
+  - name: slip_switch
+    type: NUMERIC
+  - name: slip_switch_q
+    type: STRING
+  - name: state
+    type: STRING
+  - name: total_miles
+    type: STRING
+  - name: total_track_miles
+    type: NUMERIC
+  - name: total_track_miles_q
+    type: STRING
+  - name: type_of_service
+    type: STRING
+  - name: uace_code
+    type: STRING
+  - name: uza_name
+    type: STRING

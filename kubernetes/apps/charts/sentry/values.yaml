@@ -4,6 +4,17 @@ sentry:
   existingSecret: sentry-secret
   existingSecretKey: session-secret
 
+  redis:
+    replica:
+      replicaCount: 1
+      resources:
+        requests:
+          cpu: 2
+          memory: 2Gi
+        limits:
+          cpu: 2
+          memory: 3Gi
+
   postgresql:
     global:
       postgresql:

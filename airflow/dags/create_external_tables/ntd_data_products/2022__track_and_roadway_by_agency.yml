@@ -1,0 +1,78 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "track_and_roadway_by_agency/2022/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "track_and_roadway_by_agency/2022/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.2022__track_and_roadway_by_agency"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__track_and_roadway_by_agency LIMIT 1;
+schema_fields:
+  - name: max_agency
+    type: STRING
+  - name: max_agency_voms
+    type: NUMERIC
+  - name: max_city
+    type: STRING
+  - name: max_organization_type
+    type: STRING
+  - name: max_primary_uza_population
+    type: NUMERIC
+  - name: max_reporter_type
+    type: STRING
+  - name: max_state
+    type: STRING
+  - name: max_uace_code
+    type: STRING
+  - name: max_uza_name
+    type: STRING
+  - name: ntd_id
+    type: STRING
+  - name: report_year
+    type: STRING
+  - name: sum_at_grade_ballast_including
+    type: NUMERIC
+  - name: sum_at_grade_in_street_embedded
+    type: NUMERIC
+  - name: sum_below_grade_bored_or_blasted
+    type: NUMERIC
+  - name: sum_below_grade_cut_and_cover
+    type: NUMERIC
+  - name: sum_below_grade_retained_cut
+    type: NUMERIC
+  - name: sum_below_grade_submerged_tube
+    type: NUMERIC
+  - name: sum_controlled_access_high
+    type: NUMERIC
+  - name: sum_double_crossover
+    type: NUMERIC
+  - name: sum_elevated_concrete
+    type: NUMERIC
+  - name: sum_elevated_retained_fill
+    type: NUMERIC
+  - name: sum_elevated_steel_viaduct_or
+    type: NUMERIC
+  - name: sum_exclusive_fixed_guideway
+    type: NUMERIC
+  - name: sum_exclusive_high_intensity
+    type: NUMERIC
+  - name: sum_grade_crossings
+    type: NUMERIC
+  - name: sum_lapped_turnout
+    type: NUMERIC
+  - name: sum_rail_crossings
+    type: NUMERIC
+  - name: sum_single_crossover
+    type: NUMERIC
+  - name: sum_single_turnout
+    type: NUMERIC
+  - name: sum_slip_switch
+    type: NUMERIC
+  - name: sum_total_miles
+    type: NUMERIC
+  - name: sum_total_track_miles
+    type: NUMERIC

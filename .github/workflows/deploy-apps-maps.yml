@@ -2,10 +2,14 @@ name: Build and publish apps/maps
 
 on:
   push:
+    branches:
+      - 'main'
     paths:
+      - '.github/workflows/deploy-apps-maps.yml'
       - 'apps/maps/**'
   pull_request:
     paths:
+      - '.github/workflows/deploy-apps-maps.yml'
       - 'apps/maps/**'
   workflow_dispatch:
 
@@ -34,7 +38,7 @@ jobs:
 
     # Preview on PRs
     - name: Deploy apps/maps preview to Netlify
-      if: ${{ github.ref != 'refs/heads/main' }}
+      if: ${{ github.event_name == 'pull_request' }}
       run: |
         npm install -g netlify-cli
         netlify deploy --site=embeddable-maps-calitp-org --dir=apps/maps/build --alias=${GITHUB_REPOSITORY#*/}-${PR_NUMBER}

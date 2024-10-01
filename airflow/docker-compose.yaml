@@ -99,6 +99,10 @@ x-airflow-common:
     CALITP_BUCKET__PUBLISH: "gs://test-calitp-publish"
     CALITP_BUCKET__SENTRY_EVENTS: "gs://test-calitp-sentry"
 
+    CALITP_BUCKET__NTD_API_DATA_PRODUCTS: "gs://test-calitp-ntd-api-products"
+    CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW: "gs://test-calitp-ntd-xlsx-products-raw"
+    CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN: "gs://test-calitp-ntd-xlsx-products-clean"
+
     DBT_TARGET: staging_service_account
 
     # TODO: this can be removed once we've confirmed it's no longer in Airtable

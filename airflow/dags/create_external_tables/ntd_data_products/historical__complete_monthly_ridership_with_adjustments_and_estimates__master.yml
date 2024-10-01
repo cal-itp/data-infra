@@ -1,0 +1,71 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-xlsx-products-clean
+prefix_bucket: false
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates__master
+  LIMIT 1;
+source_objects:
+  - "complete_monthly_ridership_with_adjustments_and_estimates/historical/master/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates__master"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "complete_monthly_ridership_with_adjustments_and_estimates/historical/master/"
+schema_fields:
+  - name: ntd_id
+    type: STRING
+  - name: legacy_ntd_id
+    type: STRING
+  - name: agency
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: tos
+    type: STRING
+  - name: _3_mode
+    type: STRING
+  - name: mode_type_of_service_status
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: organization_type
+    type: STRING
+  - name: hq_city
+    type: STRING
+  - name: hq_state
+    type: STRING
+  - name: uace_cd
+    type: NUMERIC
+  - name: uza_name
+    type: STRING
+  - name: uza_sq_miles
+    type: NUMERIC
+  - name: uza_population
+    type: NUMERIC
+  - name: service_area_population
+    type: NUMERIC
+  - name: service_area_sq_miles
+    type: NUMERIC
+  - name: last_closed_report_year
+    type: NUMERIC
+  - name: last_closed_fy_end_month
+    type: NUMERIC
+  - name: last_closed_fy_end_year
+    type: NUMERIC
+  - name: passenger_miles_fy
+    type: FLOAT
+  - name: unlinked_passenger_trips_fy
+    type: FLOAT
+  - name: avg_trip_length_fy
+    type: FLOAT
+  - name: fares_fy
+    type: FLOAT
+  - name: operating_expenses_fy
+    type: FLOAT
+  - name: avg_cost_per_trip_fy
+    type: FLOAT
+  - name: avg_fares_per_trip_fy
+    type: FLOAT

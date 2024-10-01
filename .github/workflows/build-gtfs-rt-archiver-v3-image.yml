@@ -48,13 +48,15 @@ jobs:
           python-version: '3.10'
       - run: curl -sSL https://install.python-poetry.org | python -
       # from https://forcepush.tech/python-package-ci-cd-with-git-hub-actions
-      - name: Get image tag from pyproject.toml
+      - name: Get image tag from pyproject.toml and commit SHA
         run: |
           cd services/gtfs-rt-archiver-v3
           PROJECT_VERSION=$(poetry version --short)
           echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+
+          echo "GITHUB_SHA_SHORT=${GITHUB_SHA:0:6}" >> $GITHUB_ENV
       - uses: docker/build-push-action@v2
         with:
           context: services/gtfs-rt-archiver-v3
           push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{github.repository}}/gtfs-rt-archiver-v3:${{env.PROJECT_VERSION}}
+          tags: ghcr.io/${{github.repository}}/gtfs-rt-archiver-v3:${{env.PROJECT_VERSION}}-${{env.GITHUB_SHA_SHORT}}
