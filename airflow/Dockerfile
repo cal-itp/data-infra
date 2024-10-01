@@ -1,11 +1,14 @@
-FROM apache/airflow:2.4.3-python3.8
+FROM apache/airflow:2.4.3-python3.9
 
 # install gcloud as root, then switch back to airflow
 USER root
 
 RUN apt-get update \
-  && apt-get install -y git \
+  && apt-get install -y git gdal-bin libgdal-dev g++ \
   && rm -rf /var/lib/apt/lists/*
+
+RUN export CPLUS_INCLUDE_PATH=/usr/include/gdal
+RUN export C_INCLUDE_PATH=/usr/include/gdal
 
 RUN curl https://sdk.cloud.google.com > install.sh \
     && sudo bash install.sh --disable-prompts --install-dir=/usr/local/
