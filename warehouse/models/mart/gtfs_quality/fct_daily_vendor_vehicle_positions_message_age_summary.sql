@@ -26,6 +26,7 @@ vendor_vehicle_positions_ages AS (
     SELECT DISTINCT
         dt,
         organization_name,
+        organization_key,
         _header_message_age,
         _vehicle_message_age,
         _vehicle_message_age_vs_header
@@ -51,6 +52,7 @@ summarize_vehicle_ages AS (
     SELECT
         dt,
         organization_name,
+        organization_key,
         median_vehicle_message_age,
         p25_vehicle_message_age,
         p75_vehicle_message_age,
@@ -61,7 +63,9 @@ summarize_vehicle_ages AS (
         AVG(_vehicle_message_age) AS avg_vehicle_message_age
     FROM vehicle_age_percentiles
     GROUP BY
-        dt, organization_name,
+        dt,
+        organization_name,
+        organization_key,
         median_vehicle_message_age,
         p25_vehicle_message_age,
         p75_vehicle_message_age,
@@ -71,9 +75,10 @@ summarize_vehicle_ages AS (
 
 fct_daily_vendor_vehicle_positions_message_age_summary AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['dt', 'organization_name']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['dt', 'organization_key']) }} AS key,
         dt,
         organization_name,
+        organization_key,
         median_vehicle_message_age,
         p25_vehicle_message_age,
         p75_vehicle_message_age,
