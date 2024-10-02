@@ -11,35 +11,16 @@
 WITH vehicle_positions_ages AS (
     SELECT DISTINCT
         dt,
-        gtfs_dataset_name,
+        gtfs_dataset_key,
         _header_message_age,
         _vehicle_message_age,
         _vehicle_message_age_vs_header
-    FROM {{ ref('fct_vehicle_positions_messages') }} AS VPM
-    INNER JOIN {{ ref('dim_gtfs_service_data') }} AS GSD
-        ON VPM.gtfs_dataset_key = GSD.gtfs_dataset_key
+    FROM {{ ref('fct_vehicle_positions_messages') }}
     WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
-    AND customer_facing IS TRUE
 ),
 
 -- these values are repeated because one row in the source table is one vehicle message so the header is identical for all messages on a given request
 -- select distinct to deduplicate these to the overall message level to make summary statistics more meaningful
-
-bridge_organization_x_gtfs_dataset AS (
-    SELECT
-        organization_name,
-        gtfs_dataset_name,
-        MIN(_valid_from) AS valid_from,
-        MAX(_valid_to) AS valid_to
-    FROM {{ ref('bridge_organizations_x_gtfs_datasets_produced') }}
-    WHERE
-        (gtfs_dataset_name LIKE '%VehiclePositions%'
-        OR gtfs_dataset_name LIKE '%Vehicle Positions%'
-        OR gtfs_dataset_name LIKE '%VehiclePosition%'
-        OR gtfs_dataset_name LIKE '%Vehicle Position%')
-    GROUP BY
-        organization_name, gtfs_dataset_name
-),
 
 vendor_vehicle_positions_ages AS (
     SELECT DISTINCT
@@ -49,9 +30,9 @@ vendor_vehicle_positions_ages AS (
         _vehicle_message_age,
         _vehicle_message_age_vs_header
     FROM vehicle_positions_ages AS VPA
-    INNER JOIN bridge_organization_x_gtfs_dataset AS BOGD
-        ON VPA.gtfs_dataset_name = BOGD.gtfs_dataset_name
-        AND dt BETWEEN DATE(valid_from) AND DATE(valid_to)
+    INNER JOIN {{ ref('bridge_organizations_x_gtfs_datasets_produced') }} AS BOGD
+        ON VPA.gtfs_dataset_key = BOGD.gtfs_dataset_key
+        AND dt BETWEEN DATE(_valid_from) AND DATE(_valid_to)
 ),
 
 
