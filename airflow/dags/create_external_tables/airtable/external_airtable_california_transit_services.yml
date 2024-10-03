@@ -288,3 +288,30 @@ schema_fields:
   - name: public_currently_operating_fixed_route
     type: STRING
     mode: NULLABLE
+  - name: holiday_website_status__from_provider_
+    type: STRING
+    mode: NULLABLE
+  - name: holiday_website__from_provider_
+    type: STRING
+    mode: NULLABLE
+  - name: holiday_schedule___veterans_day__observed_
+    type: STRING
+    mode: NULLABLE
+  - name: holiday_schedule___veterans_day
+    type: STRING
+    mode: NULLABLE
+  - name: holiday_schedule___day_after_thanksgiving_day
+    type: STRING
+    mode: NULLABLE
+  - name: holiday_schedule___christmas_eve
+    type: STRING
+    mode: NULLABLE
+  - name: holiday_schedule___new_year_s_eve
+    type: STRING
+    mode: NULLABLE
+  - name: holiday_schedule_notes
+    type: STRING
+    mode: NULLABLE
+  - name: holiday_website_status
+    type: STRING
+    mode: NULLABLE
