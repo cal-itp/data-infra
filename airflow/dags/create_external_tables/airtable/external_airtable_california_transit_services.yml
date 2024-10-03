@@ -288,9 +288,6 @@ schema_fields:
   - name: public_currently_operating_fixed_route
     type: STRING
     mode: NULLABLE
-  - name: holiday_website_status__from_provider_
-    type: STRING
-    mode: NULLABLE
   - name: holiday_website__from_provider_
     type: STRING
     mode: NULLABLE
