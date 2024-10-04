@@ -309,6 +309,6 @@ schema_fields:
   - name: holiday_schedule_notes
     type: STRING
     mode: NULLABLE
-  - name: holiday_website_status
+  - name: holiday_website_condition
     type: STRING
     mode: NULLABLE
