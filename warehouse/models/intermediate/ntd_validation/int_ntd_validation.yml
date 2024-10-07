@@ -1,9 +1,17 @@
 version: 2
 
 models:
+  - name: int_ntd_a10_facilitiesdata
+    description: |
+      For assessing A10-032: Check that sum of total facilities for each agency, across all modes, is a whole number.
+      NOTE: This model uses a dynamic variable for "this_year" which is based on the timestamp that this run started.
+  - name: int_ntd_a30_voms_vins_totals
+    description: |
+      Gets the number of VOMS in the RR-20 and the number of VINS in the A30
   - name: int_ntd_rr20_financial_fare_revenues
     description: |
       Setting up the RR-20 data for comparing fare revenues to previous year
+      NOTE: This model uses dynamic variables for "this_year" and "last_year" which are based on the timestamp that this run started.
     # tests:
     #   - dbt_utils.expression_is_true:
     #       expression: 'status != {{ guidelines_to_be_assessed_status() }}'
@@ -12,17 +20,18 @@ models:
     description: |
       Setting up the RR-20 data for comparing specific funding sources - the 5311 funds, and Other directly generated funds
       For NTD validation error ID #s RR20F-070, RR20F-065, RR20F-068, RR20F-066, RR20F-013
+      NOTE: This model uses dynamic variables for "this_year" and "last_year" which are based on the timestamp that this run started.
   - name: int_ntd_rr20_financial_total_exp
     description: |
       Setting up the RR-20 data for comparing totals, for operating and capital expenses, reported in different areas of the RR-20
       For NTD validation error ID #s RR20F-001OA, RR20F-001C, RR20F-182
+      NOTE: This model uses a dynamic variable for "this_year" which is based on the timestamp that this run started.
   - name: int_ntd_rr20_service_1alldata
     description: |
-      1st intermediate cleaning step for service data. Combines 2023 and 2022 data in preparation for doing NTD validation checks.
-      The 2022 data was *not* from the API and so formatted differently
-      We are *assuming* that data in 2024 and onwards will be the same format as 2023
-      If you get errors in 2024, check which columns may differ and read errors carefully.
-      NOTE!!!! You must add in the 2024 data when it is available with another CTE. IF NOT THERE WILL BE NO 2024 DATA CHECKED.
+      1st intermediate cleaning step for service data. Combines the current year and previous year data in preparation for doing NTD validation checks.
+      NOTE: This model uses dynamic variables for "this_year" and "last_year" which are based on the timestamp that this run started.
+    config:
+      materialized: table
   - name: int_ntd_rr20_service_2ratioslong
     description: |
       2nd intermediate cleaning step for service data. Calculates all needed NTD metrics that are ratios of two other values. E.g., cost per hour,
@@ -32,7 +41,6 @@ models:
   - name: int_ntd_rr20_service_3ratios_wide
     description: |
       3rd intermediate cleaning step for service data. Pivots data from the 2nd cleaning step (above) from longform to wide form.
-      NOTE!!!! A column for 2024 has already been added, but in 2025 and beyond you must go in and add a column for the year of interest
-      e.g., 2025, (and up to you to delete any columns you don't want, e.g. 2022)
+      NOTE: This model uses dynamic variables for "this_year" and "last_year" which are based on the timestamp that this run started.
     config:
       materialized: table
