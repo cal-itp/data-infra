@@ -306,6 +306,138 @@ models:
         description: Miles of roadway used by BRT routes that are not recognized by FTA
           as BRT for funding purposes.
       - name: drm_mixed_traffic_row
+  - name: dim_annual_funding_sources
+    description: >-
+      This dataset details federal, state, and local funding sources for each applicable agency reporting to the NTD in Report Year 2022.
+      Federal funding sources are financial assistance obtained from the Federal Government to assist with the costs of providing transit services.
+      NTD Data Tables organize and summarize data from the 2022 National Transit Database in a manner that is more useful for quick reference and summary analysis.
+      This dataset is based on the 2022 Revenue Sources database file.
+
+      Source documents:
+        https://data.transportation.gov/Public-Transit/2022-NTD-Annual-Data-Funding-Sources-Federal-/qpjk-b3zw/about_data
+        https://data.transportation.gov/Public-Transit/2022-NTD-Annual-Data-Funding-Sources-State-/dd43-h6wv/about_data
+        https://data.transportation.gov/Public-Transit/2022-NTD-Annual-Data-Funding-Sources-Local-/8tvb-ywj3/about_data
+    columns:
+      - name: funding_source
+        description: |
+          The table that originated the funding source information.
+          The options are: "federal", "state", and "local".
+      - name: agency
+        description: The transit agency's name.
+      - name: agency_voms
+        description: |
+          The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
+          This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
+          Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+      - name: city
+        description: The city in which the agency is headquartered.
+      - name: fuel_tax
+        description: |
+          Revenue from taxing fuel.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - name: fta_capital_program_5309
+        description: |
+          The Capital Program provided capital assistance for three primary activities:
+          - New and replacement buses and facilities,
+          - Modernization of existing fixed guideway (FG) systems,
+          - New fixed FG systems In MAP-21.
+          The Capital Program was split into three separate programs.
+          The State of Good Repair program is one of these successor programs.
+          The other two are the Bus and Bus Facilities (5339) program and the Fixed Guideway Capital Investment (5309) program.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: fta_rural_progam_5311
+        description: |
+          This program provides formula funding to States and Indian Tribes for supporting public transportation in areas with a population of less than 50,000.
+          Funding may be used for capital, operating, State administration, and project administration expenses.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: fta_urbanized_area_formula
+        description: |
+          The Urbanized Area Formula Funding program (49 U.S.C. 5307) provides Federal resources to urbanized areas for transit capital and operating assistance and for transit related planning.
+          The Bus and Bus Facilities program is a formula program that finances capital projects to replace, rehabilitate, and purchase buses and related equipment and to construct bus-related facilities.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: general_funds
+        description: |
+          Any funds allocated to transit out of the general revenues of the local or state government.
+          General revenue funds are usually granted through a state or local government’s annual budgeting process.
+          *ONLY for Local and State Funding Sources (funding_source IN ("local", "state"))
+      - name: income_tax
+        description: |
+          Revenue from taxing income.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - name: ntd_id
+        description: A five-digit identifying number for each agency used in the current NTD system.
+      - name: organization_type
+        description: Description of the agency's legal entity.
+      - name: other_dot_funds
+        description: |
+          Funding from grants provided by divisions of the federal Department of Transportation other than FTA.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: other_federal_funds
+        description: |
+          Funding from departments of the federal government other than Transportation.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: other_fta_funds
+        description: |
+          Funding from FTA grants other than the ones already listed (5307, 5339, 5309, 5337, 5311).
+          May include:
+          - 5303 Metropolitan Planning,
+          - 5308 Clean Fuels,
+          - 5310 Special Needs/ADA,
+          - 5316 Job Access and Reverse Commute,
+          - 5317 New Freedom,
+          - 5320 Transit in the Park.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: other_funds
+        description: |
+          Revenue from funds imposed on the public other than taxes, such as:
+          - Vehicle licensing and registration fees,
+          - Lottery and casino proceeds,
+          - Sale of property and assets.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - name: other_taxes
+        description: |
+          Revenues generated from a charge imposed by the state or local government, or independent political entity (e.g., transit authority) on persons or property to help pay expenses, including:
+          - Payroll taxes,
+          - Utility taxes,
+          - Communication taxes (e.g., telephone taxes),
+          - Motor vehicle and tire excise taxes.
+          But excluding:
+          - Income taxes,
+          - Property taxes,
+          - Sales taxes,
+          - Fuel taxes.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - name: primary_uza_population
+        description: The population of the urbanized area primarily served by the agency.
+      - name: property_tax
+        description: |
+          Revenue from taxing property.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - name: reduced_reporter_funds
+        description: |
+          Local and State funding sources reported by agencies that do not report funding sources in specific categories because they have reduced reporting requirements.
+          *ONLY for Local and State Funding Sources (funding_source IN ("local", "state"))
+      - name: report_year
+        description: The year for which the data was reported.
+      - name: reporter_type
+        description: The type of NTD report that the agency completed this year.
+      - name: sales_tax
+        description: |
+          Revenue from taxing sales.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - name: state
+        description: The state in which the agency is headquartered.
+      - name: tolls
+        description: |
+          Revenue from tolls on bridges, highways, and high occupancy/toll lanes.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - name: transportation_funds
+        description: |
+          *ONLY for State Funding Sources (funding_source = "state")
+      - name: uace_code
+        description: UACE Code remains consistent across census years.
+      - name: uza_name
+        description: The name of the agency's Urbanized Area.
   - name: dim_monthly_ntd_ridership_with_adjustments
     description: >-
       Extracts of the NTD Monthly Ridership with adjustments - VRM, VOMS, VRH,
