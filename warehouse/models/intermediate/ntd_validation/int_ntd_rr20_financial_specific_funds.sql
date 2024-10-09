@@ -18,7 +18,7 @@ WITH longform_this_year AS (
     MAX(api_report_last_modified_date) AS max_api_report_last_modified_date
      FROM {{ ref('stg_ntd_rr20_rural') }}
     WHERE item LIKE ANY("%Directly Generated Funds%","%Formula Grants for Rural Areas%","Local Funds")
-      AND api_report_period = {{this_year}}
+      AND api_report_period = {{ this_year }}
     GROUP BY organization, fiscal_year, total_expended, item
 ),
 
@@ -26,7 +26,6 @@ wide_this_year AS (
     SELECT * FROM
     (SELECT * FROM longform_this_year)
     PIVOT(AVG(total_expended) FOR item IN ('FTA_Formula_Grants_for_Rural_Areas_5311', 'Other_Directly_Generated_Funds', 'Local_Funds'))
-    ORDER BY organization
 ),
 
 longform_last_year AS (
@@ -42,7 +41,7 @@ longform_last_year AS (
     MAX(api_report_last_modified_date) AS max_api_report_last_modified_date
      FROM {{ ref('stg_ntd_rr20_rural') }}
     WHERE item LIKE ANY("%Directly Generated Funds%","%Formula Grants for Rural Areas%","Local Funds")
-      AND api_report_period = {{last_year}}
+      AND api_report_period = {{ last_year }}
     GROUP BY organization, fiscal_year, total_expended, item
 ),
 
@@ -50,10 +49,9 @@ wide_last_year AS (
     SELECT * FROM
     (SELECT * FROM longform_last_year)
     PIVOT(AVG(total_expended) FOR item IN ('FTA_Formula_Grants_for_Rural_Areas_5311', 'Other_Directly_Generated_Funds', 'Local_Funds'))
-    ORDER BY organization
 )
 
-SELECT wide_this_year.organization,
+SELECT COALESCE(wide_this_year.organization, wide_last_year.organization) AS organization,
        wide_this_year.FTA_Formula_Grants_for_Rural_Areas_5311 AS FTA_Formula_Grants_for_Rural_Areas_5311_This_Year,
        wide_this_year.Other_Directly_Generated_Funds AS Other_Directly_Generated_Funds_This_Year,
        wide_this_year.Local_Funds AS Local_Funds_This_Year,
