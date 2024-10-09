@@ -13,6 +13,8 @@ prefix_bucket: false
 post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__funding_sources_directly_generated LIMIT 1;
 schema_fields:
   - name: advertising
+    type: NUMERIC
+  - name: advertising_questionable
     type: STRING
   - name: agency
     type: STRING
@@ -21,24 +23,42 @@ schema_fields:
   - name: city
     type: STRING
   - name: concessions
+    type: NUMERIC
+  - name: concessions_questionable
     type: STRING
   - name: fares
+    type: NUMERIC
+  - name: fares_questionable
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: organization_type
     type: STRING
   - name: other
+    type: NUMERIC
+  - name: other_questionable
     type: STRING
   - name: park_and_ride
+    type: NUMERIC
+  - name: park_and_ride_questionable
     type: STRING
+  - name: primary_uza_population
+    type: NUMERIC
   - name: purchased_transportation
+    type: NUMERIC
+  - name: purchased_transportation_1
     type: STRING
   - name: report_year
-    type: NUMERIC
+    type: STRING
   - name: reporter_type
     type: STRING
   - name: state
     type: STRING
   - name: total
     type: NUMERIC
+  - name: total_questionable
+    type: STRING
+  - name: uace_code
+    type: STRING
+  - name: uza_name
+    type: STRING

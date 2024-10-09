@@ -13,22 +13,40 @@ prefix_bucket: false
 post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__track_and_roadway_guideway_age_distribution LIMIT 1;
 schema_fields:
   - name: _1940s
+    type: NUMERIC
+  - name: _1940s_q
     type: STRING
   - name: _1950s
+    type: NUMERIC
+  - name: _1950s_q
     type: STRING
   - name: _1960s
+    type: NUMERIC
+  - name: _1960s_q
     type: STRING
   - name: _1970s
+    type: NUMERIC
+  - name: _1970s_q
     type: STRING
   - name: _1980s
+    type: NUMERIC
+  - name: _1980s_q
     type: STRING
   - name: _1990s
+    type: NUMERIC
+  - name: _1990s_q
     type: STRING
   - name: _2000s
+    type: NUMERIC
+  - name: _2000s_q
     type: STRING
   - name: _2010s
+    type: NUMERIC
+  - name: _2010s_q
     type: STRING
   - name: _2020s
+    type: NUMERIC
+  - name: _2020s_q
     type: STRING
   - name: agency
     type: STRING
@@ -43,13 +61,15 @@ schema_fields:
   - name: mode_name
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: organization_type
     type: STRING
   - name: pre1940s
+    type: NUMERIC
+  - name: pre1940s_q
     type: STRING
   - name: primary_uza_population
-    type: STRING
+    type: NUMERIC
   - name: report_year
     type: STRING
   - name: reporter_type

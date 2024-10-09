@@ -33,23 +33,29 @@ schema_fields:
   - name: max_agency
     type: STRING
   - name: max_agency_voms
-    type: STRING
+    type: NUMERIC
   - name: max_city
     type: STRING
   - name: max_mode_name
     type: STRING
   - name: max_organization_type
     type: STRING
+  - name: max_primary_uza_population
+    type: NUMERIC
   - name: max_reporter_type
     type: STRING
   - name: max_state
     type: STRING
+  - name: max_uace_code
+    type: STRING
+  - name: max_uza_name
+    type: STRING
   - name: modecd
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: report_year
-    type: NUMERIC
+    type: STRING
   - name: sum_administrative_buildings
     type: NUMERIC
   - name: sum_communication_information

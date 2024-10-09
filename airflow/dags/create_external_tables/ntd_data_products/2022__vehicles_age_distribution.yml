@@ -13,59 +13,59 @@ prefix_bucket: false
 post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2022__vehicles_age_distribution LIMIT 1;
 schema_fields:
   - name: _0
-    type: STRING
+    type: NUMERIC
   - name: _1
-    type: STRING
+    type: NUMERIC
   - name: _10
-    type: STRING
+    type: NUMERIC
   - name: _11
-    type: STRING
+    type: NUMERIC
   - name: _12
-    type: STRING
+    type: NUMERIC
   - name: _13_15
-    type: STRING
+    type: NUMERIC
   - name: _16_20
-    type: STRING
+    type: NUMERIC
   - name: _2
-    type: STRING
+    type: NUMERIC
   - name: _21_25
-    type: STRING
+    type: NUMERIC
   - name: _26_30
-    type: STRING
+    type: NUMERIC
   - name: _3
-    type: STRING
+    type: NUMERIC
   - name: _31_60
-    type: STRING
+    type: NUMERIC
   - name: _4
-    type: STRING
+    type: NUMERIC
   - name: _5
-    type: STRING
+    type: NUMERIC
   - name: _6
-    type: STRING
+    type: NUMERIC
   - name: _60
-    type: STRING
+    type: NUMERIC
   - name: _7
-    type: STRING
+    type: NUMERIC
   - name: _8
-    type: STRING
+    type: NUMERIC
   - name: _9
-    type: STRING
+    type: NUMERIC
   - name: agency
     type: STRING
   - name: agency_voms
     type: NUMERIC
   - name: average_age_of_fleet_in_years
-    type: STRING
+    type: NUMERIC
   - name: average_lifetime_miles_per
     type: STRING
   - name: city
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: organization_type
     type: STRING
   - name: primary_uza_population
-    type: STRING
+    type: NUMERIC
   - name: report_year
     type: STRING
   - name: reporter_type
@@ -73,7 +73,7 @@ schema_fields:
   - name: state
     type: STRING
   - name: total_vehicles
-    type: STRING
+    type: NUMERIC
   - name: uace_code
     type: STRING
   - name: uza_name

@@ -20,25 +20,43 @@ schema_fields:
     type: STRING
   - name: fares_and_other_directly
     type: NUMERIC
+  - name: fares_and_other_directly_1
+    type: STRING
   - name: federal
     type: NUMERIC
+  - name: federal_questionable
+    type: STRING
   - name: fund_expenditure_type
     type: STRING
   - name: local
     type: NUMERIC
+  - name: local_questionable
+    type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: organization_type
     type: STRING
-  - name: report_year
+  - name: primary_uza_population
     type: NUMERIC
+  - name: report_year
+    type: STRING
   - name: reporter_type
     type: STRING
   - name: state
     type: STRING
   - name: state_1
     type: NUMERIC
+  - name: state_questionable
+    type: STRING
   - name: taxes_fees_levied_by_transit
     type: NUMERIC
+  - name: taxes_fees_levied_by_transit_1
+    type: STRING
   - name: total
     type: NUMERIC
+  - name: total_questionable
+    type: STRING
+  - name: uace_code
+    type: STRING
+  - name: uza_name
+    type: STRING

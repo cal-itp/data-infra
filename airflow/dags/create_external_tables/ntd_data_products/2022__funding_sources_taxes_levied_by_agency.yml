@@ -23,17 +23,19 @@ schema_fields:
   - name: income_tax
     type: NUMERIC
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: organization_type
     type: STRING
   - name: other_funds
     type: NUMERIC
   - name: other_tax
     type: NUMERIC
+  - name: primary_uza_population
+    type: NUMERIC
   - name: property_tax
     type: NUMERIC
   - name: report_year
-    type: NUMERIC
+    type: STRING
   - name: reporter_type
     type: STRING
   - name: sales_tax
@@ -44,3 +46,7 @@ schema_fields:
     type: NUMERIC
   - name: total
     type: NUMERIC
+  - name: uace_code
+    type: STRING
+  - name: uza_name
+    type: STRING

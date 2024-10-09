@@ -18,38 +18,94 @@ schema_fields:
     type: NUMERIC
   - name: bio_diesel_gal
     type: NUMERIC
+  - name: bio_diesel_gal_questionable
+    type: STRING
   - name: city
     type: STRING
   - name: compressed_natural_gas
     type: NUMERIC
+  - name: compressed_natural_gas_mpg
+    type: NUMERIC
+  - name: compressed_natural_gas_mpg_1
+    type: STRING
+  - name: compressed_natural_gas_1
+    type: STRING
   - name: compressed_natural_gas_gal
     type: NUMERIC
+  - name: compressed_natural_gas_gal_1
+    type: STRING
   - name: diesel
     type: NUMERIC
+  - name: diesel_questionable
+    type: STRING
   - name: diesel_gal
     type: NUMERIC
+  - name: diesel_gal_questionable
+    type: STRING
   - name: diesel_mpg
     type: NUMERIC
+  - name: diesel_mpg_questionable
+    type: STRING
   - name: electric_battery
     type: NUMERIC
+  - name: electric_battery_questionable
+    type: STRING
   - name: electric_battery_kwh
     type: NUMERIC
+  - name: electric_battery_kwh_1
+    type: STRING
+  - name: electric_battery_mi_kwh
+    type: NUMERIC
+  - name: electric_battery_mi_kwh_1
+    type: STRING
   - name: electric_propulsion
     type: NUMERIC
+  - name: electric_propulsion_1
+    type: STRING
   - name: electric_propulsion_kwh
     type: NUMERIC
+  - name: electric_propulsion_kwh_1
+    type: STRING
+  - name: electric_propulsion_mi_kwh
+    type: NUMERIC
+  - name: electric_propulsion_mi_kwh_1
+    type: STRING
   - name: gasoline
     type: NUMERIC
+  - name: gasoline_mpg
+    type: NUMERIC
+  - name: gasoline_mpg_questionable
+    type: STRING
+  - name: gasoline_questionable
+    type: STRING
   - name: gasoline_gal
     type: NUMERIC
+  - name: gasoline_gal_questionable
+    type: STRING
   - name: hydrogen
     type: NUMERIC
+  - name: hydrogen_mpkg_
+    type: NUMERIC
+  - name: hydrogen_mpkg_questionable
+    type: STRING
+  - name: hydrogen_questionable
+    type: STRING
   - name: hydrogen_kg_
     type: NUMERIC
+  - name: hydrogen_kg_questionable
+    type: STRING
   - name: liquefied_petroleum_gas
     type: NUMERIC
+  - name: liquefied_petroleum_gas_mpg
+    type: NUMERIC
+  - name: liquefied_petroleum_gas_mpg_1
+    type: STRING
+  - name: liquefied_petroleum_gas_1
+    type: STRING
   - name: liquefied_petroleum_gas_gal
     type: NUMERIC
+  - name: liquefied_petroleum_gas_gal_1
+    type: STRING
   - name: mode_name
     type: STRING
   - name: mode_voms
@@ -57,17 +113,25 @@ schema_fields:
   - name: modecd
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: organization_type
     type: STRING
   - name: other_fuel
     type: NUMERIC
+  - name: other_fuel_mpg
+    type: NUMERIC
+  - name: other_fuel_mpg_questionable
+    type: STRING
+  - name: other_fuel_questionable
+    type: STRING
   - name: other_fuel_gal_gal_equivalent
     type: NUMERIC
+  - name: other_fuel_gal_gal_equivalent_1
+    type: STRING
   - name: primary_uza_population
     type: NUMERIC
   - name: report_year
-    type: NUMERIC
+    type: STRING
   - name: reporter_type
     type: STRING
   - name: state

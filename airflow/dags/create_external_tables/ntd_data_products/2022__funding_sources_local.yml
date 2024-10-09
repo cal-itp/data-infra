@@ -19,32 +19,38 @@ schema_fields:
   - name: city
     type: STRING
   - name: fuel_tax
-    type: STRING
-  - name: general_fund
-    type: STRING
-  - name: income_tax
-    type: STRING
-  - name: ntd_id
     type: NUMERIC
+  - name: general_fund
+    type: NUMERIC
+  - name: income_tax
+    type: NUMERIC
+  - name: ntd_id
+    type: STRING
   - name: organization_type
     type: STRING
   - name: other_funds
-    type: STRING
-  - name: other_taxes
-    type: STRING
-  - name: property_tax
-    type: STRING
-  - name: reduced_reporter_funds
-    type: STRING
-  - name: report_year
     type: NUMERIC
+  - name: other_taxes
+    type: NUMERIC
+  - name: primary_uza_population
+    type: NUMERIC
+  - name: property_tax
+    type: NUMERIC
+  - name: reduced_reporter_funds
+    type: NUMERIC
+  - name: report_year
+    type: STRING
   - name: reporter_type
     type: STRING
   - name: sales_tax
-    type: STRING
+    type: NUMERIC
   - name: state
     type: STRING
   - name: tolls
-    type: STRING
+    type: NUMERIC
   - name: total
     type: NUMERIC
+  - name: uace_code
+    type: STRING
+  - name: uza_name
+    type: STRING

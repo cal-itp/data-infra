@@ -18,7 +18,7 @@ schema_fields:
   - name: top_150
     type: STRING
   - name: ntd_id
-    type: NUMERIC
+    type: STRING
   - name: agency
     type: STRING
   - name: mode
