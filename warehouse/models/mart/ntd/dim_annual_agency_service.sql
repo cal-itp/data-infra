@@ -1,6 +1,6 @@
 {{ config(materialized="table") }}
 with source as (
-        select * from {{ ref("stg_ntd__annual_database_service") }}
+        select * from {{ ref("stg_ntd_annual_data__2022__service_by_agency") }}
     ),
 ntd_modes as (
     select * from {{ ref("int_ntd__modes") }}

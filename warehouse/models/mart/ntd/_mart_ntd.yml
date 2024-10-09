@@ -45,7 +45,8 @@ models:
       - name: _is_current
         tests:
           - not_null
-  - name: dim_annual_ntd_agency_service
+  - name: dim_annual_agency_mode_time_of_day_service
+  - name: dim_annual_agency_service
     description: >-
       Contains operating statistics reported by mode and type of service.
       Categorized by vehicles operated and vehicles available in maximum service
