@@ -1,37 +1,241 @@
 version: 2
 
 models:
-  - name: stg_ntd_annual_data__2022__stations_and_facilities_by_agency_and_facility_type
-  - name: stg_ntd_annual_data__2022__stations_by_mode_and_age
-  - name: stg_ntd_annual_data__2022__operating_expenses_by_function
-  - name: stg_ntd_annual_data__2022__operating_expenses_by_function_and_agency
-  - name: stg_ntd_annual_data__2022__operating_expenses_by_type
-  - name: stg_ntd_annual_data__2022__operating_expenses_by_type_and_agency
-  - name: stg_ntd_annual_data__2022__vehicles_age_distribution
-  - name: stg_ntd_annual_data__2022__vehicles_type_count_by_agency
-  - name: stg_ntd_annual_data__2022__service_by_mode_and_time_period
-  - name: stg_ntd_annual_data__2022__service_by_mode
-  - name: stg_ntd_annual_data__2022__service_by_agency
-  - name: stg_ntd_annual_data__2022__track_and_roadway_by_mode
-  - name: stg_ntd_annual_data__2022__track_and_roadway_guideway_age_distribution
-  - name: stg_ntd_annual_data__2022__track_and_roadway_by_agency
-  - name: stg_ntd_annual_data__2022__metrics
-  - name: stg_ntd_annual_data__2022__funding_sources_by_expense_type
-  - name: stg_ntd_annual_data__2022__funding_sources_directly_generated
-  - name: stg_ntd_annual_data__2022__funding_sources_taxes_levied_by_agency
-  - name: stg_ntd_annual_data__2022__funding_sources_local
-  - name: stg_ntd_annual_data__2022__funding_sources_state
-  - name: stg_ntd_annual_data__2022__funding_sources_federal
-  - name: stg_ntd_annual_data__2022__maintenance_facilities
-  - name: stg_ntd_annual_data__2022__maintenance_facilities_by_agency
-  - name: stg_ntd_annual_data__2022__fuel_and_energy
-  - name: stg_ntd_annual_data__2022__fuel_and_energy_by_agency
-  - name: stg_ntd_annual_data__2022__employees_by_mode_and_employee_type
-  - name: stg_ntd_annual_data__2022__employees_by_mode
-  - name: stg_ntd_annual_data__2022__employees_by_agency
+  - name: stg_ntd_annual_data__2022__breakdowns
+  - name: stg_ntd_annual_data__2022__breakdowns_by_agency
   - name: stg_ntd_annual_data__2022__capital_expenses_by_capital_use
   - name: stg_ntd_annual_data__2022__capital_expenses_by_mode
   - name: stg_ntd_annual_data__2022__capital_expenses_for_existing_service
   - name: stg_ntd_annual_data__2022__capital_expenses_for_expansion_of_service
-  - name: stg_ntd_annual_data__2022__breakdowns
-  - name: stg_ntd_annual_data__2022__breakdowns_by_agency
+  - name: stg_ntd_annual_data__2022__employees_by_agency
+  - name: stg_ntd_annual_data__2022__employees_by_mode
+  - name: stg_ntd_annual_data__2022__employees_by_mode_and_employee_type
+  - name: stg_ntd_annual_data__2022__fuel_and_energy
+  - name: stg_ntd_annual_data__2022__fuel_and_energy_by_agency
+  - name: stg_ntd_annual_data__2022__funding_sources_by_expense_type
+  - name: stg_ntd_annual_data__2022__funding_sources_directly_generated
+  - name: stg_ntd_annual_data__2022__funding_sources_federal
+  - name: stg_ntd_annual_data__2022__funding_sources_local
+  - name: stg_ntd_annual_data__2022__funding_sources_state
+  - name: stg_ntd_annual_data__2022__funding_sources_taxes_levied_by_agency
+  - name: stg_ntd_annual_data__2022__maintenance_facilities
+  - name: stg_ntd_annual_data__2022__maintenance_facilities_by_agency
+  - name: stg_ntd_annual_data__2022__metrics
+  - name: stg_ntd_annual_data__2022__operating_expenses_by_function
+  - name: stg_ntd_annual_data__2022__operating_expenses_by_function_and_agency
+  - name: stg_ntd_annual_data__2022__operating_expenses_by_type
+  - name: stg_ntd_annual_data__2022__operating_expenses_by_type_and_agency
+  - name: stg_ntd_annual_data__2022__service_by_agency
+    description: |
+      Provides transit agency-wide totals for service data for applicable agencies reporting to the National Transit Database in the 2022 report year.
+      This view displays the data at a higher level (by agency), based on the "2022 NTD Annual Data - Service (by Mode and Time Period)" dataset.
+      In the years 2015-2021, you can find this data in the "Service" data table on NTD Program website, at https://transit.dot.gov/ntd/ntd-data.
+      In versions of the data tables from before 2014, you can find data on service in the file called "Transit Operating Statistics: Service Supplied and Consumed."
+    columns:
+      - name: report_year
+        description: The year for which the data was reported.
+      - name: _5_digit_ntd_id
+        description: A five-digit identifying number for each agency used in the current NTD system.
+      - name: agency
+        description: The transit agency's name.
+      - name: max_reporter_type
+        description: The type of NTD report that the agency completed this year.
+      - name: max_organization_type
+        description: Description of the agency's legal entity.
+      - name: max_city
+        description: The city in which the agency is headquartered.
+      - name: max_state
+        description: The state in which the agency is headquartered.
+      - name: max_agency_voms
+        description: |
+          The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
+          This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
+          Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+      - name: max_primary_uza_code
+        description: UACE Code remains consistent across census years.
+      - name: max_primary_uza_name
+        description: The name of the agency's Urbanized Area.
+      - name: max_primary_uza_area_sq_miles
+        description: The agency's Urbanized Area's size in square miles.
+      - name: max_primary_uza_population
+        description: The population of the urbanized area primarily served by the agency.
+      - name: max_service_area_sq_miles
+        description: The agency's service area's size in square miles.
+      - name: max_service_area_population
+        description: The population of the service area served by the agency.
+      - name: sum_actual_vehicles_passenger_car_deadhead_hours
+        description: |
+          The hours that a vehicle/passenger car travels when out of revenue service.
+          Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: sum_actual_vehicles_passenger_car_hours
+        description: |
+          The hours that vehicles/passenger cars travel while in revenue service plus deadhead hours.
+          Actual vehicle hours include:
+            - Revenue service,
+            - Deadhead,
+            - Layover/recovery time.
+          Actual vehicle hours exclude:
+            - Hours for charter service,
+            - School bus service,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: sum_actual_vehicles_passenger_car_miles
+        description: |
+          The miles that vehicles/passenger cars travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
+          Actual vehicle miles include:
+            - Revenue service,
+            - Deadhead.
+          Actual vehicle miles exclude:
+            - Miles for charter services,
+            - School bus service,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: sum_actual_vehicles_passenger_car_revenue_hours
+        description: |
+          The hours that vehicles/passenger cars travel while in revenue service.
+          Vehicle revenue hours (VRH) include:
+            - Revenue service,
+            - Layover/recovery time.
+          Actual vehicle revenue hours exclude:
+            - Deadhead,
+            - Operator training,
+            - Maintenance testing,
+            - School bus and charter services.
+      - name: sum_actual_vehicles_passenger_car_revenue_miles
+        description: |
+          The miles that vehicles/passenger cars travel while in revenue service.
+          Vehicle revenue miles (VRM) include:
+            - Revenue service.
+          Actual vehicle revenue miles exclude:
+            - Deadhead,
+            - Operator training,
+            - Maintenance testing,
+            - School bus and charter services.
+      - name: sum_actual_vehicles_passenger_deadhead_miles
+        description: |
+          The miles that a vehicle/passenger car travels when out of revenue service.
+          Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: sum_scheduled_vehicles_passenger_car_revenue_miles
+        description: |
+          The total service scheduled to be provided for picking up and discharging passengers.
+          Scheduled service is computed from internal transit agency planning documents (e.g., run paddles, trip tickets, and public timetables).
+          Scheduled service excludes special additional services.
+      - name: sum_charter_service_hours
+        description: Hours run in charter service.
+      - name: sum_school_bus_hours
+        description: Hours run in school bus service.
+      - name: sum_trains_in_operation
+        description: The maximum number of trains actually operated to provide service during the year.
+      - name: sum_directional_route_miles
+        description: |
+          The mileage in each direction over which public transportation vehicles travel while in revenue service.
+          Directional route miles (DRM) are:
+          - A measure of the route path over a facility or roadway, not the service carried on the facility; e.g., number of routes, vehicles, or vehicle revenue miles.
+          - Computed with regard to direction of service, but without regard to the number of traffic lanes or rail tracks existing in the right-of-way (ROW).
+          Directional route miles (DRM) do not include staging or storage areas at the beginning or end of a route.
+      - name: sum_passenger_miles
+        description: The cumulative sum of the distances ridden by each passenger.
+      - name: sum_train_miles
+        description: |
+          The miles that trains travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
+          Train miles include:
+            - Revenue service,
+            - Deadhead.
+          Train miles exclude:
+            - Miles for charter services,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: sum_train_revenue_miles
+        description: |
+          The miles that trains travel while in revenue service.
+          Train revenue miles include:
+            - Revenue service.
+          Train revenue miles exclude:
+            - Deadhead,
+            - Operator training,
+            - Maintenance testing,
+            - Charter services.
+      - name: sum_train_deadhead_miles
+        description: |
+          The miles that a train travels when out of revenue service. Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: sum_train_hours
+        description: |
+          The hours that trains travel while in revenue service plus deadhead hours.
+          Train hours include:
+            - Revenue service,
+            - Deadhead,
+            - Layover/recovery time,
+          Train hours exclude:
+            - Hours for charter service,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: sum_train_revenue_hours
+        description: |
+          The hours that trains travel while in revenue service. Train revenue hours include:
+            - Revenue service,
+            - Layover/recovery time.
+          Train revenue hours exclude:
+            - Deadhead,
+            - Operator training,
+            - Maintenance testing,
+            - Charter services.
+      - name: sum_train_deadhead_hours
+        description: |
+          The hours that a train travels when out of revenue service. Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: sum_ada_upt
+        description: Unlinked Passenger Trips embarked per stipulations of the Americans with Disabilities Act.
+      - name: sum_sponsored_service_upt
+        description: Unlinked Passenger Trips embarked under sponsored service.
+      - name: sum_unlinked_passenger_trips_upt
+        description: |
+          The number of passengers who board public transportation vehicles.
+          Passengers are counted each time they board a vehicle no matter how many vehicles they use to travel from their origin to their destination.
+  - name: stg_ntd_annual_data__2022__service_by_mode
+  - name: stg_ntd_annual_data__2022__service_by_mode_and_time_period
+  - name: stg_ntd_annual_data__2022__stations_and_facilities_by_agency_and_facility_type
+  - name: stg_ntd_annual_data__2022__stations_by_mode_and_age
+  - name: stg_ntd_annual_data__2022__track_and_roadway_by_agency
+  - name: stg_ntd_annual_data__2022__track_and_roadway_by_mode
+  - name: stg_ntd_annual_data__2022__track_and_roadway_guideway_age_distribution
+  - name: stg_ntd_annual_data__2022__vehicles_age_distribution
+  - name: stg_ntd_annual_data__2022__vehicles_type_count_by_agency
