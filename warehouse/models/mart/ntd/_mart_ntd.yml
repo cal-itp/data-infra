@@ -45,267 +45,6 @@ models:
       - name: _is_current
         tests:
           - not_null
-  - name: dim_annual_ntd_agency_service
-    description: >-
-      Contains operating statistics reported by mode and type of service.
-      Categorized by vehicles operated and vehicles available in maximum service
-      by day and time period.
-
-      Source document:
-      https://www.transit.dot.gov/ntd/data-product/2022-annual-database-service
-    columns:
-      - name: _dt
-      - name: year
-        description: The year this data was added to the mart and thus the ntd_id's year
-          as well.
-      - name: state_parent_ntd_id
-      - name: ntd_id
-      - name: agency_name
-      - name: reporter_type
-      - name: subrecipient_type
-      - name: reporting_module
-      - name: mode
-        description: The mode of service operated under the contract. A contractor can
-          operate more than one mode/TOS under a contract (only one B-30 for
-          that contractor).
-      - name: mode_full_name
-      - name: service_type
-        description: A summarization of modes into Fixed Route and Demand Response
-      - name: tos
-        description: The type of service operated under the contract.
-      - name: time_period
-      - name: time_service_begins
-        description: >
-          Start of transit service, i.e. the time when the first revenue service
-          vehicle leaves the garage or point of dispatch.
-      - name: time_service_ends
-        description: "End of night transit service; i.e. the time when a revenue service
-          vehicle returns to the garage or point of dispatch "
-      - name: vehicles_passenger_cars_operated_in_maximum_service
-      - name: vehicles_passenger_cars_available_for_maximum_service
-      - name: trains_in_operation
-        description: >
-          The maximum number of trains actually operated to provide service on
-          an average weekday, average Saturday and average Sunday.
-      - name: vehicles_passenger_cars_in_operation
-        description: >
-          The maximum number of vehicles or passenger cars actually operated to
-          provide service on an average weekday, average Saturday and average
-          Sunday.
-      - name: actual_vehicles_passenger_car_miles
-        description: >-
-          The miles that vehicles or passenger cars travel while in revenue
-          service (actual passenger car revenue miles) plus deadhead miles.
-          Actual vehicle or passenger car miles include:
-
-          • Revenue service
-
-          • Deadhead
-
-          Actual vehicle or passenger car miles exclude:
-
-          • Hours for charter services
-
-          2015 NTD Glossary
-
-          • Operator training
-
-          • Vehicle maintenance testing
-
-          • Fueling
-      - name: actual_vehicles_passenger_car_revenue_miles
-        description: >-
-          The miles that vehicles or passenger cars travel while in revenue
-          service. Vehicle or Passenger car revenue miles include:
-
-          • Revenue service
-
-          • Layover/recovery time
-
-          • Passenger loading time
-
-          Vehicle or Passenger car revenue miles exclude:
-
-          • Deadhead
-
-          • Operator training
-
-          • Vehicle maintenance tests
-
-          • Charter services
-      - name: actual_vehicle_passenger_deadhead_miles
-      - name: scheduled_actual_vehicle_passenger_car_revenue_miles
-        description: The anticipated revenue service to be completed by passenger cars
-          if there were no missed trips for the average weekday, average
-          Saturday, average Sunday and Annual Total. Excludes any deadhead and
-          additional services performed.
-      - name: actual_vehicle_passenger_car_hours
-        description: >-
-          The miles that vehicles or passenger cars travel while in revenue
-          service (actual passenger car revenue miles) plus deadhead miles.
-          Actual vehicle or passenger car miles include:
-
-          • Revenue service
-
-          • Deadhead
-
-          Actual vehicle or passenger car miles exclude:
-
-          • Hours for charter services
-
-          2015 NTD Glossary
-
-          • Operator training
-
-          • Vehicle maintenance testing
-
-          • Fueling
-      - name: actual_vehicle_passenger_car_revenue_hours
-        description: >-
-          The hours that vehicles or passenger cars travel while in revenue
-          service. Vehicle or Passenger car revenue hours include:
-
-          • Revenue service
-
-          • Layover/recovery time
-
-          • Passenger loading time
-
-          Vehicle or Passenger car revenue hours exclude:
-
-          • Deadhead
-
-          • Operator training
-
-          • Vehicle maintenance tests
-
-          • School Bus and Charter services
-      - name: actual_vehicle_passenger_car_deadhead_hours
-      - name: charter_service_hours
-        description: >-
-          "The total hours operated by revenue vehicles while in charter
-          service. Charter service hours include:
-
-          • Hours operated while carrying passengers for hire, and
-
-          • Associated deadhead hours "
-      - name: school_bus_hours
-        description: "The vehicle hours of travel by revenue vehicles while serving as a
-          school bus. School bus hours are only hours where a bus is primarily
-          or solely dedicated to carrying school passengers. "
-      - name: train_miles
-        description: >-
-          The miles that trains travel while in revenue service (actual train
-          revenue miles) plus deadhead miles. Actual train miles include:
-
-          • Revenue service
-
-          • Deadhead
-
-          Actual train miles exclude:
-
-          • Miles for charter services
-
-          • Operator training
-
-          • Vehicle maintenance testing
-      - name: train_revenue_miles
-        description: >-
-          The miles that trains travel while in revenue service. Train revenue
-          miles include:
-
-          • Revenue service
-
-          Train revenue miles exclude:
-
-          • Deadhead
-
-          • Training operators prior to revenue service
-
-          • Vehicle maintenance vehicle tests
-
-          • Charter services
-      - name: train_deadhead_miles
-      - name: train_hours
-        description: >-
-          The hours that trains travel while in revenue service (actual train
-          revenue hours) plus deadhead hours. Actual train hours include:
-
-          • Revenue service
-
-          • Deadhead
-
-          • Layover/recovery time Actual train hours exclude:
-
-          • Hours for charter services
-
-          • Operator training
-
-          • Vehicle maintenance testing
-      - name: train_revenue_hours
-        description: >-
-          The hours that trains travel while in revenue service. Train revenue
-          hours include:
-
-          • Revenue service
-
-          • Layover/recovery time Train revenue hours exclude:
-
-          • Deadhead
-
-          • Training operators prior to revenue service
-
-          • Vehicle maintenance tests
-
-          • Charter services
-      - name: train_deadhead_hours
-      - name: unlinked_passenger_trips__upt_
-        description: "The number of passengers who board public transportation vehicles.
-          Passengers are counted each time they board a vehicle no matter how
-          many vehicles they use to travel from their origin to their
-          destination. "
-      - name: ada_upt
-        description: The number of passengers who board public transportation vehicles
-          for complementary paratransit services (demand response (DR))
-          associated or attributed to the Americans with Disabilities Act of
-          1990 (ADA) compliance requirements. The number of ADA unlinked
-          passenger trips (UPT) should be less than or equal to the total number
-          of unlinked passenger trips. These trips are reported only for the DR
-          mode. ADA-related service reported to the National Transit Database
-          (NTD) should not include any categorical service (i.e. services that
-          are not available to the general public such as Medicaid,
-          Meals-On-Wheels, Head Start, sheltered workshops, independent living
-          centers, etc.) Also not included is service funded by the New Freedom
-          program.
-      - name: sponsored_service_upt
-        description: Public transportation services that are paid, in whole or in part,
-          directly to the transit provider by a third party. Transit providers
-          may offer these services as part of a Coordinated Human Services
-          Transportation Plan. Common sponsors include the Veterans
-          Administration, Medicare, sheltered workshops, the Association for
-          Retarded Citizens-Arc, Assisted Living Centers, and Head Start
-          programs.
-      - name: passenger_miles
-        description: Passenger Miles Traveled (PMT) - Average Weekday Schedule-The sum
-          of the distances ridden by each passenger
-      - name: days_of_service_operated
-        description: "Days Operated - Total Weekday Schedule\tSee: Form S-10, Service
-          Operated (Days), Days Operated - Annual Total"
-      - name: days_not_operated_due_to_strikes
-        description: Days Not Operated (Strikes) - Total Weekday Schedule	The number of
-          weekdays, Saturdays and Sundays that service did not operate due to
-          transit labor strikes.
-      - name: strike_comment
-        description: Description of Days Not Operated Due To Strikes.
-      - name: days_not_operated_due_to_emergencies
-        description: The number of weekdays, Saturdays and Sundays that service did not
-          operate due to officially declared emergencies.
-      - name: emergency_comment
-        description: Description of Days Not Operated Due to Emergency
-      - name: non_statutory_mixed_traffic
-        description: Miles of roadway used by BRT routes that are not recognized by FTA
-          as BRT for funding purposes.
-      - name: drm_mixed_traffic_row
   - name: dim_annual_funding_sources
     description: >-
       This dataset details federal, state, and local funding sources for each applicable agency reporting to the NTD in Report Year 2022.
@@ -444,6 +183,561 @@ models:
         description: UACE Code remains consistent across census years.
       - name: uza_name
         description: The name of the agency's Urbanized Area.
+  - name: dim_annual_service_agencies
+    description: >-
+      Provides transit agency-wide totals for service data for applicable agencies reporting to the National Transit Database in the 2022 report year.
+      This view displays the data at a higher level (by agency), based on the "2022 NTD Annual Data - Service (by Mode and Time Period)" dataset.
+      In the years 2015-2021, you can find this data in the "Service" data table on NTD Program website, at https://transit.dot.gov/ntd/ntd-data.
+      In versions of the data tables from before 2014, you can find data on service in the file called "Transit Operating Statistics: Service Supplied and Consumed."
+    columns:
+      - name: key
+        tests:
+          - not_null
+          - unique
+      - name: report_year
+        description: The year for which the data was reported.
+        tests:
+          - accepted_values:
+              values: [2022]
+      - name: ntd_id
+        description: A five-digit identifying number for each agency used in the current NTD system.
+      - name: agency
+        description: The transit agency's name.
+      - name: max_reporter_type
+        description: The type of NTD report that the agency completed this year.
+      - name: max_organization_type
+        description: Description of the agency's legal entity.
+      - name: max_city
+        description: The city in which the agency is headquartered.
+      - name: max_state
+        description: The state in which the agency is headquartered.
+      - name: max_agency_voms
+        description: |
+          The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
+          This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
+          Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+      - name: max_primary_uza_code
+        description: UACE Code remains consistent across census years.
+      - name: max_primary_uza_name
+        description: The name of the agency's Urbanized Area.
+      - name: max_primary_uza_area_sq_miles
+        description: The agency's Urbanized Area's size in square miles.
+      - name: max_primary_uza_population
+        description: The population of the urbanized area primarily served by the agency.
+      - name: max_service_area_sq_miles
+        description: The agency's service area's size in square miles.
+      - name: max_service_area_population
+        description: The population of the service area served by the agency.
+      - name: sum_actual_vehicles_passenger_car_deadhead_hours
+        description: |
+          The hours that a vehicle/passenger car travels when out of revenue service.
+          Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: sum_actual_vehicles_passenger_car_hours
+        description: |
+          The hours that vehicles/passenger cars travel while in revenue service plus deadhead hours.
+          Actual vehicle hours include:
+            - Revenue service,
+            - Deadhead,
+            - Layover/recovery time.
+          Actual vehicle hours exclude:
+            - Hours for charter service,
+            - School bus service,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: sum_actual_vehicles_passenger_car_miles
+        description: |
+          The miles that vehicles/passenger cars travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
+          Actual vehicle miles include:
+            - Revenue service,
+            - Deadhead.
+          Actual vehicle miles exclude:
+            - Miles for charter services,
+            - School bus service,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: sum_actual_vehicles_passenger_car_revenue_hours
+        description: |
+          The hours that vehicles/passenger cars travel while in revenue service.
+          Vehicle revenue hours (VRH) include:
+            - Revenue service,
+            - Layover/recovery time.
+          Actual vehicle revenue hours exclude:
+            - Deadhead,
+            - Operator training,
+            - Maintenance testing,
+            - School bus and charter services.
+      - name: sum_actual_vehicles_passenger_car_revenue_miles
+        description: |
+          The miles that vehicles/passenger cars travel while in revenue service.
+          Vehicle revenue miles (VRM) include:
+            - Revenue service.
+          Actual vehicle revenue miles exclude:
+            - Deadhead,
+            - Operator training,
+            - Maintenance testing,
+            - School bus and charter services.
+      - name: sum_actual_vehicles_passenger_deadhead_miles
+        description: |
+          The miles that a vehicle/passenger car travels when out of revenue service.
+          Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: sum_scheduled_vehicles_passenger_car_revenue_miles
+        description: |
+          The total service scheduled to be provided for picking up and discharging passengers.
+          Scheduled service is computed from internal transit agency planning documents (e.g., run paddles, trip tickets, and public timetables).
+          Scheduled service excludes special additional services.
+      - name: sum_charter_service_hours
+        description: Hours run in charter service.
+      - name: sum_school_bus_hours
+        description: Hours run in school bus service.
+      - name: sum_trains_in_operation
+        description: The maximum number of trains actually operated to provide service during the year.
+      - name: sum_directional_route_miles
+        description: |
+          The mileage in each direction over which public transportation vehicles travel while in revenue service.
+          Directional route miles (DRM) are:
+          - A measure of the route path over a facility or roadway, not the service carried on the facility; e.g., number of routes, vehicles, or vehicle revenue miles.
+          - Computed with regard to direction of service, but without regard to the number of traffic lanes or rail tracks existing in the right-of-way (ROW).
+          Directional route miles (DRM) do not include staging or storage areas at the beginning or end of a route.
+      - name: sum_passenger_miles
+        description: The cumulative sum of the distances ridden by each passenger.
+      - name: sum_train_miles
+        description: |
+          The miles that trains travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
+          Train miles include:
+            - Revenue service,
+            - Deadhead.
+          Train miles exclude:
+            - Miles for charter services,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: sum_train_revenue_miles
+        description: |
+          The miles that trains travel while in revenue service.
+          Train revenue miles include:
+            - Revenue service.
+          Train revenue miles exclude:
+            - Deadhead,
+            - Operator training,
+            - Maintenance testing,
+            - Charter services.
+      - name: sum_train_deadhead_miles
+        description: |
+          The miles that a train travels when out of revenue service. Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: sum_train_hours
+        description: |
+          The hours that trains travel while in revenue service plus deadhead hours.
+          Train hours include:
+            - Revenue service,
+            - Deadhead,
+            - Layover/recovery time,
+          Train hours exclude:
+            - Hours for charter service,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: sum_train_revenue_hours
+        description: |
+          The hours that trains travel while in revenue service. Train revenue hours include:
+            - Revenue service,
+            - Layover/recovery time.
+          Train revenue hours exclude:
+            - Deadhead,
+            - Operator training,
+            - Maintenance testing,
+            - Charter services.
+      - name: sum_train_deadhead_hours
+        description: |
+          The hours that a train travels when out of revenue service. Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: sum_ada_upt
+        description: Unlinked Passenger Trips embarked per stipulations of the Americans with Disabilities Act.
+      - name: sum_sponsored_service_upt
+        description: Unlinked Passenger Trips embarked under sponsored service.
+      - name: sum_unlinked_passenger_trips_upt
+        description: |
+          The number of passengers who board public transportation vehicles.
+          Passengers are counted each time they board a vehicle no matter how many vehicles they use to travel from their origin to their destination.
+  - name: dim_annual_service_mode_time_periods
+    description:
+      This represents the Service data reported to the NTD by transit agencies in the 2022 report year.
+    columns:
+      - name: key
+        tests:
+          - not_null
+          - unique
+      - name: report_year
+        description: The year for which the data was reported.
+        tests:
+          - accepted_values:
+              values: [2022]
+      - name: reporter_type
+        description: The type of NTD report that the agency completed this year.
+      - name: ntd_id
+        description: A five-digit identifying number for each agency used in the current NTD system.
+      - name: agency
+        description: The transit agency's name.
+      - name: type_of_service
+        description: |
+          Describes how public transportation services are provided by the transit agency:
+            directly operated (DO) or purchased transportation (PT) services.
+      - name: mode
+        description: A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
+      - name: mode_name
+        description: A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
+      - name: time_period
+        description: |
+          The time period for which data was collected:
+            - Annual Total,
+            - Average Weekday - AM Peak,
+            - Average Weekday - Midday,
+            - Average Weekday - PM Peak,
+            - Average Weekday - Other,
+            - Average Typical Weekday,
+            - Average Typical Saturday,
+            - Average Typical Sunday.
+        tests:
+          - accepted_values:
+              values: ["Average Weekday - AM Peak", "Average Weekday - Midday", "Average Weekday - PM Peak", "Average Weekday - Other", "Average Typical Weekday", "Average Typical Saturday", "Average Typical Sunday"]
+      - name: time_service_begins
+        description: The time at which a particular mode/type of service begins revenue service, presented in a 24-hour format.
+      - name: time_service_ends
+        description: The time at which a particular mode/type of service ends revenue service, presented in a 24-hour format.
+      - name: organization_type
+        description: Description of the agency's legal entity.
+      - name: city
+        description: The city in which the agency is headquartered.
+      - name: state
+        description: The state in which the agency is headquartered.
+      - name: primary_uza_code
+        description: UACE Code remains consistent across census years.
+      - name: primary_uza_name
+        description: The name of the agency's Urbanized Area.
+      - name: primary_uza_area_sq_miles
+        description: The agency's Urbanized Area's size in square miles.
+      - name: primary_uza_population
+        description: The population of the urbanized area primarily served by the agency.
+      - name: service_area_population
+        description: The population of the service area served by the agency.
+      - name: service_area_sq_miles
+        description: The agency's service area's size in square miles.
+      - name: days_of_service_operated
+        description: Days of revenue service within the fiscal year.
+      - name: days_not_operated_strikes
+        description: Days of revenue service not operated due to strikes.
+      - name: days_not_operated_emergencies
+        description: Days of revenue service not operated due to emergencies.
+      - name: agency_voms
+        description: |
+          The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
+          This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
+          Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+      - name: mode_voms
+        description: |
+          The number of revenue vehicles operated by the given mode and type of service to meet the annual maximum service requirement.
+          This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
+          Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+      - name: mode_voms_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: actual_vehicles_passenger_car_miles
+        description: |
+          The miles that vehicles/passenger cars travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
+          Actual vehicle miles include:
+            - Revenue service,
+            - Deadhead.
+          Actual vehicle miles exclude:
+            - Miles for charter services,
+            - School bus service,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: vehicle_miles_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: actual_vehicles_passenger_car_revenue_miles
+        description: |
+          The miles that vehicles/passenger cars travel while in revenue service.
+          Vehicle revenue miles (VRM) include:
+            - Revenue service.
+          Actual vehicle revenue miles exclude:
+            - Deadhead,
+            - Operator training,
+            - Maintenance testing,
+            - School bus and charter services.
+      - name: vehicle_revenue_miles_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: actual_vehicles_passenger_deadhead_miles
+        description: |
+          The miles that a vehicle/passenger car travels when out of revenue service.
+          Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: deadhead_miles_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: scheduled_vehicles_passenger_car_revenue_miles
+        description: |
+          The total service scheduled to be provided for picking up and discharging passengers.
+          Scheduled service is computed from internal transit agency planning documents (e.g., run paddles, trip tickets, and public timetables).
+          Scheduled service excludes special additional services.
+      - name: scheduled_revenue_miles_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: actual_vehicles_passenger_car_hours
+        description: |
+          The hours that vehicles/passenger cars travel while in revenue service plus deadhead hours.
+          Actual vehicle hours include:
+            - Revenue service,
+            - Deadhead,
+            - Layover/recovery time.
+          Actual vehicle hours exclude:
+            - Hours for charter service,
+            - School bus service,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: vehicle_hours_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: actual_vehicles_passenger_car_revenue_hours
+        description: |
+          The hours that vehicles/passenger cars travel while in revenue service.
+          Vehicle revenue hours (VRH) include:
+            - Revenue service,
+            - Layover/recovery time.
+          Actual vehicle revenue hours exclude:
+            - Deadhead,
+            - Operator training,
+            - Maintenance testing,
+            - School bus and charter services.
+      - name: vehicle_revenue_hours_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: actual_vehicles_passenger_car_deadhead_hours
+        description: |
+          The hours that a vehicle/passenger car travels when out of revenue service.
+          Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: deadhead_hours_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: charter_service_hours
+        description: Hours run in charter service.
+      - name: school_bus_hours
+        description: Hours run in school bus service.
+      - name: trains_in_operation
+        description: The maximum number of trains actually operated to provide service during the year.
+      - name: trains_in_operation_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: train_miles
+        description: |
+          The miles that trains travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
+          Train miles include:
+            - Revenue service,
+            - Deadhead.
+          Train miles exclude:
+            - Miles for charter services,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: train_miles_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: train_revenue_miles
+        description: |
+          The miles that trains travel while in revenue service.
+          Train revenue miles include:
+            - Revenue service.
+          Train revenue miles exclude:
+            - Deadhead,
+            - Operator training,
+            - Maintenance testing,
+            - Charter services.
+      - name: train_revenue_miles_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: train_deadhead_miles
+        description: |
+          The miles that a train travels when out of revenue service.
+          Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: train_hours
+        description: |
+          The hours that trains travel while in revenue service plus deadhead hours.
+          Train hours include:
+            - Revenue service,
+            - Deadhead,
+            - Layover/recovery time.
+          Train hours exclude:
+            - Hours for charter service,
+            - Operator training,
+            - Vehicle maintenance testing.
+      - name: train_hours_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: train_revenue_hours
+        description: |
+          The hours that trains travel while in revenue service.
+          Train revenue hours include:
+            - Revenue service,
+            - Layover/recovery time.
+          Train revenue hours exclude:
+            - Deadhead,
+            - Operator training ,
+            - Maintenance testing,
+            - Charter services.
+      - name: train_revenue_hours_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: train_deadhead_hours
+        description: |
+          The hours that a train travels when out of revenue service.
+          Deadhead includes:
+            - Leaving or returning to the garage or yard facility,
+            - Changing routes,
+            - When there is no expectation of carrying revenue passengers.
+          However, deadhead does not include:
+            - Charter service,
+            - School bus service,
+            - Travel to fueling facilities,
+            - Travel to maintenance facilities,
+            - Operator training,
+            - Maintenance testing.
+      - name: unlinked_passenger_trips_upt
+        description: |
+          The number of passengers who board public transportation vehicles.
+          Passengers are counted each time they board a vehicle no matter how many vehicles they use to travel from their origin to their destination.
+      - name: unlinked_passenger_trips_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: ada_upt
+        description: Unlinked Passenger Trips embarked per stipulations of the Americans with Disabilities Act.
+      - name: sponsored_service_upt
+        description: Unlinked Passenger Trips embarked under sponsored service.
+      - name: average_passenger_trip_length_aptl_
+        description: |
+          The average distance ridden by each passenger in a single trip, computed as passenger miles traveled (PMT) divided by unlinked passenger trips (UPT).
+          May be determined by sampling, or calculated based on actual data.
+      - name: aptl_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: average_speed
+        description: The average speed of a vehicle/passenger car during revenue service.
+      - name: average_speed_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: brt_non_statutory_mixed_traffic
+        description: |
+          Miles of roadway for Bus Rapid Transit modes which, while part of bus rapid transit system routes, are not considered fixed guideway for federal funding allocation purposes.
+          These are rare exceptions resulting from FTA’s review of each BRT system.
+      - name: mixed_traffic_right_of_way
+        description: |
+          Roadways other than exclusive and controlled access rights-of-way (ROW) used for transit operations that are mixed with pedestrian and/or vehicle traffic.
+          Does not include guideways that have only grade crossings with vehicular traffic.
+      - name: directional_route_miles
+        description: |
+          The mileage in each direction over which public transportation vehicles travel while in revenue service.
+          Directional route miles (DRM) are:
+            - A measure of the route path over a facility or roadway, not the service carried on the facility; e.g., number of routes, vehicles, or vehicle revenue miles.
+            - Computed with regard to direction of service, but without regard to the number of traffic lanes or rail tracks existing in the right-of-way (ROW).
+          Directional route miles (DRM) do not include staging or storage areas at the beginning or end of a route.
+      - name: directional_route_miles_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: passenger_miles
+        description: The cumulative sum of the distances ridden by each passenger.
+      - name: passenger_miles_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - name: passengers_per_hour
+        description: |
+          The average number of passengers to board a vehicle/passenger car in one hour of service.
+          For trains, this applies to passengers per hour on a single train car.
+      - name: passengers_per_hour_questionable
+        description: |
+          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
+          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
   - name: dim_monthly_ntd_ridership_with_adjustments
     description: >-
       Extracts of the NTD Monthly Ridership with adjustments - VRM, VOMS, VRH,
@@ -651,3 +945,36 @@ models:
           •   Atypical days; or
 
           •   One-time special events.
+  - name: fct_annual_service_modes
+    description:
+      View based on 2022 NTD Annual Data - Service (by Mode and Time Period)
+      View of Service by Mode and Time Period filtered to preserve only the Annual Total time period.
+      Useful for analyses of Annual Total service data.
+    columns:
+      - name: key
+        tests:
+          - not_null
+          - unique
+      - name: report_year
+        description: The year for which the data was reported.
+        tests:
+          - accepted_values:
+              values: [2022]
+      - name: ntd_id
+        description: A five-digit identifying number for each agency used in the current NTD system.
+      - name: type_of_service
+        description: |
+          Describes how public transportation services are provided by the transit agency: directly operated (DO) or purchased transportation (PT) services.
+      - name: mode
+        description: A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
+      - name: mode_name
+        description: A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
+      - name: questionable_record
+        description: Indicates whether there was questionable data for the given given record.
+      - name: max_time_period
+        description: |
+          The time period for which data was collected.
+          This table displays only "Annual Total".
+        tests:
+          - accepted_values:
+              values: ["Annual Total"]
