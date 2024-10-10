@@ -51,6 +51,13 @@ WITH fct_benefits_events AS (
         {{ json_extract_column('event_properties', 'status') }},
         {{ json_extract_column('event_properties', 'transit_agency') }},
 
+        -- New column `enrollment_method`, historical values should be set to "digital"
+        -- https://github.com/cal-itp/benefits/pull/2402
+        COALESCE(
+          {{ json_extract_column('event_properties', 'enrollment_method', no_alias = true) }},
+          "digital"
+        ) AS event_properties_enrollment_method,
+
         -- Historical data existed in `auth_provider` but new data is in `claims_provider`
         -- https://github.com/cal-itp/benefits/pull/2401
         COALESCE(
@@ -94,6 +101,13 @@ WITH fct_benefits_events AS (
         {{ json_extract_column('user_properties', 'referring_domain') }},
         {{ json_extract_column('user_properties', 'user_agent') }},
 
+        -- New column `enrollment_method`, historical values should be set to "digital"
+        -- https://github.com/cal-itp/benefits/pull/2402
+        COALESCE(
+          {{ json_extract_column('user_properties', 'enrollment_method', no_alias = true) }},
+          "digital"
+        ) AS user_properties_enrollment_method,
+
         -- Historical data existed in `eligibility_types` but new data is in `enrollment_flows`
         -- https://github.com/cal-itp/benefits/pull/2379
         COALESCE(
@@ -132,6 +146,7 @@ fct_old_enrollments AS (
     start_version,
     uuid,
     processed_time,
+    "digital" as event_properties_enrollment_method,
     CASE
       WHEN client_event_time < '2022-08-12T07:00:00Z'
         THEN "ca-dmv"
@@ -160,6 +175,7 @@ fct_old_enrollments AS (
     "Monterey-Salinas Transit" as event_properties_transit_agency,
     "senior" as event_properties_enrollment_flows,
     event_properties_enrollment_flows as event_properties_eligibility_types,
+    "digital" as user_properties_enrollment_method,
     CASE
       WHEN client_event_time < '2022-08-12T07:00:00Z'
         THEN "ca-dmv"
