@@ -18,7 +18,23 @@ WITH fct_benefits_events AS (
             then "finished card tokenization"
           else event_type
         end as event_type,
-        version_name,
+        -- Fix bug in Docker build process resulting in incorrect version strings
+        -- https://github.com/cal-itp/benefits/pull/2392
+        case
+          when version_name = "2024.7.3.dev0+gcd3b083.d20240731"
+            then "2024.7.2"
+          when version_name = "2024.8.2.dev0+g7664917.d20240821"
+            then "2024.8.1"
+          when version_name = "2024.9.2.dev0+gadf41b9.d20240909"
+            then "2024.9.1"
+          when version_name = "2024.9.3.dev0+gfeb06d2.d20240918"
+            then "2024.9.2"
+          when version_name = "2024.9.4.dev0+g861519e.d20240926"
+            then "2024.9.3"
+          when version_name = "2024.10.2.dev0+g158e1b0.d20241010"
+            then "2024.10.1"
+          else version_name
+        end as version_name,
         os_name,
         os_version,
         device_family,
@@ -33,7 +49,23 @@ WITH fct_benefits_events AS (
         server_upload_time,
         server_received_time,
         amplitude_id,
-        start_version,
+        -- Fix bug in Docker build process resulting in incorrect version strings
+        -- https://github.com/cal-itp/benefits/pull/2392
+        case
+          when start_version = "2024.7.3.dev0+gcd3b083.d20240731"
+            then "2024.7.2"
+          when start_version = "2024.8.2.dev0+g7664917.d20240821"
+            then "2024.8.1"
+          when start_version = "2024.9.2.dev0+gadf41b9.d20240909"
+            then "2024.9.1"
+          when start_version = "2024.9.3.dev0+gfeb06d2.d20240918"
+            then "2024.9.2"
+          when start_version = "2024.9.4.dev0+g861519e.d20240926"
+            then "2024.9.3"
+          when start_version = "2024.10.2.dev0+g158e1b0.d20241010"
+            then "2024.10.1"
+          else start_version
+        end as start_version,
         uuid,
         processed_time,
 
