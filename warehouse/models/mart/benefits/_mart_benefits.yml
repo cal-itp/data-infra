@@ -84,7 +84,13 @@ models:
       - name: event_properties_path
         description: The `path` value from the `event_properties` column
       - name: event_properties_payment_group
-        description: The `payment_group` value from the `event_properties` column
+        description: The `enrollment_group` value from the `event_properties` column
+        deprecated:
+          enabled: true
+          reason: "This column is deprecated, use `event_properties_enrollment_group` instead"
+          date: "2024-10-10"
+      - name: event_properties_enrollment_group
+        description: The `enrollment_group` value from the `event_properties` column
       - name: event_properties_status
         description: The `status` value from the `event_properties` column
       - name: event_properties_transit_agency

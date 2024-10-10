@@ -44,7 +44,6 @@ WITH fct_benefits_events AS (
         {{ json_extract_column('event_properties', 'language') }},
         {{ json_extract_column('event_properties', 'origin') }},
         {{ json_extract_column('event_properties', 'path') }},
-        {{ json_extract_column('event_properties', 'payment_group') }},
         {{ json_extract_column('event_properties', 'status') }},
         {{ json_extract_column('event_properties', 'transit_agency') }},
 
@@ -65,6 +64,15 @@ WITH fct_benefits_events AS (
         ) AS event_properties_enrollment_flows,
         -- include the old field as well, deprecated in the mart definition
         event_properties_enrollment_flows AS event_properties_eligibility_types,
+
+        -- Historical data existed in `payment_group` but new data is in `enrollment_group`
+        -- https://github.com/cal-itp/benefits/pull/2391
+        COALESCE(
+            {{ json_extract_flattened_column('event_properties', 'enrollment_group', no_alias = true) }},
+            {{ json_extract_flattened_column('event_properties', 'payment_group', no_alias = true) }}
+        ) AS event_properties_enrollment_group,
+        -- include the old field as well, deprecated in the mart definition
+        event_properties_enrollment_group AS event_properties_payment_group,
 
         -- User Properties (https://app.amplitude.com/data/compiler/Benefits/properties/main/latest/user)
         {{ json_extract_column('user_properties', 'eligibility_verifier') }},
@@ -142,7 +150,8 @@ fct_old_enrollments AS (
     event_properties_language,
     event_properties_origin,
     event_properties_path,
-    "5170d37b-43d5-4049-899c-b4d850e14990" as event_properties_payment_group,
+    "5170d37b-43d5-4049-899c-b4d850e14990" as event_properties_enrollment_group,
+    event_properties_enrollment_group as event_properties_payment_group,
     "success" as event_properties_status,
     "Monterey-Salinas Transit" as event_properties_transit_agency,
     "senior" as event_properties_enrollment_flows,
