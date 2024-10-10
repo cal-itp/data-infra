@@ -34,7 +34,6 @@ WITH fct_benefits_events AS (
         processed_time,
 
         -- Event Properties (https://app.amplitude.com/data/compiler/Benefits/properties/main/latest/event)
-        {{ json_extract_column('event_properties', 'auth_provider') }},
         {{ json_extract_column('event_properties', 'card_tokenize_func') }},
         {{ json_extract_column('event_properties', 'card_tokenize_url') }},
         {{ json_extract_column('event_properties', 'eligibility_verifier') }},
@@ -48,6 +47,15 @@ WITH fct_benefits_events AS (
         {{ json_extract_column('event_properties', 'payment_group') }},
         {{ json_extract_column('event_properties', 'status') }},
         {{ json_extract_column('event_properties', 'transit_agency') }},
+
+        -- Historical data existed in `auth_provider` but new data is in `claims_provider`
+        -- https://github.com/cal-itp/benefits/pull/2401
+        COALESCE(
+          {{ json_extract_column('event_properties', 'claims_provider', no_alias = true) }},
+          {{ json_extract_column('event_properties', 'auth_provider', no_alias = true) }}
+        ) AS event_properties_claims_provider,
+        -- include the old field as well, deprecated in the mart definition
+        event_properties_claims_provider AS event_properties_auth_provider,
 
         -- Historical data existed in `eligibility_types` but new data is in `enrollment_flows`
         -- https://github.com/cal-itp/benefits/pull/2379
@@ -112,7 +120,13 @@ fct_old_enrollments AS (
     start_version,
     uuid,
     processed_time,
-    event_properties_auth_provider,
+    CASE
+      WHEN client_event_time < '2022-08-12T07:00:00Z'
+        THEN "ca-dmv"
+      WHEN client_event_time >= '2022-08-12T07:00:00Z'
+        THEN "cdt-logingov"
+    END as event_properties_claims_provider,
+    event_properties_claims_provider as event_properties_auth_provider,
     event_properties_card_tokenize_func,
     event_properties_card_tokenize_url,
     CASE
