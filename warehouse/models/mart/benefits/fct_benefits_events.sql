@@ -117,9 +117,9 @@ fct_old_enrollments AS (
     event_properties_card_tokenize_url,
     CASE
       WHEN client_event_time < '2022-08-12T07:00:00Z'
-        THEN "DMV"
+        THEN "ca-dmv"
       WHEN client_event_time >= '2022-08-12T07:00:00Z'
-        THEN "(MST) CDT claims via Login.gov"
+        THEN "cdt-logingov"
     END as event_properties_eligibility_verifier,
     event_properties_error_name,
     event_properties_error_status,
@@ -135,9 +135,9 @@ fct_old_enrollments AS (
     event_properties_enrollment_flows as event_properties_eligibility_types,
     CASE
       WHEN client_event_time < '2022-08-12T07:00:00Z'
-        THEN "DMV"
+        THEN "ca-dmv"
       WHEN client_event_time >= '2022-08-12T07:00:00Z'
-        THEN "(MST) CDT claims via Login.gov"
+        THEN "cdt-logingov"
     END as user_properties_eligibility_verifier,
     user_properties_initial_referrer,
     user_properties_initial_referring_domain,
