@@ -12,6 +12,10 @@ WITH fct_benefits_events AS (
         case
           when event_type = "selected eligibility verifier"
             then "selected enrollment flow"
+          when event_type = "started payment connection"
+            then "started card tokenization"
+          when event_type = "closed payment connection" or event_type = "ended card tokenization"
+            then "finished card tokenization"
           else event_type
         end as event_type,
         version_name,
