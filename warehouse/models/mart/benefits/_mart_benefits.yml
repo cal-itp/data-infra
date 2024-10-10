@@ -55,6 +55,8 @@ models:
         description: UUID
       - name: processed_time
         description: UTC ISO-8601 timestamp
+      - name: event_properties_enrollment_method
+        description: The `enrollment_method` value from the `event_properties` column
       - name: event_properties_auth_provider
         description: The `claims_provider` value from the `event_properties` column
         deprecated:
@@ -103,6 +105,8 @@ models:
           date: "2024-09-19"
       - name: event_properties_enrollment_flows
         description: A semi-colon delimited list of `enrollment_flows` values from the `event_properties` column
+      - name: user_properties_enrollment_method
+        description: The `enrollment_method` value from the `user_properties` column
       - name: user_properties_eligibility_verifier
         description: The `eligibility_verifier` value from the `user_properties` column
       - name: user_properties_initial_referrer
