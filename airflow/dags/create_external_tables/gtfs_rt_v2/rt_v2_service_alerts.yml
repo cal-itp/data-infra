@@ -50,9 +50,9 @@ schema_fields:
         mode: REPEATED
         fields:
           - name: start
-            type: INTEGER
+            type: STRING
           - name: end
-            type: INTEGER
+            type: STRING
 
       - name: informedEntity
         type: RECORD
