@@ -18,7 +18,7 @@ jupyterhub:
       capacity: 32Gi
     cpu:
       # this is to put 2 pods per e2-highmem-2 which has 1.93 allocatable
-      guarantee: 0.7
+      guarantee: 1.0
     lifecycleHooks:
       postStart:
         exec:
