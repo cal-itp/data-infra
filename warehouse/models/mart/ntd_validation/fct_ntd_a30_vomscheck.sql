@@ -4,12 +4,14 @@
 WITH rr20f_180 as (
     SELECT organization,
     "RR20F-180: VOMS across forms" as name_of_check,
+    fiscal_year as year_of_data,
     CASE WHEN ROUND(rr20_voms, 1) > ROUND(a30_vin_n, 1)
         THEN "Fail"
         ELSE "Pass"
     END as check_status,
-    CONCAT("RR-20 VOMS = ", CAST(ROUND(rr20_voms, 1) AS STRING),
-            "# A-30 VINs = ", CAST(ROUND(a30_vin_n, 1) AS STRING)) AS value_checked,
+    CONCAT("RR-20 VOMS = ", IF(rr20_voms IS NULL, ' ', CAST(ROUND(rr20_voms, 1) AS STRING)),
+            ", A-30 VINs = ", IF(a30_vin_n IS NULL, ' ', CAST(ROUND(a30_vin_n, 1) AS STRING))
+    ) AS value_checked,
     CASE WHEN ROUND(rr20_voms, 1) > ROUND(a30_vin_n, 1)
         THEN "Total VOMS is greater than total A-30 vehicles reported. Please clarify."
         ELSE "VOMS & A-30 vehicles reported are equal to and/or lower than active inventory."
