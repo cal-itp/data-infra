@@ -44,7 +44,6 @@ jupyterhub:
         oauth_callback_url: https://notebooks.calitp.org/hub/oauth_callback
         allowed_organizations:
           - cal-itp:warehouse-users
-          - cal-itp:ntd-slalom
         scope:
           - read:org
       JupyterHub:
@@ -53,7 +52,7 @@ jupyterhub:
           admin_users:
             - vevetron
             - tiffanychu90
-            - themightchris
+            - themightychris
             - evansiroky
             - charlie-costanzo
     # holds github OAuth creds
