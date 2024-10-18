@@ -29,6 +29,16 @@ jupyterhub:
               cp /tmp/profile.sh /home/jovyan/.profile;
               mkdir -p -- /home/jovyan/.jupyter;
               cp /tmp/jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py;
+    profileList:
+      - display_name: "Default User"
+        description: "Your code will run on a shared machine with 3–10G of memory and 0.7–1.9 CPU cores."
+        default: True
+      - display_name: "Power User"
+        description: "Your code will run on a shared machine with 10–12G of memory and 1.5–1.9 CPU cores."
+        kubespawner_override:
+          mem_limit: "12G"
+          mem_guarantee: "10G"
+          cpu_guarantee: "1.5"
   scheduling:
     userPods:
       nodeAffinity:
