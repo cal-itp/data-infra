@@ -38,7 +38,7 @@ jupyterhub:
         kubespawner_override:
           mem_limit: "12G"
           mem_guarantee: "10G"
-          cpu_guarantee: "1.5"
+          cpu_guarantee: 1.5
   scheduling:
     userPods:
       nodeAffinity:
