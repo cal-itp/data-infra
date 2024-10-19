@@ -55,6 +55,7 @@ daily_feeds_statistics AS (
 -- If a code does not appear for a feed on a day, total_notices will be 0.
 -- If there a feed was not validated on a day, total_notices will be NULL.
 SELECT
+    {{ dbt_utils.generate_surrogate_key(['daily_feeds_codes.date', 'daily_feeds_codes.base64_url', 'daily_feeds_codes.code', 'daily_feeds_codes.is_critical']) }} AS key,
     daily_feeds_codes.date,
     daily_feeds_codes.base64_url,
     daily_feeds_codes.code,
@@ -77,4 +78,4 @@ LEFT JOIN outcomes_notices
     ON daily_feeds_codes.base64_url = outcomes_notices.base64_url
     AND daily_feeds_codes.date = outcomes_notices.extract_date
     AND daily_feeds_codes.code = outcomes_notices.code
-GROUP BY 1, 2, 3, 4, 5
+GROUP BY 1, 2, 3, 4, 5, 6
