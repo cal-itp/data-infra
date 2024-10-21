@@ -96,8 +96,6 @@ WITH fct_benefits_events AS (
           {{ json_extract_column('event_properties', 'claims_provider', no_alias = true) }},
           {{ json_extract_column('event_properties', 'auth_provider', no_alias = true) }}
         ) AS event_properties_claims_provider,
-        -- include the old field as well, deprecated in the mart definition
-        event_properties_claims_provider AS event_properties_auth_provider,
 
         -- Historical data existed in `eligibility_types` but new data is in `enrollment_flows`
         -- https://github.com/cal-itp/benefits/pull/2379
@@ -105,8 +103,6 @@ WITH fct_benefits_events AS (
             {{ json_extract_flattened_column('event_properties', 'enrollment_flows', no_alias = true) }},
             {{ json_extract_flattened_column('event_properties', 'eligibility_types', no_alias = true) }}
         ) AS event_properties_enrollment_flows,
-        -- include the old field as well, deprecated in the mart definition
-        event_properties_enrollment_flows AS event_properties_eligibility_types,
 
         -- Historical data existed in `payment_group` but new data is in `enrollment_group`
         -- https://github.com/cal-itp/benefits/pull/2391
@@ -114,8 +110,6 @@ WITH fct_benefits_events AS (
             {{ json_extract_flattened_column('event_properties', 'enrollment_group', no_alias = true) }},
             {{ json_extract_flattened_column('event_properties', 'payment_group', no_alias = true) }}
         ) AS event_properties_enrollment_group,
-        -- include the old field as well, deprecated in the mart definition
-        event_properties_enrollment_group AS event_properties_payment_group,
 
         -- User Properties (https://app.amplitude.com/data/compiler/Benefits/properties/main/latest/user)
         {{ json_extract_column('user_properties', 'eligibility_verifier') }},
@@ -145,9 +139,7 @@ WITH fct_benefits_events AS (
         COALESCE(
             {{ json_extract_flattened_column('user_properties', 'enrollment_flows', no_alias = true) }},
             {{ json_extract_flattened_column('user_properties', 'eligibility_types', no_alias = true) }}
-        ) AS user_properties_enrollment_flows,
-        -- include the old field as well, deprecated in the mart definition
-        user_properties_enrollment_flows as user_properties_eligibility_types
+        ) AS user_properties_enrollment_flows
 
     FROM {{ ref('stg_amplitude__benefits_events') }}
 ),
@@ -185,7 +177,6 @@ fct_old_enrollments AS (
       WHEN client_event_time >= '2022-08-12T07:00:00Z'
         THEN "cdt-logingov"
     END as event_properties_claims_provider,
-    event_properties_claims_provider as event_properties_auth_provider,
     event_properties_card_tokenize_func,
     event_properties_card_tokenize_url,
     CASE
@@ -202,11 +193,9 @@ fct_old_enrollments AS (
     event_properties_origin,
     event_properties_path,
     "5170d37b-43d5-4049-899c-b4d850e14990" as event_properties_enrollment_group,
-    event_properties_enrollment_group as event_properties_payment_group,
     "success" as event_properties_status,
     "Monterey-Salinas Transit" as event_properties_transit_agency,
     "senior" as event_properties_enrollment_flows,
-    event_properties_enrollment_flows as event_properties_eligibility_types,
     "digital" as user_properties_enrollment_method,
     CASE
       WHEN client_event_time < '2022-08-12T07:00:00Z'
@@ -220,8 +209,7 @@ fct_old_enrollments AS (
     user_properties_user_agent,
     user_properties_referrer,
     user_properties_referring_domain,
-    "senior" as user_properties_enrollment_flows,
-    user_properties_enrollment_flows as user_properties_eligibility_types
+    "senior" as user_properties_enrollment_flows
   FROM fct_benefits_events
   WHERE client_event_time >= '2021-12-08T08:00:00Z'
     and client_event_time < '2022-08-29T07:00:00Z'
