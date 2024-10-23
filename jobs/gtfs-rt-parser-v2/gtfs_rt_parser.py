@@ -62,6 +62,7 @@ GTFS_RT_VALIDATOR_VERSION = os.environ["GTFS_RT_VALIDATOR_VERSION"]
 
 app = typer.Typer(pretty_exceptions_enable=False)
 
+# mypy: disable-error-code="attr-defined"
 sentry_sdk.utils.MAX_STRING_LENGTH = 2048  # default is 512 which will cut off validator stderr stacktrace; see https://stackoverflow.com/a/58124859
 sentry_sdk.init()
 
@@ -747,7 +748,7 @@ def main(
     threads: int = 4,
     jar_path: Path = JAR_DEFAULT,
     verbose: bool = False,
-    base64url: str = None,
+    base64url: Optional[str] = None,
 ):
     pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
     files: List[GTFSRTFeedExtract]
