@@ -25,6 +25,7 @@ mypy = "^1.13.0"
 types-protobuf = "^5.28.0.20240924"
 types-tqdm = "^4.66.0.20240417"
 isort = "^5.13.2"
+pytest-env = "^1.1.5"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -32,3 +33,9 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 profile = "black"
+
+[tool.pytest_env]
+CALITP_BUCKET__GTFS_RT_RAW = "gs://test-calitp-gtfs-rt-raw-v2"
+CALITP_BUCKET__GTFS_RT_PARSED = "gs://test-calitp-gtfs-rt-parsed"
+CALITP_BUCKET__GTFS_RT_VALIDATION = "gs://test-calitp-gtfs-rt-validation"
+GTFS_RT_VALIDATOR_VERSION = "v1.0.0"

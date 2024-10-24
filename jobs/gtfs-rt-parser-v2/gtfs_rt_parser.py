@@ -816,6 +816,7 @@ def main(
             sorted(aggregations_to_process, key=lambda feed: feed.path)
         )[:limit]
 
+    aggregated_total = sum(len(agg.extracts) for agg in aggregations_to_process)
     pbar = tqdm(total=len(aggregations_to_process)) if progress else None
 
     outcomes: List[RTFileProcessingOutcome] = [
@@ -889,8 +890,8 @@ def main(
     save_job_result(get_fs(), result)
 
     assert (
-        len(outcomes) == total
-    ), f"we ended up with {len(outcomes)} outcomes from {total}"
+        len(outcomes) == aggregated_total
+    ), f"we ended up with {len(outcomes)} outcomes from {aggregated_total}"
 
     if exceptions:
         exc_str = "\n".join(str(tup) for tup in exceptions)
