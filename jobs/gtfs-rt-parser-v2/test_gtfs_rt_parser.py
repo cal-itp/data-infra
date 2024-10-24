@@ -88,10 +88,9 @@ def test_no_vehicle_positions_for_date():
 
 
 def test_no_vehicle_positions_for_url():
-    base64url = "nope"
     result = runner.invoke(
         app,
-        ["parse", "vehicle_positions", "2024-09-14T18:00:00", "--base64url", base64url],
+        ["parse", "vehicle_positions", "2024-09-14T18:00:00", "--base64url", "nope"],
         catch_exceptions=False,
     )
     assert result.exit_code == 0
