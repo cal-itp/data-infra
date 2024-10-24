@@ -1,3 +1,4 @@
+from typer.testing import CliRunner
 import pendulum
 import pytest
 from calitp_data_infra.storage import (  # type: ignore
@@ -13,7 +14,10 @@ from gtfs_rt_parser import (  # isort:skip
     RTFileProcessingOutcome,
     RTHourlyAggregation,
     RTProcessingStep,
+    app,
 )
+
+runner = CliRunner()
 
 
 def test_rt_file_processing_outcome_construction() -> None:
@@ -46,3 +50,26 @@ def test_rt_file_processing_outcome_construction() -> None:
             success=True,
             extract=extract,
         )
+
+
+def test_app():
+    base64url = "aHR0cHM6Ly9tdnNodXR0bGUucmlkZXN5c3RlbXMubmV0L3N1YnNjcmlwdGlvbnMvZ3Rmc3J0L3ZlaGljbGVzLmFzaHg="
+    result = runner.invoke(
+        app,
+        ["parse", "vehicle_positions", "2024-10-22T18:00:00", "--base64url", base64url],
+        catch_exceptions=False,
+    )
+    assert result.exit_code == 0
+    assert "listing all files" in result.stdout
+    assert "test-calitp-gtfs-rt-raw-v2" in result.stdout
+    assert "vehicle_positions" in result.stdout
+    assert "dt=2024-10-22" in result.stdout
+    assert "hour=2024-10-22T18:00:00+00:00" in result.stdout
+
+    assert "4786 vehicle_positions" in result.stdout
+    assert "139 aggregations" in result.stdout
+
+    assert f"only processing {base64url}" in result.stdout
+    assert "writing 28 lines" in result.stdout
+    assert "test-calitp-gtfs-rt-parsed" in result.stdout
+    assert "saving 40 outcomes" in result.stdout
