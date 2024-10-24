@@ -70,3 +70,107 @@ def test_vehicle_positions():
     assert "writing 28 lines" in result.stdout
     assert "test-calitp-gtfs-rt-parsed" in result.stdout
     assert "saving 40 outcomes" in result.stdout
+
+
+def test_no_vehicle_positions_for_date():
+    base64url = (
+        "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3ZlaGljbGVwb3NpdGlvbnM_YWdlbmN5PVNJ"
+    )
+    result = runner.invoke(
+        app,
+        ["parse", "vehicle_positions", "2022-09-14T18:00:00", "--base64url", base64url],
+        catch_exceptions=False,
+    )
+    assert result.exit_code == 0
+    assert "0 vehicle_positions files in 0 aggregations" in result.stdout
+    assert f"url filter applied, only processing {base64url}" in result.stdout
+    assert "outcomes" not in result.stdout
+
+
+def test_no_vehicle_positions_for_url():
+    base64url = "nope"
+    result = runner.invoke(
+        app,
+        ["parse", "vehicle_positions", "2024-09-14T18:00:00", "--base64url", base64url],
+        catch_exceptions=False,
+    )
+    assert result.exit_code == 0
+    assert "found 5158 vehicle_positions files in 136 aggregations" in result.stdout
+    assert "url filter applied, only processing nope" in result.stdout
+    assert "outcomes" not in result.stdout
+
+
+def test_no_records_for_url_vehicle_positions_on_date():
+    base64url = (
+        "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3ZlaGljbGVwb3NpdGlvbnM_YWdlbmN5PVNJ"
+    )
+    result = runner.invoke(
+        app,
+        ["parse", "vehicle_positions", "2024-09-14T18:00:00", "--base64url", base64url],
+        catch_exceptions=False,
+    )
+    assert result.exit_code == 0
+    assert "found 5158 vehicle_positions files in 136 aggregations" in result.stdout
+    assert f"url filter applied, only processing {base64url}" in result.stdout
+    assert "WARNING: no records at all" in result.stdout
+    assert "saving 38 outcomes" in result.stdout
+
+
+def test_trip_updates():
+    base64url = "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1TQQ=="
+    result = runner.invoke(
+        app,
+        ["parse", "trip_updates", "2024-10-22T18:00:00", "--base64url", base64url],
+        catch_exceptions=False,
+    )
+    assert result.exit_code == 0
+    assert (
+        "test-calitp-gtfs-rt-raw-v2/trip_updates/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00"
+        in result.stdout
+    )
+    assert "4489 trip_updates files in 132 aggregations" in result.stdout
+
+    assert f"url filter applied, only processing {base64url}" in result.stdout
+    assert "writing 180 lines" in result.stdout
+    assert "test-calitp-gtfs-rt-parsed" in result.stdout
+    assert "saving 49 outcomes" in result.stdout
+
+
+def test_service_alerts():
+    base64url = "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3NlcnZpY2VhbGVydHM_YWdlbmN5PUFN"
+    result = runner.invoke(
+        app,
+        ["parse", "service_alerts", "2024-10-22T18:00:00", "--base64url", base64url],
+        catch_exceptions=False,
+    )
+    assert result.exit_code == 0
+    assert (
+        "test-calitp-gtfs-rt-raw-v2/service_alerts/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00"
+        in result.stdout
+    )
+    assert "4569 service_alerts files in 131 aggregations" in result.stdout
+
+    assert f"url filter applied, only processing {base64url}" in result.stdout
+    assert "writing 24 lines" in result.stdout
+    assert "test-calitp-gtfs-rt-parsed" in result.stdout
+    assert "saving 30 outcomes" in result.stdout
+
+
+def test_validation():
+    base64url = "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbWVuZG9jaW5vL2d0ZnMtcnQtdHJpcC11cGRhdGVz"
+    result = runner.invoke(
+        app,
+        ["validate", "trip_updates", "2024-08-28T19:00:00", "--base64url", base64url],
+        catch_exceptions=False,
+    )
+    assert result.exit_code == 0
+    assert (
+        "test-calitp-gtfs-rt-raw-v2/trip_updates/dt=2024-08-28/hour=2024-08-28T19:00:00+00:00"
+        in result.stdout
+    )
+    assert "3269 trip_updates files in 125 aggregations" in result.stdout
+    assert "Fetching gtfs schedule data" in result.stdout
+    assert "validating" in result.stdout
+    assert "executing rt_validator" in result.stdout
+    assert "writing 50 lines" in result.stdout
+    assert "saving 30 outcomes" in result.stdout
