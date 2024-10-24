@@ -765,20 +765,12 @@ def main(
     )
 
     total = len(files) + len(files_missing_metadata) + len(files_invalid_metadata)
-    percentage_valid = len(files) / total
-    if percentage_valid < 0.99:
+    if files and len(files) / total < 0.99:
         typer.secho(f"missing: {files_missing_metadata}")
         typer.secho(f"invalid: {files_invalid_metadata}")
         raise RuntimeError(
             f"too many files have missing/invalid metadata; {total - len(files)} of {total}"  # noqa: E702
         )
-
-    if not files:
-        typer.secho(
-            f"WARNING: found no files to process for {feed_type} {pendulum_hour.isoformat()}, exiting",
-            fg=typer.colors.YELLOW,
-        )
-        return
 
     rt_aggs: Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]] = defaultdict(
         list
@@ -879,15 +871,16 @@ def main(
     if pbar:
         del pbar
 
-    result = GTFSRTJobResult(
-        # TODO: these seem weird...
-        hour=aggregations_to_process[0].hour,
-        filename=aggregations_to_process[0].filename.removesuffix(".gz"),
-        step=step,
-        feed_type=feed_type,
-        outcomes=outcomes,
-    )
-    save_job_result(get_fs(), result)
+    if aggregations_to_process:
+        result = GTFSRTJobResult(
+            # TODO: these seem weird...
+            hour=aggregations_to_process[0].hour,
+            filename=aggregations_to_process[0].filename.removesuffix(".gz"),
+            step=step,
+            feed_type=feed_type,
+            outcomes=outcomes,
+        )
+        save_job_result(get_fs(), result)
 
     assert (
         len(outcomes) == aggregated_total
