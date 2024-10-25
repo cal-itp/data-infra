@@ -18,13 +18,14 @@ backoff = "^2.2.1"
 sentry-sdk = "^1.12.1"
 calitp-data-infra = "2024.2.12.post1"
 
-[tool.poetry.dev-dependencies]
-pytest = "^7.1.2"
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
 black = "^22.6.0"
-mypy = "^0.971"
-types-protobuf = "^3.19.22"
-types-tqdm = "^4.64.4"
-isort = "^5.10.1"
+mypy = "^1.13.0"
+types-protobuf = "^5.28.0.20240924"
+types-tqdm = "^4.66.0.20240417"
+isort = "^5.13.2"
+pytest-env = "^1.1.5"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -32,3 +33,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 profile = "black"
+
+[tool.pytest_env]
+CALITP_BUCKET__GTFS_RT_RAW = "gs://test-calitp-gtfs-rt-raw-v2"
+CALITP_BUCKET__GTFS_RT_PARSED = "gs://test-calitp-gtfs-rt-parsed"
+CALITP_BUCKET__GTFS_RT_VALIDATION = "gs://test-calitp-gtfs-rt-validation"
+CALITP_BUCKET__GTFS_SCHEDULE_RAW = "gs://test-calitp-gtfs-schedule-raw-v2"
+GTFS_RT_VALIDATOR_JAR = "gtfs-realtime-validator-lib-1.0.0-20220223.003525-2.jar"
+GTFS_RT_VALIDATOR_VERSION = "v1.0.0"
