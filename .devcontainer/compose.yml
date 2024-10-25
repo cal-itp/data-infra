@@ -12,3 +12,18 @@ services:
       - ..:/home/calitp/app
       - ~/.dbt:/home/calitp/.dbt
       - ~/.config/gcloud:/home/calitp/.config/gcloud
+
+  dbt:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    image: data_infra:dev
+    entrypoint: ["poetry", "run", "dbt"]
+    environment:
+      - DBT_PROFILES_DIR=/home/calitp/.dbt
+      - GOOGLE_APPLICATION_CREDENTIALS=/home/calitp/.config/gcloud/application_default_credentials.json
+    volumes:
+      - ..:/home/calitp/app
+      - ~/.dbt:/home/calitp/.dbt
+      - ~/.config/gcloud:/home/calitp/.config/gcloud
+    working_dir: /home/calitp/app/warehouse
