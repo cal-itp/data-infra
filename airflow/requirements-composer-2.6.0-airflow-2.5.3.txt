@@ -327,7 +327,7 @@ vine==5.0.0
 virtualenv==20.21.0
 wcwidth==0.2.6
 websocket-client==1.5.1
-Werkzeug==2.2.3
+Werkzeug==3.0.6
 wheel==0.42.0
 wrapt==1.15.0
 WTForms==3.0.1
