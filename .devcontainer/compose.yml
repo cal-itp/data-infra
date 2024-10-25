@@ -1,0 +1,14 @@
+services:
+  dev:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    image: data_infra:dev
+    entrypoint: sleep infinity
+    environment:
+      - DBT_PROFILES_DIR=/home/calitp/.dbt
+      - GOOGLE_APPLICATION_CREDENTIALS=/home/calitp/.config/gcloud/application_default_credentials.json
+    volumes:
+      - ..:/home/calitp/app
+      - ~/.dbt:/home/calitp/.dbt
+      - ~/.config/gcloud:/home/calitp/.config/gcloud
