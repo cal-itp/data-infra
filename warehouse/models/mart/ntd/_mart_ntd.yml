@@ -322,6 +322,9 @@ models:
         description: |
           The table that originated the funding source information.
           The options are: "federal", "state", and "local".
+        tests:
+          - accepted_values:
+              values: ["federal", "state", "local"]
       - name: agency
         description: The transit agency's name.
       - name: agency_voms
@@ -419,6 +422,9 @@ models:
           *ONLY for Local and State Funding Sources (funding_source IN ("local", "state"))
       - name: report_year
         description: The year for which the data was reported.
+        tests:
+          - accepted_values:
+              values: [2022]
       - name: reporter_type
         description: The type of NTD report that the agency completed this year.
       - name: sales_tax
