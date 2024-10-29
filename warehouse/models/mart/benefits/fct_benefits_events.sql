@@ -130,84 +130,83 @@ WITH fct_benefits_events AS (
     END AS version_name
 
     FROM {{ ref('stg_amplitude__benefits_events') }}
-),
-fct_old_enrollments AS (
-  SELECT
-    -- Keep fields in alphabetical order, match fields from fct_benefits_events CTE
-    amplitude_id,
-    app,
-    city,
-    client_event_time,
-    client_upload_time,
-    country,
-    device_family,
-    device_id,
-    device_type,
-    event_id,
-    event_properties_card_tokenize_func,
-    event_properties_card_tokenize_url,
-    CASE
-      WHEN client_event_time < '2022-08-12T07:00:00Z'
-        THEN "ca-dmv"
-      WHEN client_event_time >= '2022-08-12T07:00:00Z'
-        THEN "cdt-logingov"
-    END AS event_properties_claims_provider,
-    CASE
-      WHEN client_event_time < '2022-08-12T07:00:00Z'
-        THEN "ca-dmv"
-      WHEN client_event_time >= '2022-08-12T07:00:00Z'
-        THEN "cdt-logingov"
-    END AS event_properties_eligibility_verifier,
-    "senior" AS event_properties_enrollment_flows,
-    "5170d37b-43d5-4049-899c-b4d850e14990" AS event_properties_enrollment_group,
-    event_properties_enrollment_method,
-    event_properties_error_name,
-    event_properties_error_status,
-    event_properties_error_sub,
-    event_properties_href,
-    event_properties_language,
-    event_properties_origin,
-    event_properties_path,
-    "success" AS event_properties_status,
-    "Monterey-Salinas Transit" AS event_properties_transit_agency,
-    event_time,
-    "returned enrollment" AS event_type,
-    language,
-    library,
-    os_name,
-    os_version,
-    processed_time,
-    region,
-    server_received_time,
-    server_upload_time,
-    session_id,
-    start_version,
-    user_id,
-    CASE
-      WHEN client_event_time < '2022-08-12T07:00:00Z'
-        THEN "ca-dmv"
-      WHEN client_event_time >= '2022-08-12T07:00:00Z'
-        THEN "cdt-logingov"
-    END AS user_properties_eligibility_verifier,
-    "senior" AS user_properties_enrollment_flows,
-    user_properties_enrollment_method,
-    user_properties_initial_referrer,
-    user_properties_initial_referring_domain,
-    user_properties_referrer,
-    user_properties_referring_domain,
-    "Monterey-Salinas Transit" AS user_properties_transit_agency,
-    user_properties_user_agent,
-    uuid,
-    version_name
-  FROM fct_benefits_events
-  WHERE client_event_time >= '2021-12-08T08:00:00Z'
-    and client_event_time < '2022-08-29T07:00:00Z'
-    and (region = 'California' or region is null)
-    and (city != 'Los Angeles' or city is null)
-    and event_type = 'viewed page'
-    and event_properties_path = '/enrollment/success'
 )
 
-SELECT * FROM fct_benefits_events
+SELECT
+  -- Keep fields in alphabetical order, match fields from fct_benefits_events CTE
+  amplitude_id,
+  app,
+  city,
+  client_event_time,
+  client_upload_time,
+  country,
+  device_family,
+  device_id,
+  device_type,
+  event_id,
+  event_properties_card_tokenize_func,
+  event_properties_card_tokenize_url,
+  CASE
+    WHEN client_event_time < '2022-08-12T07:00:00Z'
+      THEN "ca-dmv"
+    WHEN client_event_time >= '2022-08-12T07:00:00Z'
+      THEN "cdt-logingov"
+  END AS event_properties_claims_provider,
+  CASE
+    WHEN client_event_time < '2022-08-12T07:00:00Z'
+      THEN "ca-dmv"
+    WHEN client_event_time >= '2022-08-12T07:00:00Z'
+      THEN "cdt-logingov"
+  END AS event_properties_eligibility_verifier,
+  "senior" AS event_properties_enrollment_flows,
+  "5170d37b-43d5-4049-899c-b4d850e14990" AS event_properties_enrollment_group,
+  event_properties_enrollment_method,
+  event_properties_error_name,
+  event_properties_error_status,
+  event_properties_error_sub,
+  event_properties_href,
+  event_properties_language,
+  event_properties_origin,
+  event_properties_path,
+  "success" AS event_properties_status,
+  "Monterey-Salinas Transit" AS event_properties_transit_agency,
+  event_time,
+  "returned enrollment" AS event_type,
+  language,
+  library,
+  os_name,
+  os_version,
+  processed_time,
+  region,
+  server_received_time,
+  server_upload_time,
+  session_id,
+  start_version,
+  user_id,
+  CASE
+    WHEN client_event_time < '2022-08-12T07:00:00Z'
+      THEN "ca-dmv"
+    WHEN client_event_time >= '2022-08-12T07:00:00Z'
+      THEN "cdt-logingov"
+  END AS user_properties_eligibility_verifier,
+  "senior" AS user_properties_enrollment_flows,
+  user_properties_enrollment_method,
+  user_properties_initial_referrer,
+  user_properties_initial_referring_domain,
+  user_properties_referrer,
+  user_properties_referring_domain,
+  "Monterey-Salinas Transit" AS user_properties_transit_agency,
+  user_properties_user_agent,
+  uuid,
+  version_name
+FROM fct_benefits_events
+WHERE client_event_time >= '2021-12-08T08:00:00Z'
+  and client_event_time < '2022-08-29T07:00:00Z'
+  and (region = 'California' or region is null)
+  and (city != 'Los Angeles' or city is null)
+  and event_type = 'viewed page'
+  and event_properties_path = '/enrollment/success'
+
 UNION DISTINCT
-SELECT * FROM fct_old_enrollments
+
+SELECT * FROM fct_benefits_events
