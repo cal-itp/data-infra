@@ -203,24 +203,24 @@ models:
         description: A five-digit identifying number for each agency used in the current NTD system.
       - name: agency
         description: The transit agency's name.
-      - name: max_reporter_type
+      - name: reporter_type
         description: The type of NTD report that the agency completed this year.
-      - name: max_organization_type
+      - name: organization_type
         description: Description of the agency's legal entity.
-      - name: max_city
+      - name: city
         description: The city in which the agency is headquartered.
-      - name: max_state
+      - name: state
         description: The state in which the agency is headquartered.
-      - name: max_agency_voms
+      - name: agency_voms
         description: |
           The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
           This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
           Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
-      - name: max_primary_uza_code
+      - name: primary_uza_code
         description: UACE Code remains consistent across census years.
-      - name: max_primary_uza_name
+      - name: primary_uza_name
         description: The name of the agency's Urbanized Area.
-      - name: max_primary_uza_area_sq_miles
+      - name: primary_uza_area_sq_miles
         description: The agency's Urbanized Area's size in square miles.
       - name: max_primary_uza_population
         description: The population of the urbanized area primarily served by the agency.
@@ -228,7 +228,7 @@ models:
         description: The agency's service area's size in square miles.
       - name: max_service_area_population
         description: The population of the service area served by the agency.
-      - name: sum_actual_vehicles_passenger_car_deadhead_hours
+      - name: actual_vehicles_passenger_car_deadhead_hours
         description: |
           The hours that a vehicle/passenger car travels when out of revenue service.
           Deadhead includes:
@@ -242,7 +242,7 @@ models:
             - Travel to maintenance facilities,
             - Operator training,
             - Maintenance testing.
-      - name: sum_actual_vehicles_passenger_car_hours
+      - name: actual_vehicles_passenger_car_hours
         description: |
           The hours that vehicles/passenger cars travel while in revenue service plus deadhead hours.
           Actual vehicle hours include:
@@ -254,7 +254,7 @@ models:
             - School bus service,
             - Operator training,
             - Vehicle maintenance testing.
-      - name: sum_actual_vehicles_passenger_car_miles
+      - name: actual_vehicles_passenger_car_miles
         description: |
           The miles that vehicles/passenger cars travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
           Actual vehicle miles include:
@@ -265,7 +265,7 @@ models:
             - School bus service,
             - Operator training,
             - Vehicle maintenance testing.
-      - name: sum_actual_vehicles_passenger_car_revenue_hours
+      - name: actual_vehicles_passenger_car_revenue_hours
         description: |
           The hours that vehicles/passenger cars travel while in revenue service.
           Vehicle revenue hours (VRH) include:
@@ -276,7 +276,7 @@ models:
             - Operator training,
             - Maintenance testing,
             - School bus and charter services.
-      - name: sum_actual_vehicles_passenger_car_revenue_miles
+      - name: actual_vehicles_passenger_car_revenue_miles
         description: |
           The miles that vehicles/passenger cars travel while in revenue service.
           Vehicle revenue miles (VRM) include:
@@ -286,7 +286,7 @@ models:
             - Operator training,
             - Maintenance testing,
             - School bus and charter services.
-      - name: sum_actual_vehicles_passenger_deadhead_miles
+      - name: actual_vehicles_passenger_deadhead_miles
         description: |
           The miles that a vehicle/passenger car travels when out of revenue service.
           Deadhead includes:
@@ -300,27 +300,27 @@ models:
             - Travel to maintenance facilities,
             - Operator training,
             - Maintenance testing.
-      - name: sum_scheduled_vehicles_passenger_car_revenue_miles
+      - name: scheduled_vehicles_passenger_car_revenue_miles
         description: |
           The total service scheduled to be provided for picking up and discharging passengers.
           Scheduled service is computed from internal transit agency planning documents (e.g., run paddles, trip tickets, and public timetables).
           Scheduled service excludes special additional services.
-      - name: sum_charter_service_hours
+      - name: charter_service_hours
         description: Hours run in charter service.
-      - name: sum_school_bus_hours
+      - name: school_bus_hours
         description: Hours run in school bus service.
-      - name: sum_trains_in_operation
+      - name: trains_in_operation
         description: The maximum number of trains actually operated to provide service during the year.
-      - name: sum_directional_route_miles
+      - name: directional_route_miles
         description: |
           The mileage in each direction over which public transportation vehicles travel while in revenue service.
           Directional route miles (DRM) are:
           - A measure of the route path over a facility or roadway, not the service carried on the facility; e.g., number of routes, vehicles, or vehicle revenue miles.
           - Computed with regard to direction of service, but without regard to the number of traffic lanes or rail tracks existing in the right-of-way (ROW).
           Directional route miles (DRM) do not include staging or storage areas at the beginning or end of a route.
-      - name: sum_passenger_miles
+      - name: passenger_miles
         description: The cumulative sum of the distances ridden by each passenger.
-      - name: sum_train_miles
+      - name: train_miles
         description: |
           The miles that trains travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
           Train miles include:
@@ -330,7 +330,7 @@ models:
             - Miles for charter services,
             - Operator training,
             - Vehicle maintenance testing.
-      - name: sum_train_revenue_miles
+      - name: train_revenue_miles
         description: |
           The miles that trains travel while in revenue service.
           Train revenue miles include:
@@ -340,7 +340,7 @@ models:
             - Operator training,
             - Maintenance testing,
             - Charter services.
-      - name: sum_train_deadhead_miles
+      - name: train_deadhead_miles
         description: |
           The miles that a train travels when out of revenue service. Deadhead includes:
             - Leaving or returning to the garage or yard facility,
@@ -353,7 +353,7 @@ models:
             - Travel to maintenance facilities,
             - Operator training,
             - Maintenance testing.
-      - name: sum_train_hours
+      - name: train_hours
         description: |
           The hours that trains travel while in revenue service plus deadhead hours.
           Train hours include:
@@ -364,7 +364,7 @@ models:
             - Hours for charter service,
             - Operator training,
             - Vehicle maintenance testing.
-      - name: sum_train_revenue_hours
+      - name: train_revenue_hours
         description: |
           The hours that trains travel while in revenue service. Train revenue hours include:
             - Revenue service,
@@ -374,7 +374,7 @@ models:
             - Operator training,
             - Maintenance testing,
             - Charter services.
-      - name: sum_train_deadhead_hours
+      - name: train_deadhead_hours
         description: |
           The hours that a train travels when out of revenue service. Deadhead includes:
             - Leaving or returning to the garage or yard facility,
@@ -387,11 +387,11 @@ models:
             - Travel to maintenance facilities,
             - Operator training,
             - Maintenance testing.
-      - name: sum_ada_upt
+      - name: ada_upt
         description: Unlinked Passenger Trips embarked per stipulations of the Americans with Disabilities Act.
-      - name: sum_sponsored_service_upt
+      - name: sponsored_service_upt
         description: Unlinked Passenger Trips embarked under sponsored service.
-      - name: sum_unlinked_passenger_trips_upt
+      - name: unlinked_passenger_trips_upt
         description: |
           The number of passengers who board public transportation vehicles.
           Passengers are counted each time they board a vehicle no matter how many vehicles they use to travel from their origin to their destination.
