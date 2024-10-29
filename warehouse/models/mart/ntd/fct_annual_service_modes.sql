@@ -47,7 +47,7 @@ SELECT {{ dbt_utils.generate_surrogate_key(['report_year', '_5_digit_ntd_id', 't
        sum_actual_vehicles_passenger_deadhead_miles AS actual_vehicles_passenger_deadhead_miles,
        sum_directional_route_miles AS directional_route_miles,
        sum_passenger_miles AS passenger_miles,
-       sum_scheduled_vehicles_passenger_car_revenue_miles AS,
+       sum_scheduled_vehicles_passenger_car_revenue_miles AS scheduled_vehicles_passenger_car_revenue_miles,
        sum_train_miles AS train_miles,
        sum_train_deadhead_miles AS train_deadhead_miles,
        sum_train_revenue_miles AS train_revenue_miles
