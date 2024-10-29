@@ -1,4 +1,13 @@
 version: 2
+
+x-common-fields:
+  - &report_year
+    name: report_year
+    description: '{{ doc("ntd_report_year") }}'
+  - &ntd_id
+    name: ntd_id
+    description: '{{ doc("ntd_id") }}'
+
 models:
   - name: dim_annual_ntd_agency_information
     description: >
