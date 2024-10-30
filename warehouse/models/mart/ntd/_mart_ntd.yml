@@ -42,28 +42,28 @@ x-common-fields:
     description: '{{ doc("ntd_service_area_population") }}'
   - &service_area_sq_miles
     name: service_area_sq_miles
-    description: '{{ doc("ntd_service_area_sq_miles") }}'    
+    description: '{{ doc("ntd_service_area_sq_miles") }}'
   - &type_of_service
     name: type_of_service
     description: '{{ doc("ntd_type_of_service") }}'
   - &mode
     name: mode
-    description: '{{ doc("ntd_mode") }}'  
+    description: '{{ doc("ntd_mode") }}'
   - &mode_name
     name: mode_name
-    description: '{{ doc("ntd_mode_name") }}'      
+    description: '{{ doc("ntd_mode_name") }}'
   - &time_period
     name: time_period
-    description: '{{ doc("ntd_time_period") }}'      
+    description: '{{ doc("ntd_time_period") }}'
   - &questionable_data
     name: questionable_data
-    description: '{{ doc("ntd_questionable_data") }}'   
+    description: '{{ doc("ntd_questionable_data") }}'
   - &agency_voms
     name: agency_voms
-    description: '{{ doc("ntd_agency_voms") }}'  
+    description: '{{ doc("ntd_agency_voms") }}'
   - &actual_vehicle_hours
     name: actual_vehicle_hours
-    description: '{{ doc("ntd_actual_vehicle_hours") }}'   
+    description: '{{ doc("ntd_actual_vehicle_hours") }}'
 
 models:
   - name: dim_annual_ntd_agency_information
@@ -111,7 +111,7 @@ models:
       - name: _is_current
         tests:
           - not_null
-          
+
   - name: dim_annual_funding_sources
     description: >-
       This dataset details federal, state, and local funding sources for each applicable agency reporting to the NTD in Report Year 2022.
@@ -236,7 +236,7 @@ models:
           *ONLY for State Funding Sources (funding_source = "state")
       - *primary_uza_code
       - *primary_uza_name
-        
+
   - name: dim_annual_service_agencies
     description: >-
       Provides transit agency-wide totals for service data for applicable agencies reporting to the National Transit Database in the 2022 report year.
@@ -422,7 +422,7 @@ models:
         description: |
           The number of passengers who board public transportation vehicles.
           Passengers are counted each time they board a vehicle no matter how many vehicles they use to travel from their origin to their destination.
-          
+
   - name: dim_annual_service_mode_time_periods
     description:
       This represents the Service data reported to the NTD by transit agencies in the 2022 report year.
@@ -438,7 +438,7 @@ models:
       - *reporter_type
       - *ntd_id
       - *agency
-      - *type_of_service  
+      - *type_of_service
       - *mode
       - *mode_name
       - <<: *time_period
@@ -551,7 +551,7 @@ models:
             - Travel to maintenance facilities,
             - Operator training,
             - Maintenance testing.
-      - <<: *questionable_data 
+      - <<: *questionable_data
         name: deadhead_hours_questionable
       - name: charter_service_hours
         description: Hours run in charter service.
@@ -610,7 +610,7 @@ models:
             - Hours for charter service,
             - Operator training,
             - Vehicle maintenance testing.
-      - <<: *questionable_data 
+      - <<: *questionable_data
         name: train_hours_questionable
       - name: train_revenue_hours
         description: |
@@ -659,7 +659,7 @@ models:
         name: aptl_questionable
       - name: average_speed
         description: The average speed of a vehicle/passenger car during revenue service.
-      - <<: *questionable_data 
+      - <<: *questionable_data
         name: average_speed_questionable
       - name: brt_non_statutory_mixed_traffic
         description: |
@@ -688,7 +688,7 @@ models:
           For trains, this applies to passengers per hour on a single train car.
       - <<: *questionable_data
         name: passengers_per_hour_questionable
-        
+
   - name: dim_monthly_ntd_ridership_with_adjustments
     description: >-
       Extracts of the NTD Monthly Ridership with adjustments - VRM, VOMS, VRH,
@@ -801,7 +801,7 @@ models:
       - name: year
         description: The year this data was added to the mart and thus the ntd_id's year
           as well.
-      - *reporter_type        
+      - *reporter_type
       - *agency
       - name: mode_type_of_service_status
         description: Status – Indicates whether a property reports (active) or not
@@ -813,7 +813,7 @@ models:
         description: 3 Mode - A grouping of modes based upon whether the mode operates
           on rail, is a bus mode, is ferry boat service or other.
       - <<: *type_of_service
-        name: tos     
+        name: tos
       - *ntd_legacy_id
       - name: period_year_month
         description: ""
@@ -877,7 +877,7 @@ models:
           •   Atypical days; or
 
           •   One-time special events.
-          
+
   - name: fct_annual_service_modes
     description:
       View based on 2022 NTD Annual Data - Service (by Mode and Time Period)
