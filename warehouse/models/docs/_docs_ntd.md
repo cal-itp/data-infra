@@ -112,3 +112,15 @@ This is the revenue vehicle count during the peak season of the year; on the wee
 Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
 {% enddocs %}
 
+{% docs ntd_actual_vehicle_hours %}
+The hours that vehicles/passenger cars travel while in revenue service plus deadhead hours.
+Actual vehicle hours include:
+    - Revenue service,
+    - Deadhead,
+    - Layover/recovery time.
+Actual vehicle hours exclude:
+    - Hours for charter service,
+    - School bus service,
+    - Operator training,
+    - Vehicle maintenance testing.
+{% enddocs %}

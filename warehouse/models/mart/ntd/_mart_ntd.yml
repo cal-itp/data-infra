@@ -55,13 +55,16 @@ x-common-fields:
   - &time_period
     name: time_period
     description: '{{ doc("ntd_time_period") }}'      
-  - &agency_voms
-    name: agency_voms
-    description: '{{ doc("ntd_agency_voms") }}'   
   - &questionable_data
     name: questionable_data
     description: '{{ doc("ntd_questionable_data") }}'   
-    
+  - &agency_voms
+    name: agency_voms
+    description: '{{ doc("ntd_agency_voms") }}'  
+  - &actual_vehicle_hours
+    name: actual_vehicle_hours
+    description: '{{ doc("ntd_actual_vehicle_hours") }}'   
+
 models:
   - name: dim_annual_ntd_agency_information
     description: >
@@ -214,7 +217,7 @@ models:
         description: |
           Local and State funding sources reported by agencies that do not report funding sources in specific categories because they have reduced reporting requirements.
           *ONLY for Local and State Funding Sources (funding_source IN ("local", "state"))
-      - *report_year
+      - <<: *report_year
         tests:
           - accepted_values:
               values: [2022]
@@ -245,7 +248,7 @@ models:
         tests:
           - not_null
           - unique
-      - *report_year
+      - <<: *report_year
         tests:
           - accepted_values:
               values: [2022]
@@ -276,18 +279,8 @@ models:
             - Travel to maintenance facilities,
             - Operator training,
             - Maintenance testing.
-      - name: actual_vehicles_passenger_car_hours
-        description: |
-          The hours that vehicles/passenger cars travel while in revenue service plus deadhead hours.
-          Actual vehicle hours include:
-            - Revenue service,
-            - Deadhead,
-            - Layover/recovery time.
-          Actual vehicle hours exclude:
-            - Hours for charter service,
-            - School bus service,
-            - Operator training,
-            - Vehicle maintenance testing.
+      - <<: *actual_vehicle_hours
+        name: actual_vehicles_passenger_car_hours
       - name: actual_vehicles_passenger_car_miles
         description: |
           The miles that vehicles/passenger cars travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
@@ -429,6 +422,7 @@ models:
         description: |
           The number of passengers who board public transportation vehicles.
           Passengers are counted each time they board a vehicle no matter how many vehicles they use to travel from their origin to their destination.
+          
   - name: dim_annual_service_mode_time_periods
     description:
       This represents the Service data reported to the NTD by transit agencies in the 2022 report year.
@@ -437,7 +431,7 @@ models:
         tests:
           - not_null
           - unique
-      - *report_year
+      - <<: *report_year
         tests:
           - accepted_values:
               values: [2022]
@@ -447,7 +441,7 @@ models:
       - *type_of_service  
       - *mode
       - *mode_name
-      - *time_period
+      - <<: *time_period
         tests:
           - accepted_values:
               values: ["Average Weekday - AM Peak", "Average Weekday - Midday", "Average Weekday - PM Peak", "Average Weekday - Other", "Average Typical Weekday", "Average Typical Saturday", "Average Typical Sunday"]
@@ -476,7 +470,7 @@ models:
           The number of revenue vehicles operated by the given mode and type of service to meet the annual maximum service requirement.
           This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
           Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
-      - <<: *questionable
+      - <<: *questionable_data
         name: mode_voms_questionable
       - name: actual_vehicles_passenger_car_miles
         description: |
@@ -489,7 +483,7 @@ models:
             - School bus service,
             - Operator training,
             - Vehicle maintenance testing.
-      - <<: *questionable
+      - <<: *questionable_data
         name: vehicle_miles_questionable
       - name: actual_vehicles_passenger_car_revenue_miles
         description: |
@@ -501,7 +495,7 @@ models:
             - Operator training,
             - Maintenance testing,
             - School bus and charter services.
-      - <<: *questionable
+      - <<: *questionable_data
         name: vehicle_revenue_miles_questionable
       - name: actual_vehicles_passenger_deadhead_miles
         description: |
@@ -517,30 +511,18 @@ models:
             - Travel to maintenance facilities,
             - Operator training,
             - Maintenance testing.
-      - name: deadhead_miles_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable_data
+        name: deadhead_miles_questionable
       - name: scheduled_vehicles_passenger_car_revenue_miles
         description: |
           The total service scheduled to be provided for picking up and discharging passengers.
           Scheduled service is computed from internal transit agency planning documents (e.g., run paddles, trip tickets, and public timetables).
           Scheduled service excludes special additional services.
-      - <<: *questionable
+      - <<: *questionable_data
         name: scheduled_revenue_miles_questionable
-      - name: actual_vehicles_passenger_car_hours
-        description: |
-          The hours that vehicles/passenger cars travel while in revenue service plus deadhead hours.
-          Actual vehicle hours include:
-            - Revenue service,
-            - Deadhead,
-            - Layover/recovery time.
-          Actual vehicle hours exclude:
-            - Hours for charter service,
-            - School bus service,
-            - Operator training,
-            - Vehicle maintenance testing.
-      - <<: *questionable
+      - <<: *actual_vehicle_hours
+        name: actual_vehicles_passenger_car_hours
+      - <<: *questionable_data
         name: vehicle_hours_questionable
       - name: actual_vehicles_passenger_car_revenue_hours
         description: |
@@ -553,7 +535,7 @@ models:
             - Operator training,
             - Maintenance testing,
             - School bus and charter services.
-      - <<: *questionable
+      - <<: *questionable_data
         name: vehicle_revenue_hours_questionable
       - name: actual_vehicles_passenger_car_deadhead_hours
         description: |
@@ -569,7 +551,7 @@ models:
             - Travel to maintenance facilities,
             - Operator training,
             - Maintenance testing.
-      - <<: *questionable 
+      - <<: *questionable_data 
         name: deadhead_hours_questionable
       - name: charter_service_hours
         description: Hours run in charter service.
@@ -577,7 +559,7 @@ models:
         description: Hours run in school bus service.
       - name: trains_in_operation
         description: The maximum number of trains actually operated to provide service during the year.
-      - <<: *questionable
+      - <<: *questionable_data
         name: trains_in_operation_questionable
       - name: train_miles
         description: |
@@ -589,7 +571,7 @@ models:
             - Miles for charter services,
             - Operator training,
             - Vehicle maintenance testing.
-      - <<: *questionable
+      - <<: *questionable_data
         name: train_miles_questionable
       - name: train_revenue_miles
         description: |
@@ -601,7 +583,7 @@ models:
             - Operator training,
             - Maintenance testing,
             - Charter services.
-      - <<: *questionable
+      - <<: *questionable_data
         name: train_revenue_miles_questionable
       - name: train_deadhead_miles
         description: |
@@ -628,7 +610,7 @@ models:
             - Hours for charter service,
             - Operator training,
             - Vehicle maintenance testing.
-      - <<: *questionable 
+      - <<: *questionable_data 
         name: train_hours_questionable
       - name: train_revenue_hours
         description: |
@@ -641,7 +623,7 @@ models:
             - Operator training ,
             - Maintenance testing,
             - Charter services.
-      - <<: *questionable
+      - <<: *questionable_data
         name: train_revenue_hours_questionable
       - name: train_deadhead_hours
         description: |
@@ -673,11 +655,11 @@ models:
         description: |
           The average distance ridden by each passenger in a single trip, computed as passenger miles traveled (PMT) divided by unlinked passenger trips (UPT).
           May be determined by sampling, or calculated based on actual data.
-      - <<: *questionable
+      - <<: *questionable_data
         name: aptl_questionable
       - name: average_speed
         description: The average speed of a vehicle/passenger car during revenue service.
-      - <<: *questionable 
+      - <<: *questionable_data 
         name: average_speed_questionable
       - name: brt_non_statutory_mixed_traffic
         description: |
@@ -694,17 +676,17 @@ models:
             - A measure of the route path over a facility or roadway, not the service carried on the facility; e.g., number of routes, vehicles, or vehicle revenue miles.
             - Computed with regard to direction of service, but without regard to the number of traffic lanes or rail tracks existing in the right-of-way (ROW).
           Directional route miles (DRM) do not include staging or storage areas at the beginning or end of a route.
-      - <<: *questionable
+      - <<: *questionable_data
         name: directional_route_miles_questionable
       - name: passenger_miles
         description: The cumulative sum of the distances ridden by each passenger.
-      - <<: *questionable
+      - <<: *questionable_data
         name: passenger_miles_questionable
       - name: passengers_per_hour
         description: |
           The average number of passengers to board a vehicle/passenger car in one hour of service.
           For trains, this applies to passengers per hour on a single train car.
-      - <<: *questionable
+      - <<: *questionable_data
         name: passengers_per_hour_questionable
         
   - name: dim_monthly_ntd_ridership_with_adjustments
@@ -808,12 +790,12 @@ models:
       Trips
     columns:
       - *primary_uza_name
-      - *ntd_primary_uza_code
+      - *primary_uza_code
       - name: _dt
         description: ""
       - name: ts
         description: ""
-      - *ntd_id
+      - <<: *ntd_id
         tests:
           - not_null
       - name: year
@@ -832,7 +814,7 @@ models:
           on rail, is a bus mode, is ferry boat service or other.
       - <<: *type_of_service
         name: tos     
-      - *legacy_ntd_id
+      - *ntd_legacy_id
       - name: period_year_month
         description: ""
       - name: period_month
@@ -906,7 +888,7 @@ models:
         tests:
           - not_null
           - unique
-      - *report_year
+      - <<: *report_year
         tests:
           - accepted_values:
               values: [2022]
@@ -914,8 +896,8 @@ models:
       - *type_of_service
       - *mode
       - *mode_name
-      - name: questionable_record
-        description: Indicates whether there was questionable data for the given given record.
+      - <<: *questionable_data
+        name: questionable_record
       - <<: *time_period
         description: |
           The time period for which data was collected.
