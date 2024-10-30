@@ -1,13 +1,57 @@
 version: 2
 
 x-common-fields:
-  - &report_year
-    name: report_year
-    description: '{{ doc("ntd_report_year") }}'
   - &ntd_id
     name: ntd_id
     description: '{{ doc("ntd_id") }}'
-
+  - &agency
+    name: agency
+    description: '{{ doc("ntd_agency") }}'
+  - &ntd_legacy_id
+    name: ntd_legacy_id
+    description: '{{ doc("ntd_legacy_id") }}'
+  - &report_year
+    name: report_year
+    description: '{{ doc("ntd_report_year") }}'
+  - &reporter_type
+    name: reporter_type
+    description: '{{ doc("ntd_reporter_type") }}'
+  - &organization_type
+    name: organization_type
+    description: '{{ doc("ntd_organization_type") }}'
+  - &city
+    name: city
+    description: '{{ doc("ntd_city") }}'
+  - &state
+    name: state
+    description: '{{ doc("ntd_state") }}'
+  - &primary_uza_code
+    name: primary_uza_code
+    description: '{{ doc("ntd_primary_uza_code") }}'
+  - &primary_uza_name
+    name: primary_uza_name
+    description: '{{ doc("ntd_primary_uza_name") }}'
+  - &primary_uza_area_sq_miles
+    name: primary_uza_area_sq_miles
+    description: '{{ doc("ntd_primary_uza_area_sq_miles") }}'
+  - &primary_uza_population
+    name: primary_uza_population
+    description: '{{ doc("ntd_primary_uza_population") }}'
+  - &type_of_service
+    name: type_of_service
+    description: '{{ doc("ntd_type_of_service") }}'
+  - &mode
+    name: mode
+    description: '{{ doc("ntd_mode") }}'  
+  - &mode_name
+    name: mode_name
+    description: '{{ doc("ntd_mode_name") }}'      
+  - &time_period
+    name: time_period
+    description: '{{ doc("ntd_time_period") }}'      
+    
+    
+    
 models:
   - name: dim_annual_ntd_agency_information
     description: >
@@ -73,15 +117,13 @@ models:
         tests:
           - accepted_values:
               values: ["federal", "state", "local"]
-      - name: agency
-        description: The transit agency's name.
+      - *agency
       - name: agency_voms
         description: |
           The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
           This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
           Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
-      - name: city
-        description: The city in which the agency is headquartered.
+      - *city
       - name: fuel_tax
         description: |
           Revenue from taxing fuel.
@@ -158,8 +200,7 @@ models:
           - Sales taxes,
           - Fuel taxes.
           *ONLY for Local Funding Sources (funding_source = "local")
-      - name: primary_uza_population
-        description: The population of the urbanized area primarily served by the agency.
+      - *primary_uza_population
       - name: property_tax
         description: |
           Revenue from taxing property.
@@ -173,8 +214,7 @@ models:
         tests:
           - accepted_values:
               values: [2022]
-      - name: reporter_type
-        description: The type of NTD report that the agency completed this year.
+      - *reporter_type
       - name: sales_tax
         description: |
           Revenue from taxing sales.
@@ -188,10 +228,10 @@ models:
       - name: transportation_funds
         description: |
           *ONLY for State Funding Sources (funding_source = "state")
-      - name: uace_code
-        description: UACE Code remains consistent across census years.
-      - name: uza_name
-        description: The name of the agency's Urbanized Area.
+      - <<: *ntd_primary_uza_code
+        name: uace_code
+      - <<: *ntd_primary_uza_name
+        name: uza_name
   - name: dim_annual_service_agencies
     description: >-
       Provides transit agency-wide totals for service data for applicable agencies reporting to the National Transit Database in the 2022 report year.
@@ -203,36 +243,25 @@ models:
         tests:
           - not_null
           - unique
-      - name: report_year
-        description: The year for which the data was reported.
+      - *report_year
         tests:
           - accepted_values:
               values: [2022]
-      - name: ntd_id
-        description: A five-digit identifying number for each agency used in the current NTD system.
-      - name: agency
-        description: The transit agency's name.
-      - name: reporter_type
-        description: The type of NTD report that the agency completed this year.
-      - name: organization_type
-        description: Description of the agency's legal entity.
-      - name: city
-        description: The city in which the agency is headquartered.
-      - name: state
-        description: The state in which the agency is headquartered.
+      - *ntd_id
+      - *agency
+      - *reporter_type
+      - *organization_type
+      - *city
+      - *state
       - name: agency_voms
         description: |
           The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
           This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
           Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
-      - name: primary_uza_code
-        description: UACE Code remains consistent across census years.
-      - name: primary_uza_name
-        description: The name of the agency's Urbanized Area.
-      - name: primary_uza_area_sq_miles
-        description: The agency's Urbanized Area's size in square miles.
-      - name: max_primary_uza_population
-        description: The population of the urbanized area primarily served by the agency.
+      - *primary_uza_code
+      - *primary_uza_name
+      - *primary_uza_area_sq_miles
+      - *primary_uza_population
       - name: max_service_area_sq_miles
         description: The agency's service area's size in square miles.
       - name: max_service_area_population
@@ -417,31 +446,13 @@ models:
         tests:
           - accepted_values:
               values: [2022]
-      - name: reporter_type
-        description: The type of NTD report that the agency completed this year.
-      - name: ntd_id
-        description: A five-digit identifying number for each agency used in the current NTD system.
-      - name: agency
-        description: The transit agency's name.
-      - name: type_of_service
-        description: |
-          Describes how public transportation services are provided by the transit agency:
-            directly operated (DO) or purchased transportation (PT) services.
-      - name: mode
-        description: A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
-      - name: mode_name
-        description: A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
-      - name: time_period
-        description: |
-          The time period for which data was collected:
-            - Annual Total,
-            - Average Weekday - AM Peak,
-            - Average Weekday - Midday,
-            - Average Weekday - PM Peak,
-            - Average Weekday - Other,
-            - Average Typical Weekday,
-            - Average Typical Saturday,
-            - Average Typical Sunday.
+      - *reporter_type
+      - *ntd_id
+      - *agency
+      - *type_of_service  
+      - *mode
+      - *mode_name
+      - *time_period
         tests:
           - accepted_values:
               values: ["Average Weekday - AM Peak", "Average Weekday - Midday", "Average Weekday - PM Peak", "Average Weekday - Other", "Average Typical Weekday", "Average Typical Saturday", "Average Typical Sunday"]
@@ -451,18 +462,12 @@ models:
         description: The time at which a particular mode/type of service ends revenue service, presented in a 24-hour format.
       - name: organization_type
         description: Description of the agency's legal entity.
-      - name: city
-        description: The city in which the agency is headquartered.
-      - name: state
-        description: The state in which the agency is headquartered.
-      - name: primary_uza_code
-        description: UACE Code remains consistent across census years.
-      - name: primary_uza_name
-        description: The name of the agency's Urbanized Area.
-      - name: primary_uza_area_sq_miles
-        description: The agency's Urbanized Area's size in square miles.
-      - name: primary_uza_population
-        description: The population of the urbanized area primarily served by the agency.
+      - *city
+      - *state
+      - *primary_uza_code
+      - *primary_uza_name
+      - *primary_uza_area_sq_miles
+      - *primary_uza_population
       - name: service_area_population
         description: The population of the service area served by the agency.
       - name: service_area_sq_miles
@@ -847,51 +852,32 @@ models:
       Avg. Fares per Trip – The ratio of Fares Earned per Unlinked Passenger
       Trips
     columns:
-      - name: uza_name
-        description: Urbanized Area Name – The name of the urbanized area as defined by
-          the U.S. Census
-      - name: uace_cd
-        description: "Urban Area Census Code (UACE)  – A unique numeric identifier
-          associated with the 2020 urban areas as defined by the U.S. Census. "
+      - *primary_uza_name
+      - *ntd_primary_uza_code
       - name: _dt
         description: ""
       - name: ts
         description: ""
-      - name: ntd_id
-        description: NTD ID – The Transit Property’s NTD identification number in the
-          Next Generation NTD Database
+      - *ntd_id
         tests:
           - not_null
       - name: year
         description: The year this data was added to the mart and thus the ntd_id's year
           as well.
-      - name: reporter_type
-        description: Reporter Type - Indicates the agency's reporter type (Building
-          Reporter, Full Reporter, Reduced Asset Reporter,  Rural Reporter,
-          Separate Service Reporter or Small System Waiver Reporter) as of their
-          most recent report year.
-      - name: agency
-        description: Name – The Transit Property’s legal name
+      - *reporter_type        
+      - *agency
       - name: mode_type_of_service_status
         description: Status – Indicates whether a property reports (active) or not
           (inactive) during the most recent Annual report year.
-      - name: mode
-        description: Mode – Indicates the means of conveyance used for the service. The
-          NTD recognizes a number of different modes including Motorbus (MB),
-          Heavy Rail (HR), Light Rail (LR), and Demand Response (DR), among
-          others.
+      - *mode
       - name: service_type
         description: A summarization of modes into Fixed Route and Demand Response
       - name: _3_mode
         description: 3 Mode - A grouping of modes based upon whether the mode operates
           on rail, is a bus mode, is ferry boat service or other.
-      - name: tos
-        description: Type of Service – Indicates whether the service is directly
-          operated by the transit property, or is operated by a third party
-          through a purchased transportation agreement.
-      - name: legacy_ntd_id
-        description: Legacy NTD ID – The Transit Property’s NTD identification number in
-          the Legacy NTD Database
+      - <<: *type_of_service
+        name: tos     
+      - *legacy_ntd_id
       - name: period_year_month
         description: ""
       - name: period_month
@@ -964,20 +950,14 @@ models:
         tests:
           - not_null
           - unique
-      - name: report_year
-        description: The year for which the data was reported.
+      - *report_year
         tests:
           - accepted_values:
               values: [2022]
-      - name: ntd_id
-        description: A five-digit identifying number for each agency used in the current NTD system.
-      - name: type_of_service
-        description: |
-          Describes how public transportation services are provided by the transit agency: directly operated (DO) or purchased transportation (PT) services.
-      - name: mode
-        description: A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
-      - name: mode_name
-        description: A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
+      - *ntd_id
+      - *type_of_service
+      - *mode
+      - *mode_name
       - name: questionable_record
         description: Indicates whether there was questionable data for the given given record.
       - name: max_time_period
