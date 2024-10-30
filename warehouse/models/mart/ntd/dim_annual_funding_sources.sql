@@ -27,8 +27,8 @@ WITH local_funding_sources AS (
            state,
            tolls,
            null AS transportation_funds,
-           uace_code,
-           uza_name
+           uace_code AS primary_uza_code,
+           uza_name AS primary_uza_name,
       FROM {{ ref("stg_ntd_annual_data__2022__funding_sources_local") }}
 ),
 

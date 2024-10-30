@@ -37,6 +37,12 @@ x-common-fields:
   - &primary_uza_population
     name: primary_uza_population
     description: '{{ doc("ntd_primary_uza_population") }}'
+  - &service_area_population
+    name: service_area_population
+    description: '{{ doc("ntd_service_area_population") }}'
+  - &service_area_sq_miles
+    name: service_area_sq_miles
+    description: '{{ doc("ntd_service_area_sq_miles") }}'    
   - &type_of_service
     name: type_of_service
     description: '{{ doc("ntd_type_of_service") }}'
@@ -49,8 +55,12 @@ x-common-fields:
   - &time_period
     name: time_period
     description: '{{ doc("ntd_time_period") }}'      
-    
-    
+  - &agency_voms
+    name: agency_voms
+    description: '{{ doc("ntd_agency_voms") }}'   
+  - &questionable_data
+    name: questionable_data
+    description: '{{ doc("ntd_questionable_data") }}'   
     
 models:
   - name: dim_annual_ntd_agency_information
@@ -98,6 +108,7 @@ models:
       - name: _is_current
         tests:
           - not_null
+          
   - name: dim_annual_funding_sources
     description: >-
       This dataset details federal, state, and local funding sources for each applicable agency reporting to the NTD in Report Year 2022.
@@ -118,11 +129,7 @@ models:
           - accepted_values:
               values: ["federal", "state", "local"]
       - *agency
-      - name: agency_voms
-        description: |
-          The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
-          This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
-          Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+      - *agency_voms
       - *city
       - name: fuel_tax
         description: |
@@ -157,10 +164,8 @@ models:
         description: |
           Revenue from taxing income.
           *ONLY for Local Funding Sources (funding_source = "local")
-      - name: ntd_id
-        description: A five-digit identifying number for each agency used in the current NTD system.
-      - name: organization_type
-        description: Description of the agency's legal entity.
+      - *ntd_id
+      - *organization_type
       - name: other_dot_funds
         description: |
           Funding from grants provided by divisions of the federal Department of Transportation other than FTA.
@@ -209,8 +214,7 @@ models:
         description: |
           Local and State funding sources reported by agencies that do not report funding sources in specific categories because they have reduced reporting requirements.
           *ONLY for Local and State Funding Sources (funding_source IN ("local", "state"))
-      - name: report_year
-        description: The year for which the data was reported.
+      - *report_year
         tests:
           - accepted_values:
               values: [2022]
@@ -219,8 +223,7 @@ models:
         description: |
           Revenue from taxing sales.
           *ONLY for Local Funding Sources (funding_source = "local")
-      - name: state
-        description: The state in which the agency is headquartered.
+      - *state
       - name: tolls
         description: |
           Revenue from tolls on bridges, highways, and high occupancy/toll lanes.
@@ -228,10 +231,9 @@ models:
       - name: transportation_funds
         description: |
           *ONLY for State Funding Sources (funding_source = "state")
-      - <<: *ntd_primary_uza_code
-        name: uace_code
-      - <<: *ntd_primary_uza_name
-        name: uza_name
+      - *primary_uza_code
+      - *primary_uza_name
+        
   - name: dim_annual_service_agencies
     description: >-
       Provides transit agency-wide totals for service data for applicable agencies reporting to the National Transit Database in the 2022 report year.
@@ -253,19 +255,13 @@ models:
       - *organization_type
       - *city
       - *state
-      - name: agency_voms
-        description: |
-          The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
-          This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
-          Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+      - *agency_voms
       - *primary_uza_code
       - *primary_uza_name
       - *primary_uza_area_sq_miles
       - *primary_uza_population
-      - name: max_service_area_sq_miles
-        description: The agency's service area's size in square miles.
-      - name: max_service_area_population
-        description: The population of the service area served by the agency.
+      - *service_area_sq_miles
+      - *service_area_population
       - name: actual_vehicles_passenger_car_deadhead_hours
         description: |
           The hours that a vehicle/passenger car travels when out of revenue service.
@@ -441,8 +437,7 @@ models:
         tests:
           - not_null
           - unique
-      - name: report_year
-        description: The year for which the data was reported.
+      - *report_year
         tests:
           - accepted_values:
               values: [2022]
@@ -460,38 +455,29 @@ models:
         description: The time at which a particular mode/type of service begins revenue service, presented in a 24-hour format.
       - name: time_service_ends
         description: The time at which a particular mode/type of service ends revenue service, presented in a 24-hour format.
-      - name: organization_type
-        description: Description of the agency's legal entity.
+      - *organization_type
       - *city
       - *state
       - *primary_uza_code
       - *primary_uza_name
       - *primary_uza_area_sq_miles
       - *primary_uza_population
-      - name: service_area_population
-        description: The population of the service area served by the agency.
-      - name: service_area_sq_miles
-        description: The agency's service area's size in square miles.
+      - *service_area_population
+      - *service_area_sq_miles
       - name: days_of_service_operated
         description: Days of revenue service within the fiscal year.
       - name: days_not_operated_strikes
         description: Days of revenue service not operated due to strikes.
       - name: days_not_operated_emergencies
         description: Days of revenue service not operated due to emergencies.
-      - name: agency_voms
-        description: |
-          The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
-          This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
-          Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+      - *agency_voms
       - name: mode_voms
         description: |
           The number of revenue vehicles operated by the given mode and type of service to meet the annual maximum service requirement.
           This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
           Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
-      - name: mode_voms_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: mode_voms_questionable
       - name: actual_vehicles_passenger_car_miles
         description: |
           The miles that vehicles/passenger cars travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
@@ -503,10 +489,8 @@ models:
             - School bus service,
             - Operator training,
             - Vehicle maintenance testing.
-      - name: vehicle_miles_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: vehicle_miles_questionable
       - name: actual_vehicles_passenger_car_revenue_miles
         description: |
           The miles that vehicles/passenger cars travel while in revenue service.
@@ -517,10 +501,8 @@ models:
             - Operator training,
             - Maintenance testing,
             - School bus and charter services.
-      - name: vehicle_revenue_miles_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: vehicle_revenue_miles_questionable
       - name: actual_vehicles_passenger_deadhead_miles
         description: |
           The miles that a vehicle/passenger car travels when out of revenue service.
@@ -544,10 +526,8 @@ models:
           The total service scheduled to be provided for picking up and discharging passengers.
           Scheduled service is computed from internal transit agency planning documents (e.g., run paddles, trip tickets, and public timetables).
           Scheduled service excludes special additional services.
-      - name: scheduled_revenue_miles_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: scheduled_revenue_miles_questionable
       - name: actual_vehicles_passenger_car_hours
         description: |
           The hours that vehicles/passenger cars travel while in revenue service plus deadhead hours.
@@ -560,10 +540,8 @@ models:
             - School bus service,
             - Operator training,
             - Vehicle maintenance testing.
-      - name: vehicle_hours_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: vehicle_hours_questionable
       - name: actual_vehicles_passenger_car_revenue_hours
         description: |
           The hours that vehicles/passenger cars travel while in revenue service.
@@ -575,10 +553,8 @@ models:
             - Operator training,
             - Maintenance testing,
             - School bus and charter services.
-      - name: vehicle_revenue_hours_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: vehicle_revenue_hours_questionable
       - name: actual_vehicles_passenger_car_deadhead_hours
         description: |
           The hours that a vehicle/passenger car travels when out of revenue service.
@@ -593,20 +569,16 @@ models:
             - Travel to maintenance facilities,
             - Operator training,
             - Maintenance testing.
-      - name: deadhead_hours_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable 
+        name: deadhead_hours_questionable
       - name: charter_service_hours
         description: Hours run in charter service.
       - name: school_bus_hours
         description: Hours run in school bus service.
       - name: trains_in_operation
         description: The maximum number of trains actually operated to provide service during the year.
-      - name: trains_in_operation_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: trains_in_operation_questionable
       - name: train_miles
         description: |
           The miles that trains travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
@@ -617,10 +589,8 @@ models:
             - Miles for charter services,
             - Operator training,
             - Vehicle maintenance testing.
-      - name: train_miles_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: train_miles_questionable
       - name: train_revenue_miles
         description: |
           The miles that trains travel while in revenue service.
@@ -631,10 +601,8 @@ models:
             - Operator training,
             - Maintenance testing,
             - Charter services.
-      - name: train_revenue_miles_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: train_revenue_miles_questionable
       - name: train_deadhead_miles
         description: |
           The miles that a train travels when out of revenue service.
@@ -660,10 +628,8 @@ models:
             - Hours for charter service,
             - Operator training,
             - Vehicle maintenance testing.
-      - name: train_hours_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable 
+        name: train_hours_questionable
       - name: train_revenue_hours
         description: |
           The hours that trains travel while in revenue service.
@@ -675,10 +641,8 @@ models:
             - Operator training ,
             - Maintenance testing,
             - Charter services.
-      - name: train_revenue_hours_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: train_revenue_hours_questionable
       - name: train_deadhead_hours
         description: |
           The hours that a train travels when out of revenue service.
@@ -709,16 +673,12 @@ models:
         description: |
           The average distance ridden by each passenger in a single trip, computed as passenger miles traveled (PMT) divided by unlinked passenger trips (UPT).
           May be determined by sampling, or calculated based on actual data.
-      - name: aptl_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: aptl_questionable
       - name: average_speed
         description: The average speed of a vehicle/passenger car during revenue service.
-      - name: average_speed_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable 
+        name: average_speed_questionable
       - name: brt_non_statutory_mixed_traffic
         description: |
           Miles of roadway for Bus Rapid Transit modes which, while part of bus rapid transit system routes, are not considered fixed guideway for federal funding allocation purposes.
@@ -734,24 +694,19 @@ models:
             - A measure of the route path over a facility or roadway, not the service carried on the facility; e.g., number of routes, vehicles, or vehicle revenue miles.
             - Computed with regard to direction of service, but without regard to the number of traffic lanes or rail tracks existing in the right-of-way (ROW).
           Directional route miles (DRM) do not include staging or storage areas at the beginning or end of a route.
-      - name: directional_route_miles_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: directional_route_miles_questionable
       - name: passenger_miles
         description: The cumulative sum of the distances ridden by each passenger.
-      - name: passenger_miles_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: passenger_miles_questionable
       - name: passengers_per_hour
         description: |
           The average number of passengers to board a vehicle/passenger car in one hour of service.
           For trains, this applies to passengers per hour on a single train car.
-      - name: passengers_per_hour_questionable
-        description: |
-          FTA marks a data point as Questionable when there is reason to believe it is incorrect,
-          but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+      - <<: *questionable
+        name: passengers_per_hour_questionable
+        
   - name: dim_monthly_ntd_ridership_with_adjustments
     description: >-
       Extracts of the NTD Monthly Ridership with adjustments - VRM, VOMS, VRH,
@@ -940,6 +895,7 @@ models:
           •   Atypical days; or
 
           •   One-time special events.
+          
   - name: fct_annual_service_modes
     description:
       View based on 2022 NTD Annual Data - Service (by Mode and Time Period)
@@ -960,7 +916,7 @@ models:
       - *mode_name
       - name: questionable_record
         description: Indicates whether there was questionable data for the given given record.
-      - name: max_time_period
+      - <<: *time_period
         description: |
           The time period for which data was collected.
           This table displays only "Annual Total".

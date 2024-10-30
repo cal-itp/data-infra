@@ -19,10 +19,6 @@ The year for which the data was reported.
 {% docs ntd_reporter_type %}
 The type of NTD report that the agency completed this year.
 Valid values are: `Full Reporter`, `Reduced Reporter`, `Rural Reporter`.
-
-CHECK THESE(Building
-          Reporter, Full Reporter, Reduced Asset Reporter,  Rural Reporter,
-          Separate Service Reporter or Small System Waiver Reporter)
 {% enddocs %}
 
 {% docs ntd_organization_type %}
@@ -60,18 +56,35 @@ The population of the urbanized area primarily served by the agency.
 {% enddocs %}
 
 {% docs ntd_mode %}
-Valid values are: FILL_ME_IN
+A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
+    - Rail modes (heavy rail (HR), light rail (LR), commuter rail (CR), inclined plane (IP), cable car (CC) and Monorail/Automated guideway (MG))
+    - Ferryboats (FB)
+    - Aerial tramways (TR)
+    - Bus (MB)
+    - Trolleybus (TB)
+    - Commuter Bus (CB)
+    - Bus Rapid Transit (RB)
+    - Publico (PB)
+    - Jitney (JT)    
 {% enddocs %}
 
 {% docs ntd_mode_name %}
-Valid values are: FILL_ME_IN
 A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
+    - Rail modes: heavy rail (HR), light rail (LR), commuter rail (CR), inclined plane (IP), cable car (CC), monorail/automated guideway (MG), streetcar (SR), hybrid rail (YR), Alaska railroad (AR).
+    - Ferryboats (FB)
+    - Aerial tramways (TR)
+    - Bus (MB)
+    - Trolleybus (TB)
+    - Commuter Bus (CB)
+    - Bus Rapid Transit (RB)
+    - Publico (PB)
+    - Jitney (JT)    
 {% enddocs %}
 
 {% docs ntd_time_period %}
 The time period for which data was collected.
-Values are: 
-    - Annual Total (excluded in mart_ntd tables),
+Valid values are: 
+    - Annual Total (excluded in mart_ntd mode-tos grain),
     - Average Weekday - AM Peak
     - Average Weekday - Midday
     - Average Weekday - PM Peak
@@ -80,12 +93,22 @@ Values are:
     - Average Typical Saturday
     - Average Typical Sunday
 {% enddocs %}
+
+{% docs ntd_service_area_population %}
+The population of the service area served by the agency.
+{% enddocs %}
     
-    
- - name: service_area_population
-        description: The population of the service area served by the agency.
-      - name: service_area_sq_miles
-        description: The agency's service area's size in square miles.
-        
-        
-agency_voms
+{% docs ntd_service_area_sq_miles %}
+The agency's service area's size in square miles.
+{% enddocs %}
+
+{% docs ntd_questionable_data %}
+Indicates whether there was questionable data for the given given record.        FTA marks a data point as Questionable when there is reason to believe it is incorrect,but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+{% enddocs %}
+
+{% docs ntd_agency_voms %}
+The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
+This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
+Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+{% enddocs %}
+
