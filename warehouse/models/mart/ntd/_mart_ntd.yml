@@ -118,7 +118,7 @@ models:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
-          partition_by: CONCAT(year, '_', ntd_id)
+          partition_by: CONCAT(year, '_', ntd_id, '_', COALESCE(state_parent_ntd_id, ''))
           gaps: required
     columns:
       - name: key

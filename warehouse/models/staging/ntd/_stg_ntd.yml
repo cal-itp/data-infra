@@ -8,6 +8,7 @@ models:
             - ts
             - year
             - ntd_id
+            - state_parent_ntd_id
     columns:
       - name: ntd_id
         tests:
