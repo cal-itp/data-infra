@@ -16,7 +16,7 @@ hive_options:
   source_uri_prefix: "complete_monthly_ridership_with_adjustments_and_estimates/historical/master/"
 schema_fields:
   - name: ntd_id
-    type: STRING
+    type: NUMERIC
   - name: legacy_ntd_id
     type: STRING
   - name: agency
