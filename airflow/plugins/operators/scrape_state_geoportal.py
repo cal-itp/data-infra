@@ -89,8 +89,8 @@ class StateGeoportalAPIOperator(BaseOperator):
         self.query = query
         self.file_format = file_format
 
-        """An operator that extracts and saves GEOJSON data from the State Geoportal
-            and saves it as one GEOJSONL file, hive-partitioned by date in Google Cloud
+        """An operator that extracts and saves JSON data from the State Geoportal
+            and saves it as one JSONL file, hive-partitioned by date in Google Cloud
         """
 
         # Save JSONL files to the bucket
@@ -100,7 +100,7 @@ class StateGeoportalAPIOperator(BaseOperator):
             endpoint_id=self.endpoint_id,
             query=self.query,
             file_format=self.file_format,
-            filename=f"{self.product}.geojsonl.gz",
+            filename=f"{self.product}.jsonl.gz",
         )
 
         super().__init__(**kwargs)
@@ -110,7 +110,7 @@ class StateGeoportalAPIOperator(BaseOperator):
 
         decode_api_content = api_content.decode("utf-8")
 
-        df = pd.read_json(decode_api_content)
+        df = pd.read_json(decode_api_content, lines=True)
 
         self.gzipped_content = gzip.compress(
             df.to_json(orient="records", lines=True).encode()
