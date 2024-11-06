@@ -17,6 +17,7 @@ Here are some resources data analysts have collected and referenced, that will h
   - [DataFrames](#dataframes)
   - [Ipywidgets](#ipywidgets)
   - [Markdown](#markdown)
+  - [ReviewNB](#reviewNB)
 
 (data-analysis)=
 
@@ -188,3 +189,10 @@ def add_tooltip(chart, tooltip1, tooltip2):
 - [Add a table of content that links to headers throughout a markdown file.](https://stackoverflow.com/questions/2822089/how-to-link-to-part-of-the-same-document-in-markdown)
 - [Add links to local files.](https://stackoverflow.com/questions/32563078/how-link-to-any-local-file-with-markdown-syntax?rq=1)
 - [Direct embed an image.](https://datascienceparichay.com/article/insert-image-in-a-jupyter-notebook/)
+
+(reviewNB)=
+
+### ReviewNB on GitHub
+
+- [Tool designed to facilitate reviewing Jupyter Notebooks in a collaborative setting on GitHub](https://www.reviewnb.com/)
+- [Shows side-by-side diffs of Jupyter Notebooks, including changes to both code cells and markdown cells and allows reviewers to comment on specific cells](https://www.reviewnb.com/#faq)

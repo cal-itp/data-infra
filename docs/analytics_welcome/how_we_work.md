@@ -27,14 +27,6 @@ The section below outlines our team's primary meetings and their purposes, as we
 | #**data-office-hours**   | Discussion | A place to bring questions, issues, and observations for team discussion.                   |
 | #**data-warehouse-devs** | Discussion | For people building dbt models - focused on data warehouse performance considerations, etc. |
 
-## Collaboration Tools
-
-(analytics-project-board)=
-
-### GitHub Analytics Project Board
-
-**You can access The Analytics Project Board [using this link](https://github.com/cal-itp/data-analyses/projects/1)**.
-
 #### How We Track Work
 
 ##### Screencast - Navigating the Board

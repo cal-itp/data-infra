@@ -14,14 +14,15 @@ Analyses on JupyterHub are accomplished using notebooks, which allow users to mi
 
 01. [Using JupyterHub](#using-jupyterhub)
 02. [Logging in to JupyterHub](#logging-in-to-jupyterhub)
-03. [Connecting to the Warehouse](#connecting-to-the-warehouse)
-04. [Increasing the Query Limit](#increasing-the-query-limit)
-05. [Increase the User Storage Limit](#increasing-the-storage-limit)
-06. [Querying with SQL in JupyterHub](querying-sql-jupyterhub)
-07. [Saving Code to Github](saving-code-jupyter)
-08. [Environment Variables](#environment-variables)
-09. [Jupyter Notebook Best Practices](notebook-shortcuts)
-10. [Developing warehouse models in Jupyter](jupyterhub-warehouse)
+03. [Default vs Power User](#default-user-vs-power-user)
+04. [Connecting to the Warehouse](#connecting-to-the-warehouse)
+05. [Increasing the Query Limit](#increasing-the-query-limit)
+06. [Increase the User Storage Limit](#increasing-the-storage-limit)
+07. [Querying with SQL in JupyterHub](querying-sql-jupyterhub)
+08. [Saving Code to Github](saving-code-jupyter)
+09. [Environment Variables](#environment-variables)
+10. [Jupyter Notebook Best Practices](notebook-shortcuts)
+11. [Developing warehouse models in Jupyter](jupyterhub-warehouse)
 
 (using-jupyterhub)=
 
@@ -38,6 +39,22 @@ This avoids the need to set up a local environment, provides dedicated storage, 
 JupyterHub currently lives at [notebooks.calitp.org](https://notebooks.calitp.org/).
 
 Note: you will need to have been added to the Cal-ITP organization on GitHub to obtain access. If you have yet to be added to the organization and need to be, ask in the `#services-team` channel in Slack.
+
+(default-user-vs-power-user)=
+
+### Default User vs Power User
+
+#### Default User
+
+Designed for general use and is ideal for less resource-intensive tasks. It's a good starting point for most users who don't expect to run very large, memory-hungry jobs.
+
+Default User profile offers quick availability since it uses less memory and can allocate a smaller node, allowing you to start tasks faster. However, if your task grows in memory usage over time, it may exceed the node's capacity, potentially causing the system to terminate your job. This makes the Default profile best for smaller or medium-sized tasks that don’t require a lot of memory. If your workload exceeds these limits, you might experience instability or crashes.
+
+#### Power User
+
+Intended for more demanding, memory-intensive tasks that require more resources upfront. This profile is suitable for workloads that have higher memory requirements or are expected to grow during execution.
+
+Power User profile allocates a full node or a significant portion of resources to ensure your job has enough memory and computational power, avoiding crashes or delays. However, this comes with a longer wait time as the system needs to provision a new node for you. Once it's ready, you'll have all the resources necessary for memory-intensive tasks like large datasets or simulations. The Power User profile is ideal for jobs that might be unstable or crash on the Default profile due to higher resource demands. Additionally, it offers scalability—if your task requires more resources than the initial node can provide, the system will automatically spin up additional nodes to meet the demand.
 
 (connecting-to-the-warehouse)=
 

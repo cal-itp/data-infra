@@ -9,11 +9,16 @@ Doing work locally and pushing directly from the command line is a similar workf
 ## Table of Contents
 
 1. What's a typical [project workflow](#project-workflow)?
+
 2. Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
+
    - The `main` branch is ahead, and I want to [sync my branch with `main`](#rebase-and-merge)
    - [Rebase](#rebase) or [merge](#merge)
    - Options to [Resolve Merge Conflicts](#resolve-merge-conflicts)
+   - [Other Common Issues](#other-common-github-issues-encountered-during-saving-codes)
+
 3. [Other Common GitHub Commands](#other-common-github-commands)
+
    - [External Git Resources](#external-git-resources)
    - [Committing in the Github User Interface](#pushing-drag-drop)
 
@@ -110,6 +115,17 @@ If you discover merge conflicts and they are within a single notebook that only 
   - To keep the remote version, run:<br/>
     `git checkout --theirs path/to/notebook.ipynb`
 - From here, just add the file and commit with a message as you normally would and the conflict should be fixed in your Pull Request.
+
+(other-common-github-issues-encountered-during-saving-codes)
+
+### Other Common Issues
+
+- Untracked Files:
+  Sometimes, files are created or modified locally but are not added to Git before committing, so they are not tracked or pushed to GitHub. Use `git add <filename>` to track files before committing.
+- Incorrect Branches:
+  Committing to the wrong branch (e.g., main instead of a feature branch) can cause problems, especially if changes are not meant to be merged into the main codebase. Always ensure you're on the correct branch using git branch and switch branches with `git checkout <branch-name>` before committing.
+- Merge Conflicts from Overlapping Work:
+  When multiple analysts work on the same files or sections of code, merge conflicts can occur. Creating feature branches and pulling regularly to stay updated with main can help avoid these conflicts.
 
 (other-common-github-commands)=
 

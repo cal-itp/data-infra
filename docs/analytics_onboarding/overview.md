@@ -32,9 +32,9 @@
 
 **Python Libraries:**
 
-- [ ] **calitp-data-analysis** - Cal-ITP's internal Python library for analysis | ([Docs](calitp-data-analysis))
-- [ ] **siuba** - Recommended data analysis library | ([Docs](siuba))
-- [ ] [**shared_utils**](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) and [**here**](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis) - A shared utilities library for the analytics team | ([Docs](shared-utils))
+- [ ] [**calitp-data-analysis**](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis) - Cal-ITP's internal Python library for analysis | ([Docs](calitp-data-analysis))
+- [ ] [**siuba**](https://siuba.org/) - Recommended data analysis library | ([Docs](siuba))
+- [ ] [**shared_utils**](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) - A shared utilities library for the analytics team | ([Docs](shared-utils))
 
 **Caltrans Employee Resources:**
 
