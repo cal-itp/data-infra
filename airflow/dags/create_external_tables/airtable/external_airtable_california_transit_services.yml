@@ -294,13 +294,25 @@ schema_fields:
   - name: holiday_schedule___veterans_day
     type: STRING
     mode: NULLABLE
+  - name: holiday_schedule___thanksgiving_day
+    type: STRING
+    mode: NULLABLE
   - name: holiday_schedule___day_after_thanksgiving_day
     type: STRING
     mode: NULLABLE
   - name: holiday_schedule___christmas_eve
     type: STRING
     mode: NULLABLE
+  - name: holiday_schedule___christmas_day
+    type: STRING
+    mode: NULLABLE
   - name: holiday_schedule___new_year_s_eve
+    type: STRING
+    mode: NULLABLE
+  - name: holiday_schedule___new_year_s_day
+    type: STRING
+    mode: NULLABLE
+  - name: holiday_schedule___mlk_day
     type: STRING
     mode: NULLABLE
   - name: holiday_schedule_notes
