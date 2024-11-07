@@ -1,4 +1,5 @@
 import gzip
+import json
 import logging
 from typing import ClassVar, List  # , Optional
 
@@ -108,9 +109,43 @@ class StateGeoportalAPIOperator(BaseOperator):
     def execute(self, **kwargs):
         api_content = self.extract.fetch_from_state_geoportal()
 
-        decode_api_content = api_content.decode("utf-8")
+        decoded_api_content = api_content.decode("utf-8")
 
-        df = pd.read_json(decode_api_content, lines=True)
+        data = json.loads(decoded_api_content)
+
+        values = data.get("features")
+
+        flattened_data_list = []
+
+        for record in values:
+            # Copy the original dictionary to avoid modifying it
+            flattened_item = record.copy()
+
+            # Flatten the "geometry" and "properties" dictionaries
+            flattened_item.update(flattened_item.pop("geometry"))
+            flattened_item.update(flattened_item.pop("properties"))
+
+            # Add the flattened dictionary to the new list
+            flattened_data_list.append(flattened_item)
+
+        # json_string = json.dumps(flattened_data_list)
+
+        for item in flattened_data_list:
+            # Check if 'coordinates' exists in the dictionary
+            if "coordinates" in item:
+                # Create a GeoJSON structure
+                geojson = {
+                    "type": "LineString",  # Assuming LineString geometry for this example
+                    "coordinates": item["coordinates"],
+                }
+
+                # Convert to a GeoJSON string
+                geojson_string = json.dumps(geojson)
+
+                # Replace the 'coordinates' value with the GeoJSON string in the dictionary
+                item["coordinates"] = geojson_string
+
+        df = pd.DataFrame(flattened_data_list)
 
         self.gzipped_content = gzip.compress(
             df.to_json(orient="records", lines=True).encode()
