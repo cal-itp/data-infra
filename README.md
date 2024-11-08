@@ -63,5 +63,5 @@ For Airflow jobs, we currently use hosted Google Cloud Composer which has a
 [user interface](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod-composer2-patch/variables)
 for editing environment variables. These environment variables also have to be
 injected into pod operators as needed via Gusty YAML or similar. If you are
-running Airflow locally, the [docker-compose file](./airflow/docker-compose.yaml)
+running Airflow locally, the [docker compose file](./airflow/docker-compose.yaml)
 needs to contain appropriately set environment variables.

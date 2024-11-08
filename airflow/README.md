@@ -19,7 +19,7 @@ Finally, Airflow plugins can be found in the `plugins` subfolder; this includes 
 
 ## Testing Changes
 
-This project is developed using Docker and docker-compose, and we test most changes via a local version of Airflow that is similarly configured to the production Composer-managed Airflow instance - its dependencies are based on the dependency list from the Composer-managed production Airflow instance, copied into a file named `requirements-composer-[x.y.z]-airflow-[a.b.c].txt`. Before getting started, please make sure you have [installed Docker on your system](https://docs.docker.com/get-docker/). Docker will need to be running at the time you run any `docker-compose` commands from the console.
+This project is developed using Docker and docker compose, and we test most changes via a local version of Airflow that is similarly configured to the production Composer-managed Airflow instance - its dependencies are based on the dependency list from the Composer-managed production Airflow instance, copied into a file named `requirements-composer-[x.y.z]-airflow-[a.b.c].txt`. Before getting started, please make sure you have [installed Docker on your system](https://docs.docker.com/get-docker/). Docker will need to be running at the time you run any `docker compose` commands from the console.
 
 To test any changes you've made to DAGs, operators, etc., you'll need to follow a few setup steps:
 
@@ -38,13 +38,13 @@ gcloud init
 Next, run the initial database migration (which also creates a default local Airflow user named `airflow`).
 
 ```shell
-docker-compose run airflow db init
+docker compose run airflow db init
 ```
 
 Next, start all services including the Airflow web server.
 
 ```console
-docker-compose up
+docker compose up
 ```
 
 After a loading period, the Airflow web UI will become available. To access the web UI, visit `http://localhost:8080`.
@@ -53,7 +53,7 @@ The default login and password for our Airflow development image are both "airfl
 You may execute DAGs via the web UI, or specify individual tasks via the CLI:
 
 ```console
-docker-compose run airflow tasks test download_gtfs_schedule_v2 download_schedule_feeds 2022-04-01T00:00:00
+docker compose run airflow tasks test download_gtfs_schedule_v2 download_schedule_feeds 2022-04-01T00:00:00
 ```
 
 If a DAG you intend to run locally relies on secrets stored in Google Secret Manager, the Google account you authenticated with will need IAM permissions of "Secret Manager Secret Accessor" or above to access those secrets. Some nonessential secrets are not set via Google Secret Manager, so if you monitor Airflow logs while the application is running, you may see occasional warnings (rather than errors) about missing variables like CALITP_SLACK_URL that can be ignored unless you're specifically testing features that rely on those variables.
@@ -78,14 +78,14 @@ Then, you could execute a task using this updated image.
 
 ```bash
 # running from airflow/
-docker-compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly validate_gtfs_schedule 2023-06-07T16:00:00
+docker compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly validate_gtfs_schedule 2023-06-07T16:00:00
 ```
 
 ### Common Issues
 
-- `docker-compose up` exits with code 137 - Check that Docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.
+- `docker compose up` exits with code 137 - Check that Docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.
 
-- When testing a new or updated `requirements.txt`, you might not see packages update. You may need to run `docker-compose down --rmi all` to clear out older docker images and recreate with `docker build . --no-cache`.
+- When testing a new or updated `requirements.txt`, you might not see packages update. You may need to run `docker compose down --rmi all` to clear out older docker images and recreate with `docker build . --no-cache`.
 
 - If a task does not start when expected, its designated [pool](https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/pools.html) may not have been created locally. Pools can be created and managed in Airflow on a page accessed via the Admin -> Pools menu option. A DAG's designated pool can typically be found on its DAG Details page, and is generally defined in the `default_args` section of the DAG's `METADATA.yml` file.
 
