@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: external_state_geoportal
+    description: Data tables scraped from state geoportal.
+    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    schema: external_state_geoportal
+    tables:
+      - name: state_highway_network

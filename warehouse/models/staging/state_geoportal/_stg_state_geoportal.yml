@@ -1,0 +1,4 @@
+version: 2
+
+models:
+  - name: stg_state_geoportal__state_highway_network_stops
