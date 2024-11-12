@@ -1,5 +1,6 @@
 import gzip
-import json
+
+# import json
 import logging
 from typing import ClassVar, List  # , Optional
 
@@ -7,10 +8,13 @@ import pandas as pd  # type: ignore
 import pendulum
 import requests
 from calitp_data_infra.storage import PartitionedGCSArtifact, get_fs  # type: ignore
-from pydantic import HttpUrl, parse_obj_as
 
 from airflow.models import BaseOperator  # type: ignore
 
+# from pydantic import HttpUrl, parse_obj_as
+
+
+# API_BUCKET = "gs://calitp-state-highway-network-stops"
 API_BUCKET = "gs://calitp-state-geoportal-scrape"
 # API_BUCKET = os.environ["CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"]
 
@@ -43,13 +47,43 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
         logging.info(f"Downloading state geoportal data for {self.product}.")
 
         try:
-            url = self.root_url + self.endpoint_id + self.query + self.file_format
+            # url = self.root_url + self.endpoint_id + self.query + self.file_format
 
-            validated_url = parse_obj_as(HttpUrl, url)
+            # validated_url = parse_obj_as(HttpUrl, url)
 
-            response = requests.get(validated_url).content
+            # response = requests.get(validated_url).content
 
-            if response is None or len(response) == 0:
+            # Set up the parameters for the request
+            url = "https://caltrans-gis.dot.ca.gov/arcgis/rest/services/CHhighway/SHN_Lines/FeatureServer/0/query"
+            params = {
+                "where": "1=1",  # You can change this to filter data
+                "outFields": "*",  # Specify the fields to return
+                "f": "geojson",  # Format of the response
+                "resultRecordCount": 2000,  # Maximum number of rows per request
+            }
+
+            all_features = []  # To store all retrieved rows
+            offset = 0
+
+            while True:
+                # Update the resultOffset for each request
+                params["resultOffset"] = offset
+
+                # Make the request
+                response = requests.get(url, params=params)
+                data = response.json()
+
+                # Break the loop if there are no more features
+                if "features" not in data or not data["features"]:
+                    break
+
+                # Append the retrieved features
+                all_features.extend(data["features"])
+
+                # Increment the offset
+                offset += params["resultRecordCount"]
+
+            if all_features is None or len(all_features) == 0:
                 logging.info(
                     f"There is no data to download for {self.product}. Ending pipeline."
                 )
@@ -57,15 +91,32 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
                 pass
             else:
                 logging.info(
-                    f"Downloaded {self.product} data with {len(response)} rows!"
+                    f"Downloaded {self.product} data with {len(all_features)} rows!"
                 )
 
-                return response
+                return all_features
 
         except requests.exceptions.RequestException as e:
             logging.info(f"An error occurred: {e}")
 
             raise
+
+
+# # Function to convert coordinates to WKT format
+def to_wkt(geometry_type, coordinates):
+    if geometry_type == "LineString":
+        # Format as a LineString
+        coords_str = ", ".join([f"{lng} {lat}" for lng, lat in coordinates])
+        return f"LINESTRING({coords_str})"
+    elif geometry_type == "MultiLineString":
+        # Format as a MultiLineString
+        multiline_coords_str = ", ".join(
+            f"({', '.join([f'{lng} {lat}' for lng, lat in line])})"
+            for line in coordinates
+        )
+        return f"MULTILINESTRING({multiline_coords_str})"
+    else:
+        return None
 
 
 class JSONExtract(StateGeoportalAPIExtract):
@@ -96,12 +147,12 @@ class StateGeoportalAPIOperator(BaseOperator):
 
         # Save JSONL files to the bucket
         self.extract = JSONExtract(
-            product=self.product,
+            product=f"{self.product}_data",
             root_url=self.root_url,
             endpoint_id=self.endpoint_id,
             query=self.query,
             file_format=self.file_format,
-            filename=f"{self.product}.jsonl.gz",
+            filename=f"{self.product}_stops.jsonl.gz",
         )
 
         super().__init__(**kwargs)
@@ -109,43 +160,47 @@ class StateGeoportalAPIOperator(BaseOperator):
     def execute(self, **kwargs):
         api_content = self.extract.fetch_from_state_geoportal()
 
-        decoded_api_content = api_content.decode("utf-8")
+        df = pd.json_normalize(api_content)
 
-        data = json.loads(decoded_api_content)
+        df = df[
+            [
+                "properties.Route",
+                "properties.County",
+                "properties.District",
+                "properties.RouteType",
+                "properties.Direction",
+                "geometry.type",
+                "geometry.coordinates",
+            ]
+        ]
 
-        values = data.get("features")
+        df = df.rename(
+            columns={
+                "properties.Route": "Route",
+                "properties.County": "County",
+                "properties.District": "District",
+                "properties.RouteType": "RouteType",
+                "properties.Direction": "Direction",
+                "geometry.type": "type",
+                "geometry.coordinates": "coordinates",
+            }
+        )
 
-        flattened_data_list = []
+        # Apply function to create new column with WKT format
+        df["wkt_coordinates"] = df.apply(
+            lambda row: to_wkt(row["type"], row["coordinates"]), axis=1
+        )
 
-        for record in values:
-            # Copy the original dictionary to avoid modifying it
-            flattened_item = record.copy()
-
-            # Flatten the "geometry" and "properties" dictionaries
-            flattened_item.update(flattened_item.pop("geometry"))
-            flattened_item.update(flattened_item.pop("properties"))
-
-            # Add the flattened dictionary to the new list
-            flattened_data_list.append(flattened_item)
-
-        # json_string = json.dumps(flattened_data_list)
-
-        for item in flattened_data_list:
-            # Check if 'coordinates' exists in the dictionary
-            if "coordinates" in item:
-                # Create a GeoJSON structure
-                geojson = {
-                    "type": "LineString",  # Assuming LineString geometry for this example
-                    "coordinates": item["coordinates"],
-                }
-
-                # Convert to a GeoJSON string
-                geojson_string = json.dumps(geojson)
-
-                # Replace the 'coordinates' value with the GeoJSON string in the dictionary
-                item["coordinates"] = geojson_string
-
-        df = pd.DataFrame(flattened_data_list)
+        df = df[
+            [
+                "Route",
+                "County",
+                "District",
+                "RouteType",
+                "Direction",
+                "wkt_coordinates",
+            ]
+        ]
 
         self.gzipped_content = gzip.compress(
             df.to_json(orient="records", lines=True).encode()
