@@ -13,8 +13,6 @@ from airflow.models import BaseOperator  # type: ignore
 
 # from pydantic import HttpUrl, parse_obj_as
 
-
-# API_BUCKET = "gs://calitp-state-highway-network-stops"
 API_BUCKET = "gs://calitp-state-geoportal-scrape"
 # API_BUCKET = os.environ["CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"]
 
