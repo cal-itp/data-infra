@@ -118,7 +118,34 @@ fct_benefits_events AS (
         THEN "cdt-logingov"
       ELSE event_properties_claims_provider
     END AS event_properties_claims_provider,
-    event_properties_eligibility_verifier,
+    -- Normalize historic data into current format
+    -- https://github.com/cal-itp/benefits/issues/2521
+    CASE
+      WHEN event_properties_eligibility_verifier IN (
+        '(MST) CDT claims via Login.gov',
+        '(SBMTD) CDT claims via Login.gov',
+        'CDT claims via Login.gov (MST)',
+        'CDT claims via Login.gov (SBMTD)',
+        'OAuth claims via Login.gov',
+        'senior'
+      ) THEN "cdt-logingov"
+      WHEN event_properties_eligibility_verifier IN (
+        '(MST) VA.gov - Veteran',
+        'VA.gov - Veteran (MST)',
+        'veteran'
+      ) THEN "cdt-vagov"
+      WHEN event_properties_eligibility_verifier IN (
+        '(MST) Courtesy Card Eligibility Server Verifier (prod)',
+        'MST Courtesy Card Eligibility Server Verifier',
+        'courtesy_card'
+      ) THEN "https://mst-courtesy-cards-eligibility-server-prod-azcscsbmembwcugk.z01.azurefd.net/verify"
+      WHEN event_properties_eligibility_verifier IN (
+        '(SBMTD) Mobility Pass Eligibility Server Verifier (prod)',
+        'SBMTD Mobility Pass Eligibility Server Verifier (prod)',
+        'mobility_pass'
+      ) THEN "https://sbmtd-mobility-pass-eligibility-server-prod-h3d3djedb7ahfqeg.z01.azurefd.net/verify"
+      ELSE event_properties_eligibility_verifier
+    END AS event_properties_eligibility_verifier,
     event_properties_enrollment_flows,
     event_properties_enrollment_group,
     event_properties_enrollment_method,
