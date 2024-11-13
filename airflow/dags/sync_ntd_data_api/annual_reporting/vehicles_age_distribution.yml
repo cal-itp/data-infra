@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: 'multi-year'
+product: 'vehicles_age_distribution'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: '6abt-uhgq'
+file_format: '.json'

@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: 'multi-year'
+product: 'service_by_mode_and_time_period'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: 'wwdp-t4re'
+file_format: '.json'

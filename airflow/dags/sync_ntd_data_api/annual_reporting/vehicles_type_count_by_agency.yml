@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: 'multi-year'
+product: 'vehicles_type_count_by_agency'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: 'nimp-626k'
+file_format: '.json'

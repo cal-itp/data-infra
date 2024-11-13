@@ -1,7 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-year: '2022'
-product: 'capital_expenses_by_capital_use'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'fphd-jyyj'
-file_format: '.json'

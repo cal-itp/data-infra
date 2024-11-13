@@ -1,7 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-year: '2022'
-product: 'track_and_roadway_by_agency'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'pvgq-a73e'
-file_format: '.json'

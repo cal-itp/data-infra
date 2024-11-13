@@ -1,7 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-year: '2022'
-product: 'employees_by_mode_and_employee_type'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'uyv8-9jek'
-file_format: '.json'

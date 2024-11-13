@@ -1,7 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-year: '2022'
-product: 'funding_sources_taxes_levied_by_agency'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'c8k8-y2cj'
-file_format: '.json'

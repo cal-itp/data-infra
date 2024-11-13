@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: 'multi-year'
+product: 'operating_expenses_by_type'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: 'j5uj-anzx'
+file_format: '.json'
