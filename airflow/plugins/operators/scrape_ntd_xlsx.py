@@ -12,12 +12,14 @@ from calitp_data_infra.storage import (  # type: ignore
     get_fs,
     make_name_bq_safe,
 )
-from pydantic import HttpUrl, parse_obj_as
+from pydantic import HttpUrl  # , parse_obj_as
 
 from airflow.models import BaseOperator  # type: ignore
 
 RAW_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"]
 CLEAN_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"]
+
+ridership_download_url = os.environ["CURRENT_NTD_RIDERSHIP_URL"]
 
 
 class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
@@ -41,7 +43,13 @@ class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
         arbitrary_types_allowed = True
 
     def fetch_from_ntd_xlsx(self, file_url):
-        validated_url = parse_obj_as(HttpUrl, file_url)
+        # As of now, the only file that we are downloading is for complete_monthly_ridership_with_adjustments_and_estimates
+        # and the download link changes every time they update the date, so we have special handling for that here, which is dependent
+        # another dag task called scrape_ntd_ridership_xlsx_url.py. if we look to download other xlsx files from the DOT portal and they
+        # also change the file name every time they publish, they we will have to add the same handling for all of these files and make it programmatic
+
+        # validated_url = parse_obj_as(HttpUrl, file_url)
+        validated_url = file_url
 
         logging.info(f"reading file from url {validated_url}")
 
@@ -101,9 +109,18 @@ class NtdDataProductXLSXOperator(BaseOperator):
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
-        excel_content = self.raw_excel_extract.fetch_from_ntd_xlsx(
-            self.raw_excel_extract.file_url
-        )
+        # download_url = parse_obj_as(HttpUrl, self.raw_excel_extract.file_url)
+        download_url = self.raw_excel_extract.file_url
+
+        # testing to see what is returned
+        logging.info(f"reading ridership url as {ridership_download_url}")
+
+        if self.product == "complete_monthly_ridership_with_adjustments_and_estimates":
+            download_url = ridership_download_url
+            # download_url = parse_obj_as(HttpUrl, ridership_download_url)
+
+        excel_content = self.raw_excel_extract.fetch_from_ntd_xlsx(download_url)
+
         logging.info(
             f"file url is {self.xlsx_file_url} and file type is {type(self.xlsx_file_url)}"
         )

@@ -37,4 +37,5 @@ def scrape_ntd_ridership_xlsx_url():
 
     # Set or overwrite the variable
     # Will this work?
-    Variable.set("current_ntd_ridership_url", validated_url)
+    # Variable.set("CURRENT_NTD_RIDERSHIP_URL", f"'{validated_url}'")
+    Variable.set("CURRENT_NTD_RIDERSHIP_URL", validated_url)
