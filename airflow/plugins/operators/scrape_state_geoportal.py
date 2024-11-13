@@ -1,6 +1,7 @@
 import gzip
 import logging
-from typing import ClassVar, List  # , Optional
+import os
+from typing import ClassVar, List
 
 import pandas as pd  # type: ignore
 import pendulum
@@ -10,9 +11,7 @@ from pydantic import HttpUrl, parse_obj_as
 
 from airflow.models import BaseOperator  # type: ignore
 
-# create composer env variable and switch before merge
-API_BUCKET = "gs://calitp-state-geoportal-scrape"
-# API_BUCKET = os.environ["CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"]
+API_BUCKET = os.environ["CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"]
 
 
 class StateGeoportalAPIExtract(PartitionedGCSArtifact):

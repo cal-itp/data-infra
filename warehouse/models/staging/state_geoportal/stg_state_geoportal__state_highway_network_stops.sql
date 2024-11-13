@@ -1,7 +1,6 @@
 WITH external_state_geoportal__state_highway_network AS (
     SELECT *
     FROM
-    --`cal-itp-data-infra-staging.external_state_geoportal.state_highway_network`
     {{ source('external_state_geoportal', 'state_highway_network') }}
 ),
 
