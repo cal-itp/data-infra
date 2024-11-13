@@ -1,5 +1,5 @@
-description: "Scrape tables from DOT Ridership XLSX file daily"
-schedule_interval: "0 10 * * *" # 10am UTC every day
+description: "Scrape tables from DOT Ridership XLSX file weekly"
+schedule_interval: "0 10 * * 1" # 10am UTC every Monday
 tags:
   - all_gusty_features
 default_args:
