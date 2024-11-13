@@ -1,4 +1,4 @@
-description: "scrape-ntd-ridership-xlsx-url"
+description: "Scrape the DOT webpage for the current NTD Ridership xlsx download link and save as an environment variable"
 schedule_interval: "0 0 * * 0"
 tags:
   - all_gusty_features
