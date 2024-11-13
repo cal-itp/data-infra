@@ -1,7 +1,9 @@
 operator: operators.StateGeoportalAPIOperator
 
-product: 'state_highway_network'
 root_url: 'https://caltrans-gis.dot.ca.gov/arcgis/rest/services/'
-endpoint_id: 'CHhighway/SHN_Lines/FeatureServer/0/'
-query: 'query?where=1%3D1&outFields=*&outSR=4326&f='
-file_format: 'geojson'
+service: "CHhighway/SHN_Lines/FeatureServer/0/query"
+product: 'state_highway_network'
+where: "1=1"  # You can change this to filter data
+outFields: "*"  # Specify the fields to return
+f: "geojson"  # Format of the response
+resultRecordCount: 2000

@@ -8,25 +8,27 @@ import pandas as pd  # type: ignore
 import pendulum
 import requests
 from calitp_data_infra.storage import PartitionedGCSArtifact, get_fs  # type: ignore
+from pydantic import HttpUrl, parse_obj_as
 
 from airflow.models import BaseOperator  # type: ignore
 
-# from pydantic import HttpUrl, parse_obj_as
-
+# switch before merge
 API_BUCKET = "gs://calitp-state-geoportal-scrape"
 # API_BUCKET = os.environ["CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"]
 
 
 class StateGeoportalAPIExtract(PartitionedGCSArtifact):
     bucket: ClassVar[str]
-    product: str
     execution_ts: pendulum.DateTime = pendulum.now()
     dt: pendulum.Date = execution_ts.date()
-    root_url: str
-    endpoint_id: str
-    query: str
-    file_format: str
     partition_names: ClassVar[List[str]] = ["dt", "execution_ts"]
+    root_url: str
+    service: str
+    product: str
+    where: str
+    outFields: str
+    f: str
+    resultRecordCount: int
 
     @property
     def table(self) -> str:
@@ -45,19 +47,15 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
         logging.info(f"Downloading state geoportal data for {self.product}.")
 
         try:
-            # url = self.root_url + self.endpoint_id + self.query + self.file_format
-
-            # validated_url = parse_obj_as(HttpUrl, url)
-
-            # response = requests.get(validated_url).content
-
             # Set up the parameters for the request
-            url = "https://caltrans-gis.dot.ca.gov/arcgis/rest/services/CHhighway/SHN_Lines/FeatureServer/0/query"
+            url = self.root_url + self.service
+            validated_url = parse_obj_as(HttpUrl, url)
+
             params = {
-                "where": "1=1",  # You can change this to filter data
-                "outFields": "*",  # Specify the fields to return
-                "f": "geojson",  # Format of the response
-                "resultRecordCount": 2000,  # Maximum number of rows per request
+                "where": self.where,  # You can change this to filter data
+                "outFields": self.outFields,  # Specify the fields to return
+                "f": self.f,  # Format of the response
+                "resultRecordCount": self.resultRecordCount,  # Maximum number of rows per request
             }
 
             all_features = []  # To store all retrieved rows
@@ -68,7 +66,8 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
                 params["resultOffset"] = offset
 
                 # Make the request
-                response = requests.get(url, params=params)
+                response = requests.get(validated_url, params=params)
+                # response = requests.get(url, params=params)
                 data = response.json()
 
                 # Break the loop if there are no more features
@@ -101,6 +100,7 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
 
 
 # # Function to convert coordinates to WKT format
+# break out into own parse operator afterwards, which then reads the raw data in the bucket, and
 def to_wkt(geometry_type, coordinates):
     if geometry_type == "LineString":
         # Format as a LineString
@@ -122,22 +122,34 @@ class JSONExtract(StateGeoportalAPIExtract):
 
 
 class StateGeoportalAPIOperator(BaseOperator):
-    template_fields = ("product", "root_url", "endpoint_id", "query", "file_format")
+    template_fields = (
+        "root_url",
+        "service",
+        "product",
+        "where",
+        "outFields",
+        "f",
+        "resultRecordCount",
+    )
 
     def __init__(
         self,
-        product,
         root_url,
-        endpoint_id,
-        query,
-        file_format,
+        service,
+        product,
+        where,
+        outFields,
+        f,
+        resultRecordCount,
         **kwargs,
     ):
-        self.product = product
         self.root_url = root_url
-        self.endpoint_id = endpoint_id
-        self.query = query
-        self.file_format = file_format
+        self.service = service
+        self.product = product
+        self.where = where
+        self.outFields = outFields
+        self.f = f
+        self.resultRecordCount = resultRecordCount
 
         """An operator that extracts and saves JSON data from the State Geoportal
             and saves it as one JSONL file, hive-partitioned by date in Google Cloud
@@ -145,11 +157,13 @@ class StateGeoportalAPIOperator(BaseOperator):
 
         # Save JSONL files to the bucket
         self.extract = JSONExtract(
-            product=f"{self.product}_data",
             root_url=self.root_url,
-            endpoint_id=self.endpoint_id,
-            query=self.query,
-            file_format=self.file_format,
+            service=self.service,
+            product=f"{self.product}_data",
+            where=self.where,
+            outFields=self.outFields,
+            f=self.f,
+            resultRecordCount=self.resultRecordCount,
             filename=f"{self.product}_stops.jsonl.gz",
         )
 
