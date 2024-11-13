@@ -250,6 +250,10 @@ fct_benefits_events AS (
       ELSE version_name
     END AS version_name
   FROM fct_benefits_events_raw
+  -- Filter out events from the Azure healthprobe feature
+  -- captured before we stopped sending events for this feature
+  -- https://github.com/cal-itp/benefits/issues/1276
+  WHERE user_properties_user_agent NOT IN ('Edge Health Probe', 'AlwaysOn')
 ),
 fct_benefits_historic_enrollments AS (
   -- fct_benefits_historic_enrollments transforms old enrollment events
