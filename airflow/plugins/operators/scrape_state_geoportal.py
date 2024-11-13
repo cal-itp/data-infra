@@ -1,6 +1,4 @@
 import gzip
-
-# import json
 import logging
 from typing import ClassVar, List  # , Optional
 
@@ -100,7 +98,6 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
 
 
 # # Function to convert coordinates to WKT format
-# break out into own parse operator afterwards, which then reads the raw data in the bucket, and
 def to_wkt(geometry_type, coordinates):
     if geometry_type == "LineString":
         # Format as a LineString
@@ -159,12 +156,12 @@ class StateGeoportalAPIOperator(BaseOperator):
         self.extract = JSONExtract(
             root_url=self.root_url,
             service=self.service,
-            product=f"{self.product}_data",
+            product=f"{self.product}_geodata",
             where=self.where,
             outFields=self.outFields,
             f=self.f,
             resultRecordCount=self.resultRecordCount,
-            filename=f"{self.product}_stops.jsonl.gz",
+            filename=f"{self.product}_geodata.jsonl.gz",
         )
 
         super().__init__(**kwargs)
@@ -174,20 +171,9 @@ class StateGeoportalAPIOperator(BaseOperator):
 
         df = pd.json_normalize(api_content)
 
-        df = df[
-            [
-                "properties.Route",
-                "properties.County",
-                "properties.District",
-                "properties.RouteType",
-                "properties.Direction",
-                "geometry.type",
-                "geometry.coordinates",
-            ]
-        ]
-
-        df = df.rename(
-            columns={
+        if self.product == "state_highway_network":
+            # Select and rename columns
+            columns = {
                 "properties.Route": "Route",
                 "properties.County": "County",
                 "properties.District": "District",
@@ -196,15 +182,15 @@ class StateGeoportalAPIOperator(BaseOperator):
                 "geometry.type": "type",
                 "geometry.coordinates": "coordinates",
             }
-        )
+            df = df[list(columns.keys())].rename(columns=columns)
 
-        # Apply function to create new column with WKT format
-        df["wkt_coordinates"] = df.apply(
-            lambda row: to_wkt(row["type"], row["coordinates"]), axis=1
-        )
+            # Create new column with WKT format
+            df["wkt_coordinates"] = df.apply(
+                lambda row: to_wkt(row["type"], row["coordinates"]), axis=1
+            )
 
-        df = df[
-            [
+            # Select final columns for output
+            final_columns = [
                 "Route",
                 "County",
                 "District",
@@ -212,10 +198,10 @@ class StateGeoportalAPIOperator(BaseOperator):
                 "Direction",
                 "wkt_coordinates",
             ]
-        ]
+            df = df[final_columns]
 
+        # Compress the DataFrame content and save it
         self.gzipped_content = gzip.compress(
             df.to_json(orient="records", lines=True).encode()
         )
-
         self.extract.save_content(fs=get_fs(), content=self.gzipped_content)

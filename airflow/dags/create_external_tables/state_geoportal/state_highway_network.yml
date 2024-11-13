@@ -1,13 +1,13 @@
 operator: operators.ExternalTable
 bucket: gs://calitp-state-geoportal-scrape
 source_objects:
-  - "state_highway_network_data/*.jsonl.gz"
+  - "state_highway_network_geodata/*.jsonl.gz"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
   require_partition_filter: false
-  source_uri_prefix: "state_highway_network_data/{dt:DATE}/{execution_ts:TIMESTAMP}/"
+  source_uri_prefix: "state_highway_network_geodata/{dt:DATE}/{execution_ts:TIMESTAMP}/"
 destination_project_dataset_table: "external_state_geoportal.state_highway_network"
 prefix_bucket: false
 post_hook: |
