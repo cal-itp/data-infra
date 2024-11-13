@@ -1,6 +1,6 @@
 operator: operators.NtdDataProductAPIOperator
 
-year: 'multi-year'
+year: 'multi_year'
 product: 'service_by_agency'
 root_url: 'https://data.transportation.gov/resource/'
 endpoint_id: '6y83-7vuw'

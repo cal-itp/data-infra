@@ -1,6 +1,6 @@
 operator: operators.NtdDataProductAPIOperator
 
-year: 'multi-year'
+year: 'multi_year'
 product: 'funding_sources_by_expense_type'
 root_url: 'https://data.transportation.gov/resource/'
 endpoint_id: '4tmr-gwuu'

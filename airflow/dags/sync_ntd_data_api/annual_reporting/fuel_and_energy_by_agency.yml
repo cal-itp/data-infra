@@ -1,6 +1,6 @@
 operator: operators.NtdDataProductAPIOperator
 
-year: 'multi-year'
+year: 'multi_year'
 product: 'fuel_and_energy_by_agency'
 root_url: 'https://data.transportation.gov/resource/'
 endpoint_id: 'wwem-ata9'

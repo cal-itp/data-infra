@@ -1,6 +1,6 @@
 operator: operators.NtdDataProductAPIOperator
 
-year: 'multi-year'
+year: 'multi_year'
 product: 'track_and_roadway_by_mode'
 root_url: 'https://data.transportation.gov/resource/'
 endpoint_id: 'fzbb-f6kc'
