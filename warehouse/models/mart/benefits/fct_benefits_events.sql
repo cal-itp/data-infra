@@ -31,8 +31,8 @@ WITH fct_benefits_events AS (
     -- Historical data existed in `payment_group` but new data is in `enrollment_group`
     -- https://github.com/cal-itp/benefits/pull/2391
     COALESCE(
-        {{ json_extract_flattened_column('event_properties', 'enrollment_group', no_alias = true) }},
-        {{ json_extract_flattened_column('event_properties', 'payment_group', no_alias = true) }}
+        {{ json_extract_column('event_properties', 'enrollment_group', no_alias = true) }},
+        {{ json_extract_column('event_properties', 'payment_group', no_alias = true) }}
     ) AS event_properties_enrollment_group,
     -- New column `enrollment_method`, historical values should be set to "digital"
     -- https://github.com/cal-itp/benefits/pull/2402
