@@ -113,7 +113,11 @@ fct_benefits_events AS (
     event_id,
     event_properties_card_tokenize_func,
     event_properties_card_tokenize_url,
-    event_properties_claims_provider,
+    CASE
+      WHEN event_properties_claims_provider = "cdt-logingov-ial2"
+        THEN "cdt-logingov"
+      ELSE event_properties_claims_provider
+    END AS event_properties_claims_provider,
     event_properties_eligibility_verifier,
     event_properties_enrollment_flows,
     event_properties_enrollment_group,
