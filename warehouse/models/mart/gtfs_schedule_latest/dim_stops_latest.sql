@@ -7,7 +7,9 @@ dim_stops_latest AS (
 ),
 
 stg_state_geoportal__state_highway_network_stops AS (
-SELECT * FROM {{ ref('stg_state_geoportal__state_highway_network_stops') }}
+SELECT *
+-- FROM `cal-itp-data-infra-staging.external_state_geoportal.stg_state_geoportal__state_highway_network_stops`
+FROM {{ ref('stg_state_geoportal__state_highway_network_stops') }}
 ),
 
 
@@ -21,7 +23,8 @@ buffer_geometry_table AS (
 current_stops AS (
     SELECT
         pt_geom,
-        key
+        stop_id
+        --key
     FROM dim_stops_latest
 ),
 
@@ -38,13 +41,15 @@ dim_stops_latest_with_shn_boolean AS (
 
 SELECT
     dim_stops_latest.*,
-    IF(stops_on_shn.key IS NOT NULL, TRUE, FALSE) AS exists_in_dim_stops_latest
+    IF(stops_on_shn.stop_id IS NOT NULL, TRUE, FALSE) AS exists_in_dim_stops_latest
+    -- IF(stops_on_shn.key IS NOT NULL, TRUE, FALSE) AS exists_in_dim_stops_latest
 FROM
     dim_stops_latest
 LEFT JOIN
     stops_on_shn
 ON
-    dim_stops_latest.key = stops_on_shn.key
+    dim_stops_latest.stop_id = stops_on_shn.stop_id
+    -- dim_stops_latest.key = stops_on_shn.key
 )
 
 SELECT * FROM dim_stops_latest_with_shn_boolean
