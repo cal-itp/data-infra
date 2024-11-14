@@ -27,8 +27,8 @@ models:
   - name: stg_ntd_annual_data__operating_expenses_by_type_and_agency
   - name: stg_ntd_annual_data__service_by_agency
     description: |
-      Provides transit agency-wide totals for service data for applicable agencies reporting to the National Transit Database in the 2022 report year.
-      This view displays the data at a higher level (by agency), based on the "2022 NTD Annual Data - Service (by Mode and Time Period)" dataset.
+      Provides transit agency-wide totals for service data for applicable agencies reporting to the National Transit Database.
+      This view displays the data at a higher level (by agency), based on the "NTD Annual Data - Service (by Mode and Time Period)" dataset.
       In the years 2015-2021, you can find this data in the "Service" data table on NTD Program website, at https://transit.dot.gov/ntd/ntd-data.
       In versions of the data tables from before 2014, you can find data on service in the file called "Transit Operating Statistics: Service Supplied and Consumed."
     columns:
@@ -36,7 +36,7 @@ models:
         description: The year for which the data was reported.
         tests:
           - accepted_values:
-              values: [2022]
+              values: [2022, 2023]
       - name: _5_digit_ntd_id
         description: A five-digit identifying number for each agency used in the current NTD system.
       - name: agency
@@ -235,14 +235,14 @@ models:
           Passengers are counted each time they board a vehicle no matter how many vehicles they use to travel from their origin to their destination.
   - name: stg_ntd_annual_data__service_by_mode
     description: |
-      View based on 2022 NTD Annual Data - Service (by Mode and Time Period) filtered to preserve only the Annual Total time period.
+      View based on NTD Annual Data - Service (by Mode and Time Period) filtered to preserve only the Annual Total time period.
       Useful for analyses of Annual Total service data.
     columns:
       - name: report_year
         description: The year for which the data was reported.
         tests:
           - accepted_values:
-              values: [2022]
+              values: [2022, 2023]
       - name: _5_digit_ntd_id
         description: A five-digit identifying number for each agency used in the current NTD system.
       - name: type_of_service
@@ -270,7 +270,7 @@ models:
         description: The year for which the data was reported.
         tests:
           - accepted_values:
-              values: [2022]
+              values: [2022, 2023]
       - name: _5_digit_ntd_id
         description: A five-digit identifying number for each agency used in the current NTD system.
       - name: agency

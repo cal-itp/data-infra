@@ -256,7 +256,7 @@ models:
       - <<: *report_year
         tests:
           - accepted_values:
-              values: [2022]
+              values: [2022, 2023]
       - *reporter_type
       - name: sales_tax
         description: |
@@ -287,7 +287,7 @@ models:
       - <<: *report_year
         tests:
           - accepted_values:
-              values: [2022]
+              values: [2022, 2023]
       - *ntd_id
       - *agency
       - *reporter_type
@@ -470,7 +470,7 @@ models:
       - <<: *report_year
         tests:
           - accepted_values:
-              values: [2022]
+              values: [2022, 2023]
       - *reporter_type
       - *ntd_id
       - *agency
@@ -810,7 +810,7 @@ models:
 
   - name: fct_annual_service_modes
     description:
-      View based on 2022 NTD Annual Data - Service (by Mode and Time Period)
+      View based on NTD Annual Data - Service (by Mode and Time Period)
       View of Service by Mode and Time Period filtered to preserve only the Annual Total time period.
       Useful for analyses of Annual Total service data.
     columns:
@@ -821,7 +821,7 @@ models:
       - <<: *report_year
         tests:
           - accepted_values:
-              values: [2022]
+              values: [2022, 2023]
       - *ntd_id
       - *type_of_service
       - *mode
