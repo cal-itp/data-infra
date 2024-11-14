@@ -1,72 +1,69 @@
-with
-    source_pivoted as (
+{{ config(materialized="table") }}
+
+WITH
+    source_pivoted AS (
         {{
             dbt_utils.unpivot(
                 cast_to="int",
-                relation=ref("stg_ntd__monthly_ridership_with_adjustments_voms"),
+                relation=ref("stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__voms"),
                 exclude=[
-                    "uza_name",
-                    "uace_cd",
-                    "dt",
-                    "ts",
-                    "year",
+                    "_3_mode",
+                    "agency",
+                    "legacy_ntd_id",
+                    "mode",
+                    "mode_type_of_service_status",
                     "ntd_id",
                     "reporter_type",
-                    "agency",
-                    "mode_type_of_service_status",
-                    "mode",
-                    "_3_mode",
                     "tos",
-                    "legacy_ntd_id",
+                    "uace_cd",
+                    "uza_name",
+                    "dt",
+                    "execution_ts"
                 ],
                 field_name="period",
                 value_name="voms",
             )
         }}
     ),
-    int_ntd__monthly_ridership_with_adjustments_voms as (
-        select
-            uza_name,
-            format("%05d", cast(uace_cd as int64)) as uace_cd,
-            dt as _dt,
-            ts,
-            year,
-            format("%05d", cast(ntd_id as int64)) as ntd_id,
-            legacy_ntd_id,
-            reporter_type,
-            agency,
-            mode_type_of_service_status,
-            mode,
-            _3_mode,
-            tos,
-            split(period, '_')[offset(2)] as period_year,
-            split(period, '_')[offset(1)] as period_month,
-            voms
-        from source_pivoted
-        where
-            mode in (
-                "DR",
-                "FB",
-                "LR",
-                "MB",
-                "SR",
-                "TB",
-                "VP",
-                "CB",
-                "RB",
-                "CR",
-                "YR",
-                "MG",
-                "MO",
-                "AR",
-                "TR",
-                "HR",
-                "OR",
-                "IP",
-                "AG",
-                "PB",
-                "CC"
-            )
+
+    int_ntd__monthly_ridership_with_adjustments_voms AS (
+        SELECT format("%05d", cast(cast(ntd_id AS NUMERIC) AS INT64)) AS ntd_id,
+               legacy_ntd_id,
+               agency,
+               reporter_type,
+               split(period, '_')[offset(2)] AS period_year,
+               split(period, '_')[offset(1)] AS period_month,
+               uza_name,
+               format("%05d", cast(uace_cd AS INT64)) AS uace_cd,
+               mode,
+               mode_type_of_service_status,
+               _3_mode,
+               tos,
+               voms,
+               dt AS _dt,
+               execution_ts
+          FROM source_pivoted
+         WHERE mode IN ("AG",
+                        "AR",
+                        "CB",
+                        "CC",
+                        "CR",
+                        "DR",
+                        "FB",
+                        "HR",
+                        "IP",
+                        "LR",
+                        "MB",
+                        "MG",
+                        "MO",
+                        "OR",
+                        "PB",
+                        "RB",
+                        "SR",
+                        "TB",
+                        "TR",
+                        "VP",
+                        "YR")
     )
-select *
-from int_ntd__monthly_ridership_with_adjustments_voms
+
+SELECT * FROM int_ntd__monthly_ridership_with_adjustments_voms
