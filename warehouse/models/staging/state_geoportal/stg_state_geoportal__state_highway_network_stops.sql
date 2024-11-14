@@ -1,7 +1,6 @@
 WITH external_state_geoportal__state_highway_network AS (
     SELECT *
-    FROM
-    {{ source('external_state_geoportal', 'state_highway_network') }}
+    FROM {{ source('external_state_geoportal', 'state_highway_network') }}
 ),
 
 stg_state_geoportal__state_highway_network_stops AS(
