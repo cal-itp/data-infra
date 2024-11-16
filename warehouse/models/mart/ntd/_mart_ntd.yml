@@ -7,8 +7,8 @@ x-common-fields:
   - &agency
     name: agency
     description: '{{ doc("ntd_agency") }}'
-  - &ntd_legacy_id
-    name: ntd_legacy_id
+  - &legacy_ntd_id
+    name: legacy_ntd_id
     description: '{{ doc("ntd_legacy_id") }}'
   - &report_year
     name: report_year
@@ -52,6 +52,9 @@ x-common-fields:
   - &mode_name
     name: mode_name
     description: '{{ doc("ntd_mode_name") }}'
+  - &_3_mode
+    name: _3_mode
+    description: '{{ doc("ntd_3_mode") }}'
   - &time_period
     name: time_period
     description: '{{ doc("ntd_time_period") }}'
@@ -64,6 +67,39 @@ x-common-fields:
   - &actual_vehicle_hours
     name: actual_vehicle_hours
     description: '{{ doc("ntd_actual_vehicle_hours") }}'
+  - &mode_type_of_service_status
+    name: mode_type_of_service_status
+    description: '{{ doc("ntd_mode_type_of_service_status") }}'
+  - &service_type
+    name: service_type
+    description: '{{ doc("ntd_ridership_service_type") }}'
+  - &upt
+    name: upt
+    description: '{{ doc("ntd_upt") }}'
+  - &voms
+    name: voms
+    description: '{{ doc("ntd_voms") }}'
+  - &vrh
+    name: vrh
+    description: '{{ doc("ntd_vrh") }}'
+  - &vrm
+    name: vrm
+    description: '{{ doc("ntd_vrm") }}'
+  - &period_month
+    name: period_month
+    description: '{{ doc("ntd_period_month") }}'
+  - &period_year
+    name: period_year
+    description: '{{ doc("ntd_period_year") }}'
+  - &period_year_month
+    name: period_year_month
+    description: '{{ doc("ntd_period_year_month") }}'
+  - &_dt
+    name: _dt
+    description: '{{ doc("ntd_xlsx_dt") }}'
+  - &execution_ts
+    name: execution_ts
+    description: '{{ doc("ntd_xlsx_execution_ts") }}'
 
 models:
   - name: dim_annual_ntd_agency_information
@@ -689,194 +725,88 @@ models:
       - <<: *questionable_data
         name: passengers_per_hour_questionable
 
-  - name: dim_monthly_ntd_ridership_with_adjustments
+  - name: dim_monthly_ridership_with_adjustments
     description: >-
-      Extracts of the NTD Monthly Ridership with adjustments - VRM, VOMS, VRH,
-      and UPT
+      Extracts of the NTD Complete Monthly Ridership with Adjustments and Estimates (UPT, VOMS, VRH, and VRM)
+      that contains all monthly module data reported to the NTD since January 2002.
+      Mode and Type of Service Changes and Impacts on this Time Series
 
-      For example, the Feb 2024 dataset is found at
-      https://www.transit.dot.gov/ntd/data-product/monthly-module-adjusted-data-release.
+      Monthly data are reported by mode and type of service.
+      From 2002 through 2011, there were 16 modes in the NTD.
+      NTD monthly ridership data is now reported according to refined modal classifications.
+      Service previously reported as bus (MB) now may be reported as either MB, Commuter Bus (CB),
+      or Bus Rapid Transit (RB).
+      Additionally, service previously categorized as Light Rail (LR) now may be reported as LR or
+      Streetcar (SR).
 
-      Users are encouraged to use the glossary of transit terms located at
-      https://www.transit.dot.gov/ntd/national-transit-database-ntd-glossary or
-      the reporting manuals located at https://www.transit.dot.gov/ntd/manuals
-      for more detailed information.
+      Similarly, Types of Service were refined in Report Year 2019.
+      From 2002 - 2018, there were two types of service:
+        Directly Operated (DO) and
+        Purchased Transportation (PT).
 
-      A Master File of all properties that currently report or reported monthly
-      data during the period January 2002 - Current Calendar Year. The following
-      data elements are included in the master file and reflect the data
-      reported in the Annual module for the most recently reported fiscal year:"
+      As of 2019, Purchased Transportation is now classified such that agencies report the
+      purchased transportation based on the type of contractor:
+        general third party (PT),
+        taxicab operator (TX),
+        or transportation network company (TN).
 
-      NTD ID – The Transit Property’s NTD identification number in the Next
-      Generation NTD Database
+      FTA concurrently removed the "Demand Response Taxi" (DT/PT) mode in 2019.
+      FTA now considers all such service as Demand Response (DR) with Taxi (TX) type of service and
+      this time series has been updated to reflect this change.
 
-      Legacy NTD ID – The Transit Property’s NTD identification number in the
-      Legacy NTD Database
+      This time series also considers modes which have been combined, collapsing the
+      Automated Guideway (AG) and Monorail (MO) mode historical data into the
+      Monorail/Automated Guideway (MG) mode to reflect the current reporting arrangement and
+      allow for easier analysis of these modes.
 
-      Name – The Transit Property’s legal name
+      Finally, FTA introduced the Hybrid Rail (YR) mode in January 2012. While this mode combines
+      some systems previously classified as either Commuter Rail (CR) or Light Rail (LR),
+      this change could not be done uniformly; most operators of Hybrid Rail continued to
+      offer services presently defined as CR or LR.
+      Therefore, this time series does not attempt to combine historically.
+      Data users should therefore take caution that the following systems converted completely
+      from Commuter Rail to Hybrid Rail around this time:
+      - 60048 Capital Metropolitan Transportation Authority (Commuter Rail to Hybrid Rail)
+      - 60101 Denton County Transportation Authority (Commuter Rail to Hybrid Rail)
+      - 90030 North County Transit District (Light Rail to Hybrid Rail)
 
-      Mode – Indicates the means of conveyance used for the service. The NTD
-      recognizes a number of different modes including Motorbus (MB), Heavy Rail
-      (HR), Light Rail (LR), and Demand Response (DR), among others.
+      The dataset is found at:
+        https://www.transit.dot.gov/ntd/data-product/monthly-module-adjusted-data-release.
 
-      Type of Service – Indicates whether the service is directly operated by
-      the transit property, or is operated by a third party through a purchased
-      transportation agreement.
+      For more information use the glossary of transit terms located at:
+        https://www.transit.dot.gov/ntd/national-transit-database-ntd-glossary
+      or the reporting manuals located at:
+        https://www.transit.dot.gov/ntd/manuals.
 
-      3 Mode - A grouping of modes based upon whether the mode operates on rail,
-      is a bus mode, is ferry boat service or other.
-
-      Status – Indicates whether a property reports (active) or not (inactive)
-      during the most recent Annual report year.
-
-      HQ City – The city where the property’s headquarters (HQ) is located.
-
-      HQ State – The state where the property’s headquarters (HQ) is located.
-
-      Reporter Type - Indicates the agency's reporter type (Building Reporter,
-      Full Reporter, Reduced Asset Reporter,  Rural Reporter, Separate Service
-      Reporter or Small System Waiver Reporter) as of their most recent report
-      year.
-
-      Organization Type – Indicates the agency's organization type as of their
-      most recent report year.
-
-      Urban Area Census Code (UACE)  – A unique numeric identifier associated
-      with the 2020 urban areas as defined by the U.S. Census.
-
-      Urbanized Area Name – The name of the urbanized area as defined by the
-      U.S. Census
-
-      Urbanized Area Population – The population of the urbanized area as
-      reported by the U.S. Census. This is the population count for the year the
-      census was made. No population updates are made until the next Census
-      (2020).
-
-      Urbanized Area Square Miles – The square miles of the urbanized area as
-      reported by the U.S. census.
-
-      Property Service Area – The square miles of the area served by the
-      property, as reported by the transit property. This may include some rural
-      (non-urbanized) areas.
-
-      Property Service Area Population – The population of the area served by
-      the property, as reported by the transit property.
-
-      Most Recent Report Year (Annual module) – The property’s most-recent
-      closed-out annual report year.
-
-      Fiscal Year Month – The month the property’s fiscal year ends.
-
-      Fiscal Year End – The year in which the property’s most-recent closed-out
-      fiscal year ended.
-
-      Passenger Miles - For the most recent closed-out annual report year.
-
-      Unlinked Passenger Trips – For the most recent closed-out annual report
-      year.
-
-      Average Trip Length – The ratio of Passenger Miles per Unlinked Passenger
-      trips.
-
-      Fares – The fare revenues collected during the most recent closed-out
-      annual report year.
-
-      Operating Expenses – For the most recent closed-out annual report year.
-
-      Avg. Cost per Trip – The ratio of Total Operating Expenses per Unlinked
-      Passenger Trips
-
-      Avg. Fares per Trip – The ratio of Fares Earned per Unlinked Passenger
-      Trips
     columns:
-      - *primary_uza_name
-      - *primary_uza_code
-      - name: _dt
-        description: ""
-      - name: ts
-        description: ""
+      - name: key
+        tests:
+          - not_null
+          - unique
+      - *_dt
+      - *execution_ts
+      - *period_year_month
+      - *period_month
+      - *period_year
       - <<: *ntd_id
         tests:
           - not_null
-      - name: year
-        description: The year this data was added to the mart and thus the ntd_id's year
-          as well.
       - *reporter_type
       - *agency
-      - name: mode_type_of_service_status
-        description: Status – Indicates whether a property reports (active) or not
-          (inactive) during the most recent Annual report year.
+      - *mode_type_of_service_status
       - *mode
-      - name: service_type
-        description: A summarization of modes into Fixed Route and Demand Response
-      - name: _3_mode
-        description: 3 Mode - A grouping of modes based upon whether the mode operates
-          on rail, is a bus mode, is ferry boat service or other.
+      - *mode_name
+      - *_3_mode
+      - *service_type
       - <<: *type_of_service
         name: tos
-      - *ntd_legacy_id
-      - name: period_year_month
-        description: ""
-      - name: period_month
-        description: ""
-      - name: period_year
-        description: ""
-      - name: upt
-        description: >-
-          Unlinked Passenger Trips (UPT)
-
-          The number of passengers who board public transportation vehicles.
-          Passengers are counted each time they board vehicles no matter how
-          many vehicles they use to travel from their origin to their
-          destination.
-      - name: vrm
-        description: >-
-          Vehicle Revenue Miles (VRM)
-
-          The miles that vehicles are scheduled to or actually travel while in
-          revenue service. Vehicle revenue miles include:
-
-          •   Layover / recovery time.
-
-          Vehicle revenue miles exclude:
-
-          •   Deadhead;
-
-          •   Operator training;
-
-          •   Vehicle maintenance testing; and
-
-          •   Other non-revenue uses of vehicles.
-      - name: vrh
-        description: >-
-          Vehicle Revenue Hours (VRH)
-
-          The hours that vehicles are scheduled to or actually travel while in
-          revenue service. Vehicle revenue hours include:
-
-          •   Layover / recovery time.
-
-          Vehicle revenue hours exclude:
-
-          •   Deadhead;
-
-          •   Operator training;
-
-          •   Vehicle maintenance testing; and
-
-          •   Other non-revenue uses of vehicles.
-      - name: voms
-        description: >-
-          Vehicles Operated in Annual Maximum Service (VOMS)
-
-          The number of revenue vehicles operated to meet the annual maximum
-          service requirement. This is the revenue vehicle count during the peak
-          season of the year; on the week and day that maximum service is
-          provided. Vehicles operated in maximum service (VOMS) exclude:
-
-          •   Atypical days; or
-
-          •   One-time special events.
+      - *legacy_ntd_id
+      - *primary_uza_name
+      - *primary_uza_code
+      - *upt
+      - *voms
+      - *vrh
+      - *vrm
 
   - name: fct_annual_service_modes
     description:

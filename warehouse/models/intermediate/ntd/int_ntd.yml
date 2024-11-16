@@ -1,27 +1,163 @@
 version: 2
+
+x-common-fields:
+  - &ntd_id
+    name: ntd_id
+    description: '{{ doc("ntd_id") }}'
+    tests:
+      - not_null
+  - &legacy_ntd_id
+    name: legacy_ntd_id
+    description: '{{ doc("ntd_legacy_id") }}'
+  - &agency
+    name: agency
+    description: '{{ doc("ntd_agency") }}'
+  - &reporter_type
+    name: reporter_type
+    description: '{{ doc("ntd_reporter_type") }}'
+  - &uace_cd
+    name: uace_cd
+    description: '{{ doc("ntd_primary_uza_code") }}'
+  - &uza_name
+    name: uza_name
+    description: '{{ doc("ntd_primary_uza_name") }}'
+  - &tos
+    name: tos
+    description: '{{ doc("ntd_type_of_service") }}'
+  - &mode
+    name: mode
+    description: '{{ doc("ntd_mode") }}'
+  - &_3_mode
+    name: _3_mode
+    description: '{{ doc("ntd_3_mode") }}'
+  - &mode_type_of_service_status
+    name: mode_type_of_service_status
+    description: '{{ doc("ntd_mode_type_of_service_status") }}'
+  - &upt
+    name: upt
+    description: '{{ doc("ntd_upt") }}'
+  - &voms
+    name: voms
+    description: '{{ doc("ntd_voms") }}'
+  - &vrh
+    name: vrh
+    description: '{{ doc("ntd_vrh") }}'
+  - &vrm
+    name: vrm
+    description: '{{ doc("ntd_vrm") }}'
+  - &period_month
+    name: period_month
+    description: '{{ doc("ntd_period_month") }}'
+  - &period_year
+    name: period_year
+    description: '{{ doc("ntd_period_year") }}'
+  - &_dt
+    name: _dt
+    description: '{{ doc("ntd_xlsx_dt") }}'
+  - &execution_ts
+    name: execution_ts
+    description: '{{ doc("ntd_xlsx_execution_ts") }}'
+
 models:
-    - name: int_ntd__monthly_ridership_with_adjustments_upt
+    - name: int_ntd__modes
       description: |
-        Ridership - upt
-      config:
-        materialized: table
-    - name: int_ntd__monthly_ridership_with_adjustments_vrm
-      description: |
-        Ridership - vrm
-      config:
-        materialized: table
-    - name: int_ntd__monthly_ridership_with_adjustments_vrh
-      description: |
-        Ridership - vrh
-      config:
-        materialized: table
-    - name: int_ntd__monthly_ridership_with_adjustments_voms
-      description: |
-        Ridership - voms
-      config:
-        materialized: table
+        List of modes by abbreviation and full names.
+        Mode is a system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
+
     - name: int_ntd__monthly_ridership_with_adjustments_joined
-      description: |
-        Ridership - joined
-      config:
-        materialized: table
+      description: Ridership - joined VRM, VOMS, VRH, and UPT
+      columns:
+        - *ntd_id
+        - *legacy_ntd_id
+        - *agency
+        - *reporter_type
+        - *period_year
+        - *period_month
+        - *uza_name
+        - *uace_cd
+        - *mode
+        - *mode_type_of_service_status
+        - *_3_mode
+        - *tos
+        - *upt
+        - *voms
+        - *vrm
+        - *vrh
+        - *_dt
+        - *execution_ts
+
+    - name: int_ntd__monthly_ridership_with_adjustments_upt
+      description: '{{ doc("ntd_upt") }}'
+      columns:
+        - *ntd_id
+        - *legacy_ntd_id
+        - *agency
+        - *reporter_type
+        - *period_year
+        - *period_month
+        - *uza_name
+        - *uace_cd
+        - *mode
+        - *mode_type_of_service_status
+        - *_3_mode
+        - *tos
+        - *upt
+        - *_dt
+        - *execution_ts
+
+    - name: int_ntd__monthly_ridership_with_adjustments_voms
+      description: '{{ doc("ntd_voms") }}'
+      columns:
+        - *ntd_id
+        - *legacy_ntd_id
+        - *agency
+        - *reporter_type
+        - *period_year
+        - *period_month
+        - *uza_name
+        - *uace_cd
+        - *mode
+        - *mode_type_of_service_status
+        - *_3_mode
+        - *tos
+        - *voms
+        - *_dt
+        - *execution_ts
+
+    - name: int_ntd__monthly_ridership_with_adjustments_vrh
+      description: '{{ doc("ntd_vrh") }}'
+      columns:
+        - *ntd_id
+        - *legacy_ntd_id
+        - *agency
+        - *reporter_type
+        - *period_year
+        - *period_month
+        - *uza_name
+        - *uace_cd
+        - *mode
+        - *mode_type_of_service_status
+        - *_3_mode
+        - *tos
+        - *vrh
+        - *_dt
+        - *execution_ts
+
+    - name: int_ntd__monthly_ridership_with_adjustments_vrm
+      description: '{{ doc("ntd_vrm") }}'
+      columns:
+        - *ntd_id
+        - *legacy_ntd_id
+        - *agency
+        - *reporter_type
+        - *period_year
+        - *period_month
+        - *uza_name
+        - *uace_cd
+        - *mode
+        - *mode_type_of_service_status
+        - *_3_mode
+        - *tos
+        - *vrm
+        - *_dt
+        - *execution_ts
