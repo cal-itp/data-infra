@@ -81,6 +81,10 @@ A system for carrying transit passengers described by specific right-of-way (ROW
     - Jitney (JT)    
 {% enddocs %}
 
+{% docs ntd_3_mode %}
+A grouping of modes based upon whether the mode operates on rail, is a bus mode, is ferry boat service or other.
+{% enddocs %}
+
 {% docs ntd_time_period %}
 The time period for which data was collected.
 Valid values are: 
@@ -123,4 +127,130 @@ Actual vehicle hours exclude:
     - School bus service,
     - Operator training,
     - Vehicle maintenance testing.
+{% enddocs %}
+
+{% docs ntd_upt %}
+Unlinked Passenger Trips (UPT) -
+The number of passengers who board public transportation vehicles.
+Passengers are counted each time they board vehicles no matter how
+many vehicles they use to travel from their origin to their destination.
+{% enddocs %}
+
+{% docs ntd_voms %}
+Vehicles Operated in Annual Maximum Service (VOMS) -
+The number of revenue vehicles operated to meet the annual maximum
+service requirement. This is the revenue vehicle count during the peak
+season of the year; on the week and day that maximum service is
+provided. Vehicles operated in maximum service (VOMS) exclude:
+    - Atypical days; or
+    - One-time special events.
+{% enddocs %}
+
+{% docs ntd_vrh %}
+Vehicle Revenue Hours (VRH) -
+The hours that vehicles are scheduled to or actually travel while in
+revenue service. Vehicle revenue hours include:
+    - Layover / recovery time.
+Vehicle revenue hours exclude:
+    - Deadhead;
+    - Operator training;
+    - Vehicle maintenance testing; and
+    - Other non-revenue uses of vehicles.
+{% enddocs %}
+
+{% docs ntd_vrm %}
+Vehicle Revenue Miles (VRM) -
+The miles that vehicles are scheduled to or actually travel while in
+revenue service. Vehicle revenue miles include:
+    - Layover / recovery time.
+Vehicle revenue miles exclude:
+    - Deadhead;
+    - Operator training;
+    - Vehicle maintenance testing; and
+    - Other non-revenue uses of vehicles.
+{% enddocs %}
+
+{% docs ntd_mode_type_of_service_status %}
+Indicates whether a property reports (active) or not (inactive) during the most recent Annual report year.
+{% enddocs %}
+
+{% docs ntd_last_closed_report_year %}
+The property’s most-recent closed-out annual report year.
+In cases where the agency mode type of service combination does not have a closed out report year, this value will be null.
+{% enddocs %}
+
+{% docs ntd_last_closed_fy_end_month %}
+The month the property’s fiscal year ends.
+In cases where the agency mode type of service combination does not have a closed out report year, this value will be null.
+{% enddocs %}
+
+{% docs ntd_last_closed_fy_end_year %}
+The year in which the property’s most-recent closed-out fiscal year ended.
+In cases where the agency mode type of service combination does not have a closed out report year, this value will be null.
+{% enddocs %}
+
+{% docs ntd_passenger_miles_fy %}
+Passenger miles for the most recent closed-out annual report year.
+In cases where the agency mode type of service combination does not have a closed out report year, this value will be null.
+{% enddocs %}
+
+{% docs ntd_unlinked_passenger_trips_fy %}
+Unlinked Passenger Trips for the most recent closed-out annual report year.
+In cases where the agency mode type of service combination does not have a closed out report year, this value will be null.
+{% enddocs %}
+
+{% docs ntd_avg_trip_length_fy %}
+The ratio of Passenger Miles per Unlinked Passenger trips.
+In cases where the agency mode type of service combination does not have a closed out report year, this value will be null.
+{% enddocs %}
+
+{% docs ntd_fares_fy %}
+The fare revenues collected during the most recent closed-out annual report year.
+In cases where the agency mode type of service combination does not have a closed out report year, this value will be null.
+{% enddocs %}
+
+{% docs ntd_operating_expenses_fy %}
+The expenses associated with the operation of the transit agency, and classified by function or activity, and the goods and services purchased for the most recent closed-out annual report year.
+{% enddocs %}
+
+{% docs ntd_avg_cost_per_trip_fy %}
+The ratio of Total Operating Expenses per Unlinked Passenger Trips.
+In cases where the agency mode type of service combination does not have a closed out report year, this value will be null.
+{% enddocs %}
+
+{% docs ntd_avg_fares_per_trip_fy %}
+The ratio of Fares Earned per Unlinked Passenger Trips.
+In cases where the agency mode type of service combination does not have a closed out report year, this value will be null.
+{% enddocs %}
+
+{% docs ntd_ridership_service_type %}
+A summarization of modes into `Fixed Route`, `Demand Response`, or `Unknown`.
+{% enddocs %}
+
+{% docs ntd_top_150 %}
+Values are: `Y` (Yes) and `N` (No)
+{% enddocs %}
+
+{% docs ntd_period_year %}
+The Year for which data was collected.
+{% enddocs %}
+
+{% docs ntd_period_month %}
+The Month for which data was collected.
+{% enddocs %}
+
+{% docs ntd_period_month_year %}
+The Month and Year for which data was collected.
+{% enddocs %}
+
+{% docs ntd_period_year_month %}
+The Year and Month for which data was collected.
+{% enddocs %}
+
+{% docs ntd_xlsx_dt %}
+Date when the data was extracted.
+{% enddocs %}
+
+{% docs ntd_xlsx_execution_ts %}
+Date and Time when the data was extracted.
 {% enddocs %}

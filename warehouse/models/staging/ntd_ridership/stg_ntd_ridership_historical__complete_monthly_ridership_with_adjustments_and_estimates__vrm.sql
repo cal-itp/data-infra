@@ -1,19 +1,16 @@
-WITH external_historical_complete_monthly_ridership_with_adjustments_and_estimates__vrm AS (
-    SELECT *
-    FROM {{ source('external_ntd__ridership', 'historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm') }}
-),
+WITH
+    source AS (
+        SELECT *
+          FROM {{ source('external_ntd__ridership', 'historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm') }}
+         WHERE ntd_id IS NOT NULL
+         -- Removing records without NTD_ID because contains "estimated monthly industry totals for Rural reporters" from the bottom of the scraped file
+    ),
 
-get_latest_extract AS(
-
-    SELECT *
-    FROM external_historical_complete_monthly_ridership_with_adjustments_and_estimates__vrm
-    -- we pull the whole table every month in the pipeline, so this gets only the latest extract
-    QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
-),
-
-stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm AS (
-    SELECT *
-    FROM get_latest_extract
-)
+    stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm AS(
+        SELECT *
+          FROM source
+        -- we pull the whole table every month in the pipeline, so this gets only the latest extract
+        QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
+    )
 
 SELECT * FROM stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm
