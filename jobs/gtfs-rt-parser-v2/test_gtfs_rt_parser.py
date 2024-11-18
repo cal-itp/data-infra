@@ -173,3 +173,55 @@ def test_validation():
     assert "executing rt_validator" in result.stdout
     assert "writing 50 lines" in result.stdout
     assert "saving 30 outcomes" in result.stdout
+
+
+def test_no_recent_schedule_for_vehicle_positions_on_validation():
+    base64url = (
+        "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3ZlaGljbGVwb3NpdGlvbnM_YWdlbmN5PVNJ"
+    )
+    result = runner.invoke(
+        app,
+        [
+            "validate",
+            "vehicle_positions",
+            "2024-09-14T18:00:00",
+            "--base64url",
+            base64url,
+        ],
+        catch_exceptions=True,
+    )
+    assert result.exit_code == 0
+    assert (
+        "test-calitp-gtfs-rt-raw-v2/vehicle_positions/dt=2024-09-14/hour=2024-09-14T18:00:00+00:00"
+        in result.stdout
+    )
+    assert "5158 vehicle_positions files in 136 aggregations" in result.stdout
+    assert f"url filter applied, only processing {base64url}" in result.stdout
+    assert "no schedule data found" in result.stdout
+    assert "test-calitp-gtfs-rt-validation" in result.stdout
+    assert "saving 38 outcomes" in result.stdout
+
+
+def test_no_output_file_for_vehicle_positions_on_validation():
+    # "WARNING: no validation output file found" generates the log "[Errno 2] No such file or directory"
+    result = runner.invoke(
+        app,
+        [
+            "validate",
+            "vehicle_positions",
+            "2024-10-17T00:00:00",
+            "--limit",
+            3,
+            "--verbose",
+        ],
+        catch_exceptions=True,
+    )
+    assert result.exit_code == 0
+    assert (
+        "test-calitp-gtfs-rt-raw-v2/vehicle_positions/dt=2024-10-17/hour=2024-10-17T00:00:00+00:00"
+        in result.stdout
+    )
+    assert "5487 vehicle_positions files in 139 aggregations" in result.stdout
+    assert "limit of 3 feeds was set" in result.stdout
+    assert "WARNING: no validation output file found" in result.stdout
+    assert "saving 122 outcomes" in result.stdout
