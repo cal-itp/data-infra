@@ -14,12 +14,68 @@ from calitp_data_infra.storage import (  # type: ignore
 )
 from pydantic import HttpUrl  # , parse_obj_as
 
+# from airflow.decorators import task
 from airflow.models import BaseOperator  # type: ignore
 
 RAW_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"]
 CLEAN_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"]
 
-ridership_download_url = os.environ["CURRENT_NTD_RIDERSHIP_URL"]
+
+# @task
+# def pull_from_xcom():
+#     # Retrieve the task instance
+#     # return this?
+#     # context = get_current_context()
+#     # ti = context["ti"]
+
+#     # Specify the upstream DAG ID and task ID
+#     upstream_dag_id = "sync_ntd_data_xlsx"  # Replace with your actual upstream DAG ID
+#     upstream_task_id = (
+#         "scrape_ntd_ridership_xlsx_url"  # Replace with the task ID in the upstream DAG
+#     )
+
+#     # Pull the value from the upstream task
+#     download_url = ti.xcom_pull(
+#         # key="xlsx_url",  # Key for returned values in the TaskFlow API
+#         key="return_value",  # Key for returned values in the TaskFlow API
+#         dag_id=upstream_dag_id,
+#         task_ids=upstream_task_id,
+#     )
+
+#     print(f"Retrieved URL from upstream DAG: {download_url}")
+#     return download_url
+
+# Call the task
+
+
+# downstream_dag_instance = downstream_dag()
+
+# @task
+# def pull_from_xcom(**kwargs):
+#     task_instance = kwargs['ti']
+#     url_value = task_instance.xcom_pull(key=url_key, task_ids=scrape_task)
+# url_value = task_instance.xcom_pull(key="xlsx_url", task_ids="scrape_ntd_ridership_xlsx_url")
+# return url_value
+# def pull_from_xcom(**kwargs):
+#     # Access the task instance from kwargs
+#     task_instance = kwargs['ti']
+#     download_url = task_instance.xcom_pull(key="xlsx_url", task_ids="scrape_ntd_ridership_xlsx_url")
+#     print(f"Downloaded URL: {download_url}")
+#     return download_url
+# @task
+# def pull_from_xcom(xlsx_url):
+#     # Simply use the value passed from the upstream task
+#     #print(f"Validated URL: {xlsx_url}")
+#     return xlsx_url
+# @task
+# def pull_from_xcom(**kwargs):
+#     # Pulling the value using the same key
+#     value = kwargs['ti'].xcom_pull(task_ids='scrape_ntd_ridership_xlsx_url', key=url_key)
+#     # value = kwargs['ti'].xcom_pull(task_ids='scrape_ntd_ridership_xlsx_url', key='xlsx_url')
+#     # logging.info(f"Validated URL: {value}.")
+#     return value
+
+# ridership_download_url = os.environ["CURRENT_NTD_RIDERSHIP_URL"]
 
 
 class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
@@ -113,11 +169,21 @@ class NtdDataProductXLSXOperator(BaseOperator):
         download_url = self.raw_excel_extract.file_url
 
         # testing to see what is returned
-        logging.info(f"reading ridership url as {ridership_download_url}")
+        # logging.info(f"reading ridership url as {ridership_download_url}")
 
         if self.product == "complete_monthly_ridership_with_adjustments_and_estimates":
-            download_url = ridership_download_url
+            # download_url = pull_from_xcom()
+            download_url = download_url
+            # download_url = pull_from_xcom(key="xlsx_url", task_ids="scrape_ntd_ridership_xlsx_url")
+            # download_url = task_instance.xcom_pull(key="xlsx_url", task_ids="scrape_ntd_ridership_xlsx_url")
+            # download_url = pull_from_xcom(xlsx_url)
+            # download_url = pull_from_xcom(key='xlsx_url')
+            # download_url = pull_from_xcom(task_ids='scrape_ntd_ridership_xlsx_url', key='xlsx_url')
+            # download_url = pull_from_xcom(xlsx_url)
+            # download_url = ridership_download_url
             # download_url = parse_obj_as(HttpUrl, ridership_download_url)
+
+        logging.info(f"reading ridership url as {download_url}")
 
         excel_content = self.raw_excel_extract.fetch_from_ntd_xlsx(download_url)
 
