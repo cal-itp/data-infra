@@ -19,12 +19,35 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
     execution_ts: pendulum.DateTime = pendulum.now()
     dt: pendulum.Date = execution_ts.date()
     partition_names: ClassVar[List[str]] = ["dt", "execution_ts"]
-    root_url: str
-    service: str
+    
+    # The name to be used in the data warehouse to refer to the data
+    # product.
     product: str
-    where: str
-    outFields: str
-    f: str
+    
+    # The root of the ArcGIS services. As of Nov 2024, this should
+    # be "https://caltrans-gis.dot.ca.gov/arcgis/rest/services/".
+    root_url: str
+    
+    # The name of the service being requested. In the feature service's
+    # URL, this will be everything between the root and "/FeatureServer".
+    # Don't include a leading or trailing slash.
+    service: str
+    
+    # The layer to query. This will usually be "0", so that is the 
+    # default.
+    layer: str = "0"
+    
+    # The query filter. By default, all rows will be returned from the
+    # service. Refer to the ArcGIS documentation for syntax:
+    # https://developers.arcgis.com/rest/services-reference/enterprise/query-feature-service-layer/#request-parameters
+    where: str = "1=1"
+    
+    # A comma-separated list of fields to include in the results. Use
+    # "*" (the default) to include all fields.
+    outFields: str = "*"
+    
+    # The number of records to request for each API call (the operator
+    # will request all data from the layer in batches of this size).
     resultRecordCount: int
 
     @property
@@ -45,14 +68,14 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
 
         try:
             # Set up the parameters for the request
-            url = self.root_url + self.service
+            url = f'{self.root_url}/{self.service}/FeatureServer/{self.layer}/query'
             validated_url = parse_obj_as(HttpUrl, url)
 
             params = {
-                "where": self.where,  # You can change this to filter data
-                "outFields": self.outFields,  # Specify the fields to return
-                "f": self.f,  # Format of the response
-                "resultRecordCount": self.resultRecordCount,  # Maximum number of rows per request
+                "where": self.where,
+                "outFields": self.outFields,
+                "f": "geojson",
+                "resultRecordCount": self.resultRecordCount,
             }
 
             all_features = []  # To store all retrieved rows
@@ -64,7 +87,6 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
 
                 # Make the request
                 response = requests.get(validated_url, params=params)
-                # response = requests.get(url, params=params)
                 data = response.json()
 
                 # Break the loop if there are no more features
@@ -119,32 +141,32 @@ class JSONExtract(StateGeoportalAPIExtract):
 
 class StateGeoportalAPIOperator(BaseOperator):
     template_fields = (
+        "product",
         "root_url",
         "service",
-        "product",
+        "layer",
         "where",
         "outFields",
-        "f",
         "resultRecordCount",
     )
 
     def __init__(
         self,
+        product,
         root_url,
         service,
-        product,
+        layer,
         where,
         outFields,
-        f,
         resultRecordCount,
         **kwargs,
     ):
+        self.product = product
         self.root_url = root_url
         self.service = service
-        self.product = product
+        self.layer = layer
         self.where = where
         self.outFields = outFields
-        self.f = f
         self.resultRecordCount = resultRecordCount
 
         """An operator that extracts and saves JSON data from the State Geoportal
@@ -158,7 +180,7 @@ class StateGeoportalAPIOperator(BaseOperator):
             product=f"{self.product}_geodata",
             where=self.where,
             outFields=self.outFields,
-            f=self.f,
+            layer=self.layer,
             resultRecordCount=self.resultRecordCount,
             filename=f"{self.product}_geodata.jsonl.gz",
         )

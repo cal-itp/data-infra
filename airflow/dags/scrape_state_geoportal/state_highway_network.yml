@@ -1,7 +1,8 @@
 operator: operators.StateGeoportalAPIOperator
 
 root_url: 'https://caltrans-gis.dot.ca.gov/arcgis/rest/services/'
-service: "CHhighway/SHN_Lines/FeatureServer/0/query"
+service: "CHhighway/SHN_Lines"
+layer: "0"
 product: 'state_highway_network'
 where: "1=1"  # You can change this to filter data
 outFields: "*"  # Specify the fields to return

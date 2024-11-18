@@ -42,7 +42,6 @@ dim_stops_latest_with_shn_boolean AS (
 SELECT
     dim_stops_latest.*,
     IF(stops_on_shn.stop_id IS NOT NULL, TRUE, FALSE) AS exists_in_dim_stops_latest
-    -- IF(stops_on_shn.key IS NOT NULL, TRUE, FALSE) AS exists_in_dim_stops_latest
 FROM
     dim_stops_latest
 LEFT JOIN
