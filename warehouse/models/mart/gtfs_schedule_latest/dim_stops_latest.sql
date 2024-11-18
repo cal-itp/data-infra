@@ -7,14 +7,14 @@ dim_stops_latest AS (
 ),
 
 stg_state_geoportal__state_highway_network_stops AS (
-SELECT *
--- FROM `cal-itp-data-infra-staging.external_state_geoportal.stg_state_geoportal__state_highway_network_stops`
-FROM {{ ref('stg_state_geoportal__state_highway_network_stops') }}
+    SELECT *
+    FROM {{ ref('stg_state_geoportal__state_highway_network_stops') }}
 ),
 
 
 buffer_geometry_table AS (
     SELECT
+        -- equal to 100ft, as requested by Uriel
         ST_BUFFER(wkt_coordinates,
             30.48) AS buffer_geometry
     FROM stg_state_geoportal__state_highway_network_stops
@@ -24,7 +24,6 @@ current_stops AS (
     SELECT
         pt_geom,
         stop_id
-        --key
     FROM dim_stops_latest
 ),
 
@@ -48,7 +47,6 @@ LEFT JOIN
     stops_on_shn
 ON
     dim_stops_latest.stop_id = stops_on_shn.stop_id
-    -- dim_stops_latest.key = stops_on_shn.key
 )
 
 SELECT * FROM dim_stops_latest_with_shn_boolean
