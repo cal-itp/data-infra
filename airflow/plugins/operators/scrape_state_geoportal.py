@@ -19,33 +19,33 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
     execution_ts: pendulum.DateTime = pendulum.now()
     dt: pendulum.Date = execution_ts.date()
     partition_names: ClassVar[List[str]] = ["dt", "execution_ts"]
-    
+
     # The name to be used in the data warehouse to refer to the data
     # product.
     product: str
-    
+
     # The root of the ArcGIS services. As of Nov 2024, this should
     # be "https://caltrans-gis.dot.ca.gov/arcgis/rest/services/".
     root_url: str
-    
+
     # The name of the service being requested. In the feature service's
     # URL, this will be everything between the root and "/FeatureServer".
     # Don't include a leading or trailing slash.
     service: str
-    
-    # The layer to query. This will usually be "0", so that is the 
+
+    # The layer to query. This will usually be "0", so that is the
     # default.
     layer: str = "0"
-    
+
     # The query filter. By default, all rows will be returned from the
     # service. Refer to the ArcGIS documentation for syntax:
     # https://developers.arcgis.com/rest/services-reference/enterprise/query-feature-service-layer/#request-parameters
     where: str = "1=1"
-    
+
     # A comma-separated list of fields to include in the results. Use
     # "*" (the default) to include all fields.
     outFields: str = "*"
-    
+
     # The number of records to request for each API call (the operator
     # will request all data from the layer in batches of this size).
     resultRecordCount: int
@@ -68,7 +68,7 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
 
         try:
             # Set up the parameters for the request
-            url = f'{self.root_url}/{self.service}/FeatureServer/{self.layer}/query'
+            url = f"{self.root_url}/{self.service}/FeatureServer/{self.layer}/query"
             validated_url = parse_obj_as(HttpUrl, url)
 
             params = {
