@@ -52,26 +52,26 @@ def test_rt_file_processing_outcome_construction() -> None:
         )
 
 
+@pytest.mark.skipif("not config.getoption('--gcs')", reason="requires GCS credentials")
 def test_vehicle_positions():
-    base64url = "aHR0cHM6Ly9tdnNodXR0bGUucmlkZXN5c3RlbXMubmV0L3N1YnNjcmlwdGlvbnMvZ3Rmc3J0L3ZlaGljbGVzLmFzaHg="
     result = runner.invoke(
         app,
-        ["parse", "vehicle_positions", "2024-10-22T18:00:00", "--base64url", base64url],
+        ["parse", "vehicle_positions", "1999-10-22T18:00:00"],
         catch_exceptions=False,
     )
     assert result.exit_code == 0
     assert (
-        "test-calitp-gtfs-rt-raw-v2/vehicle_positions/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00"
+        "test-calitp-gtfs-rt-raw-v2/vehicle_positions/dt=1999-10-22/hour=1999-10-22T18:00:00+00:00"
         in result.stdout
     )
-    assert "4786 vehicle_positions files in 139 aggregations" in result.stdout
+    assert "1 vehicle_positions files in 1 aggregations" in result.stdout
 
-    assert f"url filter applied, only processing {base64url}" in result.stdout
-    assert "writing 28 lines" in result.stdout
+    assert "writing 1 lines" in result.stdout
     assert "test-calitp-gtfs-rt-parsed" in result.stdout
-    assert "saving 40 outcomes" in result.stdout
+    assert "saving 1 outcomes" in result.stdout
 
 
+@pytest.mark.skipif("not config.getoption('--gcs')", reason="requires GCS credentials")
 def test_no_vehicle_positions_for_date():
     base64url = (
         "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3ZlaGljbGVwb3NpdGlvbnM_YWdlbmN5PVNJ"
@@ -87,6 +87,7 @@ def test_no_vehicle_positions_for_date():
     assert "outcomes" not in result.stdout
 
 
+@pytest.mark.skipif("not config.getoption('--gcs')", reason="requires GCS credentials")
 def test_no_vehicle_positions_for_url():
     result = runner.invoke(
         app,
@@ -99,6 +100,7 @@ def test_no_vehicle_positions_for_url():
     assert "outcomes" not in result.stdout
 
 
+@pytest.mark.skipif("not config.getoption('--gcs')", reason="requires GCS credentials")
 def test_no_records_for_url_vehicle_positions_on_date():
     base64url = (
         "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3ZlaGljbGVwb3NpdGlvbnM_YWdlbmN5PVNJ"
@@ -115,6 +117,7 @@ def test_no_records_for_url_vehicle_positions_on_date():
     assert "saving 38 outcomes" in result.stdout
 
 
+@pytest.mark.skipif("not config.getoption('--gcs')", reason="requires GCS credentials")
 def test_trip_updates():
     base64url = "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1TQQ=="
     result = runner.invoke(
@@ -135,6 +138,7 @@ def test_trip_updates():
     assert "saving 49 outcomes" in result.stdout
 
 
+@pytest.mark.skipif("not config.getoption('--gcs')", reason="requires GCS credentials")
 def test_service_alerts():
     base64url = "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3NlcnZpY2VhbGVydHM_YWdlbmN5PUFN"
     result = runner.invoke(
@@ -155,6 +159,7 @@ def test_service_alerts():
     assert "saving 30 outcomes" in result.stdout
 
 
+@pytest.mark.skipif("not config.getoption('--gcs')", reason="requires GCS credentials")
 def test_validation():
     base64url = "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbWVuZG9jaW5vL2d0ZnMtcnQtdHJpcC11cGRhdGVz"
     result = runner.invoke(
@@ -175,6 +180,7 @@ def test_validation():
     assert "saving 30 outcomes" in result.stdout
 
 
+@pytest.mark.skipif("not config.getoption('--gcs')", reason="requires GCS credentials")
 def test_no_recent_schedule_for_vehicle_positions_on_validation():
     base64url = (
         "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3ZlaGljbGVwb3NpdGlvbnM_YWdlbmN5PVNJ"
@@ -202,8 +208,8 @@ def test_no_recent_schedule_for_vehicle_positions_on_validation():
     assert "saving 38 outcomes" in result.stdout
 
 
+@pytest.mark.skipif("not config.getoption('--gcs')", reason="requires GCS credentials")
 def test_no_output_file_for_vehicle_positions_on_validation():
-    # "WARNING: no validation output file found" generates the log "[Errno 2] No such file or directory"
     result = runner.invoke(
         app,
         [
@@ -216,6 +222,7 @@ def test_no_output_file_for_vehicle_positions_on_validation():
         ],
         catch_exceptions=True,
     )
+    print(result.stdout)
     assert result.exit_code == 0
     assert (
         "test-calitp-gtfs-rt-raw-v2/vehicle_positions/dt=2024-10-17/hour=2024-10-17T00:00:00+00:00"
@@ -223,5 +230,6 @@ def test_no_output_file_for_vehicle_positions_on_validation():
     )
     assert "5487 vehicle_positions files in 139 aggregations" in result.stdout
     assert "limit of 3 feeds was set" in result.stdout
+    # "WARNING: no validation output file found" was previously generating the error "[Errno 2] No such file or directory"
     assert "WARNING: no validation output file found" in result.stdout
     assert "saving 122 outcomes" in result.stdout

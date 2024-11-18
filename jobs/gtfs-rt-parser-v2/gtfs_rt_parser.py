@@ -413,7 +413,7 @@ def validate_and_upload(
             with open(results_path) as f:
                 records = json.load(f)
         except FileNotFoundError as e:
-            # TODO: does this mean no errors?
+            # This exception was previously generating the error "[Errno 2] No such file or directory"
             msg = f"WARNING: no validation output file found in {results_path} for {extract.path}"
             if verbose:
                 log(
