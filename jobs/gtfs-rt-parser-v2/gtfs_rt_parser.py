@@ -275,47 +275,39 @@ class ScheduleStorage:
 
         return DailyScheduleExtracts(extract_dict)
 
+
 # Originally this whole function was retried, but tmpdir flakiness will throw
 # exceptions in backoff's context, which ruins things
 def parse_and_validate(
-    hour: RTHourlyAggregation,
+    aggregation: RTHourlyAggregation,
     jar_path: Path,
     verbose: bool = False,
 ) -> List[RTFileProcessingOutcome]:
     outcomes = []
     with tempfile.TemporaryDirectory() as tmp_dir:
         with sentry_sdk.push_scope() as scope:
-            scope.set_tag("config_feed_type", hour.first_extract.config.feed_type)
-            scope.set_tag("config_name", hour.first_extract.config.name)
-            scope.set_tag("config_url", hour.first_extract.config.url)
-            scope.set_context("RT Hourly Aggregation", json.loads(hour.json()))
+            scope.set_tag("config_feed_type", aggregation.first_extract.config.feed_type)
+            scope.set_tag("config_name", aggregation.first_extract.config.name)
+            scope.set_tag("config_url", aggregation.first_extract.config.url)
+            scope.set_context("RT Hourly Aggregation", json.loads(aggregation.json()))
 
-            if hour.step != RTProcessingStep.validate and hour.step != RTProcessingStep.parse:
+            if aggregation.step != RTProcessingStep.validate and aggregation.step != RTProcessingStep.parse:
                 raise RuntimeError("we should not be here")
 
-            if hour.step == RTProcessingStep.validate and not hour.extracts[0].config.schedule_url_for_validation:
+            if aggregation.step == RTProcessingStep.validate and not aggregation.extracts[0].config.schedule_url_for_validation:
                 outcomes = [
                     RTFileProcessingOutcome(
-                        step=hour.step,
+                        step=aggregation.step,
                         success=False,
                         extract=extract,
                         exception=NoScheduleDataSpecified(),
                     )
-                    for extract in hour.extracts
+                    for extract in aggregation.extracts
                 ]
 
-            if hour.step == RTProcessingStep.validate:
+            if aggregation.step == RTProcessingStep.validate:
                 fs = get_fs()
-                dst_path_rt = f"{tmp_dir}/rt_{hour.name_hash}/"
-                fs.get(
-                    rpath=[
-                        extract.path
-                        for extract in hour.local_paths_to_extract(dst_path_rt).values()
-                    ],
-                    lpath=list(hour.local_paths_to_extract(dst_path_rt).keys()),
-                )
-
-                first_extract = hour.extracts[0]
+                first_extract = aggregation.extracts[0]
                 extract_day = first_extract.dt
                 # Fall back to most recent available schedule within 7 days
                 for target_date in reversed(
@@ -354,19 +346,28 @@ def parse_and_validate(
                     scope.fingerprint = [
                         type(e),
                         # convert back to url manually, I don't want to mess around with the hourly class
-                        base64.urlsafe_b64decode(hour.base64_url.encode()).decode(),
+                        base64.urlsafe_b64decode(aggregation.base64_url.encode()).decode(),
                     ]
                     sentry_sdk.capture_exception(e, scope=scope)
 
                     outcomes = [
                         RTFileProcessingOutcome(
-                            step=hour.step,
+                            step=aggregation.step,
                             success=False,
                             extract=extract,
                             exception=e,
                         )
-                        for extract in hour.extracts
+                        for extract in aggregation.extracts
                     ]
+
+                dst_path_rt = f"{tmp_dir}/rt_{aggregation.name_hash}/"
+                fs.get(
+                    rpath=[
+                        extract.path
+                        for extract in aggregation.local_paths_to_extract(dst_path_rt).values()
+                    ],
+                    lpath=list(aggregation.local_paths_to_extract(dst_path_rt).keys()),
+                )
 
                 if not outcomes:
                     try:
@@ -379,7 +380,7 @@ def parse_and_validate(
                         fingerprint: List[Any] = [
                             type(e),
                             # convert back to url manually, I don't want to mess around with the hourly class
-                            base64.urlsafe_b64decode(hour.base64_url.encode()).decode(),
+                            base64.urlsafe_b64decode(aggregation.base64_url.encode()).decode(),
                         ]
                         fingerprint.append(e.returncode)
                         stderr = e.stderr.decode("utf-8")
@@ -398,7 +399,7 @@ def parse_and_validate(
 
                         outcomes = [
                             RTFileProcessingOutcome(
-                                step=hour.step,
+                                step=aggregation.step,
                                 success=False,
                                 extract=extract,
                                 exception=e,
@@ -408,7 +409,7 @@ def parse_and_validate(
 
                 if not outcomes:
                     records_to_upload = []
-                    for local_path, extract in hour.local_paths_to_extract(dst_path_rt).items():
+                    for local_path, extract in aggregation.local_paths_to_extract(dst_path_rt).items():
                         results_path = local_path + ".results.json"
                         try:
                             with open(results_path) as f:
@@ -422,7 +423,7 @@ def parse_and_validate(
                                 )
                             outcomes.append(
                                 RTFileProcessingOutcome(
-                                    step=hour.step,
+                                    step=aggregation.step,
                                     success=False,
                                     exception=e,
                                     extract=extract,
@@ -448,17 +449,17 @@ def parse_and_validate(
 
                         outcomes.append(
                             RTFileProcessingOutcome(
-                                step=hour.step,
+                                step=aggregation.step,
                                 success=True,
                                 extract=extract,
-                                aggregation=hour,
+                                aggregation=aggregation,
                             )
                         )
 
                     # BigQuery fails when trying to parse empty files, so shouldn't write them
                     if records_to_upload:
                         typer.secho(
-                            f"writing {len(records_to_upload)} lines to {hour.path}",
+                            f"writing {len(records_to_upload)} lines to {aggregation.path}",
                         )
                         with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
                             gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
@@ -468,32 +469,32 @@ def parse_and_validate(
                             gzipfile.write("\n".join(encoded).encode("utf-8"))
                             gzipfile.close()
 
-                        fs.put(f.name, hour.path)
+                        fs.put(f.name, aggregation.path)
                     else:
                         typer.secho(
-                            f"WARNING: no records found for {hour.path}, skipping upload",
+                            f"WARNING: no records found for {aggregation.path}, skipping upload",
                             fg=typer.colors.YELLOW,
                         )
 
-            if hour.step == RTProcessingStep.parse:
+            if aggregation.step == RTProcessingStep.parse:
                 fs = get_fs()
-                dst_path_rt = f"{tmp_dir}/rt_{hour.name_hash}/"
+                dst_path_rt = f"{tmp_dir}/rt_{aggregation.name_hash}/"
                 fs.get(
                     rpath=[
                         extract.path
-                        for extract in hour.local_paths_to_extract(dst_path_rt).values()
+                        for extract in aggregation.local_paths_to_extract(dst_path_rt).values()
                     ],
-                    lpath=list(hour.local_paths_to_extract(dst_path_rt).keys()),
+                    lpath=list(aggregation.local_paths_to_extract(dst_path_rt).keys()),
                 )
 
                 written = 0
-                gzip_fname = str(tmp_dir + hour.unique_filename)
+                gzip_fname = str(tmp_dir + aggregation.unique_filename)
 
                 # ParseFromString() seems to not release memory well, so manually handle
                 # writing to the gzip and cleaning up after ourselves
 
                 with gzip.open(gzip_fname, "w") as gzipfile:
-                    for extract in hour.extracts:
+                    for extract in aggregation.extracts:
                         feed = gtfs_realtime_pb2.FeedMessage()
 
                         try:
@@ -577,7 +578,7 @@ def parse_and_validate(
                                 step=RTProcessingStep.parse,
                                 success=True,
                                 extract=extract,
-                                aggregation=hour,
+                                aggregation=aggregation,
                                 header=parsed["header"],
                             )
                         )
@@ -585,12 +586,12 @@ def parse_and_validate(
 
                 if written:
                     typer.secho(
-                        f"writing {written} lines to {hour.path}",
+                        f"writing {written} lines to {aggregation.path}",
                     )
-                    fs.put(gzip_fname, hour.path)
+                    fs.put(gzip_fname, aggregation.path)
                 else:
                     typer.secho(
-                        f"WARNING: no records at all for {hour.path}",
+                        f"WARNING: no records at all for {aggregation.path}",
                         fg=typer.colors.YELLOW,
                     )
 
@@ -748,27 +749,27 @@ def main(
         futures: Dict[Future, RTHourlyAggregation] = {
             pool.submit(
                 parse_and_validate,
-                hour=hour,
+                aggregation=aggregation,
                 jar_path=jar_path,
                 verbose=verbose,
-            ): hour
-            for hour in aggregations_to_process
+            ): aggregation
+            for aggregation in aggregations_to_process
         }
 
         for future in concurrent.futures.as_completed(futures):
-            hour = futures[future]
+            aggregation = futures[future]
             try:
                 outcomes.extend(future.result())
             except KeyboardInterrupt:
                 raise
             except Exception as e:
                 typer.secho(
-                    f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {hour.path}\n{traceback.format_exc()}",
+                    f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {aggregation.path}\n{traceback.format_exc()}",
                     err=True,
                     fg=typer.colors.RED,
                 )
                 sentry_sdk.capture_exception(e)
-                exceptions.append((e, hour.path, traceback.format_exc()))
+                exceptions.append((e, aggregation.path, traceback.format_exc()))
 
     if aggregations_to_process:
         result = GTFSRTJobResult(
