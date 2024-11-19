@@ -49,7 +49,6 @@ from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2  # type: ignore
 from pydantic import BaseModel, Field, validator
-from tqdm import tqdm
 
 RT_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_RT_VALIDATOR_JAR"
 JAR_DEFAULT = typer.Option(
@@ -108,33 +107,22 @@ class RTValidationMetadata(BaseModel):
     gtfs_validator_version: str
 
 
-def log(*args, err=False, fg=None, pbar=None, **kwargs):
-    # capture fg so we don't pass it to pbar
-    if pbar:
-        pbar.write(*args, **kwargs, file=sys.stderr if err else None)
-    else:
-        typer.secho(*args, err=err, fg=fg, **kwargs)
-
-
 def upload_if_records(
     fs,
     tmp_dir: str,
     artifact: PartitionedGCSArtifact,
     records: Sequence[Union[Dict, BaseModel]],
-    pbar=None,
 ):
     # BigQuery fails when trying to parse empty files, so shouldn't write them
     if not records:
-        log(
+        typer.secho(
             f"WARNING: no records found for {artifact.path}, skipping upload",
             fg=typer.colors.YELLOW,
-            pbar=pbar,
         )
         return
 
-    log(
+    typer.secho(
         f"writing {len(records)} lines to {artifact.path}",
-        pbar=pbar,
     )
     with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
         gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
@@ -300,23 +288,6 @@ class GTFSRTJobResult(PartitionedGCSArtifact):
         return self.hour.date()
 
 
-def save_job_result(fs: gcsfs.GCSFileSystem, result: GTFSRTJobResult):
-    typer.secho(
-        f"saving {len(result.outcomes)} outcomes to {result.path}",
-        fg=typer.colors.GREEN,
-    )
-    # TODO: I dislike having to exclude the records here
-    #   I need to figure out the best way to have a single type represent the "metadata" of
-    #   the content as well as the content itself
-    result.save_content(
-        fs=fs,
-        content="\n".join(
-            (json.dumps(make_pydantic_model_bq_safe(o)) for o in result.outcomes)
-        ).encode(),
-        exclude={"outcomes"},
-    )
-
-
 def fatal_code(e):
     return isinstance(e, ClientResponseError) and e.status == 404
 
@@ -344,13 +315,11 @@ def download_gtfs_schedule_zip(
     fs,
     schedule_extract: GTFSFeedExtract,
     dst_dir: str,
-    pbar=None,
 ) -> str:
     # fetch and zip gtfs schedule
     full_dst_path = "/".join([dst_dir, schedule_extract.filename])
-    log(
+    typer.secho(
         f"Fetching gtfs schedule data from {schedule_extract.path} to {full_dst_path}",
-        pbar=pbar,
     )
     get_with_retry(fs, schedule_extract.path, full_dst_path)
 
@@ -364,9 +333,9 @@ def download_gtfs_schedule_zip(
 
 
 def execute_rt_validator(
-    gtfs_file: str, rt_path: str, jar_path: Path, verbose=False, pbar=None
+    gtfs_file: str, rt_path: str, jar_path: Path, verbose=False
 ):
-    log(f"validating {rt_path} with {gtfs_file}", fg=typer.colors.MAGENTA, pbar=pbar)
+    typer.secho(f"validating {rt_path} with {gtfs_file}", fg=typer.colors.MAGENTA)
 
     args = [
         "java",
@@ -380,7 +349,7 @@ def execute_rt_validator(
         "name",
     ]
 
-    log(f"executing rt_validator: {' '.join(args)}", pbar=pbar)
+    typer.secho(f"executing rt_validator: {' '.join(args)}")
     subprocess.run(
         args,
         capture_output=True,
@@ -396,14 +365,12 @@ def validate_and_upload(
     hour: RTHourlyAggregation,
     gtfs_zip: str,
     verbose: bool = False,
-    pbar=None,
 ) -> List[RTFileProcessingOutcome]:
     execute_rt_validator(
         gtfs_zip,
         dst_path_rt,
         jar_path=jar_path,
         verbose=verbose,
-        pbar=pbar,
     )
 
     records_to_upload = []
@@ -417,10 +384,9 @@ def validate_and_upload(
             # This exception was previously generating the error "[Errno 2] No such file or directory"
             msg = f"WARNING: no validation output file found in {results_path} for {extract.path}"
             if verbose:
-                log(
+                typer.secho(
                     msg,
                     fg=typer.colors.YELLOW,
-                    pbar=pbar,
                 )
             outcomes.append(
                 RTFileProcessingOutcome(
@@ -462,7 +428,6 @@ def validate_and_upload(
         tmp_dir,
         artifact=hour,
         records=records_to_upload,
-        pbar=pbar,
     )
 
     return outcomes
@@ -474,7 +439,6 @@ def parse_and_upload(
     tmp_dir,
     hour: RTHourlyAggregation,
     verbose=False,
-    pbar=None,
 ) -> List[RTFileProcessingOutcome]:
     written = 0
     outcomes = []
@@ -495,10 +459,9 @@ def parse_and_upload(
                 parsed = json_format.MessageToDict(feed)
             except DecodeError as e:
                 if verbose:
-                    log(
+                    typer.secho(
                         f"WARNING: DecodeError for {str(extract.path)}",
                         fg=typer.colors.YELLOW,
-                        pbar=pbar,
                     )
                 outcomes.append(
                     RTFileProcessingOutcome(
@@ -513,10 +476,9 @@ def parse_and_upload(
             if not parsed:
                 msg = f"WARNING: no parsed dictionary found in {str(extract.path)}"
                 if verbose:
-                    log(
+                    typer.secho(
                         msg,
                         fg=typer.colors.YELLOW,
-                        pbar=pbar,
                     )
                 outcomes.append(
                     RTFileProcessingOutcome(
@@ -531,10 +493,9 @@ def parse_and_upload(
             if "entity" not in parsed:
                 msg = f"WARNING: no parsed entity found in {str(extract.path)}"
                 if verbose:
-                    log(
+                    typer.secho(
                         msg,
                         fg=typer.colors.YELLOW,
-                        pbar=pbar,
                     )
                 outcomes.append(
                     RTFileProcessingOutcome(
@@ -578,16 +539,14 @@ def parse_and_upload(
             del parsed
 
     if written:
-        log(
+        typer.secho(
             f"writing {written} lines to {hour.path}",
-            pbar=pbar,
         )
         put_with_retry(fs, gzip_fname, hour.path)
     else:
-        log(
+        typer.secho(
             f"WARNING: no records at all for {hour.path}",
             fg=typer.colors.YELLOW,
-            pbar=pbar,
         )
 
     return outcomes
@@ -599,7 +558,6 @@ def parse_and_validate(
     hour: RTHourlyAggregation,
     jar_path: Path,
     verbose: bool = False,
-    pbar=None,
 ) -> List[RTFileProcessingOutcome]:
     with tempfile.TemporaryDirectory() as tmp_dir:
         with sentry_sdk.push_scope() as scope:
@@ -650,7 +608,6 @@ def parse_and_validate(
                                 fs,
                                 schedule_extract=schedule_extract,
                                 dst_dir=tmp_dir,
-                                pbar=pbar,
                             )
 
                             break
@@ -671,7 +628,6 @@ def parse_and_validate(
                         hour=hour,
                         gtfs_zip=gtfs_zip,
                         verbose=verbose,
-                        pbar=pbar,
                     )
 
                 # these are the only two types of errors we expect; let any others bubble up
@@ -700,16 +656,14 @@ def parse_and_validate(
                     sentry_sdk.capture_exception(e, scope=scope)
 
                     if verbose:
-                        log(
+                        typer.secho(
                             f"{str(e)} thrown for {hour.path}",
                             fg=typer.colors.RED,
-                            pbar=pbar,
                         )
                         if isinstance(e, subprocess.CalledProcessError):
-                            log(
+                            typer.secho(
                                 e.stderr.decode("utf-8"),
                                 fg=typer.colors.YELLOW,
-                                pbar=pbar,
                             )
 
                     return [
@@ -730,7 +684,6 @@ def parse_and_validate(
                     tmp_dir=tmp_dir,
                     hour=hour,
                     verbose=verbose,
-                    pbar=pbar,
                 )
 
             raise RuntimeError("we should not be here")
@@ -815,10 +768,6 @@ def main(
     feed_type: GTFSFeedType,
     hour: datetime.datetime,
     limit: int = 0,
-    progress: bool = typer.Option(
-        False,
-        help="If true, display progress bar; useful for development but not in production.",
-    ),
     threads: int = 4,
     jar_path: Path = JAR_DEFAULT,
     verbose: bool = False,
@@ -846,8 +795,6 @@ def main(
 
     if limit:
         typer.secho(f"limit of {limit} feeds was set", fg=typer.colors.YELLOW)
-
-    pbar = tqdm(total=len(aggregations_to_process)) if progress else None
 
     outcomes: List[RTFileProcessingOutcome] = [
         RTFileProcessingOutcome(
@@ -881,31 +828,24 @@ def main(
                 hour=hour,
                 jar_path=jar_path,
                 verbose=verbose,
-                pbar=pbar,
             ): hour
             for hour in aggregations_to_process
         }
 
         for future in concurrent.futures.as_completed(futures):
             hour = futures[future]
-            if pbar:
-                pbar.update(1)
             try:
                 outcomes.extend(future.result())
             except KeyboardInterrupt:
                 raise
             except Exception as e:
-                log(
+                typer.secho(
                     f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {hour.path}\n{traceback.format_exc()}",
                     err=True,
                     fg=typer.colors.RED,
-                    pbar=pbar,
                 )
                 sentry_sdk.capture_exception(e)
                 exceptions.append((e, hour.path, traceback.format_exc()))
-
-    if pbar:
-        del pbar
 
     if aggregations_to_process:
         result = GTFSRTJobResult(
@@ -916,7 +856,21 @@ def main(
             feed_type=feed_type,
             outcomes=outcomes,
         )
-        save_job_result(get_fs(), result)
+        typer.secho(
+            f"saving {len(result.outcomes)} outcomes to {result.path}",
+            fg=typer.colors.GREEN,
+        )
+        # TODO: I dislike having to exclude the records here
+        #   I need to figure out the best way to have a single type represent the "metadata" of
+        #   the content as well as the content itself
+        result.save_content(
+            fs=get_fs(),
+            content="\n".join(
+                (json.dumps(make_pydantic_model_bq_safe(o)) for o in result.outcomes)
+            ).encode(),
+            exclude={"outcomes"},
+        )
+
 
     assert (
         len(outcomes) == aggregated_feed.where_base64url(base64url).set_limit(limit).total()
