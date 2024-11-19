@@ -250,12 +250,14 @@ class RtValidator:
             check=True,
         )
 
+
 class DailyScheduleExtracts:
     def __init__(self, extracts: Dict[str, GTFSScheduleFeedExtract]):
         self.extracts = extracts
 
     def get_url_schedule(self, base64_url: str) -> GTFSScheduleFeedExtract:
         return self.extracts[base64_url]
+
 
 class ScheduleStorage:
     @lru_cache
@@ -273,24 +275,6 @@ class ScheduleStorage:
 
         return DailyScheduleExtracts(extract_dict)
 
-@lru_cache
-def get_schedule_extracts_for_day(
-    dt: pendulum.Date,
-) -> Dict[str, GTFSScheduleFeedExtract]:
-    extracts: List[GTFSScheduleFeedExtract]
-    extracts, missing, invalid = fetch_all_in_partition(
-        cls=GTFSScheduleFeedExtract,
-        partitions={
-            "dt": dt,
-        },
-    )
-
-    # Explicitly put extracts in timestamp order so dict construction below sets
-    # values to the most recent extract for a given base64_url
-    extracts.sort(key=lambda extract: extract.ts)
-
-    return {extract.base64_url: extract for extract in extracts}
-
 # Originally this whole function was retried, but tmpdir flakiness will throw
 # exceptions in backoff's context, which ruins things
 def parse_and_validate(
@@ -305,16 +289,6 @@ def parse_and_validate(
             scope.set_tag("config_name", hour.first_extract.config.name)
             scope.set_tag("config_url", hour.first_extract.config.url)
             scope.set_context("RT Hourly Aggregation", json.loads(hour.json()))
-
-            fs = get_fs()
-            dst_path_rt = f"{tmp_dir}/rt_{hour.name_hash}/"
-            fs.get(
-                rpath=[
-                    extract.path
-                    for extract in hour.local_paths_to_extract(dst_path_rt).values()
-                ],
-                lpath=list(hour.local_paths_to_extract(dst_path_rt).keys()),
-            )
 
             if hour.step != RTProcessingStep.validate and hour.step != RTProcessingStep.parse:
                 raise RuntimeError("we should not be here")
@@ -331,39 +305,108 @@ def parse_and_validate(
                 ]
 
             if hour.step == RTProcessingStep.validate:
-                try:
-                    first_extract = hour.extracts[0]
-                    extract_day = first_extract.dt
-                    for target_date in reversed(
-                        list(extract_day - extract_day.subtract(days=7))
-                    ):  # Fall back to most recent available schedule within 7 days
-                        try:
-                            schedule_extract = get_schedule_extracts_for_day(
-                                target_date
-                            )[first_extract.config.base64_validation_url]
+                fs = get_fs()
+                dst_path_rt = f"{tmp_dir}/rt_{hour.name_hash}/"
+                fs.get(
+                    rpath=[
+                        extract.path
+                        for extract in hour.local_paths_to_extract(dst_path_rt).values()
+                    ],
+                    lpath=list(hour.local_paths_to_extract(dst_path_rt).keys()),
+                )
 
-                            scope.set_context(
-                                "Schedule Extract", json.loads(schedule_extract.json())
-                            )
+                first_extract = hour.extracts[0]
+                extract_day = first_extract.dt
+                # Fall back to most recent available schedule within 7 days
+                for target_date in reversed(
+                    list(extract_day - extract_day.subtract(days=7))
+                ):
+                    try:
+                        schedule_extract = ScheduleStorage().get_day(target_date).get_url_schedule(first_extract.config.base64_validation_url)
+                    except KeyError:
+                        typer.secho(
+                            f"no schedule data found for {first_extract.path} and day {target_date}"
+                        )
+                        continue
 
-                            gtfs_zip = "/".join([tmp_dir, schedule_extract.filename])
-                            typer.secho(
-                                f"Fetching gtfs schedule data from {schedule_extract.path} to {gtfs_zip}",
-                            )
-                            fs.get(schedule_extract.path, gtfs_zip)
+                    scope.set_context(
+                        "Schedule Extract", json.loads(schedule_extract.json())
+                    )
 
-                            break
-                        except (KeyError, FileNotFoundError):
-                            typer.secho(
-                                f"no schedule data found for {first_extract.path} and day {target_date}"
-                            )
-                    else:
-                        raise ScheduleDataNotFound(
-                            f"no recent schedule data found for {first_extract.path}"
+                    gtfs_zip = "/".join([tmp_dir, schedule_extract.filename])
+                    typer.secho(
+                        f"Fetching gtfs schedule data from {schedule_extract.path} to {gtfs_zip}",
+                    )
+
+                    try:
+                        fs.get(schedule_extract.path, gtfs_zip)
+
+                        break
+                    except FileNotFoundError:
+                        typer.secho(
+                            f"no schedule data found for {first_extract.path} and day {target_date}"
+                        )
+                else:
+                    e = ScheduleDataNotFound(
+                        f"no recent schedule data found for {first_extract.path}"
+                    )
+
+                    scope.fingerprint = [
+                        type(e),
+                        # convert back to url manually, I don't want to mess around with the hourly class
+                        base64.urlsafe_b64decode(hour.base64_url.encode()).decode(),
+                    ]
+                    sentry_sdk.capture_exception(e, scope=scope)
+
+                    outcomes = [
+                        RTFileProcessingOutcome(
+                            step=hour.step,
+                            success=False,
+                            extract=extract,
+                            exception=e,
+                        )
+                        for extract in hour.extracts
+                    ]
+
+                if not outcomes:
+                    try:
+                        RtValidator(jar_path).execute(gtfs_zip, dst_path_rt)
+
+                    # these are the only two types of errors we expect; let any others bubble up
+                    except subprocess.CalledProcessError as e:
+                        stderr = None
+
+                        fingerprint: List[Any] = [
+                            type(e),
+                            # convert back to url manually, I don't want to mess around with the hourly class
+                            base64.urlsafe_b64decode(hour.base64_url.encode()).decode(),
+                        ]
+                        fingerprint.append(e.returncode)
+                        stderr = e.stderr.decode("utf-8")
+
+                        # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
+                        scope.set_context(
+                            "Process", {"stderr": e.stderr.decode("utf-8")[-2000:]}
                         )
 
-                    RtValidator(jar_path).execute(gtfs_zip, dst_path_rt)
+                        # we could also use a custom exception for this
+                        if "Unexpected end of ZLIB input stream" in stderr:
+                            fingerprint.append("Unexpected end of ZLIB input stream")
 
+                        scope.fingerprint = fingerprint
+                        sentry_sdk.capture_exception(e, scope=scope)
+
+                        outcomes = [
+                            RTFileProcessingOutcome(
+                                step=hour.step,
+                                success=False,
+                                extract=extract,
+                                exception=e,
+                                process_stderr=stderr,
+                            )
+                        ]
+
+                if not outcomes:
                     records_to_upload = []
                     for local_path, extract in hour.local_paths_to_extract(dst_path_rt).items():
                         results_path = local_path + ".results.json"
@@ -432,54 +475,17 @@ def parse_and_validate(
                             fg=typer.colors.YELLOW,
                         )
 
-                # these are the only two types of errors we expect; let any others bubble up
-                except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
-                    stderr = None
-
-                    fingerprint: List[Any] = [
-                        type(e),
-                        # convert back to url manually, I don't want to mess around with the hourly class
-                        base64.urlsafe_b64decode(hour.base64_url.encode()).decode(),
-                    ]
-                    if isinstance(e, subprocess.CalledProcessError):
-                        fingerprint.append(e.returncode)
-                        stderr = e.stderr.decode("utf-8")
-
-                        # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
-                        scope.set_context(
-                            "Process", {"stderr": e.stderr.decode("utf-8")[-2000:]}
-                        )
-
-                        # we could also use a custom exception for this
-                        if "Unexpected end of ZLIB input stream" in stderr:
-                            fingerprint.append("Unexpected end of ZLIB input stream")
-
-                    scope.fingerprint = fingerprint
-                    sentry_sdk.capture_exception(e, scope=scope)
-
-                    if verbose:
-                        typer.secho(
-                            f"{str(e)} thrown for {hour.path}",
-                            fg=typer.colors.RED,
-                        )
-                        if isinstance(e, subprocess.CalledProcessError):
-                            typer.secho(
-                                e.stderr.decode("utf-8"),
-                                fg=typer.colors.YELLOW,
-                            )
-
-                    outcomes = [
-                        RTFileProcessingOutcome(
-                            step=hour.step,
-                            success=False,
-                            extract=extract,
-                            exception=e,
-                            process_stderr=stderr,
-                        )
-                        for extract in hour.extracts
-                    ]
-
             if hour.step == RTProcessingStep.parse:
+                fs = get_fs()
+                dst_path_rt = f"{tmp_dir}/rt_{hour.name_hash}/"
+                fs.get(
+                    rpath=[
+                        extract.path
+                        for extract in hour.local_paths_to_extract(dst_path_rt).values()
+                    ],
+                    lpath=list(hour.local_paths_to_extract(dst_path_rt).keys()),
+                )
+
                 written = 0
                 gzip_fname = str(tmp_dir + hour.unique_filename)
 
