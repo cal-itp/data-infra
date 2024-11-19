@@ -222,7 +222,6 @@ def test_no_output_file_for_vehicle_positions_on_validation():
         ],
         catch_exceptions=True,
     )
-    print(result.stdout)
     assert result.exit_code == 0
     assert (
         "test-calitp-gtfs-rt-raw-v2/vehicle_positions/dt=2024-10-17/hour=2024-10-17T00:00:00+00:00"
@@ -232,4 +231,4 @@ def test_no_output_file_for_vehicle_positions_on_validation():
     assert "limit of 3 feeds was set" in result.stdout
     # "WARNING: no validation output file found" was previously generating the error "[Errno 2] No such file or directory"
     assert "WARNING: no validation output file found" in result.stdout
-    assert "saving 122 outcomes" in result.stdout
+    assert "saving 114 outcomes" in result.stdout

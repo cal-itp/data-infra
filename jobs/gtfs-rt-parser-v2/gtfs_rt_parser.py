@@ -17,6 +17,7 @@ from collections import defaultdict
 from concurrent.futures import Future, ThreadPoolExecutor
 from enum import Enum
 from functools import lru_cache
+from itertools import islice
 from pathlib import Path
 from typing import Any, ClassVar, Dict, List, Optional, Sequence, Tuple, Union
 
@@ -734,6 +735,46 @@ def parse_and_validate(
 
             raise RuntimeError("we should not be here")
 
+class HourlyFeedQuery:
+    def __init__(self, step: RTProcessingStep, feed_type: GTFSFeedType, files: List[GTFSRTFeedExtract], limit: int = 0, base64_url: Optional[str] = None):
+        self.step = step
+        self.feed_type = feed_type
+        self.files = files
+        self.limit = limit
+        self.base64_url = base64_url
+
+    def set_limit(self, limit: int):
+        return HourlyFeedQuery(self.step, self.feed_type, self.files, limit, self.base64_url)
+
+    def where_base64url(self, base64_url: str):
+        return HourlyFeedQuery(self.step, self.feed_type, self.files, self.limit, base64_url)
+
+    def get_aggregates(self) -> Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]]:
+        aggregates: Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]] = defaultdict(
+            list
+        )
+
+        for file in self.files:
+            if self.base64_url is None or file.base64_url == self.base64_url:
+                aggregates[(file.hour, file.base64_url)].append(file)
+
+        if self.limit > 0:
+            aggregates = dict(islice(aggregates.items(), self.limit))
+
+        return [
+            RTHourlyAggregation(
+                step=self.step,
+                filename=f"{self.feed_type}{JSONL_GZIP_EXTENSION}",
+                first_extract=entries[0],
+                extracts=entries,
+            )
+            for (hour, base64_url), entries in aggregates.items()
+        ]
+
+    def total(self) -> int:
+        return sum(len(agg.extracts) for agg in self.get_aggregates())
+
+
 class HourlyFeedFiles:
     def __init__(self, files: List[GTFSRTFeedExtract], files_missing_metadata: List[Blob], files_invalid_metadata: List[Blob]):
         self.files = files
@@ -745,6 +786,10 @@ class HourlyFeedFiles:
 
     def valid(self) -> bool:
         return not self.files or len(self.files) / self.total() > 0.99
+
+    def get_query(self, step: RTProcessingStep, feed_type: GTFSFeedType) -> HourlyFeedQuery:
+        return HourlyFeedQuery(step, feed_type, self.files)
+
 
 class FeedStorage:
     def __init__(self, feed_type: GTFSFeedType):
@@ -786,26 +831,11 @@ def main(
         raise RuntimeError(
             f"too many files have missing/invalid metadata; {total - len(files)} of {total}"  # noqa: E702
         )
-
-    rt_aggs: Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]] = defaultdict(
-        list
-    )
-
-    for file in hourly_feed_files.files:
-        rt_aggs[(file.hour, file.base64_url)].append(file)
-
-    aggregations_to_process = [
-        RTHourlyAggregation(
-            step=step,
-            filename=f"{feed_type}{JSONL_GZIP_EXTENSION}",
-            first_extract=entries[0],
-            extracts=entries,
-        )
-        for (hour, base64url), entries in rt_aggs.items()
-    ]
+    aggregated_feed = hourly_feed_files.get_query(step, feed_type)
+    aggregations_to_process = aggregated_feed.where_base64url(base64url).set_limit(limit).get_aggregates()
 
     typer.secho(
-        f"found {len(hourly_feed_files.files)} {feed_type} files in {len(aggregations_to_process)} aggregations to process",
+        f"found {len(hourly_feed_files.files)} {feed_type} files in {len(aggregated_feed.get_aggregates())} aggregations to process",
         fg=typer.colors.MAGENTA,
     )
 
@@ -813,17 +843,10 @@ def main(
         typer.secho(
             f"url filter applied, only processing {base64url}", fg=typer.colors.YELLOW
         )
-        aggregations_to_process = [
-            agg for agg in aggregations_to_process if agg.base64_url == base64url
-        ]
 
     if limit:
         typer.secho(f"limit of {limit} feeds was set", fg=typer.colors.YELLOW)
-        aggregations_to_process = list(
-            sorted(aggregations_to_process, key=lambda feed: feed.path)
-        )[:limit]
 
-    aggregated_total = sum(len(agg.extracts) for agg in aggregations_to_process)
     pbar = tqdm(total=len(aggregations_to_process)) if progress else None
 
     outcomes: List[RTFileProcessingOutcome] = [
@@ -896,8 +919,8 @@ def main(
         save_job_result(get_fs(), result)
 
     assert (
-        len(outcomes) == aggregated_total
-    ), f"we ended up with {len(outcomes)} outcomes from {aggregated_total}"
+        len(outcomes) == aggregated_feed.where_base64url(base64url).set_limit(limit).total()
+    ), f"we ended up with {len(outcomes)} outcomes from {aggregated_feed.where_base64url(base64url).set_limit(limit).total()}"
 
     if exceptions:
         exc_str = "\n".join(str(tup) for tup in exceptions)
