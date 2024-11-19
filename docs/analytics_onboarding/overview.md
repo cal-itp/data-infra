@@ -38,10 +38,13 @@
 
 **Caltrans Employee Resources:**
 
+- [ ] [**Organizational Chart**](https://pmp.onramp.dot.ca.gov/downloads/pmp/files/Splash%20Page/org-charts-10-2024/DDS_OrgChart_October2024-signed.pdf) - Data and Digital Services Organizational Chart
 - [ ] [**OnRamp**](https://onramp.dot.ca.gov/) - Caltrans employee intranet
 - [ ] [**Service Now (SNOW)**](https://cdotprod.service-now.com/sp) - Caltrans IT Service Management Portal for IT issues and requesting specific software
 - [ ] [**Cal Employee Connect**](https://connect.sco.ca.gov/) - State Controller's Office site for paystubs and tax information
 - [ ] [**Geospatial Enterprise Engagement Platform - GIS Account Request Form**](https://sv03tmcpo.ct.dot.ca.gov/portal/apps/sites/#/geep/pages/account-request) (optional) - User request form for ArcGIS Online and ArcGIS Portal accounts
+- [ ] [**Planning Handbook**](https://transportationplanning.onramp.dot.ca.gov/caltrans-transportation-planning-handbook) - Caltrans Transportation Planning Handbook
+- [ ] [**California Public Employees Retirement System**](https://www.calpers.ca.gov/) - System that manages pension and health benefits
 
 &#160;
 (get-help)=

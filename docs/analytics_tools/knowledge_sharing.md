@@ -2,7 +2,7 @@
 
 # Helpful Links
 
-Here are some resources data analysts have collected and referenced, that will hopefully help you out in your work. Have something you want to share? Create a new markdown file, add it [to the example report folder](https://github.com/cal-itp/data-analyses/tree/main/example_report), and [message Amanda.](https://app.slack.com/client/T014965JTHA/C013N8GELLF/user_profile/U02PCTPSZ8A)
+Here are some resources data analysts have collected and referenced, that will hopefully help you out in your work.
 
 - [Data Analysis](#data-analysis)
   - [Python](#python)
@@ -160,7 +160,6 @@ def add_tooltip(chart, tooltip1, tooltip2):
 
 ### Maps
 
-- [Examples of folium, branca, and color maps.](https://nbviewer.org/github/python-visualization/folium/blob/v0.2.0/examples/Colormaps.ipynb)
 - [Quick interactive maps with Geopandas.gdf.explore()](https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.explore.html)
 
 (dataframes)=

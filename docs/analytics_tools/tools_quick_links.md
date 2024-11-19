@@ -14,9 +14,3 @@
 | [**analysis.calitp.org**](https://analysis.calitp.org/)                                            | Analytics portfolio landing page        |
 | [**Google BigQuery**](https://console.cloud.google.com/bigquery)                                   | Our warehouse and SQL Querying          |
 | [**Google Cloud Storage**](https://console.cloud.google.com/storage/browser/calitp-analytics-data) | Cloud file storage                      |
-
-&#160;
-
-```{admonition} Still need access to a tool on this page?
-Ask in the `#services-team` channel in the Cal-ITP Slack.
-```
