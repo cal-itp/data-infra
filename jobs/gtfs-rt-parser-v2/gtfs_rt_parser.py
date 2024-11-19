@@ -734,6 +734,35 @@ def parse_and_validate(
 
             raise RuntimeError("we should not be here")
 
+class HourlyFeedFiles:
+    def __init__(self, files: List[GTFSRTFeedExtract], files_missing_metadata: List[Blob], files_invalid_metadata: List[Blob]):
+        self.files = files
+        self.files_missing_metadata = files_missing_metadata
+        self.files_invalid_metadata = files_invalid_metadata
+
+    def total(self) -> int:
+        return len(self.files) + len(self.files_missing_metadata) + len(self.files_invalid_metadata)
+
+    def valid(self) -> bool:
+        return not self.files or len(self.files) / self.total() > 0.99
+
+class FeedStorage:
+    def __init__(self, feed_type: GTFSFeedType):
+        self.feed_type = feed_type
+
+    @lru_cache
+    def get_hour(self, hour: datetime.datetime) -> HourlyFeedFiles:
+        pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
+        files, files_missing_metadata, files_invalid_metadata = fetch_all_in_partition(
+            cls=GTFSRTFeedExtract,
+            partitions={
+                "dt": pendulum_hour.date(),
+                "hour": pendulum_hour,
+            },
+            table=self.feed_type,
+            verbose=True,
+        )
+        return HourlyFeedFiles(files, files_missing_metadata, files_invalid_metadata)
 
 @app.command()
 def main(
@@ -750,22 +779,8 @@ def main(
     verbose: bool = False,
     base64url: Optional[str] = None,
 ):
-    pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
-    files: List[GTFSRTFeedExtract]
-    files_missing_metadata: List[Blob]
-    files_invalid_metadata: List[Blob]
-    files, files_missing_metadata, files_invalid_metadata = fetch_all_in_partition(
-        cls=GTFSRTFeedExtract,
-        partitions={
-            "dt": pendulum_hour.date(),
-            "hour": pendulum_hour,
-        },
-        table=feed_type,
-        verbose=True,
-    )
-
-    total = len(files) + len(files_missing_metadata) + len(files_invalid_metadata)
-    if files and len(files) / total < 0.99:
+    hourly_feed_files = FeedStorage(feed_type).get_hour(hour)
+    if not hourly_feed_files.valid():
         typer.secho(f"missing: {files_missing_metadata}")
         typer.secho(f"invalid: {files_invalid_metadata}")
         raise RuntimeError(
@@ -776,21 +791,21 @@ def main(
         list
     )
 
-    for file in files:
+    for file in hourly_feed_files.files:
         rt_aggs[(file.hour, file.base64_url)].append(file)
 
     aggregations_to_process = [
         RTHourlyAggregation(
             step=step,
             filename=f"{feed_type}{JSONL_GZIP_EXTENSION}",
-            first_extract=files[0],
-            extracts=files,
+            first_extract=entries[0],
+            extracts=entries,
         )
-        for (hour, base64url), files in rt_aggs.items()
+        for (hour, base64url), entries in rt_aggs.items()
     ]
 
     typer.secho(
-        f"found {len(files)} {feed_type} files in {len(aggregations_to_process)} aggregations to process",
+        f"found {len(hourly_feed_files.files)} {feed_type} files in {len(aggregations_to_process)} aggregations to process",
         fg=typer.colors.MAGENTA,
     )
 
@@ -818,7 +833,7 @@ def main(
             blob_path=blob.path,
             exception=MissingMetadata(),
         )
-        for blob in files_missing_metadata
+        for blob in hourly_feed_files.files_missing_metadata
     ] + [
         RTFileProcessingOutcome(
             step=step.value,
@@ -826,7 +841,7 @@ def main(
             blob_path=blob.path,
             exception=InvalidMetadata(),
         )
-        for blob in files_invalid_metadata
+        for blob in hourly_feed_files.files_invalid_metadata
     ]
     exceptions = []
 
