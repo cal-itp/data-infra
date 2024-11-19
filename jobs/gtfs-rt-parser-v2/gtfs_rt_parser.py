@@ -67,22 +67,6 @@ sentry_sdk.utils.MAX_STRING_LENGTH = 2048  # default is 512 which will cut off v
 sentry_sdk.init()
 
 
-def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
-    return {
-        make_name_bq_safe(key): make_dict_bq_safe(value)
-        if isinstance(value, dict)
-        else value
-        for key, value in d.items()
-    }
-
-
-def make_pydantic_model_bq_safe(model: BaseModel) -> Dict[str, Any]:
-    """
-    This is ugly but I think it's the best option until https://github.com/pydantic/pydantic/issues/1409
-    """
-    return make_dict_bq_safe(json.loads(model.json()))
-
-
 class MissingMetadata(Exception):
     pass
 
@@ -107,59 +91,12 @@ class RTValidationMetadata(BaseModel):
     gtfs_validator_version: str
 
 
-def upload_if_records(
-    fs,
-    tmp_dir: str,
-    artifact: PartitionedGCSArtifact,
-    records: Sequence[Union[Dict, BaseModel]],
-):
-    # BigQuery fails when trying to parse empty files, so shouldn't write them
-    if not records:
-        typer.secho(
-            f"WARNING: no records found for {artifact.path}, skipping upload",
-            fg=typer.colors.YELLOW,
-        )
-        return
-
-    typer.secho(
-        f"writing {len(records)} lines to {artifact.path}",
-    )
-    with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
-        gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
-        encoded = (
-            r.json() if isinstance(r, BaseModel) else json.dumps(r) for r in records
-        )
-        gzipfile.write("\n".join(encoded).encode("utf-8"))
-        gzipfile.close()
-
-    put_with_retry(fs, f.name, artifact.path)
-
-
 class NoScheduleDataSpecified(Exception):
     pass
 
 
 class ScheduleDataNotFound(Exception):
     pass
-
-
-@lru_cache
-def get_schedule_extracts_for_day(
-    dt: pendulum.Date,
-) -> Dict[str, GTFSScheduleFeedExtract]:
-    extracts: List[GTFSScheduleFeedExtract]
-    extracts, missing, invalid = fetch_all_in_partition(
-        cls=GTFSScheduleFeedExtract,
-        partitions={
-            "dt": dt,
-        },
-    )
-
-    # Explicitly put extracts in timestamp order so dict construction below sets
-    # values to the most recent extract for a given base64_url
-    extracts.sort(key=lambda extract: extract.ts)
-
-    return {extract.base64_url: extract for extract in extracts}
 
 
 class RTHourlyAggregation(PartitionedGCSArtifact):
@@ -288,269 +225,71 @@ class GTFSRTJobResult(PartitionedGCSArtifact):
         return self.hour.date()
 
 
-def fatal_code(e):
-    return isinstance(e, ClientResponseError) and e.status == 404
+class RtValidator:
+    def __init__(self, jar_path: Path):
+        self.jar_path = jar_path
 
+    def execute(self, gtfs_file: str, rt_path: str):
+        typer.secho(f"validating {rt_path} with {gtfs_file}", fg=typer.colors.MAGENTA)
+        args = [
+            "java",
+            "-jar",
+            str(self.jar_path),
+            "-gtfs",
+            gtfs_file,
+            "-gtfsRealtimePath",
+            rt_path,
+            "-sort",
+            "name",
+        ]
 
-@backoff.on_exception(
-    backoff.expo,
-    exception=(ClientOSError, ClientResponseError, ServerDisconnectedError),
-    max_tries=3,
-    giveup=fatal_code,
-)
-def get_with_retry(fs, *args, **kwargs):
-    return fs.get(*args, **kwargs)
-
-
-@backoff.on_exception(
-    backoff.expo,
-    exception=(ClientOSError, ClientResponseError, ServerDisconnectedError),
-    max_tries=3,
-)
-def put_with_retry(fs, *args, **kwargs):
-    return fs.put(*args, **kwargs)
-
-
-def download_gtfs_schedule_zip(
-    fs,
-    schedule_extract: GTFSFeedExtract,
-    dst_dir: str,
-) -> str:
-    # fetch and zip gtfs schedule
-    full_dst_path = "/".join([dst_dir, schedule_extract.filename])
-    typer.secho(
-        f"Fetching gtfs schedule data from {schedule_extract.path} to {full_dst_path}",
-    )
-    get_with_retry(fs, schedule_extract.path, full_dst_path)
-
-    # https://github.com/MobilityData/gtfs-realtime-validator/issues/92
-    # try:
-    #     os.remove(os.path.join(dst_path, "areas.txt"))
-    # except FileNotFoundError:
-    #     pass
-
-    return full_dst_path
-
-
-def execute_rt_validator(
-    gtfs_file: str, rt_path: str, jar_path: Path, verbose=False
-):
-    typer.secho(f"validating {rt_path} with {gtfs_file}", fg=typer.colors.MAGENTA)
-
-    args = [
-        "java",
-        "-jar",
-        str(jar_path),
-        "-gtfs",
-        gtfs_file,
-        "-gtfsRealtimePath",
-        rt_path,
-        "-sort",
-        "name",
-    ]
-
-    typer.secho(f"executing rt_validator: {' '.join(args)}")
-    subprocess.run(
-        args,
-        capture_output=True,
-        check=True,
-    )
-
-
-def validate_and_upload(
-    fs,
-    jar_path: Path,
-    dst_path_rt: str,
-    tmp_dir: str,
-    hour: RTHourlyAggregation,
-    gtfs_zip: str,
-    verbose: bool = False,
-) -> List[RTFileProcessingOutcome]:
-    execute_rt_validator(
-        gtfs_zip,
-        dst_path_rt,
-        jar_path=jar_path,
-        verbose=verbose,
-    )
-
-    records_to_upload = []
-    outcomes = []
-    for local_path, extract in hour.local_paths_to_extract(dst_path_rt).items():
-        results_path = local_path + ".results.json"
-        try:
-            with open(results_path) as f:
-                records = json.load(f)
-        except FileNotFoundError as e:
-            # This exception was previously generating the error "[Errno 2] No such file or directory"
-            msg = f"WARNING: no validation output file found in {results_path} for {extract.path}"
-            if verbose:
-                typer.secho(
-                    msg,
-                    fg=typer.colors.YELLOW,
-                )
-            outcomes.append(
-                RTFileProcessingOutcome(
-                    step=hour.step,
-                    success=False,
-                    exception=e,
-                    extract=extract,
-                )
-            )
-            continue
-
-        records_to_upload.extend(
-            [
-                {
-                    "metadata": json.loads(
-                        RTValidationMetadata(
-                            extract_ts=extract.ts,
-                            extract_config=extract.config,
-                            gtfs_validator_version=GTFS_RT_VALIDATOR_VERSION,
-                        ).json()
-                    ),
-                    **record,
-                }
-                for record in records
-            ]
+        typer.secho(f"executing rt_validator: {' '.join(args)}")
+        subprocess.run(
+            args,
+            capture_output=True,
+            check=True,
         )
 
-        outcomes.append(
-            RTFileProcessingOutcome(
-                step=hour.step,
-                success=True,
-                extract=extract,
-                aggregation=hour,
-            )
-        )
+class DailyScheduleExtracts:
+    def __init__(self, extracts: Dict[str, GTFSScheduleFeedExtract]):
+        self.extracts = extracts
 
-    upload_if_records(
-        fs,
-        tmp_dir,
-        artifact=hour,
-        records=records_to_upload,
+    def get_url_schedule(self, base64_url: str) -> GTFSScheduleFeedExtract:
+        return self.extracts[base64_url]
+
+class ScheduleStorage:
+    @lru_cache
+    def get_day(self, dt: pendulum.Date) -> DailyScheduleExtracts:
+        extracts, _, _ = fetch_all_in_partition(
+            cls=GTFSScheduleFeedExtract,
+            partitions={"dt": dt},
+            verbose=True,
+        )
+        # Explicitly put extracts in timestamp order so dict construction below sets
+        # values to the most recent extract for a given base64_url
+        extracts.sort(key=lambda extract: extract.ts)
+
+        extract_dict = {extract.base64_url: extract for extract in extracts}
+
+        return DailyScheduleExtracts(extract_dict)
+
+@lru_cache
+def get_schedule_extracts_for_day(
+    dt: pendulum.Date,
+) -> Dict[str, GTFSScheduleFeedExtract]:
+    extracts: List[GTFSScheduleFeedExtract]
+    extracts, missing, invalid = fetch_all_in_partition(
+        cls=GTFSScheduleFeedExtract,
+        partitions={
+            "dt": dt,
+        },
     )
 
-    return outcomes
+    # Explicitly put extracts in timestamp order so dict construction below sets
+    # values to the most recent extract for a given base64_url
+    extracts.sort(key=lambda extract: extract.ts)
 
-
-def parse_and_upload(
-    fs,
-    dst_path_rt,
-    tmp_dir,
-    hour: RTHourlyAggregation,
-    verbose=False,
-) -> List[RTFileProcessingOutcome]:
-    written = 0
-    outcomes = []
-    gzip_fname = str(tmp_dir + hour.unique_filename)
-
-    # ParseFromString() seems to not release memory well, so manually handle
-    # writing to the gzip and cleaning up after ourselves
-
-    with gzip.open(gzip_fname, "w") as gzipfile:
-        for extract in hour.extracts:
-            feed = gtfs_realtime_pb2.FeedMessage()
-
-            try:
-                with open(
-                    os.path.join(dst_path_rt, extract.timestamped_filename), "rb"
-                ) as f:
-                    feed.ParseFromString(f.read())
-                parsed = json_format.MessageToDict(feed)
-            except DecodeError as e:
-                if verbose:
-                    typer.secho(
-                        f"WARNING: DecodeError for {str(extract.path)}",
-                        fg=typer.colors.YELLOW,
-                    )
-                outcomes.append(
-                    RTFileProcessingOutcome(
-                        step=RTProcessingStep.parse,
-                        success=False,
-                        exception=e,
-                        extract=extract,
-                    )
-                )
-                continue
-
-            if not parsed:
-                msg = f"WARNING: no parsed dictionary found in {str(extract.path)}"
-                if verbose:
-                    typer.secho(
-                        msg,
-                        fg=typer.colors.YELLOW,
-                    )
-                outcomes.append(
-                    RTFileProcessingOutcome(
-                        step=RTProcessingStep.parse,
-                        success=False,
-                        exception=ValueError(msg),
-                        extract=extract,
-                    )
-                )
-                continue
-
-            if "entity" not in parsed:
-                msg = f"WARNING: no parsed entity found in {str(extract.path)}"
-                if verbose:
-                    typer.secho(
-                        msg,
-                        fg=typer.colors.YELLOW,
-                    )
-                outcomes.append(
-                    RTFileProcessingOutcome(
-                        step=RTProcessingStep.parse,
-                        success=True,
-                        extract=extract,
-                        header=parsed["header"],
-                    )
-                )
-                continue
-
-            for record in parsed["entity"]:
-                gzipfile.write(
-                    (
-                        json.dumps(
-                            {
-                                "header": parsed["header"],
-                                # back and forth so we use pydantic serialization
-                                "metadata": json.loads(
-                                    RTParsingMetadata(
-                                        extract_ts=extract.ts,
-                                        extract_config=extract.config,
-                                    ).json()
-                                ),
-                                **copy.deepcopy(record),
-                            }
-                        )
-                        + "\n"
-                    ).encode("utf-8")
-                )
-                written += 1
-            outcomes.append(
-                RTFileProcessingOutcome(
-                    step=RTProcessingStep.parse,
-                    success=True,
-                    extract=extract,
-                    aggregation=hour,
-                    header=parsed["header"],
-                )
-            )
-            del parsed
-
-    if written:
-        typer.secho(
-            f"writing {written} lines to {hour.path}",
-        )
-        put_with_retry(fs, gzip_fname, hour.path)
-    else:
-        typer.secho(
-            f"WARNING: no records at all for {hour.path}",
-            fg=typer.colors.YELLOW,
-        )
-
-    return outcomes
-
+    return {extract.base64_url: extract for extract in extracts}
 
 # Originally this whole function was retried, but tmpdir flakiness will throw
 # exceptions in backoff's context, which ruins things
@@ -559,6 +298,7 @@ def parse_and_validate(
     jar_path: Path,
     verbose: bool = False,
 ) -> List[RTFileProcessingOutcome]:
+    outcomes = []
     with tempfile.TemporaryDirectory() as tmp_dir:
         with sentry_sdk.push_scope() as scope:
             scope.set_tag("config_feed_type", hour.first_extract.config.feed_type)
@@ -568,8 +308,7 @@ def parse_and_validate(
 
             fs = get_fs()
             dst_path_rt = f"{tmp_dir}/rt_{hour.name_hash}/"
-            get_with_retry(
-                fs,
+            fs.get(
                 rpath=[
                     extract.path
                     for extract in hour.local_paths_to_extract(dst_path_rt).values()
@@ -577,18 +316,21 @@ def parse_and_validate(
                 lpath=list(hour.local_paths_to_extract(dst_path_rt).keys()),
             )
 
-            if hour.step == RTProcessingStep.validate:
-                if not hour.extracts[0].config.schedule_url_for_validation:
-                    return [
-                        RTFileProcessingOutcome(
-                            step=hour.step,
-                            success=False,
-                            extract=extract,
-                            exception=NoScheduleDataSpecified(),
-                        )
-                        for extract in hour.extracts
-                    ]
+            if hour.step != RTProcessingStep.validate and hour.step != RTProcessingStep.parse:
+                raise RuntimeError("we should not be here")
 
+            if hour.step == RTProcessingStep.validate and not hour.extracts[0].config.schedule_url_for_validation:
+                outcomes = [
+                    RTFileProcessingOutcome(
+                        step=hour.step,
+                        success=False,
+                        extract=extract,
+                        exception=NoScheduleDataSpecified(),
+                    )
+                    for extract in hour.extracts
+                ]
+
+            if hour.step == RTProcessingStep.validate:
                 try:
                     first_extract = hour.extracts[0]
                     extract_day = first_extract.dt
@@ -604,15 +346,15 @@ def parse_and_validate(
                                 "Schedule Extract", json.loads(schedule_extract.json())
                             )
 
-                            gtfs_zip = download_gtfs_schedule_zip(
-                                fs,
-                                schedule_extract=schedule_extract,
-                                dst_dir=tmp_dir,
+                            gtfs_zip = "/".join([tmp_dir, schedule_extract.filename])
+                            typer.secho(
+                                f"Fetching gtfs schedule data from {schedule_extract.path} to {gtfs_zip}",
                             )
+                            fs.get(schedule_extract.path, gtfs_zip)
 
                             break
                         except (KeyError, FileNotFoundError):
-                            print(
+                            typer.secho(
                                 f"no schedule data found for {first_extract.path} and day {target_date}"
                             )
                     else:
@@ -620,15 +362,75 @@ def parse_and_validate(
                             f"no recent schedule data found for {first_extract.path}"
                         )
 
-                    return validate_and_upload(
-                        fs=fs,
-                        jar_path=jar_path,
-                        dst_path_rt=dst_path_rt,
-                        tmp_dir=tmp_dir,
-                        hour=hour,
-                        gtfs_zip=gtfs_zip,
-                        verbose=verbose,
-                    )
+                    RtValidator(jar_path).execute(gtfs_zip, dst_path_rt)
+
+                    records_to_upload = []
+                    for local_path, extract in hour.local_paths_to_extract(dst_path_rt).items():
+                        results_path = local_path + ".results.json"
+                        try:
+                            with open(results_path) as f:
+                                records = json.load(f)
+                        except FileNotFoundError as e:
+                            # This exception was previously generating the error "[Errno 2] No such file or directory"
+                            if verbose:
+                                typer.secho(
+                                    f"WARNING: no validation output file found in {results_path} for {extract.path}",
+                                    fg=typer.colors.YELLOW,
+                                )
+                            outcomes.append(
+                                RTFileProcessingOutcome(
+                                    step=hour.step,
+                                    success=False,
+                                    exception=e,
+                                    extract=extract,
+                                )
+                            )
+                            continue
+
+                        records_to_upload.extend(
+                            [
+                                {
+                                    "metadata": json.loads(
+                                        RTValidationMetadata(
+                                            extract_ts=extract.ts,
+                                            extract_config=extract.config,
+                                            gtfs_validator_version=GTFS_RT_VALIDATOR_VERSION,
+                                        ).json()
+                                    ),
+                                    **record,
+                                }
+                                for record in records
+                            ]
+                        )
+
+                        outcomes.append(
+                            RTFileProcessingOutcome(
+                                step=hour.step,
+                                success=True,
+                                extract=extract,
+                                aggregation=hour,
+                            )
+                        )
+
+                    # BigQuery fails when trying to parse empty files, so shouldn't write them
+                    if records_to_upload:
+                        typer.secho(
+                            f"writing {len(records_to_upload)} lines to {hour.path}",
+                        )
+                        with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
+                            gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
+                            encoded = (
+                                r.json() if isinstance(r, BaseModel) else json.dumps(r) for r in records_to_upload
+                            )
+                            gzipfile.write("\n".join(encoded).encode("utf-8"))
+                            gzipfile.close()
+
+                        fs.put(f.name, hour.path)
+                    else:
+                        typer.secho(
+                            f"WARNING: no records found for {hour.path}, skipping upload",
+                            fg=typer.colors.YELLOW,
+                        )
 
                 # these are the only two types of errors we expect; let any others bubble up
                 except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
@@ -666,7 +468,7 @@ def parse_and_validate(
                                 fg=typer.colors.YELLOW,
                             )
 
-                    return [
+                    outcomes = [
                         RTFileProcessingOutcome(
                             step=hour.step,
                             success=False,
@@ -678,15 +480,115 @@ def parse_and_validate(
                     ]
 
             if hour.step == RTProcessingStep.parse:
-                return parse_and_upload(
-                    fs=fs,
-                    dst_path_rt=dst_path_rt,
-                    tmp_dir=tmp_dir,
-                    hour=hour,
-                    verbose=verbose,
-                )
+                written = 0
+                gzip_fname = str(tmp_dir + hour.unique_filename)
 
-            raise RuntimeError("we should not be here")
+                # ParseFromString() seems to not release memory well, so manually handle
+                # writing to the gzip and cleaning up after ourselves
+
+                with gzip.open(gzip_fname, "w") as gzipfile:
+                    for extract in hour.extracts:
+                        feed = gtfs_realtime_pb2.FeedMessage()
+
+                        try:
+                            with open(
+                                os.path.join(dst_path_rt, extract.timestamped_filename), "rb"
+                            ) as f:
+                                feed.ParseFromString(f.read())
+                            parsed = json_format.MessageToDict(feed)
+                        except DecodeError as e:
+                            if verbose:
+                                typer.secho(
+                                    f"WARNING: DecodeError for {str(extract.path)}",
+                                    fg=typer.colors.YELLOW,
+                                )
+                            outcomes.append(
+                                RTFileProcessingOutcome(
+                                    step=RTProcessingStep.parse,
+                                    success=False,
+                                    exception=e,
+                                    extract=extract,
+                                )
+                            )
+                            continue
+
+                        if not parsed:
+                            msg = f"WARNING: no parsed dictionary found in {str(extract.path)}"
+                            if verbose:
+                                typer.secho(
+                                    msg,
+                                    fg=typer.colors.YELLOW,
+                                )
+                            outcomes.append(
+                                RTFileProcessingOutcome(
+                                    step=RTProcessingStep.parse,
+                                    success=False,
+                                    exception=ValueError(msg),
+                                    extract=extract,
+                                )
+                            )
+                            continue
+
+                        if "entity" not in parsed:
+                            msg = f"WARNING: no parsed entity found in {str(extract.path)}"
+                            if verbose:
+                                typer.secho(
+                                    msg,
+                                    fg=typer.colors.YELLOW,
+                                )
+                            outcomes.append(
+                                RTFileProcessingOutcome(
+                                    step=RTProcessingStep.parse,
+                                    success=True,
+                                    extract=extract,
+                                    header=parsed["header"],
+                                )
+                            )
+                            continue
+
+                        for record in parsed["entity"]:
+                            gzipfile.write(
+                                (
+                                    json.dumps(
+                                        {
+                                            "header": parsed["header"],
+                                            # back and forth so we use pydantic serialization
+                                            "metadata": json.loads(
+                                                RTParsingMetadata(
+                                                    extract_ts=extract.ts,
+                                                    extract_config=extract.config,
+                                                ).json()
+                                            ),
+                                            **copy.deepcopy(record),
+                                        }
+                                    )
+                                    + "\n"
+                                ).encode("utf-8")
+                            )
+                            written += 1
+                        outcomes.append(
+                            RTFileProcessingOutcome(
+                                step=RTProcessingStep.parse,
+                                success=True,
+                                extract=extract,
+                                aggregation=hour,
+                                header=parsed["header"],
+                            )
+                        )
+                        del parsed
+
+                if written:
+                    typer.secho(
+                        f"writing {written} lines to {hour.path}",
+                    )
+                    fs.put(gzip_fname, hour.path)
+                else:
+                    typer.secho(
+                        f"WARNING: no records at all for {hour.path}",
+                        fg=typer.colors.YELLOW,
+                    )
+
+    return outcomes
 
 class HourlyFeedQuery:
     def __init__(self, step: RTProcessingStep, feed_type: GTFSFeedType, files: List[GTFSRTFeedExtract], limit: int = 0, base64_url: Optional[str] = None):
@@ -761,6 +663,21 @@ class FeedStorage:
             verbose=True,
         )
         return HourlyFeedFiles(files, files_missing_metadata, files_invalid_metadata)
+
+def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        make_name_bq_safe(key): make_dict_bq_safe(value)
+        if isinstance(value, dict)
+        else value
+        for key, value in d.items()
+    }
+
+
+def make_pydantic_model_bq_safe(model: BaseModel) -> Dict[str, Any]:
+    """
+    This is ugly but I think it's the best option until https://github.com/pydantic/pydantic/issues/1409
+    """
+    return make_dict_bq_safe(json.loads(model.json()))
 
 @app.command()
 def main(
@@ -870,7 +787,6 @@ def main(
             ).encode(),
             exclude={"outcomes"},
         )
-
 
     assert (
         len(outcomes) == aggregated_feed.where_base64url(base64url).set_limit(limit).total()
