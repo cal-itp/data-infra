@@ -23,7 +23,7 @@ buffer_geometry_table AS (
 current_stops AS (
     SELECT
         pt_geom,
-        stop_id
+        _gtfs_key
     FROM dim_stops_latest
 ),
 
@@ -40,13 +40,13 @@ dim_stops_latest_with_shn_boolean AS (
 
 SELECT
     dim_stops_latest.*,
-    IF(stops_on_shn.stop_id IS NOT NULL, TRUE, FALSE) AS exists_in_dim_stops_latest
+    IF(stops_on_shn._gtfs_key IS NOT NULL, TRUE, FALSE) AS exists_in_dim_stops_latest
 FROM
     dim_stops_latest
 LEFT JOIN
     stops_on_shn
 ON
-    dim_stops_latest.stop_id = stops_on_shn.stop_id
+    dim_stops_latest._gtfs_key = stops_on_shn._gtfs_key
 )
 
 SELECT * FROM dim_stops_latest_with_shn_boolean
