@@ -444,6 +444,282 @@ class FeedStorage:
         return HourlyFeedFiles(files, files_missing_metadata, files_invalid_metadata)
 
 
+class ValidationProcessor:
+    def __init__(self, aggregation: RTHourlyAggregation, validator: RtValidator, verbose: bool = False):
+        self.aggregation = aggregation
+        self.validator = validator
+        self.verbose = verbose
+
+    def process(self, tmp_dir: tempfile.TemporaryDirectory, scope) -> List[RTFileProcessingOutcome]:
+        outcomes: List[RTFileProcessingOutcome] = []
+        fs = get_fs()
+
+        aggregation_extracts = AggregationExtracts(fs, tmp_dir, self.aggregation)
+        aggregation_extracts.download()
+        gtfs_zip = aggregation_extracts.download_most_recent_schedule()
+
+        if not gtfs_zip:
+            e = ScheduleDataNotFound(
+                f"no recent schedule data found for {self.aggregation.extracts[0].path}"
+            )
+
+            scope.fingerprint = [
+                type(e),
+                # convert back to url manually, I don't want to mess around with the hourly class
+                base64.urlsafe_b64decode(self.aggregation.base64_url.encode()).decode(),
+            ]
+            sentry_sdk.capture_exception(e, scope=scope)
+
+            outcomes = [
+                RTFileProcessingOutcome(
+                    step=self.aggregation.step,
+                    success=False,
+                    extract=extract,
+                    exception=e,
+                )
+                for extract in self.aggregation.extracts
+            ]
+
+        if not outcomes:
+            try:
+                self.validator.execute(gtfs_zip, aggregation_extracts.get_path())
+
+            # these are the only two types of errors we expect; let any others bubble up
+            except subprocess.CalledProcessError as e:
+                stderr = e.stderr.decode("utf-8")
+
+                fingerprint: List[Any] = [
+                    type(e),
+                    # convert back to url manually, I don't want to mess around with the hourly class
+                    base64.urlsafe_b64decode(self.aggregation.base64_url.encode()).decode(),
+                ]
+                fingerprint.append(e.returncode)
+
+                # we could also use a custom exception for this
+                if "Unexpected end of ZLIB input stream" in stderr:
+                    fingerprint.append("Unexpected end of ZLIB input stream")
+
+                scope.fingerprint = fingerprint
+
+                # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
+                scope.set_context(
+                    "Process", {"stderr": stderr[-2000:]}
+                )
+
+                sentry_sdk.capture_exception(e, scope=scope)
+
+                outcomes = [
+                    RTFileProcessingOutcome(
+                        step=self.aggregation.step,
+                        success=False,
+                        extract=extract,
+                        exception=e,
+                        process_stderr=stderr,
+                    )
+                ]
+
+        if not outcomes:
+            records_to_upload = []
+            hashed_results = aggregation_extracts.get_hashed_results()
+            for hash, extracts in aggregation_extracts.get_hashes().items():
+                try:
+                    records = hashed_results[hash]
+                except KeyError as e:
+                    if self.verbose:
+                        paths = ", ".join(e.path for e in extracts)
+                        typer.secho(
+                            f"WARNING: no results found for {paths}",
+                            fg=typer.colors.YELLOW,
+                        )
+
+                    for e in extracts:
+                        outcomes.append(
+                            RTFileProcessingOutcome(
+                                step=self.aggregation.step,
+                                success=False,
+                                extract=e,
+                                aggregation=aggregation,
+                            )
+                        )
+                    continue
+
+                records_to_upload.extend(
+                    [
+                        {
+                            "metadata": json.loads(
+                                RTValidationMetadata(
+                                    extract_ts=extracts[0].ts,
+                                    extract_config=extracts[0].config,
+                                    gtfs_validator_version=GTFS_RT_VALIDATOR_VERSION,
+                                ).json()
+                            ),
+                            **record,
+                        }
+                        for record in records
+                    ]
+                )
+
+                for e in extracts:
+                    outcomes.append(
+                        RTFileProcessingOutcome(
+                            step=self.aggregation.step,
+                            success=True,
+                            extract=e,
+                            aggregation=self.aggregation,
+                        )
+                    )
+
+            # BigQuery fails when trying to parse empty files, so shouldn't write them
+            if records_to_upload:
+                typer.secho(
+                    f"writing {len(records_to_upload)} lines to {self.aggregation.path}",
+                )
+                with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
+                    gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
+                    encoded = (
+                        r.json() if isinstance(r, BaseModel) else json.dumps(r) for r in records_to_upload
+                    )
+                    gzipfile.write("\n".join(encoded).encode("utf-8"))
+                    gzipfile.close()
+
+                fs.put(f.name, self.aggregation.path)
+            else:
+                typer.secho(
+                    f"WARNING: no records found for {self.aggregation.path}, skipping upload",
+                    fg=typer.colors.YELLOW,
+                )
+
+        return outcomes
+
+
+class ParseProcessor:
+    def __init__(self, aggregation: RTHourlyAggregation, verbose: bool = False):
+        self.aggregation = aggregation
+        self.verbose = verbose
+
+    def process(self, tmp_dir: tempfile.TemporaryDirectory, scope) -> List[RTFileProcessingOutcome]:
+        outcomes: List[RTFileProcessingOutcome] = []
+        fs = get_fs()
+        dst_path_rt = f"{tmp_dir}/rt_{self.aggregation.name_hash}/"
+        fs.get(
+            rpath=[
+                extract.path
+                for extract in self.aggregation.local_paths_to_extract(dst_path_rt).values()
+            ],
+            lpath=list(self.aggregation.local_paths_to_extract(dst_path_rt).keys()),
+        )
+
+        written = 0
+        gzip_fname = str(tmp_dir + self.aggregation.unique_filename)
+
+        # ParseFromString() seems to not release memory well, so manually handle
+        # writing to the gzip and cleaning up after ourselves
+
+        with gzip.open(gzip_fname, "w") as gzipfile:
+            for extract in self.aggregation.extracts:
+                feed = gtfs_realtime_pb2.FeedMessage()
+
+                try:
+                    with open(
+                        os.path.join(dst_path_rt, extract.timestamped_filename), "rb"
+                    ) as f:
+                        feed.ParseFromString(f.read())
+                    parsed = json_format.MessageToDict(feed)
+                except DecodeError as e:
+                    if verbose:
+                        typer.secho(
+                            f"WARNING: DecodeError for {str(extract.path)}",
+                            fg=typer.colors.YELLOW,
+                        )
+                    outcomes.append(
+                        RTFileProcessingOutcome(
+                            step=RTProcessingStep.parse,
+                            success=False,
+                            exception=e,
+                            extract=extract,
+                        )
+                    )
+                    continue
+
+                if not parsed:
+                    msg = f"WARNING: no parsed dictionary found in {str(extract.path)}"
+                    if self.verbose:
+                        typer.secho(
+                            msg,
+                            fg=typer.colors.YELLOW,
+                        )
+                    outcomes.append(
+                        RTFileProcessingOutcome(
+                            step=RTProcessingStep.parse,
+                            success=False,
+                            exception=ValueError(msg),
+                            extract=extract,
+                        )
+                    )
+                    continue
+
+                if "entity" not in parsed:
+                    msg = f"WARNING: no parsed entity found in {str(extract.path)}"
+                    if self.verbose:
+                        typer.secho(
+                            msg,
+                            fg=typer.colors.YELLOW,
+                        )
+                    outcomes.append(
+                        RTFileProcessingOutcome(
+                            step=RTProcessingStep.parse,
+                            success=True,
+                            extract=extract,
+                            header=parsed["header"],
+                        )
+                    )
+                    continue
+
+                for record in parsed["entity"]:
+                    gzipfile.write(
+                        (
+                            json.dumps(
+                                {
+                                    "header": parsed["header"],
+                                    # back and forth so we use pydantic serialization
+                                    "metadata": json.loads(
+                                        RTParsingMetadata(
+                                            extract_ts=extract.ts,
+                                            extract_config=extract.config,
+                                        ).json()
+                                    ),
+                                    **copy.deepcopy(record),
+                                }
+                            )
+                            + "\n"
+                        ).encode("utf-8")
+                    )
+                    written += 1
+                outcomes.append(
+                    RTFileProcessingOutcome(
+                        step=RTProcessingStep.parse,
+                        success=True,
+                        extract=extract,
+                        aggregation=self.aggregation,
+                        header=parsed["header"],
+                    )
+                )
+                del parsed
+
+        if written:
+            typer.secho(
+                f"writing {written} lines to {self.aggregation.path}",
+            )
+            fs.put(gzip_fname, self.aggregation.path)
+        else:
+            typer.secho(
+                f"WARNING: no records at all for {self.aggregation.path}",
+                fg=typer.colors.YELLOW,
+            )
+
+        return outcomes
+
+
 # Originally this whole function was retried, but tmpdir flakiness will throw
 # exceptions in backoff's context, which ruins things
 def parse_and_validate(
@@ -475,261 +751,10 @@ def parse_and_validate(
                 ]
 
             if aggregation.step == RTProcessingStep.validate:
-                fs = get_fs()
-
-                aggregation_extracts = AggregationExtracts(fs, tmp_dir, aggregation)
-                aggregation_extracts.download()
-                gtfs_zip = aggregation_extracts.download_most_recent_schedule()
-
-                if not gtfs_zip:
-                    e = ScheduleDataNotFound(
-                        f"no recent schedule data found for {aggregation.extracts[0].path}"
-                    )
-
-                    scope.fingerprint = [
-                        type(e),
-                        # convert back to url manually, I don't want to mess around with the hourly class
-                        base64.urlsafe_b64decode(aggregation.base64_url.encode()).decode(),
-                    ]
-                    sentry_sdk.capture_exception(e, scope=scope)
-
-                    outcomes = [
-                        RTFileProcessingOutcome(
-                            step=aggregation.step,
-                            success=False,
-                            extract=extract,
-                            exception=e,
-                        )
-                        for extract in aggregation.extracts
-                    ]
-
-                if not outcomes:
-                    try:
-                        validator.execute(gtfs_zip, aggregation_extracts.get_path())
-
-                    # these are the only two types of errors we expect; let any others bubble up
-                    except subprocess.CalledProcessError as e:
-                        stderr = e.stderr.decode("utf-8")
-
-                        fingerprint: List[Any] = [
-                            type(e),
-                            # convert back to url manually, I don't want to mess around with the hourly class
-                            base64.urlsafe_b64decode(aggregation.base64_url.encode()).decode(),
-                        ]
-                        fingerprint.append(e.returncode)
-
-                        # we could also use a custom exception for this
-                        if "Unexpected end of ZLIB input stream" in stderr:
-                            fingerprint.append("Unexpected end of ZLIB input stream")
-
-                        scope.fingerprint = fingerprint
-
-                        # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
-                        scope.set_context(
-                            "Process", {"stderr": stderr[-2000:]}
-                        )
-
-                        sentry_sdk.capture_exception(e, scope=scope)
-
-                        outcomes = [
-                            RTFileProcessingOutcome(
-                                step=aggregation.step,
-                                success=False,
-                                extract=extract,
-                                exception=e,
-                                process_stderr=stderr,
-                            )
-                        ]
-
-                if not outcomes:
-                    records_to_upload = []
-                    hashed_results = aggregation_extracts.get_hashed_results()
-                    for hash, extracts in aggregation_extracts.get_hashes().items():
-                        try:
-                            records = hashed_results[hash]
-                        except KeyError as e:
-                            if verbose:
-                                paths = ", ".join(e.path for e in extracts)
-                                typer.secho(
-                                    f"WARNING: no results found for {paths}",
-                                    fg=typer.colors.YELLOW,
-                                )
-
-                            for e in extracts:
-                                outcomes.append(
-                                    RTFileProcessingOutcome(
-                                        step=aggregation.step,
-                                        success=False,
-                                        extract=e,
-                                        aggregation=aggregation,
-                                    )
-                                )
-                            continue
-
-                        records_to_upload.extend(
-                            [
-                                {
-                                    "metadata": json.loads(
-                                        RTValidationMetadata(
-                                            extract_ts=extracts[0].ts,
-                                            extract_config=extracts[0].config,
-                                            gtfs_validator_version=GTFS_RT_VALIDATOR_VERSION,
-                                        ).json()
-                                    ),
-                                    **record,
-                                }
-                                for record in records
-                            ]
-                        )
-
-                        for e in extracts:
-                            outcomes.append(
-                                RTFileProcessingOutcome(
-                                    step=aggregation.step,
-                                    success=True,
-                                    extract=e,
-                                    aggregation=aggregation,
-                                )
-                            )
-
-                    # BigQuery fails when trying to parse empty files, so shouldn't write them
-                    if records_to_upload:
-                        typer.secho(
-                            f"writing {len(records_to_upload)} lines to {aggregation.path}",
-                        )
-                        with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
-                            gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
-                            encoded = (
-                                r.json() if isinstance(r, BaseModel) else json.dumps(r) for r in records_to_upload
-                            )
-                            gzipfile.write("\n".join(encoded).encode("utf-8"))
-                            gzipfile.close()
-
-                        fs.put(f.name, aggregation.path)
-                    else:
-                        typer.secho(
-                            f"WARNING: no records found for {aggregation.path}, skipping upload",
-                            fg=typer.colors.YELLOW,
-                        )
+                outcomes = ValidationProcessor(aggregation, validator, verbose).process(tmp_dir, scope)
 
             if aggregation.step == RTProcessingStep.parse:
-                fs = get_fs()
-                dst_path_rt = f"{tmp_dir}/rt_{aggregation.name_hash}/"
-                fs.get(
-                    rpath=[
-                        extract.path
-                        for extract in aggregation.local_paths_to_extract(dst_path_rt).values()
-                    ],
-                    lpath=list(aggregation.local_paths_to_extract(dst_path_rt).keys()),
-                )
-
-                written = 0
-                gzip_fname = str(tmp_dir + aggregation.unique_filename)
-
-                # ParseFromString() seems to not release memory well, so manually handle
-                # writing to the gzip and cleaning up after ourselves
-
-                with gzip.open(gzip_fname, "w") as gzipfile:
-                    for extract in aggregation.extracts:
-                        feed = gtfs_realtime_pb2.FeedMessage()
-
-                        try:
-                            with open(
-                                os.path.join(dst_path_rt, extract.timestamped_filename), "rb"
-                            ) as f:
-                                feed.ParseFromString(f.read())
-                            parsed = json_format.MessageToDict(feed)
-                        except DecodeError as e:
-                            if verbose:
-                                typer.secho(
-                                    f"WARNING: DecodeError for {str(extract.path)}",
-                                    fg=typer.colors.YELLOW,
-                                )
-                            outcomes.append(
-                                RTFileProcessingOutcome(
-                                    step=RTProcessingStep.parse,
-                                    success=False,
-                                    exception=e,
-                                    extract=extract,
-                                )
-                            )
-                            continue
-
-                        if not parsed:
-                            msg = f"WARNING: no parsed dictionary found in {str(extract.path)}"
-                            if verbose:
-                                typer.secho(
-                                    msg,
-                                    fg=typer.colors.YELLOW,
-                                )
-                            outcomes.append(
-                                RTFileProcessingOutcome(
-                                    step=RTProcessingStep.parse,
-                                    success=False,
-                                    exception=ValueError(msg),
-                                    extract=extract,
-                                )
-                            )
-                            continue
-
-                        if "entity" not in parsed:
-                            msg = f"WARNING: no parsed entity found in {str(extract.path)}"
-                            if verbose:
-                                typer.secho(
-                                    msg,
-                                    fg=typer.colors.YELLOW,
-                                )
-                            outcomes.append(
-                                RTFileProcessingOutcome(
-                                    step=RTProcessingStep.parse,
-                                    success=True,
-                                    extract=extract,
-                                    header=parsed["header"],
-                                )
-                            )
-                            continue
-
-                        for record in parsed["entity"]:
-                            gzipfile.write(
-                                (
-                                    json.dumps(
-                                        {
-                                            "header": parsed["header"],
-                                            # back and forth so we use pydantic serialization
-                                            "metadata": json.loads(
-                                                RTParsingMetadata(
-                                                    extract_ts=extract.ts,
-                                                    extract_config=extract.config,
-                                                ).json()
-                                            ),
-                                            **copy.deepcopy(record),
-                                        }
-                                    )
-                                    + "\n"
-                                ).encode("utf-8")
-                            )
-                            written += 1
-                        outcomes.append(
-                            RTFileProcessingOutcome(
-                                step=RTProcessingStep.parse,
-                                success=True,
-                                extract=extract,
-                                aggregation=aggregation,
-                                header=parsed["header"],
-                            )
-                        )
-                        del parsed
-
-                if written:
-                    typer.secho(
-                        f"writing {written} lines to {aggregation.path}",
-                    )
-                    fs.put(gzip_fname, aggregation.path)
-                else:
-                    typer.secho(
-                        f"WARNING: no records at all for {aggregation.path}",
-                        fg=typer.colors.YELLOW,
-                    )
+                outcomes = ParseProcessor(aggregation, verbose).process(tmp_dir, scope)
 
     return outcomes
 
