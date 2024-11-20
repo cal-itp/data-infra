@@ -297,6 +297,32 @@ class MostRecentSchedule:
                 continue
 
 
+class AggregationExtract:
+    def __init__(self, path: str, extract: GTFSRTFeedExtract):
+        self.path = path
+        self.extract = extract
+
+    def get_local_path(self) -> str:
+        return os.path.join(self.path, self.extract.timestamped_filename)
+
+    def get_results_path(self) -> str:
+        return os.path.join(self.path, f"{self.extract.timestamped_filename}.results.json")
+
+    def hash(self) -> str:
+        with open(os.path.join(self.path, self.extract.timestamped_filename), "rb") as f:
+            file_hash = hashlib.md5()
+            while chunk := f.read(8192):
+                file_hash.update(chunk)
+        return file_hash.digest()
+
+    def get_results(self) -> Dict[str, str]:
+        with open(self.get_results_path()) as f:
+            return json.load(f)
+
+    def has_results(self) -> bool:
+        return os.path.exists(self.get_results_path())
+
+
 class AggregationExtracts:
     def __init__(self, fs: gcsfs.GCSFileSystem, path: str, aggregation: RTHourlyAggregation):
         self.fs = fs
@@ -306,19 +332,116 @@ class AggregationExtracts:
     def get_path(self):
         return f"{self.path}/rt_{self.aggregation.name_hash}/"
 
+    def get_extracts(self) -> List[AggregationExtract]:
+        return [AggregationExtract(self.get_path(), e) for e in self.aggregation.extracts]
+
+    def get_local_paths(self) -> Dict[str, GTFSRTFeedExtract]:
+        return {e.get_local_path(): e.extract for e in self.get_extracts()}
+
+    def get_results_paths(self) -> Dict[str, GTFSRTFeedExtract]:
+        return {e.get_results_path(): e.extract for e in self.get_extracts()}
+
+    def get_hashed_results(self) -> Dict[str, List[Dict[str, str]]]:
+        hashed: Dict[str, str] = {}
+        for e in self.get_extracts():
+            if e.has_results():
+                hashed[e.hash()] = e.get_results()
+        return hashed
+
+    def get_hashes(self) -> Dict[str, List[GTFSRTFeedExtract]]:
+        hashed: Dict[str, List[GTFSRTFeedExtract]] = defaultdict(list)
+        for e in self.get_extracts():
+            hashed[e.hash()].append(e.extract)
+        return hashed
+
     def download(self):
         self.fs.get(
             rpath=[
                 extract.path
-                for extract in self.aggregation.local_paths_to_extract(self.get_path()).values()
+                for extract in self.get_local_paths().values()
             ],
-            lpath=list(self.aggregation.local_paths_to_extract(self.get_path()).keys()),
+            lpath=list(self.get_local_paths().keys()),
         )
 
     def download_most_recent_schedule(self) -> str:
         first_extract = self.aggregation.extracts[0]
         schedule = MostRecentSchedule(self.fs, self.path, first_extract.config.base64_validation_url)
         return schedule.download(first_extract.dt)
+
+
+class HourlyFeedQuery:
+    def __init__(self, step: RTProcessingStep, feed_type: GTFSFeedType, files: List[GTFSRTFeedExtract], limit: int = 0, base64_url: Optional[str] = None):
+        self.step = step
+        self.feed_type = feed_type
+        self.files = files
+        self.limit = limit
+        self.base64_url = base64_url
+
+    def set_limit(self, limit: int):
+        return HourlyFeedQuery(self.step, self.feed_type, self.files, limit, self.base64_url)
+
+    def where_base64url(self, base64_url: str):
+        return HourlyFeedQuery(self.step, self.feed_type, self.files, self.limit, base64_url)
+
+    def get_aggregates(self) -> Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]]:
+        aggregates: Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]] = defaultdict(
+            list
+        )
+
+        for file in self.files:
+            if self.base64_url is None or file.base64_url == self.base64_url:
+                aggregates[(file.hour, file.base64_url)].append(file)
+
+        if self.limit > 0:
+            aggregates = dict(islice(aggregates.items(), self.limit))
+
+        return [
+            RTHourlyAggregation(
+                step=self.step,
+                filename=f"{self.feed_type}{JSONL_GZIP_EXTENSION}",
+                first_extract=entries[0],
+                extracts=entries,
+            )
+            for (hour, base64_url), entries in aggregates.items()
+        ]
+
+    def total(self) -> int:
+        return sum(len(agg.extracts) for agg in self.get_aggregates())
+
+
+class HourlyFeedFiles:
+    def __init__(self, files: List[GTFSRTFeedExtract], files_missing_metadata: List[Blob], files_invalid_metadata: List[Blob]):
+        self.files = files
+        self.files_missing_metadata = files_missing_metadata
+        self.files_invalid_metadata = files_invalid_metadata
+
+    def total(self) -> int:
+        return len(self.files) + len(self.files_missing_metadata) + len(self.files_invalid_metadata)
+
+    def valid(self) -> bool:
+        return not self.files or len(self.files) / self.total() > 0.99
+
+    def get_query(self, step: RTProcessingStep, feed_type: GTFSFeedType) -> HourlyFeedQuery:
+        return HourlyFeedQuery(step, feed_type, self.files)
+
+
+class FeedStorage:
+    def __init__(self, feed_type: GTFSFeedType):
+        self.feed_type = feed_type
+
+    @lru_cache
+    def get_hour(self, hour: datetime.datetime) -> HourlyFeedFiles:
+        pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
+        files, files_missing_metadata, files_invalid_metadata = fetch_all_in_partition(
+            cls=GTFSRTFeedExtract,
+            partitions={
+                "dt": pendulum_hour.date(),
+                "hour": pendulum_hour,
+            },
+            table=self.feed_type,
+            verbose=True,
+        )
+        return HourlyFeedFiles(files, files_missing_metadata, files_invalid_metadata)
 
 
 # Originally this whole function was retried, but tmpdir flakiness will throw
@@ -420,26 +543,27 @@ def parse_and_validate(
 
                 if not outcomes:
                     records_to_upload = []
-                    for local_path, extract in aggregation.local_paths_to_extract(aggregation_extracts.get_path()).items():
-                        results_path = local_path + ".results.json"
+                    hashed_results = aggregation_extracts.get_hashed_results()
+                    for hash, extracts in aggregation_extracts.get_hashes().items():
                         try:
-                            with open(results_path) as f:
-                                records = json.load(f)
-                        except FileNotFoundError as e:
-                            # This exception was previously generating the error "[Errno 2] No such file or directory"
+                            records = hashed_results[hash]
+                        except KeyError as e:
                             if verbose:
+                                paths = ", ".join(e.path for e in extracts)
                                 typer.secho(
-                                    f"WARNING: no validation output file found in {results_path} for {extract.path}",
+                                    f"WARNING: no results found for {paths}",
                                     fg=typer.colors.YELLOW,
                                 )
-                            outcomes.append(
-                                RTFileProcessingOutcome(
-                                    step=aggregation.step,
-                                    success=False,
-                                    exception=e,
-                                    extract=extract,
+
+                            for e in extracts:
+                                outcomes.append(
+                                    RTFileProcessingOutcome(
+                                        step=aggregation.step,
+                                        success=False,
+                                        extract=e,
+                                        aggregation=aggregation,
+                                    )
                                 )
-                            )
                             continue
 
                         records_to_upload.extend(
@@ -447,8 +571,8 @@ def parse_and_validate(
                                 {
                                     "metadata": json.loads(
                                         RTValidationMetadata(
-                                            extract_ts=extract.ts,
-                                            extract_config=extract.config,
+                                            extract_ts=extracts[0].ts,
+                                            extract_config=extracts[0].config,
                                             gtfs_validator_version=GTFS_RT_VALIDATOR_VERSION,
                                         ).json()
                                     ),
@@ -458,14 +582,15 @@ def parse_and_validate(
                             ]
                         )
 
-                        outcomes.append(
-                            RTFileProcessingOutcome(
-                                step=aggregation.step,
-                                success=True,
-                                extract=extract,
-                                aggregation=aggregation,
+                        for e in extracts:
+                            outcomes.append(
+                                RTFileProcessingOutcome(
+                                    step=aggregation.step,
+                                    success=True,
+                                    extract=e,
+                                    aggregation=aggregation,
+                                )
                             )
-                        )
 
                     # BigQuery fails when trying to parse empty files, so shouldn't write them
                     if records_to_upload:
@@ -608,79 +733,6 @@ def parse_and_validate(
 
     return outcomes
 
-class HourlyFeedQuery:
-    def __init__(self, step: RTProcessingStep, feed_type: GTFSFeedType, files: List[GTFSRTFeedExtract], limit: int = 0, base64_url: Optional[str] = None):
-        self.step = step
-        self.feed_type = feed_type
-        self.files = files
-        self.limit = limit
-        self.base64_url = base64_url
-
-    def set_limit(self, limit: int):
-        return HourlyFeedQuery(self.step, self.feed_type, self.files, limit, self.base64_url)
-
-    def where_base64url(self, base64_url: str):
-        return HourlyFeedQuery(self.step, self.feed_type, self.files, self.limit, base64_url)
-
-    def get_aggregates(self) -> Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]]:
-        aggregates: Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]] = defaultdict(
-            list
-        )
-
-        for file in self.files:
-            if self.base64_url is None or file.base64_url == self.base64_url:
-                aggregates[(file.hour, file.base64_url)].append(file)
-
-        if self.limit > 0:
-            aggregates = dict(islice(aggregates.items(), self.limit))
-
-        return [
-            RTHourlyAggregation(
-                step=self.step,
-                filename=f"{self.feed_type}{JSONL_GZIP_EXTENSION}",
-                first_extract=entries[0],
-                extracts=entries,
-            )
-            for (hour, base64_url), entries in aggregates.items()
-        ]
-
-    def total(self) -> int:
-        return sum(len(agg.extracts) for agg in self.get_aggregates())
-
-
-class HourlyFeedFiles:
-    def __init__(self, files: List[GTFSRTFeedExtract], files_missing_metadata: List[Blob], files_invalid_metadata: List[Blob]):
-        self.files = files
-        self.files_missing_metadata = files_missing_metadata
-        self.files_invalid_metadata = files_invalid_metadata
-
-    def total(self) -> int:
-        return len(self.files) + len(self.files_missing_metadata) + len(self.files_invalid_metadata)
-
-    def valid(self) -> bool:
-        return not self.files or len(self.files) / self.total() > 0.99
-
-    def get_query(self, step: RTProcessingStep, feed_type: GTFSFeedType) -> HourlyFeedQuery:
-        return HourlyFeedQuery(step, feed_type, self.files)
-
-
-class FeedStorage:
-    def __init__(self, feed_type: GTFSFeedType):
-        self.feed_type = feed_type
-
-    @lru_cache
-    def get_hour(self, hour: datetime.datetime) -> HourlyFeedFiles:
-        pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
-        files, files_missing_metadata, files_invalid_metadata = fetch_all_in_partition(
-            cls=GTFSRTFeedExtract,
-            partitions={
-                "dt": pendulum_hour.date(),
-                "hour": pendulum_hour,
-            },
-            table=self.feed_type,
-            verbose=True,
-        )
-        return HourlyFeedFiles(files, files_missing_metadata, files_invalid_metadata)
 
 def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
     return {
@@ -696,6 +748,7 @@ def make_pydantic_model_bq_safe(model: BaseModel) -> Dict[str, Any]:
     This is ugly but I think it's the best option until https://github.com/pydantic/pydantic/issues/1409
     """
     return make_dict_bq_safe(json.loads(model.json()))
+
 
 @app.command()
 def main(

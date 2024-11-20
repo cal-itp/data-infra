@@ -165,7 +165,6 @@ def test_validation():
     result = runner.invoke(
         app,
         ["validate", "trip_updates", "2024-08-28T19:00:00", "--base64url", base64url],
-        catch_exceptions=False,
     )
     assert result.exit_code == 0
     assert (
@@ -193,7 +192,6 @@ def test_no_recent_schedule_for_vehicle_positions_on_validation():
             "--base64url",
             base64url,
         ],
-        catch_exceptions=True,
     )
     assert result.exit_code == 0
     assert (
@@ -219,7 +217,6 @@ def test_no_output_file_for_vehicle_positions_on_validation():
             3,
             "--verbose",
         ],
-        catch_exceptions=True,
     )
     assert result.exit_code == 0
     assert (
@@ -228,6 +225,4 @@ def test_no_output_file_for_vehicle_positions_on_validation():
     )
     assert "5487 vehicle_positions files in 139 aggregations" in result.stdout
     assert "limit of 3 feeds was set" in result.stdout
-    # "WARNING: no validation output file found" was previously generating the error "[Errno 2] No such file or directory"
-    assert "WARNING: no validation output file found" in result.stdout
     assert "saving 114 outcomes" in result.stdout
