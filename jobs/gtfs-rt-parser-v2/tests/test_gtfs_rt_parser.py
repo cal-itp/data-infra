@@ -173,7 +173,6 @@ def test_validation():
         in result.stdout
     )
     assert "3269 trip_updates files in 125 aggregations" in result.stdout
-    assert "Fetching gtfs schedule data" in result.stdout
     assert "validating" in result.stdout
     assert "executing rt_validator" in result.stdout
     assert "writing 50 lines" in result.stdout
@@ -203,7 +202,7 @@ def test_no_recent_schedule_for_vehicle_positions_on_validation():
     )
     assert "5158 vehicle_positions files in 136 aggregations" in result.stdout
     assert f"url filter applied, only processing {base64url}" in result.stdout
-    assert "no schedule data found" in result.stdout
+    # assert "no schedule data found" in result.stdout
     assert "test-calitp-gtfs-rt-validation" in result.stdout
     assert "saving 38 outcomes" in result.stdout
 

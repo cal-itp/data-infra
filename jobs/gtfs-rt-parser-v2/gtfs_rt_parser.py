@@ -276,6 +276,51 @@ class ScheduleStorage:
         return DailyScheduleExtracts(extract_dict)
 
 
+class MostRecentSchedule:
+    def __init__(self, fs: gcsfs.GCSFileSystem, path: str, base64_validation_url: str):
+        self.fs = fs
+        self.path = path
+        self.base64_validation_url = base64_validation_url
+
+    def download(self, date: datetime.datetime) -> str:
+        for day in reversed(list(date - date.subtract(days=7))):
+            try:
+                schedule_extract = ScheduleStorage().get_day(day).get_url_schedule(self.base64_validation_url)
+            except KeyError:
+                continue
+
+            try:
+                gtfs_zip = "/".join([self.path, schedule_extract.filename])
+                self.fs.get(schedule_extract.path, gtfs_zip)
+                return gtfs_zip
+            except FileNotFoundError:
+                continue
+
+
+class AggregationExtracts:
+    def __init__(self, fs: gcsfs.GCSFileSystem, path: str, aggregation: RTHourlyAggregation):
+        self.fs = fs
+        self.path = path
+        self.aggregation = aggregation
+
+    def get_path(self):
+        return f"{self.path}/rt_{self.aggregation.name_hash}/"
+
+    def download(self):
+        self.fs.get(
+            rpath=[
+                extract.path
+                for extract in self.aggregation.local_paths_to_extract(self.get_path()).values()
+            ],
+            lpath=list(self.aggregation.local_paths_to_extract(self.get_path()).keys()),
+        )
+
+    def download_most_recent_schedule(self) -> str:
+        first_extract = self.aggregation.extracts[0]
+        schedule = MostRecentSchedule(self.fs, self.path, first_extract.config.base64_validation_url)
+        return schedule.download(first_extract.dt)
+
+
 # Originally this whole function was retried, but tmpdir flakiness will throw
 # exceptions in backoff's context, which ruins things
 def parse_and_validate(
@@ -283,6 +328,7 @@ def parse_and_validate(
     jar_path: Path,
     verbose: bool = False,
 ) -> List[RTFileProcessingOutcome]:
+    validator = RtValidator(jar_path)
     outcomes = []
     with tempfile.TemporaryDirectory() as tmp_dir:
         with sentry_sdk.push_scope() as scope:
@@ -307,40 +353,14 @@ def parse_and_validate(
 
             if aggregation.step == RTProcessingStep.validate:
                 fs = get_fs()
-                first_extract = aggregation.extracts[0]
-                extract_day = first_extract.dt
-                # Fall back to most recent available schedule within 7 days
-                for target_date in reversed(
-                    list(extract_day - extract_day.subtract(days=7))
-                ):
-                    try:
-                        schedule_extract = ScheduleStorage().get_day(target_date).get_url_schedule(first_extract.config.base64_validation_url)
-                    except KeyError:
-                        typer.secho(
-                            f"no schedule data found for {first_extract.path} and day {target_date}"
-                        )
-                        continue
 
-                    scope.set_context(
-                        "Schedule Extract", json.loads(schedule_extract.json())
-                    )
+                aggregation_extracts = AggregationExtracts(fs, tmp_dir, aggregation)
+                aggregation_extracts.download()
+                gtfs_zip = aggregation_extracts.download_most_recent_schedule()
 
-                    gtfs_zip = "/".join([tmp_dir, schedule_extract.filename])
-                    typer.secho(
-                        f"Fetching gtfs schedule data from {schedule_extract.path} to {gtfs_zip}",
-                    )
-
-                    try:
-                        fs.get(schedule_extract.path, gtfs_zip)
-
-                        break
-                    except FileNotFoundError:
-                        typer.secho(
-                            f"no schedule data found for {first_extract.path} and day {target_date}"
-                        )
-                else:
+                if not gtfs_zip:
                     e = ScheduleDataNotFound(
-                        f"no recent schedule data found for {first_extract.path}"
+                        f"no recent schedule data found for {aggregation.extracts[0].path}"
                     )
 
                     scope.fingerprint = [
@@ -360,22 +380,13 @@ def parse_and_validate(
                         for extract in aggregation.extracts
                     ]
 
-                dst_path_rt = f"{tmp_dir}/rt_{aggregation.name_hash}/"
-                fs.get(
-                    rpath=[
-                        extract.path
-                        for extract in aggregation.local_paths_to_extract(dst_path_rt).values()
-                    ],
-                    lpath=list(aggregation.local_paths_to_extract(dst_path_rt).keys()),
-                )
-
                 if not outcomes:
                     try:
-                        RtValidator(jar_path).execute(gtfs_zip, dst_path_rt)
+                        validator.execute(gtfs_zip, aggregation_extracts.get_path())
 
                     # these are the only two types of errors we expect; let any others bubble up
                     except subprocess.CalledProcessError as e:
-                        stderr = None
+                        stderr = e.stderr.decode("utf-8")
 
                         fingerprint: List[Any] = [
                             type(e),
@@ -383,18 +394,18 @@ def parse_and_validate(
                             base64.urlsafe_b64decode(aggregation.base64_url.encode()).decode(),
                         ]
                         fingerprint.append(e.returncode)
-                        stderr = e.stderr.decode("utf-8")
-
-                        # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
-                        scope.set_context(
-                            "Process", {"stderr": e.stderr.decode("utf-8")[-2000:]}
-                        )
 
                         # we could also use a custom exception for this
                         if "Unexpected end of ZLIB input stream" in stderr:
                             fingerprint.append("Unexpected end of ZLIB input stream")
 
                         scope.fingerprint = fingerprint
+
+                        # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
+                        scope.set_context(
+                            "Process", {"stderr": stderr[-2000:]}
+                        )
+
                         sentry_sdk.capture_exception(e, scope=scope)
 
                         outcomes = [
@@ -409,7 +420,7 @@ def parse_and_validate(
 
                 if not outcomes:
                     records_to_upload = []
-                    for local_path, extract in aggregation.local_paths_to_extract(dst_path_rt).items():
+                    for local_path, extract in aggregation.local_paths_to_extract(aggregation_extracts.get_path()).items():
                         results_path = local_path + ".results.json"
                         try:
                             with open(results_path) as f:
