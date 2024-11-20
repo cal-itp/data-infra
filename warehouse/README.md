@@ -27,14 +27,14 @@ are already configured/installed.
 
 3. Execute `poetry install` to create a virtual environment and install requirements.
 
-    > [!NOTE]  
-    > If you run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
-    >
-    > ```bash
-    > export CFLAGS="-I $(brew --prefix graphviz)/include"
-    > export LDFLAGS="-L $(brew --prefix graphviz)/lib"
-    > poetry install
-    > ```
+   > [!NOTE]
+   > If you run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
+   >
+   > ```bash
+   > export CFLAGS="-I $(brew --prefix graphviz)/include"
+   > export LDFLAGS="-L $(brew --prefix graphviz)/lib"
+   > poetry install
+   > ```
 
 4. Execute `poetry run dbt deps` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`).
 
@@ -59,15 +59,15 @@ are already configured/installed.
 
    See [the dbt docs on profiles.yml](https://docs.getdbt.com/dbt-cli/configure-your-profile) for more background on this file.
 
-    > [!NOTE]  
-    > This default profile template will set a maximum bytes billed of 2 TB; no models should fail with the default lookbacks in our development environment, even with a full refresh. You can override this limit during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
-    >
-    > [!WARNING]  
-    > If you receive a warning similar to the following, do **NOT** overwrite the file. This is a sign that you do not have a `DBT_PROFILES_DIR` variable available in your environment and need to address that first (see step 5).
-    >
-    > ```text
-    > The profile calitp_warehouse already exists in /data-infra/warehouse/profiles.yml. Continue and overwrite it? [y/N]:
-    > ```
+   > [!NOTE]
+   > This default profile template will set a maximum bytes billed of 2 TB; no models should fail with the default lookbacks in our development environment, even with a full refresh. You can override this limit during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
+   >
+   > [!WARNING]
+   > If you receive a warning similar to the following, do **NOT** overwrite the file. This is a sign that you do not have a `DBT_PROFILES_DIR` variable available in your environment and need to address that first (see step 5).
+   >
+   > ```text
+   > The profile calitp_warehouse already exists in /data-infra/warehouse/profiles.yml. Continue and overwrite it? [y/N]:
+   > ```
 
 7. Check whether `~/.dbt/profiles.yml` was successfully created, e.g. `cat ~/.dbt/profiles.yml`. If you encountered an error, you may create it by hand and fill it with the same content - this will point your models at BigQuery datasets (schemas) in the `cal-itp-data-infra-staging` project that are prefixed with your name, where operations on them will not impact production data:
 
@@ -147,10 +147,10 @@ Once you have performed the setup above, you are good to go run
    2. You will need to re-run seeds if new seeds are added, or existing ones are changed.
 2. `poetry run dbt run`
    1. Wll run all the models, i.e. execute SQL in the warehouse.
-   2. In the future, you can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) (via the `-s` or `--select` flags) to run only a subset of models, otherwise this will run *all* the tables.
+   2. In the future, you can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) (via the `-s` or `--select` flags) to run only a subset of models, otherwise this will run _all_ the tables.
    3. By default, your very first `run` is a [full refresh](https://docs.getdbt.com/reference/commands/run#refresh-incremental-models) but you'll need to pass the `--full-refresh` flag in the future if you want to change the schema of incremental tables, or "backfill" existing rows with new logic.
 
-> [!NOTE]  
+> [!NOTE]
 > In general, it's a good idea to run `seed` and `run --full-refresh` if you think your local environment is substantially outdated (for example, if you haven't worked on dbt models in a few weeks but want to create or modify a model). We have macros in the project that prevent a non-production "full refresh" from actually processing all possible data.
 
 Some additional helpful commands:
@@ -177,10 +177,10 @@ If this is your first time using the terminal, we recommend reading "[Learning t
 
 You can enable [displaying hidden folders/files in macOS Finder](https://www.macworld.com/article/671158/how-to-show-hidden-files-on-a-mac.html) but generally, we recommend using the terminal when possible for editing these files. Generally, `nano ~/.dbt/profiles.yml` will be the easiest method for editing your personal profiles file. `nano` is a simple terminal-based text editor; you use the arrows keys to navigate and the hotkeys displayed at the bottom to save and exit. Reading an [online tutorial for using `nano`](https://www.howtogeek.com/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/) may be useful if you haven't used a terminal-based editor before.
 
-> [!NOTE]  
+> [!NOTE]
 > These instructions assume you are on macOS, but are largely similar for other operating systems. Most \*nix OSes will have a package manager that you should use instead of Homebrew.
 >
-> [!NOTE]  
+> [!NOTE]
 > If you get `Operation not permitted` when attempting to use the terminal, you may need to [fix your terminal permissions](https://osxdaily.com/2018/10/09/fix-operation-not-permitted-terminal-error-macos/)
 
 ### Install Homebrew (if you haven't)
@@ -302,6 +302,45 @@ In addition to the steps specified in the dbt docs, [Google Private Access was e
 and the cal-itp-data-infra-staging project's default service account (`473674835135-compute@developer.gserviceaccount.com`) was granted access to the production project
 since the buckets for compiled Python models (`gs://calitp-dbt-python-models` and `gs://test-calitp-dbt-python-models`)
 as well as external tables exist in the production project.
+
+## Run with VS Code Dev Containers
+
+This repository comes with a [Dev Containers](https://containers.dev/) configuration that makes it possible to run everything
+within VS Code with minimal dependencies, from any operating system.
+
+1. Ensure you have Docker and Docker Compose installed locally
+1. Ensure you have the Dev Containers VS Code extension installed: `ms-vscode-remote.remote-containers`
+1. If you have never run the DBT project before, create the following directories locally:
+
+   ```console
+   mkdir ~/.dbt
+   mkdir -p ~/.config/gcloud
+   ```
+
+1. Open this repository in VS Code
+1. When prompted, choose `Reopen in Container` or use the Command Palette: `Ctrl/Cmd` + `Shift` + `P` and type `Dev Containers`
+1. If you have never run the DBT project before, once the devcontainer has built and opens, you will be guided through the
+   initialization process for DBT and Google Cloud CLI.
+
+You can also run any DBT command from your local machine via Docker Compose.
+
+Change into the `.devcontainer/` directory:
+
+```console
+cd .devcontainer/
+```
+
+Then use `docker compose run` with a `dbt <command>`:
+
+```console
+docker compose run dbt <command>
+```
+
+E.g.
+
+```console
+docker compose run dbt debug
+```
 
 ## Testing Warehouse Image Changes
 

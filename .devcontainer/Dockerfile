@@ -1,22 +1,46 @@
-# See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.177.0/containers/python-3/.devcontainer/base.Dockerfile
+FROM python:3.9
 
-# [Choice] Python version: 3, 3.9, 3.8, 3.7, 3.6
-ARG VARIANT="3.9"
-FROM mcr.microsoft.com/vscode/devcontainers/python:0-${VARIANT}
+LABEL org.opencontainers.image.source=https://github.com/cal-itp/data-infra
 
-# [Option] Install Node.js
-ARG INSTALL_NODE="true"
-ARG NODE_VERSION="lts/*"
-RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    USER=calitp
 
-# [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
-# COPY requirements.txt /tmp/pip-tmp/
-# RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-#    && rm -rf /tmp/pip-tmp
+# install gcloud CLI
+RUN apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && \
+    apt-get update -y && apt-get install -y google-cloud-cli
 
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
+# install pygraphviz deps
+RUN apt-get update && apt-get install -y libgdal-dev libgraphviz-dev graphviz-dev
 
-# [Optional] Uncomment this line to install global node packages.
-# RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
+# create and switch to non-root user for devcontainer
+RUN useradd --create-home --shell /bin/bash $USER && \
+    chown -R $USER:$USER /home/$USER
+USER $USER
+
+# setup warehouse deps
+WORKDIR /home/$USER/app/warehouse
+# pip install location for non-root
+ENV PATH="$PATH:/home/$USER/.local/bin"
+# upgrade pip, install poetry
+RUN python -m pip install --upgrade pip && pip install poetry
+
+# copy source files
+COPY ./warehouse/pyproject.toml pyproject.toml
+COPY ./warehouse/poetry.lock poetry.lock
+COPY ./warehouse/dbt_project.yml dbt_project.yml
+COPY ./warehouse/packages.yml packages.yml
+
+# install warehouse deps
+RUN poetry install
+RUN poetry run dbt deps
+
+# install dev deps
+RUN pip install black memray pre-commit
+
+# switch back to app root
+WORKDIR /home/$USER/app
+# CMD for devcontainers
+CMD ["sleep", "infinity"]
