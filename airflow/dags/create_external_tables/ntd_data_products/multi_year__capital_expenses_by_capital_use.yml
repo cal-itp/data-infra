@@ -1,0 +1,90 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "capital_expenses_by_capital_use/multi_year/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "capital_expenses_by_capital_use/multi_year/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.multi_year__capital_expenses_by_capital_use"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.multi_year__capital_expenses_by_capital_use LIMIT 1;
+schema_fields:
+  - name: administrative_buildings
+    type: NUMERIC
+  - name: administrative_buildings_1
+    type: STRING
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: city
+    type: STRING
+  - name: communication_information
+    type: NUMERIC
+  - name: communication_information_1
+    type: STRING
+  - name: fare_collection_equipment
+    type: NUMERIC
+  - name: fare_collection_equipment_1
+    type: STRING
+  - name: form_type
+    type: STRING
+  - name: guideway
+    type: NUMERIC
+  - name: guideway_questionable
+    type: NUMERIC
+  - name: maintenance_buildings
+    type: NUMERIC
+  - name: maintenance_buildings_1
+    type: STRING
+  - name: mode_name
+    type: STRING
+  - name: mode_voms
+    type: NUMERIC
+  - name: modecd
+    type: STRING
+  - name: ntd_id
+    type: STRING
+  - name: organization_type
+    type: STRING
+  - name: other
+    type: NUMERIC
+  - name: other_questionable
+    type: STRING
+  - name: other_vehicles
+    type: NUMERIC
+  - name: other_vehicles_questionable
+    type: STRING
+  - name: passenger_vehicles
+    type: NUMERIC
+  - name: passenger_vehicles_1
+    type: STRING
+  - name: primary_uza_population
+    type: NUMERIC
+  - name: reduced_reporter
+    type: NUMERIC
+  - name: reduced_reporter_questionable
+    type: STRING
+  - name: report_year
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: state
+    type: STRING
+  - name: stations
+    type: NUMERIC
+  - name: stations_questionable
+    type: STRING
+  - name: total
+    type: NUMERIC
+  - name: total_questionable
+    type: STRING
+  - name: typeofservicecd
+    type: STRING
+  - name: uace_code
+    type: STRING
+  - name: uza_name
+    type: STRING

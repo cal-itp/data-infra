@@ -1,0 +1,88 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "stations_and_facilities_by_agency_and_facility_type/multi_year/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "stations_and_facilities_by_agency_and_facility_type/multi_year/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.multi_year__stations_and_facilities_by_agency_and_facility_type"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.multi_year__stations_and_facilities_by_agency_and_facility_type LIMIT 1;
+schema_fields:
+  - name: administrative_and_other_non_passenger_facilities
+    type: NUMERIC
+  - name: administrative_office_sales
+    type: NUMERIC
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: at_grade_fixed_guideway
+    type: NUMERIC
+  - name: bus_transfer_center
+    type: NUMERIC
+  - name: city
+    type: STRING
+  - name: combined_administrative_and
+    type: NUMERIC
+  - name: elevated_fixed_guideway
+    type: NUMERIC
+  - name: exclusive_grade_separated
+    type: NUMERIC
+  - name: ferryboat_terminal
+    type: NUMERIC
+  - name: general_purpose_maintenance
+    type: NUMERIC
+  - name: heavy_maintenance_overhaul
+    type: NUMERIC
+  - name: maintenance_facilities
+    type: NUMERIC
+  - name: maintenance_facility_service
+    type: NUMERIC
+  - name: ntd_id
+    type: STRING
+  - name: organization_type
+    type: STRING
+  - name: other_administrative
+    type: NUMERIC
+  - name: other_passenger_or_parking
+    type: NUMERIC
+  - name: parking_and_other_passenger_facilities
+    type: NUMERIC
+  - name: parking_structure
+    type: NUMERIC
+  - name: passenger_stations_and_terminals
+    type: NUMERIC
+  - name: primary_uza_population
+    type: NUMERIC
+  - name: report_year
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: revenue_collection_facility
+    type: NUMERIC
+  - name: simple_at_grade_platform
+    type: NUMERIC
+  - name: state
+    type: STRING
+  - name: surface_parking_lot
+    type: NUMERIC
+  - name: total_facilities
+    type: NUMERIC
+  - name: uace_code
+    type: STRING
+  - name: underground_fixed_guideway
+    type: NUMERIC
+  - name: uza_name
+    type: STRING
+  - name: vehicle_blow_down_facility
+    type: NUMERIC
+  - name: vehicle_fueling_facility
+    type: NUMERIC
+  - name: vehicle_testing_facility
+    type: NUMERIC
+  - name: vehicle_washing_facility
+    type: NUMERIC

@@ -106,13 +106,6 @@ models:
     description: >
       Versioned extracts of the NTD Annual Database Agency Information.
 
-      For example, the 2021 dataset is found at
-      https://www.transit.dot.gov/ntd/data-product/2021-annual-database-agency-information.
-
-      Only contains 2021 data as of 2022-02-08 but we will be importing
-
-      more data in the future.
-
       The versioning is bitemporal, so records are versioned at the year
 
       and ntd_id level. This means you must join based on
@@ -150,15 +143,10 @@ models:
 
   - name: dim_annual_funding_sources
     description: >-
-      This dataset details federal, state, and local funding sources for each applicable agency reporting to the NTD in Report Year 2022.
+      This dataset details federal, state, and local funding sources for each applicable agency reporting to the NTD.
       Federal funding sources are financial assistance obtained from the Federal Government to assist with the costs of providing transit services.
-      NTD Data Tables organize and summarize data from the 2022 National Transit Database in a manner that is more useful for quick reference and summary analysis.
-      This dataset is based on the 2022 Revenue Sources database file.
-
-      Source documents:
-        https://data.transportation.gov/Public-Transit/2022-NTD-Annual-Data-Funding-Sources-Federal-/qpjk-b3zw/about_data
-        https://data.transportation.gov/Public-Transit/2022-NTD-Annual-Data-Funding-Sources-State-/dd43-h6wv/about_data
-        https://data.transportation.gov/Public-Transit/2022-NTD-Annual-Data-Funding-Sources-Local-/8tvb-ywj3/about_data
+      NTD Data Tables organize and summarize data from the National Transit Database in a manner that is more useful for quick reference and summary analysis.
+      This dataset is based on the Revenue Sources database file.
     columns:
       - name: funding_source
         description: |
@@ -256,7 +244,7 @@ models:
       - <<: *report_year
         tests:
           - accepted_values:
-              values: [2022]
+              values: [2022, 2023]
       - *reporter_type
       - name: sales_tax
         description: |
@@ -275,8 +263,8 @@ models:
 
   - name: dim_annual_service_agencies
     description: >-
-      Provides transit agency-wide totals for service data for applicable agencies reporting to the National Transit Database in the 2022 report year.
-      This view displays the data at a higher level (by agency), based on the "2022 NTD Annual Data - Service (by Mode and Time Period)" dataset.
+      Provides transit agency-wide totals for service data for applicable agencies reporting to the National Transit Database.
+      This view displays the data at a higher level (by agency), based on the "NTD Annual Data - Service (by Mode and Time Period)" dataset.
       In the years 2015-2021, you can find this data in the "Service" data table on NTD Program website, at https://transit.dot.gov/ntd/ntd-data.
       In versions of the data tables from before 2014, you can find data on service in the file called "Transit Operating Statistics: Service Supplied and Consumed."
     columns:
@@ -287,7 +275,7 @@ models:
       - <<: *report_year
         tests:
           - accepted_values:
-              values: [2022]
+              values: [2022, 2023]
       - *ntd_id
       - *agency
       - *reporter_type
@@ -461,7 +449,7 @@ models:
 
   - name: dim_annual_service_mode_time_periods
     description:
-      This represents the Service data reported to the NTD by transit agencies in the 2022 report year.
+      This represents the Service data reported to the NTD by transit agencies.
     columns:
       - name: key
         tests:
@@ -470,7 +458,7 @@ models:
       - <<: *report_year
         tests:
           - accepted_values:
-              values: [2022]
+              values: [2022, 2023]
       - *reporter_type
       - *ntd_id
       - *agency
@@ -810,7 +798,7 @@ models:
 
   - name: fct_annual_service_modes
     description:
-      View based on 2022 NTD Annual Data - Service (by Mode and Time Period)
+      View based on NTD Annual Data - Service (by Mode and Time Period)
       View of Service by Mode and Time Period filtered to preserve only the Annual Total time period.
       Useful for analyses of Annual Total service data.
     columns:
@@ -821,7 +809,7 @@ models:
       - <<: *report_year
         tests:
           - accepted_values:
-              values: [2022]
+              values: [2022, 2023]
       - *ntd_id
       - *type_of_service
       - *mode

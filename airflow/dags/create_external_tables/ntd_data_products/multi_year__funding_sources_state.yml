@@ -1,0 +1,46 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "funding_sources_state/multi_year/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "funding_sources_state/multi_year/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.multi_year__funding_sources_state"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.multi_year__funding_sources_state LIMIT 1;
+schema_fields:
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: city
+    type: STRING
+  - name: general_funds
+    type: NUMERIC
+  - name: ntd_id
+    type: STRING
+  - name: organization_type
+    type: STRING
+  - name: primary_uza_population
+    type: NUMERIC
+  - name: reduced_reporter_funds
+    type: NUMERIC
+  - name: report_year
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: state
+    type: STRING
+  - name: total
+    type: NUMERIC
+  - name: total_questionable
+    type: STRING
+  - name: transportation_funds
+    type: NUMERIC
+  - name: uace_code
+    type: STRING
+  - name: uza_name
+    type: STRING

@@ -1,0 +1,92 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "employees_by_mode_and_employee_type/multi_year/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "employees_by_mode_and_employee_type/multi_year/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.multi_year__employees_by_mode_and_employee_type"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.multi_year__employees_by_mode_and_employee_type LIMIT 1;
+schema_fields:
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: capital_labor_count
+    type: NUMERIC
+  - name: capital_labor_count_q
+    type: STRING
+  - name: capital_labor_hours
+    type: NUMERIC
+  - name: capital_labor_hours_q
+    type: STRING
+  - name: city
+    type: STRING
+  - name: facility_maintenance_count
+    type: NUMERIC
+  - name: facility_maintenance_count_q
+    type: STRING
+  - name: facility_maintenance_hours
+    type: NUMERIC
+  - name: facility_maintenance_hours_q
+    type: STRING
+  - name: full_or_part_time
+    type: STRING
+  - name: general_administration_count
+    type: NUMERIC
+  - name: general_administration_count_q
+    type: STRING
+  - name: general_administration_hours
+    type: NUMERIC
+  - name: general_administration_hours_q
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: mode_name
+    type: STRING
+  - name: mode_voms
+    type: NUMERIC
+  - name: ntd_id
+    type: STRING
+  - name: organization_type
+    type: STRING
+  - name: primary_uza_population
+    type: NUMERIC
+  - name: report_year
+    type: STRING
+  - name: state
+    type: STRING
+  - name: total_employee_count
+    type: NUMERIC
+  - name: total_employee_count_q
+    type: STRING
+  - name: total_hours
+    type: NUMERIC
+  - name: total_hours_q
+    type: STRING
+  - name: type_of_service
+    type: STRING
+  - name: uace_code
+    type: STRING
+  - name: uza_name
+    type: STRING
+  - name: vehicle_maintenance_count
+    type: NUMERIC
+  - name: vehicle_maintenance_count_q
+    type: STRING
+  - name: vehicle_maintenance_hours
+    type: NUMERIC
+  - name: vehicle_maintenance_hours_q
+    type: STRING
+  - name: vehicle_operations_count
+    type: NUMERIC
+  - name: vehicle_operations_count_q
+    type: STRING
+  - name: vehicle_operations_hours
+    type: NUMERIC
+  - name: vehicle_operations_hours_q
+    type: STRING

@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: 'multi_year'
+product: 'stations_by_mode_and_age'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: 'wfz2-eft6'
+file_format: '.json'
