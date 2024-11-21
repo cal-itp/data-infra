@@ -11,6 +11,7 @@ Here are some resources data analysts have collected and referenced, that will h
   - [Merging](#merging)
   - [Dates](#dates)
   - [Monetary Values](#monetary-values)
+  - [Tidy Data](#tidy-data)
 - [Visualizations](#visualization)
   - [Charts](#charts)
   - [Maps](#maps)
@@ -128,6 +129,20 @@ def adjust_prices(df):
         df[f"adjusted_{col}"] = ((df[col] * 270.97) / multiplier)
     return df
 ```
+
+(tidy-data)=
+
+### Tidy Data
+
+Tidy Data follows a set of principles that ensure the data is easy to work with, especially when using tools like pandas and matplotlib. Primary rules of tidy data are:
+
+- Each variable must have its own column.
+- Each observation must have its own row.
+- Each value must have its own cell.
+
+Tidy data ensures consistency, making it easier to work with tools like pandas, matplotlib, or seaborn. It also simplifies data manipulation, as functions like `groupby()`, `pivot()`, and `melt()` work more intuitively when the data is structured properly. Additionally, tidy data enables vectorized operations in pandas, allowing for efficient analysis on entire columns or rows at once.
+
+Learn more about Tidy Data [here.](https://vita.had.co.nz/papers/tidy-data.pdf)
 
 (visualization)=
 
