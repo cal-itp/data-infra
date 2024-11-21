@@ -287,6 +287,9 @@ class MostRecentSchedule:
             try:
                 schedule_extract = ScheduleStorage().get_day(day).get_url_schedule(self.base64_validation_url)
             except KeyError:
+                print(
+                    f"no schedule data found for {self.base64_validation_url} on day {day}"
+                )
                 continue
 
             try:
@@ -294,6 +297,9 @@ class MostRecentSchedule:
                 self.fs.get(schedule_extract.path, gtfs_zip)
                 return gtfs_zip
             except FileNotFoundError:
+                print(
+                    f"no schedule file found for {self.base64_validation_url} on day {day}"
+                )
                 continue
 
 
@@ -462,6 +468,7 @@ class ValidationProcessor:
             e = ScheduleDataNotFound(
                 f"no recent schedule data found for {self.aggregation.extracts[0].path}"
             )
+            print(e)
 
             scope.fingerprint = [
                 type(e),
