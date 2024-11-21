@@ -10,7 +10,6 @@ import hashlib
 import json
 import os
 import subprocess
-import sys
 import tempfile
 import traceback
 from collections import defaultdict
@@ -19,22 +18,15 @@ from enum import Enum
 from functools import lru_cache
 from itertools import islice
 from pathlib import Path
-from typing import Any, ClassVar, Dict, List, Optional, Sequence, Tuple, Union
+from typing import Any, ClassVar, Dict, List, Optional, Tuple
 
-import backoff  # type: ignore
 import gcsfs  # type: ignore
 import pendulum
 import sentry_sdk
 import typer
-from aiohttp.client_exceptions import (
-    ClientOSError,
-    ClientResponseError,
-    ServerDisconnectedError,
-)
 from calitp_data_infra.storage import (  # type: ignore
     JSONL_GZIP_EXTENSION,
     GTFSDownloadConfig,
-    GTFSFeedExtract,
     GTFSFeedType,
     GTFSRTFeedExtract,
     GTFSScheduleFeedExtract,
@@ -565,6 +557,7 @@ class ValidationProcessor:
                         exception=e,
                         process_stderr=stderr,
                     )
+                    for extract in self.aggregation.extracts
                 ]
 
         if not outcomes:
@@ -581,13 +574,13 @@ class ValidationProcessor:
                             fg=typer.colors.YELLOW,
                         )
 
-                    for e in extracts:
+                    for extract in extracts:
                         outcomes.append(
                             RTFileProcessingOutcome(
                                 step=self.aggregation.step,
                                 success=False,
-                                extract=e,
-                                aggregation=aggregation,
+                                exception=e,
+                                extract=extract,
                             )
                         )
                     continue
@@ -682,7 +675,7 @@ class ParseProcessor:
                         feed.ParseFromString(f.read())
                     parsed = json_format.MessageToDict(feed)
                 except DecodeError as e:
-                    if verbose:
+                    if self.verbose:
                         typer.secho(
                             f"WARNING: DecodeError for {str(extract.path)}",
                             fg=typer.colors.YELLOW,
@@ -854,10 +847,10 @@ def main(
 ):
     hourly_feed_files = FeedStorage(feed_type).get_hour(hour)
     if not hourly_feed_files.valid():
-        typer.secho(f"missing: {files_missing_metadata}")
-        typer.secho(f"invalid: {files_invalid_metadata}")
+        typer.secho(f"missing: {hourly_feed_files.files_missing_metadata}")
+        typer.secho(f"invalid: {hourly_feed_files.files_invalid_metadata}")
         raise RuntimeError(
-            f"too many files have missing/invalid metadata; {total - len(files)} of {total}"  # noqa: E702
+            f"too many files have missing/invalid metadata; {hourly_feed_files.total - len(hourly_feed_files.files)} of {hourly_feed_files.total}"  # noqa: E702
         )
     aggregated_feed = hourly_feed_files.get_query(step, feed_type)
     aggregations_to_process = (

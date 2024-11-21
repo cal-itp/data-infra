@@ -226,4 +226,7 @@ def test_no_output_file_for_vehicle_positions_on_validation():
     )
     assert "5487 vehicle_positions files in 139 aggregations" in result.stdout
     assert "limit of 3 feeds was set" in result.stdout
+    assert "validating" in result.stdout
+    assert "executing rt_validator" in result.stdout
+    assert "writing 69 lines" in result.stdout
     assert "saving 114 outcomes" in result.stdout
