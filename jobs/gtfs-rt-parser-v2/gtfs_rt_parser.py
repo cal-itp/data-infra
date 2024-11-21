@@ -285,7 +285,11 @@ class MostRecentSchedule:
     def download(self, date: datetime.datetime) -> str:
         for day in reversed(list(date - date.subtract(days=7))):
             try:
-                schedule_extract = ScheduleStorage().get_day(day).get_url_schedule(self.base64_validation_url)
+                schedule_extract = (
+                    ScheduleStorage()
+                    .get_day(day)
+                    .get_url_schedule(self.base64_validation_url)
+                )
             except KeyError:
                 print(
                     f"no schedule data found for {self.base64_validation_url} on day {day}"
@@ -312,10 +316,14 @@ class AggregationExtract:
         return os.path.join(self.path, self.extract.timestamped_filename)
 
     def get_results_path(self) -> str:
-        return os.path.join(self.path, f"{self.extract.timestamped_filename}.results.json")
+        return os.path.join(
+            self.path, f"{self.extract.timestamped_filename}.results.json"
+        )
 
     def hash(self) -> str:
-        with open(os.path.join(self.path, self.extract.timestamped_filename), "rb") as f:
+        with open(
+            os.path.join(self.path, self.extract.timestamped_filename), "rb"
+        ) as f:
             file_hash = hashlib.md5()
             while chunk := f.read(8192):
                 file_hash.update(chunk)
@@ -330,7 +338,9 @@ class AggregationExtract:
 
 
 class AggregationExtracts:
-    def __init__(self, fs: gcsfs.GCSFileSystem, path: str, aggregation: RTHourlyAggregation):
+    def __init__(
+        self, fs: gcsfs.GCSFileSystem, path: str, aggregation: RTHourlyAggregation
+    ):
         self.fs = fs
         self.path = path
         self.aggregation = aggregation
@@ -339,7 +349,9 @@ class AggregationExtracts:
         return f"{self.path}/rt_{self.aggregation.name_hash}/"
 
     def get_extracts(self) -> List[AggregationExtract]:
-        return [AggregationExtract(self.get_path(), e) for e in self.aggregation.extracts]
+        return [
+            AggregationExtract(self.get_path(), e) for e in self.aggregation.extracts
+        ]
 
     def get_local_paths(self) -> Dict[str, GTFSRTFeedExtract]:
         return {e.get_local_path(): e.extract for e in self.get_extracts()}
@@ -362,21 +374,27 @@ class AggregationExtracts:
 
     def download(self):
         self.fs.get(
-            rpath=[
-                extract.path
-                for extract in self.get_local_paths().values()
-            ],
+            rpath=[extract.path for extract in self.get_local_paths().values()],
             lpath=list(self.get_local_paths().keys()),
         )
 
     def download_most_recent_schedule(self) -> str:
         first_extract = self.aggregation.extracts[0]
-        schedule = MostRecentSchedule(self.fs, self.path, first_extract.config.base64_validation_url)
+        schedule = MostRecentSchedule(
+            self.fs, self.path, first_extract.config.base64_validation_url
+        )
         return schedule.download(first_extract.dt)
 
 
 class HourlyFeedQuery:
-    def __init__(self, step: RTProcessingStep, feed_type: GTFSFeedType, files: List[GTFSRTFeedExtract], limit: int = 0, base64_url: Optional[str] = None):
+    def __init__(
+        self,
+        step: RTProcessingStep,
+        feed_type: GTFSFeedType,
+        files: List[GTFSRTFeedExtract],
+        limit: int = 0,
+        base64_url: Optional[str] = None,
+    ):
         self.step = step
         self.feed_type = feed_type
         self.files = files
@@ -384,15 +402,21 @@ class HourlyFeedQuery:
         self.base64_url = base64_url
 
     def set_limit(self, limit: int):
-        return HourlyFeedQuery(self.step, self.feed_type, self.files, limit, self.base64_url)
+        return HourlyFeedQuery(
+            self.step, self.feed_type, self.files, limit, self.base64_url
+        )
 
     def where_base64url(self, base64_url: str):
-        return HourlyFeedQuery(self.step, self.feed_type, self.files, self.limit, base64_url)
-
-    def get_aggregates(self) -> Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]]:
-        aggregates: Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]] = defaultdict(
-            list
+        return HourlyFeedQuery(
+            self.step, self.feed_type, self.files, self.limit, base64_url
         )
+
+    def get_aggregates(
+        self,
+    ) -> Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]]:
+        aggregates: Dict[
+            Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]
+        ] = defaultdict(list)
 
         for file in self.files:
             if self.base64_url is None or file.base64_url == self.base64_url:
@@ -416,18 +440,29 @@ class HourlyFeedQuery:
 
 
 class HourlyFeedFiles:
-    def __init__(self, files: List[GTFSRTFeedExtract], files_missing_metadata: List[Blob], files_invalid_metadata: List[Blob]):
+    def __init__(
+        self,
+        files: List[GTFSRTFeedExtract],
+        files_missing_metadata: List[Blob],
+        files_invalid_metadata: List[Blob],
+    ):
         self.files = files
         self.files_missing_metadata = files_missing_metadata
         self.files_invalid_metadata = files_invalid_metadata
 
     def total(self) -> int:
-        return len(self.files) + len(self.files_missing_metadata) + len(self.files_invalid_metadata)
+        return (
+            len(self.files)
+            + len(self.files_missing_metadata)
+            + len(self.files_invalid_metadata)
+        )
 
     def valid(self) -> bool:
         return not self.files or len(self.files) / self.total() > 0.99
 
-    def get_query(self, step: RTProcessingStep, feed_type: GTFSFeedType) -> HourlyFeedQuery:
+    def get_query(
+        self, step: RTProcessingStep, feed_type: GTFSFeedType
+    ) -> HourlyFeedQuery:
         return HourlyFeedQuery(step, feed_type, self.files)
 
 
@@ -451,12 +486,19 @@ class FeedStorage:
 
 
 class ValidationProcessor:
-    def __init__(self, aggregation: RTHourlyAggregation, validator: RtValidator, verbose: bool = False):
+    def __init__(
+        self,
+        aggregation: RTHourlyAggregation,
+        validator: RtValidator,
+        verbose: bool = False,
+    ):
         self.aggregation = aggregation
         self.validator = validator
         self.verbose = verbose
 
-    def process(self, tmp_dir: tempfile.TemporaryDirectory, scope) -> List[RTFileProcessingOutcome]:
+    def process(
+        self, tmp_dir: tempfile.TemporaryDirectory, scope
+    ) -> List[RTFileProcessingOutcome]:
         outcomes: List[RTFileProcessingOutcome] = []
         fs = get_fs()
 
@@ -498,7 +540,9 @@ class ValidationProcessor:
                 fingerprint: List[Any] = [
                     type(e),
                     # convert back to url manually, I don't want to mess around with the hourly class
-                    base64.urlsafe_b64decode(self.aggregation.base64_url.encode()).decode(),
+                    base64.urlsafe_b64decode(
+                        self.aggregation.base64_url.encode()
+                    ).decode(),
                 ]
                 fingerprint.append(e.returncode)
 
@@ -509,9 +553,7 @@ class ValidationProcessor:
                 scope.fingerprint = fingerprint
 
                 # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
-                scope.set_context(
-                    "Process", {"stderr": stderr[-2000:]}
-                )
+                scope.set_context("Process", {"stderr": stderr[-2000:]})
 
                 sentry_sdk.capture_exception(e, scope=scope)
 
@@ -581,10 +623,13 @@ class ValidationProcessor:
                 typer.secho(
                     f"writing {len(records_to_upload)} lines to {self.aggregation.path}",
                 )
-                with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
+                with tempfile.NamedTemporaryFile(
+                    mode="wb", delete=False, dir=tmp_dir
+                ) as f:
                     gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
                     encoded = (
-                        r.json() if isinstance(r, BaseModel) else json.dumps(r) for r in records_to_upload
+                        r.json() if isinstance(r, BaseModel) else json.dumps(r)
+                        for r in records_to_upload
                     )
                     gzipfile.write("\n".join(encoded).encode("utf-8"))
                     gzipfile.close()
@@ -604,14 +649,18 @@ class ParseProcessor:
         self.aggregation = aggregation
         self.verbose = verbose
 
-    def process(self, tmp_dir: tempfile.TemporaryDirectory, scope) -> List[RTFileProcessingOutcome]:
+    def process(
+        self, tmp_dir: tempfile.TemporaryDirectory, scope
+    ) -> List[RTFileProcessingOutcome]:
         outcomes: List[RTFileProcessingOutcome] = []
         fs = get_fs()
         dst_path_rt = f"{tmp_dir}/rt_{self.aggregation.name_hash}/"
         fs.get(
             rpath=[
                 extract.path
-                for extract in self.aggregation.local_paths_to_extract(dst_path_rt).values()
+                for extract in self.aggregation.local_paths_to_extract(
+                    dst_path_rt
+                ).values()
             ],
             lpath=list(self.aggregation.local_paths_to_extract(dst_path_rt).keys()),
         )
@@ -738,15 +787,23 @@ def parse_and_validate(
     outcomes = []
     with tempfile.TemporaryDirectory() as tmp_dir:
         with sentry_sdk.push_scope() as scope:
-            scope.set_tag("config_feed_type", aggregation.first_extract.config.feed_type)
+            scope.set_tag(
+                "config_feed_type", aggregation.first_extract.config.feed_type
+            )
             scope.set_tag("config_name", aggregation.first_extract.config.name)
             scope.set_tag("config_url", aggregation.first_extract.config.url)
             scope.set_context("RT Hourly Aggregation", json.loads(aggregation.json()))
 
-            if aggregation.step != RTProcessingStep.validate and aggregation.step != RTProcessingStep.parse:
+            if (
+                aggregation.step != RTProcessingStep.validate
+                and aggregation.step != RTProcessingStep.parse
+            ):
                 raise RuntimeError("we should not be here")
 
-            if aggregation.step == RTProcessingStep.validate and not aggregation.extracts[0].config.schedule_url_for_validation:
+            if (
+                aggregation.step == RTProcessingStep.validate
+                and not aggregation.extracts[0].config.schedule_url_for_validation
+            ):
                 outcomes = [
                     RTFileProcessingOutcome(
                         step=aggregation.step,
@@ -758,7 +815,9 @@ def parse_and_validate(
                 ]
 
             if aggregation.step == RTProcessingStep.validate:
-                outcomes = ValidationProcessor(aggregation, validator, verbose).process(tmp_dir, scope)
+                outcomes = ValidationProcessor(aggregation, validator, verbose).process(
+                    tmp_dir, scope
+                )
 
             if aggregation.step == RTProcessingStep.parse:
                 outcomes = ParseProcessor(aggregation, verbose).process(tmp_dir, scope)
@@ -801,7 +860,9 @@ def main(
             f"too many files have missing/invalid metadata; {total - len(files)} of {total}"  # noqa: E702
         )
     aggregated_feed = hourly_feed_files.get_query(step, feed_type)
-    aggregations_to_process = aggregated_feed.where_base64url(base64url).set_limit(limit).get_aggregates()
+    aggregations_to_process = (
+        aggregated_feed.where_base64url(base64url).set_limit(limit).get_aggregates()
+    )
 
     typer.secho(
         f"found {len(hourly_feed_files.files)} {feed_type} files in {len(aggregated_feed.get_aggregates())} aggregations to process",
@@ -892,7 +953,8 @@ def main(
         )
 
     assert (
-        len(outcomes) == aggregated_feed.where_base64url(base64url).set_limit(limit).total()
+        len(outcomes)
+        == aggregated_feed.where_base64url(base64url).set_limit(limit).total()
     ), f"we ended up with {len(outcomes)} outcomes from {aggregated_feed.where_base64url(base64url).set_limit(limit).total()}"
 
     if exceptions:
