@@ -1,7 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-year: '2022'
-product: 'breakdowns'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'amkt-4ehs'
-file_format: '.json'

@@ -1,0 +1,72 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "breakdowns/multi_year/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "breakdowns/multi_year/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.multi_year__breakdowns"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.multi_year__breakdowns LIMIT 1;
+schema_fields:
+  - name: agency
+    type: STRING
+  - name: agency_voms
+    type: NUMERIC
+  - name: city
+    type: STRING
+  - name: major_mechanical_failures
+    type: NUMERIC
+  - name: major_mechanical_failures_1
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: mode_name
+    type: STRING
+  - name: mode_voms
+    type: NUMERIC
+  - name: ntd_id
+    type: STRING
+  - name: organization_type
+    type: STRING
+  - name: other_mechanical_failures
+    type: NUMERIC
+  - name: other_mechanical_failures_1
+    type: STRING
+  - name: primary_uza_population
+    type: NUMERIC
+  - name: report_year
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: state
+    type: STRING
+  - name: total_mechanical_failures
+    type: NUMERIC
+  - name: total_mechanical_failures_1
+    type: STRING
+  - name: train_miles
+    type: NUMERIC
+  - name: train_miles_questionable
+    type: STRING
+  - name: train_revenue_miles
+    type: NUMERIC
+  - name: train_revenue_miles_1
+    type: STRING
+  - name: type_of_service
+    type: STRING
+  - name: uace_code
+    type: STRING
+  - name: uza_name
+    type: STRING
+  - name: vehicle_passenger_car_miles
+    type: NUMERIC
+  - name: vehicle_passenger_car_miles_1
+    type: STRING
+  - name: vehicle_passenger_car_miles_2
+    type: STRING
+  - name: vehicle_passenger_car_revenue
+    type: NUMERIC

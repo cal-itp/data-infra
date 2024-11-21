@@ -1,7 +1,0 @@
-operator: operators.NtdDataProductAPIOperator
-
-year: '2022'
-product: 'metrics'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'ekg5-frzt'
-file_format: '.json'
