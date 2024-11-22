@@ -16,7 +16,7 @@ def push_url_to_xcom(scraped_url, context):
 
 
 def scrape_ntd_ridership_xlsx_url(**context):
-    # page to find download URL on
+    # page to find download URL
     url = "https://www.transit.dot.gov/ntd/data-product/monthly-module-raw-data-release"
     req = requests.get(url)
     soup = BeautifulSoup(req.text, "html.parser")
