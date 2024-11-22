@@ -12,12 +12,14 @@ from calitp_data_infra.storage import (  # type: ignore
     get_fs,
     make_name_bq_safe,
 )
-from pydantic import HttpUrl, parse_obj_as
+from pydantic import HttpUrl  # , parse_obj_as
 
 from airflow.models import BaseOperator  # type: ignore
 
 RAW_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"]
 CLEAN_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"]
+
+ridership_download_url = os.environ["CURRENT_NTD_RIDERSHIP_URL"]
 
 
 # pulls the URL from XCom
@@ -127,6 +129,22 @@ class NtdDataProductXLSXOperator(BaseOperator):
 
         excel_content = self.raw_excel_extract.fetch_from_ntd_xlsx(download_url)
 
+<<<<<<< HEAD
+=======
+    def execute(self, **kwargs):
+        # download_url = parse_obj_as(HttpUrl, self.raw_excel_extract.file_url)
+        download_url = self.raw_excel_extract.file_url
+
+        # testing to see what is returned
+        logging.info(f"reading ridership url as {ridership_download_url}")
+
+        if self.product == "complete_monthly_ridership_with_adjustments_and_estimates":
+            download_url = ridership_download_url
+            # download_url = parse_obj_as(HttpUrl, ridership_download_url)
+
+        excel_content = self.raw_excel_extract.fetch_from_ntd_xlsx(download_url)
+
+>>>>>>> fe2d07cb (rebase)
         logging.info(
             f"file url is {self.xlsx_file_url} and file type is {type(self.xlsx_file_url)}"
         )
