@@ -41,7 +41,7 @@ sources:
             description: The year for which the data was reported.
             tests:
               - accepted_values:
-                  values: [2022]
+                  values: [2022, 2023]
           - name: _5_digit_ntd_id
             description: A five-digit identifying number for each agency used in the current NTD system.
           - name: agency
@@ -247,7 +247,7 @@ sources:
             description: The year for which the data was reported.
             tests:
               - accepted_values:
-                  values: [2022]
+                  values: [2022, 2023]
           - name: _5_digit_ntd_id
             description: A five-digit identifying number for each agency used in the current NTD system.
           - name: type_of_service
@@ -275,7 +275,7 @@ sources:
             description: The year for which the data was reported.
             tests:
               - accepted_values:
-                  values: [2022]
+                  values: [2022, 2023]
           - name: _5_digit_ntd_id
             description: A five-digit identifying number for each agency used in the current NTD system.
           - name: agency
