@@ -1,7 +1,6 @@
 import gzip
 import logging
-
-# import os
+import os
 from typing import ClassVar, List
 
 import pandas as pd  # type: ignore
@@ -12,8 +11,7 @@ from pydantic import HttpUrl, parse_obj_as
 
 from airflow.models import BaseOperator  # type: ignore
 
-API_BUCKET = "gs://calitp-state-geoportal-scrape"
-# API_BUCKET = os.environ["CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"]
+API_BUCKET = os.environ["CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"]
 
 
 class StateGeoportalAPIExtract(PartitionedGCSArtifact):
@@ -88,7 +86,8 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
                 params["resultOffset"] = offset
 
                 # Make the request
-                response = requests.get(validated_url, params=params).raise_for_status()
+                response = requests.get(validated_url, params=params)
+                response.raise_for_status()
                 data = response.json()
 
                 # Break the loop if there are no more features
@@ -187,7 +186,7 @@ class StateGeoportalAPIOperator(BaseOperator):
         df = pd.json_normalize(api_content)
 
         if self.product == "state_highway_network":
-            # Select columns to keep, have to be explicit because there are duplicate values after normalizing
+            # Select columns to keep, have to be explicit before renaming because there are duplicate values after normalizing
             df = df[
                 [
                     "properties.Route",
