@@ -1,6 +1,6 @@
 WITH staging_funding_sources_by_expense_type AS (
     SELECT *
-    FROM {{ ref('staging', 'stg_ntd_annual_data__funding_sources_by_expense_type') }}
+    FROM {{ ref('stg_ntd_annual_data__funding_sources_by_expense_type') }}
 ),
 
 fct_ntd_annual_data__funding_sources_by_expense_type AS (

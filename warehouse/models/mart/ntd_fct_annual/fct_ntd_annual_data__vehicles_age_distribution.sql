@@ -1,6 +1,6 @@
 WITH staging_vehicles_age_distribution AS (
     SELECT *
-    FROM {{ ref('staging', 'stg_ntd_annual_data__vehicles_age_distribution') }}
+    FROM {{ ref('stg_ntd_annual_data__vehicles_age_distribution') }}
 ),
 
 fct_ntd_annual_data__vehicles_age_distribution AS (

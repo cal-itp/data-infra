@@ -1,6 +1,6 @@
 WITH staging_breakdowns AS (
     SELECT *
-    FROM {{ ref('staging', 'stg_ntd_annual_data__breakdowns') }}
+    FROM {{ ref('stg_ntd_annual_data__breakdowns') }}
 ),
 
 fct_ntd_annual_data__breakdowns AS (
