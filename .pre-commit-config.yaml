@@ -15,8 +15,7 @@ repos:
     rev: 6.0.0
     hooks:
       - id: flake8
-        args: ["--ignore=E501,W503"] # line too long and line before binary operator (black is ok with these)
-        # args: ["--ignore=E501,W503,E231"] # line too long and line before binary operator (black is ok with these) and explicitly ignore the whitespace after colon error
+        args: ["--ignore=E501,W503,E231"] # line too long and line before binary operator (black is ok with these) and explicitly ignore the whitespace after colon error
         types:
           - python
         # Suppress SyntaxWarning about invalid escape sequence from calitp-data-infra dependency without modifying source
