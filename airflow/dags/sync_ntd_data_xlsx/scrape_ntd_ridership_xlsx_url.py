@@ -24,9 +24,11 @@ def scrape_ntd_ridership_xlsx_url(**context):
     # Look for an anchor tag where the href ends with '.xlsx' and starts with '/sites/fta.dot.gov/files/'
     link = soup.find(
         "a",
-        href=lambda href: href
-        and href.startswith("/sites/fta.dot.gov/files/")
-        and href.endswith(".xlsx"),
+        href=lambda href: (
+            href
+            and href.startswith("/sites/fta.dot.gov/files/")
+            and href.endswith(".xlsx")
+        ),
     )
 
     # Extract the href if the link is found
