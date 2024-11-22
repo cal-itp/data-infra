@@ -11,13 +11,25 @@ repos:
         exclude: 'kubernetes/apps/charts/.*'
       - id: check-added-large-files
     # TODO: could we use ruff to replace flake8/isort and maybe black?
+repos:
   - repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
+    rev: '6.1.0'  # Use a specific version
     hooks:
       - id: flake8
-        args: ["--ignore=E501,W503"] # line too long and line before binary operator (black is ok with these)
-        types:
-          - python
+        additional_dependencies: [flake8-docstrings]
+        args: [
+          '--max-line-length=100',
+          '--extend-ignore=E203',
+          '--ignore=E501,W503'
+        ]
+
+  # - repo: https://github.com/pycqa/flake8
+  #   rev: 6.0.0
+  #   hooks:
+  #     - id: flake8
+  #       args: ["--ignore=E501,W503"] # line too long and line before binary operator (black is ok with these)
+  #       types:
+  #         - python
   - repo: https://github.com/psf/black
     rev: 23.1.0
     hooks:
