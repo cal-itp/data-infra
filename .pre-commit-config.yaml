@@ -20,7 +20,6 @@ repos:
           - python
         # Suppress SyntaxWarning about invalid escape sequence from calitp-data-infra dependency without modifying source
         entry: env PYTHONWARNINGS="ignore::SyntaxWarning" flake8
-
   - repo: https://github.com/psf/black
     rev: 23.1.0
     hooks:
