@@ -1,6 +1,7 @@
 import gzip
 import logging
-import os
+
+# import os
 from typing import ClassVar, List
 
 import pandas as pd  # type: ignore
@@ -11,7 +12,8 @@ from pydantic import HttpUrl, parse_obj_as
 
 from airflow.models import BaseOperator  # type: ignore
 
-API_BUCKET = os.environ["CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"]
+API_BUCKET = "gs://calitp-state-geoportal-scrape"
+# API_BUCKET = os.environ["CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"]
 
 
 class StateGeoportalAPIExtract(PartitionedGCSArtifact):
@@ -86,7 +88,7 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
                 params["resultOffset"] = offset
 
                 # Make the request
-                response = requests.get(validated_url, params=params)
+                response = requests.get(validated_url, params=params).raise_for_status()
                 data = response.json()
 
                 # Break the loop if there are no more features
@@ -145,8 +147,6 @@ class StateGeoportalAPIOperator(BaseOperator):
         "root_url",
         "service",
         "layer",
-        "where",
-        "outFields",
         "resultRecordCount",
     )
 
@@ -156,8 +156,6 @@ class StateGeoportalAPIOperator(BaseOperator):
         root_url,
         service,
         layer,
-        where,
-        outFields,
         resultRecordCount,
         **kwargs,
     ):
@@ -165,8 +163,6 @@ class StateGeoportalAPIOperator(BaseOperator):
         self.root_url = root_url
         self.service = service
         self.layer = layer
-        self.where = where
-        self.outFields = outFields
         self.resultRecordCount = resultRecordCount
 
         """An operator that extracts and saves JSON data from the State Geoportal
@@ -178,8 +174,6 @@ class StateGeoportalAPIOperator(BaseOperator):
             root_url=self.root_url,
             service=self.service,
             product=f"{self.product}_geodata",
-            where=self.where,
-            outFields=self.outFields,
             layer=self.layer,
             resultRecordCount=self.resultRecordCount,
             filename=f"{self.product}_geodata.jsonl.gz",
@@ -193,7 +187,7 @@ class StateGeoportalAPIOperator(BaseOperator):
         df = pd.json_normalize(api_content)
 
         if self.product == "state_highway_network":
-            # Select columns to keep
+            # Select columns to keep, have to be explicit because there are duplicate values after normalizing
             df = df[
                 [
                     "properties.Route",
