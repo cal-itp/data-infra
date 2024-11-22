@@ -494,6 +494,17 @@ class ValidationProcessor:
         outcomes: List[RTFileProcessingOutcome] = []
         fs = get_fs()
 
+        if not self.aggregation.extracts[0].config.schedule_url_for_validation:
+                outcomes = [
+                    RTFileProcessingOutcome(
+                        step=self.aggregation.step,
+                        success=False,
+                        extract=extract,
+                        exception=NoScheduleDataSpecified(),
+                    )
+                    for extract in self.aggregation.extracts
+                ]
+
         aggregation_extracts = AggregationExtracts(fs, tmp_dir, self.aggregation)
         aggregation_extracts.download()
         gtfs_zip = aggregation_extracts.download_most_recent_schedule()
@@ -777,7 +788,6 @@ def parse_and_validate(
     verbose: bool = False,
 ) -> List[RTFileProcessingOutcome]:
     validator = RtValidator(jar_path)
-    outcomes = []
     with tempfile.TemporaryDirectory() as tmp_dir:
         with sentry_sdk.push_scope() as scope:
             scope.set_tag(
@@ -793,29 +803,13 @@ def parse_and_validate(
             ):
                 raise RuntimeError("we should not be here")
 
-            if (
-                aggregation.step == RTProcessingStep.validate
-                and not aggregation.extracts[0].config.schedule_url_for_validation
-            ):
-                outcomes = [
-                    RTFileProcessingOutcome(
-                        step=aggregation.step,
-                        success=False,
-                        extract=extract,
-                        exception=NoScheduleDataSpecified(),
-                    )
-                    for extract in aggregation.extracts
-                ]
-
             if aggregation.step == RTProcessingStep.validate:
-                outcomes = ValidationProcessor(aggregation, validator, verbose).process(
+                return ValidationProcessor(aggregation, validator, verbose).process(
                     tmp_dir, scope
                 )
 
             if aggregation.step == RTProcessingStep.parse:
-                outcomes = ParseProcessor(aggregation, verbose).process(tmp_dir, scope)
-
-    return outcomes
+                return ParseProcessor(aggregation, verbose).process(tmp_dir, scope)
 
 
 def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
