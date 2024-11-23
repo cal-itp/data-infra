@@ -17,7 +17,6 @@ from concurrent.futures import Future, ThreadPoolExecutor
 from enum import Enum
 from functools import lru_cache
 from itertools import islice
-from pathlib import Path
 from typing import Any, ClassVar, Dict, List, Optional, Tuple
 
 import gcsfs  # type: ignore
@@ -42,12 +41,7 @@ from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2  # type: ignore
 from pydantic import BaseModel, Field, validator
 
-RT_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_RT_VALIDATOR_JAR"
-JAR_DEFAULT = typer.Option(
-    os.environ.get(RT_VALIDATOR_JAR_LOCATION_ENV_KEY),
-    help="Path to the GTFS RT Validator JAR",
-)
-
+JAR_DEFAULT = os.environ["GTFS_RT_VALIDATOR_JAR"]
 RT_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_PARSED"]
 RT_VALIDATION_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_VALIDATION"]
 GTFS_RT_VALIDATOR_VERSION = os.environ["GTFS_RT_VALIDATOR_VERSION"]
@@ -218,7 +212,7 @@ class GTFSRTJobResult(PartitionedGCSArtifact):
 
 
 class RtValidator:
-    def __init__(self, jar_path: Path):
+    def __init__(self, jar_path: str = JAR_DEFAULT):
         self.jar_path = jar_path
 
     def execute(self, gtfs_file: str, rt_path: str):
@@ -291,12 +285,13 @@ class MostRecentSchedule:
             try:
                 gtfs_zip = "/".join([self.path, schedule_extract.filename])
                 self.fs.get(schedule_extract.path, gtfs_zip)
-                return gtfs_zip
+                break
             except FileNotFoundError:
                 print(
                     f"no schedule file found for {self.base64_validation_url} on day {day}"
                 )
                 continue
+        return gtfs_zip
 
 
 class AggregationExtract:
@@ -312,7 +307,7 @@ class AggregationExtract:
             self.path, f"{self.extract.timestamped_filename}.results.json"
         )
 
-    def hash(self) -> str:
+    def hash(self) -> bytes:
         with open(
             os.path.join(self.path, self.extract.timestamped_filename), "rb"
         ) as f:
@@ -351,15 +346,15 @@ class AggregationExtracts:
     def get_results_paths(self) -> Dict[str, GTFSRTFeedExtract]:
         return {e.get_results_path(): e.extract for e in self.get_extracts()}
 
-    def get_hashed_results(self) -> Dict[str, List[Dict[str, str]]]:
-        hashed: Dict[str, str] = {}
+    def get_hashed_results(self):
+        hashed = {}
         for e in self.get_extracts():
             if e.has_results():
                 hashed[e.hash()] = e.get_results()
         return hashed
 
-    def get_hashes(self) -> Dict[str, List[GTFSRTFeedExtract]]:
-        hashed: Dict[str, List[GTFSRTFeedExtract]] = defaultdict(list)
+    def get_hashes(self) -> Dict[bytes, List[GTFSRTFeedExtract]]:
+        hashed: Dict[bytes, List[GTFSRTFeedExtract]] = defaultdict(list)
         for e in self.get_extracts():
             hashed[e.hash()].append(e.extract)
         return hashed
@@ -398,14 +393,14 @@ class HourlyFeedQuery:
             self.step, self.feed_type, self.files, limit, self.base64_url
         )
 
-    def where_base64url(self, base64_url: str):
+    def where_base64url(self, base64_url: Optional[str]):
         return HourlyFeedQuery(
             self.step, self.feed_type, self.files, self.limit, base64_url
         )
 
     def get_aggregates(
         self,
-    ) -> Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]]:
+    ) -> List[RTHourlyAggregation]:
         aggregates: Dict[
             Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]
         ] = defaultdict(list)
@@ -481,29 +476,30 @@ class ValidationProcessor:
     def __init__(
         self,
         aggregation: RTHourlyAggregation,
-        validator: RtValidator,
         verbose: bool = False,
     ):
         self.aggregation = aggregation
-        self.validator = validator
         self.verbose = verbose
 
+    def validator(self):
+        return RtValidator()
+
     def process(
-        self, tmp_dir: tempfile.TemporaryDirectory, scope
+        self, tmp_dir: str, scope
     ) -> List[RTFileProcessingOutcome]:
         outcomes: List[RTFileProcessingOutcome] = []
         fs = get_fs()
 
         if not self.aggregation.extracts[0].config.schedule_url_for_validation:
-                outcomes = [
-                    RTFileProcessingOutcome(
-                        step=self.aggregation.step,
-                        success=False,
-                        extract=extract,
-                        exception=NoScheduleDataSpecified(),
-                    )
-                    for extract in self.aggregation.extracts
-                ]
+            outcomes = [
+                RTFileProcessingOutcome(
+                    step=self.aggregation.step,
+                    success=False,
+                    extract=extract,
+                    exception=NoScheduleDataSpecified(),
+                )
+                for extract in self.aggregation.extracts
+            ]
 
         aggregation_extracts = AggregationExtracts(fs, tmp_dir, self.aggregation)
         aggregation_extracts.download()
@@ -534,7 +530,7 @@ class ValidationProcessor:
 
         if not outcomes:
             try:
-                self.validator.execute(gtfs_zip, aggregation_extracts.get_path())
+                self.validator().execute(gtfs_zip, aggregation_extracts.get_path())
 
             # these are the only two types of errors we expect; let any others bubble up
             except subprocess.CalledProcessError as e:
@@ -612,12 +608,12 @@ class ValidationProcessor:
                     ]
                 )
 
-                for e in extracts:
+                for extract in extracts:
                     outcomes.append(
                         RTFileProcessingOutcome(
                             step=self.aggregation.step,
                             success=True,
-                            extract=e,
+                            extract=extract,
                             aggregation=self.aggregation,
                         )
                     )
@@ -654,7 +650,7 @@ class ParseProcessor:
         self.verbose = verbose
 
     def process(
-        self, tmp_dir: tempfile.TemporaryDirectory, scope
+        self, tmp_dir: str, scope
     ) -> List[RTFileProcessingOutcome]:
         outcomes: List[RTFileProcessingOutcome] = []
         fs = get_fs()
@@ -784,10 +780,8 @@ class ParseProcessor:
 # exceptions in backoff's context, which ruins things
 def parse_and_validate(
     aggregation: RTHourlyAggregation,
-    jar_path: Path,
     verbose: bool = False,
 ) -> List[RTFileProcessingOutcome]:
-    validator = RtValidator(jar_path)
     with tempfile.TemporaryDirectory() as tmp_dir:
         with sentry_sdk.push_scope() as scope:
             scope.set_tag(
@@ -804,7 +798,7 @@ def parse_and_validate(
                 raise RuntimeError("we should not be here")
 
             if aggregation.step == RTProcessingStep.validate:
-                return ValidationProcessor(aggregation, validator, verbose).process(
+                return ValidationProcessor(aggregation, verbose).process(
                     tmp_dir, scope
                 )
 
@@ -835,7 +829,6 @@ def main(
     hour: datetime.datetime,
     limit: int = 0,
     threads: int = 4,
-    jar_path: Path = JAR_DEFAULT,
     verbose: bool = False,
     base64url: Optional[str] = None,
 ):
@@ -843,8 +836,9 @@ def main(
     if not hourly_feed_files.valid():
         typer.secho(f"missing: {hourly_feed_files.files_missing_metadata}")
         typer.secho(f"invalid: {hourly_feed_files.files_invalid_metadata}")
+        error_count = hourly_feed_files.total() - len(hourly_feed_files.files)
         raise RuntimeError(
-            f"too many files have missing/invalid metadata; {hourly_feed_files.total - len(hourly_feed_files.files)} of {hourly_feed_files.total}"  # noqa: E702
+            f"too many files have missing/invalid metadata; {error_count} of {hourly_feed_files.total()}"  # noqa: E702
         )
     aggregated_feed = hourly_feed_files.get_query(step, feed_type)
     aggregations_to_process = (
@@ -894,7 +888,6 @@ def main(
             pool.submit(
                 parse_and_validate,
                 aggregation=aggregation,
-                jar_path=jar_path,
                 verbose=verbose,
             ): aggregation
             for aggregation in aggregations_to_process
