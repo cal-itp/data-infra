@@ -484,9 +484,7 @@ class ValidationProcessor:
     def validator(self):
         return RtValidator()
 
-    def process(
-        self, tmp_dir: str, scope
-    ) -> List[RTFileProcessingOutcome]:
+    def process(self, tmp_dir: str, scope) -> List[RTFileProcessingOutcome]:
         outcomes: List[RTFileProcessingOutcome] = []
         fs = get_fs()
 
@@ -649,9 +647,7 @@ class ParseProcessor:
         self.aggregation = aggregation
         self.verbose = verbose
 
-    def process(
-        self, tmp_dir: str, scope
-    ) -> List[RTFileProcessingOutcome]:
+    def process(self, tmp_dir: str, scope) -> List[RTFileProcessingOutcome]:
         outcomes: List[RTFileProcessingOutcome] = []
         fs = get_fs()
         dst_path_rt = f"{tmp_dir}/rt_{self.aggregation.name_hash}/"
@@ -798,9 +794,7 @@ def parse_and_validate(
                 raise RuntimeError("we should not be here")
 
             if aggregation.step == RTProcessingStep.validate:
-                return ValidationProcessor(aggregation, verbose).process(
-                    tmp_dir, scope
-                )
+                return ValidationProcessor(aggregation, verbose).process(tmp_dir, scope)
 
             if aggregation.step == RTProcessingStep.parse:
                 return ParseProcessor(aggregation, verbose).process(tmp_dir, scope)
