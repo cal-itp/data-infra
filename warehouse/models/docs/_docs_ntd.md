@@ -2,6 +2,10 @@ Docs for NTD models;
 
 {% docs ntd_id %}
 A five-digit identifying number for each agency used in the current NTD system.
+FTA assigns each reporter a unique five-digit NTD Identification Number.
+The first digit of the NTD ID corresponds to the FTA Region where the reporter is located (e.g., 9#### indicates Region IX).
+The code will have a four-to-five digit prefix for any entity submitting the report on behalf of the reporter.
+For example, State Departments of Transportation (usually indicated as #R##) submit on behalf of their subrecipients.
 {% enddocs %}
 
 {% docs ntd_legacy_id %}
@@ -40,6 +44,7 @@ The state in which the agency is headquartered.
 {% enddocs %}
 
 {% docs ntd_primary_uza_code %}
+The primary urbanized area served by the transit agency.
 UACE Code remains consistent across census years.
 {% enddocs %}
 

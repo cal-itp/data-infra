@@ -2,6 +2,12 @@ version: 2
 
 models:
   - name: stg_ntd__annual_database_agency_information
+    description: |
+      Contains basic contact and agency information for each NTD reporter.
+
+      The dataset can be found at:
+        https://www.transit.dot.gov/ntd/data-product/2023-annual-database-agency-information
+        * For other years, just replace 2023 by the desired year.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
