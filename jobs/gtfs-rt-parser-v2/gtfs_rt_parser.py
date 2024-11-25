@@ -268,7 +268,7 @@ class MostRecentSchedule:
         self.path = path
         self.base64_validation_url = base64_validation_url
 
-    def download(self, date: datetime.datetime) -> str:
+    def download(self, date: datetime.datetime) -> Optional[str]:
         for day in reversed(list(date - date.subtract(days=7))):
             try:
                 schedule_extract = (
@@ -285,13 +285,13 @@ class MostRecentSchedule:
             try:
                 gtfs_zip = "/".join([self.path, schedule_extract.filename])
                 self.fs.get(schedule_extract.path, gtfs_zip)
-                break
+                return gtfs_zip
             except FileNotFoundError:
                 print(
                     f"no schedule file found for {self.base64_validation_url} on day {day}"
                 )
                 continue
-        return gtfs_zip
+        return None
 
 
 class AggregationExtract:
@@ -365,7 +365,7 @@ class AggregationExtracts:
             lpath=list(self.get_local_paths().keys()),
         )
 
-    def download_most_recent_schedule(self) -> str:
+    def download_most_recent_schedule(self) -> Optional[str]:
         first_extract = self.aggregation.extracts[0]
         schedule = MostRecentSchedule(
             self.fs, self.path, first_extract.config.base64_validation_url
