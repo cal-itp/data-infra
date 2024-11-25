@@ -54,10 +54,7 @@ def test_rt_file_processing_outcome_construction() -> None:
 
 @pytest.mark.skipif("not config.getoption('--gcs')", reason="requires GCS credentials")
 def test_vehicle_positions():
-    result = runner.invoke(
-        app,
-        ["parse", "vehicle_positions", "1999-10-22T18:00:00"]
-    )
+    result = runner.invoke(app, ["parse", "vehicle_positions", "1999-10-22T18:00:00"])
     assert result.exit_code == 0
     assert (
         "test-calitp-gtfs-rt-raw-v2/vehicle_positions/dt=1999-10-22/hour=1999-10-22T18:00:00+00:00"
@@ -77,7 +74,7 @@ def test_no_vehicle_positions_for_date():
     )
     result = runner.invoke(
         app,
-        ["parse", "vehicle_positions", "2022-09-14T18:00:00", "--base64url", base64url]
+        ["parse", "vehicle_positions", "2022-09-14T18:00:00", "--base64url", base64url],
     )
     assert result.exit_code == 0
     assert "0 vehicle_positions files in 0 aggregations" in result.stdout
@@ -89,7 +86,7 @@ def test_no_vehicle_positions_for_date():
 def test_no_vehicle_positions_for_url():
     result = runner.invoke(
         app,
-        ["parse", "vehicle_positions", "2024-09-14T18:00:00", "--base64url", "nope"]
+        ["parse", "vehicle_positions", "2024-09-14T18:00:00", "--base64url", "nope"],
     )
     assert result.exit_code == 0
     assert "found 5158 vehicle_positions files in 136 aggregations" in result.stdout
@@ -104,7 +101,7 @@ def test_no_records_for_url_vehicle_positions_on_date():
     )
     result = runner.invoke(
         app,
-        ["parse", "vehicle_positions", "2024-09-14T18:00:00", "--base64url", base64url]
+        ["parse", "vehicle_positions", "2024-09-14T18:00:00", "--base64url", base64url],
     )
     assert result.exit_code == 0
     assert "found 5158 vehicle_positions files in 136 aggregations" in result.stdout
@@ -117,8 +114,7 @@ def test_no_records_for_url_vehicle_positions_on_date():
 def test_trip_updates():
     base64url = "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1TQQ=="
     result = runner.invoke(
-        app,
-        ["parse", "trip_updates", "2024-10-22T18:00:00", "--base64url", base64url]
+        app, ["parse", "trip_updates", "2024-10-22T18:00:00", "--base64url", base64url]
     )
     assert result.exit_code == 0
     assert (
@@ -138,7 +134,7 @@ def test_service_alerts():
     base64url = "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3NlcnZpY2VhbGVydHM_YWdlbmN5PUFN"
     result = runner.invoke(
         app,
-        ["parse", "service_alerts", "2024-10-22T18:00:00", "--base64url", base64url]
+        ["parse", "service_alerts", "2024-10-22T18:00:00", "--base64url", base64url],
     )
     assert result.exit_code == 0
     assert (
@@ -185,7 +181,7 @@ def test_no_recent_schedule_for_vehicle_positions_on_validation():
             "2024-09-14T18:00:00",
             "--base64url",
             base64url,
-        ]
+        ],
     )
     assert result.exit_code == 0
     assert (
