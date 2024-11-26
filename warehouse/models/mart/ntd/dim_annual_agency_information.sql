@@ -1,9 +1,14 @@
-WITH source AS (
-    SELECT * FROM {{ source('ntd_data_products', 'annual_database_agency_information') }}
+WITH stg_ntd__annual_database_agency_information AS (
+    SELECT
+        *,
+        -- TODO: this does not handle deletes
+        LEAD(ts) OVER (PARTITION BY year, ntd_id, state_parent_ntd_id ORDER BY ts ASC) AS next_ts,
+    FROM {{ ref('stg_ntd__annual_database_agency_information') }}
 ),
 
-stg_ntd__annual_database_agency_information AS (
+dim_annual_agency_information AS (
     SELECT
+       {{ dbt_utils.generate_surrogate_key(['year', 'ntd_id', 'state_parent_ntd_id', 'ts']) }} AS key,
         year,
         ntd_id,
         state_parent_ntd_id,
@@ -33,8 +38,8 @@ stg_ntd__annual_database_agency_information AS (
         ueid,
         service_area_sq_miles,
         service_area_pop,
-        primary_uza AS primary_uza_code,
-        uza_name AS primary_uza_name,
+        primary_uza_code,
+        primary_uza_name,
         tribal_area_name,
         population,
         density,
@@ -48,9 +53,10 @@ stg_ntd__annual_database_agency_information AS (
         number_of_state_counties,
         number_of_counties_with_service,
         state_admin_funds_expended,
-        dt,
-        ts
-    FROM source
+        ts AS _valid_from,
+        {{ make_end_of_valid_range('COALESCE(next_ts, CAST("2099-01-01" AS TIMESTAMP))') }} AS _valid_to,
+        next_ts IS NULL AS _is_current,
+    FROM stg_ntd__annual_database_agency_information
 )
 
-SELECT * FROM stg_ntd__annual_database_agency_information
+SELECT * FROM dim_annual_agency_information

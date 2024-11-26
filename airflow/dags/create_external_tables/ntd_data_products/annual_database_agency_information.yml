@@ -16,125 +16,88 @@ hive_options:
   source_uri_prefix: "annual-database-agency-information/{dt:DATE}/{ts:TIMESTAMP}/{year:INTEGER}/"
 schema_fields:
   - name: number_of_state_counties
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: tam_tier
     type: STRING
-    mode: NULLABLE
   - name: personal_vehicles
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: density
     type: FLOAT
-    mode: NULLABLE
   - name: uza_name
     type: STRING
-    mode: NULLABLE
   - name: tribal_area_name
     type: STRING
-    mode: NULLABLE
   - name: service_area_sq_miles
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: total_voms
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: city
     type: STRING
-    mode: NULLABLE
   - name: fta_recipient_id
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: region
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: state_admin_funds_expended
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: zip_code_ext
-    type: FLOAT
-    mode: NULLABLE
+    type: STRING
   - name: zip_code
-    type: FLOAT
-    mode: NULLABLE
+    type: STRING
   - name: ueid
     type: STRING
-    mode: NULLABLE
   - name: address_line_2
     type: STRING
-    mode: NULLABLE
   - name: number_of_counties_with_service
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: reporter_acronym
     type: STRING
-    mode: NULLABLE
   - name: original_due_date
-    type: INTEGER
-    mode: NULLABLE
+    type: STRING
   - name: sq_miles
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: address_line_1
     type: STRING
-    mode: NULLABLE
   - name: p_o__box
     type: STRING
-    mode: NULLABLE
   - name: fy_end_date
-    type: INTEGER
-    mode: NULLABLE
+    type: STRING
   - name: reported_by_ntd_id
     type: STRING
-    mode: NULLABLE
   - name: population
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: reporting_module
     type: STRING
-    mode: NULLABLE
   - name: service_area_pop
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: subrecipient_type
     type: STRING
-    mode: NULLABLE
   - name: state
     type: STRING
-    mode: NULLABLE
   - name: volunteer_drivers
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: primary_uza
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: doing_business_as
     type: STRING
-    mode: NULLABLE
   - name: reporter_type
     type: STRING
-    mode: NULLABLE
   - name: legacy_ntd_id
     type: STRING
-    mode: NULLABLE
   - name: voms_do
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: url
     type: STRING
-    mode: NULLABLE
   - name: reported_by_name
     type: STRING
-    mode: NULLABLE
   - name: voms_pt
-    type: FLOAT
-    mode: NULLABLE
+    type: NUMERIC
   - name: organization_type
     type: STRING
-    mode: NULLABLE
   - name: agency_name
     type: STRING
-    mode: NULLABLE
   - name: ntd_id
     type: STRING
-    mode: NULLABLE
+  - name: division_department
+    type: STRING
+  - name: state_parent_ntd_id
+    type: STRING

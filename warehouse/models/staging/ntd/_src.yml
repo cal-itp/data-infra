@@ -7,3 +7,9 @@ sources:
     schema: external_ntd_data_products
     tables:
       - name: annual_database_agency_information
+        description: |
+          Contains basic contact and agency information for each NTD reporter.
+
+          The dataset can be found at:
+            https://www.transit.dot.gov/ntd/data-product/2023-annual-database-agency-information
+            * For other years, just replace 2023 by the desired year.
