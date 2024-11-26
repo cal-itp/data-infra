@@ -77,7 +77,7 @@ funding_by_org AS (
 -- We cannot use `_is_current` here because every year is marked as "current"
 -- since it's the "current" record for the respective year.
 annual_ntd AS (
-    SELECT * FROM {{ ref('dim_annual_ntd_agency_information') }}
+    SELECT * FROM {{ ref('dim_annual_agency_information') }}
     WHERE state = "CA"
 
     -- We only want data from the latest data from NTD. In the rare edge case

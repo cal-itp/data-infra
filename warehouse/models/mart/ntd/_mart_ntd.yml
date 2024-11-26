@@ -102,7 +102,7 @@ x-common-fields:
     description: '{{ doc("ntd_xlsx_execution_ts") }}'
 
 models:
-  - name: dim_annual_ntd_agency_information
+  - name: dim_annual_agency_information
     description: >
       Contains basic contact and agency information for each NTD reporter.
 

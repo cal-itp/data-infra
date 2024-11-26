@@ -6,7 +6,7 @@ WITH stg_ntd__annual_database_agency_information AS (
     FROM {{ ref('stg_ntd__annual_database_agency_information') }}
 ),
 
-dim_annual_ntd_agency_information AS (
+dim_annual_agency_information AS (
     SELECT
        {{ dbt_utils.generate_surrogate_key(['year', 'ntd_id', 'state_parent_ntd_id', 'ts']) }} AS key,
         year,
@@ -59,4 +59,4 @@ dim_annual_ntd_agency_information AS (
     FROM stg_ntd__annual_database_agency_information
 )
 
-SELECT * FROM dim_annual_ntd_agency_information
+SELECT * FROM dim_annual_agency_information
