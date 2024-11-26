@@ -61,6 +61,18 @@ class InvalidMetadata(Exception):
     pass
 
 
+class NoScheduleDataSpecified(Exception):
+    pass
+
+
+class ScheduleDataNotFound(Exception):
+    pass
+
+
+class NoValidatorResults(Exception):
+    pass
+
+
 class RTProcessingStep(str, Enum):
     parse = "parse"
     validate = "validate"
@@ -75,14 +87,6 @@ class RTValidationMetadata(BaseModel):
     extract_ts: pendulum.DateTime
     extract_config: GTFSDownloadConfig
     gtfs_validator_version: str
-
-
-class NoScheduleDataSpecified(Exception):
-    pass
-
-
-class ScheduleDataNotFound(Exception):
-    pass
 
 
 class RTHourlyAggregation(PartitionedGCSArtifact):
@@ -277,7 +281,7 @@ class MostRecentSchedule:
                     .get_url_schedule(self.base64_validation_url)
                 )
             except KeyError:
-                print(
+                typer.secho(
                     f"no schedule data found for {self.base64_validation_url} on day {day}"
                 )
                 continue
@@ -287,7 +291,7 @@ class MostRecentSchedule:
                 self.fs.get(schedule_extract.path, gtfs_zip)
                 return gtfs_zip
             except FileNotFoundError:
-                print(
+                typer.secho(
                     f"no schedule file found for {self.base64_validation_url} on day {day}"
                 )
                 continue
@@ -346,17 +350,17 @@ class AggregationExtracts:
     def get_results_paths(self) -> Dict[str, GTFSRTFeedExtract]:
         return {e.get_results_path(): e.extract for e in self.get_extracts()}
 
-    def get_hashed_results(self):
+    def get_hashed_results(self) -> Dict[str, Any]:
         hashed = {}
         for e in self.get_extracts():
             if e.has_results():
-                hashed[e.hash()] = e.get_results()
+                hashed[e.hash().hex()] = e.get_results()
         return hashed
 
-    def get_hashes(self) -> Dict[bytes, List[GTFSRTFeedExtract]]:
-        hashed: Dict[bytes, List[GTFSRTFeedExtract]] = defaultdict(list)
+    def get_hashes(self) -> Dict[str, List[GTFSRTFeedExtract]]:
+        hashed: Dict[str, List[GTFSRTFeedExtract]] = defaultdict(list)
         for e in self.get_extracts():
-            hashed[e.hash()].append(e.extract)
+            hashed[e.hash().hex()].append(e.extract)
         return hashed
 
     def download(self):
@@ -507,7 +511,7 @@ class ValidationProcessor:
             e = ScheduleDataNotFound(
                 f"no recent schedule data found for {self.aggregation.extracts[0].path}"
             )
-            print(e)
+            typer.secho(e)
 
             scope.fingerprint = [
                 type(e),
@@ -571,11 +575,11 @@ class ValidationProcessor:
             for hash, extracts in aggregation_extracts.get_hashes().items():
                 try:
                     records = hashed_results[hash]
-                except KeyError as e:
+                except KeyError:
                     if self.verbose:
                         paths = ", ".join(e.path for e in extracts)
                         typer.secho(
-                            f"WARNING: no results found for {paths}",
+                            f"WARNING: validator did not produce results for {paths}",
                             fg=typer.colors.YELLOW,
                         )
 
@@ -584,7 +588,7 @@ class ValidationProcessor:
                             RTFileProcessingOutcome(
                                 step=self.aggregation.step,
                                 success=False,
-                                exception=e,
+                                exception=NoValidatorResults("No validator output"),
                                 extract=extract,
                             )
                         )
@@ -680,7 +684,7 @@ class ParseProcessor:
                 except DecodeError as e:
                     if self.verbose:
                         typer.secho(
-                            f"WARNING: DecodeError for {str(extract.path)}",
+                            f'DecodeError: "{str(e)}" thrown when decoding {str(extract.path)}',
                             fg=typer.colors.YELLOW,
                         )
                     outcomes.append(
@@ -918,13 +922,9 @@ def main(
         # TODO: I dislike having to exclude the records here
         #   I need to figure out the best way to have a single type represent the "metadata" of
         #   the content as well as the content itself
-        result.save_content(
-            fs=get_fs(),
-            content="\n".join(
-                (json.dumps(make_pydantic_model_bq_safe(o)) for o in result.outcomes)
-            ).encode(),
-            exclude={"outcomes"},
-        )
+        raw = [json.dumps(make_pydantic_model_bq_safe(o)) for o in result.outcomes]
+        content = "\n".join(raw).encode("utf-8")
+        result.save_content(fs=get_fs(), content=content, exclude={"outcomes"})
 
     assert (
         len(outcomes)
