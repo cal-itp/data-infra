@@ -40,7 +40,7 @@ dim_stops_latest_with_shn_boolean AS (
 
 SELECT
     dim_stops_latest.*,
-    IF(stops_on_shn._gtfs_key IS NOT NULL, TRUE, FALSE) AS exists_in_dim_stops_latest
+    IF(stops_on_shn._gtfs_key IS NOT NULL, TRUE, FALSE) AS on_state_highway_network
 FROM
     dim_stops_latest
 LEFT JOIN
