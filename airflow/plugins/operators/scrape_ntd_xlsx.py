@@ -20,6 +20,16 @@ RAW_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"]
 CLEAN_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"]
 
 
+# pulls the URL from XCom
+def pull_url_from_xcom(context):
+    task_instance = context["ti"]
+    pulled_value = task_instance.xcom_pull(
+        task_ids="scrape_ntd_ridership_xlsx_url", key="current_url"
+    )
+    print(f"Pulled value from XCom: {pulled_value}")
+    return pulled_value
+
+
 class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
     bucket: ClassVar[str]
     year: str
@@ -41,6 +51,11 @@ class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
         arbitrary_types_allowed = True
 
     def fetch_from_ntd_xlsx(self, file_url):
+        # As of now, the only file that we are downloading is for complete_monthly_ridership_with_adjustments_and_estimates
+        # and the download link changes every time they update the date, so we have special handling for that here, which is dependent
+        # another dag task called scrape_ntd_ridership_xlsx_url.py. if we look to download other xlsx files from the DOT portal and they
+        # also change the file name every time they publish, they we will have to add the same handling for all of these files and make it programmatic
+
         validated_url = parse_obj_as(HttpUrl, file_url)
 
         logging.info(f"reading file from url {validated_url}")
@@ -84,6 +99,7 @@ class NtdDataProductXLSXOperator(BaseOperator):
         product: str,
         xlsx_file_url,
         year: int,
+        *args,
         **kwargs,
     ):
         self.year = year
@@ -98,15 +114,18 @@ class NtdDataProductXLSXOperator(BaseOperator):
             filename=f"{self.year}__{self.product}_raw.xlsx",
         )
 
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
-    def execute(self, **kwargs):
-        excel_content = self.raw_excel_extract.fetch_from_ntd_xlsx(
-            self.raw_excel_extract.file_url
-        )
-        logging.info(
-            f"file url is {self.xlsx_file_url} and file type is {type(self.xlsx_file_url)}"
-        )
+    def execute(self, context, *args, **kwargs):
+        download_url = self.raw_excel_extract.file_url
+
+        if self.product == "complete_monthly_ridership_with_adjustments_and_estimates":
+            download_url = pull_url_from_xcom(context=context)
+
+        # see what is returned
+        logging.info(f"reading ridership url as {download_url}")
+
+        excel_content = self.raw_excel_extract.fetch_from_ntd_xlsx(download_url)
 
         self.raw_excel_extract.save_content(fs=get_fs(), content=excel_content)
 
