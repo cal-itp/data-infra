@@ -1,0 +1,7 @@
+operator: operators.StateGeoportalAPIOperator
+
+root_url: 'https://caltrans-gis.dot.ca.gov/arcgis/rest/services/'
+service: "CHhighway/SHN_Lines"
+layer: "0"
+product: 'state_highway_network'
+resultRecordCount: 2000

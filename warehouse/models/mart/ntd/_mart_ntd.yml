@@ -102,33 +102,35 @@ x-common-fields:
     description: '{{ doc("ntd_xlsx_execution_ts") }}'
 
 models:
-  - name: dim_annual_ntd_agency_information
+  - name: dim_annual_agency_information
     description: >
-      Versioned extracts of the NTD Annual Database Agency Information.
+      Contains basic contact and agency information for each NTD reporter.
 
-      The versioning is bitemporal, so records are versioned at the year
+      The dataset can be found at:
+        https://www.transit.dot.gov/ntd/data-product/2023-annual-database-agency-information
+        * For other years, just replace 2023 by the desired year.
 
-      and ntd_id level. This means you must join based on
-      _valid_from/_valid_from
+      The versioning is bitemporal, so records are versioned at the year, ntd_id, and state_parent_ntd_id level.
+      This means you must join based on _valid_from/_valid_from to get the records for a given ntd_id and state_parent_ntd_id,
+      and then choose which year to look up.
 
-      to get the records for a given ntd_id, and then choose which year to
-
-      look up.
+      Use _is_current to find the latest version for each set of year, ntd_id, and state_parent_ntd_id.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
-          partition_by: CONCAT(year, '_', ntd_id)
+          partition_by: CONCAT(year, '_', ntd_id, '_', COALESCE(state_parent_ntd_id, ''))
           gaps: required
     columns:
       - name: key
         tests:
           - not_null
           - unique
-      - name: year
+      - <<: *report_year
+        name: year
         tests:
           - not_null
-      - name: ntd_id
+      - <<: *ntd_id
         tests:
           - not_null
       - name: _valid_from
@@ -138,8 +140,120 @@ models:
         tests:
           - not_null
       - name: _is_current
+        description: Indicates the latest report version for each year, ntd_id, and state_parent_ntd_id.
         tests:
           - not_null
+      - name: state_parent_ntd_id
+        description: |
+          Indicates the ID number of the transit agency reporting to the database on behalf of the transit agency.
+      - name: agency_name
+        description: |
+          The agency name is the full legal name of the agency.
+          If reporting is required under an FTA grant program, this must reflect the legal name of the funding recipient.
+      - name: doing_business_as
+        description: The name under which the reporting agency is doing business.
+      - name: address_line_1
+        description: First line of the agency's mailing address.
+      - name: address_line_2
+        description: Second line of the agency's mailing address (if applicable).
+      - name: p_o__box
+        description: The PO Box of the agency (if applicable).
+      - name: city
+        description: City of the agency's mailing address.
+      - name: state
+        description: State of the agency's mailing address.
+      - name: zip_code
+        description: Zip Code of the agency's mailing address.
+      - name: zip_code_ext
+        description: Zip Code Extension of the agency's mailing address.
+      - name: region
+        description: The FTA region in which the reporter is located.
+      - name: density
+        description: The population density of the Primary UZA of the agency, if one exists.
+      - name: ueid
+        description: |
+          The UEID is a number or other identifier used to identify a specific commercial, nonprofit, or Government entity.
+          This is now reported in place of DUNS number for each unique transit agency reporting to the NTD.
+          See the U.S. General Services Administration UEID web page for more information.
+      - name: fta_recipient_id
+        description: |
+          The four-digit number assigned to a transit agency for the Federal Transit Administration (FTA) electronic grant making system — TrAMS (Transportation Award Management System).
+      - name: original_due_date
+        description: The date on which the 2020 NTD Report was due to FTA.
+      - name: fy_end_date
+        description: Calendar selection for the last day of an agency's fiscal year.
+      - name: number_of_counties_with_service
+        description: |
+          States report the total number of counties in the state that are currently served, in whole or in part, by Formula Grants for Rural Areas (§5311)-funded operators.
+      - name: number_of_state_counties
+        description: The number of Counties in given State (for State Departments of Transportation).
+      - *organization_type
+      - name: personal_vehicles
+        description: |
+          Vehicles that are used by the transit provider to transport passengers in revenue service but are owned by private individuals, typically an employee of the agency or a volunteer driver.
+      - name: population
+        description: The population of the Primary UZA of the agency, if one exists.
+      - *primary_uza_code
+      - *primary_uza_name
+      - name: reported_by_name
+        description: The NTD ID of the entity reporting on behalf of another entity.
+      - name: reported_by_ntd_id
+        description: |
+          The entity, usually a State, submitting an NTD report on behalf of another entity, usually a subrecipient of the State.
+      - name: reporter_acronym
+        description: The acronym used by the reporting agency.
+      - name: reporter_type
+        description: |
+          Reporter Type will be based on where they operate and the reporting requirements associated with their agency.
+          Agencies that receive Chapter 53 funds and own, operate, or manage capital assets in public transportation are also required to file an annual report, even if they do not receive §5307 or §5311 funds.
+          Agencies that do not receive or benefit from FTA funding may elect to submit their data to the NTD as Voluntary Reporter but are still assigned a reporter type.
+          Current types are:
+            `Building Reporter`,
+            `Full Reporter`,
+            `Group Plan Sponsor`,
+            `Planning Reporter`,
+            `Reduced Asset Reporter`,
+            `Reduced Reporter`,
+            `Rural Reporter`,
+            `Separate Service`,
+            `State Reporter`.
+      - name: reporting_module
+        description: |
+          A general classification that will determine which, if any, FTA formula programs will use the NTD data.
+          For example, Tribes and Native Villages will have data included in the in the §5311j Tribal Transit Program.
+          Reporters receiving Chapter 53 funds but not receiving or benefiting from §5307 and §5311
+          AND not electing to report service data are classified as Asset due to the requirement to report asset inventory data.
+          These agencies are not presently included in formula program datasets.
+      - name: service_area_pop
+        description: |
+          A measure of access to transit service in terms of population served and area coverage (square miles).
+          The reporting transit agency determines the service area boundaries and population for most transit services using the definitions contained in the Americans with Disabilities Act of 1990 (ADA),
+          i.e. a corridor surrounding the routes 3/4 of a mile on either side, or for rail, a series of circles of radius 3/4 mile centered on each station Transit agency reporters are required to submit service area information.
+      - name: sq_miles
+        description: The square miles of the Primary UZA of the agency, if one exists.
+      - *service_area_sq_miles
+      - name: state_admin_funds_expended
+        description: |
+          States report the §5311 revenues they expended as a result of administering the program.
+          Since the §5311 program operates on a reimbursement basis, revenues expended during the report year will be expended during the same year.
+          Report the operating revenue expended during the report year from FTA §5311 Formula Grants for Rural Areas funds.
+      - name: subrecipient_type
+        description: Reflects the type of Rural Formula Grant funding received by the subrecipient.
+      - name: tam_tier
+        description: |
+          Defines whether the agency is a Tier I agency required to produce their own Transit Asset Management plan (and, in parenparens, on what basis)
+          or a Tier II operator eligible to be in a group TAM Plan.
+          N/A indicates that the requirement does not apply.
+      - name: total_voms
+        description: |
+          The Vehicles Operated in Maximum Service ("peak service level") across the entire fiscal year for the given agency.
+      - name: tribal_area_name
+        description: The tribal land, determined by US Census data, on which tribes operate.
+      - name: url
+        description: Agency's transit website.
+      - name: volunteer_drivers
+        description: |
+          Individuals who drive vehicles in revenue service to transport passengers for the transit provider but are not employees of the transit provider and are not compensated for their labor.
 
   - name: dim_annual_funding_sources
     description: >-

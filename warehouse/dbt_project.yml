@@ -69,3 +69,5 @@ models:
         schema: mart_benefits
       ntd_validation:
         schema: mart_ntd_validation
+      ntd_fct_annual:
+        schema: mart_ntd_fct_annual

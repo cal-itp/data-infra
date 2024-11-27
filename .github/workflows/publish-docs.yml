@@ -29,7 +29,7 @@ jobs:
 
     - name: Build jupyter book
       run: jb build docs --warningiserror --keep-going # set doc to fail on any sphinx warning
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: always()
       with:
         name: docs-build
