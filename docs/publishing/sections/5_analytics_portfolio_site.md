@@ -11,6 +11,7 @@ Netlify is the platform turns our Jupyter Notebooks uploaded to GitHub into a fu
 To setup your netlify key:
 
 - Ask in Slack/Teams for a Netlify key if you don't have one yet.
+- If you already have your Netlify key set up, find it by typing `cat ~/.bash_profile` into the root of your repo.
 - Install netlify: `npm install -g netlify-cli`
 - Navigate to your main directory
 - Edit your bash profile using Nano:
@@ -47,13 +48,15 @@ Create a `README.md` file in the repo where your work lies. This also forms the 
 
 Each `.yml` file creates a new site on the [Portfolio's Index Page](https://analysis.calitp.org/), so every project needs its own file. DLA Grant Analysis, SB125 Route Illustrations, and Active Transportation Program all have their own `.yml` file.
 
-All the `.yml` files live here at [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
+All the `.yml` files live here at [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Navigate to this folder to create the .yml file.
 
 Here's how to create a `yml` file:
 
 - Include the directory to the notebook(s) you want to publish.
 
 - Name your `.yml` file. For now we will use `my_report.yml` as an example.
+
+- `.yml` file should contain the title, directory, README.md path and notebook path.
 
 - The structure of your `.yml` file depends on the type of your analysis:
 
@@ -206,3 +209,9 @@ build_my_reports:
     git add portfolio/my_report/district_*/ portfolio/my_report/*.yml portfolio/my_report/*.md
     git add portfolio/sites/my_report.yml
 ```
+
+### Delete Portfolio/ Refresh Index Page
+
+When creating a new portfolio and there’s an old version with existing files or content on your portfolio site or in your local environment, it’s important to clean up the old files before adding new content.
+
+Use python `portfolio/portfolio.py clean my_report` before deploying your report.

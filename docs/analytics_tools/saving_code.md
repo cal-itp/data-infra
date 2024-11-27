@@ -123,7 +123,7 @@ If you discover merge conflicts and they are within a single notebook that only 
 - Untracked Files:
   Sometimes, files are created or modified locally but are not added to Git before committing, so they are not tracked or pushed to GitHub. Use `git add <filename>` to track files before committing.
 - Incorrect Branches:
-  Committing to the wrong branch (e.g., main instead of a feature branch) can cause problems, especially if changes are not meant to be merged into the main codebase. Always ensure you're on the correct branch using git branch and switch branches with `git checkout <branch-name>` before committing.
+  Committing to the wrong branch (e.g., main instead of a feature branch) can cause problems, especially if changes are not meant to be merged into the main codebase. Always ensure you're on the correct branch using git branch and switch branches with `git switch -c <branch-name>` before committing.
 - Merge Conflicts from Overlapping Work:
   When multiple analysts work on the same files or sections of code, merge conflicts can occur. Creating feature branches and pulling regularly to stay updated with main can help avoid these conflicts.
 
