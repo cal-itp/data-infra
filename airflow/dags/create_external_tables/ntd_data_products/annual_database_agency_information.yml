@@ -45,6 +45,10 @@ schema_fields:
     type: STRING
   - name: ueid
     type: STRING
+  - name: division_department
+    type: STRING
+  - name: state_parent_ntd_id
+    type: STRING
   - name: address_line_2
     type: STRING
   - name: number_of_counties_with_service
@@ -96,8 +100,4 @@ schema_fields:
   - name: agency_name
     type: STRING
   - name: ntd_id
-    type: STRING
-  - name: division_department
-    type: STRING
-  - name: state_parent_ntd_id
     type: STRING
