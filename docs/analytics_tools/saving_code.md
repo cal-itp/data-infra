@@ -116,7 +116,7 @@ If you discover merge conflicts and they are within a single notebook that only 
     `git checkout --theirs path/to/notebook.ipynb`
 - From here, just add the file and commit with a message as you normally would and the conflict should be fixed in your Pull Request.
 
-(other-common-github-issues-encountered-during-saving-codes)
+(other-common-github-issues-encountered-during-saving-codes)=
 
 ### Other Common Issues
 
