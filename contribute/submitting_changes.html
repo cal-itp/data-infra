@@ -610,6 +610,8 @@
 <section id="how-is-the-docs-github-action-triggered">
 <h3>How is the docs GitHub action triggered?<a class="headerlink" href="#how-is-the-docs-github-action-triggered" title="Link to this heading">#</a></h3>
 <p>Our GitHub action is triggered on pushes to the <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> repository related to the <code class="docutils literal notranslate"><span class="pre">docs</span></code> directory.</p>
+<p>Another way to edit and test your markdown changes is using the jupyterhub.  Edit the text files directly then run this command from the base of the data-infra repo: <code class="docutils literal notranslate"><span class="pre">jb</span> <span class="pre">build</span> <span class="pre">docs</span> <span class="pre">--warningiserror</span></code>.</p>
+<p>This will locally build the docs and allow you to test your changes without having to make lots of commits.</p>
 </section>
 </section>
 <section id="how-do-i-preview-my-docs-change">

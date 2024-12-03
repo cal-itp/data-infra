@@ -85,6 +85,10 @@ The action is an automated service provided by GitHub that ensures suggested add
 
 Our GitHub action is triggered on pushes to the `data-infra` repository related to the `docs` directory.
 
+Another way to edit and test your markdown changes is using the jupyterhub.  Edit the text files directly then run this command from the base of the data-infra repo: `jb build docs --warningiserror`.
+
+This will locally build the docs and allow you to test your changes without having to make lots of commits.
+
 (docs-preview)=
 
 ## How do I preview my docs change?

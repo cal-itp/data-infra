@@ -475,6 +475,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-your-report">Deploy your Report</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-specifications">Other Specifications</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-to-the-makefile">Adding to the Makefile</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#delete-portfolio-refresh-index-page">Delete Portfolio/ Refresh Index Page</a></li>
 </ul>
 </li>
 </ul>
@@ -497,6 +498,7 @@
 <p>To setup your netlify key:</p>
 <ul class="simple">
 <li><p>Ask in Slack/Teams for a Netlify key if you don’t have one yet.</p></li>
+<li><p>If you already have your Netlify key set up, find it by typing <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">~/.bash_profile</span></code> into the root of your repo.</p></li>
 <li><p>Install netlify: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">-g</span> <span class="pre">netlify-cli</span></code></p></li>
 <li><p>Navigate to your main directory</p></li>
 <li><p>Edit your bash profile using Nano:</p>
@@ -549,11 +551,12 @@
 <section id="yml">
 <h3>YML<a class="headerlink" href="#yml" title="Link to this heading">#</a></h3>
 <p>Each <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file creates a new site on the <a class="reference external" href="https://analysis.calitp.org/">Portfolio’s Index Page</a>, so every project needs its own file. DLA Grant Analysis, SB125 Route Illustrations, and Active Transportation Program all have their own <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file.</p>
-<p>All the <code class="docutils literal notranslate"><span class="pre">.yml</span></code> files live here at <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites">data-analyses/portfolio/sites</a>.</p>
+<p>All the <code class="docutils literal notranslate"><span class="pre">.yml</span></code> files live here at <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites">data-analyses/portfolio/sites</a>. Navigate to this folder to create the .yml file.</p>
 <p>Here’s how to create a <code class="docutils literal notranslate"><span class="pre">yml</span></code> file:</p>
 <ul>
 <li><p>Include the directory to the notebook(s) you want to publish.</p></li>
 <li><p>Name your <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file. For now we will use <code class="docutils literal notranslate"><span class="pre">my_report.yml</span></code> as an example.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.yml</span></code> file should contain the title, directory, <a class="reference external" href="http://README.md">README.md</a> path and notebook path.</p></li>
 <li><p>The structure of your <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file depends on the type of your analysis:</p>
 <ul>
 <li><p>If you have one parameterized notebook with <strong>one parameter</strong>:</p>
@@ -739,6 +742,11 @@
 </pre></div>
 </div>
 </section>
+<section id="delete-portfolio-refresh-index-page">
+<h3>Delete Portfolio/ Refresh Index Page<a class="headerlink" href="#delete-portfolio-refresh-index-page" title="Link to this heading">#</a></h3>
+<p>When redeploying your portfolio with new content and there’s an old version with existing files or content on your portfolio site or in your local environment, it’s important to clean up the old files before adding new content.</p>
+<p>Use python <code class="docutils literal notranslate"><span class="pre">portfolio/portfolio.py</span> <span class="pre">clean</span> <span class="pre">my_report</span></code> before deploying your report.</p>
+</section>
 </section>
 </section>
 
@@ -818,6 +826,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-your-report">Deploy your Report</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-specifications">Other Specifications</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-to-the-makefile">Adding to the Makefile</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#delete-portfolio-refresh-index-page">Delete Portfolio/ Refresh Index Page</a></li>
 </ul>
 </li>
 </ul>

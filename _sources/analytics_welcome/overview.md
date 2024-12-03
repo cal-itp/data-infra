@@ -15,6 +15,10 @@ After you've read through this section, continue reading through the remaining s
 
 ______________________________________________________________________
 
+- [Data and Digital Services Organizational Chart](https://pmp.onramp.dot.ca.gov/downloads/pmp/files/Splash%20Page/org-charts-10-2024/DDS_OrgChart_October2024-signed.pdf)
+
+______________________________________________________________________
+
 **Other Analytics Sections**:
 
 - [Technical Onboarding](technical-onboarding)

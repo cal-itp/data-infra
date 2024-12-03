@@ -471,6 +471,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#merging">Merging</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dates">Dates</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monetary-values">Monetary Values</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tidy-data">Tidy Data</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">Visualization</a><ul class="nav section-nav flex-column">
@@ -485,6 +486,7 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#markdown">Markdown</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reviewnb-on-github">ReviewNB on GitHub</a></li>
 </ul>
 </li>
 </ul>
@@ -500,7 +502,7 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="helpful-links">
 <span id="knowledge-sharing"></span><h1>Helpful Links<a class="headerlink" href="#helpful-links" title="Link to this heading">#</a></h1>
-<p>Here are some resources data analysts have collected and referenced, that will hopefully help you out in your work. Have something you want to share? Create a new markdown file, add it <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/example_report">to the example report folder</a>, and <a class="reference external" href="https://app.slack.com/client/T014965JTHA/C013N8GELLF/user_profile/U02PCTPSZ8A">message Amanda.</a></p>
+<p>Here are some resources data analysts have collected and referenced, that will hopefully help you out in your work.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#data-analysis">Data Analysis</a></p>
 <ul>
@@ -510,6 +512,7 @@
 <li><p><a class="reference internal" href="#merging">Merging</a></p></li>
 <li><p><a class="reference internal" href="#dates">Dates</a></p></li>
 <li><p><a class="reference internal" href="#monetary-values">Monetary Values</a></p></li>
+<li><p><a class="reference internal" href="#tidy-data">Tidy Data</a></p></li>
 </ul>
 </li>
 <li><p><a class="reference internal" href="#visualization">Visualizations</a></p>
@@ -519,6 +522,7 @@
 <li><p><a class="reference internal" href="#dataframes">DataFrames</a></p></li>
 <li><p><a class="reference internal" href="#ipywidgets">Ipywidgets</a></p></li>
 <li><p><a class="reference internal" href="#markdown">Markdown</a></p></li>
+<li><p><a class="reference internal" href="#reviewnb"><span class="std std-ref">ReviewNB</span></a></p></li>
 </ul>
 </li>
 </ul>
@@ -637,11 +641,22 @@
 </pre></div>
 </div>
 </section>
+<section id="tidy-data">
+<span id="id8"></span><h3>Tidy Data<a class="headerlink" href="#tidy-data" title="Link to this heading">#</a></h3>
+<p>Tidy Data follows a set of principles that ensure the data is easy to work with, especially when using tools like pandas and matplotlib. Primary rules of tidy data are:</p>
+<ul class="simple">
+<li><p>Each variable must have its own column.</p></li>
+<li><p>Each observation must have its own row.</p></li>
+<li><p>Each value must have its own cell.</p></li>
+</ul>
+<p>Tidy data ensures consistency, making it easier to work with tools like pandas, matplotlib, or seaborn. It also simplifies data manipulation, as functions like <code class="docutils literal notranslate"><span class="pre">groupby()</span></code>, <code class="docutils literal notranslate"><span class="pre">pivot()</span></code>, and <code class="docutils literal notranslate"><span class="pre">melt()</span></code> work more intuitively when the data is structured properly. Additionally, tidy data enables vectorized operations in pandas, allowing for efficient analysis on entire columns or rows at once.</p>
+<p>Learn more about Tidy Data <a class="reference external" href="https://vita.had.co.nz/papers/tidy-data.pdf">here.</a></p>
+</section>
 </section>
 <section id="visualization">
-<span id="id8"></span><h2>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">#</a></h2>
+<span id="id9"></span><h2>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">#</a></h2>
 <section id="charts">
-<span id="id9"></span><h3>Charts<a class="headerlink" href="#charts" title="Link to this heading">#</a></h3>
+<span id="id10"></span><h3>Charts<a class="headerlink" href="#charts" title="Link to this heading">#</a></h3>
 <section id="altair">
 <h4>Altair<a class="headerlink" href="#altair" title="Link to this heading">#</a></h4>
 <ul class="simple">
@@ -664,21 +679,20 @@
 </section>
 </section>
 <section id="maps">
-<span id="id10"></span><h3>Maps<a class="headerlink" href="#maps" title="Link to this heading">#</a></h3>
+<span id="id11"></span><h3>Maps<a class="headerlink" href="#maps" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://nbviewer.org/github/python-visualization/folium/blob/v0.2.0/examples/Colormaps.ipynb">Examples of folium, branca, and color maps.</a></p></li>
 <li><p><a class="reference external" href="https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.explore.html">Quick interactive maps with Geopandas.gdf.explore()</a></p></li>
 </ul>
 </section>
 <section id="dataframes">
-<span id="id11"></span><h3>DataFrames<a class="headerlink" href="#dataframes" title="Link to this heading">#</a></h3>
+<span id="id12"></span><h3>DataFrames<a class="headerlink" href="#dataframes" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/style.html">Styling dataframes with HTML.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/56647813/perform-operations-after-styling-in-a-dataframe">After styling a DataFrame, you will have to access the underlying data with .data</a>.</p></li>
 </ul>
 </section>
 <section id="ipywidgets">
-<span id="id12"></span><h3>ipywidgets<a class="headerlink" href="#ipywidgets" title="Link to this heading">#</a></h3>
+<span id="id13"></span><h3>ipywidgets<a class="headerlink" href="#ipywidgets" title="Link to this heading">#</a></h3>
 <section id="tabs">
 <h4>Tabs<a class="headerlink" href="#tabs" title="Link to this heading">#</a></h4>
 <ul class="simple">
@@ -693,12 +707,19 @@
 </section>
 </section>
 <section id="markdown">
-<span id="id13"></span><h3>Markdown<a class="headerlink" href="#markdown" title="Link to this heading">#</a></h3>
+<span id="id14"></span><h3>Markdown<a class="headerlink" href="#markdown" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.pluralsight.com/guides/working-tables-github-markdown">Create a markdown table.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/2822089/how-to-link-to-part-of-the-same-document-in-markdown">Add a table of content that links to headers throughout a markdown file.</a></p></li>
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/32563078/how-link-to-any-local-file-with-markdown-syntax?rq=1">Add links to local files.</a></p></li>
 <li><p><a class="reference external" href="https://datascienceparichay.com/article/insert-image-in-a-jupyter-notebook/">Direct embed an image.</a></p></li>
+</ul>
+</section>
+<section id="reviewnb-on-github">
+<span id="reviewnb"></span><h3>ReviewNB on GitHub<a class="headerlink" href="#reviewnb-on-github" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.reviewnb.com/">Tool designed to facilitate reviewing Jupyter Notebooks in a collaborative setting on GitHub</a></p></li>
+<li><p><a class="reference external" href="https://www.reviewnb.com/#faq">Shows side-by-side diffs of Jupyter Notebooks, including changes to both code cells and markdown cells and allows reviewers to comment on specific cells</a></p></li>
 </ul>
 </section>
 </section>
@@ -776,6 +797,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#merging">Merging</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dates">Dates</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monetary-values">Monetary Values</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tidy-data">Tidy Data</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">Visualization</a><ul class="nav section-nav flex-column">
@@ -790,6 +812,7 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#markdown">Markdown</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reviewnb-on-github">ReviewNB on GitHub</a></li>
 </ul>
 </li>
 </ul>

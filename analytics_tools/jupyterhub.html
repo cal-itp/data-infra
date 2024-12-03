@@ -468,6 +468,11 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-jupyterhub">Using JupyterHub</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#logging-in-to-jupyterhub">Logging in to JupyterHub</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#default-user-vs-power-user">Default User vs Power User</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#default-user">Default User</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#power-user">Power User</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-warehouse">Connecting to the Warehouse</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#increasing-the-query-limit">Increasing the Query Limit</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#increasing-the-storage-limit">Increasing the Storage Limit</a></li>
@@ -502,6 +507,7 @@
 <ol class="arabic simple">
 <li><p><a class="reference internal" href="#using-jupyterhub">Using JupyterHub</a></p></li>
 <li><p><a class="reference internal" href="#logging-in-to-jupyterhub">Logging in to JupyterHub</a></p></li>
+<li><p><a class="reference internal" href="#default-user-vs-power-user">Default vs Power User</a></p></li>
 <li><p><a class="reference internal" href="#connecting-to-the-warehouse">Connecting to the Warehouse</a></p></li>
 <li><p><a class="reference internal" href="#increasing-the-query-limit">Increasing the Query Limit</a></p></li>
 <li><p><a class="reference internal" href="#increasing-the-storage-limit">Increase the User Storage Limit</a></p></li>
@@ -521,8 +527,21 @@
 <p>JupyterHub currently lives at <a class="reference external" href="https://notebooks.calitp.org/">notebooks.calitp.org</a>.</p>
 <p>Note: you will need to have been added to the Cal-ITP organization on GitHub to obtain access. If you have yet to be added to the organization and need to be, ask in the <code class="docutils literal notranslate"><span class="pre">#services-team</span></code> channel in Slack.</p>
 </section>
+<section id="default-user-vs-power-user">
+<span id="id3"></span><h3>Default User vs Power User<a class="headerlink" href="#default-user-vs-power-user" title="Link to this heading">#</a></h3>
+<section id="default-user">
+<h4>Default User<a class="headerlink" href="#default-user" title="Link to this heading">#</a></h4>
+<p>Designed for general use and is ideal for less resource-intensive tasks. It’s a good starting point for most users who don’t expect to run very large, memory-hungry jobs.</p>
+<p>Default User profile offers quick availability since it uses less memory and can allocate a smaller node, allowing you to start tasks faster. However, if your task grows in memory usage over time, it may exceed the node’s capacity, potentially causing the system to terminate your job. This makes the Default profile best for smaller or medium-sized tasks that don’t require a lot of memory. If your workload exceeds these limits, you might experience instability or crashes.</p>
+</section>
+<section id="power-user">
+<h4>Power User<a class="headerlink" href="#power-user" title="Link to this heading">#</a></h4>
+<p>Intended for more demanding, memory-intensive tasks that require more resources upfront. This profile is suitable for workloads that have higher memory requirements or are expected to grow during execution.</p>
+<p>Power User profile allocates a full node or a significant portion of resources to ensure your job has enough memory and computational power, avoiding crashes or delays. However, this comes with a longer wait time as the system needs to provision a new node for you. Once it’s ready, you’ll have all the resources necessary for memory-intensive tasks like large datasets or simulations. The Power User profile is ideal for jobs that might be unstable or crash on the Default profile due to higher resource demands. Additionally, it offers scalability—if your task requires more resources than the initial node can provide, the system will automatically spin up additional nodes to meet the demand.</p>
+</section>
+</section>
 <section id="connecting-to-the-warehouse">
-<span id="id3"></span><h3>Connecting to the Warehouse<a class="headerlink" href="#connecting-to-the-warehouse" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>Connecting to the Warehouse<a class="headerlink" href="#connecting-to-the-warehouse" title="Link to this heading">#</a></h3>
 <p>Connecting to the warehouse requires a bit of setup after logging in to JupyterHub, but allows users to query data in the warehouse directly.
 To do this, you will need to download and install the gcloud commandline tool from the app.</p>
 <p>See the screencast below for a full walkthrough.</p>
@@ -543,7 +562,7 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 <p>If you are still not able to connect, make sure you have the suite of permissions associated with other analysts.</p>
 </section>
 <section id="increasing-the-query-limit">
-<span id="id4"></span><h3>Increasing the Query Limit<a class="headerlink" href="#increasing-the-query-limit" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>Increasing the Query Limit<a class="headerlink" href="#increasing-the-query-limit" title="Link to this heading">#</a></h3>
 <p>By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into <code class="docutils literal notranslate"><span class="pre">DatabaseError:</span> <span class="pre">500</span> <span class="pre">Query</span> <span class="pre">exceeded</span> <span class="pre">limit</span> <span class="pre">for</span> <span class="pre">bytes</span> <span class="pre">billed</span></code> should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit, add and execute the following in your notebook:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
 
@@ -555,7 +574,7 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 </div>
 </section>
 <section id="increasing-the-storage-limit">
-<span id="id5"></span><h3>Increasing the Storage Limit<a class="headerlink" href="#increasing-the-storage-limit" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>Increasing the Storage Limit<a class="headerlink" href="#increasing-the-storage-limit" title="Link to this heading">#</a></h3>
 <p>By default, new JupyterHub instances are subject to a 10GB storage limit. This setting comes from the underlying infrastructure configuration, and requires some interaction with Kubernetes Engine in Google Cloud to modify.</p>
 <p>If a JupyterHub user experiences an error indicating <code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">space</span> <span class="pre">left</span> <span class="pre">on</span> <span class="pre">device</span></code> or similar, their provisioned storage likely needs to be increased. This can be done from within the Storage section of <a class="reference external" href="https://console.cloud.google.com/kubernetes/list/overview?project=cal-itp-data-infra">the Google Kubernetes Engine web UI</a>. Click into the “claim-[username]” entry associated with the user (<em>not</em> the “pvc-[abc123]” persistent volume associated with that entry), navigate to the “YAML” tab, and change the storage resource request under <code class="docutils literal notranslate"><span class="pre">spec</span></code> and the storage capacity limit under <code class="docutils literal notranslate"><span class="pre">status</span></code>.</p>
 <p>After making the configuration change in GKE, shut down and restart the user’s JupyterHub instance. If the first restart attempt times out, try again once or twice - it can take a moment for the scaleup to complete and properly link the storage volume to the JupyterHub instance.</p>
@@ -597,7 +616,7 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 </ul>
 </section>
 <section id="environment-variables">
-<span id="id6"></span><h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading">#</a></h3>
 <p>Sometimes if data access is expensive, or if there is sensitive data, then accessing it will require some sort of credentials (which may take the form of passwords or tokens).</p>
 <p>There is a fundamental tension between data access restrictions and analysis reproducibility. If credentials are required, then an analysis is not reproducible out-of-the-box. However, including these credentials in scripts and notebooks is a security risk.</p>
 <p>Most projects should store the authentication credentials in environment variables, which can then be read by scripts and notebooks. The environment variables that are required for an analysis to work should be clearly documented.</p>
@@ -704,6 +723,11 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-jupyterhub">Using JupyterHub</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#logging-in-to-jupyterhub">Logging in to JupyterHub</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#default-user-vs-power-user">Default User vs Power User</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#default-user">Default User</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#power-user">Power User</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-warehouse">Connecting to the Warehouse</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#increasing-the-query-limit">Increasing the Query Limit</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#increasing-the-storage-limit">Increasing the Storage Limit</a></li>

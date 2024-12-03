@@ -7,7 +7,7 @@
 | Tool                                                                                               | Purpose                                 |
 | -------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | [**Analytics Repo**](https://github.com/cal-itp/data-analyses)                                     | Analytics team code repository.         |
-| [**Analytics Project Board**](https://github.com/cal-itp/data-analyses/projects/1)                 | Analytics team work management.         |
+| [**Analytics Project Board**](https://github.com/cal-itp/data-analyses/projects/1)                 | Analytics team list of active issues.   |
 | [**notebooks.calitp.org**](https://notebooks.calitp.org/)                                          | JupyterHub cloud-based notebooks        |
 | [**dashboards.calitp.org**](https://dashboards.calitp.org/)                                        | Metabase dashboards & Business Insights |
 | [**dbt-docs.calitp.org**](https://dbt-docs.calitp.org/)                                            | DBT warehouse documentation             |

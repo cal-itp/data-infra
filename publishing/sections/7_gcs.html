@@ -441,7 +441,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -457,6 +459,14 @@
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#public-data-access-in-gcs">Public Data Access in GCS</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -468,10 +478,17 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="gcs">
 <span id="publishing-gcs"></span><h1>GCS<a class="headerlink" href="#gcs" title="Link to this heading">#</a></h1>
-<p>NOTE: If you are planning on publishing to <a class="reference internal" href="8_ckan.html#publishing-ckan"><span class="std std-ref">CKAN</span></a> and you are
-using the dbt exposure publishing framework, your data will already be saved in
-GCS as part of the upload process.</p>
-<p>TBD.</p>
+<section id="public-data-access-in-gcs">
+<h2>Public Data Access in GCS<a class="headerlink" href="#public-data-access-in-gcs" title="Link to this heading">#</a></h2>
+<p>Some data stored in Cloud Storage is configured to be publicly accessible, meaning anyone on the internet can read it at any time. In Google Cloud Storage, you can make data publicly accessible either at the bucket level or the object level. At the bucket level, you can grant public access to all objects within the bucket by modifying the bucket policy. Alternatively, you can provide public access to specific objects.</p>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>Always ensure that sensitive information is not exposed when configuring public access in Google Cloud Storage. Publicly accessible data should be carefully reviewed to prevent the accidental sharing of confidential or private information.</p></li>
+<li><p>External users can’t browse the public bucket on the web, only download individual files. If you have many files to share, it’s best to use the <a class="reference external" href="https://cloud.google.com/storage/docs/access-public-data#command-line">Command Line Interface.</a></p></li>
+<li><p>There is a <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/f62b150768fb1547c6b604cb53d122531104d099/_shared_utils/shared_utils/publish_utils.py#L16">function</a> in shared_utils that handles writing files to the public bucket, regardless of the file type (e.g., Parquet, GeoJSON, etc.)</p></li>
+</ul>
+<p>NOTE: If you are planning on publishing to <a class="reference internal" href="8_ckan.html#publishing-ckan"><span class="std std-ref">CKAN</span></a> and you are using the dbt exposure publishing framework, your data will already be saved in GCS as part of the upload process.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -528,6 +545,22 @@ GCS as part of the upload process.</p>
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#public-data-access-in-gcs">Public Data Access in GCS</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
