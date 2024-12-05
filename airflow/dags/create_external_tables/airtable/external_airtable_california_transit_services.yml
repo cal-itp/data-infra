@@ -321,6 +321,3 @@ schema_fields:
   - name: holiday_website_condition
     type: STRING
     mode: NULLABLE
-  - name: holiday_website__from_provider_
-    type: STRING
-    mode: NULLABLE
