@@ -10,8 +10,10 @@ import pandas as pd
 import shapely  # type: ignore
 
 WGS84 = "EPSG:4326"
-CA_StatePlane = "EPSG:2229"  # units are in feet
-CA_NAD83Albers = "EPSG:3310"  # units are in meters
+CA_NAD83Albers_ft = "ESRI:102600"  # units are in feet
+CA_StatePlane = CA_NAD83Albers_ft  # for compatability pending package publication and analyst code changes, former projection was technically SoCal counties only
+CA_NAD83Albers_m = "EPSG:3310"  # units are in meters
+CA_NAD83Albers = CA_NAD83Albers_m  # for compatability pending package publication and analyst code changes
 
 SQ_MI_PER_SQ_M = 3.86 * 10**-7
 FEET_PER_MI = 5_280
