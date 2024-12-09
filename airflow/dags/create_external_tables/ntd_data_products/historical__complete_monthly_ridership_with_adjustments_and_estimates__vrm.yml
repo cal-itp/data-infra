@@ -10,6 +10,7 @@ source_objects:
 destination_project_dataset_table: "external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
+autodetect: true
 hive_options:
   mode: AUTO
   require_partition_filter: false
