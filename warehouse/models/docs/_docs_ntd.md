@@ -12,6 +12,10 @@ For example, State Departments of Transportation (usually indicated as #R##) sub
 The Transit Property’s NTD identification number in the Legacy NTD Database.
 {% enddocs %}
 
+{% docs ntd_state_parent_ntd_id %}
+Indicates the ID number of the transit agency reporting to the database on behalf of the transit agency.
+{% enddocs %}
+
 {% docs ntd_agency %}
 The transit agency's name.
 {% enddocs %}
@@ -112,7 +116,8 @@ The agency's service area's size in square miles.
 {% enddocs %}
 
 {% docs ntd_questionable_data %}
-Indicates whether there was questionable data for the given given record.        FTA marks a data point as Questionable when there is reason to believe it is incorrect,but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
+Indicates whether there was questionable data for the given given record.
+FTA marks a data point as Questionable when there is reason to believe it is incorrect,but the reporting agency has been unable to correct the data or offer an explanation for its anomalous appearance.
 {% enddocs %}
 
 {% docs ntd_agency_voms %}
@@ -121,7 +126,7 @@ This is the revenue vehicle count during the peak season of the year; on the wee
 Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
 {% enddocs %}
 
-{% docs ntd_actual_vehicle_hours %}
+{% docs ntd_actual_vehicles_passenger_car_hours %}
 The hours that vehicles/passenger cars travel while in revenue service plus deadhead hours.
 Actual vehicle hours include:
     - Revenue service,
@@ -132,6 +137,237 @@ Actual vehicle hours exclude:
     - School bus service,
     - Operator training,
     - Vehicle maintenance testing.
+{% enddocs %}
+
+{% docs ntd_actual_vehicles_passenger_car_deadhead_hours %}
+The hours that a vehicle/passenger car travels when out of revenue service.
+Deadhead includes:
+    - Leaving or returning to the garage or yard facility,
+    - Changing routes,
+    - When there is no expectation of carrying revenue passengers.
+However, deadhead does not include:
+    - Charter service,
+    - School bus service,
+    - Travel to fueling facilities,
+    - Travel to maintenance facilities,
+    - Operator training,
+    - Maintenance testing.
+{% enddocs %}
+
+{% docs ntd_actual_vehicles_passenger_car_revenue_hours %}
+The hours that vehicles/passenger cars travel while in revenue service.
+Vehicle revenue hours (VRH) include:
+    - Revenue service,
+    - Layover/recovery time.
+Actual vehicle revenue hours exclude:
+    - Deadhead,
+    - Operator training,
+    - Maintenance testing,
+    - School bus and charter services.
+{% enddocs %}
+
+{% docs ntd_charter_service_hours %}
+Hours run in charter service.
+{% enddocs %}
+
+{% docs ntd_school_bus_hours %}
+Hours run in school bus service.
+{% enddocs %}
+
+{% docs ntd_train_hours %}
+The hours that trains travel while in revenue service plus deadhead hours.
+Train hours include:
+    - Revenue service,
+    - Deadhead,
+    - Layover/recovery time,
+Train hours exclude:
+    - Hours for charter service,
+    - Operator training,
+    - Vehicle maintenance testing.
+{% enddocs %}
+
+{% docs ntd_train_revenue_hours %}
+The hours that trains travel while in revenue service. Train revenue hours include:
+    - Revenue service,
+    - Layover/recovery time.
+Train revenue hours exclude:
+    - Deadhead,
+    - Operator training,
+    - Maintenance testing,
+    - Charter services.
+{% enddocs %}
+
+{% docs ntd_train_deadhead_hours %}
+The hours that a train travels when out of revenue service. Deadhead includes:
+    - Leaving or returning to the garage or yard facility,
+    - Changing routes,
+    - When there is no expectation of carrying revenue passengers.
+However, deadhead does not include:
+    - Charter service,
+    - School bus service,
+    - Travel to fueling facilities,
+    - Travel to maintenance facilities,
+    - Operator training,
+    - Maintenance testing.
+{% enddocs %}
+
+{% docs ntd_passengers_per_hour %}
+The average number of passengers to board a vehicle/passenger car in one hour of service.
+For trains, this applies to passengers per hour on a single train car.
+{% enddocs %}
+
+{% docs ntd_actual_vehicles_passenger_car_miles %}
+The miles that vehicles/passenger cars travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
+Actual vehicle miles include:
+    - Revenue service,
+    - Deadhead.
+Actual vehicle miles exclude:
+    - Miles for charter services,
+    - School bus service,
+    - Operator training,
+    - Vehicle maintenance testing.
+{% enddocs %}
+
+{% docs ntd_actual_vehicles_passenger_car_revenue_miles %}
+The miles that vehicles/passenger cars travel while in revenue service.
+Vehicle revenue miles (VRM) include:
+    - Revenue service.
+Actual vehicle revenue miles exclude:
+    - Deadhead,
+    - Operator training,
+    - Maintenance testing,
+    - School bus and charter services.
+{% enddocs %}
+
+{% docs ntd_actual_vehicles_passenger_deadhead_miles %}
+The miles that a vehicle/passenger car travels when out of revenue service.
+Deadhead includes:
+    - Leaving or returning to the garage or yard facility,
+    - Changing routes,
+    - When there is no expectation of carrying revenue passengers.
+However, deadhead does not include:
+    - Charter service,
+    - School bus service,
+    - Travel to fueling facilities,
+    - Travel to maintenance facilities,
+    - Operator training,
+    - Maintenance testing.
+{% enddocs %}
+
+{% docs ntd_scheduled_vehicles_passenger_car_revenue_miles %}
+The total service scheduled to be provided for picking up and discharging passengers.
+Scheduled service is computed from internal transit agency planning documents (e.g., run paddles, trip tickets, and public timetables).
+Scheduled service excludes special additional services.
+{% enddocs %}
+
+{% docs ntd_directional_route_miles %}
+The mileage in each direction over which public transportation vehicles travel while in revenue service.
+Directional route miles (DRM) are:
+    - A measure of the route path over a facility or roadway, not the service carried on the facility; e.g., number of routes, vehicles, or vehicle revenue miles.
+    - Computed with regard to direction of service, but without regard to the number of traffic lanes or rail tracks existing in the right-of-way (ROW).
+Directional route miles (DRM) do not include staging or storage areas at the beginning or end of a route.
+{% enddocs %}
+
+{% docs ntd_passenger_miles %}
+The cumulative sum of the distances ridden by each passenger.
+{% enddocs %}
+
+{% docs ntd_train_miles %}
+The miles that trains travel while in revenue service (actual vehicle revenue miles (VRM)) plus deadhead miles.
+Train miles include:
+    - Revenue service,
+    - Deadhead.
+Train miles exclude:
+    - Miles for charter services,
+    - Operator training,
+    - Vehicle maintenance testing.
+{% enddocs %}
+
+{% docs ntd_train_revenue_miles %}
+The miles that trains travel while in revenue service.
+Train revenue miles include:
+    - Revenue service.
+Train revenue miles exclude:
+    - Deadhead,
+    - Operator training,
+    - Maintenance testing,
+    - Charter services.
+{% enddocs %}
+
+{% docs ntd_train_deadhead_miles %}
+The miles that a train travels when out of revenue service. Deadhead includes:
+    - Leaving or returning to the garage or yard facility,
+    - Changing routes,
+    - When there is no expectation of carrying revenue passengers.
+However, deadhead does not include:
+    - Charter service,
+    - School bus service,
+    - Travel to fueling facilities,
+    - Travel to maintenance facilities,
+    - Operator training,
+    - Maintenance testing.
+{% enddocs %}
+
+{% docs ntd_trains_in_operation %}
+The maximum number of trains actually operated to provide service during the year.
+{% enddocs %}
+
+{% docs ntd_ada_upt %}
+Unlinked Passenger Trips embarked per stipulations of the Americans with Disabilities Act.
+{% enddocs %}
+
+{% docs ntd_sponsored_service_upt %}
+Unlinked Passenger Trips embarked under sponsored service.
+{% enddocs %}
+
+{% docs ntd_unlinked_passenger_trips_upt %}
+The number of passengers who board public transportation vehicles.
+Passengers are counted each time they board a vehicle no matter how many vehicles they use to travel from their origin to their destination.
+{% enddocs %}
+
+{% docs ntd_time_service_begins %}
+The time at which a particular mode/type of service begins revenue service, presented in a 24-hour format.
+{% enddocs %}
+
+{% docs ntd_time_service_ends %}
+The time at which a particular mode/type of service ends revenue service, presented in a 24-hour format.
+{% enddocs %}
+
+{% docs ntd_days_of_service_operated %}
+Days of revenue service within the fiscal year.
+{% enddocs %}
+
+{% docs ntd_days_not_operated_strikes %}
+Days of revenue service not operated due to strikes.
+{% enddocs %}
+
+{% docs ntd_days_not_operated_emergencies %}
+Days of revenue service not operated due to emergencies.
+{% enddocs %}
+
+{% docs ntd_mode_voms %}
+The number of revenue vehicles operated by the given mode and type of service to meet the annual maximum service requirement.
+This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
+Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+{% enddocs %}
+
+{% docs ntd_average_passenger_trip_length_aptl_ %}
+The average distance ridden by each passenger in a single trip, computed as passenger miles traveled (PMT) divided by unlinked passenger trips (UPT).
+May be determined by sampling, or calculated based on actual data.
+{% enddocs %}
+
+{% docs ntd_average_speed %}
+The average speed of a vehicle/passenger car during revenue service.
+{% enddocs %}
+
+{% docs ntd_brt_non_statutory_mixed_traffic %}
+Miles of roadway for Bus Rapid Transit modes which, while part of bus rapid transit system routes, are not considered fixed guideway for federal funding allocation purposes.
+These are rare exceptions resulting from FTA’s review of each BRT system.
+{% enddocs %}
+
+{% docs ntd_mixed_traffic_right_of_way %}
+Roadways other than exclusive and controlled access rights-of-way (ROW) used for transit operations that are mixed with pedestrian and/or vehicle traffic.
+Does not include guideways that have only grade crossings with vehicular traffic.
 {% enddocs %}
 
 {% docs ntd_upt %}
