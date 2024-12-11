@@ -4,6 +4,8 @@ x-common-fields:
   - &ntd_id
     name: ntd_id
     description: '{{ doc("ntd_id") }}'
+    tests:
+      - not_null
   - &agency
     name: agency
     description: '{{ doc("ntd_agency") }}'
@@ -14,6 +16,7 @@ x-common-fields:
     name: report_year
     description: '{{ doc("ntd_report_year") }}'
     tests:
+      - not_null
       - accepted_values:
           values: [2022, 2023]
   - &reporter_type

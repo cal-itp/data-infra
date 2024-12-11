@@ -4,6 +4,8 @@ x-common-fields:
   - &ntd_id
     name: ntd_id
     description: '{{ doc("ntd_id") }}'
+    tests:
+      - not_null
   - &agency
     name: agency
     description: '{{ doc("ntd_agency") }}'
@@ -13,6 +15,10 @@ x-common-fields:
   - &report_year
     name: report_year
     description: '{{ doc("ntd_report_year") }}'
+    tests:
+      - not_null
+      - accepted_values:
+          values: [2022, 2023]
   - &reporter_type
     name: reporter_type
     description: '{{ doc("ntd_reporter_type") }}'
@@ -205,10 +211,7 @@ sources:
           In the years 2015-2021, you can find this data in the "Service" data table on NTD Program website, at https://transit.dot.gov/ntd/ntd-data.
           In versions of the data tables from before 2014, you can find data on service in the file called "Transit Operating Statistics: Service Supplied and Consumed."
         columns:
-          - <<: *report_year
-            tests:
-              - accepted_values:
-                  values: [2022, 2023]
+          - *report_year
           - <<: *ntd_id
             name: _5_digit_ntd_id
           - *agency
@@ -284,10 +287,7 @@ sources:
           View based on 2022 NTD Annual Data - Service (by Mode and Time Period) filtered to preserve only the Annual Total time period.
           Useful for analyses of Annual Total service data.
         columns:
-          - <<: *report_year
-            tests:
-              - accepted_values:
-                  values: [2022, 2023]
+          - *report_year
           - *mode
           - *type_of_service
           - <<: *ntd_id
@@ -301,6 +301,7 @@ sources:
               The time period for which data was collected.
               This table displays only "Annual Total".
             tests:
+              - not_null
               - accepted_values:
                   values: ["Annual Total"]
           - <<: *time_service_begins
@@ -389,10 +390,7 @@ sources:
           This represents the Service data reported to the NTD by transit agencies to the NTD.
           In versions of the data tables from before 2014, you can find data on service in the file called "Transit Operating Statistics: Service Supplied and Consumed."
         columns:
-          - <<: *report_year
-            tests:
-              - accepted_values:
-                  values: [2022, 2023]
+          - *report_year
           - <<: *ntd_id
             name: _5_digit_ntd_id
           - *agency

@@ -9,6 +9,8 @@ x-common-fields:
   - &ntd_id
     name: ntd_id
     description: '{{ doc("ntd_id") }}'
+    tests:
+      - not_null
   - &agency
     name: agency
     description: '{{ doc("ntd_agency") }}'
@@ -360,6 +362,7 @@ models:
           The table that originated the funding source information.
           The options are: `federal`, `state`, and `local`.
         tests:
+          - not_null
           - accepted_values:
               values: ["federal", "state", "local"]
       - *agency
@@ -450,6 +453,7 @@ models:
           *ONLY for Local and State Funding Sources (funding_source IN ("local", "state"))
       - <<: *report_year
         tests:
+          - not_null
           - accepted_values:
               values: [2022, 2023]
       - *reporter_type
@@ -478,6 +482,7 @@ models:
       - *key
       - <<: *report_year
         tests:
+          - not_null
           - accepted_values:
               values: [2022, 2023]
       - *ntd_id
@@ -522,6 +527,7 @@ models:
       - *key
       - <<: *report_year
         tests:
+          - not_null
           - accepted_values:
               values: [2022, 2023]
       - *reporter_type
@@ -702,6 +708,7 @@ models:
       - *key
       - <<: *report_year
         tests:
+          - not_null
           - accepted_values:
               values: [2022, 2023]
       - *ntd_id
@@ -715,5 +722,6 @@ models:
           The time period for which data was collected.
           This table displays only "Annual Total".
         tests:
+          - not_null
           - accepted_values:
               values: ["Annual Total"]
