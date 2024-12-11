@@ -20,18 +20,38 @@ Indicates the ID number of the transit agency reporting to the database on behal
 The transit agency's name.
 {% enddocs %}
 
+{% docs ntd_agency_name %}
+The agency name is the full legal name of the agency.
+If reporting is required under an FTA grant program, this must reflect the legal name of the funding recipient.
+{% enddocs %}
+
+{% docs ntd_doing_business_as %}
+The name under which the reporting agency is doing business.
+{% enddocs %}
+
 {% docs ntd_report_year %}
 The year for which the data was reported.
 {% enddocs %}
 
 {% docs ntd_reporter_type %}
-The type of NTD report that the agency completed this year.
-Valid values are: `Full Reporter`, `Reduced Reporter`, `Rural Reporter`.
+Reporter Type will be based on where they operate and the reporting requirements associated with their agency.
+Agencies that receive Chapter 53 funds and own, operate, or manage capital assets in public transportation are also required to file an annual report, even if they do not receive §5307 or §5311 funds.
+Agencies that do not receive or benefit from FTA funding may elect to submit their data to the NTD as Voluntary Reporter but are still assigned a reporter type.
+Current types are:
+    `Building Reporter`,
+    `Full Reporter`,
+    `Group Plan Sponsor`,
+    `Planning Reporter`,
+    `Reduced Asset Reporter`,
+    `Reduced Reporter`,
+    `Rural Reporter`,
+    `Separate Service`,
+    `State Reporter`.
 {% enddocs %}
 
 {% docs ntd_organization_type %}
 Description of the agency's legal entity.
-Valid values are: `Area Agency on Aging`, `University`, `MPO, COG, or Other Planning Agency`, `Private-Non-Profit Corporation`, `State Government Unit or Department of Transportation`, `City, County, or Local Government Unit or Department of Transportation`, `Independent Public Agency or Authority of Transit Service`, `Private Provider Reporting on Behalf of a Public Entity`, `Private-For-Profit Corporation`, or `Tribe`. 
+Valid values are: `Area Agency on Aging`, `University`, `MPO, COG, or Other Planning Agency`, `Private-Non-Profit Corporation`, `State Government Unit or Department of Transportation`, `City, County, or Local Government Unit or Department of Transportation`, `Independent Public Agency or Authority of Transit Service`, `Private Provider Reporting on Behalf of a Public Entity`, `Private-For-Profit Corporation`, or `Tribe`.
 {% enddocs %}
 
 {% docs ntd_type_of_service %}
@@ -45,6 +65,123 @@ The city in which the agency is headquartered.
 
 {% docs ntd_state %}
 The state in which the agency is headquartered.
+{% enddocs %}
+
+{% docs ntd_mailing_address_line_1 %}
+First line of the agency's mailing address.
+{% enddocs %}
+
+{% docs ntd_mailing_address_line_2 %}
+Second line of the agency's mailing address (if applicable).
+{% enddocs %}
+
+{% docs ntd_mailing_p_o_box %}
+The PO Box of the agency (if applicable).
+{% enddocs %}
+
+{% docs ntd_mailing_city %}
+City of the agency's mailing address.
+{% enddocs %}
+
+{% docs ntd_mailing_state %}
+State of the agency's mailing address.
+{% enddocs %}
+
+{% docs ntd_mailing_zip_code %}
+Zip Code of the agency's mailing address.
+{% enddocs %}
+
+{% docs ntd_mailing_zip_code_ext %}
+Zip Code Extension of the agency's mailing address.
+{% enddocs %}
+
+{% docs ntd_region %}
+The FTA region in which the reporter is located.
+{% enddocs %}
+
+{% docs ntd_density %}
+The population density of the Primary UZA of the agency, if one exists.
+{% enddocs %}
+
+{% docs ntd_ueid %}
+The UEID is a number or other identifier used to identify a specific commercial, nonprofit, or Government entity.
+This is now reported in place of DUNS number for each unique transit agency reporting to the NTD.
+See the U.S. General Services Administration UEID web page for more information.
+{% enddocs %}
+
+{% docs ntd_fta_recipient_id %}
+The four-digit number assigned to a transit agency for the Federal Transit Administration (FTA) electronic grant making system — TrAMS (Transportation Award Management System).
+{% enddocs %}
+
+{% docs ntd_original_due_date %}
+The date on which the 2020 NTD Report was due to FTA.
+{% enddocs %}
+
+{% docs ntd_fy_end_date %}
+Calendar selection for the last day of an agency's fiscal year.
+{% enddocs %}
+
+{% docs ntd_number_of_counties_with_service %}
+States report the total number of counties in the state that are currently served, in whole or in part, by Formula Grants for Rural Areas (§5311)-funded operators.
+{% enddocs %}
+
+{% docs ntd_number_of_state_counties %}
+The number of Counties in given State (for State Departments of Transportation).
+{% enddocs %}
+
+{% docs ntd_personal_vehicles %}
+Vehicles that are used by the transit provider to transport passengers in revenue service but are owned by private individuals, typically an employee of the agency or a volunteer driver.
+{% enddocs %}
+
+{% docs ntd_reported_by_name %}
+The NTD ID of the entity reporting on behalf of another entity.
+{% enddocs %}
+
+{% docs ntd_reported_by_ntd_id %}
+The entity, usually a State, submitting an NTD report on behalf of another entity, usually a subrecipient of the State.
+{% enddocs %}
+
+{% docs ntd_reporter_acronym %}
+The acronym used by the reporting agency.
+{% enddocs %}
+
+{% docs ntd_division_department %}
+Division or department of a transit agency.
+{% enddocs %}
+
+{% docs ntd_reporting_module %}
+A general classification that will determine which, if any, FTA formula programs will use the NTD data.
+For example, Tribes and Native Villages will have data included in the in the §5311j Tribal Transit Program.
+Reporters receiving Chapter 53 funds but not receiving or benefiting from §5307 and §5311
+AND not electing to report service data are classified as Asset due to the requirement to report asset inventory data.
+These agencies are not presently included in formula program datasets.
+{% enddocs %}
+
+{% docs ntd_state_admin_funds_expended %}
+States report the §5311 revenues they expended as a result of administering the program.
+Since the §5311 program operates on a reimbursement basis, revenues expended during the report year will be expended during the same year.
+Report the operating revenue expended during the report year from FTA §5311 Formula Grants for Rural Areas funds.
+{% enddocs %}
+
+{% docs ntd_subrecipient_type %}
+Reflects the type of Rural Formula Grant funding received by the subrecipient.
+{% enddocs %}
+
+{% docs ntd_tam_tier %}
+Defines whether the agency is a Tier I agency required to produce their own Transit Asset Management plan (and, in parenparens, on what basis) or a Tier II operator eligible to be in a group TAM Plan.
+N/A indicates that the requirement does not apply.
+{% enddocs %}
+
+{% docs ntd_tribal_area_name %}
+The tribal land, determined by US Census data, on which tribes operate.
+{% enddocs %}
+
+{% docs ntd_agency_url %}
+Agency's transit website.
+{% enddocs %}
+
+{% docs ntd_volunteer_drivers %}
+Individuals who drive vehicles in revenue service to transport passengers for the transit provider but are not employees of the transit provider and are not compensated for their labor.
 {% enddocs %}
 
 {% docs ntd_primary_uza_code %}
@@ -74,7 +211,7 @@ A system for carrying transit passengers described by specific right-of-way (ROW
     - Commuter Bus (CB)
     - Bus Rapid Transit (RB)
     - Publico (PB)
-    - Jitney (JT)    
+    - Jitney (JT)
 {% enddocs %}
 
 {% docs ntd_mode_name %}
@@ -87,7 +224,7 @@ A system for carrying transit passengers described by specific right-of-way (ROW
     - Commuter Bus (CB)
     - Bus Rapid Transit (RB)
     - Publico (PB)
-    - Jitney (JT)    
+    - Jitney (JT)
 {% enddocs %}
 
 {% docs ntd_3_mode %}
@@ -96,7 +233,7 @@ A grouping of modes based upon whether the mode operates on rail, is a bus mode,
 
 {% docs ntd_time_period %}
 The time period for which data was collected.
-Valid values are: 
+Valid values are:
     - Annual Total (excluded in mart_ntd mode-tos grain),
     - Average Weekday - AM Peak
     - Average Weekday - Midday
@@ -108,7 +245,9 @@ Valid values are:
 {% enddocs %}
 
 {% docs ntd_service_area_population %}
-The population of the service area served by the agency.
+A measure of access to transit service in terms of population served and area coverage (square miles).
+The reporting transit agency determines the service area boundaries and population for most transit services using the definitions contained in the Americans with Disabilities Act of 1990 (ADA),
+i.e. a corridor surrounding the routes 3/4 of a mile on either side, or for rail, a series of circles of radius 3/4 mile centered on each station Transit agency reporters are required to submit service area information.
 {% enddocs %}
     
 {% docs ntd_service_area_sq_miles %}
@@ -124,6 +263,14 @@ FTA marks a data point as Questionable when there is reason to believe it is inc
 The number of revenue vehicles operated across the whole agency to meet the annual maximum service requirement.
 This is the revenue vehicle count during the peak season of the year; on the week and day that maximum service is provided.
 Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+{% enddocs %}
+
+{% docs ntd_voms_do %}
+Vehicles Operated in Maximum Service (VOMS) for a Directly Operated (DO) transit service specify the highest number of vehicles deployed during their busiest service period.
+{% enddocs %}
+
+{% docs ntd_voms_pt %}
+Vehicles Operated in Maximum Service (VOMS) for Public Transit (PT) specify the highest number of vehicles a transit agency operates during their peak service period, typically on the busiest day of the year, excluding special events or atypical days; it's a key data point used to measure an agency's maximum service capacity.
 {% enddocs %}
 
 {% docs ntd_actual_vehicles_passenger_car_hours %}
