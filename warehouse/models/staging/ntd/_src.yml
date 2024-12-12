@@ -139,10 +139,10 @@ x-common-fields:
     description: '{{ doc("ntd_agency_voms") }}'
   - &dt
     name: dt
-    description: '{{ doc("ntd_xlsx_dt") }}'
+    description: '{{ doc("ntd_extracting_date") }}'
   - &ts
     name: ts
-    description: '{{ doc("ntd_xlsx_execution_ts") }}'
+    description: '{{ doc("ntd_execution_timestamp") }}'
 
 sources:
   - name: ntd_data_products

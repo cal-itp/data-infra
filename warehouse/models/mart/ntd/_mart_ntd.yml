@@ -283,10 +283,10 @@ x-common-fields:
     description: '{{ doc("ntd_period_year_month") }}'
   - &_dt
     name: _dt
-    description: '{{ doc("ntd_xlsx_dt") }}'
+    description: '{{ doc("ntd_extracting_date") }}'
   - &execution_ts
     name: execution_ts
-    description: '{{ doc("ntd_xlsx_execution_ts") }}'
+    description: '{{ doc("ntd_execution_timestamp") }}'
 
 models:
   - name: dim_annual_agency_information

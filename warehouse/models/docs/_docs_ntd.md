@@ -635,10 +635,10 @@ The Month and Year for which data was collected.
 The Year and Month for which data was collected.
 {% enddocs %}
 
-{% docs ntd_xlsx_dt %}
+{% docs ntd_extracting_date %}
 Date when the data was extracted.
 {% enddocs %}
 
-{% docs ntd_xlsx_execution_ts %}
+{% docs ntd_execution_timestamp %}
 Date and Time when the data was extracted.
 {% enddocs %}
