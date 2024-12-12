@@ -1,0 +1,13 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "fra_regulated_mode_major_security_events/historical/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "fra_regulated_mode_major_security_events/historical/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__safety_and_security.historical__fra_regulated_mode_major_security_events"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__safety_and_security.historical__fra_regulated_mode_major_security_events LIMIT 1;
