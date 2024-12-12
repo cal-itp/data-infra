@@ -3,5 +3,5 @@ operator: operators.NtdDataProductAPIOperator
 year: 'historical'
 product: 'major_safety_events'
 root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: '9ivb-8ae9'
+endpoint_id: 'urir-txqm'
 file_format: '.json'
