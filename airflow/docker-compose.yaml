@@ -102,6 +102,7 @@ x-airflow-common:
     CALITP_BUCKET__NTD_API_DATA_PRODUCTS: "gs://test-calitp-ntd-api-products"
     CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW: "gs://test-calitp-ntd-xlsx-products-raw"
     CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN: "gs://test-calitp-ntd-xlsx-products-clean"
+    CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS: "gs://test-calitp-state-geoportal-scrape"
 
     DBT_TARGET: staging_service_account
 

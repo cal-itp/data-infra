@@ -73,6 +73,6 @@ repos:
       exclude: 'README.md|warehouse/.*'
       args: ["--number"]
       additional_dependencies:
-      - mdformat-gfm
+      - mdformat-gfm==0.3.5
       - mdformat-frontmatter
       - mdformat-footnote
