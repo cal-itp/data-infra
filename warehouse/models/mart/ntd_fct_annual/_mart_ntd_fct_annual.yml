@@ -35,3 +35,5 @@ models:
   - name: fct_ntd_annual_data__track_and_roadway_guideway_age_distribution
   - name: fct_ntd_annual_data__vehicles_age_distribution
   - name: fct_ntd_annual_data__vehicles_type_count_by_agency
+  - name: fct_ntd_annual_data__2023_agency_information
+  - name: fct_ntd_annual_data__2023_contractual_relationships
