@@ -99,10 +99,10 @@ x-common-fields:
     description: '{{ doc("ntd_vrm") }}'
   - &dt
     name: dt
-    description: '{{ doc("ntd_xlsx_dt") }}'
+    description: '{{ doc("ntd_extracting_date") }}'
   - &execution_ts
     name: execution_ts
-    description: '{{ doc("ntd_xlsx_execution_ts") }}'
+    description: '{{ doc("ntd_execution_timestamp") }}'
 
 sources:
   - name: external_ntd__ridership

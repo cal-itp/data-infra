@@ -101,10 +101,10 @@ x-common-fields:
     description: '{{ doc("ntd_vrm") }}'
   - &dt
     name: dt
-    description: '{{ doc("ntd_xlsx_dt") }}'
+    description: '{{ doc("ntd_extracting_date") }}'
   - &execution_ts
     name: execution_ts
-    description: '{{ doc("ntd_xlsx_execution_ts") }}'
+    description: '{{ doc("ntd_execution_timestamp") }}'
 
 models:
   - name: stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_upt
