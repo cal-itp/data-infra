@@ -1,0 +1,5 @@
+operator: operators.NtdDataProductXLSXOperator
+
+product: 'annual_database_contractual_relationship'
+xlsx_file_url: 'https://www.transit.dot.gov/sites/fta.dot.gov/files/2024-10/2023%20Contractual%20Relationships.xlsx'
+year: '2023' # one of: 'historical' (long history), 'mutli-year' (select history), or a specific year (ex: 2022)
