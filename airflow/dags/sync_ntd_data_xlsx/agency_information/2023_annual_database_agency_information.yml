@@ -1,5 +1,7 @@
 operator: operators.NtdDataProductXLSXOperator
 
 product: 'annual_database_agency_information'
-xlsx_file_url: 'https://www.transit.dot.gov/sites/fta.dot.gov/files/2024-10/2023%20Agency%20Information_0.xlsx'
+xlsx_file_url: 'https://www.transit.dot.gov/ntd/data-product/2023-annual-database-agency-information' # placeholder for scraped url from scrape_ntd_xlsx_urls task
 year: '2023' # one of: 'historical' (long history), 'mutli-year' (select history), or a specific year (ex: 2022)
+dependencies:
+  - scrape_ntd_xlsx_urls
