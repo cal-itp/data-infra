@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: stg_ntd_annual_data__breakdowns
+  - name: stg_ntd_annual_data__breakdowns_by_agency
+  - name: stg_ntd_annual_data__capital_expenses_by_capital_use
+  - name: stg_ntd_annual_data__capital_expenses_by_mode
