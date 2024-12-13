@@ -101,6 +101,9 @@ x-common-fields:
   - &reporting_module
     name: reporting_module
     description: '{{ doc("ntd_reporting_module") }}'
+  - &division_department
+    name: division_department
+    description: '{{ doc("ntd_division_department") }}'
   - &state_admin_funds_expended
     name: state_admin_funds_expended
     description: '{{ doc("ntd_state_admin_funds_expended") }}'
@@ -137,6 +140,12 @@ x-common-fields:
   - &service_area_sq_miles
     name: service_area_sq_miles
     description: '{{ doc("ntd_service_area_sq_miles") }}'
+  - &voms_do
+    name: voms_do
+    description: '{{ doc("ntd_voms_do") }}'
+  - &voms_pt
+    name: voms_pt
+    description: '{{ doc("ntd_voms_pt") }}'
   - &type_of_service
     name: type_of_service
     description: '{{ doc("ntd_type_of_service") }}'
@@ -354,6 +363,7 @@ models:
       - *reporter_acronym
       - *reporter_type
       - *reporting_module
+      - *division_department
       - <<: *service_area_population
         name: service_area_pop
       - <<: *primary_uza_area_sq_miles
@@ -362,6 +372,8 @@ models:
       - *state_admin_funds_expended
       - *subrecipient_type
       - *tam_tier
+      - *voms_do
+      - *voms_pt
       - <<: *agency_voms
         name: total_voms
       - *tribal_area_name
