@@ -132,7 +132,7 @@ class NtdDataProductXLSXOperator(BaseOperator):
             )
 
         # see what is returned
-        logging.info(f"reading ridership url as {download_url}")
+        logging.info(f"reading {self.product} url as {download_url}")
 
         excel_content = self.raw_excel_extract.fetch_from_ntd_xlsx(download_url)
 
