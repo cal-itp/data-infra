@@ -5,7 +5,7 @@ WITH
         {{
             dbt_utils.unpivot(
                 cast_to="int",
-                relation=ref("stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__voms"),
+                relation=ref("stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__voms"),
                 exclude=[
                     "_3_mode",
                     "agency",
