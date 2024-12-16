@@ -11,9 +11,9 @@ get_latest_extract AS(
     QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
 ),
 
-stg_ntd_safety_and_security__monthly_modal_time_series_safety_and_service AS (
+stg_ntd__monthly_modal_time_series_safety_and_service AS (
     SELECT *
     FROM get_latest_extract
 )
 
-SELECT * FROM stg_ntd_safety_and_security__monthly_modal_time_series_safety_and_service
+SELECT * FROM stg_ntd__monthly_modal_time_series_safety_and_service

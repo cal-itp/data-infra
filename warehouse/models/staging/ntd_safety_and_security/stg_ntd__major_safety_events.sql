@@ -11,9 +11,9 @@ get_latest_extract AS(
     QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
 ),
 
-stg_ntd_safety_and_security__major_safety_events AS (
+stg_ntd__major_safety_events AS (
     SELECT *
     FROM get_latest_extract
 )
 
-SELECT * FROM stg_ntd_safety_and_security__major_safety_events
+SELECT * FROM stg_ntd__major_safety_events
