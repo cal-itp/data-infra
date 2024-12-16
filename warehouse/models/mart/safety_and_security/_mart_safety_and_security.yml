@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: fct_safety_and_security__fra_regulated_mode_major_security_events
-  - name: fct_safety_and_security__major_safety_events
-  - name: fct_safety_and_security__monthly_modal_time_series_safety_and_service
-  - name: fct_safety_and_security__nonmajor_safety_and_security_events
+  - name: fct_fra_regulated_mode_major_security_events
+  - name: fct_major_safety_events
+  - name: fct_monthly_modal_time_series_safety_and_service
+  - name: fct_nonmajor_safety_and_security_events
