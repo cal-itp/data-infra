@@ -1,6 +1,6 @@
 WITH staging_major_safety_events AS (
     SELECT *
-    FROM {{ ref('stg_ntd_safety_and_security__major_safety_events') }}
+    FROM {{ ref('stg_ntd__major_safety_events') }}
 ),
 
 fct_safety_and_security__major_safety_events AS (
