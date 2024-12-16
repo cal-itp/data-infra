@@ -69,9 +69,9 @@ models:
         schema: mart_benefits
       ntd_validation:
         schema: mart_ntd_validation
-      annual_reporting:
-        schema: mart_annual_reporting
-      safety_and_security:
-        schema: mart_safety_and_security
-      ridership:
-        schema: mart_ridership
+      ntd_annual_reporting:
+        schema: mart_ntd_annual_reporting
+      ntd_safety_and_security:
+        schema: mart_ntd_safety_and_security
+      ntd_ridership:
+        schema: mart_ntd_ridership
