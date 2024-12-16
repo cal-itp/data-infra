@@ -107,7 +107,7 @@ x-common-fields:
     description: '{{ doc("ntd_execution_timestamp") }}'
 
 models:
-  - name: stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_upt
+  - name: stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_upt
     description: Calendar year totals for UPT for each transit agency, by mode and type of service.
     columns:
       - *ntd_id
@@ -123,7 +123,7 @@ models:
       - *dt
       - *execution_ts
 
-  - name: stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_vrm
+  - name: stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_vrm
     description: Calendar year totals for VRM for each transit agency, by mode and type of service.
     columns:
       - *ntd_id
@@ -139,7 +139,7 @@ models:
       - *dt
       - *execution_ts
 
-  - name: stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__master
+  - name: stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__master
     description: A Master File of all properties that currently report or reported monthly data during the period January 2002 - Current Calendar Year.
     columns:
       - *ntd_id
@@ -172,7 +172,7 @@ models:
       - *dt
       - *execution_ts
 
-  - name: stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__upt
+  - name: stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__upt
     description: '{{ doc("ntd_upt") }}'
     columns:
       - *ntd_id
@@ -188,7 +188,7 @@ models:
       - *dt
       - *execution_ts
 
-  - name: stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__upt_estimates
+  - name: stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__upt_estimates
     description: |
       This dataset includes estimates for missing UPT data in the two most recent report years.
       Estimates are calculated based on the monthly modal growth rates from an industry-wide sample of transit agencies.
@@ -204,7 +204,7 @@ models:
       - *dt
       - *execution_ts
 
-  - name: stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__voms
+  - name: stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__voms
     description: '{{ doc("ntd_voms") }}'
     columns:
       - *ntd_id
@@ -220,7 +220,7 @@ models:
       - *dt
       - *execution_ts
 
-  - name: stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__vrh
+  - name: stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__vrh
     description: '{{ doc("ntd_vrh") }}'
     columns:
       - *ntd_id
@@ -236,7 +236,7 @@ models:
       - *dt
       - *execution_ts
 
-  - name: stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm
+  - name: stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__vrm
     description: '{{ doc("ntd_vrm") }}'
     columns:
       - *ntd_id
@@ -252,7 +252,7 @@ models:
       - *dt
       - *execution_ts
 
-  - name: stg_ntd_ridership_historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm_estimates
+  - name: stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__vrm_estimates
     description: |
       This dataset includes estimates for missing VRM data in the two most recent report years.
       Estimates are calculated based on the monthly modal growth rates from an industry-wide sample of transit agencies.
