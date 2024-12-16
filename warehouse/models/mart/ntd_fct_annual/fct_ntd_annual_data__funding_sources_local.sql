@@ -1,6 +1,6 @@
 WITH staging_funding_sources_local AS (
     SELECT *
-    FROM {{ ref('stg_ntd_annual_data__funding_sources_local') }}
+    FROM {{ ref('stg_ntd__funding_sources_local') }}
 ),
 
 fct_ntd_annual_data__funding_sources_local AS (

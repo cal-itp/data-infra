@@ -1,6 +1,6 @@
 WITH staging_employees_by_agency AS (
     SELECT *
-    FROM {{ ref('stg_ntd_annual_data__employees_by_agency') }}
+    FROM {{ ref('stg_ntd__employees_by_agency') }}
 ),
 
 fct_ntd_annual_data__employees_by_agency AS (

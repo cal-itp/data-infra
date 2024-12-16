@@ -1,6 +1,6 @@
 WITH staging_operating_expenses_by_function_and_agency AS (
     SELECT *
-    FROM {{ ref('stg_ntd_annual_data__operating_expenses_by_function_and_agency') }}
+    FROM {{ ref('stg_ntd__operating_expenses_by_function_and_agency') }}
 ),
 
 fct_ntd_annual_data__operating_expenses_by_function_and_agency AS (

@@ -1,6 +1,6 @@
 WITH staging_breakdowns_by_agency AS (
     SELECT *
-    FROM {{ ref('stg_ntd_annual_data__breakdowns_by_agency') }}
+    FROM {{ ref('stg_ntd__breakdowns_by_agency') }}
 ),
 
 fct_ntd_annual_data__breakdowns_by_agency AS (

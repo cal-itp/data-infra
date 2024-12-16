@@ -1,6 +1,6 @@
 WITH staging_capital_expenses_for_existing_service AS (
     SELECT *
-    FROM {{ ref('stg_ntd_annual_data__capital_expenses_for_existing_service') }}
+    FROM {{ ref('stg_ntd__capital_expenses_for_existing_service') }}
 ),
 
 fct_ntd_annual_data__capital_expenses_for_existing_service AS (

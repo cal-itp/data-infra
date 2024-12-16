@@ -1,6 +1,6 @@
 WITH staging_service_by_mode AS (
     SELECT *
-    FROM {{ ref('stg_ntd_annual_data__service_by_mode') }}
+    FROM {{ ref('stg_ntd__service_by_mode') }}
 ),
 
 fct_ntd_annual_data__service_by_mode AS (
