@@ -4,7 +4,6 @@ WITH external_funding_sources_taxes_levied_by_agency AS (
 ),
 
 get_latest_extract AS(
-
     SELECT *
     FROM external_funding_sources_taxes_levied_by_agency
     -- we pull the whole table every month in the pipeline, so this gets only the latest extract
@@ -16,4 +15,26 @@ stg_ntd__funding_sources_taxes_levied_by_agency AS (
     FROM get_latest_extract
 )
 
-SELECT * FROM stg_ntd__funding_sources_taxes_levied_by_agency
+SELECT
+    agency,
+    agency_voms,
+    city,
+    fuel_tax,
+    income_tax,
+    ntd_id,
+    organization_type,
+    other_funds,
+    other_tax,
+    primary_uza_population,
+    property_tax,
+    report_year,
+    reporter_type,
+    sales_tax,
+    state,
+    tolls,
+    total,
+    uace_code,
+    uza_name,
+    dt,
+    execution_ts
+FROM stg_ntd__funding_sources_taxes_levied_by_agency

@@ -3,11 +3,11 @@ bucket: gs://test-calitp-ntd-xlsx-products-clean
 prefix_bucket: false
 post_hook: |
   SELECT *
-  FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2023__annual_database_contractual_relationship
+  FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2023__annual_database_contractual_relationships
   LIMIT 1;
 source_objects:
   - "annual_database_contractual_relationship/2023/contractual_relationships/*.jsonl.gz"
-destination_project_dataset_table: "external_ntd__annual_reporting.2023__annual_database_contractual_relationship"
+destination_project_dataset_table: "external_ntd__annual_reporting.2023__annual_database_contractual_relationships"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
