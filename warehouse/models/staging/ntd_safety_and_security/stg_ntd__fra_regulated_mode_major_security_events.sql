@@ -1,6 +1,6 @@
 WITH external_fra_regulated_mode_major_security_events AS (
     SELECT *
-    FROM {{ source('external_ntd__safety_and_security', 'multi_year__fra_regulated_mode_major_security_events') }}
+    FROM {{ source('external_ntd__safety_and_security', 'historical__fra_regulated_mode_major_security_events') }}
 ),
 
 get_latest_extract AS(

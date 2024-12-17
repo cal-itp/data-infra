@@ -1,6 +1,6 @@
 WITH external_monthly_modal_time_series_safety_and_service AS (
     SELECT *
-    FROM {{ source('external_ntd__safety_and_security', 'multi_year__monthly_modal_time_series_safety_and_service') }}
+    FROM {{ source('external_ntd__safety_and_security', 'historical__monthly_modal_time_series_safety_and_service') }}
 ),
 
 get_latest_extract AS(

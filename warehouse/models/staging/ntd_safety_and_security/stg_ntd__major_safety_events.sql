@@ -1,6 +1,6 @@
 WITH external_major_safety_events AS (
     SELECT *
-    FROM {{ source('external_ntd__safety_and_security', 'multi_year__major_safety_events') }}
+    FROM {{ source('external_ntd__safety_and_security', 'historical__major_safety_events') }}
 ),
 
 get_latest_extract AS(
