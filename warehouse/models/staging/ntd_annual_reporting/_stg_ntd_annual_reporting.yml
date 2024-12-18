@@ -174,6 +174,9 @@ x-common-fields:
     description: '{{ doc("ntd_execution_timestamp") }}'
 
 models:
+  - name: stg_ntd__2022_agency_information
+  - name: stg_ntd__2023_agency_information
+  - name: stg_ntd__2023_contractual_relationships
   - name: stg_ntd__breakdowns
   - name: stg_ntd__breakdowns_by_agency
   - name: stg_ntd__capital_expenses_by_capital_use
