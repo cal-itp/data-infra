@@ -26,7 +26,7 @@ SELECT
     {{ trim_make_empty_string_null('max_uace_code') }} AS max_uace_code,
     {{ trim_make_empty_string_null('max_uza_name') }} AS max_uza_name,
     {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     SAFE_CAST(sum_casualty_and_liability AS NUMERIC) AS sum_casualty_and_liability,
     SAFE_CAST(sum_fringe_benefits AS NUMERIC) AS sum_fringe_benefits,
     SAFE_CAST(sum_fuel_and_lube AS NUMERIC) AS sum_fuel_and_lube,

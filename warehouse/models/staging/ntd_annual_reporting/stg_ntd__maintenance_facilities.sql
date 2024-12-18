@@ -45,7 +45,7 @@ SELECT
     SAFE_CAST(owned_by_public_agency AS NUMERIC) AS owned_by_public_agency,
     {{ trim_make_empty_string_null('owned_by_public_agency_1') }} AS owned_by_public_agency_1,
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
     {{ trim_make_empty_string_null('state') }} AS state,
     SAFE_CAST(total_facilities AS NUMERIC) AS total_facilities,

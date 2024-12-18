@@ -39,7 +39,7 @@ SELECT
     SAFE_CAST(parking_structure AS NUMERIC) AS parking_structure,
     SAFE_CAST(passenger_stations_and_terminals AS NUMERIC) AS passenger_stations_and_terminals,
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
     SAFE_CAST(revenue_collection_facility AS NUMERIC) AS revenue_collection_facility,
     SAFE_CAST(simple_at_grade_platform AS NUMERIC) AS simple_at_grade_platform,

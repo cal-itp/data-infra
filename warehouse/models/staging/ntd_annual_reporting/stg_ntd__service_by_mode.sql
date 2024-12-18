@@ -36,7 +36,7 @@ SELECT
     {{ trim_make_empty_string_null('max_time_service_ends') }} AS max_time_service_ends,
     {{ trim_make_empty_string_null('mode') }} AS mode,
     {{ trim_make_empty_string_null('questionable_record') }} AS questionable_record,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     SAFE_CAST(sum_actual_vehicles_passenger_car_deadhead_hours AS NUMERIC) AS sum_actual_vehicles_passenger_car_deadhead_hours,
     SAFE_CAST(sum_actual_vehicles_passenger_car_hours AS NUMERIC) AS sum_actual_vehicles_passenger_car_hours,
     SAFE_CAST(sum_actual_vehicles_passenger_car_miles AS NUMERIC) AS sum_actual_vehicles_passenger_car_miles,

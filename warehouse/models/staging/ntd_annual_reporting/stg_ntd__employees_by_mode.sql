@@ -31,7 +31,7 @@ SELECT
     {{ trim_make_empty_string_null('max_mode_name') }} AS max_mode_name,
     {{ trim_make_empty_string_null('mode') }} AS mode,
     {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     SAFE_CAST(sum_total_employee_count AS NUMERIC) AS sum_total_employee_count,
     SAFE_CAST(sum_total_hours AS NUMERIC) AS sum_total_hours,
     {{ trim_make_empty_string_null('type_of_service') }} AS type_of_service,

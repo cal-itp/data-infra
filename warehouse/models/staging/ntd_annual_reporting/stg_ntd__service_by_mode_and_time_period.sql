@@ -54,7 +54,7 @@ SELECT
     SAFE_CAST(primary_uza_code AS NUMERIC) AS primary_uza_code,
     {{ trim_make_empty_string_null('primary_uza_name') }} AS primary_uza_name,
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
     {{ trim_make_empty_string_null('scheduled_revenue_miles_questionable') }} AS scheduled_revenue_miles_questionable,
     SAFE_CAST(scheduled_vehicles_passenger_car_revenue_miles AS NUMERIC) AS scheduled_vehicles_passenger_car_revenue_miles,

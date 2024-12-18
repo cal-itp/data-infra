@@ -70,8 +70,11 @@ models:
       ntd_validation:
         schema: mart_ntd_validation
       ntd_annual_reporting:
+        +materialized: table
         schema: mart_ntd_annual_reporting
       ntd_safety_and_security:
+        +materialized: table
         schema: mart_ntd_safety_and_security
       ntd_ridership:
+        +materialized: table
         schema: mart_ntd_ridership

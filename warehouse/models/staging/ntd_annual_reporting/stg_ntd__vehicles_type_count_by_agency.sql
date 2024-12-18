@@ -80,7 +80,7 @@ SELECT
     SAFE_CAST(over_the_road_bus_ulb AS NUMERIC) AS over_the_road_bus_ulb,
     SAFE_CAST(over_the_road_busrptulb AS NUMERIC) AS over_the_road_busrptulb,
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
     SAFE_CAST(school_bus AS NUMERIC) AS school_bus,
     SAFE_CAST(school_bus_ulb AS NUMERIC) AS school_bus_ulb,
