@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: gs://test-calitp-ntd-xlsx-products-clean
+bucket: gs://calitp-ntd-xlsx-products-clean
 prefix_bucket: false
 post_hook: |
   SELECT *
