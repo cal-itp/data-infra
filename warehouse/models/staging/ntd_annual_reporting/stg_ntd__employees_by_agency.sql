@@ -37,7 +37,7 @@ SELECT
     SAFE_CAST(max_primary_uza_population_1 AS NUMERIC) AS max_primary_uza_population_1,
     {{ trim_make_empty_string_null('max_state_1') }} AS max_state_1,
     {{ trim_make_empty_string_null('max_uza_name_1') }} AS max_uza_name_1,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     SAFE_CAST(sum_total_hours AS NUMERIC) AS sum_total_hours,
     SAFE_CAST(total_employees AS NUMERIC) AS total_employees,
     SAFE_CAST(total_operating_hours AS NUMERIC) AS total_operating_hours,

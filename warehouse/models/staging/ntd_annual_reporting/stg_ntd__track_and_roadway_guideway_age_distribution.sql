@@ -45,7 +45,7 @@ SELECT
     SAFE_CAST(pre1940s AS NUMERIC) AS pre1940s,
     {{ trim_make_empty_string_null('pre1940s_q') }} AS pre1940s_q,
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
     {{ trim_make_empty_string_null('state') }} AS state,
     {{ trim_make_empty_string_null('type_of_service') }} AS type_of_service,

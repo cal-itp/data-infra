@@ -57,7 +57,7 @@ SELECT
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
     SAFE_CAST(rail_crossings AS NUMERIC) AS rail_crossings,
     {{ trim_make_empty_string_null('rail_crossings_q') }} AS rail_crossings_q,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
     SAFE_CAST(single_crossover AS NUMERIC) AS single_crossover,
     {{ trim_make_empty_string_null('single_crossover_q') }} AS single_crossover_q,

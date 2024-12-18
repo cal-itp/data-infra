@@ -27,7 +27,7 @@ SELECT
     SAFE_CAST(other_tax AS NUMERIC) AS other_tax,
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
     SAFE_CAST(property_tax AS NUMERIC) AS property_tax,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
     SAFE_CAST(sales_tax AS NUMERIC) AS sales_tax,
     {{ trim_make_empty_string_null('state') }} AS state,

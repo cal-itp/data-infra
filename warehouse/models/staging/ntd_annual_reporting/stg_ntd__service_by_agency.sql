@@ -29,7 +29,7 @@ SELECT
     SAFE_CAST(max_service_area_population AS NUMERIC) AS max_service_area_population,
     SAFE_CAST(max_service_area_sq_miles AS NUMERIC) AS max_service_area_sq_miles,
     {{ trim_make_empty_string_null('max_state') }} AS max_state,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     SAFE_CAST(sum_actual_vehicles_passenger_car_deadhead_hours AS NUMERIC) AS sum_actual_vehicles_passenger_car_deadhead_hours,
     SAFE_CAST(sum_actual_vehicles_passenger_car_hours AS NUMERIC) AS sum_actual_vehicles_passenger_car_hours,
     SAFE_CAST(sum_actual_vehicles_passenger_car_miles AS NUMERIC) AS sum_actual_vehicles_passenger_car_miles,

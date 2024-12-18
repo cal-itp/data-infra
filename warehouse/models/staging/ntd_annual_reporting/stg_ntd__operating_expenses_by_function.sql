@@ -31,7 +31,7 @@ SELECT
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
     SAFE_CAST(reduced_reporter_expenses AS NUMERIC) AS reduced_reporter_expenses,
     {{ trim_make_empty_string_null('reduced_reporter_expenses_1') }} AS reduced_reporter_expenses_1,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
     SAFE_CAST(separate_report_amount AS NUMERIC) AS separate_report_amount,
     {{ trim_make_empty_string_null('separate_report_amount_1') }} AS separate_report_amount_1,

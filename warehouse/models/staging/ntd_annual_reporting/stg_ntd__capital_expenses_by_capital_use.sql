@@ -44,7 +44,7 @@ SELECT
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
     SAFE_CAST(reduced_reporter AS NUMERIC) AS reduced_reporter,
     {{ trim_make_empty_string_null('reduced_reporter_questionable') }} AS reduced_reporter_questionable,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
     {{ trim_make_empty_string_null('state') }} AS state,
     SAFE_CAST(stations AS NUMERIC) AS stations,

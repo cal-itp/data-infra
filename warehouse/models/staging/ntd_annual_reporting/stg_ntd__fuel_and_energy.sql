@@ -75,7 +75,7 @@ SELECT
     SAFE_CAST(other_fuel_gal_gal_equivalent AS NUMERIC) AS other_fuel_gal_gal_equivalent,
     {{ trim_make_empty_string_null('other_fuel_gal_gal_equivalent_1') }} AS other_fuel_gal_gal_equivalent_1,
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
     {{ trim_make_empty_string_null('state') }} AS state,
     {{ trim_make_empty_string_null('typeofservicecd') }} AS typeofservicecd,

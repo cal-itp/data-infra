@@ -38,7 +38,7 @@ SELECT
     {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
     {{ trim_make_empty_string_null('organization_type') }} AS organization_type,
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
-    {{ trim_make_empty_string_null('report_year') }} AS report_year,
+    SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('state') }} AS state,
     SAFE_CAST(total_employee_count AS NUMERIC) AS total_employee_count,
     {{ trim_make_empty_string_null('total_employee_count_q') }} AS total_employee_count_q,
