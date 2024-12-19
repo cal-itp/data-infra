@@ -9,6 +9,7 @@ import requests
 from calitp_data_infra.storage import PartitionedGCSArtifact, get_fs  # type: ignore
 from pydantic import HttpUrl, parse_obj_as
 
+from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator  # type: ignore
 
 API_BUCKET = os.environ["CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"]
@@ -82,57 +83,72 @@ class StateGeoportalAPIExtract(PartitionedGCSArtifact):
             offset = 0
 
             while True:
-                # Update the resultOffset for each request
-                params["resultOffset"] = offset
+                try:
+                    # Update the resultOffset for each request
+                    params["resultOffset"] = offset
 
-                # Make the request
-                response = requests.get(validated_url, params=params)
-                response.raise_for_status()
-                data = response.json()
+                    # Make the request
+                    response = requests.get(validated_url, params=params)
+                    response.raise_for_status()  # Raises an HTTPError for bad responses
+                    data = response.json()
 
-                # Break the loop if there are no more features
-                if "features" not in data or not data["features"]:
-                    break
+                    # Break the loop if there are no more features
+                    if "features" not in data or not data["features"]:
+                        break
 
-                # Append the retrieved features
-                all_features.extend(data["features"])
+                    # Append the retrieved features
+                    all_features.extend(data["features"])
 
-                # Increment the offset
-                offset += params["resultRecordCount"]
+                    # Increment the offset
+                    offset += params["resultRecordCount"]
 
-            if all_features is None or len(all_features) == 0:
+                except requests.exceptions.HTTPError as e:
+                    logging.error(
+                        f"HTTP error in batch request at offset {offset}: {e}"
+                    )
+                    raise AirflowException(f"HTTP error in geoportal request: {e}")
+                except requests.exceptions.RequestException as e:
+                    logging.error(f"Request error in batch at offset {offset}: {e}")
+                    raise AirflowException(f"Request error in geoportal request: {e}")
+                except Exception as e:
+                    logging.error(f"Error processing batch at offset {offset}: {e}")
+                    raise AirflowException(f"Error processing geoportal batch: {e}")
+
+            if not all_features:
                 logging.info(
                     f"There is no data to download for {self.product}. Ending pipeline."
                 )
+                return None
 
-                pass
-            else:
-                logging.info(
-                    f"Downloaded {self.product} data with {len(all_features)} rows!"
-                )
+            logging.info(
+                f"Downloaded {self.product} data with {len(all_features)} rows!"
+            )
+            return all_features
 
-                return all_features
-
-        except requests.exceptions.RequestException as e:
-            logging.info(f"An error occurred: {e}")
-
-            raise
+        except Exception as e:
+            logging.error(f"Error in geoportal data fetch: {e}")
+            raise AirflowException(f"Failed to fetch geoportal data: {e}")
 
 
-# # Function to convert coordinates to WKT format
+# Function to convert coordinates to WKT format
 def to_wkt(geometry_type, coordinates):
-    if geometry_type == "LineString":
-        # Format as a LineString
-        coords_str = ", ".join([f"{lng} {lat}" for lng, lat in coordinates])
-        return f"LINESTRING({coords_str})"
-    elif geometry_type == "MultiLineString":
-        # Format as a MultiLineString
-        multiline_coords_str = ", ".join(
-            f"({', '.join([f'{lng} {lat}' for lng, lat in line])})"
-            for line in coordinates
-        )
-        return f"MULTILINESTRING({multiline_coords_str})"
-    else:
+    try:
+        if geometry_type == "LineString":
+            # Format as a LineString
+            coords_str = ", ".join([f"{lng} {lat}" for lng, lat in coordinates])
+            return f"LINESTRING({coords_str})"
+        elif geometry_type == "MultiLineString":
+            # Format as a MultiLineString
+            multiline_coords_str = ", ".join(
+                f"({', '.join([f'{lng} {lat}' for lng, lat in line])})"
+                for line in coordinates
+            )
+            return f"MULTILINESTRING({multiline_coords_str})"
+        else:
+            logging.warning(f"Unsupported geometry type: {geometry_type}")
+            return None
+    except Exception as e:
+        logging.error(f"Error converting coordinates to WKT: {e}")
         return None
 
 
@@ -181,37 +197,58 @@ class StateGeoportalAPIOperator(BaseOperator):
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
-        api_content = self.extract.fetch_from_state_geoportal()
+        try:
+            api_content = self.extract.fetch_from_state_geoportal()
+            if api_content is None:
+                return None
 
-        df = pd.json_normalize(api_content)
+            try:
+                df = pd.json_normalize(api_content)
+            except Exception as e:
+                logging.error(f"Error normalizing JSON data: {e}")
+                raise AirflowException(f"Failed to normalize geoportal data: {e}")
 
-        if self.product == "state_highway_network":
-            # Select columns to keep, have to be explicit before renaming because there are duplicate values after normalizing
-            df = df[
-                [
-                    "properties.Route",
-                    "properties.County",
-                    "properties.District",
-                    "properties.RouteType",
-                    "properties.Direction",
-                    "geometry.type",
-                    "geometry.coordinates",
-                ]
-            ]
+            if self.product == "state_highway_network":
+                try:
+                    # Select columns to keep, have to be explicit before renaming because there are duplicate values after normalizing
+                    df = df[
+                        [
+                            "properties.Route",
+                            "properties.County",
+                            "properties.District",
+                            "properties.RouteType",
+                            "properties.Direction",
+                            "geometry.type",
+                            "geometry.coordinates",
+                        ]
+                    ]
 
-            # Dynamically create a mapping by removing known prefixes
-            columns = {col: col.split(".")[-1] for col in df.columns}
+                    # Dynamically create a mapping by removing known prefixes
+                    columns = {col: col.split(".")[-1] for col in df.columns}
 
-            # Rename columns using the dynamically created mapping
-            df = df.rename(columns=columns)
+                    # Rename columns using the dynamically created mapping
+                    df = df.rename(columns=columns)
 
-            # Create new column with WKT format
-            df["wkt_coordinates"] = df.apply(
-                lambda row: to_wkt(row["type"], row["coordinates"]), axis=1
-            )
+                    # Create new column with WKT format
+                    df["wkt_coordinates"] = df.apply(
+                        lambda row: to_wkt(row["type"], row["coordinates"]), axis=1
+                    )
+                except Exception as e:
+                    logging.error(f"Error processing state highway network data: {e}")
+                    raise AirflowException(
+                        f"Failed to process state highway network data: {e}"
+                    )
 
-        # Compress the DataFrame content and save it
-        self.gzipped_content = gzip.compress(
-            df.to_json(orient="records", lines=True).encode()
-        )
-        self.extract.save_content(fs=get_fs(), content=self.gzipped_content)
+            # Compress the DataFrame content and save it
+            try:
+                self.gzipped_content = gzip.compress(
+                    df.to_json(orient="records", lines=True).encode()
+                )
+                self.extract.save_content(fs=get_fs(), content=self.gzipped_content)
+            except Exception as e:
+                logging.error(f"Error saving processed data: {e}")
+                raise AirflowException(f"Failed to save processed geoportal data: {e}")
+
+        except Exception as e:
+            logging.error(f"Error in geoportal operator execution: {e}")
+            raise AirflowException(f"Geoportal operator execution failed: {e}")
