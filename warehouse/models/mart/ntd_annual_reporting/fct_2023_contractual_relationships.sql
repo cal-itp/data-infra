@@ -3,9 +3,21 @@ WITH staging_contractual_relationships AS (
     FROM {{ ref('stg_ntd__2023_contractual_relationships') }}
 ),
 
-fct_2023_contractual_relationships AS (
+dim_organizations AS (
+
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+
+),
+
+fct_2023_contractual_relationships AS (
+    SELECT
+        staging_contractual_relationships.*,
+        dim_organizations.caltrans_district
     FROM staging_contractual_relationships
+    LEFT JOIN dim_organizations
+        ON staging_contractual_relationships.ntd_id = dim_organizations.ntd_id
 )
 
 SELECT

@@ -3,9 +3,24 @@ WITH staging_vehicles_type_count_by_agency AS (
     FROM {{ ref('stg_ntd__vehicles_type_count_by_agency') }}
 ),
 
-fct_vehicles_type_count_by_agency AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_vehicles_type_count_by_agency AS (
+    SELECT
+        staging_vehicles_type_count_by_agency.*,
+        dim_organizations.caltrans_district
     FROM staging_vehicles_type_count_by_agency
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_vehicles_type_count_by_agency.report_year = 2022 THEN
+                staging_vehicles_type_count_by_agency.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_vehicles_type_count_by_agency.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -105,6 +120,7 @@ SELECT
     vintage_historic_trolley,
     vintage_historic_trolley_1,
     vintage_historic_trolley_2,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_vehicles_type_count_by_agency

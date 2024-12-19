@@ -3,9 +3,24 @@ WITH staging_fra_regulated_mode_major_security_events AS (
     FROM {{ ref('stg_ntd__fra_regulated_mode_major_security_events') }}
 ),
 
-fct_fra_regulated_mode_major_security_events AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_fra_regulated_mode_major_security_events AS (
+    SELECT
+        staging_fra_regulated_mode_major_security_events.*,
+        dim_organizations.caltrans_district
     FROM staging_fra_regulated_mode_major_security_events
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_fra_regulated_mode_major_security_events.year <= 2022 THEN
+                staging_fra_regulated_mode_major_security_events.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_fra_regulated_mode_major_security_events.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -98,6 +113,7 @@ SELECT
     pedestrian_not_in_crosswalk,
     number_of_derailed_cars,
     ntd_id,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_fra_regulated_mode_major_security_events

@@ -3,9 +3,24 @@ WITH staging_breakdowns AS (
     FROM {{ ref('stg_ntd__breakdowns') }}
 ),
 
-fct_breakdowns AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_breakdowns AS (
+    SELECT
+        staging_breakdowns.*,
+        dim_organizations.caltrans_district
     FROM staging_breakdowns
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_breakdowns.report_year = 2022 THEN
+                staging_breakdowns.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_breakdowns.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -38,6 +53,7 @@ SELECT
     vehicle_passenger_car_miles_1,
     vehicle_passenger_car_miles_2,
     vehicle_passenger_car_revenue,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_breakdowns

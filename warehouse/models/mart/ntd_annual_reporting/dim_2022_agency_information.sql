@@ -3,9 +3,21 @@ WITH staging_agency_information AS (
     FROM {{ ref('stg_ntd__2022_agency_information') }}
 ),
 
-dim_2022_agency_information AS (
+dim_organizations AS (
+
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+
+),
+
+dim_2022_agency_information AS (
+    SELECT
+        staging_agency_information.*,
+        dim_organizations.caltrans_district
     FROM staging_agency_information
+    LEFT JOIN dim_organizations
+        ON staging_agency_information.ntd_id = dim_organizations.ntd_id_2022
 )
 
 SELECT
@@ -51,6 +63,7 @@ SELECT
     reported_by_ntd_id,
     density,
     state_parent_ntd_id,
+    caltrans_district,
     dt,
     execution_ts
 FROM dim_2022_agency_information

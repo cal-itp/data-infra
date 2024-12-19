@@ -3,9 +3,24 @@ WITH staging_employees_by_mode AS (
     FROM {{ ref('stg_ntd__employees_by_mode') }}
 ),
 
-fct_employees_by_mode AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_employees_by_mode AS (
+    SELECT
+        staging_employees_by_mode.*,
+        dim_organizations.caltrans_district
     FROM staging_employees_by_mode
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_employees_by_mode.report_year = 2022 THEN
+                staging_employees_by_mode.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_employees_by_mode.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -28,6 +43,7 @@ SELECT
     sum_total_employee_count,
     sum_total_hours,
     type_of_service,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_employees_by_mode

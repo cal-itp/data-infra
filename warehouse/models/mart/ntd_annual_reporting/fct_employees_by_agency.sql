@@ -3,9 +3,24 @@ WITH staging_employees_by_agency AS (
     FROM {{ ref('stg_ntd__employees_by_agency') }}
 ),
 
-fct_employees_by_agency AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_employees_by_agency AS (
+    SELECT
+        staging_employees_by_agency.*,
+        dim_organizations.caltrans_district
     FROM staging_employees_by_agency
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_employees_by_agency.report_year = 2022 THEN
+                staging_employees_by_agency.max_ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_employees_by_agency.max_ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -35,6 +50,7 @@ SELECT
     total_employees,
     total_operating_hours,
     total_salaries,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_employees_by_agency

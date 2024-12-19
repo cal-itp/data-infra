@@ -3,9 +3,21 @@ WITH staging_agency_information AS (
     FROM {{ ref('stg_ntd__2023_agency_information') }}
 ),
 
-dim_2023_agency_information AS (
+dim_organizations AS (
+
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+
+),
+
+dim_2023_agency_information AS (
+    SELECT
+        staging_agency_information.*,
+        dim_organizations.caltrans_district
     FROM staging_agency_information
+    LEFT JOIN dim_organizations
+        ON staging_agency_information.ntd_id = dim_organizations.ntd_id
 )
 
 SELECT

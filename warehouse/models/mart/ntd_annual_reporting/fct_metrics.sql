@@ -3,9 +3,24 @@ WITH staging_metrics AS (
     FROM {{ ref('stg_ntd__metrics') }}
 ),
 
-fct_metrics AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_metrics AS (
+    SELECT
+        staging_metrics.*,
+        dim_organizations.caltrans_district
     FROM staging_metrics
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_metrics.report_year = 2022 THEN
+                staging_metrics.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_metrics.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -48,6 +63,7 @@ SELECT
     vehicle_revenue_miles_1,
     uace_code,
     uza_name,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_metrics
