@@ -179,6 +179,9 @@ sources:
     database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
     schema: external_ntd__annual_reporting
     tables:
+      - name: 2022__annual_database_agency_information
+      - name: 2023__annual_database_agency_information
+      - name: 2023__annual_database_contractual_relationships
       - name: multi_year__breakdowns
       - name: multi_year__breakdowns_by_agency
       - name: multi_year__capital_expenses_by_capital_use
@@ -501,5 +504,3 @@ sources:
       - name: multi_year__track_and_roadway_guideway_age_distribution
       - name: multi_year__vehicles_age_distribution
       - name: multi_year__vehicles_type_count_by_agency
-      - name: 2023__annual_database_agency_information
-      - name: 2023__annual_database_contractual_relationships
