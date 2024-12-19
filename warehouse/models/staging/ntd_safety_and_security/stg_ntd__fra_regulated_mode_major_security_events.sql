@@ -104,7 +104,7 @@ SELECT
     SAFE_CAST(other_fatalities AS INTEGER) AS other_fatalities,
     SAFE_CAST(pedestrian_not_in_crosswalk AS INTEGER) AS pedestrian_not_in_crosswalk,
     SAFE_CAST(number_of_derailed_cars AS NUMERIC) AS number_of_derailed_cars,
-    SAFE_CAST(ntd_id AS INTEGER) AS ntd_id,
+    SAFE_CAST(ntd_id AS STRING) AS ntd_id,
     dt,
     execution_ts
 FROM stg_ntd__fra_regulated_mode_major_security_events

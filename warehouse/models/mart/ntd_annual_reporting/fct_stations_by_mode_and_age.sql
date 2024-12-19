@@ -3,9 +3,24 @@ WITH staging_stations_by_mode_and_age AS (
     FROM {{ ref('stg_ntd__stations_by_mode_and_age') }}
 ),
 
-fct_stations_by_mode_and_age AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_stations_by_mode_and_age AS (
+    SELECT
+        staging_stations_by_mode_and_age.*,
+        dim_organizations.caltrans_district
     FROM staging_stations_by_mode_and_age
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_stations_by_mode_and_age.report_year = 2022 THEN
+                staging_stations_by_mode_and_age.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_stations_by_mode_and_age.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -34,6 +49,7 @@ SELECT
     total_facilities,
     uace_code,
     uza_name,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_stations_by_mode_and_age

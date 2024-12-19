@@ -3,9 +3,24 @@ WITH staging_capital_expenses_by_mode AS (
     FROM {{ ref('stg_ntd__capital_expenses_by_mode') }}
 ),
 
-fct_capital_expenses_by_mode AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_capital_expenses_by_mode AS (
+    SELECT
+        staging_capital_expenses_by_mode.*,
+        dim_organizations.caltrans_district
     FROM staging_capital_expenses_by_mode
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_capital_expenses_by_mode.report_year = 2022 THEN
+                staging_capital_expenses_by_mode.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_capital_expenses_by_mode.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -43,6 +58,7 @@ SELECT
     sum_stations,
     sum_total,
     typeofservicecd,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_capital_expenses_by_mode

@@ -3,9 +3,24 @@ WITH staging_track_and_roadway_by_agency AS (
     FROM {{ ref('stg_ntd__track_and_roadway_by_agency') }}
 ),
 
-fct_track_and_roadway_by_agency AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_track_and_roadway_by_agency AS (
+    SELECT
+        staging_track_and_roadway_by_agency.*,
+        dim_organizations.caltrans_district
     FROM staging_track_and_roadway_by_agency
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_track_and_roadway_by_agency.report_year = 2022 THEN
+                staging_track_and_roadway_by_agency.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_track_and_roadway_by_agency.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -41,6 +56,7 @@ SELECT
     sum_slip_switch,
     sum_total_miles,
     sum_total_track_miles,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_track_and_roadway_by_agency
