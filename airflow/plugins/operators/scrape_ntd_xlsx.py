@@ -19,6 +19,20 @@ from airflow.models import BaseOperator  # type: ignore
 RAW_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"]
 CLEAN_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"]
 
+# Map product and year combinations to their xcom keys for dynamic url scraping
+xcom_keys = {
+    (
+        "complete_monthly_ridership_with_adjustments_and_estimates",
+        "historical",
+    ): "ridership_url",
+    ("annual_database_agency_information", "2022"): "2022_agency_url",
+    ("annual_database_agency_information", "2023"): "2023_agency_url",
+    (
+        "annual_database_contractual_relationship",
+        "2023",
+    ): "contractual_relationship_url",
+}
+
 
 # pulls the URL from XCom
 def pull_url_from_xcom(key, context):
@@ -116,39 +130,7 @@ class NtdDataProductXLSXOperator(BaseOperator):
     def execute(self, context, *args, **kwargs):
         download_url = self.raw_excel_extract.file_url
 
-        # if self.product == "complete_monthly_ridership_with_adjustments_and_estimates":
-        #     download_url = pull_url_from_xcom(key="ridership_url", context=context)
-
-        # if self.product == "annual_database_agency_information" and self.year == '2022':
-        #     download_url = pull_url_from_xcom(key="2022_agency_url", context=context)
-
-        # if self.product == "annual_database_agency_information" and self.year == '2023':
-        #     download_url = pull_url_from_xcom(key="2023_agency_url", context=context)
-
-        # if self.product == "annual_database_contractual_relationship":
-        #     download_url = pull_url_from_xcom(
-        #         key="contractual_relationship_url", context=context
-        #     )
-
-        # Map product and year combinations to their xcom keys
-        xcom_keys = {
-            (
-                "complete_monthly_ridership_with_adjustments_and_estimates",
-                None,
-            ): "ridership_url",
-            ("annual_database_agency_information", "2022"): "2022_agency_url",
-            ("annual_database_agency_information", "2023"): "2023_agency_url",
-            (
-                "annual_database_contractual_relationship",
-                None,
-            ): "contractual_relationship_url",
-        }
-
-        key = (
-            (self.product, self.year)
-            if self.product == "annual_database_agency_information"
-            else (self.product, None)
-        )
+        key = (self.product, self.year)
 
         if key in xcom_keys:
             download_url = pull_url_from_xcom(key=xcom_keys[key], context=context)
