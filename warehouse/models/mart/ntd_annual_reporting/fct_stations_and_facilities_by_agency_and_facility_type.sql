@@ -3,9 +3,24 @@ WITH staging_stations_and_facilities_by_agency_and_facility_type AS (
     FROM {{ ref('stg_ntd__stations_and_facilities_by_agency_and_facility_type') }}
 ),
 
-fct_stations_and_facilities_by_agency_and_facility_type AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_stations_and_facilities_by_agency_and_facility_type AS (
+    SELECT
+        staging_stations_and_facilities_by_agency_and_facility_type.*,
+        dim_organizations.caltrans_district
     FROM staging_stations_and_facilities_by_agency_and_facility_type
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_stations_and_facilities_by_agency_and_facility_type.report_year = 2022 THEN
+                staging_stations_and_facilities_by_agency_and_facility_type.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_stations_and_facilities_by_agency_and_facility_type.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -46,6 +61,7 @@ SELECT
     vehicle_fueling_facility,
     vehicle_testing_facility,
     vehicle_washing_facility,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_stations_and_facilities_by_agency_and_facility_type

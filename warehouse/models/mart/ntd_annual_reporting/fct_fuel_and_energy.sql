@@ -3,9 +3,24 @@ WITH staging_fuel_and_energy AS (
     FROM {{ ref('stg_ntd__fuel_and_energy') }}
 ),
 
-fct_fuel_and_energy AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_fuel_and_energy AS (
+    SELECT
+        staging_fuel_and_energy.*,
+        dim_organizations.caltrans_district
     FROM staging_fuel_and_energy
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_fuel_and_energy.report_year = 2022 THEN
+                staging_fuel_and_energy.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_fuel_and_energy.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -74,6 +89,7 @@ SELECT
     typeofservicecd,
     uace_code,
     uza_name,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_fuel_and_energy

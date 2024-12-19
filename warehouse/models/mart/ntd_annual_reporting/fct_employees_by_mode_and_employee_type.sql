@@ -3,9 +3,24 @@ WITH staging_employees_by_mode_and_employee_type AS (
     FROM {{ ref('stg_ntd__employees_by_mode_and_employee_type') }}
 ),
 
-fct_employees_by_mode_and_employee_type AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_employees_by_mode_and_employee_type AS (
+    SELECT
+        staging_employees_by_mode_and_employee_type.*,
+        dim_organizations.caltrans_district
     FROM staging_employees_by_mode_and_employee_type
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_employees_by_mode_and_employee_type.report_year = 2022 THEN
+                staging_employees_by_mode_and_employee_type.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_employees_by_mode_and_employee_type.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -48,6 +63,7 @@ SELECT
     vehicle_operations_count_q,
     vehicle_operations_hours,
     vehicle_operations_hours_q,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_employees_by_mode_and_employee_type

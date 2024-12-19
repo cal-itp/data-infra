@@ -3,9 +3,24 @@ WITH staging_service_by_mode_and_time_period AS (
     FROM {{ ref('stg_ntd__service_by_mode_and_time_period') }}
 ),
 
-fct_service_by_mode_and_time_period AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_service_by_mode_and_time_period AS (
+    SELECT
+        staging_service_by_mode_and_time_period.*,
+        dim_organizations.caltrans_district
     FROM staging_service_by_mode_and_time_period
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_service_by_mode_and_time_period.report_year = 2022 THEN
+                staging_service_by_mode_and_time_period._5_digit_ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_service_by_mode_and_time_period._5_digit_ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -78,6 +93,7 @@ SELECT
     vehicle_miles_questionable,
     vehicle_revenue_hours_questionable,
     vehicle_revenue_miles_questionable,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_service_by_mode_and_time_period

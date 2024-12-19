@@ -3,9 +3,24 @@ WITH staging_operating_expenses_by_type AS (
     FROM {{ ref('stg_ntd__operating_expenses_by_type') }}
 ),
 
-fct_operating_expenses_by_type AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_operating_expenses_by_type AS (
+    SELECT
+        staging_operating_expenses_by_type.*,
+        dim_organizations.caltrans_district
     FROM staging_operating_expenses_by_type
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_operating_expenses_by_type.report_year = 2022 THEN
+                staging_operating_expenses_by_type.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_operating_expenses_by_type.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -58,6 +73,7 @@ SELECT
     utilities,
     utilities_questionable,
     uza_name,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_operating_expenses_by_type
