@@ -13,6 +13,7 @@ from calitp_data_infra.storage import (  # type: ignore
 )
 from pydantic import HttpUrl, parse_obj_as
 
+from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator  # type: ignore
 
 API_BUCKET = os.environ["CALITP_BUCKET__NTD_API_DATA_PRODUCTS"]
@@ -52,25 +53,30 @@ class NtdDataProductAPIExtract(PartitionedGCSArtifact):
 
             validated_url = parse_obj_as(HttpUrl, url)
 
-            response = requests.get(validated_url).content
+            response = requests.get(validated_url)
+            response.raise_for_status()  # Raises an HTTPError for bad responses
+            response_content = response.content
 
-            if response is None or len(response) == 0:
+            if response_content is None or len(response_content) == 0:
                 logging.info(
                     f"There is no data to download for {self.year} / {self.product}. Ending pipeline."
                 )
+                return None
 
-                pass
-            else:
-                logging.info(
-                    f"Downloaded {self.product} data for {self.year} with {len(response)} rows!"
-                )
+            logging.info(
+                f"Downloaded {self.product} data for {self.year} with {len(response_content)} rows!"
+            )
+            return response_content
 
-                return response
-
+        except requests.exceptions.HTTPError as e:
+            logging.error(f"HTTP error occurred: {e}")
+            raise AirflowException(f"HTTP error in NTD API request: {e}")
         except requests.exceptions.RequestException as e:
-            logging.info(f"An error occurred: {e}")
-
-            raise
+            logging.error(f"Request error occurred: {e}")
+            raise AirflowException(f"Error in NTD API request: {e}")
+        except Exception as e:
+            logging.error(f"Unexpected error occurred: {e}")
+            raise AirflowException(f"Unexpected error in NTD API request: {e}")
 
 
 class JSONExtract(NtdDataProductAPIExtract):
@@ -111,16 +117,24 @@ class NtdDataProductAPIOperator(BaseOperator):
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
-        api_content = self.extract.fetch_from_ntd_api()
+        try:
+            api_content = self.extract.fetch_from_ntd_api()
+            if api_content is None:
+                return None
 
-        decode_api_content = api_content.decode("utf-8")
+            decode_api_content = api_content.decode("utf-8")
+            df = pd.read_json(decode_api_content)
+            df = df.rename(make_name_bq_safe, axis="columns")
 
-        df = pd.read_json(decode_api_content)
+            self.gzipped_content = gzip.compress(
+                df.to_json(orient="records", lines=True).encode()
+            )
 
-        df = df.rename(make_name_bq_safe, axis="columns")
+            self.extract.save_content(fs=get_fs(), content=self.gzipped_content)
 
-        self.gzipped_content = gzip.compress(
-            df.to_json(orient="records", lines=True).encode()
-        )
-
-        self.extract.save_content(fs=get_fs(), content=self.gzipped_content)
+        except ValueError as e:
+            logging.error(f"Error parsing JSON data: {e}")
+            raise AirflowException(f"Failed to parse JSON data: {e}")
+        except Exception as e:
+            logging.error(f"Error processing NTD API data: {e}")
+            raise AirflowException(f"Failed to process NTD API data: {e}")
