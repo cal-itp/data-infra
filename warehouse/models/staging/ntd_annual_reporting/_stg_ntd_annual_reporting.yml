@@ -498,5 +498,3 @@ models:
   - name: stg_ntd__track_and_roadway_guideway_age_distribution
   - name: stg_ntd__vehicles_age_distribution
   - name: stg_ntd__vehicles_type_count_by_agency
-  - name: stg_ntd__2023_agency_information
-  - name: stg_ntd__2023_contractual_relationships
