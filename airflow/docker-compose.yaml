@@ -52,6 +52,8 @@ x-airflow-common:
     AIRFLOW__CORE__BASE_LOG_FOLDER: /opt/airflow/gcs/logs
     AIRFLOW__CORE__PLUGINS_FOLDER: /opt/airflow/gcs/plugins
     AIRFLOW__WEBSERVER__RELOAD_ON_PLUGIN_CHANGE: 'true'
+    # AIRFLOW__CORE__DAGBAG_IMPORT_TIMEOUT: 120
+
 
     # this option prevents a DAG from trying to run all dagruns back to its
     # start date. this lets you it spin up docker, unpause a dag, and just
