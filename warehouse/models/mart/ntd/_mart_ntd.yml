@@ -474,6 +474,7 @@ models:
           - not_null
           - accepted_values:
               values: [2022, 2023]
+              quote: false
       - *reporter_type
       - name: sales_tax
         description: |
@@ -503,6 +504,7 @@ models:
           - not_null
           - accepted_values:
               values: [2022, 2023]
+              quote: false
       - *ntd_id
       - *agency
       - *reporter_type
@@ -548,6 +550,7 @@ models:
           - not_null
           - accepted_values:
               values: [2022, 2023]
+              quote: false
       - *reporter_type
       - *ntd_id
       - *agency
@@ -729,6 +732,7 @@ models:
           - not_null
           - accepted_values:
               values: [2022, 2023]
+              quote: false
       - *ntd_id
       - *type_of_service
       - *mode

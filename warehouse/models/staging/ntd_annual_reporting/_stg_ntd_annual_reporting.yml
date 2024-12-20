@@ -19,6 +19,7 @@ x-common-fields:
       - not_null
       - accepted_values:
           values: [2022, 2023]
+          quote: false
   - &reporter_type
     name: reporter_type
     description: '{{ doc("ntd_reporter_type") }}'
@@ -298,7 +299,6 @@ models:
           The time period for which data was collected.
           This table displays only "Annual Total".
         tests:
-          - not_null
           - accepted_values:
               values: ["Annual Total"]
       - <<: *time_service_begins
