@@ -15,7 +15,7 @@ Resolves #\[issue\]
 
 _Include commands/logs/screenshots as relevant._
 
-_If making changes to dbt models, please run the command `poetry run dbt run -s CHANGED_MODEL` and include the output in this section of the PR._
+_If making changes to dbt models, please run the command `poetry run dbt run -s CHANGED_MODEL` and `poetry run dbt test -s CHANGED_MODEL`, then include the output in this section of the PR._
 
 ## Post-merge follow-ups
 
