@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "calitp-data-analysis"
-version = "2024.5.28"
+version = "2024.12.6"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
 authors = ["Andrew Vaccaro"]
 
@@ -20,7 +20,7 @@ geopandas = "^0.14.0"
 requests = "^2.31.0"
 dask = "~2024.5"
 shapely = "^2.0.1"
-gtfs-segments = "0.1.0"
+gtfs-segments = "2.1.7"
 pyairtable = "2.2.2"
 
 [tool.poetry.group.dev.dependencies]
