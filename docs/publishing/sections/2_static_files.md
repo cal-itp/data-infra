@@ -101,7 +101,7 @@ jupyter nbconvert --to html --no-input --no-prompt my_notebook.ipynb
 weasyprint my_notebook.html my_notebook.pdf
 ```
 
-- There are assignments that require you to rerun the same notebook for different values and save each of these new notebooks in PDF format. This  essentially combines parameterization principles using `papermill`  with the `weasyprint` steps above. You can reference the code that was used to generate the CSIS scorecards [here](https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/run_papermill.py). This script iterates over [this notebook](https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/sb1_scorecard.ipynb) to produce 50+ PDF files for each of the nominated projects.
+- There are assignments that require you to rerun the same notebook for different values and save each of these new notebooks in PDF format. This essentially combines parameterization principles using papermill with the weasyprint steps above. You can reference the code that was used to generate the CSIS scorecards [here](https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/_make_scorecard.py). This script iterates over [this notebook](https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/08_csis_scorecard.ipynb) to produce PDF files for each of the nominated projects found [here](<https://console.cloud.google.com/storage/browser/calitp-analytics-data/data-analyses/general_csis/scorecards?pageState=(%22StorageObjectListTable%22:(%22f%22:%22%255B%255D%22))&project=cal-itp-data-infra>).
 
   Briefly, the script above does the following:
 
