@@ -39,6 +39,12 @@ jupyterhub:
           mem_limit: "12G"
           mem_guarantee: "10G"
           cpu_guarantee: 1.5
+      - display_name: "Prototype Image - 2024.5.24"
+        description: "This is the next image we will deploy."
+        kubespawner_override:
+          image:
+            name: ghcr.io/cal-itp/data-infra/jupyter-singleuser
+            tag: 2024.5.24
   scheduling:
     userPods:
       nodeAffinity:
