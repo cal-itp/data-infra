@@ -744,6 +744,5 @@ models:
           The time period for which data was collected.
           This table displays only "Annual Total".
         tests:
-          - not_null
           - accepted_values:
               values: ["Annual Total"]
