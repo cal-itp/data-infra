@@ -1,5 +1,7 @@
 operator: operators.NtdDataProductXLSXOperator
 
 product: 'complete_monthly_ridership_with_adjustments_and_estimates'
-xlsx_file_url: 'https://www.transit.dot.gov/sites/fta.dot.gov/files/2024-08/June%202024%20Complete%20Monthly%20Ridership%20%28with%20adjustments%20and%20estimates%29_240801.xlsx'
-year: 'historical'
+xlsx_file_url: 'https://www.transit.dot.gov/ntd/data-product/monthly-module-raw-data-release' # placeholder for scraped url from scrape_ntd_xlsx_urls task
+year: 'historical' # one of: 'historical' (long history), 'mutli-year' (select history), or a specific year (ex: 2022)
+dependencies:
+  - scrape_ntd_xlsx_urls

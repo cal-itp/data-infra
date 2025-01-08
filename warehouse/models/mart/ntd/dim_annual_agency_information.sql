@@ -1,0 +1,62 @@
+WITH stg_ntd__annual_database_agency_information AS (
+    SELECT
+        *,
+        -- TODO: this does not handle deletes
+        LEAD(ts) OVER (PARTITION BY year, ntd_id, state_parent_ntd_id ORDER BY ts ASC) AS next_ts,
+    FROM {{ ref('stg_ntd__annual_database_agency_information') }}
+),
+
+dim_annual_agency_information AS (
+    SELECT
+       {{ dbt_utils.generate_surrogate_key(['year', 'ntd_id', 'state_parent_ntd_id', 'ts']) }} AS key,
+        year,
+        ntd_id,
+        state_parent_ntd_id,
+        agency_name,
+        reporter_acronym,
+        doing_business_as,
+        division_department,
+        legacy_ntd_id,
+        reported_by_ntd_id,
+        reported_by_name,
+        reporter_type,
+        reporting_module,
+        organization_type,
+        subrecipient_type,
+        fy_end_date,
+        original_due_date,
+        address_line_1,
+        address_line_2,
+        p_o__box,
+        city,
+        state,
+        zip_code,
+        zip_code_ext,
+        region,
+        url,
+        fta_recipient_id,
+        ueid,
+        service_area_sq_miles,
+        service_area_pop,
+        primary_uza_code,
+        primary_uza_name,
+        tribal_area_name,
+        population,
+        density,
+        sq_miles,
+        voms_do,
+        voms_pt,
+        total_voms,
+        volunteer_drivers,
+        personal_vehicles,
+        tam_tier,
+        number_of_state_counties,
+        number_of_counties_with_service,
+        state_admin_funds_expended,
+        ts AS _valid_from,
+        {{ make_end_of_valid_range('COALESCE(next_ts, CAST("2099-01-01" AS TIMESTAMP))') }} AS _valid_to,
+        next_ts IS NULL AS _is_current,
+    FROM stg_ntd__annual_database_agency_information
+)
+
+SELECT * FROM dim_annual_agency_information

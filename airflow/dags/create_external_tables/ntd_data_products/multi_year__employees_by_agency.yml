@@ -1,0 +1,66 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "employees_by_agency/multi_year/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "employees_by_agency/multi_year/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.multi_year__employees_by_agency"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.multi_year__employees_by_agency LIMIT 1;
+schema_fields:
+  - name: agency
+    type: STRING
+  - name: avgwagerate
+    type: FLOAT
+  - name: count_capital_labor_count_q
+    type: NUMERIC
+  - name: count_capital_labor_hours_q
+    type: NUMERIC
+  - name: count_facility_maintenance_count_q
+    type: NUMERIC
+  - name: count_facility_maintenance_hours_q
+    type: NUMERIC
+  - name: count_general_administration_count_q
+    type: NUMERIC
+  - name: count_general_administration_hours_q
+    type: NUMERIC
+  - name: count_total_employee_count_q
+    type: NUMERIC
+  - name: count_total_employee_hours_q
+    type: NUMERIC
+  - name: count_vehicle_maintenance_count_q
+    type: NUMERIC
+  - name: count_vehicle_maintenance_hours_q
+    type: NUMERIC
+  - name: count_vehicle_operations_count_q
+    type: NUMERIC
+  - name: count_vehicle_operations_hours_q
+    type: NUMERIC
+  - name: max_agency_voms_1
+    type: NUMERIC
+  - name: max_city_1
+    type: STRING
+  - name: max_mode_voms
+    type: NUMERIC
+  - name: max_ntd_id
+    type: STRING
+  - name: max_primary_uza_population_1
+    type: NUMERIC
+  - name: max_state_1
+    type: STRING
+  - name: max_uza_name_1
+    type: STRING
+  - name: report_year
+    type: STRING
+  - name: sum_total_hours
+    type: NUMERIC
+  - name: total_employees
+    type: NUMERIC
+  - name: total_operating_hours
+    type: NUMERIC
+  - name: total_salaries
+    type: NUMERIC

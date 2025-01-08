@@ -19,7 +19,7 @@
 
 - [ ] [**Slack**](https://cal-itp.slack.com) | ([Docs](slack-intro))
 - [ ] [**Analytics Repo**](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
-- [ ] [**Analyst Project Board**](https://github.com/cal-itp/data-analyses/projects/1) | ([Docs](analytics-project-board))
+- [ ] [**Analyst Project Board**](https://github.com/cal-itp/data-analyses/projects/1)
 - [ ] [**Google Cloud Storage**](https://console.cloud.google.com/storage/browser/calitp-analytics-data) | ([Docs](storing-new-data))
 
 **Analytics Tools:**
@@ -32,16 +32,19 @@
 
 **Python Libraries:**
 
-- [ ] **calitp-data-analysis** - Cal-ITP's internal Python library for analysis | ([Docs](calitp-data-analysis))
-- [ ] **siuba** - Recommended data analysis library | ([Docs](siuba))
-- [ ] [**shared_utils**](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) and [**here**](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis) - A shared utilities library for the analytics team | ([Docs](shared-utils))
+- [ ] [**calitp-data-analysis**](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis) - Cal-ITP's internal Python library for analysis | ([Docs](calitp-data-analysis))
+- [ ] [**siuba**](https://siuba.org/) - Recommended data analysis library | ([Docs](siuba))
+- [ ] [**shared_utils**](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) - A shared utilities library for the analytics team | ([Docs](shared-utils))
 
 **Caltrans Employee Resources:**
 
+- [ ] [**Organizational Chart**](https://pmp.onramp.dot.ca.gov/organizational-chart) - Data and Digital Services Organizational Chart
 - [ ] [**OnRamp**](https://onramp.dot.ca.gov/) - Caltrans employee intranet
 - [ ] [**Service Now (SNOW)**](https://cdotprod.service-now.com/sp) - Caltrans IT Service Management Portal for IT issues and requesting specific software
 - [ ] [**Cal Employee Connect**](https://connect.sco.ca.gov/) - State Controller's Office site for paystubs and tax information
 - [ ] [**Geospatial Enterprise Engagement Platform - GIS Account Request Form**](https://sv03tmcpo.ct.dot.ca.gov/portal/apps/sites/#/geep/pages/account-request) (optional) - User request form for ArcGIS Online and ArcGIS Portal accounts
+- [ ] [**Planning Handbook**](https://transportationplanning.onramp.dot.ca.gov/caltrans-transportation-planning-handbook) - Caltrans Transportation Planning Handbook
+- [ ] [**California Public Employees Retirement System**](https://www.calpers.ca.gov/) - System that manages pension and health benefits
 
 &#160;
 (get-help)=

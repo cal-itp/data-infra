@@ -19,6 +19,28 @@ from airflow.models import BaseOperator  # type: ignore
 RAW_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"]
 CLEAN_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"]
 
+# Map product and year combinations to their xcom keys for dynamic url scraping
+xcom_keys = {
+    (
+        "complete_monthly_ridership_with_adjustments_and_estimates",
+        "historical",
+    ): "ridership_url",
+    ("annual_database_agency_information", "2022"): "2022_agency_url",
+    ("annual_database_agency_information", "2023"): "2023_agency_url",
+    (
+        "annual_database_contractual_relationship",
+        "2023",
+    ): "contractual_relationship_url",
+}
+
+
+# pulls the URL from XCom
+def pull_url_from_xcom(key, context):
+    task_instance = context["ti"]
+    pulled_value = task_instance.xcom_pull(task_ids="scrape_ntd_xlsx_urls", key=key)
+    print(f"Pulled value from XCom: {pulled_value}")
+    return pulled_value
+
 
 class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
     bucket: ClassVar[str]
@@ -41,6 +63,10 @@ class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
         arbitrary_types_allowed = True
 
     def fetch_from_ntd_xlsx(self, file_url):
+        # As of now, the NTD XLSX download links change every time they update the file, so we have special handling for that here, which is dependent on
+        # another dag task called scrape_ntd_xlsx_urls.py. if we look to download other xlsx files from the DOT portal and they
+        # also change the file name every time they publish, they we will have to add the same handling for all of these files and make it programmatic
+
         validated_url = parse_obj_as(HttpUrl, file_url)
 
         logging.info(f"reading file from url {validated_url}")
@@ -84,6 +110,7 @@ class NtdDataProductXLSXOperator(BaseOperator):
         product: str,
         xlsx_file_url,
         year: int,
+        *args,
         **kwargs,
     ):
         self.year = year
@@ -98,15 +125,20 @@ class NtdDataProductXLSXOperator(BaseOperator):
             filename=f"{self.year}__{self.product}_raw.xlsx",
         )
 
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
-    def execute(self, **kwargs):
-        excel_content = self.raw_excel_extract.fetch_from_ntd_xlsx(
-            self.raw_excel_extract.file_url
-        )
-        logging.info(
-            f"file url is {self.xlsx_file_url} and file type is {type(self.xlsx_file_url)}"
-        )
+    def execute(self, context, *args, **kwargs):
+        download_url = self.raw_excel_extract.file_url
+
+        key = (self.product, self.year)
+
+        if key in xcom_keys:
+            download_url = pull_url_from_xcom(key=xcom_keys[key], context=context)
+
+        # see what is returned
+        logging.info(f"reading {self.product} url as {download_url}")
+
+        excel_content = self.raw_excel_extract.fetch_from_ntd_xlsx(download_url)
 
         self.raw_excel_extract.save_content(fs=get_fs(), content=excel_content)
 

@@ -2,7 +2,7 @@
 
 # Helpful Links
 
-Here are some resources data analysts have collected and referenced, that will hopefully help you out in your work. Have something you want to share? Create a new markdown file, add it [to the example report folder](https://github.com/cal-itp/data-analyses/tree/main/example_report), and [message Amanda.](https://app.slack.com/client/T014965JTHA/C013N8GELLF/user_profile/U02PCTPSZ8A)
+Here are some resources data analysts have collected and referenced, that will hopefully help you out in your work.
 
 - [Data Analysis](#data-analysis)
   - [Python](#python)
@@ -11,12 +11,14 @@ Here are some resources data analysts have collected and referenced, that will h
   - [Merging](#merging)
   - [Dates](#dates)
   - [Monetary Values](#monetary-values)
+  - [Tidy Data](#tidy-data)
 - [Visualizations](#visualization)
   - [Charts](#charts)
   - [Maps](#maps)
   - [DataFrames](#dataframes)
   - [Ipywidgets](#ipywidgets)
   - [Markdown](#markdown)
+  - [ReviewNB](#reviewNB)
 
 (data-analysis)=
 
@@ -26,7 +28,7 @@ Here are some resources data analysts have collected and referenced, that will h
 
 ### Python
 
-- [Composing Programs: comprehensive Python course](https://composingprograms.com/)
+- [Composing Programs: comprehensive Python course](https://www.composingprograms.com/)
 - [Intermediate Python: tips for improving your programs](https://book.pythontips.com/en/latest/index.html)
 - [Stop Python from executing code when a module is imported.](https://stackoverflow.com/questions/6523791/why-is-python-running-my-module-when-i-import-it-and-how-do-i-stop-it)
 - [Loop through 2 lists with zip in parallel.](https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel)
@@ -128,6 +130,20 @@ def adjust_prices(df):
     return df
 ```
 
+(tidy-data)=
+
+### Tidy Data
+
+Tidy Data follows a set of principles that ensure the data is easy to work with, especially when using tools like pandas and matplotlib. Primary rules of tidy data are:
+
+- Each variable must have its own column.
+- Each observation must have its own row.
+- Each value must have its own cell.
+
+Tidy data ensures consistency, making it easier to work with tools like pandas, matplotlib, or seaborn. It also simplifies data manipulation, as functions like `groupby()`, `pivot()`, and `melt()` work more intuitively when the data is structured properly. Additionally, tidy data enables vectorized operations in pandas, allowing for efficient analysis on entire columns or rows at once.
+
+Learn more about Tidy Data [here.](https://vita.had.co.nz/papers/tidy-data.pdf)
+
 (visualization)=
 
 ## Visualization
@@ -159,7 +175,6 @@ def add_tooltip(chart, tooltip1, tooltip2):
 
 ### Maps
 
-- [Examples of folium, branca, and color maps.](https://nbviewer.org/github/python-visualization/folium/blob/v0.2.0/examples/Colormaps.ipynb)
 - [Quick interactive maps with Geopandas.gdf.explore()](https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.explore.html)
 
 (dataframes)=
@@ -188,3 +203,10 @@ def add_tooltip(chart, tooltip1, tooltip2):
 - [Add a table of content that links to headers throughout a markdown file.](https://stackoverflow.com/questions/2822089/how-to-link-to-part-of-the-same-document-in-markdown)
 - [Add links to local files.](https://stackoverflow.com/questions/32563078/how-link-to-any-local-file-with-markdown-syntax?rq=1)
 - [Direct embed an image.](https://datascienceparichay.com/article/insert-image-in-a-jupyter-notebook/)
+
+(reviewNB)=
+
+### ReviewNB on GitHub
+
+- [Tool designed to facilitate reviewing Jupyter Notebooks in a collaborative setting on GitHub](https://www.reviewnb.com/)
+- [Shows side-by-side diffs of Jupyter Notebooks, including changes to both code cells and markdown cells and allows reviewers to comment on specific cells](https://www.reviewnb.com/#faq)

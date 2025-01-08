@@ -73,6 +73,8 @@ schema_fields:
       type: INTEGER
     - name: Size
       type: STRING
+    - name: Type
+      type: STRING
     - name: DOTCapitalResponsibility
       type: FLOAT
     - name: OrganizationCapitalResponsibility
@@ -95,6 +97,10 @@ schema_fields:
       type: STRING
     - name: PrivateMode
       type: STRING
+    - name: Note
+      type: STRING
+    - name: LastModifiedDate
+      type: TIMESTAMP
   - name: ntdassetandresourceinfo_data
     type: RECORD
     mode: REPEATED
@@ -139,6 +145,44 @@ schema_fields:
       type: STRING
     - name: LastModifiedDate
       type: TIMESTAMP
+    - name: AgencyFleetId
+      type: STRING
+    - name: TotalVehicles
+      type: INTEGER
+    - name: ActiveVehicles
+      type: INTEGER
+    - name: DedicatedFleet
+      type: BOOLEAN
+    - name: NoCapitalReplacementResponsibility
+      type: BOOLEAN
+    - name: AutomatedorAutonomousVehicles
+      type: STRING
+    - name: Manufacturer
+      type: STRING
+    - name: DescribeOtherManufacturer
+      type: STRING
+    - name: Model
+      type: STRING
+    - name: YearRebuilt
+      type: INTEGER
+    - name: OtherFuelType
+      type: STRING
+    - name: DuelFuelType
+      type: STRING
+    - name: StandingCapacity
+      type: INTEGER
+    - name: OtherOwnershipType
+      type: STRING
+    - name: EmergencyVehicles
+      type: BOOLEAN
+    - name: TypeofLastRenewal
+      type: STRING
+    - name: UsefulLifeBenchmark
+      type: INTEGER
+    - name: MilesThisYear
+      type: INTEGER
+    - name: AverageLifetimeMilesPerActiveVehicle
+      type: INTEGER
   - name: ntdreportingp10_data
     type: RECORD
     mode: REPEATED
@@ -320,14 +364,24 @@ schema_fields:
       type: STRING
     - name: AnnualVehicleRevMiles
       type: INTEGER
+    - name: AnnualVehicleRevMilesComments
+      type: STRING
     - name: AnnualVehicleRevHours
       type: INTEGER
+    - name: AnnualVehicleRevHoursComments
+      type: STRING
     - name: AnnualUnlinkedPassTrips
       type: INTEGER
+    - name: AnnualUnlinkedPassTripsComments
+      type: STRING
     - name: AnnualVehicleMaxService
       type: INTEGER
+    - name: AnnualVehicleMaxServiceComments
+      type: STRING
     - name: SponsoredServiceUPT
       type: INTEGER
+    - name: SponsoredServiceUPTComments
+      type: STRING
     - name: Quantity
       type: INTEGER
     - name: LastModifiedDate
@@ -371,6 +425,8 @@ schema_fields:
     - name: TAMPlanGoalsDescription
       type: STRING
     - name: VehiclesToBeRetiredBeyondULB
+      type: INTEGER
+    - name: VehiclesToBePurchasesNextYear
       type: INTEGER
     - name: VehiclesPastULBInTAM
       type: INTEGER

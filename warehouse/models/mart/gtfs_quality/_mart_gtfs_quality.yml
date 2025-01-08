@@ -576,6 +576,29 @@ models:
         tests:
           - not_null
 
+  - name: fct_daily_vendor_vehicle_positions_message_age_summary
+    description: |
+      Table summarizing the age in seconds of various message components by vendor by date.
+      Terms:
+      - For definitions of the underlying `header_message_age`, `vehicle_message_age`, and `vehice_message_age_vs_header`
+        values, see `fct_vehicle_positions_messages`. In particular, note that a negative value indicates that the
+        referenced item happened *after* the item it's being compared to; i.e., a negative `header_message_age` indicates
+        that the `header_timestamp` was later than `_extract_ts`.
+      - `pX` refers to a percentile, so `p25` refers to 25th percentile.
+      - `avg` refers to the mean.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - dt
+            - organization_name
+    columns:
+      - name: dt
+        tests:
+          - not_null
+      - name: organization_name
+        tests:
+          - not_null
+
   - name: fct_daily_trip_updates_message_age_summary
     description: |
       Table summarizing the age in seconds of various message components by RT URL by date.

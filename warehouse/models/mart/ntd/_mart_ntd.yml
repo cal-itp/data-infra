@@ -1,41 +1,320 @@
 version: 2
+
+x-common-fields:
+  - &key
+    name: key
+    tests:
+      - not_null
+      - unique
+  - &ntd_id
+    name: ntd_id
+    description: '{{ doc("ntd_id") }}'
+    tests:
+      - not_null
+  - &agency
+    name: agency
+    description: '{{ doc("ntd_agency") }}'
+  - &agency_name
+    name: agency_name
+    description: '{{ doc("ntd_agency_name") }}'
+  - &legacy_ntd_id
+    name: legacy_ntd_id
+    description: '{{ doc("ntd_legacy_id") }}'
+  - &state_parent_ntd_id
+    name: state_parent_ntd_id
+    description: '{{ doc("ntd_state_parent_ntd_id") }}'
+  - &report_year
+    name: report_year
+    description: '{{ doc("ntd_report_year") }}'
+  - &reporter_type
+    name: reporter_type
+    description: '{{ doc("ntd_reporter_type") }}'
+  - &organization_type
+    name: organization_type
+    description: '{{ doc("ntd_organization_type") }}'
+  - &city
+    name: city
+    description: '{{ doc("ntd_city") }}'
+  - &state
+    name: state
+    description: '{{ doc("ntd_state") }}'
+  - &doing_business_as
+    name: doing_business_as
+    description: '{{ doc("ntd_doing_business_as") }}'
+  - &address_line_1
+    name: address_line_1
+    description: '{{ doc("ntd_mailing_address_line_1") }}'
+  - &address_line_2
+    name: address_line_2
+    description: '{{ doc("ntd_mailing_address_line_2") }}'
+  - &p_o__box
+    name: p_o__box
+    description: '{{ doc("ntd_mailing_p_o_box") }}'
+  - &mailing_city
+    name: city
+    description: '{{ doc("ntd_mailing_city") }}'
+  - &mailing_state
+    name: state
+    description: '{{ doc("ntd_mailing_state") }}'
+  - &zip_code
+    name: zip_code
+    description: '{{ doc("ntd_mailing_zip_code") }}'
+  - &zip_code_ext
+    name: zip_code_ext
+    description: '{{ doc("ntd_mailing_zip_code_ext") }}'
+  - &region
+    name: region
+    description: '{{ doc("ntd_region") }}'
+  - &density
+    name: density
+    description: '{{ doc("ntd_density") }}'
+  - &ueid
+    name: ueid
+    description: '{{ doc("ntd_ueid") }}'
+  - &fta_recipient_id
+    name: fta_recipient_id
+    description: '{{ doc("ntd_fta_recipient_id") }}'
+  - &original_due_date
+    name: original_due_date
+    description: '{{ doc("ntd_original_due_date") }}'
+  - &fy_end_date
+    name: fy_end_date
+    description: '{{ doc("ntd_fy_end_date") }}'
+  - &number_of_counties_with_service
+    name: number_of_counties_with_service
+    description: '{{ doc("ntd_number_of_counties_with_service") }}'
+  - &number_of_state_counties
+    name: number_of_state_counties
+    description: '{{ doc("ntd_number_of_state_counties") }}'
+  - &personal_vehicles
+    name: personal_vehicles
+    description: '{{ doc("ntd_personal_vehicles") }}'
+  - &reported_by_name
+    name: reported_by_name
+    description: '{{ doc("ntd_reported_by_name") }}'
+  - &reported_by_ntd_id
+    name: reported_by_ntd_id
+    description: '{{ doc("ntd_reported_by_ntd_id") }}'
+  - &reporter_acronym
+    name: reporter_acronym
+    description: '{{ doc("ntd_reporter_acronym") }}'
+  - &reporting_module
+    name: reporting_module
+    description: '{{ doc("ntd_reporting_module") }}'
+  - &state_admin_funds_expended
+    name: state_admin_funds_expended
+    description: '{{ doc("ntd_state_admin_funds_expended") }}'
+  - &subrecipient_type
+    name: subrecipient_type
+    description: '{{ doc("ntd_subrecipient_type") }}'
+  - &tam_tier
+    name: tam_tier
+    description: '{{ doc("ntd_tam_tier") }}'
+  - &tribal_area_name
+    name: tribal_area_name
+    description: '{{ doc("ntd_tribal_area_name") }}'
+  - &url
+    name: url
+    description: '{{ doc("ntd_agency_url") }}'
+  - &volunteer_drivers
+    name: volunteer_drivers
+    description: '{{ doc("ntd_volunteer_drivers") }}'
+  - &primary_uza_code
+    name: primary_uza_code
+    description: '{{ doc("ntd_primary_uza_code") }}'
+  - &primary_uza_name
+    name: primary_uza_name
+    description: '{{ doc("ntd_primary_uza_name") }}'
+  - &primary_uza_area_sq_miles
+    name: primary_uza_area_sq_miles
+    description: '{{ doc("ntd_primary_uza_area_sq_miles") }}'
+  - &primary_uza_population
+    name: primary_uza_population
+    description: '{{ doc("ntd_primary_uza_population") }}'
+  - &service_area_population
+    name: service_area_population
+    description: '{{ doc("ntd_service_area_population") }}'
+  - &service_area_sq_miles
+    name: service_area_sq_miles
+    description: '{{ doc("ntd_service_area_sq_miles") }}'
+  - &type_of_service
+    name: type_of_service
+    description: '{{ doc("ntd_type_of_service") }}'
+  - &mode
+    name: mode
+    description: '{{ doc("ntd_mode") }}'
+  - &mode_name
+    name: mode_name
+    description: '{{ doc("ntd_mode_name") }}'
+  - &_3_mode
+    name: _3_mode
+    description: '{{ doc("ntd_3_mode") }}'
+  - &time_period
+    name: time_period
+    description: '{{ doc("ntd_time_period") }}'
+  - &questionable_data
+    name: questionable_data
+    description: '{{ doc("ntd_questionable_data") }}'
+  - &agency_voms
+    name: agency_voms
+    description: '{{ doc("ntd_agency_voms") }}'
+  - &actual_vehicles_passenger_car_hours
+    name: actual_vehicles_passenger_car_hours
+    description: '{{ doc("ntd_actual_vehicles_passenger_car_hours") }}'
+  - &actual_vehicles_passenger_car_deadhead_hours
+    name: actual_vehicles_passenger_car_deadhead_hours
+    description: '{{ doc("ntd_actual_vehicles_passenger_car_deadhead_hours") }}'
+  - &actual_vehicles_passenger_car_revenue_hours
+    name: actual_vehicles_passenger_car_revenue_hours
+    description: '{{ doc("ntd_actual_vehicles_passenger_car_revenue_hours") }}'
+  - &charter_service_hours
+    name: charter_service_hours
+    description: '{{ doc("ntd_charter_service_hours") }}'
+  - &school_bus_hours
+    name: school_bus_hours
+    description: '{{ doc("ntd_school_bus_hours") }}'
+  - &train_hours
+    name: train_hours
+    description: '{{ doc("ntd_train_hours") }}'
+  - &train_revenue_hours
+    name: train_revenue_hours
+    description: '{{ doc("ntd_train_revenue_hours") }}'
+  - &train_deadhead_hours
+    name: train_deadhead_hours
+    description: '{{ doc("ntd_train_deadhead_hours") }}'
+  - &passengers_per_hour
+    name: passengers_per_hour
+    description: '{{ doc("ntd_passengers_per_hour") }}'
+  - &actual_vehicles_passenger_car_miles
+    name: actual_vehicles_passenger_car_miles
+    description: '{{ doc("ntd_actual_vehicles_passenger_car_miles") }}'
+  - &actual_vehicles_passenger_car_revenue_miles
+    name: actual_vehicles_passenger_car_revenue_miles
+    description: '{{ doc("ntd_actual_vehicles_passenger_car_revenue_miles") }}'
+  - &actual_vehicles_passenger_deadhead_miles
+    name: actual_vehicles_passenger_deadhead_miles
+    description: '{{ doc("ntd_actual_vehicles_passenger_deadhead_miles") }}'
+  - &scheduled_vehicles_passenger_car_revenue_miles
+    name: scheduled_vehicles_passenger_car_revenue_miles
+    description: '{{ doc("ntd_scheduled_vehicles_passenger_car_revenue_miles") }}'
+  - &directional_route_miles
+    name: directional_route_miles
+    description: '{{ doc("ntd_directional_route_miles") }}'
+  - &passenger_miles
+    name: passenger_miles
+    description: '{{ doc("ntd_passenger_miles") }}'
+  - &train_miles
+    name: train_miles
+    description: '{{ doc("ntd_train_miles") }}'
+  - &train_revenue_miles
+    name: train_revenue_miles
+    description: '{{ doc("ntd_train_revenue_miles") }}'
+  - &train_deadhead_miles
+    name: train_deadhead_miles
+    description: '{{ doc("ntd_train_deadhead_miles") }}'
+  - &trains_in_operation
+    name: trains_in_operation
+    description: '{{ doc("ntd_trains_in_operation") }}'
+  - &ada_upt
+    name: ada_upt
+    description: '{{ doc("ntd_ada_upt") }}'
+  - &sponsored_service_upt
+    name: sponsored_service_upt
+    description: '{{ doc("ntd_sponsored_service_upt") }}'
+  - &unlinked_passenger_trips_upt
+    name: unlinked_passenger_trips_upt
+    description: '{{ doc("ntd_unlinked_passenger_trips_upt") }}'
+  - &mode_voms
+    name: mode_voms
+    description: '{{ doc("ntd_mode_voms") }}'
+  - &time_service_begins
+    name: time_service_begins
+    description: '{{ doc("ntd_time_service_begins") }}'
+  - &time_service_ends
+    name: time_service_ends
+    description: '{{ doc("ntd_time_service_ends") }}'
+  - &days_of_service_operated
+    name: days_of_service_operated
+    description: '{{ doc("ntd_days_of_service_operated") }}'
+  - &days_not_operated_strikes
+    name: days_not_operated_strikes
+    description: '{{ doc("ntd_days_not_operated_strikes") }}'
+  - &days_not_operated_emergencies
+    name: days_not_operated_emergencies
+    description: '{{ doc("ntd_days_not_operated_emergencies") }}'
+  - &average_passenger_trip_length_aptl_
+    name: average_passenger_trip_length_aptl_
+    description: '{{ doc("ntd_average_passenger_trip_length_aptl_") }}'
+  - &average_speed
+    name: average_speed
+    description: '{{ doc("ntd_average_speed") }}'
+  - &brt_non_statutory_mixed_traffic
+    name: brt_non_statutory_mixed_traffic
+    description: '{{ doc("ntd_brt_non_statutory_mixed_traffic") }}'
+  - &mixed_traffic_right_of_way
+    name: mixed_traffic_right_of_way
+    description: '{{ doc("ntd_mixed_traffic_right_of_way") }}'
+  - &mode_type_of_service_status
+    name: mode_type_of_service_status
+    description: '{{ doc("ntd_mode_type_of_service_status") }}'
+  - &service_type
+    name: service_type
+    description: '{{ doc("ntd_ridership_service_type") }}'
+  - &upt
+    name: upt
+    description: '{{ doc("ntd_upt") }}'
+  - &voms
+    name: voms
+    description: '{{ doc("ntd_voms") }}'
+  - &vrh
+    name: vrh
+    description: '{{ doc("ntd_vrh") }}'
+  - &vrm
+    name: vrm
+    description: '{{ doc("ntd_vrm") }}'
+  - &period_month
+    name: period_month
+    description: '{{ doc("ntd_period_month") }}'
+  - &period_year
+    name: period_year
+    description: '{{ doc("ntd_period_year") }}'
+  - &period_year_month
+    name: period_year_month
+    description: '{{ doc("ntd_period_year_month") }}'
+  - &_dt
+    name: _dt
+    description: '{{ doc("ntd_extracting_date") }}'
+  - &execution_ts
+    name: execution_ts
+    description: '{{ doc("ntd_execution_timestamp") }}'
+
 models:
-  - name: dim_annual_ntd_agency_information
+  - name: dim_annual_agency_information
     description: >
-      Versioned extracts of the NTD Annual Database Agency Information.
+      Contains basic contact and agency information for each NTD reporter.
 
-      For example, the 2021 dataset is found at
-      https://www.transit.dot.gov/ntd/data-product/2021-annual-database-agency-information.
+      The dataset can be found at:
+        https://www.transit.dot.gov/ntd/data-product/2023-annual-database-agency-information
+        * For other years, just replace 2023 by the desired year.
 
-      Only contains 2021 data as of 2022-02-08 but we will be importing
+      The versioning is bitemporal, so records are versioned at the year, ntd_id, and state_parent_ntd_id level.
+      This means you must join based on _valid_from/_valid_from to get the records for a given ntd_id and state_parent_ntd_id,
+      and then choose which year to look up.
 
-      more data in the future.
-
-      The versioning is bitemporal, so records are versioned at the year
-
-      and ntd_id level. This means you must join based on
-      _valid_from/_valid_from
-
-      to get the records for a given ntd_id, and then choose which year to
-
-      look up.
+      Use _is_current to find the latest version for each set of year, ntd_id, and state_parent_ntd_id.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
-          partition_by: CONCAT(year, '_', ntd_id)
+          partition_by: CONCAT(year, '_', ntd_id, '_', COALESCE(state_parent_ntd_id, ''))
           gaps: required
     columns:
-      - name: key
+      - *key
+      - <<: *report_year
+        name: year
         tests:
           - not_null
-          - unique
-      - name: year
-        tests:
-          - not_null
-      - name: ntd_id
-        tests:
-          - not_null
+      - *ntd_id
       - name: _valid_from
         tests:
           - not_null
@@ -43,473 +322,427 @@ models:
         tests:
           - not_null
       - name: _is_current
+        description: Indicates the latest report version for each year, ntd_id, and state_parent_ntd_id.
         tests:
           - not_null
-  - name: dim_annual_ntd_agency_service
+      - *state_parent_ntd_id
+      - *agency_name
+      - *doing_business_as
+      - *address_line_1
+      - *address_line_2
+      - *p_o__box
+      - *mailing_city
+      - *mailing_state
+      - *zip_code
+      - *zip_code_ext
+      - *region
+      - *density
+      - *ueid
+      - *fta_recipient_id
+      - *original_due_date
+      - *fy_end_date
+      - *number_of_counties_with_service
+      - *number_of_state_counties
+      - *organization_type
+      - *personal_vehicles
+      - <<: *primary_uza_population
+        name: population
+      - *primary_uza_code
+      - *primary_uza_name
+      - *reported_by_name
+      - *reported_by_ntd_id
+      - *reporter_acronym
+      - *reporter_type
+      - *reporting_module
+      - <<: *service_area_population
+        name: service_area_pop
+      - <<: *primary_uza_area_sq_miles
+        name: sq_miles
+      - *service_area_sq_miles
+      - *state_admin_funds_expended
+      - *subrecipient_type
+      - *tam_tier
+      - <<: *agency_voms
+        name: total_voms
+      - *tribal_area_name
+      - *url
+      - *volunteer_drivers
+
+  - name: dim_annual_funding_sources
     description: >-
-      Contains operating statistics reported by mode and type of service.
-      Categorized by vehicles operated and vehicles available in maximum service
-      by day and time period.
-
-      Source document:
-      https://www.transit.dot.gov/ntd/data-product/2022-annual-database-service
+      This dataset details federal, state, and local funding sources for each applicable agency reporting to the NTD.
+      Federal funding sources are financial assistance obtained from the Federal Government to assist with the costs of providing transit services.
+      NTD Data Tables organize and summarize data from the National Transit Database in a manner that is more useful for quick reference and summary analysis.
+      This dataset is based on the Revenue Sources database file.
     columns:
-      - name: _dt
-      - name: year
-        description: The year this data was added to the mart and thus the ntd_id's year
-          as well.
-      - name: state_parent_ntd_id
-      - name: ntd_id
-      - name: agency_name
-      - name: reporter_type
-      - name: subrecipient_type
-      - name: reporting_module
-      - name: mode
-        description: The mode of service operated under the contract. A contractor can
-          operate more than one mode/TOS under a contract (only one B-30 for
-          that contractor).
-      - name: mode_full_name
-      - name: service_type
-        description: A summarization of modes into Fixed Route and Demand Response
-      - name: tos
-        description: The type of service operated under the contract.
-      - name: time_period
-      - name: time_service_begins
-        description: >
-          Start of transit service, i.e. the time when the first revenue service
-          vehicle leaves the garage or point of dispatch.
-      - name: time_service_ends
-        description: "End of night transit service; i.e. the time when a revenue service
-          vehicle returns to the garage or point of dispatch "
-      - name: vehicles_passenger_cars_operated_in_maximum_service
-      - name: vehicles_passenger_cars_available_for_maximum_service
-      - name: trains_in_operation
-        description: >
-          The maximum number of trains actually operated to provide service on
-          an average weekday, average Saturday and average Sunday.
-      - name: vehicles_passenger_cars_in_operation
-        description: >
-          The maximum number of vehicles or passenger cars actually operated to
-          provide service on an average weekday, average Saturday and average
-          Sunday.
-      - name: actual_vehicles_passenger_car_miles
-        description: >-
-          The miles that vehicles or passenger cars travel while in revenue
-          service (actual passenger car revenue miles) plus deadhead miles.
-          Actual vehicle or passenger car miles include:
-
-          • Revenue service
-
-          • Deadhead
-
-          Actual vehicle or passenger car miles exclude:
-
-          • Hours for charter services
-
-          2015 NTD Glossary
-
-          • Operator training
-
-          • Vehicle maintenance testing
-
-          • Fueling
-      - name: actual_vehicles_passenger_car_revenue_miles
-        description: >-
-          The miles that vehicles or passenger cars travel while in revenue
-          service. Vehicle or Passenger car revenue miles include:
-
-          • Revenue service
-
-          • Layover/recovery time
-
-          • Passenger loading time
-
-          Vehicle or Passenger car revenue miles exclude:
-
-          • Deadhead
-
-          • Operator training
-
-          • Vehicle maintenance tests
-
-          • Charter services
-      - name: actual_vehicle_passenger_deadhead_miles
-      - name: scheduled_actual_vehicle_passenger_car_revenue_miles
-        description: The anticipated revenue service to be completed by passenger cars
-          if there were no missed trips for the average weekday, average
-          Saturday, average Sunday and Annual Total. Excludes any deadhead and
-          additional services performed.
-      - name: actual_vehicle_passenger_car_hours
-        description: >-
-          The miles that vehicles or passenger cars travel while in revenue
-          service (actual passenger car revenue miles) plus deadhead miles.
-          Actual vehicle or passenger car miles include:
-
-          • Revenue service
-
-          • Deadhead
-
-          Actual vehicle or passenger car miles exclude:
-
-          • Hours for charter services
-
-          2015 NTD Glossary
-
-          • Operator training
-
-          • Vehicle maintenance testing
-
-          • Fueling
-      - name: actual_vehicle_passenger_car_revenue_hours
-        description: >-
-          The hours that vehicles or passenger cars travel while in revenue
-          service. Vehicle or Passenger car revenue hours include:
-
-          • Revenue service
-
-          • Layover/recovery time
-
-          • Passenger loading time
-
-          Vehicle or Passenger car revenue hours exclude:
-
-          • Deadhead
-
-          • Operator training
-
-          • Vehicle maintenance tests
-
-          • School Bus and Charter services
-      - name: actual_vehicle_passenger_car_deadhead_hours
-      - name: charter_service_hours
-        description: >-
-          "The total hours operated by revenue vehicles while in charter
-          service. Charter service hours include:
-
-          • Hours operated while carrying passengers for hire, and
-
-          • Associated deadhead hours "
-      - name: school_bus_hours
-        description: "The vehicle hours of travel by revenue vehicles while serving as a
-          school bus. School bus hours are only hours where a bus is primarily
-          or solely dedicated to carrying school passengers. "
-      - name: train_miles
-        description: >-
-          The miles that trains travel while in revenue service (actual train
-          revenue miles) plus deadhead miles. Actual train miles include:
-
-          • Revenue service
-
-          • Deadhead
-
-          Actual train miles exclude:
-
-          • Miles for charter services
-
-          • Operator training
-
-          • Vehicle maintenance testing
-      - name: train_revenue_miles
-        description: >-
-          The miles that trains travel while in revenue service. Train revenue
-          miles include:
-
-          • Revenue service
-
-          Train revenue miles exclude:
-
-          • Deadhead
-
-          • Training operators prior to revenue service
-
-          • Vehicle maintenance vehicle tests
-
-          • Charter services
-      - name: train_deadhead_miles
-      - name: train_hours
-        description: >-
-          The hours that trains travel while in revenue service (actual train
-          revenue hours) plus deadhead hours. Actual train hours include:
-
-          • Revenue service
-
-          • Deadhead
-
-          • Layover/recovery time Actual train hours exclude:
-
-          • Hours for charter services
-
-          • Operator training
-
-          • Vehicle maintenance testing
-      - name: train_revenue_hours
-        description: >-
-          The hours that trains travel while in revenue service. Train revenue
-          hours include:
-
-          • Revenue service
-
-          • Layover/recovery time Train revenue hours exclude:
-
-          • Deadhead
-
-          • Training operators prior to revenue service
-
-          • Vehicle maintenance tests
-
-          • Charter services
-      - name: train_deadhead_hours
-      - name: unlinked_passenger_trips__upt_
-        description: "The number of passengers who board public transportation vehicles.
-          Passengers are counted each time they board a vehicle no matter how
-          many vehicles they use to travel from their origin to their
-          destination. "
-      - name: ada_upt
-        description: The number of passengers who board public transportation vehicles
-          for complementary paratransit services (demand response (DR))
-          associated or attributed to the Americans with Disabilities Act of
-          1990 (ADA) compliance requirements. The number of ADA unlinked
-          passenger trips (UPT) should be less than or equal to the total number
-          of unlinked passenger trips. These trips are reported only for the DR
-          mode. ADA-related service reported to the National Transit Database
-          (NTD) should not include any categorical service (i.e. services that
-          are not available to the general public such as Medicaid,
-          Meals-On-Wheels, Head Start, sheltered workshops, independent living
-          centers, etc.) Also not included is service funded by the New Freedom
-          program.
-      - name: sponsored_service_upt
-        description: Public transportation services that are paid, in whole or in part,
-          directly to the transit provider by a third party. Transit providers
-          may offer these services as part of a Coordinated Human Services
-          Transportation Plan. Common sponsors include the Veterans
-          Administration, Medicare, sheltered workshops, the Association for
-          Retarded Citizens-Arc, Assisted Living Centers, and Head Start
-          programs.
-      - name: passenger_miles
-        description: Passenger Miles Traveled (PMT) - Average Weekday Schedule-The sum
-          of the distances ridden by each passenger
-      - name: days_of_service_operated
-        description: "Days Operated - Total Weekday Schedule\tSee: Form S-10, Service
-          Operated (Days), Days Operated - Annual Total"
-      - name: days_not_operated_due_to_strikes
-        description: Days Not Operated (Strikes) - Total Weekday Schedule	The number of
-          weekdays, Saturdays and Sundays that service did not operate due to
-          transit labor strikes.
-      - name: strike_comment
-        description: Description of Days Not Operated Due To Strikes.
-      - name: days_not_operated_due_to_emergencies
-        description: The number of weekdays, Saturdays and Sundays that service did not
-          operate due to officially declared emergencies.
-      - name: emergency_comment
-        description: Description of Days Not Operated Due to Emergency
-      - name: non_statutory_mixed_traffic
-        description: Miles of roadway used by BRT routes that are not recognized by FTA
-          as BRT for funding purposes.
-      - name: drm_mixed_traffic_row
-  - name: dim_monthly_ntd_ridership_with_adjustments
-    description: >-
-      Extracts of the NTD Monthly Ridership with adjustments - VRM, VOMS, VRH,
-      and UPT
-
-      For example, the Feb 2024 dataset is found at
-      https://www.transit.dot.gov/ntd/data-product/monthly-module-adjusted-data-release.
-
-      Users are encouraged to use the glossary of transit terms located at
-      https://www.transit.dot.gov/ntd/national-transit-database-ntd-glossary or
-      the reporting manuals located at https://www.transit.dot.gov/ntd/manuals
-      for more detailed information.
-
-      A Master File of all properties that currently report or reported monthly
-      data during the period January 2002 - Current Calendar Year. The following
-      data elements are included in the master file and reflect the data
-      reported in the Annual module for the most recently reported fiscal year:"
-
-      NTD ID – The Transit Property’s NTD identification number in the Next
-      Generation NTD Database
-
-      Legacy NTD ID – The Transit Property’s NTD identification number in the
-      Legacy NTD Database
-
-      Name – The Transit Property’s legal name
-
-      Mode – Indicates the means of conveyance used for the service. The NTD
-      recognizes a number of different modes including Motorbus (MB), Heavy Rail
-      (HR), Light Rail (LR), and Demand Response (DR), among others.
-
-      Type of Service – Indicates whether the service is directly operated by
-      the transit property, or is operated by a third party through a purchased
-      transportation agreement.
-
-      3 Mode - A grouping of modes based upon whether the mode operates on rail,
-      is a bus mode, is ferry boat service or other.
-
-      Status – Indicates whether a property reports (active) or not (inactive)
-      during the most recent Annual report year.
-
-      HQ City – The city where the property’s headquarters (HQ) is located.
-
-      HQ State – The state where the property’s headquarters (HQ) is located.
-
-      Reporter Type - Indicates the agency's reporter type (Building Reporter,
-      Full Reporter, Reduced Asset Reporter,  Rural Reporter, Separate Service
-      Reporter or Small System Waiver Reporter) as of their most recent report
-      year.
-
-      Organization Type – Indicates the agency's organization type as of their
-      most recent report year.
-
-      Urban Area Census Code (UACE)  – A unique numeric identifier associated
-      with the 2020 urban areas as defined by the U.S. Census.
-
-      Urbanized Area Name – The name of the urbanized area as defined by the
-      U.S. Census
-
-      Urbanized Area Population – The population of the urbanized area as
-      reported by the U.S. Census. This is the population count for the year the
-      census was made. No population updates are made until the next Census
-      (2020).
-
-      Urbanized Area Square Miles – The square miles of the urbanized area as
-      reported by the U.S. census.
-
-      Property Service Area – The square miles of the area served by the
-      property, as reported by the transit property. This may include some rural
-      (non-urbanized) areas.
-
-      Property Service Area Population – The population of the area served by
-      the property, as reported by the transit property.
-
-      Most Recent Report Year (Annual module) – The property’s most-recent
-      closed-out annual report year.
-
-      Fiscal Year Month – The month the property’s fiscal year ends.
-
-      Fiscal Year End – The year in which the property’s most-recent closed-out
-      fiscal year ended.
-
-      Passenger Miles - For the most recent closed-out annual report year.
-
-      Unlinked Passenger Trips – For the most recent closed-out annual report
-      year.
-
-      Average Trip Length – The ratio of Passenger Miles per Unlinked Passenger
-      trips.
-
-      Fares – The fare revenues collected during the most recent closed-out
-      annual report year.
-
-      Operating Expenses – For the most recent closed-out annual report year.
-
-      Avg. Cost per Trip – The ratio of Total Operating Expenses per Unlinked
-      Passenger Trips
-
-      Avg. Fares per Trip – The ratio of Fares Earned per Unlinked Passenger
-      Trips
-    columns:
-      - name: uza_name
-        description: Urbanized Area Name – The name of the urbanized area as defined by
-          the U.S. Census
-      - name: uace_cd
-        description: "Urban Area Census Code (UACE)  – A unique numeric identifier
-          associated with the 2020 urban areas as defined by the U.S. Census. "
-      - name: _dt
-        description: ""
-      - name: ts
-        description: ""
-      - name: ntd_id
-        description: NTD ID – The Transit Property’s NTD identification number in the
-          Next Generation NTD Database
+      - name: funding_source
+        description: |
+          The table that originated the funding source information.
+          The options are: `federal`, `state`, and `local`.
         tests:
           - not_null
-      - name: year
-        description: The year this data was added to the mart and thus the ntd_id's year
-          as well.
-      - name: reporter_type
-        description: Reporter Type - Indicates the agency's reporter type (Building
-          Reporter, Full Reporter, Reduced Asset Reporter,  Rural Reporter,
-          Separate Service Reporter or Small System Waiver Reporter) as of their
-          most recent report year.
-      - name: agency
-        description: Name – The Transit Property’s legal name
-      - name: mode_type_of_service_status
-        description: Status – Indicates whether a property reports (active) or not
-          (inactive) during the most recent Annual report year.
-      - name: mode
-        description: Mode – Indicates the means of conveyance used for the service. The
-          NTD recognizes a number of different modes including Motorbus (MB),
-          Heavy Rail (HR), Light Rail (LR), and Demand Response (DR), among
-          others.
-      - name: service_type
-        description: A summarization of modes into Fixed Route and Demand Response
-      - name: _3_mode
-        description: 3 Mode - A grouping of modes based upon whether the mode operates
-          on rail, is a bus mode, is ferry boat service or other.
-      - name: tos
-        description: Type of Service – Indicates whether the service is directly
-          operated by the transit property, or is operated by a third party
-          through a purchased transportation agreement.
-      - name: legacy_ntd_id
-        description: Legacy NTD ID – The Transit Property’s NTD identification number in
-          the Legacy NTD Database
-      - name: period_year_month
-        description: ""
-      - name: period_month
-        description: ""
-      - name: period_year
-        description: ""
-      - name: upt
-        description: >-
-          Unlinked Passenger Trips (UPT)
+          - accepted_values:
+              values: ["federal", "state", "local"]
+      - *agency
+      - *agency_voms
+      - *city
+      - name: fuel_tax
+        description: |
+          Revenue from taxing fuel.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - name: fta_capital_program_5309
+        description: |
+          The Capital Program provided capital assistance for three primary activities:
+          - New and replacement buses and facilities,
+          - Modernization of existing fixed guideway (FG) systems,
+          - New fixed FG systems In MAP-21.
+          The Capital Program was split into three separate programs.
+          The State of Good Repair program is one of these successor programs.
+          The other two are the Bus and Bus Facilities (5339) program and the Fixed Guideway Capital Investment (5309) program.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: fta_rural_progam_5311
+        description: |
+          This program provides formula funding to States and Indian Tribes for supporting public transportation in areas with a population of less than 50,000.
+          Funding may be used for capital, operating, State administration, and project administration expenses.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: fta_urbanized_area_formula
+        description: |
+          The Urbanized Area Formula Funding program (49 U.S.C. 5307) provides Federal resources to urbanized areas for transit capital and operating assistance and for transit related planning.
+          The Bus and Bus Facilities program is a formula program that finances capital projects to replace, rehabilitate, and purchase buses and related equipment and to construct bus-related facilities.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: general_funds
+        description: |
+          Any funds allocated to transit out of the general revenues of the local or state government.
+          General revenue funds are usually granted through a state or local government’s annual budgeting process.
+          *ONLY for Local and State Funding Sources (funding_source IN ("local", "state"))
+      - name: income_tax
+        description: |
+          Revenue from taxing income.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - *ntd_id
+      - *organization_type
+      - name: other_dot_funds
+        description: |
+          Funding from grants provided by divisions of the federal Department of Transportation other than FTA.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: other_federal_funds
+        description: |
+          Funding from departments of the federal government other than Transportation.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: other_fta_funds
+        description: |
+          Funding from FTA grants other than the ones already listed (5307, 5339, 5309, 5337, 5311).
+          May include:
+          - 5303 Metropolitan Planning,
+          - 5308 Clean Fuels,
+          - 5310 Special Needs/ADA,
+          - 5316 Job Access and Reverse Commute,
+          - 5317 New Freedom,
+          - 5320 Transit in the Park.
+          *ONLY for Federal Funding Sources (funding_source = "federal")
+      - name: other_funds
+        description: |
+          Revenue from funds imposed on the public other than taxes, such as:
+          - Vehicle licensing and registration fees,
+          - Lottery and casino proceeds,
+          - Sale of property and assets.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - name: other_taxes
+        description: |
+          Revenues generated from a charge imposed by the state or local government, or independent political entity (e.g., transit authority) on persons or property to help pay expenses, including:
+          - Payroll taxes,
+          - Utility taxes,
+          - Communication taxes (e.g., telephone taxes),
+          - Motor vehicle and tire excise taxes.
+          But excluding:
+          - Income taxes,
+          - Property taxes,
+          - Sales taxes,
+          - Fuel taxes.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - *primary_uza_population
+      - name: property_tax
+        description: |
+          Revenue from taxing property.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - name: reduced_reporter_funds
+        description: |
+          Local and State funding sources reported by agencies that do not report funding sources in specific categories because they have reduced reporting requirements.
+          *ONLY for Local and State Funding Sources (funding_source IN ("local", "state"))
+      - <<: *report_year
+        tests:
+          - not_null
+          - accepted_values:
+              values: [2022, 2023]
+              quote: false
+      - *reporter_type
+      - name: sales_tax
+        description: |
+          Revenue from taxing sales.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - *state
+      - name: tolls
+        description: |
+          Revenue from tolls on bridges, highways, and high occupancy/toll lanes.
+          *ONLY for Local Funding Sources (funding_source = "local")
+      - name: transportation_funds
+        description: |
+          *ONLY for State Funding Sources (funding_source = "state")
+      - *primary_uza_code
+      - *primary_uza_name
 
-          The number of passengers who board public transportation vehicles.
-          Passengers are counted each time they board vehicles no matter how
-          many vehicles they use to travel from their origin to their
-          destination.
-      - name: vrm
-        description: >-
-          Vehicle Revenue Miles (VRM)
+  - name: dim_annual_service_agencies
+    description: >-
+      Provides transit agency-wide totals for service data for applicable agencies reporting to the National Transit Database.
+      This view displays the data at a higher level (by agency), based on the "NTD Annual Data - Service (by Mode and Time Period)" dataset.
+      In the years 2015-2021, you can find this data in the "Service" data table on NTD Program website, at https://transit.dot.gov/ntd/ntd-data.
+      In versions of the data tables from before 2014, you can find data on service in the file called "Transit Operating Statistics: Service Supplied and Consumed."
+    columns:
+      - *key
+      - <<: *report_year
+        tests:
+          - not_null
+          - accepted_values:
+              values: [2022, 2023]
+              quote: false
+      - *ntd_id
+      - *agency
+      - *reporter_type
+      - *organization_type
+      - *city
+      - *state
+      - *agency_voms
+      - *primary_uza_code
+      - *primary_uza_name
+      - *primary_uza_area_sq_miles
+      - *primary_uza_population
+      - *service_area_sq_miles
+      - *service_area_population
+      - *actual_vehicles_passenger_car_deadhead_hours
+      - *actual_vehicles_passenger_car_hours
+      - *actual_vehicles_passenger_car_miles
+      - *actual_vehicles_passenger_car_revenue_hours
+      - *actual_vehicles_passenger_car_revenue_miles
+      - *actual_vehicles_passenger_deadhead_miles
+      - *scheduled_vehicles_passenger_car_revenue_miles
+      - *charter_service_hours
+      - *school_bus_hours
+      - *trains_in_operation
+      - *directional_route_miles
+      - *passenger_miles
+      - *train_miles
+      - *train_revenue_miles
+      - *train_deadhead_miles
+      - *train_hours
+      - *train_revenue_hours
+      - *train_deadhead_hours
+      - *ada_upt
+      - *sponsored_service_upt
+      - *unlinked_passenger_trips_upt
 
-          The miles that vehicles are scheduled to or actually travel while in
-          revenue service. Vehicle revenue miles include:
+  - name: dim_annual_service_mode_time_periods
+    description:
+      This represents the Service data reported to the NTD by transit agencies.
+    columns:
+      - *key
+      - <<: *report_year
+        tests:
+          - not_null
+          - accepted_values:
+              values: [2022, 2023]
+              quote: false
+      - *reporter_type
+      - *ntd_id
+      - *agency
+      - *type_of_service
+      - *mode
+      - *mode_name
+      - <<: *time_period
+        tests:
+          - accepted_values:
+              values: ["Average Weekday - AM Peak", "Average Weekday - Midday", "Average Weekday - PM Peak", "Average Weekday - Other", "Average Typical Weekday", "Average Typical Saturday", "Average Typical Sunday"]
+      - *time_service_begins
+      - *time_service_ends
+      - *organization_type
+      - *city
+      - *state
+      - *primary_uza_code
+      - *primary_uza_name
+      - *primary_uza_area_sq_miles
+      - *primary_uza_population
+      - *service_area_population
+      - *service_area_sq_miles
+      - *days_of_service_operated
+      - *days_not_operated_strikes
+      - *days_not_operated_emergencies
+      - *agency_voms
+      - *mode_voms
+      - <<: *questionable_data
+        name: mode_voms_questionable
+      - *actual_vehicles_passenger_car_miles
+      - <<: *questionable_data
+        name: vehicle_miles_questionable
+      - *actual_vehicles_passenger_car_revenue_miles
+      - <<: *questionable_data
+        name: vehicle_revenue_miles_questionable
+      - *actual_vehicles_passenger_deadhead_miles
+      - <<: *questionable_data
+        name: deadhead_miles_questionable
+      - *scheduled_vehicles_passenger_car_revenue_miles
+      - <<: *questionable_data
+        name: scheduled_revenue_miles_questionable
+      - *actual_vehicles_passenger_car_hours
+      - <<: *questionable_data
+        name: vehicle_hours_questionable
+      - *actual_vehicles_passenger_car_revenue_hours
+      - <<: *questionable_data
+        name: vehicle_revenue_hours_questionable
+      - *actual_vehicles_passenger_car_deadhead_hours
+      - <<: *questionable_data
+        name: deadhead_hours_questionable
+      - *charter_service_hours
+      - *school_bus_hours
+      - *trains_in_operation
+      - <<: *questionable_data
+        name: trains_in_operation_questionable
+      - *train_miles
+      - <<: *questionable_data
+        name: train_miles_questionable
+      - *train_revenue_miles
+      - <<: *questionable_data
+        name: train_revenue_miles_questionable
+      - *train_deadhead_miles
+      - *train_hours
+      - <<: *questionable_data
+        name: train_hours_questionable
+      - *train_revenue_hours
+      - <<: *questionable_data
+        name: train_revenue_hours_questionable
+      - *train_deadhead_hours
+      - *unlinked_passenger_trips_upt
+      - <<: *questionable_data
+        name: unlinked_passenger_trips_questionable
+      - *ada_upt
+      - *sponsored_service_upt
+      - *average_passenger_trip_length_aptl_
+      - <<: *questionable_data
+        name: aptl_questionable
+      - *average_speed
+      - <<: *questionable_data
+        name: average_speed_questionable
+      - *brt_non_statutory_mixed_traffic
+      - *mixed_traffic_right_of_way
+      - *directional_route_miles
+      - <<: *questionable_data
+        name: directional_route_miles_questionable
+      - *passenger_miles
+      - <<: *questionable_data
+        name: passenger_miles_questionable
+      - *passengers_per_hour
+      - <<: *questionable_data
+        name: passengers_per_hour_questionable
 
-          •   Layover / recovery time.
+  - name: dim_monthly_ridership_with_adjustments
+    description: >-
+      Extracts of the NTD Complete Monthly Ridership with Adjustments and Estimates (UPT, VOMS, VRH, and VRM)
+      that contains all monthly module data reported to the NTD since January 2002.
+      Mode and Type of Service Changes and Impacts on this Time Series
 
-          Vehicle revenue miles exclude:
+      Monthly data are reported by mode and type of service.
+      From 2002 through 2011, there were 16 modes in the NTD.
+      NTD monthly ridership data is now reported according to refined modal classifications.
+      Service previously reported as bus (MB) now may be reported as either MB, Commuter Bus (CB),
+      or Bus Rapid Transit (RB).
+      Additionally, service previously categorized as Light Rail (LR) now may be reported as LR or
+      Streetcar (SR).
 
-          •   Deadhead;
+      Similarly, Types of Service were refined in Report Year 2019.
+      From 2002 - 2018, there were two types of service:
+        Directly Operated (DO) and
+        Purchased Transportation (PT).
 
-          •   Operator training;
+      As of 2019, Purchased Transportation is now classified such that agencies report the
+      purchased transportation based on the type of contractor:
+        general third party (PT),
+        taxicab operator (TX),
+        or transportation network company (TN).
 
-          •   Vehicle maintenance testing; and
+      FTA concurrently removed the "Demand Response Taxi" (DT/PT) mode in 2019.
+      FTA now considers all such service as Demand Response (DR) with Taxi (TX) type of service and
+      this time series has been updated to reflect this change.
 
-          •   Other non-revenue uses of vehicles.
-      - name: vrh
-        description: >-
-          Vehicle Revenue Hours (VRH)
+      This time series also considers modes which have been combined, collapsing the
+      Automated Guideway (AG) and Monorail (MO) mode historical data into the
+      Monorail/Automated Guideway (MG) mode to reflect the current reporting arrangement and
+      allow for easier analysis of these modes.
 
-          The hours that vehicles are scheduled to or actually travel while in
-          revenue service. Vehicle revenue hours include:
+      Finally, FTA introduced the Hybrid Rail (YR) mode in January 2012. While this mode combines
+      some systems previously classified as either Commuter Rail (CR) or Light Rail (LR),
+      this change could not be done uniformly; most operators of Hybrid Rail continued to
+      offer services presently defined as CR or LR.
+      Therefore, this time series does not attempt to combine historically.
+      Data users should therefore take caution that the following systems converted completely
+      from Commuter Rail to Hybrid Rail around this time:
+      - 60048 Capital Metropolitan Transportation Authority (Commuter Rail to Hybrid Rail)
+      - 60101 Denton County Transportation Authority (Commuter Rail to Hybrid Rail)
+      - 90030 North County Transit District (Light Rail to Hybrid Rail)
 
-          •   Layover / recovery time.
+      The dataset is found at:
+        https://www.transit.dot.gov/ntd/data-product/monthly-module-adjusted-data-release.
 
-          Vehicle revenue hours exclude:
+      For more information use the glossary of transit terms located at:
+        https://www.transit.dot.gov/ntd/national-transit-database-ntd-glossary
+      or the reporting manuals located at:
+        https://www.transit.dot.gov/ntd/manuals.
 
-          •   Deadhead;
+    columns:
+      - *key
+      - *_dt
+      - *execution_ts
+      - *period_year_month
+      - *period_month
+      - *period_year
+      - *ntd_id
+      - *reporter_type
+      - *agency
+      - *mode_type_of_service_status
+      - *mode
+      - *mode_name
+      - *_3_mode
+      - *service_type
+      - <<: *type_of_service
+        name: tos
+      - *legacy_ntd_id
+      - *primary_uza_name
+      - *primary_uza_code
+      - *upt
+      - *voms
+      - *vrh
+      - *vrm
 
-          •   Operator training;
-
-          •   Vehicle maintenance testing; and
-
-          •   Other non-revenue uses of vehicles.
-      - name: voms
-        description: >-
-          Vehicles Operated in Annual Maximum Service (VOMS)
-
-          The number of revenue vehicles operated to meet the annual maximum
-          service requirement. This is the revenue vehicle count during the peak
-          season of the year; on the week and day that maximum service is
-          provided. Vehicles operated in maximum service (VOMS) exclude:
-
-          •   Atypical days; or
-
-          •   One-time special events.
+  - name: fct_annual_service_modes
+    description:
+      View based on NTD Annual Data - Service (by Mode and Time Period)
+      View of Service by Mode and Time Period filtered to preserve only the Annual Total time period.
+      Useful for analyses of Annual Total service data.
+    columns:
+      - *key
+      - <<: *report_year
+        tests:
+          - not_null
+          - accepted_values:
+              values: [2022, 2023]
+              quote: false
+      - *ntd_id
+      - *type_of_service
+      - *mode
+      - *mode_name
+      - <<: *questionable_data
+        name: questionable_record
+      - <<: *time_period
+        description: |
+          The time period for which data was collected.
+          This table displays only "Annual Total".
+        tests:
+          - accepted_values:
+              values: ["Annual Total"]

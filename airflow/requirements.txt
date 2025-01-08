@@ -7,3 +7,4 @@ sentry-sdk==1.17.0
 platformdirs<3,>=2.5
 boto3==1.26.87
 openpyxl==3.1.5
+beautifulsoup4==4.12.3

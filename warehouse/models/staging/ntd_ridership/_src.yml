@@ -1,5 +1,109 @@
 version: 2
 
+x-common-fields:
+  - &ntd_id
+    name: ntd_id
+    description: '{{ doc("ntd_id") }}'
+  - &legacy_ntd_id
+    name: legacy_ntd_id
+    description: '{{ doc("ntd_legacy_id") }}'
+  - &agency
+    name: agency
+    description: '{{ doc("ntd_agency") }}'
+  - &reporter_type
+    name: reporter_type
+    description: '{{ doc("ntd_reporter_type") }}'
+  - &uace_cd
+    name: uace_cd
+    description: '{{ doc("ntd_primary_uza_code") }}'
+  - &uza_name
+    name: uza_name
+    description: '{{ doc("ntd_primary_uza_name") }}'
+  - &tos
+    name: tos
+    description: '{{ doc("ntd_type_of_service") }}'
+  - &mode
+    name: mode
+    description: '{{ doc("ntd_mode") }}'
+  - &_3_mode
+    name: _3_mode
+    description: '{{ doc("ntd_3_mode") }}'
+  - &mode_type_of_service_status
+    name: mode_type_of_service_status
+    description: '{{ doc("ntd_mode_type_of_service_status") }}'
+  - &organization_type
+    name: organization_type
+    description: '{{ doc("ntd_organization_type") }}'
+  - &hq_city
+    name: hq_city
+    description: '{{ doc("ntd_city") }}'
+  - &hq_state
+    name: hq_state
+    description: '{{ doc("ntd_state") }}'
+  - &uza_sq_miles
+    name: uza_sq_miles
+    description: '{{ doc("ntd_primary_uza_area_sq_miles") }}'
+  - &uza_population
+    name: uza_population
+    description: '{{ doc("ntd_primary_uza_population") }}'
+  - &service_area_population
+    name: service_area_population
+    description: '{{ doc("ntd_service_area_population") }}'
+  - &service_area_sq_miles
+    name: service_area_sq_miles
+    description: '{{ doc("ntd_service_area_sq_miles") }}'
+  - &last_closed_report_year
+    name: last_closed_report_year
+    description: '{{ doc("ntd_last_closed_report_year") }}'
+  - &last_closed_fy_end_month
+    name: last_closed_fy_end_month
+    description: '{{ doc("ntd_last_closed_fy_end_month") }}'
+  - &last_closed_fy_end_year
+    name: last_closed_fy_end_year
+    description: '{{ doc("ntd_last_closed_fy_end_year") }}'
+  - &passenger_miles_fy
+    name: passenger_miles_fy
+    description: '{{ doc("ntd_passenger_miles_fy") }}'
+  - &unlinked_passenger_trips_fy
+    name: unlinked_passenger_trips_fy
+    description: '{{ doc("ntd_unlinked_passenger_trips_fy") }}'
+  - &avg_trip_length_fy
+    name: avg_trip_length_fy
+    description: '{{ doc("ntd_avg_trip_length_fy") }}'
+  - &fares_fy
+    name: fares_fy
+    description: '{{ doc("ntd_fares_fy") }}'
+  - &operating_expenses_fy
+    name: operating_expenses_fy
+    description: '{{ doc("ntd_operating_expenses_fy") }}'
+  - &avg_cost_per_trip_fy
+    name: avg_cost_per_trip_fy
+    description: '{{ doc("ntd_avg_cost_per_trip_fy") }}'
+  - &avg_fares_per_trip_fy
+    name: avg_fares_per_trip_fy
+    description: '{{ doc("ntd_avg_fares_per_trip_fy") }}'
+  - &top_150
+    name: top_150
+    description: '{{ doc("ntd_top_150") }}'
+  - &month_year
+    name: month
+    description: '{{ doc("ntd_period_month_year") }}'
+  - &year
+    name: year
+    description: '{{ doc("ntd_period_year") }}'
+  - &estimated_upt
+    name: estimated_upt
+    description: '{{ doc("ntd_upt") }}'
+  - &estimated_vrm
+    name: estimated_vrm
+    description: '{{ doc("ntd_vrm") }}'
+  - &dt
+    name: dt
+    description: '{{ doc("ntd_extracting_date") }}'
+  - &execution_ts
+    name: execution_ts
+    description: '{{ doc("ntd_execution_timestamp") }}'
+
 sources:
   - name: external_ntd__ridership
     description: |
@@ -20,11 +124,162 @@ sources:
     schema: external_ntd__ridership
     tables:
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_upt
+        description: Calendar year totals for UPT for each transit agency, by mode and type of service.
+        columns:
+          - *ntd_id
+          - *legacy_ntd_id
+          - *agency
+          - *mode_type_of_service_status
+          - *reporter_type
+          - *uace_cd
+          - *uza_name
+          - *mode
+          - *tos
+          - *_3_mode
+          - *dt
+          - *execution_ts
+
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_vrm
+        description: Calendar year totals for VRM for each transit agency, by mode and type of service.
+        columns:
+          - *ntd_id
+          - *legacy_ntd_id
+          - *agency
+          - *mode_type_of_service_status
+          - *reporter_type
+          - *uace_cd
+          - *uza_name
+          - *mode
+          - *tos
+          - *_3_mode
+          - *dt
+          - *execution_ts
+
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__master
+        description: A Master File of all properties that currently report or reported monthly data during the period January 2002 - Current Calendar Year.
+        columns:
+          - *ntd_id
+          - *legacy_ntd_id
+          - *agency
+          - *mode
+          - *tos
+          - *_3_mode
+          - *mode_type_of_service_status
+          - *reporter_type
+          - *organization_type
+          - *hq_city
+          - *hq_state
+          - *uace_cd
+          - *uza_name
+          - *uza_sq_miles
+          - *uza_population
+          - *service_area_population
+          - *service_area_sq_miles
+          - *last_closed_report_year
+          - *last_closed_fy_end_month
+          - *last_closed_fy_end_year
+          - *passenger_miles_fy
+          - *unlinked_passenger_trips_fy
+          - *avg_trip_length_fy
+          - *fares_fy
+          - *operating_expenses_fy
+          - *avg_cost_per_trip_fy
+          - *avg_fares_per_trip_fy
+          - *dt
+          - *execution_ts
+
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__upt
+        description: '{{ doc("ntd_upt") }}'
+        columns:
+          - *ntd_id
+          - *legacy_ntd_id
+          - *agency
+          - *mode_type_of_service_status
+          - *reporter_type
+          - *uace_cd
+          - *uza_name
+          - *mode
+          - *tos
+          - *_3_mode
+          - *dt
+          - *execution_ts
+
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__upt_estimates
+        description: |
+          This dataset includes estimates for missing UPT data in the two most recent report years.
+          Estimates are calculated based on the monthly modal growth rates from an industry-wide sample of transit agencies.
+        columns:
+          - *top_150
+          - *ntd_id
+          - *agency
+          - *mode
+          - *tos
+          - *month_year
+          - *year
+          - *estimated_upt
+          - *dt
+          - *execution_ts
+
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__voms
+        description: '{{ doc("ntd_voms") }}'
+        columns:
+          - *ntd_id
+          - *legacy_ntd_id
+          - *agency
+          - *mode_type_of_service_status
+          - *reporter_type
+          - *uace_cd
+          - *uza_name
+          - *mode
+          - *tos
+          - *_3_mode
+          - *dt
+          - *execution_ts
+
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__vrh
+        description: '{{ doc("ntd_vrh") }}'
+        columns:
+          - *ntd_id
+          - *legacy_ntd_id
+          - *agency
+          - *mode_type_of_service_status
+          - *reporter_type
+          - *uace_cd
+          - *uza_name
+          - *mode
+          - *tos
+          - *_3_mode
+          - *dt
+          - *execution_ts
+
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm
+        description: '{{ doc("ntd_vrm") }}'
+        columns:
+          - *ntd_id
+          - *legacy_ntd_id
+          - *agency
+          - *mode_type_of_service_status
+          - *reporter_type
+          - *uace_cd
+          - *uza_name
+          - *mode
+          - *tos
+          - *_3_mode
+          - *dt
+          - *execution_ts
+
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm_estimates
+        description: |
+          This dataset includes estimates for missing VRM data in the two most recent report years.
+          Estimates are calculated based on the monthly modal growth rates from an industry-wide sample of transit agencies.
+        columns:
+          - *top_150
+          - *ntd_id
+          - *agency
+          - *mode
+          - *tos
+          - *month_year
+          - *year
+          - *estimated_vrm
+          - *dt
+          - *execution_ts

@@ -18,7 +18,10 @@ vins_a30 as (
     GROUP BY organization, fiscal_year
 )
 
-select voms_rr20.*, vins_a30.a30_vin_n
+SELECT COALESCE(voms_rr20.organization, vins_a30.organization) as organization,
+       COALESCE(voms_rr20.fiscal_year, vins_a30.fiscal_year) as fiscal_year,
+       voms_rr20.rr20_voms,
+       vins_a30.a30_vin_n
 FROM voms_rr20
 FULL OUTER JOIN vins_a30
     ON voms_rr20.organization = vins_a30.organization

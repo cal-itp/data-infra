@@ -6,7 +6,11 @@ from typing import ClassVar, List  # , Optional
 import pandas as pd  # type: ignore
 import pendulum
 import requests
-from calitp_data_infra.storage import PartitionedGCSArtifact, get_fs  # type: ignore
+from calitp_data_infra.storage import (  # type: ignore
+    PartitionedGCSArtifact,
+    get_fs,
+    make_name_bq_safe,
+)
 from pydantic import HttpUrl, parse_obj_as
 
 from airflow.models import BaseOperator  # type: ignore
@@ -112,6 +116,8 @@ class NtdDataProductAPIOperator(BaseOperator):
         decode_api_content = api_content.decode("utf-8")
 
         df = pd.read_json(decode_api_content)
+
+        df = df.rename(make_name_bq_safe, axis="columns")
 
         self.gzipped_content = gzip.compress(
             df.to_json(orient="records", lines=True).encode()

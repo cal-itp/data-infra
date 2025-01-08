@@ -135,6 +135,136 @@
       const layerType = layer.props.type;
 
       // TODO: this should probably be a map of functions?
+      if (layerType === "new_speedmap") {
+        const { tooltip_speed_key } = layer.props;
+        const { stop_pair_name, segment_id, route_short_name, route_id, avg_mph, trips_hr_sch, shape_id } = feature.properties;
+
+        let speed = avg_mph;
+
+        if (tooltip_speed_key && feature.properties[tooltip_speed_key]) {
+          speed = feature.properties[tooltip_speed_key];
+          console.log(speed);
+        }
+
+        let display_pair_name = stop_pair_name.replace("__", " &#8594 ");
+        let segment_postfix = segment_id.charAt(segment_id.length - 1);
+
+        let segment_type = "Stop to Stop";
+
+        if (segment_postfix !== "1") {
+          segment_type = "Interpolated";
+          console.log(segment_type);
+        }
+
+        return {
+          html: `
+            <h2 class="has-text-weight-bold has-text-teal-bold">
+              ${display_pair_name ?? 'Non-stop segment'}
+              <span class="tag ml-2">
+                <i class="fas fa-circle mr-2" style="color: rgb(${getColor(feature)})"></i>
+                ${speed}&nbsp;
+                <span class="has-text-weight-normal">mph</span>
+              </span>
+            </h2>
+
+            <ul class="tooltip-meta-list has-text-slate-bold">
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Route</div>
+                <div class="tooltip-meta-value">${route_short_name ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Segment ID</div>
+                <div class="tooltip-meta-value">${segment_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Route ID</div>
+                <div class="tooltip-meta-value">${route_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Trips/Hour</div>
+                <div class="tooltip-meta-value">${trips_hr_sch ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">GTFS Shape ID</div>
+                <div class="tooltip-meta-value">${shape_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Segment Type</div>
+                <div class="tooltip-meta-value">${segment_type ?? '\u2014'}</div>
+              </li>
+            </ul>
+          `,
+          style: style,
+        }
+      }
+
+      if (layerType === "new_speed_variation") {
+        const { tooltip_speed_key } = layer.props;
+        const { stop_pair_name, segment_id, route_short_name, route_id, p20_mph, p80_mph, avg_mph, fast_slow_ratio, trips_hr_sch, shape_id } = feature.properties;
+
+        let speed = avg_mph;
+
+        if (tooltip_speed_key && feature.properties[tooltip_speed_key]) {
+          speed = feature.properties[tooltip_speed_key];
+          console.log(speed);
+        }
+
+        let display_pair_name = stop_pair_name.replace("__", " &#8594 ");
+        let segment_postfix = segment_id.charAt(segment_id.length - 1);
+
+        let segment_type = "Stop to Stop";
+
+        if (segment_postfix !== "1") {
+          segment_type = "Interpolated";
+          console.log(segment_type);
+        }
+
+        return {
+          html: `
+            <h2 class="has-text-weight-bold has-text-teal-bold">
+              ${display_pair_name ?? 'Non-stop segment'}
+              <span class="tag ml-2">
+                <i class="fas fa-circle mr-2" style="color: rgb(${getColor(feature)})"></i>
+                <span class="has-text-weight-normal"><sup>p80</sup> &#8260; <sub>p20</sub> </span>
+                &nbsp;${fast_slow_ratio}
+              </span>
+            </h2>
+
+            <ul class="tooltip-meta-list has-text-slate-bold">
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key"><sup>p80</sup> &#8260; <sub>p20</sub></div>
+                <div class="tooltip-meta-value"><sup>${p80_mph} mph</sup> &#8260; <sub>${p20_mph} mph</sub></div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Route</div>
+                <div class="tooltip-meta-value">${route_short_name ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Segment ID</div>
+                <div class="tooltip-meta-value">${segment_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Route ID</div>
+                <div class="tooltip-meta-value">${route_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Trips/Hour</div>
+                <div class="tooltip-meta-value">${trips_hr_sch ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">GTFS Shape ID</div>
+                <div class="tooltip-meta-value">${shape_id ?? '\u2014'}</div>
+              </li>
+              <li class="tooltip-meta-item">
+                <div class="tooltip-meta-key">Segment Type</div>
+                <div class="tooltip-meta-value">${segment_type ?? '\u2014'}</div>
+              </li>
+            </ul>
+          `,
+          style: style,
+        }
+      }
+
       if (layerType === "speedmap") {
         const { tooltip_speed_key } = layer.props;
         const { stop_name, stop_id, route_short_name, route_id, avg_mph, trips_per_hour, shape_id, stop_sequence } = feature.properties;

@@ -1,0 +1,52 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-api-products
+source_objects:
+  - "employees_by_mode/multi_year/*.jsonl.gz"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "employees_by_mode/multi_year/{dt:DATE}/{execution_ts:TIMESTAMP}"
+destination_project_dataset_table: "external_ntd__annual_reporting.multi_year__employees_by_mode"
+prefix_bucket: false
+post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.multi_year__employees_by_mode LIMIT 1;
+schema_fields:
+  - name: count_capital_labor_count_q
+    type: NUMERIC
+  - name: count_capital_labor_hours_q
+    type: NUMERIC
+  - name: count_facility_maintenance_count_q
+    type: NUMERIC
+  - name: count_facility_maintenance_hours_q
+    type: NUMERIC
+  - name: count_general_administration_count_q
+    type: NUMERIC
+  - name: count_general_administration_hours_q
+    type: NUMERIC
+  - name: count_total_employee_count_q
+    type: NUMERIC
+  - name: count_total_employee_hours_q
+    type: NUMERIC
+  - name: count_vehicle_maintenance_count_q
+    type: NUMERIC
+  - name: count_vehicle_maintenance_hours_q
+    type: NUMERIC
+  - name: count_vehicle_operations_count_q
+    type: NUMERIC
+  - name: count_vehicle_operations_hours_q
+    type: NUMERIC
+  - name: max_mode_name
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: ntd_id
+    type: STRING
+  - name: report_year
+    type: STRING
+  - name: sum_total_employee_count
+    type: NUMERIC
+  - name: sum_total_hours
+    type: NUMERIC
+  - name: type_of_service
+    type: STRING

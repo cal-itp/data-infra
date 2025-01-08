@@ -28,9 +28,9 @@ int_gtfs_rt__service_alerts_fully_unnested AS (
         cause,
         effect,
 
-        -- active periods
-        unnested_active_period.start AS active_period_start,
-        unnested_active_period.end AS active_period_end,
+        -- active periods, converting from STRINGS since some agency has bad data that insn't unnestable as INTs
+        SAFE_CAST(unnested_active_period.start AS INT) AS active_period_start,
+        SAFE_CAST(unnested_active_period.end AS INT) AS active_period_end,
 
         -- informted entities
         unnested_informed_entity.agencyId AS agency_id,

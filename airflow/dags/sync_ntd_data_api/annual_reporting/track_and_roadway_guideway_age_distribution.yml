@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductAPIOperator
+
+year: 'multi_year'
+product: 'track_and_roadway_guideway_age_distribution'
+root_url: 'https://data.transportation.gov/resource/'
+endpoint_id: 'j9q7-53ae'
+file_format: '.json'
