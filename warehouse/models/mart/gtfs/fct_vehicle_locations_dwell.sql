@@ -3,19 +3,14 @@
 WITH fct_vehicle_locations AS (
     SELECT
         key,
-        --gtfs_dataset_key,
-        --dt,
         service_date,
-        --base64_url,
-        --gtfs_dataset_name,
-        --schedule_gtfs_dataset_key,
         trip_instance_key,
         location_timestamp,
         location,
         next_location_key,
 
     FROM {{ ref('fct_vehicle_locations') }}
-    WHERE gtfs_dataset_name="LA DOT VehiclePositions" AND trip_instance_key="0000a63ce280462e6eed4f3ae92df16d" AND service_date = "2025-01-07"
+    WHERE gtfs_dataset_name="LA DOT VehiclePositions" AND service_date = "2025-01-07" --AND trip_instance_key="0000a63ce280462e6eed4f3ae92df16d"
     ORDER by service_date, trip_instance_key, location_timestamp
     ),
 
@@ -65,16 +60,18 @@ vp_grouping_agg AS (
         vp_groupings.current_latitude,
         vp_groupings.next_latitude,
         CASE
-            WHEN current_longitude = next_longitude AND current_latitude = next_latitude
+            WHEN vp_groupings.current_longitude = vp_groupings.next_longitude AND vp_groupings.current_latitude = vp_groupings.next_latitude
             THEN 0
             ELSE 1
         END AS new_group,
     FROM vp_groupings
 ),
 
-vp_grouping_agg2 AS (
+grouped AS (
     SELECT
         key,
+        vp_grouping_agg.current_longitude,
+        vp_grouping_agg.current_latitude,
         SUM(new_group)
             OVER (
                 PARTITION BY service_date, trip_instance_key
@@ -82,7 +79,23 @@ vp_grouping_agg2 AS (
                 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
             )  AS vp_group,
     FROM vp_grouping_agg
+),
+
+merged AS (
+    SELECT
+        current_vp.trip_instance_key AS trip_instance_key,
+        current_vp.service_date AS service_date,
+        MIN(current_vp.key) AS key,
+        grouped.vp_group AS vp_group,
+        COUNT(current_vp.key) AS n_vp,
+        MIN(current_vp.location_timestamp) AS location_timestamp,
+        MAX(current_vp.location_timestamp) AS moving_timestamp,
+        ST_GEOGPOINT(grouped.current_longitude, grouped.current_latitude) AS location,
+    FROM current_vp
+    INNER JOIN grouped
+        ON current_vp.key = grouped.key
+    GROUP BY service_date, trip_instance_key, vp_group, current_longitude, current_latitude
+    ORDER BY service_date, trip_instance_key, vp_group, location_timestamp
 )
 
-
-SELECT * FROM vp_grouping_agg2
+SELECT * FROM merged
