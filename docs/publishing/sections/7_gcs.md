@@ -2,7 +2,7 @@
 
 # GCS
 
-### Public Data Access in GCS
+## Public Data Access in GCS
 
 Some data stored in Cloud Storage is configured to be publicly accessible, meaning anyone on the internet can read it at any time. In Google Cloud Storage, you can make data publicly accessible either at the bucket level or the object level. At the bucket level, you can grant public access to all objects within the bucket by modifying the bucket policy. Alternatively, you can provide public access to specific objects.
 

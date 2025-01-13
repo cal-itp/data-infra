@@ -1,7 +1,7 @@
 {{ config(materialized="table") }}
 
 WITH source AS (
-    SELECT * FROM {{ ref("stg_ntd_annual_data__service_by_agency") }}
+    SELECT * FROM {{ ref("stg_ntd__service_by_agency") }}
 )
 
 SELECT {{ dbt_utils.generate_surrogate_key(['report_year', '_5_digit_ntd_id']) }} as key,

@@ -29,7 +29,7 @@ WITH local_funding_sources AS (
            null AS transportation_funds,
            uace_code AS primary_uza_code,
            uza_name AS primary_uza_name,
-      FROM {{ ref("stg_ntd_annual_data__funding_sources_local") }}
+      FROM {{ ref("stg_ntd__funding_sources_local") }}
 ),
 
 state_funding_sources AS (
@@ -61,7 +61,7 @@ state_funding_sources AS (
            transportation_funds,
            uace_code,
            uza_name
-      FROM {{ ref("stg_ntd_annual_data__funding_sources_state") }}
+      FROM {{ ref("stg_ntd__funding_sources_state") }}
 ),
 
 federal_funding_sources AS (
@@ -93,7 +93,7 @@ federal_funding_sources AS (
            null AS transportation_funds,
            uace_code,
            uza_name
-      FROM {{ ref("stg_ntd_annual_data__funding_sources_federal") }}
+      FROM {{ ref("stg_ntd__funding_sources_federal") }}
 )
 
 SELECT * FROM local_funding_sources

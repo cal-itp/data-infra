@@ -1,7 +1,7 @@
 {{ config(materialized="table") }}
 
 WITH source AS (
-    SELECT * FROM {{ ref("stg_ntd_annual_data__service_by_mode_and_time_period") }}
+    SELECT * FROM {{ ref("stg_ntd__service_by_mode_and_time_period") }}
 )
 
 SELECT {{ dbt_utils.generate_surrogate_key(['report_year', '_5_digit_ntd_id', 'type_of_service', 'mode', 'time_period']) }} as key,
