@@ -1,25 +1,26 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2024.5.24"
+version = "2025.1.13"
 description = ""
+package-mode = false
 authors = ["Soren Spicknall <soren.s@jarv.us>"]
 
 [tool.poetry.dependencies]
 python = "~3.11"
-black = "22.3.0"
+black = "24.10.0"
 intake = "0.6.4"
 intake-dcat = "0.4.0"
-intake-geopandas = "0.3.0"
-intake-parquet = "0.2.3"
+intake-geopandas = ">=0.3.0"
+intake-parquet = ">=0.2.3"
 ipyleaflet = "0.15.0"
-jupytext = "1.13.5"
-jupyterlab-code-formatter = "1.4.10"
-voila = "0.3.6"
-plotnine = "0.8.0"
+jupytext = ">=1.13.5"
+jupyterlab-code-formatter = ">=1.4.10"
+voila = "0.5.8"
+plotnine = ">=0.8.0"
 plotly = "5.5.0"
-folium = "0.12.1.post1"
+folium = ">=0.12.1.post1"
 branca = "0.4.2"
-altair-saver = "0.5.0"
+altair-saver = ">=0.5.0"
 vega = "3.5.0"
 pygeos = "0.14.0"
 Rtree = "0.9.7"
@@ -38,19 +39,18 @@ dask = "~2024.5"
 # distributed = "~2022.8" Should show up in package regardless
 pyodbc = "^4.0.34"
 sqlalchemy-bigquery = "^1.4.4"
-siuba = "^0.4.0"
+siuba = ">=0.4.0"
 graphviz = "^0.20.1"
+rasterio = "1.3.11" # the highest version that works with GDAL 3.4.1
 ydata-profiling = {extras = ["notebook"], version = "^4.0.0"}
 # https://github.com/statsmodels/statsmodels/issues/8543
 statsmodels = "<0.13.3 || >0.13.3,<0.13.4 || >0.13.4,<0.13.5 || >0.13.5"
 pendulum = "^2.1.2"
-# numba = "^0.56.4"
-calitp-data-analysis = "2024.5.28"
+calitp-data-analysis = "2024.12.6"
 calitp-map-utils = "2024.5.23"
-jupyter-book = "1.0.0"
 jupyter-server-proxy = "^4.1.1"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"
 llvmlite= "^0.40.0"
 [tool.poetry.group.shared_utils.dependencies]
@@ -67,7 +67,7 @@ nbformat = "^5.8.0"
 papermill = "^2.4.0"
 python-slugify = "^6.1.1"
 pyaml = "^21.10.1"
-jupyter-book = "^1.0.0"
+jupyter-book = ">=1.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

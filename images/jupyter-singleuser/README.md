@@ -7,9 +7,23 @@ via JupyterHub.
 
 A person with Docker set up locally can build a new version of the image at any time after making changes.
 
+This can check for any significant security issues with this build
+```
+pip install safety
+safety scan 
+```
+Take the package versions from the build file and document with the PR.  Do a cleanup step before you make a final build.
+
+```
+docker system prune -a #
+docker build . 2>&1 | tee build.log
+```
+
+
 ```bash
 docker build -t ghcr.io/cal-itp/data-infra/jupyter-singleuser:[NEW VERSION TAG] .
 ```
+
 
 ## Deploying Changes to Production
 
