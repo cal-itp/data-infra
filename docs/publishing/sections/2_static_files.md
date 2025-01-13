@@ -103,13 +103,19 @@ weasyprint my_notebook.html my_notebook.pdf
 
 - There are assignments that require you to rerun the same notebook for different values and save each of these new notebooks in PDF format. This essentially combines parameterization principles using papermill with the weasyprint steps above. You can reference the code that was used to generate the CSIS scorecards [here](https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/_make_scorecard.py). This script iterates over [this notebook](https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/08_csis_scorecard.ipynb) to produce PDF files for each of the nominated projects found [here](<https://console.cloud.google.com/storage/browser/calitp-analytics-data/data-analyses/general_csis/scorecards?pageState=(%22StorageObjectListTable%22:(%22f%22:%22%255B%255D%22))&project=cal-itp-data-infra>).
 
-  Briefly, the script above does the following:
+Note: Viewer may need access to the private CSIS repository.
 
-  - Automates the naming of the new PDF files by taking away punctuation that isn't allowed.
-  - Saves the notebook as html files.
-  - Converts the html files to PDF.
-  - Saves each PDF to the folder (organized by district) to our GCS.
-  - Deletes irrelevant files.
+Briefly, the script above does the following:
+
+- Automates the naming of the new PDF files by taking away punctuation that isn't allowed.
+
+- Saves the notebook as html files.
+
+- Converts the html files to PDF.
+
+- Saves each PDF to the folder (organized by district) to our GCS.
+
+- Deletes irrelevant files.
 
 - Here are some tips and tricks when converting notebooks to HTML before PDF conversions.
 
