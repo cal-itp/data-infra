@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,10 +27,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -268,9 +268,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -564,9 +569,9 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 <section id="increasing-the-query-limit">
 <span id="id5"></span><h3>Increasing the Query Limit<a class="headerlink" href="#increasing-the-query-limit" title="Link to this heading">#</a></h3>
 <p>By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into <code class="docutils literal notranslate"><span class="pre">DatabaseError:</span> <span class="pre">500</span> <span class="pre">Query</span> <span class="pre">exceeded</span> <span class="pre">limit</span> <span class="pre">for</span> <span class="pre">bytes</span> <span class="pre">billed</span></code> should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit, add and execute the following in your notebook:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">tbls</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CALITP_BQ_MAX_BYTES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">20_000_000_000</span><span class="p">)</span>
 
 <span class="n">tbls</span><span class="o">.</span><span class="n">_init</span><span class="p">()</span>
@@ -584,7 +589,7 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 <span id="querying-sql-jupyterhub"></span><h3>Querying with SQL in JupyterHub<a class="headerlink" href="#querying-with-sql-in-jupyterhub" title="Link to this heading">#</a></h3>
 <p>JupyterHub makes it easy to query SQL in the notebooks.</p>
 <p>To query SQL, simply import the below at the top of your notebook:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">calitp_data_analysis.magics</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">calitp_data_analysis.magics</span>
 </pre></div>
 </div>
 <p>And add the following to the top of any cell block that you would like to query SQL in:</p>
@@ -592,7 +597,7 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 </pre></div>
 </div>
 <p>Example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">calitp_data_analysis.magics</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">calitp_data_analysis.magics</span>
 </pre></div>
 </div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">sql</span>
@@ -628,8 +633,8 @@ gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<sp
 </pre></div>
 </div>
 <p>To pass these credentials in a Jupyter Notebook:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dotenv</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dotenv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 <span class="c1"># Load the env file</span>
 <span class="n">dotenv</span><span class="o">.</span><span class="n">load_dotenv</span><span class="p">(</span><span class="s2">&quot;_env&quot;</span><span class="p">)</span>
@@ -786,8 +791,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

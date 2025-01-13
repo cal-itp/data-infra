@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,10 +27,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
@@ -268,9 +268,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -483,17 +488,17 @@
 as image files (such as PNGs) and commit them to the repository.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
 <span class="c1"># matplotlib or seaborn</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plot</span>
-<span class="kn">import</span> <span class="nn">seaborn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plot</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;../my-visualization.png&quot;</span><span class="p">)</span>
 
 <span class="c1"># altair</span>
-<span class="kn">import</span> <span class="nn">altair</span> <span class="k">as</span> <span class="nn">alt</span>
-<span class="kn">import</span> <span class="nn">altair_saver</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">altair</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">alt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">altair_saver</span>
 <span class="n">chart</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;../my-visualization.png&quot;</span><span class="p">)</span>
 
 <span class="c1"># plotnine</span>
-<span class="kn">from</span> <span class="nn">plotnine</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 <span class="n">chart</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;../my-visualization.png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -502,8 +507,8 @@ as image files (such as PNGs) and commit them to the repository.</p>
 <p>Reports can be shared as HTML webpages or PDFs. Standalone HTML pages tend
 to be self-contained and can be sent via email or similar.</p>
 <p>A Jupyter Notebook can be converted to HTML with:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">papermill</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">papermill</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
 
 <span class="n">OUTPUT_FILENAME</span> <span class="o">=</span> <span class="s2">&quot;sample-report&quot;</span>
 
@@ -568,17 +573,17 @@ to be self-contained and can be sent via email or similar.</p>
 <span class="n">weasyprint</span> <span class="n">my_notebook</span><span class="o">.</span><span class="n">html</span> <span class="n">my_notebook</span><span class="o">.</span><span class="n">pdf</span>
 </pre></div>
 </div>
-<ul>
-<li><p>There are assignments that require you to rerun the same notebook for different values and save each of these new notebooks in PDF format. This  essentially combines parameterization principles using <code class="docutils literal notranslate"><span class="pre">papermill</span></code>  with the <code class="docutils literal notranslate"><span class="pre">weasyprint</span></code> steps above. You can reference the code that was used to generate the CSIS scorecards <a class="reference external" href="https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/run_papermill.py">here</a>. This script iterates over <a class="reference external" href="https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/sb1_scorecard.ipynb">this notebook</a> to produce 50+ PDF files for each of the nominated projects.</p>
-<p>Briefly, the script above does the following:</p>
 <ul class="simple">
+<li><p>There are assignments that require you to rerun the same notebook for different values and save each of these new notebooks in PDF format. This essentially combines parameterization principles using papermill with the weasyprint steps above. You can reference the code that was used to generate the CSIS scorecards <a class="reference external" href="https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/_make_scorecard.py">here</a>. This script iterates over <a class="reference external" href="https://github.com/cal-itp/csis-metrics/blob/main/project_prioritization/metrics_summaries/08_csis_scorecard.ipynb">this notebook</a> to produce PDF files for each of the nominated projects found <a class="reference external" href="https://console.cloud.google.com/storage/browser/calitp-analytics-data/data-analyses/general_csis/scorecards?pageState=(%22StorageObjectListTable%22:(%22f%22:%22%255B%255D%22))&amp;amp;project=cal-itp-data-infra">here</a>.</p></li>
+</ul>
+<p>Note: Viewer may need access to the private CSIS repository.</p>
+<p>Briefly, the script above does the following:</p>
+<ul>
 <li><p>Automates the naming of the new PDF files by taking away punctuation that isn’t allowed.</p></li>
 <li><p>Saves the notebook as html files.</p></li>
 <li><p>Converts the html files to PDF.</p></li>
 <li><p>Saves each PDF to the folder (organized by district) to our GCS.</p></li>
 <li><p>Deletes irrelevant files.</p></li>
-</ul>
-</li>
 <li><p>Here are some tips and tricks when converting notebooks to HTML before PDF conversions.</p>
 <ul>
 <li><p>Any formatting should be done in HTML/CSS first.</p></li>
@@ -712,8 +717,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -46,7 +46,7 @@ In order to save data being used in a report, you can use two methods:
 
 Watch the screencast below and read the additional information to begin.
 
-**Note**: To access Google Cloud Storage you will need to have set up your Google authentication. If you have yet to do so, [follow these instructions](https://docs.calitp.org/data-infra/analytics_tools/notebooks.html#connecting-to-warehouse).
+**Note**: To access Google Cloud Storage you will need to have set up your Google authentication. If you have yet to do so, [follow these instructions](https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html#connecting-to-the-warehouse).
 
 (storing-new-data-screencast)=
 

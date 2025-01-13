@@ -20,12 +20,14 @@ This section is geared towards data analysts who are new to Python. The followin
 - If you are new to Python, take a look at [all the Python tutorials](https://www.linkedin.com/learning/search?keywords=python&u=36029164) available through Caltrans. There are many introductory Python courses [such as this one.](https://www.linkedin.com/learning/python-essential-training-18764650/getting-started-with-python?autoplay=true&u=36029164)
 - [Joris van den Bossche's Geopandas Tutorial](https://github.com/jorisvandenbossche/geopandas-tutorial)
 - [Practical Python for Data Science by Jill Cates](https://www.practicalpythonfordatascience.com/intro.html)
+- [General Python Functions](https://pandas.pydata.org/pandas-docs/stable/reference/general_functions.html)
 - [Ben-Gurion University of the Negev - Geometric operations](https://geobgu.xyz/py/geopandas2.html)
 - [Geographic Thinking for Data Scientists](https://geographicdata.science/book/notebooks/01_geo_thinking.html)
 - [PyGIS Geospatial Tutorials](https://pygis.io/docs/a_intro.html)
 - [Python Courses, compiled by our team](https://docs.google.com/spreadsheets/d/1Omow8F0SUiMx1jyG7GpbwnnJ5yWqlLeMH7SMtKxwG80/edit?usp=sharing)
 - [Why Dask?](https://docs.dask.org/en/stable/why.html)
 - [10 Minutes to Dask](https://docs.dask.org/en/stable/10-minutes-to-dask.html)
+- [Jupyter Notebook Tutorial](https://www.youtube.com/watch?v=LW2Rye_l8L0)
 
 ### Books
 

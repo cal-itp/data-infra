@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,10 +27,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -268,9 +268,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -521,10 +526,10 @@
 <span id="id1"></span><h2>Reading and Writing Data<a class="headerlink" href="#reading-and-writing-data" title="Link to this heading">#</a></h2>
 <section id="gcs">
 <span id="id2"></span><h3>GCS<a class="headerlink" href="#gcs" title="Link to this heading">#</a></h3>
-<p>Our team often uses Google Cloud Storage (GCS) for object storage. If you haven’t set up your Google authentication, go <a class="reference external" href="https://docs.calitp.org/data-infra/analytics_tools/notebooks.html#connecting-to-warehouse">here</a> for the instructions. For a walkthrough on how to use GCS buckets, go <a class="reference external" href="https://docs.calitp.org/data-infra/analytics_tools/storing_data.html#in-gcs">here</a>.</p>
+<p>Our team often uses Google Cloud Storage (GCS) for object storage. If you haven’t set up your Google authentication, go <a class="reference external" href="https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html#connecting-to-the-warehouse">here</a> for the instructions. For a walkthrough on how to use GCS buckets, go <a class="reference external" href="https://docs.calitp.org/data-infra/analytics_tools/storing_data.html#in-gcs">here</a>.</p>
 <p>By putting data on GCS, anybody on the team can use/access/replicate the data without having to transfer data files between machines.</p>
 <p>To write and read a pandas dataframe as a CSV to GCS:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my_csv.csv&#39;</span><span class="p">)</span>
 
@@ -536,7 +541,7 @@
 <section id="local-folders">
 <span id="id3"></span><h3>Local Folders<a class="headerlink" href="#local-folders" title="Link to this heading">#</a></h3>
 <p>Sometimes, it is easiest to simply use your local file system to store data.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;./my_csv.csv&#39;</span><span class="p">)</span>
 
@@ -577,7 +582,7 @@
 <p>Parquet is an “open source columnar storage format for use in data analysis systems.” Columnar storage is more efficient as it is  easily compressed and the data is more homogenous. CSV files utilize a row-based storage format which is harder to compress, a reason why Parquets files are preferable for larger datasets. Parquet files are faster to read than CSVs, as they have a higher querying speed and preserve datatypes (i.e. Number,  Timestamps, Points). They are best for intermediate data storage and large datasets (1GB+) on most any on-disk storage. This file format is also good for passing dataframes between Python and R. A similar option is <a class="reference external" href="https://blog.rstudio.com/2016/03/29/feather/">feather</a>.</p>
 <p>One of the downsides to Parquet files is the inability to quickly look at the dataset in GUI based (Excel, QGIS, etc.) programs. Parquet files also lack built-in support for categorical data.</p>
 <p>Here is a way to use pandas to convert a local CSV file to a Parquet file:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;my_csv_name.csv&#39;</span><span class="p">)</span>
 <span class="n">df2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">&#39;my_parquet_name.parquet&#39;</span><span class="p">)</span>
@@ -590,7 +595,7 @@
 <p>The Feather format is not compressed, allowing for faster input/output so it works well with solid-state drives. Similarly, Feather doesn’t need unpacking in order to load it back into RAM.</p>
 <p>Feather is not be the ideal file format if you’re looking for long-term data storage. It is really only equipped for short-term data storage. The Feather files themselves are also smaller than CSVs and have a higher input/output speed, but they don’t necessarily have the same level of compression as Parquet files.</p>
 <p>Once you install the feather package with <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">feather-format</span></code> then you can easily write a dataframe.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">feather</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">feather</span>
 <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;my_data.feather&#39;</span>
 <span class="n">feather</span><span class="o">.</span><span class="n">write_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">feather</span><span class="o">.</span><span class="n">read_dataframe</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -600,7 +605,7 @@
 <section id="geojson">
 <span id="id9"></span><h3>GeoJSON<a class="headerlink" href="#geojson" title="Link to this heading">#</a></h3>
 <p>GeoJSON is an <a class="reference external" href="https://geojson.org/">open-standard format</a> for encoding a variety of geographic data structures using JavaScript Object Notation (JSON).  A GeoJSON object may represent a region of space (a Geometry), a spatially bounded entity (a Feature), or a list of Features (a FeatureCollection). It supports geometry types: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. JSON is light and easier to read than most geospatial formats, but GeoJSON files can quickly get too large to handle. The upside is that a GeoJSON file is often easier to work with than a Shapefile.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
 
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;https://data.cityofnewyork.us/api/geospatial/tqmj-j8zm?method=export&amp;format=GeoJSON&#39;</span><span class="p">)</span>
 </pre></div>
@@ -612,8 +617,8 @@
 <p>One weird thing, however, is that a shapefile isn’t a <em>file</em>, it’s a <em>folder</em>, containing multiple subfiles (such as .dbf, .shpx, etc). To properly read/write shapefiles, make sure to read the entire folder or write to a folder each time. This can cause issues especially as most shapefiles are compressed into a zip file with isn’t always easily decompressed.</p>
 <p>It is often better to use <code class="docutils literal notranslate"><span class="pre">geojson</span></code> vs <code class="docutils literal notranslate"><span class="pre">shapefiles</span></code> since the former is easier to render on the web. The latter is better when you have a bespoke projection. A few downsides to shapefiles include their inability to store topological information and the file size restriction of 2GB. Similarly, shapefiles can only contain one geometry type per file.</p>
 <p>Here is a template for one way to read and write shapefiles using pandas:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 <span class="c1"># read shapefile</span>
 <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;./my_folder/&#39;</span><span class="p">)</span>
@@ -770,8 +775,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

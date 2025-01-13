@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,10 +27,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -268,9 +268,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -521,7 +526,7 @@
 <li><p>Using the Google Cloud Storage web UI to manually upload.</p></li>
 </ul>
 <p>Watch the screencast below and read the additional information to begin.</p>
-<p><strong>Note</strong>: To access Google Cloud Storage you will need to have set up your Google authentication. If you have yet to do so, <a class="reference external" href="https://docs.calitp.org/data-infra/analytics_tools/notebooks.html#connecting-to-warehouse">follow these instructions</a>.</p>
+<p><strong>Note</strong>: To access Google Cloud Storage you will need to have set up your Google authentication. If you have yet to do so, <a class="reference external" href="https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html#connecting-to-the-warehouse">follow these instructions</a>.</p>
 </section>
 <section id="storing-new-data-screencast">
 <span id="id2"></span><h2>Storing New Data - Screencast<a class="headerlink" href="#storing-new-data-screencast" title="Link to this heading">#</a></h2>
@@ -530,11 +535,11 @@
 <section id="uploading-data-from-a-notebook">
 <span id="uploading-from-notebook"></span><h2>Uploading Data from a Notebook<a class="headerlink" href="#uploading-data-from-a-notebook" title="Link to this heading">#</a></h2>
 <p>In order to begin, import the following libraries in your notebook and set the <code class="docutils literal notranslate"><span class="pre">fs</span></code> variable</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">gcsfs</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gcsfs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">calitp_data_analysis</span> <span class="kn">import</span> <span class="n">get_fs</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_fs</span>
 <span class="n">fs</span> <span class="o">=</span> <span class="n">get_fs</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -579,7 +584,7 @@
 </pre></div>
 </div>
 <p>Or, use the <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> package that lives in <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis">data-infra</a></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis</span> <span class="kn">import</span> <span class="n">utils</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 
 <span class="n">utils</span><span class="o">.</span><span class="n">geoparquet_gcs_export</span><span class="p">(</span>
     <span class="n">gdf</span><span class="p">,</span>
@@ -597,7 +602,7 @@
 <span id="storing-data-geojson"></span><h4>GeoJSON<a class="headerlink" href="#geojson" title="Link to this heading">#</a></h4>
 <p>Refer to the <a class="reference internal" href="data_catalogs.html#data-catalogs"><span class="std std-ref">data catalogs doc</span></a> to list a GeoJSON, and read in the GeoJSON with the <code class="docutils literal notranslate"><span class="pre">intake</span></code> method. GeoJSONs saved in GCS cannot be read in directly using <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>.</p>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> package to read in or export geojsons.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis</span> <span class="kn">import</span> <span class="n">utils</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 
 <span class="n">GCS_FOLDER</span> <span class="o">=</span> <span class="s2">&quot;gs://calitp-analytics-data/data-analyses/task-subfolder/&quot;</span>
 
@@ -757,8 +762,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

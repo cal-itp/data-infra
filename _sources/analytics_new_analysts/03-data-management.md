@@ -28,7 +28,7 @@ Below is a series of tips, tricks and use-cases for managing data throughout the
 
 ### GCS
 
-Our team often uses Google Cloud Storage (GCS) for object storage. If you haven't set up your Google authentication, go [here](https://docs.calitp.org/data-infra/analytics_tools/notebooks.html#connecting-to-warehouse) for the instructions. For a walkthrough on how to use GCS buckets, go [here](https://docs.calitp.org/data-infra/analytics_tools/storing_data.html#in-gcs).
+Our team often uses Google Cloud Storage (GCS) for object storage. If you haven't set up your Google authentication, go [here](https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html#connecting-to-the-warehouse) for the instructions. For a walkthrough on how to use GCS buckets, go [here](https://docs.calitp.org/data-infra/analytics_tools/storing_data.html#in-gcs).
 
 By putting data on GCS, anybody on the team can use/access/replicate the data without having to transfer data files between machines.
 

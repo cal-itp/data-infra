@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,10 +27,10 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -268,9 +268,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -505,9 +510,9 @@
 </ul>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
 </pre></div>
 </div>
 </section>
@@ -775,7 +780,7 @@
                 <span class="k">else</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># An equivalent full function would be:</span>
-<span class="k">def</span> <span class="nf">tag_famous</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tag_famous</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">&#39;Mouse Rat&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
@@ -862,7 +867,7 @@
 <h3><strong>Apply over Dataframe</strong><a class="headerlink" href="#apply-over-dataframe" title="Link to this heading">#</a></h3>
 <p>You should use a full function when a function is too complicated to be a lambda function. These functions are defined by a name and are called upon to operate on the rows of a dataframe. You can also write more complex functions that bundle together all the steps (including nesting more functions) you want to execute over the dataframe.</p>
 <p><code class="docutils literal notranslate"><span class="pre">df.apply</span></code> is one common usage of a function.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">years_active</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">years_active</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">&#39;Mouse Rat&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;2009-2014&#39;</span>
     <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">&#39;Scarecrow Boat&#39;</span><span class="p">:</span>
@@ -909,7 +914,7 @@
 <p>Sometimes it’s necessary to create a new column to group together certain values of a column. Here are two ways to accomplish this:</p>
 <p><b>Method #1</b>: Write a function using if-else statement and apply it using a lambda function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The function is called elected_year, and it operates on every row.</span>
-<span class="k">def</span> <span class="nf">elected_year</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">elected_year</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
     <span class="c1"># For each row, if Council_Member says &#39;Leslie Knope&#39;, then return 2012</span>
     <span class="c1"># as the value.</span>
     <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Council_Member</span> <span class="o">==</span> <span class="s1">&#39;Leslie Knope&#39;</span><span class="p">:</span>
@@ -1104,7 +1109,7 @@
 <span id="id4"></span><h2>Export Aggregated Output<a class="headerlink" href="#export-aggregated-output" title="Link to this heading">#</a></h2>
 <p>Python can do most of the heavy lifting for data cleaning, transformations, and general wrangling. But, for charts or tables, it might be preferable to finish in Excel so that visualizations conform to the corporate style guide.</p>
 <p>Dataframes can be exported into Excel and written into multiple sheets.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xlsxwriter</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xlsxwriter</span>
 
 <span class="c1"># initiate a writer</span>
 <span class="n">writer</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="s1">&#39;../outputs/filename.xlsx&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;xlsxwriter&#39;</span><span class="p">)</span>
@@ -1258,8 +1263,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
