@@ -210,7 +210,7 @@ build_my_reports:
     git add portfolio/sites/my_report.yml
 ```
 
-### Delete Portfolio/ Refresh Index Page
+### Redeploying Portfolio/ Refresh Index Page
 
 When redeploying your portfolio with new content and there’s an old version with existing files or content on your portfolio site or in your local environment, it’s important to clean up the old files before adding new content.
 
