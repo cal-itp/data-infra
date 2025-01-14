@@ -3,14 +3,17 @@
 WITH fct_vehicle_locations AS (
     SELECT
         key,
+        gtfs_dataset_key,
+        base64_url,
+        gtfs_dataset_name,
+        schedule_gtfs_dataset_key,
         service_date,
         trip_instance_key,
         location_timestamp,
         location,
         next_location_key,
-
     FROM {{ ref('fct_vehicle_locations') }}
-    WHERE gtfs_dataset_name="LA DOT VehiclePositions" AND service_date = "2025-01-07" AND (trip_instance_key="0000a63ce280462e6eed4f3ae92df16d" OR trip_instance_key="ec14aa25e209f90ed025450c18519814")
+    WHERE gtfs_dataset_name="LA DOT VehiclePositions" AND service_date = "2025-01-07" --AND (trip_instance_key="0000a63ce280462e6eed4f3ae92df16d" OR trip_instance_key="ec14aa25e209f90ed025450c18519814")
     ORDER by service_date, trip_instance_key, location_timestamp
     ),
 
@@ -56,9 +59,13 @@ merged AS (
 fct_vp_dwell AS (
     SELECT
         MIN(fct_vehicle_locations.key) as key,
+        fct_vehicle_locations.gtfs_dataset_key,
+        fct_vehicle_locations.base64_url,
+        fct_vehicle_locations.gtfs_dataset_name,
+        fct_vehicle_locations.schedule_gtfs_dataset_key,
         fct_vehicle_locations.trip_instance_key as trip_instance_key,
         fct_vehicle_locations.service_date as service_date,
-        merged.vp_group AS vp_group,
+        --merged.vp_group AS vp_group,
         MIN(fct_vehicle_locations.location_timestamp) AS location_timestamp,
         MAX(fct_vehicle_locations.location_timestamp) AS moving_timestamp,
         COUNT(*) AS n_vp,
@@ -68,7 +75,7 @@ fct_vp_dwell AS (
     FROM fct_vehicle_locations
     LEFT JOIN merged
         ON fct_vehicle_locations.key = merged.key
-    GROUP BY service_date, trip_instance_key, vp_group
+    GROUP BY service_date, gtfs_dataset_key, base64_url, gtfs_dataset_name, schedule_gtfs_dataset_key, trip_instance_key, vp_group
 )
 
 -- can we roll in n_vp + location into merged
