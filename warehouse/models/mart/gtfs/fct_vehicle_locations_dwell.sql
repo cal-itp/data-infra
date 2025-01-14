@@ -18,74 +18,61 @@ WITH fct_vehicle_locations AS (
 get_next AS (
     SELECT
         key AS next_location_key,
-        location,
-        location_timestamp
+        location AS next_location,
     FROM fct_vehicle_locations
 ),
 
 vp_groupings AS (
     SELECT
-        fct_vehicle_locations.service_date,
-        fct_vehicle_locations.trip_instance_key,
         fct_vehicle_locations.key,
-        --fct_vehicle_locations.location,
-        fct_vehicle_locations.location_timestamp,
-        get_next.location_timestamp AS next_location_timestamp,
-        --get_next.location AS next_location,
+        fct_vehicle_locations.next_location_key,
         CASE
-            WHEN ST_EQUALS(fct_vehicle_locations.location, get_next.location)
+            WHEN ST_EQUALS(fct_vehicle_locations.location, get_next.next_location)
             THEN 0
             ELSE 1
         END AS new_group,
     FROM fct_vehicle_locations
-    LEFT JOIN get_next
+    INNER JOIN get_next
         ON fct_vehicle_locations.next_location_key = get_next.next_location_key
 ),
 
-grouped AS (
+merged AS (
     SELECT
-        key,
-        SUM(new_group)
+        fct_vehicle_locations.key AS key,
+        -- vp_group should increase from 1, 2, ... , n, depending on number of groups are present within a trip
+        SUM(
+            COALESCE(vp_groupings.new_group, 1)
+        )
             OVER (
                 PARTITION BY service_date, trip_instance_key
                 ORDER BY location_timestamp
                 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
             )  AS vp_group,
-    FROM vp_groupings
+    FROM fct_vehicle_locations
+    INNER JOIN vp_groupings
+        ON fct_vehicle_locations.key = vp_groupings.key AND fct_vehicle_locations.next_location_key = vp_groupings.next_location_key
 ),
 
-merged AS (
+fct_vp_dwell AS (
     SELECT
-        fct_vehicle_locations.trip_instance_key AS trip_instance_key,
-        fct_vehicle_locations.service_date AS service_date,
-        MIN(fct_vehicle_locations.key) AS key,
-        grouped.vp_group AS vp_group,
-        COUNT(*) AS n_vp,
+        MIN(fct_vehicle_locations.key) as key,
+        fct_vehicle_locations.trip_instance_key as trip_instance_key,
+        fct_vehicle_locations.service_date as service_date,
+        merged.vp_group AS vp_group,
         MIN(fct_vehicle_locations.location_timestamp) AS location_timestamp,
         MAX(fct_vehicle_locations.location_timestamp) AS moving_timestamp,
+        COUNT(*) AS n_vp,
+        ST_GEOGFROMTEXT(MIN(ST_ASTEXT(fct_vehicle_locations.location))) AS location,
+        -- location as geography column can't be included in group by,
+        -- so let's just grab first value of string and coerce back to geography
     FROM fct_vehicle_locations
-    LEFT JOIN grouped
-        ON fct_vehicle_locations.key = grouped.key
+    LEFT JOIN merged
+        ON fct_vehicle_locations.key = merged.key
     GROUP BY service_date, trip_instance_key, vp_group
-),
-
-fct_vehicle_locations_dwell AS (
-    SELECT
-        merged.trip_instance_key AS trip_instance_key,
-        merged.service_date AS service_date,
-        merged.key AS key,
-        merged.vp_group as vp_group, -- this column can be deleted, but use this to check, because vp_group=11 should have 2, but sometimes has count of 1.
-        merged.n_vp as n_vp,
-        merged.location_timestamp AS location_timestamp,
-        merged.moving_timestamp AS moving_timestamp,
-        fct_vehicle_locations.location AS location
-    FROM merged
-    LEFT JOIN fct_vehicle_locations
-        ON merged.key = fct_vehicle_locations.key
 )
 
 -- can we roll in n_vp + location into merged
 -- without the last merge? how to group with location (geography) type?
 -- expect to see n_vp have values 1, 2, 3 for these 2 trips
 
-SELECT * FROM fct_vehicle_locations_dwell
+SELECT * FROM fct_vp_dwell
