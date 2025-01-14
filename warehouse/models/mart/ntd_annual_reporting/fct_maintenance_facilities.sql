@@ -3,9 +3,24 @@ WITH staging_maintenance_facilities AS (
     FROM {{ ref('stg_ntd__maintenance_facilities') }}
 ),
 
-fct_maintenance_facilities AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_maintenance_facilities AS (
+    SELECT
+        staging_maintenance_facilities.*,
+        dim_organizations.caltrans_district
     FROM staging_maintenance_facilities
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_maintenance_facilities.report_year = 2022 THEN
+                staging_maintenance_facilities.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_maintenance_facilities.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -48,6 +63,7 @@ SELECT
     under_200_vehicles,
     under_200_vehicles_1,
     uza_name,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_maintenance_facilities

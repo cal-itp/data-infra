@@ -3,9 +3,24 @@ WITH staging_nonmajor_safety_and_security_events AS (
     FROM {{ ref('stg_ntd__nonmajor_safety_and_security_events') }}
 ),
 
-fct_nonmajor_safety_and_security_events AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_nonmajor_safety_and_security_events AS (
+    SELECT
+        staging_nonmajor_safety_and_security_events.*,
+        dim_organizations.caltrans_district
     FROM staging_nonmajor_safety_and_security_events
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_nonmajor_safety_and_security_events.year <= 2022 THEN
+                staging_nonmajor_safety_and_security_events._5_digit_ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_nonmajor_safety_and_security_events._5_digit_ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -127,6 +142,7 @@ SELECT
     number_of_transit_vehicles,
     year,
     uace_code,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_nonmajor_safety_and_security_events
