@@ -2,7 +2,7 @@ import gzip
 import logging
 import os
 from io import BytesIO
-from typing import ClassVar, List  # Optional
+from typing import ClassVar, Dict, List, Optional, Tuple
 
 import pandas as pd  # type: ignore
 import pendulum
@@ -47,13 +47,17 @@ xcom_keys = {
 }
 
 
-# pulls the URL from XCom
-def pull_url_from_xcom(key, context):
+def pull_url_from_xcom(key: str, context: dict) -> str:
+    """Pull URL from XCom with proper error handling."""
     try:
         task_instance = context["ti"]
+        if task_instance is None:
+            raise AirflowException("Task instance not found in context")
+
         pulled_value = task_instance.xcom_pull(task_ids="scrape_ntd_xlsx_urls", key=key)
         if pulled_value is None:
             raise AirflowException(f"No URL found in XCom for key: {key}")
+
         print(f"Pulled value from XCom: {pulled_value}")
         return pulled_value
     except Exception as e:
@@ -81,32 +85,42 @@ class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
     class Config:
         arbitrary_types_allowed = True
 
-    def fetch_from_ntd_xlsx(self, file_url):
-        validated_url = parse_obj_as(HttpUrl, file_url)
-        logging.info(f"reading file from url {validated_url}")
-
+    def _make_request(self, url: str) -> bytes:
+        """Make HTTP request with proper error handling."""
         try:
-            response = requests.get(validated_url)
-            response.raise_for_status()  # Raises an HTTPError for bad responses
-            excel_content = response.content
-
-            if excel_content is None or len(excel_content) == 0:
-                logging.info(
-                    f"There is no data to download for {self.year} / {self.product}. Ending pipeline."
-                )
-                return None
-
-            logging.info(
-                f"Downloaded {self.product} data for {self.year} with {len(excel_content)} rows!"
-            )
-            return excel_content
-
+            response = requests.get(url)
+            response.raise_for_status()
+            return response.content
         except requests.exceptions.HTTPError as e:
             logging.error(f"HTTP error occurred: {e}")
             raise AirflowException(f"HTTP error in XLSX download: {e}")
         except requests.exceptions.RequestException as e:
             logging.error(f"Request error occurred: {e}")
             raise AirflowException(f"Error downloading XLSX file: {e}")
+
+    def _validate_content(self, content: bytes) -> Optional[bytes]:
+        """Validate downloaded content."""
+        if content is None or len(content) == 0:
+            logging.info(
+                f"There is no data to download for {self.year} / {self.product}. Ending pipeline."
+            )
+            return None
+        logging.info(
+            f"Downloaded {self.product} data for {self.year} with {len(content)} rows!"
+        )
+        return content
+
+    def fetch_from_ntd_xlsx(self, file_url: str) -> Optional[bytes]:
+        """Fetch XLSX file with proper error handling."""
+        try:
+            validated_url = parse_obj_as(HttpUrl, file_url)
+            logging.info(f"reading file from url {validated_url}")
+
+            excel_content = self._make_request(validated_url)
+            return self._validate_content(excel_content)
+
+        except AirflowException:
+            raise
         except Exception as e:
             logging.error(f"Unexpected error occurred: {e}")
             raise AirflowException(f"Unexpected error in XLSX download: {e}")
@@ -126,8 +140,8 @@ class NtdDataProductXLSXOperator(BaseOperator):
     def __init__(
         self,
         product: str,
-        xlsx_file_url,
-        year: int,
+        xlsx_file_url: str,
+        year: str,
         *args,
         **kwargs,
     ):
@@ -145,16 +159,60 @@ class NtdDataProductXLSXOperator(BaseOperator):
 
         super().__init__(*args, **kwargs)
 
-    def execute(self, context, *args, **kwargs):
+    def _get_download_url(self, context: dict) -> str:
+        """Get download URL from XCom if needed."""
+        download_url = self.raw_excel_extract.file_url
+        key = (self.product, self.year)
+        if key in xcom_keys:
+            download_url = pull_url_from_xcom(key=xcom_keys[key], context=context)
+        logging.info(f"reading {self.product} url as {download_url}")
+        return download_url
+
+    def _read_excel_file(self, excel_content: bytes) -> Dict[str, pd.DataFrame]:
+        """Read Excel file with proper error handling."""
         try:
-            download_url = self.raw_excel_extract.file_url
+            excel_data = BytesIO(excel_content)
+            return pd.read_excel(excel_data, sheet_name=None, engine="openpyxl")
+        except Exception as e:
+            logging.error(f"Error reading Excel file: {e}")
+            raise AirflowException(f"Failed to read Excel file: {e}")
 
-            key = (self.product, self.year)
-            if key in xcom_keys:
-                download_url = pull_url_from_xcom(key=xcom_keys[key], context=context)
+    def _process_sheet(self, sheet_name: str, df: pd.DataFrame) -> Tuple[str, bytes]:
+        """Process a single Excel sheet with proper error handling."""
+        try:
+            df = df.rename(make_name_bq_safe, axis="columns")
+            logging.info(f"read {df.shape[0]} rows and {df.shape[1]} columns")
 
-            logging.info(f"reading {self.product} url as {download_url}")
+            gzipped_content = gzip.compress(
+                df.to_json(orient="records", lines=True).encode()
+            )
 
+            tab_name = make_name_bq_safe(sheet_name)
+            return tab_name, gzipped_content
+        except Exception as e:
+            logging.error(f"Error processing sheet {sheet_name}: {e}")
+            raise AirflowException(f"Failed to process Excel sheet {sheet_name}: {e}")
+
+    def _save_processed_sheet(self, tab_name: str, gzipped_content: bytes) -> None:
+        """Save processed sheet with proper error handling."""
+        try:
+            clean_excel_extract = CleanExtract(
+                year=self.year,
+                product=self.product + "/" + self.year + "/" + tab_name,
+                filename=f"{self.year}__{self.product}__{tab_name}.jsonl.gz",
+            )
+            clean_excel_extract.save_content(fs=get_fs(), content=gzipped_content)
+        except Exception as e:
+            logging.error(f"Error saving processed sheet {tab_name}: {e}")
+            raise AirflowException(f"Failed to save processed sheet {tab_name}: {e}")
+
+    def execute(self, context: dict, *args, **kwargs) -> None:
+        """Execute the operator with proper error handling."""
+        try:
+            # Get download URL
+            download_url = self._get_download_url(context)
+
+            # Download Excel file
             excel_content = self.raw_excel_extract.fetch_from_ntd_xlsx(download_url)
             if excel_content is None:
                 return None
@@ -162,41 +220,17 @@ class NtdDataProductXLSXOperator(BaseOperator):
             # Save raw content
             self.raw_excel_extract.save_content(fs=get_fs(), content=excel_content)
 
-            # Process Excel file
-            excel_data = BytesIO(excel_content)
-            try:
-                df_dict = pd.read_excel(excel_data, sheet_name=None, engine="openpyxl")
-            except Exception as e:
-                logging.error(f"Error reading Excel file: {e}")
-                raise AirflowException(f"Failed to read Excel file: {e}")
+            # Read Excel file
+            df_dict = self._read_excel_file(excel_content)
 
             # Process each sheet
-            for key, df in df_dict.items():
-                try:
-                    df = df.rename(make_name_bq_safe, axis="columns")
-                    logging.info(f"read {df.shape[0]} rows and {df.shape[1]} columns")
+            for sheet_name, df in df_dict.items():
+                tab_name, gzipped_content = self._process_sheet(sheet_name, df)
+                self._save_processed_sheet(tab_name, gzipped_content)
 
-                    self.clean_gzipped_content = gzip.compress(
-                        df.to_json(orient="records", lines=True).encode()
-                    )
-
-                    tab_name = make_name_bq_safe(key)
-
-                    # Save clean gzipped jsonl files to the clean bucket
-                    self.clean_excel_extract = CleanExtract(
-                        year=self.year,
-                        product=self.product + "/" + self.year + "/" + tab_name,
-                        filename=f"{self.year}__{self.product}__{tab_name}.jsonl.gz",
-                    )
-
-                    self.clean_excel_extract.save_content(
-                        fs=get_fs(), content=self.clean_gzipped_content
-                    )
-
-                except Exception as e:
-                    logging.error(f"Error processing sheet {key}: {e}")
-                    raise AirflowException(f"Failed to process Excel sheet {key}: {e}")
-
+        except AirflowException:
+            # Re-raise AirflowExceptions as they already have proper error messages
+            raise
         except Exception as e:
             logging.error(f"Error in XLSX operator execution: {e}")
             raise AirflowException(f"XLSX operator execution failed: {e}")
