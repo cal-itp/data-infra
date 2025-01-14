@@ -1,6 +1,6 @@
 FROM jupyter/datascience-notebook:python-3.11.6
 
-LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
+LABEL org.opencontainers.image.source=https://github.com/cal-itp/data-infra
 
 USER root
 RUN apt-get update
@@ -15,8 +15,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | s
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 RUN apt update \
     && apt install -y gh
-
-
+RUN apt-get install -y gdal-bin libgdal-dev # for rasterio
 # create these ahead of time, then chown to to the notebook user
 ENV GCLOUD_HOME=/gcloud
 ENV POETRY_HOME="/poetry"
@@ -29,9 +28,10 @@ USER $NB_UID
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="$POETRY_HOME/bin:$PATH"
-
-RUN npm install -g --unsafe-perm=true --allow-root netlify-cli vega-cli vega-lite sql-language-server
-
+RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
+# RUN npm install -g --unsafe-perm=true --allow-root vega-cli # Can't get these to work
+# RUN npm install -g --unsafe-perm=true --allow-root vega-lite
+RUN npm install -g --unsafe-perm=true --allow-root sql-language-server
 # gcloud CLI https://cloud.google.com/sdk/docs/install#deb
 RUN cd $GCLOUD_HOME \
     && curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-423.0.0-linux-x86_64.tar.gz \
@@ -42,7 +42,9 @@ ENV PATH="$GCLOUD_HOME/google-cloud-sdk/bin:$PATH"
 COPY ./pyproject.toml /reqs/pyproject.toml
 COPY ./poetry.lock /reqs/poetry.lock
 RUN poetry config virtualenvs.create false
+# RUN gdalinfo --version # for debugging, use this to figure out which rasterio to support
 RUN cd /reqs && poetry install --with=shared_utils --with=portfolio
+RUN cd /reqs && poetry show # print out the package versions for documentation
 RUN poetry config virtualenvs.create true
 
 ENV DBT_PROFILES_DIR=/home/jovyan/.dbt/
