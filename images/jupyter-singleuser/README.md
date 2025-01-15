@@ -16,14 +16,14 @@ Take the package versions from the build file and document with the PR.  Do a cl
 
 ```
 docker system prune -a #
-docker build . 2>&1 | tee build.log
+docker build  -t envs-hurt . 2>&1 | tee build.log
 ```
 
-
-```bash
-docker build -t ghcr.io/cal-itp/data-infra/jupyter-singleuser:[NEW VERSION TAG] .
+You can go into the docker image and do tests:
 ```
-
+docker list
+docker exec -it upbeat_bhaskara /bin/bash
+```
 
 ## Deploying Changes to Production
 
