@@ -34,8 +34,8 @@ RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 RUN npm install -g --unsafe-perm=true --allow-root sql-language-server
 # gcloud CLI https://cloud.google.com/sdk/docs/install#deb
 RUN cd $GCLOUD_HOME \
-    && curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-423.0.0-linux-x86_64.tar.gz \
-    && tar -zxvf google-cloud-cli-423.0.0-linux-x86_64.tar.gz \
+    && curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-506.0.0-linux-x86_64.tar.gz \
+    && tar -zxvf google-cloud-cli-506.0.0-linux-x86_64.tar.gz \
     && ./google-cloud-sdk/install.sh
 ENV PATH="$GCLOUD_HOME/google-cloud-sdk/bin:$PATH"
 

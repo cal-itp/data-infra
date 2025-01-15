@@ -16,8 +16,18 @@ Take the package versions from the build file and document with the PR.  Do a cl
 
 ```
 docker system prune -a #
-docker build . 2>&1 | tee build.log
+docker build  -t envs-hurt . 2>&1 | tee build.log
 ```
+
+You can go into the docker image and do tests:
+```
+docker list
+docker exec -it upbeat_bhaskara /bin/bash
+```
+
+
+
+
 
 
 ```bash
