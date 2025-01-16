@@ -13,7 +13,7 @@ WITH fct_vehicle_locations AS (
         location,
         next_location_key,
     FROM {{ ref('fct_vehicle_locations') }}
-    WHERE gtfs_dataset_name="LA DOT VehiclePositions" AND service_date = "2025-01-07" --AND (trip_instance_key="0000a63ce280462e6eed4f3ae92df16d" OR trip_instance_key="ec14aa25e209f90ed025450c18519814")
+    WHERE gtfs_dataset_name="LA DOT VehiclePositions" AND service_date = "2025-01-07" AND (trip_instance_key="0000a63ce280462e6eed4f3ae92df16d" OR trip_instance_key="ec14aa25e209f90ed025450c18519814")
     ORDER by service_date, trip_instance_key, location_timestamp
     ),
 
@@ -34,6 +34,7 @@ same_locations AS (
             THEN 0
             ELSE 1
         END AS new_group,
+        ST_AZIMUTH(next_location.next_location, fct_vehicle_locations.location) AS azimuth,
     FROM fct_vehicle_locations
     INNER JOIN next_location
         ON fct_vehicle_locations.next_location_key = next_location.next_location_key
@@ -52,6 +53,20 @@ vp_groupings AS (
                 ORDER BY location_timestamp
                 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
             )  AS vp_group,
+        same_locations.azimuth,
+        CASE
+            WHEN same_locations.azimuth BETWEEN 0 AND 22.5
+            THEN "North"
+            WHEN same_locations.azimuth BETWEEN 67.5 AND 112.5
+            THEN "East"
+            WHEN same_locations.azimuth BETWEEN 157.5 AND 202.5
+            THEN "South"
+            WHEN same_locations.azimuth BETWEEN 247.5 AND 292.5
+            THEN "West"
+            WHEN same_locations.azimuth BETWEEN 337.5 AND 360
+            THEN "North"
+            ELSE "Unknown"
+        END AS azimuth_direction
     FROM fct_vehicle_locations
     INNER JOIN same_locations
         ON fct_vehicle_locations.key = same_locations.key AND fct_vehicle_locations.next_location_key = same_locations.next_location_key
@@ -66,13 +81,15 @@ fct_vp_dwell AS (
         fct_vehicle_locations.schedule_gtfs_dataset_key,
         fct_vehicle_locations.trip_instance_key as trip_instance_key,
         fct_vehicle_locations.service_date as service_date,
-        --merged.vp_group AS vp_group,
+        vp_groupings.vp_group AS vp_group,
         MIN(fct_vehicle_locations.location_timestamp) AS location_timestamp,
         MAX(fct_vehicle_locations.location_timestamp) AS moving_timestamp,
         COUNT(*) AS n_vp,
         ST_GEOGFROMTEXT(MIN(ST_ASTEXT(fct_vehicle_locations.location))) AS location,
         -- location as geography column can't be included in group by,
         -- so let's just grab first value of string and coerce back to geography
+        MIN(vp_groupings.azimuth) AS azimuth,
+        MIN(vp_groupings.azimuth_direction) AS azimuth_direction,
     FROM fct_vehicle_locations
     LEFT JOIN vp_groupings
         ON fct_vehicle_locations.key = vp_groupings.key
