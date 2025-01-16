@@ -2,17 +2,18 @@
 name = "calitp_warehouse"
 version = "0.1.1"
 description = ""
+package-mode = false
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "~3.9"
+python = "~3.11"
 colorama = "^0.4.4"
 pydantic = "^1.9.0"
 SQLAlchemy = "1.3.24"
 sqlalchemy-bigquery = {extras = ["geography"], version = "^1.4.3"}
 humanize = "^4.1.0"
 requests-toolbelt = "^0.9.1"
-pandas-gbq = "^0.17.4"
+pandas-gbq = ">=0.26.1" # the poetry picked versions don't work.
 tqdm = "^4.64.0"
 pendulum = "^2.1.2"
 Shapely = "^1.8.2"
@@ -28,14 +29,13 @@ networkx = {version = "<3", extras = ["default"]}
 # May need to run these after `brew install graphviz` when installing on macOS
 # export CFLAGS="-I $(brew --prefix graphviz)/include"
 # export LDFLAGS="-L $(brew --prefix graphviz)/lib"
-pygraphviz = "^1.11"
+# pygraphviz = "^1.11" # Not working, removing it.
 palettable = "^3.3.0"
 metabase-api = "^0.3.0"
-# fiona 1.9 requires gdal 3 which ubuntu does not install yet
-# from https://gis.stackexchange.com/questions/375685/how-to-install-or-build-gdal-3-on-debian-buster
-fiona = "~1.8"
+fiona = "1.10.1" # match the version in the analysis image.
 typer = "^0.4.0"
 dbt-bigquery = "1.5.1"
+pyarrow = "19.0.0" # install errors out when it self-picks 9.0.0
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"
