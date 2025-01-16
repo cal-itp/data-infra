@@ -18,33 +18,34 @@ WITH fct_vehicle_locations AS (
     ),
 
 
-get_next AS (
+next_location AS (
     SELECT
         key AS next_location_key,
         location AS next_location,
     FROM fct_vehicle_locations
 ),
 
-vp_groupings AS (
+same_locations AS (
     SELECT
         fct_vehicle_locations.key,
         fct_vehicle_locations.next_location_key,
         CASE
-            WHEN ST_EQUALS(fct_vehicle_locations.location, get_next.next_location)
+            WHEN ST_EQUALS(fct_vehicle_locations.location, next_location.next_location)
             THEN 0
             ELSE 1
         END AS new_group,
     FROM fct_vehicle_locations
-    INNER JOIN get_next
-        ON fct_vehicle_locations.next_location_key = get_next.next_location_key
+    INNER JOIN next_location
+        ON fct_vehicle_locations.next_location_key = next_location.next_location_key
 ),
 
-merged AS (
+vp_groupings AS (
     SELECT
         fct_vehicle_locations.key AS key,
-        -- vp_group should increase from 1, 2, ... , n, depending on number of groups are present within a trip
+        -- vp_group should increase from 1, 2, ... , n, depending on number of
+        -- groups are present within a trip
         SUM(
-            COALESCE(vp_groupings.new_group, 1)
+            COALESCE(same_locations.new_group, 1)
         )
             OVER (
                 PARTITION BY service_date, trip_instance_key
@@ -52,8 +53,8 @@ merged AS (
                 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
             )  AS vp_group,
     FROM fct_vehicle_locations
-    INNER JOIN vp_groupings
-        ON fct_vehicle_locations.key = vp_groupings.key AND fct_vehicle_locations.next_location_key = vp_groupings.next_location_key
+    INNER JOIN same_locations
+        ON fct_vehicle_locations.key = same_locations.key AND fct_vehicle_locations.next_location_key = same_locations.next_location_key
 ),
 
 fct_vp_dwell AS (
@@ -73,13 +74,11 @@ fct_vp_dwell AS (
         -- location as geography column can't be included in group by,
         -- so let's just grab first value of string and coerce back to geography
     FROM fct_vehicle_locations
-    LEFT JOIN merged
-        ON fct_vehicle_locations.key = merged.key
+    LEFT JOIN vp_groupings
+        ON fct_vehicle_locations.key = vp_groupings.key
     GROUP BY service_date, gtfs_dataset_key, base64_url, gtfs_dataset_name, schedule_gtfs_dataset_key, trip_instance_key, vp_group
 )
 
--- can we roll in n_vp + location into merged
--- without the last merge? how to group with location (geography) type?
 -- expect to see n_vp have values 1, 2, 3 for these 2 trips
 
 SELECT * FROM fct_vp_dwell
