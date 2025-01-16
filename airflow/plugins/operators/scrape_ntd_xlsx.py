@@ -32,9 +32,13 @@ xcom_keys = {
         "2023",
     ): "contractual_relationship_url",
     (
-        "operating_and_capital_funding",
+        "operating_and_capital_funding_time_series",
         "historical",
     ): "operating_and_capital_funding_url",
+    (
+        "service_data_and_operating_expenses_time_series_by_mode",
+        "historical",
+    ): "service_data_and_operating_expenses_time_series_by_mode_url",
 }
 
 
