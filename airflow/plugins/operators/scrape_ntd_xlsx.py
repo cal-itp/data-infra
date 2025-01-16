@@ -31,6 +31,10 @@ xcom_keys = {
         "annual_database_contractual_relationship",
         "2023",
     ): "contractual_relationship_url",
+    (
+        "operating_and_capital_funding",
+        "historical",
+    ): "operating_and_capital_funding_url",
 }
 
 

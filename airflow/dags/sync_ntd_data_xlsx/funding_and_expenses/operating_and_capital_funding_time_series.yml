@@ -1,0 +1,7 @@
+operator: operators.NtdDataProductXLSXOperator
+
+product: 'operating_and_capital_funding_time_series'
+xlsx_file_url: 'https://www.transit.dot.gov/ntd/data-product/ts12-operating-funding-time-series-3' # placeholder for scraped url from scrape_ntd_xlsx_urls task
+year: 'historical' # one of: 'historical' (long history), 'mutli-year' (select history), or a specific year (ex: 2022)
+dependencies:
+  - scrape_ntd_xlsx_urls
