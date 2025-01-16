@@ -39,6 +39,10 @@ xcom_keys = {
         "service_data_and_operating_expenses_time_series_by_mode",
         "historical",
     ): "service_data_and_operating_expenses_time_series_by_mode_url",
+    (
+        "capital_expenditures_time_series",
+        "historical",
+    ): "capital_expenditures_time_series_url",
 }
 
 
