@@ -39,13 +39,14 @@ same_locations AS (
             ELSE 1
         END AS new_group,
     FROM fct_vehicle_locations
-    INNER JOIN next_location
+    LEFT JOIN next_location
         ON fct_vehicle_locations.next_location_key = next_location.next_location_key
 ),
 
 direction AS (
     SELECT
         same_locations.next_location_key AS key,
+        same_locations.new_group,
         CASE
             WHEN (ABS(delta_lon) > ABS(delta_lat)) AND (delta_lon > 0)
             THEN "East"
@@ -57,48 +58,53 @@ direction AS (
             THEN "South"
         END AS vp_direction,
     FROM same_locations
+    WHERE same_locations.new_group = 1
 ),
 
-vp_groupings AS (
+vp_keys_grouped AS (
     SELECT
         fct_vehicle_locations.key,
-        fct_vehicle_locations.next_location_key,
-        fct_vehicle_locations.service_date,
-        fct_vehicle_locations.trip_instance_key,
-        fct_vehicle_locations.location,
-        fct_vehicle_locations.location_timestamp,
-        SUM(
-            COALESCE(same_locations.new_group, 1)
-        )
-            OVER (
-                PARTITION BY service_date, trip_instance_key
-                ORDER BY location_timestamp
-                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-            )  AS vp_group,
-        direction.vp_direction, -- within a vp_group, we can have null (point doesn't move) and valid direction
+        direction.new_group,
+        direction.vp_direction
     FROM fct_vehicle_locations
-    LEFT JOIN same_locations
-        ON fct_vehicle_locations.key = same_locations.key AND fct_vehicle_locations.next_location_key = same_locations.next_location_key
     LEFT JOIN direction
         ON fct_vehicle_locations.key = direction.key
 ),
 
+vp_grouper AS (
+    SELECT
+        fct_vehicle_locations.key,
+        fct_vehicle_locations.service_date,
+        fct_vehicle_locations.trip_instance_key,
+        fct_vehicle_locations.location,
+        fct_vehicle_locations.location_timestamp,
+        SUM(vp_keys_grouped.new_group)
+            OVER (
+                PARTITION BY service_date, trip_instance_key
+                ORDER BY location_timestamp
+                RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+            )  AS vp_group,
+        vp_keys_grouped.vp_direction
+    FROM fct_vehicle_locations
+    INNER JOIN vp_keys_grouped
+        ON fct_vehicle_locations.key = vp_keys_grouped.key
+),
+
 fct_dwelling_locations AS (
     SELECT
-        MIN(vp_groupings.key) AS key,
-        vp_groupings.service_date,
-        vp_groupings.trip_instance_key,
-        MIN(vp_groupings.location_timestamp) AS location_timestamp,
-        MAX(vp_groupings.location_timestamp) AS moving_timestamp,
+        MIN(vp_grouper.key) AS key,
+        vp_grouper.service_date,
+        vp_grouper.trip_instance_key,
+        MIN(vp_grouper.location_timestamp) AS location_timestamp,
+        MAX(vp_grouper.location_timestamp) AS moving_timestamp,
         COUNT(*) AS n_vp,
-        ST_GEOGFROMTEXT(MIN(ST_ASTEXT(vp_groupings.location))) AS location,
+        ST_GEOGFROMTEXT(MIN(ST_ASTEXT(vp_grouper.location))) AS location,
         CASE
-            WHEN MIN(vp_groupings.vp_direction) IS NULL
+            WHEN MIN(vp_grouper.vp_direction) IS NULL
             THEN "Unknown" -- now that we grabbed a valid direction, any remaining should be unknown
-            ELSE MIN(vp_groupings.vp_direction)
+            ELSE MIN(vp_grouper.vp_direction)
         END AS vp_direction,
-        vp_group
-    FROM vp_groupings
+    FROM vp_grouper
     GROUP BY service_date, trip_instance_key, vp_group
 )
 
