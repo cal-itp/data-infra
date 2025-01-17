@@ -59,9 +59,11 @@ direction AS (
         END AS vp_direction,
     FROM same_locations
     WHERE same_locations.new_group = 1
+    -- subset to where new_group is identified so we can fill in unknown
+    -- direction / dwelling points once we group the vp
 ),
 
-vp_keys_grouped AS (
+keys_grouped AS (
     SELECT
         fct_vehicle_locations.key,
         direction.new_group,
@@ -78,7 +80,7 @@ vp_grouper AS (
         fct_vehicle_locations.trip_instance_key,
         fct_vehicle_locations.location,
         fct_vehicle_locations.location_timestamp,
-        SUM(vp_keys_grouped.new_group)
+        SUM(keys_grouped.new_group)
             OVER (
                 PARTITION BY service_date, trip_instance_key
                 ORDER BY location_timestamp
@@ -86,8 +88,8 @@ vp_grouper AS (
             )  AS vp_group,
         vp_keys_grouped.vp_direction
     FROM fct_vehicle_locations
-    INNER JOIN vp_keys_grouped
-        ON fct_vehicle_locations.key = vp_keys_grouped.key
+    INNER JOIN keys_grouped
+        ON fct_vehicle_locations.key = keys_grouped.key
 ),
 
 fct_dwelling_locations AS (
