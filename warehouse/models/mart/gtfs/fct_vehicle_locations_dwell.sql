@@ -29,12 +29,10 @@ same_locations AS (
     SELECT
         fct_vehicle_locations.key,
         fct_vehicle_locations.next_location_key,
-        --fct_vehicle_locations.location AS location,
-        --next_location.next_location AS next_location,
         ST_X(fct_vehicle_locations.location) AS lon,
         ST_Y(fct_vehicle_locations.location) AS lat,
-        ST_X(next_location.next_location) - ST_X(fct_vehicle_locations.location) AS delta_lon_ew,
-        ST_Y(next_location.next_location) - ST_Y(fct_vehicle_locations.location) AS delta_lat_ns,
+        ST_X(next_location.next_location) - ST_X(fct_vehicle_locations.location) AS delta_lon,
+        ST_Y(next_location.next_location) - ST_Y(fct_vehicle_locations.location) AS delta_lat,
         CASE
             WHEN ST_EQUALS(fct_vehicle_locations.location, next_location.next_location)
             THEN 0
@@ -49,15 +47,15 @@ direction AS (
     SELECT
         same_locations.next_location_key AS key,
         CASE
-            WHEN (ABS(delta_lon_ew) > ABS(delta_lat_ns)) AND (delta_lon_ew > 0)
+            WHEN (ABS(delta_lon) > ABS(delta_lat)) AND (delta_lon > 0)
             THEN "East"
-            WHEN (ABS(delta_lon_ew) > ABS(delta_lat_ns)) AND (delta_lon_ew < 0)
+            WHEN (ABS(delta_lon) > ABS(delta_lat)) AND (delta_lon < 0)
             THEN "West"
-            WHEN (ABS(delta_lon_ew) < ABS(delta_lat_ns)) AND (delta_lat_ns > 0)
+            WHEN (ABS(delta_lon) < ABS(delta_lat)) AND (delta_lat > 0)
             THEN "North"
-            WHEN (ABS(delta_lon_ew) < ABS(delta_lat_ns)) AND (delta_lat_ns < 0)
+            WHEN (ABS(delta_lon) < ABS(delta_lat)) AND (delta_lat < 0)
             THEN "South"
-        END AS vp_direction
+        END AS vp_direction,
     FROM same_locations
 ),
 
@@ -77,11 +75,11 @@ vp_groupings AS (
                 ORDER BY location_timestamp
                 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
             )  AS vp_group,
-        direction.vp_direction -- within a vp_group, we can have null (point doesn't move) and valid direction
+        direction.vp_direction, -- within a vp_group, we can have null (point doesn't move) and valid direction
     FROM fct_vehicle_locations
     LEFT JOIN same_locations
         ON fct_vehicle_locations.key = same_locations.key AND fct_vehicle_locations.next_location_key = same_locations.next_location_key
-    INNER JOIN direction
+    LEFT JOIN direction
         ON fct_vehicle_locations.key = direction.key
 ),
 
