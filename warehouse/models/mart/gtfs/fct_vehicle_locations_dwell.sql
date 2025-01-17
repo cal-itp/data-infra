@@ -29,22 +29,46 @@ same_locations AS (
     SELECT
         fct_vehicle_locations.key,
         fct_vehicle_locations.next_location_key,
+        --fct_vehicle_locations.location AS location,
+        --next_location.next_location AS next_location,
+        ST_X(fct_vehicle_locations.location) AS lon,
+        ST_Y(fct_vehicle_locations.location) AS lat,
+        ST_X(next_location.next_location) - ST_X(fct_vehicle_locations.location) AS delta_lon_ew,
+        ST_Y(next_location.next_location) - ST_Y(fct_vehicle_locations.location) AS delta_lat_ns,
         CASE
             WHEN ST_EQUALS(fct_vehicle_locations.location, next_location.next_location)
             THEN 0
             ELSE 1
         END AS new_group,
-        ST_AZIMUTH(next_location.next_location, fct_vehicle_locations.location) AS azimuth,
     FROM fct_vehicle_locations
     INNER JOIN next_location
         ON fct_vehicle_locations.next_location_key = next_location.next_location_key
 ),
 
+direction AS (
+    SELECT
+        same_locations.next_location_key AS key,
+        CASE
+            WHEN (ABS(delta_lon_ew) > ABS(delta_lat_ns)) AND (delta_lon_ew > 0)
+            THEN "East"
+            WHEN (ABS(delta_lon_ew) > ABS(delta_lat_ns)) AND (delta_lon_ew < 0)
+            THEN "West"
+            WHEN (ABS(delta_lon_ew) < ABS(delta_lat_ns)) AND (delta_lat_ns > 0)
+            THEN "North"
+            WHEN (ABS(delta_lon_ew) < ABS(delta_lat_ns)) AND (delta_lat_ns < 0)
+            THEN "South"
+        END AS vp_direction
+    FROM same_locations
+),
+
 vp_groupings AS (
     SELECT
-        fct_vehicle_locations.key AS key,
-        -- vp_group should increase from 1, 2, ... , n, depending on number of
-        -- groups are present within a trip
+        fct_vehicle_locations.key,
+        fct_vehicle_locations.next_location_key,
+        fct_vehicle_locations.service_date,
+        fct_vehicle_locations.trip_instance_key,
+        fct_vehicle_locations.location,
+        fct_vehicle_locations.location_timestamp,
         SUM(
             COALESCE(same_locations.new_group, 1)
         )
@@ -53,49 +77,31 @@ vp_groupings AS (
                 ORDER BY location_timestamp
                 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
             )  AS vp_group,
-        same_locations.azimuth,
-        CASE
-            WHEN same_locations.azimuth BETWEEN 0 AND 22.5
-            THEN "North"
-            WHEN same_locations.azimuth BETWEEN 67.5 AND 112.5
-            THEN "East"
-            WHEN same_locations.azimuth BETWEEN 157.5 AND 202.5
-            THEN "South"
-            WHEN same_locations.azimuth BETWEEN 247.5 AND 292.5
-            THEN "West"
-            WHEN same_locations.azimuth BETWEEN 337.5 AND 360
-            THEN "North"
-            ELSE "Unknown"
-        END AS azimuth_direction
+        direction.vp_direction -- within a vp_group, we can have null (point doesn't move) and valid direction
     FROM fct_vehicle_locations
-    INNER JOIN same_locations
+    LEFT JOIN same_locations
         ON fct_vehicle_locations.key = same_locations.key AND fct_vehicle_locations.next_location_key = same_locations.next_location_key
+    INNER JOIN direction
+        ON fct_vehicle_locations.key = direction.key
 ),
 
-fct_vp_dwell AS (
+fct_dwelling_locations AS (
     SELECT
-        MIN(fct_vehicle_locations.key) as key,
-        fct_vehicle_locations.gtfs_dataset_key,
-        fct_vehicle_locations.base64_url,
-        fct_vehicle_locations.gtfs_dataset_name,
-        fct_vehicle_locations.schedule_gtfs_dataset_key,
-        fct_vehicle_locations.trip_instance_key as trip_instance_key,
-        fct_vehicle_locations.service_date as service_date,
-        vp_groupings.vp_group AS vp_group,
-        MIN(fct_vehicle_locations.location_timestamp) AS location_timestamp,
-        MAX(fct_vehicle_locations.location_timestamp) AS moving_timestamp,
+        MIN(vp_groupings.key) AS key,
+        vp_groupings.service_date,
+        vp_groupings.trip_instance_key,
+        MIN(vp_groupings.location_timestamp) AS location_timestamp,
+        MAX(vp_groupings.location_timestamp) AS moving_timestamp,
         COUNT(*) AS n_vp,
-        ST_GEOGFROMTEXT(MIN(ST_ASTEXT(fct_vehicle_locations.location))) AS location,
-        -- location as geography column can't be included in group by,
-        -- so let's just grab first value of string and coerce back to geography
-        MIN(vp_groupings.azimuth) AS azimuth,
-        MIN(vp_groupings.azimuth_direction) AS azimuth_direction,
-    FROM fct_vehicle_locations
-    LEFT JOIN vp_groupings
-        ON fct_vehicle_locations.key = vp_groupings.key
-    GROUP BY service_date, gtfs_dataset_key, base64_url, gtfs_dataset_name, schedule_gtfs_dataset_key, trip_instance_key, vp_group
+        ST_GEOGFROMTEXT(MIN(ST_ASTEXT(vp_groupings.location))) AS location,
+        CASE
+            WHEN MIN(vp_groupings.vp_direction) IS NULL
+            THEN "Unknown" -- now that we grabbed a valid direction, any remaining should be unknown
+            ELSE MIN(vp_groupings.vp_direction)
+        END AS vp_direction,
+        vp_group
+    FROM vp_groupings
+    GROUP BY service_date, trip_instance_key, vp_group
 )
 
--- expect to see n_vp have values 1, 2, 3 for these 2 trips
-
-SELECT * FROM fct_vp_dwell
+SELECT * FROM fct_dwelling_locations
