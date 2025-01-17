@@ -3,6 +3,7 @@
 WITH fct_vehicle_locations AS (
     SELECT
         key,
+        dt,
         gtfs_dataset_key,
         base64_url,
         gtfs_dataset_name,
@@ -39,7 +40,7 @@ same_locations AS (
             ELSE 1
         END AS new_group,
     FROM fct_vehicle_locations
-    LEFT JOIN next_location
+    INNER JOIN next_location
         ON fct_vehicle_locations.next_location_key = next_location.next_location_key
 ),
 
@@ -76,6 +77,11 @@ keys_grouped AS (
 vp_grouper AS (
     SELECT
         fct_vehicle_locations.key,
+        fct_vehicle_locations.dt,
+        fct_vehicle_locations.gtfs_dataset_key,
+        fct_vehicle_locations.base64_url,
+        fct_vehicle_locations.gtfs_dataset_name,
+        fct_vehicle_locations.schedule_gtfs_dataset_key,
         fct_vehicle_locations.service_date,
         fct_vehicle_locations.trip_instance_key,
         fct_vehicle_locations.location,
@@ -86,7 +92,7 @@ vp_grouper AS (
                 ORDER BY location_timestamp
                 RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
             )  AS vp_group,
-        vp_keys_grouped.vp_direction
+        keys_grouped.vp_direction
     FROM fct_vehicle_locations
     INNER JOIN keys_grouped
         ON fct_vehicle_locations.key = keys_grouped.key
@@ -95,6 +101,11 @@ vp_grouper AS (
 fct_dwelling_locations AS (
     SELECT
         MIN(vp_grouper.key) AS key,
+        vp_grouper.dt,
+        vp_grouper.gtfs_dataset_key,
+        vp_grouper.base64_url,
+        vp_grouper.gtfs_dataset_name,
+        vp_grouper.schedule_gtfs_dataset_key,
         vp_grouper.service_date,
         vp_grouper.trip_instance_key,
         MIN(vp_grouper.location_timestamp) AS location_timestamp,
@@ -107,7 +118,7 @@ fct_dwelling_locations AS (
             ELSE MIN(vp_grouper.vp_direction)
         END AS vp_direction,
     FROM vp_grouper
-    GROUP BY service_date, trip_instance_key, vp_group
+    GROUP BY gtfs_dataset_key, base64_url, gtfs_dataset_name, schedule_gtfs_dataset_key, dt, service_date, trip_instance_key, vp_group
 )
 
 SELECT * FROM fct_dwelling_locations
