@@ -258,7 +258,7 @@ council_population
 | 2   | Jeremy Jamm     | 2,000      | 2008    |
 | 3   | Douglass Howser | 2,250      | 2006    |
 
-<b>Method #2</b>: Loop over every value, fill in the new column value, then attach that new column.
+<b>Method #2</b>: Loop over every value, fill in the new column value, and then attach that new column.
 
 ```python
 # Create a list to store the new column
