@@ -1,0 +1,16 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-xlsx-products-clean
+prefix_bucket: false
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd__funding_and_expenses.historical__service_data_and_operating_expenses_time_series_by_mode__vrm
+  LIMIT 1;
+source_objects:
+  - "service_data_and_operating_expenses_time_series_by_mode/historical/vrm/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd__funding_and_expenses.historical__service_data_and_operating_expenses_time_series_by_mode__vrm"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "service_data_and_operating_expenses_time_series_by_mode/historical/vrm/"

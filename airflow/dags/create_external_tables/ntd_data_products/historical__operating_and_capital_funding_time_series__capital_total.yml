@@ -1,0 +1,16 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-xlsx-products-clean
+prefix_bucket: false
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd__funding_and_expenses.historical__operating_and_capital_funding_time_series__capital_total
+  LIMIT 1;
+source_objects:
+  - "operating_and_capital_funding_time_series/historical/capital_total/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd__funding_and_expenses.historical__operating_and_capital_funding_time_series__capital_total"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "operating_and_capital_funding_time_series/historical/capital_total/"
