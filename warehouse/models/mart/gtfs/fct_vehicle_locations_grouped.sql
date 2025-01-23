@@ -1,4 +1,16 @@
-{{ config(materialized='table') }}
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by = {
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by=['service_date', 'base64_url'],
+        on_schema_change='append_new_columns'
+    )
+}}
 
 WITH fct_vehicle_locations AS (
     SELECT
@@ -14,8 +26,8 @@ WITH fct_vehicle_locations AS (
         location,
         next_location_key,
     FROM {{ ref('fct_vehicle_locations') }}
-    WHERE gtfs_dataset_name="LA DOT VehiclePositions" AND service_date = "2025-01-07" AND (trip_instance_key="0000a63ce280462e6eed4f3ae92df16d" OR trip_instance_key="ec14aa25e209f90ed025450c18519814")
     ORDER by service_date, trip_instance_key, location_timestamp
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
     ),
 
 
