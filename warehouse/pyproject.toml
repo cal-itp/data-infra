@@ -29,7 +29,7 @@ networkx = {version = "<3", extras = ["default"]}
 # May need to run these after `brew install graphviz` when installing on macOS
 # export CFLAGS="-I $(brew --prefix graphviz)/include"
 # export LDFLAGS="-L $(brew --prefix graphviz)/lib"
-pygraphviz = "1.14" # Not working, removing it.
+pygraphviz = "1.14" # On a mac need to follow above steps to get this to work
 palettable = "^3.3.0"
 metabase-api = "^0.3.0"
 fiona = "1.10.1" # match the version in the analysis image.
