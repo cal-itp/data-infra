@@ -98,7 +98,7 @@ vp_grouper AS (
         ON fct_vehicle_locations.key = keys_grouped.key
 ),
 
-fct_dwelling_locations AS (
+fct_grouped_locations AS (
     SELECT
         MIN(vp_grouper.key) AS key,
         vp_grouper.dt,
@@ -121,4 +121,4 @@ fct_dwelling_locations AS (
     GROUP BY gtfs_dataset_key, base64_url, gtfs_dataset_name, schedule_gtfs_dataset_key, dt, service_date, trip_instance_key, vp_group
 )
 
-SELECT * FROM fct_dwelling_locations
+SELECT * FROM fct_grouped_locations

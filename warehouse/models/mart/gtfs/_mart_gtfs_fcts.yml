@@ -2513,7 +2513,7 @@ models:
         description: |
           Total scheduled service hours that occurred for the route for this
           month, `day_type`, and `time_of_day`.
-  - name: fct_vehicle_locations_dwell
+  - name: fct_vehicle_locations_grouped
     description: |
       Vehicle positions, grouped by location position. Uses fct_vehicle_locations and
       calculates a first timestamp at location (location_timestamp) and
