@@ -26,8 +26,8 @@ WITH fct_vehicle_locations AS (
         location,
         next_location_key,
     FROM {{ ref('fct_vehicle_locations') }}
-    ORDER by service_date, trip_instance_key, location_timestamp
     WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
+    ORDER by service_date, trip_instance_key, location_timestamp
     ),
 
 
