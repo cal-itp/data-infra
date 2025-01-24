@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: '3.11'
       # - run: curl -sSL https://install.python-poetry.org | python -
-      - run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=2.0.1 python -
+      - run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=2.0.0 python -
       - run: cd warehouse && poetry install && poetry run mypy scripts
 
   compile:
