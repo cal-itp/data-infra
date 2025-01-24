@@ -15,7 +15,6 @@
 WITH fct_vehicle_locations AS (
     SELECT
         key,
-        dt,
         gtfs_dataset_key,
         base64_url,
         gtfs_dataset_name,
@@ -89,7 +88,6 @@ keys_grouped AS (
 vp_grouper AS (
     SELECT
         fct_vehicle_locations.key,
-        fct_vehicle_locations.dt,
         fct_vehicle_locations.gtfs_dataset_key,
         fct_vehicle_locations.base64_url,
         fct_vehicle_locations.gtfs_dataset_name,
@@ -113,7 +111,6 @@ vp_grouper AS (
 fct_grouped_locations AS (
     SELECT
         MIN(vp_grouper.key) AS key,
-        vp_grouper.dt,
         vp_grouper.gtfs_dataset_key,
         vp_grouper.base64_url,
         vp_grouper.gtfs_dataset_name,
@@ -130,7 +127,7 @@ fct_grouped_locations AS (
             ELSE MIN(vp_grouper.vp_direction)
         END AS vp_direction,
     FROM vp_grouper
-    GROUP BY gtfs_dataset_key, base64_url, gtfs_dataset_name, schedule_gtfs_dataset_key, dt, service_date, trip_instance_key, vp_group
+    GROUP BY gtfs_dataset_key, base64_url, gtfs_dataset_name, schedule_gtfs_dataset_key, service_date, trip_instance_key, vp_group
 )
 
 SELECT * FROM fct_grouped_locations
