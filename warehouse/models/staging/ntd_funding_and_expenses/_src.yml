@@ -1,0 +1,40 @@
+version: 2
+
+sources:
+  - name: external_ntd__funding_and_expenses
+    description: Historical funding and expense data tables, loaded from DOT NTD data portal https://www.transit.dot.gov/ntd/ntd-data.
+    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    schema: external_ntd__funding_and_expenses
+    tables:
+      - name: historical__capital_expenditures_time_series__facilities
+      - name: historical__capital_expenditures_time_series__other
+      - name: historical__capital_expenditures_time_series__read_me_data_dictionary
+      - name: historical__capital_expenditures_time_series__rolling_stock
+      - name: historical__capital_expenditures_time_series__total
+      - name: historical__operating_and_capital_funding_time_series__capital_federal
+      - name: historical__operating_and_capital_funding_time_series__capital_local
+      - name: historical__operating_and_capital_funding_time_series__capital_other
+      - name: historical__operating_and_capital_funding_time_series__capital_state
+      - name: historical__operating_and_capital_funding_time_series__capital_total
+      - name: historical__operating_and_capital_funding_time_series__decommissioned_operatingfares
+      - name: historical__operating_and_capital_funding_time_series__decommissioned_operatingother
+      - name: historical__operating_and_capital_funding_time_series__operating_federal
+      - name: historical__operating_and_capital_funding_time_series__operating_local
+      - name: historical__operating_and_capital_funding_time_series__operating_other
+      - name: historical__operating_and_capital_funding_time_series__operating_state
+      - name: historical__operating_and_capital_funding_time_series__operating_total
+      - name: historical__operating_and_capital_funding_time_series__read_me_data_dictionary
+      - name: historical__operating_and_capital_funding_time_series__summary_total
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__drm
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__fares
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__opexp_ga
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__opexp_nvm
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__opexp_total
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__opexp_vm
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__opexp_vo
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__pmt
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__read_me_data_dictionary
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__upt
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__voms
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__vrh
+      - name: historical__service_data_and_operating_expenses_time_series_by_mode__vrm
