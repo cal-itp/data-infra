@@ -705,7 +705,8 @@ models:
       - &rt_position_speed
         name: position_speed
         description: '{{ doc("gtfs_position__speed") }}'
-      - name: location_timestamp
+      - &rt_location_timestamp
+        name: location_timestamp
         description: Vehicle timestamp or header timestamp
       - name: vehicle_trip_key
         description: |
@@ -713,7 +714,8 @@ models:
           trip_id, and trip_start_time.
       - name: next_location_key
         description: Location key for the next vehicle timestamp.
-      - name: location
+      - &rt_location
+        name: location
         description: GEOGPOINT created by the position latitute and longitude
       - *trip_instance_key
 
@@ -2511,3 +2513,44 @@ models:
         description: |
           Total scheduled service hours that occurred for the route for this
           month, `day_type`, and `time_of_day`.
+  - name: fct_vehicle_locations_grouped
+    description: |
+      Vehicle positions, grouped by location position. Uses fct_vehicle_locations and
+      calculates a first timestamp at location (location_timestamp) and
+      last timestamp at location (moving_timestamp).
+      Unique at the url/vehicle/trip/location_position level.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `service_date`, `base64_url`,
+          `location_timestamp`, `vehicle_id`, `vehicle_label`,
+          `trip_id`, and `trip_start_time`.
+        tests: *almost_unique_rt_key_tests
+      - *gtfs_rt_dt
+      - *rt_service_date
+      - name: gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+        tests:
+          - dbt_utils.relationships_where:
+              to: ref('dim_gtfs_datasets')
+              field: key
+              to_condition: "type = 'vehicle_positions'"
+      - *base64_url
+      - *gtfs_rt_name
+      - *gtfs_rt_schedule_dataset_key
+      - <<: *trip_instance_key
+        tests:
+          - not_null
+          - unique_proportion:
+              at_least: 0.9999
+          - relationships:
+              to: ref('fct_observed_trips')
+              field: trip_instance_key
+      - *rt_location_timestamp
+      - name: moving_timestamp
+        description: |
+          The last location_timestamp at this position.
+      - name: n_vp
+        description: |
+          Number of vehicle positions observed at this location.
+      - *rt_location
