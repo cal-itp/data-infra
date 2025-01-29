@@ -104,5 +104,5 @@ jobs:
         if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/git_action_testground') || steps.changed-files-specific.outputs.any_changed == 'true' }}
         with:
           context: warehouse
-          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/git_action_testground' }}
           tags: ghcr.io/${{github.repository}}/warehouse_test_space:latest
