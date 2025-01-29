@@ -8,7 +8,6 @@ sources:
     tables:
       - name: historical__capital_expenditures_time_series__facilities
       - name: historical__capital_expenditures_time_series__other
-      - name: historical__capital_expenditures_time_series__read_me_data_dictionary
       - name: historical__capital_expenditures_time_series__rolling_stock
       - name: historical__capital_expenditures_time_series__total
       - name: historical__operating_and_capital_funding_time_series__capital_federal
@@ -23,7 +22,6 @@ sources:
       - name: historical__operating_and_capital_funding_time_series__operating_other
       - name: historical__operating_and_capital_funding_time_series__operating_state
       - name: historical__operating_and_capital_funding_time_series__operating_total
-      - name: historical__operating_and_capital_funding_time_series__read_me_data_dictionary
       - name: historical__operating_and_capital_funding_time_series__summary_total
       - name: historical__service_data_and_operating_expenses_time_series_by_mode__drm
       - name: historical__service_data_and_operating_expenses_time_series_by_mode__fares
@@ -33,7 +31,6 @@ sources:
       - name: historical__service_data_and_operating_expenses_time_series_by_mode__opexp_vm
       - name: historical__service_data_and_operating_expenses_time_series_by_mode__opexp_vo
       - name: historical__service_data_and_operating_expenses_time_series_by_mode__pmt
-      - name: historical__service_data_and_operating_expenses_time_series_by_mode__read_me_data_dictionary
       - name: historical__service_data_and_operating_expenses_time_series_by_mode__upt
       - name: historical__service_data_and_operating_expenses_time_series_by_mode__voms
       - name: historical__service_data_and_operating_expenses_time_series_by_mode__vrh
