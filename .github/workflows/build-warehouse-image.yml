@@ -101,8 +101,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v6
-        if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') || steps.changed-files-specific.outputs.any_changed == 'true' }}
+        if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/git_action_testground') || steps.changed-files-specific.outputs.any_changed == 'true' }}
         with:
           context: warehouse
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{github.repository}}/warehouse:latest
+          tags: ghcr.io/${{github.repository}}/warehouse_test_space:latest
