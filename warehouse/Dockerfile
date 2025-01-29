@@ -1,6 +1,6 @@
-FROM  --platform=linux/amd64 python:3.11-buster as build
+FROM  --platform=linux/amd64 python:3.11-buster AS build
 
-LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
+LABEL org.opencontainers.image.source=https://github.com/cal-itp/data-infra
 
 RUN apt-get update
 RUN apt-get install -y ca-certificates curl gnupg
@@ -13,8 +13,8 @@ RUN apt-get update \
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
-RUN poetry self add poetry-plugin-export@1.9.0
 ENV PATH="/root/.local/bin:${PATH}"
+RUN poetry self add poetry-plugin-export@1.9.0
 
 RUN mkdir /app
 WORKDIR /app
