@@ -3,7 +3,7 @@ name: Test, visualize, and build dbt project
 on:
   push:
     branches:
-      - 'main'
+      - 'git_action_testground'
     paths:
       - '.github/workflows/build-warehouse-image.yml'
       - 'warehouse/**'
@@ -14,7 +14,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/git_action_testground' }}
 
 jobs:
   check:
