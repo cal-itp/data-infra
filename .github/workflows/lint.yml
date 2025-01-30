@@ -12,6 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
       - uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
@@ -22,7 +24,8 @@ jobs:
       - uses: crate-ci/typos@v1.19.0 # Set back to `master` after #967 on the typos repo is fixed
         with:
           files: ./docs/**
-      - uses: snok/install-poetry@v1
+      - name: Install Poetry
+        run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=2.0.1 python -
       - name: mypy ci
         working-directory: ci
         run: |
