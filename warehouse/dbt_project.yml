@@ -56,8 +56,6 @@ models:
         schema: mart_gtfs
       gtfs_schedule_latest:
         schema: mart_gtfs_schedule_latest
-      ad_hoc:
-        schema: mart_ad_hoc
       audit:
         schema: mart_audit
       ntd:
