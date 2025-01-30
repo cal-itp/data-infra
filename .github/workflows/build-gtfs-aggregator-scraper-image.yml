@@ -24,8 +24,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
-      - run: curl -sSL https://install.python-poetry.org | python -
+          python-version: '3.11'
+      - run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=2.0.1 python -
       - run: cd jobs/gtfs-aggregator-scraper && poetry install && poetry run mypy .
 
   build_push:
