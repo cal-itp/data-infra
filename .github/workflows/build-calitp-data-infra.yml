@@ -26,7 +26,7 @@ jobs:
         working-directory: packages/calitp-data-infra
     strategy:
       matrix:
-        pyversion: ['3.8', '3.11']
+        pyversion: ['3.11']
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
