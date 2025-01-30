@@ -1,12 +1,13 @@
 FROM openjdk:11
 
-LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
+LABEL org.opencontainers.image.source=https://github.com/cal-itp/data-infra
 
 RUN apt-get update -y \
     && apt-get install -y python3 python3-pip python3-venv libunwind-dev liblz4-dev
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:${PATH}"
+RUN poetry self add poetry-plugin-export@1.9.0
 
 # v2 from https://github.com/MobilityData/gtfs-validator/releases/download/v2.0.0/gtfs-validator-v2.0.0_cli.jar
 ENV V2_VALIDATOR_JAR=/gtfs-validator-v2.0.0_cli.jar
