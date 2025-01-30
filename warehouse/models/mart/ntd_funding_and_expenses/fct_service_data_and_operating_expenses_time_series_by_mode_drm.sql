@@ -1,48 +1,14 @@
-WITH staging_service_data_and_operating_expenses_time_series_by_mode_drm AS (
+WITH int_ntd__service_data_and_operating_expenses_time_series_by_mode_drm AS (
     SELECT *
-    FROM {{ ref('stg_ntd__service_data_and_operating_expenses_time_series_by_mode__drm') }}
+    FROM {{ ref('int_ntd__service_data_and_operating_expenses_time_series_by_mode_drm') }}
 ),
 
 fct_service_data_and_operating_expenses_time_series_by_mode_drm AS (
     SELECT *
-    FROM staging_service_data_and_operating_expenses_time_series_by_mode_drm
+    FROM int_ntd__service_data_and_operating_expenses_time_series_by_mode_drm
 )
 
 SELECT
-    _1991,
-    _1992,
-    _1993,
-    _1994,
-    _1995,
-    _1996,
-    _1997,
-    _1998,
-    _1999,
-    _2000,
-    _2001,
-    _2002,
-    _2003,
-    _2004,
-    _2005,
-    _2006,
-    _2007,
-    _2008,
-    _2009,
-    _2010,
-    _2011,
-    _2012,
-    _2013,
-    _2014,
-    _2015,
-    _2016,
-    _2017,
-    _2018,
-    _2019,
-    _2020,
-    _2021,
-    _2022,
-    _2023,
-    _2023_mode_status,
     agency_name,
     agency_status,
     census_year,
@@ -52,14 +18,17 @@ SELECT
     mode,
     mode_status,
     ntd_id,
-    primary_uza_name,
     reporter_type,
     reporting_module,
     service,
     state,
     uace_code,
     uza_area_sq_miles,
+    primary_uza_name,
     uza_population,
+    year,
+    drm,
+    _2023_mode_status,
     dt,
     execution_ts
 FROM fct_service_data_and_operating_expenses_time_series_by_mode_drm
