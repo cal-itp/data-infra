@@ -26,7 +26,7 @@ RUN mkdir $POETRY_HOME \
 
 USER $NB_UID
 
-RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN curl -sSL https://install.python-poetry.org | POETRY_VERSION=2.0.1 python -
 ENV PATH="$POETRY_HOME/bin:$PATH"
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 # RUN npm install -g --unsafe-perm=true --allow-root vega-cli # Can't get these to work

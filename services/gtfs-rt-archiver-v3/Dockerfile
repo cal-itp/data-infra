@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source=https://github.com/cal-itp/data-infra
 
 RUN apt-get update && apt-get install -y libunwind-dev liblz4-dev
 
-RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN curl -sSL https://install.python-poetry.org | POETRY_VERSION=2.0.1 python -
 ENV PATH="/root/.local/bin:${PATH}"
 RUN poetry self add poetry-plugin-export@1.9.0
 
