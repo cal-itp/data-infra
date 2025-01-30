@@ -2,6 +2,7 @@
 name = "gtfs-rt-archiver"
 version = "2024.3.27"
 description = ""
+package-mode = false
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]
