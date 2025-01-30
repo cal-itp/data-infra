@@ -24,11 +24,14 @@ jobs:
     defaults:
       run:
         working-directory: packages/calitp-data-infra
+    strategy:
+      matrix:
+        pyversion: ['3.11']
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: ${{ matrix.pyversion }}
       - uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
