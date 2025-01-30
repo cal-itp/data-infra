@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "calitp-data-infra"
-version = "2024.4.1.post1"
+version = "2025.1.30"
 description = "Shared code for developing data pipelines that process Cal-ITP data."
 package-mode = true
 authors = ["Andrew Vaccaro"]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.10"
+python = ">=3.8,<3.12"
 # Some of these are pinned oddly to play nicely with Composer
 pydantic = "~1.9"
 tqdm = "^4.64.1"
