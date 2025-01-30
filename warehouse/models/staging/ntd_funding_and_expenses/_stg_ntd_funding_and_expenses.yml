@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: stg_ntd__capital_expenditures_time_series__facilities
+  - name: stg_ntd__capital_expenditures_time_series__other
+  - name: stg_ntd__capital_expenditures_time_series__rolling_stock
+  - name: stg_ntd__capital_expenditures_time_series__total
+  - name: stg_ntd__operating_and_capital_funding_time_series__capital_federal
+  - name: stg_ntd__operating_and_capital_funding_time_series__capital_local
+  - name: stg_ntd__operating_and_capital_funding_time_series__capital_other
+  - name: stg_ntd__operating_and_capital_funding_time_series__capital_state
+  - name: stg_ntd__operating_and_capital_funding_time_series__capital_total
+  - name: stg_ntd__operating_and_capital_funding_time_series__decommissioned_operatingfares
+  - name: stg_ntd__operating_and_capital_funding_time_series__decommissioned_operatingother
+  - name: stg_ntd__operating_and_capital_funding_time_series__operating_federal
+  - name: stg_ntd__operating_and_capital_funding_time_series__operating_local
+  - name: stg_ntd__operating_and_capital_funding_time_series__operating_other
+  - name: stg_ntd__operating_and_capital_funding_time_series__operating_state
+  - name: stg_ntd__operating_and_capital_funding_time_series__operating_total
+  - name: stg_ntd__operating_and_capital_funding_time_series__summary_total
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__drm
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__fares
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__opexp_ga
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__opexp_nvm
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__opexp_total
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__opexp_vm
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__opexp_vo
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__pmt
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__upt
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__voms
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__vrh
+  - name: stg_ntd__service_data_and_operating_expenses_time_series_by_mode__vrm

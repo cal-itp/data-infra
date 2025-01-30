@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: fct_capital_expenditures_time_series_facilities
+  - name: fct_capital_expenditures_time_series_other
+  - name: fct_capital_expenditures_time_series_rolling_stock
+  - name: fct_capital_expenditures_time_series_total
+  - name: fct_operating_and_capital_funding_time_series_capital_federal
+  - name: fct_operating_and_capital_funding_time_series_capital_local
+  - name: fct_operating_and_capital_funding_time_series_capital_other
+  - name: fct_operating_and_capital_funding_time_series_capital_state
+  - name: fct_operating_and_capital_funding_time_series_capital_total
+  - name: fct_operating_and_capital_funding_time_series_operating_federal
+  - name: fct_operating_and_capital_funding_time_series_operating_local
+  - name: fct_operating_and_capital_funding_time_series_operating_other
+  - name: fct_operating_and_capital_funding_time_series_operating_state
+  - name: fct_operating_and_capital_funding_time_series_operating_total
+  - name: fct_operating_and_capital_funding_time_series_summary_total
+  - name: fct_operating_and_capital_funding_time_series_decommissioned_operatingfares
+  - name: fct_operating_and_capital_funding_time_series_decommissioned_operatingother
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_drm
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_fares
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_ga
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_nvm
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_total
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_vm
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_vo
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_pmt
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_upt
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_voms
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_vrh
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode_vrm
