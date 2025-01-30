@@ -39,40 +39,154 @@ models:
     staging:
       +materialized: view
       schema: staging
+      amplitude:
+        +labels:
+          domain: staging
+          dataset: benefits
+      audit:
+        +labels:
+          domain: staging
+          dataset: audit
+      gtfs:
+        +labels:
+          domain: staging
+          dataset: gtfs
+      gtfs_quality:
+        +labels:
+          domain: staging
+          dataset: gtfs_quality
+      ntd:
+        +labels:
+          domain: staging
+          dataset: ntd
+      ntd_annual_reporting:
+        +labels:
+          domain: staging
+          dataset: ntd_annual_reporting
+      ntd_ridership:
+        +labels:
+          domain: staging
+          dataset: ntd_ridership
+      ntd_safety_and_security:
+        +labels:
+          domain: staging
+          dataset: ntd_safety_and_security
+      ntd_validation:
+        +labels:
+          domain: staging
+          dataset: ntd_validation
+      payments:
+        +labels:
+          domain: staging
+          dataset: payments
+      rt:
+        +labels:
+          domain: staging
+          dataset: gtfs
+      state_geoportal:
+        +labels:
+          domain: staging
+          dataset: state_geoportal
+      transit_database:
+        +labels:
+          domain: staging
+          dataset: transit_database
 
     intermediate:
+      gtfs:
+        +labels:
+          domain: intermediate
+          dataset: gtfs
       gtfs_quality:
+        +labels:
+          domain: intermediate
+          dataset: gtfs_quality
         guidelines_checks:
           +materialized: table
+      ntd:
+        +labels:
+          domain: intermediate
+          dataset: ntd
+      ntd_validation:
+        +labels:
+          domain: intermediate
+          dataset: ntd_validation
+      payments:
+        +labels:
+          domain: intermediate
+          dataset: payments
+      transit_database:
+        +labels:
+          domain: intermediate
+          dataset: transit_database
 
     mart:
-      transit_database:
-        schema: mart_transit_database
-      transit_database_latest:
-        schema: mart_transit_database_latest
-      gtfs_quality:
-        schema: mart_gtfs_quality
-      gtfs:
-        schema: mart_gtfs
-      gtfs_schedule_latest:
-        schema: mart_gtfs_schedule_latest
       audit:
+        +labels:
+          domain: mart
+          dataset: audit
         schema: mart_audit
-      ntd:
-        schema: mart_ntd
-      payments:
-        +materialized: table
-        schema: mart_payments
       benefits:
+        +labels:
+          domain: mart
+          dataset: benefits
         schema: mart_benefits
-      ntd_validation:
-        schema: mart_ntd_validation
+      gtfs:
+        +labels:
+          domain: mart
+          dataset: gtfs
+        schema: mart_gtfs
+      gtfs_quality:
+        +labels:
+          domain: mart
+          dataset: gtfs_quality
+        schema: mart_gtfs_quality
+      gtfs_schedule_latest:
+        +labels:
+          domain: mart
+          dataset: gtfs_schedule_latest
+        schema: mart_gtfs_schedule_latest
+      ntd:
+        +labels:
+          domain: mart
+          dataset: ntd
+        schema: mart_ntd
       ntd_annual_reporting:
         +materialized: table
+        +labels:
+          domain: mart
+          dataset: ntd_annual_reporting
         schema: mart_ntd_annual_reporting
-      ntd_safety_and_security:
-        +materialized: table
-        schema: mart_ntd_safety_and_security
       ntd_ridership:
         +materialized: table
+        +labels:
+          domain: mart
+          dataset: ntd_ridership
         schema: mart_ntd_ridership
+      ntd_safety_and_security:
+        +materialized: table
+        +labels:
+          domain: mart
+          dataset: ntd_safety_and_security
+        schema: mart_ntd_safety_and_security
+      ntd_validation:
+        +labels:
+          domain: mart
+          dataset: ntd_validation
+        schema: mart_ntd_validation
+      payments:
+        +materialized: table
+        +labels:
+          domain: mart
+          dataset: payments
+        schema: mart_payments
+      transit_database:
+        +labels:
+          domain: mart
+          dataset: transit_database
+        schema: mart_transit_database
+      transit_database_latest:
+        +labels:
+          domain: mart
+          dataset: transit_database_latest
+        schema: mart_transit_database_latest
