@@ -4,6 +4,10 @@ seeds:
   - name: miles_traveled
     description: |
       A matrix of the distance between origin/destination pairs in miles.
+    config:
+      labels:
+        domain: seeds
+        dataset: payments
     columns:
       - name: location_name
         description: On location in the O/D pair
@@ -19,6 +23,10 @@ seeds:
   - name: ntd_modes_to_full_names
     description: |
       A list of ntd 2 letter mode codes and their full names
+    config:
+      labels:
+        domain: seeds
+        dataset: ntd
     columns:
       - name: ntd_mode_abbreviation
         description: The two letter abbreviation mode
@@ -28,6 +36,10 @@ seeds:
         description: The mode's full name
 
   - name: payments_entity_mapping
+    config:
+      labels:
+        domain: seeds
+        dataset: payments
     columns:
       - name: gtfs_dataset_source_record_id
         description: Unversioned key to dim_gtfs_datasets natural key from Airtable.
@@ -45,6 +57,10 @@ seeds:
     description: |
       A list of validation codes output by the GTFS RT validator, and their severities.
       Originally sourced from https://docs.google.com/spreadsheets/d/1GDDaDlsBPCYn3dtYPSABnce9ns3ekJ8Jzfgyy56lZz4/edit#gid=617612870.
+    config:
+      labels:
+        domain: seeds
+        dataset: gtfs_quality
     columns:
       - name: code
         tests:
@@ -56,6 +72,10 @@ seeds:
     description: |
       A list of validation codes output by the GTFS Schedule validator, and their severities.
       Originally sourced from https://docs.google.com/spreadsheets/d/1GDDaDlsBPCYn3dtYPSABnce9ns3ekJ8Jzfgyy56lZz4/edit#gid=0.
+    config:
+      labels:
+        domain: seeds
+        dataset: gtfs_quality
     columns:
       - name: name
         tests:
@@ -67,6 +87,10 @@ seeds:
       A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
       This data was manually parsed from the contents of the RULES.md file in the v2.0.0 release of the validator,
       sourced from: https://github.com/MobilityData/gtfs-validator/archive/refs/tags/v2.0.0.zip
+    config:
+      labels:
+        domain: seeds
+        dataset: gtfs_quality
     columns:
       - name: code
         tests:
@@ -87,6 +111,10 @@ seeds:
       A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
       This data was manually parsed from the contents of the RULES.md file in the v3.1.1 release of the validator,
       sourced from: https://github.com/MobilityData/gtfs-validator/archive/refs/tags/v3.1.1.zip
+    config:
+      labels:
+        domain: seeds
+        dataset: gtfs_quality
     columns:
       - name: code
         tests:
@@ -107,6 +135,10 @@ seeds:
       A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
       This data was manually parsed from the contents of the RULES.md file in the v4.0.0 release of the validator,
       sourced from: https://github.com/MobilityData/gtfs-validator/archive/refs/tags/v4.0.0.zip
+    config:
+      labels:
+        domain: seeds
+        dataset: gtfs_quality
     columns:
       - name: code
         tests:
@@ -127,6 +159,10 @@ seeds:
       A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
       This data was manually parsed from the contents of the RULES.md file in the v4.1.0 release of the validator,
       sourced from: https://github.com/MobilityData/gtfs-validator/archive/refs/tags/v4.1.0.zip
+    config:
+      labels:
+        domain: seeds
+        dataset: gtfs_quality
     columns:
       - name: code
         tests:
@@ -147,6 +183,10 @@ seeds:
       A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
       This data was manually parsed from the contents of the RULES.md file in the v4.2.0 release of the validator,
       sourced from: https://github.com/MobilityData/gtfs-validator/archive/refs/tags/v4.2.0.zip
+    config:
+      labels:
+        domain: seeds
+        dataset: gtfs_quality
     columns:
       - name: code
         tests:
@@ -167,6 +207,10 @@ seeds:
       A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
       This data was manually parsed from the contents of the RULES.md file in the v5.0.0 release of the validator,
       sourced from: https://github.com/MobilityData/gtfs-validator/releases/tag/v5.0.0
+    config:
+      labels:
+        domain: seeds
+        dataset: gtfs_quality
     columns:
       - name: code
         tests:
@@ -200,6 +244,10 @@ seeds:
 
       There are also a few records in here that were manually added after looking at the 2021 NTD
       data and comparing that to see if any records were missing.
+    config:
+      labels:
+        domain: seeds
+        dataset: transit_database
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
