@@ -2,6 +2,7 @@
 name = "gtfs-aggregator-scraper"
 version = "0.1.0"
 description = ""
+package-mode = false
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]

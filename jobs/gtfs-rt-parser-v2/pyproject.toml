@@ -2,6 +2,7 @@
 name = "gtfs-rt-parser-v2"
 version = "2.0.0"
 description = ""
+package-mode = false
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]
