@@ -160,7 +160,7 @@ def fetch(tick: datetime, config: GTFSDownloadConfig, auth_dict: Mapping[str, st
                 status_code = e.response.status_code
                 kwargs.update(
                     dict(
-                        code=e.response.status_code,
+                        code=e.response.status_code,  # type: ignore
                         content=e.response.text,
                     )
                 )
