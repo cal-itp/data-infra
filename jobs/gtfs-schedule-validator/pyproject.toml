@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gtfs-schedule-validator"
-version = "0.1.1"
+version = "0.1.0"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
@@ -16,7 +16,7 @@ tqdm = "^4.64.0"
 backoff = "^2.2.1"
 python-slugify = "^7.0.0"
 sentry-sdk = "^1.12.1"
-calitp-data-infra = "2025.1.30"
+calitp-data-infra = "2024.2.12.post1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
