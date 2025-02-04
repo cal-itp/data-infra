@@ -9,9 +9,15 @@ x-common-fields:
   - &agency
     name: agency
     description: '{{ doc("ntd_agency") }}'
+  - &agency_name
+    name: agency_name
+    description: '{{ doc("ntd_agency_name") }}'
   - &legacy_ntd_id
     name: legacy_ntd_id
     description: '{{ doc("ntd_legacy_id") }}'
+  - &state_parent_ntd_id
+    name: state_parent_ntd_id
+    description: '{{ doc("ntd_state_parent_ntd_id") }}'
   - &report_year
     name: report_year
     description: '{{ doc("ntd_report_year") }}'
@@ -32,6 +38,90 @@ x-common-fields:
   - &state
     name: state
     description: '{{ doc("ntd_state") }}'
+  - &doing_business_as
+    name: doing_business_as
+    description: '{{ doc("ntd_doing_business_as") }}'
+  - &mailing_address_line_1
+    name: address_line_1
+    description: '{{ doc("ntd_mailing_address_line_1") }}'
+  - &mailing_address_line_2
+    name: address_line_2
+    description: '{{ doc("ntd_mailing_address_line_2") }}'
+  - &mailing_p_o__box
+    name: p_o__box
+    description: '{{ doc("ntd_mailing_p_o_box") }}'
+  - &mailing_city
+    name: city
+    description: '{{ doc("ntd_mailing_city") }}'
+  - &mailing_state
+    name: state
+    description: '{{ doc("ntd_mailing_state") }}'
+  - &mailing_zip_code
+    name: zip_code
+    description: '{{ doc("ntd_mailing_zip_code") }}'
+  - &mailing_zip_code_ext
+    name: zip_code_ext
+    description: '{{ doc("ntd_mailing_zip_code_ext") }}'
+  - &region
+    name: region
+    description: '{{ doc("ntd_region") }}'
+  - &density
+    name: density
+    description: '{{ doc("ntd_density") }}'
+  - &ueid
+    name: ueid
+    description: '{{ doc("ntd_ueid") }}'
+  - &fta_recipient_id
+    name: fta_recipient_id
+    description: '{{ doc("ntd_fta_recipient_id") }}'
+  - &original_due_date
+    name: original_due_date
+    description: '{{ doc("ntd_original_due_date") }}'
+  - &fy_end_date
+    name: fy_end_date
+    description: '{{ doc("ntd_fy_end_date") }}'
+  - &number_of_counties_with_service
+    name: number_of_counties_with_service
+    description: '{{ doc("ntd_number_of_counties_with_service") }}'
+  - &number_of_state_counties
+    name: number_of_state_counties
+    description: '{{ doc("ntd_number_of_state_counties") }}'
+  - &personal_vehicles
+    name: personal_vehicles
+    description: '{{ doc("ntd_personal_vehicles") }}'
+  - &reported_by_name
+    name: reported_by_name
+    description: '{{ doc("ntd_reported_by_name") }}'
+  - &reported_by_ntd_id
+    name: reported_by_ntd_id
+    description: '{{ doc("ntd_reported_by_ntd_id") }}'
+  - &reporter_acronym
+    name: reporter_acronym
+    description: '{{ doc("ntd_reporter_acronym") }}'
+  - &reporting_module
+    name: reporting_module
+    description: '{{ doc("ntd_reporting_module") }}'
+  - &division_department
+    name: division_department
+    description: '{{ doc("ntd_division_department") }}'
+  - &state_admin_funds_expended
+    name: state_admin_funds_expended
+    description: '{{ doc("ntd_state_admin_funds_expended") }}'
+  - &subrecipient_type
+    name: subrecipient_type
+    description: '{{ doc("ntd_subrecipient_type") }}'
+  - &tam_tier
+    name: tam_tier
+    description: '{{ doc("ntd_tam_tier") }}'
+  - &tribal_area_name
+    name: tribal_area_name
+    description: '{{ doc("ntd_tribal_area_name") }}'
+  - &url
+    name: url
+    description: '{{ doc("ntd_agency_url") }}'
+  - &volunteer_drivers
+    name: volunteer_drivers
+    description: '{{ doc("ntd_volunteer_drivers") }}'
   - &primary_uza_code
     name: primary_uza_code
     description: '{{ doc("ntd_primary_uza_code") }}'
@@ -50,6 +140,15 @@ x-common-fields:
   - &service_area_sq_miles
     name: service_area_sq_miles
     description: '{{ doc("ntd_service_area_sq_miles") }}'
+  - &voms_do
+    name: voms_do
+    description: '{{ doc("ntd_voms_do") }}'
+  - &voms_pt
+    name: voms_pt
+    description: '{{ doc("ntd_voms_pt") }}'
+  - &total_voms
+    name: total_voms
+    description: '{{ doc("ntd_agency_voms") }}'
   - &type_of_service
     name: type_of_service
     description: '{{ doc("ntd_type_of_service") }}'
@@ -176,7 +275,114 @@ x-common-fields:
 
 models:
   - name: stg_ntd__2022_agency_information
+    description: |
+      Contains 2022 basic contact and agency information for each NTD reporter.
+    columns:
+      - *ntd_id
+      - *legacy_ntd_id
+      - *state_parent_ntd_id
+      - *agency_name
+      - *doing_business_as
+      - *mailing_address_line_1
+      - *mailing_address_line_2
+      - *mailing_p_o__box
+      - *mailing_city
+      - *mailing_state
+      - *mailing_zip_code
+      - *mailing_zip_code_ext
+      - *region
+      - *density
+      - *ueid
+      - *fta_recipient_id
+      - *original_due_date
+      - *fy_end_date
+      - *number_of_counties_with_service
+      - *number_of_state_counties
+      - *organization_type
+      - *personal_vehicles
+      - <<: *primary_uza_population
+        name: population
+      - <<: *primary_uza_code
+        name: primary_uza_uace_code
+      - <<: *primary_uza_name
+        name: uza_name
+      - *reported_by_name
+      - *reported_by_ntd_id
+      - *reporter_acronym
+      - *reporter_type
+      - *reporting_module
+      - <<: *service_area_population
+        name: service_area_pop
+      - <<: *primary_uza_area_sq_miles
+        name: sq_miles
+      - *service_area_sq_miles
+      - *state_admin_funds_expended
+      - *subrecipient_type
+      - *tam_tier
+      - *voms_do
+      - *voms_pt
+      - *total_voms
+      - *tribal_area_name
+      - *url
+      - *volunteer_drivers
+      - *dt
+      - *execution_ts
+
   - name: stg_ntd__2023_agency_information
+    description: |
+      Contains 2023 basic contact and agency information for each NTD reporter.
+    columns:
+      - *ntd_id
+      - *legacy_ntd_id
+      - *state_parent_ntd_id
+      - *agency_name
+      - *doing_business_as
+      - *mailing_address_line_1
+      - *mailing_address_line_2
+      - *mailing_p_o__box
+      - *mailing_city
+      - *mailing_state
+      - *mailing_zip_code
+      - *mailing_zip_code_ext
+      - *region
+      - *density
+      - *ueid
+      - *fta_recipient_id
+      - *original_due_date
+      - *fy_end_date
+      - *number_of_counties_with_service
+      - *number_of_state_counties
+      - *organization_type
+      - *personal_vehicles
+      - <<: *primary_uza_population
+        name: population
+      - <<: *primary_uza_code
+        name: primary_uza_uace_code
+      - <<: *primary_uza_name
+        name: uza_name
+      - *reported_by_name
+      - *reported_by_ntd_id
+      - *reporter_acronym
+      - *reporter_type
+      - *reporting_module
+      - *division_department
+      - <<: *service_area_population
+        name: service_area_pop
+      - <<: *primary_uza_area_sq_miles
+        name: sq_miles
+      - *service_area_sq_miles
+      - *state_admin_funds_expended
+      - *subrecipient_type
+      - *tam_tier
+      - *voms_do
+      - *voms_pt
+      - *total_voms
+      - *tribal_area_name
+      - *url
+      - *volunteer_drivers
+      - *dt
+      - *execution_ts
+
   - name: stg_ntd__2023_contractual_relationships
   - name: stg_ntd__breakdowns
   - name: stg_ntd__breakdowns_by_agency
