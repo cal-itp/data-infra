@@ -9,9 +9,9 @@ WITH stg_littlepay__micropayments AS (
 
 ),
 
-int_littlepay__cleaned_micropayment_device_transactions AS (
+int_payments__cleaned_micropayment_device_transactions AS (
 
-    SELECT * FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
+    SELECT * FROM {{ ref('int_payments__cleaned_micropayment_device_transactions') }}
 
 ),
 
@@ -32,8 +32,8 @@ validate_cleaned_micropayment_transaction_time_order AS (
         ) AS transaction_date_time_utc
     FROM stg_littlepay__micropayments
     INNER JOIN
-        int_littlepay__cleaned_micropayment_device_transactions ON
-            stg_littlepay__micropayments.micropayment_id = int_littlepay__cleaned_micropayment_device_transactions.micropayment_id
+        int_payments__cleaned_micropayment_device_transactions ON
+            stg_littlepay__micropayments.micropayment_id = int_payments__cleaned_micropayment_device_transactions.micropayment_id
     INNER JOIN
         stg_littlepay__device_transactions USING (littlepay_transaction_id)
     WHERE
