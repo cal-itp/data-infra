@@ -57,14 +57,8 @@ models:
         description: UTC ISO-8601 timestamp
       - name: event_properties_enrollment_method
         description: The `enrollment_method` value from the `event_properties` column
-      - name: event_properties_auth_provider
-        description: The `claims_provider` value from the `event_properties` column
-        deprecated:
-          enabled: true
-          reason: "This column is deprecated, use `event_properties_claims_provider` instead"
-          date: "2024-10-10"
       - name: event_properties_claims_provider
-        description: The `claims_provider` value from the `event_properties` column
+        description: The `claims_provider` value from the `event_properties` column (previously `event_properties_auth_provider`)
       - name: event_properties_card_tokenize_func
         description: The `card_tokenize_func` value from the `event_properties` column
       - name: event_properties_card_tokenize_url
@@ -85,26 +79,14 @@ models:
         description: The `origin` value from the `event_properties` column
       - name: event_properties_path
         description: The `path` value from the `event_properties` column
-      - name: event_properties_payment_group
-        description: The `enrollment_group` value from the `event_properties` column
-        deprecated:
-          enabled: true
-          reason: "This column is deprecated, use `event_properties_enrollment_group` instead"
-          date: "2024-10-10"
       - name: event_properties_enrollment_group
-        description: The `enrollment_group` value from the `event_properties` column
+        description: The `enrollment_group` value from the `event_properties` column (previously `event_properties_payment_group`)
       - name: event_properties_status
         description: The `status` value from the `event_properties` column
       - name: event_properties_transit_agency
         description: The `transit_agency` value from the `event_properties` column
-      - name: event_properties_eligibility_types
-        description: A semi-colon delimited list of `enrollment_flows` values from the `event_properties` column
-        deprecated:
-          enabled: true
-          reason: "This column is deprecated, use `event_properties_enrollment_flows` instead"
-          date: "2024-09-19"
       - name: event_properties_enrollment_flows
-        description: A semi-colon delimited list of `enrollment_flows` values from the `event_properties` column
+        description: A semi-colon delimited list of `enrollment_flows` values from the `event_properties` column (previously `event_properties_eligibility_types`)
       - name: user_properties_enrollment_method
         description: The `enrollment_method` value from the `user_properties` column
       - name: user_properties_eligibility_verifier
@@ -121,11 +103,5 @@ models:
         description: The `transit_agency` value from the `user_properties` column. For entries prior to October 2022, the information in this column came from the `provider_name` field of `user_properties`.
       - name: user_properties_user_agent
         description: The `user_agent` value from the `user_properties` column
-      - name: user_properties_eligibility_types
-        description: A semi-colon delimited list of `enrollment_flows` values from the `user_properties` column
-        deprecated:
-          enabled: true
-          reason: "This column is deprecated, use `user_properties_enrollment_flows` instead"
-          date: "2024-09-19"
       - name: user_properties_enrollment_flows
-        description: A semi-colon delimited list of `enrollment_flows` values from the `user_properties` column
+        description: A semi-colon delimited list of `enrollment_flows` values from the `user_properties` column (previously `user_properties_eligibility_types`)
