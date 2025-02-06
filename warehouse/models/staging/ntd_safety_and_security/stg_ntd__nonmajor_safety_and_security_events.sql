@@ -75,7 +75,7 @@ SELECT
     SAFE_CAST(pedestrian_in_crosswalk AS INTEGER) AS pedestrian_in_crosswalk,
     {{ trim_make_empty_string_null('safety_security') }} AS safety_security,
     SAFE_CAST(transit_employee_fatalities AS INTEGER) AS transit_employee_fatalities,
-    {{ trim_make_empty_string_null('revenue_vehicle_identifier_list') }} AS revenue_vehicle_identifier_list,
+    SAFE_CAST(revenue_vehicle_identifier_list AS INTEGER) AS revenue_vehicle_identifier_list,
     {{ trim_make_empty_string_null('manufacturer_description') }} AS manufacturer_description,
     SAFE_CAST(transit_vehicle_operator AS INTEGER) AS transit_vehicle_operator,
     SAFE_CAST(evac_to_right_of_way AS BOOLEAN) AS evac_to_right_of_way,
