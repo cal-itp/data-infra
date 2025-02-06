@@ -3,9 +3,24 @@ WITH staging_fuel_and_energy_by_agency AS (
     FROM {{ ref('stg_ntd__fuel_and_energy_by_agency') }}
 ),
 
-fct_fuel_and_energy_by_agency AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_fuel_and_energy_by_agency AS (
+    SELECT
+        staging_fuel_and_energy_by_agency.*,
+        dim_organizations.caltrans_district
     FROM staging_fuel_and_energy_by_agency
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_fuel_and_energy_by_agency.report_year = 2022 THEN
+                staging_fuel_and_energy_by_agency.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_fuel_and_energy_by_agency.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -39,6 +54,7 @@ SELECT
     sum_liquefied_petroleum_gas_gal,
     sum_other_fuel,
     sum_other_fuel_gal_gal_equivalent,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_fuel_and_energy_by_agency

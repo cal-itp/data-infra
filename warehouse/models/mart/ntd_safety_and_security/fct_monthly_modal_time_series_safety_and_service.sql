@@ -3,9 +3,24 @@ WITH staging_monthly_modal_time_series_safety_and_service AS (
     FROM {{ ref('stg_ntd__monthly_modal_time_series_safety_and_service') }}
 ),
 
-fct_monthly_modal_time_series_safety_and_service AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_monthly_modal_time_series_safety_and_service AS (
+    SELECT
+        staging_monthly_modal_time_series_safety_and_service.*,
+        dim_organizations.caltrans_district
     FROM staging_monthly_modal_time_series_safety_and_service
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_monthly_modal_time_series_safety_and_service.year <= 2022 THEN
+                staging_monthly_modal_time_series_safety_and_service._5_digit_ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_monthly_modal_time_series_safety_and_service._5_digit_ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -82,6 +97,7 @@ SELECT
     total_other_injuries,
     other_fatalities,
     pedestrian_not_in_crosswalk,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_monthly_modal_time_series_safety_and_service

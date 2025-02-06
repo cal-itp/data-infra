@@ -3,9 +3,24 @@ WITH staging_maintenance_facilities_by_agency AS (
     FROM {{ ref('stg_ntd__maintenance_facilities_by_agency') }}
 ),
 
-fct_maintenance_facilities_by_agency AS (
+dim_organizations AS (
     SELECT *
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+fct_maintenance_facilities_by_agency AS (
+    SELECT
+        staging_maintenance_facilities_by_agency.*,
+        dim_organizations.caltrans_district
     FROM staging_maintenance_facilities_by_agency
+    LEFT JOIN dim_organizations
+        ON CASE
+            WHEN staging_maintenance_facilities_by_agency.report_year = 2022 THEN
+                staging_maintenance_facilities_by_agency.ntd_id = dim_organizations.ntd_id_2022
+            ELSE
+                staging_maintenance_facilities_by_agency.ntd_id = dim_organizations.ntd_id
+        END
 )
 
 SELECT
@@ -32,6 +47,7 @@ SELECT
     sum_owned_by_public_agency,
     sum_total_facilities,
     sum_under_200_vehicles,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_maintenance_facilities_by_agency
