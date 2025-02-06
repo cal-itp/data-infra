@@ -23,7 +23,7 @@ schema_fields:
   - name: is_bidirectional
     type: INTEGER
   - name: length
-    type: NUMERIC
+    type: FLOAT
   - name: traversal_time
     type: INTEGER
   - name: stair_count
