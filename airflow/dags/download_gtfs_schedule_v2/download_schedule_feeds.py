@@ -24,7 +24,7 @@ from calitp_data_infra.storage import (
     get_fs,
     get_latest,
 )
-from pydantic import validator
+from pydantic.v1 import validator
 from requests.exceptions import HTTPError
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95

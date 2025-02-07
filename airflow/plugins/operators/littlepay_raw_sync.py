@@ -16,9 +16,9 @@ from calitp_data_infra.storage import (
     get_fs,
     get_latest_file,
 )
-from pydantic.class_validators import validator
-from pydantic.error_wrappers import ValidationError
-from pydantic.main import BaseModel
+from pydantic.v1.class_validators import validator
+from pydantic.v1.error_wrappers import ValidationError
+from pydantic.v1.main import BaseModel
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
