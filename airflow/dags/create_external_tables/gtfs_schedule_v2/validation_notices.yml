@@ -151,7 +151,7 @@ schema_fields:
       - name: lineIndex
         type: BIGNUMERIC
       - name: locationType
-        type: BIGNUMERIC
+        type: STRING
       - name: lonFieldName
         type: STRING
       - name: lonFieldValue
