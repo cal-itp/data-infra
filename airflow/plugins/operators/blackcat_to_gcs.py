@@ -7,7 +7,7 @@ import pandas as pd
 import pendulum
 import requests
 from calitp_data_infra.storage import get_fs, make_name_bq_safe
-from pydantic import BaseModel
+from pydantic.v1 import BaseModel
 
 from airflow.models import BaseOperator
 
