@@ -1,7 +1,7 @@
 import pendulum
 import pytest
 from calitp_data_infra.storage import GTFSDownloadConfig, make_name_bq_safe
-from pydantic import ValidationError
+from pydantic.v1 import ValidationError
 
 
 def test_gtfs_download_config() -> None:
