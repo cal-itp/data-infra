@@ -6,10 +6,10 @@
 jupyterhub:
   singleuser:
     defaultUrl: "/lab"
-    startTimeout: 3600
+    startTimeout: 2700
     image:
       name: ghcr.io/cal-itp/data-infra/jupyter-singleuser
-      tag: 2024.3.27
+      tag: 2025.1.15
     memory:
       # Much more than 10 and we risk bumping up against the actual capacity of e2-highmem-2
       limit: 10G
@@ -31,19 +31,19 @@ jupyterhub:
               mkdir -p -- /home/jovyan/.jupyter;
               cp /tmp/jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py;
     profileList:
-      - display_name: "Default User"
+      - display_name: "Default User - 2025.1.15, Python 3.11"
         description: "Your code will run on a shared machine with 3–10G of memory and 0.7–1.9 CPU cores."
         default: true
-      - display_name: "Power User"
+      - display_name: "Power User - 2025.1.15, Python 3.11"
         description: "Your code will run on a shared machine with 10–12G of memory and 1.5–1.9 CPU cores."
         kubespawner_override:
           mem_limit: "12G"
           mem_guarantee: "10G"
           cpu_guarantee: 1.5
-      - display_name: "Prototype Image 2025.1.15"
-        description: "This is for testing the next image we will deploy."
+      - display_name: "Legacy Image - 2024.3.27, Python 3.9"
+        description: "This is the older environment for legacy processes."
         kubespawner_override:
-          image: ghcr.io/cal-itp/data-infra/jupyter-singleuser:2025.1.15
+          image: ghcr.io/cal-itp/data-infra/jupyter-singleuser:2024.3.27
   scheduling:
     userPods:
       nodeAffinity:
