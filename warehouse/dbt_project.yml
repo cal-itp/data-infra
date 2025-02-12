@@ -157,6 +157,12 @@ models:
           domain: mart
           dataset: ntd_annual_reporting
         schema: mart_ntd_annual_reporting
+      ntd_funding_and_expenses:
+        +materialized: table
+        +labels:
+          domain: mart
+          dataset: ntd_funding_and_expenses
+        schema: mart_ntd_funding_and_expenses
       ntd_ridership:
         +materialized: table
         +labels:
