@@ -7,7 +7,7 @@ resource "google_compute_firewall" "tfer--default-allow-http" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "default-allow-http"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "1000"
   project       = "cal-itp-data-infra"
   source_ranges = ["0.0.0.0/0"]
@@ -23,7 +23,7 @@ resource "google_compute_firewall" "tfer--default-allow-https" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "default-allow-https"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "1000"
   project       = "cal-itp-data-infra"
   source_ranges = ["0.0.0.0/0"]
@@ -39,7 +39,7 @@ resource "google_compute_firewall" "tfer--default-allow-icmp" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "default-allow-icmp"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "65534"
   project       = "cal-itp-data-infra"
   source_ranges = ["0.0.0.0/0"]
@@ -64,7 +64,7 @@ resource "google_compute_firewall" "tfer--default-allow-internal" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "default-allow-internal"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "65534"
   project       = "cal-itp-data-infra"
   source_ranges = ["10.128.0.0/9"]
@@ -80,7 +80,7 @@ resource "google_compute_firewall" "tfer--default-allow-rdp" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "default-allow-rdp"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "65534"
   project       = "cal-itp-data-infra"
   source_ranges = ["0.0.0.0/0"]
@@ -96,7 +96,7 @@ resource "google_compute_firewall" "tfer--default-allow-ssh" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "default-allow-ssh"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "65534"
   project       = "cal-itp-data-infra"
   source_ranges = ["0.0.0.0/0"]
@@ -130,7 +130,7 @@ resource "google_compute_firewall" "tfer--gke-data-infra-apps-0fe1e974-all" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "gke-data-infra-apps-0fe1e974-all"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "1000"
   project       = "cal-itp-data-infra"
   source_ranges = ["10.96.0.0/14"]
@@ -146,7 +146,7 @@ resource "google_compute_firewall" "tfer--gke-data-infra-apps-0fe1e974-ssh" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "gke-data-infra-apps-0fe1e974-ssh"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "1000"
   project       = "cal-itp-data-infra"
   source_ranges = ["34.127.17.149/32", "34.145.121.153/32", "34.145.4.65/32"]
@@ -171,7 +171,7 @@ resource "google_compute_firewall" "tfer--gke-data-infra-apps-0fe1e974-vms" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "gke-data-infra-apps-0fe1e974-vms"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "1000"
   project       = "cal-itp-data-infra"
   source_ranges = ["10.128.0.0/9"]
@@ -187,7 +187,7 @@ resource "google_compute_firewall" "tfer--gke-us-west2-calitp-airflow2-pr-171e4e
   direction     = "INGRESS"
   disabled      = "false"
   name          = "gke-us-west2-calitp-airflow2-pr-171e4e47-gke-0b2083d6-ssh"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "1000"
   project       = "cal-itp-data-infra"
   source_ranges = ["34.94.25.3/32"]
@@ -222,7 +222,7 @@ resource "google_compute_firewall" "tfer--gke-us-west2-calitp-airflow2-pr-88ca8e
   direction     = "INGRESS"
   disabled      = "false"
   name          = "gke-us-west2-calitp-airflow2-pr-88ca8ec6-gke-98ed8a64-all"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "1000"
   project       = "cal-itp-data-infra"
   source_ranges = ["10.15.0.0/17"]
@@ -238,7 +238,7 @@ resource "google_compute_firewall" "tfer--gke-us-west2-calitp-airflow2-pr-88ca8e
   direction     = "INGRESS"
   disabled      = "false"
   name          = "gke-us-west2-calitp-airflow2-pr-88ca8ec6-gke-98ed8a64-exkubelet"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "1000"
   project       = "cal-itp-data-infra"
   source_ranges = ["0.0.0.0/0"]
@@ -254,7 +254,7 @@ resource "google_compute_firewall" "tfer--gke-us-west2-calitp-airflow2-pr-88ca8e
   direction     = "INGRESS"
   disabled      = "false"
   name          = "gke-us-west2-calitp-airflow2-pr-88ca8ec6-gke-98ed8a64-inkubelet"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "999"
   project       = "cal-itp-data-infra"
   source_ranges = ["10.15.0.0/17"]
@@ -280,7 +280,7 @@ resource "google_compute_firewall" "tfer--gke-us-west2-calitp-airflow2-pr-88ca8e
   direction     = "INGRESS"
   disabled      = "false"
   name          = "gke-us-west2-calitp-airflow2-pr-88ca8ec6-gke-98ed8a64-vms"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "1000"
   project       = "cal-itp-data-infra"
   source_ranges = ["10.128.0.0/9"]
@@ -297,7 +297,7 @@ resource "google_compute_firewall" "tfer--k8s-ad40eb3afc69e4deeaf43a1ed1393eeb-h
   direction     = "INGRESS"
   disabled      = "false"
   name          = "k8s-ad40eb3afc69e4deeaf43a1ed1393eeb-http-hc"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "1000"
   project       = "cal-itp-data-infra"
   source_ranges = ["130.211.0.0/22", "209.85.152.0/22", "209.85.204.0/22", "35.191.0.0/16"]
@@ -314,7 +314,7 @@ resource "google_compute_firewall" "tfer--k8s-e092126e72b02003-node-http-hc" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "k8s-e092126e72b02003-node-http-hc"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "1000"
   project       = "cal-itp-data-infra"
   source_ranges = ["130.211.0.0/22", "209.85.152.0/22", "209.85.204.0/22", "35.191.0.0/16"]
@@ -332,7 +332,7 @@ resource "google_compute_firewall" "tfer--k8s-fw-a0d3bb39e959b49a1b6015fd2193e30
   direction          = "INGRESS"
   disabled           = "false"
   name               = "k8s-fw-a0d3bb39e959b49a1b6015fd2193e30d"
-  network            = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network            = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority           = "1000"
   project            = "cal-itp-data-infra"
   source_ranges      = ["0.0.0.0/0"]
@@ -350,7 +350,7 @@ resource "google_compute_firewall" "tfer--k8s-fw-ad40eb3afc69e4deeaf43a1ed1393ee
   direction          = "INGRESS"
   disabled           = "false"
   name               = "k8s-fw-ad40eb3afc69e4deeaf43a1ed1393eeb"
-  network            = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network            = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority           = "1000"
   project            = "cal-itp-data-infra"
   source_ranges      = ["0.0.0.0/0"]

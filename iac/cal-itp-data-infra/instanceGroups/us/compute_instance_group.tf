@@ -27,7 +27,6 @@ resource "google_compute_instance_group" "tfer--us-west1-a-002F-gke-data-infra-a
 
 resource "google_compute_instance_group" "tfer--us-west1-a-002F-gke-data-infra-apps-jupyterhub-users-b57e08f4-grp" {
   description = "This instance group is controlled by Instance Group Manager 'gke-data-infra-apps-jupyterhub-users-b57e08f4-grp'. To modify instances in this group, use the Instance Group Manager API: https://cloud.google.com/compute/docs/reference/latest/instanceGroupManagers"
-  instances   = ["https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/zones/us-west1-a/instances/gke-data-infra-apps-jupyterhub-users-b57e08f4-42at"]
   name        = "gke-data-infra-apps-jupyterhub-users-b57e08f4-grp"
   network     = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/global/networks/default"
   project     = "cal-itp-data-infra"
@@ -63,7 +62,7 @@ resource "google_compute_instance_group" "tfer--us-west1-b-002F-gke-data-infra-a
 
 resource "google_compute_instance_group" "tfer--us-west1-b-002F-gke-data-infra-apps-jupyterhub-users-dddc57ff-grp" {
   description = "This instance group is controlled by Instance Group Manager 'gke-data-infra-apps-jupyterhub-users-dddc57ff-grp'. To modify instances in this group, use the Instance Group Manager API: https://cloud.google.com/compute/docs/reference/latest/instanceGroupManagers"
-  instances   = ["https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/zones/us-west1-b/instances/gke-data-infra-apps-jupyterhub-users-dddc57ff-cbrw", "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/zones/us-west1-b/instances/gke-data-infra-apps-jupyterhub-users-dddc57ff-u7p2"]
+  instances   = ["https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/zones/us-west1-b/instances/gke-data-infra-apps-jupyterhub-users-dddc57ff-cbrw"]
   name        = "gke-data-infra-apps-jupyterhub-users-dddc57ff-grp"
   network     = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/global/networks/default"
   project     = "cal-itp-data-infra"
@@ -99,7 +98,7 @@ resource "google_compute_instance_group" "tfer--us-west1-c-002F-gke-data-infra-a
 
 resource "google_compute_instance_group" "tfer--us-west1-c-002F-gke-data-infra-apps-jupyterhub-users-6aa76dbb-grp" {
   description = "This instance group is controlled by Instance Group Manager 'gke-data-infra-apps-jupyterhub-users-6aa76dbb-grp'. To modify instances in this group, use the Instance Group Manager API: https://cloud.google.com/compute/docs/reference/latest/instanceGroupManagers"
-  instances   = ["https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/zones/us-west1-c/instances/gke-data-infra-apps-jupyterhub-users-6aa76dbb-b03b", "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/zones/us-west1-c/instances/gke-data-infra-apps-jupyterhub-users-6aa76dbb-juyr", "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/zones/us-west1-c/instances/gke-data-infra-apps-jupyterhub-users-6aa76dbb-shcz"]
+  instances   = ["https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/zones/us-west1-c/instances/gke-data-infra-apps-jupyterhub-users-6aa76dbb-b03b", "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/zones/us-west1-c/instances/gke-data-infra-apps-jupyterhub-users-6aa76dbb-fk7x", "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/zones/us-west1-c/instances/gke-data-infra-apps-jupyterhub-users-6aa76dbb-juyr"]
   name        = "gke-data-infra-apps-jupyterhub-users-6aa76dbb-grp"
   network     = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/global/networks/default"
   project     = "cal-itp-data-infra"
