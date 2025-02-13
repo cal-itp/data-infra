@@ -1922,6 +1922,30 @@ resource "google_storage_bucket_iam_policy" "tfer--dev-calitp-test-sandbox" {
 POLICY
 }
 
+resource "google_storage_bucket_iam_policy" "tfer--export-ysjqwvyxc4ti3jmahojq" {
+  bucket = "b/export-ysjqwvyxc4ti3jmahojq"
+
+  policy_data = <<POLICY
+{
+  "bindings": [
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra",
+        "projectOwner:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyBucketOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyBucketReader"
+    }
+  ]
+}
+POLICY
+}
+
 resource "google_storage_bucket_iam_policy" "tfer--gtfs-data" {
   bucket = "b/gtfs-data"
 

@@ -7,7 +7,7 @@ resource "google_container_node_pool" "tfer--data-infra-apps_apps-v2" {
     total_min_node_count = "0"
   }
 
-  cluster            = "${google_container_cluster.tfer--data-infra-apps.name}"
+  cluster            = google_container_cluster.tfer--data-infra-apps.name
   initial_node_count = "1"
   location           = "us-west1"
 
@@ -27,13 +27,12 @@ resource "google_container_node_pool" "tfer--data-infra-apps_apps-v2" {
   }
 
   node_config {
-    disk_size_gb                = "100"
-    disk_type                   = "pd-standard"
-    enable_confidential_storage = "false"
-    image_type                  = "COS_CONTAINERD"
-    local_ssd_count             = "0"
-    logging_variant             = "DEFAULT"
-    machine_type                = "n1-standard-4"
+    disk_size_gb    = "100"
+    disk_type       = "pd-standard"
+    image_type      = "COS_CONTAINERD"
+    local_ssd_count = "0"
+    logging_variant = "DEFAULT"
+    machine_type    = "n1-standard-4"
 
     metadata = {
       disable-legacy-endpoints = "true"
@@ -73,7 +72,7 @@ resource "google_container_node_pool" "tfer--data-infra-apps_gtfsrt-v4" {
     total_min_node_count = "0"
   }
 
-  cluster            = "${google_container_cluster.tfer--data-infra-apps.name}"
+  cluster            = google_container_cluster.tfer--data-infra-apps.name
   initial_node_count = "1"
   location           = "us-west1"
 
@@ -93,10 +92,9 @@ resource "google_container_node_pool" "tfer--data-infra-apps_gtfsrt-v4" {
   }
 
   node_config {
-    disk_size_gb                = "100"
-    disk_type                   = "pd-standard"
-    enable_confidential_storage = "false"
-    image_type                  = "COS_CONTAINERD"
+    disk_size_gb = "100"
+    disk_type    = "pd-standard"
+    image_type   = "COS_CONTAINERD"
 
     labels = {
       resource-domain = "gtfsrtv3"
@@ -120,6 +118,12 @@ resource "google_container_node_pool" "tfer--data-infra-apps_gtfsrt-v4" {
     }
 
     spot = "false"
+
+    taint {
+      effect = "NO_SCHEDULE"
+      key    = "resource-domain"
+      value  = "gtfsrtv3"
+    }
   }
 
   node_count     = "1"
@@ -144,7 +148,7 @@ resource "google_container_node_pool" "tfer--data-infra-apps_jobs-v1" {
     total_min_node_count = "0"
   }
 
-  cluster            = "${google_container_cluster.tfer--data-infra-apps.name}"
+  cluster            = google_container_cluster.tfer--data-infra-apps.name
   initial_node_count = "1"
   location           = "us-west1"
 
@@ -164,10 +168,9 @@ resource "google_container_node_pool" "tfer--data-infra-apps_jobs-v1" {
   }
 
   node_config {
-    disk_size_gb                = "100"
-    disk_type                   = "pd-standard"
-    enable_confidential_storage = "false"
-    image_type                  = "COS_CONTAINERD"
+    disk_size_gb = "100"
+    disk_type    = "pd-standard"
+    image_type   = "COS_CONTAINERD"
 
     labels = {
       pod-role = "computetask"
@@ -191,6 +194,12 @@ resource "google_container_node_pool" "tfer--data-infra-apps_jobs-v1" {
     }
 
     spot = "false"
+
+    taint {
+      effect = "NO_SCHEDULE"
+      key    = "pod-role"
+      value  = "computetask"
+    }
   }
 
   node_count     = "1"
@@ -215,7 +224,7 @@ resource "google_container_node_pool" "tfer--data-infra-apps_jupyterhub-users" {
     total_min_node_count = "6"
   }
 
-  cluster            = "${google_container_cluster.tfer--data-infra-apps.name}"
+  cluster            = google_container_cluster.tfer--data-infra-apps.name
   initial_node_count = "2"
   location           = "us-west1"
 
@@ -235,10 +244,9 @@ resource "google_container_node_pool" "tfer--data-infra-apps_jupyterhub-users" {
   }
 
   node_config {
-    disk_size_gb                = "100"
-    disk_type                   = "pd-standard"
-    enable_confidential_storage = "false"
-    image_type                  = "COS_CONTAINERD"
+    disk_size_gb = "100"
+    disk_type    = "pd-standard"
+    image_type   = "COS_CONTAINERD"
 
     labels = {
       "hub.jupyter.org/node-purpose" = "user"
@@ -262,9 +270,14 @@ resource "google_container_node_pool" "tfer--data-infra-apps_jupyterhub-users" {
     }
 
     spot = "false"
+
+    taint {
+      effect = "NO_SCHEDULE"
+      key    = "hub.jupyter.org/dedicated"
+      value  = "user"
+    }
   }
 
-  node_count     = "2"
   node_locations = ["us-west1-a", "us-west1-b", "us-west1-c"]
   project        = "cal-itp-data-infra"
 

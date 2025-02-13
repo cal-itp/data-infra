@@ -202,6 +202,10 @@ resource "google_storage_bucket_acl" "tfer--dev-calitp-test-sandbox" {
   bucket = "dev-calitp-test-sandbox"
 }
 
+resource "google_storage_bucket_acl" "tfer--export-ysjqwvyxc4ti3jmahojq" {
+  bucket = "export-ysjqwvyxc4ti3jmahojq"
+}
+
 resource "google_storage_bucket_acl" "tfer--gtfs-data" {
   bucket = "gtfs-data"
 }
