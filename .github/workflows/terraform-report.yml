@@ -68,7 +68,6 @@ jobs:
 
       - name: Terraform Plan
         uses: dflook/terraform-plan@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          add_github_comment: false
           path: ${{ matrix.path }}
