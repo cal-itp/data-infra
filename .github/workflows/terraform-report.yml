@@ -16,7 +16,7 @@ jobs:
 
       - name: Discover Terraform targets
         id: ls
-        run: echo "paths=$(ls -d iac/*/* | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')" >> ${GITHUB_OUTPUT}
+        run: echo "paths=$(ls -d iac/*/*/* | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')" >> ${GITHUB_OUTPUT}
 
   lint:
     runs-on: ubuntu-latest
