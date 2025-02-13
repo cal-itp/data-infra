@@ -16,7 +16,7 @@ _Please Link to previously completed relevant tickets._
 
 ### Dependencies
 
-_List any systems or components that might be affected by this Metabase maintenance._
+_List any systems or components that might be affected by this maintenance job._
 
 ### Acceptance Criteria
 
