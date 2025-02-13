@@ -7,7 +7,7 @@ resource "google_compute_firewall" "tfer--default-allow-icmp" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "default-allow-icmp"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "65534"
   project       = "cal-itp-data-infra-staging"
   source_ranges = ["0.0.0.0/0"]
@@ -32,7 +32,7 @@ resource "google_compute_firewall" "tfer--default-allow-internal" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "default-allow-internal"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "65534"
   project       = "cal-itp-data-infra-staging"
   source_ranges = ["10.128.0.0/9"]
@@ -48,7 +48,7 @@ resource "google_compute_firewall" "tfer--default-allow-rdp" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "default-allow-rdp"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "65534"
   project       = "cal-itp-data-infra-staging"
   source_ranges = ["0.0.0.0/0"]
@@ -64,7 +64,7 @@ resource "google_compute_firewall" "tfer--default-allow-ssh" {
   direction     = "INGRESS"
   disabled      = "false"
   name          = "default-allow-ssh"
-  network       = "${data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link}"
+  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority      = "65534"
   project       = "cal-itp-data-infra-staging"
   source_ranges = ["0.0.0.0/0"]
