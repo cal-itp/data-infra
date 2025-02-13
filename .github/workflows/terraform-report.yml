@@ -1,24 +1,64 @@
-name: Report pending terraform changes
+name: Terraform Validation
 
 on:
   pull_request:
-    branches:
-      - 'main'
-      - 'targets/*'
     paths:
-      - 'iac/terraform/*'
+      - 'iac/*'
 
 jobs:
-
-  changed:
-
+  targets:
     runs-on: ubuntu-latest
+    outputs:
+      paths: ${{ steps.ls.outputs.paths }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/checkout@v3
+      - name: Discover Terraform targets
+        id: ls
+        run: echo "paths=$(ls -d iac/*/* | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')" >> ${GITHUB_OUTPUT}
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: targets
+    strategy:
+      matrix:
+        path: ${{ fromJson(needs.targets.outputs.paths) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform Formatting
+        uses: dflook/terraform-fmt-check@v1
         with:
-          fetch-depth: 0
-          submodules: true
+          path: ${{ matrix.path }}
+
+  validate:
+    runs-on: ubuntu-latest
+    needs: targets
+    strategy:
+      matrix:
+        path: ${{ fromJson(needs.targets.outputs.paths) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform Validation
+        uses: dflook/terraform-validate@v1
+        with:
+          path: ${{ matrix.path }}
+
+  plan:
+    runs-on: ubuntu-latest
+    needs: targets
+    strategy:
+      matrix:
+        path: ${{ fromJson(needs.targets.outputs.paths) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - run: echo ${{ matrix.path }}
 
       - uses: 'google-github-actions/auth@v2'
         with:
@@ -26,45 +66,9 @@ jobs:
 
       - uses: google-github-actions/setup-gcloud@v2
 
-      - uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.1.7
-          terraform_wrapper: false
-
-      - name: terraform-report
-        shell: bash
+      - name: Terraform Plan
+        uses: dflook/terraform-plan@v1
         env:
-          CONTENT_ROOT       : ${{ github.workspace     }}/iac
-          ENGINE_ROOT        : ${{ github.workspace     }}/iac/.engine
-          GITHUB_TOKEN       : ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_PR_NUMBER   : ${{ github.event.number  }}
-          GITHUB_BASE_BRANCH : ${{ github.event.pull_request.base.ref }}
-        run: |
-
-          if [[ $GITHUB_BASE_BRANCH == main ]]; then
-            export INFRA_TARGET_NAME=prod
-          else
-            export INFRA_TARGET_NAME=${GITHUB_BASE_BRANCH#targets/}
-            if [[ $INFRA_TARGET_NAME == prod ]]; then
-              echo "fatal: prod changes must be merged to main branch" >&2
-              exit 1
-            fi
-          fi
-
-          . "$ENGINE_ROOT"/lib/sh/terraform-report.sh
-
-          if [[ ${#target_endpoint_changes[*]} == 0 ]]; then
-            exit 0
-          fi
-
-          gh pr comment $GITHUB_PR_NUMBER --body-file - <<EOF
-          ## Terraform Deployment Preview
-          $(
-            for endpoint in "${!target_endpoint_changes[@]}"; do
-              printf '\n### %s\n\n' "$endpoint"
-              printf '```hcl\n'
-              printf '%s\n'         "${target_endpoint_changes[$endpoint]}"
-              printf '```\n'
-            done
-          )
-          EOF
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: ${{ matrix.path }}
