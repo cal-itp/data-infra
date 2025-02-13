@@ -10,39 +10,27 @@ resource "google_container_cluster" "tfer--data-infra-apps" {
   }
 
   cluster_autoscaling {
-    autoscaling_profile = "BALANCED"
-    enabled             = "false"
-  }
-
-  ip_allocation_policy {
-    cluster_ipv4_cidr_block  = "10.96.0.0/14"
-    services_ipv4_cidr_block = "10.100.0.0/20"
-    stack_type               = "IPV4"
-  }
-
-  control_plane_endpoints_config {
-    dns_endpoint_config {
-      allow_external_traffic = "false"
-      endpoint               = "gke-0fe1e974c7ae431b8906cfb4b50cc4218cb1-1005246706141.us-west1.gke.goog"
-    }
+    enabled = "false"
   }
 
   database_encryption {
     state = "DECRYPTED"
   }
 
-  default_max_pods_per_node                = "110"
-  deletion_protection                      = "true"
-  enable_cilium_clusterwide_network_policy = "false"
-  enable_fqdn_network_policy               = "false"
-  enable_intranode_visibility              = "false"
-  enable_kubernetes_alpha                  = "false"
-  enable_l4_ilb_subsetting                 = "false"
-  enable_legacy_abac                       = "false"
-  enable_multi_networking                  = "false"
-  enable_shielded_nodes                    = "true"
-  enable_tpu                               = "false"
-  initial_node_count                       = "0"
+  default_max_pods_per_node   = "110"
+  enable_binary_authorization = "false"
+  enable_intranode_visibility = "false"
+  enable_kubernetes_alpha     = "false"
+  enable_l4_ilb_subsetting    = "false"
+  enable_legacy_abac          = "false"
+  enable_shielded_nodes       = "true"
+  enable_tpu                  = "false"
+  initial_node_count          = "0"
+
+  ip_allocation_policy {
+    cluster_ipv4_cidr_block  = "10.96.0.0/14"
+    services_ipv4_cidr_block = "10.100.0.0/20"
+  }
 
   location = "us-west1"
 
@@ -67,11 +55,6 @@ resource "google_container_cluster" "tfer--data-infra-apps" {
   }
 
   monitoring_config {
-    advanced_datapath_observability_config {
-      enable_metrics = "false"
-      enable_relay   = "false"
-    }
-
     enable_components = ["SYSTEM_COMPONENTS"]
   }
 
@@ -89,8 +72,7 @@ resource "google_container_cluster" "tfer--data-infra-apps" {
 
   node_pool_defaults {
     node_config_defaults {
-      insecure_kubelet_readonly_port_enabled = "TRUE"
-      logging_variant                        = "DEFAULT"
+      logging_variant = "DEFAULT"
     }
   }
 
@@ -109,10 +91,6 @@ resource "google_container_cluster" "tfer--data-infra-apps" {
 
   release_channel {
     channel = "STABLE"
-  }
-
-  secret_manager_config {
-    enabled = "false"
   }
 
   service_external_ips_config {
