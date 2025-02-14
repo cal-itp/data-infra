@@ -1,0 +1,79 @@
+resource "google_storage_bucket" "tfer--calitp-staging-data-analyses-portfolio" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-data-analyses-portfolio"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "false"
+}
+
+resource "google_storage_bucket" "tfer--calitp-staging-data-analyses-portfolio-draft" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-data-analyses-portfolio-draft"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "false"
+
+  website {
+    main_page_suffix = "index.html"
+  }
+}
+
+resource "google_storage_bucket" "tfer--dataproc-staging-us-west2-473674835135-t87wkokr" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "dataproc-staging-us-west2-473674835135-t87wkokr"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "false"
+}
+
+resource "google_storage_bucket" "tfer--dataproc-temp-us-west2-473674835135-yuzmmdyk" {
+  default_event_based_hold = "false"
+  force_destroy            = "false"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "90"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
+
+  location                    = "US-WEST2"
+  name                        = "dataproc-temp-us-west2-473674835135-yuzmmdyk"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "false"
+}
+
+resource "google_storage_bucket" "tfer--test-calitp-amplitude-benefits-events" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "test-calitp-amplitude-benefits-events"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "enforced"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
