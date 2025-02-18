@@ -64,7 +64,7 @@ WITH
         {{ trim_make_empty_string_null('reporting_module') }} AS reporting_module,
         {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
         {{ trim_make_empty_string_null('agency_name') }} AS agency_name,
-        {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+        {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
         dt,
         execution_ts
     FROM stg_ntd__capital_expenditures_time_series__total

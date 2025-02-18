@@ -22,7 +22,7 @@ SELECT
     SAFE_CAST(fta_capital_program_5309 AS NUMERIC) AS fta_capital_program_5309,
     SAFE_CAST(fta_rural_progam_5311 AS NUMERIC) AS fta_rural_progam_5311,
     SAFE_CAST(fta_urbanized_area_formula AS NUMERIC) AS fta_urbanized_area_formula,
-    {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+    {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
     {{ trim_make_empty_string_null('organization_type') }} AS organization_type,
     SAFE_CAST(other_dot_funds AS NUMERIC) AS other_dot_funds,
     SAFE_CAST(other_federal_funds AS NUMERIC) AS other_federal_funds,

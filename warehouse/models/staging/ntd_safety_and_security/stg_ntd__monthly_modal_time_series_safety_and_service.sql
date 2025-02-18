@@ -85,7 +85,7 @@ SELECT
     SAFE_CAST(pedestrian_crossing_tracks_1 AS INTEGER) AS pedestrian_crossing_tracks_1,
     SAFE_CAST(primary_uza_sq_miles AS NUMERIC) AS primary_uza_sq_miles,
     {{ trim_make_empty_string_null('primary_uza_name') }} AS primary_uza_name,
-    {{ trim_make_empty_string_null('_5_digit_ntd_id') }} AS _5_digit_ntd_id,
+        {{ trim_make_empty_string_null('CAST(_5_digit_ntd_id AS STRING)') }} AS _5_digit_ntd_id,
     SAFE_CAST(total_other_injuries AS INTEGER) AS total_other_injuries,
     SAFE_CAST(other_fatalities AS INTEGER) AS other_fatalities,
     SAFE_CAST(pedestrian_not_in_crosswalk AS INTEGER) AS pedestrian_not_in_crosswalk,

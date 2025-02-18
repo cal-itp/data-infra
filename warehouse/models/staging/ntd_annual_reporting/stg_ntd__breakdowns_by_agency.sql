@@ -31,7 +31,7 @@ SELECT
     {{ trim_make_empty_string_null('max_state') }} AS max_state,
     {{ trim_make_empty_string_null('max_uace_code') }} AS max_uace_code,
     {{ trim_make_empty_string_null('max_uza_name') }} AS max_uza_name,
-    {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+    {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
     SAFE_CAST(report_year AS INT64) AS report_year,
     SAFE_CAST(sum_major_mechanical_failures AS NUMERIC) AS sum_major_mechanical_failures,
     SAFE_CAST(sum_other_mechanical_failures AS NUMERIC) AS sum_other_mechanical_failures,

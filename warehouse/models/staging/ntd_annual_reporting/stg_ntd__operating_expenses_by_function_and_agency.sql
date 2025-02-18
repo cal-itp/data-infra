@@ -24,7 +24,7 @@ SELECT
     {{ trim_make_empty_string_null('max_reporter_type') }} AS max_reporter_type,
     {{ trim_make_empty_string_null('max_uace_code') }} AS max_uace_code,
     {{ trim_make_empty_string_null('max_uza_name') }} AS max_uza_name,
-    {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+    {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
     SAFE_CAST(report_year AS INT64) AS report_year,
     {{ trim_make_empty_string_null('state') }} AS state,
     SAFE_CAST(sum_facility_maintenance AS NUMERIC) AS sum_facility_maintenance,

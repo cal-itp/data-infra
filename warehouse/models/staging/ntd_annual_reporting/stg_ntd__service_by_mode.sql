@@ -16,7 +16,7 @@ stg_ntd__service_by_mode AS (
 )
 
 SELECT
-    {{ trim_make_empty_string_null('_5_digit_ntd_id') }} AS _5_digit_ntd_id,
+    {{ trim_make_empty_string_null('CAST(_5_digit_ntd_id AS STRING)') }} AS _5_digit_ntd_id,
     {{ trim_make_empty_string_null('max_agency') }} AS max_agency,
     SAFE_CAST(max_agency_voms AS NUMERIC) AS max_agency_voms,
     {{ trim_make_empty_string_null('max_city') }} AS max_city,

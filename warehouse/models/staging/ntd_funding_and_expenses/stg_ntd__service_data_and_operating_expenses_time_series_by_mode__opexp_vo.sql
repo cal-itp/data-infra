@@ -31,7 +31,7 @@ WITH
         SAFE_CAST(_2002 AS FLOAT64) AS _2002,
         SAFE_CAST(_2006 AS FLOAT64) AS _2006,
         SAFE_CAST(_2000 AS FLOAT64) AS _2000,
-        {{ trim_make_empty_string_null('legacy_ntd_id') }} AS legacy_ntd_id,
+        {{ trim_make_empty_string_null('CAST(legacy_ntd_id AS STRING)') }} AS legacy_ntd_id,
         SAFE_CAST(uace_code AS INT64) AS uace_code,
         SAFE_CAST(_2004 AS FLOAT64) AS _2004,
         SAFE_CAST(_1998 AS FLOAT64) AS _1998,
@@ -67,7 +67,7 @@ WITH
         {{ trim_make_empty_string_null('reporting_module') }} AS reporting_module,
         {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
         {{ trim_make_empty_string_null('agency_name') }} AS agency_name,
-        {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+        {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
         dt,
         execution_ts
     FROM stg_ntd__service_data_and_operating_expenses_time_series_by_mode__opexp_vo

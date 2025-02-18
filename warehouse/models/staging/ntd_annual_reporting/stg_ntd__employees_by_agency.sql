@@ -33,7 +33,7 @@ SELECT
     SAFE_CAST(max_agency_voms_1 AS NUMERIC) AS max_agency_voms_1,
     {{ trim_make_empty_string_null('max_city_1') }} AS max_city_1,
     SAFE_CAST(max_mode_voms AS NUMERIC) AS max_mode_voms,
-    {{ trim_make_empty_string_null('max_ntd_id') }} AS max_ntd_id,
+    {{ trim_make_empty_string_null('CAST(max_ntd_id AS STRING)') }} AS max_ntd_id,
     SAFE_CAST(max_primary_uza_population_1 AS NUMERIC) AS max_primary_uza_population_1,
     {{ trim_make_empty_string_null('max_state_1') }} AS max_state_1,
     {{ trim_make_empty_string_null('max_uza_name_1') }} AS max_uza_name_1,

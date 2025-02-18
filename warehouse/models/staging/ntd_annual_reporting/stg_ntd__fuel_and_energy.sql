@@ -66,7 +66,7 @@ SELECT
     {{ trim_make_empty_string_null('mode_name') }} AS mode_name,
     SAFE_CAST(mode_voms AS NUMERIC) AS mode_voms,
     {{ trim_make_empty_string_null('modecd') }} AS modecd,
-    {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+    {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
     {{ trim_make_empty_string_null('organization_type') }} AS organization_type,
     SAFE_CAST(other_fuel AS NUMERIC) AS other_fuel,
     SAFE_CAST(other_fuel_mpg AS NUMERIC) AS other_fuel_mpg,

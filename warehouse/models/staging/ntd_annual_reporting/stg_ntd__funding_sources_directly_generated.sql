@@ -25,7 +25,7 @@ SELECT
     {{ trim_make_empty_string_null('concessions_questionable') }} AS concessions_questionable,
     SAFE_CAST(fares AS NUMERIC) AS fares,
     {{ trim_make_empty_string_null('fares_questionable') }} AS fares_questionable,
-    {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+    {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
     {{ trim_make_empty_string_null('organization_type') }} AS organization_type,
     SAFE_CAST(other AS NUMERIC) AS other,
     {{ trim_make_empty_string_null('other_questionable') }} AS other_questionable,

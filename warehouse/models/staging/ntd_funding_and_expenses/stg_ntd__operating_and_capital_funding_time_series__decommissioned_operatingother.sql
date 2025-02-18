@@ -50,7 +50,7 @@ WITH
         SAFE_CAST(_1998 AS FLOAT64) AS _1998,
         SAFE_CAST(_2015 AS FLOAT64) AS _2015,
         {{ trim_make_empty_string_null('primary_uza_name') }} AS primary_uza_name,
-        {{ trim_make_empty_string_null('legacy_ntd_id') }} AS legacy_ntd_id,
+        {{ trim_make_empty_string_null('CAST(legacy_ntd_id AS STRING)') }} AS legacy_ntd_id,
         SAFE_CAST(census_year AS INT64) AS census_year,
         SAFE_CAST(_1993 AS FLOAT64) AS _1993,
         {{ trim_make_empty_string_null('reporting_module') }} AS reporting_module,
@@ -58,7 +58,7 @@ WITH
         {{ trim_make_empty_string_null('state') }} AS state,
         {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
         {{ trim_make_empty_string_null('agency_name') }} AS agency_name,
-        {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+        {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
         dt,
         execution_ts
     FROM stg_ntd__operating_and_capital_funding_time_series__decommissioned_operatingother

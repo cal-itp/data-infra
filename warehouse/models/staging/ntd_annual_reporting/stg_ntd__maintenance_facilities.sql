@@ -34,7 +34,7 @@ SELECT
     {{ trim_make_empty_string_null('mode') }} AS mode,
     {{ trim_make_empty_string_null('mode_name') }} AS mode_name,
     SAFE_CAST(mode_voms AS NUMERIC) AS mode_voms,
-    {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+    {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
     {{ trim_make_empty_string_null('organization_type') }} AS organization_type,
     SAFE_CAST(over_300_vehicles AS NUMERIC) AS over_300_vehicles,
     {{ trim_make_empty_string_null('over_300_vehicles_questionable') }} AS over_300_vehicles_questionable,

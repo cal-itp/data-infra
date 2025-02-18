@@ -30,7 +30,7 @@ SELECT
     SAFE_CAST(count_vehicle_operations_hours_q AS NUMERIC) AS count_vehicle_operations_hours_q,
     {{ trim_make_empty_string_null('max_mode_name') }} AS max_mode_name,
     {{ trim_make_empty_string_null('mode') }} AS mode,
-    {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+    {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
     SAFE_CAST(report_year AS INT64) AS report_year,
     SAFE_CAST(sum_total_employee_count AS NUMERIC) AS sum_total_employee_count,
     SAFE_CAST(sum_total_hours AS NUMERIC) AS sum_total_hours,
