@@ -20,7 +20,7 @@ SELECT
     SAFE_CAST(agency_voms AS NUMERIC) AS agency_voms,
     {{ trim_make_empty_string_null('city') }} AS city,
     SAFE_CAST(general_funds AS NUMERIC) AS general_funds,
-    {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+    {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
     {{ trim_make_empty_string_null('organization_type') }} AS organization_type,
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
     SAFE_CAST(reduced_reporter_funds AS NUMERIC) AS reduced_reporter_funds,

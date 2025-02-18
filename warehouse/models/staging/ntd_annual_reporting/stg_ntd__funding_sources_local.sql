@@ -22,7 +22,7 @@ SELECT
     SAFE_CAST(fuel_tax AS NUMERIC) AS fuel_tax,
     SAFE_CAST(general_fund AS NUMERIC) AS general_fund,
     SAFE_CAST(income_tax AS NUMERIC) AS income_tax,
-    {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+    {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
     {{ trim_make_empty_string_null('organization_type') }} AS organization_type,
     SAFE_CAST(other_funds AS NUMERIC) AS other_funds,
     SAFE_CAST(other_taxes AS NUMERIC) AS other_taxes,

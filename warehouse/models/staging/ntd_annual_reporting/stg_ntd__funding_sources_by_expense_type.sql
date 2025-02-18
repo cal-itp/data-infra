@@ -26,7 +26,7 @@ SELECT
     {{ trim_make_empty_string_null('fund_expenditure_type') }} AS fund_expenditure_type,
     SAFE_CAST(local AS NUMERIC) AS local,
     {{ trim_make_empty_string_null('local_questionable') }} AS local_questionable,
-    {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
+    {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
     {{ trim_make_empty_string_null('organization_type') }} AS organization_type,
     SAFE_CAST(primary_uza_population AS NUMERIC) AS primary_uza_population,
     SAFE_CAST(report_year AS INT64) AS report_year,
