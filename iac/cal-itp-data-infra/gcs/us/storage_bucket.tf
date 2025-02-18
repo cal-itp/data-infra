@@ -454,7 +454,7 @@ resource "google_storage_bucket" "tfer--calitp-map-tiles" {
     max_age_seconds = "300"
     method          = ["GET", "HEAD"]
     origin          = ["*"]
-    response_header = ["etag", "range"]
+    response_header = ["range", "etag"]
   }
 
   default_event_based_hold    = "false"
