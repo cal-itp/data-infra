@@ -50,7 +50,7 @@ WITH
         SAFE_CAST(_2015 AS FLOAT64) AS _2015,
         SAFE_CAST(_1995 AS FLOAT64) AS _1995,
         SAFE_CAST(_1994 AS FLOAT64) AS _1994,
-        SAFE_CAST(ntd_id AS FLOAT64) AS ntd_id,
+        {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
         {{ trim_make_empty_string_null('_2023_status') }} AS _2023_status,
         {{ trim_make_empty_string_null('agency_status') }} AS agency_status,
         SAFE_CAST(_1992 AS FLOAT64) AS _1992,

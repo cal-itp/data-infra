@@ -58,7 +58,7 @@ WITH
         {{ trim_make_empty_string_null('state') }} AS state,
         {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
         {{ trim_make_empty_string_null('agency_name') }} AS agency_name,
-        SAFE_CAST(ntd_id AS FLOAT64) AS ntd_id,
+        {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
         dt,
         execution_ts
     FROM stg_ntd__operating_and_capital_funding_time_series__decommissioned_operatingfares

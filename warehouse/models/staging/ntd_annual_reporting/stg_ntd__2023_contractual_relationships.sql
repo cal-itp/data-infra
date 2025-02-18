@@ -42,7 +42,7 @@ SELECT
     {{ trim_make_empty_string_null('reporting_module') }} AS reporting_module,
     {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
     {{ trim_make_empty_string_null('other_public_assets_provided_desc') }} AS other_public_assets_provided_desc,
-    SAFE_CAST(ntd_id AS INTEGER) AS ntd_id,
+    {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
     dt,
     execution_ts
 FROM stg_ntd__2023_contractual_relationships

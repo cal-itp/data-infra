@@ -57,7 +57,7 @@ SELECT
     SAFE_CAST(pederstiran_in_crosswalk AS INTEGER) AS pederstiran_in_crosswalk,
     SAFE_CAST(__computed_region_8fe2_rd7y AS NUMERIC) AS __computed_region_8fe2_rd7y,
     SAFE_CAST(bicyclist_injuries AS INTEGER) AS bicyclist_injuries,
-    SAFE_CAST(_5_digit_ntd_id AS INTEGER) AS _5_digit_ntd_id,
+    {{ trim_make_empty_string_null('_5_digit_ntd_id') }} AS _5_digit_ntd_id,
     SAFE_CAST(transit_employee_serious AS INTEGER) AS transit_employee_serious,
     SAFE_CAST(transit_employee_injuries AS INTEGER) AS transit_employee_injuries,
     SAFE_CAST(trespasser_serious_injuries_subtotal_ AS INTEGER) AS trespasser_serious_injuries_subtotal_,
