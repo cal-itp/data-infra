@@ -4,9 +4,10 @@ WITH dim AS (
     SELECT * FROM {{ ref('int_transit_database__organizations_dim') }}
 ),
 
-ntd_agency_to_organization AS (
-    SELECT * FROM {{ ref('_deprecated__ntd_agency_to_organization') }}
-),
+-- This is deprecated, what replaced the source of truth for ntd_id < '2023-05-23' that was previously found in ntd_to_org.ntd_id ??
+-- ntd_agency_to_organization AS (
+--     SELECT * FROM {{ ref('_deprecated__ntd_agency_to_organization') }}
+-- ),
 
 dim_organizations AS (
     SELECT
@@ -32,6 +33,8 @@ dim_organizations AS (
             WHEN _valid_from >= '2023-05-23' THEN raw_ntd_id
             ELSE ntd_to_org.ntd_id
         END AS ntd_id,
+
+        -- is this not related to ntd_to_org.ntd_id (ntd_id < '2023-05-23') ??
         ntd_id_2022,
         public_currently_operating,
         public_currently_operating_fixed_route,
