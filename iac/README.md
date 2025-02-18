@@ -34,6 +34,11 @@ $ terraform init
 Run `terraform init` against each nested resource:
 
 ```bash
-$ find . -name 'terraform.tfstate' | xargs dirname | xargs -I'{}' terraform -chd
-ir='{}' init
+$ find . -name 'terraform.tfstate' | xargs dirname | xargs -I'{}' terraform -chdir='{}' init
+```
+
+To see any outstanding changes, run `terraform plan` against each nested resource:
+
+```bash
+$ find . -name 'terraform.tfstate' | xargs dirname | xargs -I'{}' terraform -chdir='{}' plan
 ```

@@ -224,7 +224,7 @@ resource "google_compute_instance_group_manager" "tfer--gke-data-infra-apps-jupy
   list_managed_instances_results = "PAGINATED"
   name                           = "gke-data-infra-apps-jupyterhub-users-6aa76dbb-grp"
   project                        = "cal-itp-data-infra"
-  target_size                    = "3"
+  target_size                    = "4"
   wait_for_instances             = "false"
 
   update_policy {
@@ -249,7 +249,7 @@ resource "google_compute_instance_group_manager" "tfer--gke-data-infra-apps-jupy
   list_managed_instances_results = "PAGELESS"
   name                           = "gke-data-infra-apps-jupyterhub-users-b57e08f4-grp"
   project                        = "cal-itp-data-infra"
-  target_size                    = "2"
+  target_size                    = "1"
   wait_for_instances             = "false"
 
   update_policy {

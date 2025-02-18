@@ -254,16 +254,8 @@ output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-jobs-v1-62
   value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-jobs-v1-625ec063-5q8v.self_link
 }
 
-output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-jupyterhub-users-6aa76dbb-b03b_self_link" {
-  value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-jupyterhub-users-6aa76dbb-b03b.self_link
-}
-
 output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-jupyterhub-users-6aa76dbb-fk7x_self_link" {
   value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-jupyterhub-users-6aa76dbb-fk7x.self_link
-}
-
-output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-jupyterhub-users-6aa76dbb-juyr_self_link" {
-  value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-jupyterhub-users-6aa76dbb-juyr.self_link
 }
 
 output "google_compute_disk_tfer--us-west1-c-002F-pvc-32c3a666-3ae5-4cfc-8129-84f571239f42_self_link" {

@@ -1279,27 +1279,6 @@ resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-jobs-v
   zone                      = "us-west1-c"
 }
 
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-jupyterhub-users-6aa76dbb-b03b" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-jupyterhub-users-6aa76dbb-b03b"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
 resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-jupyterhub-users-6aa76dbb-fk7x" {
   image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
 
@@ -1313,27 +1292,6 @@ resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-jupyte
   }
 
   name                      = "gke-data-infra-apps-jupyterhub-users-6aa76dbb-fk7x"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-jupyterhub-users-6aa76dbb-juyr" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-jupyterhub-users-6aa76dbb-juyr"
   physical_block_size_bytes = "4096"
   project                   = "cal-itp-data-infra"
   provisioned_iops          = "0"
