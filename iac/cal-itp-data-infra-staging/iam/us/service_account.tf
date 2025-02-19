@@ -25,3 +25,11 @@ resource "google_service_account" "tfer--111881979116192190399" {
   display_name = "metabase"
   project      = "cal-itp-data-infra-staging"
 }
+
+resource "google_service_account" "tfer--terraform" {
+  account_id   = "github-actions-terraform"
+  description  = "Service account for Github Actions to run Terraform"
+  disabled     = "false"
+  display_name = "Terraform"
+  project      = "cal-itp-data-infra-staging"
+}

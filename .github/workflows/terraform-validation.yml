@@ -9,16 +9,21 @@ jobs:
   targets:
     runs-on: ubuntu-latest
     outputs:
-      paths: ${{ steps.ls.outputs.paths }}
+      staging: ${{ steps.staging.outputs.paths }}
+      production: ${{ steps.production.outputs.paths }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Discover Terraform targets
-        id: ls
-        run: echo "paths=$(ls -d iac/*/*/* | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')" >> ${GITHUB_OUTPUT}
+      - name: Staging Terraform targets
+        id: staging
+        run: echo "paths=$(find iac -name 'provider.tf' | grep cal-itp-data-infra-staging/ | xargs dirname | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')" >> ${GITHUB_OUTPUT}
 
-  validate:
+      - name: Production Terraform targets
+        id: production
+        run: echo "paths=$(find iac -name 'provider.tf' | grep cal-itp-data-infra/ | xargs dirname | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')" >> ${GITHUB_OUTPUT}
+
+  staging:
     needs: targets
 
     runs-on: ubuntu-latest
@@ -30,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        path: ${{ fromJson(needs.targets.outputs.paths) }}
+        path: ${{ fromJson(needs.targets.outputs.staging) }}
 
     steps:
       - name: Checkout
@@ -38,7 +43,50 @@ jobs:
 
       - uses: 'google-github-actions/auth@v2'
         with:
-          project_id: 'cal-itp-data-infra'
+          project_id: cal-itp-data-infra-staging
+          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Terraform Formatting
+        uses: dflook/terraform-fmt-check@v1
+        with:
+          path: ${{ matrix.path }}
+
+      - name: Terraform Validation
+        uses: dflook/terraform-validate@v1
+        with:
+          path: ${{ matrix.path }}
+
+      - name: Terraform Plan
+        uses: dflook/terraform-plan@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          add_github_comment: changes-only
+          path: ${{ matrix.path }}
+
+  production:
+    needs: targets
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        path: ${{ fromJson(needs.targets.outputs.production) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: cal-itp-data-infra
           workload_identity_provider: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
 
       - uses: google-github-actions/setup-gcloud@v2

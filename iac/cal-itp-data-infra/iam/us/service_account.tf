@@ -247,3 +247,11 @@ resource "google_service_account" "tfer--118350215382382143206" {
   display_name = "gh_actions_mobi_mart"
   project      = "cal-itp-data-infra"
 }
+
+resource "google_service_account" "terraform" {
+  account_id   = "github-actions-terraform"
+  description  = "Service account for Github Actions to run Terraform"
+  disabled     = "false"
+  display_name = "Terraform"
+  project      = "cal-itp-data-infra"
+}
