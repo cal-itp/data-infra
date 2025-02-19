@@ -1,9 +1,15 @@
-name: Terraform Validation
+name: Terraform Apply
 
 on:
-  pull_request:
+  push:
+    branches:
+      - 'main'
     paths:
       - 'iac/*'
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   targets:
@@ -37,6 +43,7 @@ jobs:
       matrix:
         path: ${{ fromJson(needs.targets.outputs.staging) }}
 
+    name: Apply approved plan
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -50,22 +57,11 @@ jobs:
 
       - uses: google-github-actions/setup-gcloud@v2
 
-      - name: Terraform Formatting
-        uses: dflook/terraform-fmt-check@v1
-        with:
-          path: ${{ matrix.path }}
-
-      - name: Terraform Validation
-        uses: dflook/terraform-validate@v1
-        with:
-          path: ${{ matrix.path }}
-
-      - name: Terraform Plan
-        uses: dflook/terraform-plan@v1
+      - name: Terraform Apply
+        uses: dflook/terraform-apply@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          add_github_comment: changes-only
           path: ${{ matrix.path }}
 
   production:
@@ -95,20 +91,9 @@ jobs:
 
       - uses: google-github-actions/setup-gcloud@v2
 
-      - name: Terraform Formatting
-        uses: dflook/terraform-fmt-check@v1
-        with:
-          path: ${{ matrix.path }}
-
-      - name: Terraform Validation
-        uses: dflook/terraform-validate@v1
-        with:
-          path: ${{ matrix.path }}
-
-      - name: Terraform Plan
-        uses: dflook/terraform-plan@v1
+      - name: Terraform Apply
+        uses: dflook/terraform-apply@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          add_github_comment: changes-only
           path: ${{ matrix.path }}
