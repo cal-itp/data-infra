@@ -142,3 +142,40 @@ resource "google_storage_bucket_iam_policy" "tfer--test-calitp-amplitude-benefit
 }
 POLICY
 }
+
+resource "google_storage_bucket_iam_policy" "tfer--calitp-staging-gcp-components-tfstate" {
+  bucket = "b/calitp-staging-gcp-components-tfstate"
+
+  policy_data = <<POLICY
+{
+  "bindings": [
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra-staging",
+        "projectOwner:cal-itp-data-infra-staging"
+      ],
+      "role": "roles/storage.legacyBucketOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra-staging"
+      ],
+      "role": "roles/storage.legacyBucketReader"
+    },
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra-staging",
+        "projectOwner:cal-itp-data-infra-staging"
+      ],
+      "role": "roles/storage.legacyObjectOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra-staging"
+      ],
+      "role": "roles/storage.legacyObjectReader"
+    }
+  ]
+}
+POLICY
+}

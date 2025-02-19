@@ -1,7 +1,8 @@
 data "terraform_remote_state" "networks" {
-  backend = "local"
+  backend = "gcs"
 
   config = {
-    path = "../../networks/us/terraform.tfstate"
+    bucket = "calitp-staging-gcp-components-tfstate"
+    prefix = "cal-itp-data-infra-staging/networks"
   }
 }

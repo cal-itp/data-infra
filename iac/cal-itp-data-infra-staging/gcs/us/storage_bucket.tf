@@ -77,3 +77,15 @@ resource "google_storage_bucket" "tfer--test-calitp-amplitude-benefits-events" {
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
 }
+
+resource "google_storage_bucket" "tfer--calitp-staging-gcp-components-tfstate" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US"
+  name                        = "calitp-staging-gcp-components-tfstate"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}

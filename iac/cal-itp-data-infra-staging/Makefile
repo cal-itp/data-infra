@@ -18,3 +18,11 @@ plan:
 .PHONY: apply
 apply:
 	$(call FOREACH,apply)
+
+.PHONY: fmt
+fmt:
+	$(call FOREACH,fmt)
+
+.PHONY: migrate-state
+migrate-state:
+	$(call FOREACH,init -migrate-state)

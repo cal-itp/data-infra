@@ -27,3 +27,9 @@ resource "google_storage_bucket_iam_binding" "tfer--test-calitp-amplitude-benefi
   members = ["projectViewer:cal-itp-data-infra-staging"]
   role    = "roles/storage.legacyBucketReader"
 }
+
+resource "google_storage_bucket_iam_binding" "tfer--calitp-staging-gcp-components-tfstate" {
+  bucket  = "b/calitp-staging-gcp-components-tfstate"
+  members = ["projectViewer:cal-itp-data-infra-staging"]
+  role    = "roles/storage.legacyObjectReader"
+}

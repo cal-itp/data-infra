@@ -8,4 +8,9 @@ terraform {
       version = "~> 4.59.0"
     }
   }
+
+  backend "gcs" {
+    bucket = "calitp-staging-gcp-components-tfstate"
+    prefix = "cal-itp-data-infra-staging/networks"
+  }
 }
