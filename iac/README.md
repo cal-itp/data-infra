@@ -31,14 +31,16 @@ Initialize Terraform:
 $ terraform init
 ```
 
-Run `terraform init` against each nested resource:
+Run `terraform init` against each nested resource using `make plan`:
 
 ```bash
-$ find . -name 'terraform.tfstate' | xargs dirname | xargs -I'{}' terraform -chdir='{}' init
+$ cd iac/
+$ make init
 ```
 
-To see any outstanding changes, run `terraform plan` against each nested resource:
+To see any outstanding changes, run `terraform plan` recursively using `make plan`:
 
 ```bash
-$ find . -name 'terraform.tfstate' | xargs dirname | xargs -I'{}' terraform -chdir='{}' plan
+$ cd iac/
+$ make plan
 ```
