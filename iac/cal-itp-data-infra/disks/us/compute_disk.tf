@@ -1,24 +1,3 @@
-resource "google_compute_disk" "tfer--us-west1-a-002F-gke-data-infra-apps-0f-pvc-2a93aefe-28c7-46ba-93f2-a86ff6f4aafa" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-2a93aefe-28c7-46ba-93f2-a86ff6f4aafa\",\"kubernetes.io/created-for/pvc/name\":\"claim-katrinamkaiser\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-0f-pvc-2a93aefe-28c7-46ba-93f2-a86ff6f4aafa"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-a"
-}
-
 resource "google_compute_disk" "tfer--us-west1-a-002F-gke-data-infra-apps-0f-pvc-2df32811-310a-4273-9369-0cf65e9d514e" {
   description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-2df32811-310a-4273-9369-0cf65e9d514e\",\"kubernetes.io/created-for/pvc/name\":\"data-postgresql-0\",\"kubernetes.io/created-for/pvc/namespace\":\"monitoring-grafana\"}"
 
@@ -322,27 +301,6 @@ resource "google_compute_disk" "tfer--us-west1-a-002F-gke-data-infra-apps-jobs-v
   zone                      = "us-west1-a"
 }
 
-resource "google_compute_disk" "tfer--us-west1-a-002F-pvc-39448e03-f6dd-4cd1-88ee-030e9a4c6864" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-39448e03-f6dd-4cd1-88ee-030e9a4c6864\",\"kubernetes.io/created-for/pvc/name\":\"claim-fsalemi\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "pvc-39448e03-f6dd-4cd1-88ee-030e9a4c6864"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-a"
-}
-
 resource "google_compute_disk" "tfer--us-west1-a-002F-pvc-a5b1d3cd-ad12-405c-ab13-687bced0ff1e" {
   description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-a5b1d3cd-ad12-405c-ab13-687bced0ff1e\",\"kubernetes.io/created-for/pvc/name\":\"data-sentry-zookeeper-clickhouse-1\",\"kubernetes.io/created-for/pvc/namespace\":\"sentry\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
 
@@ -360,27 +318,6 @@ resource "google_compute_disk" "tfer--us-west1-a-002F-pvc-a5b1d3cd-ad12-405c-ab1
   project                   = "cal-itp-data-infra"
   provisioned_iops          = "0"
   size                      = "16"
-  type                      = "pd-standard"
-  zone                      = "us-west1-a"
-}
-
-resource "google_compute_disk" "tfer--us-west1-a-002F-pvc-bd1e9f34-09a4-4b74-8b70-ec0991eab635" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-bd1e9f34-09a4-4b74-8b70-ec0991eab635\",\"kubernetes.io/created-for/pvc/name\":\"claim-albeedobson\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "pvc-bd1e9f34-09a4-4b74-8b70-ec0991eab635"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "32"
   type                      = "pd-standard"
   zone                      = "us-west1-a"
 }
@@ -419,47 +356,6 @@ resource "google_compute_disk" "tfer--us-west1-a-002F-pvc-c7a31ebc-2f7e-40c0-a46
   labels = {
     goog-gke-volume = ""
   }
-}
-
-resource "google_compute_disk" "tfer--us-west1-a-002F-pvc-d7742e0a-a969-458c-a91a-7af8f49f6472" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-d7742e0a-a969-458c-a91a-7af8f49f6472\",\"kubernetes.io/created-for/pvc/name\":\"claim-mdsaifulislamfahim\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-gke-cost-management  = ""
-    goog-gke-volume           = ""
-    goog-k8s-cluster-location = "us-west1"
-    goog-k8s-cluster-name     = "data-infra-apps"
-    goog-k8s-node-pool-name   = "jupyterhub-users"
-  }
-
-  name                      = "pvc-d7742e0a-a969-458c-a91a-7af8f49f6472"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "32"
-  type                      = "pd-standard"
-  zone                      = "us-west1-a"
-}
-
-resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-16a68482-25de-4d96-9e3b-3cfd0db3e368" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-16a68482-25de-4d96-9e3b-3cfd0db3e368\",\"kubernetes.io/created-for/pvc/name\":\"claim-natam1\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-0f-pvc-16a68482-25de-4d96-9e3b-3cfd0db3e368"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "32"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
 }
 
 resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-3265ecbf-c279-4cc3-8e67-f98174ad19e9" {
@@ -504,26 +400,6 @@ resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc
   zone                      = "us-west1-b"
 }
 
-resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-88d137db-2ba6-4aa6-b94d-2d5f77714c7c" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-88d137db-2ba6-4aa6-b94d-2d5f77714c7c\",\"kubernetes.io/created-for/pvc/name\":\"claim-evansiroky\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-
-  labels = {
-    goog-gke-cost-management  = ""
-    goog-gke-volume           = ""
-    goog-k8s-cluster-location = "us-west1"
-    goog-k8s-cluster-name     = "data-infra-apps"
-    goog-k8s-node-pool-name   = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-0f-pvc-88d137db-2ba6-4aa6-b94d-2d5f77714c7c"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "32"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
 resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-bd2749b9-7e64-4991-83e4-9b694beac49b" {
   description               = "{\"kubernetes.io/created-for/pv/name\":\"pvc-bd2749b9-7e64-4991-83e4-9b694beac49b\",\"kubernetes.io/created-for/pvc/name\":\"claim-mjumbewu\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
   name                      = "gke-data-infra-apps-0f-pvc-bd2749b9-7e64-4991-83e4-9b694beac49b"
@@ -556,27 +432,6 @@ resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc
   project                   = "cal-itp-data-infra"
   provisioned_iops          = "0"
   size                      = "8"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
-resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-cd04012e-8535-4d35-b3b6-16f2750b2fb9" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-cd04012e-8535-4d35-b3b6-16f2750b2fb9\",\"kubernetes.io/created-for/pvc/name\":\"claim-noah-2dca\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-0f-pvc-cd04012e-8535-4d35-b3b6-16f2750b2fb9"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "50"
   type                      = "pd-standard"
   zone                      = "us-west1-b"
 }
@@ -679,27 +534,6 @@ resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-jobs-v
   zone                      = "us-west1-b"
 }
 
-resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-jupyterhub-users-dddc57ff-cbrw" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-jupyterhub-users-dddc57ff-cbrw"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
 resource "google_compute_disk" "tfer--us-west1-b-002F-pvc-51920f4f-17fb-4119-88d3-7ab7946939c9" {
   description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-51920f4f-17fb-4119-88d3-7ab7946939c9\",\"kubernetes.io/created-for/pvc/name\":\"sentry-clickhouse-data-sentry-clickhouse-2\",\"kubernetes.io/created-for/pvc/namespace\":\"sentry\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
 
@@ -717,132 +551,6 @@ resource "google_compute_disk" "tfer--us-west1-b-002F-pvc-51920f4f-17fb-4119-88d
   project                   = "cal-itp-data-infra"
   provisioned_iops          = "0"
   size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
-resource "google_compute_disk" "tfer--us-west1-b-002F-pvc-56236315-a154-4f43-b3f0-8bb7915da9e4" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-56236315-a154-4f43-b3f0-8bb7915da9e4\",\"kubernetes.io/created-for/pvc/name\":\"claim-themightychris\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "pvc-56236315-a154-4f43-b3f0-8bb7915da9e4"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "32"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
-resource "google_compute_disk" "tfer--us-west1-b-002F-pvc-8ae88cc0-46d6-4dbd-b554-ebb1fd75df28" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-8ae88cc0-46d6-4dbd-b554-ebb1fd75df28\",\"kubernetes.io/created-for/pvc/name\":\"claim-monicamorenoespinoza\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "pvc-8ae88cc0-46d6-4dbd-b554-ebb1fd75df28"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "10"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
-resource "google_compute_disk" "tfer--us-west1-b-002F-pvc-b75ef8be-704f-4c95-b75f-8b75e7f8216e" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-b75ef8be-704f-4c95-b75f-8b75e7f8216e\",\"kubernetes.io/created-for/pvc/name\":\"claim-erikamov\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "pvc-b75ef8be-704f-4c95-b75f-8b75e7f8216e"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "32"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
-resource "google_compute_disk" "tfer--us-west1-b-002F-pvc-b9f30810-bebd-43b6-81d1-cb17699cd116" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-b9f30810-bebd-43b6-81d1-cb17699cd116\",\"kubernetes.io/created-for/pvc/name\":\"claim-lottspot\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "pvc-b9f30810-bebd-43b6-81d1-cb17699cd116"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "32"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
-resource "google_compute_disk" "tfer--us-west1-b-002F-pvc-bf1cfbb8-d529-4199-a4c1-2f83e4369a21" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-bf1cfbb8-d529-4199-a4c1-2f83e4369a21\",\"kubernetes.io/created-for/pvc/name\":\"claim-shweta487\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "pvc-bf1cfbb8-d529-4199-a4c1-2f83e4369a21"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
-resource "google_compute_disk" "tfer--us-west1-b-002F-pvc-cb1787db-828d-4577-8d5b-35e46c43f3a7" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-cb1787db-828d-4577-8d5b-35e46c43f3a7\",\"kubernetes.io/created-for/pvc/name\":\"claim-hhmckay\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "pvc-cb1787db-828d-4577-8d5b-35e46c43f3a7"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "10"
   type                      = "pd-standard"
   zone                      = "us-west1-b"
 }
@@ -900,27 +608,6 @@ resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc
   }
 }
 
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-537c2c55-3c90-44db-a36d-6bd4a4b0ebc2" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-537c2c55-3c90-44db-a36d-6bd4a4b0ebc2\",\"kubernetes.io/created-for/pvc/name\":\"claim-amandaha8\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-0f-pvc-537c2c55-3c90-44db-a36d-6bd4a4b0ebc2"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
 resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-5a9722fe-da89-48b2-a633-3bd3f4e8ab78" {
   description               = "{\"kubernetes.io/created-for/pv/name\":\"pvc-5a9722fe-da89-48b2-a633-3bd3f4e8ab78\",\"kubernetes.io/created-for/pvc/name\":\"data-sentry-kafka-2\",\"kubernetes.io/created-for/pvc/namespace\":\"sentry\"}"
   name                      = "gke-data-infra-apps-0f-pvc-5a9722fe-da89-48b2-a633-3bd3f4e8ab78"
@@ -976,48 +663,6 @@ resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc
   zone                      = "us-west1-c"
 }
 
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-6d2d7ce8-56d1-45bc-bd6a-9b0a70c4c697" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-6d2d7ce8-56d1-45bc-bd6a-9b0a70c4c697\",\"kubernetes.io/created-for/pvc/name\":\"claim-csuyat-2ddot\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-0f-pvc-6d2d7ce8-56d1-45bc-bd6a-9b0a70c4c697"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-780faa09-e65d-46f6-8809-6d69eaa6073f" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-780faa09-e65d-46f6-8809-6d69eaa6073f\",\"kubernetes.io/created-for/pvc/name\":\"claim-charlie-2dcostanzo\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-0f-pvc-780faa09-e65d-46f6-8809-6d69eaa6073f"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
 resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-789ca26b-60f7-4b82-ba71-63b519969b5a" {
   description               = "{\"kubernetes.io/created-for/pv/name\":\"pvc-789ca26b-60f7-4b82-ba71-63b519969b5a\",\"kubernetes.io/created-for/pvc/name\":\"claim-chnvd\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
   name                      = "gke-data-infra-apps-0f-pvc-789ca26b-60f7-4b82-ba71-63b519969b5a"
@@ -1031,48 +676,6 @@ resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc
   labels = {
     goog-gke-volume = ""
   }
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-7f5d3f75-5bdd-430d-a47b-d9111ae2d66b" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-7f5d3f75-5bdd-430d-a47b-d9111ae2d66b\",\"kubernetes.io/created-for/pvc/name\":\"claim-benjaminbressette\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-0f-pvc-7f5d3f75-5bdd-430d-a47b-d9111ae2d66b"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "10"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-8e1af0b5-de26-4747-93b8-2f1bcd6f9c1b" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-8e1af0b5-de26-4747-93b8-2f1bcd6f9c1b\",\"kubernetes.io/created-for/pvc/name\":\"claim-edasmalchi\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-0f-pvc-8e1af0b5-de26-4747-93b8-2f1bcd6f9c1b"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
 }
 
 resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-998826b4-8586-42ac-b030-874e1c622155" {
@@ -1128,27 +731,6 @@ resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc
   project                   = "cal-itp-data-infra"
   provisioned_iops          = "0"
   size                      = "20"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-da85fe84-416e-4013-8253-d01d82ebaf2d" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-da85fe84-416e-4013-8253-d01d82ebaf2d\",\"kubernetes.io/created-for/pvc/name\":\"claim-hunterowens\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-0f-pvc-da85fe84-416e-4013-8253-d01d82ebaf2d"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "10"
   type                      = "pd-standard"
   zone                      = "us-west1-c"
 }
@@ -1279,48 +861,6 @@ resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-jobs-v
   zone                      = "us-west1-c"
 }
 
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-jupyterhub-users-6aa76dbb-fk7x" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "gke-data-infra-apps-jupyterhub-users-6aa76dbb-fk7x"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-pvc-32c3a666-3ae5-4cfc-8129-84f571239f42" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-32c3a666-3ae5-4cfc-8129-84f571239f42\",\"kubernetes.io/created-for/pvc/name\":\"claim-cathyxlin\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "pvc-32c3a666-3ae5-4cfc-8129-84f571239f42"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "32"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
 resource "google_compute_disk" "tfer--us-west1-c-002F-pvc-3fb43fc4-3b64-478a-aca4-87ab2f21c969" {
   description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-3fb43fc4-3b64-478a-aca4-87ab2f21c969\",\"kubernetes.io/created-for/pvc/name\":\"sentry-clickhouse-data-sentry-clickhouse-0\",\"kubernetes.io/created-for/pvc/namespace\":\"sentry\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
 
@@ -1401,49 +941,6 @@ resource "google_compute_disk" "tfer--us-west1-c-002F-pvc-51ff509f-72b2-46d8-946
   project                   = "cal-itp-data-infra"
   provisioned_iops          = "0"
   size                      = "10"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-pvc-a2132f03-9613-4f28-8a87-157d93e7b5e9" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-a2132f03-9613-4f28-8a87-157d93e7b5e9\",\"kubernetes.io/created-for/pvc/name\":\"claim-tiffanychu90\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "pvc-a2132f03-9613-4f28-8a87-157d93e7b5e9"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "75"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-pvc-c27aa4d3-2472-4d81-916c-668a4c3e4828" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-c27aa4d3-2472-4d81-916c-668a4c3e4828\",\"kubernetes.io/created-for/pvc/name\":\"claim-vevetron\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-cost-management   = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jupyterhub-users"
-  }
-
-  name                      = "pvc-c27aa4d3-2472-4d81-916c-668a4c3e4828"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
   type                      = "pd-standard"
   zone                      = "us-west1-c"
 }

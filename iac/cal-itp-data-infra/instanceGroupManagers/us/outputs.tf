@@ -69,27 +69,3 @@ output "google_compute_instance_group_manager_tfer--gke-data-infra-apps-jobs-v1-
 output "google_compute_instance_group_manager_tfer--gke-data-infra-apps-jobs-v1-cd18666b-grp_self_link" {
   value = google_compute_instance_group_manager.tfer--gke-data-infra-apps-jobs-v1-cd18666b-grp.self_link
 }
-
-output "google_compute_instance_group_manager_tfer--gke-data-infra-apps-jupyterhub-users-6aa76dbb-grp_instance_group" {
-  value = google_compute_instance_group_manager.tfer--gke-data-infra-apps-jupyterhub-users-6aa76dbb-grp.instance_group
-}
-
-output "google_compute_instance_group_manager_tfer--gke-data-infra-apps-jupyterhub-users-6aa76dbb-grp_self_link" {
-  value = google_compute_instance_group_manager.tfer--gke-data-infra-apps-jupyterhub-users-6aa76dbb-grp.self_link
-}
-
-output "google_compute_instance_group_manager_tfer--gke-data-infra-apps-jupyterhub-users-b57e08f4-grp_instance_group" {
-  value = google_compute_instance_group_manager.tfer--gke-data-infra-apps-jupyterhub-users-b57e08f4-grp.instance_group
-}
-
-output "google_compute_instance_group_manager_tfer--gke-data-infra-apps-jupyterhub-users-b57e08f4-grp_self_link" {
-  value = google_compute_instance_group_manager.tfer--gke-data-infra-apps-jupyterhub-users-b57e08f4-grp.self_link
-}
-
-output "google_compute_instance_group_manager_tfer--gke-data-infra-apps-jupyterhub-users-dddc57ff-grp_instance_group" {
-  value = google_compute_instance_group_manager.tfer--gke-data-infra-apps-jupyterhub-users-dddc57ff-grp.instance_group
-}
-
-output "google_compute_instance_group_manager_tfer--gke-data-infra-apps-jupyterhub-users-dddc57ff-grp_self_link" {
-  value = google_compute_instance_group_manager.tfer--gke-data-infra-apps-jupyterhub-users-dddc57ff-grp.self_link
-}
