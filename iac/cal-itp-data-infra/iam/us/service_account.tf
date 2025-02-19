@@ -248,7 +248,7 @@ resource "google_service_account" "tfer--118350215382382143206" {
   project      = "cal-itp-data-infra"
 }
 
-resource "google_service_account" "terraform" {
+resource "google_service_account" "tfer--terraform" {
   account_id   = "github-actions-terraform"
   description  = "Service account for Github Actions to run Terraform"
   disabled     = "false"

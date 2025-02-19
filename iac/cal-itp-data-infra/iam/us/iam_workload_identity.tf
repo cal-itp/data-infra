@@ -1,3 +1,7 @@
+locals {
+  github_repository_name = "cal-itp/data-infra"
+}
+
 resource "google_iam_workload_identity_pool" "github-actions--pool" {
   workload_identity_pool_id = "github-actions-pool"
 }
@@ -20,7 +24,7 @@ resource "google_iam_workload_identity_pool_provider" "github-actions--provider"
 }
 
 resource "google_service_account_iam_member" "github-actions--service-account" {
-  service_account_id = google_service_account.terraform.id
+  service_account_id = google_service_account.tfer--terraform.id
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principalSet://iam.googleapis.com/projects/1005246706141/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.github-actions--pool.workload_identity_pool_id}/attribute.repository/cal-itp/data-infra"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions--pool.name}/attribute.repository/${local.github_repository_name}"
 }
