@@ -134,10 +134,6 @@ output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-5f1
   value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-5f1039b1-f4bb-48e0-b925-0b9f4936b92c.self_link
 }
 
-output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-789ca26b-60f7-4b82-ba71-63b519969b5a_self_link" {
-  value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-789ca26b-60f7-4b82-ba71-63b519969b5a.self_link
-}
-
 output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-998826b4-8586-42ac-b030-874e1c622155_self_link" {
   value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-998826b4-8586-42ac-b030-874e1c622155.self_link
 }

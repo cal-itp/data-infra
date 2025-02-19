@@ -663,21 +663,6 @@ resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc
   zone                      = "us-west1-c"
 }
 
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-789ca26b-60f7-4b82-ba71-63b519969b5a" {
-  description               = "{\"kubernetes.io/created-for/pv/name\":\"pvc-789ca26b-60f7-4b82-ba71-63b519969b5a\",\"kubernetes.io/created-for/pvc/name\":\"claim-chnvd\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-  name                      = "gke-data-infra-apps-0f-pvc-789ca26b-60f7-4b82-ba71-63b519969b5a"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "10"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-
-  labels = {
-    goog-gke-volume = ""
-  }
-}
-
 resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-998826b4-8586-42ac-b030-874e1c622155" {
   description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-998826b4-8586-42ac-b030-874e1c622155\",\"kubernetes.io/created-for/pvc/name\":\"prometheus-server\",\"kubernetes.io/created-for/pvc/namespace\":\"monitoring-prometheus\"}"
 
