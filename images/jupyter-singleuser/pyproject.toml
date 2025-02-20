@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2025.1.15"
+version = "2025.2.20"
 description = ""
 package-mode = false
 authors = ["Vevetron"]
@@ -15,7 +15,8 @@ intake-parquet = ">=0.2.3"
 ipyleaflet = "0.15.0"
 jupytext = ">=1.13.5"
 jupyterlab-code-formatter = ">=1.4.10"
-voila = "0.5.8"
+lxml_html_clean = ">=0.4.1" #To stop some background error messages
+# voila = "0.5.8"
 plotnine = ">=0.8.0"
 plotly = "5.5.0"
 folium = ">=0.12.1.post1"
@@ -45,7 +46,7 @@ ydata-profiling = {extras = ["notebook"], version = "^4.0.0"}
 # https://github.com/statsmodels/statsmodels/issues/8543
 statsmodels = "<0.13.3 || >0.13.3,<0.13.4 || >0.13.4,<0.13.5 || >0.13.5"
 pendulum = "^2.1.2"
-calitp-data-analysis = "2024.12.6"
+calitp-data-analysis = "2024.12.6.post1"
 calitp-map-utils = "2024.5.23"
 jupyter-server-proxy = "^4.1.1"
 setuptools = "68.2.2" # For some reason, poetry/pip installs setuptools 75 then it starts to break.  Probably be a conda backports related issue.  Update later and test
