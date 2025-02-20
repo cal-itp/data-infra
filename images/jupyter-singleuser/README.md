@@ -21,7 +21,7 @@ docker build  -t envs-hurt . 2>&1 | tee build.log
 
 You can go into the docker image and do tests:
 ```
-docker images
+docker list
 docker exec -it upbeat_bhaskara /bin/bash
 ```
 
