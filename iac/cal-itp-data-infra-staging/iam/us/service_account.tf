@@ -33,3 +33,11 @@ resource "google_service_account" "tfer--terraform" {
   display_name = "Terraform"
   project      = "cal-itp-data-infra-staging"
 }
+
+resource "google_service_account" "tfer--pytest" {
+  account_id   = "github-actions-pytest"
+  description  = "Service account for Github Actions to run tests"
+  disabled     = "false"
+  display_name = "pytest"
+  project      = "cal-itp-data-infra-staging"
+}

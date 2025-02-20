@@ -229,3 +229,9 @@ resource "google_project_iam_member" "tfer--terraform-membership" {
   member  = "serviceAccount:${google_service_account.tfer--terraform.email}"
   project = "cal-itp-data-infra-staging"
 }
+
+resource "google_project_iam_member" "tfer--pytest-membership" {
+  member  = "serviceAccount:${google_service_account.tfer--pytest.email}"
+  project = "cal-itp-data-infra-staging"
+  role    = "roles/storage.objectViewer"
+}
