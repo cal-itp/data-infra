@@ -3,9 +3,25 @@ WITH staging_capital_expenses_for_expansion_of_service AS (
     FROM {{ ref('stg_ntd__capital_expenses_for_expansion_of_service') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_capital_expenses_for_expansion_of_service.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_capital_expenses_for_expansion_of_service
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_capital_expenses_for_expansion_of_service AS (
     SELECT *
-    FROM staging_capital_expenses_for_expansion_of_service
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -32,6 +48,7 @@ SELECT
     sum_reduced_reporter,
     sum_stations,
     sum_total,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_capital_expenses_for_expansion_of_service
