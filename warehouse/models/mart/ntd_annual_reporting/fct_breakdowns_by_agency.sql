@@ -1,11 +1,31 @@
+-- this was already here, no changes
 WITH staging_breakdowns_by_agency AS (
     SELECT *
     FROM {{ ref('stg_ntd__breakdowns_by_agency') }}
 ),
 
+-- this is a new CTE, which pulls two columns from dim_organizations: ntd_id to join on in the CTE immediately below, and caltrans_district to enrich the final table
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+-- this is a new CTE, perform the join on staging_breakdowns_by_agency to include caltrans_district
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_breakdowns_by_agency.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_breakdowns_by_agency
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
+-- this CTE was here previously, but it used to pull from the first CTE (staging_breakdowns_by_agency). now I have ajusted the from statement to pull from the new CTE that performs the join and enriches with caltrans_district
 fct_breakdowns_by_agency AS (
     SELECT *
-    FROM staging_breakdowns_by_agency
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -33,6 +53,8 @@ SELECT
     sum_train_revenue_miles,
     sum_vehicle_passenger_car_miles,
     sum_vehicle_passenger_car_revenue,
+-- include newly added column in column selection
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_breakdowns_by_agency

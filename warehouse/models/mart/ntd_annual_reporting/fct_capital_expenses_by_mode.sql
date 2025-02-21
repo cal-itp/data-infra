@@ -3,9 +3,25 @@ WITH staging_capital_expenses_by_mode AS (
     FROM {{ ref('stg_ntd__capital_expenses_by_mode') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_capital_expenses_by_mode.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_capital_expenses_by_mode
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_capital_expenses_by_mode AS (
     SELECT *
-    FROM staging_capital_expenses_by_mode
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -43,6 +59,7 @@ SELECT
     sum_stations,
     sum_total,
     typeofservicecd,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_capital_expenses_by_mode

@@ -3,9 +3,25 @@ WITH staging_operating_expenses_by_function_and_agency AS (
     FROM {{ ref('stg_ntd__operating_expenses_by_function_and_agency') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_operating_expenses_by_function_and_agency.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_operating_expenses_by_function_and_agency
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_operating_expenses_by_function_and_agency AS (
     SELECT *
-    FROM staging_operating_expenses_by_function_and_agency
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -27,6 +43,7 @@ SELECT
     sum_vehicle_maintenance,
     sum_vehicle_operations,
     total,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_operating_expenses_by_function_and_agency

@@ -22,7 +22,7 @@ stg_transit_database__organizations AS (
             WHEN id = 'rec2DteW2sfmBJRsH' AND itp_id = 188 THEN 187
             ELSE CAST(itp_id AS INTEGER)
         END AS itp_id,
-        unnested_ntd_records AS ntd_agency_info_key,
+        {{ trim_make_empty_string_null('unnested_ntd_records') }} AS ntd_agency_info_key,
         hubspot_company_record_id,
         alias_ as alias,
         details,
@@ -46,6 +46,7 @@ stg_transit_database__organizations AS (
         public_currently_operating_fixed_route = "Yes" AS public_currently_operating_fixed_route,
     FROM once_daily_organizations
     LEFT JOIN UNNEST(once_daily_organizations.ntd_id) as unnested_ntd_records
+
 )
 
 SELECT * FROM stg_transit_database__organizations
