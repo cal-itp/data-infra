@@ -3,9 +3,25 @@ WITH staging_metrics AS (
     FROM {{ ref('stg_ntd__metrics') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_metrics.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_metrics
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_metrics AS (
     SELECT *
-    FROM staging_metrics
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -48,6 +64,7 @@ SELECT
     vehicle_revenue_miles_1,
     uace_code,
     uza_name,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_metrics

@@ -3,9 +3,25 @@ WITH staging_fuel_and_energy_by_agency AS (
     FROM {{ ref('stg_ntd__fuel_and_energy_by_agency') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_fuel_and_energy_by_agency.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_fuel_and_energy_by_agency
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_fuel_and_energy_by_agency AS (
     SELECT *
-    FROM staging_fuel_and_energy_by_agency
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -39,6 +55,7 @@ SELECT
     sum_liquefied_petroleum_gas_gal,
     sum_other_fuel,
     sum_other_fuel_gal_gal_equivalent,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_fuel_and_energy_by_agency

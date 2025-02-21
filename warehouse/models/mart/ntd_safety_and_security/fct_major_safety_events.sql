@@ -3,9 +3,25 @@ WITH staging_major_safety_events AS (
     FROM {{ ref('stg_ntd__major_safety_events') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_major_safety_events.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_major_safety_events
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_major_safety_events AS (
     SELECT *
-    FROM staging_major_safety_events
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -29,6 +45,7 @@ SELECT
     reportername,
     customer,
     ntd_id,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_major_safety_events

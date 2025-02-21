@@ -3,9 +3,25 @@ WITH staging_operating_and_capital_funding_time_series_decommissioned_operatingo
     FROM {{ ref('stg_ntd__operating_and_capital_funding_time_series__decommissioned_operatingother') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_operating_and_capital_funding_time_series_decommissioned_operatingother.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_operating_and_capital_funding_time_series_decommissioned_operatingother
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_operating_and_capital_funding_time_series_decommissioned_operatingother AS (
     SELECT *
-    FROM staging_operating_and_capital_funding_time_series_decommissioned_operatingother
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -51,6 +67,7 @@ SELECT
     reporter_type,
     agency_name,
     ntd_id,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_operating_and_capital_funding_time_series_decommissioned_operatingother

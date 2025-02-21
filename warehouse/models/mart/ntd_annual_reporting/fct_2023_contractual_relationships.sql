@@ -3,9 +3,25 @@ WITH staging_contractual_relationships AS (
     FROM {{ ref('stg_ntd__2023_contractual_relationships') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_contractual_relationships.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_contractual_relationships
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_2023_contractual_relationships AS (
     SELECT *
-    FROM staging_contractual_relationships
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -36,6 +52,7 @@ SELECT
     reporter_type,
     other_public_assets_provided_desc,
     ntd_id,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_2023_contractual_relationships

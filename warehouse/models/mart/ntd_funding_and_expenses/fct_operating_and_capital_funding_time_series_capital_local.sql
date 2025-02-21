@@ -3,9 +3,25 @@ WITH int_ntd__operating_and_capital_funding_time_series_capital_local AS (
     FROM {{ ref('int_ntd__operating_and_capital_funding_time_series_capital_local') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        int_ntd__operating_and_capital_funding_time_series_capital_local.*,
+        current_dim_organizations.caltrans_district
+    FROM int_ntd__operating_and_capital_funding_time_series_capital_local
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_operating_and_capital_funding_time_series_capital_local AS (
     SELECT *
-    FROM int_ntd__operating_and_capital_funding_time_series_capital_local
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -26,6 +42,7 @@ SELECT
     year,
     capital_local,
     _2023_status,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_operating_and_capital_funding_time_series_capital_local

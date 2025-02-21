@@ -3,9 +3,25 @@ WITH staging_employees_by_mode_and_employee_type AS (
     FROM {{ ref('stg_ntd__employees_by_mode_and_employee_type') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_employees_by_mode_and_employee_type.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_employees_by_mode_and_employee_type
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_employees_by_mode_and_employee_type AS (
     SELECT *
-    FROM staging_employees_by_mode_and_employee_type
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -48,6 +64,7 @@ SELECT
     vehicle_operations_count_q,
     vehicle_operations_hours,
     vehicle_operations_hours_q,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_employees_by_mode_and_employee_type

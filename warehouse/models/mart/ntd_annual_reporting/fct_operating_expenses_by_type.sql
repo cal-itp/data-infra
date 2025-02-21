@@ -3,9 +3,25 @@ WITH staging_operating_expenses_by_type AS (
     FROM {{ ref('stg_ntd__operating_expenses_by_type') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_operating_expenses_by_type.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_operating_expenses_by_type
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_operating_expenses_by_type AS (
     SELECT *
-    FROM staging_operating_expenses_by_type
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -58,6 +74,7 @@ SELECT
     utilities,
     utilities_questionable,
     uza_name,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_operating_expenses_by_type

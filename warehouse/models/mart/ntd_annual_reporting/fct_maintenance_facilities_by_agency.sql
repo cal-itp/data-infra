@@ -3,9 +3,25 @@ WITH staging_maintenance_facilities_by_agency AS (
     FROM {{ ref('stg_ntd__maintenance_facilities_by_agency') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_maintenance_facilities_by_agency.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_maintenance_facilities_by_agency
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_maintenance_facilities_by_agency AS (
     SELECT *
-    FROM staging_maintenance_facilities_by_agency
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -32,6 +48,7 @@ SELECT
     sum_owned_by_public_agency,
     sum_total_facilities,
     sum_under_200_vehicles,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_maintenance_facilities_by_agency
