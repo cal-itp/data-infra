@@ -3,9 +3,25 @@ WITH int_ntd__capital_expenditures_time_series_total AS (
     FROM {{ ref('int_ntd__capital_expenditures_time_series_total') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        int_ntd__capital_expenditures_time_series_total.*,
+        current_dim_organizations.caltrans_district
+    FROM int_ntd__capital_expenditures_time_series_total
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_capital_expenditures_time_series_total AS (
     SELECT *
-    FROM int_ntd__capital_expenditures_time_series_total
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -27,6 +43,7 @@ SELECT
     year,
     total,
     _2023_mode_status,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_capital_expenditures_time_series_total

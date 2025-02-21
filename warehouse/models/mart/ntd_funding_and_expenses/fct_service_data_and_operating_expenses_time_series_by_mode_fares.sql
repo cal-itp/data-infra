@@ -3,9 +3,25 @@ WITH int_ntd__service_data_and_operating_expenses_time_series_by_mode_fares AS (
     FROM {{ ref('int_ntd__service_data_and_operating_expenses_time_series_by_mode_fares') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        int_ntd__service_data_and_operating_expenses_time_series_by_mode_fares.*,
+        current_dim_organizations.caltrans_district
+    FROM int_ntd__service_data_and_operating_expenses_time_series_by_mode_fares
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_service_data_and_operating_expenses_time_series_by_mode_fares AS (
     SELECT *
-    FROM int_ntd__service_data_and_operating_expenses_time_series_by_mode_fares
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -29,6 +45,7 @@ SELECT
     year,
     fares,
     _2023_mode_status,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_service_data_and_operating_expenses_time_series_by_mode_fares
