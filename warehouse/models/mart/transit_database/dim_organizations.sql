@@ -4,11 +4,6 @@ WITH dim AS (
     SELECT * FROM {{ ref('int_transit_database__organizations_dim') }}
 ),
 
--- This is deprecated, what replaced the source of truth for ntd_id < '2023-05-23' that was previously found in ntd_to_org.ntd_id ??
--- ntd_agency_to_organization AS (
---     SELECT * FROM {{ ref('_deprecated__ntd_agency_to_organization') }}
--- ),
-
 dim_organizations AS (
     SELECT
         key,
@@ -31,10 +26,8 @@ dim_organizations AS (
         -- use same May 23, 2023 cutover date as `assessment_status` --> `public_currently_operating` in downstream models for consistency
         CASE
             WHEN _valid_from >= '2023-05-23' THEN raw_ntd_id
-            ELSE ntd_to_org.ntd_id
+            ELSE ntd_agency_info_key
         END AS ntd_id,
-
-        -- is this not related to ntd_to_org.ntd_id (ntd_id < '2023-05-23') ??
         ntd_id_2022,
         public_currently_operating,
         public_currently_operating_fixed_route,
@@ -43,8 +36,6 @@ dim_organizations AS (
         _valid_to
 
     FROM dim
-    LEFT JOIN ntd_agency_to_organization ntd_to_org
-        ON source_record_id = ntd_to_org.organization_record_id
 )
 
 SELECT * FROM dim_organizations

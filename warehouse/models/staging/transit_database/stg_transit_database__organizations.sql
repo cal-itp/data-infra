@@ -46,6 +46,7 @@ stg_transit_database__organizations AS (
         public_currently_operating_fixed_route = "Yes" AS public_currently_operating_fixed_route,
     FROM once_daily_organizations
     LEFT JOIN UNNEST(once_daily_organizations.ntd_id) as unnested_ntd_records
+
 )
 
 SELECT * FROM stg_transit_database__organizations
