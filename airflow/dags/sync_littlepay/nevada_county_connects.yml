@@ -1,0 +1,3 @@
+operator: operators.LittlepayRawSync
+instance: nevada-county-connects
+access_key_secret_name: LITTLEPAY_AWS_IAM_NEVADA_COUNTY_CONNECTS_ACCESS_KEY
