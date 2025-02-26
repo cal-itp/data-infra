@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2025.1.15"
+version = "2025.2.26"
 description = ""
 package-mode = false
 authors = ["Vevetron"]
