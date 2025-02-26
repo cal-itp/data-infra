@@ -9,7 +9,7 @@ jupyterhub:
     startTimeout: 300
     image:
       name: ghcr.io/cal-itp/data-infra/jupyter-singleuser
-      tag: 2025.2.20
+      tag: 2025.2.26
     memory:
       # Much more than 10 and we risk bumping up against the actual capacity of e2-highmem-2
       limit: 10G
@@ -31,10 +31,10 @@ jupyterhub:
               mkdir -p -- /home/jovyan/.jupyter;
               cp /tmp/jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py;
     profileList:
-      - display_name: "Default User - 2025.2.20, Python 3.11"
+      - display_name: "Default User - 2025.2.26, Python 3.11"
         description: "Your code will run on a shared machine with 3–10G of memory and 0.7–1.9 CPU cores."
         default: true
-      - display_name: "Power User - 2025.2.20, Python 3.11"
+      - display_name: "Power User - 2025.2.26, Python 3.11"
         description: "Your code will run on a shared machine with 10–12G of memory and 1.5–1.9 CPU cores."
         kubespawner_override:
           mem_limit: "12G"
