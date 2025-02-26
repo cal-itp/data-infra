@@ -31,7 +31,7 @@ Initialize Terraform:
 $ terraform init
 ```
 
-Run `terraform init` against each nested resource using `make plan`:
+Run `terraform init` against each nested resource using `make init`:
 
 ```bash
 $ cd iac/
