@@ -100,3 +100,26 @@ We have a [GitHub Action](../.github/workflows/deploy-airflow.yml) that runs whe
 Our production Composer instance is called [calitp-airflow2-prod-composer2-20250402](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod-composer2-20250402/monitoring); its configuration (including worker count, Airflow config overrides, and environment variables) is manually managed through the web console. When scoping upcoming upgrades to the specific Composer-managed Airflow version we use in production, it can be helpful to grab the corresponding list of requirements from the [Cloud Composer version list](https://cloud.google.com/composer/docs/concepts/versioning/composer-versions), copy it into `requirements-composer-[COMPOSER_VERSION_NUMBER]-airflow-[AIRFLOW_VERSION_NUMBER].txt`, change [Dockerfile.composer](./Dockerfile.composer) to reference that file (deleting the previous equivalent) and modify the `FROM` statement at the top to grab the correct Airflow and Python versions for that Composer version, and build the image locally.
 
 It is desirable to keep our local testing image closely aligned with the production image, so the `FROM` statement in our automatically deployed [Dockerfile](./Dockerfile) should always be updated after a production Airflow upgrade reflect the same Airflow version and Python version that are being run in the Composer-managed production environment.
+
+
+### Infrastructure Separation
+
+As part of Cal-ITP's migration to a Caltrans IT supported environment, the data engineering team is moving to three separate environments.
+
+This transition is driven by the following principles:
+
+* Least privilege
+* Isolated environment
+* Reproducible
+
+#### Development
+
+The development environment is primarily run locally via the [`composer-local-dev`](https://github.com/GoogleCloudPlatform/composer-local-dev.git) script. To satisfy the principle of least privilege, this environment does not require any access to production or staging credentials or keys, although some development credentials may be required. To satisfy the principle of an isolated environment, all local DAG runs should operate against local data, which may be refreshed using tools. To satisfy the principle of reproducible failures, testing data should be checked into the repository.
+
+#### Staging
+
+The staging environment is run against the `cal-itp-data-infra-staging` environment on Google Cloud. To satsify the principle of least privilege, DAGs and scripts only have access to staging resources via a staging-specific service account. To satisfy the principle of an isolated environment, there should be no dependency on production data or services. To satisfy the principle of reproducible failures, the data on staging should run against tolerably-stale data that is retained for a limited time, and is identical to production data in terms of schema.
+
+#### Production
+
+The production environment is run against the `cal-itp-data-infra` environment on Google Cloud. To satisfy the principle of least privilege, the production-specific service account should only require those permissions required by DAGs and scripts. To satisfy the principle of an isolated environment, there should be no dependency on staging data or services. To satisfy the principle of reproducible failures, the data on production will be live with data retention appropriate for the data type.
