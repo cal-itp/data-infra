@@ -26,28 +26,65 @@ jobs:
         working-directory: packages/calitp-data-infra
     strategy:
       matrix:
-        pyversion: ['3.11']
+        python-version: ['3.11']
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.pyversion }}
+      - uses: actions/checkout@v4
+
       - uses: 'google-github-actions/auth@v2'
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra-staging
+          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+          service_account: 'github-actions-pytest@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+
       - uses: google-github-actions/setup-gcloud@v2
-      - name: Run checks
-        run: |
-          curl -sSL https://install.python-poetry.org | python -
-          poetry install
-          poetry run mypy .
-          poetry run pytest
-          poetry build
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('poetry.lock') }}-${{ hashFiles('.github/actions/install-env/action.yml') }}-${{ steps.setup-python.outputs.python-version }}
+
+      - name: Load cached .local
+        id: cached-dotlocal
+        uses: actions/cache@v4
+        with:
+          path: ~/.local
+          key: dotlocal-${{ runner.os }}-${{ hashFiles('.github/actions/install-env/action.yml') }}-${{ steps.setup-python.outputs.python-version }}
+
+      - name: Install Python poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+          virtualenvs-path: .venv
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+
+      - name: Install dependencies
+        shell: bash
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction
+
+      - name: Lint
+        run: poetry run mypy .
+
+      - name: Run tests
         env:
           CALITP_BUCKET__AIRTABLE: gs://this-does-not-exist
           CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: gs://this-does-not-exist
           CALITP_BUCKET__GTFS_SCHEDULE_RAW: gs://this-does-not-exist
           CALITP_BUCKET__GTFS_RT_RAW: gs://this-does-not-exist
+        run: poetry run pytest
+
+      - name: Build
+        run: poetry build
+
       - if: ${{ github.ref != 'refs/heads/main' }}
         run: |
           poetry config repositories.test-pypi https://test.pypi.org/legacy/
@@ -55,6 +92,7 @@ jobs:
           poetry publish -r test-pypi --skip-existing
         env:
           POETRY_TEST_PYPI_TOKEN_PYPI: ${{ secrets.TEST_PYPI_CALITP_DATA_INFRA_TOKEN }}
+
       - if: ${{ github.ref == 'refs/heads/main' }}
         run: poetry publish --skip-existing
         env:
