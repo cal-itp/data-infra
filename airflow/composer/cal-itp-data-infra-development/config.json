@@ -1,9 +1,9 @@
 {
     "composer_image_version": "composer-2.6.5-airflow-2.7.3",
-    "composer_location": "us-west1",
+    "composer_location": "us-west2",
     "composer_project_id": "cal-itp-data-infra-staging",
     "dags_path": "/Users/erikaypacheco/Documents/workspace/data-infra/airflow/dags",
     "dag_dir_list_interval": 10,
     "port": 8081,
-    "database_engine": "sqlite3"
+    "database_engine": "postgresql"
 }
