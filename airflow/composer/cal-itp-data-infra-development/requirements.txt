@@ -1,1 +1,2 @@
+gusty==0.6.0
 calitp-data-infra @ git+https://github.com/cal-itp/data-infra.git@mov/add-composer-dev#egg=calitp-data-infra&subdirectory=packages/calitp-data-infra
