@@ -152,11 +152,14 @@ class LittlepayRawSync(BaseOperator):
         self,
         *args,
         instance: str,
+        src_bucket: str,
         access_key_secret_name: str,
         **kwargs,
     ):
         self.instance = instance
-        self.src_bucket = f"littlepay-prod-{instance}-datafeed"
+        # self.src_bucket = f"littlepay-prod-{instance}-datafeed"
+        # can no longer dynamically generate bucket name because littlepay broke the format, have to be explicit in task yml
+        self.src_bucket = src_bucket
         self.access_key_secret_name = access_key_secret_name
         super().__init__(**kwargs)
 

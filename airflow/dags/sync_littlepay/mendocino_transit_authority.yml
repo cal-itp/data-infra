@@ -1,3 +1,4 @@
 operator: operators.LittlepayRawSync
 instance: mendocino-transit-authority
+src_bucket: littlepay-prod-mendocino-transit-authority-datafeed
 access_key_secret_name: LITTLEPAY_AWS_IAM_MENDOCINO_TRANSIT_AUTHORITY_ACCESS_KEY
