@@ -1,3 +1,4 @@
 operator: operators.LittlepayRawSync
 instance: atn
+src_bucket: littlepay-prod-atn-datafeed
 access_key_secret_name: LITTLEPAY_AWS_IAM_ANAHEIM_TRANSPORTATION_NETWORK_ACCESS_KEY

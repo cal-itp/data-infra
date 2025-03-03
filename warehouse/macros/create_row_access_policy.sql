@@ -81,6 +81,12 @@ filter using (
 ) }};
 
 {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'nevada-county-connects',
+    principals = ['serviceAccount:nevada-county-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
     principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
