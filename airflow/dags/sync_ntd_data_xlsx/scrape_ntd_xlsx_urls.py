@@ -6,7 +6,7 @@ import logging
 
 import requests
 from bs4 import BeautifulSoup
-from pydantic import HttpUrl, ValidationError, parse_obj_as
+from pydantic.v1 import HttpUrl, ValidationError, parse_obj_as
 
 from airflow.exceptions import AirflowException
 
