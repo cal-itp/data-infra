@@ -12,7 +12,7 @@ from calitp_data_infra.storage import (  # type: ignore
     get_fs,
     make_name_bq_safe,
 )
-from pydantic.v1 import HttpUrl, parse_obj_as
+from pydantic import HttpUrl, parse_obj_as
 
 from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator  # type: ignore

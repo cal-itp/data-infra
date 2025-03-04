@@ -19,7 +19,7 @@ from calitp_data_infra.storage import (
     GTFSDownloadConfigExtract,
     get_fs,
 )
-from pydantic.v1 import ValidationError
+from pydantic import ValidationError
 
 
 def gtfs_datasets_to_extract_configs(
