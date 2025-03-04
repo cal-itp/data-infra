@@ -96,7 +96,9 @@ x-airflow-common:
     CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY: "gs://test-calitp-gtfs-schedule-parsed-hourly"
 
     CALITP_BUCKET__LITTLEPAY_PARSED: "gs://test-calitp-payments-littlepay-parsed"
+    CALITP_BUCKET__LITTLEPAY_PARSED_V3: "gs://test-calitp-payments-littlepay-parsed-v3"
     CALITP_BUCKET__LITTLEPAY_RAW: "gs://test-calitp-payments-littlepay-raw"
+    CALITP_BUCKET__LITTLEPAY_RAW_V3: "gs://test-calitp-payments-littlepay-raw-v3"
     CALITP_BUCKET__PUBLISH: "gs://test-calitp-publish"
     CALITP_BUCKET__SENTRY_EVENTS: "gs://test-calitp-sentry"
 
