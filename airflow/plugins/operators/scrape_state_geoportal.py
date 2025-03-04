@@ -7,7 +7,7 @@ import pandas as pd  # type: ignore
 import pendulum
 import requests
 from calitp_data_infra.storage import PartitionedGCSArtifact, get_fs  # type: ignore
-from pydantic.v1 import HttpUrl, parse_obj_as
+from pydantic import HttpUrl, parse_obj_as
 
 from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator  # type: ignore

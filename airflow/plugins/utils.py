@@ -11,7 +11,7 @@ from calitp_data_infra.storage import (
     PartitionedGCSArtifact,
     fetch_all_in_partition,
 )
-from pydantic.v1 import validator
+from pydantic import validator
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
 SCHEDULE_UNZIPPED_BUCKET_HOURLY = os.environ[
