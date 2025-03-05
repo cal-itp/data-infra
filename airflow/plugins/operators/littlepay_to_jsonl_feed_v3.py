@@ -11,7 +11,7 @@ from calitp_data_infra.storage import (
     fetch_all_in_partition,
     get_fs,
 )
-from operators.littlepay_raw_sync import RawLittlepayFileExtract
+from operators.littlepay_raw_sync_feed_v3 import RawLittlepayFileExtract
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
