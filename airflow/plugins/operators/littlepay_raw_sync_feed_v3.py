@@ -48,10 +48,10 @@ class LittlepayFileKey(str):
     def entity(self) -> str:
         return self.split("/")[2]
 
-    # entity is now in location 3 (instead of 2)
+    # filename is now in location 3 (instead of 2)
     @property
     def filename(self) -> str:
-        return self.split("/")[2]
+        return self.split("/")[3]  # Return full filename with extension
 
 
 class LittlepayS3Object(BaseModel):
