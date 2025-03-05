@@ -1,5 +1,5 @@
 {
-    "composer_image_version": "composer-2.6.5-airflow-2.7.3",
+    "composer_image_version": "composer-2.8.3-airflow-2.6.3",
     "composer_location": "us-west2",
     "composer_project_id": "cal-itp-data-infra-staging",
     "dags_path": "dags",
