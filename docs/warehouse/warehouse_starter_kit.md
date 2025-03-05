@@ -68,7 +68,7 @@ For a given day:
 - [dim_annual_agency_information](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_annual_database_agency_information)
 
   - View some of the data produced by the [US Department of Transportation](https://www.transit.dot.gov/ntd) for the National Transit Database.
-  - Information from 2018-2021 are available.
+  - Information from 2022 and 2023 are available.
   - Includes information such as reporter type, organization type, website, and address.
   - Not every provider is required to report their data to the NTD, so this is not a comprehensive dataset.
 
