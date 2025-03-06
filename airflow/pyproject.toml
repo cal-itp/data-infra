@@ -27,11 +27,19 @@ boto3 = "1.26.87"
 apache-airflow-providers-google = "10.17.0"
 kubernetes = "29.0.0"
 apache-airflow-providers-cncf-kubernetes = "8.1.1"
+astronomer-cosmos = "^1.9.0"
+gusty = "0.6.0"
+paramiko = "3.4.0"
+beautifulsoup4 = "4.12.3"
+sentry-sdk = "1.17.0"
+flask = "2.2.5"
+flask-session = "0.5.0"
+connexion = "2.14.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
 pytest-dotenv = "^0.5.2"
 
 [tool.pytest.ini_options]
-norecursedirs = [".venv", "composer", "plugins", "dags"]
+testpaths = ["tests"]
 env_files = ["composer/cal-itp-data-infra-development/variables.env"]
