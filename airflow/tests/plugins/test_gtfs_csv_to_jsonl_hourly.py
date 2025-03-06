@@ -1,10 +1,4 @@
-# we have to do this since Airflow imports are weird
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../plugins"))
-
-from plugins.operators.gtfs_csv_to_jsonl_hourly import parse_csv_str  # noqa: E402
+from operators.gtfs_csv_to_jsonl_hourly import parse_csv_str  # noqa: E402
 
 
 def test_parse_csv_str():
