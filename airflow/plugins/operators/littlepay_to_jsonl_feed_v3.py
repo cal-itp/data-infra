@@ -100,6 +100,8 @@ class LittlepayToJSONLV3(BaseOperator):
             "products",
             "refunds",
             "settlements",
+            # this is new? handle in create_external_tables?
+            "terminal-device-transactions",
         ]
 
         with logging_redirect_tqdm():
