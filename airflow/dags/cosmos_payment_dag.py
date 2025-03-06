@@ -1,6 +1,6 @@
 from datetime import datetime
-
 from cosmos import DbtDag, ProfileConfig, ProjectConfig, RenderConfig
+
 
 cosmos_payment = DbtDag(
     # dbt/cosmos-specific parameters
