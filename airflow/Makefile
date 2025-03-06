@@ -1,15 +1,19 @@
 COMPOSER_ENVIRONMENT_PATH := composer/cal-itp-data-infra-development
 DATA_PATH := $(COMPOSER_ENVIRONMENT_PATH)/data
 WAREHOUSE_PATH := $(DATA_PATH)/warehouse
+PLUGINS_PATH := $(COMPOSER_ENVIRONMENT_PATH)/plugins
 
 clean:
 ifneq (,$(wildcard $(WAREHOUSE_PATH)))
 	rm -r $(WAREHOUSE_PATH)
 endif
+ifneq (,$(wildcard $(PLUGINS_PATH)))
+	rm -r $(PLUGINS_PATH)
+endif
 
 install: clean
-	rsync -ar plugins $(DATA_PATH)
-	rsync -ar ../warehouse $(WAREHOUSE_PATH)
+	rsync -ar plugins/ $(PLUGINS_PATH)
+	rsync -ar ../warehouse/ $(WAREHOUSE_PATH)
 
 start: install
 	composer-dev start
