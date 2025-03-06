@@ -12,6 +12,7 @@ from airflow.settings import Session
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../plugins"))
 
+sys.path.append(os.path.join(os.path.dirname(__file__), "../plugins"))
 
 def pytest_sessionstart(session):
     subprocess.run(
