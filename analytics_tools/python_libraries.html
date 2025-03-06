@@ -16,22 +16,20 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -39,11 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -83,7 +80,6 @@
     <link rel="prev" title="Local Oracle Database Connections" href="local_oracle_db_connections.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -99,8 +95,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -108,6 +115,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -115,8 +123,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -132,8 +140,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -163,17 +170,21 @@
     
     
     <img src="../_static/calitp_logo_MAIN.png" class="logo__image only-light" alt="Cal-ITP Data Services - Home"/>
-    <img src="../_static/calitp_logo_MAIN.png" class="logo__image only-dark pst-js-only" alt="Cal-ITP Data Services - Home"/>
+    <script>document.write(`<img src="../_static/calitp_logo_MAIN.png" class="logo__image only-dark" alt="Cal-ITP Data Services - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -268,14 +279,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -436,16 +442,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -653,6 +667,25 @@
     </tr>
     <tr>
       <th>2</th>
+      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
+      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
+      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-05-14</td>
+      <td>2022-05-14 00:01:18+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>3</th>
       <td>a196a8996bb74b7bd6d92f0cc2802620</td>
       <td>00e77c29f2ce1986407cb93f53936dff</td>
       <td>25915c089571c49be33b59e10c25d2ac</td>
@@ -671,7 +704,7 @@
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>4</th>
       <td>282b4e07171c48ac08162e0dc8749066</td>
       <td>18fcf47148228c7b56c19726c854054b</td>
       <td>9b8e9b8befe560293a6c5b38dc19ffbb</td>
@@ -686,25 +719,6 @@
       <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
       <td>2021-07-28</td>
       <td>2021-07-28 13:56:16+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>033d018b031002914fbfa48c872d4a65</td>
-      <td>8f5e204872e6b7034479a6d11502547b</td>
-      <td>3d30b02b9008f788eb89c41c137786c1</td>
-      <td>MT</td>
-      <td>None</td>
-      <td>http://www.mantecatransit.com</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(209) 456-8000</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
-      <td>2022-01-19</td>
-      <td>2022-01-19 00:11:01+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -819,6 +833,25 @@
     </tr>
     <tr>
       <th>2</th>
+      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
+      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
+      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-05-14</td>
+      <td>2022-05-14 00:01:18+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>3</th>
       <td>a196a8996bb74b7bd6d92f0cc2802620</td>
       <td>00e77c29f2ce1986407cb93f53936dff</td>
       <td>25915c089571c49be33b59e10c25d2ac</td>
@@ -837,7 +870,7 @@
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>4</th>
       <td>282b4e07171c48ac08162e0dc8749066</td>
       <td>18fcf47148228c7b56c19726c854054b</td>
       <td>9b8e9b8befe560293a6c5b38dc19ffbb</td>
@@ -852,25 +885,6 @@
       <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
       <td>2021-07-28</td>
       <td>2021-07-28 13:56:16+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>033d018b031002914fbfa48c872d4a65</td>
-      <td>8f5e204872e6b7034479a6d11502547b</td>
-      <td>3d30b02b9008f788eb89c41c137786c1</td>
-      <td>MT</td>
-      <td>None</td>
-      <td>http://www.mantecatransit.com</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(209) 456-8000</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
-      <td>2022-01-19</td>
-      <td>2022-01-19 00:11:01+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -932,27 +946,27 @@ and showing SQL test queries that siuba code generates.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>a64532640829f3eae9129cd5d5e9590b</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>4697bb52eb4da8bcff925f503a623326</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>f4095db9282b859842d338f5db032561</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>3</th>
       <td>b01a3ce6ba2e972a6acc08574a3e06a9</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>1</th>
+      <td>8f5949d03a0cb1243ac9301df8adef14</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>e839b5cbcd5b29a16c2ac4d40cd4439d</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
       <td>7eded7cbbf072a2fd9dd812f80bf2d2b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5ad87901f329be154545fec771aa2c21</td>
       <td>1</td>
     </tr>
   </tbody>
@@ -1051,6 +1065,25 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
     </tr>
     <tr>
       <th>2</th>
+      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
+      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
+      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-05-14</td>
+      <td>2022-05-14 00:01:18+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>3</th>
       <td>a196a8996bb74b7bd6d92f0cc2802620</td>
       <td>00e77c29f2ce1986407cb93f53936dff</td>
       <td>25915c089571c49be33b59e10c25d2ac</td>
@@ -1069,7 +1102,7 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>4</th>
       <td>282b4e07171c48ac08162e0dc8749066</td>
       <td>18fcf47148228c7b56c19726c854054b</td>
       <td>9b8e9b8befe560293a6c5b38dc19ffbb</td>
@@ -1084,25 +1117,6 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
       <td>2021-07-28</td>
       <td>2021-07-28 13:56:16+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>033d018b031002914fbfa48c872d4a65</td>
-      <td>8f5e204872e6b7034479a6d11502547b</td>
-      <td>3d30b02b9008f788eb89c41c137786c1</td>
-      <td>MT</td>
-      <td>None</td>
-      <td>http://www.mantecatransit.com</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(209) 456-8000</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
-      <td>2022-01-19</td>
-      <td>2022-01-19 00:11:01+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -1171,47 +1185,47 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
   <tbody>
     <tr>
       <th>0</th>
-      <td>6ef00206641f97e0e6d2fd19f21ac9c0</td>
-      <td>56b61b5baea7c4768dd8939d3612296f</td>
-      <td>1819d162df24993e08dd9d308edbad84</td>
+      <td>9a395f3d167d2c0088ebf8dd3d2e1da9</td>
+      <td>75ddeb651b8c6b5039add08b71e1464a</td>
+      <td>3f5795f479e908e5ea99de4a22bb2500</td>
       <td>960</td>
       <td>Madera Metro</td>
-      <td>https://www.madera.gov/home/departments/transi...</td>
+      <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
       <td>America/Los_Angeles</td>
       <td>en</td>
       <td>(559) 661-RIDE (7433)</td>
-      <td>https://www.madera.gov/home/departments/transi...</td>
+      <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
       <td>None</td>
       <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2024-02-01</td>
-      <td>2024-02-01 03:00:21.894200+00:00</td>
+      <td>2022-07-19</td>
+      <td>2022-07-19 00:00:43+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>b22bc5c21e3e90bef6e0fc91c66199db</td>
-      <td>f3271fec250502a41da3848717b9eeaf</td>
-      <td>149ad0155813993026db844421248c4a</td>
+      <td>658ce6d521b06dac8eae6aa9ab687ef0</td>
+      <td>38e6213bccdba1a21f8e745386907e43</td>
+      <td>3eccac6a9a0be4649df3eb0fe967daa2</td>
       <td>960</td>
       <td>Madera Metro</td>
-      <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
       <td>America/Los_Angeles</td>
       <td>en</td>
       <td>(559) 661-RIDE (7433)</td>
-      <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
       <td>None</td>
       <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2021-08-04</td>
-      <td>2021-08-04 00:06:42+00:00</td>
+      <td>2024-01-31</td>
+      <td>2024-01-31 03:01:13.329722+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>5510fd5cfd5718d36c5cea9efc61b05e</td>
-      <td>267a1b2a19b0526a5086cded02ba3325</td>
-      <td>2716d91a7c0f05036fd7d593a6980ec4</td>
+      <td>65ce81af96c6e1bbe1e8b34e9c6cd1bf</td>
+      <td>a51fc5abab3caa0f0adc09c2ad04ffe6</td>
+      <td>4f9efa4176247918b04f6c7ec3926b35</td>
       <td>960</td>
       <td>Madera Metro</td>
       <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
@@ -1221,16 +1235,16 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
       <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
       <td>None</td>
       <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2022-12-16</td>
-      <td>2022-12-16 03:00:27.604217+00:00</td>
+      <td>2021-04-16</td>
+      <td>2021-04-16 00:01:13+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>57317be7e3f5249578e73e95f7dc5965</td>
-      <td>5c81c258fbc5971b313c4bf898146f3d</td>
-      <td>fbbfef3d80a43f31213adacbedcea27d</td>
+      <td>4db1e4458fec07330417b4f27bae527e</td>
+      <td>1aae9998784e92ab4fefdbca9415a020</td>
+      <td>2900be32d7daff7b93d4d7f4a242fa68</td>
       <td>960</td>
       <td>Madera Metro</td>
       <td>https://www.madera.gov/home/departments/transi...</td>
@@ -1240,27 +1254,27 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
       <td>https://www.madera.gov/home/departments/transi...</td>
       <td>None</td>
       <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2024-02-02</td>
-      <td>2024-02-02 03:00:31.039579+00:00</td>
+      <td>2025-01-11</td>
+      <td>2025-01-11 03:00:37.352100+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0782ef40776b4ad8fba49ca86a375e5a</td>
-      <td>621d37259d6a5a7f641fd5a6e8a747f7</td>
-      <td>30a2d5133c29abfbdc9e504bef2830e9</td>
+      <td>a3ecd303b4eaf59d937631c943c0abfe</td>
+      <td>bfe22848a94f7cff936847116d54445c</td>
+      <td>ae20d23beb02c5331d1f7087f54bef7d</td>
       <td>960</td>
       <td>Madera Metro</td>
-      <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
       <td>America/Los_Angeles</td>
       <td>en</td>
       <td>(559) 661-RIDE (7433)</td>
-      <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
       <td>None</td>
       <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2023-04-08</td>
-      <td>2023-04-08 03:00:20.134144+00:00</td>
+      <td>2023-04-14</td>
+      <td>2023-04-14 03:00:18.458064+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -1396,8 +1410,7 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1476,8 +1489,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
