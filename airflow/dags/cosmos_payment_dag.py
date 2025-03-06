@@ -1,10 +1,10 @@
 import os
 from datetime import datetime
-
 from cosmos import DbtDag, ProfileConfig, ProjectConfig, RenderConfig
 from cosmos.constants import TestBehavior
 
 DBT_TARGET = os.environ.get("DBT_TARGET")
+
 
 cosmos_payment = DbtDag(
     # dbt/cosmos-specific parameters
