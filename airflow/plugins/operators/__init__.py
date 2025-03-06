@@ -5,7 +5,9 @@ from operators.external_table import ExternalTable
 from operators.gtfs_csv_to_jsonl import GtfsGcsToJsonlOperator
 from operators.gtfs_csv_to_jsonl_hourly import GtfsGcsToJsonlOperatorHourly
 from operators.littlepay_raw_sync import LittlepayRawSync
+from operators.littlepay_raw_sync_feed_v3 import LittlepayRawSyncV3
 from operators.littlepay_to_jsonl import LittlepayToJSONL
+from operators.littlepay_to_jsonl_feed_v3 import LittlepayToJSONLV3
 from operators.pod_operator import PodOperator
 from operators.scrape_ntd_api import NtdDataProductAPIOperator
 from operators.scrape_ntd_xlsx import NtdDataProductXLSXOperator
