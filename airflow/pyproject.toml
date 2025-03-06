@@ -18,7 +18,20 @@ package-mode = false
 [tool.poetry.dependencies]
 python = ">=3.11.0,<3.12"
 apache-airflow = "2.6.3"
+pandas = "2.1.4"
+calitp_data_infra = {git="git+https://github.com/cal-itp/data-infra.git", rev="mov/add-composer-dev", subdirectory="packages/calitp-data-infra"}
+pyairtable = "2.2.1"
+google-cloud-bigquery = "3.20.1"
+typer = "0.4.1"
+boto3 = "1.26.87"
+apache-airflow-providers-google = "10.17.0"
+kubernetes = "29.0.0"
+apache-airflow-providers-cncf-kubernetes = "8.1.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
+pytest-dotenv = "^0.5.2"
 
+[tool.pytest.ini_options]
+norecursedirs = [".venv", "composer", "plugins", "dags"]
+env_files = ["composer/cal-itp-data-infra-development/variables.env"]
