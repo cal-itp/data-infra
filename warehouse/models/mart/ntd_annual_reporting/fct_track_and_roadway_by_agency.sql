@@ -3,9 +3,25 @@ WITH staging_track_and_roadway_by_agency AS (
     FROM {{ ref('stg_ntd__track_and_roadway_by_agency') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_track_and_roadway_by_agency.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_track_and_roadway_by_agency
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_track_and_roadway_by_agency AS (
     SELECT *
-    FROM staging_track_and_roadway_by_agency
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -41,6 +57,7 @@ SELECT
     sum_slip_switch,
     sum_total_miles,
     sum_total_track_miles,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_track_and_roadway_by_agency
