@@ -11,7 +11,10 @@ ifneq (,$(wildcard $(PLUGINS_PATH)))
 	rm -r $(PLUGINS_PATH)
 endif
 
-install: clean
+..warehouse/target/manifest.json:
+	cd ${WAREHOUSE_PATH} && poetry install && poetry run dbt deps && poetry run dbt compile --target dev
+
+install: ../warehouse/target/manifest.json
 	rsync -ar plugins/ $(PLUGINS_PATH)
 	rsync -ar ../warehouse/ $(WAREHOUSE_PATH)
 
