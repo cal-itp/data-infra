@@ -1,7 +1,25 @@
 {{ config(materialized='table') }}
 
-WITH dim AS (
+WITH int_organizations_dim AS (
     SELECT * FROM {{ ref('int_transit_database__organizations_dim') }}
+),
+
+bridge_organizations_x_headquarters_county_geography AS (
+    SELECT * FROM {{ ref('bridge_organizations_x_headquarters_county_geography') }}
+),
+
+dim_county_geography AS (
+    SELECT * FROM {{ ref('dim_county_geography') }}
+),
+
+join_caltrans_district AS (
+    SELECT
+        int_organizations_dim.*,
+        dim_county_geography.caltrans_district,
+        dim_county_geography.caltrans_district_name
+    FROM int_organizations_dim
+    LEFT JOIN bridge_organizations_x_headquarters_county_geography ON int_organizations_dim.key = bridge_organizations_x_headquarters_county_geography.organization_key
+        LEFT JOIN dim_county_geography ON bridge_organizations_x_headquarters_county_geography.county_geography_key = dim_county_geography.key
 ),
 
 dim_organizations AS (
@@ -14,6 +32,7 @@ dim_organizations AS (
         itp_id,
         details,
         caltrans_district,
+        caltrans_district_name,
         website,
         reporting_category,
         hubspot_company_record_id,
@@ -35,7 +54,8 @@ dim_organizations AS (
         _valid_from,
         _valid_to
 
-    FROM dim
+    FROM join_caltrans_district
+
 )
 
 SELECT * FROM dim_organizations
