@@ -43,4 +43,7 @@ ipdb = "^0.13.13"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-env_files = ["composer/cal-itp-data-infra-development/variables.env"]
+env_files = [
+    "composer/cal-itp-data-infra-development/variables.env",
+    "tests/test.env"
+]
