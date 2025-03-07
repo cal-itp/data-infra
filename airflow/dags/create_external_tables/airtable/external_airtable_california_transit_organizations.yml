@@ -257,3 +257,9 @@ schema_fields:
   - name: ntd_id_2022
     type: STRING
     mode: NULLABLE
+  - name: rtpa
+    type: STRING
+    mode: NULLABLE
+  - name: mpo
+    type: STRING
+    mode: NULLABLE
