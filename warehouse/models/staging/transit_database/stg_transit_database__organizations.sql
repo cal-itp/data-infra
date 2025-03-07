@@ -26,7 +26,6 @@ stg_transit_database__organizations AS (
         hubspot_company_record_id,
         alias_ as alias,
         details,
-        caltrans_district,
         mobility_services_managed,
         parent_organization,
         website,
