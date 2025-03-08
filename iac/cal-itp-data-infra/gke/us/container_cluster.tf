@@ -76,7 +76,7 @@ resource "google_container_cluster" "tfer--data-infra-apps" {
     }
   }
 
-  node_version = "1.30.8-gke.1128001"
+  node_version = "1.30.9-gke.1009000"
 
   private_cluster_config {
     enable_private_endpoint = "false"
