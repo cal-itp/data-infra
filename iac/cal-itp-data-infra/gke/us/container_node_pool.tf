@@ -60,7 +60,7 @@ resource "google_container_node_pool" "tfer--data-infra-apps_apps-v2" {
     strategy        = "SURGE"
   }
 
-  version = "1.30.8-gke.1128001"
+  version = "1.30.9-gke.1009000"
 }
 
 resource "google_container_node_pool" "tfer--data-infra-apps_gtfsrt-v4" {
@@ -136,7 +136,7 @@ resource "google_container_node_pool" "tfer--data-infra-apps_gtfsrt-v4" {
     strategy        = "SURGE"
   }
 
-  version = "1.30.8-gke.1128001"
+  version = "1.30.9-gke.1009000"
 }
 
 resource "google_container_node_pool" "tfer--data-infra-apps_jobs-v1" {
@@ -212,7 +212,7 @@ resource "google_container_node_pool" "tfer--data-infra-apps_jobs-v1" {
     strategy        = "SURGE"
   }
 
-  version = "1.30.8-gke.1128001"
+  version = "1.30.9-gke.1009000"
 }
 
 resource "google_container_node_pool" "tfer--data-infra-apps_jupyterhub-users" {
@@ -287,5 +287,5 @@ resource "google_container_node_pool" "tfer--data-infra-apps_jupyterhub-users" {
     strategy        = "SURGE"
   }
 
-  version = "1.30.8-gke.1128001"
+  version = "1.30.9-gke.1009000"
 }

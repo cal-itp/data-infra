@@ -8,9 +8,9 @@ This subdirectory contains the Terraform configuration for Google Cloud.
 Install Terraform via ASDF:
 
 ```bash
-$ asdf plugin-add terraform https://github.com/asdf-community/asdf-hashicorp.git
+$ asdf plugin add terraform https://github.com/asdf-community/asdf-hashicorp.git
 $ asdf install terraform 1.10.5
-$ asdf global terraform 1.10.5
+$ asdf reshim
 ```
 
 Create the `iac/provider.tf` file containing the following provider definition:
