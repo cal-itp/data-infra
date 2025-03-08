@@ -52,6 +52,8 @@ schema_fields:
     type: STRING
   - name: location_type
     type: STRING
+  - name: multiple_locations_list
+    type: STRING
   - name: latitude
     type: NUMERIC
   - name: longitude
@@ -86,17 +88,17 @@ schema_fields:
     type: STRING
   - name: evacuation_comment
     type: STRING
+  - name: evacuation_location
+    type: STRING
   - name: towed_y_n
-    type: BOOLEAN
+    type: STRING
   - name: life_safety_y_n
-    type: BOOLEAN
+    type: STRING
   - name: self_evacuation_y_n
-    type: BOOLEAN
+    type: STRING
   - name: intentional_y_n
     type: BOOLEAN
   - name: transit_y_n
-    type: STRING
-  - name: evacuation_location
     type: STRING
   - name: hazmat_type
     type: STRING
@@ -153,6 +155,8 @@ schema_fields:
   - name: vehicle_speed
     type: NUMERIC
   - name: non_rail_transit_vehicle
+    type: STRING
+  - name: non_transit_vehicle_action_list
     type: STRING
   - name: manufacturer
     type: STRING
@@ -220,6 +224,8 @@ schema_fields:
     type: INTEGER
   - name: transit_employee_serious
     type: INTEGER
+  - name: transit_vehicle_type
+    type: STRING
   - name: transit_vehicle_operator
     type: INTEGER
   - name: transit_vehicle_operator_1
@@ -256,7 +262,3 @@ schema_fields:
     type: STRING
   - name: revenue_vehicle_identifier_list
     type: STRING
-  - name: __computed_region_8fe2_rd7y
-    type: NUMERIC
-  - name: __computed_region_m2nu_4dib
-    type: NUMERIC
