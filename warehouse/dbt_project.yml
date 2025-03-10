@@ -55,10 +55,6 @@ models:
         +labels:
           domain: staging
           dataset: gtfs_quality
-      ntd:
-        +labels:
-          domain: staging
-          dataset: ntd
       ntd_annual_reporting:
         +labels:
           domain: staging
