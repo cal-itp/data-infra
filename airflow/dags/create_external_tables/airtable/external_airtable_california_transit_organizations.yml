@@ -57,9 +57,9 @@ schema_fields:
   - name: gtfs_schedule_status
     type: STRING
     mode: REPEATED
-  - name: mpo_rtpa
-    type: STRING
-    mode: REPEATED
+  # - name: mpo_rtpa
+  #   type: STRING
+  #   mode: REPEATED
   - name: ntp_id
     type: STRING
     mode: REPEATED
@@ -255,5 +255,11 @@ schema_fields:
     type: STRING
     mode: NULLABLE
   - name: ntd_id_2022
+    type: STRING
+    mode: NULLABLE
+  - name: rtpa
+    type: STRING
+    mode: REPEATED
+  - name: mpo
     type: STRING
     mode: NULLABLE
