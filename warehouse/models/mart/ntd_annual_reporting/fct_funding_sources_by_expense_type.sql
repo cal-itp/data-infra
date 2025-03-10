@@ -3,9 +3,25 @@ WITH staging_funding_sources_by_expense_type AS (
     FROM {{ ref('stg_ntd__funding_sources_by_expense_type') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_funding_sources_by_expense_type.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_funding_sources_by_expense_type
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_funding_sources_by_expense_type AS (
     SELECT *
-    FROM staging_funding_sources_by_expense_type
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -33,6 +49,7 @@ SELECT
     total_questionable,
     uace_code,
     uza_name,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_funding_sources_by_expense_type

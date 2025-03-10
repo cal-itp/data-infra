@@ -3,9 +3,25 @@ WITH staging_capital_expenses_by_capital_use AS (
     FROM {{ ref('stg_ntd__capital_expenses_by_capital_use') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_capital_expenses_by_capital_use.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_capital_expenses_by_capital_use
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_capital_expenses_by_capital_use AS (
     SELECT *
-    FROM staging_capital_expenses_by_capital_use
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -47,6 +63,7 @@ SELECT
     typeofservicecd,
     uace_code,
     uza_name,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_capital_expenses_by_capital_use
