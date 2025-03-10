@@ -262,4 +262,4 @@ schema_fields:
     mode: REPEATED
   - name: mpo
     type: STRING
-    mode: NULLABLE
+    mode: REPEATED
