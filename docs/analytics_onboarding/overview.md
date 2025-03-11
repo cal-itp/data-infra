@@ -9,15 +9,10 @@
 - See below for list of our collaboration and analysis tools.
 - As part of your onboarding, privileges have already been created for you to access the resources below.
 
-**Non-Analyst Team Members**
-
-- Any of the tools below are available to you as well!
-
 **If you still need help with access**, use the information at the bottom of this page to [**get help**](get-help).
 :::
 **Collaboration Tools:**
 
-- [ ] [**Slack**](https://cal-itp.slack.com) | ([Docs](slack-intro))
 - [ ] [**Analytics Repo**](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
 - [ ] [**Analyst Project Board**](https://github.com/cal-itp/data-analyses/projects/1)
 - [ ] [**Google Cloud Storage**](https://console.cloud.google.com/storage/browser/calitp-analytics-data) | ([Docs](storing-new-data))
@@ -33,7 +28,7 @@
 **Python Libraries:**
 
 - [ ] [**calitp-data-analysis**](https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis) - Cal-ITP's internal Python library for analysis | ([Docs](calitp-data-analysis))
-- [ ] [**siuba**](https://siuba.org/) - Recommended data analysis library | ([Docs](siuba))
+- [ ] [**siuba**](https://siuba.org/) - Data analysis library we use to query data from the warehouse| ([Docs](siuba))
 - [ ] [**shared_utils**](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) - A shared utilities library for the analytics team | ([Docs](shared-utils))
 
 **Caltrans Employee Resources:**

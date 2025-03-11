@@ -14,19 +14,29 @@ The section below outlines our team's primary meetings and their purposes, as we
 | Name                     | Cadence              | Description                                                                  |
 | ------------------------ | -------------------- | ---------------------------------------------------------------------------- |
 | **Technical Onboarding** | Week 1 <br/> 40 Mins | To ensure access to tools and go over best practices.                        |
-| **Analyst Team Meeting** | Thurs <br/> 45 Mins  | Branch meeting to share your screen and discuss what you've been working on. |
+| **Analyst Data Roundtable Meeting** | Thursday <br/> 50 Mins  | Branch meeting to share your screen and discuss what you've been working on. |
+| **Analyst Administrative Meeting** | Wednesday <br/> 25 Mins  | Branch meeting for administrative updates every other week.|
+| **Team Social Meeting** | Wednesday <br/> 60 Mins  | Due to the geographic spread of our branch, every other Wednesday we get together for an **optional** hour of chatting.|
 
 (slack-intro)=
 
-## Communication Channels
+## Teams Communication Channels
+When communicating with Caltrans coworkers, we use Teams.
 
 | Channel                  | Purpose    | Description                                                                                 |
 | ------------------------ | ---------- | ------------------------------------------------------------------------------------------- |
-| #**ct-bdat-internal**    | Discussion | For Caltrans Division of Data and Digital Services employees.                               |
-| #**data-analysis**       | Discussion | For sharing and collaborating on Cal-ITP data analyses.                                     |
-| #**data-office-hours**   | Discussion | A place to bring questions, issues, and observations for team discussion.                   |
-| #**data-warehouse-devs** | Discussion | For people building dbt models - focused on data warehouse performance considerations, etc. |
+| #**General**    | Discussion | For all employees in Caltrans Division of Data and Digital Services (DDS).                               |
+| #**Data Analysis**       | Discussion | For sharing and collaborating on data analyses.                                     |
+| #**Data Office Hours**   | Discussion | A place to bring questions, issues, and observations for team discussion.                   |
+| #**Data Science**   | Discussion | For all employees in DDS's Data Science Branch.                   |
 
+## Slack Communication Channels
+
+When working with contractors, we use Slack.
+
+| Channel                  | Purpose    | Description                                                                                 |
+| ------------------------ | ---------- | ------------------------------------------------------------------------------------------- |
+| #**data-warehouse-devs** | Discussion | For people building dbt models - focused on data warehouse performance considerations, etc. |
 (analytics-repo)=
 
 ### GitHub Analytics Repo
@@ -34,3 +44,5 @@ The section below outlines our team's primary meetings and their purposes, as we
 The `data-analyses` repo is our main data analysis repository, for sharing quick reports and works in progress. Get set up on GitHub and clone the data-analyses repository [using this link](saving-code-jupyter).
 
 For collaborative short-term tasks, create a new folder and work off a separate branch.
+
+For large and long-term projects, create a whole new repo. 
