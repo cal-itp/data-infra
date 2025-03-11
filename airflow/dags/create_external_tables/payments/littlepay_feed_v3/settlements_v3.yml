@@ -1,0 +1,54 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__LITTLEPAY_PARSED_V3') }}"
+source_objects:
+  - "settlements/*.jsonl.gz"
+destination_project_dataset_table: "external_littlepay.settlements_v3"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "settlements/{instance:STRING}/{extract_filename:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: settlement_id
+    type: STRING
+  - name: participant_id
+    type: STRING
+  - name: aggregation_id
+    type: STRING
+  - name: customer_id
+    type: STRING
+  - name: funding_source_id
+    type: STRING
+  - name: amount # renamed in v3 from transaction_amount
+    type: STRING
+  - name: retrieval_reference_number
+    type: STRING
+  - name: littlepay_reference_number
+    type: STRING
+  - name: external_reference_number
+    type: STRING
+  - name: acquirer_code # renamed in v3 from acquirer
+    type: STRING
+  - name: record_updated_timestamp_utc # renamed in v3 from settlement_requested_date_time_utc
+    type: TIMESTAMP
+  - name: settlement_type
+    type: STRING
+  - name: acquirer_response_rrn
+    type: STRING
+  - name: settlement_status
+    type: STRING
+  - name: request_created_timestamp_utc
+    type: STRING
+  - name: response_created_timestamp_utc
+    type: STRING
+  - name: refund_id
+    type: STRING
+  - name: transaction_timestamp_utc
+    type: STRING
+  - name: currency_code
+    type: STRING
+  - name: channel
+    type: STRING
+  - name: _line_number
+    type: STRING
