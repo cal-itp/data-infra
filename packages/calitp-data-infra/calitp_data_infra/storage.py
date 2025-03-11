@@ -61,11 +61,11 @@ def make_name_bq_safe(name: str):
     Add underscore if starts with a number.  Also sometimes excel has columns names that are
     all numbers, not even strings of numbers (ﾉﾟ0ﾟ)ﾉ~
     """
-    if type(name) != str:
+    if not isinstance(name, str):
         name = str(name)
     if name[:1].isdigit():
         name = "_" + name
-    return str.lower(re.sub("[^\w]", "_", name))  # noqa: W605
+    return str.lower(re.sub(r"[^\w]", "_", name))
 
 
 AIRTABLE_BUCKET = os.getenv("CALITP_BUCKET__AIRTABLE")
