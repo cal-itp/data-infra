@@ -42,6 +42,8 @@ stg_transit_database__organizations AS (
         is_public_entity = "Yes" AS is_public_entity,
         raw_ntd_id,
         ntd_id_2022,
+        rtpa,
+        mpo,
         public_currently_operating = "Yes" AS public_currently_operating,
         public_currently_operating_fixed_route = "Yes" AS public_currently_operating_fixed_route,
     FROM once_daily_organizations

@@ -33,6 +33,8 @@ dim_organizations AS (
             ELSE ntd_to_org.ntd_id
         END AS ntd_id,
         ntd_id_2022,
+        rtpa,
+        mpo,
         public_currently_operating,
         public_currently_operating_fixed_route,
         _is_current,
