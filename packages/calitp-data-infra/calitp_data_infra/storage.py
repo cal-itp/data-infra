@@ -1,5 +1,9 @@
 import abc
 import base64
+
+# NOTE that the cgi module is deprecated in Python 3.11, and will be removed in
+# Python 3.13 https://docs.python.org/3.11/library/cgi.html. There is a drop-in
+# replacement available at https://pypi.org/project/legacy-cgi/
 import cgi
 import gzip
 import json
