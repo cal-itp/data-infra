@@ -1,0 +1,18 @@
+description: "Parse feed v3 Littlepay files into JSONL"
+schedule_interval: "30 * * * *"
+tags:
+  - all_gusty_features
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: "2023-03-12"
+    email:
+      - "hello@calitp.org"
+    email_on_failure: False
+    email_on_retry: False
+    max_active_dag_runs: 6
+    retries: 1
+    retry_delay: !timedelta 'minutes: 2'
+    concurrency: 50
+    #sla: !timedelta 'hours: 2'
+latest_only: False
