@@ -85,7 +85,7 @@ vp_grouper AS (
                 ORDER BY location_timestamp
                 RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
             )  AS vp_group,
-        keys_grouped.vp_direction_current_to_next
+        COALESCE(keys_grouped.vp_direction_current_to_next, "Unknown") AS vp_direction, -- there can be missing, infrequent though
     FROM keys_grouped
 )
 

@@ -1,32 +1,21 @@
-{{
-    config(
-        materialized='incremental',
-        incremental_strategy='insert_overwrite',
-        partition_by = {
-            'field': 'dt',
-            'data_type': 'date',
-            'granularity': 'day',
-        },
-        cluster_by=['dt', 'base64_url'],
-        on_schema_change='append_new_columns'
-    )
-}}
+{{ config(materialized='table') }}
 
 WITH fct_vehicle_locations AS (
     SELECT
         key,
-        dt,
-        gtfs_dataset_key,
-        base64_url,
-        gtfs_dataset_name,
-        schedule_gtfs_dataset_key,
-        service_date,
-        trip_instance_key,
+        --dt,
+        --gtfs_dataset_key,
+        --base64_url,
+        --gtfs_dataset_name,
+        --schedule_gtfs_dataset_key,
+        --service_date,
+        --trip_instance_key,
         location_timestamp,
         location,
         next_location_key,
     FROM {{ ref('fct_vehicle_locations') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
+    WHERE trip_instance_key = '32034bff4a0692bab4e31d303bd5276d' AND service_date = '2025-02-12'
+    --WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
     ORDER by service_date, trip_instance_key, location_timestamp
     ),
 
