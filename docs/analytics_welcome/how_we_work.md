@@ -21,7 +21,8 @@ The section below outlines our team's primary meetings and their purposes, as we
 (slack-intro)=
 
 ## Teams Communication Channels
-When communicating with Caltrans coworkers, we use Teams.
+When communicating with Caltrans coworkers, we use Teams. The message retention policy for Teams is not permanent. [Open up a GitHub Issue](https://github.com/cal-itp/data-analyses/issues) for any posts you make on the **Data Analysis** and **Data Office Hours** channels that are worth keeping for posterity's sake and/or are lengthy and complex in nature. 
+
 
 | Channel                  | Purpose    | Description                                                                                 |
 | ------------------------ | ---------- | ------------------------------------------------------------------------------------------- |
