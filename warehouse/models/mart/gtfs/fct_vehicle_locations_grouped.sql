@@ -24,10 +24,10 @@ WITH fct_vehicle_locations AS (
         trip_instance_key,
         location_timestamp,
         location,
+        -- rather than using next_location_key, use lag to calculate direction from previous
     FROM {{ ref('fct_vehicle_locations') }}
     WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
-    ORDER by service_date, trip_instance_key, location_timestamp
-),
+    ),
 
 lat_lon AS (
     SELECT
@@ -126,4 +126,4 @@ fct_grouped_locations AS (
     GROUP BY dt, gtfs_dataset_key, base64_url, gtfs_dataset_name, schedule_gtfs_dataset_key, service_date, trip_instance_key, vp_group, ST_ASTEXT(fct_vehicle_locations.location)
 )
 
-SELECT * FROM fct_grouped_locations ORDER BY location_timestamp
+SELECT * FROM fct_grouped_locations
