@@ -26,8 +26,8 @@ WITH fct_vehicle_locations AS (
         location,
         -- rather than using next_location_key, use lag to calculate direction from previous
     FROM {{ ref('fct_vehicle_locations') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
-    ),
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }} AND trip_instance_key IS NOT NULL
+),
 
 lat_lon AS (
     SELECT
