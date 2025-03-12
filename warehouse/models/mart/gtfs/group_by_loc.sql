@@ -1,41 +1,41 @@
 {{ config(materialized='table') }}
 
 WITH fct_vehicle_locations AS (
-    SELECT
-        trip_instance_key,
+   SELECT
         key,
+        dt,
+        gtfs_dataset_key,
+        base64_url,
+        gtfs_dataset_name,
+        schedule_gtfs_dataset_key,
+        service_date,
+        trip_instance_key,
         location_timestamp,
         location,
-        next_location_key,
     FROM cal-itp-data-infra-staging.tiffany_mart_gtfs.culver_trip
-    ORDER by trip_instance_key, location_timestamp
+    ORDER by service_date, trip_instance_key, location_timestamp
 ),
-
 
 lat_lon AS (
     SELECT
         fct_vehicle_locations.trip_instance_key,
+        fct_vehicle_locations.service_date,
         fct_vehicle_locations.key,
         fct_vehicle_locations.location_timestamp,
         ST_X(fct_vehicle_locations.location) AS longitude,
         ST_Y(fct_vehicle_locations.location) AS latitude,
     FROM fct_vehicle_locations
-
 ),
 
 lagged AS (
     SELECT
-        lat_lon.trip_instance_key,
-        lat_lon.key,
-        lat_lon.longitude,
-        lat_lon.latitude,
-        lat_lon.location_timestamp,
+        lat_lon.*,
         LAG(longitude, 1, NULL)
-            OVER (PARTITION BY trip_instance_key
+            OVER (PARTITION BY service_date, trip_instance_key
                   ORDER BY location_timestamp)
         AS previous_longitude,
         LAG(latitude, 1, NULL)
-            OVER (PARTITION BY trip_instance_key
+            OVER (PARTITION BY service_date, trip_instance_key
                   ORDER BY location_timestamp)
         AS previous_latitude,
     FROM lat_lon
@@ -43,11 +43,7 @@ lagged AS (
 
 deltas AS (
     SELECT
-        lagged.key,
-        lagged.trip_instance_key,
-        lagged.location_timestamp,
-        lagged.longitude,
-        lagged.latitude,
+        lagged.*,
         lagged.longitude - lagged.previous_longitude AS delta_lon,
         lagged.latitude - lagged.previous_latitude AS delta_lat,
     FROM lagged
@@ -83,13 +79,11 @@ direction AS (
 vp_grouper AS (
     SELECT
         direction.trip_instance_key,
+        direction.service_date,
         direction.key,
-        direction.location_timestamp,
-        direction.longitude,
-        direction.latitude,
         SUM(direction.new_group)
             OVER (
-                PARTITION BY trip_instance_key
+                PARTITION BY service_date, trip_instance_key
                 ORDER BY location_timestamp
                 RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
             )  AS vp_group,
@@ -99,16 +93,24 @@ vp_grouper AS (
 
 fct_grouped_locations AS (
     SELECT
-        MIN(vp_grouper.key) AS key,
+        fct_vehicle_locations.dt,
+        fct_vehicle_locations.gtfs_dataset_key,
+        fct_vehicle_locations.base64_url,
+        fct_vehicle_locations.gtfs_dataset_name,
+        fct_vehicle_locations.schedule_gtfs_dataset_key,
+        fct_vehicle_locations.service_date,
         vp_grouper.trip_instance_key,
-        MIN(vp_grouper.location_timestamp) AS location_timestamp,
-        MAX(vp_grouper.location_timestamp) AS moving_timestamp,
-        ST_GEOGPOINT(vp_grouper.longitude, vp_grouper.latitude) AS location,
+        MIN(vp_grouper.key) AS key,
+        MIN(fct_vehicle_locations.location_timestamp) AS location_timestamp,
+        MAX(fct_vehicle_locations.location_timestamp) AS moving_timestamp,
+        ST_GEOGFROMTEXT(MIN(ST_ASTEXT(fct_vehicle_locations.location))) AS location,
         COUNT(*) AS n_vp,
         MIN(vp_grouper.vp_direction) AS vp_direction,
-        vp_group,
+        vp_grouper.vp_group,
     FROM vp_grouper
-    GROUP BY trip_instance_key, vp_group, longitude, latitude
+    INNER JOIN fct_vehicle_locations
+        ON fct_vehicle_locations.key = vp_grouper.key
+    GROUP BY dt, gtfs_dataset_key, base64_url, gtfs_dataset_name, schedule_gtfs_dataset_key, service_date, trip_instance_key, vp_group, ST_ASTEXT(fct_vehicle_locations.location)
 )
 
 SELECT * FROM fct_grouped_locations ORDER BY location_timestamp
