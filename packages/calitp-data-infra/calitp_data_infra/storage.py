@@ -1,5 +1,9 @@
 import abc
 import base64
+
+# NOTE that the cgi module is deprecated in Python 3.11, and will be removed in
+# Python 3.13 https://docs.python.org/3.11/library/cgi.html. There is a drop-in
+# replacement available at https://pypi.org/project/legacy-cgi/
 import cgi
 import gzip
 import json
@@ -61,11 +65,11 @@ def make_name_bq_safe(name: str):
     Add underscore if starts with a number.  Also sometimes excel has columns names that are
     all numbers, not even strings of numbers (ﾉﾟ0ﾟ)ﾉ~
     """
-    if type(name) != str:
+    if not isinstance(name, str):
         name = str(name)
     if name[:1].isdigit():
         name = "_" + name
-    return str.lower(re.sub("[^\w]", "_", name))  # noqa: W605
+    return str.lower(re.sub(r"[^\w]", "_", name))
 
 
 AIRTABLE_BUCKET = os.getenv("CALITP_BUCKET__AIRTABLE")
