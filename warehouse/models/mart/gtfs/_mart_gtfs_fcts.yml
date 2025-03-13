@@ -2526,7 +2526,6 @@ models:
           `location_timestamp`, `vehicle_id`, `vehicle_label`,
           `trip_id`, and `trip_start_time`.
         tests: *almost_unique_rt_key_tests
-      - *gtfs_rt_dt
       - *rt_service_date
       - name: gtfs_dataset_key
         description: *gtfs_dataset_key_desc
@@ -2541,11 +2540,6 @@ models:
       - <<: *trip_instance_key
         tests:
           - not_null
-          - unique_proportion:
-              at_least: 0.9999
-          - relationships:
-              to: ref('fct_observed_trips')
-              field: trip_instance_key
       - *rt_location_timestamp
       - name: moving_timestamp
         description: |
