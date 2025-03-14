@@ -44,9 +44,9 @@ Services represent the "transportation product" that transit agencies offer to c
 Frequently, organizations provide multiple services with different characteristics. The Caliofrnia Transit base differentiates between these services if there is a difference in any of the following characteristics:
 
 1. Provider of the service
-1. "Super-mode" of the service
-1. Whether the service is a "fixed-route" service
-1. Whether there are different "rider requirements" that passengers must qualify for in order to ride
+2. "Super-mode" of the service
+3. Whether the service is a "fixed-route" service
+4. Whether there are different "rider requirements" that passengers must qualify for in order to ride
 
 #### GTFS Datasets
 
