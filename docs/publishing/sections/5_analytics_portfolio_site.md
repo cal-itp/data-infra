@@ -6,11 +6,11 @@ Now that your notebook(s) are portfolio-ready, it's time to publish your work to
 
 ## Netlify Setup
 
-Netlify is the platform turns our Jupyter Notebooks uploaded to GitHub into a full website.
+Netlify is the platform turns our Jupyter Notebooks uploaded to GitHub into a webpage.
 
-To setup your netlify key:
+**To setup your netlify key:**
 
-- Ask in Teams for a Netlify key if you don't have one yet.
+- Ask on the Teams `Data Analysis` channel for a Netlify key if you don't have one yet.
 - If you already have your Netlify key set up, find it by typing `cat ~/.bash_profile` into the root of your repo.
 - Install netlify: `npm install -g netlify-cli`
 - Navigate to your main directory

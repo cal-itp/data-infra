@@ -17,3 +17,7 @@ A selection of resources taken from the above document providing background on t
 - [Market Sounding](https://dot.ca.gov/-/media/dot-media/cal-itp/documents/final-cal-itp-market-sounding-market-response-summary-103119b-a11y.pdf): This 2019 market sounding laid the foundation for our current priorities. It was followed up with a business case analysis of the project in a [Feasibility Study](https://dot.ca.gov/-/media/dot-media/cal-itp/documents/calitp-feasibility-study-042420-a11y.pdf).
 - This [project framework orientation deck](https://docs.google.com/presentation/d/1zsEp2KoKyPlE34AJyqBPeSdv_ySYd6n-zcmrkdTftgo/edit) highlights some of the history of Cal-ITP,  how it came to be, and the problems it is trying to solve.
 - [The 2022 roadmap deck](https://docs.google.com/presentation/d/11DgqhoEqDUFJLTo71OkyWVtpih9-HzUF33DPT6M59N4/edit?usp=sharing) presents our 2022 milestones, projects, and collaboration teams “looking forward” for the year.
+
+## How Cal-ITP relates to DDS
+
+- Copy here.

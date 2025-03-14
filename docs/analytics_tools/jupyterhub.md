@@ -38,7 +38,7 @@ This avoids the need to set up a local environment, provides dedicated storage, 
 
 JupyterHub currently lives at [notebooks.calitp.org](https://notebooks.calitp.org/).
 
-**Note**: you need be added to the Cal-ITP organization on GitHub to obtain access. Tag Evan Siroky on the `Data Analysis` channel in Teams.
+**Note**: you need be added to the Cal-ITP organization on GitHub to use JupyterHub. Tag Evan Siroky on the `Data Analysis` channel on Teams to ask for access.
 
 (default-user-vs-power-user)=
 

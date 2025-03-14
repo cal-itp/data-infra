@@ -17,5 +17,5 @@
 &#160;
 
 ```{admonition} Still need access to a tool on this page?
-Ask in the `Data Office Hours` channel on Teams.
+Ask in the `Data Analysis` channel on Teams.
 ```
