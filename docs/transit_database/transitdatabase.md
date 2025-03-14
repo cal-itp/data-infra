@@ -19,6 +19,51 @@ Cal-ITP uses two main Airtable bases:
 | [**California Transit**](#california-transit)               | Defines key organizational relationships and properties. Organizations, geography, funding programs,  transit services, service characteristics, transit datasets such as GTFS, and the intersection between transit datasets and services.                           |
 | [**Transit Technology Stacks**](#transit-technology-stacks) | Defines operational setups at transit provider organizations. Defines relationships between vendor organizations, transit provider and operator organizations, products, contracts to provide products, transit stack components, and how they relate to one-another. |
 
+## Entity Relationship Diagrams
+
+The following entity relationship diagrams were last updated in 2022 but are preserved for general reference purposes.
+
+(california-transit)=
+
+### California Transit
+
+[![](https://mermaid.ink/img/pako:eNqVk8tuwjAQRX_F8hrUfXZVaVlVRNBlNkM8SSzFD8Y2Ukr499ohaUMBqc0u1j13Htc-8dII5BlHWkmoCVShWfw2VIOWn-Cl0ezcL5fmxHZIR1lixgquQEONruB_UhuLBP6R3Azyta_cCjw49AmxZEQo_4eEfStdc2EeU_OzhEnHLBBqz8xcbaq7pfto0t-avOebp-1H_swqQ8w3yKIjpJ_J5IGV6dmLCdp3azRx-bbpxpYaBHEIQB4JBZN68hm3yvp-6OMOvBmXPYN-qSY4b6HEK1agK0nuI1wOyLLFI7bRKU6iLl3fzPQWtJC6zin5qCH9_ir9Kgq-c9xKgbTFQ5CEKi19TGWmB2tbGVvw5ifI-dhj8uNRugCJIqxaLH1c1r6bis0uyNTXHVKmaZUl6SKcYucLrjDOK0V8F6dkVfCYqcKCX5ZUQWh9KnKO0mBFXPerkN4QzypoHS44BG92nS555ingJBpf2Kg6fwGQYjVu)](https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqVk8tuwjAQRX_F8hrUfXZVaVlVRNBlNkM8SSzFD8Y2Ukr499ohaUMBqc0u1j13Htc-8dII5BlHWkmoCVShWfw2VIOWn-Cl0ezcL5fmxHZIR1lixgquQEONruB_UhuLBP6R3Azyta_cCjw49AmxZEQo_4eEfStdc2EeU_OzhEnHLBBqz8xcbaq7pfto0t-avOebp-1H_swqQ8w3yKIjpJ_J5IGV6dmLCdp3azRx-bbpxpYaBHEIQB4JBZN68hm3yvp-6OMOvBmXPYN-qSY4b6HEK1agK0nuI1wOyLLFI7bRKU6iLl3fzPQWtJC6zin5qCH9_ir9Kgq-c9xKgbTFQ5CEKi19TGWmB2tbGVvw5ifI-dhj8uNRugCJIqxaLH1c1r6bis0uyNTXHVKmaZUl6SKcYucLrjDOK0V8F6dkVfCYqcKCX5ZUQWh9KnKO0mBFXPerkN4QzypoHS44BG92nS555ingJBpf2Kg6fwGQYjVu)
+
+[editable source](https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqVk8tuwjAQRX_F8hrUfXZVaVlVRNBlNkM8SSzFD8Y2Ukr499ohaUMBqc0u1j13Htc-8dII5BlHWkmoCVShWfw2VIOWn-Cl0ezcL5fmxHZIR1lixgquQEONruB_UhuLBP6R3Azyta_cCjw49AmxZEQo_4eEfStdc2EeU_OzhEnHLBBqz8xcbaq7pfto0t-avOebp-1H_swqQ8w3yKIjpJ_J5IGV6dmLCdp3azRx-bbpxpYaBHEIQB4JBZN68hm3yvp-6OMOvBmXPYN-qSY4b6HEK1agK0nuI1wOyLLFI7bRKU6iLl3fzPQWtJC6zin5qCH9_ir9Kgq-c9xKgbTFQ5CEKi19TGWmB2tbGVvw5ifI-dhj8uNRugCJIqxaLH1c1r6bis0uyNTXHVKmaZUl6SKcYucLrjDOK0V8F6dkVfCYqcKCX5ZUQWh9KnKO0mBFXPerkN4QzypoHS44BG92nS555ingJBpf2Kg6fwGQYjVu)
+
+The California Transit Airtable Base Contains data about organizations, the services they operate and how those services are represented with GTFS Data.
+
+#### Organizations
+
+Organizations represent legal entities such as companies, universities, government entities or non-profits. Within these records there may be transit agencies or vendors that serve transit agencies. Some of these entities may "manage" several transit services.
+
+#### Services
+
+Services represent the "transportation product" that transit agencies offer to customers. Services are differenitiated in the characteristics of service they offer. Each service has a "Provider" which is the organization that is generall responsible for funding the service and planning how the service will operate. Where data has been collected, some services also have "Operators" which identify whether the providing organization directly operates the service with their own staff or if they have a contractor provide the service for them.
+
+Frequently, organizations provide multiple services with different characteristics. The Caliofrnia Transit base differentiates between these services if there is a difference in any of the following characteristics:
+
+1. Provider of the service
+1. "Super-mode" of the service
+1. Whether the service is a "fixed-route" service
+1. Whether there are different "rider requirements" that passengers must qualify for in order to ride
+
+#### GTFS Datasets
+
+This table contains records of GTFS URLs where GTFS data can be downloaded from. Each of these records identifies the type of GTFS data format and for realtime datasets also indicates which GTFS Schedule feed it is associated with for matching and validation purposes.
+
+#### GTFS Service Data
+
+This table describes the linkage between Services and GTFS Datasets. Each record is restricted to have exactly one service and one GTFS dataset record. There is also a place to indicate whether the GTFS Dataset in the record is assumed to be "public facing" for the associated service. "Public facing" indicates whether the associated GTFS Dataset is assumed to be what trip planners use to represent the associated service when integrated the data into their systems to show the general public.
+
+(transit-technology-stacks)=
+
+### Transit Stacks
+
+[![](https://mermaid.ink/img/pako:eNqdk7tuwzAMRX9F0JzH7jXp0ClF09ELITGyAFs0KClFG-ffS7_6SNu0iEbp3MtLSjppQxZ1oZG3HhxDUwYla8cOgn-F5ClEde6WSzqpPfLRGyxUqRsI4DCW-kecBnxDITGY1PP0HP4PV1Tb6_QDk80jHLGuB3jEp4wbaloKGJIoVqvuS3YfVY5oVSLV1hDWYy9rapEh4Vz3N6NPpcUoSlQF8bqoU-8bk0wa9cH9JbwYi-hapqO3ffaKKbvqo-9HrMcRVb79ZtZ1Q4rL_d50x975AEOcOJ4rMwNzulvNn4Adpht9pwlsIcHeVNhA73gfxSUENEmGkKOkLrVe6Aa5AW_lHZ9651InEchV9hKLB8j1UPMsaG6t3PKd9YlYFweoIy405ET7l2B0kTjjDE0_YqLOb7JEHuQ)](https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqdk7tuwzAMRX9F0JzH7jXp0ClF09ELITGyAFs0KClFG-ffS7_6SNu0iEbp3MtLSjppQxZ1oZG3HhxDUwYla8cOgn-F5ClEde6WSzqpPfLRGyxUqRsI4DCW-kecBnxDITGY1PP0HP4PV1Tb6_QDk80jHLGuB3jEp4wbaloKGJIoVqvuS3YfVY5oVSLV1hDWYy9rapEh4Vz3N6NPpcUoSlQF8bqoU-8bk0wa9cH9JbwYi-hapqO3ffaKKbvqo-9HrMcRVb79ZtZ1Q4rL_d50x975AEOcOJ4rMwNzulvNn4Adpht9pwlsIcHeVNhA73gfxSUENEmGkKOkLrVe6Aa5AW_lHZ9651InEchV9hKLB8j1UPMsaG6t3PKd9YlYFweoIy405ET7l2B0kTjjDE0_YqLOb7JEHuQ)
+
+[editable source](https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqdk7tuwzAMRX9F0JzH7jXp0ClF09ELITGyAFs0KClFG-ffS7_6SNu0iEbp3MtLSjppQxZ1oZG3HhxDUwYla8cOgn-F5ClEde6WSzqpPfLRGyxUqRsI4DCW-kecBnxDITGY1PP0HP4PV1Tb6_QDk80jHLGuB3jEp4wbaloKGJIoVqvuS3YfVY5oVSLV1hDWYy9rapEh4Vz3N6NPpcUoSlQF8bqoU-8bk0wa9cH9JbwYi-hapqO3ffaKKbvqo-9HrMcRVb79ZtZ1Q4rL_d50x975AEOcOJ4rMwNzulvNn4Adpht9pwlsIcHeVNhA73gfxSUENEmGkKOkLrVe6Aa5AW_lHZ9651InEchV9hKLB8j1UPMsaG6t3PKd9YlYFweoIy405ET7l2B0kTjjDE0_YqLOb7JEHuQ)
+
 The rest of this page outlines stray technical considerations associated with Airtable and its ingestion into the data warehouse.
 
 ## Primary Keys
@@ -61,26 +106,6 @@ Bridge tables do introduce some complexity in handling fanout from joins, but th
 Airtable allows you to "sync" a table from one base to another, where it appears with all the data from its source location and can be linked to records in the second base. An example in our Airtable is the `California Transit.organizations` table is synced to `Transit Technology Stacks.organizations`; you will see a little lightning icon to show that it is a synced table.
 
 This requires special handling when importing to the warehouse, because Airtable assigns new back-end record IDs in the synced table, which means that foreign keys to the synced table in the second base will not match record IDs in the source table. We resolve this by mapping all foreign keys to point to the source table in a base layer in dbt. See [data infra PR #2781](https://github.com/cal-itp/data-infra/pull/2781) for an example.
-
-## Entity Relationship Diagrams
-
-The following entity relationship diagrams were last updated in 2022 but are preserved for general reference purposes.
-
-(california-transit)=
-
-### California Transit
-
-[![](https://mermaid.ink/img/pako:eNqVVEtv4jAQ_iuWz0W9c1stbbWHbhFw5DLEEzJax07HDqss4b_vOCQQXlLLBSX6XuP5nL3OvEE91cgzgi1DuXZKfh-8BUf_IJJ36tBOJn6vlsg7ynCq1roEB1sMa_0ltK-QIT6C-w7-FvMwgwgBY6Jk3oW6_BalYm_q7HuUemMpFEfOY9b4XaJRUBUwuqj8GO3zu9btQxEwJTkKEZnc9sta7a3W-_zjebGa_1C5ZxULVJIO0sN3RCRQolYWnEt5oI6FZ4rNQ9VHw7bqp69dbN7QS6OqounlCwTzWQPLwGgUuUHnCq3atgs4t5DhhYbBkDFtMKiso0ws7tCKkoQqjwFG8V4l77KR4y0HxeuRoaosiVr05wL0vQ3D8kc9Pu4dIoMLFAer3qx2Rk5tzilu2V2C9oKcC-DUzQUZ5AV-1sRYpiLdml1mS6QXS1uSwsbm5HLDsvLvgtCwA5Pt93czX3ck_Y3oX6WLkTQYc4tZlBVtmsF7dHGG2e4wKS2mrJiCkM8VXkH4c_c8Bep3GJ7_ehaAPxXiFdG8Y2TKwtCoq5t7bkIqJqOVne5QiaLnCE7mO9v_Xs1-SUMGpXEJQtIqvDXinueUEdgEV0acujz6SZco3SIj38h90ltrcSxxrY8xcqhtTE4HgdaVEPHFUPSsp5FrfNJyjfyycdnwfMT0H1s9zcEGPPwHJNjt_A)](https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqVVEtv4jAQ_iuWz0W9c1stbbWHbhFw5DLEEzJax07HDqss4b_vOCQQXlLLBSX6XuP5nL3OvEE91cgzgi1DuXZKfh-8BUf_IJJ36tBOJn6vlsg7ynCq1roEB1sMa_0ltK-QIT6C-w7-FvMwgwgBY6Jk3oW6_BalYm_q7HuUemMpFEfOY9b4XaJRUBUwuqj8GO3zu9btQxEwJTkKEZnc9sta7a3W-_zjebGa_1C5ZxULVJIO0sN3RCRQolYWnEt5oI6FZ4rNQ9VHw7bqp69dbN7QS6OqounlCwTzWQPLwGgUuUHnCq3atgs4t5DhhYbBkDFtMKiso0ws7tCKkoQqjwFG8V4l77KR4y0HxeuRoaosiVr05wL0vQ3D8kc9Pu4dIoMLFAer3qx2Rk5tzilu2V2C9oKcC-DUzQUZ5AV-1sRYpiLdml1mS6QXS1uSwsbm5HLDsvLvgtCwA5Pt93czX3ck_Y3oX6WLkTQYc4tZlBVtmsF7dHGG2e4wKS2mrJiCkM8VXkH4c_c8Bep3GJ7_ehaAPxXiFdG8Y2TKwtCoq5t7bkIqJqOVne5QiaLnCE7mO9v_Xs1-SUMGpXEJQtIqvDXinueUEdgEV0acujz6SZco3SIj38h90ltrcSxxrY8xcqhtTE4HgdaVEPHFUPSsp5FrfNJyjfyycdnwfMT0H1s9zcEGPPwHJNjt_A)
-
-[editable source](https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqVVEtv4jAQ_iuWz0W9c1stbbWHbhFw5DLEEzJax07HDqss4b_vOCQQXlLLBSX6XuP5nL3OvEE91cgzgi1DuXZKfh-8BUf_IJJ36tBOJn6vlsg7ynCq1roEB1sMa_0ltK-QIT6C-w7-FvMwgwgBY6Jk3oW6_BalYm_q7HuUemMpFEfOY9b4XaJRUBUwuqj8GO3zu9btQxEwJTkKEZnc9sta7a3W-_zjebGa_1C5ZxULVJIO0sN3RCRQolYWnEt5oI6FZ4rNQ9VHw7bqp69dbN7QS6OqounlCwTzWQPLwGgUuUHnCq3atgs4t5DhhYbBkDFtMKiso0ws7tCKkoQqjwFG8V4l77KR4y0HxeuRoaosiVr05wL0vQ3D8kc9Pu4dIoMLFAer3qx2Rk5tzilu2V2C9oKcC-DUzQUZ5AV-1sRYpiLdml1mS6QXS1uSwsbm5HLDsvLvgtCwA5Pt93czX3ck_Y3oX6WLkTQYc4tZlBVtmsF7dHGG2e4wKS2mrJiCkM8VXkH4c_c8Bep3GJ7_ehaAPxXiFdG8Y2TKwtCoq5t7bkIqJqOVne5QiaLnCE7mO9v_Xs1-SUMGpXEJQtIqvDXinueUEdgEV0acujz6SZco3SIj38h90ltrcSxxrY8xcqhtTE4HgdaVEPHFUPSsp5FrfNJyjfyycdnwfMT0H1s9zcEGPPwHJNjt_A)
-
-(transit-technology-stacks)=
-
-### Transit Stacks
-
-[![](https://mermaid.ink/img/pako:eNqdk7tuwzAMRX9F0JzH7jXp0ClF09ELITGyAFs0KClFG-ffS7_6SNu0iEbp3MtLSjppQxZ1oZG3HhxDUwYla8cOgn-F5ClEde6WSzqpPfLRGyxUqRsI4DCW-kecBnxDITGY1PP0HP4PV1Tb6_QDk80jHLGuB3jEp4wbaloKGJIoVqvuS3YfVY5oVSLV1hDWYy9rapEh4Vz3N6NPpcUoSlQF8bqoU-8bk0wa9cH9JbwYi-hapqO3ffaKKbvqo-9HrMcRVb79ZtZ1Q4rL_d50x975AEOcOJ4rMwNzulvNn4Adpht9pwlsIcHeVNhA73gfxSUENEmGkKOkLrVe6Aa5AW_lHZ9651InEchV9hKLB8j1UPMsaG6t3PKd9YlYFweoIy405ET7l2B0kTjjDE0_YqLOb7JEHuQ)](https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqdk7tuwzAMRX9F0JzH7jXp0ClF09ELITGyAFs0KClFG-ffS7_6SNu0iEbp3MtLSjppQxZ1oZG3HhxDUwYla8cOgn-F5ClEde6WSzqpPfLRGyxUqRsI4DCW-kecBnxDITGY1PP0HP4PV1Tb6_QDk80jHLGuB3jEp4wbaloKGJIoVqvuS3YfVY5oVSLV1hDWYy9rapEh4Vz3N6NPpcUoSlQF8bqoU-8bk0wa9cH9JbwYi-hapqO3ffaKKbvqo-9HrMcRVb79ZtZ1Q4rL_d50x975AEOcOJ4rMwNzulvNn4Adpht9pwlsIcHeVNhA73gfxSUENEmGkKOkLrVe6Aa5AW_lHZ9651InEchV9hKLB8j1UPMsaG6t3PKd9YlYFweoIy405ET7l2B0kTjjDE0_YqLOb7JEHuQ)
-
-[editable source](https://mermaid-js.github.io/mermaid-live-editor/edit/#pako:eNqdk7tuwzAMRX9F0JzH7jXp0ClF09ELITGyAFs0KClFG-ffS7_6SNu0iEbp3MtLSjppQxZ1oZG3HhxDUwYla8cOgn-F5ClEde6WSzqpPfLRGyxUqRsI4DCW-kecBnxDITGY1PP0HP4PV1Tb6_QDk80jHLGuB3jEp4wbaloKGJIoVqvuS3YfVY5oVSLV1hDWYy9rapEh4Vz3N6NPpcUoSlQF8bqoU-8bk0wa9cH9JbwYi-hapqO3ffaKKbvqo-9HrMcRVb79ZtZ1Q4rL_d50x975AEOcOJ4rMwNzulvNn4Adpht9pwlsIcHeVNhA73gfxSUENEmGkKOkLrVe6Aa5AW_lHZ9651InEchV9hKLB8j1UPMsaG6t3PKd9YlYFweoIy405ET7l2B0kTjjDE0_YqLOb7JEHuQ)
 
 ## DAGs Maintenance
 
