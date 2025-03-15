@@ -39,9 +39,9 @@ Organizations represent legal entities such as companies, universities, governme
 
 #### Services
 
-Services represent the "transportation product" that transit agencies offer to customers. Services are differenitiated in the characteristics of service they offer. Each service has a "Provider" which is the organization that is generall responsible for funding the service and planning how the service will operate. Where data has been collected, some services also have "Operators" which identify whether the providing organization directly operates the service with their own staff or if they have a contractor provide the service for them.
+Services represent the "transportation product" that transit agencies offer to customers. Services are differenitiated in the characteristics of service they offer. Each service has a "Provider" which is the organization that is responsible for funding the service and planning how the service will operate. Where data has been collected, some services also have "Operators" which identify whether the providing organization directly operates the service with their own staff or if they have a contractor provide the service for them.
 
-Frequently, organizations provide multiple services with different characteristics. The Caliofrnia Transit base differentiates between these services if there is a difference in any of the following characteristics:
+Frequently, organizations provide multiple services with different characteristics. The California Transit base differentiates between these services if there is a difference in any of the following characteristics:
 
 1. Provider of the service
 2. "Super-mode" of the service
