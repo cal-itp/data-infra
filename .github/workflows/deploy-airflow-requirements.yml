@@ -1,0 +1,37 @@
+name: Deploy Airflow Requirements
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - airflow/requirements.txt
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: cal-itp-data-infra
+          workload_identity_provider: projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+          service_account: github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Update Composer Dependencies
+        run: |
+          gcloud composer environments update calitp-airflow2-prod-composer2-patch \
+          --update-pypi-packages-from-file airflow/requirements.txt \
+          --location us-west2 \
+          --project cal-itp-data-infra
