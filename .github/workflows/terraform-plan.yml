@@ -48,14 +48,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: 'google-github-actions/auth@v2'
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
         with:
-          create_credentials_file: 'true'
+          create_credentials_file: true
           project_id: cal-itp-data-infra-staging
-          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
-          service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+          workload_identity_provider: projects/473674835135/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+          service_account: github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com
 
-      - uses: google-github-actions/setup-gcloud@v2
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Terraform Formatting
         uses: dflook/terraform-fmt-check@v1
@@ -96,14 +98,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: 'google-github-actions/auth@v2'
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
         with:
-          create_credentials_file: 'true'
+          create_credentials_file: true
           project_id: cal-itp-data-infra
-          workload_identity_provider: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
-          service_account: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
+          workload_identity_provider: projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+          service_account: github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com
 
-      - uses: google-github-actions/setup-gcloud@v2
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Terraform Format Check
         uses: dflook/terraform-fmt-check@v1
