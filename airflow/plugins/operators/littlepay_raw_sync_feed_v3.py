@@ -156,14 +156,11 @@ class LittlepayRawSyncV3(BaseOperator):
         self,
         *args,
         instance: str,
-        # pull src_bucket from task yml
         src_bucket: str,
         access_key_secret_name: str,
         **kwargs,
     ):
         self.instance = instance
-        # deprecate because source bucket names are not predictable in v3
-        # self.src_bucket = f"littlepay-prod-{instance}-datafeed"
         self.src_bucket = src_bucket
         self.access_key_secret_name = access_key_secret_name
         super().__init__(**kwargs)

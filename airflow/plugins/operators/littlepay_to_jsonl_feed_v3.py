@@ -88,19 +88,15 @@ class LittlepayToJSONLV3(BaseOperator):
         # TODO: this could be worth splitting into separate tasks
         entities = [
             "authorisations",
-            # renamed based on v3 table name changes
             "customer-funding-sources",
             "device-transaction-purchases",
-            # this was already using the new name? verify that this is correct
             "device-transactions",
             "micropayment-adjustments",
             "micropayment-device-transactions",
             "micropayments",
-            # this was also renamed based on schema changes
             "products",
             "refunds",
             "settlements",
-            # this is new? handle in create_external_tables?
             "terminal-device-transactions",
         ]
 
