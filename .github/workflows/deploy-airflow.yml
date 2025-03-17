@@ -24,7 +24,7 @@ jobs:
         with:
           project_id: cal-itp-data-infra
           workload_identity_provider: projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
-          service_account: github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com
+          service_account: github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com
 
       - name: Setup GCloud utilities
         uses: google-github-actions/setup-gcloud@v2
