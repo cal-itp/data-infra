@@ -1,6 +1,14 @@
 {{
     config(
-        materialized='table'
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by = {
+            'field': 'dt',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by=['dt', 'base64_url'],
+        on_schema_change='append_new_columns'
     )
 }}
 
@@ -17,7 +25,7 @@ WITH fct_vehicle_locations AS (
         location,
         -- rather than using next_location_key, use lag to calculate direction from previous
     FROM {{ ref('fct_vehicle_locations') }}
-    WHERE service_date = DATE('2025-02-12') AND base64_url = 'aHR0cHM6Ly9uZXh0Y2NidXMub3JnL2d0ZnNydC92ZWhpY2xlcw=='
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 lat_lon AS (
