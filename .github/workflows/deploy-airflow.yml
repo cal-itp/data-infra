@@ -7,6 +7,12 @@ on:
     paths:
       - 'airflow/*'
 
+env:
+  SERVICE_ACCOUNT: 'github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com'
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+  PROJECT_ID: 'cal-itp-data-infra'
+  BUCKET_ID: 'us-west2-calitp-airflow2-pr-88ca8ec6-bucket'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,14 +28,14 @@ jobs:
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
         with:
-          project_id: cal-itp-data-infra
-          workload_identity_provider: projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
-          service_account: github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
 
       - name: Setup GCloud utilities
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Push Airflow code to GCS
         run: |
-          gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow2-pr-88ca8ec6-bucket/dags
-          gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow2-pr-88ca8ec6-bucket/plugins
+          gsutil -m rsync -d -c -r airflow/dags gs://${{ env.BUCKET_ID }}/dags
+          gsutil -m rsync -d -c -r airflow/plugins gs://${{ env.BUCKET_ID }}/plugins
