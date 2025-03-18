@@ -14,7 +14,7 @@
 **Collaboration Tools:**
 
 - [ ] Microsoft Teams
-- [ ] [**Analytics Repo**](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
+- [ ] [**Analytics Repo**](https://github.com/cal-itp/data-analyses)
 - [ ] [**Analyst Project Board**](https://github.com/cal-itp/data-analyses/projects/1)
 - [ ] [**Google Cloud Storage**](https://console.cloud.google.com/storage/browser/calitp-analytics-data) | ([Docs](storing-new-data))
 
