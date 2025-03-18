@@ -2,7 +2,7 @@ operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__LITTLEPAY_PARSED_V3') }}"
 source_objects:
   - "authorisations/*.jsonl.gz"
-destination_project_dataset_table: "external_littlepay.authorisations_v3"
+destination_project_dataset_table: "external_littlepay_v3.authorisations"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
