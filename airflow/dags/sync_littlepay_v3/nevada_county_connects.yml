@@ -1,0 +1,4 @@
+operator: operators.LittlepayRawSyncV3
+instance: nevada-county-connects
+src_bucket: littlepay-datafeed-prod-nevada-county-connec-7c9479e0
+access_key_secret_name: LITTLEPAY_AWS_IAM_NEVADA_COUNTY_CONNECTS_ACCESS_KEY_FEED_V3
