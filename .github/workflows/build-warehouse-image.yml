@@ -17,9 +17,12 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
-  PYTHON_VERSION: "3.11"
-  POETRY_VERSION: "2.0.1"
-  NODE_VERSION: "16"
+  PYTHON_VERSION: '3.11'
+  POETRY_VERSION: '2.0.1'
+  NODE_VERSION: '16'
+  SERVICE_ACCOUNT: 'github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com'
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+  PROJECT_ID: 'cal-itp-data-infra'
 
 jobs:
   lint:
@@ -80,9 +83,9 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           create_credentials_file: true
-          project_id: cal-itp-data-infra
-          workload_identity_provider: projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
-          service_account: github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
