@@ -1,0 +1,17 @@
+description: "Syncs feed V3 Littlepay data from S3 bucket to our buckets"
+schedule_interval: "0 * * * *"
+tags:
+  - all_gusty_features
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: !days_ago 1
+    email:
+      - "hello@calitp.org"
+    email_on_failure: False
+    email_on_retry: False
+    retries: 0
+    retry_delay: !timedelta 'minutes: 2'
+    concurrency: 50
+    #sla: !timedelta 'hours: 2'
+latest_only: True
