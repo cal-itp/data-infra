@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: external_littlepay
-    description: Hive-partitioned external tables reading Littlepay payments data.
+    description: Hive-partitioned external tables reading Littlepay feed v3 payments data.
     database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
     schema: external_littlepay
     tables:
