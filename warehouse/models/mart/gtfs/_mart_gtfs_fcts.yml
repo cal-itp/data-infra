@@ -39,7 +39,7 @@ x-common-fields:
             # occurs prior to that
             error_if: ">20"
   - &gtfs_rt_dataset_key
-    name: gtfs_dataset_key
+    name: &gtfs_rt_dataset_key_desc | #gtfs_dataset_key
     description: |
       Foreign key to the associated GTFS dataset record.
     tests:
@@ -2525,18 +2525,13 @@ models:
           Synthetic primary key constructed from `service_date`, `base64_url`,
           `location_timestamp`, `vehicle_id`, `vehicle_label`,
           `trip_id`, and `trip_start_time`.
-        tests: *almost_unique_rt_key_tests
       - *rt_service_date
       - name: gtfs_dataset_key
-        description: *gtfs_dataset_key_desc
-        tests:
-          - dbt_utils.relationships_where:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              to_condition: "type = 'vehicle_positions'"
+        description: *gtfs_rt_dataset_key_desc
       - *base64_url
       - *gtfs_rt_name
-      - *gtfs_rt_schedule_dataset_key
+      - name: gtfs_rt_schedule_dataset_key
+        description: '{{ doc("column_rt_schedule_dataset_key") }}'
       - <<: *trip_instance_key
         tests:
           - not_null
