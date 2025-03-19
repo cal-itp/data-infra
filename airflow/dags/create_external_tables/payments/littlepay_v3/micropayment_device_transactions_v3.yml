@@ -1,0 +1,24 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__LITTLEPAY_PARSED_V3') }}"
+source_objects:
+  - "micropayment-device-transactions/*.jsonl.gz"
+destination_project_dataset_table: "external_littlepay_v3.micropayment_device_transactions"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "micropayment-device-transactions/{instance:STRING}/{extract_filename:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: littlepay_transaction_id
+    type: STRING
+  - name: micropayment_id
+    type: STRING
+  - name: record_updated_timestamp_utc
+    type: TIMESTAMP
+  - name: participant_id
+    type: STRING
+  - name: channel
+    type: STRING
+  - name: _line_number
+    type: STRING
