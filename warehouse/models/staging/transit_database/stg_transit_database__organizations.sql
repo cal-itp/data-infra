@@ -42,12 +42,15 @@ stg_transit_database__organizations AS (
         is_public_entity = "Yes" AS is_public_entity,
         raw_ntd_id,
         ntd_id_2022,
-        rtpa,
-        mpo,
+        unnested_rtpa as rtpa,
+        unnested_mpo as mpo,
         public_currently_operating = "Yes" AS public_currently_operating,
         public_currently_operating_fixed_route = "Yes" AS public_currently_operating_fixed_route,
     FROM once_daily_organizations
     LEFT JOIN UNNEST(once_daily_organizations.ntd_id) as unnested_ntd_records
+    LEFT JOIN UNNEST(once_daily_organizations.rtpa) AS unnested_rtpa
+    LEFT JOIN UNNEST(once_daily_organizations.mpo) AS unnested_mpo
+
 )
 
 SELECT * FROM stg_transit_database__organizations

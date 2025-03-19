@@ -8,11 +8,22 @@ ntd_agency_to_organization AS (
     SELECT * FROM {{ ref('_deprecated__ntd_agency_to_organization') }}
 ),
 
-dim_organizations AS (
+mpo_rtpa AS (
     SELECT
         key,
         source_record_id,
-        name,
+        name
+    FROM dim
+    WHERE
+        organization_type = "MPO/RTPA"
+        AND _is_current = TRUE
+),
+
+dim_organizations AS (
+    SELECT
+        dim.key,
+        dim.source_record_id,
+        dim.name,
         organization_type,
         roles,
         itp_id,
@@ -33,8 +44,10 @@ dim_organizations AS (
             ELSE ntd_to_org.ntd_id
         END AS ntd_id,
         ntd_id_2022,
-        rtpa,
-        mpo,
+        mr_rtpa.key AS rtpa_key,
+        mr_rtpa.name AS rtpa_name,
+        mr_mpo.key AS mpo_key,
+        mr_mpo.name AS mpo_name,
         public_currently_operating,
         public_currently_operating_fixed_route,
         _is_current,
@@ -44,6 +57,9 @@ dim_organizations AS (
     FROM dim
     LEFT JOIN ntd_agency_to_organization ntd_to_org
         ON source_record_id = ntd_to_org.organization_record_id
+    LEFT JOIN mpo_rtpa mr_rtpa ON dim.rtpa = mr_rtpa.source_record_id
+    LEFT JOIN mpo_rtpa mr_mpo ON dim.mpo = mr_mpo.source_record_id
+
 )
 
 SELECT * FROM dim_organizations
