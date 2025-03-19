@@ -41,7 +41,7 @@ When working with contractors, we use Slack.
 | (analytics-repo)=        |            |                                                                                             |
 | (analytics-repo)=        |            |                                                                                             |
 
-## GitHub Analytics Repo
+### GitHub Analytics Repo
 
 The `data-analyses` repo is our main data analysis repository, for sharing quick reports and works in progress. Get set up on GitHub and clone the data-analyses repository [using this link](saving-code-jupyter).
 
