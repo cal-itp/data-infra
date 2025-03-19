@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: external_littlepay_v3
+    description: Hive-partitioned external tables reading Littlepay feed v3 payments data.
+    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    schema: external_littlepay_v3
+    tables:
+      - name: authorisations
+      - name: customer_funding_source
+      - name: device_transaction_purchases
+      - name: device_transactions
+      - name: micropayment_adjustments
+      - name: micropayment_device_transactions
+      - name: micropayments
+      - name: product_data
+      - name: refunds
+      - name: settlements
+
+models:
+  - name: stg_littlepay__authorisations_v3
