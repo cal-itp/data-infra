@@ -21,7 +21,11 @@ clean_columns AS (
         {{ trim_make_empty_string_null('approval_status') }} AS approval_status,
         {{ trim_make_empty_string_null('issuer') }} AS issuer,
         {{ trim_make_empty_string_null('issuer_comment') }} AS issuer_comment,
+
+        -- renamed refund_created_timestamp_utc in v3, this was created_time in v1
         {{ safe_cast('refund_created_timestamp_utc', type_timestamp()) }} AS created_time,
+
+        -- renamed refund_approved_timestamp_utc in v3, this was approved_time in v1
         {{ safe_cast('refund_approved_timestamp_utc', type_timestamp()) }} AS approved_time,
 
         -- these fields are deprecated in v3, reasoning in comments below

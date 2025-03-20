@@ -6,8 +6,12 @@ clean_columns AS (
     SELECT
         {{ trim_make_empty_string_null('participant_id') }} AS participant_id,
         {{ trim_make_empty_string_null('aggregation_id') }} AS aggregation_id,
+
+        -- renamed acquirer_code in v3, this was acquirer_id in v1
         {{ trim_make_empty_string_null('acquirer_code') }} AS acquirer_id,
         {{ trim_make_empty_string_null('request_type') }} AS request_type,
+
+        -- renamed amount in v3, this was transaction_amount in v1
         {{ safe_cast('amount', type_numeric()) }} AS transaction_amount,
         {{ safe_cast('currency_code', type_int()) }} AS currency_code,
         {{ trim_make_empty_string_null('retrieval_reference_number') }} AS retrieval_reference_number,
@@ -15,6 +19,8 @@ clean_columns AS (
         {{ trim_make_empty_string_null('external_reference_number') }} AS external_reference_number,
         {{ trim_make_empty_string_null('response_code') }} AS response_code,
         {{ trim_make_empty_string_null('status') }} AS status,
+
+        -- renamed authorisation_timestamp_utc in v3, this was authorisation_date_time_utc in v1
         {{ safe_cast('authorisation_timestamp_utc', type_timestamp()) }} AS authorisation_date_time_utc,
         CAST(_line_number AS INTEGER) AS _line_number,
         `instance`,

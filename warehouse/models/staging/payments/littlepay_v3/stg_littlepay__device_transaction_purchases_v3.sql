@@ -10,7 +10,10 @@ clean_columns AS (
         {{ trim_make_empty_string_null('product_id') }} AS product_id,
         {{ trim_make_empty_string_null('description') }} AS description,
         {{ safe_cast('indicative_amount', type_numeric()) }} AS indicative_amount,
+
+        -- renamed transaction_timestamp_utc in v3, this was transaction_time in v1
         {{ safe_cast('transaction_timestamp_utc', type_timestamp()) }} AS transaction_time,
+
         CAST(_line_number AS INTEGER) AS _line_number,
         `instance`,
         extract_filename,
