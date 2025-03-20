@@ -7,7 +7,7 @@ sources:
     schema: external_littlepay_v3
     tables:
       - name: authorisations
-      - name: customer_funding_source
+      - name: customer_funding_sources
       - name: device_transaction_purchases
       - name: device_transactions
       - name: micropayment_adjustments
@@ -19,3 +19,4 @@ sources:
 
 models:
   - name: stg_littlepay__authorisations_v3
+  - name: stg_littlepay__customer_funding_source_v3
