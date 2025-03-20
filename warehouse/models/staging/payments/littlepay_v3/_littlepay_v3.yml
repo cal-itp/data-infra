@@ -13,9 +13,10 @@ sources:
       - name: micropayment_adjustments
       - name: micropayment_device_transactions
       - name: micropayments
-      - name: product_data
+      - name: products
       - name: refunds
       - name: settlements
+      - name: terminal_device_transactions
 
 models:
   - name: stg_littlepay__authorisations_v3
@@ -25,3 +26,7 @@ models:
   - name: stg_littlepay__micropayment_adjustments_v3
   - name: stg_littlepay__micropayment_device_transactions_v3
   - name: stg_littlepay__micropayments_v3
+  - name: stg_littlepay__products_v3
+  - name: stg_littlepay__refunds_v3
+  - name: stg_littlepay__settlements_v3
+  - name: stg_littlepay__terminal_device_transactions_v3
