@@ -8,3 +8,6 @@ models:
   - name: int_littlepay__unioned_micropayment_adjustments
   - name: int_littlepay__unioned_micropayment_device_transactions
   - name: int_littlepay__unioned_micropayments
+  - name: int_littlepay__unioned_products
+  - name: int_littlepay__unioned_refunds
+  - name: int_littlepay__unioned_settlements
