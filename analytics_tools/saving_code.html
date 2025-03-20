@@ -492,6 +492,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#options-for-resolving-merge-conflicts">Options for Resolving Merge Conflicts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#options-for-resolving-pre-commit-issues">Options for Resolving Pre-commit Issues</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-common-issues">Other Common Issues</a></li>
 </ul>
 </li>
@@ -524,6 +525,7 @@ document.write(`
 <li><p>The <code class="docutils literal notranslate"><span class="pre">main</span></code> branch is ahead, and I want to <a class="reference internal" href="#rebase-and-merge">sync my branch with <code class="docutils literal notranslate"><span class="pre">main</span></code></a></p></li>
 <li><p><a class="reference internal" href="#rebase">Rebase</a> or <a class="reference internal" href="#merge">merge</a></p></li>
 <li><p>Options to <a class="reference internal" href="#resolve-merge-conflicts">Resolve Merge Conflicts</a></p></li>
+<li><p>Options to <a class="reference internal" href="#resolve-pre-commit-hook-issues">Resolve pre-commit issues</a></p></li>
 <li><p><a class="reference internal" href="#other-common-github-issues-encountered-during-saving-codes">Other Common Issues</a></p></li>
 </ul>
 </li>
@@ -620,6 +622,25 @@ document.write(`
 </ul>
 </li>
 <li><p>From here, just add the file and commit with a message as you normally would and the conflict should be fixed in your Pull Request.</p></li>
+</ul>
+</section>
+<section id="options-for-resolving-pre-commit-issues">
+<span id="resolve-pre-commit-hook-issues"></span><h3>Options for Resolving Pre-commit Issues<a class="headerlink" href="#options-for-resolving-pre-commit-issues" title="Link to this heading">#</a></h3>
+<p>Pre-commit checks are used to ensure our code meets our quality standards and fix formatting issues before being committed to the remote repo. If your Pull Request or files are failing the pre-commit checks, try these steps to resolve them.</p>
+<ul class="simple">
+<li><p>In the root repo, run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pre-commit</span></code> and <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code>. Specifically, if you are in the root of the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> repo you can run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">add_precommit</span></code> to run the same commands.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code> like normal. The pre-commit checks will run and identify any errors it finds, automatically correct errors it can do, and identify errors that need manual changes.</p></li>
+<li><p>If you are not able to <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code> your commit and get a <code class="docutils literal notranslate"><span class="pre">Everything</span> <span class="pre">up-to-date</span></code> message, or if your PR is failing the pre-commit check, then run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span> <span class="pre">--all-files</span></code>. Running <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span> <span class="pre">--all-files</span></code> will run the pre-commit checks again on all files.</p></li>
+<li><p>Address any manual changes the check identifies (“E402 module level import not at top of file”, “&lt;&gt; imported but unused”, “expected 2 blank lines, found 1”, etc.)</p></li>
+<li><p>Repeat <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span> <span class="pre">--all-files</span></code> and make manual changes until all checks are passing.</p></li>
+<li><p>Finally you can <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> the adjusted files, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code>, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code> again.</p></li>
+</ul>
+<p>If you are importing a module from a different directory with <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">sys</span></code>, <code class="docutils literal notranslate"><span class="pre">sys.path.append()</span></code> and <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">...</span> <span class="pre">import...</span></code> into your script, you may receive the <code class="docutils literal notranslate"><span class="pre">E402</span> <span class="pre">module</span> <span class="pre">level</span> <span class="pre">import</span> <span class="pre">not</span> <span class="pre">at</span> <span class="pre">top</span> <span class="pre">of</span> <span class="pre">file</span></code> pre-commit error. This error occurs because of the placement of the <code class="docutils literal notranslate"><span class="pre">sys.path.append()</span></code> line and the <code class="docutils literal notranslate"><span class="pre">import...</span></code> line that follows. To satisfy  the pre-commit checks and still have your script run, please do the following:</p>
+<ul class="simple">
+<li><p>include <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">importlib</span></code>, <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">os</span></code> and <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">sys</span></code> at the beginning of your script with the other dependencies.</p></li>
+<li><p>include a line for <code class="docutils literal notranslate"><span class="pre">sys.path.append(os.path.abspath(&quot;../path_to_module&quot;))</span></code></p></li>
+<li><p>followed by a line for <code class="docutils literal notranslate"><span class="pre">module_name</span> <span class="pre">=</span> <span class="pre">importlib.import_module(&quot;module_name&quot;)</span></code></p></li>
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/_shared_utils/shared_utils/schedule_gtfs_keys_multi_orgs.py#L9-L17">See this script for an example</a></p></li>
 </ul>
 </section>
 <section id="other-common-issues">
@@ -741,6 +762,7 @@ When multiple analysts work on the same files or sections of code, merge conflic
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#options-for-resolving-merge-conflicts">Options for Resolving Merge Conflicts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#options-for-resolving-pre-commit-issues">Options for Resolving Pre-commit Issues</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-common-issues">Other Common Issues</a></li>
 </ul>
 </li>
