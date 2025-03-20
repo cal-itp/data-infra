@@ -15,6 +15,7 @@ Doing work locally and pushing directly from the command line is a similar workf
    - The `main` branch is ahead, and I want to [sync my branch with `main`](#rebase-and-merge)
    - [Rebase](#rebase) or [merge](#merge)
    - Options to [Resolve Merge Conflicts](#resolve-merge-conflicts)
+   - Options to [Resolve pre-commit issues](#resolve-pre-commit-hook-issues)
    - [Other Common Issues](#other-common-github-issues-encountered-during-saving-codes)
 
 3. [Other Common GitHub Commands](#other-common-github-commands)
@@ -115,6 +116,19 @@ If you discover merge conflicts and they are within a single notebook that only 
   - To keep the remote version, run:<br/>
     `git checkout --theirs path/to/notebook.ipynb`
 - From here, just add the file and commit with a message as you normally would and the conflict should be fixed in your Pull Request.
+
+(resolve-pre-commit-hook-issues)=
+
+### Options for Resolving Pre-commit issues
+
+Pre-commit checks are used to ensure our code meets our quality standards and fix fomatting issues before being commited to the remote repo. If your Pull Request or files are failing the pre-commit checks, try these steps to resolve them.
+
+- In the root repo, run `pip install pre-commit` and `pre-commit install`. Speifically, if you are in the root of the `data-analyses` repo you can run `make add_precommit` to run the same commands.
+- Run `git add` and `git commit` like normal. The pre-commit checks will run and identify any errors it finds, automatically correct errors it can do, and identify errors that need manual changes.
+- If you are not able to `git push` your commit and get a `Everything up-to-date` message, or if your PR is failing the pre-commit check, then run `pre-commit run --all-files`. This will run the pre-commit check on all files.
+- Address any manual changes the check identifies ("E402 module level import not at top of file", "\<> imported but unused", "expected 2 blank lines, found 1", etc.)
+- Run `pre-commit run --all-files`, address manual changes again until all checks are passing,
+- Then you can `git add` the adjusted files,`git commit`, `git push` again.
 
 (other-common-github-issues-encountered-during-saving-codes)=
 
