@@ -119,16 +119,23 @@ If you discover merge conflicts and they are within a single notebook that only 
 
 (resolve-pre-commit-hook-issues)=
 
-### Options for Resolving Pre-commit issues
+### Options for Resolving Pre-commit Issues
 
 Pre-commit checks are used to ensure our code meets our quality standards and fix formatting issues before being committed to the remote repo. If your Pull Request or files are failing the pre-commit checks, try these steps to resolve them.
 
-- In the root repo, run `pip install pre-commit` and `pre-commit install`. Speifically, if you are in the root of the `data-analyses` repo you can run `make add_precommit` to run the same commands.
+- In the root repo, run `pip install pre-commit` and `pre-commit install`. Specifically, if you are in the root of the `data-analyses` repo you can run `make add_precommit` to run the same commands.
 - Run `git add` and `git commit` like normal. The pre-commit checks will run and identify any errors it finds, automatically correct errors it can do, and identify errors that need manual changes.
-- If you are not able to `git push` your commit and get a `Everything up-to-date` message, or if your PR is failing the pre-commit check, then run `pre-commit run --all-files`. This will run the pre-commit check on all files.
+- If you are not able to `git push` your commit and get a `Everything up-to-date` message, or if your PR is failing the pre-commit check, then run `pre-commit run --all-files`. Running `pre-commit run --all-files` will run the pre-commit checks again on all files.
 - Address any manual changes the check identifies ("E402 module level import not at top of file", "\<> imported but unused", "expected 2 blank lines, found 1", etc.)
-- Run `pre-commit run --all-files`, address manual changes again until all checks are passing,
-- Then you can `git add` the adjusted files,`git commit`, `git push` again.
+- Repeat `pre-commit run --all-files` and make manual changes until all checks are passing.
+- Finally you can `git add` the adjusted files, `git commit`, `git push` again.
+
+If you are importing a module from a different directory with `import sys`, `sys.path.append()` and `from ... import...` into your script, you may receive the `E402 module level import not at top of file` pre-commit error. This error occurs because of the placement of the `sys.path.append()` line and the `import...` line that follows. To satisfy  the pre-commit checks and still have your script run, please do the following:
+
+- include `import importlib`, `import os` and `import sys` at the beginning of your script with the other dependencies.
+- include a line for `sys.path.append(os.path.abspath("../path_to_module"))`
+- followed by a line for `module_name = importlib.import_module("module_name")`
+- [See this script for an exmaple](https://github.com/cal-itp/data-analyses/blob/main/_shared_utils/shared_utils/schedule_gtfs_keys_multi_orgs.py#L9-L17)
 
 (other-common-github-issues-encountered-during-saving-codes)=
 
