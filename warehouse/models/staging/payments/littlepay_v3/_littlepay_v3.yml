@@ -22,3 +22,6 @@ models:
   - name: stg_littlepay__customer_funding_source_v3
   - name: stg_littlepay__device_transaction_purchases_v3
   - name: stg_littlepay__device_transactions_v3
+  - name: stg_littlepay__micropayment_adjustments_v3
+  - name: stg_littlepay__micropayment_device_transactions_v3
+  - name: stg_littlepay__micropayments_v3
