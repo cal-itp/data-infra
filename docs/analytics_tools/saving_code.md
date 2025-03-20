@@ -121,7 +121,7 @@ If you discover merge conflicts and they are within a single notebook that only 
 
 ### Options for Resolving Pre-commit issues
 
-Pre-commit checks are used to ensure our code meets our quality standards and fix fomatting issues before being commited to the remote repo. If your Pull Request or files are failing the pre-commit checks, try these steps to resolve them.
+Pre-commit checks are used to ensure our code meets our quality standards and fix formatting issues before being committed to the remote repo. If your Pull Request or files are failing the pre-commit checks, try these steps to resolve them.
 
 - In the root repo, run `pip install pre-commit` and `pre-commit install`. Speifically, if you are in the root of the `data-analyses` repo you can run `make add_precommit` to run the same commands.
 - Run `git add` and `git commit` like normal. The pre-commit checks will run and identify any errors it finds, automatically correct errors it can do, and identify errors that need manual changes.
