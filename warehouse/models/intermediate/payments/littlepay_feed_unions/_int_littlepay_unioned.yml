@@ -2,3 +2,4 @@ version: 2
 
 models:
   - name: int_littlepay__unioned_authorisations
+  - name: int_littlepay__unioned_customer_funding_sources
