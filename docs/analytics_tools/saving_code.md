@@ -135,7 +135,7 @@ If you are importing a module from a different directory with `import sys`, `sys
 - include `import importlib`, `import os` and `import sys` at the beginning of your script with the other dependencies.
 - include a line for `sys.path.append(os.path.abspath("../path_to_module"))`
 - followed by a line for `module_name = importlib.import_module("module_name")`
-- [See this script for an exmaple](https://github.com/cal-itp/data-analyses/blob/main/_shared_utils/shared_utils/schedule_gtfs_keys_multi_orgs.py#L9-L17)
+- [See this script for an example](https://github.com/cal-itp/data-analyses/blob/main/_shared_utils/shared_utils/schedule_gtfs_keys_multi_orgs.py#L9-L17)
 
 (other-common-github-issues-encountered-during-saving-codes)=
 
