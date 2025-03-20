@@ -10,19 +10,20 @@ clean_columns AS (
         {{ trim_make_empty_string_null('customer_id') }} AS customer_id,
         {{ trim_make_empty_string_null('funding_source_id') }} AS funding_source_id,
 
-        -- renamed in v3, keeping feed v1 name for consistency
+        -- renamed amount in v3, this was transaction_amount in v1
         {{ safe_cast('amount', type_numeric()) }} AS transaction_amount,
-        {{ trim_make_empty_string_null('acquirer_code') }} AS acquirer,
-
         {{ trim_make_empty_string_null('retrieval_reference_number') }} AS retrieval_reference_number,
         {{ trim_make_empty_string_null('littlepay_reference_number') }} AS littlepay_reference_number,
         {{ trim_make_empty_string_null('external_reference_number') }} AS external_reference_number,
         {{ trim_make_empty_string_null('settlement_type') }} AS settlement_type,
 
+        -- renamed record_updated_timestamp_utc in v3, this was settlement_requested_date_time_utc in v1
         -- prior to 11/28/23, only ATN had record_updated_timestamp_utc
         -- per communication from LP, that column is the new name of settlement_requested_date_time_utc
         {{ safe_cast('record_updated_timestamp_utc', type_timestamp()) }} AS record_updated_timestamp_utc,
 
+        -- renamed acquirer_code in v3, this was acquirer in v1
+        {{ trim_make_empty_string_null('acquirer_code') }} AS acquirer,
         {{ trim_make_empty_string_null('refund_id') }} AS refund_id,
         {{ safe_cast('request_created_timestamp_utc', type_timestamp()) }} AS request_created_timestamp_utc,
         {{ safe_cast('response_created_timestamp_utc', type_timestamp()) }} AS response_created_timestamp_utc,
