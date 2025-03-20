@@ -5,3 +5,6 @@ models:
   - name: int_littlepay__unioned_customer_funding_sources
   - name: int_littlepay__unioned_device_transaction_purchases
   - name: int_littlepay__unioned_device_transactions
+  - name: int_littlepay__unioned_micropayment_adjustments
+  - name: int_littlepay__unioned_micropayment_device_transactions
+  - name: int_littlepay__unioned_micropayments
