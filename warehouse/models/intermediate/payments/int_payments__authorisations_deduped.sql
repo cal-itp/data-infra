@@ -2,7 +2,7 @@
 
 WITH auth AS (
     SELECT *
-    FROM {{ ref('stg_littlepay__authorisations') }}
+    FROM {{ ref('int_littlepay__unioned_authorisations') }}
 ),
 
 settlement_rrns AS (
