@@ -19,7 +19,7 @@ find_earliest_tap AS (
         participant_id,
         customer_id,
         MIN(transaction_date_time_pacific) AS earliest_tap
-    FROM {{ ref('stg_littlepay__device_transactions') }}
+    FROM {{ ref('int_littlepay__unioned_device_transactions') }}
     GROUP BY participant_id, customer_id
 
 ),

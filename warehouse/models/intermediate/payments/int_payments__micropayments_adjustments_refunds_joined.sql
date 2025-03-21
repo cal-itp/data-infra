@@ -1,5 +1,5 @@
 WITH debit_micropayments AS (
-    SELECT * FROM {{ ref('stg_littlepay__micropayments') }}
+    SELECT * FROM {{ ref('int_littlepay__unioned_micropayments') }}
     WHERE type = 'DEBIT'
 ),
 
@@ -11,13 +11,13 @@ valid_micropayment_ids AS (
 ),
 
 adjustments AS (
-    SELECT * FROM {{ ref('stg_littlepay__micropayment_adjustments') }}
+    SELECT * FROM {{ ref('int_littlepay__unioned_micropayment_adjustments') }}
     -- we only want adjustments that were actually applied
     WHERE applied
 ),
 
 products AS (
-    SELECT * FROM {{ ref('stg_littlepay__product_data') }}
+    SELECT * FROM {{ ref('int_littlepay__unioned_products') }}
 ),
 
 individual_refunds AS (

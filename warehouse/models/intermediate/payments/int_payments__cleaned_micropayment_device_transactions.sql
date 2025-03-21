@@ -4,12 +4,12 @@
     )
 }}
 
-WITH stg_littlepay__micropayment_device_transactions AS (
-    SELECT * FROM {{ ref('stg_littlepay__micropayment_device_transactions') }}
+WITH int_littlepay__unioned_micropayment_device_transactions AS (
+    SELECT * FROM {{ ref('int_littlepay__unioned_micropayment_device_transactions') }}
 ),
 
-stg_littlepay__micropayments AS (
-    SELECT * FROM {{ ref('stg_littlepay__micropayments') }}
+int_littlepay__unioned_micropayments AS (
+    SELECT * FROM {{ ref('int_littlepay__unioned_micropayments') }}
 ),
 
 deduped_micropayment_device_transaction_ids AS (
@@ -17,7 +17,7 @@ deduped_micropayment_device_transaction_ids AS (
 
         littlepay_transaction_id,
         micropayment_id
-    FROM stg_littlepay__micropayment_device_transactions
+    FROM int_littlepay__unioned_micropayment_device_transactions
 ),
 
 join_transactions_to_micropayments AS (
@@ -27,7 +27,7 @@ join_transactions_to_micropayments AS (
         charge_type,
         type,
     FROM deduped_micropayment_device_transaction_ids
-    INNER JOIN stg_littlepay__micropayments
+    INNER JOIN int_littlepay__unioned_micropayments
         USING(micropayment_id)
 ),
 
@@ -44,7 +44,7 @@ invalid_micropayment_device_transaction_ids AS (
     FROM join_transactions_to_micropayments AS first_transaction
     INNER JOIN deduped_micropayment_device_transaction_ids AS second_micropayment_device_transaction
         USING (littlepay_transaction_id)
-    INNER JOIN stg_littlepay__micropayments AS second_micropayment
+    INNER JOIN int_littlepay__unioned_micropayments AS second_micropayment
         ON second_micropayment_device_transaction.micropayment_id = second_micropayment.micropayment_id
     WHERE first_transaction.micropayment_id != second_micropayment.micropayment_id
         AND first_transaction.charge_type = 'pending_charge_fare'
@@ -68,7 +68,7 @@ cleaned_micropayment_device_transaction_ids AS (
 int_payments__cleaned_micropayment_device_transactions AS (
 
     SELECT DISTINCT *
-    FROM stg_littlepay__micropayment_device_transactions
+    FROM int_littlepay__unioned_micropayment_device_transactions
     INNER JOIN cleaned_micropayment_device_transaction_ids
         USING (littlepay_transaction_id, micropayment_id)
 )
