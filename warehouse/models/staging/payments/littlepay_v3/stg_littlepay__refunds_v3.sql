@@ -2,6 +2,13 @@ WITH source AS (
     SELECT * FROM {{ source('external_littlepay_v3', 'refunds') }}
 ),
 
+settlements AS (
+    SELECT
+        refund_id,
+        settlement_status
+    FROM {{ ref('stg_littlepay__settlements_v3') }}
+),
+
 clean_columns AS (
     SELECT
         {{ trim_make_empty_string_null('refund_id') }} AS refund_id,
@@ -32,9 +39,6 @@ clean_columns AS (
         -- but adding them here as null strings for the union with v1, so as to not risk breaking dashboards
         {{ trim_make_empty_string_null("''") }} AS settlement_reason_code, -- removed (not in use)
         {{ trim_make_empty_string_null("''") }} AS settlement_response_text, -- removed (not in use)
-        {{ trim_make_empty_string_null("''") }} AS status, -- removed, use refund_id to link to the credit settlement to get the latest status
-        {{ trim_make_empty_string_null("''") }} AS settlement_status, -- removed, use refund_id to link to the credit settlement to get the latest status
-        {{ safe_cast("''", 'DATE') }} AS settlement_status_time, -- removed, use refund_id to link to the credit settlement to get the latest status
 
         CAST(_line_number AS INTEGER) AS _line_number,
         `instance`,
@@ -54,6 +58,15 @@ clean_columns AS (
     FROM source
 ),
 
+enrich_settlement_status AS (
+
+    SELECT
+        clean_columns.*,
+        settlements.settlement_status
+    FROM clean_columns
+    LEFT JOIN settlements USING (refund_id)
+),
+
 stg_littlepay__refunds_v3 AS (
     SELECT
         refund_id,
@@ -68,7 +81,6 @@ stg_littlepay__refunds_v3 AS (
         proposed_amount,
         refund_amount,
         currency_code,
-        status,
         initiator,
         reason,
         approval_status,
@@ -76,8 +88,16 @@ stg_littlepay__refunds_v3 AS (
         issuer_comment,
         created_time,
         approved_time,
+
+        -- this was removed from refunds table in v3, so it is now enriched from the settlements table in the CTE above
         settlement_status,
-        settlement_status_time,
+
+        -- these were removed from feed v3 refunds table, but I'm still trying to figure out how/where these are used
+        -- For now, I've added them as empty placeholder columnns, but we may need to figure out if the empty 'status' fields are
+        -- going to effect calculations downstream. Are 'status' and 'settlement_status' interchangeable?
+        {{ trim_make_empty_string_null("''") }} AS status, -- removed, use refund_id to link to the credit settlement to get the latest status
+        {{ safe_cast("''", 'DATE') }} AS settlement_status_time, -- removed, use refund_id to link to the credit settlement to get the latest status
+
         settlement_reason_code,
         settlement_response_text,
         CAST(_line_number AS INTEGER) AS _line_number,
@@ -91,7 +111,7 @@ stg_littlepay__refunds_v3 AS (
         {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
         -- we have multiple rows for some refunds as the refund moves through different statuses; we should handle this later
         {{ dbt_utils.generate_surrogate_key(['refund_id', 'approval_status']) }} AS _payments_key
-    FROM clean_columns
+    FROM enrich_settlement_status
 )
 
 SELECT * FROM stg_littlepay__refunds_v3

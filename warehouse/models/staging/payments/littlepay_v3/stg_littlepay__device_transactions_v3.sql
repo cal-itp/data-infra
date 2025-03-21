@@ -13,13 +13,10 @@ clean_columns AS (
         {{ trim_make_empty_string_null('type') }} AS type,
         {{ trim_make_empty_string_null('transaction_outcome') }} AS transaction_outcome,
 
-        -- renamed transaction_timestamp_utc, this was transaction_date_time_utc in v1
-        -- ensure the format of this field aligns with the handling of this field in v1
-        -- does this also need to be cast?
-        -- this is also used for transaction_date_time_pacific below
+        -- renamed transaction_timestamp_utc in v3, this was transaction_date_time_utc in v1
         -- we actually ingest this as timestamp through v3, but v1 ingests it as a string,
-        -- so briefly casting back to string for the union but hope to evaluate further
-        {{ trim_make_empty_string_null('CAST(transaction_timestamp_utc AS STRING)') }} AS transaction_date_time_utc,
+        -- so we make it a string and conform it to the shape of an ISO 8601 format with Z timezone indicator, like it is in v1
+        {{ trim_make_empty_string_null("FORMAT_TIMESTAMP('%Y-%m-%dT%H:%M:%S.000Z', transaction_timestamp_utc)") }} AS transaction_date_time_utc,
 
         DATETIME(
             TIMESTAMP(transaction_timestamp_utc), "America/Los_Angeles"
