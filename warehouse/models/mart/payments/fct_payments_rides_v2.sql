@@ -44,9 +44,9 @@ int_payments__customer_funding_source_vaults AS (
     FROM {{ ref('int_payments__customer_funding_source_vaults') }}
 ),
 
-stg_littlepay__product_data AS (
+int_littlepay__unioned_products AS (
     SELECT *
-    FROM {{ ref('stg_littlepay__product_data') }}
+    FROM {{ ref('int_littlepay__unioned_products') }}
 ),
 
 participants_to_routes_and_agency AS (
@@ -155,7 +155,7 @@ fct_payments_rides_v2 AS (
     LEFT JOIN int_payments__matched_device_transactions AS device_transactions
         ON micropayments.participant_id = device_transactions.participant_id
             AND micropayments.micropayment_id = device_transactions.micropayment_id
-    LEFT JOIN stg_littlepay__product_data AS products
+    LEFT JOIN int_littlepay__unioned_products AS products
         ON micropayments.participant_id = products.participant_id
             AND micropayments.product_id = products.product_id
     LEFT JOIN participants_to_routes_and_agency AS routes

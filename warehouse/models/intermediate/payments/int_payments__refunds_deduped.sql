@@ -5,12 +5,12 @@ WITH micropayment_device_transactions AS (
 ),
 
 micropayments_refunds AS (
-    SELECT * FROM {{ ref('stg_littlepay__micropayments') }}
+    SELECT * FROM {{ ref('int_littlepay__unioned_micropayments') }}
     WHERE type = 'CREDIT'
 ),
 
 refunds AS (
-    SELECT * FROM {{ ref('stg_littlepay__refunds') }}
+    SELECT * FROM {{ ref('int_littlepay__unioned_refunds') }}
 ),
 
 format_micropayments_table_refunds AS (
@@ -76,7 +76,7 @@ distinct_aggregations_by_refund_id AS (
 
     SELECT DISTINCT retrieval_reference_number,
         aggregation_id
-    FROM {{ ref('stg_littlepay__refunds') }}
+    FROM {{ ref('int_littlepay__unioned_refunds') }}
     WHERE aggregation_id IS NOT NULL
 
 ),

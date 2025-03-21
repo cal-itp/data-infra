@@ -6,13 +6,13 @@
 
 WITH micropayments AS (
     SELECT *
-    FROM {{ ref('stg_littlepay__micropayments') }}
+    FROM {{ ref('int_littlepay__unioned_micropayments') }}
 ),
 
 -- flag micropayments that were adjusted
 micropayment_adj AS (
     SELECT DISTINCT micropayment_id
-    FROM {{ ref('stg_littlepay__micropayment_adjustments') }}
+    FROM {{ ref('int_littlepay__unioned_micropayment_adjustments') }}
     WHERE applied
 ),
 
