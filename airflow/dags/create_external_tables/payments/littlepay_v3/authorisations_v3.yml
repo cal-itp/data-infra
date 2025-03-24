@@ -1,0 +1,44 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__LITTLEPAY_PARSED_V3') }}"
+source_objects:
+  - "authorisations/*.jsonl.gz"
+destination_project_dataset_table: "external_littlepay_v3.authorisations"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "authorisations/{instance:STRING}/{extract_filename:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+   - name: participant_id
+     type: STRING
+   - name: aggregation_id
+     type: STRING
+   - name: acquirer_code # renamed in v3 from acquirer_id
+     type: STRING
+   - name: request_type
+     type: STRING  # (Card_Check, Authorisation, Debt Recovery)
+   - name: amount # renamed in v3 from transaction_amount
+     type: STRING
+   - name: currency_code
+     type: STRING  # ISO 4217 Numeric Code
+   - name: retrieval_reference_number
+     type: STRING
+   - name: littlepay_reference_number
+     type: STRING
+   - name: external_reference_number
+     type: STRING
+   - name: response_code
+     type: STRING
+   - name: status
+     type: STRING  # (Authorised, Declined, Failed, Invalid, Lost, Stolen, Unavailable, Unknown, Verified)
+   - name: authorisation_timestamp_utc # renamed in v3 from authorisation_date_time_utc
+     type: STRING
+   - name: request_created_timestamp_utc # added in v3
+     type: TIMESTAMP
+   - name: record_updated_timestamp_utc # added in v3
+     type: TIMESTAMP
+   - name: channel # added in v3
+     type: STRING
+   - name: _line_number
+     type: STRING

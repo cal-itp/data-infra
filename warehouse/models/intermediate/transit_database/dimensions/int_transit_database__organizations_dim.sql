@@ -37,6 +37,8 @@ int_transit_database__organizations_dim AS (
         is_public_entity,
         raw_ntd_id,
         ntd_id_2022,
+        rtpa,
+        mpo,
         public_currently_operating,
         public_currently_operating_fixed_route,
         _is_current,
@@ -44,5 +46,4 @@ int_transit_database__organizations_dim AS (
         _valid_to
     FROM dim
 )
-
 SELECT * FROM int_transit_database__organizations_dim
