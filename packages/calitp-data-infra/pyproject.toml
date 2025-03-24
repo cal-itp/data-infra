@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "calitp-data-infra"
-version = "2025.3.11"
+version = "2025.3.24"
 description = "Shared code for developing data pipelines that process Cal-ITP data."
 package-mode = true
 authors = ["Andrew Vaccaro"]
@@ -35,3 +35,4 @@ line-length = 120
 exclude = [
     "dist/",
 ]
+plugins = ["pydantic.mypy"]
