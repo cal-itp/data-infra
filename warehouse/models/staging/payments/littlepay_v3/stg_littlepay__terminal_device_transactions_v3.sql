@@ -32,6 +32,8 @@ add_keys_drop_full_dupes AS (
         *,
         -- generate keys now that input columns have been trimmed & cast and files deduped
         {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
+        -- only hashing one field here in this new table, not really hashing anything together, but we can still
+        -- use this for uniqueness to follow the pattern used throughout the rest of the models
         {{ dbt_utils.generate_surrogate_key(['littlepay_transaction_id']) }} AS _payments_key,
     FROM clean_columns
     {{ qualify_dedupe_full_duplicate_lp_rows() }}

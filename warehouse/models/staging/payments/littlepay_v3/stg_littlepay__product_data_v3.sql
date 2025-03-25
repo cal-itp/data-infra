@@ -87,7 +87,7 @@ add_keys_drop_full_dupes AS (
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
 ),
 
-stg_littlepay__products_v3 AS (
+stg_littlepay__product_data_v3 AS (
     SELECT
         participant_id,
         product_id,
@@ -153,4 +153,4 @@ stg_littlepay__products_v3 AS (
     ) = 1
 )
 
-SELECT * FROM stg_littlepay__products_v3
+SELECT * FROM stg_littlepay__product_data_v3

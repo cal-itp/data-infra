@@ -67,7 +67,7 @@ add_keys_drop_full_dupes AS (
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
 ),
 
-stg_littlepay__customer_funding_sources_v3 AS (
+stg_littlepay__customer_funding_source_v3 AS (
     SELECT
         funding_source_id,
         funding_source_vault_id,
@@ -110,4 +110,4 @@ stg_littlepay__customer_funding_sources_v3 AS (
     ) = 1
 )
 
-SELECT * FROM stg_littlepay__customer_funding_sources_v3
+SELECT * FROM stg_littlepay__customer_funding_source_v3

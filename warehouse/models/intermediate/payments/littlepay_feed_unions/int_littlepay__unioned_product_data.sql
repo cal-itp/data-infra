@@ -5,16 +5,16 @@ WITH product_data_v1 AS (
     FROM {{ ref('stg_littlepay__product_data') }}
 ),
 
-products_v3 AS (
+product_data_v3 AS (
     SELECT *
-    FROM {{ ref('stg_littlepay__products_v3') }}
+    FROM {{ ref('stg_littlepay__product_data_v3') }}
 ),
 
-int_littlepay__unioned_products AS (
+int_littlepay__unioned_product_data AS (
     SELECT *
     FROM product_data_v1
     UNION ALL
-    SELECT * FROM products_v3
+    SELECT * FROM product_data_v3
 )
 
-SELECT * FROM int_littlepay__unioned_products
+SELECT * FROM int_littlepay__unioned_product_data

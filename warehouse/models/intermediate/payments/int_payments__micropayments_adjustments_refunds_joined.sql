@@ -17,7 +17,7 @@ adjustments AS (
 ),
 
 products AS (
-    SELECT * FROM {{ ref('int_littlepay__unioned_products') }}
+    SELECT * FROM {{ ref('int_littlepay__unioned_product_data') }}
 ),
 
 individual_refunds AS (
