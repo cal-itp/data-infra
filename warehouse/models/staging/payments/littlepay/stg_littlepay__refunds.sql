@@ -24,6 +24,10 @@ clean_columns AS (
         {{ safe_cast('created_time', type_timestamp()) }} AS created_time,
         {{ safe_cast('approved_time', type_timestamp()) }} AS approved_time,
         {{ trim_make_empty_string_null('settlement_status') }} AS settlement_status,
+
+        -- this field is no longer available in feed v3, but looking back historically it looks like it never
+        -- provided useful information in earlier feeds, but either way, is now defunct.
+        -- it does not appear as though this should be used
         {{ trim_make_empty_string_null('status') }} AS status,
         {{ safe_cast('settlement_status_time', 'DATE') }} AS settlement_status_time,
         {{ trim_make_empty_string_null('settlement_reason_code') }} AS settlement_reason_code,
@@ -65,6 +69,10 @@ stg_littlepay__refunds AS (
         created_time,
         approved_time,
         settlement_status,
+
+        -- this field is no longer available in feed v3, but looking back historically it looks like it never
+        -- provided useful information in earlier feeds, but either way, is now defunct.
+        -- it does not appear as though this should be used
         status,
         settlement_status_time,
         settlement_reason_code,

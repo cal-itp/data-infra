@@ -92,9 +92,10 @@ stg_littlepay__refunds_v3 AS (
         -- this was removed from refunds table in v3, so it is now enriched from the settlements table in the CTE above
         settlement_status,
 
-        -- these were removed from feed v3 refunds table, but I'm still trying to figure out how/where these are used
-        -- For now, I've added them as empty placeholder columnns, but we may need to figure out if the empty 'status' fields are
-        -- going to effect calculations downstream. Are 'status' and 'settlement_status' interchangeable?
+        -- this field is no longer available in feed v3, and looking back historically it looks like it never
+        -- provided useful information in earlier feeds and was not used, but either way, is now defunct.
+        -- it does not appear as though this field should be used. we are only keeping it here as a null placeholder so as to
+        -- preserve compatibility with feed v1 for the unions (and to not risk breaking anything else)
         {{ trim_make_empty_string_null("''") }} AS status, -- removed, use refund_id to link to the credit settlement to get the latest status
         {{ safe_cast("''", 'DATE') }} AS settlement_status_time, -- removed, use refund_id to link to the credit settlement to get the latest status
 
