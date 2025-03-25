@@ -2,6 +2,7 @@ WITH source AS (
     SELECT * FROM {{ source('external_littlepay_v3', 'refunds') }}
 ),
 
+-- settlement status is no longer included in the refunds table in feed v3, bringing this in for the join below
 settlements AS (
     SELECT
         refund_id,
@@ -58,6 +59,7 @@ clean_columns AS (
     FROM source
 ),
 
+-- this was removed from refunds table in v3, so it is now enriched from the settlements table here
 enrich_settlement_status AS (
 
     SELECT
