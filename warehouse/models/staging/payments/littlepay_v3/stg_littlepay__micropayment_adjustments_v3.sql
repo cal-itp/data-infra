@@ -47,14 +47,6 @@ add_keys_drop_full_dupes AS (
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
 ),
 
--- this CTE is no longer doing anything, it was dropping dupes in the v1 copy of this file,
--- but leaving it here in case we need to do any more dedupe with the new feed v3
-drop_additional_dupes AS (
-    SELECT
-        *
-    FROM add_keys_drop_full_dupes
-),
-
 stg_littlepay__micropayment_adjustments_v3 AS (
     SELECT
         micropayment_id,
@@ -85,7 +77,7 @@ stg_littlepay__micropayment_adjustments_v3 AS (
         _key,
         _payments_key,
         _content_hash,
-    FROM drop_additional_dupes
+    FROM add_keys_drop_full_dupes
 )
 
 SELECT * FROM stg_littlepay__micropayment_adjustments_v3
