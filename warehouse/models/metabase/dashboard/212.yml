@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: scag_public_facing_gtfs_datasets
+    label: SCAG public-facing GTFS Datasets
+    description: '### Dashboard Cards: 1
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __212__
+
+
+      Created On: __2024-08-20T20:46:39.739411Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/212
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

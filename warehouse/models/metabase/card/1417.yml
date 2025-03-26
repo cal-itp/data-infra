@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: total_revenue_6
+    label: Total Revenue
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1417__
+
+
+      Created On: __2023-07-06T19:04:10.01129Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1417
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:01.069'
+      last_used_at: '2025-04-04T01:32:28.450176Z'

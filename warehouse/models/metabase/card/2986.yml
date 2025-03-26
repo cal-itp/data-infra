@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: elavon_deposit_transactions_13
+    label: Elavon Deposit Transactions
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2986__
+
+
+      Created On: __2024-08-23T17:07:02.160245Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2986
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:04.654'
+      last_used_at: '2025-03-27T22:19:03.047249Z'

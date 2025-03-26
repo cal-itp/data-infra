@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: average_charge_amount_of_aggregations_with_more_than_one_journey_per_agency
+    label: Average charge amount of aggregations with more than one journey per agency
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3093__
+
+
+      Created On: __2024-09-12T02:19:52.389611Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3093
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:01.786'
+      last_used_at: '2025-02-04T18:52:30.602395Z'

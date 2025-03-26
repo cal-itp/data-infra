@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: adjustments
+    label: Adjustments
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2546__
+
+
+      Created On: __2024-07-30T11:46:43.955917Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2546
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:01.140'
+      last_used_at: '2025-04-22T21:40:48.73117Z'

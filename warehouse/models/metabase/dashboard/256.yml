@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _ncc__merchant_service_charge_tracking
+    label: (NCC) Merchant Service Charge tracking
+    description: '### Dashboard Cards: 36
+
+
+      Merchant Service Charges tracking dashboard, based on the Elavon data feed.
+
+
+      #### Metadata
+
+
+      Metabase ID: __256__
+
+
+      Created On: __2025-03-27T14:08:37.614109Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/256
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: sales____of_trx____per_month_8
+    label: Sales (# of trx) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3503__
+
+
+      Created On: __2025-03-27T14:08:37.614109Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3503
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.702'
+      last_used_at: '2025-03-27T19:50:04.441105Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: april_may_2024_troubleshooting
+    label: April/May 2024 troubleshooting
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2268__
+
+
+      Created On: __2024-05-07T06:52:46.754478Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2268
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    meta:
+      average_query_time: '0:02.865'
+      last_used_at: '2025-03-11T21:35:38.139148Z'

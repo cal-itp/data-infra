@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: sacrt_benefits_dashboard
+    label: SacRT Benefits Dashboard
+    description: '### Dashboard Cards: 4
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __250__
+
+
+      Created On: __2025-02-19T20:48:51.124163Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/250
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: total_hours_worked_by_employee_type
+    label: Total Hours Worked by Employee Type
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3248__
+
+
+      Created On: __2024-12-09T22:25:24.746754Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3248
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.561'
+      last_used_at: '2025-04-22T19:44:11.892206Z'

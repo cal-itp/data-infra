@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: agencies_yml_urls_vs_airtable_uris___v2
+    label: agencies.yml URLs vs airtable URIs - v2
+    description: '### Dashboard Cards: 11
+
+
+      A few questions to make sure agencies.yml URLs and airtable URIs are consistent.
+
+
+      #### Metadata
+
+
+      Metabase ID: __75__
+
+
+      Created On: __2022-07-18T13:28:35.622478Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/75
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: _v2_pipeline__file_count_bar_chart
+    label: (v2 Pipeline) File Count Bar Chart
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __615__
+
+
+      Created On: __2022-12-22T04:59:50.333995Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/615
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.987'
+      last_used_at: '2025-04-21T20:31:12.490873Z'

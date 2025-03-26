@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: count_of_operating_counties
+    label: Count of Operating Counties
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2307__
+
+
+      Created On: __2024-05-28T19:49:51.543945Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2307
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    meta:
+      average_query_time: '0:00.614'
+      last_used_at: '2024-09-20T17:54:54.131902Z'

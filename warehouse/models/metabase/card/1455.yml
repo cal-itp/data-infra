@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_cancelled_trips_in_last_month
+    label: Number of cancelled trips in last month
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1455__
+
+
+      Created On: __2023-07-18T20:45:32.743778Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1455
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    meta:
+      average_query_time: '0:00.984'
+      last_used_at: '2025-04-21T21:59:04.485324Z'

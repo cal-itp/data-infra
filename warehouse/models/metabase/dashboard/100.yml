@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: feed_level_archiver_comparison_dashboard
+    label: Feed-Level Archiver Comparison Dashboard
+    description: '### Dashboard Cards: 2
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __100__
+
+
+      Created On: __2022-12-22T04:37:50.718479Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/100
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

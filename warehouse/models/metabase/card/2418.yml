@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: lake_transit_authority___unlabeled_routes_alert
+    label: Lake Transit Authority – Unlabeled Routes Alert
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2418__
+
+
+      Created On: __2024-07-03T19:03:34.858884Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2418
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.914'
+      last_used_at: '2025-04-21T15:00:00.478025Z'
