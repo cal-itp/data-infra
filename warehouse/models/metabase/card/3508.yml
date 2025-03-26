@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: charges_and_fees_as___of_net_sales___per_month_13
+    label: Charges and Fees as % of Net Sales - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3508__
+
+
+      Created On: __2025-03-27T14:08:37.614109Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3508
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.782'
+      last_used_at: '2025-03-27T14:26:44.355832Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: current_organizations_offering_fixed_route_service__not_all_orgs_are_undergoing_checks____v2
+    label: Current Organizations offering Fixed Route Service (not all orgs are undergoing
+      checks) - v2
+    description: '### Visualization: Scalar
+
+
+
+
+      #### Metadata
+
+
+      Metabase ID: __1373__
+
+
+      Created On: __2023-06-13T18:32:08.518142Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1373
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:01.108'
+      last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: activity_report__rolling_56_days_unique_riders_and_journey_count_
+    label: Activity report (rolling 56 days unique riders and journey count)
+    description: '### Dashboard Cards: 3
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __238__
+
+
+      Created On: __2024-11-01T16:16:49.196339Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/238
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []

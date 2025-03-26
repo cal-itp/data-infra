@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: daily_amtrak_journey_report__t_1_
+    label: Daily Amtrak journey report (T-1)
+    description: '### Dashboard Cards: 1
+
+
+      Created to report journeys on a daily frequency to Amtrak (testing purpose)
+
+
+      #### Metadata
+
+
+      Metabase ID: __163__
+
+
+      Created On: __2023-11-23T07:30:13.728282Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/163
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []

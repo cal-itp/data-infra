@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: staging_gtfs_rt_files__daily_summary
+    label: 'STAGING GTFS RT Files: Daily Summary'
+    description: '### Dashboard Cards: 5
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __52__
+
+
+      Created On: __2022-02-23T19:24:29.232433Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/52
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []

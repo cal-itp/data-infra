@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _mendocino_transit_authority__merchant_service_charge_tracking___duplicate
+    label: (Mendocino Transit Authority) Merchant Service Charge tracking - Duplicate
+    description: '### Dashboard Cards: 36
+
+
+      Merchant Service Charges tracking dashboard, based on the Elavon data feed.
+
+
+      #### Metadata
+
+
+      Metabase ID: __206__
+
+
+      Created On: __2024-08-15T02:08:57.851294Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/206
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []

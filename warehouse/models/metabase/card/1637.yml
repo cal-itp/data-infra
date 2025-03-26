@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: average_transaction_value__usd____per_month_2
+    label: Average transaction value (USD) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1637__
+
+
+      Created On: __2023-08-18T21:26:29.720255Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1637
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:01.069'
+      last_used_at: '2025-03-26T18:21:36.784163Z'

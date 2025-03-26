@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: work_in_progress_query_for_vehicle_message_age
+    label: Work in progress query for vehicle message age
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2317__
+
+
+      Created On: __2024-05-29T23:18:36.250764Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2317
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    meta:
+      average_query_time: '1:00.758'
+      last_used_at: '2025-03-27T14:00:00.193197Z'

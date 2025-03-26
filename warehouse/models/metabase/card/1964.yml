@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: total_journey_count_by_agency
+    label: Total Journey Count by Agency
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1964__
+
+
+      Created On: __2023-12-01T19:25:14.83697Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1964
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:01.132'
+      last_used_at: '2025-03-27T19:49:20.07164Z'

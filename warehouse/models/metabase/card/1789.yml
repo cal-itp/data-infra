@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: adjustments__usd_
+    label: Adjustments (USD)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1789__
+
+
+      Created On: __2023-10-02T11:26:36.884338Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1789
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:01.117'
+      last_used_at: '2025-03-11T17:24:38.91512Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: redwood_coast_transit___unlabeled_routes_alert
+    label: Redwood Coast Transit – Unlabeled Routes Alert
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2421__
+
+
+      Created On: __2024-07-03T19:05:50.718846Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2421
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.911'
+      last_used_at: '2025-03-24T15:00:00.60234Z'

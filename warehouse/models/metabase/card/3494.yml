@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: elavon_adjustment_transactions_10
+    label: Elavon Adjustment Transactions
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3494__
+
+
+      Created On: __2025-03-27T14:08:37.614109Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3494
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.677'
+      last_used_at: '2025-03-27T14:26:53.559714Z'

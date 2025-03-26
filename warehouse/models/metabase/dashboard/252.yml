@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: ex11__summary_dashboard_by_organization
+    label: 'Ex11: Summary Dashboard by Organization'
+    description: '### Dashboard Cards: 9
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __252__
+
+
+      Created On: __2025-03-13T00:19:45.119039Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/252
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []

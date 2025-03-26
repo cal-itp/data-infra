@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: value_of_settled_refunds__grouped_by_week_3
+    label: Value of Settled Refunds, Grouped by Week
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1779__
+
+
+      Created On: __2023-09-27T15:57:14.019034Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1779
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.975'
+      last_used_at: '2025-03-27T19:49:44.661655Z'

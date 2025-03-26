@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: transit_data_quality_okrs
+    label: Transit Data Quality OKRs
+    description: '### Dashboard Cards: 8
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __181__
+
+
+      Created On: __2024-05-07T02:41:24.201952Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/181
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
