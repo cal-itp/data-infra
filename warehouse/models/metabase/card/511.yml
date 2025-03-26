@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: change_in_revenue_due_to_adjustments__grouped_by_week_9
+    label: Change in Revenue Due to Adjustments, Grouped by Week
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __511__
+
+
+      Created On: __2022-09-20T22:04:48.962927Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/511
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.994'
+      last_used_at: '2025-04-15T17:05:20.293656Z'

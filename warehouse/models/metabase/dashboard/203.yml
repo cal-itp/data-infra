@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _clean_air_express__merchant_service_charge_tracking_
+    label: '(Clean Air Express) Merchant Service Charge tracking '
+    description: '### Dashboard Cards: 36
+
+
+      Merchant Service Charges tracking dashboard, based on the Elavon data feed.
+
+
+      #### Metadata
+
+
+      Metabase ID: __203__
+
+
+      Created On: __2024-08-13T18:51:10.875601Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/203
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []

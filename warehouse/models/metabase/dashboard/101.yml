@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: hourly_archiver_comparison_dashboard
+    label: Hourly Archiver Comparison Dashboard
+    description: '### Dashboard Cards: 2
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __101__
+
+
+      Created On: __2022-12-22T16:47:43.088219Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/101
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

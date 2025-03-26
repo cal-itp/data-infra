@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: ccjpa_reconciliation_dashboard
+    label: CCJPA Reconciliation Dashboard
+    description: '### Dashboard Cards: 32
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __169__
+
+
+      Created On: __2023-12-21T01:34:12.662759Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/169
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []

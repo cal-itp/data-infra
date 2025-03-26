@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: statewide_gtfs_rt_completeness_metrics
+    label: Statewide GTFS-RT Completeness Metrics
+    description: '### Dashboard Cards: 5
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __134__
+
+
+      Created On: __2023-05-01T23:24:53.472258Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/134
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

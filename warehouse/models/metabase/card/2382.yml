@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: quarterly_enrollment_numbers
+    label: Quarterly enrollment numbers
+    description: '### Visualization: Bar
+
+
+      Used in external CS reporting
+
+
+      #### Metadata
+
+
+      Metabase ID: __2382__
+
+
+      Created On: __2024-06-24T18:04:45.067674Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2382
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    meta:
+      average_query_time: '0:00.614'
+      last_used_at: '2025-04-15T19:18:01.187646Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_fixed_route_transit_agencies_by_organization_type
+    label: Number of Fixed-Route Transit Agencies by Organization Type
+    description: '### Visualization: Pie
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2349__
+
+
+      Created On: __2024-06-10T23:35:32.896325Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2349
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    meta:
+      average_query_time: '0:00.592'
+      last_used_at: '2025-04-19T15:09:02.797675Z'

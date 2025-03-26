@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: staging_gtfs_rt_files_hourly_view
+    label: STAGING GTFS RT Files Hourly View
+    description: '### Dashboard Cards: 1
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __51__
+
+
+      Created On: __2022-02-23T16:00:14.31591Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/51
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []

@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: jess__cal_itp_kpi_dashboard
+    label: Jess' Cal-ITP KPI Dashboard
+    description: '### Dashboard Cards: 2
+
+
+      Work in progress
+
+
+      #### Metadata
+
+
+      Metabase ID: __67__
+
+
+      Created On: __2022-04-20T20:22:59.225162Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/67
+    maturity: medium
+    owner:
+      name: Vyki Englert
+      email: vyki@compiler.la
+    depends_on: []

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: charges_and_fees_per_transaction__usd_trx____per_month_13
+    label: Charges and Fees per transaction (USD/trx) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3522__
+
+
+      Created On: __2025-03-28T17:43:06.264659Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3522
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.853'
+      last_used_at: '2025-04-17T18:20:30.749309Z'

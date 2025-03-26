@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: bigquery_daily_cost_breakdown
+    label: BigQuery Daily Cost Breakdown
+    description: '### Visualization: Bar
+
+
+      Daily BigQuery Cost Breakdown
+
+
+      #### Metadata
+
+
+      Metabase ID: __427__
+
+
+      Created On: __2022-07-27T14:40:06.295378Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/427
+    maturity: medium
+    owner:
+      name: Blake Fleischer
+      email: blake.f@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:01.086'
+      last_used_at: '2025-04-15T20:58:35.741284Z'

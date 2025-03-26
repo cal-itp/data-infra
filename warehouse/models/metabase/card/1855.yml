@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: total_journey_count__grouped_by_week
+    label: Total Journey Count, Grouped by Week
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1855__
+
+
+      Created On: __2023-10-31T19:45:26.293636Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1855
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:01.195'
+      last_used_at: '2025-04-21T15:00:03.500763Z'
