@@ -1,6 +1,6 @@
 WITH device_transactions AS (
     SELECT *
-    FROM {{ ref('stg_littlepay__device_transactions') }}
+    FROM {{ ref('int_littlepay__unioned_device_transactions') }}
 ),
 
 pairs AS (

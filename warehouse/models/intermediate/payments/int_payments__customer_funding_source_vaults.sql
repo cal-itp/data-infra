@@ -6,7 +6,7 @@
 
 WITH deduped_by_funding_source AS (
     SELECT *
-    FROM {{ ref('stg_littlepay__customer_funding_source') }}
+    FROM {{ ref('int_littlepay__unioned_customer_funding_source') }}
     QUALIFY ROW_NUMBER() OVER (PARTITION BY participant_id, funding_source_id ORDER BY littlepay_export_ts DESC) = 1
 ),
 

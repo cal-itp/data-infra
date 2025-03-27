@@ -1,6 +1,6 @@
-WITH stg_littlepay__customer_funding_source AS (
+WITH int_littlepay__unioned_customer_funding_source AS (
     SELECT *
-    FROM {{ ref('stg_littlepay__customer_funding_source') }}
+    FROM {{ ref('int_littlepay__unioned_customer_funding_source') }}
 ),
 
 -- We want the last occurrence by funding_source_id and customer_id
@@ -9,7 +9,7 @@ select_first_rank AS (
         participant_id,
         customer_id,
         principal_customer_id
-    FROM stg_littlepay__customer_funding_source
+    FROM int_littlepay__unioned_customer_funding_source
     WHERE calitp_customer_id_rank = 1
         AND calitp_funding_source_id_rank = 1
 ),
@@ -19,7 +19,7 @@ find_earliest_tap AS (
         participant_id,
         customer_id,
         MIN(transaction_date_time_pacific) AS earliest_tap
-    FROM {{ ref('stg_littlepay__device_transactions') }}
+    FROM {{ ref('int_littlepay__unioned_device_transactions') }}
     GROUP BY participant_id, customer_id
 
 ),
