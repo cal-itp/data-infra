@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: average_transaction_value__usd____per_month_13
+    label: Average transaction value (USD) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3501__
+
+
+      Created On: __2025-03-27T14:08:37.614109Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3501
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.808'
+      last_used_at: '2025-03-27T14:26:45.746849Z'

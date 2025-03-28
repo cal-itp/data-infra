@@ -1,0 +1,25 @@
+version: 2
+exposures:
+  - name: ex_11_create_a_dashboard_and_filter_it_by_organization_name_or_caltrans_district
+    label: ex_11_Create a Dashboard and filter it by Organization Name or Caltrans
+      District
+    description: '### Dashboard Cards: 6
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __251__
+
+
+      Created On: __2025-02-27T21:16:33.591267Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/251
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []

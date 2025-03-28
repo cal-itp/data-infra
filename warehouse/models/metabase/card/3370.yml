@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: total_mechanical_failures
+    label: Total Mechanical Failures
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3370__
+
+
+      Created On: __2025-01-31T19:33:02.188865Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3370
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.474'
+      last_used_at: '2025-03-27T22:19:15.71203Z'

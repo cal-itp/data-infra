@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: by_district
+    label: By District
+    description: '### Dashboard Cards: 10
+
+
+      Looking at the data by District
+
+
+      #### Metadata
+
+
+      Metabase ID: __56__
+
+
+      Created On: __2022-03-01T18:41:55.483511Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/56
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie.a@jarv.us
+    depends_on: []

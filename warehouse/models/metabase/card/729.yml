@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: daily_transaction_deltas___failing
+    label: Daily Transaction Deltas - Failing
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __729__
+
+
+      Created On: __2023-01-17T22:31:31.055799Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/729
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.603'
+      last_used_at: '2025-03-27T14:00:00.205531Z'

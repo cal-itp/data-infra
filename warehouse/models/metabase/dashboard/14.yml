@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: example_dashboard
+    label: example dashboard
+    description: '### Dashboard Cards: 1
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __14__
+
+
+      Created On: __2021-08-19T14:41:35.643986Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/14
+    maturity: medium
+    owner:
+      name: Michael Chow
+      email: michael.c@jarv.us
+    depends_on: []

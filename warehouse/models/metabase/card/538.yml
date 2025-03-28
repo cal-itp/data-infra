@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: total_journey_count_by_route_10
+    label: Total Journey Count by Route
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __538__
+
+
+      Created On: __2022-09-21T16:30:10.717719Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/538
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:01.043'
+      last_used_at: '2025-03-26T16:45:16.338605Z'

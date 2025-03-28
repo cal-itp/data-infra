@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: gtfs_rt_files__daily_summary
+    label: 'GTFS RT Files: Daily Summary'
+    description: '### Dashboard Cards: 7
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __47__
+
+
+      Created On: __2022-02-18T18:24:48.887651Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/47
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []

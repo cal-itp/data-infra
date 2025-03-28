@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_trips_for_aggregations_with_more_than_one_ride
+    label: Number of trips for aggregations with more than one ride
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3088__
+
+
+      Created On: __2024-09-11T13:43:02.625973Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3088
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:02.701'
+      last_used_at: '2025-02-04T18:52:30.76966Z'

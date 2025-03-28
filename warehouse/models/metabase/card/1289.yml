@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: total_revenue_by_route_6
+    label: Total Revenue by Route
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1289__
+
+
+      Created On: __2023-04-13T14:17:05.244759Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1289
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:01.185'
+      last_used_at: '2025-03-13T22:42:02.466537Z'

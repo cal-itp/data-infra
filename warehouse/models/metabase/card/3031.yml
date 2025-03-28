@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: list_of_fixed_route_transit_agencies
+    label: List of Fixed-Route Transit Agencies
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3031__
+
+
+      Created On: __2024-08-29T21:31:42.746044Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3031
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    meta:
+      average_query_time: '0:00.633'
+      last_used_at: '2025-03-25T07:19:25.206494Z'

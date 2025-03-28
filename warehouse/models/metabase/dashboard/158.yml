@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: gtfs_features_dashboard_version_1___filtered
+    label: GTFS Features Dashboard Version 1 - Filtered
+    description: '### Dashboard Cards: 40
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __158__
+
+
+      Created On: __2023-09-22T22:02:37.499593Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/158
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []

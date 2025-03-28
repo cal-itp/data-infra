@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: quarterly_reduced_fare_transactions
+    label: Quarterly reduced fare transactions
+    description: '### Visualization: Bar
+
+
+      Used in CS external reporting
+
+
+      #### Metadata
+
+
+      Metabase ID: __2383__
+
+
+      Created On: __2024-06-24T18:10:36.439763Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2383
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    meta:
+      average_query_time: '0:02.197'
+      last_used_at: '2025-03-01T16:00:08.832542Z'
