@@ -137,8 +137,11 @@ At this time there are two different types of agency dashboards: those that use 
 
 Good source dashboards for copying:
 
-- **Flat Fare**: Humboldt Transit Authority
-- **Variable Fare**: Redwood Coast Transit
+- Contactless Payments Metrics Dashboard
+  - **Flat Fare**: MST
+  - **Variable Fare**: CCJPA
+- Merchant Service Charge Tracking Dashboard
+  - Mendocino Transit Authority
 
 To duplicate a dashboard, navigate to the collection of one of the source dashboards above
 
