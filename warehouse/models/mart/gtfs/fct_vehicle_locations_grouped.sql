@@ -1,17 +1,3 @@
-{{
-    config(
-        materialized='incremental',
-        incremental_strategy='insert_overwrite',
-        partition_by = {
-            'field': 'service_date',
-            'data_type': 'date',
-            'granularity': 'day',
-        },
-        cluster_by=['service_date', 'base64_url'],
-        on_schema_change='append_new_columns'
-    )
-}}
-
 WITH fct_vehicle_locations AS (
    SELECT
         key,
