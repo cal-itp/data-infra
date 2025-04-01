@@ -42,10 +42,8 @@ dim_organizations AS (
         -- use same May 23, 2023 cutover date as `assessment_status` --> `public_currently_operating` in downstream models for consistency
         CASE
             WHEN _valid_from >= '2023-05-23' THEN raw_ntd_id
-            ELSE ntd_to_org.ntd_id
+            ELSE ntd_agency_info_key
         END AS ntd_id,
-
-        -- is this not related to ntd_to_org.ntd_id (ntd_id < '2023-05-23') ??
         ntd_id_2022,
         mr_rtpa.key AS rtpa_key,
         mr_rtpa.name AS rtpa_name,
