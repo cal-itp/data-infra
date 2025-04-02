@@ -1,17 +1,3 @@
-{{
-    config(
-        materialized='incremental',
-        incremental_strategy='insert_overwrite',
-        partition_by = {
-            'field': 'service_date',
-            'data_type': 'date',
-            'granularity': 'day',
-        },
-        cluster_by=['service_date', 'base64_url'],
-        on_schema_change='append_new_columns'
-    )
-}}
-
 WITH fct_vehicle_locations AS (
    SELECT
         key,
@@ -25,7 +11,8 @@ WITH fct_vehicle_locations AS (
         location,
         -- rather than using next_location_key, use lag to calculate direction from previous
     FROM {{ ref('fct_vehicle_locations') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }} AND trip_instance_key IS NOT NULL
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', this_dt_column='service_date') }}
+    AND trip_instance_key IS NOT NULL
 ),
 
 lat_lon AS (
@@ -103,7 +90,7 @@ vp_grouper AS (
     FROM direction
 ),
 
-fct_grouped_locations AS (
+fct_vehicle_locations_grouped AS (
     SELECT
         fct_vehicle_locations.gtfs_dataset_key,
         fct_vehicle_locations.base64_url,
@@ -124,4 +111,4 @@ fct_grouped_locations AS (
     GROUP BY gtfs_dataset_key, base64_url, gtfs_dataset_name, schedule_gtfs_dataset_key, service_date, trip_instance_key, vp_group, ST_ASTEXT(fct_vehicle_locations.location)
 )
 
-SELECT * FROM fct_grouped_locations
+SELECT * FROM fct_vehicle_locations_grouped
