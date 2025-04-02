@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: gtfs_guidelines__specific_date_
+    label: GTFS Guidelines (Specific Date)
+    description: '### Dashboard Cards: 25
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __26__
+
+
+      Created On: __2021-10-26T17:28:03.479126Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/26
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

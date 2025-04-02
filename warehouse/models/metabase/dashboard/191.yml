@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: test_dashboard
+    label: Test dashboard
+    description: '### Dashboard Cards: 4
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __191__
+
+
+      Created On: __2024-07-02T18:31:54.425059Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/191
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []

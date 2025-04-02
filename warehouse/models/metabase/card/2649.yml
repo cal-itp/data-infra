@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: elavon_adjustment_transactions_4
+    label: Elavon Adjustment Transactions
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2649__
+
+
+      Created On: __2024-08-13T01:18:04.56114Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2649
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:00.816'
+      last_used_at: '2025-03-26T18:26:42.762385Z'

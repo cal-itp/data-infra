@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: bigquery_monthly_cost__usd_
+    label: BigQuery Monthly Cost (USD)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __428__
+
+
+      Created On: __2022-07-27T14:50:59.091119Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/428
+    maturity: medium
+    owner:
+      name: Blake Fleischer
+      email: blake.f@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.701'
+      last_used_at: '2025-03-11T22:26:50.526349Z'

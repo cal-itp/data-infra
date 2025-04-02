@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: aggregation_dashboard_v2
+    label: Aggregation dashboard v2
+    description: '### Dashboard Cards: 13
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __221__
+
+
+      Created On: __2024-08-29T14:59:48.481084Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/221
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: payments____ridership_by_week__taps_only
+    label: Payments || Ridership By Week, Taps Only
+    description: '### Visualization: Bar
+
+
+      MST Ridership By Day
+
+
+      #### Metadata
+
+
+      Metabase ID: __16__
+
+
+      Created On: __2021-06-21T23:43:12.375971Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/16
+    maturity: medium
+    owner:
+      name: Hunter Owens
+      email: hunter.owens@dot.ca.gov
+    depends_on: []
+    meta:
+      average_query_time: '0:01.574'
+      last_used_at: '2025-03-06T18:25:27.739549Z'

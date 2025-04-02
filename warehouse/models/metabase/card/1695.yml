@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_incomplete_journeys
+    label: Number of Incomplete Journeys
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1695__
+
+
+      Created On: __2023-09-11T20:22:57.686941Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1695
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.987'
+      last_used_at: '2025-02-13T14:33:39.81192Z'

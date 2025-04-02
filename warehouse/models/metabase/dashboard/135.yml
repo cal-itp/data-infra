@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: elavon_littlepay_dashboard_mvp___ccjpa_
+    label: Elavon+Littlepay Dashboard MVP  (CCJPA)
+    description: '### Dashboard Cards: 27
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __135__
+
+
+      Created On: __2023-05-12T17:00:19.969161Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/135
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: decline_rate__static_
+    label: Decline Rate (Static)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2453__
+
+
+      Created On: __2024-07-09T09:09:25.591776Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2453
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:01.177'
+      last_used_at: '2025-01-13T14:46:59.317033Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_riders_per_month
+    label: Number of Riders per Month
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __277__
+
+
+      Created On: __2022-02-04T17:19:03.350745Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/277
+    maturity: medium
+    owner:
+      name: Mjumbe Poe
+      email: mjumbe.p@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.961'
+      last_used_at: '2025-02-28T19:54:58.582304Z'

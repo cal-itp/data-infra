@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: share_of_aggregations_with_more_than_one_ride_by_month
+    label: Share of aggregations with more than one ride by month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3103__
+
+
+      Created On: __2024-09-13T02:25:12.483758Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3103
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:02.479'
+      last_used_at: '2025-02-04T18:52:30.518124Z'

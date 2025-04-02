@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: mst___unlabeled_routes_alert
+    label: MST – Unlabeled Routes Alert
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2420__
+
+
+      Created On: __2024-07-03T19:05:07.568188Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2420
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.929'
+      last_used_at: '2025-03-24T15:00:00.356411Z'

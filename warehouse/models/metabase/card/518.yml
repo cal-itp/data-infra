@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_adjusted_price_journeys__grouped_by_month_9
+    label: Number of Adjusted-Price Journeys, Grouped by Month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __518__
+
+
+      Created On: __2022-09-20T22:21:04.166129Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/518
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:01.091'
+      last_used_at: '2024-09-20T17:54:54.131902Z'

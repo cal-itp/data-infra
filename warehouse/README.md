@@ -159,6 +159,7 @@ Some additional helpful commands:
 - `poetry run dbt compile` -- will compile all the models (generate SQL, with references resolved) but won't execute anything in the warehouse; useful for visualizing what dbt will actually execute
 - `poetry run dbt docs generate` -- will generate the dbt documentation
 - `poetry run dbt docs serve` -- will "serve" the dbt docs locally so you can access them via `http://localhost:8080`; note that you must `docs generate` before you can `docs serve`
+- `poetry run dbt-metabase exposures --output-grouping="type" --output-path=models/metabase/ --manifest-path=target/manifest.json --metabase-url https://dashboards.calitp.org --metabase-api-key="INFORM_SERVICE_KEY"` -- will create/update files for questions (cards) and dashboards extracted from Metabase that can be visualized in dbt documentation. You can search for specific models to see where they are refereced in Metabase. For more details see [exposures documentation](https://github.com/gouline/dbt-metabase?tab=readme-ov-file#exposure-extraction).
 
 ### Incremental model considerations
 

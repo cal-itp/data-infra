@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: 9___station_boardings
+    label: 9 - Station Boardings
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2111__
+
+
+      Created On: __2024-01-25T18:40:14.00321Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2111
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:00.639'
+      last_used_at: '2025-03-15T15:00:18.827562Z'
