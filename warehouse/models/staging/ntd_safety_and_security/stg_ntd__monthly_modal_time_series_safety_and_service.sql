@@ -1,18 +1,8 @@
-WITH external_monthly_modal_time_series_safety_and_service AS (
+WITH stg_ntd__monthly_modal_time_series_safety_and_service AS (
     SELECT *
     FROM {{ source('external_ntd__safety_and_security', 'historical__monthly_modal_time_series_safety_and_service') }}
-),
-
-get_latest_extract AS(
-    SELECT *
-    FROM external_monthly_modal_time_series_safety_and_service
     -- we pull the whole table every month in the pipeline, so this gets only the latest extract
     QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
-),
-
-stg_ntd__monthly_modal_time_series_safety_and_service AS (
-    SELECT *
-    FROM get_latest_extract
 )
 
 SELECT
@@ -85,7 +75,7 @@ SELECT
     SAFE_CAST(pedestrian_crossing_tracks_1 AS INTEGER) AS pedestrian_crossing_tracks_1,
     SAFE_CAST(primary_uza_sq_miles AS NUMERIC) AS primary_uza_sq_miles,
     {{ trim_make_empty_string_null('primary_uza_name') }} AS primary_uza_name,
-        {{ trim_make_empty_string_null('CAST(_5_digit_ntd_id AS STRING)') }} AS _5_digit_ntd_id,
+    {{ trim_make_empty_string_null('CAST(_5_digit_ntd_id AS STRING)') }} AS _5_digit_ntd_id,
     SAFE_CAST(total_other_injuries AS INTEGER) AS total_other_injuries,
     SAFE_CAST(other_fatalities AS INTEGER) AS other_fatalities,
     SAFE_CAST(pedestrian_not_in_crosswalk AS INTEGER) AS pedestrian_not_in_crosswalk,

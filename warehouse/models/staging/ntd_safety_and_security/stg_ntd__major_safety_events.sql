@@ -1,18 +1,8 @@
-WITH external_major_safety_events AS (
+WITH stg_ntd__major_safety_events AS (
     SELECT *
     FROM {{ source('external_ntd__safety_and_security', 'historical__major_safety_events') }}
-),
-
-get_latest_extract AS(
-    SELECT *
-    FROM external_major_safety_events
     -- we pull the whole table every month in the pipeline, so this gets only the latest extract
     QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
-),
-
-stg_ntd__major_safety_events AS (
-    SELECT *
-    FROM get_latest_extract
 )
 
 SELECT
@@ -35,7 +25,7 @@ SELECT
     {{ trim_make_empty_string_null('typeofservicecd') }} AS typeofservicecd,
     {{ trim_make_empty_string_null('reportername') }} AS reportername,
     SAFE_CAST(customer AS INTEGER) AS customer,
-        {{ trim_make_empty_string_null('CAST(ntdid AS STRING)') }} AS ntdid,
+    {{ trim_make_empty_string_null('CAST(ntdid AS STRING)') }} AS ntdid,
     dt,
     execution_ts
 FROM stg_ntd__major_safety_events
