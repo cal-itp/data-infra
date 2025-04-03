@@ -1,4 +1,4 @@
-FROM apache/airflow:2.5.3-python3.8
+FROM apache/airflow:2.6.3-python3.11
 
 # install gcloud as root, then switch back to airflow
 USER root
@@ -17,4 +17,4 @@ USER airflow
 
 COPY requirements.txt /tmp/requirements.txt
 
-RUN pip install --no-cache-dir --user -r /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt

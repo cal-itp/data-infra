@@ -2,12 +2,12 @@
 
 WITH auth AS (
     SELECT *
-    FROM {{ ref('stg_littlepay__authorisations') }}
+    FROM {{ ref('int_littlepay__unioned_authorisations') }}
 ),
 
 settlement_rrns AS (
     SELECT DISTINCT retrieval_reference_number
-    FROM {{ ref('stg_littlepay__settlements') }}
+    FROM {{ ref('int_littlepay__unioned_settlements') }}
 ),
 
 -- as of 10/10/23, we have two aggregation_id/authorisation_date_time_utc pairs that are duplicates

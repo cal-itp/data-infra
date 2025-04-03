@@ -15,9 +15,9 @@ with int_payments__cleaned_micropayment_device_transactions as (
 
 ),
 
-stg_littlepay__micropayments as (
+int_littlepay__unioned_micropayments as (
 
-    select * from {{ ref('stg_littlepay__micropayments') }}
+    select * from {{ ref('int_littlepay__unioned_micropayments') }}
 
 ),
 
@@ -25,7 +25,7 @@ multiple_debit_transaction_ids as (
 
     select littlepay_transaction_id
     from int_payments__cleaned_micropayment_device_transactions
-    inner join stg_littlepay__micropayments as m using (micropayment_id)
+    inner join int_littlepay__unioned_micropayments as m using (micropayment_id)
     where m.type = 'DEBIT'
     group by 1
     having count(*) > 1
@@ -38,7 +38,7 @@ validate_cleaned_micropayment_device_transactions as (
         littlepay_transaction_id,
         m.*
     from int_payments__cleaned_micropayment_device_transactions
-    inner join stg_littlepay__micropayments as m using (micropayment_id)
+    inner join int_littlepay__unioned_micropayments as m using (micropayment_id)
     inner join multiple_debit_transaction_ids using (littlepay_transaction_id)
     -- commented out the line below because I could not get rid of sqlfluff error L054
     -- order by transaction_time desc, littlepay_transaction_id asc, charge_type desc

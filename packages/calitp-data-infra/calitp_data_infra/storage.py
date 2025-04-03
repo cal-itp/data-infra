@@ -1,5 +1,9 @@
 import abc
 import base64
+
+# NOTE that the cgi module is deprecated in Python 3.11, and will be removed in
+# Python 3.13 https://docs.python.org/3.11/library/cgi.html. There is a drop-in
+# replacement available at https://pypi.org/project/legacy-cgi/
 import cgi
 import gzip
 import json
@@ -11,6 +15,7 @@ from abc import ABC
 from datetime import datetime
 from enum import Enum
 from typing import (
+    Any,
     Callable,
     ClassVar,
     Dict,
@@ -55,17 +60,17 @@ def get_fs(gcs_project="", **kwargs):
         )
 
 
-def make_name_bq_safe(name: str):
+def make_name_bq_safe(name: Any):
     """Replace non-word characters.
     See: https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical#identifiers.
     Add underscore if starts with a number.  Also sometimes excel has columns names that are
     all numbers, not even strings of numbers (ﾉﾟ0ﾟ)ﾉ~
     """
-    if type(name) != str:
+    if not isinstance(name, str):
         name = str(name)
     if name[:1].isdigit():
         name = "_" + name
-    return str.lower(re.sub("[^\w]", "_", name))  # noqa: W605
+    return str.lower(re.sub(r"[^\w]", "_", name))
 
 
 AIRTABLE_BUCKET = os.getenv("CALITP_BUCKET__AIRTABLE")
@@ -397,8 +402,8 @@ class GCSFileInfo(GCSBaseInfo):
     md5Hash: str
 
     @property
-    def filename(self) -> str:
-        return os.path.basename(self.name)
+    def filename(self) -> StringNoWhitespace:
+        return StringNoWhitespace(os.path.basename(self.name))
 
     @property
     def path(self) -> str:
@@ -581,12 +586,18 @@ class AirtableGTFSDataExtract(PartitionedGCSArtifact):
             f"identified {latest.name} as the most recent extract of gtfs datasets"
         )
 
+        latest_partition_ts = pendulum.parse(latest.partition["ts"], exact=True)
+        assert isinstance(latest_partition_ts, pendulum.DateTime), (
+            f"Expected latest partition time {latest.partition['ts']!r} to "
+            f"be a date/time but it was parsed as {type(latest_partition_ts)}"
+        )
+
         with get_fs().open(latest.name, "rb") as f:
             content = gzip.decompress(f.read())
 
         return AirtableGTFSDataExtract(
             filename=latest.filename,
-            ts=pendulum.parse(latest.partition["ts"], exact=True),
+            ts=latest_partition_ts,
             records=[
                 AirtableGTFSDataRecord(**json.loads(row))
                 for row in content.decode().splitlines()

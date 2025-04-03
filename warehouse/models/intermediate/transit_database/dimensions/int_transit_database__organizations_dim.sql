@@ -6,7 +6,7 @@ WITH dim AS (
         date_col = 'dt',
         record_id_col = 'id',
         array_cols = ['roles', 'alias', 'mobility_services_managed', 'parent_organization',
-            'funding_programs', 'gtfs_datasets_produced', 'hq_county_geography', 'rtpa', 'mpo']
+            'funding_programs', 'gtfs_datasets_produced', 'hq_county_geography']
         ) }}
 ),
 
@@ -46,5 +46,4 @@ int_transit_database__organizations_dim AS (
         _valid_to
     FROM dim
 )
-
 SELECT * FROM int_transit_database__organizations_dim

@@ -8,8 +8,8 @@ WITH int_payments__cleaned_micropayment_device_transactions AS (
     SELECT * FROM {{ ref('int_payments__cleaned_micropayment_device_transactions') }}
 ),
 
-stg_littlepay__device_transactions AS (
-    SELECT * FROM {{ ref('stg_littlepay__device_transactions') }}
+int_littlepay__unioned_device_transactions AS (
+    SELECT * FROM {{ ref('int_littlepay__unioned_device_transactions') }}
 ),
 
 miles_traveled AS (
@@ -22,7 +22,7 @@ valid_transactions AS (
     *,
     ROW_NUMBER() OVER(PARTITION BY micropayment_id ORDER BY transaction_date_time_utc) AS row_num
   FROM int_payments__cleaned_micropayment_device_transactions
-  INNER JOIN stg_littlepay__device_transactions USING (littlepay_transaction_id)
+  INNER JOIN int_littlepay__unioned_device_transactions USING (littlepay_transaction_id)
 ),
 
 match_ids AS (
@@ -87,9 +87,9 @@ int_payments__matched_device_transactions AS (
         miles_traveled.distance_miles
 
     FROM match_ids AS pairs
-    LEFT JOIN stg_littlepay__device_transactions AS first_tap
+    LEFT JOIN int_littlepay__unioned_device_transactions AS first_tap
         ON pairs.littlepay_transaction_id = first_tap.littlepay_transaction_id
-    LEFT JOIN stg_littlepay__device_transactions AS second_tap
+    LEFT JOIN int_littlepay__unioned_device_transactions AS second_tap
         ON pairs.off_littlepay_transaction_id = second_tap.littlepay_transaction_id
     LEFT JOIN miles_traveled ON (first_tap.location_name = miles_traveled.location_name)
         AND (second_tap.location_name = miles_traveled.off_location_name)

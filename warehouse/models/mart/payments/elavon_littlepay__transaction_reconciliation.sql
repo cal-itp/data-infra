@@ -1,7 +1,7 @@
 {{ config(materialized='table') }}
 
-WITH stg_littlepay__settlements AS (
-    SELECT * FROM {{ ref('stg_littlepay__settlements') }}
+WITH int_littlepay__unioned_settlements AS (
+    SELECT * FROM {{ ref('int_littlepay__unioned_settlements') }}
 ),
 
 
@@ -53,7 +53,7 @@ elavon_littlepay__transaction_reconciliation AS (
         t2.card_no AS  elavon_card_no,
         t2.chk_num AS elavon_chk_num
 
-    FROM stg_littlepay__settlements AS t1
+    FROM int_littlepay__unioned_settlements AS t1
     INNER JOIN elavon_deposits AS t2
         ON t1.retrieval_reference_number = t2.PURCH_ID
 )
