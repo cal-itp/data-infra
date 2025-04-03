@@ -2,7 +2,7 @@
 
 # Cal-ITP Project Information
 
-More information on the Cal-ITP project is available at [calitp.org](https://www.calitp.org/).
+Supported by the [California State Transportation Agency (CalSTA)](https://statics.teams.cdn.office.net/evergreen-assets/safelinks/1/atp-safelinks.html) and the [California Department of Transportation (Caltrans)](https://dot.ca.gov/) through a grant from the [California Transit and Intercity Rail Capital Program (TIRCP)](https://calsta.ca.gov/subject-areas/transit-intercity-rail-capital-prog), the California Integrated Travel Project (Cal-ITP) is a statewide initiative to make travel simpler and more cost-effective for everyone. More information on the Cal-ITP project is available at [calitp.org](https://www.calitp.org/).
 
 ## On-boarding Resources and Reading
 
@@ -20,4 +20,4 @@ A selection of resources taken from the above document providing background on t
 
 ## How Cal-ITP relates to DDS
 
-- Copy here.
+Caltrans's Division of Data & Digital Services directly supports Cal-ITP by providing subject matter expert knowledge, analyzing data, and coordinating the interaction between CalSTA, Caltrans, Partner Agencies and other stakeholders to achieve the Cal-ITP's goals.
