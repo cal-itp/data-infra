@@ -1918,14 +1918,6 @@ output "google_storage_bucket_tfer--calitp-ntd-api-products_self_link" {
   value = google_storage_bucket.tfer--calitp-ntd-api-products.self_link
 }
 
-output "google_storage_bucket_tfer--calitp-ntd-data-products_name" {
-  value = google_storage_bucket.tfer--calitp-ntd-data-products.name
-}
-
-output "google_storage_bucket_tfer--calitp-ntd-data-products_self_link" {
-  value = google_storage_bucket.tfer--calitp-ntd-data-products.self_link
-}
-
 output "google_storage_bucket_tfer--calitp-ntd-report-validation_name" {
   value = google_storage_bucket.tfer--calitp-ntd-report-validation.name
 }
@@ -2356,14 +2348,6 @@ output "google_storage_bucket_tfer--test-calitp-ntd-api-products_name" {
 
 output "google_storage_bucket_tfer--test-calitp-ntd-api-products_self_link" {
   value = google_storage_bucket.tfer--test-calitp-ntd-api-products.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-ntd-data-products_name" {
-  value = google_storage_bucket.tfer--test-calitp-ntd-data-products.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-ntd-data-products_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-ntd-data-products.self_link
 }
 
 output "google_storage_bucket_tfer--test-calitp-ntd-report-validation_name" {
