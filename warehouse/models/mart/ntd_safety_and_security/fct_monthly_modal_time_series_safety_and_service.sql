@@ -73,7 +73,7 @@ SELECT
     pedestrian_crossing_tracks_1,
     primary_uza_sq_miles,
     primary_uza_name,
-    _5_digit_ntd_id,
+    ntd_id,
     total_other_injuries,
     other_fatalities,
     pedestrian_not_in_crosswalk,

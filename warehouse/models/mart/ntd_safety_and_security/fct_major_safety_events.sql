@@ -23,7 +23,7 @@ SELECT
     typeofservicecd,
     reportername,
     customer,
-    ntdid,
+    ntd_id,
     dt,
     execution_ts
 FROM fct_major_safety_events
