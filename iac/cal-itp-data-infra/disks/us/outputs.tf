@@ -42,22 +42,6 @@ output "google_compute_disk_tfer--us-west1-a-002F-gke-data-infra-apps-0f-pvc-e97
   value = google_compute_disk.tfer--us-west1-a-002F-gke-data-infra-apps-0f-pvc-e97e933f-a97d-408e-afa7-e031986063c1.self_link
 }
 
-output "google_compute_disk_tfer--us-west1-a-002F-gke-data-infra-apps-apps-v2-2729c0c0-v3px_self_link" {
-  value = google_compute_disk.tfer--us-west1-a-002F-gke-data-infra-apps-apps-v2-2729c0c0-v3px.self_link
-}
-
-output "google_compute_disk_tfer--us-west1-a-002F-gke-data-infra-apps-gtfsrt-v4-2a13e092-n53e_self_link" {
-  value = google_compute_disk.tfer--us-west1-a-002F-gke-data-infra-apps-gtfsrt-v4-2a13e092-n53e.self_link
-}
-
-output "google_compute_disk_tfer--us-west1-a-002F-gke-data-infra-apps-gtfsrt-v4-2a13e092-s9i5_self_link" {
-  value = google_compute_disk.tfer--us-west1-a-002F-gke-data-infra-apps-gtfsrt-v4-2a13e092-s9i5.self_link
-}
-
-output "google_compute_disk_tfer--us-west1-a-002F-gke-data-infra-apps-jobs-v1-cd18666b-ygrz_self_link" {
-  value = google_compute_disk.tfer--us-west1-a-002F-gke-data-infra-apps-jobs-v1-cd18666b-ygrz.self_link
-}
-
 output "google_compute_disk_tfer--us-west1-a-002F-pvc-a5b1d3cd-ad12-405c-ab13-687bced0ff1e_self_link" {
   value = google_compute_disk.tfer--us-west1-a-002F-pvc-a5b1d3cd-ad12-405c-ab13-687bced0ff1e.self_link
 }
@@ -78,10 +62,6 @@ output "google_compute_disk_tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-53c
   value = google_compute_disk.tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-53c7e604-a011-419d-96eb-429b7c2b8c70.self_link
 }
 
-output "google_compute_disk_tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-bd2749b9-7e64-4991-83e4-9b694beac49b_self_link" {
-  value = google_compute_disk.tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-bd2749b9-7e64-4991-83e4-9b694beac49b.self_link
-}
-
 output "google_compute_disk_tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-c9e0b814-b6ad-4a2a-903a-1357d22f0640_self_link" {
   value = google_compute_disk.tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-c9e0b814-b6ad-4a2a-903a-1357d22f0640.self_link
 }
@@ -92,18 +72,6 @@ output "google_compute_disk_tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-e93
 
 output "google_compute_disk_tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-eece374b-c967-4bcd-b32f-504b4718d5e7_self_link" {
   value = google_compute_disk.tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-eece374b-c967-4bcd-b32f-504b4718d5e7.self_link
-}
-
-output "google_compute_disk_tfer--us-west1-b-002F-gke-data-infra-apps-apps-v2-0dfb61fb-5kvg_self_link" {
-  value = google_compute_disk.tfer--us-west1-b-002F-gke-data-infra-apps-apps-v2-0dfb61fb-5kvg.self_link
-}
-
-output "google_compute_disk_tfer--us-west1-b-002F-gke-data-infra-apps-gtfsrt-v4-b003cc53-b7vi_self_link" {
-  value = google_compute_disk.tfer--us-west1-b-002F-gke-data-infra-apps-gtfsrt-v4-b003cc53-b7vi.self_link
-}
-
-output "google_compute_disk_tfer--us-west1-b-002F-gke-data-infra-apps-jobs-v1-8eec22fb-aazx_self_link" {
-  value = google_compute_disk.tfer--us-west1-b-002F-gke-data-infra-apps-jobs-v1-8eec22fb-aazx.self_link
 }
 
 output "google_compute_disk_tfer--us-west1-b-002F-pvc-51920f4f-17fb-4119-88d3-7ab7946939c9_self_link" {
@@ -152,22 +120,6 @@ output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-e0a
 
 output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-fd2ef2a6-9c8c-4715-abe6-94795af047db_self_link" {
   value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc-fd2ef2a6-9c8c-4715-abe6-94795af047db.self_link
-}
-
-output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-apps-v2-24a4cc95-bdau_self_link" {
-  value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-apps-v2-24a4cc95-bdau.self_link
-}
-
-output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-apps-v2-24a4cc95-xdkc_self_link" {
-  value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-apps-v2-24a4cc95-xdkc.self_link
-}
-
-output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-gtfsrt-v4-7577d4d7-lz65_self_link" {
-  value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-gtfsrt-v4-7577d4d7-lz65.self_link
-}
-
-output "google_compute_disk_tfer--us-west1-c-002F-gke-data-infra-apps-jobs-v1-625ec063-5q8v_self_link" {
-  value = google_compute_disk.tfer--us-west1-c-002F-gke-data-infra-apps-jobs-v1-625ec063-5q8v.self_link
 }
 
 output "google_compute_disk_tfer--us-west1-c-002F-pvc-3fb43fc4-3b64-478a-aca4-87ab2f21c969_self_link" {

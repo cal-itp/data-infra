@@ -5,6 +5,14 @@ on:
     paths:
       - 'iac/*'
 
+env:
+  SERVICE_ACCOUNT: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+  PROJECT_ID: 'cal-itp-data-infra'
+  STAGING_SERVICE_ACCOUNT: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+  STAGING_WORKLOAD_IDENTITY_PROVIDER: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+  STAGING_PROJECT_ID: 'cal-itp-data-infra-staging'
+
 jobs:
   targets:
     name: Find targets
@@ -28,16 +36,14 @@ jobs:
         run: echo "paths=$(find iac -name 'provider.tf' | grep cal-itp-data-infra/ | xargs dirname | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')" >> ${GITHUB_OUTPUT}
 
   staging:
-    name: Staging
-
-    needs: targets
+    needs: [targets]
 
     runs-on: ubuntu-latest
 
     permissions:
-      contents: 'read'
-      id-token: 'write'
-      pull-requests: 'write'
+      contents: read
+      id-token: write
+      pull-requests: write
 
     strategy:
       fail-fast: false
@@ -48,14 +54,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: 'google-github-actions/auth@v2'
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
         with:
-          create_credentials_file: 'true'
-          project_id: cal-itp-data-infra-staging
-          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
-          service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+          create_credentials_file: true
+          project_id: ${{ env.STAGING_PROJECT_ID }}
+          workload_identity_provider: ${{ env.STAGING_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.STAGING_SERVICE_ACCOUNT }}
 
-      - uses: google-github-actions/setup-gcloud@v2
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Terraform Formatting
         uses: dflook/terraform-fmt-check@v1
@@ -76,16 +84,14 @@ jobs:
           path: ${{ matrix.path }}
 
   production:
-    name: Production
-
-    needs: targets
+    needs: [targets]
 
     runs-on: ubuntu-latest
 
     permissions:
-      contents: 'read'
-      id-token: 'write'
-      pull-requests: 'write'
+      contents: read
+      id-token: write
+      pull-requests: write
 
     strategy:
       fail-fast: false
@@ -96,14 +102,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: 'google-github-actions/auth@v2'
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
         with:
-          create_credentials_file: 'true'
-          project_id: cal-itp-data-infra
-          workload_identity_provider: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
-          service_account: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
+          create_credentials_file: true
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
 
-      - uses: google-github-actions/setup-gcloud@v2
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Terraform Format Check
         uses: dflook/terraform-fmt-check@v1

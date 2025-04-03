@@ -1,9 +1,9 @@
-name: Test, visualize, and build dbt project
+name: Build dbt image
 
 on:
   push:
     branches:
-      - 'main'
+      - main
     paths:
       - '.github/workflows/build-warehouse-image.yml'
       - 'warehouse/**'
@@ -16,77 +16,57 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+env:
+  PYTHON_VERSION: '3.11'
+  POETRY_VERSION: '2.0.1'
+
 jobs:
-  check:
-    name: check python
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt-get install -y libgraphviz-dev graphviz-dev
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=2.0.1 python -
-      - run: cd warehouse && poetry install && poetry run mypy scripts
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  compile:
-    name: check dbt
-    runs-on: ubuntu-latest
-    steps:
-      - run: sudo apt-get install -y libgraphviz-dev graphviz graphviz-dev
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      - run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=2.0.1 python -
-      - uses: 'google-github-actions/auth@v2'
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache poetry
+        uses: actions/cache@v3
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
-      - uses: google-github-actions/setup-gcloud@v2
-      - name: Compile dbt project
+          path: ~/.cache/pypoetry
+          key: poetry-cache-{{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Cache python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: python-cache-{{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
         working-directory: warehouse
-        run: |
-          poetry install
-          poetry run dbt deps
-          poetry run dbt compile --target prod --full-refresh
-          poetry run dbt docs generate --target prod --no-compile
-      - uses: 'google-github-actions/upload-cloud-storage@v1'
-        with:
-          path: './warehouse/logs/'
-          destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/logs/'
-      - uses: 'google-github-actions/upload-cloud-storage@v1'
-        with:
-          path: './warehouse/target/'
-          glob: '*.json'
-          destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/target/'
-      # Only do visualization if we actually changed models and we are merging against main
-      - uses: tj-actions/changed-files@v41
-        if: ${{ github.event_name == 'pull_request' }}
-        id: changed-files-warehouse
-        with:
-          files: 'warehouse/models/**/*.sql'
-      # install a specific version of node before cml https://github.com/iterative/cml/issues/1377
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '16'
-      - uses: iterative/setup-cml@v1
-        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
-      - name: Create GitHub comment
-        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd warehouse
-          gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
-          poetry run python scripts/visualize.py ci-report
-          cml comment update target/report.md
+        run: poetry install
 
-  build_push:
-    name: package warehouse image
+      - name: Run mypy
+        working-directory: warehouse
+        run: poetry run mypy scripts
+
+  docker:
     runs-on: ubuntu-latest
-    needs: [check]
+    needs: [lint]
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - uses: tj-actions/changed-files@v41
         with:
           files: |
