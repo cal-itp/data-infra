@@ -190,12 +190,6 @@ resource "google_storage_bucket_iam_member" "tfer--calitp-ntd-api-products" {
   role   = "roles/storage.legacyBucketOwner"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--calitp-ntd-data-products" {
-  bucket = "b/calitp-ntd-data-products"
-  member = "projectOwner:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--calitp-ntd-report-validation" {
   bucket = "b/calitp-ntd-report-validation"
   member = "projectViewer:cal-itp-data-infra"
@@ -518,12 +512,6 @@ resource "google_storage_bucket_iam_member" "tfer--test-calitp-ntd-api-products"
   bucket = "b/test-calitp-ntd-api-products"
   member = "projectOwner:cal-itp-data-infra"
   role   = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-ntd-data-products" {
-  bucket = "b/test-calitp-ntd-data-products"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketOwner"
 }
 
 resource "google_storage_bucket_iam_member" "tfer--test-calitp-ntd-report-validation" {

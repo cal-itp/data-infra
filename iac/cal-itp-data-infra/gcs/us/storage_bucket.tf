@@ -492,24 +492,6 @@ resource "google_storage_bucket" "tfer--calitp-ntd-api-products" {
   uniform_bucket_level_access = "true"
 }
 
-resource "google_storage_bucket" "tfer--calitp-ntd-data-products" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-  location                 = "US-WEST2"
-  name                     = "calitp-ntd-data-products"
-  project                  = "cal-itp-data-infra"
-  public_access_prevention = "enforced"
-  requester_pays           = "false"
-
-  retention_policy {
-    is_locked        = "false"
-    retention_period = "31557600"
-  }
-
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-}
-
 resource "google_storage_bucket" "tfer--calitp-ntd-report-validation" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
@@ -1295,18 +1277,6 @@ resource "google_storage_bucket" "tfer--test-calitp-ntd-api-products" {
   force_destroy               = "false"
   location                    = "US"
   name                        = "test-calitp-ntd-api-products"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-ntd-data-products" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-ntd-data-products"
   project                     = "cal-itp-data-infra"
   public_access_prevention    = "enforced"
   requester_pays              = "false"

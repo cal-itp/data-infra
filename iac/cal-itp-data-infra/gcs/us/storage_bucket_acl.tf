@@ -126,10 +126,6 @@ resource "google_storage_bucket_acl" "tfer--calitp-ntd-api-products" {
   bucket = "calitp-ntd-api-products"
 }
 
-resource "google_storage_bucket_acl" "tfer--calitp-ntd-data-products" {
-  bucket = "calitp-ntd-data-products"
-}
-
 resource "google_storage_bucket_acl" "tfer--calitp-ntd-report-validation" {
   bucket = "calitp-ntd-report-validation"
 }
@@ -344,10 +340,6 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-validation
 
 resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-api-products" {
   bucket = "test-calitp-ntd-api-products"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-data-products" {
-  bucket = "test-calitp-ntd-data-products"
 }
 
 resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-report-validation" {
