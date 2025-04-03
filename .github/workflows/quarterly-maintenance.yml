@@ -1,0 +1,99 @@
+name: Quarterly Maintenance
+
+on:
+  schedule:
+    - cron: '0 0 1 1,4,7,10 *'  # Run at midnight on the 1st of January, April, July, and October
+
+jobs:
+  create_issues:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set quarter variable
+      run: |
+        const now = new Date();
+        const quarter = Math.floor((now.getMonth() / 3) + 1);
+        echo "quarter=${quarter}" >> $GITHUB_ENV
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Create Metabase issue
+      uses: peter-evans/create-issue-from-file@v4
+      with:
+        token: ${{ secrets.GH_PROJECTS_TOKEN }}
+        title: Quarterly Maintenance - Metabase Q${{ quarter }}
+        content-filepath: .github/ISSUE_TEMPLATE/quarterly_infrastructure_maintenance.md
+        labels: quarterly, maintenance, metabase
+        # template-variables: {"software": "Metabase", "quarter": "${{ quarter }}"}
+
+    # - name: Create Jupyterhub issue
+    #   uses: peter-evans/create-issue-from-file@v4
+    #   with:
+    #     token: ${{ secrets.GH_PROJECTS_TOKEN }}
+    #     title: Quarterly Maintenance - Jupyterhub Q${{ env.quarter }}
+    #     content-filepath: .github/ISSUE_TEMPLATE/quarterly_infrastructure_maintenance.md
+    #     labels: quarterly, maintenance, jupyterhub
+    #     template-variables: '{"software": "Jupyterhub", "quarter": "'${{ env.quarter }}'"}'
+
+    # - name: Create Kubernetes issue
+    #   uses: peter-evans/create-issue-from-file@v4
+    #   with:
+    #     token: ${{ secrets.GH_PROJECTS_TOKEN }}
+    #     title: Quarterly Maintenance - Kubernetes Q${{ env.quarter }}
+    #     content-filepath: .github/ISSUE_TEMPLATE/quarterly_infrastructure_maintenance.md
+    #     labels: quarterly, maintenance, kubernetes
+    #     template-variables: '{"software": "Kubernetes", "quarter": "'${{ env.quarter }}'"}'
+
+    # - name: Create Sentry issue
+    #   uses: peter-evans/create-issue-from-file@v4
+    #   with:
+    #     token: ${{ secrets.GH_PROJECTS_TOKEN }}
+    #     title: Quarterly Maintenance - Sentry Q${{ env.quarter }}
+    #     content-filepath: .github/ISSUE_TEMPLATE/quarterly_infrastructure_maintenance.md
+    #     labels: quarterly, maintenance, sentry
+    #     template-variables: '{"software": "Sentry", "quarter": "'${{ env.quarter }}'"}'
+
+    # - name: Create Airflow issue
+    #   uses: peter-evans/create-issue-from-file@v4
+    #   with:
+    #     token: ${{ secrets.GH_PROJECTS_TOKEN }}
+    #     title: Quarterly Maintenance - Airflow Q${{ env.quarter }}
+    #     content-filepath: .github/ISSUE_TEMPLATE/quarterly_infrastructure_maintenance.md
+    #     labels: quarterly, maintenance, airflow
+    #     template-variables: '{"software": "Airflow", "quarter": "'${{ env.quarter }}'"}'
+
+    # - name: Create Composer issue
+    #   uses: peter-evans/create-issue-from-file@v4
+    #   with:
+    #     token: ${{ secrets.GH_PROJECTS_TOKEN }}
+    #     title: Quarterly Maintenance - Composer Q${{ env.quarter }}
+    #     content-filepath: .github/ISSUE_TEMPLATE/quarterly_infrastructure_maintenance.md
+    #     labels: quarterly, maintenance, composer
+    #     template-variables: '{"software": "Composer", "quarter": "'${{ env.quarter }}'"}'
+
+    # - name: Create RT Archiver base image issue
+    #   uses: peter-evans/create-issue-from-file@v4
+    #   with:
+    #     token: ${{ secrets.GH_PROJECTS_TOKEN }}
+    #     title: Quarterly Maintenance - RT Archiver base image Q${{ env.quarter }}
+    #     content-filepath: .github/ISSUE_TEMPLATE/quarterly_infrastructure_maintenance.md
+    #     labels: quarterly, maintenance, rt-archiver
+    #     template-variables: '{"software": "RT Archiver base image", "quarter": "'${{ env.quarter }}'"}'
+
+    # - name: Create dependabot PRs issue
+    #   uses: peter-evans/create-issue-from-file@v4
+    #   with:
+    #     token: ${{ secrets.GH_PROJECTS_TOKEN }}
+    #     title: Quarterly Maintenance - Review and Merge dependabot PRs Q${{ env.quarter }}
+    #     content-filepath: .github/ISSUE_TEMPLATE/quarterly_infrastructure_maintenance.md
+    #     labels: quarterly, maintenance, dependabot
+    #     template-variables: '{"software": "dependabot pull requests", "quarter": "'${{ env.quarter }}'"}'
+
+    # - name: Create AWS key rotation issue
+    #   uses: peter-evans/create-issue-from-file@v4
+    #   with:
+    #     token: ${{ secrets.GH_PROJECTS_TOKEN }}
+    #     title: Quarterly Maintenance - AWS key rotation Q${{ env.quarter }}
+    #     content-filepath: .github/ISSUE_TEMPLATE/quarterly_infrastructure_maintenance.md
+    #     labels: quarterly, maintenance, aws
+    #     template-variables: '{"software": "AWS key rotation", "quarter": "'${{ env.quarter }}'"}'
