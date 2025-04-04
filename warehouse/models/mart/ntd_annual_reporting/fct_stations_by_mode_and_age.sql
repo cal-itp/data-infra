@@ -3,9 +3,25 @@ WITH staging_stations_by_mode_and_age AS (
     FROM {{ ref('stg_ntd__stations_by_mode_and_age') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_stations_by_mode_and_age.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_stations_by_mode_and_age
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_stations_by_mode_and_age AS (
     SELECT *
-    FROM staging_stations_by_mode_and_age
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -34,6 +50,7 @@ SELECT
     total_facilities,
     uace_code,
     uza_name,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_stations_by_mode_and_age
