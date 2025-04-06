@@ -37,7 +37,7 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_NAME }}
           location: ${{ env.GKE_REGION }}
-      - run: curl -sSL https://install.python-poetry.org | python -
+      - run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=2.0.1 python -
       - name: Set up hologit
         env:
           BIO_RELEASE: 1.6.821
