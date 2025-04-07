@@ -8,20 +8,35 @@ on:
       - .github/workflows/deploy-airflow.yml
       - 'airflow/**'
 
+env:
+  SERVICE_ACCOUNT: github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com
+  WORKLOAD_IDENTITY_PROVIDER: projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+  PROJECT_ID: cal-itp-data-infra
+  AIRFLOW_BUCKET: us-west2-calitp-airflow2-pr-f6bb9855-bucket
+  COMPOSER_ENVIRONMENT: calitp-airflow2-prod-composer2-20250402
+  COMPOSER_REGION: us-west2
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: 'google-github-actions/auth@v2'
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
 
-      - uses: google-github-actions/setup-gcloud@v2
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
 
       # Only update requirements if they have changed; Composer throws an error if there are no changes to apply
       - uses: tj-actions/changed-files@v41
@@ -32,11 +47,9 @@ jobs:
 
       - name: Deploy Airflow dependencies to Composer
         if: steps.changed-requirements.outputs.any_changed == 'true'
-        run: gcloud composer environments update calitp-airflow2-prod-composer2-20250402 --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra
+        run: gcloud composer environments update ${{ env.COMPOSER_ENVIRONMENT }} --update-pypi-packages-from-file airflow/requirements.txt --location ${{ env.COMPOSER_REGION }} --project ${{ env.PROJECT_ID }}
 
       - name: Push Airflow code to Composer
         run: |
-          gsutil -m rsync -d -c -r airflow/dags gs://$AIRFLOW_BUCKET/dags
-          gsutil -m rsync -d -c -r airflow/plugins gs://$AIRFLOW_BUCKET/plugins
-        env:
-          AIRFLOW_BUCKET: "us-west2-calitp-airflow2-pr-f6bb9855-bucket"
+          gsutil -m rsync -d -c -r airflow/dags gs://${{ env.AIRFLOW_BUCKET }}/dags
+          gsutil -m rsync -d -c -r airflow/plugins gs://${{ env.AIRFLOW_BUCKET }}/plugins

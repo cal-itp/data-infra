@@ -1,0 +1,130 @@
+name: Deploy dbt
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'warehouse/**'
+  pull_request:
+    paths:
+      - 'warehouse/**'
+
+env:
+  PYTHON_VERSION: '3.11'
+  POETRY_VERSION: '2.0.1'
+  NODE_VERSION: '16'
+  SERVICE_ACCOUNT: 'github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com'
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+  PROJECT_ID: 'cal-itp-data-infra'
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: true
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-{{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Cache python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: python-cache-{{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        working-directory: warehouse
+        run: poetry install
+
+      - name: Cache dbt packages
+        uses: actions/cache@v3
+        with:
+          path: warehouse/dbt_packages
+          key: python-cache-{{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
+
+      - name: Install dbt dependencies
+        working-directory: warehouse
+        run: poetry run dbt deps
+
+      - name: Compile dbt
+        working-directory: warehouse
+        run: poetry run dbt compile --target prod --full-refresh
+
+      - name: Generate dbt documentation
+        working-directory: warehouse
+        run: poetry run dbt docs generate --target prod --no-compile
+
+      - name: Upload dbt logs
+        uses: google-github-actions/upload-cloud-storage@v1
+        with:
+          path: './warehouse/logs/'
+          destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/logs/'
+
+      - name: Upload dbt compilation artifacts
+        uses: google-github-actions/upload-cloud-storage@v1
+        with:
+          path: './warehouse/target/'
+          glob: '*.json'
+          destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/target/'
+
+      # Only do visualization if we actually changed models and we are merging against main
+      - uses: tj-actions/changed-files@v41
+        if: ${{ github.event_name == 'pull_request' }}
+        id: changed-files-warehouse
+        with:
+          files: 'warehouse/models/**/*.sql'
+
+      - name: Setup Continuous Machine Learning tools
+        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
+        uses: iterative/setup-cml@v2
+
+      - name: Synchronize dbt artifacts output
+        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
+        working-directory: warehouse
+        run: gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
+
+      - name: Create CI report
+        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
+        run: poetry run python scripts/visualize.py ci-report
+
+      - name: Create GitHub comment
+        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
+        working-directory: warehouse
+        run: cml comment update target/report.md
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
