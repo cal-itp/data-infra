@@ -217,90 +217,6 @@ resource "google_compute_disk" "tfer--us-west1-a-002F-gke-data-infra-apps-0f-pvc
   zone                      = "us-west1-a"
 }
 
-resource "google_compute_disk" "tfer--us-west1-a-002F-gke-data-infra-apps-apps-v2-2729c0c0-v3px" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "apps-v2"
-  }
-
-  name                      = "gke-data-infra-apps-apps-v2-2729c0c0-v3px"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-a"
-}
-
-resource "google_compute_disk" "tfer--us-west1-a-002F-gke-data-infra-apps-gtfsrt-v4-2a13e092-n53e" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "gtfsrt-v4"
-  }
-
-  name                      = "gke-data-infra-apps-gtfsrt-v4-2a13e092-n53e"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-a"
-}
-
-resource "google_compute_disk" "tfer--us-west1-a-002F-gke-data-infra-apps-gtfsrt-v4-2a13e092-s9i5" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "gtfsrt-v4"
-  }
-
-  name                      = "gke-data-infra-apps-gtfsrt-v4-2a13e092-s9i5"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-a"
-}
-
-resource "google_compute_disk" "tfer--us-west1-a-002F-gke-data-infra-apps-jobs-v1-cd18666b-ygrz" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jobs-v1"
-  }
-
-  name                      = "gke-data-infra-apps-jobs-v1-cd18666b-ygrz"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-a"
-}
-
 resource "google_compute_disk" "tfer--us-west1-a-002F-pvc-a5b1d3cd-ad12-405c-ab13-687bced0ff1e" {
   description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-a5b1d3cd-ad12-405c-ab13-687bced0ff1e\",\"kubernetes.io/created-for/pvc/name\":\"data-sentry-zookeeper-clickhouse-1\",\"kubernetes.io/created-for/pvc/namespace\":\"sentry\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
 
@@ -400,21 +316,6 @@ resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc
   zone                      = "us-west1-b"
 }
 
-resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-bd2749b9-7e64-4991-83e4-9b694beac49b" {
-  description               = "{\"kubernetes.io/created-for/pv/name\":\"pvc-bd2749b9-7e64-4991-83e4-9b694beac49b\",\"kubernetes.io/created-for/pvc/name\":\"claim-mjumbewu\",\"kubernetes.io/created-for/pvc/namespace\":\"jupyterhub\"}"
-  name                      = "gke-data-infra-apps-0f-pvc-bd2749b9-7e64-4991-83e4-9b694beac49b"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "10"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-
-  labels = {
-    goog-gke-volume = ""
-  }
-}
-
 resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc-c9e0b814-b6ad-4a2a-903a-1357d22f0640" {
   description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-c9e0b814-b6ad-4a2a-903a-1357d22f0640\",\"kubernetes.io/created-for/pvc/name\":\"data-sentry-rabbitmq-2\",\"kubernetes.io/created-for/pvc/namespace\":\"sentry\"}"
 
@@ -467,69 +368,6 @@ resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-0f-pvc
   project                   = "cal-itp-data-infra"
   provisioned_iops          = "0"
   size                      = "8"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
-resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-apps-v2-0dfb61fb-5kvg" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "apps-v2"
-  }
-
-  name                      = "gke-data-infra-apps-apps-v2-0dfb61fb-5kvg"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
-resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-gtfsrt-v4-b003cc53-b7vi" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "gtfsrt-v4"
-  }
-
-  name                      = "gke-data-infra-apps-gtfsrt-v4-b003cc53-b7vi"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-b"
-}
-
-resource "google_compute_disk" "tfer--us-west1-b-002F-gke-data-infra-apps-jobs-v1-8eec22fb-aazx" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jobs-v1"
-  }
-
-  name                      = "gke-data-infra-apps-jobs-v1-8eec22fb-aazx"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
   type                      = "pd-standard"
   zone                      = "us-west1-b"
 }
@@ -758,90 +596,6 @@ resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-0f-pvc
   project                   = "cal-itp-data-infra"
   provisioned_iops          = "0"
   size                      = "8"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-apps-v2-24a4cc95-bdau" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "apps-v2"
-  }
-
-  name                      = "gke-data-infra-apps-apps-v2-24a4cc95-bdau"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-apps-v2-24a4cc95-xdkc" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "apps-v2"
-  }
-
-  name                      = "gke-data-infra-apps-apps-v2-24a4cc95-xdkc"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-gtfsrt-v4-7577d4d7-lz65" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "gtfsrt-v4"
-  }
-
-  name                      = "gke-data-infra-apps-gtfsrt-v4-7577d4d7-lz65"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
-  type                      = "pd-standard"
-  zone                      = "us-west1-c"
-}
-
-resource "google_compute_disk" "tfer--us-west1-c-002F-gke-data-infra-apps-jobs-v1-625ec063-5q8v" {
-  image = "https://www.googleapis.com/compute/v1/projects/gke-node-images/global/images/gke-1308-gke1128001-cos-113-18244-236-70-c-cgpv1-pre"
-
-  labels = {
-    goog-gke-cluster-id-base32 = "b7q6s5ghvzbrxcigz62lkdgeeggldd76ipme2xfbzcvpmcrghpqq"
-    goog-gke-node              = ""
-    goog-gke-volume            = ""
-    goog-k8s-cluster-location  = "us-west1"
-    goog-k8s-cluster-name      = "data-infra-apps"
-    goog-k8s-node-pool-name    = "jobs-v1"
-  }
-
-  name                      = "gke-data-infra-apps-jobs-v1-625ec063-5q8v"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "100"
   type                      = "pd-standard"
   zone                      = "us-west1-c"
 }
