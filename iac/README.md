@@ -4,15 +4,20 @@ This subdirectory contains the Terraform configuration for Google Cloud.
 
 
 ## Local Development Setup
+You will need to do these steps.
 
 Install Terraform via ASDF:
 
 ```bash
+$ brew install asdf
 $ asdf plugin add terraform https://github.com/asdf-community/asdf-hashicorp.git
 $ asdf install terraform 1.10.5
 $ asdf set terraform 1.10.5
 $ asdf reshim
 ```
+
+You may need to add this to your ~/.bashrc
+```export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:$PATH"```
 
 Create the `iac/provider.tf` file containing the following provider definition:
 
@@ -48,6 +53,7 @@ $ make plan
 
 
 ## Importing Resources
+This is what we did to first derive the terraform environment.  You will not need to do this ever again (heaven forbid).
 
 To install Terraformer:
 
@@ -70,7 +76,7 @@ You'll need to move the imported resources to the correct directory:
 $ mv generated/google/cal-itp-data-infra-staging/gcs cal-itp-data-infra-staging/gcs
 ```
 
-Then, you'll need to run `terraform init` in the new directory. See below for a common error and resolution.
+Then, you'll need to run `terraform init` in the new directory, `cal-itp-data-infra-staging/gcs`. See below for a common error and resolution.
 
 Once that completes, modify the `provider.tf` file to add the storage bucket:
 
