@@ -18,20 +18,28 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      staging: ${{ steps.staging.outputs.paths }}
-      production: ${{ steps.production.outputs.paths }}
+      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
+      production: ${{ steps.production-changes.outputs.all_changed_files }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Staging Terraform targets
-        id: staging
-        run: echo "paths=$(find iac -name 'provider.tf' | grep cal-itp-data-infra-staging/ | xargs dirname | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')" >> ${GITHUB_OUTPUT}
+      - uses: tj-actions/changed-files@v46
+        id: staging-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'iac/cal-itp-data-infra-staging/**'
 
-      - name: Production Terraform targets
-        id: production
-        run: echo "paths=$(find iac -name 'provider.tf' | grep cal-itp-data-infra/ | xargs dirname | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')" >> ${GITHUB_OUTPUT}
+      - uses: tj-actions/changed-files@v46
+        id: production-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'iac/cal-itp-data-infra/**'
 
   staging:
     name: Staging
