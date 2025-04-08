@@ -4,10 +4,6 @@ WITH dim AS (
     SELECT * FROM {{ ref('int_transit_database__organizations_dim') }}
 ),
 
--- ntd_agency_to_organization AS (
---     SELECT * FROM {{ ref('_deprecated__ntd_agency_to_organization') }}
--- ),
-
 mpo_rtpa AS (
     SELECT
         key,
@@ -59,8 +55,6 @@ dim_organizations AS (
         _valid_to
 
     FROM dim
-    -- LEFT JOIN ntd_agency_to_organization ntd_to_org
-    --     ON source_record_id = ntd_to_org.organization_record_id
     LEFT JOIN mpo_rtpa mr_rtpa ON dim.rtpa = mr_rtpa.source_record_id
     LEFT JOIN mpo_rtpa mr_mpo ON dim.mpo = mr_mpo.source_record_id
 
