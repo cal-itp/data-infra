@@ -10,6 +10,21 @@ WITH dim AS (
         ) }}
 ),
 
+agency_info AS (
+    SELECT
+        id AS agency_info_id,
+        ntd_id
+    FROM {{ ref('stg_transit_database__ntd_agency_info') }}
+),
+
+join_for_ntd_id AS (
+    SELECT
+        dim.*,
+        agency_info.ntd_id
+    FROM dim
+    LEFT JOIN join_for_ntd_id ON dim.ntd_agency_info_key = agency_info.agency_info_id
+)
+
 int_transit_database__organizations_dim AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['id', '_valid_from']) }} AS key,
@@ -35,6 +50,7 @@ int_transit_database__organizations_dim AS (
         manual_check__contact_on_website,
         hq_county_geography,
         is_public_entity,
+        ntd_id,
         raw_ntd_id,
         ntd_id_2022,
         rtpa,
@@ -44,6 +60,6 @@ int_transit_database__organizations_dim AS (
         _is_current,
         _valid_from,
         _valid_to
-    FROM dim
+    FROM join_for_ntd_id
 )
 SELECT * FROM int_transit_database__organizations_dim
