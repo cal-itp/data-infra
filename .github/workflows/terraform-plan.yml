@@ -3,7 +3,7 @@ name: Terraform Plan
 on:
   pull_request:
     paths:
-      - 'iac/*'
+      - 'iac/**'
 
 jobs:
   targets:
