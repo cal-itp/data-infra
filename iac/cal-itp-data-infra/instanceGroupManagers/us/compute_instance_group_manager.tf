@@ -15,7 +15,7 @@ resource "google_compute_instance_group_manager" "tfer--gke-data-infra-apps-apps
   }
 
   version {
-    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-apps-v2-982bffda"
+    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-apps-v2-3a59e05d"
     name              = ""
   }
 
@@ -40,7 +40,7 @@ resource "google_compute_instance_group_manager" "tfer--gke-data-infra-apps-apps
   }
 
   version {
-    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-apps-v2-f2c6ebb9"
+    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-apps-v2-623241b2"
   }
 
   wait_for_instances_status = "STABLE"
@@ -64,7 +64,7 @@ resource "google_compute_instance_group_manager" "tfer--gke-data-infra-apps-apps
   }
 
   version {
-    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-apps-v2-4de9cc73"
+    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-apps-v2-5a216727"
     name              = ""
   }
 
@@ -89,7 +89,7 @@ resource "google_compute_instance_group_manager" "tfer--gke-data-infra-apps-gtfs
   }
 
   version {
-    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-gtfsrt-v4-eda43ed7"
+    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-gtfsrt-v4-a543ed3d"
     name              = ""
   }
 
@@ -114,7 +114,7 @@ resource "google_compute_instance_group_manager" "tfer--gke-data-infra-apps-gtfs
   }
 
   version {
-    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-gtfsrt-v4-dea74e39"
+    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-gtfsrt-v4-0200f5d4"
   }
 
   wait_for_instances_status = "STABLE"
@@ -138,7 +138,7 @@ resource "google_compute_instance_group_manager" "tfer--gke-data-infra-apps-gtfs
   }
 
   version {
-    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-gtfsrt-v4-52b37e88"
+    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-gtfsrt-v4-1a99461a"
   }
 
   wait_for_instances_status = "STABLE"
@@ -162,7 +162,7 @@ resource "google_compute_instance_group_manager" "tfer--gke-data-infra-apps-jobs
   }
 
   version {
-    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-jobs-v1-2d506811"
+    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-jobs-v1-145409cd"
     name              = ""
   }
 
@@ -187,7 +187,7 @@ resource "google_compute_instance_group_manager" "tfer--gke-data-infra-apps-jobs
   }
 
   version {
-    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-jobs-v1-5b0c78e4"
+    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-jobs-v1-bef1471a"
   }
 
   wait_for_instances_status = "STABLE"
@@ -211,7 +211,7 @@ resource "google_compute_instance_group_manager" "tfer--gke-data-infra-apps-jobs
   }
 
   version {
-    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-jobs-v1-22a6d081"
+    instance_template = "https://www.googleapis.com/compute/v1/projects/cal-itp-data-infra/regions/us-west1/instanceTemplates/gke-data-infra-apps-jobs-v1-cdebddb6"
     name              = ""
   }
 
