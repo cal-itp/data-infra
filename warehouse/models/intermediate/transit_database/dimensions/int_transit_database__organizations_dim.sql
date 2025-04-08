@@ -12,9 +12,9 @@ WITH dim AS (
 
 agency_info AS (
     SELECT
-        id AS agency_info_id,
+        source_record_id,
         ntd_id
-    FROM {{ ref('stg_transit_database__ntd_agency_info') }}
+    FROM {{ ref('int_transit_database__ntd_agency_info_dim') }}
 ),
 
 join_for_ntd_id AS (
@@ -22,8 +22,8 @@ join_for_ntd_id AS (
         dim.*,
         agency_info.ntd_id
     FROM dim
-    LEFT JOIN join_for_ntd_id ON dim.ntd_agency_info_key = agency_info.agency_info_id
-)
+    LEFT JOIN agency_info ON dim.ntd_agency_info_key = agency_info.source_record_id
+),
 
 int_transit_database__organizations_dim AS (
     SELECT
