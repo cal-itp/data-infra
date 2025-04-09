@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _public__vine_transit_gtfs_rt_completeness
+    label: '[Public] Vine Transit GTFS-RT Completeness'
+    description: '### Dashboard Cards: 26
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __246__
+
+
+      Created On: __2025-01-29T18:07:39.837048Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/246
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

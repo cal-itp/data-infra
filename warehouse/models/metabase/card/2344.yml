@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: reduced_fare_open_loop_transactions_processed_in_2024__updated_
+    label: Reduced fare open loop transactions processed in 2024 (updated)
+    description: '### Visualization: Progress
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2344__
+
+
+      Created On: __2024-06-05T23:39:28.55817Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2344
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    meta:
+      average_query_time: '0:01.755'
+      last_used_at: '2025-03-26T21:39:34.976015Z'

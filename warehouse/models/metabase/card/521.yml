@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: product_codes_associated_with_adjusted_price_journeys__grouped_by_week_9
+    label: Product Codes Associated with Adjusted-Price Journeys, Grouped by Week
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __521__
+
+
+      Created On: __2022-09-20T22:25:26.342418Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/521
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:01.020'
+      last_used_at: '2024-09-20T17:54:54.131902Z'

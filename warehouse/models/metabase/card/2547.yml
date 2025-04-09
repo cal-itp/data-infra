@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: chargebacks
+    label: Chargebacks
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2547__
+
+
+      Created On: __2024-07-30T11:50:46.239107Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2547
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:01.142'
+      last_used_at: '2025-03-20T15:29:14.364335Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: other_transaction_charges__usd_
+    label: Other Transaction Charges (USD)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1626__
+
+
+      Created On: __2023-08-11T11:30:30.044898Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1626
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:01.001'
+      last_used_at: '2025-03-11T17:24:38.91512Z'

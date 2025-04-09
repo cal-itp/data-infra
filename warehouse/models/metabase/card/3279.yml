@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: total_number_of_park_n_rides
+    label: Total Number of Park-N-Rides
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3279__
+
+
+      Created On: __2024-12-10T02:28:18.421667Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3279
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.610'
+      last_used_at: '2025-03-27T22:19:15.675888Z'

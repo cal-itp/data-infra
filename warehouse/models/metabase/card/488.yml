@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_journeys_by_origin_location_6
+    label: Number of Journeys by Origin Location
+    description: '### Visualization: Row
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __488__
+
+
+      Created On: __2022-09-19T19:59:07.94292Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/488
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:01.294'
+      last_used_at: '2025-03-13T22:42:02.677937Z'

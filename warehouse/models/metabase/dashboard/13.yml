@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: analysis_dashboard___charlie
+    label: Analysis Dashboard - Charlie
+    description: '### Dashboard Cards: 5
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __13__
+
+
+      Created On: __2021-08-18T13:59:16.785014Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/13
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

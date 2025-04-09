@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: adjusted_price_journeys_relative_to_total_journey_count__grouped_by_route_7
+    label: Adjusted-Price Journeys Relative to Total Journey Count, Grouped by Route
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3475__
+
+
+      Created On: __2025-03-27T14:08:05.345329Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3475
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.964'
+      last_used_at: '2025-03-27T14:28:22.020041Z'
