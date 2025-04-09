@@ -487,10 +487,9 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#current-meetings">Current Meetings</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#communication-channels">Communication Channels</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-analytics-repo">GitHub Analytics Repo</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teams-communication-channels">Teams Communication Channels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#slack-communication-channels">Slack Communication Channels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-analytics-repo">GitHub Analytics Repo</a></li>
 </ul>
             </nav>
         </div>
@@ -522,17 +521,26 @@ document.write(`
 <td><p>Week 1 <br/> 40 Mins</p></td>
 <td><p>To ensure access to tools and go over best practices.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>Analyst Team Meeting</strong></p></td>
-<td><p>Thurs <br/> 45 Mins</p></td>
+<tr class="row-odd"><td><p><strong>Analyst Data Roundtable Meeting</strong></p></td>
+<td><p>Thursday, Weekly <br/> 50 Mins</p></td>
 <td><p>Branch meeting to share your screen and discuss what you’ve been working on.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Analyst Administrative Meeting</strong></p></td>
+<td><p>Wednesday, Bi-Weekly <br/> 25 Mins</p></td>
+<td><p>Branch meeting for administrative updates every other Wednesday.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Team Social Meeting (Optional)</strong></p></td>
+<td><p>Wednesday, Bi-Weekly <br/> 60 Mins</p></td>
+<td><p>Due to the geographic spread of our branch, every other Wednesday we get together for an optional hour of chatting.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
 </section>
-<section id="communication-channels">
-<span id="slack-intro"></span><h2>Communication Channels<a class="headerlink" href="#communication-channels" title="Link to this heading">#</a></h2>
+<section id="teams-communication-channels">
+<span id="slack-intro"></span><h2>Teams Communication Channels<a class="headerlink" href="#teams-communication-channels" title="Link to this heading">#</a></h2>
+<p>When communicating with Caltrans coworkers, we use Teams. The message retention policy for Teams is not permanent. <a class="reference external" href="https://github.com/cal-itp/data-analyses/issues">Open up a GitHub Issue</a> with the appropriate template for any posts you make on the <strong>Data Analysis</strong> and <strong>Data Office Hours</strong> channels that are worth keeping for posterity’s sake and/or are lengthy and complex in nature.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Channel</p></th>
@@ -541,30 +549,54 @@ document.write(`
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>#<strong>ct-bdat-internal</strong></p></td>
+<tr class="row-even"><td><p>#<strong>General</strong></p></td>
 <td><p>Discussion</p></td>
-<td><p>For Caltrans Division of Data and Digital Services employees.</p></td>
+<td><p>For all employees in Caltrans Division of Data and Digital Services (DDS).</p></td>
 </tr>
-<tr class="row-odd"><td><p>#<strong>data-analysis</strong></p></td>
+<tr class="row-odd"><td><p>#<strong>Data Analysis</strong></p></td>
 <td><p>Discussion</p></td>
-<td><p>For sharing and collaborating on Cal-ITP data analyses.</p></td>
+<td><p>For sharing and collaborating on data analyses.</p></td>
 </tr>
-<tr class="row-even"><td><p>#<strong>data-office-hours</strong></p></td>
+<tr class="row-even"><td><p>#<strong>Data Office Hours</strong></p></td>
 <td><p>Discussion</p></td>
 <td><p>A place to bring questions, issues, and observations for team discussion.</p></td>
 </tr>
-<tr class="row-odd"><td><p>#<strong>data-warehouse-devs</strong></p></td>
+<tr class="row-odd"><td><p>#<strong>Data Science</strong></p></td>
 <td><p>Discussion</p></td>
-<td><p>For people building dbt models - focused on data warehouse performance considerations, etc.</p></td>
+<td><p>For all employees in DDS’s Data Science Branch.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+</section>
+<section id="slack-communication-channels">
+<h2>Slack Communication Channels<a class="headerlink" href="#slack-communication-channels" title="Link to this heading">#</a></h2>
+<p>When working with contractors, we use Slack.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Channel</p></th>
+<th class="head"><p>Purpose</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>#<strong>data-warehouse-devs</strong></p></td>
+<td><p>Discussion</p></td>
+<td><p>For people building dbt models - focused on data warehouse performance considerations, etc.</p></td>
+</tr>
+<tr class="row-odd"><td><p>(analytics-repo)=</p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="github-analytics-repo">
-<span id="analytics-repo"></span><h3>GitHub Analytics Repo<a class="headerlink" href="#github-analytics-repo" title="Link to this heading">#</a></h3>
+<h2>GitHub Analytics Repo<a class="headerlink" href="#github-analytics-repo" title="Link to this heading">#</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> repo is our main data analysis repository, for sharing quick reports and works in progress. Get set up on GitHub and clone the data-analyses repository <a class="reference internal" href="../analytics_tools/jupyterhub.html#saving-code-jupyter"><span class="std std-ref">using this link</span></a>.</p>
 <p>For collaborative short-term tasks, create a new folder and work off a separate branch.</p>
-</section>
+<p>For large and long-term projects, create a whole new repo.</p>
 </section>
 </section>
 
@@ -636,10 +668,9 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#current-meetings">Current Meetings</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#communication-channels">Communication Channels</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-analytics-repo">GitHub Analytics Repo</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teams-communication-channels">Teams Communication Channels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#slack-communication-channels">Slack Communication Channels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-analytics-repo">GitHub Analytics Repo</a></li>
 </ul>
   </nav></div>
 
