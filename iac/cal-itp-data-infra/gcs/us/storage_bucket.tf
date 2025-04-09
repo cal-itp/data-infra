@@ -437,18 +437,6 @@ resource "google_storage_bucket" "tfer--calitp-gtfs-schedule-validation-hourly" 
   uniform_bucket_level_access = "true"
 }
 
-resource "google_storage_bucket" "tfer--calitp-jamesl-gcp-components-tfstate" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST1"
-  name                        = "calitp-jamesl-gcp-components-tfstate"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-}
-
 resource "google_storage_bucket" "tfer--calitp-map-tiles" {
   cors {
     max_age_seconds = "300"
@@ -628,30 +616,6 @@ resource "google_storage_bucket" "tfer--calitp-state-highway-network-stops" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
-}
-
-resource "google_storage_bucket" "tfer--cold-storage-outputs-gtfs-data-test" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US"
-  name                        = "cold-storage-outputs-gtfs-data-test"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "false"
-}
-
-resource "google_storage_bucket" "tfer--cold-storage-outputs-gtfs-data-test-charlie-test" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US"
-  name                        = "cold-storage-outputs-gtfs-data-test-charlie-test"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "false"
 }
 
 resource "google_storage_bucket" "tfer--dataproc-staging-us-west2-1005246706141-sfgmtgyp" {

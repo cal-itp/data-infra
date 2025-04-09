@@ -1092,43 +1092,6 @@ resource "google_storage_bucket_iam_policy" "tfer--calitp-gtfs-schedule-validati
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--calitp-jamesl-gcp-components-tfstate" {
-  bucket = "b/calitp-jamesl-gcp-components-tfstate"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
-    }
-  ]
-}
-POLICY
-}
-
 resource "google_storage_bucket_iam_policy" "tfer--calitp-map-tiles" {
   bucket = "b/calitp-map-tiles"
 
@@ -1665,54 +1628,6 @@ resource "google_storage_bucket_iam_policy" "tfer--calitp-state-highway-network-
         "projectViewer:cal-itp-data-infra"
       ],
       "role": "roles/storage.legacyObjectReader"
-    }
-  ]
-}
-POLICY
-}
-
-resource "google_storage_bucket_iam_policy" "tfer--cold-storage-outputs-gtfs-data-test" {
-  bucket = "b/cold-storage-outputs-gtfs-data-test"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    }
-  ]
-}
-POLICY
-}
-
-resource "google_storage_bucket_iam_policy" "tfer--cold-storage-outputs-gtfs-data-test-charlie-test" {
-  bucket = "b/cold-storage-outputs-gtfs-data-test-charlie-test"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
     }
   ]
 }
