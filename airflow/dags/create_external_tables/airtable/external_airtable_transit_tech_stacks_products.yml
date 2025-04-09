@@ -66,3 +66,12 @@ schema_fields:
   - name: organization_stack_components
     type: STRING
     mode: REPEATED
+  - name: start_date
+    type: STRING
+    mode: NULLABLE
+  - name: end_date
+    type: STRING
+    mode: NULLABLE
+  - name: status
+    type: STRING
+    mode: NULLABLE
