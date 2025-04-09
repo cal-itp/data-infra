@@ -2,7 +2,7 @@
 
 # Tutorials for New Python Users
 
-This section is geared towards data analysts who are new to Python. The following tutorials highlight the most relevant Python skills used at Cal ITP. Use them to guide you through completing [practice exercises #1-9](https://github.com/cal-itp/data-analyses/tree/main/starter_kit).
+This section is geared towards data analysts who are new to Python. The following tutorials highlight the most relevant Python skills used at Cal ITP. Use them to guide you through completing [the exercises in our `starter_kit` repo.](https://github.com/cal-itp/starter_kit).
 
 ## Content
 
