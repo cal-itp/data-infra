@@ -672,6 +672,21 @@ resource "google_storage_bucket" "tfer--dev-calitp-aggregator-scraper" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--dev-calitp-gtfs-rt-raw" {
@@ -684,6 +699,21 @@ resource "google_storage_bucket" "tfer--dev-calitp-gtfs-rt-raw" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--dev-calitp-test-sandbox" {
@@ -764,6 +794,21 @@ resource "google_storage_bucket" "tfer--gtfs-data-test" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--gtfs-data-test-reports" {
@@ -780,6 +825,21 @@ resource "google_storage_bucket" "tfer--gtfs-data-test-reports" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--gtfs-schedule-backfill-test" {
@@ -917,6 +977,21 @@ resource "google_storage_bucket" "tfer--test-calitp-aggregator-scraper" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-airtable" {
@@ -929,6 +1004,21 @@ resource "google_storage_bucket" "tfer--test-calitp-airtable" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-dbt-artifacts" {
@@ -941,6 +1031,21 @@ resource "google_storage_bucket" "tfer--test-calitp-dbt-artifacts" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-dbt-python-models" {
@@ -953,6 +1058,21 @@ resource "google_storage_bucket" "tfer--test-calitp-dbt-python-models" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-elavon" {
@@ -965,25 +1085,10 @@ resource "google_storage_bucket" "tfer--test-calitp-elavon" {
     }
 
     condition {
-      age                        = "0"
+      age                        = "30"
       created_before             = ""
       days_since_custom_time     = "0"
       days_since_noncurrent_time = "0"
-      num_newer_versions         = "1"
-      with_state                 = "ARCHIVED"
-    }
-  }
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "0"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "7"
       num_newer_versions         = "0"
       with_state                 = "ANY"
     }
@@ -998,7 +1103,7 @@ resource "google_storage_bucket" "tfer--test-calitp-elavon" {
   uniform_bucket_level_access = "true"
 
   versioning {
-    enabled = "true"
+    enabled = "false"
   }
 }
 
@@ -1012,6 +1117,21 @@ resource "google_storage_bucket" "tfer--test-calitp-elavon-parsed" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-elavon-raw" {
@@ -1024,6 +1144,21 @@ resource "google_storage_bucket" "tfer--test-calitp-elavon-raw" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-config" {
@@ -1036,6 +1171,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-config" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-download-config" {
@@ -1048,6 +1198,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-download-config" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-raw" {
@@ -1060,6 +1225,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-raw" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-parsed" {
@@ -1072,6 +1252,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-parsed" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-raw" {
@@ -1084,6 +1279,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-raw" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-raw-v2" {
@@ -1096,6 +1306,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-raw-v2" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-validation" {
@@ -1108,6 +1333,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-validation" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-parsed" {
@@ -1120,6 +1360,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-parsed" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-parsed-hourly" {
@@ -1132,6 +1387,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-parsed-hourly"
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-processed" {
@@ -1144,24 +1414,48 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-processed" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-raw" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-  location                 = "US-WEST2"
-  name                     = "test-calitp-gtfs-schedule-raw"
-  project                  = "cal-itp-data-infra"
-  public_access_prevention = "inherited"
-  requester_pays           = "false"
-
-  retention_policy {
-    is_locked        = "false"
-    retention_period = "2678400"
-  }
-
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "test-calitp-gtfs-schedule-raw"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-raw-v2" {
@@ -1174,6 +1468,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-raw-v2" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test" {
@@ -1186,6 +1495,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-raw-v2-backfil
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-unzipped" {
@@ -1198,6 +1522,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-unzipped" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-unzipped-hourly" {
@@ -1210,6 +1549,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-unzipped-hourl
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-validation" {
@@ -1222,6 +1576,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-validation" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-validation-hourly" {
@@ -1234,6 +1603,21 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-validation-hou
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-ntd-api-products" {
@@ -1246,6 +1630,21 @@ resource "google_storage_bucket" "tfer--test-calitp-ntd-api-products" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-ntd-report-validation" {
@@ -1258,6 +1657,21 @@ resource "google_storage_bucket" "tfer--test-calitp-ntd-report-validation" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-ntd-xlsx-products-clean" {
@@ -1270,6 +1684,21 @@ resource "google_storage_bucket" "tfer--test-calitp-ntd-xlsx-products-clean" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-ntd-xlsx-products-raw" {
@@ -1282,6 +1711,21 @@ resource "google_storage_bucket" "tfer--test-calitp-ntd-xlsx-products-raw" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-parsed" {
@@ -1294,6 +1738,21 @@ resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-parsed" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-raw" {
@@ -1306,6 +1765,21 @@ resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-raw" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-publish" {
@@ -1318,6 +1792,21 @@ resource "google_storage_bucket" "tfer--test-calitp-publish" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-publish-data-analysis" {
@@ -1330,6 +1819,21 @@ resource "google_storage_bucket" "tfer--test-calitp-publish-data-analysis" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-reports-data" {
@@ -1342,6 +1846,21 @@ resource "google_storage_bucket" "tfer--test-calitp-reports-data" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-sentry" {
@@ -1354,6 +1873,21 @@ resource "google_storage_bucket" "tfer--test-calitp-sentry" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-state-geoportal-scrape" {
@@ -1366,6 +1900,21 @@ resource "google_storage_bucket" "tfer--test-calitp-state-geoportal-scrape" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-rt-parsed" {
@@ -1378,6 +1927,21 @@ resource "google_storage_bucket" "tfer--test-rt-parsed" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--test-rt-validations" {
@@ -1390,6 +1954,21 @@ resource "google_storage_bucket" "tfer--test-rt-validations" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com" {
