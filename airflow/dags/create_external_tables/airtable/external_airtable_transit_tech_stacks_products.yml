@@ -67,10 +67,10 @@ schema_fields:
     type: STRING
     mode: REPEATED
   - name: start_date
-    type: STRING
+    type: DATE
     mode: NULLABLE
   - name: end_date
-    type: STRING
+    type: DATE
     mode: NULLABLE
   - name: status
     type: STRING
