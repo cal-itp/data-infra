@@ -4,3 +4,4 @@ terraform.tfstate.backup
 terraform.tfstate
 /.terraform.lock.hcl
 /provider.tf
+*.ans
