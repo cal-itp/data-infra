@@ -1501,3 +1501,17 @@ resource "google_storage_bucket" "tfer--us-west2-calitp-airflow2-pr-88ca8ec6-buc
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "false"
 }
+
+resource "google_storage_bucket" "calitp-gtfs" {
+  location                    = "US-WEST2"
+  name                        = "calitp-gtfs"
+  project                     = "cal-itp-data-infra"
+  uniform_bucket_level_access = "true"
+  storage_class               = "STANDARD"
+  force_destroy               = "true"
+
+  website {
+    main_page_suffix = "index.html"
+    not_found_page   = "404.html"
+  }
+}
