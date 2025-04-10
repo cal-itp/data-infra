@@ -166,12 +166,6 @@ resource "google_storage_bucket_iam_member" "tfer--calitp-gtfs-schedule-validati
   role   = "roles/storage.legacyObjectOwner"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--calitp-jamesl-gcp-components-tfstate" {
-  bucket = "b/calitp-jamesl-gcp-components-tfstate"
-  member = "projectViewer:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectReader"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--calitp-map-tiles" {
   bucket = "b/calitp-map-tiles"
   member = "projectEditor:cal-itp-data-infra"
@@ -254,18 +248,6 @@ resource "google_storage_bucket_iam_member" "tfer--calitp-state-highway-network-
   bucket = "b/calitp-state-highway-network-stops"
   member = "projectViewer:cal-itp-data-infra"
   role   = "roles/storage.legacyObjectReader"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--cold-storage-outputs-gtfs-data-test" {
-  bucket = "b/cold-storage-outputs-gtfs-data-test"
-  member = "projectViewer:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketReader"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--cold-storage-outputs-gtfs-data-test-charlie-test" {
-  bucket = "b/cold-storage-outputs-gtfs-data-test-charlie-test"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketOwner"
 }
 
 resource "google_storage_bucket_iam_member" "tfer--dataproc-staging-us-west2-1005246706141-sfgmtgyp" {

@@ -110,10 +110,6 @@ resource "google_storage_bucket_acl" "tfer--calitp-gtfs-schedule-validation-hour
   bucket = "calitp-gtfs-schedule-validation-hourly"
 }
 
-resource "google_storage_bucket_acl" "tfer--calitp-jamesl-gcp-components-tfstate" {
-  bucket = "calitp-jamesl-gcp-components-tfstate"
-}
-
 resource "google_storage_bucket_acl" "tfer--calitp-map-tiles" {
   bucket = "calitp-map-tiles"
 }
@@ -168,14 +164,6 @@ resource "google_storage_bucket_acl" "tfer--calitp-state-geoportal-scrape" {
 
 resource "google_storage_bucket_acl" "tfer--calitp-state-highway-network-stops" {
   bucket = "calitp-state-highway-network-stops"
-}
-
-resource "google_storage_bucket_acl" "tfer--cold-storage-outputs-gtfs-data-test" {
-  bucket = "cold-storage-outputs-gtfs-data-test"
-}
-
-resource "google_storage_bucket_acl" "tfer--cold-storage-outputs-gtfs-data-test-charlie-test" {
-  bucket = "cold-storage-outputs-gtfs-data-test-charlie-test"
 }
 
 resource "google_storage_bucket_acl" "tfer--dataproc-staging-us-west2-1005246706141-sfgmtgyp" {

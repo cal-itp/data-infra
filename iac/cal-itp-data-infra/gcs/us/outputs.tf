@@ -110,10 +110,6 @@ output "google_storage_bucket_acl_tfer--calitp-gtfs-schedule-validation_id" {
   value = google_storage_bucket_acl.tfer--calitp-gtfs-schedule-validation.id
 }
 
-output "google_storage_bucket_acl_tfer--calitp-jamesl-gcp-components-tfstate_id" {
-  value = google_storage_bucket_acl.tfer--calitp-jamesl-gcp-components-tfstate.id
-}
-
 output "google_storage_bucket_acl_tfer--calitp-map-tiles_id" {
   value = google_storage_bucket_acl.tfer--calitp-map-tiles.id
 }
@@ -168,14 +164,6 @@ output "google_storage_bucket_acl_tfer--calitp-state-geoportal-scrape_id" {
 
 output "google_storage_bucket_acl_tfer--calitp-state-highway-network-stops_id" {
   value = google_storage_bucket_acl.tfer--calitp-state-highway-network-stops.id
-}
-
-output "google_storage_bucket_acl_tfer--cold-storage-outputs-gtfs-data-test-charlie-test_id" {
-  value = google_storage_bucket_acl.tfer--cold-storage-outputs-gtfs-data-test-charlie-test.id
-}
-
-output "google_storage_bucket_acl_tfer--cold-storage-outputs-gtfs-data-test_id" {
-  value = google_storage_bucket_acl.tfer--cold-storage-outputs-gtfs-data-test.id
 }
 
 output "google_storage_bucket_acl_tfer--dataproc-staging-us-west2-1005246706141-sfgmtgyp_id" {
@@ -518,10 +506,6 @@ output "google_storage_bucket_iam_binding_tfer--calitp-gtfs-schedule-validation_
   value = google_storage_bucket_iam_binding.tfer--calitp-gtfs-schedule-validation.id
 }
 
-output "google_storage_bucket_iam_binding_tfer--calitp-jamesl-gcp-components-tfstate_id" {
-  value = google_storage_bucket_iam_binding.tfer--calitp-jamesl-gcp-components-tfstate.id
-}
-
 output "google_storage_bucket_iam_binding_tfer--calitp-map-tiles_id" {
   value = google_storage_bucket_iam_binding.tfer--calitp-map-tiles.id
 }
@@ -576,14 +560,6 @@ output "google_storage_bucket_iam_binding_tfer--calitp-state-geoportal-scrape_id
 
 output "google_storage_bucket_iam_binding_tfer--calitp-state-highway-network-stops_id" {
   value = google_storage_bucket_iam_binding.tfer--calitp-state-highway-network-stops.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--cold-storage-outputs-gtfs-data-test-charlie-test_id" {
-  value = google_storage_bucket_iam_binding.tfer--cold-storage-outputs-gtfs-data-test-charlie-test.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--cold-storage-outputs-gtfs-data-test_id" {
-  value = google_storage_bucket_iam_binding.tfer--cold-storage-outputs-gtfs-data-test.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--dataproc-staging-us-west2-1005246706141-sfgmtgyp_id" {
@@ -926,10 +902,6 @@ output "google_storage_bucket_iam_member_tfer--calitp-gtfs-schedule-validation_i
   value = google_storage_bucket_iam_member.tfer--calitp-gtfs-schedule-validation.id
 }
 
-output "google_storage_bucket_iam_member_tfer--calitp-jamesl-gcp-components-tfstate_id" {
-  value = google_storage_bucket_iam_member.tfer--calitp-jamesl-gcp-components-tfstate.id
-}
-
 output "google_storage_bucket_iam_member_tfer--calitp-map-tiles_id" {
   value = google_storage_bucket_iam_member.tfer--calitp-map-tiles.id
 }
@@ -984,14 +956,6 @@ output "google_storage_bucket_iam_member_tfer--calitp-state-geoportal-scrape_id"
 
 output "google_storage_bucket_iam_member_tfer--calitp-state-highway-network-stops_id" {
   value = google_storage_bucket_iam_member.tfer--calitp-state-highway-network-stops.id
-}
-
-output "google_storage_bucket_iam_member_tfer--cold-storage-outputs-gtfs-data-test-charlie-test_id" {
-  value = google_storage_bucket_iam_member.tfer--cold-storage-outputs-gtfs-data-test-charlie-test.id
-}
-
-output "google_storage_bucket_iam_member_tfer--cold-storage-outputs-gtfs-data-test_id" {
-  value = google_storage_bucket_iam_member.tfer--cold-storage-outputs-gtfs-data-test.id
 }
 
 output "google_storage_bucket_iam_member_tfer--dataproc-staging-us-west2-1005246706141-sfgmtgyp_id" {
@@ -1334,10 +1298,6 @@ output "google_storage_bucket_iam_policy_tfer--calitp-gtfs-schedule-validation_i
   value = google_storage_bucket_iam_policy.tfer--calitp-gtfs-schedule-validation.id
 }
 
-output "google_storage_bucket_iam_policy_tfer--calitp-jamesl-gcp-components-tfstate_id" {
-  value = google_storage_bucket_iam_policy.tfer--calitp-jamesl-gcp-components-tfstate.id
-}
-
 output "google_storage_bucket_iam_policy_tfer--calitp-map-tiles_id" {
   value = google_storage_bucket_iam_policy.tfer--calitp-map-tiles.id
 }
@@ -1392,14 +1352,6 @@ output "google_storage_bucket_iam_policy_tfer--calitp-state-geoportal-scrape_id"
 
 output "google_storage_bucket_iam_policy_tfer--calitp-state-highway-network-stops_id" {
   value = google_storage_bucket_iam_policy.tfer--calitp-state-highway-network-stops.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--cold-storage-outputs-gtfs-data-test-charlie-test_id" {
-  value = google_storage_bucket_iam_policy.tfer--cold-storage-outputs-gtfs-data-test-charlie-test.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--cold-storage-outputs-gtfs-data-test_id" {
-  value = google_storage_bucket_iam_policy.tfer--cold-storage-outputs-gtfs-data-test.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--dataproc-staging-us-west2-1005246706141-sfgmtgyp_id" {
@@ -1854,14 +1806,6 @@ output "google_storage_bucket_tfer--calitp-gtfs-schedule-validation_self_link" {
   value = google_storage_bucket.tfer--calitp-gtfs-schedule-validation.self_link
 }
 
-output "google_storage_bucket_tfer--calitp-jamesl-gcp-components-tfstate_name" {
-  value = google_storage_bucket.tfer--calitp-jamesl-gcp-components-tfstate.name
-}
-
-output "google_storage_bucket_tfer--calitp-jamesl-gcp-components-tfstate_self_link" {
-  value = google_storage_bucket.tfer--calitp-jamesl-gcp-components-tfstate.self_link
-}
-
 output "google_storage_bucket_tfer--calitp-map-tiles_name" {
   value = google_storage_bucket.tfer--calitp-map-tiles.name
 }
@@ -1972,22 +1916,6 @@ output "google_storage_bucket_tfer--calitp-state-highway-network-stops_name" {
 
 output "google_storage_bucket_tfer--calitp-state-highway-network-stops_self_link" {
   value = google_storage_bucket.tfer--calitp-state-highway-network-stops.self_link
-}
-
-output "google_storage_bucket_tfer--cold-storage-outputs-gtfs-data-test-charlie-test_name" {
-  value = google_storage_bucket.tfer--cold-storage-outputs-gtfs-data-test-charlie-test.name
-}
-
-output "google_storage_bucket_tfer--cold-storage-outputs-gtfs-data-test-charlie-test_self_link" {
-  value = google_storage_bucket.tfer--cold-storage-outputs-gtfs-data-test-charlie-test.self_link
-}
-
-output "google_storage_bucket_tfer--cold-storage-outputs-gtfs-data-test_name" {
-  value = google_storage_bucket.tfer--cold-storage-outputs-gtfs-data-test.name
-}
-
-output "google_storage_bucket_tfer--cold-storage-outputs-gtfs-data-test_self_link" {
-  value = google_storage_bucket.tfer--cold-storage-outputs-gtfs-data-test.self_link
 }
 
 output "google_storage_bucket_tfer--dataproc-staging-us-west2-1005246706141-sfgmtgyp_name" {
@@ -2562,10 +2490,6 @@ output "google_storage_default_object_acl_tfer--calitp-gtfs-schedule-validation_
   value = google_storage_default_object_acl.tfer--calitp-gtfs-schedule-validation.id
 }
 
-output "google_storage_default_object_acl_tfer--calitp-jamesl-gcp-components-tfstate_id" {
-  value = google_storage_default_object_acl.tfer--calitp-jamesl-gcp-components-tfstate.id
-}
-
 output "google_storage_default_object_acl_tfer--calitp-map-tiles_id" {
   value = google_storage_default_object_acl.tfer--calitp-map-tiles.id
 }
@@ -2620,14 +2544,6 @@ output "google_storage_default_object_acl_tfer--calitp-state-geoportal-scrape_id
 
 output "google_storage_default_object_acl_tfer--calitp-state-highway-network-stops_id" {
   value = google_storage_default_object_acl.tfer--calitp-state-highway-network-stops.id
-}
-
-output "google_storage_default_object_acl_tfer--cold-storage-outputs-gtfs-data-test-charlie-test_id" {
-  value = google_storage_default_object_acl.tfer--cold-storage-outputs-gtfs-data-test-charlie-test.id
-}
-
-output "google_storage_default_object_acl_tfer--cold-storage-outputs-gtfs-data-test_id" {
-  value = google_storage_default_object_acl.tfer--cold-storage-outputs-gtfs-data-test.id
 }
 
 output "google_storage_default_object_acl_tfer--dataproc-staging-us-west2-1005246706141-sfgmtgyp_id" {
