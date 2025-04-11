@@ -220,19 +220,22 @@ resource "google_project_iam_member" "tfer--roles-002F-storage-002E-objectViewer
   role    = "roles/storage.objectViewer"
 }
 
-resource "google_project_iam_member" "tfer--terraform-membership" {
+resource "google_project_iam_member" "github-actions-terraform" {
   for_each = toset([
     "roles/resourcemanager.projectIamAdmin",
     "roles/editor",
     "roles/storage.admin"
   ])
   role    = each.key
-  member  = "serviceAccount:${google_service_account.tfer--terraform.email}"
+  member  = "serviceAccount:${google_service_account.github-actions-terraform.email}"
   project = "cal-itp-data-infra-staging"
 }
 
-resource "google_project_iam_member" "tfer--pytest-membership" {
-  member  = "serviceAccount:${google_service_account.tfer--pytest.email}"
+resource "google_project_iam_member" "github-actions-service-account" {
+  for_each = toset([
+    "roles/storage.admin"
+  ])
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.github-actions-service-account.email}"
   project = "cal-itp-data-infra-staging"
-  role    = "roles/storage.objectViewer"
 }

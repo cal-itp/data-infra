@@ -166,10 +166,6 @@ output "google_service_account_tfer--111881979116192190399_id" {
   value = google_service_account.tfer--111881979116192190399.id
 }
 
-output "google_service_account_tfer--terraform_email" {
-  value = google_service_account.tfer--terraform.email
-}
-
 output "google_iam_workload_identity_pool_provider_github-actions--provider_name" {
   value = google_iam_workload_identity_pool_provider.github-actions--provider.name
 }

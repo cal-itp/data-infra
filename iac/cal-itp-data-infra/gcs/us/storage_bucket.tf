@@ -2058,3 +2058,19 @@ resource "google_storage_bucket" "calitp-gtfs" {
     not_found_page   = "404.html"
   }
 }
+
+resource "google_storage_bucket" "calitp-dbt-docs" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-dbt-docs"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  website {
+    main_page_suffix = "index.html"
+  }
+}

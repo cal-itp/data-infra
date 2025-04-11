@@ -538,13 +538,26 @@ resource "google_project_iam_member" "tfer--roles-002F-viewerserviceAccount-003A
   role    = "roles/viewer"
 }
 
-resource "google_project_iam_member" "tfer--terraform-membership" {
+resource "google_project_iam_member" "github-actions-terraform" {
   for_each = toset([
     "roles/resourcemanager.projectIamAdmin",
     "roles/editor",
     "roles/storage.admin"
   ])
   role    = each.key
-  member  = "serviceAccount:${google_service_account.tfer--terraform.email}"
+  member  = "serviceAccount:${google_service_account.github-actions-terraform.email}"
+  project = "cal-itp-data-infra"
+}
+
+resource "google_project_iam_member" "github-actions-service-account" {
+  for_each = toset([
+    "roles/bigquery.dataViewer",
+    "roles/bigquery.jobUser",
+    "roles/bigquery.readSessionUser",
+    "roles/composer.admin",
+    "roles/storage.admin"
+  ])
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.github-actions-service-account.email}"
   project = "cal-itp-data-infra"
 }

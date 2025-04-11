@@ -26,7 +26,7 @@ resource "google_service_account" "tfer--111881979116192190399" {
   project      = "cal-itp-data-infra-staging"
 }
 
-resource "google_service_account" "tfer--terraform" {
+resource "google_service_account" "github-actions-terraform" {
   account_id   = "github-actions-terraform"
   description  = "Service account for Github Actions to run Terraform"
   disabled     = "false"
@@ -34,10 +34,10 @@ resource "google_service_account" "tfer--terraform" {
   project      = "cal-itp-data-infra-staging"
 }
 
-resource "google_service_account" "tfer--pytest" {
-  account_id   = "github-actions-pytest"
-  description  = "Service account for Github Actions to run tests"
+resource "google_service_account" "github-actions-service-account" {
+  account_id   = "github-actions-service-account"
+  description  = "Service account for general Github Actions"
   disabled     = "false"
-  display_name = "pytest"
+  display_name = "github_actions_services_account"
   project      = "cal-itp-data-infra-staging"
 }
