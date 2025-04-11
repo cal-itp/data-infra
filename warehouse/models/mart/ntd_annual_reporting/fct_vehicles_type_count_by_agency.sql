@@ -3,9 +3,25 @@ WITH staging_vehicles_type_count_by_agency AS (
     FROM {{ ref('stg_ntd__vehicles_type_count_by_agency') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_vehicles_type_count_by_agency.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_vehicles_type_count_by_agency
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_vehicles_type_count_by_agency AS (
     SELECT *
-    FROM staging_vehicles_type_count_by_agency
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -105,6 +121,7 @@ SELECT
     vintage_historic_trolley,
     vintage_historic_trolley_1,
     vintage_historic_trolley_2,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_vehicles_type_count_by_agency

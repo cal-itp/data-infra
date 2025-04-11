@@ -3,9 +3,25 @@ WITH staging_stations_and_facilities_by_agency_and_facility_type AS (
     FROM {{ ref('stg_ntd__stations_and_facilities_by_agency_and_facility_type') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_stations_and_facilities_by_agency_and_facility_type.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_stations_and_facilities_by_agency_and_facility_type
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_stations_and_facilities_by_agency_and_facility_type AS (
     SELECT *
-    FROM staging_stations_and_facilities_by_agency_and_facility_type
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -46,6 +62,7 @@ SELECT
     vehicle_fueling_facility,
     vehicle_testing_facility,
     vehicle_washing_facility,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_stations_and_facilities_by_agency_and_facility_type

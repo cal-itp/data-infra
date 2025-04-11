@@ -3,9 +3,25 @@ WITH staging_breakdowns_by_agency AS (
     FROM {{ ref('stg_ntd__breakdowns_by_agency') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_breakdowns_by_agency.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_breakdowns_by_agency
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
 fct_breakdowns_by_agency AS (
     SELECT *
-    FROM staging_breakdowns_by_agency
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -33,6 +49,7 @@ SELECT
     sum_train_revenue_miles,
     sum_vehicle_passenger_car_miles,
     sum_vehicle_passenger_car_revenue,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_breakdowns_by_agency

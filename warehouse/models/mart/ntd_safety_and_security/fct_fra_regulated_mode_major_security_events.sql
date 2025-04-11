@@ -1,6 +1,27 @@
 WITH fct_fra_regulated_mode_major_security_events AS (
     SELECT *
     FROM {{ ref('stg_ntd__fra_regulated_mode_major_security_events') }}
+),
+
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district
+    FROM {{ ref('dim_organizations') }}
+    WHERE _is_current
+),
+
+enrich_with_caltrans_district AS (
+    SELECT
+        staging_fra_regulated_mode_major_security_events.*,
+        current_dim_organizations.caltrans_district
+    FROM staging_fra_regulated_mode_major_security_events
+    LEFT JOIN current_dim_organizations USING (ntd_id)
+),
+
+fct_fra_regulated_mode_major_security_events AS (
+    SELECT *
+    FROM enrich_with_caltrans_district
 )
 
 SELECT
@@ -93,6 +114,7 @@ SELECT
     pedestrian_not_in_crosswalk,
     number_of_derailed_cars,
     ntd_id,
+    caltrans_district,
     dt,
     execution_ts
 FROM fct_fra_regulated_mode_major_security_events
