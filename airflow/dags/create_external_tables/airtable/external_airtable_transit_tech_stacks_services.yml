@@ -21,3 +21,6 @@ schema_fields:
   - name: name
     type: STRING
     mode: NULLABLE
+  - name: contracts
+    type: STRING
+    mode: REPEATED
