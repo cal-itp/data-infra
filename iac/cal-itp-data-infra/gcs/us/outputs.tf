@@ -2374,6 +2374,10 @@ output "google_storage_bucket_calitp-gtfs_name" {
   value = google_storage_bucket.calitp-gtfs.name
 }
 
+output "google_storage_bucket_calitp-dbt-docs_name" {
+  value = google_storage_bucket.calitp-dbt-docs.name
+}
+
 output "google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-88ca8ec6-bucket_self_link" {
   value = google_storage_bucket.tfer--us-west2-calitp-airflow2-pr-88ca8ec6-bucket.self_link
 }

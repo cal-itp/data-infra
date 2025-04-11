@@ -1,20 +1,6 @@
-resource "google_compute_backend_bucket" "calitp-gtfs" {
-  name        = "calitp-gtfs-backend-bucket"
-  bucket_name = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs_name
-  enable_cdn  = true
-  cdn_policy {
-    cache_mode        = "CACHE_ALL_STATIC"
-    client_ttl        = 3600
-    default_ttl       = 3600
-    max_ttl           = 86400
-    negative_caching  = true
-    serve_while_stale = 86400
-  }
-}
-
-resource "google_compute_backend_bucket" "calitp-dbt-docs" {
-  name        = "calitp-dbt-docs-backend-bucket"
-  bucket_name = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-dbt-docs_name
+resource "google_compute_backend_bucket" "calitp-staging-dbt-docs" {
+  name        = "calitp-staging-dbt-docs-backend-bucket"
+  bucket_name = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-dbt-docs_name
   enable_cdn  = true
   cdn_policy {
     cache_mode        = "CACHE_ALL_STATIC"
@@ -28,7 +14,7 @@ resource "google_compute_backend_bucket" "calitp-dbt-docs" {
 
 resource "google_compute_url_map" "default" {
   name            = "http-lb"
-  default_service = google_compute_backend_bucket.calitp-gtfs.id
+  default_service = google_compute_backend_bucket.calitp-staging-dbt-docs.id
 }
 
 resource "google_compute_target_http_proxy" "default" {

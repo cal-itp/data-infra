@@ -248,10 +248,18 @@ resource "google_service_account" "tfer--118350215382382143206" {
   project      = "cal-itp-data-infra"
 }
 
-resource "google_service_account" "tfer--terraform" {
+resource "google_service_account" "github-actions-terraform" {
   account_id   = "github-actions-terraform"
   description  = "Service account for Github Actions to run Terraform"
   disabled     = "false"
-  display_name = "Terraform"
+  display_name = "github-actions-terraform"
+  project      = "cal-itp-data-infra"
+}
+
+resource "google_service_account" "github-actions-service-account" {
+  account_id   = "github-actions-service-account"
+  description  = "Service account for general Github Actions tasks"
+  disabled     = "false"
+  display_name = "github-actions"
   project      = "cal-itp-data-infra"
 }

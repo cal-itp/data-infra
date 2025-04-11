@@ -33,3 +33,9 @@ resource "google_storage_bucket_iam_member" "tfer--calitp-staging-gcp-components
   member = "projectViewer:cal-itp-data-infra-staging"
   role   = "roles/storage.legacyBucketReader"
 }
+
+resource "google_storage_bucket_iam_member" "calitp-staging-dbt-docs" {
+  bucket = google_storage_bucket.calitp-staging-dbt-docs.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}

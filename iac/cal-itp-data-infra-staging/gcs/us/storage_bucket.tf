@@ -104,3 +104,31 @@ resource "google_storage_bucket" "tfer--calitp-staging-gcp-components-tfstate" {
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
 }
+
+resource "google_storage_bucket" "calitp-staging-dbt-artifacts" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-dbt-artifacts"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-dbt-docs" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-dbt-docs"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  website {
+    main_page_suffix = "index.html"
+  }
+}
