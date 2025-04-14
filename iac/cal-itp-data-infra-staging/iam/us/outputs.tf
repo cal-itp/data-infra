@@ -169,3 +169,11 @@ output "google_service_account_tfer--111881979116192190399_id" {
 output "google_iam_workload_identity_pool_provider_github-actions--provider_name" {
   value = google_iam_workload_identity_pool_provider.github-actions--provider.name
 }
+
+output "google_service_account_composer-service-account_id" {
+  value = google_service_account.composer-service-account.id
+}
+
+output "google_service_account_composer-service-account_email" {
+  value = google_service_account.composer-service-account.email
+}
