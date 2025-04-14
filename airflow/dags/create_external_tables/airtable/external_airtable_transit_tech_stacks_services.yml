@@ -14,13 +14,3 @@ hive_options:
   mode: AUTO
   require_partition_filter: false
   source_uri_prefix: "transit_technology_stacks__services/"
-schema_fields:
-  - name: id
-    type: STRING
-    mode: NULLABLE
-  - name: name
-    type: STRING
-    mode: NULLABLE
-  - name: contracts
-    type: STRING
-    mode: REPEATED
