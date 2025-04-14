@@ -15,3 +15,17 @@ resource "google_project_iam_custom_role" "tfer--projects-002F-cal-itp-data-infr
   stage       = "ALPHA"
   title       = "Data Analyst"
 }
+
+resource "google_project_iam_custom_role" "github_publish_website_action_role" {
+  role_id     = "github_action_role"
+  title       = "GitHub Publish Website to GCS Bucket Action Role"
+  description = "Role for GitHub Actions to deploy to GCS"
+  permissions = [
+    "storage.objects.create",
+    "storage.objects.delete",
+    "storage.objects.get",
+    "storage.objects.list",
+    "storage.buckets.get"
+  ]
+  project     = "cal-itp-data-infra"
+}

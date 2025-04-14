@@ -40,3 +40,14 @@ resource "google_service_account_iam_member" "github-actions--github-actions-ser
   role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions--pool.name}/attribute.repository/${local.github_repository_name}"
 }
+
+resource "google_service_account" "github_action_sa" {
+  account_id   = "github-action-sa"
+  display_name = "GitHub Action Service Account"
+}
+
+resource "google_project_iam_member" "github_action_sa_binding" {
+  project = "cal-itp-data-infra"
+  role    = "roles/google_project_iam_custom_role.github_action_role.name"
+  member  = "serviceAccount:${google_service_account.github_action_sa.email}"
+}

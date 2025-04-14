@@ -509,3 +509,7 @@ output "google_service_account_tfer--118350215382382143206_id" {
 output "google_iam_workload_identity_pool_provider_github-actions--provider_name" {
   value = google_iam_workload_identity_pool_provider.github-actions--provider.name
 }
+
+output "service_account_email" {
+  value = google_service_account.github_action_sa.email
+}
