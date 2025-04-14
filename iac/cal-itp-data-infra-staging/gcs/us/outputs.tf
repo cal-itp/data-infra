@@ -122,6 +122,10 @@ output "google_storage_bucket_calitp-staging-dbt-docs_name" {
   value = google_storage_bucket.calitp-staging-dbt-docs.name
 }
 
+output "google_storage_bucket_calitp-staging-composer_name" {
+  value = google_storage_bucket.calitp-staging-composer.name
+}
+
 output "google_storage_default_object_acl_tfer--calitp-staging-data-analyses-portfolio-draft_id" {
   value = google_storage_default_object_acl.tfer--calitp-staging-data-analyses-portfolio-draft.id
 }

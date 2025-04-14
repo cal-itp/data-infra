@@ -173,3 +173,7 @@ output "google_iam_workload_identity_pool_provider_github-actions--provider_name
 output "google_service_account_composer-service-account_id" {
   value = google_service_account.composer-service-account.id
 }
+
+output "google_service_account_composer-service-account_email" {
+  value = google_service_account.composer-service-account.email
+}

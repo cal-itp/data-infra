@@ -36,6 +36,12 @@ resource "google_storage_bucket_iam_member" "tfer--calitp-staging-gcp-components
 
 resource "google_storage_bucket_iam_member" "calitp-staging-dbt-docs" {
   bucket = google_storage_bucket.calitp-staging-dbt-docs.name
-  role   = "roles/storage.objectViewer"
   member = "allUsers"
+  role   = "roles/storage.objectViewer"
+}
+
+resource "google_storage_bucket_iam_member" "calitp-staging-composer" {
+  bucket = google_storage_bucket.calitp-staging-composer.name
+  member = "projectEditor:cal-itp-data-infra"
+  role   = "roles/storage.legacyBucketOwner"
 }
