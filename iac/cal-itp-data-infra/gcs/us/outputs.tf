@@ -138,8 +138,16 @@ output "google_storage_bucket_acl_tfer--calitp-payments-littlepay-parsed_id" {
   value = google_storage_bucket_acl.tfer--calitp-payments-littlepay-parsed.id
 }
 
+output "google_storage_bucket_acl_tfer--calitp-payments-littlepay-parsed-v3_id" {
+  value = google_storage_bucket_acl.tfer--calitp-payments-littlepay-parsed-v3.id
+}
+
 output "google_storage_bucket_acl_tfer--calitp-payments-littlepay-raw_id" {
   value = google_storage_bucket_acl.tfer--calitp-payments-littlepay-raw.id
+}
+
+output "google_storage_bucket_acl_tfer--calitp-payments-littlepay-raw-v3_id" {
+  value = google_storage_bucket_acl.tfer--calitp-payments-littlepay-raw-v3.id
 }
 
 output "google_storage_bucket_acl_tfer--calitp-prod-gcp-components-tfstate_id" {
@@ -346,8 +354,16 @@ output "google_storage_bucket_acl_tfer--test-calitp-payments-littlepay-parsed_id
   value = google_storage_bucket_acl.tfer--test-calitp-payments-littlepay-parsed.id
 }
 
+output "google_storage_bucket_acl_tfer--test-calitp-payments-littlepay-parsed-v3_id" {
+  value = google_storage_bucket_acl.tfer--test-calitp-payments-littlepay-parsed-v3.id
+}
+
 output "google_storage_bucket_acl_tfer--test-calitp-payments-littlepay-raw_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-payments-littlepay-raw.id
+}
+
+output "google_storage_bucket_acl_tfer--test-calitp-payments-littlepay-raw-v3_id" {
+  value = google_storage_bucket_acl.tfer--test-calitp-payments-littlepay-raw-v3.id
 }
 
 output "google_storage_bucket_acl_tfer--test-calitp-publish-data-analysis_id" {
@@ -534,8 +550,16 @@ output "google_storage_bucket_iam_binding_tfer--calitp-payments-littlepay-parsed
   value = google_storage_bucket_iam_binding.tfer--calitp-payments-littlepay-parsed.id
 }
 
+output "google_storage_bucket_iam_binding_tfer--calitp-payments-littlepay-parsed-v3_id" {
+  value = google_storage_bucket_iam_binding.tfer--calitp-payments-littlepay-parsed-v3.id
+}
+
 output "google_storage_bucket_iam_binding_tfer--calitp-payments-littlepay-raw_id" {
   value = google_storage_bucket_iam_binding.tfer--calitp-payments-littlepay-raw.id
+}
+
+output "google_storage_bucket_iam_binding_tfer--calitp-payments-littlepay-raw-v3_id" {
+  value = google_storage_bucket_iam_binding.tfer--calitp-payments-littlepay-raw-v3.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--calitp-prod-gcp-components-tfstate_id" {
@@ -742,8 +766,16 @@ output "google_storage_bucket_iam_binding_tfer--test-calitp-payments-littlepay-p
   value = google_storage_bucket_iam_binding.tfer--test-calitp-payments-littlepay-parsed.id
 }
 
+output "google_storage_bucket_iam_binding_tfer--test-calitp-payments-littlepay-parsed-v3_id" {
+  value = google_storage_bucket_iam_binding.tfer--test-calitp-payments-littlepay-parsed-v3.id
+}
+
 output "google_storage_bucket_iam_binding_tfer--test-calitp-payments-littlepay-raw_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-payments-littlepay-raw.id
+}
+
+output "google_storage_bucket_iam_binding_tfer--test-calitp-payments-littlepay-raw-v3_id" {
+  value = google_storage_bucket_iam_binding.tfer--test-calitp-payments-littlepay-raw-v3.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-publish-data-analysis_id" {
@@ -930,8 +962,16 @@ output "google_storage_bucket_iam_member_tfer--calitp-payments-littlepay-parsed_
   value = google_storage_bucket_iam_member.tfer--calitp-payments-littlepay-parsed.id
 }
 
+output "google_storage_bucket_iam_member_tfer--calitp-payments-littlepay-parsed-v3_id" {
+  value = google_storage_bucket_iam_member.tfer--calitp-payments-littlepay-parsed-v3.id
+}
+
 output "google_storage_bucket_iam_member_tfer--calitp-payments-littlepay-raw_id" {
   value = google_storage_bucket_iam_member.tfer--calitp-payments-littlepay-raw.id
+}
+
+output "google_storage_bucket_iam_member_tfer--calitp-payments-littlepay-raw-v3_id" {
+  value = google_storage_bucket_iam_member.tfer--calitp-payments-littlepay-raw-v3.id
 }
 
 output "google_storage_bucket_iam_member_tfer--calitp-prod-gcp-components-tfstate_id" {
@@ -1138,8 +1178,16 @@ output "google_storage_bucket_iam_member_tfer--test-calitp-payments-littlepay-pa
   value = google_storage_bucket_iam_member.tfer--test-calitp-payments-littlepay-parsed.id
 }
 
+output "google_storage_bucket_iam_member_tfer--test-calitp-payments-littlepay-parsed-v3_id" {
+  value = google_storage_bucket_iam_member.tfer--test-calitp-payments-littlepay-parsed-v3.id
+}
+
 output "google_storage_bucket_iam_member_tfer--test-calitp-payments-littlepay-raw_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-payments-littlepay-raw.id
+}
+
+output "google_storage_bucket_iam_member_tfer--test-calitp-payments-littlepay-raw-v3_id" {
+  value = google_storage_bucket_iam_member.tfer--test-calitp-payments-littlepay-raw-v3.id
 }
 
 output "google_storage_bucket_iam_member_tfer--test-calitp-publish-data-analysis_id" {
@@ -1326,8 +1374,16 @@ output "google_storage_bucket_iam_policy_tfer--calitp-payments-littlepay-parsed_
   value = google_storage_bucket_iam_policy.tfer--calitp-payments-littlepay-parsed.id
 }
 
+output "google_storage_bucket_iam_policy_tfer--calitp-payments-littlepay-parsed-v3_id" {
+  value = google_storage_bucket_iam_policy.tfer--calitp-payments-littlepay-parsed-v3.id
+}
+
 output "google_storage_bucket_iam_policy_tfer--calitp-payments-littlepay-raw_id" {
   value = google_storage_bucket_iam_policy.tfer--calitp-payments-littlepay-raw.id
+}
+
+output "google_storage_bucket_iam_policy_tfer--calitp-payments-littlepay-raw-v3_id" {
+  value = google_storage_bucket_iam_policy.tfer--calitp-payments-littlepay-raw-v3.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--calitp-prod-gcp-components-tfstate_id" {
@@ -1534,8 +1590,16 @@ output "google_storage_bucket_iam_policy_tfer--test-calitp-payments-littlepay-pa
   value = google_storage_bucket_iam_policy.tfer--test-calitp-payments-littlepay-parsed.id
 }
 
+output "google_storage_bucket_iam_policy_tfer--test-calitp-payments-littlepay-parsed-v3_id" {
+  value = google_storage_bucket_iam_policy.tfer--test-calitp-payments-littlepay-parsed-v3.id
+}
+
 output "google_storage_bucket_iam_policy_tfer--test-calitp-payments-littlepay-raw_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-payments-littlepay-raw.id
+}
+
+output "google_storage_bucket_iam_policy_tfer--test-calitp-payments-littlepay-raw-v3_id" {
+  value = google_storage_bucket_iam_policy.tfer--test-calitp-payments-littlepay-raw-v3.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-publish-data-analysis_id" {
@@ -1858,16 +1922,32 @@ output "google_storage_bucket_tfer--calitp-payments-littlepay-parsed_name" {
   value = google_storage_bucket.tfer--calitp-payments-littlepay-parsed.name
 }
 
+output "google_storage_bucket_tfer--calitp-payments-littlepay-parsed-v3_name" {
+  value = google_storage_bucket.tfer--calitp-payments-littlepay-parsed-v3.name
+}
+
 output "google_storage_bucket_tfer--calitp-payments-littlepay-parsed_self_link" {
   value = google_storage_bucket.tfer--calitp-payments-littlepay-parsed.self_link
+}
+
+output "google_storage_bucket_tfer--calitp-payments-littlepay-parsed-v3_self_link" {
+  value = google_storage_bucket.tfer--calitp-payments-littlepay-parsed-v3.self_link
 }
 
 output "google_storage_bucket_tfer--calitp-payments-littlepay-raw_name" {
   value = google_storage_bucket.tfer--calitp-payments-littlepay-raw.name
 }
 
+output "google_storage_bucket_tfer--calitp-payments-littlepay-raw-v3_name" {
+  value = google_storage_bucket.tfer--calitp-payments-littlepay-raw-v3.name
+}
+
 output "google_storage_bucket_tfer--calitp-payments-littlepay-raw_self_link" {
   value = google_storage_bucket.tfer--calitp-payments-littlepay-raw.self_link
+}
+
+output "google_storage_bucket_tfer--calitp-payments-littlepay-raw-v3_self_link" {
+  value = google_storage_bucket.tfer--calitp-payments-littlepay-raw-v3.self_link
 }
 
 output "google_storage_bucket_tfer--calitp-prod-gcp-components-tfstate_name" {
@@ -2274,16 +2354,32 @@ output "google_storage_bucket_tfer--test-calitp-payments-littlepay-parsed_name" 
   value = google_storage_bucket.tfer--test-calitp-payments-littlepay-parsed.name
 }
 
+output "google_storage_bucket_tfer--test-calitp-payments-littlepay-parsed-v3_name" {
+  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-parsed-v3.name
+}
+
 output "google_storage_bucket_tfer--test-calitp-payments-littlepay-parsed_self_link" {
   value = google_storage_bucket.tfer--test-calitp-payments-littlepay-parsed.self_link
+}
+
+output "google_storage_bucket_tfer--test-calitp-payments-littlepay-parsed-v3_self_link" {
+  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-parsed-v3.self_link
 }
 
 output "google_storage_bucket_tfer--test-calitp-payments-littlepay-raw_name" {
   value = google_storage_bucket.tfer--test-calitp-payments-littlepay-raw.name
 }
 
+output "google_storage_bucket_tfer--test-calitp-payments-littlepay-raw-v3_name" {
+  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-raw-v3.name
+}
+
 output "google_storage_bucket_tfer--test-calitp-payments-littlepay-raw_self_link" {
   value = google_storage_bucket.tfer--test-calitp-payments-littlepay-raw.self_link
+}
+
+output "google_storage_bucket_tfer--test-calitp-payments-littlepay-raw-v3_self_link" {
+  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-raw-v3.self_link
 }
 
 output "google_storage_bucket_tfer--test-calitp-publish-data-analysis_name" {
@@ -2522,8 +2618,16 @@ output "google_storage_default_object_acl_tfer--calitp-payments-littlepay-parsed
   value = google_storage_default_object_acl.tfer--calitp-payments-littlepay-parsed.id
 }
 
+output "google_storage_default_object_acl_tfer--calitp-payments-littlepay-parsed-v3_id" {
+  value = google_storage_default_object_acl.tfer--calitp-payments-littlepay-parsed-v3.id
+}
+
 output "google_storage_default_object_acl_tfer--calitp-payments-littlepay-raw_id" {
   value = google_storage_default_object_acl.tfer--calitp-payments-littlepay-raw.id
+}
+
+output "google_storage_default_object_acl_tfer--calitp-payments-littlepay-raw-v3_id" {
+  value = google_storage_default_object_acl.tfer--calitp-payments-littlepay-raw-v3.id
 }
 
 output "google_storage_default_object_acl_tfer--calitp-prod-gcp-components-tfstate_id" {
@@ -2730,8 +2834,16 @@ output "google_storage_default_object_acl_tfer--test-calitp-payments-littlepay-p
   value = google_storage_default_object_acl.tfer--test-calitp-payments-littlepay-parsed.id
 }
 
+output "google_storage_default_object_acl_tfer--test-calitp-payments-littlepay-parsed-v3_id" {
+  value = google_storage_default_object_acl.tfer--test-calitp-payments-littlepay-parsed-v3.id
+}
+
 output "google_storage_default_object_acl_tfer--test-calitp-payments-littlepay-raw_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-payments-littlepay-raw.id
+}
+
+output "google_storage_default_object_acl_tfer--test-calitp-payments-littlepay-raw-v3_id" {
+  value = google_storage_default_object_acl.tfer--test-calitp-payments-littlepay-raw-v3.id
 }
 
 output "google_storage_default_object_acl_tfer--test-calitp-publish-data-analysis_id" {

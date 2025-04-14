@@ -138,8 +138,16 @@ resource "google_storage_bucket_acl" "tfer--calitp-payments-littlepay-parsed" {
   bucket = "calitp-payments-littlepay-parsed"
 }
 
+resource "google_storage_bucket_acl" "tfer--calitp-payments-littlepay-parsed-v3" {
+  bucket = "calitp-payments-littlepay-parsed-v3"
+}
+
 resource "google_storage_bucket_acl" "tfer--calitp-payments-littlepay-raw" {
   bucket = "calitp-payments-littlepay-raw"
+}
+
+resource "google_storage_bucket_acl" "tfer--calitp-payments-littlepay-raw-v3" {
+  bucket = "calitp-payments-littlepay-raw-v3"
 }
 
 resource "google_storage_bucket_acl" "tfer--calitp-prod-gcp-components-tfstate" {
@@ -346,8 +354,16 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-payments-littlepay-parse
   bucket = "test-calitp-payments-littlepay-parsed"
 }
 
+resource "google_storage_bucket_acl" "tfer--test-calitp-payments-littlepay-parsed-v3" {
+  bucket = "test-calitp-payments-littlepay-parsed-v3"
+}
+
 resource "google_storage_bucket_acl" "tfer--test-calitp-payments-littlepay-raw" {
   bucket = "test-calitp-payments-littlepay-raw"
+}
+
+resource "google_storage_bucket_acl" "tfer--test-calitp-payments-littlepay-raw-v3" {
+  bucket = "test-calitp-payments-littlepay-raw-v3"
 }
 
 resource "google_storage_bucket_acl" "tfer--test-calitp-publish" {

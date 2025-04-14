@@ -528,6 +528,18 @@ resource "google_storage_bucket" "tfer--calitp-payments-littlepay-parsed" {
   uniform_bucket_level_access = "true"
 }
 
+resource "google_storage_bucket" "tfer--calitp-payments-littlepay-parsed-v3" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "calitp-payments-littlepay-parsed-v3"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "enforced"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
 resource "google_storage_bucket" "tfer--calitp-payments-littlepay-raw" {
   default_event_based_hold = "false"
   force_destroy            = "false"
@@ -542,6 +554,18 @@ resource "google_storage_bucket" "tfer--calitp-payments-littlepay-raw" {
     retention_period = "31557600"
   }
 
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "tfer--calitp-payments-littlepay-raw-v3" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "calitp-payments-littlepay-raw-v3"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "enforced"
+  requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
 }
@@ -1755,11 +1779,65 @@ resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-parsed" {
   }
 }
 
+resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-parsed-v3" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "test-calitp-payments-littlepay-parsed-v3"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "enforced"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
+}
+
 resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-raw" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
   location                    = "US-WEST2"
   name                        = "test-calitp-payments-littlepay-raw"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "enforced"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
+}
+
+resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-raw-v3" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "test-calitp-payments-littlepay-raw-v3"
   project                     = "cal-itp-data-infra"
   public_access_prevention    = "enforced"
   requester_pays              = "false"
