@@ -27,5 +27,5 @@ resource "google_project_iam_custom_role" "github_publish_website_action_role" {
     "storage.objects.list",
     "storage.buckets.get"
   ]
-  project     = "cal-itp-data-infra"
+  project = "cal-itp-data-infra"
 }
