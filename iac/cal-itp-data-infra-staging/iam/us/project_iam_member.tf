@@ -239,3 +239,12 @@ resource "google_project_iam_member" "github-actions-service-account" {
   member  = "serviceAccount:${google_service_account.github-actions-service-account.email}"
   project = "cal-itp-data-infra-staging"
 }
+
+resource "google_project_iam_member" "custom_service_account" {
+  for_each = toset([
+    "roles/composer.worker"
+  ])
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.composer-service-account.email}"
+  project = "cal-itp-data-infra-staging"
+}
