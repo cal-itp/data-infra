@@ -42,6 +42,6 @@ resource "google_storage_bucket_iam_member" "calitp-staging-dbt-docs" {
 
 resource "google_storage_bucket_iam_member" "calitp-staging-composer" {
   bucket = google_storage_bucket.calitp-staging-composer.name
-  member = "projectEditor:cal-itp-data-infra"
+  member = "projectEditor:cal-itp-data-infra-staging"
   role   = "roles/storage.legacyBucketOwner"
 }
