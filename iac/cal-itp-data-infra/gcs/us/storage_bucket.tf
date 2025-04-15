@@ -634,8 +634,8 @@ resource "google_storage_bucket" "tfer--dataproc-temp-us-west2-1005246706141-x9m
   default_event_based_hold = "false"
   force_destroy            = "false"
 
-  labels = {
-    goog-dataproc-location = "us-west2"
+  lifecycle {
+    ignore_changes = [labels]
   }
 
   lifecycle_rule {
@@ -1984,17 +1984,8 @@ resource "google_storage_bucket" "tfer--us-002E-artifacts-002E-cal-itp-data-infr
 }
 
 resource "google_storage_bucket" "tfer--us-west2-calitp-airflow2-pr-171e4e47-bucket" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  labels = {
-    goog-composer-environment         = "calitp-airflow2-prod"
-    goog-composer-environment-deleted = "true"
-    goog-composer-environment-uuid    = "8731c3aa-7c40-4da7-9bf6-6aa1759ec2ec"
-    goog-composer-location            = "us-west2"
-    goog-composer-version             = "composer-1-20-6-airflow-2-4-3"
-  }
-
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
   location                    = "US-WEST2"
   name                        = "us-west2-calitp-airflow2-pr-171e4e47-bucket"
   project                     = "cal-itp-data-infra"
@@ -2002,20 +1993,15 @@ resource "google_storage_bucket" "tfer--us-west2-calitp-airflow2-pr-171e4e47-buc
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "false"
+
+  lifecycle {
+    ignore_changes = [labels]
+  }
 }
 
 resource "google_storage_bucket" "tfer--us-west2-calitp-airflow2-pr-31e41084-bucket" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  labels = {
-    goog-composer-environment         = "calitp-airflow2-prod-composer2"
-    goog-composer-environment-deleted = "true"
-    goog-composer-environment-uuid    = "43d3f4a4-235d-4f04-addc-6d86e6542b09"
-    goog-composer-location            = "us-west2"
-    goog-composer-version             = "composer-2-6-0-airflow-2-5-3"
-  }
-
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
   location                    = "US-WEST2"
   name                        = "us-west2-calitp-airflow2-pr-31e41084-bucket"
   project                     = "cal-itp-data-infra"
@@ -2023,19 +2009,14 @@ resource "google_storage_bucket" "tfer--us-west2-calitp-airflow2-pr-31e41084-buc
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "false"
+  lifecycle {
+    ignore_changes = [labels]
+  }
 }
 
 resource "google_storage_bucket" "tfer--us-west2-calitp-airflow2-pr-88ca8ec6-bucket" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  labels = {
-    goog-composer-environment      = "calitp-airflow2-prod-composer2-patch"
-    goog-composer-environment-uuid = "b2062ffc-a77d-44a2-8b4e-05f8f5bf4996"
-    goog-composer-location         = "us-west2"
-    goog-composer-version          = "composer-2-6-0-airflow-2-5-3"
-  }
-
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
   location                    = "US-WEST2"
   name                        = "us-west2-calitp-airflow2-pr-88ca8ec6-bucket"
   project                     = "cal-itp-data-infra"
@@ -2043,6 +2024,9 @@ resource "google_storage_bucket" "tfer--us-west2-calitp-airflow2-pr-88ca8ec6-buc
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "false"
+  lifecycle {
+    ignore_changes = [labels]
+  }
 }
 
 resource "google_storage_bucket" "calitp-gtfs" {
