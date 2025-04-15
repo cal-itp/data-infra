@@ -8,7 +8,6 @@ on:
 jobs:
   targets:
     name: Find targets
-
     runs-on: ubuntu-latest
 
     outputs:
@@ -37,9 +36,8 @@ jobs:
 
   staging:
     name: Staging
-
-    needs: targets
-
+    needs: [targets]
+    if: ${{ needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -85,9 +83,8 @@ jobs:
 
   production:
     name: Production
-
-    needs: targets
-
+    needs: [targets]
+    if: ${{ needs.targets.outputs.production != '[]' && needs.targets.outputs.production != '' }}
     runs-on: ubuntu-latest
 
     permissions:

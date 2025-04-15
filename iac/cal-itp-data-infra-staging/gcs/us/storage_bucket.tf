@@ -143,4 +143,8 @@ resource "google_storage_bucket" "calitp-staging-composer" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle {
+    ignore_changes = [labels]
+  }
 }
