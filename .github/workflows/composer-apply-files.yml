@@ -1,0 +1,27 @@
+name: Apply Airflow DAGs
+
+on:
+  pull_request:
+    paths:
+      - 'airflow/**'
+
+jobs:
+  staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra-staging
+          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+          service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+
+      - name: Terraform Apply
+        uses: dflook/terraform-apply@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: iac/cal-itp-data-infra-staging/airflow/us
