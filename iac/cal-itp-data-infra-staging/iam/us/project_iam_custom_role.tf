@@ -6,3 +6,11 @@ resource "google_project_iam_custom_role" "tfer--projects-002F-cal-itp-data-infr
   stage       = "ALPHA"
   title       = "Custom GCS Publisher"
 }
+
+resource "google_project_iam_custom_role" "calitp-dds-analyst" {
+  description = "Custom role for DDS Analysts"
+  permissions = ["viewer"]
+  role_id     = "dds.analyst"
+  project     = "cal-itp-data-infra-staging"
+  title       = "DDS Analyst"
+}
