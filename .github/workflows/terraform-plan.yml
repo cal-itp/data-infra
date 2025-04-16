@@ -58,7 +58,7 @@ jobs:
         with:
           create_credentials_file: 'true'
           project_id: cal-itp-data-infra-staging
-          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
           service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
 
       - uses: google-github-actions/setup-gcloud@v2
@@ -105,7 +105,7 @@ jobs:
         with:
           create_credentials_file: 'true'
           project_id: cal-itp-data-infra
-          workload_identity_provider: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+          workload_identity_provider: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
           service_account: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
 
       - uses: google-github-actions/setup-gcloud@v2
