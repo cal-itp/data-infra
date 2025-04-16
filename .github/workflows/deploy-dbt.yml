@@ -19,7 +19,7 @@ env:
   SERVICE_ACCOUNT: ${{ github.ref == 'refs/heads/main' && 'github-actions-service-account@cal-itp-data-infra.iam.gserviceaccount.com' || 'github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com' }}
   WORKLOAD_IDENTITY_PROVIDER: ${{ github.ref == 'refs/heads/main' && 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra' || 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra' }}
   PROJECT_ID: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
-  DBT_TARGET: ${{ github.ref == 'refs/heads/main' && 'prod_service_account' || 'staging_service_account' }}
+  DBT_TARGET: ${{ github.ref == 'refs/heads/main' && 'prod' || 'staging' }}
   DBT_ARTIFACTS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-artifacts' || 'calitp-dbt-artifacts-staging' }}
   DBT_DOCS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-docs' || 'calitp-dbt-docs-staging' }}
   DBT_SOURCE_DATABASE: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
