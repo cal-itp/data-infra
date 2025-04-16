@@ -561,3 +561,9 @@ resource "google_project_iam_member" "github-actions-service-account" {
   member  = "serviceAccount:${google_service_account.github-actions-service-account.email}"
   project = "cal-itp-data-infra"
 }
+
+resource "google_project_iam_member" "DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
+  member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DOT_DDS_Data_Pipeline_and_Warehouse_Users"
+  project = "cal-itp-data-infra"
+  role    = google_project_iam_custom_role.calitp-dds-analyst.id
+}

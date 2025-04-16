@@ -248,3 +248,9 @@ resource "google_project_iam_member" "custom_service_account" {
   member  = "serviceAccount:${google_service_account.composer-service-account.email}"
   project = "cal-itp-data-infra-staging"
 }
+
+resource "google_project_iam_member" "DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
+  member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DOT_DDS_Data_Pipeline_and_Warehouse_Users"
+  project = "cal-itp-data-infra-staging"
+  role    = google_project_iam_custom_role.calitp-dds-analyst.id
+}
