@@ -37,9 +37,7 @@ dim_organizations AS (
         -- use same May 23, 2023 cutover date as `assessment_status` --> `public_currently_operating` in downstream models for consistency
         CASE
             WHEN _valid_from >= '2023-05-23' THEN raw_ntd_id
-            -- is this substitution appropriate?
             ELSE ntd_id
-            -- previously: ELSE ntd_to_org.ntd_id
         END AS ntd_id,
         ntd_agency_info_key,
         ntd_id_2022,
