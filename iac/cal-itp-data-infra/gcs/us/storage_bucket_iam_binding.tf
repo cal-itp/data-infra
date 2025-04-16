@@ -208,8 +208,20 @@ resource "google_storage_bucket_iam_binding" "tfer--calitp-payments-littlepay-pa
   role    = "roles/storage.legacyObjectOwner"
 }
 
+resource "google_storage_bucket_iam_binding" "tfer--calitp-payments-littlepay-parsed-v3" {
+  bucket  = "b/calitp-payments-littlepay-parsed-v3"
+  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
+  role    = "roles/storage.legacyObjectOwner"
+}
+
 resource "google_storage_bucket_iam_binding" "tfer--calitp-payments-littlepay-raw" {
   bucket  = "b/calitp-payments-littlepay-raw"
+  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
+  role    = "roles/storage.legacyBucketOwner"
+}
+
+resource "google_storage_bucket_iam_binding" "tfer--calitp-payments-littlepay-raw-v3" {
+  bucket  = "b/calitp-payments-littlepay-raw-v3"
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
   role    = "roles/storage.legacyBucketOwner"
 }
@@ -520,8 +532,20 @@ resource "google_storage_bucket_iam_binding" "tfer--test-calitp-payments-littlep
   role    = "roles/storage.legacyBucketReader"
 }
 
+resource "google_storage_bucket_iam_binding" "tfer--test-calitp-payments-littlepay-parsed-v3" {
+  bucket  = "b/test-calitp-payments-littlepay-parsed-v3"
+  members = ["projectViewer:cal-itp-data-infra"]
+  role    = "roles/storage.legacyBucketReader"
+}
+
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-payments-littlepay-raw" {
   bucket  = "b/test-calitp-payments-littlepay-raw"
+  members = ["projectViewer:cal-itp-data-infra"]
+  role    = "roles/storage.legacyBucketReader"
+}
+
+resource "google_storage_bucket_iam_binding" "tfer--test-calitp-payments-littlepay-raw-v3" {
+  bucket  = "b/test-calitp-payments-littlepay-raw-v3"
   members = ["projectViewer:cal-itp-data-infra"]
   role    = "roles/storage.legacyBucketReader"
 }

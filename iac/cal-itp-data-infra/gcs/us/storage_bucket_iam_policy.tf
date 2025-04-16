@@ -1363,8 +1363,83 @@ resource "google_storage_bucket_iam_policy" "tfer--calitp-payments-littlepay-par
 POLICY
 }
 
+resource "google_storage_bucket_iam_policy" "tfer--calitp-payments-littlepay-parsed-v3" {
+  bucket = "b/calitp-payments-littlepay-parsed-v3"
+
+  policy_data = <<POLICY
+{
+  "bindings": [
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra",
+        "projectOwner:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyBucketOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyBucketReader"
+    },
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra",
+        "projectOwner:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyObjectOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyObjectReader"
+    }
+  ]
+}
+POLICY
+}
+
 resource "google_storage_bucket_iam_policy" "tfer--calitp-payments-littlepay-raw" {
   bucket = "b/calitp-payments-littlepay-raw"
+
+  policy_data = <<POLICY
+{
+  "bindings": [
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra",
+        "projectOwner:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyBucketOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyBucketReader"
+    },
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra",
+        "projectOwner:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyObjectOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyObjectReader"
+    }
+  ]
+}
+POLICY
+}
+
+
+resource "google_storage_bucket_iam_policy" "tfer--calitp-payments-littlepay-raw-v3" {
+  bucket = "b/calitp-payments-littlepay-raw-v3"
 
   policy_data = <<POLICY
 {
@@ -3316,8 +3391,83 @@ resource "google_storage_bucket_iam_policy" "tfer--test-calitp-payments-littlepa
 POLICY
 }
 
+resource "google_storage_bucket_iam_policy" "tfer--test-calitp-payments-littlepay-parsed-v3" {
+  bucket = "b/test-calitp-payments-littlepay-parsed-v3"
+
+  policy_data = <<POLICY
+{
+  "bindings": [
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra",
+        "projectOwner:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyBucketOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyBucketReader"
+    },
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra",
+        "projectOwner:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyObjectOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyObjectReader"
+    }
+  ]
+}
+POLICY
+}
+
 resource "google_storage_bucket_iam_policy" "tfer--test-calitp-payments-littlepay-raw" {
   bucket = "b/test-calitp-payments-littlepay-raw"
+
+  policy_data = <<POLICY
+{
+  "bindings": [
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra",
+        "projectOwner:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyBucketOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyBucketReader"
+    },
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra",
+        "projectOwner:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyObjectOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyObjectReader"
+    }
+  ]
+}
+POLICY
+}
+
+
+resource "google_storage_bucket_iam_policy" "tfer--test-calitp-payments-littlepay-raw-v3" {
+  bucket = "b/test-calitp-payments-littlepay-raw-v3"
 
   policy_data = <<POLICY
 {
