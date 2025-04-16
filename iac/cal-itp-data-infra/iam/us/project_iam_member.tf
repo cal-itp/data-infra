@@ -562,8 +562,22 @@ resource "google_project_iam_member" "github-actions-service-account" {
   project = "cal-itp-data-infra"
 }
 
-resource "google_project_iam_member" "DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
+resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
+  for_each = toset([
+    "roles/viewer",
+    google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-DataAnalyst.id
+  ])
+  role    = each.key
   member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DOT_DDS_Data_Pipeline_and_Warehouse_Users"
   project = "cal-itp-data-infra"
-  role    = google_project_iam_custom_role.calitp-dds-analyst.id
+}
+
+resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
+  for_each = toset([
+    "roles/editor",
+    google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-DataAnalyst.id
+  ])
+  role    = each.key
+  member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Cloud_Admins"
+  project = "cal-itp-data-infra"
 }

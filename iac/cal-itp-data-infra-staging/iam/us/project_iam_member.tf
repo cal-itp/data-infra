@@ -249,8 +249,23 @@ resource "google_project_iam_member" "custom_service_account" {
   project = "cal-itp-data-infra-staging"
 }
 
-resource "google_project_iam_member" "DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
+
+resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
+  for_each = toset([
+    "roles/viewer",
+    google_project_iam_custom_role.calitp-dds-analyst.id
+  ])
+  role    = each.key
   member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DOT_DDS_Data_Pipeline_and_Warehouse_Users"
   project = "cal-itp-data-infra-staging"
-  role    = google_project_iam_custom_role.calitp-dds-analyst.id
+}
+
+resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
+  for_each = toset([
+    "roles/editor",
+    google_project_iam_custom_role.calitp-dds-analyst.id
+  ])
+  role    = each.key
+  member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Cloud_Admins"
+  project = "cal-itp-data-infra-staging"
 }
