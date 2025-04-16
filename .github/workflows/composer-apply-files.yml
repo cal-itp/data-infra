@@ -1,7 +1,9 @@
 name: Apply Airflow DAGs
 
 on:
-  pull_request:
+  push:
+    branches:
+      - 'main'
     paths:
       - 'airflow/**'
 
@@ -9,6 +11,9 @@ jobs:
   staging:
     name: Staging
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
