@@ -41,7 +41,7 @@ jobs:
         id: google-credentials
         uses: google-github-actions/auth@v2
         with:
-          create_credentials_file: true
+          create_credentials_file: 'true'
           project_id: ${{ env.PROJECT_ID }}
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
@@ -88,10 +88,14 @@ jobs:
       - name: Print dbt environment
         working-directory: warehouse
         run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
+        env:
+          BIGQUERY_KEYFILE_LOCATION: ${{ steps.google-credentials.outputs.credentials_file_path }}
 
       - name: Compile dbt
         working-directory: warehouse
         run: poetry run dbt compile --target ${{ env.DBT_TARGET }} --full-refresh
+        env:
+          BIGQUERY_KEYFILE_LOCATION: ${{ steps.google-credentials.outputs.credentials_file_path }}
 
       - name: Generate dbt documentation
         working-directory: warehouse
