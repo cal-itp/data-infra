@@ -3,9 +3,9 @@ WITH staging_master AS (
     FROM {{ ref('stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__master') }}
 ),
 
-stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__master AS (
+fct_complete_monthly_ridership_with_adjustments_and_estimates__master AS (
     SELECT *
     FROM staging_master
 )
 
-SELECT * FROM stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__master
+SELECT * FROM fct_complete_monthly_ridership_with_adjustments_and_estimates__master
