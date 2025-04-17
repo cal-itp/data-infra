@@ -37,7 +37,6 @@ int_transit_database__organizations_dim AS (
         hubspot_company_record_id,
         alias,
         details,
-        caltrans_district,
         mobility_services_managed,
         parent_organization,
         website,

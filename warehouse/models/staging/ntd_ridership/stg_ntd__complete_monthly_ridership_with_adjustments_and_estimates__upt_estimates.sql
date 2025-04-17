@@ -11,4 +11,15 @@ WITH
         QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
     )
 
-SELECT * FROM stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__upt_estimates
+SELECT
+  top_150,
+  ntd_id,
+  agency,
+  mode,
+  tos,
+  month,
+  year,
+  estimated_upt,
+  dt,
+  execution_ts
+FROM stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates__upt_estimates

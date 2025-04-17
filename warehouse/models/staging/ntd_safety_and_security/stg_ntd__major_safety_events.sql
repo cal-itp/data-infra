@@ -35,7 +35,7 @@ SELECT
     {{ trim_make_empty_string_null('typeofservicecd') }} AS typeofservicecd,
     {{ trim_make_empty_string_null('reportername') }} AS reportername,
     SAFE_CAST(customer AS INTEGER) AS customer,
-        {{ trim_make_empty_string_null('CAST(ntdid AS STRING)') }} AS ntdid,
+        {{ trim_make_empty_string_null('CAST(ntdid AS STRING)') }} AS ntd_id,
     dt,
     execution_ts
 FROM stg_ntd__major_safety_events
