@@ -3,54 +3,66 @@ WITH staging_operating_and_capital_funding_time_series_decommissioned_operatingo
     FROM {{ ref('stg_ntd__operating_and_capital_funding_time_series__decommissioned_operatingother') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district AS caltrans_district_current,
+        caltrans_district_name AS caltrans_district_name_current
+    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+),
+
 fct_operating_and_capital_funding_time_series_decommissioned_operatingother AS (
-    SELECT *
-    FROM staging_operating_and_capital_funding_time_series_decommissioned_operatingother
+    SELECT
+        stg._2017,
+        stg._2016,
+        stg._2014,
+        stg._2012,
+        stg._2010,
+        stg._2009,
+        stg._2008,
+        stg._2007,
+        stg._2005,
+        stg._2013,
+        stg._2002,
+        stg._2006,
+        stg._2000,
+        stg._2004,
+        stg._2003,
+        stg._1999,
+        stg._1997,
+        stg._2011,
+        stg._1995,
+        stg._1994,
+        stg._2017_status,
+        stg.agency_status,
+        stg._1992,
+        stg.uza_population,
+        stg.uza_area_sq_miles,
+        stg._2001,
+        stg._1996,
+        stg._1991,
+        stg.uza,
+        stg.city,
+        stg._1998,
+        stg._2015,
+        stg.primary_uza_name,
+        stg.legacy_ntd_id,
+        stg.census_year,
+        stg._1993,
+        stg.reporting_module,
+        stg.last_report_year,
+        stg.state,
+        stg.reporter_type,
+        stg.agency_name,
+        stg.ntd_id,
+
+        orgs.caltrans_district_current,
+        orgs.caltrans_district_name_current,
+
+        stg.dt,
+        stg.execution_ts
+    FROM staging_operating_and_capital_funding_time_series_decommissioned_operatingother AS stg
+    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
 )
 
-SELECT
-    _2017,
-    _2016,
-    _2014,
-    _2012,
-    _2010,
-    _2009,
-    _2008,
-    _2007,
-    _2005,
-    _2013,
-    _2002,
-    _2006,
-    _2000,
-    _2004,
-    _2003,
-    _1999,
-    _1997,
-    _2011,
-    _1995,
-    _1994,
-    _2017_status,
-    agency_status,
-    _1992,
-    uza_population,
-    uza_area_sq_miles,
-    _2001,
-    _1996,
-    _1991,
-    uza,
-    city,
-    _1998,
-    _2015,
-    primary_uza_name,
-    legacy_ntd_id,
-    census_year,
-    _1993,
-    reporting_module,
-    last_report_year,
-    state,
-    reporter_type,
-    agency_name,
-    ntd_id,
-    dt,
-    execution_ts
-FROM fct_operating_and_capital_funding_time_series_decommissioned_operatingother
+SELECT * FROM fct_operating_and_capital_funding_time_series_decommissioned_operatingother
