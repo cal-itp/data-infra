@@ -3,37 +3,49 @@ WITH staging_stations_by_mode_and_age AS (
     FROM {{ ref('stg_ntd__stations_by_mode_and_age') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district AS caltrans_district_current,
+        caltrans_district_name AS caltrans_district_name_current
+    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+),
+
 fct_stations_by_mode_and_age AS (
-    SELECT *
-    FROM staging_stations_by_mode_and_age
+    SELECT
+        stg._1940s,
+        stg._1950s,
+        stg._1960s,
+        stg._1970s,
+        stg._1980s,
+        stg._1990s,
+        stg._2000s,
+        stg._2010s,
+        stg._2020s,
+        stg.agency,
+        stg.agency_voms,
+        stg.city,
+        stg.facility_type,
+        stg.mode_names,
+        stg.modes,
+        stg.ntd_id,
+        stg.organization_type,
+        stg.pre1940,
+        stg.primary_uza_population,
+        stg.report_year,
+        stg.reporter_type,
+        stg.state,
+        stg.total_facilities,
+        stg.uace_code,
+        stg.uza_name,
+
+        orgs.caltrans_district_current,
+        orgs.caltrans_district_name_current,
+
+        stg.dt,
+        stg.execution_ts
+    FROM staging_stations_by_mode_and_age AS stg
+    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
 )
 
-SELECT
-    _1940s,
-    _1950s,
-    _1960s,
-    _1970s,
-    _1980s,
-    _1990s,
-    _2000s,
-    _2010s,
-    _2020s,
-    agency,
-    agency_voms,
-    city,
-    facility_type,
-    mode_names,
-    modes,
-    ntd_id,
-    organization_type,
-    pre1940,
-    primary_uza_population,
-    report_year,
-    reporter_type,
-    state,
-    total_facilities,
-    uace_code,
-    uza_name,
-    dt,
-    execution_ts
-FROM fct_stations_by_mode_and_age
+SELECT * FROM fct_stations_by_mode_and_age

@@ -3,51 +3,63 @@ WITH staging_maintenance_facilities AS (
     FROM {{ ref('stg_ntd__maintenance_facilities') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district AS caltrans_district_current,
+        caltrans_district_name AS caltrans_district_name_current
+    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+),
+
 fct_maintenance_facilities AS (
-    SELECT *
-    FROM staging_maintenance_facilities
+    SELECT
+        stg._200_to_300_vehicles,
+        stg._200_to_300_vehicles_1,
+        stg.agency,
+        stg.agency_voms,
+        stg.city,
+        stg.heavy_maintenance_facilities,
+        stg.heavy_maintenance_facilities_1,
+        stg.leased_by_pt_provider,
+        stg.leased_by_pt_provider_1,
+        stg.leased_by_public_agency,
+        stg.leased_by_public_agency_1,
+        stg.leased_from_a_private_entity,
+        stg.leased_from_a_private_entity_1,
+        stg.leased_from_a_public_entity,
+        stg.leased_from_a_public_entity_1,
+        stg.mode,
+        stg.mode_name,
+        stg.mode_voms,
+        stg.ntd_id,
+        stg.organization_type,
+        stg.over_300_vehicles,
+        stg.over_300_vehicles_questionable,
+        stg.owned,
+        stg.owned_questionable,
+        stg.owned_by_pt_provider,
+        stg.owned_by_pt_provider_1,
+        stg.owned_by_public_agency,
+        stg.owned_by_public_agency_1,
+        stg.primary_uza_population,
+        stg.report_year,
+        stg.reporter_type,
+        stg.state,
+        stg.total_facilities,
+        stg.total_maintenance_facilities,
+        stg.type_of_service,
+        stg.uace_code,
+        stg.under_200_vehicles,
+        stg.under_200_vehicles_1,
+        stg.uza_name,
+
+        orgs.caltrans_district_current,
+        orgs.caltrans_district_name_current,
+
+        stg.dt,
+        stg.execution_ts
+    FROM staging_maintenance_facilities AS stg
+    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
 )
 
-SELECT
-    _200_to_300_vehicles,
-    _200_to_300_vehicles_1,
-    agency,
-    agency_voms,
-    city,
-    heavy_maintenance_facilities,
-    heavy_maintenance_facilities_1,
-    leased_by_pt_provider,
-    leased_by_pt_provider_1,
-    leased_by_public_agency,
-    leased_by_public_agency_1,
-    leased_from_a_private_entity,
-    leased_from_a_private_entity_1,
-    leased_from_a_public_entity,
-    leased_from_a_public_entity_1,
-    mode,
-    mode_name,
-    mode_voms,
-    ntd_id,
-    organization_type,
-    over_300_vehicles,
-    over_300_vehicles_questionable,
-    owned,
-    owned_questionable,
-    owned_by_pt_provider,
-    owned_by_pt_provider_1,
-    owned_by_public_agency,
-    owned_by_public_agency_1,
-    primary_uza_population,
-    report_year,
-    reporter_type,
-    state,
-    total_facilities,
-    total_maintenance_facilities,
-    type_of_service,
-    uace_code,
-    under_200_vehicles,
-    under_200_vehicles_1,
-    uza_name,
-    dt,
-    execution_ts
-FROM fct_maintenance_facilities
+SELECT * FROM fct_maintenance_facilities
