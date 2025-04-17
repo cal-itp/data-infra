@@ -8,4 +8,15 @@ fct_complete_monthly_ridership_with_adjustments_and_estimates__upt_estimates AS 
     FROM staging_upt_estimates
 )
 
-SELECT * FROM fct_complete_monthly_ridership_with_adjustments_and_estimates__upt_estimates
+SELECT
+    top_150,
+    ntd_id,
+    agency,
+    mode,
+    tos,
+    month,
+    year,
+    estimated_upt,
+    dt,
+    execution_ts
+FROM fct_complete_monthly_ridership_with_adjustments_and_estimates__upt_estimates
