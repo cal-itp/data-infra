@@ -3,29 +3,41 @@ WITH int_ntd__operating_and_capital_funding_time_series_capital_total AS (
     FROM {{ ref('int_ntd__operating_and_capital_funding_time_series_capital_total') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district AS caltrans_district_current,
+        caltrans_district_name AS caltrans_district_name_current
+    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+),
+
 fct_operating_and_capital_funding_time_series_capital_total AS (
-    SELECT *
-    FROM int_ntd__operating_and_capital_funding_time_series_capital_total
+    SELECT
+        int.agency_name,
+        int.agency_status,
+        int.census_year,
+        int.city,
+        int.last_report_year,
+        int.legacy_ntd_id,
+        int.ntd_id,
+        int.reporter_type,
+        int.reporting_module,
+        int.state,
+        int.uace_code,
+        int.uza_area_sq_miles,
+        int.primary_uza_name,
+        int.uza_population,
+        int.year,
+        int.capital_total,
+        int._2023_status,
+
+        orgs.caltrans_district_current,
+        orgs.caltrans_district_name_current,
+
+        int.dt,
+        int.execution_ts
+    FROM int_ntd__operating_and_capital_funding_time_series_capital_total AS int
+    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
 )
 
-SELECT
-    agency_name,
-    agency_status,
-    census_year,
-    city,
-    last_report_year,
-    legacy_ntd_id,
-    ntd_id,
-    reporter_type,
-    reporting_module,
-    state,
-    uace_code,
-    uza_area_sq_miles,
-    primary_uza_name,
-    uza_population,
-    year,
-    capital_total,
-    _2023_status,
-    dt,
-    execution_ts
-FROM fct_operating_and_capital_funding_time_series_capital_total
+SELECT * FROM fct_operating_and_capital_funding_time_series_capital_total

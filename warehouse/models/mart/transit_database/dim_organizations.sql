@@ -24,7 +24,6 @@ dim_organizations AS (
         roles,
         itp_id,
         details,
-        caltrans_district,
         website,
         reporting_category,
         hubspot_company_record_id,

@@ -3,42 +3,54 @@ WITH staging_fuel_and_energy_by_agency AS (
     FROM {{ ref('stg_ntd__fuel_and_energy_by_agency') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district AS caltrans_district_current,
+        caltrans_district_name AS caltrans_district_name_current
+    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+),
+
 fct_fuel_and_energy_by_agency AS (
-    SELECT *
-    FROM staging_fuel_and_energy_by_agency
+    SELECT
+        stg.diesel_gal_questionable,
+        stg.diesel_mpg_questionable,
+        stg.max_agency,
+        stg.max_agency_voms,
+        stg.max_city,
+        stg.max_organization_type,
+        stg.max_primary_uza_population,
+        stg.max_reporter_type,
+        stg.max_state,
+        stg.max_uace_code,
+        stg.max_uza_name,
+        stg.ntd_id,
+        stg.report_year,
+        stg.sum_bio_diesel_gal,
+        stg.sum_compressed_natural_gas,
+        stg.sum_compressed_natural_gas_gal,
+        stg.sum_diesel,
+        stg.sum_diesel_gal,
+        stg.sum_electric_battery,
+        stg.sum_electric_battery_kwh,
+        stg.sum_electric_propulsion,
+        stg.sum_electric_propulsion_kwh,
+        stg.sum_gasoline,
+        stg.sum_gasoline_gal,
+        stg.sum_hydrogen,
+        stg.sum_hydrogen_kg_,
+        stg.sum_liquefied_petroleum_gas,
+        stg.sum_liquefied_petroleum_gas_gal,
+        stg.sum_other_fuel,
+        stg.sum_other_fuel_gal_gal_equivalent,
+
+        orgs.caltrans_district_current,
+        orgs.caltrans_district_name_current,
+
+        stg.dt,
+        stg.execution_ts
+    FROM staging_fuel_and_energy_by_agency AS stg
+    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
 )
 
-SELECT
-    diesel_gal_questionable,
-    diesel_mpg_questionable,
-    max_agency,
-    max_agency_voms,
-    max_city,
-    max_organization_type,
-    max_primary_uza_population,
-    max_reporter_type,
-    max_state,
-    max_uace_code,
-    max_uza_name,
-    ntd_id,
-    report_year,
-    sum_bio_diesel_gal,
-    sum_compressed_natural_gas,
-    sum_compressed_natural_gas_gal,
-    sum_diesel,
-    sum_diesel_gal,
-    sum_electric_battery,
-    sum_electric_battery_kwh,
-    sum_electric_propulsion,
-    sum_electric_propulsion_kwh,
-    sum_gasoline,
-    sum_gasoline_gal,
-    sum_hydrogen,
-    sum_hydrogen_kg_,
-    sum_liquefied_petroleum_gas,
-    sum_liquefied_petroleum_gas_gal,
-    sum_other_fuel,
-    sum_other_fuel_gal_gal_equivalent,
-    dt,
-    execution_ts
-FROM fct_fuel_and_energy_by_agency
+SELECT * FROM fct_fuel_and_energy_by_agency
