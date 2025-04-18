@@ -233,6 +233,8 @@ resource "google_project_iam_member" "github-actions-terraform" {
 
 resource "google_project_iam_member" "github-actions-service-account" {
   for_each = toset([
+    "roles/bigquery.filteredDataViewer",
+    "roles/bigquery.metadataViewer",
     google_project_iam_custom_role.calitp-dds-analyst.id,
     google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-staging-002F-roles-002F-CustomGCSPublisher.id
   ])
