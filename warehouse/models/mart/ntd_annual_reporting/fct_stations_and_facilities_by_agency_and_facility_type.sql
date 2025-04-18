@@ -3,49 +3,61 @@ WITH staging_stations_and_facilities_by_agency_and_facility_type AS (
     FROM {{ ref('stg_ntd__stations_and_facilities_by_agency_and_facility_type') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district AS caltrans_district_current,
+        caltrans_district_name AS caltrans_district_name_current
+    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+),
+
 fct_stations_and_facilities_by_agency_and_facility_type AS (
-    SELECT *
-    FROM staging_stations_and_facilities_by_agency_and_facility_type
+    SELECT
+        stg.administrative_and_other_non_passenger_facilities,
+        stg.administrative_office_sales,
+        stg.agency,
+        stg.agency_voms,
+        stg.at_grade_fixed_guideway,
+        stg.bus_transfer_center,
+        stg.city,
+        stg.combined_administrative_and,
+        stg.elevated_fixed_guideway,
+        stg.exclusive_grade_separated,
+        stg.ferryboat_terminal,
+        stg.general_purpose_maintenance,
+        stg.heavy_maintenance_overhaul,
+        stg.maintenance_facilities,
+        stg.maintenance_facility_service,
+        stg.ntd_id,
+        stg.organization_type,
+        stg.other_administrative,
+        stg.other_passenger_or_parking,
+        stg.parking_and_other_passenger_facilities,
+        stg.parking_structure,
+        stg.passenger_stations_and_terminals,
+        stg.primary_uza_population,
+        stg.report_year,
+        stg.reporter_type,
+        stg.revenue_collection_facility,
+        stg.simple_at_grade_platform,
+        stg.state,
+        stg.surface_parking_lot,
+        stg.total_facilities,
+        stg.uace_code,
+        stg.underground_fixed_guideway,
+        stg.uza_name,
+        stg.vehicle_blow_down_facility,
+        stg.vehicle_fueling_facility,
+        stg.vehicle_testing_facility,
+        stg.vehicle_washing_facility,
+
+        orgs.caltrans_district_current,
+        orgs.caltrans_district_name_current,
+
+        stg.dt,
+        stg.execution_ts
+    FROM staging_stations_and_facilities_by_agency_and_facility_type AS stg
+    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
 )
 
-SELECT
-    administrative_and_other_non_passenger_facilities,
-    administrative_office_sales,
-    agency,
-    agency_voms,
-    at_grade_fixed_guideway,
-    bus_transfer_center,
-    city,
-    combined_administrative_and,
-    elevated_fixed_guideway,
-    exclusive_grade_separated,
-    ferryboat_terminal,
-    general_purpose_maintenance,
-    heavy_maintenance_overhaul,
-    maintenance_facilities,
-    maintenance_facility_service,
-    ntd_id,
-    organization_type,
-    other_administrative,
-    other_passenger_or_parking,
-    parking_and_other_passenger_facilities,
-    parking_structure,
-    passenger_stations_and_terminals,
-    primary_uza_population,
-    report_year,
-    reporter_type,
-    revenue_collection_facility,
-    simple_at_grade_platform,
-    state,
-    surface_parking_lot,
-    total_facilities,
-    uace_code,
-    underground_fixed_guideway,
-    uza_name,
-    vehicle_blow_down_facility,
-    vehicle_fueling_facility,
-    vehicle_testing_facility,
-    vehicle_washing_facility,
-    dt,
-    execution_ts
-FROM fct_stations_and_facilities_by_agency_and_facility_type
+SELECT * FROM fct_stations_and_facilities_by_agency_and_facility_type

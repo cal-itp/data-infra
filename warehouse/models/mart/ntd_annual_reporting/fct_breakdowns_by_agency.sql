@@ -3,36 +3,48 @@ WITH staging_breakdowns_by_agency AS (
     FROM {{ ref('stg_ntd__breakdowns_by_agency') }}
 ),
 
+current_dim_organizations AS (
+    SELECT
+        ntd_id,
+        caltrans_district AS caltrans_district_current,
+        caltrans_district_name AS caltrans_district_name_current
+    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+),
+
 fct_breakdowns_by_agency AS (
-    SELECT *
-    FROM staging_breakdowns_by_agency
+    SELECT
+        stg.count_major_mechanical_failures_questionable,
+        stg.count_other_mechanical_failures_questionable,
+        stg.count_total_mechanical_failures_questionable,
+        stg.count_train_miles_questionable,
+        stg.count_train_revenue_miles_questionable,
+        stg.count_vehicle_passenger_car_miles_questionable,
+        stg.max_agency,
+        stg.max_agency_voms,
+        stg.max_city,
+        stg.max_organization_type,
+        stg.max_primary_uza_population,
+        stg.max_reporter_type,
+        stg.max_state,
+        stg.max_uace_code,
+        stg.max_uza_name,
+        stg.ntd_id,
+        stg.report_year,
+        stg.sum_major_mechanical_failures,
+        stg.sum_other_mechanical_failures,
+        stg.sum_total_mechanical_failures,
+        stg.sum_train_miles,
+        stg.sum_train_revenue_miles,
+        stg.sum_vehicle_passenger_car_miles,
+        stg.sum_vehicle_passenger_car_revenue,
+
+        orgs.caltrans_district_current,
+        orgs.caltrans_district_name_current,
+
+        stg.dt,
+        stg.execution_ts
+    FROM staging_breakdowns_by_agency AS stg
+    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
 )
 
-SELECT
-    count_major_mechanical_failures_questionable,
-    count_other_mechanical_failures_questionable,
-    count_total_mechanical_failures_questionable,
-    count_train_miles_questionable,
-    count_train_revenue_miles_questionable,
-    count_vehicle_passenger_car_miles_questionable,
-    max_agency,
-    max_agency_voms,
-    max_city,
-    max_organization_type,
-    max_primary_uza_population,
-    max_reporter_type,
-    max_state,
-    max_uace_code,
-    max_uza_name,
-    ntd_id,
-    report_year,
-    sum_major_mechanical_failures,
-    sum_other_mechanical_failures,
-    sum_total_mechanical_failures,
-    sum_train_miles,
-    sum_train_revenue_miles,
-    sum_vehicle_passenger_car_miles,
-    sum_vehicle_passenger_car_revenue,
-    dt,
-    execution_ts
-FROM fct_breakdowns_by_agency
+SELECT * FROM fct_breakdowns_by_agency

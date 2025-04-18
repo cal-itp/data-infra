@@ -13,7 +13,7 @@ WITH
 
 SELECT
   top_150,
-  ntd_id,
+  {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
   agency,
   mode,
   tos,
