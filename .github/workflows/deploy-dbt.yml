@@ -20,8 +20,8 @@ env:
   WORKLOAD_IDENTITY_PROVIDER: ${{ github.ref == 'refs/heads/main' && 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra' || 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra' }}
   PROJECT_ID: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
   DBT_TARGET: ${{ github.ref == 'refs/heads/main' && 'prod' || 'staging' }}
-  DBT_ARTIFACTS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-artifacts' || 'calitp-dbt-artifacts-staging' }}
-  DBT_DOCS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-docs' || 'calitp-dbt-docs-staging' }}
+  DBT_ARTIFACTS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-artifacts' || 'calitp-staging-dbt-artifacts' }}
+  DBT_DOCS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-docs' || 'calitp-staging-dbt-docs' }}
   DBT_SOURCE_DATABASE: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
 
 jobs:
@@ -57,7 +57,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/pypoetry
-          key: poetry-cache-{{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
 
       - name: Setup Poetry
         uses: abatilo/actions-poetry@v3
@@ -68,7 +68,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.local
-          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
 
       - name: Install dependencies
         working-directory: warehouse
@@ -78,7 +78,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: warehouse/dbt_packages
-          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
 
       - name: Install dbt dependencies
         working-directory: warehouse
@@ -96,6 +96,14 @@ jobs:
         working-directory: warehouse
         run: poetry run dbt docs generate --target ${{ env.DBT_TARGET }} --no-compile
 
+      - name: Archive compilation artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt
+          path: |
+            warehouse/target/*.json
+            warehouse/target/*.html
+
       - name: Get current timestamp
         uses: josStorer/get-current-time@v2
         id: current-time
@@ -109,21 +117,6 @@ jobs:
         with:
           format: "YYYY-MM-DD"
           timezone: "UTC"
-
-      - name: Upload dbt logs
-        uses: google-github-actions/upload-cloud-storage@v1
-        with:
-          path: './warehouse/logs/'
-          parent: false
-          destination: 'calitp-ci-artifacts/${{ github.workflow }}/run_id=${{ github.run_id }}/job=${{ github.job }}/logs/'
-
-      - name: Upload dbt compilation artifacts
-        uses: google-github-actions/upload-cloud-storage@v1
-        with:
-          path: './warehouse/target/'
-          glob: '*.json'
-          parent: false
-          destination: 'calitp-ci-artifacts/${{ github.workflow }}/run_id=${{ github.run_id }}/job=${{ github.job }}/target/'
 
       - name: Upload catalog.json
         uses: google-github-actions/upload-cloud-storage@v1
