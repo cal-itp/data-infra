@@ -16,7 +16,7 @@ stg_ntd__employees_by_agency AS (
 )
 
 SELECT
-    {{ trim_make_empty_string_null('agency') }} AS agency,
+    {{ trim_make_empty_string_null('max_agency_1') }} AS max_agency_1,
     SAFE_CAST(avgwagerate AS FLOAT64) AS avgwagerate,
     SAFE_CAST(count_capital_labor_count_q AS NUMERIC) AS count_capital_labor_count_q,
     SAFE_CAST(count_capital_labor_hours_q AS NUMERIC) AS count_capital_labor_hours_q,

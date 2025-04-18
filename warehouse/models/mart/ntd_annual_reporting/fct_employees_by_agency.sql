@@ -13,7 +13,7 @@ current_dim_organizations AS (
 
 fct_employees_by_agency AS (
     SELECT
-        stg.agency,
+        stg.max_agency_1,
         stg.avgwagerate,
         stg.count_capital_labor_count_q,
         stg.count_capital_labor_hours_q,
