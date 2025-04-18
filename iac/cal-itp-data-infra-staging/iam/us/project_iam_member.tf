@@ -241,6 +241,20 @@ resource "google_project_iam_member" "github-actions-service-account" {
   project = "cal-itp-data-infra-staging"
 }
 
+resource "google_project_iam_member" "github-actions-service-account-production" {
+  for_each = toset([
+    "roles/bigquery.dataViewer",
+    "roles/bigquery.jobs.create",
+    "roles/bigquery.jobUser",
+    "roles/bigquery.readSessionUser",
+    "roles/storage.legacyBucketReader",
+    "roles/storage.legacyObjectReader"
+  ])
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.github-actions-service-account.email}"
+  project = "cal-itp-data-infra"
+}
+
 resource "google_project_iam_member" "custom_service_account" {
   for_each = toset([
     "roles/composer.worker"
@@ -249,7 +263,6 @@ resource "google_project_iam_member" "custom_service_account" {
   member  = "serviceAccount:${google_service_account.composer-service-account.email}"
   project = "cal-itp-data-infra-staging"
 }
-
 
 resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
   for_each = toset([
