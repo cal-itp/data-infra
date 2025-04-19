@@ -12,7 +12,7 @@ destination_project_dataset_table: "external_ntd__annual_reporting.multi_year__e
 prefix_bucket: false
 post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.multi_year__employees_by_agency LIMIT 1;
 schema_fields:
-  - name: agency
+  - name: max_agency_1
     type: STRING
   - name: avgwagerate
     type: FLOAT
