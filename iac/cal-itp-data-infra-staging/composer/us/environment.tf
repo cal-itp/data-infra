@@ -19,18 +19,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         core-dags_are_paused_at_creation = "True"
       }
 
-      pypi_packages = {
-        calitp-data-infra = "==2025.3.25"
-        gusty             = "==0.6.0"
-        pyairtable        = "==2.2.1"
-        pydantic          = ">=1.9,<2.0"
-        typer             = "==0.4.1"
-        sentry-sdk        = "==1.17.0"
-        platformdirs      = ">=2.5"
-        boto3             = ">=1.26.87,<2"
-        openpyxl          = "==3.1.5"
-        beautifulsoup4    = "==4.12.3"
-      }
+      pypi_packages = local.pypi_packages
 
       env_variables = {
         AIRFLOW_VAR_EXTRACT_BUCKET                           = "gs://gtfs-data"
