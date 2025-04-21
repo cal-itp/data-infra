@@ -63,6 +63,7 @@ fct_operating_and_capital_funding_time_series_decommissioned_operatingfares AS (
         stg.execution_ts
     FROM staging_operating_and_capital_funding_time_series_decommissioned_operatingfares AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE stg.state = 'CA'
 )
 
 SELECT * FROM fct_operating_and_capital_funding_time_series_decommissioned_operatingfares

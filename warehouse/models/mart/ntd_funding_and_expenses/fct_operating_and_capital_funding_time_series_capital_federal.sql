@@ -38,6 +38,7 @@ fct_operating_and_capital_funding_time_series_capital_federal AS (
         int.execution_ts
     FROM int_ntd__operating_and_capital_funding_time_series_capital_federal AS int
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE int.state = 'CA'
 )
 
 SELECT * FROM fct_operating_and_capital_funding_time_series_capital_federal

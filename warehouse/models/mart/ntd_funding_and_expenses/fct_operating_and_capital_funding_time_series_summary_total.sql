@@ -24,6 +24,7 @@ fct_operating_and_capital_funding_time_series_summary_total AS (
         stg.dt,
         stg.execution_ts
     FROM staging_operating_and_capital_funding_time_series_summary_total AS stg
+    WHERE stg.state = 'CA'
 )
 
 SELECT * FROM fct_operating_and_capital_funding_time_series_summary_total

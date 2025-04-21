@@ -41,6 +41,7 @@ fct_service_data_and_operating_expenses_time_series_by_mode_upt AS (
         int.execution_ts
     FROM int_ntd__service_data_and_operating_expenses_time_series_by_mode_upt AS int
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE int.state = 'CA'
 )
 
 SELECT * FROM fct_service_data_and_operating_expenses_time_series_by_mode_upt

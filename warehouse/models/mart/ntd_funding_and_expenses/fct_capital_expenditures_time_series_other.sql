@@ -39,6 +39,7 @@ fct_capital_expenditures_time_series_other AS (
         int.execution_ts
     FROM int_ntd__capital_expenditures_time_series_other AS int
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE int.state = 'CA'
 )
 
 SELECT * FROM fct_capital_expenditures_time_series_other
