@@ -44,6 +44,7 @@ fct_capital_expenses_for_expansion_of_service AS (
         stg.execution_ts
     FROM staging_capital_expenses_for_expansion_of_service AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE stg.max_state = 'CA'
 )
 
 SELECT * FROM fct_capital_expenses_for_expansion_of_service

@@ -51,6 +51,7 @@ fct_fuel_and_energy_by_agency AS (
         stg.execution_ts
     FROM staging_fuel_and_energy_by_agency AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE stg.max_state = 'CA'
 )
 
 SELECT * FROM fct_fuel_and_energy_by_agency

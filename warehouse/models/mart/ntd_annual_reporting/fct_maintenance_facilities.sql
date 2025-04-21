@@ -60,6 +60,7 @@ fct_maintenance_facilities AS (
         stg.execution_ts
     FROM staging_maintenance_facilities AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE stg.state = 'CA'
 )
 
 SELECT * FROM fct_maintenance_facilities

@@ -59,6 +59,7 @@ fct_capital_expenses_by_capital_use AS (
         stg.execution_ts
     FROM staging_capital_expenses_by_capital_use AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE stg.state = 'CA'
 )
 
 SELECT * FROM fct_capital_expenses_by_capital_use

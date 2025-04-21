@@ -60,6 +60,7 @@ fct_employees_by_mode_and_employee_type AS (
         stg.execution_ts
     FROM staging_employees_by_mode_and_employee_type AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE stg.state = 'CA'
 )
 
 SELECT * FROM fct_employees_by_mode_and_employee_type

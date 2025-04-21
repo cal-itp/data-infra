@@ -50,6 +50,7 @@ fct_operating_expenses_by_function AS (
         stg.execution_ts
     FROM staging_operating_expenses_by_function AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE stg.state = 'CA'
 )
 
 SELECT * FROM fct_operating_expenses_by_function

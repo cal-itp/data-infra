@@ -47,6 +47,8 @@ fct_employees_by_agency AS (
         stg.execution_ts
     FROM staging_employees_by_agency AS stg
     LEFT JOIN current_dim_organizations AS orgs ON stg.max_ntd_id = orgs.ntd_id
+    WHERE stg.max_state_1 = 'CA'
+
 )
 
 SELECT * FROM fct_employees_by_agency

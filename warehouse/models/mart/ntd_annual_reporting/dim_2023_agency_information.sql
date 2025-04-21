@@ -64,6 +64,8 @@ dim_2023_agency_information AS (
         stg.execution_ts
     FROM staging_agency_information AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE stg.state = 'CA'
+
 )
 
 SELECT * FROM dim_2023_agency_information

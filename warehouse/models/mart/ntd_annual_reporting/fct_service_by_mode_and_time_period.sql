@@ -90,6 +90,8 @@ fct_service_by_mode_and_time_period AS (
         stg.execution_ts
     FROM staging_service_by_mode_and_time_period AS stg
     LEFT JOIN current_dim_organizations AS orgs ON stg._5_digit_ntd_id = orgs.ntd_id
+    WHERE stg.state = 'CA'
+
 )
 
 SELECT * FROM fct_service_by_mode_and_time_period

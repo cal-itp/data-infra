@@ -77,6 +77,7 @@ fct_track_and_roadway_by_mode AS (
         stg.execution_ts
     FROM staging_track_and_roadway_by_mode AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE stg.state = 'CA'
 )
 
 SELECT * FROM fct_track_and_roadway_by_mode

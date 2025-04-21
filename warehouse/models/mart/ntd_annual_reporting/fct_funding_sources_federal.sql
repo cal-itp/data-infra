@@ -39,6 +39,7 @@ fct_funding_sources_federal AS (
         stg.execution_ts
     FROM staging_funding_sources_federal AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    WHERE stg.state = 'CA'
 )
 
 SELECT * FROM fct_funding_sources_federal
