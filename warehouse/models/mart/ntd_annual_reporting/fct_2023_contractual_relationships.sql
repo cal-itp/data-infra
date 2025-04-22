@@ -44,6 +44,8 @@ fct_2023_contractual_relationships AS (
         orgs.caltrans_district_current,
         orgs.caltrans_district_name_current,
 
+        2023 AS report_year,
+
         stg.dt,
         stg.execution_ts
     FROM staging_contractual_relationships AS stg
