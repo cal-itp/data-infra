@@ -32,6 +32,7 @@ vars:
 models:
   calitp_warehouse:
     schema: staging
+    +hours_to_expiration: "{{ '720' if target.name in ('dev','staging') else None }}" # expires dev and staging models in 30 days
     +persist_docs:
       relation: true
       columns: true
