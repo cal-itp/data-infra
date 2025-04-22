@@ -18,7 +18,7 @@ xlsx_urls = {
     "operating_and_capital_funding_url": "https://www.transit.dot.gov/ntd/data-product/ts12-operating-funding-time-series-3",
     "service_data_and_operating_expenses_time_series_by_mode_url": "https://www.transit.dot.gov/ntd/data-product/ts21-service-data-and-operating-expenses-time-series-mode-2",
     "capital_expenditures_time_series_url": "https://www.transit.dot.gov/ntd/data-product/ts31-capital-expenditures-time-series-2",
-    "aasset_inventory_time_series_url": "https://www.transit.dot.gov/ntd/data-product/ts41-asset-inventory-time-series-4",
+    "asset_inventory_time_series_url": "https://www.transit.dot.gov/ntd/data-product/ts41-asset-inventory-time-series-4",
 }
 
 
