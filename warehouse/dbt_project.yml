@@ -140,7 +140,7 @@ models:
       gtfs_schedule_latest:
         +labels:
           domain: mart
-          dataset: gtfs_schedule_latest
+          dataset: gtfs_schedule
         schema: mart_gtfs_schedule_latest
       ntd:
         +labels:
@@ -190,5 +190,5 @@ models:
       transit_database_latest:
         +labels:
           domain: mart
-          dataset: transit_database_latest
+          dataset: transit_database
         schema: mart_transit_database_latest
