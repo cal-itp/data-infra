@@ -1,0 +1,16 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-xlsx-products-clean
+prefix_bucket: false
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd__assets.historical__asset_inventory_time_series__avg_fleet_age
+  LIMIT 1;
+source_objects:
+  - "asset_inventory_time_series/historical/avg_fleet_age/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd__assets.historical__asset_inventory_time_series__avg_fleet_age"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "asset_inventory_time_series/historical/avg_fleet_age/"
