@@ -44,6 +44,10 @@ xcom_keys = {
         "capital_expenditures_time_series",
         "historical",
     ): "capital_expenditures_time_series_url",
+    (
+        "asset_inventory_time_series",
+        "historical",
+    ): "asset_inventory_time_series_url",
 }
 
 
