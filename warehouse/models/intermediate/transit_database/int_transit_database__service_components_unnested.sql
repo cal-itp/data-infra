@@ -17,6 +17,9 @@ int_transit_database__service_components_unnested AS (
         ntd_certified,
         product_component_valid,
         notes,
+        start_date,
+        end_date,
+        is_active,
         l.dt,
         l.universal_first_val
     FROM latest AS l

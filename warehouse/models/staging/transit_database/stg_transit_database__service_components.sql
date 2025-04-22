@@ -15,6 +15,9 @@ stg_transit_database__service_components AS (
         services,
         component,
         product,
+        start_date,
+        end_date,
+        is_active,
         dt
     FROM once_daily_service_components
 )

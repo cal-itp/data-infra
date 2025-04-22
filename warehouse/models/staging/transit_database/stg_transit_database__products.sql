@@ -22,6 +22,10 @@ stg_transit_database__products AS (
         accepted_input_components,
         output_components,
         components,
+        start_date,
+        end_date,
+        status,
+        cal_itp_product,
         dt
     FROM once_daily_products
     LEFT JOIN UNNEST(once_daily_products.vendor) AS unnested_vendor

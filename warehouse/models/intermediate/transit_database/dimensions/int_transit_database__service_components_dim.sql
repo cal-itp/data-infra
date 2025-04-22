@@ -44,6 +44,9 @@ join_services AS (
         historical.ntd_certified,
         historical.product_component_valid,
         historical.notes,
+        historical.start_date,
+        historical.end_date,
+        historical.is_active,
         (historical._is_current AND dim_services._is_current) AS _is_current,
         GREATEST(historical._valid_from, dim_services._valid_from) AS _valid_from,
         LEAST(historical._valid_to, dim_services._valid_to) AS _valid_to

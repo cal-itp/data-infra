@@ -33,6 +33,10 @@ int_transit_database__products_dim AS (
         vendor_organization_source_record_id,
         accepted_input_components,
         output_components,
+        start_date,
+        end_date,
+        status,
+        cal_itp_product,
         _is_current,
         _valid_from,
         _valid_to

@@ -27,6 +27,8 @@ int_transit_database__contracts_dim AS (
         value,
         start_date,
         end_date,
+        is_active,
+        covered_services,
         renewal_option,
         notes,
         attachments,
