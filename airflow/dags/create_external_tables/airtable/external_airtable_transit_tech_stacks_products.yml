@@ -75,3 +75,6 @@ schema_fields:
   - name: status
     type: STRING
     mode: NULLABLE
+  - name: cal_itp_product
+    type: BOOLEAN
+    mode: NULLABLE
