@@ -23,7 +23,7 @@ sentry-sdk = "^1.9.8"
 backoff = "^2.2.1"
 gcsfs = "^2023.1.0"
 # should migrate to 1.x soon; 0.10.3 appears to be the end of the line for pre-1.0
-dbt-metabase = "^0.10.3"
+dbt-metabase = "^1.5.0"
 networkx = {version = "<3", extras = ["default"]}
 # from https://github.com/pygraphviz/pygraphviz/issues/398#issuecomment-1450367670
 # May need to run these after `brew install graphviz` when installing on macOS
@@ -54,9 +54,6 @@ mypy = "^1.2.0"
 pyspark = "~3.0" # pin this low because of stubs
 pyspark-stubs = "^3.0.0.post3"
 dbt-coverage = "^0.3.4"
-
-[tool.poetry.requires-plugins]
-poetry-plugin-export = ">=1.8"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
