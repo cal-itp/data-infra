@@ -31,7 +31,11 @@ xcom_keys = {
     (
         "annual_database_contractual_relationship",
         "2023",
-    ): "contractual_relationship_url",
+    ): "2023_contractual_relationship_url",
+    (
+        "annual_database_contractual_relationship",
+        "2022",
+    ): "2022_contractual_relationship_url",
     (
         "operating_and_capital_funding_time_series",
         "historical",
@@ -44,6 +48,10 @@ xcom_keys = {
         "capital_expenditures_time_series",
         "historical",
     ): "capital_expenditures_time_series_url",
+    (
+        "asset_inventory_time_series",
+        "historical",
+    ): "asset_inventory_time_series_url",
 }
 
 
