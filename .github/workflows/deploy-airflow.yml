@@ -30,22 +30,11 @@ jobs:
         with:
           files: 'airflow/requirements.txt'
 
-      - name: Deploy Airflow dependencies to old Composer
-        if: steps.changed-requirements.outputs.any_changed == 'true'
-        run: gcloud composer environments update calitp-airflow2-prod-composer2-patch --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra
-
-      - name: Deploy Airflow dependencies to new Composer
+      - name: Deploy Airflow dependencies to Composer
         if: steps.changed-requirements.outputs.any_changed == 'true'
         run: gcloud composer environments update calitp-airflow2-prod-composer2-20250402 --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra
 
-      - name: Push Airflow code to old Composer
-        run: |
-          gsutil -m rsync -d -c -r airflow/dags gs://$AIRFLOW_BUCKET/dags
-          gsutil -m rsync -d -c -r airflow/plugins gs://$AIRFLOW_BUCKET/plugins
-        env:
-          AIRFLOW_BUCKET: "us-west2-calitp-airflow2-pr-88ca8ec6-bucket"
-
-      - name: Push Airflow code to new Composer
+      - name: Push Airflow code to Composer
         run: |
           gsutil -m rsync -d -c -r airflow/dags gs://$AIRFLOW_BUCKET/dags
           gsutil -m rsync -d -c -r airflow/plugins gs://$AIRFLOW_BUCKET/plugins
