@@ -11,6 +11,8 @@ env:
   SERVICE_ACCOUNT: github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com
   WORKLOAD_IDENTITY_PROVIDER: projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
   PROJECT_ID: cal-itp-data-infra
+  COMPOSER_ENVIRONMENT: calitp-airflow2-prod-composer2-20250402
+  COMPOSER_REGION: us-west2
 
 jobs:
   sync:
@@ -19,13 +21,6 @@ jobs:
     permissions:
       contents: read
       id-token: write
-
-    strategy:
-      fail-fast: false
-      matrix:
-        composer_id:
-          - calitp-airflow2-prod-composer2-patch
-          - calitp-airflow2-prod-composer2-20250402
 
     steps:
       - name: Checkout
@@ -43,7 +38,7 @@ jobs:
 
       - name: Update Composer Dependencies
         run: |
-          gcloud composer environments update ${{ matrix.composer_id }} \
+          gcloud composer environments update ${{ env.COMPOSER_ENVIRONMENT }} \
           --update-pypi-packages-from-file airflow/requirements.txt \
-          --location us-west2 \
-          --project cal-itp-data-infra
+          --location ${{ env.COMPOSER_REGION }} \
+          --project ${{ env.PROJECT_ID }}

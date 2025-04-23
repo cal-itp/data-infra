@@ -13,8 +13,6 @@ env:
   WORKLOAD_IDENTITY_PROVIDER: projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
   PROJECT_ID: cal-itp-data-infra
   AIRFLOW_BUCKET: us-west2-calitp-airflow2-pr-f6bb9855-bucket
-  COMPOSER_ENVIRONMENT: calitp-airflow2-prod-composer2-20250402
-  COMPOSER_REGION: us-west2
 
 jobs:
   build:
@@ -37,17 +35,6 @@ jobs:
 
       - name: Setup GCloud utilities
         uses: google-github-actions/setup-gcloud@v2
-
-      # Only update requirements if they have changed; Composer throws an error if there are no changes to apply
-      - uses: tj-actions/changed-files@v41
-        if: ${{ github.ref == 'refs/heads/main' }}
-        id: changed-requirements
-        with:
-          files: 'airflow/requirements.txt'
-
-      - name: Deploy Airflow dependencies to Composer
-        if: steps.changed-requirements.outputs.any_changed == 'true'
-        run: gcloud composer environments update ${{ env.COMPOSER_ENVIRONMENT }} --update-pypi-packages-from-file airflow/requirements.txt --location ${{ env.COMPOSER_REGION }} --project ${{ env.PROJECT_ID }}
 
       - name: Push Airflow code to Composer
         run: |
