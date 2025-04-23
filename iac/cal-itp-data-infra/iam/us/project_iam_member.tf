@@ -581,3 +581,9 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
   member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Cloud_Admins"
   project = "cal-itp-data-infra"
 }
+
+resource "google_project_iam_member" "staging-github-actions-service-account" {
+  role    = google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-DataAnalyst.id
+  member  = "serviceAccount:github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com"
+  project = "cal-itp-data-infra"
+}

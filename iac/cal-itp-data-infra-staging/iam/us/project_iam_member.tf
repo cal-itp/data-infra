@@ -233,7 +233,10 @@ resource "google_project_iam_member" "github-actions-terraform" {
 
 resource "google_project_iam_member" "github-actions-service-account" {
   for_each = toset([
-    "roles/storage.admin"
+    "roles/bigquery.filteredDataViewer",
+    "roles/bigquery.metadataViewer",
+    google_project_iam_custom_role.calitp-dds-analyst.id,
+    google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-staging-002F-roles-002F-CustomGCSPublisher.id
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.github-actions-service-account.email}"
@@ -248,7 +251,6 @@ resource "google_project_iam_member" "custom_service_account" {
   member  = "serviceAccount:${google_service_account.composer-service-account.email}"
   project = "cal-itp-data-infra-staging"
 }
-
 
 resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
   for_each = toset([

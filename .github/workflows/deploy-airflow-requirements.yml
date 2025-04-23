@@ -1,21 +1,21 @@
-name: Deploy Airflow DAGs
+name: Deploy Airflow Requirements
 
 on:
   push:
     branches:
       - main
     paths:
-      - .github/workflows/deploy-airflow.yml
-      - 'airflow/**'
+      - airflow/requirements.txt
 
 env:
   SERVICE_ACCOUNT: github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com
   WORKLOAD_IDENTITY_PROVIDER: projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
   PROJECT_ID: cal-itp-data-infra
-  AIRFLOW_BUCKET: us-west2-calitp-airflow2-pr-f6bb9855-bucket
+  COMPOSER_ENVIRONMENT: calitp-airflow2-prod-composer2-20250402
+  COMPOSER_REGION: us-west2
 
 jobs:
-  build:
+  sync:
     runs-on: ubuntu-latest
 
     permissions:
@@ -36,7 +36,9 @@ jobs:
       - name: Setup GCloud utilities
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Push Airflow code to Composer
+      - name: Update Composer Dependencies
         run: |
-          gsutil -m rsync -d -c -r airflow/dags gs://${{ env.AIRFLOW_BUCKET }}/dags
-          gsutil -m rsync -d -c -r airflow/plugins gs://${{ env.AIRFLOW_BUCKET }}/plugins
+          gcloud composer environments update ${{ env.COMPOSER_ENVIRONMENT }} \
+          --update-pypi-packages-from-file airflow/requirements.txt \
+          --location ${{ env.COMPOSER_REGION }} \
+          --project ${{ env.PROJECT_ID }}
