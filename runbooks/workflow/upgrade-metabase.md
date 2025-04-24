@@ -14,7 +14,7 @@ When Metabase detects a version change, it runs a set of database migrations. In
 
 ### Service Credentials
 
-1. Log into GCloud: `gcloud auth login`
+1. Log into GCloud from the repository directory: `gcloud auth login --login-config=iac/login.json`
 2. List the clusters you can access: `gcloud container clusters list`
 3. Pull Kubernetes credentials for the `data-infra-apps` cluster to your local machine: `gcloud container clusters get-credentials data-infra-apps --location us-west1`
 

@@ -28,7 +28,8 @@ We do not currently use Terraform to manage our cluster, nodepools, etc. and maj
 First, verify you are logged in and gcloud is pointed at `cal-itp-data-infra` and the `us-west1` region.
 
 ```bash
-gcloud auth list
+gcloud auth login --login-config=iac/login.json
+gcloud config set project cal-itp-data-infra
 gcloud config get-value project
 gcloud config get-value compute/region
 ```
