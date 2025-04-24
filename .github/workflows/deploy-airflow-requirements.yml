@@ -5,17 +5,19 @@ on:
     branches:
       - main
     paths:
+      - .github/workflows/deploy-airflow-requirements.yml
       - airflow/requirements.txt
 
 env:
-  SERVICE_ACCOUNT: github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com
-  WORKLOAD_IDENTITY_PROVIDER: projects/1005246706141/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
-  PROJECT_ID: cal-itp-data-infra
-  COMPOSER_ENVIRONMENT: calitp-airflow2-prod-composer2-20250402
+  SERVICE_ACCOUNT: 'github-actions-service-account@cal-itp-data-infra.iam.gserviceaccount.com'
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+  PROJECT_ID: 'cal-itp-data-infra'
+  COMPOSER_ENVIRONMENT: 'calitp-airflow2-prod-composer2-20250402'
   COMPOSER_REGION: us-west2
 
 jobs:
   sync:
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -29,6 +31,7 @@ jobs:
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
         with:
+          create_credentials_file: 'true'
           project_id: ${{ env.PROJECT_ID }}
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
