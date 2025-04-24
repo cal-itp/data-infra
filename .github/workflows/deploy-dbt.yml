@@ -127,6 +127,7 @@ jobs:
           path: './warehouse/target/'
           glob: 'catalog.json'
           parent: false
+          process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/catalog.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
       - name: Upload manifest.json
@@ -135,6 +136,7 @@ jobs:
           path: './warehouse/target/'
           glob: 'manifest.json'
           parent: false
+          process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/manifest.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
       - name: Upload run_results.json
@@ -143,6 +145,7 @@ jobs:
           path: './warehouse/target/'
           glob: 'run_results.json'
           parent: false
+          process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/run_results.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
       - name: Upload index.html
@@ -151,6 +154,7 @@ jobs:
           path: './warehouse/target/'
           glob: 'index.html'
           parent: false
+          process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/index.html/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
       - name: Upload latest
@@ -159,6 +163,7 @@ jobs:
           path: './warehouse/target/'
           glob: '{catalog.json,manifest.json,run_results.json,index.html}'
           parent: false
+          process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/latest/"
 
       - name: Upload documentation
@@ -167,6 +172,7 @@ jobs:
           path: './warehouse/target/'
           glob: '{catalog.json,manifest.json,index.html}'
           parent: false
+          process_gcloudignore: false
           destination: ${{ env.DBT_DOCS_BUCKET }}
 
   models-changed:
