@@ -87,11 +87,11 @@ models:
       - name: ntd_id_2022
         description: |
           Pulled from airtable, the 5 digit component of raw_ntd_id
-      - name: rtpa
+      - name: rtpa_name
         description: |
           Regional Transportation Planning Agency. It shows which RTPA each transit agency is headquartered in.
           All transit agencies will be associated with a single RTPA given that there are RTPAs covering the entire state of California.
-      - name: mpo
+      - name: mpo_name
         description: |
           Metropolitan Planning Organization. It shows which MPO each transit agency is headquartered in.
           Not all transit agencies are associated with an MPO, since there are not MPOs covering the entire state.

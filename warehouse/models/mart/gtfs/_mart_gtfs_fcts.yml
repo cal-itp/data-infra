@@ -39,7 +39,7 @@ x-common-fields:
             # occurs prior to that
             error_if: ">20"
   - &gtfs_rt_dataset_key
-    name: &gtfs_rt_dataset_key_desc | #gtfs_dataset_key
+    name: gtfs_rt_dataset_key_desc
     description: |
       Foreign key to the associated GTFS dataset record.
     tests:
@@ -2527,11 +2527,9 @@ models:
           `trip_id`, and `trip_start_time`.
       - *rt_service_date
       - name: gtfs_dataset_key
-        description: *gtfs_rt_dataset_key_desc
+        description: Foreign key to the associated GTFS dataset record.
       - *base64_url
       - *gtfs_rt_name
-      - name: gtfs_rt_schedule_dataset_key
-        description: '{{ doc("column_rt_schedule_dataset_key") }}'
       - <<: *trip_instance_key
         tests:
           - not_null
