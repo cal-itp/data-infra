@@ -551,11 +551,11 @@ resource "google_project_iam_member" "github-actions-terraform" {
 
 resource "google_project_iam_member" "github-actions-service-account" {
   for_each = toset([
-    "roles/bigquery.dataViewer",
-    "roles/bigquery.jobUser",
-    "roles/bigquery.readSessionUser",
+    "roles/bigquery.filteredDataViewer",
+    "roles/bigquery.metadataViewer",
     "roles/composer.admin",
-    "roles/storage.admin"
+    "roles/storage.objectAdmin",
+    google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-DataAnalyst.id
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.github-actions-service-account.email}"
