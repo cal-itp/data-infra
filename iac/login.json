@@ -1,0 +1,9 @@
+{
+  "universe_domain": "googleapis.com",
+  "universe_cloud_web_domain": "cloud.google",
+  "type": "external_account_authorized_user_login_config",
+  "audience": "//iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/providers/dot-gcp",
+  "auth_url": "https://auth.cloud.google/authorize",
+  "token_url": "https://sts.googleapis.com/v1/oauthtoken",
+  "token_info_url": "https://sts.googleapis.com/v1/introspect"
+}
