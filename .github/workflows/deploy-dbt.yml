@@ -23,6 +23,7 @@ env:
   DBT_ARTIFACTS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-artifacts' || 'calitp-staging-dbt-artifacts' }}
   DBT_DOCS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-docs' || 'calitp-staging-dbt-docs' }}
   DBT_SOURCE_DATABASE: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
+  METABASE_DESTINATION_DATABASE: ${{ github.ref == 'refs/heads/main' && 'Data Marts (formerly Warehouse Views)' || '(Internal) Staging Warehouse Views' }}
 
 jobs:
   compile:
@@ -98,6 +99,10 @@ jobs:
       - name: Generate dbt documentation
         working-directory: warehouse
         run: poetry run dbt docs generate --target ${{ env.DBT_TARGET }} --no-compile
+
+      - name: Synchronize Metabase
+        working-directory: warehouse
+        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --exclude-schemas="*staging, payments" --skip-sources --docs-url="https://dbt-docs.calitp.org" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
 
       - name: Archive compilation artifacts
         uses: actions/upload-artifact@v4
