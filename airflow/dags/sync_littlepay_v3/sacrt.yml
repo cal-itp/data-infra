@@ -1,0 +1,4 @@
+operator: operators.LittlepayRawSyncV3
+instance: sacrt
+src_bucket: littlepay-datafeed-prod-sacrt-56af2970
+access_key_secret_name: LITTLEPAY_AWS_IAM_SACRT_ACCESS_KEY_FEED_V3
