@@ -1,4 +1,4 @@
-FROM apache/airflow:2.6.3-python3.11
+FROM apache/airflow:2.5.3-python3.8
 
 # install gcloud as root, then switch back to airflow
 USER root
@@ -15,8 +15,8 @@ RUN gcloud components install gke-gcloud-auth-plugin
 
 USER airflow
 
-COPY requirements-composer-2.8.3-airflow-2.6.3.txt /tmp/requirements-composer-2.8.3-airflow-2.6.3.txt
-RUN pip install --no-cache-dir --user -r /tmp/requirements-composer-2.8.3-airflow-2.6.3.txt
+COPY requirements-composer-2.6.5-airflow-2.5.3.txt /tmp/requirements-composer-2.6.5-airflow-2.5.3.txt
+RUN pip install --no-cache-dir --user -r /tmp/requirements-composer-2.6.5-airflow-2.5.3.txt
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir --user -r /tmp/requirements.txt

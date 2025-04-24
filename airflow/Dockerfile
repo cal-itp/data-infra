@@ -1,4 +1,4 @@
-FROM apache/airflow:2.6.3-python3.11
+FROM apache/airflow:2.5.3-python3.8
 
 # install gcloud as root, then switch back to airflow
 USER root
