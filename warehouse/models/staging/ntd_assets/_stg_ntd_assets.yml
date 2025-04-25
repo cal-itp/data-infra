@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: stg_ntd__asset_inventory_time_series__active_fleet
+  - name: stg_ntd__asset_inventory_time_series__ada_fleet
+  - name: stg_ntd__asset_inventory_time_series__avg_fleet_age
+  - name: stg_ntd__asset_inventory_time_series__avg_seating_capacity
+  - name: stg_ntd__asset_inventory_time_series__avg_standing_capacity

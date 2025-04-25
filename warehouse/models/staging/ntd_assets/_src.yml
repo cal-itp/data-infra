@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: external_ntd__assets
+    description: Historical assets data tables, loaded from DOT NTD API https://www.transit.dot.gov/ntd/ntd-data.
+    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    schema: external_ntd__assets
+    tables:
+      - name: historical__asset_inventory_time_series__active_fleet
+      - name: historical__asset_inventory_time_series__ada_fleet
+      - name: historical__asset_inventory_time_series__avg_fleet_age
+      - name: historical__asset_inventory_time_series__avg_seating_capacity
+      - name: historical__asset_inventory_time_series__avg_standing_capacity
