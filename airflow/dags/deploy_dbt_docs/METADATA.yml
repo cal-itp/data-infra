@@ -1,4 +1,4 @@
-description: "Builds dbt artifacts and syncs documentation to Metabase."
+description: "Builds dbt artifacts and syncs documentation."
 schedule_interval: null
 tags:
   - all_gusty_features

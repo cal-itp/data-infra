@@ -1,5 +1,5 @@
 operator: 'operators.PodOperator'
-name: 'sync-dbt-docs-to-metabase'
+name: 'sync-dbt-docs'
 image: 'ghcr.io/cal-itp/data-infra/warehouse:{{ image_tag() }}'
 
 cmds:
@@ -10,8 +10,6 @@ arguments:
   - '--no-dbt-seed'
   - '--no-dbt-run'
   - '--dbt-docs'
-  - '--sync-metabase'
-  - '--check-sync-metabase'
 
 is_delete_operator_pod: true
 get_logs: true
@@ -37,14 +35,6 @@ secrets:
     deploy_target: /secrets/jobs-data/
     secret: jobs-data
     key: service-account.json
-  - deploy_type: env
-    deploy_target: MB_USER
-    secret: jobs-data
-    key: metabase-user
-  - deploy_type: env
-    deploy_target: MB_PASSWORD
-    secret: jobs-data
-    key: metabase-password
 
 tolerations:
   - key: pod-role
