@@ -211,6 +211,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@v2
 
@@ -245,7 +256,11 @@ jobs:
 
       - name: Synchronize dbt artifacts output
         working-directory: warehouse
-        run: gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
+        run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ .
+
+      - name: Install dbt dependencies
+        working-directory: warehouse
+        run: poetry run dbt deps
 
       - name: Create CI report
         working-directory: warehouse
