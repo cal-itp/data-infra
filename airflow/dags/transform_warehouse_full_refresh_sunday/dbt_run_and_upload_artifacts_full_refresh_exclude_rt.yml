@@ -11,7 +11,6 @@ arguments:
   - '--dbt-docs'
   - '--save-artifacts'
   - '--deploy-docs'
-  - '--sync-metabase'
   - '--select'
   - "{{ dag_run.conf.get('dbt_select_statement', '') }}"
   - '--exclude'
@@ -43,14 +42,6 @@ secrets:
     deploy_target: /secrets/jobs-data/
     secret: jobs-data
     key: service-account.json
-  - deploy_type: env
-    deploy_target: MB_USER
-    secret: jobs-data
-    key: metabase-user
-  - deploy_type: env
-    deploy_target: MB_PASSWORD
-    secret: jobs-data
-    key: metabase-password
   - deploy_type: env
     deploy_target: NETLIFY_AUTH_TOKEN
     secret: jobs-data

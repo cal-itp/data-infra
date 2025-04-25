@@ -38,8 +38,8 @@ x-common-fields:
             # historical; this threshold may need to increase if the backfill
             # occurs prior to that
             error_if: ">20"
-  - &gtfs_rt_dataset_key
-    name: gtfs_rt_dataset_key_desc
+  - &gtfs_dataset_key_errorif_sampled
+    name: gtfs_dataset_key
     description: |
       Foreign key to the associated GTFS dataset record.
     tests:
@@ -540,7 +540,7 @@ models:
               where: '__rt_sampled__'
           - not_null:
               where: '__rt_sampled__'
-      - *gtfs_rt_dataset_key
+      - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
       - *gtfs_rt_hour
       - *base64_url
@@ -583,7 +583,7 @@ models:
     columns:
       - name: key
         tests: *almost_unique_rt_key_tests
-      - *gtfs_rt_dataset_key
+      - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
       - *gtfs_rt_hour
       - *base64_url
@@ -733,7 +733,7 @@ models:
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
           entity `id`, `vehicle_id`, and `trip_id`.
         tests: *almost_unique_rt_key_tests
-      - *gtfs_rt_dataset_key
+      - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
       - *gtfs_rt_hour
       - *base64_url
@@ -995,7 +995,7 @@ models:
               where: '__rt_sampled__'
           - not_null:
               where: '__rt_sampled__'
-      - *gtfs_rt_dataset_key
+      - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
       - *gtfs_rt_hour
       - *rt_schedule_base64_url
@@ -1074,7 +1074,7 @@ models:
           #     config:
           #       where: '__rt_sampled__'
       - *rt_service_date
-      - *gtfs_rt_dataset_key
+      - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
       - *gtfs_rt_hour
       - *base64_url
@@ -1724,7 +1724,7 @@ models:
     columns:
       - name: key
         tests: *almost_unique_rt_key_tests
-      - *gtfs_rt_dataset_key
+      - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
       - *gtfs_rt_hour
       - *base64_url

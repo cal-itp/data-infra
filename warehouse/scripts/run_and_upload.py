@@ -12,7 +12,6 @@ import pendulum
 import sentry_sdk
 import typer
 from dbt_artifacts import Manifest, RunResults, RunResultStatus
-from dbtmetabase.models.interface import DbtInterface, MetabaseInterface  # type: ignore
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
 
@@ -46,10 +45,6 @@ class DbtTestFail(Exception):
 
 
 class DbtTestWarn(Exception):
-    pass
-
-
-class DbtMetabaseSyncFailure(Exception):
     pass
 
 
@@ -146,8 +141,6 @@ def run(
     dbt_docs: bool = False,
     save_artifacts: bool = False,
     deploy_docs: bool = False,
-    sync_metabase: bool = False,
-    check_sync_metabase: bool = False,
     select: Optional[str] = None,
     dbt_vars: Optional[str] = None,
     exclude: Optional[str] = None,
@@ -295,76 +288,8 @@ def run(
 
             results_to_check.append(subprocess.run(args))
 
-    metabase_export_exception: Optional[Exception] = None
-    if sync_metabase:
-        if target and (target.startswith("prod") or target.startswith("staging")):
-            typer.secho("syncing documentation to metabase", fg=typer.colors.MAGENTA)
-
-            # get secrets
-            mb_user = os.getenv("MB_USER")
-            mb_pass = os.getenv("MB_PASSWORD")
-            mb_host = os.getenv("MB_HOST")
-            dbt_database = os.getenv("DBT_DATABASE")
-            metabase_database = (
-                "Data Marts (formerly Warehouse Views)"
-                if target.startswith("prod")
-                else "(Internal) Staging Warehouse Views"
-            )
-
-            # use programmatic invocation
-            # Instantiate dbt interface
-            dbt = DbtInterface(
-                manifest_path="./target/manifest.json",
-                database=dbt_database,
-                schema_excludes=["staging", "payments"],
-            )
-
-            # Load models
-            typer.secho("reading dbt models")
-            dbt_models, aliases = dbt.read_models(
-                docs_url="https://dbt-docs.calitp.org",
-            )
-
-            # Instantiate Metabase interface
-            typer.secho("instantiating metabase interface")
-            assert mb_host, "mb_host is empty."
-            metabase = MetabaseInterface(
-                host=mb_host.lstrip("https://"),
-                user=mb_user,
-                password=mb_pass,
-                use_http=True,
-                database=metabase_database,
-                exclude_sources=True,
-            )
-
-            # TODO: We used to try to report individual models to Sentry for tracking,
-            #  but parsing stdout logs is fragile; if we want to add the handling code
-            #  back, we need tests
-            typer.secho("propagating models to metabase")
-            try:
-                metabase.client.export_models(
-                    database=metabase.database,
-                    models=dbt_models,
-                    aliases=aliases,
-                )
-            except Exception as e:
-                metabase_export_exception = e
-                typer.secho(
-                    "Metabase export models failed with exception "
-                    + str(metabase_export_exception)
-                )
-
-        else:
-            typer.secho(
-                f"WARNING: running with prod target {target} so skipping metabase sync",
-                fg=typer.colors.YELLOW,
-            )
-
     for result in results_to_check:
         result.check_returncode()
-
-    if check_sync_metabase and metabase_export_exception:
-        raise metabase_export_exception
 
 
 if __name__ == "__main__":
