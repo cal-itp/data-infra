@@ -387,6 +387,7 @@ sources:
           - *dt
           - *execution_ts
 
+      - name: 2022__annual_database_contractual_relationships
       - name: 2023__annual_database_contractual_relationships
       - name: multi_year__breakdowns
       - name: multi_year__breakdowns_by_agency
