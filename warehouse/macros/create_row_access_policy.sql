@@ -163,7 +163,7 @@ filter using (
 
 {{ create_row_access_policy(
     filter_column = 'organization_name',
-    filter_value = 'Nevada County Transportation Commission',
+    filter_value = 'Nevada County',
     principals = ['serviceAccount:nevada-county-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
