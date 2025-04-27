@@ -13,6 +13,7 @@ current_dim_organizations AS (
 
 fct_monthly_modal_time_series_safety_and_service AS (
     SELECT
+        stg._5_digit_ntd_id AS ntd_id,
         stg.major_non_physical_assaults_on_operators,
         stg.major_non_physical_assaults_on_other_transit_workers,
         stg.major_physical_assaults_on_operators,
@@ -82,7 +83,6 @@ fct_monthly_modal_time_series_safety_and_service AS (
         stg.pedestrian_crossing_tracks_1,
         stg.primary_uza_sq_miles,
         stg.primary_uza_name,
-        stg._5_digit_ntd_id,
 
         orgs.caltrans_district_current,
         orgs.caltrans_district_name_current,

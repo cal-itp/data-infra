@@ -13,10 +13,10 @@ current_dim_organizations AS (
 
 fct_operating_and_capital_funding_time_series_decommissioned_operatingfares AS (
     SELECT
+        int.agency_name,
         int.ntd_id,
         int.city,
         int.state,
-        int.agency_name,
         int._2017_status,
         int.agency_status,
         int.uza_population,

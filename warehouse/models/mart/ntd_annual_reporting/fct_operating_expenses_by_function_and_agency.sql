@@ -13,17 +13,17 @@ current_dim_organizations AS (
 
 fct_operating_expenses_by_function_and_agency AS (
     SELECT
+        stg.ntd_id,
         stg.agency,
+        stg.report_year,
         stg.city,
+        stg.state,
         stg.max_agency_voms,
         stg.max_organization_type,
         stg.max_primary_uza_population,
         stg.max_reporter_type,
         stg.max_uace_code,
         stg.max_uza_name,
-        stg.ntd_id,
-        stg.report_year,
-        stg.state,
         stg.sum_facility_maintenance,
         stg.sum_general_administration,
         stg.sum_reduced_reporter_expenses,

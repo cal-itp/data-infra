@@ -13,6 +13,8 @@ current_dim_organizations AS (
 
 fct_employees_by_mode AS (
     SELECT
+        stg.ntd_id,
+        stg.report_year,
         stg.count_capital_labor_count_q,
         stg.count_capital_labor_hours_q,
         stg.count_facility_maintenance_count_q,
@@ -27,8 +29,6 @@ fct_employees_by_mode AS (
         stg.count_vehicle_operations_hours_q,
         stg.max_mode_name,
         stg.mode,
-        stg.ntd_id,
-        stg.report_year,
         stg.sum_total_employee_count,
         stg.sum_total_hours,
         stg.type_of_service,

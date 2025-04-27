@@ -11,8 +11,11 @@ current_dim_organizations AS (
     FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
 ),
 
-fct_contractual_relationships AS (
+dim_contractual_relationships AS (
     SELECT
+        int.agency_name,
+        int.ntd_id,
+        int.year,
         int.other_reconciling_item_expenses_incurred_by_the_buyer,
         int.total_modal_expenses,
         int.contract_capital_leasing_expenses,
@@ -27,7 +30,6 @@ fct_contractual_relationships AS (
         int.buyer_supplies_vehicles_to_seller,
         int.contractee_ntd_id,
         int.pt_fare_revenues_passenger_fees,
-        int.agency_name,
         int.tos,
         int.type_of_contract,
         int.reporter_contractual_position,
@@ -39,7 +41,6 @@ fct_contractual_relationships AS (
         int.reporting_module,
         int.reporter_type,
         int.other_public_assets_provided_desc,
-        int.ntd_id,
 
         orgs.caltrans_district_current,
         orgs.caltrans_district_name_current,
@@ -50,4 +51,4 @@ fct_contractual_relationships AS (
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
 )
 
-SELECT * FROM fct_contractual_relationships
+SELECT * FROM dim_contractual_relationships

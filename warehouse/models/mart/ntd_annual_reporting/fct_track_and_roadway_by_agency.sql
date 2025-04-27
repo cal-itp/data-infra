@@ -13,17 +13,17 @@ current_dim_organizations AS (
 
 fct_track_and_roadway_by_agency AS (
     SELECT
-        stg.max_agency,
+        stg.max_agency AS agency,
+        stg.ntd_id,
+        stg.report_year,
+        stg.max_city AS city,
+        stg.max_state AS state,
         stg.max_agency_voms,
-        stg.max_city,
         stg.max_organization_type,
         stg.max_primary_uza_population,
         stg.max_reporter_type,
-        stg.max_state,
         stg.max_uace_code,
         stg.max_uza_name,
-        stg.ntd_id,
-        stg.report_year,
         stg.sum_at_grade_ballast_including,
         stg.sum_at_grade_in_street_embedded,
         stg.sum_below_grade_bored_or_blasted,

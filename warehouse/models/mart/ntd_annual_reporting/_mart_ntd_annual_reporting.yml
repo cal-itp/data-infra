@@ -227,4 +227,4 @@ models:
   - name: fct_track_and_roadway_guideway_age_distribution
   - name: fct_vehicles_age_distribution
   - name: fct_vehicles_type_count_by_agency
-  - name: fct_contractual_relationships
+  - name: dim_contractual_relationships
