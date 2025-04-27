@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: int_ntd__capital_expenditures_time_series_facilities
+  - name: int_ntd__capital_expenditures_time_series_other
+  - name: int_ntd__capital_expenditures_time_series_rolling_stock
+  - name: int_ntd__capital_expenditures_time_series_total
+  - name: int_ntd__operating_and_capital_funding_time_series_capital_federal
+  - name: int_ntd__operating_and_capital_funding_time_series_capital_local
+  - name: int_ntd__operating_and_capital_funding_time_series_capital_other
+  - name: int_ntd__operating_and_capital_funding_time_series_capital_state
+  - name: int_ntd__operating_and_capital_funding_time_series_capital_total
+  - name: int_ntd__operating_and_capital_funding_time_series_operating_federal
+  - name: int_ntd__operating_and_capital_funding_time_series_operating_local
+  - name: int_ntd__operating_and_capital_funding_time_series_operating_other
+  - name: int_ntd__operating_and_capital_funding_time_series_operating_state
+  - name: int_ntd__operating_and_capital_funding_time_series_operating_total
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_drm
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_fares
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_opexp_ga
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_opexp_nvm
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_opexp_total
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_opexp_vm
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_opexp_vo
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_pmt
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_upt
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_voms
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_vrh
+  - name: int_ntd__service_data_and_operating_expenses_time_series_by_mode_vrm
