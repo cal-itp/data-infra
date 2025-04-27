@@ -2,3 +2,4 @@ version: 2
 
 models:
   - name: int_ntd__unioned_contractual_relationships
+  - name: int_ntd__unioned_agency_information
