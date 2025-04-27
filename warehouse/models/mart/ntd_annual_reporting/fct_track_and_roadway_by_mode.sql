@@ -13,8 +13,8 @@ current_dim_organizations AS (
 
 fct_track_and_roadway_by_mode AS (
     SELECT
+        stg.agency AS agency_name,
         stg.ntd_id,
-        stg.agency,
         stg.report_year,
         stg.city,
         stg.state,

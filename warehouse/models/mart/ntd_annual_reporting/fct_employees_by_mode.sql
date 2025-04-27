@@ -3,6 +3,16 @@ WITH staging_employees_by_mode AS (
     FROM {{ ref('stg_ntd__employees_by_mode') }}
 ),
 
+dim_agency_information AS (
+    SELECT
+        ntd_id,
+        agency_name,
+        year,
+        city,
+        state,
+    FROM {{ ref('dim_agency_information') }}
+),
+
 current_dim_organizations AS (
     SELECT
         ntd_id,
@@ -13,8 +23,14 @@ current_dim_organizations AS (
 
 fct_employees_by_mode AS (
     SELECT
+        agency.agency_name,
+
         stg.ntd_id,
         stg.report_year,
+
+        agency.city,
+        agency.state,
+
         stg.count_capital_labor_count_q,
         stg.count_capital_labor_hours_q,
         stg.count_facility_maintenance_count_q,
@@ -40,6 +56,9 @@ fct_employees_by_mode AS (
         stg.execution_ts
     FROM staging_employees_by_mode AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    LEFT JOIN dim_agency_information AS agency
+        ON stg.ntd_id = agency.ntd_id
+            AND stg.report_year = agency.year
 )
 
 SELECT * FROM fct_employees_by_mode

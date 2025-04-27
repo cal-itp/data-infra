@@ -13,12 +13,11 @@ current_dim_organizations AS (
 
 fct_funding_sources_by_expense_type AS (
     SELECT
-        stg.agency,
+        stg.agency AS agency_name,
         stg.ntd_id,
         stg.report_year,
         stg.city,
         stg.state,
-        stg.state_1,
         stg.agency_voms,
         stg.fares_and_other_directly,
         stg.fares_and_other_directly_1,
@@ -34,6 +33,7 @@ fct_funding_sources_by_expense_type AS (
         stg.taxes_fees_levied_by_transit,
         stg.taxes_fees_levied_by_transit_1,
         stg.total,
+        stg.state_1,
         stg.total_questionable,
         stg.uace_code,
         stg.uza_name,

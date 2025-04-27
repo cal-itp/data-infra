@@ -13,8 +13,8 @@ current_dim_organizations AS (
 
 fct_stations_by_mode_and_age AS (
     SELECT
+        stg.agency AS agency_name,
         stg.ntd_id,
-        stg.agency,
         stg.report_year,
         stg.city,
         stg.state,

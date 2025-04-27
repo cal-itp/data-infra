@@ -13,11 +13,13 @@ current_dim_organizations AS (
 
 fct_asset_inventory_time_series_avg_seating_capacity AS (
     SELECT
-        int.year,
-        int.total,
-        int.state,
-        int.uza_area_sq_miles,
+        int.agency_name,
         int.ntd_id,
+        int.year,
+        int.city,
+        int.state,
+        int.total,
+        int.uza_area_sq_miles,
         int.legacy_ntd_id,
         int.uace_code,
         int.last_report_year,
@@ -28,11 +30,9 @@ fct_asset_inventory_time_series_avg_seating_capacity AS (
         int.uza_population,
         int.mode,
         int.uza_name,
-        int.city,
         int.census_year,
         int.reporting_module,
         int.reporter_type,
-        int.agency_name,
 
         orgs.caltrans_district_current,
         orgs.caltrans_district_name_current,

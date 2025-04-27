@@ -13,7 +13,7 @@ current_dim_organizations AS (
 
 fct_maintenance_facilities_by_agency AS (
     SELECT
-        stg.max_agency AS agency,
+        stg.max_agency AS agency_name,
         stg.ntd_id,
         stg.report_year,
         stg.max_city AS city,

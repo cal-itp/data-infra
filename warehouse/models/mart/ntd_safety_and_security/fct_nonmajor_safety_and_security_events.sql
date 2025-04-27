@@ -3,6 +3,15 @@ WITH staging_nonmajor_safety_and_security_events AS (
     FROM {{ ref('stg_ntd__nonmajor_safety_and_security_events') }}
 ),
 
+dim_agency_information AS (
+    SELECT
+        ntd_id,
+        year,
+        city,
+        state,
+    FROM {{ ref('dim_agency_information') }}
+),
+
 current_dim_organizations AS (
     SELECT
         ntd_id,
@@ -13,13 +22,17 @@ current_dim_organizations AS (
 
 fct_nonmajor_safety_and_security_events AS (
     SELECT
+        stg.agency AS agency_name,
         stg.ntd_id,
-        stg.agency,
+        stg.year,
+
+        agency.city,
+        agency.state,
+
         stg.uace_code,
         stg.mode,
         stg.mode_name,
         stg.type_of_service,
-        stg.year,
         stg.fixed_route_flag,
         stg.incident_description,
         stg.incident_number,
@@ -143,6 +156,9 @@ fct_nonmajor_safety_and_security_events AS (
         stg.execution_ts
     FROM staging_nonmajor_safety_and_security_events AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    LEFT JOIN dim_agency_information AS agency
+        ON stg.ntd_id = agency.ntd_id
+            AND stg.year = agency.year
 )
 
 SELECT * FROM fct_nonmajor_safety_and_security_events

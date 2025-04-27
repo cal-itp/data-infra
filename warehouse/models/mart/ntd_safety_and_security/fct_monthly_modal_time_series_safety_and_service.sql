@@ -3,6 +3,15 @@ WITH staging_monthly_modal_time_series_safety_and_service AS (
     FROM {{ ref('stg_ntd__monthly_modal_time_series_safety_and_service') }}
 ),
 
+dim_agency_information AS (
+    SELECT
+        ntd_id,
+        year,
+        city,
+        state,
+    FROM {{ ref('dim_agency_information') }}
+),
+
 current_dim_organizations AS (
     SELECT
         ntd_id,
@@ -13,7 +22,13 @@ current_dim_organizations AS (
 
 fct_monthly_modal_time_series_safety_and_service AS (
     SELECT
+        stg.agency AS agency_name,
         stg._5_digit_ntd_id AS ntd_id,
+        stg.year,
+
+        agency.city,
+        agency.state,
+
         stg.major_non_physical_assaults_on_operators,
         stg.major_non_physical_assaults_on_other_transit_workers,
         stg.major_physical_assaults_on_operators,
@@ -62,7 +77,6 @@ fct_monthly_modal_time_series_safety_and_service AS (
         stg.pedestrian_crossing_tracks,
         stg.total_assaults_on_transit_workers,
         stg.total_collisions,
-        stg.agency,
         stg.collisions_with_rail_vehicle,
         stg.passenger_injuries,
         stg.collisions_with_fixed_object,
@@ -74,7 +88,6 @@ fct_monthly_modal_time_series_safety_and_service AS (
         stg.service_area_sq_miles,
         stg.other_employee_fatalities,
         stg.non_major_physical_assaults_on_operators,
-        stg.year,
         stg.vehicle_revenue_hours,
         stg.pedestrian_not_in_crosswalk_1,
         stg.vehicle_revenue_miles,
@@ -94,6 +107,9 @@ fct_monthly_modal_time_series_safety_and_service AS (
         stg.execution_ts
     FROM staging_monthly_modal_time_series_safety_and_service AS stg
     LEFT JOIN current_dim_organizations AS orgs ON stg._5_digit_ntd_id = orgs.ntd_id
+    LEFT JOIN dim_agency_information AS agency
+        ON stg._5_digit_ntd_id = agency.ntd_id
+            AND stg.year = agency.year
 )
 
 SELECT * FROM fct_monthly_modal_time_series_safety_and_service

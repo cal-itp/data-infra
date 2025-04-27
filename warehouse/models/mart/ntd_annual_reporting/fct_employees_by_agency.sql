@@ -13,7 +13,7 @@ current_dim_organizations AS (
 
 fct_employees_by_agency AS (
     SELECT
-        stg.max_agency_1 AS agency,
+        stg.max_agency_1 AS agency_name,
         stg.max_ntd_id AS ntd_id,
         stg.report_year,
         stg.max_city_1 AS city,

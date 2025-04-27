@@ -13,7 +13,7 @@ current_dim_organizations AS (
 
 fct_service_by_mode AS (
     SELECT
-        stg.max_agency AS agency,
+        stg.max_agency AS agency_name,
         stg._5_digit_ntd_id AS ntd_id,
         stg.report_year,
         stg.max_city AS city,

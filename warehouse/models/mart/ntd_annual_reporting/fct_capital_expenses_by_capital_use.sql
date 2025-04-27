@@ -13,7 +13,7 @@ current_dim_organizations AS (
 
 fct_capital_expenses_by_capital_use AS (
     SELECT
-        stg.agency,
+        stg.agency AS agency_name,
         stg.ntd_id,
         stg.report_year,
         stg.city,

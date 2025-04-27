@@ -13,7 +13,7 @@ current_dim_organizations AS (
 
 fct_employees_by_mode_and_employee_type AS (
     SELECT
-        stg.agency,
+        stg.agency AS agency_name,
         stg.ntd_id,
         stg.report_year,
         stg.city,

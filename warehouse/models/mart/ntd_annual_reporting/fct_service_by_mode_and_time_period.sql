@@ -13,8 +13,8 @@ current_dim_organizations AS (
 
 fct_service_by_mode_and_time_period AS (
     SELECT
+        stg.agency AS agency_name,
         stg._5_digit_ntd_id AS ntd_id,
-        stg.agency,
         stg.report_year,
         stg.city,
         stg.state,
