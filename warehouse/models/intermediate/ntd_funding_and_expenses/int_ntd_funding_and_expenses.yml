@@ -10,6 +10,8 @@ models:
   - name: int_ntd__operating_and_capital_funding_time_series_capital_other
   - name: int_ntd__operating_and_capital_funding_time_series_capital_state
   - name: int_ntd__operating_and_capital_funding_time_series_capital_total
+  - name: int_ntd__operating_and_capital_funding_time_series_decommissioned_operatingfares
+  - name: int_ntd__operating_and_capital_funding_time_series_decommissioned_operatingother
   - name: int_ntd__operating_and_capital_funding_time_series_operating_federal
   - name: int_ntd__operating_and_capital_funding_time_series_operating_local
   - name: int_ntd__operating_and_capital_funding_time_series_operating_other
