@@ -111,6 +111,14 @@ models:
         +labels:
           domain: intermediate
           dataset: ntd
+      ntd_assets:
+        +labels:
+          domain: intermediate
+          dataset: ntd_assets
+      ntd_funding_and_expenses:
+        +labels:
+          domain: intermediate
+          dataset: ntd_funding_and_expenses
       ntd_validation:
         +labels:
           domain: intermediate
