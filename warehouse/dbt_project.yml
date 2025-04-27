@@ -115,6 +115,10 @@ models:
         +labels:
           domain: intermediate
           dataset: ntd_assets
+      ntd_annual_reporting:
+        +labels:
+          domain: intermediate
+          dataset: ntd_annual_reporting
       ntd_funding_and_expenses:
         +labels:
           domain: intermediate
