@@ -140,9 +140,9 @@ x-common-fields:
     description: '{{ doc("ntd_execution_timestamp") }}'
 
 models:
-  - name: dim_2022_agency_information
+  - name: dim_agency_information
     description: |
-      Contains 2022 basic contact and agency information for each NTD reporter.
+      Contains annual basic contact and agency information for each NTD reporter.
     columns:
       - *ntd_id
       - *legacy_ntd_id
@@ -193,62 +193,6 @@ models:
       - *volunteer_drivers
       - *dt
       - *execution_ts
-
-  - name: dim_2023_agency_information
-    description: |
-      Contains 2023 basic contact and agency information for each NTD reporter.
-    columns:
-      - *ntd_id
-      - *legacy_ntd_id
-      - *state_parent_ntd_id
-      - *agency_name
-      - *doing_business_as
-      - *mailing_address_line_1
-      - *mailing_address_line_2
-      - *mailing_p_o__box
-      - *mailing_city
-      - *mailing_state
-      - *mailing_zip_code
-      - *mailing_zip_code_ext
-      - *region
-      - *density
-      - *ueid
-      - *fta_recipient_id
-      - *original_due_date
-      - *fy_end_date
-      - *number_of_counties_with_service
-      - *number_of_state_counties
-      - *organization_type
-      - *personal_vehicles
-      - <<: *primary_uza_population
-        name: population
-      - <<: *primary_uza_code
-        name: primary_uza_uace_code
-      - <<: *primary_uza_name
-        name: uza_name
-      - *reported_by_name
-      - *reported_by_ntd_id
-      - *reporter_acronym
-      - *reporter_type
-      - *reporting_module
-      - *division_department
-      - <<: *service_area_population
-        name: service_area_pop
-      - <<: *primary_uza_area_sq_miles
-        name: sq_miles
-      - *service_area_sq_miles
-      - *state_admin_funds_expended
-      - *subrecipient_type
-      - *tam_tier
-      - *voms_do
-      - *voms_pt
-      - *total_voms
-      - *tribal_area_name
-      - *url
-      - *volunteer_drivers
-      - *dt
-      - *execution_ts
-
   - name: fct_breakdowns
   - name: fct_breakdowns_by_agency
   - name: fct_capital_expenses_by_capital_use
@@ -283,5 +227,4 @@ models:
   - name: fct_track_and_roadway_guideway_age_distribution
   - name: fct_vehicles_age_distribution
   - name: fct_vehicles_type_count_by_agency
-  - name: fct_2023_contractual_relationships
-  - name: fct_2022_contractual_relationships
+  - name: fct_contractual_relationships
