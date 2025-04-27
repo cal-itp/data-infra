@@ -1,4 +1,4 @@
-WITH staging_asset_inventory_time_series_active_fleet AS (
+WITH intermediate_asset_inventory_time_series_active_fleet AS (
     SELECT *
     FROM {{ ref('int_ntd__asset_inventory_time_series_active_fleet') }}
 ),
@@ -13,33 +13,33 @@ current_dim_organizations AS (
 
 fct_asset_inventory_time_series_active_fleet AS (
     SELECT
-        stg.year,
-        stg.total,
-        stg.state,
-        stg.uza_area_sq_miles,
-        stg.ntd_id,
-        stg.legacy_ntd_id,
-        stg.uace_code,
-        stg.last_report_year,
-        stg.mode_status,
-        stg.service,
-        stg._2023_mode_status,
-        stg.agency_status,
-        stg.uza_population,
-        stg.mode,
-        stg.uza_name,
-        stg.city,
-        stg.census_year,
-        stg.reporting_module,
-        stg.reporter_type,
-        stg.agency_name,
+        int.year,
+        int.total,
+        int.state,
+        int.uza_area_sq_miles,
+        int.ntd_id,
+        int.legacy_ntd_id,
+        int.uace_code,
+        int.last_report_year,
+        int.mode_status,
+        int.service,
+        int._2023_mode_status,
+        int.agency_status,
+        int.uza_population,
+        int.mode,
+        int.uza_name,
+        int.city,
+        int.census_year,
+        int.reporting_module,
+        int.reporter_type,
+        int.agency_name,
 
         orgs.caltrans_district_current,
         orgs.caltrans_district_name_current,
 
-        stg.dt,
-        stg.execution_ts
-    FROM staging_asset_inventory_time_series_active_fleet AS stg
+        int.dt,
+        int.execution_ts
+    FROM intermediate_asset_inventory_time_series_active_fleet AS int
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
 )
 
