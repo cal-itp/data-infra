@@ -1,6 +1,6 @@
 WITH staging_asset_inventory_time_series_active_fleet AS (
     SELECT *
-    FROM {{ ref('stg_ntd__asset_inventory_time_series__active_fleet') }}
+    FROM {{ ref('int_ntd__asset_inventory_time_series_active_fleet') }}
 ),
 
 current_dim_organizations AS (
@@ -13,6 +13,8 @@ current_dim_organizations AS (
 
 fct_asset_inventory_time_series_active_fleet AS (
     SELECT
+        stg.year,
+        stg.total,
         stg.state,
         stg.uza_area_sq_miles,
         stg.ntd_id,
@@ -31,38 +33,6 @@ fct_asset_inventory_time_series_active_fleet AS (
         stg.reporting_module,
         stg.reporter_type,
         stg.agency_name,
-        stg._2021,
-        stg._2023,
-        stg._1995,
-        stg._2015,
-        stg._2019,
-        stg._2014,
-        stg._2012,
-        stg._2008,
-        stg._2007,
-        stg._2013,
-        stg._2002,
-        stg._2006,
-        stg._2000,
-        stg._2004,
-        stg._2003,
-        stg._1998,
-        stg._2022,
-        stg._1999,
-        stg._1997,
-        stg._2011,
-        stg._2001,
-        stg._1996,
-        stg._2020,
-        stg._2005,
-        stg._2017,
-        stg._1994,
-        stg._1992,
-        stg._2010,
-        stg._2009,
-        stg._2016,
-        stg._2018,
-        stg._1993,
 
         orgs.caltrans_district_current,
         orgs.caltrans_district_name_current,
