@@ -63,16 +63,24 @@ Power User profile allocates a full node or a significant portion of resources t
 Connecting to the warehouse requires a bit of setup after logging in to JupyterHub, but allows users to query data in the warehouse directly.
 To do this, you will need to download and install the gcloud commandline tool from the app.
 
-See the screencast below for a full walkthrough.
+See the screencast below for a walkthrough of a similar process:
 
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
-The commands required (assuming you're in the root directory):
+Be in the root directory of either data-infra or the data-analyses repo.  Then run these commands:
 
 ```bash
 gcloud auth login --login-config=iac/login.json
+gcloud config set project cal-itp-data-infra
+```
+
+If you are developing in the warehouse, set your project to staging with:
+
+```bash
 gcloud config set project cal-itp-data-infra-staging
 ```
+
+This will enable your authorization that should work.
 
 If you are still not able to connect, make sure you have the suite of permissions associated with other analysts.
 
