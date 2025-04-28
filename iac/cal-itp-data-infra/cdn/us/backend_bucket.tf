@@ -29,6 +29,26 @@ resource "google_compute_backend_bucket" "calitp-dbt-docs" {
 resource "google_compute_url_map" "default" {
   name            = "http-lb"
   default_service = google_compute_backend_bucket.calitp-gtfs.id
+
+  host_rule {
+    path_matcher = "gtfs"
+    hosts        = ["gtfs.dds.dot.ca.gov"]
+  }
+
+  host_rule {
+    path_matcher = "dbt-docs"
+    hosts        = ["dbt-docs.dds.dot.ca.gov"]
+  }
+
+  path_matcher {
+    name            = "gtfs"
+    default_service = google_compute_backend_bucket.calitp-gtfs.id
+  }
+
+  path_matcher {
+    name            = "dbt-docs"
+    default_service = google_compute_backend_bucket.calitp-dbt-docs.id
+  }
 }
 
 resource "google_compute_target_http_proxy" "default" {
