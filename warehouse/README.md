@@ -223,17 +223,14 @@ You can enable [displaying hidden folders/files in macOS Finder](https://www.mac
          export PATH="$HOME/google-cloud-sdk/bin:$PATH"
          ```
 
-2. Restart your terminal, and run `gcloud init`
+2. Restart your terminal and run `gcloud auth login --login-config=iac/login.json`
 
-3. Step through the prompts and select the Google account associated with GCP
-
-   - Set `cal-itp-data-infra` as the default project
-   - Do not set a region
+3. Set the default project with `gcloud config set project cal-itp-data-infra-staging`
 
 4. You should also [set the application default](https://cloud.google.com/sdk/gcloud/reference/auth/application-default) so that `dbt` can access your Google Cloud credentials.
 
    ```bash
-   gcloud auth application-default login
+   gcloud auth application-default login --login-config=iac/login.json
    ```
 
 5. If `bq ls` shows output, you are good to go.
