@@ -67,19 +67,11 @@ See the screencast below for a full walkthrough.
 
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
-The commands required:
+The commands required (assuming you're in the root directory):
 
 ```bash
-# init will both authenticate and do basic configuration
-# You do not have to set a default compute region/zone
-gcloud init
-
-# Optionally, you can auth and set the project separately
-gcloud auth login
-gcloud config set project cal-itp-data-infra
-
-# Regardless, set up application default credentials
-gcloud auth application-default login
+gcloud auth login --login-config=iac/login.json
+gcloud config set project cal-itp-data-infra-staging
 ```
 
 If you are still not able to connect, make sure you have the suite of permissions associated with other analysts.

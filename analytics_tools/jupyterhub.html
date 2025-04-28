@@ -565,17 +565,9 @@ document.write(`
 To do this, you will need to download and install the gcloud commandline tool from the app.</p>
 <p>See the screencast below for a full walkthrough.</p>
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
-<p>The commands required:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># init will both authenticate and do basic configuration</span>
-<span class="c1"># You do not have to set a default compute region/zone</span>
-gcloud<span class="w"> </span>init
-
-<span class="c1"># Optionally, you can auth and set the project separately</span>
-gcloud<span class="w"> </span>auth<span class="w"> </span>login
-gcloud<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>project<span class="w"> </span>cal-itp-data-infra
-
-<span class="c1"># Regardless, set up application default credentials</span>
-gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<span class="w"> </span>login
+<p>The commands required (assuming you’re in the root directory):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud<span class="w"> </span>auth<span class="w"> </span>login<span class="w"> </span>--login-config<span class="o">=</span>iac/login.json
+gcloud<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>project<span class="w"> </span>cal-itp-data-infra-staging
 </pre></div>
 </div>
 <p>If you are still not able to connect, make sure you have the suite of permissions associated with other analysts.</p>
