@@ -34,8 +34,10 @@ mapped_org_ids AS (
     LEFT JOIN base_tts_services_ct_services_map AS map_services
         ON unnested_covered_services = map_services.tts_key
         AND dt = map_services.tts_date
+
     GROUP BY id, dt
 ),
+
 
 base_tts_contracts_idmap AS (
     SELECT
