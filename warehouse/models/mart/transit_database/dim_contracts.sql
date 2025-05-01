@@ -15,6 +15,7 @@ dim_contracts AS (
         start_date,
         source_record_id,
         end_date,
+        is_active,
         renewal_option,
         notes,
         contract_name_notes,

@@ -17,6 +17,10 @@ dim_products AS (
         certifications,
         product_features,
         business_model_features,
+        start_date,
+        end_date,
+        status,
+        cal_itp_product,
         _is_current,
         _valid_from,
         _valid_to

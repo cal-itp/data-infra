@@ -7,15 +7,17 @@ once_daily_contracts AS (
 ),
 
 stg_transit_database__contracts AS (
-    SELECT
+    SELECT DISTINCT
         id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         unnested_contract_holder AS contract_holder_organization_key,
         unnested_contract_vendor AS contract_vendor_organization_key,
         covered_components,
+        covered_services,
         value,
         start_date,
         end_date,
+        is_active,
         renewal_option,
         notes,
         contract_name AS contract_name_notes,

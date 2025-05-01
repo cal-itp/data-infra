@@ -44,6 +44,9 @@ join_services AS (
         historical.ntd_certified,
         historical.product_component_valid,
         historical.notes,
+        historical.start_date,
+        historical.end_date,
+        historical.is_active,
         (historical._is_current AND dim_services._is_current) AS _is_current,
         GREATEST(historical._valid_from, dim_services._valid_from) AS _valid_from,
         LEAST(historical._valid_to, dim_services._valid_to) AS _valid_to
@@ -69,6 +72,9 @@ join_products AS (
         ntd_certified,
         product_component_valid,
         join_services.notes,
+        join_services.start_date,
+        join_services.end_date,
+        join_services.is_active,
         (join_services._is_current AND dim_products._is_current) AS _is_current,
         GREATEST(join_services._valid_from, dim_products._valid_from) AS _valid_from,
         LEAST(join_services._valid_to, dim_products._valid_to) AS _valid_to
@@ -96,6 +102,9 @@ join_orgs AS (
         ntd_certified,
         product_component_valid,
         notes,
+        start_date,
+        end_date,
+        is_active,
         (join_products._is_current AND COALESCE(dim_organizations._is_current, TRUE)) AS _is_current,
         GREATEST(join_products._valid_from, COALESCE(dim_organizations._valid_from, "1900-01-01")) AS _valid_from,
         LEAST(join_products._valid_to, COALESCE(dim_organizations._valid_to, "2099-01-01")) AS _valid_to
@@ -131,6 +140,9 @@ int_transit_database__service_components_dim AS (
         ntd_certified,
         product_component_valid,
         join_orgs.notes,
+        join_orgs.start_date,
+        join_orgs.end_date,
+        join_orgs.is_active,
         (join_orgs._is_current AND COALESCE(dim_components._is_current, TRUE)) AS _is_current,
         GREATEST(join_orgs._valid_from, COALESCE(dim_components._valid_from, '1900-01-01')) AS _valid_from,
         LEAST(join_orgs._valid_to, COALESCE(dim_components._valid_to, '2099-01-01')) AS _valid_to
