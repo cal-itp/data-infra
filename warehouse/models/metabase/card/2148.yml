@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: 6___passenger_miles_and_charged_amount_by_train
+    label: 6 - Passenger Miles and Charged Amount by Train
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2148__
+
+
+      Created On: __2024-02-06T22:08:33.149983Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2148
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:00.743'
+      last_used_at: '2025-04-15T15:14:47.118216Z'

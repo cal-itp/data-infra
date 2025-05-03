@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _atn__contactless_payments_metrics_dashboard
+    label: (ATN) Contactless Payments Metrics Dashboard
+    description: '### Dashboard Cards: 71
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __155__
+
+
+      Created On: __2023-09-07T16:35:42.873651Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/155
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

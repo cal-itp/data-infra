@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: cal_itp_benefits_enrollments__2023_
+    label: Cal-ITP Benefits enrollments (2023)
+    description: '### Visualization: Progress
+
+
+      Successful benefit enrollments using the Cal-ITP Benefits app across all enrollment
+      pathways and all California transit agencies between Jan – Dec 2023.
+
+
+      #### Metadata
+
+
+      Metabase ID: __2907__
+
+
+      Created On: __2024-08-21T22:52:40.584261Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2907
+    maturity: medium
+    owner:
+      name: Andy Walker
+      email: andy@compiler.la
+    depends_on: []
+    meta:
+      average_query_time: '0:00.353'
+      last_used_at: '2024-09-20T17:54:54.131902Z'

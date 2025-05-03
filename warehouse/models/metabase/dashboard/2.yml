@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: validator_errors__
+    label: 'Validator errors  '
+    description: '### Dashboard Cards: 6
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2__
+
+
+      Created On: __2021-06-17T14:36:09.867108Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/2
+    maturity: medium
+    owner:
+      name: Natalya Diaz
+      email: natalya.d@jarv.us
+    depends_on: []

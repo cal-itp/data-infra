@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: assessment_fee_per_category__usd_
+    label: Assessment fee per category (USD)
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1491__
+
+
+      Created On: __2023-07-26T19:27:43.630848Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1491
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:00.548'
+      last_used_at: '2025-04-17T18:25:26.649Z'

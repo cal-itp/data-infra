@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: bigquery_overview_dashboard
+    label: BigQuery Overview Dashboard
+    description: '### Dashboard Cards: 9
+
+
+      Overview of BigQuery Information
+
+
+      #### Metadata
+
+
+      Metabase ID: __76__
+
+
+      Created On: __2022-07-27T14:45:26.253446Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/76
+    maturity: medium
+    owner:
+      name: Blake Fleischer
+      email: blake.f@jarv.us
+    depends_on: []

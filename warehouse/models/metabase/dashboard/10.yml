@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: juniper_report_solutions_
+    label: 'Juniper Report Solutions '
+    description: '### Dashboard Cards: 4
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __10__
+
+
+      Created On: __2021-07-29T14:38:21.200269Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/10
+    maturity: medium
+    owner:
+      name: Natalya Diaz
+      email: natalya.d@jarv.us
+    depends_on: []

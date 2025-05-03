@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: all_journeys_data_9
+    label: All Journeys Data
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __505__
+
+
+      Created On: __2022-09-20T21:23:29.237199Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/505
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:04.371'
+      last_used_at: '2025-04-15T17:05:20.269878Z'

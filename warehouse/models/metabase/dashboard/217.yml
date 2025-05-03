@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _redwood_coast_transit__merchant_service_charge_tracking_
+    label: '(Redwood Coast Transit) Merchant Service Charge tracking '
+    description: '### Dashboard Cards: 36
+
+
+      Merchant Service Charges tracking dashboard, based on the Elavon data feed.
+
+
+      #### Metadata
+
+
+      Metabase ID: __217__
+
+
+      Created On: __2024-08-23T17:07:02.160245Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/217
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []

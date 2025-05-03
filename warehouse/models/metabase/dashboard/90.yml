@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: sample
+    label: Sample
+    description: '### Dashboard Cards: 3
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __90__
+
+
+      Created On: __2022-11-01T18:24:21.079515Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/90
+    maturity: medium
+    owner:
+      name: Jameelah Young
+      email: jameelah.y@jarv.us
+    depends_on: []

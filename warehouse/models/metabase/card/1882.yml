@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_unique_riders__grouped_by_week_9
+    label: Number of Unique Riders, Grouped by Week
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1882__
+
+
+      Created On: __2023-11-02T19:44:38.197061Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1882
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:01.104'
+      last_used_at: '2025-04-15T17:05:20.241505Z'

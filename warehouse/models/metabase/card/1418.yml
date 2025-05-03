@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: total_journey_count_9
+    label: Total Journey Count
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1418__
+
+
+      Created On: __2023-07-06T20:11:31.717785Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1418
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.870'
+      last_used_at: '2025-04-15T17:05:20.269878Z'
