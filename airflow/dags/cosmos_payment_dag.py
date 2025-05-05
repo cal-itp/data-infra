@@ -4,11 +4,14 @@ from cosmos import DbtDag, ProfileConfig, ProjectConfig, RenderConfig
 
 cosmos_payment = DbtDag(
     # dbt/cosmos-specific parameters
-    project_config=ProjectConfig(dbt_project_path="data/warehouse"),
+    project_config=ProjectConfig(
+        dbt_project_path="/home/airflow/gcs/data/warehouse",
+        manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
+    ),
     profile_config=ProfileConfig(
         target_name="staging",
         profile_name="calitp_warehouse",
-        profiles_yml_filepath="data/warehouse/profiles.yml",
+        profiles_yml_filepath="/home/airflow/gcs/data/warehouse/profiles.yml",
     ),
     render_config=RenderConfig(
         select=[
