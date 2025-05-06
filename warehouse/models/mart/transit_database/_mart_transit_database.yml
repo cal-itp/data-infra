@@ -848,6 +848,28 @@ models:
           - relationships:
              to: ref('dim_components')
              field: key
+  - name: bridge_contracts_x_services
+    description: |
+      Mapping table between contracts and services.
+      Relationship indicates that contract covers the given service.
+      This is a versioned, many-to-many relationship.
+      Joins via this table can result in fanout.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - contract_key
+            - service_key
+    columns:
+      - name: contract_key
+        tests:
+          - relationships:
+             to: ref('dim_contracts')
+             field: key
+      - name: service_key
+        tests:
+          - relationships:
+             to: ref('dim_services')
+             field: key
   - name: bridge_schedule_dataset_for_validation
     description: |
       Mapping table between GTFS RT datasets and the schedule dataset that is used to validate it
