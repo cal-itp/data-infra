@@ -1,14 +1,27 @@
 WITH
+latest_ct AS (
+    {{ get_latest_dense_rank(
+        external_table = source('airtable', 'california_transit__services'),
+        order_by = 'ts DESC', partition_by = 'dt'
+        ) }}
+),
+
+latest_tts AS (
+    {{ get_latest_dense_rank(
+        external_table = source('airtable', 'transit_technology_stacks__services'),
+        order_by = 'ts DESC', partition_by = 'dt'
+        ) }}
+),
 
 ct_services AS ( -- noqa: L045
     SELECT *
-    FROM {{ source('airtable', 'california_transit__services') }}
+    FROM latest_ct
     WHERE TRIM(name) != ""
 ),
 
 tts_services AS ( -- noqa: L045
     SELECT *
-    FROM {{ source('airtable', 'transit_technology_stacks__services') }}
+    FROM latest_tts
     WHERE TRIM(name) != ""
 ),
 
