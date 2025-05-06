@@ -92,7 +92,7 @@ are implemented for future schema consistency, but historical data has not yet b
 
 {% docs service_components_table %}
 
-Each record is an association between one or more `services`, a `product`, and one or more `components` which that product is serving as.
+Each record is an association between a `services`, a `product`, and one `components` which that product is serving as.
 
 Each row in this table is a relationship version, where the record
 had the given set of attributes. Because `dim_services` and `dim_organizations` are fully versioned but `dim_products` and `dim_components` are not,
