@@ -1,28 +1,32 @@
+import os
 from typing import Mapping
 
-import os
 from google.cloud import secretmanager  # type: ignore
 
 
-def get_gcp_project() -> str:
+def get_gcp_project_id() -> str:
     """
     Get the GCP project ID from the environment variable. Try the following
     environment variables in order:
-    1. GCP_PROJECT
-    2. GOOGLE_CLOUD_PROJECT
+    1. GOOGLE_CLOUD_PROJECT
+    2. GCP_PROJECT
     3. PROJECT_ID
 
     Cloud Composer should set at least one of these environment variables. See
     https://cloud.google.com/composer/docs/composer-3/set-environment-variables
     """
     try:
-        return os.getenv(
-            "GCP_PROJECT",
-            os.getenv(
-                "GOOGLE_CLOUD_PROJECT",
-                os.environ["PROJECT_ID"]
-            ),
-        )
+        return os.environ["GOOGLE_CLOUD_PROJECT"]
+    except KeyError:
+        pass
+
+    try:
+        return os.environ["GCP_PROJECT"]
+    except KeyError:
+        pass
+
+    try:
+        return os.environ["PROJECT_ID"]
     except KeyError:
         raise ValueError(
             "GCP project not set in environment variables. "
@@ -36,7 +40,7 @@ def get_secret_by_name(
     project: str = None,
     client=secretmanager.SecretManagerServiceClient(),
 ) -> str:
-    project = project or get_gcp_project()
+    project = project or get_gcp_project_id()
 
     version = f"{project}/secrets/{name}/versions/latest"
     response = client.access_secret_version(name=version)
@@ -49,7 +53,7 @@ def get_secrets_by_label(
     client=secretmanager.SecretManagerServiceClient(),
 ) -> Mapping[str, str]:
     secret_values = {}
-    project = project or get_gcp_project()
+    project = project or get_gcp_project_id()
 
     # once we get on at least 2.0.0 of secret manager, we can filter server-side
     for secret in client.list_secrets(parent=project):
