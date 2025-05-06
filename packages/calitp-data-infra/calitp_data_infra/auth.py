@@ -37,7 +37,7 @@ def get_gcp_project_id() -> str:
 
 def get_secret_by_name(
     name: str,
-    project: str = None,
+    project: str = "",
     client=secretmanager.SecretManagerServiceClient(),
 ) -> str:
     project = project or get_gcp_project_id()
@@ -49,7 +49,7 @@ def get_secret_by_name(
 
 def get_secrets_by_label(
     label: str,
-    project: str = None,
+    project: str = "",
     client=secretmanager.SecretManagerServiceClient(),
 ) -> Mapping[str, str]:
     secret_values = {}
