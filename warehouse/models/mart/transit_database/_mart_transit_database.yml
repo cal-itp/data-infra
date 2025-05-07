@@ -272,7 +272,7 @@ models:
       - *key
       - name: cal_itp_product
         description: |
-          Boolean flag indicating whether the product is offered through the Cal-ITP marketplace.
+          Boolean flag indicating whether the product is offered through the [California Mobility Marketplace](https://camobilitymarketplace.org/) or some other Cal-ITP or state-sponsored partnership such as the CalSTA Remix offering.
       - name: status
         description: |
           Categorical field indicating the current status of the product: "planned", "active", or "deprecated".
