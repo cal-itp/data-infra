@@ -168,10 +168,8 @@ models:
       - *personal_vehicles
       - <<: *primary_uza_population
         name: population
-      - <<: *primary_uza_code
-        name: primary_uza_uace_code
-      - <<: *primary_uza_name
-        name: uza_name
+      - *primary_uza_code
+      - *primary_uza_name
       - *reported_by_name
       - *reported_by_ntd_id
       - *reporter_acronym
@@ -191,8 +189,7 @@ models:
       - *tribal_area_name
       - *url
       - *volunteer_drivers
-      - *dt
-      - *execution_ts
+
   - name: fct_breakdowns
   - name: fct_breakdowns_by_agency
   - name: fct_capital_expenses_by_capital_use
