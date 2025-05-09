@@ -13,7 +13,11 @@ current_dim_organizations AS (
 
 fct_employees_by_agency AS (
     SELECT
-        stg.max_agency_1,
+        stg.max_agency_1 AS agency_name,
+        stg.max_ntd_id AS ntd_id,
+        stg.report_year,
+        stg.max_city_1 AS city,
+        stg.max_state_1 AS state,
         stg.avgwagerate,
         stg.count_capital_labor_count_q,
         stg.count_capital_labor_hours_q,
@@ -28,13 +32,9 @@ fct_employees_by_agency AS (
         stg.count_vehicle_operations_count_q,
         stg.count_vehicle_operations_hours_q,
         stg.max_agency_voms_1,
-        stg.max_city_1,
         stg.max_mode_voms,
-        stg.max_ntd_id,
         stg.max_primary_uza_population_1,
-        stg.max_state_1,
         stg.max_uza_name_1,
-        stg.report_year,
         stg.sum_total_hours,
         stg.total_employees,
         stg.total_operating_hours,

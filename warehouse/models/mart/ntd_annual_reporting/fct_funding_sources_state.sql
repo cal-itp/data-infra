@@ -13,17 +13,17 @@ current_dim_organizations AS (
 
 fct_funding_sources_state AS (
     SELECT
-        stg.agency,
-        stg.agency_voms,
-        stg.city,
-        stg.general_funds,
+        stg.agency AS agency_name,
         stg.ntd_id,
+        stg.report_year,
+        stg.city,
+        stg.state,
+        stg.agency_voms,
+        stg.general_funds,
         stg.organization_type,
         stg.primary_uza_population,
         stg.reduced_reporter_funds,
-        stg.report_year,
         stg.reporter_type,
-        stg.state,
         stg.total,
         stg.total_questionable,
         stg.transportation_funds,

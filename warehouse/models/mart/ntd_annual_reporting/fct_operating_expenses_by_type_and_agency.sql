@@ -13,17 +13,17 @@ current_dim_organizations AS (
 
 fct_operating_expenses_by_type_and_agency AS (
     SELECT
-        stg.max_agency,
+        stg.max_agency AS agency_name,
+        stg.ntd_id,
+        stg.report_year,
+        stg.max_city AS city,
+        stg.max_state AS state,
         stg.max_agency_voms,
-        stg.max_city,
         stg.max_organization_type,
         stg.max_primary_uza_population,
         stg.max_reporter_type,
-        stg.max_state,
         stg.max_uace_code,
         stg.max_uza_name,
-        stg.ntd_id,
-        stg.report_year,
         stg.sum_casualty_and_liability,
         stg.sum_fringe_benefits,
         stg.sum_fuel_and_lube,
