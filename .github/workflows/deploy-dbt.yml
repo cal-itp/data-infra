@@ -15,7 +15,6 @@ on:
 env:
   PYTHON_VERSION: '3.11'
   POETRY_VERSION: '2.0.1'
-  NODE_VERSION: '16'
   SERVICE_ACCOUNT: ${{ github.ref == 'refs/heads/main' && 'github-actions-service-account@cal-itp-data-infra.iam.gserviceaccount.com' || 'github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com' }}
   WORKLOAD_IDENTITY_PROVIDER: ${{ github.ref == 'refs/heads/main' && 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra' || 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra' }}
   PROJECT_ID: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
@@ -29,9 +28,11 @@ jobs:
   compile:
     name: Compile dbt
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
       id-token: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -55,7 +56,7 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Cache poetry
+      - name: Cache Poetry
         uses: actions/cache@v3
         with:
           path: ~/.cache/pypoetry
@@ -66,7 +67,7 @@ jobs:
         with:
           poetry-version: ${{ env.POETRY_VERSION }}
 
-      - name: Cache python packages
+      - name: Cache Python packages
         uses: actions/cache@v3
         with:
           path: ~/.local
@@ -106,18 +107,46 @@ jobs:
             warehouse/target/*.json
             warehouse/target/*.html
 
+  models-changed:
+    name: Detect dbt model changes
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event_name == 'pull_request' }}
+
+    outputs:
+      any_changed: ${{ steps.changed-files-warehouse.outputs.any_changed }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: tj-actions/changed-files@v46
+        id: changed-files-warehouse
+        with:
+          files: 'warehouse/models/**/*.sql'
+
   metabase:
     name: Sync Metabase
-    needs: [compile]
     runs-on: ubuntu-latest
+
+    needs:
+      - compile
+      - models-changed
+
+    if: ${{ needs.models-changed.outputs.any_changed == 'true' }}
+
     permissions:
       contents: read
       id-token: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v4
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
         with:
           name: dbt
           path: warehouse/target
@@ -141,7 +170,7 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Cache poetry
+      - name: Cache Poetry
         uses: actions/cache@v3
         with:
           path: ~/.cache/pypoetry
@@ -152,7 +181,7 @@ jobs:
         with:
           poetry-version: ${{ env.POETRY_VERSION }}
 
-      - name: Cache python packages
+      - name: Cache Python packages
         uses: actions/cache@v3
         with:
           path: ~/.local
@@ -176,6 +205,17 @@ jobs:
         working-directory: warehouse
         run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
 
+      # TODO: To be enabled when permission Terraform applies bigquery.tables.create
+      # - name: Download latest artifacts from GCS
+      #   working-directory: warehouse
+      #   if: ${{ env.DBT_TARGET  == 'staging' }}
+      #   run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ ./target/
+      #
+      # - name: Run changed models
+      #   working-directory: warehouse
+      #   if: ${{ env.DBT_TARGET  == 'staging' }}
+      #   run: poetry run dbt run --select state:modified+ --target ${{ env.DBT_TARGET }} --state ./target/latest
+
       - name: Synchronize Metabase
         working-directory: warehouse
         run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --exclude-schemas="*staging, payments" --skip-sources --docs-url="https://dbt-docs.calitp.org" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
@@ -184,11 +224,14 @@ jobs:
     name: Upload to Google Cloud Storage
     needs: [compile]
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
       id-token: write
+
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
         with:
           name: dbt
           path: warehouse/target
@@ -254,15 +297,6 @@ jobs:
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/index.html/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
-      - name: Upload latest
-        uses: google-github-actions/upload-cloud-storage@v1
-        with:
-          path: './warehouse/target/'
-          glob: '{catalog.json,manifest.json,run_results.json,index.html}'
-          parent: false
-          process_gcloudignore: false
-          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/latest/"
-
       - name: Upload documentation
         uses: google-github-actions/upload-cloud-storage@v1
         with:
@@ -272,37 +306,18 @@ jobs:
           process_gcloudignore: false
           destination: ${{ env.DBT_DOCS_BUCKET }}
 
-  models-changed:
-    name: Detect dbt model changes
-    if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-latest
-
-    outputs:
-      any_changed: ${{ steps.changed-files-warehouse.outputs.any_changed }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: tj-actions/changed-files@v46
-        id: changed-files-warehouse
-        with:
-          files: 'warehouse/models/**/*.sql'
-
   visualize:
     name: Pull Request visualization
+    runs-on: ubuntu-latest
+
     needs:
       - models-changed
       - compile
 
     if: ${{ github.event_name == 'pull_request' && needs.models-changed.outputs.any_changed == 'true' }}
 
-    runs-on: ubuntu-latest
-
     permissions:
-      contents: write
+      contents: read
       id-token: write
       pull-requests: write
 
@@ -310,10 +325,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v4
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
         with:
           name: dbt
           path: warehouse/target
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@v2
@@ -351,12 +378,16 @@ jobs:
         working-directory: warehouse
         run: poetry run dbt deps
 
+      - name: Download latest artifacts from GCS
+        working-directory: warehouse
+        run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ ./target/
+
       - name: Create CI report
         working-directory: warehouse
-        run: poetry run python scripts/visualize.py ci-report
+        run: poetry run python scripts/visualize.py ci-report --latest-dir='./target/latest/'
 
       - name: Create GitHub comment
         working-directory: warehouse
-        run: cml comment update target/report.md
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: cml comment update target/report.md
