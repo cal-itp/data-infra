@@ -449,11 +449,11 @@ resource "google_storage_bucket" "calitp-staging-state-geoportal-scrape" {
   uniform_bucket_level_access = "true"
 }
 
-resource "google_storage_bucket" "test-calitp-gtfs-download-config" {
+resource "google_storage_bucket" "calitp-staging-gtfs-download-config-test" {
   default_event_based_hold    = "false"
   force_destroy               = "true"
   location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-download-config"
+  name                        = "calitp-staging-gtfs-download-config-test"
   project                     = "cal-itp-data-infra-staging"
   public_access_prevention    = "inherited"
   requester_pays              = "false"
