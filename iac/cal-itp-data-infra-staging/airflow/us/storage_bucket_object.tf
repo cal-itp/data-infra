@@ -13,25 +13,25 @@ resource "google_storage_bucket_object" "calitp-staging-composer-dags" {
 }
 
 resource "google_storage_bucket_object" "calitp-staging-composer-manifest" {
-  name     = "data/warehouse/target/manifest.json"
+  name    = "data/warehouse/target/manifest.json"
   content = data.google_storage_bucket_object_content.calitp-staging-dbt-manifest.content
-  bucket   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
 }
 
 resource "google_storage_bucket_object" "calitp-staging-composer-catalog" {
-  name     = "data/warehouse/target/catalog.json"
+  name    = "data/warehouse/target/catalog.json"
   content = data.google_storage_bucket_object_content.calitp-staging-dbt-catalog.content
-  bucket   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
 }
 
 resource "google_storage_bucket_object" "calitp-staging-composer-index" {
-  name     = "data/warehouse/target/index.html"
+  name    = "data/warehouse/target/index.html"
   content = data.google_storage_bucket_object_content.calitp-staging-dbt-index.content
-  bucket   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
 }
 
 resource "google_storage_bucket_object" "calitp-staging-composer-run_results" {
-  name     = "data/warehouse/target/run_results.json"
+  name    = "data/warehouse/target/run_results.json"
   content = data.google_storage_bucket_object_content.calitp-staging-dbt-run_results.content
-  bucket   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
 }
