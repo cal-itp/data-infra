@@ -16,10 +16,10 @@ stg_ntd__service_by_mode AS (
 )
 
 SELECT
-    {{ trim_make_empty_string_null('CAST(_5_digit_ntd_id AS STRING)') }} AS _5_digit_ntd_id,
-    {{ trim_make_empty_string_null('max_agency') }} AS max_agency,
+    {{ trim_make_empty_string_null('CAST(_5_digit_ntd_id AS STRING)') }} AS ntd_id,
+    {{ trim_make_empty_string_null('max_agency') }} AS agency,
     SAFE_CAST(max_agency_voms AS NUMERIC) AS max_agency_voms,
-    {{ trim_make_empty_string_null('max_city') }} AS max_city,
+    {{ trim_make_empty_string_null('max_city') }} AS city,
     {{ trim_make_empty_string_null('max_mode_name') }} AS max_mode_name,
     SAFE_CAST(max_mode_voms AS NUMERIC) AS max_mode_voms,
     {{ trim_make_empty_string_null('max_organization_type') }} AS max_organization_type,
@@ -30,7 +30,7 @@ SELECT
     {{ trim_make_empty_string_null('max_reporter_type') }} AS max_reporter_type,
     SAFE_CAST(max_service_area_population AS NUMERIC) AS max_service_area_population,
     SAFE_CAST(max_service_area_sq_miles AS NUMERIC) AS max_service_area_sq_miles,
-    {{ trim_make_empty_string_null('max_state') }} AS max_state,
+    {{ trim_make_empty_string_null('max_state') }} AS state,
     {{ trim_make_empty_string_null('max_time_period') }} AS max_time_period,
     {{ trim_make_empty_string_null('min_time_service_begins') }} AS min_time_service_begins,
     {{ trim_make_empty_string_null('max_time_service_ends') }} AS max_time_service_ends,

@@ -16,10 +16,10 @@ stg_ntd__service_by_agency AS (
 )
 
 SELECT
-    {{ trim_make_empty_string_null('CAST(_5_digit_ntd_id AS STRING)') }} AS _5_digit_ntd_id,
+    {{ trim_make_empty_string_null('CAST(_5_digit_ntd_id AS STRING)') }} AS ntd_id,
     {{ trim_make_empty_string_null('agency') }} AS agency,
     SAFE_CAST(max_agency_voms AS NUMERIC) AS max_agency_voms,
-    {{ trim_make_empty_string_null('max_city') }} AS max_city,
+    {{ trim_make_empty_string_null('max_city') }} AS city,
     {{ trim_make_empty_string_null('max_organization_type') }} AS max_organization_type,
     {{ trim_make_empty_string_null('max_primary_uza_area_sq_miles') }} AS max_primary_uza_area_sq_miles,
     SAFE_CAST(max_primary_uza_code AS NUMERIC) AS max_primary_uza_code,
@@ -28,7 +28,7 @@ SELECT
     {{ trim_make_empty_string_null('max_reporter_type') }} AS max_reporter_type,
     SAFE_CAST(max_service_area_population AS NUMERIC) AS max_service_area_population,
     SAFE_CAST(max_service_area_sq_miles AS NUMERIC) AS max_service_area_sq_miles,
-    {{ trim_make_empty_string_null('max_state') }} AS max_state,
+    {{ trim_make_empty_string_null('max_state') }} AS state,
     SAFE_CAST(report_year AS INT64) AS report_year,
     SAFE_CAST(sum_actual_vehicles_passenger_car_deadhead_hours AS NUMERIC) AS sum_actual_vehicles_passenger_car_deadhead_hours,
     SAFE_CAST(sum_actual_vehicles_passenger_car_hours AS NUMERIC) AS sum_actual_vehicles_passenger_car_hours,
