@@ -16,13 +16,13 @@ stg_ntd__maintenance_facilities_by_agency AS (
 )
 
 SELECT
-    {{ trim_make_empty_string_null('max_agency') }} AS max_agency,
+    {{ trim_make_empty_string_null('max_agency') }} AS agency,
     SAFE_CAST(max_agency_voms AS NUMERIC) AS max_agency_voms,
-    {{ trim_make_empty_string_null('max_city') }} AS max_city,
+    {{ trim_make_empty_string_null('max_city') }} AS city,
     {{ trim_make_empty_string_null('max_organization_type') }} AS max_organization_type,
     SAFE_CAST(max_primary_uza_population AS NUMERIC) AS max_primary_uza_population,
     {{ trim_make_empty_string_null('max_reporter_type') }} AS max_reporter_type,
-    {{ trim_make_empty_string_null('max_state') }} AS max_state,
+    {{ trim_make_empty_string_null('max_state') }} AS state,
     {{ trim_make_empty_string_null('max_uace_code') }} AS max_uace_code,
     {{ trim_make_empty_string_null('max_uza_name') }} AS max_uza_name,
     {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
