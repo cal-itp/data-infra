@@ -3,21 +3,29 @@ WITH staging_vehicles_age_distribution AS (
     FROM {{ ref('stg_ntd__vehicles_age_distribution') }}
 ),
 
-current_dim_organizations AS (
+dim_agency_information AS (
     SELECT
         ntd_id,
-        caltrans_district AS caltrans_district_current,
-        caltrans_district_name AS caltrans_district_name_current
-    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+        year,
+        agency_name,
+        city,
+        state,
+        caltrans_district_current,
+        caltrans_district_name_current
+    FROM {{ ref('dim_agency_information') }}
 ),
 
 fct_vehicles_age_distribution AS (
     SELECT
-        stg.agency AS agency_name,
         stg.ntd_id,
         stg.report_year,
-        stg.city,
-        stg.state,
+
+        agency.agency_name,
+        agency.city,
+        agency.state,
+        agency.caltrans_district_current,
+        agency.caltrans_district_name_current,
+
         stg._0,
         stg._1,
         stg._10,
@@ -47,14 +55,15 @@ fct_vehicles_age_distribution AS (
         stg.uace_code,
         stg.uza_name,
         stg.vehicle_type,
-
-        orgs.caltrans_district_current,
-        orgs.caltrans_district_name_current,
-
+        stg.agency AS source_agency,
+        stg.city AS source_city,
+        stg.state AS source_state,
         stg.dt,
         stg.execution_ts
     FROM staging_vehicles_age_distribution AS stg
-    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    LEFT JOIN dim_agency_information AS agency
+        ON stg.ntd_id = agency.ntd_id
+            AND stg.report_year = agency.year
 )
 
 SELECT * FROM fct_vehicles_age_distribution

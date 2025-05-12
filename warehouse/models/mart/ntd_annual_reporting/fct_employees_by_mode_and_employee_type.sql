@@ -3,21 +3,29 @@ WITH staging_employees_by_mode_and_employee_type AS (
     FROM {{ ref('stg_ntd__employees_by_mode_and_employee_type') }}
 ),
 
-current_dim_organizations AS (
+dim_agency_information AS (
     SELECT
         ntd_id,
-        caltrans_district AS caltrans_district_current,
-        caltrans_district_name AS caltrans_district_name_current
-    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+        year,
+        agency_name,
+        city,
+        state,
+        caltrans_district_current,
+        caltrans_district_name_current
+    FROM {{ ref('dim_agency_information') }}
 ),
 
 fct_employees_by_mode_and_employee_type AS (
     SELECT
-        stg.agency AS agency_name,
         stg.ntd_id,
         stg.report_year,
-        stg.city,
-        stg.state,
+
+        agency.agency_name,
+        agency.city,
+        agency.state,
+        agency.caltrans_district_current,
+        agency.caltrans_district_name_current,
+
         stg.agency_voms,
         stg.capital_labor_count,
         stg.capital_labor_count_q,
@@ -52,14 +60,15 @@ fct_employees_by_mode_and_employee_type AS (
         stg.vehicle_operations_count_q,
         stg.vehicle_operations_hours,
         stg.vehicle_operations_hours_q,
-
-        orgs.caltrans_district_current,
-        orgs.caltrans_district_name_current,
-
+        stg.agency AS source_agency,
+        stg.city AS source_city,
+        stg.state AS source_state,
         stg.dt,
         stg.execution_ts
     FROM staging_employees_by_mode_and_employee_type AS stg
-    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    LEFT JOIN dim_agency_information AS agency
+        ON stg.ntd_id = agency.ntd_id
+            AND stg.report_year = agency.year
 )
 
 SELECT * FROM fct_employees_by_mode_and_employee_type
