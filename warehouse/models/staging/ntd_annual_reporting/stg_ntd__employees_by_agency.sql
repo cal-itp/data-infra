@@ -16,7 +16,7 @@ stg_ntd__employees_by_agency AS (
 )
 
 SELECT
-    {{ trim_make_empty_string_null('max_agency_1') }} AS max_agency_1,
+    {{ trim_make_empty_string_null('max_agency_1') }} AS agency,
     SAFE_CAST(avgwagerate AS FLOAT64) AS avgwagerate,
     SAFE_CAST(count_capital_labor_count_q AS NUMERIC) AS count_capital_labor_count_q,
     SAFE_CAST(count_capital_labor_hours_q AS NUMERIC) AS count_capital_labor_hours_q,
@@ -31,11 +31,11 @@ SELECT
     SAFE_CAST(count_vehicle_operations_count_q AS NUMERIC) AS count_vehicle_operations_count_q,
     SAFE_CAST(count_vehicle_operations_hours_q AS NUMERIC) AS count_vehicle_operations_hours_q,
     SAFE_CAST(max_agency_voms_1 AS NUMERIC) AS max_agency_voms_1,
-    {{ trim_make_empty_string_null('max_city_1') }} AS max_city_1,
+    {{ trim_make_empty_string_null('max_city_1') }} AS city,
     SAFE_CAST(max_mode_voms AS NUMERIC) AS max_mode_voms,
-    {{ trim_make_empty_string_null('CAST(max_ntd_id AS STRING)') }} AS max_ntd_id,
+    {{ trim_make_empty_string_null('CAST(max_ntd_id AS STRING)') }} AS ntd_id,
     SAFE_CAST(max_primary_uza_population_1 AS NUMERIC) AS max_primary_uza_population_1,
-    {{ trim_make_empty_string_null('max_state_1') }} AS max_state_1,
+    {{ trim_make_empty_string_null('max_state_1') }} AS state,
     {{ trim_make_empty_string_null('max_uza_name_1') }} AS max_uza_name_1,
     SAFE_CAST(report_year AS INT64) AS report_year,
     SAFE_CAST(sum_total_hours AS NUMERIC) AS sum_total_hours,
