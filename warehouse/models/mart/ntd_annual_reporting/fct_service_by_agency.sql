@@ -13,10 +13,12 @@ current_dim_organizations AS (
 
 fct_service_by_agency AS (
     SELECT
-        stg._5_digit_ntd_id,
-        stg.agency,
+        stg.agency AS agency_name,
+        stg._5_digit_ntd_id AS ntd_id,
+        stg.report_year,
+        stg.max_city AS city,
+        stg.max_state AS state,
         stg.max_agency_voms,
-        stg.max_city,
         stg.max_organization_type,
         stg.max_primary_uza_area_sq_miles,
         stg.max_primary_uza_code,
@@ -25,8 +27,6 @@ fct_service_by_agency AS (
         stg.max_reporter_type,
         stg.max_service_area_population,
         stg.max_service_area_sq_miles,
-        stg.max_state,
-        stg.report_year,
         stg.sum_actual_vehicles_passenger_car_deadhead_hours,
         stg.sum_actual_vehicles_passenger_car_hours,
         stg.sum_actual_vehicles_passenger_car_miles,

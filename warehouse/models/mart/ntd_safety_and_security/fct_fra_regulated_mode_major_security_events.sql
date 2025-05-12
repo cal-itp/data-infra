@@ -3,6 +3,15 @@ WITH staging_fra_regulated_mode_major_security_events AS (
     FROM {{ ref('stg_ntd__fra_regulated_mode_major_security_events') }}
 ),
 
+dim_agency_information AS (
+    SELECT
+        ntd_id,
+        year,
+        city,
+        state,
+    FROM {{ ref('dim_agency_information') }}
+),
+
 current_dim_organizations AS (
     SELECT
         ntd_id,
@@ -13,6 +22,13 @@ current_dim_organizations AS (
 
 fct_fra_regulated_mode_major_security_events AS (
     SELECT
+        stg.agency AS agency_name,
+        stg.ntd_id,
+        stg.year,
+
+        agency.city,
+        agency.state,
+
         stg.other_vehicle_action,
         stg.manufacturer_description,
         stg.evacuation_comment,
@@ -91,17 +107,14 @@ fct_fra_regulated_mode_major_security_events AS (
         stg.incident_time,
         stg.pedestrian_walking_along_2,
         stg.towed_y_n,
-        stg.agency,
         stg.right_of_way_condition,
         stg.fire_fuel,
         stg.number_of_transit_vehicles,
-        stg.year,
         stg.transit_vehicle_operator_2,
         stg.incident_number,
         stg.other_fatalities,
         stg.pedestrian_not_in_crosswalk,
         stg.number_of_derailed_cars,
-        stg.ntd_id,
 
         orgs.caltrans_district_current,
         orgs.caltrans_district_name_current,
@@ -110,6 +123,9 @@ fct_fra_regulated_mode_major_security_events AS (
         stg.execution_ts
     FROM staging_fra_regulated_mode_major_security_events AS stg
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    LEFT JOIN dim_agency_information AS agency
+        ON stg.ntd_id = agency.ntd_id
+            AND stg.year = agency.year
 )
 
 SELECT * FROM fct_fra_regulated_mode_major_security_events
