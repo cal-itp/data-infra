@@ -36,7 +36,7 @@ WITH
 
     int_ntd__asset_inventory_time_series_avg_standing_capacity AS (
         SELECT
-            split(year, '_')[offset(1)] AS year,
+            SAFE_CAST((SPLIT(year, '_')[OFFSET(1)]) AS INT64) AS year,
             total,
             state,
             uza_area_sq_miles,
