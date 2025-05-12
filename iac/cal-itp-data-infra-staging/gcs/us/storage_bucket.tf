@@ -148,3 +148,315 @@ resource "google_storage_bucket" "calitp-staging-composer" {
     ignore_changes = [labels]
   }
 }
+
+resource "google_storage_bucket" "calitp-staging-aggregator-scraper" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-aggregator-scraper"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-airtable" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-airtable"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-elavon-parsed" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-elavon-parsed"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-elavon-raw" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-elavon-raw"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-gtfs-download-config" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-gtfs-download-config"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-gtfs-rt-parsed" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-gtfs-rt-parsed"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-gtfs-rt-raw-v2" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-gtfs-rt-raw-v2"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-gtfs-rt-validation" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-gtfs-rt-validation"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-gtfs-schedule-parsed" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-gtfs-schedule-parsed"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-gtfs-schedule-parsed-hourly" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-gtfs-schedule-parsed-hourly"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-gtfs-schedule-raw-v2" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-gtfs-schedule-raw-v2"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-gtfs-schedule-unzipped" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-gtfs-schedule-unzipped"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-gtfs-schedule-unzipped-hourly" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-gtfs-schedule-unzipped-hourly"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-gtfs-schedule-validation" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-gtfs-schedule-validation"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-gtfs-schedule-validation-hourly" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-gtfs-schedule-validation-hourly"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-ntd-api-products" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-ntd-api-products"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-ntd-xlsx-products-clean" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-ntd-xlsx-products-clean"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-ntd-xlsx-products-raw" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-ntd-xlsx-products-raw"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-payments-littlepay-parsed" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-payments-littlepay-parsed"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-payments-littlepay-parsed-v3" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-payments-littlepay-parsed-v3"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-payments-littlepay-raw" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-payments-littlepay-raw"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-payments-littlepay-raw-v3" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-payments-littlepay-raw-v3"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-publish" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-publish"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-sentry" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-sentry"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-staging-state-geoportal-scrape" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-state-geoportal-scrape"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "test-calitp-gtfs-download-config" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "test-calitp-gtfs-download-config"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
