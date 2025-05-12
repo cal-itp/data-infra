@@ -12,6 +12,13 @@ resource "google_storage_bucket_object" "calitp-staging-composer-dags" {
   bucket   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
 }
 
+resource "google_storage_bucket_object" "calitp-staging-composer-plugins" {
+  for_each = local.composer_plugins_files
+  name     = "data/${each.value}"
+  source   = "../../../../airflow/${each.value}"
+  bucket   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+}
+
 resource "google_storage_bucket_object" "calitp-staging-composer-manifest" {
   name    = "data/warehouse/target/manifest.json"
   content = data.google_storage_bucket_object_content.calitp-staging-dbt-manifest.content
