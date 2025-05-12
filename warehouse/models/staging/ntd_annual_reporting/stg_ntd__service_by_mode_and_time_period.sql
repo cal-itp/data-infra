@@ -16,7 +16,7 @@ stg_ntd__service_by_mode_and_time_period AS (
 )
 
 SELECT
-    {{ trim_make_empty_string_null('_5_digit_ntd_id') }} AS _5_digit_ntd_id,
+    {{ trim_make_empty_string_null('_5_digit_ntd_id') }} AS ntd_id,
     SAFE_CAST(actual_vehicles_passenger_car_deadhead_hours AS NUMERIC) AS actual_vehicles_passenger_car_deadhead_hours,
     SAFE_CAST(actual_vehicles_passenger_car_hours AS NUMERIC) AS actual_vehicles_passenger_car_hours,
     SAFE_CAST(actual_vehicles_passenger_car_miles AS NUMERIC) AS actual_vehicles_passenger_car_miles,
