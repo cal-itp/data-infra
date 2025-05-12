@@ -22,12 +22,6 @@ resource "google_storage_bucket_iam_binding" "tfer--dataproc-temp-us-west2-47367
   role    = "roles/storage.legacyBucketOwner"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-amplitude-benefits-events" {
-  bucket  = "b/test-calitp-amplitude-benefits-events"
-  members = ["projectViewer:cal-itp-data-infra-staging"]
-  role    = "roles/storage.legacyBucketReader"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--calitp-staging-gcp-components-tfstate" {
   bucket  = "b/calitp-staging-gcp-components-tfstate"
   members = ["projectViewer:cal-itp-data-infra-staging"]

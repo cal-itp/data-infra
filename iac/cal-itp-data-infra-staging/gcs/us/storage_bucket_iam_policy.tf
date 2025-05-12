@@ -106,43 +106,6 @@ resource "google_storage_bucket_iam_policy" "tfer--dataproc-temp-us-west2-473674
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--test-calitp-amplitude-benefits-events" {
-  bucket = "b/test-calitp-amplitude-benefits-events"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra-staging",
-        "projectOwner:cal-itp-data-infra-staging"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra-staging"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra-staging",
-        "projectOwner:cal-itp-data-infra-staging"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra-staging"
-      ],
-      "role": "roles/storage.legacyObjectReader"
-    }
-  ]
-}
-POLICY
-}
-
 resource "google_storage_bucket_iam_policy" "tfer--calitp-staging-gcp-components-tfstate" {
   bucket = "b/calitp-staging-gcp-components-tfstate"
 

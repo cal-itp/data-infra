@@ -14,10 +14,6 @@ resource "google_storage_bucket_acl" "tfer--dataproc-temp-us-west2-473674835135-
   bucket = "dataproc-temp-us-west2-473674835135-yuzmmdyk"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-amplitude-benefits-events" {
-  bucket = "test-calitp-amplitude-benefits-events"
-}
-
 resource "google_storage_bucket_acl" "tfer--calitp-staging-gcp-components-tfstate" {
   bucket = "calitp-staging-gcp-components-tfstate"
 }
