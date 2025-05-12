@@ -15,6 +15,10 @@ locals {
     fileset("../../../../warehouse", "seeds/**/*"),
     fileset("../../../../warehouse", "tests/**/*")
   )
+
+  composer_plugins_files = setunion(
+    fileset("../../../../airflow", "plugins/**/*.py")
+  )
 }
 
 data "terraform_remote_state" "networks" {
