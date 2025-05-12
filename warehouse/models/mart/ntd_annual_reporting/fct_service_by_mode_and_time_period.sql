@@ -3,21 +3,29 @@ WITH staging_service_by_mode_and_time_period AS (
     FROM {{ ref('stg_ntd__service_by_mode_and_time_period') }}
 ),
 
-current_dim_organizations AS (
+dim_agency_information AS (
     SELECT
         ntd_id,
-        caltrans_district AS caltrans_district_current,
-        caltrans_district_name AS caltrans_district_name_current
-    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+        year,
+        agency_name,
+        city,
+        state,
+        caltrans_district_current,
+        caltrans_district_name_current
+    FROM {{ ref('dim_agency_information') }}
 ),
 
 fct_service_by_mode_and_time_period AS (
     SELECT
-        stg.agency AS agency_name,
-        stg._5_digit_ntd_id AS ntd_id,
+        stg.ntd_id,
         stg.report_year,
-        stg.city,
-        stg.state,
+
+        agency.agency_name,
+        agency.city,
+        agency.state,
+        agency.caltrans_district_current,
+        agency.caltrans_district_name_current,
+
         stg.actual_vehicles_passenger_car_deadhead_hours,
         stg.actual_vehicles_passenger_car_hours,
         stg.actual_vehicles_passenger_car_miles,
@@ -82,14 +90,15 @@ fct_service_by_mode_and_time_period AS (
         stg.vehicle_miles_questionable,
         stg.vehicle_revenue_hours_questionable,
         stg.vehicle_revenue_miles_questionable,
-
-        orgs.caltrans_district_current,
-        orgs.caltrans_district_name_current,
-
+        stg.agency AS source_agency,
+        stg.city AS source_city,
+        stg.state AS source_state,
         stg.dt,
         stg.execution_ts
     FROM staging_service_by_mode_and_time_period AS stg
-    LEFT JOIN current_dim_organizations AS orgs ON stg._5_digit_ntd_id = orgs.ntd_id
+    LEFT JOIN dim_agency_information AS agency
+        ON stg.ntd_id = agency.ntd_id
+            AND stg.report_year = agency.year
 )
 
 SELECT * FROM fct_service_by_mode_and_time_period
