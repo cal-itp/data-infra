@@ -1,24 +1,2 @@
-# Names are in alphabetical order, no priority or seniority is implied
-
 # repo owners
-*                                       @hunterowens @evansiroky
-
-# infra components
-/.github/workflows                      @evansiroky @vevetron
-/ci                                     @evansiroky @vevetron
-/iac                                    @evansiroky @vevetron
-/kubernetes                             @evansiroky @vevetron
-
-# jupyter service, e.g. updating the image
-/kubernetes/apps/charts/jupyterhub      @evansiroky @vevetron
-/images                                 @evansiroky @vevetron
-
-# project documentation
-/docs                                   @tiffanychu90
-
-# actual pipeline code
-/airflow                                @evansiroky @vevetron
-/jobs                                   @evansiroky @vevetron
-/runbooks                               @evansiroky @vevetron
-/services                               @evansiroky @vevetron
-/warehouse                              @evansiroky @vevetron @tiffanychu90
+*                                       @evansiroky @vevetron @tiffanychu90 @ohrite @erikamov @charlie-costanzo @mjumbewu @themightychris
