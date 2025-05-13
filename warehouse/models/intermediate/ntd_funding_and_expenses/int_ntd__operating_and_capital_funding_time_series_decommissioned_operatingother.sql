@@ -45,6 +45,7 @@ WITH
             reporting_module,
             last_report_year,
             state,
+            SAFE_CAST((SPLIT(year, '_')[OFFSET(1)]) AS INT64) AS year,
             reporter_type,
             agency_name,
             ntd_id,
