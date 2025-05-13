@@ -7,27 +7,24 @@ dim_agency_information AS (
     SELECT
         ntd_id,
         year,
+        agency_name,
         city,
         state,
+        caltrans_district_current,
+        caltrans_district_name_current
     FROM {{ ref('dim_agency_information') }}
-),
-
-current_dim_organizations AS (
-    SELECT
-        ntd_id,
-        caltrans_district AS caltrans_district_current,
-        caltrans_district_name AS caltrans_district_name_current
-    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
 ),
 
 fct_monthly_modal_time_series_safety_and_service AS (
     SELECT
-        stg.agency AS agency_name,
-        stg._5_digit_ntd_id AS ntd_id,
+        stg.ntd_id,
         stg.year,
 
+        agency.agency_name,
         agency.city,
         agency.state,
+        agency.caltrans_district_current,
+        agency.caltrans_district_name_current,
 
         stg.major_non_physical_assaults_on_operators,
         stg.major_non_physical_assaults_on_other_transit_workers,
@@ -96,19 +93,15 @@ fct_monthly_modal_time_series_safety_and_service AS (
         stg.pedestrian_crossing_tracks_1,
         stg.primary_uza_sq_miles,
         stg.primary_uza_name,
-
-        orgs.caltrans_district_current,
-        orgs.caltrans_district_name_current,
-
+        stg.agency AS source_agency,
         stg.total_other_injuries,
         stg.other_fatalities,
         stg.pedestrian_not_in_crosswalk,
         stg.dt,
         stg.execution_ts
     FROM staging_monthly_modal_time_series_safety_and_service AS stg
-    LEFT JOIN current_dim_organizations AS orgs ON stg._5_digit_ntd_id = orgs.ntd_id
     LEFT JOIN dim_agency_information AS agency
-        ON stg._5_digit_ntd_id = agency.ntd_id
+        ON stg.ntd_id = agency.ntd_id
             AND stg.year = agency.year
 )
 
