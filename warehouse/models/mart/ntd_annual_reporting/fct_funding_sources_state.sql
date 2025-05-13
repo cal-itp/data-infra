@@ -17,6 +17,7 @@ dim_agency_information AS (
 
 fct_funding_sources_state AS (
     SELECT
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year']) }} AS key,
         stg.ntd_id,
         stg.report_year,
 

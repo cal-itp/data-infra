@@ -17,6 +17,7 @@ dim_agency_information AS (
 
 fct_operating_expenses_by_function_and_agency AS (
     SELECT
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year']) }} AS key,
         stg.ntd_id,
         stg.report_year,
 
