@@ -17,6 +17,7 @@ dim_agency_information AS (
 
 fct_breakdowns AS (
     SELECT
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.type_of_service']) }} AS key,
         stg.ntd_id,
         stg.report_year,
 
