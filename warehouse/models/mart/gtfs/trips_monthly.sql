@@ -22,7 +22,7 @@ day_of_week AS (
         END
         AS day_type,
     FROM fct_scheduled_trips
-    GROUP BY gtfs_dataset_key, service_date
+    GROUP BY 1, 2
 ),
 
 fct_monthly_trips AS (
@@ -43,11 +43,8 @@ fct_monthly_trips AS (
     FROM trips
     INNER JOIN day_of_week
         ON trips.gtfs_dataset_key = day_of_week.gtfs_dataset_key AND trips.service_date = day_of_week.service_date
-    GROUP BY gtfs_dataset_key, base64_url, name,
-        year, month, day_type,
-        trip_id,
-        route_id, direction_id, shape_id,
-        route_short_name, route_long_name
+    GROUP BY 1, 2, 3, 4, 5, 6,
+        7, 8, 9, 10, 11, 12
 )
 
 SELECT * FROM fct_monthly_trips
