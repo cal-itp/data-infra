@@ -29,7 +29,7 @@ SELECT
     {{ trim_make_empty_string_null('eventtype') }} AS eventtype,
     {{ trim_make_empty_string_null('additional_assault_information') }} AS additional_assault_information,
     {{ trim_make_empty_string_null('sftsecfl') }} AS sftsecfl,
-    SAFE_CAST(yr AS INTEGER) AS yr,
+    SAFE_CAST(yr AS INTEGER) AS year,
     {{ trim_make_empty_string_null('modecd') }} AS modecd,
     {{ trim_make_empty_string_null('mo') }} AS mo,
     {{ trim_make_empty_string_null('typeofservicecd') }} AS typeofservicecd,
