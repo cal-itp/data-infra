@@ -191,29 +191,245 @@ models:
       - *volunteer_drivers
 
   - name: fct_breakdowns
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, and `type_of_service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_breakdowns_by_agency
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_capital_expenses_by_capital_use
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `modecd` (mode), `typeofservicecd` (type of service), and `form_type`.
+        tests:
+          - not_null
+          - unique
   - name: fct_capital_expenses_by_mode
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, and `modecd` (mode), and `typeofservicecd` (type of service).
+        tests:
+          - not_null
+          - unique
   - name: fct_capital_expenses_for_existing_service
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_capital_expenses_for_expansion_of_service
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_employees_by_agency
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_employees_by_mode
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, 'mode', 'type_of_service'.
+        tests:
+          - not_null
+          - unique
   - name: fct_employees_by_mode_and_employee_type
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, 'mode', 'type_of_service', and 'full_or_part_time'.
+        tests:
+          - not_null
+          - unique
   - name: fct_fuel_and_energy
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, and `modecd` (mode), and `typeofservicecd` (type of service).
+        tests:
+          - not_null
+          - unique
   - name: fct_fuel_and_energy_by_agency
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_funding_sources_by_expense_type
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, and `fund_expenditure_type`.
+        tests:
+          - not_null
+          - unique
   - name: fct_funding_sources_directly_generated
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_funding_sources_federal
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_funding_sources_local
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_funding_sources_state
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_funding_sources_taxes_levied_by_agency
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_maintenance_facilities
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, and `type_of_service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_maintenance_facilities_by_agency
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_metrics
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, and `type_of_service.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_expenses_by_function
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, and `type_of_service.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_expenses_by_function_and_agency
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_expenses_by_type
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, and `type_of_service.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_expenses_by_type_and_agency
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_by_agency
   - name: fct_service_by_mode
   - name: fct_service_by_mode_and_time_period
