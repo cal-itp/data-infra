@@ -224,7 +224,8 @@ resource "google_project_iam_member" "github-actions-terraform" {
   for_each = toset([
     "roles/resourcemanager.projectIamAdmin",
     "roles/editor",
-    "roles/storage.admin"
+    "roles/storage.admin",
+    "roles/iam.roleAdmin"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.github-actions-terraform.email}"
