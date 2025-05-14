@@ -144,6 +144,12 @@ models:
     description: |
       Contains annual basic contact and agency information for each NTD reporter.
     columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `year`, 'ntd_id', 'state_parent_ntd_id', and 'execution_ts'.
+        tests:
+          - not_null
+          - unique
       - *ntd_id
       - *legacy_ntd_id
       - *state_parent_ntd_id
@@ -189,7 +195,7 @@ models:
       - *tribal_area_name
       - *url
       - *volunteer_drivers
-
+  - name: dim_contractual_relationships
   - name: fct_breakdowns
     description: |
       Add description
@@ -431,13 +437,102 @@ models:
           - not_null
           - unique
   - name: fct_service_by_agency
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_by_mode
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, and `type_of_service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_by_mode_and_time_period
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, `type_of_service`, and `time_period`.
+        tests:
+          - not_null
+          - unique
   - name: fct_stations_and_facilities_by_agency_and_facility_type
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_stations_by_mode_and_age
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, and `facility_type`.
+        tests:
+          - not_null
+          - unique
   - name: fct_track_and_roadway_by_agency
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique
   - name: fct_track_and_roadway_by_mode
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, and `type_of_service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_track_and_roadway_guideway_age_distribution
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, `type_of_service`, and `guideway_element`.
+        tests:
+          - not_null
+          - unique
   - name: fct_vehicles_age_distribution
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `report_year`, and `vehicle_type`.
+        tests:
+          - not_null
+          - unique
   - name: fct_vehicles_type_count_by_agency
-  - name: dim_contractual_relationships
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id` and `report_year`.
+        tests:
+          - not_null
+          - unique

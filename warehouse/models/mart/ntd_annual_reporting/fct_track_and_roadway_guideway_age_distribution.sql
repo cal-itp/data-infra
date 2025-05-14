@@ -16,6 +16,7 @@ dim_agency_information AS (
 
 fct_track_and_roadway_guideway_age_distribution AS (
     SELECT
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.type_of_service', 'stg.guideway_element']) }} AS key,
         stg.ntd_id,
         stg.report_year,
 

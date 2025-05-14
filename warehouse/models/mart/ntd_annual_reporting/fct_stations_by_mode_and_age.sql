@@ -17,6 +17,7 @@ dim_agency_information AS (
 
 fct_stations_by_mode_and_age AS (
     SELECT
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.modes', 'stg.facility_type']) }} AS key,
         stg.ntd_id,
         stg.report_year,
 
