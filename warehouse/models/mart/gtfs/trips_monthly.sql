@@ -6,7 +6,6 @@ WITH trips AS (
         *
     --FROM {{ ref('fct_scheduled_trips') }}
     FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`
-    WHERE EXTRACT(YEAR FROM service_date) >= 2024
 ),
 
 day_of_week AS (
