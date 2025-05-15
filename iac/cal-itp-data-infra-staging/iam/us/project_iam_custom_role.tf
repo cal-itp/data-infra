@@ -44,6 +44,7 @@ resource "google_project_iam_custom_role" "calitp-dds-analyst" {
     "bigquery.tables.list",
     "bigquery.tables.create",
     "bigquery.tables.update",
+    "bigquery.tables.updateData",
     "resourcemanager.projects.get",
     "storage.buckets.get",
     "storage.buckets.list",
