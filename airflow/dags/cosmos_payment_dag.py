@@ -7,6 +7,7 @@ cosmos_payment = DbtDag(
     project_config=ProjectConfig(
         dbt_project_path="/home/airflow/gcs/data/warehouse",
         manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
+        project_name="cosmos_payment",
     ),
     profile_config=ProfileConfig(
         target_name="staging",
@@ -20,10 +21,12 @@ cosmos_payment = DbtDag(
             "+path:models/mart/payments+",
         ],
     ),
+    operator_args={"install_deps": True},
     # normal dag parameters
     schedule_interval="@daily",
-    start_date=datetime(2023, 1, 1),
+    start_date=datetime(2025, 5, 1),
     catchup=False,
     dag_id="cosmos_payment",
     tags=["dbt", "payments"],
+    default_args={"retries": 0},
 )
