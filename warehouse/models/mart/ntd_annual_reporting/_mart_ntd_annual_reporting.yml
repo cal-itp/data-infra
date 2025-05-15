@@ -195,6 +195,9 @@ models:
       - *tribal_area_name
       - *url
       - *volunteer_drivers
+      - *dt
+      - *execution_ts
+
   - name: dim_contractual_relationships
   - name: fct_breakdowns
     description: |
