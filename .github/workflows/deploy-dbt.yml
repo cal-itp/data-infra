@@ -213,7 +213,7 @@ jobs:
       - name: Run changed models
         working-directory: warehouse
         if: ${{ env.DBT_TARGET  == 'staging' }}
-        run: poetry run dbt run --select state:modified+ --target ${{ env.DBT_TARGET }} --state ./target/latest
+        run: poetry run dbt run --select +state:modified+ --target ${{ env.DBT_TARGET }} --state ./target/latest
 
       - name: Synchronize Metabase
         working-directory: warehouse

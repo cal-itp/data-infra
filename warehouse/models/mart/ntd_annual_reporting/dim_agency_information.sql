@@ -64,8 +64,10 @@ dim_agency_information AS (
 
         int._valid_from,
         int._valid_to,
-        int._is_current
-    FROM intermediate_unioned_agency_information as int
+        int._is_current,
+        int.dt,
+        int.execution_ts
+    FROM intermediate_unioned_agency_information AS int
     LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
 )
 

@@ -6,30 +6,25 @@ WITH staging_major_safety_events AS (
 dim_agency_information AS (
     SELECT
         ntd_id,
-        agency_name,
         year,
+        agency_name,
         city,
         state,
+        caltrans_district_current,
+        caltrans_district_name_current
     FROM {{ ref('dim_agency_information') }}
-),
-
-current_dim_organizations AS (
-    SELECT
-        ntd_id,
-        caltrans_district AS caltrans_district_current,
-        caltrans_district_name AS caltrans_district_name_current
-    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
 ),
 
 fct_major_safety_events AS (
     SELECT
-        agency.agency_name,
-
         stg.ntd_id,
-        stg.yr AS year,
+        stg.year,
 
+        agency.agency_name,
         agency.city,
         agency.state,
+        agency.caltrans_district_current,
+        agency.caltrans_district_name_current,
 
         stg.other,
         stg.worker,
@@ -49,17 +44,12 @@ fct_major_safety_events AS (
         stg.typeofservicecd,
         stg.reportername,
         stg.customer,
-
-        orgs.caltrans_district_current,
-        orgs.caltrans_district_name_current,
-
         stg.dt,
         stg.execution_ts
     FROM staging_major_safety_events AS stg
-    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
     LEFT JOIN dim_agency_information AS agency
         ON stg.ntd_id = agency.ntd_id
-            AND stg.yr = agency.year
+            AND stg.year = agency.year
 )
 
 SELECT * FROM fct_major_safety_events
