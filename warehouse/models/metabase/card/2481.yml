@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of__potentially_duplicated__bus_stops_in_california
+    label: Number of (potentially duplicated) bus stops in California
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2481__
+
+
+      Created On: __2024-07-11T21:27:55.379049Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2481
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    meta:
+      average_query_time: '0:02.470'
+      last_used_at: '2025-03-28T18:12:47.432482Z'

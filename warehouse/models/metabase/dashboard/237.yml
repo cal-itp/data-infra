@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: vendor_individual_agency_vehicle_position_latency_dashboard
+    label: Vendor-Individual Agency Vehicle Position Latency Dashboard
+    description: '### Dashboard Cards: 2
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __237__
+
+
+      Created On: __2024-10-18T04:25:11.770138Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/237
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []

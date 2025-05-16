@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: distinct_values_of_funding_source_vault_id_by_principal_customer_id___modified
+    label: Distinct values of Funding Source Vault ID by Principal Customer ID - Modified
+    description: '### Visualization: Table
+
+
+      One PCID can have multiple FSVIDs associated with it, and this can be used as
+      an indicator for retokenisation.
+
+
+      #### Metadata
+
+
+      Metabase ID: __3110__
+
+
+      Created On: __2024-09-23T14:55:37.256705Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3110
+    maturity: medium
+    owner:
+      name: Georgia Jones
+      email: georgia.jones@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:01.487'
+      last_used_at: '2025-01-13T14:47:56.044837Z'

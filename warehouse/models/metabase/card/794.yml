@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: weekly_transaction_deltas_1
+    label: Weekly Transaction Deltas
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __794__
+
+
+      Created On: __2023-02-03T00:22:41.503703Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/794
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    meta:
+      average_query_time: '0:00.584'
+      last_used_at: '2025-03-19T16:00:33.125962Z'

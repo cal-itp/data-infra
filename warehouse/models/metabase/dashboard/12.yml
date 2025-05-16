@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: quarterly_dashboard
+    label: Quarterly Dashboard
+    description: '### Dashboard Cards: 11
+
+
+      TBD
+
+
+      #### Metadata
+
+
+      Metabase ID: __12__
+
+
+      Created On: __2021-08-17T13:23:01.313017Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/12
+    maturity: medium
+    owner:
+      name: Chris Cardillo
+      email: chris.c@jarv.us
+    depends_on: []

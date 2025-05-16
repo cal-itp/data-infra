@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: ahsc_increased_ridership_predictions
+    label: AHSC Increased Ridership Predictions
+    description: '### Dashboard Cards: 4
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __96__
+
+
+      Created On: __2022-12-07T16:31:37.460996Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/96
+    maturity: medium
+    owner:
+      name: Katrina Kaiser
+      email: katrina.kaiser@dot.ca.gov
+    depends_on: []

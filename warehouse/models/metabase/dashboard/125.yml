@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: gtfs_features_dashboard_version_1
+    label: GTFS Features Dashboard Version 1
+    description: '### Dashboard Cards: 39
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __125__
+
+
+      Created On: __2023-03-03T01:38:31.106306Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/125
+    maturity: medium
+    owner:
+      name: Julia Ma
+      email: julia.ma@dot.ca.gov
+    depends_on: []

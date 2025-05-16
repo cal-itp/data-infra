@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: interchange_fees_as___of_net_sales
+    label: Interchange Fees as % of Net Sales
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1858__
+
+
+      Created On: __2023-11-01T09:54:06.980175Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1858
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:01.814'
+      last_used_at: '2025-04-17T18:24:49.80591Z'

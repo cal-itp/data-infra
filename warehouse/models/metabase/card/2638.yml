@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: net_sales__usd____per_month_6
+    label: Net sales (USD) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2638__
+
+
+      Created On: __2024-08-12T19:52:13.971648Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2638
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    meta:
+      average_query_time: '0:00.956'
+      last_used_at: '2025-04-17T18:27:59.432882Z'

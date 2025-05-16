@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: vehicles_age_distribution
+    label: Vehicles Age Distribution
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3320__
+
+
+      Created On: __2025-01-13T17:29:03.457715Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3320
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    meta:
+      average_query_time: '0:00.631'
+      last_used_at: '2025-03-28T18:12:48.626686Z'

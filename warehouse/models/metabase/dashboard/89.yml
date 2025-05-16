@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: dashboard___contactless_payments_metrics
+    label: Dashboard - Contactless Payments Metrics
+    description: '### Dashboard Cards: 39
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __89__
+
+
+      Created On: __2022-09-26T15:52:12.254854Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/89
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

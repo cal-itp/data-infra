@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: payments_quarterly_taps
+    label: payments quarterly taps
+    description: '### Visualization: Bar
+
+
+      used in external CS reporting
+
+
+      #### Metadata
+
+
+      Metabase ID: __2387__
+
+
+      Created On: __2024-06-24T18:30:57.024264Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2387
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    meta:
+      average_query_time: '0:01.447'
+      last_used_at: '2025-04-01T15:00:02.715968Z'
