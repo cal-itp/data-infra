@@ -1,0 +1,4 @@
+operator: operators.LittlepayRawSyncV3
+instance: atn
+src_bucket: littlepay-datafeed-prod-atn-5c319c40
+access_key_secret_name: LITTLEPAY_AWS_IAM_ATN_ACCESS_KEY_FEED_V3
