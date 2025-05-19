@@ -7,7 +7,6 @@ clean_columns AS (
         {{ trim_make_empty_string_null('littlepay_transaction_id') }} AS littlepay_transaction_id,
         {{ trim_make_empty_string_null('micropayment_id') }} AS micropayment_id,
         CAST(_line_number AS INTEGER) AS _line_number,
-        participant_id,
         `instance`,
         extract_filename,
         ts,

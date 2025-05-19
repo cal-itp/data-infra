@@ -33,7 +33,6 @@ stg_littlepay__micropayment_device_transactions AS (
         littlepay_transaction_id,
         micropayment_id,
         _line_number,
-        instance AS participant_id,
         `instance`,
         'v1' AS feed_version,
         extract_filename,
