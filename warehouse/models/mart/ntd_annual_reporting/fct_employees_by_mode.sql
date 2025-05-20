@@ -28,7 +28,7 @@ fct_employees_by_mode AS (
         agency.caltrans_district_name_current,
 
         stg.mode,
-        stg.max_mode_name,
+        stg.mode_name,
         stg.type_of_service,
         stg.count_capital_labor_count_q,
         stg.count_capital_labor_hours_q,
