@@ -17,6 +17,7 @@ dim_agency_information AS (
 
 fct_monthly_modal_time_series_safety_and_service AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.year', 'stg.mode', 'stg.month', 'stg.type_of_service']) }} AS key,
         stg.ntd_id,
         stg.year,
 
