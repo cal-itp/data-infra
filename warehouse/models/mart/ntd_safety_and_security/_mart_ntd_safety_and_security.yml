@@ -15,9 +15,9 @@ models:
     description: |
       Add description
     columns:
-      - name: key
+      - name: _content_hash
         description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `mode`, `month`, `type_of_service`, `location_group`, `location`, and `event_type`.
+          Synthetic primary key constructed from hashing all row values (aside from internally-created columns `dt` and `execution_ts`).
         tests:
           - not_null
           - unique
