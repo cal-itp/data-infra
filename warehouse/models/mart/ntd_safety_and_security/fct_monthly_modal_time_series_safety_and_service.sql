@@ -17,9 +17,10 @@ dim_agency_information AS (
 
 fct_monthly_modal_time_series_safety_and_service AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.year', 'stg.mode', 'stg.month', 'stg.type_of_service']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.year', 'stg.month', 'stg.mode', 'stg.type_of_service']) }} AS key,
         stg.ntd_id,
         stg.year,
+        stg.month,
 
         agency.agency_name,
         agency.city,
@@ -27,6 +28,8 @@ fct_monthly_modal_time_series_safety_and_service AS (
         agency.caltrans_district_current,
         agency.caltrans_district_name_current,
 
+        stg.mode,
+        stg.type_of_service,
         stg.major_non_physical_assaults_on_operators,
         stg.major_non_physical_assaults_on_other_transit_workers,
         stg.major_physical_assaults_on_operators,
@@ -56,14 +59,11 @@ fct_monthly_modal_time_series_safety_and_service AS (
         stg.pedestrian_in_crosswalk,
         stg.bicyclist_fatalities,
         stg.other_worker_fatalities,
-        stg.type_of_service,
-        stg.mode,
         stg.passenger_fatalities,
         stg.total_employee_fatalities,
         stg.operator_fatalities,
         stg.people_waiting_or_leaving,
         stg.uace_code,
-        stg.month,
         stg.total_events_not_otherwise,
         stg.primary_uza_population,
         stg.collisions_with_bus_vehicle,
