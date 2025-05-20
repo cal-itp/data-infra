@@ -17,6 +17,7 @@ dim_agency_information AS (
 
 fct_asset_inventory_time_series_avg_fleet_age AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['int.ntd_id', 'int.year', 'int.legacy_ntd_id', 'int.mode', 'int.service']) }} AS key,
         int.ntd_id,
         int.year,
 
