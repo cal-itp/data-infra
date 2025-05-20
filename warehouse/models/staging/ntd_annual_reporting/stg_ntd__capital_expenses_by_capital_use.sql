@@ -28,7 +28,7 @@ stg_ntd__capital_expenses_by_capital_use AS (
         {{ trim_make_empty_string_null('maintenance_buildings_1') }} AS maintenance_buildings_1,
         {{ trim_make_empty_string_null('mode_name') }} AS mode_name,
         SAFE_CAST(mode_voms AS NUMERIC) AS mode_voms,
-        {{ trim_make_empty_string_null('modecd') }} AS modecd,
+        {{ trim_make_empty_string_null('modecd') }} AS mode,
         {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
         {{ trim_make_empty_string_null('organization_type') }} AS organization_type,
         SAFE_CAST(other AS NUMERIC) AS other,

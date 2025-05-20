@@ -17,7 +17,7 @@ dim_agency_information AS (
 
 fct_capital_expenses_by_mode AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.modecd', 'stg.typeofservicecd']) }} AS key,
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.typeofservicecd']) }} AS key,
         stg.ntd_id,
         stg.report_year,
 
@@ -43,7 +43,7 @@ fct_capital_expenses_by_mode AS (
         stg.max_reporter_type,
         stg.max_uace_code,
         stg.max_uza_name,
-        stg.modecd,
+        stg.mode,
         stg.sum_administrative_buildings,
         stg.sum_communication_information,
         stg.sum_fare_collection_equipment,

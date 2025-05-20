@@ -17,7 +17,7 @@ dim_agency_information AS (
 
 fct_fuel_and_energy AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.modecd', 'stg.typeofservicecd']) }} AS key,
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.typeofservicecd']) }} AS key,
         stg.ntd_id,
         stg.report_year,
 
@@ -74,7 +74,7 @@ fct_fuel_and_energy AS (
         stg.liquefied_petroleum_gas_gal_1,
         stg.mode_name,
         stg.mode_voms,
-        stg.modecd,
+        stg.mode,
         stg.organization_type,
         stg.other_fuel,
         stg.other_fuel_mpg,
