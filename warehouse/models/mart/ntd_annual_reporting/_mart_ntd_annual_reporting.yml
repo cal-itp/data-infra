@@ -225,7 +225,7 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, `typeofservicecd` (type of service), and `form_type`.
+          Synthetic primary key constructed from `ntd_id`, `report_year`, `mode`, `type_of_service`, and `form_type`.
         tests:
           - not_null
           - unique
@@ -235,7 +235,7 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `ntd_id`, `report_year`, and `mode`, and `typeofservicecd` (type of service).
+          Synthetic primary key constructed from `ntd_id`, `report_year`, and `mode`, and `type_of_service`.
         tests:
           - not_null
           - unique
@@ -295,7 +295,7 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `ntd_id`, `report_year`, and `mode`, and `typeofservicecd` (type of service).
+          Synthetic primary key constructed from `ntd_id`, `report_year`, and `mode`, and `type_of_service`.
         tests:
           - not_null
           - unique

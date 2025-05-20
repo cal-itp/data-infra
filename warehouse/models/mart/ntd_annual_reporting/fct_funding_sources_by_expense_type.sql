@@ -27,12 +27,12 @@ fct_funding_sources_by_expense_type AS (
         agency.caltrans_district_current,
         agency.caltrans_district_name_current,
 
+        stg.fund_expenditure_type,
         stg.agency_voms,
         stg.fares_and_other_directly,
         stg.fares_and_other_directly_1,
         stg.federal,
         stg.federal_questionable,
-        stg.fund_expenditure_type,
         stg.local,
         stg.local_questionable,
         stg.organization_type,

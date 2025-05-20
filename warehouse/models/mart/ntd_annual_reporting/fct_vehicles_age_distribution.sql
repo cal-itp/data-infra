@@ -27,6 +27,7 @@ fct_vehicles_age_distribution AS (
         agency.caltrans_district_current,
         agency.caltrans_district_name_current,
 
+        stg.vehicle_type,
         stg._0,
         stg._1,
         stg._10,
@@ -55,7 +56,6 @@ fct_vehicles_age_distribution AS (
         stg.total_vehicles,
         stg.uace_code,
         stg.uza_name,
-        stg.vehicle_type,
         stg.agency AS source_agency,
         stg.city AS source_city,
         stg.state AS source_state,
