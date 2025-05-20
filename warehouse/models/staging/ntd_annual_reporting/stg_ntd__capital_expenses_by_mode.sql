@@ -31,7 +31,7 @@ stg_ntd__capital_expenses_by_mode AS (
         {{ trim_make_empty_string_null('max_state') }} AS state,
         {{ trim_make_empty_string_null('max_uace_code') }} AS max_uace_code,
         {{ trim_make_empty_string_null('max_uza_name') }} AS max_uza_name,
-        {{ trim_make_empty_string_null('modecd') }} AS modecd,
+        {{ trim_make_empty_string_null('modecd') }} AS mode,
         {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
         SAFE_CAST(report_year AS INT64) AS report_year,
         SAFE_CAST(sum_administrative_buildings AS NUMERIC) AS sum_administrative_buildings,
