@@ -74,7 +74,7 @@ stg_ntd__fuel_and_energy AS (
         SAFE_CAST(report_year AS INT64) AS report_year,
         {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
         {{ trim_make_empty_string_null('state') }} AS state,
-        {{ trim_make_empty_string_null('typeofservicecd') }} AS typeofservicecd,
+        {{ trim_make_empty_string_null('typeofservicecd') }} AS type_of_service,
         {{ trim_make_empty_string_null('uace_code') }} AS uace_code,
         {{ trim_make_empty_string_null('uza_name') }} AS uza_name,
         dt,

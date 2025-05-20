@@ -17,7 +17,7 @@ dim_agency_information AS (
 
 fct_capital_expenses_by_capital_use AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.typeofservicecd', 'stg.form_type']) }} AS key,
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.type_of_service', 'stg.form_type']) }} AS key,
         stg.ntd_id,
         stg.report_year,
 
@@ -27,6 +27,10 @@ fct_capital_expenses_by_capital_use AS (
         agency.caltrans_district_current,
         agency.caltrans_district_name_current,
 
+        stg.mode,
+        stg.mode_name,
+        stg.type_of_service,
+        stg.form_type,
         stg.administrative_buildings,
         stg.administrative_buildings_1,
         stg.agency_voms,
@@ -34,14 +38,11 @@ fct_capital_expenses_by_capital_use AS (
         stg.communication_information_1,
         stg.fare_collection_equipment,
         stg.fare_collection_equipment_1,
-        stg.form_type,
         stg.guideway,
         stg.guideway_questionable,
         stg.maintenance_buildings,
         stg.maintenance_buildings_1,
-        stg.mode_name,
         stg.mode_voms,
-        stg.mode,
         stg.organization_type,
         stg.other,
         stg.other_questionable,
@@ -57,7 +58,6 @@ fct_capital_expenses_by_capital_use AS (
         stg.stations_questionable,
         stg.total,
         stg.total_questionable,
-        stg.typeofservicecd,
         stg.uace_code,
         stg.uza_name,
         stg.agency AS source_agency,

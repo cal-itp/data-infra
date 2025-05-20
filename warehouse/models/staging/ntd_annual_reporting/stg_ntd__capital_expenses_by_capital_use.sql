@@ -47,7 +47,7 @@ stg_ntd__capital_expenses_by_capital_use AS (
         {{ trim_make_empty_string_null('stations_questionable') }} AS stations_questionable,
         SAFE_CAST(total AS NUMERIC) AS total,
         {{ trim_make_empty_string_null('total_questionable') }} AS total_questionable,
-        {{ trim_make_empty_string_null('typeofservicecd') }} AS typeofservicecd,
+        {{ trim_make_empty_string_null('typeofservicecd') }} AS type_of_service,
         {{ trim_make_empty_string_null('uace_code') }} AS uace_code,
         {{ trim_make_empty_string_null('uza_name') }} AS uza_name,
         dt,
