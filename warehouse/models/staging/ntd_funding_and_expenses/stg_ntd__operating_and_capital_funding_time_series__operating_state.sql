@@ -1,21 +1,16 @@
-WITH
-    source AS (
-        SELECT *
-          FROM {{ source('external_ntd__funding_and_expenses', 'historical__operating_and_capital_funding_time_series__operating_state') }}
-    ),
+WITH source AS (
+    SELECT *
+    FROM {{ source('external_ntd__funding_and_expenses', 'historical__operating_and_capital_funding_time_series__operating_state') }}
+),
 
-    get_latest_extract AS(
-        SELECT *
-          FROM source
-        -- we pull the whole table every month in the pipeline, so this gets only the latest extract
-        QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
-    ),
+get_latest_extract AS(
+    SELECT *
+    FROM source
+    -- we pull the whole table every month in the pipeline, so this gets only the latest extract
+    QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
+),
 
-    stg_ntd__operating_and_capital_funding_time_series__operating_state AS (
-        SELECT *
-        FROM get_latest_extract
-    )
-
+stg_ntd__operating_and_capital_funding_time_series__operating_state AS (
     SELECT
         SAFE_CAST(_2017 AS FLOAT64) AS _2017,
         SAFE_CAST(_2016 AS FLOAT64) AS _2016,
@@ -67,4 +62,7 @@ WITH
         {{ trim_make_empty_string_null('agency_name') }} AS agency_name,
         dt,
         execution_ts
-    FROM stg_ntd__operating_and_capital_funding_time_series__operating_state
+    FROM get_latest_extract
+)
+
+SELECT * FROM stg_ntd__operating_and_capital_funding_time_series__operating_state

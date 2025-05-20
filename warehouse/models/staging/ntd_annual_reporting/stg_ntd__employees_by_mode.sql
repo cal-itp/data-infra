@@ -11,30 +11,29 @@ get_latest_extract AS(
 ),
 
 stg_ntd__employees_by_mode AS (
-    SELECT *
+    SELECT
+        SAFE_CAST(count_capital_labor_count_q AS NUMERIC) AS count_capital_labor_count_q,
+        SAFE_CAST(count_capital_labor_hours_q AS NUMERIC) AS count_capital_labor_hours_q,
+        SAFE_CAST(count_facility_maintenance_count_q AS NUMERIC) AS count_facility_maintenance_count_q,
+        SAFE_CAST(count_facility_maintenance_hours_q AS NUMERIC) AS count_facility_maintenance_hours_q,
+        SAFE_CAST(count_general_administration_count_q AS NUMERIC) AS count_general_administration_count_q,
+        SAFE_CAST(count_general_administration_hours_q AS NUMERIC) AS count_general_administration_hours_q,
+        SAFE_CAST(count_total_employee_count_q AS NUMERIC) AS count_total_employee_count_q,
+        SAFE_CAST(count_total_employee_hours_q AS NUMERIC) AS count_total_employee_hours_q,
+        SAFE_CAST(count_vehicle_maintenance_count_q AS NUMERIC) AS count_vehicle_maintenance_count_q,
+        SAFE_CAST(count_vehicle_maintenance_hours_q AS NUMERIC) AS count_vehicle_maintenance_hours_q,
+        SAFE_CAST(count_vehicle_operations_count_q AS NUMERIC) AS count_vehicle_operations_count_q,
+        SAFE_CAST(count_vehicle_operations_hours_q AS NUMERIC) AS count_vehicle_operations_hours_q,
+        {{ trim_make_empty_string_null('max_mode_name') }} AS max_mode_name,
+        {{ trim_make_empty_string_null('mode') }} AS mode,
+        {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
+        SAFE_CAST(report_year AS INT64) AS report_year,
+        SAFE_CAST(sum_total_employee_count AS NUMERIC) AS sum_total_employee_count,
+        SAFE_CAST(sum_total_hours AS NUMERIC) AS sum_total_hours,
+        {{ trim_make_empty_string_null('type_of_service') }} AS type_of_service,
+        dt,
+        execution_ts
     FROM get_latest_extract
 )
 
-SELECT
-    SAFE_CAST(count_capital_labor_count_q AS NUMERIC) AS count_capital_labor_count_q,
-    SAFE_CAST(count_capital_labor_hours_q AS NUMERIC) AS count_capital_labor_hours_q,
-    SAFE_CAST(count_facility_maintenance_count_q AS NUMERIC) AS count_facility_maintenance_count_q,
-    SAFE_CAST(count_facility_maintenance_hours_q AS NUMERIC) AS count_facility_maintenance_hours_q,
-    SAFE_CAST(count_general_administration_count_q AS NUMERIC) AS count_general_administration_count_q,
-    SAFE_CAST(count_general_administration_hours_q AS NUMERIC) AS count_general_administration_hours_q,
-    SAFE_CAST(count_total_employee_count_q AS NUMERIC) AS count_total_employee_count_q,
-    SAFE_CAST(count_total_employee_hours_q AS NUMERIC) AS count_total_employee_hours_q,
-    SAFE_CAST(count_vehicle_maintenance_count_q AS NUMERIC) AS count_vehicle_maintenance_count_q,
-    SAFE_CAST(count_vehicle_maintenance_hours_q AS NUMERIC) AS count_vehicle_maintenance_hours_q,
-    SAFE_CAST(count_vehicle_operations_count_q AS NUMERIC) AS count_vehicle_operations_count_q,
-    SAFE_CAST(count_vehicle_operations_hours_q AS NUMERIC) AS count_vehicle_operations_hours_q,
-    {{ trim_make_empty_string_null('max_mode_name') }} AS max_mode_name,
-    {{ trim_make_empty_string_null('mode') }} AS mode,
-    {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
-    SAFE_CAST(report_year AS INT64) AS report_year,
-    SAFE_CAST(sum_total_employee_count AS NUMERIC) AS sum_total_employee_count,
-    SAFE_CAST(sum_total_hours AS NUMERIC) AS sum_total_hours,
-    {{ trim_make_empty_string_null('type_of_service') }} AS type_of_service,
-    dt,
-    execution_ts
-FROM stg_ntd__employees_by_mode
+SELECT * FROM stg_ntd__employees_by_mode
