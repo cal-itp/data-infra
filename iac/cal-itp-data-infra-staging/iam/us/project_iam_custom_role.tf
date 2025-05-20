@@ -17,6 +17,11 @@ resource "google_project_iam_custom_role" "tfer--projects-002F-cal-itp-data-infr
 }
 
 resource "google_project_iam_custom_role" "calitp-dds-analyst" {
+  # Contain some permissions from the following roles:
+  # - roles/viewer
+  # - roles/bigquery.user
+  # - roles/bigquery.metadataViewer
+  # - roles/bigquery.filteredDataViewer
   description = "Custom role for DDS Analysts"
   permissions = [
     "bigquery.bireservations.get",
@@ -29,6 +34,7 @@ resource "google_project_iam_custom_role" "calitp-dds-analyst" {
     "bigquery.jobs.create",
     "bigquery.jobs.list",
     "bigquery.models.list",
+    "bigquery.models.getMetadata",
     "bigquery.readsessions.create",
     "bigquery.readsessions.getData",
     "bigquery.readsessions.update",
@@ -36,16 +42,25 @@ resource "google_project_iam_custom_role" "calitp-dds-analyst" {
     "bigquery.reservationAssignments.search",
     "bigquery.reservations.get",
     "bigquery.reservations.list",
+    "bigquery.routines.get",
     "bigquery.routines.list",
     "bigquery.rowAccessPolicies.create",
+    "bigquery.rowAccessPolicies.getFilteredData",
     "bigquery.savedqueries.get",
     "bigquery.savedqueries.list",
     "bigquery.tables.get",
     "bigquery.tables.getData",
+    "bigquery.tables.getIamPolicy",
     "bigquery.tables.list",
     "bigquery.tables.create",
     "bigquery.tables.update",
     "bigquery.tables.updateData",
+    "dataform.locations.get",
+    "dataform.locations.list",
+    "dataform.repositories.create",
+    "dataform.repositories.list",
+    "dataplex.projects.search",
+    "resourcemanager.projects.list",
     "resourcemanager.projects.get",
     "storage.buckets.get",
     "storage.buckets.list",
