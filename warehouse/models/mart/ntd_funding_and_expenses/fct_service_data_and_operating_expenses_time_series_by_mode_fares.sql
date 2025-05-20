@@ -17,6 +17,7 @@ dim_agency_information AS (
 
 fct_service_data_and_operating_expenses_time_series_by_mode_fares AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['int.ntd_id', 'int.year', 'int.legacy_ntd_id', 'int.mode', 'int.service']) }} AS key,
         int.ntd_id,
         int.year,
 

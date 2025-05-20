@@ -17,6 +17,7 @@ dim_agency_information AS (
 
 fct_fra_regulated_mode_major_security_events AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.year', 'stg.incident_number']) }} AS key,
         stg.ntd_id,
         stg.year,
 

@@ -17,6 +17,7 @@ dim_agency_information AS (
 
 fct_capital_expenditures_time_series_rolling_stock AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['int.ntd_id', 'int.year', 'int.legacy_ntd_id', 'int.mode']) }} AS key,
         int.ntd_id,
         int.year,
 

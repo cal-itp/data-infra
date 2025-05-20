@@ -17,6 +17,7 @@ dim_agency_information AS (
 
 fct_major_safety_events AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.year', 'stg.modecd', 'stg.mo', 'stg.typeofservicecd', 'stg.location_group', 'stg.location', 'stg.eventtype', 'stg.customer']) }} AS key,
         stg.ntd_id,
         stg.year,
 
