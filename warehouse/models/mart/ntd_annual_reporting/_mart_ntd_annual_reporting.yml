@@ -204,7 +204,7 @@ models:
     columns:
       - name: _content_hash
         description: |
-          Synthetic primary key constructed from hashing all row values (aside from `dt` and `execution_ts`).
+          Synthetic primary key constructed from hashing all row values (aside from internally-created columns `dt` and `execution_ts`).
         tests:
           - not_null
           - unique
