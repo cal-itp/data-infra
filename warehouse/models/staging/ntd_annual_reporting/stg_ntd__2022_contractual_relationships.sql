@@ -26,7 +26,7 @@ stg_ntd__2022_contractual_relationships AS (
         SAFE_CAST(buyer_supplies_vehicles_to_seller AS BOOLEAN) AS buyer_supplies_vehicles_to_seller,
         {{ trim_make_empty_string_null('contractee_ntd_id') }} AS contractee_ntd_id,
         SAFE_CAST(pt_fare_revenues_passenger_fees AS INTEGER) AS pt_fare_revenues_passenger_fees,
-        {{ trim_make_empty_string_null('agency_name') }} AS agency_name,
+        {{ trim_make_empty_string_null('agency_name') }} AS source_agency_name,
         {{ trim_make_empty_string_null('tos') }} AS tos,
         {{ trim_make_empty_string_null('type_of_contract') }} AS type_of_contract,
         {{ trim_make_empty_string_null('reporter_contractual_position') }} AS reporter_contractual_position,

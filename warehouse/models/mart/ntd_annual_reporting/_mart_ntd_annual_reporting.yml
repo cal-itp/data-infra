@@ -198,7 +198,16 @@ models:
       - *dt
       - *execution_ts
 
-  - name: dim_contractual_relationships
+  - name: fct_contractual_relationships
+    description: |
+      Add description
+    columns:
+      - name: _content_hash
+        description: |
+          Synthetic primary key constructed from hashing all row values (aside from `dt` and `execution_ts`).
+        tests:
+          - not_null
+          - unique
   - name: fct_breakdowns
     description: |
       Add description
