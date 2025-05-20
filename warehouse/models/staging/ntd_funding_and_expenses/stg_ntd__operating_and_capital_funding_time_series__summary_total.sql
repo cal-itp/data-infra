@@ -1,21 +1,16 @@
-WITH
-    source AS (
-        SELECT *
-          FROM {{ source('external_ntd__funding_and_expenses', 'historical__operating_and_capital_funding_time_series__summary_total') }}
-    ),
+WITH source AS (
+    SELECT *
+    FROM {{ source('external_ntd__funding_and_expenses', 'historical__operating_and_capital_funding_time_series__summary_total') }}
+),
 
-    get_latest_extract AS(
-        SELECT *
-          FROM source
-        -- we pull the whole table every month in the pipeline, so this gets only the latest extract
-        QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
-    ),
+get_latest_extract AS(
+    SELECT *
+    FROM source
+    -- we pull the whole table every month in the pipeline, so this gets only the latest extract
+    QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
+),
 
-    stg_ntd__operating_and_capital_funding_time_series__summary_total AS (
-        SELECT *
-        FROM get_latest_extract
-    )
-
+stg_ntd__operating_and_capital_funding_time_series__summary_total AS (
     SELECT
         {{ trim_make_empty_string_null('unnamed__14') }} AS unnamed__14,
         {{ trim_make_empty_string_null('other') }} AS other,
@@ -35,4 +30,7 @@ WITH
         {{ trim_make_empty_string_null('national_total') }} AS national_total,
         dt,
         execution_ts
-    FROM stg_ntd__operating_and_capital_funding_time_series__summary_total
+    FROM get_latest_extract
+)
+
+SELECT * FROM stg_ntd__operating_and_capital_funding_time_series__summary_total
