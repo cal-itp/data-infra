@@ -27,11 +27,11 @@ fct_capital_expenditures_time_series_rolling_stock AS (
         agency.caltrans_district_current,
         agency.caltrans_district_name_current,
 
+        int.legacy_ntd_id,
+        int.mode,
         int.agency_status,
         int.census_year,
         int.last_report_year,
-        int.legacy_ntd_id,
-        int.mode,
         int.reporter_type,
         int.reporting_module,
         int.uace_code,

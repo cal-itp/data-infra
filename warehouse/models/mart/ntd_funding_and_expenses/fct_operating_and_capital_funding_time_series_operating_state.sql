@@ -27,10 +27,10 @@ fct_operating_and_capital_funding_time_series_operating_state AS (
         agency.caltrans_district_current,
         agency.caltrans_district_name_current,
 
+        int.legacy_ntd_id,
         int.agency_status,
         int.census_year,
         int.last_report_year,
-        int.legacy_ntd_id,
         int.reporter_type,
         int.reporting_module,
         int.uace_code,
