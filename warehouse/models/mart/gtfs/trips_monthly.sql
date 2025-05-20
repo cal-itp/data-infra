@@ -47,7 +47,28 @@ fct_monthly_trips AS (
         trips.direction_id,
         trips.route_key,
         trips.route_type,
-        trips.shape_id,
+        -- fix Metrolink's empty shape_ids based on route_id and direction_id
+        -- based on https://github.com/cal-itp/data-analyses/blob/main/_shared_utils/shared_utils/gtfs_utils_v2.py#L153-L228
+        CASE
+            WHEN trips.route_id = "Antelope Valley Line" AND trips.direction_id = 0 THEN "AVout"
+            WHEN trips.route_id = "Antelope Valley Line" AND trips.direction_id = 1 THEN "AVin"
+            WHEN trips.route_id = "Orange County Line" AND trips.direction_id = 0 THEN "OCout"
+            WHEN trips.route_id = "Orange County Line" AND trips.direction_id = 1 THEN "OCin"
+            WHEN trips.route_id = "LAX FlyAway Bus" AND trips.direction_id = 0 THEN "LAXout"
+            WHEN trips.route_id = "LAX FlyAway Bus" AND trips.direction_id = 1 THEN "LAXin"
+            WHEN trips.route_id = "San Bernardino Line" AND trips.direction_id = 0 THEN "SBout"
+            WHEN trips.route_id = "San Bernardino Line" AND trips.direction_id = 1 THEN "SBin"
+            WHEN trips.route_id = "Ventura County Line" AND trips.direction_id = 0 THEN "VTout"
+            WHEN trips.route_id = "Ventura County Line" AND trips.direction_id = 1 THEN "VTin"
+            WHEN trips.route_id = "91 Line" AND trips.direction_id = 0 THEN "91out"
+            WHEN trips.route_id = "91 Line" AND trips.direction_id = 1 THEN "91in"
+            WHEN trips.route_id = "Inland Emp.-Orange Co. Line" AND trips.direction_id = 0 THEN "IEOCout"
+            WHEN trips.route_id = "Inland Emp.-Orange Co. Line" AND trips.direction_id = 1 THEN "IEOCin"
+            WHEN trips.route_id = "Riverside Line" AND trips.direction_id = 0 THEN "RIVERout"
+            WHEN trips.route_id = "Riverside Line" AND trips.direction_id = 1 THEN "RIVERin"
+            ELSE trips.shape_id
+        END
+        AS shape_id,
         trips.shape_array_key,
         trips.route_short_name,
         trips.route_long_name,
