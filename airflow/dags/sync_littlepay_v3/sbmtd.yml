@@ -1,0 +1,4 @@
+operator: operators.LittlepayRawSyncV3
+instance: sbmtd
+src_bucket: littlepay-datafeed-prod-sbmtd-58599230
+access_key_secret_name: LITTLEPAY_AWS_IAM_SBMTD_ACCESS_KEY_FEED_V3
