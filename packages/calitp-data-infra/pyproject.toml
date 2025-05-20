@@ -6,17 +6,17 @@ package-mode = true
 authors = ["Andrew Vaccaro"]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12"
+python = ">=3.9,<3.12"
 # Some of these are pinned oddly to play nicely with Composer
 pydantic = ">=1.9,<2.0"
 tqdm = "^4.64.1"
 pendulum = "^2.1.2"
-humanize = "^4.6.0"
+humanize = "^4.9.0"
 backoff = "^2.2.1"
-google-api-core = ">=1.31.4"
-typing-extensions = ">=3.10.0.2"
-google-cloud-secret-manager = ">=2.16.4,<2.23"
-gcsfs = "!=2022.7.1"
+typing_extensions = ">=4.12.1"
+gcsfs = "^2025.3.2"
+google-api-core = "^2.19.0"
+google-cloud-secret-manager = "^2.20.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"
