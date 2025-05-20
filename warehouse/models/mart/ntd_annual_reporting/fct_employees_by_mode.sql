@@ -27,6 +27,9 @@ fct_employees_by_mode AS (
         agency.caltrans_district_current,
         agency.caltrans_district_name_current,
 
+        stg.mode,
+        stg.max_mode_name,
+        stg.type_of_service,
         stg.count_capital_labor_count_q,
         stg.count_capital_labor_hours_q,
         stg.count_facility_maintenance_count_q,
@@ -39,11 +42,8 @@ fct_employees_by_mode AS (
         stg.count_vehicle_maintenance_hours_q,
         stg.count_vehicle_operations_count_q,
         stg.count_vehicle_operations_hours_q,
-        stg.max_mode_name,
-        stg.mode,
         stg.sum_total_employee_count,
         stg.sum_total_hours,
-        stg.type_of_service,
         stg.dt,
         stg.execution_ts
     FROM staging_employees_by_mode AS stg

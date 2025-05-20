@@ -24,7 +24,7 @@ stg_ntd__employees_by_mode AS (
         SAFE_CAST(count_vehicle_maintenance_hours_q AS NUMERIC) AS count_vehicle_maintenance_hours_q,
         SAFE_CAST(count_vehicle_operations_count_q AS NUMERIC) AS count_vehicle_operations_count_q,
         SAFE_CAST(count_vehicle_operations_hours_q AS NUMERIC) AS count_vehicle_operations_hours_q,
-        {{ trim_make_empty_string_null('max_mode_name') }} AS max_mode_name,
+        {{ trim_make_empty_string_null('max_mode_name') }} AS mode_name,
         {{ trim_make_empty_string_null('mode') }} AS mode,
         {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
         SAFE_CAST(report_year AS INT64) AS report_year,

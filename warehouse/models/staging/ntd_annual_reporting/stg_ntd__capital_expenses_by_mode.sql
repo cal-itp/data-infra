@@ -24,7 +24,7 @@ stg_ntd__capital_expenses_by_mode AS (
         {{ trim_make_empty_string_null('max_agency') }} AS agency,
         SAFE_CAST(max_agency_voms AS NUMERIC) AS max_agency_voms,
         {{ trim_make_empty_string_null('max_city') }} AS city,
-        {{ trim_make_empty_string_null('max_mode_name') }} AS max_mode_name,
+        {{ trim_make_empty_string_null('max_mode_name') }} AS mode_name,
         {{ trim_make_empty_string_null('max_organization_type') }} AS max_organization_type,
         SAFE_CAST(max_primary_uza_population AS NUMERIC) AS max_primary_uza_population,
         {{ trim_make_empty_string_null('max_reporter_type') }} AS max_reporter_type,
@@ -45,7 +45,7 @@ stg_ntd__capital_expenses_by_mode AS (
         SAFE_CAST(sum_reduced_reporter AS NUMERIC) AS sum_reduced_reporter,
         SAFE_CAST(sum_stations AS NUMERIC) AS sum_stations,
         SAFE_CAST(sum_total AS NUMERIC) AS sum_total,
-        {{ trim_make_empty_string_null('typeofservicecd') }} AS typeofservicecd,
+        {{ trim_make_empty_string_null('typeofservicecd') }} AS type_of_service,
         dt,
         execution_ts
     FROM get_latest_extract
