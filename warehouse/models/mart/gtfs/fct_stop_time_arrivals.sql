@@ -1,6 +1,5 @@
 {{
     config(
-        materialized='table',
         partition_by={
             'field': 'service_date',
             'data_type': 'date',
@@ -12,13 +11,13 @@
 
 WITH fct_stop_time_updates AS (
     SELECT * FROM {{ ref('fct_stop_time_updates') }}
-    WHERE dt >= '2025-05-07' AND service_date = '2025-05-08' AND gtfs_dataset_name NOT IN (
+    -- TODO: these have duplicate rows down to the stop level, maybe should exclude
+    WHERE gtfs_dataset_name NOT IN (
          'Bay Area 511 Regional TripUpdates',
          'BART TripUpdates',
          'Bay Area 511 Muni TripUpdates',
          'Unitrans Trip Updates'
      )
-    -- TODO: these have duplicate rows down to the stop level, maybe should exclude
 ),
 
 fct_tu_summaries AS (
@@ -28,7 +27,6 @@ fct_tu_summaries AS (
         schedule_base64_url,
         trip_id
     FROM {{ ref('fct_trip_updates_summaries') }}
-    WHERE service_date = '2025-05-08'
 ),
 
 stop_arrivals AS (
