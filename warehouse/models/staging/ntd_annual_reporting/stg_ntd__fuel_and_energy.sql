@@ -61,7 +61,7 @@ stg_ntd__fuel_and_energy AS (
         {{ trim_make_empty_string_null('liquefied_petroleum_gas_gal_1') }} AS liquefied_petroleum_gas_gal_1,
         {{ trim_make_empty_string_null('mode_name') }} AS mode_name,
         SAFE_CAST(mode_voms AS NUMERIC) AS mode_voms,
-        {{ trim_make_empty_string_null('modecd') }} AS modecd,
+        {{ trim_make_empty_string_null('modecd') }} AS mode,
         {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
         {{ trim_make_empty_string_null('organization_type') }} AS organization_type,
         SAFE_CAST(other_fuel AS NUMERIC) AS other_fuel,

@@ -17,7 +17,7 @@ dim_agency_information AS (
 
 fct_capital_expenses_by_capital_use AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.modecd', 'stg.typeofservicecd', 'stg.form_type']) }} AS key,
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.typeofservicecd', 'stg.form_type']) }} AS key,
         stg.ntd_id,
         stg.report_year,
 
@@ -41,7 +41,7 @@ fct_capital_expenses_by_capital_use AS (
         stg.maintenance_buildings_1,
         stg.mode_name,
         stg.mode_voms,
-        stg.modecd,
+        stg.mode,
         stg.organization_type,
         stg.other,
         stg.other_questionable,
