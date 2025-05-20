@@ -65,7 +65,7 @@ fct_contractual_relationships AS (
             'int.passenger_out_of_pocket_expenses', 'int.buyer_provides_maintenance_facility_to_seller', 'int.reporting_module',
             'int.reporter_type', 'int.other_public_assets_provided_desc', 'int.source_agency_name']) }} AS _content_hash
     FROM intermediate_contractual_relationships AS int
-    LEFT JOIN dim_agency_information AS agency_name
+    LEFT JOIN dim_agency_information AS agency
         ON int.ntd_id = agency.ntd_id
             AND int.year = agency.year
 )
