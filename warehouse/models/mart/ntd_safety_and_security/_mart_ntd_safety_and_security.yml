@@ -17,7 +17,7 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `modecd`, `month`, `typeofservicecd`, `location_group`, `location`, `eventtype`, and `customer`.
+          Synthetic primary key constructed from `ntd_id`, `year`, `mode`, `month`, `type_of_service`, `location_group`, `location`, and `event_type`.
         tests:
           - not_null
           - unique
