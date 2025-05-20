@@ -88,6 +88,7 @@ stg_littlepay__device_transactions AS (
             processed_timestamp_utc,
             _line_number,
             `instance`,
+            'v1' AS feed_version,
             extract_filename,
             littlepay_export_ts,
             littlepay_export_date,

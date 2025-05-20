@@ -85,6 +85,7 @@ stg_littlepay__settlements_v3 AS (
 
         _line_number,
         `instance`,
+        'v3' AS feed_version,
         extract_filename,
         ts,
         _content_hash,

@@ -65,6 +65,7 @@ stg_littlepay__micropayments AS (
         charge_type,
         _line_number,
         `instance`,
+        'v1' AS feed_version,
         extract_filename,
         ts,
         littlepay_export_ts,
