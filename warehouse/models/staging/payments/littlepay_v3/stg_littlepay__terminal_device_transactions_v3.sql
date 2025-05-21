@@ -52,6 +52,7 @@ stg_littlepay__terminal_device_transactions_v3 AS (
         channel,
         _line_number,
         `instance`,
+        'v3' AS feed_version,
         extract_filename,
         ts,
         littlepay_export_ts,

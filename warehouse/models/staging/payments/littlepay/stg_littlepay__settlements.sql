@@ -79,6 +79,7 @@ stg_littlepay__settlements AS (
         response_created_timestamp_utc,
         _line_number,
         `instance`,
+        'v1' AS feed_version,
         extract_filename,
         ts,
         _content_hash,

@@ -46,6 +46,7 @@ stg_littlepay__device_transaction_purchases AS (
         transaction_time,
         _line_number,
         `instance`,
+        'v1' AS feed_version,
         extract_filename,
         littlepay_export_ts,
         littlepay_export_date,

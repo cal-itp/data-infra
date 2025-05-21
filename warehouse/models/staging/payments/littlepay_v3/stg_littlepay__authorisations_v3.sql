@@ -82,6 +82,7 @@ stg_littlepay__authorisations_v3 AS (
         authorisation_date_time_utc,
          _line_number,
         `instance`,
+        'v3' AS feed_version,
         extract_filename,
         littlepay_export_ts,
         littlepay_export_date,

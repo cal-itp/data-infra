@@ -79,6 +79,7 @@ stg_littlepay__refunds AS (
         settlement_response_text,
         CAST(_line_number AS INTEGER) AS _line_number,
         `instance`,
+        'v1' AS feed_version,
         extract_filename,
         ts,
         littlepay_export_ts,

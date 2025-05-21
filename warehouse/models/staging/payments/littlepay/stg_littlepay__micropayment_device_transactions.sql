@@ -34,6 +34,7 @@ stg_littlepay__micropayment_device_transactions AS (
         micropayment_id,
         _line_number,
         `instance`,
+        'v1' AS feed_version,
         extract_filename,
         ts,
         littlepay_export_ts,

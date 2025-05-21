@@ -63,6 +63,7 @@ stg_littlepay__micropayment_adjustments_v3 AS (
         incentive_product_id,
         _line_number,
         `instance`,
+        'v3' AS feed_version,
         extract_filename,
         ts,
         littlepay_export_ts,

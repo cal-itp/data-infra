@@ -107,6 +107,7 @@ stg_littlepay__micropayments_v3 AS (
 
         _line_number,
         `instance`,
+        'v3' AS feed_version,
         extract_filename,
         ts,
         littlepay_export_ts,
