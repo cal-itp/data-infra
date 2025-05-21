@@ -34,6 +34,12 @@ stop_times_grouped AS (
     SELECT * FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
 ),
 
+-- use seed to fill in where shape_ids are missing
+derived_shapes AS (
+    SELECT *
+    FROM {{ ref('gtfs_optional_shapes') }}
+),
+
 gtfs_joins AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['service_index.service_date', 'trips.key', 'stop_times_grouped.iteration_num']) }} AS key,
@@ -163,7 +169,7 @@ fct_scheduled_trips AS (
         gtfs_joins.agency_id,
         gtfs_joins.network_id,
         gtfs_joins.shape_array_key,
-        gtfs_joins.shape_id,
+        COALESCE(gtfs_joins.shape_id, derived_shapes.shape_id) AS shape_id,
         gtfs_joins.contains_warning_duplicate_trip_primary_key,
         gtfs_joins.num_distinct_stops_served,
         gtfs_joins.num_stop_times,
@@ -206,6 +212,10 @@ fct_scheduled_trips AS (
         AND gtfs_joins.service_date = daily_feeds.date
     LEFT JOIN dim_gtfs_datasets
         ON daily_feeds.gtfs_dataset_key = dim_gtfs_datasets.key
+    LEFT JOIN derived_shapes
+    ON dim_gtfs_datasets.name = derived_shapes.gtfs_dataset_name
+        AND gtfs_joins.route_id = derived_shapes.route_id
+        AND gtfs_joins.direction_id = derived_shapes.direction_id
     -- drop trips that no one can actually ride
     WHERE has_rider_service
 )
