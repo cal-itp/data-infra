@@ -7,28 +7,30 @@ dim_agency_information AS (
     SELECT
         ntd_id,
         year,
+        agency_name,
         city,
         state,
+        caltrans_district_current,
+        caltrans_district_name_current
     FROM {{ ref('dim_agency_information') }}
-),
-
-current_dim_organizations AS (
-    SELECT
-        ntd_id,
-        caltrans_district AS caltrans_district_current,
-        caltrans_district_name AS caltrans_district_name_current
-    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
 ),
 
 fct_fra_regulated_mode_major_security_events AS (
     SELECT
-        stg.agency AS agency_name,
+        {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.year', 'stg.incident_number']) }} AS key,
         stg.ntd_id,
         stg.year,
 
+        agency.agency_name,
         agency.city,
         agency.state,
+        agency.caltrans_district_current,
+        agency.caltrans_district_name_current,
 
+        stg.incident_number,
+        stg.event_type,
+        stg.mode,
+        stg.type_of_service,
         stg.other_vehicle_action,
         stg.manufacturer_description,
         stg.evacuation_comment,
@@ -86,14 +88,11 @@ fct_fra_regulated_mode_major_security_events AS (
         stg.rail_grade_crossing_control,
         stg.intentional_y_n,
         stg.total_injuries,
-        stg.event_type,
         stg.event_location,
         stg.number_of_vehicles_involved,
         stg.suicide_injuries,
         stg.pedestrian_walking_along,
         stg.person_list,
-        stg.type_of_service,
-        stg.mode,
         stg.self_evacuation_y_n,
         stg.bicyclist_injuries,
         stg.property_damage,
@@ -111,18 +110,13 @@ fct_fra_regulated_mode_major_security_events AS (
         stg.fire_fuel,
         stg.number_of_transit_vehicles,
         stg.transit_vehicle_operator_2,
-        stg.incident_number,
         stg.other_fatalities,
         stg.pedestrian_not_in_crosswalk,
         stg.number_of_derailed_cars,
-
-        orgs.caltrans_district_current,
-        orgs.caltrans_district_name_current,
-
+        stg.agency AS source_agency,
         stg.dt,
         stg.execution_ts
     FROM staging_fra_regulated_mode_major_security_events AS stg
-    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
     LEFT JOIN dim_agency_information AS agency
         ON stg.ntd_id = agency.ntd_id
             AND stg.year = agency.year

@@ -3,21 +3,33 @@ WITH staging_fuel_and_energy AS (
     FROM {{ ref('stg_ntd__fuel_and_energy') }}
 ),
 
-current_dim_organizations AS (
+dim_agency_information AS (
     SELECT
         ntd_id,
-        caltrans_district AS caltrans_district_current,
-        caltrans_district_name AS caltrans_district_name_current
-    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+        year,
+        agency_name,
+        city,
+        state,
+        caltrans_district_current,
+        caltrans_district_name_current
+    FROM {{ ref('dim_agency_information') }}
 ),
 
 fct_fuel_and_energy AS (
     SELECT
-        stg.agency AS agency_name,
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.type_of_service']) }} AS key,
         stg.ntd_id,
         stg.report_year,
-        stg.city,
-        stg.state,
+
+        agency.agency_name,
+        agency.city,
+        agency.state,
+        agency.caltrans_district_current,
+        agency.caltrans_district_name_current,
+
+        stg.mode,
+        stg.mode_name,
+        stg.type_of_service,
         stg.agency_voms,
         stg.bio_diesel_gal,
         stg.bio_diesel_gal_questionable,
@@ -63,9 +75,7 @@ fct_fuel_and_energy AS (
         stg.liquefied_petroleum_gas_1,
         stg.liquefied_petroleum_gas_gal,
         stg.liquefied_petroleum_gas_gal_1,
-        stg.mode_name,
         stg.mode_voms,
-        stg.modecd,
         stg.organization_type,
         stg.other_fuel,
         stg.other_fuel_mpg,
@@ -75,17 +85,17 @@ fct_fuel_and_energy AS (
         stg.other_fuel_gal_gal_equivalent_1,
         stg.primary_uza_population,
         stg.reporter_type,
-        stg.typeofservicecd,
         stg.uace_code,
         stg.uza_name,
-
-        orgs.caltrans_district_current,
-        orgs.caltrans_district_name_current,
-
+        stg.agency AS source_agency,
+        stg.city AS source_city,
+        stg.state AS source_state,
         stg.dt,
         stg.execution_ts
     FROM staging_fuel_and_energy AS stg
-    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    LEFT JOIN dim_agency_information AS agency
+        ON stg.ntd_id = agency.ntd_id
+            AND stg.report_year = agency.year
 )
 
 SELECT * FROM fct_fuel_and_energy

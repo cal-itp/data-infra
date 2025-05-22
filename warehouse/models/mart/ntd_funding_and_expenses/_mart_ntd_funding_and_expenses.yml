@@ -2,31 +2,283 @@ version: 2
 
 models:
   - name: fct_capital_expenditures_time_series_facilities
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, and `mode`.
+        tests:
+          - not_null
+          - unique
   - name: fct_capital_expenditures_time_series_other
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, and `mode`.
+        tests:
+          - not_null
+          - unique
   - name: fct_capital_expenditures_time_series_rolling_stock
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, and `mode`.
+        tests:
+          - not_null
+          - unique
   - name: fct_capital_expenditures_time_series_total
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, and `mode`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_capital_federal
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_capital_local
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_capital_other
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_capital_state
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_capital_total
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_operating_federal
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_operating_local
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_operating_other
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_operating_state
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_operating_total
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_summary_total
   - name: fct_operating_and_capital_funding_time_series_decommissioned_operatingfares
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_operating_and_capital_funding_time_series_decommissioned_operatingother
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_drm
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_fares
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_ga
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_nvm
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_total
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_vm
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_vo
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_pmt
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_upt
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_voms
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_vrh
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_vrm
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+        tests:
+          - not_null
+          - unique

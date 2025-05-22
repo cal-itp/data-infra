@@ -64,6 +64,8 @@ int_ntd__unioned_agency_information AS (
         execution_ts AS _valid_from,
         {{ make_end_of_valid_range('COALESCE(next_ts, CAST("2099-01-01" AS TIMESTAMP))') }} AS _valid_to,
         next_ts IS NULL AS _is_current,
+        dt,
+        execution_ts
     FROM stg_ntd__2023_agency_information
 
     UNION ALL
@@ -117,6 +119,8 @@ int_ntd__unioned_agency_information AS (
         execution_ts AS _valid_from,
         {{ make_end_of_valid_range('COALESCE(next_ts, CAST("2099-01-01" AS TIMESTAMP))') }} AS _valid_to,
         next_ts IS NULL AS _is_current,
+        dt,
+        execution_ts
     FROM stg_ntd__2022_agency_information
 )
 

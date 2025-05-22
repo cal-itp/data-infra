@@ -3,23 +3,34 @@ WITH staging_service_by_mode AS (
     FROM {{ ref('stg_ntd__service_by_mode') }}
 ),
 
-current_dim_organizations AS (
+dim_agency_information AS (
     SELECT
         ntd_id,
-        caltrans_district AS caltrans_district_current,
-        caltrans_district_name AS caltrans_district_name_current
-    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+        year,
+        agency_name,
+        city,
+        state,
+        caltrans_district_current,
+        caltrans_district_name_current
+    FROM {{ ref('dim_agency_information') }}
 ),
 
 fct_service_by_mode AS (
     SELECT
-        stg.max_agency AS agency_name,
-        stg._5_digit_ntd_id AS ntd_id,
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.type_of_service']) }} AS key,
+        stg.ntd_id,
         stg.report_year,
-        stg.max_city AS city,
-        stg.max_state AS state,
+
+        agency.agency_name,
+        agency.city,
+        agency.state,
+        agency.caltrans_district_current,
+        agency.caltrans_district_name_current,
+
+        stg.mode,
+        stg.mode_name,
+        stg.type_of_service,
         stg.max_agency_voms,
-        stg.max_mode_name,
         stg.max_mode_voms,
         stg.max_organization_type,
         stg.max_primary_uza_area_sq_miles,
@@ -32,7 +43,6 @@ fct_service_by_mode AS (
         stg.max_time_period,
         stg.min_time_service_begins,
         stg.max_time_service_ends,
-        stg.mode,
         stg.questionable_record,
         stg.sum_actual_vehicles_passenger_car_deadhead_hours,
         stg.sum_actual_vehicles_passenger_car_hours,
@@ -58,15 +68,15 @@ fct_service_by_mode AS (
         stg.sum_train_revenue_miles,
         stg.sum_trains_in_operation,
         stg.sum_unlinked_passenger_trips_upt,
-        stg.type_of_service,
-
-        orgs.caltrans_district_current,
-        orgs.caltrans_district_name_current,
-
+        stg.agency AS source_agency,
+        stg.city AS source_city,
+        stg.state AS source_state,
         stg.dt,
         stg.execution_ts
     FROM staging_service_by_mode AS stg
-    LEFT JOIN current_dim_organizations AS orgs ON stg._5_digit_ntd_id = orgs.ntd_id
+    LEFT JOIN dim_agency_information AS agency
+        ON stg.ntd_id = agency.ntd_id
+            AND stg.report_year = agency.year
 )
 
 SELECT * FROM fct_service_by_mode
