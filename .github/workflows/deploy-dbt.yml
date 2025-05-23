@@ -29,6 +29,8 @@ jobs:
     name: Compile dbt
     runs-on: ubuntu-latest
 
+    if: ${{ 'false' == 'true' }}
+
     permissions:
       contents: read
       id-token: write

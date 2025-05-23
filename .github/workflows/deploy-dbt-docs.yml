@@ -89,17 +89,17 @@ jobs:
         working-directory: warehouse
         run: poetry run dbt compile --target ${{ env.DBT_TARGET }} --full-refresh
 
-      - name: Create Metabase folder
-        working-directory: warehouse/models
-        run: mkdir metabase
+      # - name: Create Metabase folder
+      #   working-directory: warehouse/models
+      #   run: mkdir metabase
 
-      - name: Extract Metabase exposures
-        working-directory: warehouse
-        run: poetry run dbt-metabase exposures -v --output-grouping="type" --output-path=./models/metabase/ --manifest-path=./target/manifest.json  --metabase-url="https://dashboards.calitp.org" --metabase-api-key="${{ secrets.METABASE_API_KEY }}"
+      # - name: Extract Metabase exposures
+      #   working-directory: warehouse
+      #   run: poetry run dbt-metabase exposures -v --output-grouping="type" --output-path=./models/metabase/ --manifest-path=./target/manifest.json  --metabase-url="https://dashboards.calitp.org" --metabase-api-key="${{ secrets.METABASE_API_KEY }}"
 
-      - name: Compile dbt with exposures
-        working-directory: warehouse
-        run: poetry run dbt compile --target ${{ env.DBT_TARGET }} --full-refresh
+      # - name: Compile dbt with exposures
+      #   working-directory: warehouse
+      #   run: poetry run dbt compile --target ${{ env.DBT_TARGET }} --full-refresh
 
       - name: Generate dbt documentation
         working-directory: warehouse
