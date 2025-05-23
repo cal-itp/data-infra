@@ -17,7 +17,3 @@ resource "google_storage_default_object_acl" "tfer--dataproc-temp-us-west2-47367
   bucket      = "dataproc-temp-us-west2-473674835135-yuzmmdyk"
   role_entity = ["OWNER:project-editors-473674835135", "OWNER:project-owners-473674835135", "READER:project-viewers-473674835135"]
 }
-
-resource "google_storage_default_object_acl" "tfer--test-calitp-amplitude-benefits-events" {
-  bucket = "test-calitp-amplitude-benefits-events"
-}
