@@ -1,0 +1,17 @@
+gtfs_dataset_name,route_id,direction_id,shape_id
+Metrolink Schedule,Antelope Valley Line,0,AVout
+Metrolink Schedule,Antelope Valley Line,1,AVin
+Metrolink Schedule,Orange County Line,0,OCout
+Metrolink Schedule,Orange County Line,1,OCin
+Metrolink Schedule,LAX FlyAway Bus,0,LAXout
+Metrolink Schedule,LAX FlyAway Bus,1,LAXin
+Metrolink Schedule,San Bernardino Line,0,SBout
+Metrolink Schedule,San Bernardino Line,1,SBin
+Metrolink Schedule,Ventura County Line,0,VTout
+Metrolink Schedule,Ventura County Line,1,VTin
+Metrolink Schedule,91 Line,0,91out
+Metrolink Schedule,91 Line,1,91in
+Metrolink Schedule,Inland Emp.-Orange Co. Line,0,IEOCout
+Metrolink Schedule,Inland Emp.-Orange Co. Line,1,IEOCin
+Metrolink Schedule,Riverside Line,0,RIVERout
+Metrolink Schedule,Riverside Line,1,RIVERin
