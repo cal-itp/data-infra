@@ -107,7 +107,7 @@ gtfs_joins AS (
         trips.warning_duplicate_gtfs_key AS contains_warning_duplicate_trip_primary_key,
         
         shapes.key AS shape_array_key,
-        --shapes.pt_array # this attaches now
+        shapes.pt_array --# this attaches now
         
  
 
@@ -121,12 +121,7 @@ gtfs_joins AS (
     LEFT JOIN dim_routes AS routes
         ON service_index.feed_key = routes.feed_key
             AND trips.route_id = routes.route_id
-    --LEFT JOIN stop_times_grouped
-    --   ON service_index.feed_key = stop_times_grouped.feed_key
-    --        AND trips.trip_id = stop_times_grouped.trip_id
-    -- drop trips with no stops
-    --WHERE stop_times_grouped.feed_key IS NOT NULL
-)
 
+)
 
 SELECT * FROM gtfs_joins
