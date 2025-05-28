@@ -109,8 +109,6 @@ gtfs_joins AS (
         shapes.key AS shape_array_key,
         shapes.pt_array --# this attaches now
         
- 
-
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
     INNER JOIN dim_trips2 AS trips
         ON service_index.feed_key = trips.feed_key
@@ -121,7 +119,20 @@ gtfs_joins AS (
     LEFT JOIN dim_routes AS routes
         ON service_index.feed_key = routes.feed_key
             AND trips.route_id = routes.route_id
+),
 
+gtfs_joins2 AS (
+    SELECT
+        
+        gtfs_joins.*,
+        stop_times_grouped.iteration_num,
+        stop_times_grouped.frequencies_defined_trip,
+    FROM gtfs_joins
+    LEFT JOIN stop_times_grouped
+        ON gtfs_joins.feed_key = stop_times_grouped.feed_key
+            AND gtfs_joins.trip_id = stop_times_grouped.trip_id
+    -- drop trips with no stops
+    --WHERE stop_times_grouped.feed_key IS NOT NULL
 )
 
-SELECT * FROM gtfs_joins
+SELECT * FROM gtfs_joins2
