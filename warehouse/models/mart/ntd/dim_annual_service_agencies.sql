@@ -4,9 +4,9 @@ WITH source AS (
     SELECT * FROM {{ ref("stg_ntd__service_by_agency") }}
 )
 
-SELECT {{ dbt_utils.generate_surrogate_key(['report_year', '_5_digit_ntd_id']) }} as key,
+SELECT {{ dbt_utils.generate_surrogate_key(['report_year', 'ntd_id']) }} as key,
        report_year,
-       _5_digit_ntd_id AS ntd_id,
+       ntd_id,
        agency,
        max_reporter_type AS reporter_type,
        max_organization_type AS organization_type,
