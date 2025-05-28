@@ -5,18 +5,26 @@ WITH int_gtfs_schedule__daily_scheduled_service_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_schedule__daily_scheduled_service_index') }}
     WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602") 
+        AND {{ incremental_where(
+            default_start_var='GTFS_SCHEDULE_START',
+            this_dt_column='service_date',
+            filter_dt_column='service_date',
+            dev_lookback_days = 60) 
+    }}
 ),
 
 dim_trips AS (
     SELECT *
     FROM {{ ref('dim_trips') }}
     WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602") 
+    
 ),
 
 dim_routes AS (
     SELECT *
     FROM {{ ref('dim_routes') }}
     WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602") 
+
 ),
 
 fct_daily_schedule_feeds AS (
@@ -35,7 +43,7 @@ dim_gtfs_datasets AS (
 ),
 
 stop_times_grouped AS (
-    SELECT * FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
+    SELECT * FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_st_groups`
     WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602") 
 ),
 
@@ -75,6 +83,7 @@ dim_trips2 AS (
 
 gtfs_joins AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['service_index.service_date', 'trips.key', 'stop_times_grouped.iteration_num']) }} AS key,
 
         service_index.service_date,
         service_index.feed_key,
@@ -87,8 +96,8 @@ gtfs_joins AS (
         trips.trip_short_name,
         trips.direction_id,
         trips.block_id,
-        --stop_times_grouped.iteration_num,
-        --stop_times_grouped.frequencies_defined_trip,
+        stop_times_grouped.iteration_num,
+        stop_times_grouped.frequencies_defined_trip,
 
         routes.key AS route_key,
         routes.route_id AS route_id,
@@ -119,20 +128,11 @@ gtfs_joins AS (
     LEFT JOIN dim_routes AS routes
         ON service_index.feed_key = routes.feed_key
             AND trips.route_id = routes.route_id
-),
-
-gtfs_joins2 AS (
-    SELECT
-        
-        gtfs_joins.*,
-        stop_times_grouped.iteration_num,
-        stop_times_grouped.frequencies_defined_trip,
-    FROM gtfs_joins
     LEFT JOIN stop_times_grouped
-        ON gtfs_joins.feed_key = stop_times_grouped.feed_key
-            AND gtfs_joins.trip_id = stop_times_grouped.trip_id
+        ON service_index.feed_key = stop_times_grouped.feed_key
+            AND trips.trip_id = stop_times_grouped.trip_id
     -- drop trips with no stops
     WHERE stop_times_grouped.feed_key IS NOT NULL
 )
 
-SELECT * FROM gtfs_joins2
+SELECT * FROM gtfs_joins
