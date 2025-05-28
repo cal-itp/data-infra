@@ -132,7 +132,7 @@ gtfs_joins2 AS (
         ON gtfs_joins.feed_key = stop_times_grouped.feed_key
             AND gtfs_joins.trip_id = stop_times_grouped.trip_id
     -- drop trips with no stops
-    --WHERE stop_times_grouped.feed_key IS NOT NULL
+    WHERE stop_times_grouped.feed_key IS NOT NULL
 )
 
 SELECT * FROM gtfs_joins2
