@@ -4,32 +4,29 @@
 WITH int_gtfs_schedule__daily_scheduled_service_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_schedule__daily_scheduled_service_index') }}
-    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602", "0f80473907c7613e9fefbb71220e9e56", "5dc8e10aaf365db19377d6a89d287497", "c38789e6ea2280c459f71931e0333e00", "df3f70652f80ec0199607a3ec6b1f371")
-
+    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602")
 ),
 
 dim_trips AS (
     SELECT *
     FROM {{ ref('dim_trips') }}
-    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602", "0f80473907c7613e9fefbb71220e9e56", "5dc8e10aaf365db19377d6a89d287497", "c38789e6ea2280c459f71931e0333e00", "df3f70652f80ec0199607a3ec6b1f371")
-
+    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602")
 ),
 
 dim_routes AS (
     SELECT *
     FROM {{ ref('dim_routes') }}
-    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602", "0f80473907c7613e9fefbb71220e9e56", "5dc8e10aaf365db19377d6a89d287497", "c38789e6ea2280c459f71931e0333e00", "df3f70652f80ec0199607a3ec6b1f371")
+    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602")
 ),
 
 fct_daily_schedule_feeds AS (
     SELECT * FROM {{ ref('fct_daily_schedule_feeds') }}
-    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602", "0f80473907c7613e9fefbb71220e9e56", "5dc8e10aaf365db19377d6a89d287497", "c38789e6ea2280c459f71931e0333e00", "df3f70652f80ec0199607a3ec6b1f371")
+    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602")
 ),
 
 dim_shapes_arrays AS (
     SELECT * FROM {{ ref('dim_shapes_arrays') }}
-    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602", "0f80473907c7613e9fefbb71220e9e56", "5dc8e10aaf365db19377d6a89d287497", "c38789e6ea2280c459f71931e0333e00", "df3f70652f80ec0199607a3ec6b1f371")
-
+    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602")
 ),
 
 dim_gtfs_datasets AS (
@@ -39,7 +36,7 @@ dim_gtfs_datasets AS (
 
 stop_times_grouped AS (
     SELECT * FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
-    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602", "0f80473907c7613e9fefbb71220e9e56", "5dc8e10aaf365db19377d6a89d287497", "c38789e6ea2280c459f71931e0333e00", "df3f70652f80ec0199607a3ec6b1f371")
+    WHERE feed_key in ("c8c998ed5280bd8afe6229f41075d602")
 ),
 
 -- use seed to fill in where shape_ids are missing
@@ -63,7 +60,8 @@ derived_shapes_with_feed AS (
 
 dim_trips2 AS (
     SELECT
-        * EXCEPT(feed_key, route_id, direction_id, shape_id),
+        * EXCEPT(feed_key, route_id, direction_id, shape_id, key),
+        dim_trips.key, --the key in dim_trips will have null shape_id, so somehow it's not carrying over in the join later
         dim_trips.feed_key,
         dim_trips.route_id,
         dim_trips.direction_id,
@@ -74,5 +72,6 @@ dim_trips2 AS (
             AND derived_shapes_with_feed.route_id = dim_trips.route_id
             AND derived_shapes_with_feed.direction_id = dim_trips.direction_id
 )
+
 
 SELECT * FROM dim_trips2
