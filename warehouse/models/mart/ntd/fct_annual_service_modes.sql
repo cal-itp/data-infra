@@ -4,9 +4,9 @@ WITH source AS (
     SELECT * FROM {{ ref("stg_ntd__service_by_mode") }}
 )
 
-SELECT {{ dbt_utils.generate_surrogate_key(['report_year', '_5_digit_ntd_id', 'type_of_service', 'mode']) }} as key,
+SELECT {{ dbt_utils.generate_surrogate_key(['report_year', 'ntd_id', 'type_of_service', 'mode']) }} as key,
        report_year,
-       _5_digit_ntd_id AS ntd_id,
+       ntd_id,
        type_of_service,
        mode,
        max_mode_name AS mode_name,
