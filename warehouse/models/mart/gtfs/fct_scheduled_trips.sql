@@ -59,8 +59,7 @@ derived_shapes_with_feed AS (
 
 dim_trips_fixed AS (
     SELECT
-        * EXCEPT(feed_key, route_id, direction_id, shape_id, key),
-        dim_trips.key, --the key in dim_trips will have null shape_id, so somehow it's not carrying over in the join later
+        * EXCEPT(feed_key, route_id, direction_id, shape_id),
         dim_trips.feed_key,
         dim_trips.route_id,
         dim_trips.direction_id,
