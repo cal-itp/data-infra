@@ -18,13 +18,11 @@ dim_routes AS (
 ),
 
 fct_daily_schedule_feeds AS (
-    SELECT *
-    FROM {{ ref('fct_daily_schedule_feeds') }}
+    SELECT * FROM {{ ref('fct_daily_schedule_feeds') }}
 ),
 
 dim_shapes_arrays AS (
-    SELECT *
-    FROM {{ ref('dim_shapes_arrays') }}
+    SELECT * FROM {{ ref('dim_shapes_arrays') }}
 ),
 
 dim_gtfs_datasets AS (
@@ -33,9 +31,7 @@ dim_gtfs_datasets AS (
 ),
 
 stop_times_grouped AS (
-    SELECT *
-    FROM {{ ref('int_gtfs_schedule__daily_scheduled_service_index')
-    }}
+    SELECT * FROM {{ ref('int_gtfs_schedule__daily_scheduled_service_index') }}
 ),
 
 -- use seed to fill in where shape_ids are missing
