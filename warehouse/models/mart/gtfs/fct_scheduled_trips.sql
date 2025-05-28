@@ -32,7 +32,6 @@ dim_gtfs_datasets AS (
 
 stop_times_grouped AS (
     SELECT * FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
-
 ),
 
 -- use seed to fill in where shape_ids are missing
