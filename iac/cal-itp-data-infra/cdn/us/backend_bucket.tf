@@ -1,3 +1,14 @@
+resource "google_compute_managed_ssl_certificate" "calitp" {
+  name = "calitp-certificate"
+
+  managed {
+    domains = [
+      "dbt-docs.dds.dot.ca.gov.",
+      "gtfs.dds.dot.ca.gov."
+    ]
+  }
+}
+
 resource "google_compute_backend_bucket" "calitp-gtfs" {
   name        = "calitp-gtfs-backend-bucket"
   bucket_name = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs_name
@@ -26,9 +37,9 @@ resource "google_compute_backend_bucket" "calitp-dbt-docs" {
   }
 }
 
-resource "google_compute_url_map" "default" {
-  name            = "http-lb"
-  default_service = google_compute_backend_bucket.calitp-gtfs.id
+resource "google_compute_url_map" "calitp-https" {
+  name            = "calitp-https-load-balancer"
+  default_service = google_compute_backend_bucket.calitp-dbt-docs.id
 
   host_rule {
     path_matcher = "gtfs"
@@ -43,24 +54,56 @@ resource "google_compute_url_map" "default" {
   path_matcher {
     name            = "gtfs"
     default_service = google_compute_backend_bucket.calitp-gtfs.id
+
+    path_rule {
+      paths   = ["/*"]
+      service = google_compute_backend_bucket.calitp-gtfs.id
+    }
   }
 
   path_matcher {
     name            = "dbt-docs"
     default_service = google_compute_backend_bucket.calitp-dbt-docs.id
+
+    path_rule {
+      paths   = ["/*"]
+      service = google_compute_backend_bucket.calitp-dbt-docs.id
+    }
   }
 }
 
-resource "google_compute_target_http_proxy" "default" {
-  name    = "http-lb-proxy"
-  url_map = google_compute_url_map.default.id
+resource "google_compute_target_https_proxy" "calitp-https" {
+  name             = "calitp-https-proxy"
+  url_map          = google_compute_url_map.calitp-https.id
+  ssl_certificates = [google_compute_managed_ssl_certificate.calitp.id]
 }
 
-resource "google_compute_global_forwarding_rule" "default" {
-  name                  = "http-lb-forwarding-rule"
-  ip_protocol           = "TCP"
-  load_balancing_scheme = "EXTERNAL"
-  port_range            = "80"
-  target                = google_compute_target_http_proxy.default.id
-  ip_address            = data.terraform_remote_state.networks.outputs.google_compute_network_static-load-balancer-address_id
+resource "google_compute_global_forwarding_rule" "calitp-https" {
+  name        = "calitp-https-forwarding-rule"
+  ip_protocol = "TCP"
+  port_range  = 443
+  target      = google_compute_target_https_proxy.calitp-https.id
+  ip_address  = data.terraform_remote_state.networks.outputs.google_compute_network_static-load-balancer-address_id
+}
+
+resource "google_compute_url_map" "calitp-http" {
+  name = "calitp-http-load-balancer"
+
+  default_url_redirect {
+    strip_query    = false
+    https_redirect = true
+  }
+}
+
+resource "google_compute_target_http_proxy" "calitp-http" {
+  name    = "calitp-http-proxy"
+  url_map = google_compute_url_map.calitp-http.self_link
+}
+
+resource "google_compute_global_forwarding_rule" "calitp-http" {
+  name        = "calitp-http-forwarding-rule"
+  ip_protocol = "TCP"
+  port_range  = 80
+  target      = google_compute_target_http_proxy.calitp-http.self_link
+  ip_address  = data.terraform_remote_state.networks.outputs.google_compute_network_static-load-balancer-address_id
 }
