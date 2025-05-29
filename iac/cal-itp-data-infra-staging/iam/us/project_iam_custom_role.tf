@@ -60,7 +60,6 @@ resource "google_project_iam_custom_role" "calitp-dds-analyst" {
     "dataform.repositories.create",
     "dataform.repositories.list",
     "dataplex.projects.search",
-    "resourcemanager.projects.list",
     "resourcemanager.projects.get",
     "storage.buckets.get",
     "storage.buckets.list",
