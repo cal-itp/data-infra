@@ -3,21 +3,33 @@ WITH staging_stations_by_mode_and_age AS (
     FROM {{ ref('stg_ntd__stations_by_mode_and_age') }}
 ),
 
-current_dim_organizations AS (
+dim_agency_information AS (
     SELECT
         ntd_id,
-        caltrans_district AS caltrans_district_current,
-        caltrans_district_name AS caltrans_district_name_current
-    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+        year,
+        agency_name,
+        city,
+        state,
+        caltrans_district_current,
+        caltrans_district_name_current
+    FROM {{ ref('dim_agency_information') }}
 ),
 
 fct_stations_by_mode_and_age AS (
     SELECT
-        stg.agency AS agency_name,
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.modes', 'stg.facility_type']) }} AS key,
         stg.ntd_id,
         stg.report_year,
-        stg.city,
-        stg.state,
+
+        agency.agency_name,
+        agency.city,
+        agency.state,
+        agency.caltrans_district_current,
+        agency.caltrans_district_name_current,
+
+        stg.modes,
+        stg.mode_names,
+        stg.facility_type,
         stg._1940s,
         stg._1950s,
         stg._1960s,
@@ -28,9 +40,6 @@ fct_stations_by_mode_and_age AS (
         stg._2010s,
         stg._2020s,
         stg.agency_voms,
-        stg.facility_type,
-        stg.mode_names,
-        stg.modes,
         stg.organization_type,
         stg.pre1940,
         stg.primary_uza_population,
@@ -38,14 +47,15 @@ fct_stations_by_mode_and_age AS (
         stg.total_facilities,
         stg.uace_code,
         stg.uza_name,
-
-        orgs.caltrans_district_current,
-        orgs.caltrans_district_name_current,
-
+        stg.agency AS source_agency,
+        stg.city AS source_city,
+        stg.state AS source_state,
         stg.dt,
         stg.execution_ts
     FROM staging_stations_by_mode_and_age AS stg
-    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    LEFT JOIN dim_agency_information AS agency
+        ON stg.ntd_id = agency.ntd_id
+            AND stg.report_year = agency.year
 )
 
 SELECT * FROM fct_stations_by_mode_and_age

@@ -1,21 +1,16 @@
-WITH
-    source AS (
-        SELECT *
-          FROM {{ source('external_ntd__funding_and_expenses', 'historical__capital_expenditures_time_series__facilities') }}
-    ),
+WITH source AS (
+    SELECT *
+    FROM {{ source('external_ntd__funding_and_expenses', 'historical__capital_expenditures_time_series__facilities') }}
+),
 
-    get_latest_extract AS(
-        SELECT *
-          FROM source
-        -- we pull the whole table every month in the pipeline, so this gets only the latest extract
-        QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
-    ),
+get_latest_extract AS(
+    SELECT *
+    FROM source
+    -- we pull the whole table every month in the pipeline, so this gets only the latest extract
+    QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
+),
 
-    stg_ntd__capital_expenditures_time_series__facilities AS (
-        SELECT *
-        FROM get_latest_extract
-    )
-
+stg_ntd__capital_expenditures_time_series__facilities AS (
     SELECT
         SAFE_CAST(_2017 AS FLOAT64) AS _2017,
         SAFE_CAST(_2023 AS FLOAT64) AS _2023,
@@ -67,4 +62,7 @@ WITH
         {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
         dt,
         execution_ts
-    FROM stg_ntd__capital_expenditures_time_series__facilities
+    FROM get_latest_extract
+)
+
+SELECT * FROM stg_ntd__capital_expenditures_time_series__facilities

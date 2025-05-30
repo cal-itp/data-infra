@@ -2,6 +2,42 @@ version: 2
 
 models:
   - name: fct_fra_regulated_mode_major_security_events
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `incident_number`.
+        tests:
+          - not_null
+          - unique
   - name: fct_major_safety_events
+    description: |
+      Add description
+    columns:
+      - name: _content_hash
+        description: |
+          Synthetic primary key constructed from hashing all row values (aside from internally-created columns `dt` and `execution_ts`).
+        tests:
+          - not_null
+          - unique
   - name: fct_monthly_modal_time_series_safety_and_service
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, `mode`, `month`, and `type_of_service`.
+        tests:
+          - not_null
+          - unique
   - name: fct_nonmajor_safety_and_security_events
+    description: |
+      Add description
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `incident_number`.
+        tests:
+          - not_null
+          - unique
