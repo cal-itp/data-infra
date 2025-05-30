@@ -1,15 +1,17 @@
-name: Deploy dbt
+name: Build dbt docs
 
 on:
+  # schedule:
+  #   - cron: "0 8 * * 1" # 8am UTC every Monday
   push:
     branches:
       - main
     paths:
-      - .github/workflows/deploy-dbt.yml
+      - .github/workflows/build-dbt-docs.yml
       - 'warehouse/**'
   pull_request:
     paths:
-      - .github/workflows/deploy-dbt.yml
+      - .github/workflows/build-dbt-docs.yml
       - 'warehouse/**'
 
 env:
@@ -26,7 +28,7 @@ env:
 
 jobs:
   compile:
-    name: Compile dbt
+    name: Compile dbt docs
     runs-on: ubuntu-latest
 
     permissions:
@@ -95,6 +97,18 @@ jobs:
         working-directory: warehouse
         run: poetry run dbt compile --target ${{ env.DBT_TARGET }} --full-refresh
 
+      - name: Create Metabase folder
+        working-directory: warehouse/models
+        run: mkdir metabase
+
+      - name: Extract Metabase exposures
+        working-directory: warehouse
+        run: poetry run dbt-metabase exposures -v --output-grouping="type" --output-path=./models/metabase/ --manifest-path=./target/manifest.json  --metabase-url="https://dashboards.calitp.org" --metabase-api-key="${{ secrets.METABASE_API_KEY }}"
+
+      - name: Compile dbt with exposures
+        working-directory: warehouse
+        run: poetry run dbt compile --target ${{ env.DBT_TARGET }} --full-refresh
+
       - name: Generate dbt documentation
         working-directory: warehouse
         run: poetry run dbt docs generate --target ${{ env.DBT_TARGET }} --no-compile
@@ -107,115 +121,11 @@ jobs:
             warehouse/target/*.json
             warehouse/target/*.html
 
-  models-changed:
-    name: Detect dbt model changes
-    runs-on: ubuntu-latest
-
-    outputs:
-      any_changed: ${{ steps.changed-files-warehouse.outputs.any_changed }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Archive metabase exposures
+        uses: actions/upload-artifact@v4
         with:
-          fetch-depth: 0
-
-      - uses: tj-actions/changed-files@v46
-        id: changed-files-warehouse
-        with:
-          files: 'warehouse/models/**/*.sql'
-
-  metabase:
-    name: Sync Metabase
-    runs-on: ubuntu-latest
-
-    needs:
-      - compile
-      - models-changed
-
-    if: ${{ needs.models-changed.outputs.any_changed == 'true' }}
-
-    permissions:
-      contents: read
-      id-token: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download compilation artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dbt
-          path: warehouse/target
-
-      - name: Authenticate Google Service Account
-        uses: google-github-actions/auth@v2
-        with:
-          create_credentials_file: 'true'
-          project_id: ${{ env.PROJECT_ID }}
-          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.SERVICE_ACCOUNT }}
-
-      - name: Setup GCloud utilities
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v2
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Cache Poetry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pypoetry
-          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
-
-      - name: Setup Poetry
-        uses: abatilo/actions-poetry@v3
-        with:
-          poetry-version: ${{ env.POETRY_VERSION }}
-
-      - name: Cache Python packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.local
-          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
-
-      - name: Install dependencies
-        working-directory: warehouse
-        run: poetry install
-
-      - name: Cache dbt packages
-        uses: actions/cache@v3
-        with:
-          path: warehouse/dbt_packages
-          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
-
-      - name: Install dbt dependencies
-        working-directory: warehouse
-        run: poetry run dbt deps
-
-      - name: Print dbt environment
-        working-directory: warehouse
-        run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
-
-      - name: Download latest artifacts from GCS
-        working-directory: warehouse
-        if: ${{ env.DBT_TARGET  == 'staging' }}
-        run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ ./target/
-
-      - name: Run changed models
-        working-directory: warehouse
-        if: ${{ env.DBT_TARGET  == 'staging' }}
-        run: poetry run dbt run --select state:modified+ --target ${{ env.DBT_TARGET }} --state ./target/latest
-
-      - name: Synchronize Metabase
-        working-directory: warehouse
-        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --exclude-schemas="*staging, payments" --skip-sources --docs-url="https://dbt-docs.calitp.org" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
+          name: exposures
+          path: warehouse/models/metabase/*
 
   upload:
     name: Upload to Google Cloud Storage
@@ -232,6 +142,12 @@ jobs:
         with:
           name: dbt
           path: warehouse/target
+
+      - name: Download Metabase exposures
+        uses: actions/download-artifact@v4
+        with:
+          name: exposures
+          path: warehouse/models/metabase
 
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
@@ -294,6 +210,23 @@ jobs:
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/index.html/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
+      - name: Upload artifacts to latest
+        uses: google-github-actions/upload-cloud-storage@v1
+        with:
+          path: './warehouse/target/'
+          glob: '{catalog.json,manifest.json,index.html,run_results.json}'
+          parent: false
+          process_gcloudignore: false
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/latest/"
+
+      - name: Upload Metabase exposures
+        uses: google-github-actions/upload-cloud-storage@v1
+        with:
+          path: './warehouse/models/metabase'
+          parent: false
+          process_gcloudignore: false
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/exposures/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+
       - name: Upload documentation
         uses: google-github-actions/upload-cloud-storage@v1
         with:
@@ -302,89 +235,3 @@ jobs:
           parent: false
           process_gcloudignore: false
           destination: ${{ env.DBT_DOCS_BUCKET }}
-
-  visualize:
-    name: Pull Request visualization
-    runs-on: ubuntu-latest
-
-    needs:
-      - models-changed
-      - compile
-
-    if: ${{ github.event_name == 'pull_request' && needs.models-changed.outputs.any_changed == 'true' }}
-
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download compilation artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dbt
-          path: warehouse/target
-
-      - name: Authenticate Google Service Account
-        uses: google-github-actions/auth@v2
-        with:
-          create_credentials_file: 'true'
-          project_id: ${{ env.PROJECT_ID }}
-          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.SERVICE_ACCOUNT }}
-
-      - name: Setup GCloud utilities
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v2
-
-      - name: Setup Continuous Machine Learning tools
-        uses: iterative/setup-cml@v2
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Cache poetry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pypoetry
-          key: poetry-cache-{{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
-
-      - name: Setup Poetry
-        uses: abatilo/actions-poetry@v3
-        with:
-          poetry-version: ${{ env.POETRY_VERSION }}
-
-      - name: Cache python packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.local
-          key: python-cache-{{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
-
-      - name: Install dependencies
-        working-directory: warehouse
-        run: poetry install
-
-      - name: Install dbt dependencies
-        working-directory: warehouse
-        run: poetry run dbt deps
-
-      - name: Download latest artifacts from GCS
-        working-directory: warehouse
-        run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ ./target/
-
-      - name: Create CI report
-        working-directory: warehouse
-        run: poetry run python scripts/visualize.py ci-report --latest-dir='./target/latest/'
-
-      - name: Create GitHub comment
-        working-directory: warehouse
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: cml comment update target/report.md
