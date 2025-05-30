@@ -49,6 +49,15 @@ This workflow builds a static website from the Svelte app and deploys it to Netl
 This workflow compiles dbt models and docs, syncs Metabase, uploads dbt artifacts, builds a visual comment about model changes.
 
 
+## deploy-dbt-docs.yml
+
+This workflow generates latest dbt artifacts with extracted questions (cards) and dashboards from Metabase using dbt-metabase exposures, and update the dbt documentation.
+
+Developers and analysts can view all dbt documentation and easily verify if particular models are in use by searching inside the `warehouse\models\metabase` folder or on [dbt docs site](https://dbt-docs.calitp.org/#!/overview).
+
+It is scheduled to run every Monday at 8am UTC (1am PST) or when there is any changes on model merged to the main branch.
+
+
 ## deploy-kubernetes.yml
 
 This workflow deploys changes to the production Kubernetes cluster when they get merged into the `main` branch.
