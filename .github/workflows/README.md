@@ -15,6 +15,15 @@ Workflows prefixed with `build-` generally lint, test, and (usually) publish eit
 Workflows prefixed with `preview-` deal with generating previews for pull request changes.
 
 
+## build-dbt-docs.yml
+
+This workflow generates latest dbt artifacts with extracted questions (cards) and dashboards from Metabase using dbt-metabase exposures, and update the dbt documentation.
+
+Developers and analysts can view all dbt documentation and easily verify if particular models are in use by searching inside the `warehouse\models\metabase` folder or on [dbt docs site](https://dbt-docs.calitp.org/#!/overview).
+
+It is scheduled to run every Monday at 8am UTC or when any model changes.
+
+
 ## composer-plan-files.yml
 
 When creating a PR that changes any file in the `airflow` directory, this workflow runs `Terraform plan` to create a comment with an execution plan to preview the changes that will be made to Staging Airflow DAGs.
