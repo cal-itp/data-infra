@@ -40,6 +40,33 @@ derived_shapes AS (
     FROM {{ ref('gtfs_optional_shapes') }}
 ),
 
+derived_shapes_with_feed AS (
+    SELECT DISTINCT
+        fct_daily_schedule_feeds.feed_key,
+        derived_shapes.gtfs_dataset_name,
+        derived_shapes.route_id,
+        derived_shapes.direction_id,
+        derived_shapes.shape_id
+
+    FROM derived_shapes
+    INNER JOIN fct_daily_schedule_feeds
+        ON derived_shapes.gtfs_dataset_name = fct_daily_schedule_feeds.gtfs_dataset_name
+),
+
+dim_trips_fixed AS (
+    SELECT
+        * EXCEPT(feed_key, route_id, direction_id, shape_id),
+        dim_trips.feed_key,
+        dim_trips.route_id,
+        dim_trips.direction_id,
+        COALESCE(dim_trips.shape_id, derived_shapes_with_feed.shape_id) AS shape_id,
+    FROM dim_trips
+    LEFT JOIN derived_shapes_with_feed
+        ON derived_shapes_with_feed.feed_key = dim_trips.feed_key
+            AND derived_shapes_with_feed.route_id = dim_trips.route_id
+            AND derived_shapes_with_feed.direction_id = dim_trips.direction_id
+),
+
 gtfs_joins AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['service_index.service_date', 'trips.key', 'stop_times_grouped.iteration_num']) }} AS key,
@@ -68,11 +95,13 @@ gtfs_joins AS (
         routes.network_id AS network_id,
         routes.continuous_pickup AS route_continuous_pickup,
         routes.continuous_drop_off AS route_continuous_drop_off,
-
-        shapes.key AS shape_array_key,
+        routes.route_color,
+        routes.route_text_color,
 
         trips.shape_id,
         trips.warning_duplicate_gtfs_key AS contains_warning_duplicate_trip_primary_key,
+
+        shapes.key AS shape_array_key,
 
         stop_times_grouped.num_distinct_stops_served,
         stop_times_grouped.num_stop_times,
@@ -116,17 +145,16 @@ gtfs_joins AS (
             {{ gtfs_noon_minus_twelve_hours('service_date', 'service_index.feed_timezone') }},
             INTERVAL stop_times_grouped.last_end_pickup_drop_off_window_sec SECOND
             ) AS trip_last_end_pickup_drop_off_window_ts,
-
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
-    INNER JOIN dim_trips AS trips
+    INNER JOIN dim_trips_fixed AS trips
         ON service_index.feed_key = trips.feed_key
             AND service_index.service_id = trips.service_id
+    LEFT JOIN dim_shapes_arrays as shapes
+        ON service_index.feed_key = shapes.feed_key
+            AND trips.shape_id = shapes.shape_id
     LEFT JOIN dim_routes AS routes
         ON service_index.feed_key = routes.feed_key
             AND trips.route_id = routes.route_id
-    LEFT JOIN dim_shapes_arrays AS shapes
-        ON service_index.feed_key = shapes.feed_key
-            AND trips.shape_id = shapes.shape_id
     LEFT JOIN stop_times_grouped
         ON service_index.feed_key = stop_times_grouped.feed_key
             AND trips.trip_id = stop_times_grouped.trip_id
@@ -169,7 +197,7 @@ fct_scheduled_trips AS (
         gtfs_joins.agency_id,
         gtfs_joins.network_id,
         gtfs_joins.shape_array_key,
-        COALESCE(gtfs_joins.shape_id, derived_shapes.shape_id) AS shape_id,
+        gtfs_joins.shape_id,
         gtfs_joins.contains_warning_duplicate_trip_primary_key,
         gtfs_joins.num_distinct_stops_served,
         gtfs_joins.num_stop_times,
@@ -212,10 +240,6 @@ fct_scheduled_trips AS (
         AND gtfs_joins.service_date = daily_feeds.date
     LEFT JOIN dim_gtfs_datasets
         ON daily_feeds.gtfs_dataset_key = dim_gtfs_datasets.key
-    LEFT JOIN derived_shapes
-    ON dim_gtfs_datasets.name = derived_shapes.gtfs_dataset_name
-        AND gtfs_joins.route_id = derived_shapes.route_id
-        AND gtfs_joins.direction_id = derived_shapes.direction_id
     -- drop trips that no one can actually ride
     WHERE has_rider_service
 )
