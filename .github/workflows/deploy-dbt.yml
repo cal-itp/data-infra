@@ -111,8 +111,6 @@ jobs:
     name: Detect dbt model changes
     runs-on: ubuntu-latest
 
-    if: ${{ github.event_name == 'pull_request' }}
-
     outputs:
       any_changed: ${{ steps.changed-files-warehouse.outputs.any_changed }}
 
