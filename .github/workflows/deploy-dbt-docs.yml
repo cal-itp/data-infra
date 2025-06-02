@@ -1,8 +1,8 @@
 name: Deploy dbt docs
 
 on:
-  schedule:
-    - cron: "0 8 * * 1" # 8am UTC (1am PST) every Monday
+  # schedule:
+  #   - cron: "0 8 * * 1" # 8am UTC (1am PST) every Monday
   push:
     branches:
       - main
@@ -21,25 +21,41 @@ concurrency:
 env:
   PYTHON_VERSION: '3.11'
   POETRY_VERSION: '2.0.1'
+  SERVICE_ACCOUNT: ${{ github.ref == 'refs/heads/main' && 'github-actions-service-account@cal-itp-data-infra.iam.gserviceaccount.com' || 'github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com' }}
+  WORKLOAD_IDENTITY_PROVIDER: ${{ github.ref == 'refs/heads/main' && 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra' || 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra' }}
+  PROJECT_ID: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
+  DBT_TARGET: ${{ github.ref == 'refs/heads/main' && 'prod' || 'staging' }}
+  DBT_ARTIFACTS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-artifacts' || 'calitp-staging-dbt-artifacts' }}
+  DBT_DOCS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-docs' || 'calitp-staging-dbt-docs' }}
+  DBT_SOURCE_DATABASE: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
+  METABASE_DESTINATION_DATABASE: ${{ github.ref == 'refs/heads/main' && 'Data Marts (formerly Warehouse Views)' || '(Internal) Staging Warehouse Views' }}
 
 jobs:
-  compile:
-    name: Compile dbt docs
+  models-changed:
+    name: Detect dbt model changes
+    runs-on: ubuntu-latest
+
+    outputs:
+      any_changed: ${{ steps.changed-files-warehouse.outputs.any_changed }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: tj-actions/changed-files@v46
+        id: changed-files-warehouse
+        with:
+          files: 'warehouse/models/**/*.sql'
+
+  export_exposures:
+    name: Export exposures
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
       id-token: write
-
-    strategy:
-      matrix:
-        include:
-          - service_account: 'github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com'
-            workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
-            project_id: 'cal-itp-data-infra-staging'
-            dbt_target: 'staging'
-            dbt_artifacts_bucket: 'calitp-staging-dbt-artifacts'
-            dbt_docs_bucket: 'calitp-staging-dbt-docs'
 
     steps:
       - name: Checkout
@@ -49,9 +65,9 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           create_credentials_file: 'true'
-          project_id: ${{ matrix.project_id }}
-          workload_identity_provider: ${{ matrix.workload_identity_provider }}
-          service_account: ${{ matrix.service_account }}
+          project_id: ${{ env.PROJECT_ID }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
 
       - name: Setup GCloud utilities
         uses: google-github-actions/setup-gcloud@v2
@@ -97,11 +113,15 @@ jobs:
 
       - name: Print dbt environment
         working-directory: warehouse
-        run: poetry run dbt debug --target ${{ matrix.dbt_target }}
+        run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
 
       - name: Compile dbt
         working-directory: warehouse
-        run: poetry run dbt compile --target ${{ matrix.dbt_target }} --full-refresh
+        run: poetry run dbt compile --target ${{ env.DBT_TARGET }} --full-refresh
+
+      - name: List target dir
+        working-directory: warehouse/target
+        run: ls
 
       - name: Create Metabase folder
         working-directory: warehouse/models
@@ -111,13 +131,92 @@ jobs:
         working-directory: warehouse
         run: poetry run dbt-metabase exposures -v --output-grouping="type" --output-path=./models/metabase/ --manifest-path=./target/manifest.json  --metabase-url="https://dashboards.calitp.org" --metabase-api-key="${{ secrets.METABASE_API_KEY }}"
 
+      - name: Archive metabase exposures
+        uses: actions/upload-artifact@v4
+        with:
+          name: exposures
+          path: warehouse/models/metabase/*
+
+  compile:
+    name: Compile dbt docs
+    runs-on: ubuntu-latest
+    needs: [export_exposures]
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Metabase exposures
+        uses: actions/download-artifact@v4
+        with:
+          name: exposures
+          path: warehouse/models/metabase/*
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache Poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        working-directory: warehouse
+        run: poetry install
+
+      - name: Cache dbt packages
+        uses: actions/cache@v3
+        with:
+          path: warehouse/dbt_packages
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
+
+      - name: Install dbt dependencies
+        working-directory: warehouse
+        run: poetry run dbt deps
+
+      - name: Print dbt environment
+        working-directory: warehouse
+        run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
+
       - name: Compile dbt with exposures
         working-directory: warehouse
-        run: poetry run dbt compile --target ${{ matrix.dbt_target }} --full-refresh
+        run: poetry run dbt compile --target ${{ env.DBT_TARGET }} --full-refresh
 
       - name: Generate dbt documentation
         working-directory: warehouse
-        run: poetry run dbt docs generate --target ${{ matrix.dbt_target }} --no-compile
+        run: poetry run dbt docs generate --target ${{ env.DBT_TARGET }} --no-compile
 
       - name: Archive compilation artifacts
         uses: actions/upload-artifact@v4
@@ -127,20 +226,105 @@ jobs:
             warehouse/target/*.json
             warehouse/target/*.html
 
-      - name: Archive metabase exposures
-        uses: actions/upload-artifact@v4
-        with:
-          name: exposures
-          path: warehouse/models/metabase/*
-
-  upload:
-    name: Upload to Google Cloud Storage
-    needs: [compile]
+  metabase:
+    name: Sync Metabase
     runs-on: ubuntu-latest
+    needs: [models-changed, compile]
+
+    if: ${{ needs.models-changed.outputs.any_changed == 'true' }}
 
     permissions:
       contents: read
       id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dbt
+          path: warehouse/target
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache Poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        working-directory: warehouse
+        run: poetry install
+
+      - name: Cache dbt packages
+        uses: actions/cache@v3
+        with:
+          path: warehouse/dbt_packages
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
+
+      - name: Install dbt dependencies
+        working-directory: warehouse
+        run: poetry run dbt deps
+
+      - name: Download latest artifacts from GCS
+        working-directory: warehouse
+        # if: ${{ env.DBT_TARGET  == 'staging' }}
+        run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ ./target/
+
+      - name: Print dbt environment
+        working-directory: warehouse
+        run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
+
+      - name: Run changed models
+        working-directory: warehouse
+        # if: ${{ env.DBT_TARGET  == 'staging' }}
+        run: poetry run dbt run --select state:modified+ --target ${{ env.DBT_TARGET }} --state ./target/latest
+
+      - name: Synchronize Metabase
+        working-directory: warehouse
+        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --exclude-schemas="*staging, payments" --skip-sources --docs-url="https://dbt-docs.calitp.org" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
+
+  upload:
+    name: Upload to Google Cloud Storage
+    runs-on: ubuntu-latest
+    needs: [compile, metabase]
+
+    permissions:
+      contents: read
+      id-token: write
+
+    if: ${{ always() && !failure() && !cancelled() }}
 
     steps:
       - name: Download compilation artifacts
@@ -159,9 +343,9 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           create_credentials_file: 'true'
-          project_id: ${{ matrix.project_id }}
-          workload_identity_provider: ${{ matrix.workload_identity_provider }}
-          service_account: ${{ matrix.service_account }}
+          project_id: ${{ env.PROJECT_ID }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
 
       - name: Setup GCloud utilities
         uses: google-github-actions/setup-gcloud@v2
@@ -187,7 +371,7 @@ jobs:
           glob: 'catalog.json'
           parent: false
           process_gcloudignore: false
-          destination: "${{ matrix.dbt_artifacts_bucket }}/catalog.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/catalog.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
       - name: Upload manifest.json
         uses: google-github-actions/upload-cloud-storage@v1
@@ -196,7 +380,7 @@ jobs:
           glob: 'manifest.json'
           parent: false
           process_gcloudignore: false
-          destination: "${{ matrix.dbt_artifacts_bucket }}/manifest.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/manifest.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
       - name: Upload run_results.json
         uses: google-github-actions/upload-cloud-storage@v1
@@ -205,7 +389,7 @@ jobs:
           glob: 'run_results.json'
           parent: false
           process_gcloudignore: false
-          destination: "${{ matrix.dbt_artifacts_bucket }}/run_results.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/run_results.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
       - name: Upload index.html
         uses: google-github-actions/upload-cloud-storage@v1
@@ -214,7 +398,7 @@ jobs:
           glob: 'index.html'
           parent: false
           process_gcloudignore: false
-          destination: "${{ matrix.dbt_artifacts_bucket }}/index.html/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/index.html/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
       - name: Upload artifacts to latest
         uses: google-github-actions/upload-cloud-storage@v1
@@ -223,7 +407,7 @@ jobs:
           glob: '{catalog.json,manifest.json,index.html,run_results.json}'
           parent: false
           process_gcloudignore: false
-          destination: "${{ matrix.dbt_artifacts_bucket }}/latest/"
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/latest/"
 
       - name: Upload Metabase exposures
         uses: google-github-actions/upload-cloud-storage@v1
@@ -231,7 +415,7 @@ jobs:
           path: './warehouse/models/metabase'
           parent: false
           process_gcloudignore: false
-          destination: "${{ matrix.dbt_artifacts_bucket }}/exposures/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/exposures/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
       - name: Upload documentation
         uses: google-github-actions/upload-cloud-storage@v1
@@ -240,4 +424,4 @@ jobs:
           glob: '{catalog.json,manifest.json,index.html}'
           parent: false
           process_gcloudignore: false
-          destination: ${{ matrix.dbt_docs_bucket }}
+          destination: ${{ env.DBT_DOCS_BUCKET }}
