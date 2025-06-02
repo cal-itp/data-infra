@@ -3,21 +3,30 @@ WITH staging_fuel_and_energy_by_agency AS (
     FROM {{ ref('stg_ntd__fuel_and_energy_by_agency') }}
 ),
 
-current_dim_organizations AS (
+dim_agency_information AS (
     SELECT
         ntd_id,
-        caltrans_district AS caltrans_district_current,
-        caltrans_district_name AS caltrans_district_name_current
-    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+        year,
+        agency_name,
+        city,
+        state,
+        caltrans_district_current,
+        caltrans_district_name_current
+    FROM {{ ref('dim_agency_information') }}
 ),
 
 fct_fuel_and_energy_by_agency AS (
     SELECT
-        stg.max_agency AS agency_name,
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year']) }} AS key,
         stg.ntd_id,
         stg.report_year,
-        stg.max_city AS city,
-        stg.max_state AS state,
+
+        agency.agency_name,
+        agency.city,
+        agency.state,
+        agency.caltrans_district_current,
+        agency.caltrans_district_name_current,
+
         stg.diesel_gal_questionable,
         stg.diesel_mpg_questionable,
         stg.max_agency_voms,
@@ -43,14 +52,15 @@ fct_fuel_and_energy_by_agency AS (
         stg.sum_liquefied_petroleum_gas_gal,
         stg.sum_other_fuel,
         stg.sum_other_fuel_gal_gal_equivalent,
-
-        orgs.caltrans_district_current,
-        orgs.caltrans_district_name_current,
-
+        stg.agency AS source_agency,
+        stg.city AS source_city,
+        stg.state AS source_state,
         stg.dt,
         stg.execution_ts
     FROM staging_fuel_and_energy_by_agency AS stg
-    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    LEFT JOIN dim_agency_information AS agency
+        ON stg.ntd_id = agency.ntd_id
+            AND stg.report_year = agency.year
 )
 
 SELECT * FROM fct_fuel_and_energy_by_agency

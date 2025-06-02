@@ -3,21 +3,33 @@ WITH staging_metrics AS (
     FROM {{ ref('stg_ntd__metrics') }}
 ),
 
-current_dim_organizations AS (
+dim_agency_information AS (
     SELECT
         ntd_id,
-        caltrans_district AS caltrans_district_current,
-        caltrans_district_name AS caltrans_district_name_current
-    FROM {{ ref('dim_organizations_latest_with_caltrans_district') }}
+        year,
+        agency_name,
+        city,
+        state,
+        caltrans_district_current,
+        caltrans_district_name_current
+    FROM {{ ref('dim_agency_information') }}
 ),
 
 fct_metrics AS (
     SELECT
-        stg.agency AS agency_name,
+       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.type_of_service']) }} AS key,
         stg.ntd_id,
         stg.report_year,
-        stg.city,
-        stg.state,
+
+        agency.agency_name,
+        agency.city,
+        agency.state,
+        agency.caltrans_district_current,
+        agency.caltrans_district_name_current,
+
+        stg.mode,
+        stg.mode_name,
+        stg.type_of_service,
         stg.agency_voms,
         stg.cost_per_hour,
         stg.cost_per_hour_questionable,
@@ -31,8 +43,6 @@ fct_metrics AS (
         stg.fare_revenues_per_total_1,
         stg.fare_revenues_per_unlinked,
         stg.fare_revenues_per_unlinked_1,
-        stg.mode,
-        stg.mode_name,
         stg.mode_voms,
         stg.organization_type,
         stg.passenger_miles,
@@ -43,7 +53,6 @@ fct_metrics AS (
         stg.reporter_type,
         stg.total_operating_expenses,
         stg.total_operating_expenses_1,
-        stg.type_of_service,
         stg.unlinked_passenger_trips,
         stg.unlinked_passenger_trips_1,
         stg.vehicle_revenue_hours,
@@ -52,14 +61,15 @@ fct_metrics AS (
         stg.vehicle_revenue_miles_1,
         stg.uace_code,
         stg.uza_name,
-
-        orgs.caltrans_district_current,
-        orgs.caltrans_district_name_current,
-
+        stg.agency AS source_agency,
+        stg.city AS source_city,
+        stg.state AS source_state,
         stg.dt,
         stg.execution_ts
     FROM staging_metrics AS stg
-    LEFT JOIN current_dim_organizations AS orgs USING (ntd_id)
+    LEFT JOIN dim_agency_information AS agency
+        ON stg.ntd_id = agency.ntd_id
+            AND stg.report_year = agency.year
 )
 
 SELECT * FROM fct_metrics
