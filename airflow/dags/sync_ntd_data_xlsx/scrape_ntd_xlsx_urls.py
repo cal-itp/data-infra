@@ -22,6 +22,13 @@ xlsx_urls = {
     "asset_inventory_time_series_url": "https://www.transit.dot.gov/ntd/data-product/ts41-asset-inventory-time-series-4",
 }
 
+headers = {
+    "User-Agent": "CalITP/1.0.0",
+    "sec-ch-ua": '"CalITP";v="1"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"macOS"',
+}
+
 
 def push_url_to_xcom(key, scraped_url, context):
     """Push the scraped URL value to XCom with proper error handling."""
@@ -46,7 +53,7 @@ def href_matcher(href):
 def make_http_request(url, key):
     """Make HTTP request with proper error handling."""
     try:
-        response = requests.get(url)
+        response = requests.get(url, headers=headers)
         response.raise_for_status()
         return response
     except requests.exceptions.HTTPError as e:
