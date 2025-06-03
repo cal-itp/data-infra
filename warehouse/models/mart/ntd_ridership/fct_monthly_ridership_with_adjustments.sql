@@ -61,7 +61,7 @@ fct_monthly_ridership_with_adjustments AS (
         src.execution_ts
     FROM source AS src
     LEFT JOIN ntd_modes AS modes
-        ON source.mode = ntd_modes.ntd_mode_abbreviation
+        ON src.mode = modes.ntd_mode_abbreviation
     LEFT JOIN dim_agency_information AS agency
         ON src.ntd_id = agency.ntd_id
             AND src.period_year = agency.year
