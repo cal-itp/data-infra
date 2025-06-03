@@ -27,14 +27,14 @@ WITH
     ),
 
     int_ntd__monthly_ridership_with_adjustments_vrm AS (
-        SELECT format("%05d", cast(cast(ntd_id AS NUMERIC) AS INT64)) AS ntd_id,
+        SELECT FORMAT("%05d", CAST(CAST(ntd_id AS NUMERIC) AS INT64)) AS ntd_id,
                legacy_ntd_id,
                agency,
                reporter_type,
-               split(period, '_')[offset(2)] AS period_year,
-               split(period, '_')[offset(1)] AS period_month,
+               SAFE_CAST(SPLIT(period, '_')[OFFSET(2)] AS INT64) AS period_year,
+               SPLIT(period, '_')[OFFSET(1)] AS period_month,
                uza_name,
-               format("%05d", cast(uace_cd AS INT64)) AS uace_cd,
+               FORMAT("%05d", CAST(uace_cd AS INT64)) AS uace_cd,
                mode,
                mode_type_of_service_status,
                _3_mode,
