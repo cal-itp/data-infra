@@ -142,3 +142,40 @@ resource "google_storage_bucket_iam_policy" "tfer--calitp-staging-gcp-components
 }
 POLICY
 }
+
+resource "google_storage_bucket_iam_policy" "calitp-staging" {
+  for_each    = local.environment_buckets
+  bucket      = google_storage_bucket.calitp-staging[each.key].name
+  policy_data = <<POLICY
+{
+  "bindings": [
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra-staging",
+        "projectOwner:cal-itp-data-infra-staging"
+      ],
+      "role": "roles/storage.legacyBucketOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra-staging"
+      ],
+      "role": "roles/storage.legacyBucketReader"
+    },
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra-staging",
+        "projectOwner:cal-itp-data-infra-staging"
+      ],
+      "role": "roles/storage.legacyObjectOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra-staging"
+      ],
+      "role": "roles/storage.legacyObjectReader"
+    }
+  ]
+}
+POLICY
+}
