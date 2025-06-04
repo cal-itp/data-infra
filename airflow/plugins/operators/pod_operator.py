@@ -26,7 +26,7 @@ def PodOperator(*args, **kwargs):
     return GKEPodOperator(
         *args,
         in_cluster=False,
-        project_id="cal-itp-data-infra",  # there currently isn't a staging cluster
+        project_id=os.environ.get("GOOGLE_CLOUD_PROJECT", "cal-itp-data-infra"),
         location=location,
         cluster_name=cluster_name,
         namespace=namespace,
