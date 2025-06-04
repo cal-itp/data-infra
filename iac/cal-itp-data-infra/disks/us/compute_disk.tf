@@ -764,29 +764,3 @@ resource "google_compute_disk" "tfer--us-west2-a-002F-gke-us-west2-calitp-ai-pvc
   type                      = "pd-standard"
   zone                      = "us-west2-a"
 }
-
-resource "google_compute_disk" "tfer--us-west2-b-002F-pvc-f4d9e2dd-2fc3-4fac-8ba0-cd8b9043c3a1" {
-  description = "{\"kubernetes.io/created-for/pv/name\":\"pvc-f4d9e2dd-2fc3-4fac-8ba0-cd8b9043c3a1\",\"kubernetes.io/created-for/pvc/name\":\"airflow-redis-volume-airflow-redis-0\",\"kubernetes.io/created-for/pvc/namespace\":\"composer-system\",\"storage.gke.io/created-by\":\"pd.csi.storage.gke.io\"}"
-
-  labels = {
-    goog-composer-environment      = "calitp-airflow2-prod-composer2-patch"
-    goog-composer-environment-uuid = "b2062ffc-a77d-44a2-8b4e-05f8f5bf4996"
-    goog-composer-location         = "us-west2"
-    goog-composer-version          = "composer-2-6-0-airflow-2-5-3"
-    goog-gke-cluster-id-base32     = "tdwyuzfom5eu7lab72embfwhnqd5e3i7cx7eoimiiuqzdpyqcnoq"
-    goog-gke-cost-management       = ""
-    goog-gke-cost-management       = ""
-    goog-gke-volume                = ""
-    goog-k8s-cluster-location      = "us-west2"
-    goog-k8s-cluster-name          = "us-west2-calitp-airflow2-pr-88ca8ec6-gke"
-    goog-k8s-node-pool-name        = "pool-2"
-  }
-
-  name                      = "pvc-f4d9e2dd-2fc3-4fac-8ba0-cd8b9043c3a1"
-  physical_block_size_bytes = "4096"
-  project                   = "cal-itp-data-infra"
-  provisioned_iops          = "0"
-  size                      = "2"
-  type                      = "pd-standard"
-  zone                      = "us-west2-b"
-}
