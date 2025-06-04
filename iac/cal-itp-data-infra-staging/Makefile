@@ -11,6 +11,10 @@ endef
 init:
 	$(call FOREACH,init)
 
+.PHONY: upgrade
+upgrade:
+	$(call FOREACH,init -upgrade)
+
 .PHONY: plan
 plan:
 	$(call FOREACH,plan)
