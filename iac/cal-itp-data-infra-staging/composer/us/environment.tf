@@ -22,7 +22,10 @@ resource "google_composer_environment" "calitp-staging-composer" {
 
       pypi_packages = local.pypi_packages
 
-      env_variables = local.env_variables
+      env_variables = merge(local.env_variables, {
+        "POD_LOCATION"     = "us-west2",
+        "POD_CLUSTER_NAME" = data.terraform_remote_state.gke.outputs.google_container_cluster_airflow-jobs-staging_name
+      })
     }
   }
 }
