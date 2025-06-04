@@ -12,9 +12,6 @@ arguments:
 
 is_delete_operator_pod: true
 get_logs: true
-pod_location: us-west1
-cluster_name: data-infra-apps
-namespace: airflow-jobs
 
 env_vars:
   GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
