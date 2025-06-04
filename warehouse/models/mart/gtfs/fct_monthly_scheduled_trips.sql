@@ -1,8 +1,10 @@
-{{ config(materialized='table') }}
+{{ config(
+    materialized='table',
+    cluster_by='year')
+}}
 
 WITH trips AS (
     SELECT * FROM {{ ref('fct_scheduled_trips') }}
-    WHERE EXTRACT(YEAR FROM service_date) = 2025 --WHERE service_date < DATE_TRUNC(CURRENT_DATE(), MONTH)
 ),
 
 dim_shapes_arrays AS (
@@ -51,7 +53,6 @@ monthly_trips AS (
         --SUM(service_hours) AS ttl_service_hours,
         COUNT(DISTINCT trip_instance_key) as n_trips,
         COUNT(DISTINCT service_date) as n_days,
-
 
     FROM trips
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
