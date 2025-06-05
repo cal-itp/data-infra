@@ -194,6 +194,8 @@ fct_scheduled_trips AS (
         gtfs_joins.route_continuous_pickup,
         gtfs_joins.route_continuous_drop_off,
         gtfs_joins.route_desc,
+        gtfs_joins.route_color,
+        gtfs_joins.route_text_color,
         gtfs_joins.agency_id,
         gtfs_joins.network_id,
         gtfs_joins.shape_array_key,
