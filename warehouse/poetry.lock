@@ -777,14 +777,14 @@ files = [
 
 [[package]]
 name = "dbt-metabase"
-version = "1.5.1"
+version = "1.5.2"
 description = "dbt + Metabase integration."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "dbt_metabase-1.5.1-py3-none-any.whl", hash = "sha256:ad280654e4b5dff2d25c886299d1051f303dc8b4cbf2452d10cec453b2f4d529"},
-    {file = "dbt_metabase-1.5.1.tar.gz", hash = "sha256:e9e5711c1f9daa808de6b58b709b139d9662fdb8203fa8997db6a7ac543c49b7"},
+    {file = "dbt_metabase-1.5.2-py3-none-any.whl", hash = "sha256:6571f9290aee954b29ede432799c6c35c91e24052da68348f35f4a8b6387cf2e"},
+    {file = "dbt_metabase-1.5.2.tar.gz", hash = "sha256:e58329a4b439ea34071c48d344d7977ac8d02c7a9fefd112e4209dbeb219fe84"},
 ]
 
 [package.dependencies]
@@ -4472,4 +4472,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.11"
-content-hash = "b085e90740c6be79d60a4d649f25006904a268cac6a1e0a444764814d6b90ead"
+content-hash = "b74480f2f0266670cace2e1370a9a90c147c270ef98bf056e3017837c6d40d2f"
