@@ -26,13 +26,13 @@ priority_class_name: dbt-high-priority
 env_vars:
   AIRFLOW_ENV: "{{ env_var('AIRFLOW_ENV') }}"
   CALITP_BUCKET__DBT_ARTIFACTS: "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}"
+  CALITP_BUCKET__DBT_DOCS: "{{ env_var('CALITP_BUCKET__DBT_DOCS') }}"
   BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
   DBT_PROJECT_DIR: /app
   DBT_PROFILE_DIR: /app
   DBT_DATABASE: "{{ get_project_id() }}"
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
   MB_HOST: https://dashboards.calitp.org
-  NETLIFY_SITE_ID: cal-itp-dbt-docs
   SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
   SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
 
@@ -41,10 +41,6 @@ secrets:
     deploy_target: /secrets/jobs-data/
     secret: jobs-data
     key: service-account.json
-  - deploy_type: env
-    deploy_target: NETLIFY_AUTH_TOKEN
-    secret: jobs-data
-    key: netlify-auth-token
 
 k8s_resources:
   request_memory: 2.0Gi
