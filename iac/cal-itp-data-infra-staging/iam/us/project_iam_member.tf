@@ -249,9 +249,16 @@ resource "google_project_iam_member" "github-actions-service-account" {
   project = "cal-itp-data-infra-staging"
 }
 
-resource "google_project_iam_member" "custom_service_account" {
+resource "google_project_iam_member" "composer-service-account" {
   for_each = toset([
-    "roles/composer.worker"
+    "roles/bigquery.dataEditor",
+    "roles/bigquery.jobUser",
+    "roles/cloudbuild.builds.viewer",
+    "roles/composer.ServiceAgentV2Ext",
+    "roles/composer.serviceAgent",
+    "roles/composer.worker",
+    "roles/secretmanager.secretAccessor",
+    "roles/secretmanager.viewer"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.composer-service-account.email}"
