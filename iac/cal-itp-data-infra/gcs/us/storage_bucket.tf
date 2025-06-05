@@ -2136,3 +2136,34 @@ resource "google_storage_bucket" "calitp-dbt-docs" {
     main_page_suffix = "index.html"
   }
 }
+
+resource "google_storage_bucket" "test-calitp-dbt-docs" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "test-calitp-dbt-docs"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  website {
+    main_page_suffix = "index.html"
+  }
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "30"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
+}

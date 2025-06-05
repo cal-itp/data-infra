@@ -78,6 +78,7 @@ x-airflow-common:
     CALITP_BUCKET__AIRTABLE: "gs://test-calitp-airtable"
     CALITP_BUCKET__AMPLITUDE_BENEFITS_EVENTS: "gs://test-calitp-amplitude-benefits-events"
     CALITP_BUCKET__DBT_ARTIFACTS: "gs://test-calitp-dbt-artifacts"
+    CALITP_BUCKET__DBT_DOCS: "gs://test-calitp-dbt-docs"
     CALITP_BUCKET__ELAVON_RAW: "gs://test-calitp-elavon-raw"
     CALITP_BUCKET__ELAVON_PARSED: "gs://test-calitp-elavon-parsed"
     CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://test-calitp-gtfs-download-config"
