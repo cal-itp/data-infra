@@ -10,7 +10,7 @@ resource "google_service_account_iam_member" "github-actions-service-account" {
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${local.data-infra_github_repository_name}"
 }
 
-resource "google_service_account_iam_member" "composer-service-account" {
+resource "google_service_account_iam_member" "custom_service_account" {
   service_account_id = google_service_account.composer-service-account.id
   role               = "roles/composer.ServiceAgentV2Ext"
   member             = "serviceAccount:service-${local.project_id}@cloudcomposer-accounts.iam.gserviceaccount.com"
