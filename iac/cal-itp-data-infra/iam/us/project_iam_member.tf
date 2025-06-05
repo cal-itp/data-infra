@@ -589,8 +589,7 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
     "roles/bigquery.dataEditor",
     "roles/storage.objectAdmin",
     "roles/composer.admin",
-    "roles/secretmanager.secretAccessor",
-    "roles/secretmanager.viewer",
+    "roles/secretmanager.admin",
     google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-DataAnalyst.id
   ])
   role    = each.key
