@@ -72,7 +72,7 @@ x-airflow-common:
     AIRFLOW_VAR_EXTRACT_BUCKET: "gs://gtfs-data-test"
     # Corresponds to GCP_PROJECT on composer, but gauth looks for this name.
     # see https://googleapis.dev/python/google-auth/latest/user-guide.html#using-external-identities
-    GOOGLE_CLOUD_PROJECT: cal-itp-data-infra
+    GOOGLE_CLOUD_PROJECT: cal-itp-data-infra-staging
 
     CALITP_BUCKET__AGGREGATOR_SCRAPER: "gs://test-calitp-aggregator-scraper"
     CALITP_BUCKET__AIRTABLE: "gs://test-calitp-airtable"

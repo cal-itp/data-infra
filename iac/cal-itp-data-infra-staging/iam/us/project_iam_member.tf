@@ -249,9 +249,16 @@ resource "google_project_iam_member" "github-actions-service-account" {
   project = "cal-itp-data-infra-staging"
 }
 
-resource "google_project_iam_member" "custom_service_account" {
+resource "google_project_iam_member" "composer-service-account" {
   for_each = toset([
-    "roles/composer.worker"
+    "roles/bigquery.dataEditor",
+    "roles/bigquery.jobUser",
+    "roles/cloudbuild.builds.viewer",
+    "roles/composer.ServiceAgentV2Ext",
+    "roles/composer.serviceAgent",
+    "roles/composer.worker",
+    "roles/secretmanager.secretAccessor",
+    "roles/secretmanager.viewer"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.composer-service-account.email}"
@@ -265,6 +272,8 @@ resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Ware
     "roles/bigquery.dataEditor",
     "roles/bigquery.filteredDataViewer",
     "roles/storage.objectUser",
+    "roles/secretmanager.secretAccessor",
+    "roles/secretmanager.viewer",
     google_project_iam_custom_role.calitp-dds-analyst.id
   ])
   role    = each.key
@@ -279,6 +288,7 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
     "roles/bigquery.dataEditor",
     "roles/storage.objectAdmin",
     "roles/composer.admin",
+    "roles/secretmanager.admin",
     google_project_iam_custom_role.calitp-dds-analyst.id
   ])
   role    = each.key

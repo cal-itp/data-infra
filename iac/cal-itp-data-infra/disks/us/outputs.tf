@@ -153,7 +153,3 @@ output "google_compute_disk_tfer--us-west2-a-002F-gke-us-west2-calitp-ai-pvc-60b
 output "google_compute_disk_tfer--us-west2-a-002F-gke-us-west2-calitp-ai-pvc-74f6d8c4-8ef8-4519-b72f-7da8c079dcfb_self_link" {
   value = google_compute_disk.tfer--us-west2-a-002F-gke-us-west2-calitp-ai-pvc-74f6d8c4-8ef8-4519-b72f-7da8c079dcfb.self_link
 }
-
-output "google_compute_disk_tfer--us-west2-b-002F-pvc-f4d9e2dd-2fc3-4fac-8ba0-cd8b9043c3a1_self_link" {
-  value = google_compute_disk.tfer--us-west2-b-002F-pvc-f4d9e2dd-2fc3-4fac-8ba0-cd8b9043c3a1.self_link
-}
