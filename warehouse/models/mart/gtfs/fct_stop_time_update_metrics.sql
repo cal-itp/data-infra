@@ -1,6 +1,27 @@
+{{
+    config(
+        partition_by = {
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by='base64_url',
+    )
+}}
+
 WITH fct_stop_time_updates AS (
     SELECT *
     FROM {{ ref('fct_stop_time_updates_with_arrivals') }}
+),
+
+fct_tu_summaries AS (
+    SELECT DISTINCT
+        trip_instance_key,
+        service_date,
+        base64_url,
+        schedule_base64_url,
+        trip_id
+    FROM {{ ref('fct_trip_updates_summaries') }}
 ),
 
 prediction_difference AS (
@@ -86,6 +107,18 @@ stop_time_metrics AS (
 
     FROM prediction_accuracy
     GROUP BY base64_url, service_date, trip_id, stop_id
+),
+
+fct_stop_time_metrics AS (
+    SELECT
+        stop_time_metrics.*,
+        fct_tu_summaries.trip_instance_key,
+        fct_tu_summaries.schedule_base64_url
+    FROM stop_time_metrics
+    LEFT JOIN fct_tu_summaries -- inner join has left us with zero rows before, is this because of incremental settings?
+        ON stop_time_metrics.service_date = fct_tu_summaries.service_date
+        AND stop_time_metrics.base64_url = fct_tu_summaries.base64_url
+        AND stop_time_metrics.trip_id = fct_tu_summaries.trip_id
 )
 
-SELECT * FROM stop_time_metrics
+SELECT * FROM fct_stop_time_metrics

@@ -1,3 +1,15 @@
+{{
+    config(
+        partition_by = {
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by='base64_url',
+    )
+}}
+
+
 WITH fct_stop_time_updates AS (
     SELECT
         base64_url,
