@@ -31,7 +31,6 @@ env_vars:
   DBT_PROFILE_DIR: /app
   DBT_DATABASE: "{{ get_project_id() }}"
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
-  MB_HOST: https://dashboards.calitp.org
   SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
   SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
 
