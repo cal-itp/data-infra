@@ -28,15 +28,7 @@ monthly_trips AS (
             ELSE "Weekday"
         END
         AS day_type,
-        CASE
-            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 4 THEN "Owl"
-            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 7 THEN "Early AM"
-            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 10 THEN "AM Peak"
-            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 15 THEN "Midday"
-            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 20 THEN "PM Peak"
-            ELSE "Evening"
-        END
-        AS time_of_day,
+        time_of_day,
         --route_id, # this might change over longer time periods
         direction_id,
         route_short_name,
