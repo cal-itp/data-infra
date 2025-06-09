@@ -50,7 +50,6 @@ monthly_trips AS (
         shape_array_key,
 
         AVG(service_hours) AS service_hours,
-        --SUM(service_hours) AS ttl_service_hours,
         COUNT(DISTINCT trip_instance_key) as n_trips,
         COUNT(DISTINCT service_date) as n_days,
 
