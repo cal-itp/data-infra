@@ -58,3 +58,8 @@ data "google_storage_bucket_object_content" "calitp-staging-dbt-index" {
   name   = "latest/index.html"
   bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-dbt-artifacts_id
 }
+
+data "google_storage_bucket_object_content" "calitp-staging-dbt-partial_parse" {
+  name   = "latest/partial_parse.msgpack"
+  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-dbt-artifacts_id
+}
