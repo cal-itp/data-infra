@@ -16,8 +16,10 @@ resource "google_composer_environment" "calitp-staging-composer" {
       image_version = "composer-2.8.3-airflow-2.6.3"
 
       airflow_config_overrides = {
-        core-dags_are_paused_at_creation = "True"
-        core-dagbag_import_timeout       = 500
+        core-dags_are_paused_at_creation    = "True"
+        core-dagbag_import_timeout          = 600
+        core-dag_file_processor_timeout     = 1200
+        scheduler-min_file_process_interval = 120
       }
 
       pypi_packages = local.pypi_packages
