@@ -12,8 +12,8 @@ import sentry_sdk
 import typer
 from dbt_artifacts import Manifest, RunResults, RunResultStatus
 
-CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
-CALITP_BUCKET__DBT_DOCS = os.getenv("CALITP_BUCKET__DBT_DOCS")
+CALITP_BUCKET__DBT_ARTIFACTS = os.environ.get("CALITP_BUCKET__DBT_ARTIFACTS")
+CALITP_BUCKET__DBT_DOCS = os.environ.get("CALITP_BUCKET__DBT_DOCS")
 
 artifacts = map(
     Path, ["index.html", "catalog.json", "manifest.json", "run_results.json"]
@@ -111,8 +111,8 @@ def report_failures(
     verbose: bool = False,
 ):
     fs = gcsfs.GCSFileSystem(
-        project="cal-itp-data-infra",
-        token=os.getenv("BIGQUERY_KEYFILE_LOCATION"),
+        project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
+        token=os.environ.get("BIGQUERY_KEYFILE_LOCATION"),
     )
 
     openf = fs.open if run_results_path.startswith("gs://") else open
@@ -238,8 +238,8 @@ def run(
         subprocess.run(get_command("docs", "generate")).check_returncode()
 
         fs = gcsfs.GCSFileSystem(
-            project="cal-itp-data-infra",
-            token=os.getenv("BIGQUERY_KEYFILE_LOCATION"),
+            project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
+            token=os.environ.get("BIGQUERY_KEYFILE_LOCATION"),
         )
 
         ts = pendulum.now()
