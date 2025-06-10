@@ -12,6 +12,29 @@ resource "google_composer_environment" "calitp-staging-composer" {
       service_account = data.terraform_remote_state.iam.outputs.google_service_account_composer-service-account_id
     }
 
+    workloads_config {
+      scheduler {
+        cpu        = 0.5
+        memory_gb  = 2
+        storage_gb = 1
+        count      = 1
+      }
+      web_server {
+        cpu        = 0.5
+        memory_gb  = 2
+        storage_gb = 1
+      }
+      worker {
+        cpu        = 0.5
+        memory_gb  = 2
+        storage_gb = 1
+        min_count  = 1
+        max_count  = 3
+      }
+    }
+
+    environment_size = "ENVIRONMENT_SIZE_SMALL"
+
     software_config {
       image_version = "composer-2.8.3-airflow-2.6.3"
 
