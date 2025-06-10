@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: gs://analysis-output-models
+bucket: "{{ env_var('CALITP_BUCKET__ANALYSIS_OUTPUT_MODELS') }}"
 # TODO: currently this points at a specific version, but long-term we'll want to read it all in
 source_objects:
   - "high_quality_transit_areas_areas/dt=2022-06-15/*.geojsonl"

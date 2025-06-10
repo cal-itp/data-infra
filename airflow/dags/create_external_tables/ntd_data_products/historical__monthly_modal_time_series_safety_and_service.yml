@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: gs://calitp-ntd-api-products
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
 source_objects:
   - "monthly_modal_time_series_safety_and_service/historical/*.jsonl.gz"
 source_format: NEWLINE_DELIMITED_JSON
@@ -9,5 +9,4 @@ hive_options:
   require_partition_filter: false
   source_uri_prefix: "monthly_modal_time_series_safety_and_service/historical/{dt:DATE}/{execution_ts:TIMESTAMP}"
 destination_project_dataset_table: "external_ntd__safety_and_security.historical__monthly_modal_time_series_safety_and_service"
-prefix_bucket: false
 post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__safety_and_security.historical__monthly_modal_time_series_safety_and_service LIMIT 1;

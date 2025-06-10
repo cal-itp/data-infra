@@ -21,6 +21,7 @@ env:
   DBT_TARGET: ${{ github.ref == 'refs/heads/main' && 'prod' || 'staging' }}
   DBT_ARTIFACTS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-artifacts' || 'calitp-staging-dbt-artifacts' }}
   DBT_DOCS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-docs' || 'calitp-staging-dbt-docs' }}
+  CALITP_BUCKET__PUBLISH: ${{ github.ref == 'refs/heads/main' && 'calitp-publish' || 'calitp-staging-publish' }}
   DBT_SOURCE_DATABASE: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
   METABASE_DESTINATION_DATABASE: ${{ github.ref == 'refs/heads/main' && 'Data Marts (formerly Warehouse Views)' || '(Internal) Staging Warehouse Views' }}
 

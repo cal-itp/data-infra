@@ -7,35 +7,21 @@ Now, the pipeline aims to use bigquery's sqlalchemy client where possible.
 However, it's cumbersome to convert the http api style schema fields to SQL, so
 we provide a fallback for these old-style tasks.
 """
-import os
-import re
-
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
-from utils import CALITP_BQ_LOCATION
+from utils import CALITP_BQ_LOCATION, CALITP_PROJECT_NAME
 
 from airflow.models import BaseOperator
-
-
-# TODO: this should probably be an env var
-def get_project_id():
-    return (
-        "cal-itp-data-infra-staging"
-        if os.environ["AIRFLOW_ENV"] == "development"
-        else "cal-itp-data-infra"
-    )
 
 
 def format_table_name(name, is_staging=False, full_name=False):
     dataset, table_name = name.split(".")
     staging = "__staging" if is_staging else ""
-    # test_prefix = "zzz_test_" if is_development() else ""
-    test_prefix = ""
 
-    project_id = "cal-itp-data-infra" + "." if full_name else ""
+    project_id = CALITP_PROJECT_NAME + "." if full_name else ""
     # e.g. test_gtfs_schedule__staging.agency
 
-    return f"{project_id}{test_prefix}{dataset}.{table_name}{staging}"
+    return f"{project_id}{dataset}.{table_name}{staging}"
 
 
 def _bq_client_create_external_table(
@@ -78,23 +64,23 @@ def _bq_client_create_external_table(
             opt.source_uri_prefix = prefix
         ext.hive_partitioning = opt
 
-    client = bigquery.Client(project=get_project_id(), location=CALITP_BQ_LOCATION)
+    client = bigquery.Client(project=CALITP_PROJECT_NAME, location=CALITP_BQ_LOCATION)
 
     dataset_name, _ = table_name.split(".")
-    full_dataset_name = ".".join((get_project_id(), dataset_name))
+    full_dataset_name = ".".join((CALITP_PROJECT_NAME, dataset_name))
 
     try:
         client.get_dataset(full_dataset_name)
     except NotFound:
         print(f"Dataset {full_dataset_name} not found, creating.")
         dataset = bigquery.Dataset(full_dataset_name)
-        dataset.location = "us-west2"
+        dataset.location = CALITP_BQ_LOCATION
         client.create_dataset(dataset, timeout=30)
 
     # for some reason, you can set the project name in the bigquery client, and
     # it doesn't need to be in the SQL code, but this bigquery API still requires
     # the fully qualified table name when initializing a Table.
-    full_table_name = f"{get_project_id()}.{table_name}"
+    full_table_name = f"{CALITP_PROJECT_NAME}.{table_name}"
 
     # First delete table if it exists
     print(f"Deleting external table if exists: {full_table_name}")
@@ -126,7 +112,6 @@ class ExternalTable(BaseOperator):
         self,
         *args,
         bucket=None,
-        prefix_bucket=False,
         destination_project_dataset_table=None,  # note that the project is optional here
         skip_leading_rows=1,
         schema_fields=None,
@@ -141,10 +126,6 @@ class ExternalTable(BaseOperator):
     ):
         assert bucket is not None
         self.bucket = bucket
-        # This only exists because the prefix_bucket() template isn't working in the yml file for some reason
-        if self.bucket and prefix_bucket and os.environ["AIRFLOW_ENV"] == "development":
-            self.bucket = re.sub(r"gs://([\w-]+)", r"gs://test-\1", self.bucket)
-
         self.destination_project_dataset_table = format_table_name(
             destination_project_dataset_table
         )
@@ -212,7 +193,7 @@ OPTIONS ({options_str})
 
             print(query)
             client = bigquery.Client(
-                project=get_project_id(), location=CALITP_BQ_LOCATION
+                project=CALITP_PROJECT_NAME, location=CALITP_BQ_LOCATION
             )
             query_job = client.query(query)
             query_job.result()

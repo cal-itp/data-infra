@@ -1,6 +1,5 @@
 operator: operators.ExternalTable
-bucket: gs://calitp-ntd-xlsx-products-clean
-prefix_bucket: false
+bucket: "{{ env_var('CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN') }}"
 post_hook: |
   SELECT *
   FROM `{{ get_project_id() }}`.external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates__vrm_estimates

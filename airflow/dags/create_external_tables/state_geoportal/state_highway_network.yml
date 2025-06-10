@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: gs://calitp-state-geoportal-scrape
+bucket: "{{ env_var('CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS') }}"
 source_objects:
   - "state_highway_network_geodata/*.jsonl.gz"
 source_format: NEWLINE_DELIMITED_JSON
@@ -9,7 +9,6 @@ hive_options:
   require_partition_filter: false
   source_uri_prefix: "state_highway_network_geodata/{dt:DATE}/{execution_ts:TIMESTAMP}/"
 destination_project_dataset_table: "external_state_geoportal.state_highway_network"
-prefix_bucket: false
 post_hook: |
   SELECT *
   FROM `{{ get_project_id() }}`.external_state_geoportal.state_highway_network
