@@ -48,7 +48,7 @@ stop_arrivals AS (
 
 fct_stop_time_arrivals AS (
     SELECT
-        fct_stop_time_updates.*,
+        stop_arrivals.*,
         -- usually one of these columns is null, but we want to use it to compare against _extract_ts
         COALESCE(last_trip_updates_arrival_pacific, last_trip_updates_departure_pacific) AS actual_arrival_pacific,
         COALESCE(last_trip_updates_arrival, last_trip_updates_departure) AS actual_arrival,
