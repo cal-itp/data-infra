@@ -30,6 +30,7 @@ stop_arrivals AS (
         service_date,
         trip_id,
         stop_id,
+        stop_sequence,
         trip_start_date,
         trip_start_time,
         trip_direction_id,
@@ -37,11 +38,11 @@ stop_arrivals AS (
         trip_schedule_relationship,
 
         -- last arrival and departure as UTC
-        DATETIME(TIMESTAMP_SECONDS(LAST_VALUE(arrival_time IGNORE NULLS) OVER(PARTITION BY base64_url, service_date, trip_id, trip_start_date, trip_start_time, stop_id ORDER BY COALESCE(trip_update_timestamp, header_timestamp) ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING))) AS last_trip_updates_arrival,
-        DATETIME(TIMESTAMP_SECONDS(LAST_VALUE(departure_time IGNORE NULLS) OVER(PARTITION BY base64_url, service_date, trip_id, trip_start_date, trip_start_time, stop_id ORDER BY COALESCE(trip_update_timestamp, header_timestamp) ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING))) AS last_trip_updates_departure,
+        DATETIME(TIMESTAMP_SECONDS(LAST_VALUE(arrival_time IGNORE NULLS) OVER(PARTITION BY base64_url, service_date, trip_id, trip_start_date, trip_start_time, stop_id, stop_sequence ORDER BY COALESCE(trip_update_timestamp, header_timestamp) ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING))) AS last_trip_updates_arrival,
+        DATETIME(TIMESTAMP_SECONDS(LAST_VALUE(departure_time IGNORE NULLS) OVER(PARTITION BY base64_url, service_date, trip_id, trip_start_date, trip_start_time, stop_id, stop_sequence ORDER BY COALESCE(trip_update_timestamp, header_timestamp) ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING))) AS last_trip_updates_departure,
         -- last arrival and departure as Pacific
-        DATETIME(TIMESTAMP_SECONDS(LAST_VALUE(arrival_time IGNORE NULLS) OVER(PARTITION BY base64_url, service_date, trip_id, trip_start_date, trip_start_time, stop_id ORDER BY COALESCE(trip_update_timestamp, header_timestamp) ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)), "America/Los_Angeles") AS last_trip_updates_arrival_pacific,
-        DATETIME(TIMESTAMP_SECONDS(LAST_VALUE(departure_time IGNORE NULLS) OVER(PARTITION BY base64_url, service_date, trip_id, trip_start_date, trip_start_time, stop_id ORDER BY COALESCE(trip_update_timestamp, header_timestamp) ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)), "America/Los_Angeles") AS last_trip_updates_departure_pacific,
+        DATETIME(TIMESTAMP_SECONDS(LAST_VALUE(arrival_time IGNORE NULLS) OVER(PARTITION BY base64_url, service_date, trip_id, trip_start_date, trip_start_time, stop_id, stop_sequence ORDER BY COALESCE(trip_update_timestamp, header_timestamp) ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)), "America/Los_Angeles") AS last_trip_updates_arrival_pacific,
+        DATETIME(TIMESTAMP_SECONDS(LAST_VALUE(departure_time IGNORE NULLS) OVER(PARTITION BY base64_url, service_date, trip_id, trip_start_date, trip_start_time, stop_id, stop_sequence ORDER BY COALESCE(trip_update_timestamp, header_timestamp) ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)), "America/Los_Angeles") AS last_trip_updates_departure_pacific,
 
     FROM fct_stop_time_updates
 ),
