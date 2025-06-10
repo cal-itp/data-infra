@@ -3,9 +3,11 @@ locals {
     "calitp-staging-aggregator-scraper",
     "calitp-staging-airtable",
     "calitp-staging-amplitude-benefits-events",
+    "calitp-staging-analysis-output-models",
     "calitp-staging-elavon-parsed",
     "calitp-staging-elavon-raw",
     "calitp-staging-gtfs-download-config",
+    "calitp-staging-gtfs-download-config-test",
     "calitp-staging-gtfs-rt-parsed",
     "calitp-staging-gtfs-rt-raw-v2",
     "calitp-staging-gtfs-rt-validation",
@@ -26,7 +28,6 @@ locals {
     "calitp-staging-publish",
     "calitp-staging-sentry",
     "calitp-staging-state-geoportal-scrape",
-    "calitp-staging-gtfs-download-config-test",
   ])
 }
 
