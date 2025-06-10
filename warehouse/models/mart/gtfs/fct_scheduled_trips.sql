@@ -194,6 +194,8 @@ fct_scheduled_trips AS (
         gtfs_joins.route_continuous_pickup,
         gtfs_joins.route_continuous_drop_off,
         gtfs_joins.route_desc,
+        gtfs_joins.route_color,
+        gtfs_joins.route_text_color,
         gtfs_joins.agency_id,
         gtfs_joins.network_id,
         gtfs_joins.shape_array_key,
@@ -234,6 +236,14 @@ fct_scheduled_trips AS (
         DATE(trip_first_start_pickup_drop_off_window_ts, trip_start_timezone) AS trip_first_start_pickup_drop_off_window_date_local_tz,
         DATETIME(trip_first_start_pickup_drop_off_window_ts, trip_start_timezone) AS trip_first_start_pickup_drop_off_window_datetime_local_tz,
         DATETIME(trip_last_end_pickup_drop_off_window_ts, trip_end_timezone) AS trip_last_end_pickup_drop_off_window_datetime_local_tz,
+        CASE
+            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 4 THEN "Owl"
+            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 7 THEN "Early AM"
+            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 10 THEN "AM Peak"
+            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 15 THEN "Midday"
+            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 20 THEN "PM Peak"
+            ELSE "Evening"
+        END AS time_of_day,
     FROM gtfs_joins
     LEFT JOIN fct_daily_schedule_feeds AS daily_feeds
         ON gtfs_joins.feed_key = daily_feeds.feed_key

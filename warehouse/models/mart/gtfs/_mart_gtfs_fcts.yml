@@ -1863,6 +1863,10 @@ models:
         description: '{{ doc("gtfs_routes__route_long_name") }}'
       - name: route_desc
         description: '{{ doc("gtfs_routes__route_desc") }}'
+      - name: route_color
+        description: '{{ doc("gtfs_routes__route_color") }}'
+      - name: route_text_color
+        description: '{{ doc("gtfs_routes__route_text_color") }}'
       - name: agency_id
         description: '{{ doc("gtfs_routes__agency_id") }}'
       - name: network_id
