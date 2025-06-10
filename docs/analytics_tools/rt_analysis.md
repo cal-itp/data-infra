@@ -2,7 +2,7 @@
 
 The former `rt_parser` module, including the `OperatorDayAnalysis` and `VehiclePositionsInterpolator` classes, has been deprecated. A truncated version of these docs remains as a guide to accessing processed speeds outputs that predate the `rt_segment_speeds` pipeline. `rt_filter_map_plot` is still usable as of June 2025, or artifacts on GCS can be accessed directly.
 
-### `rt_filter_map_plot`: your flexible analytics and mapping interface
+## `rt_filter_map_plot`: your flexible analytics and mapping interface
 
 ```{mermaid}
 flowchart TD
@@ -64,11 +64,11 @@ flowchart TD
 
 _Check out the [walkthrough notebook](https://github.com/cal-itp/data-analyses/blob/main/rt_delay/31_tutorial.ipynb) for further explanation/demo of these steps_
 
-#### Loading Intermediate Data (largely automatically)
+### Loading Intermediate Data (largely automatically)
 
 To load intermediate data, use `rt_filter_map_plot.from_gcs` to create an RtFilterMapper instance for the itp_id and date of interest.
 
-#### Filtering
+### Filtering
 
 Using the `set_filter` method, RtFilterMapper supports filtering based on at least one of these attributes at a time:
 
@@ -86,13 +86,13 @@ Using the `set_filter` method, RtFilterMapper supports filtering based on at lea
 
 Mapping, charting, and metric generation methods, listed under "dynamic tools" in the chart above, will respect the current filter. After generating your desired output, you can call `set_filter` again to set a new filter, or use `reset_filter` to remove the filter entirely. Then you can continue to analyze, without needing to create a new RtFilterMapper instance.
 
-#### Mapping
+### Mapping
 
 Use the `segment_speed_map` method to generate a speed map. Depending on parameters, the speeds visualized will either be the 20th percentile or average speeds for all trips in each segment matching the current filter, if any. See function docstring for additional information.
 
 The `map_variance` method, currently under development, offers a spatial view of variation in speeds for all trips in each segment matching the current filter, if any. This is now quantified as the ratio between 80th percentile and 20th percentile speeds, and used on the CA Transit Speed Maps tool.
 
-#### More performant maps via embedded app
+### More performant maps via embedded app
 
 Rather than render the maps directly in the notebook via geopandas and folium, we now have the capability to save them as compressed GeoJSON to GCS and render them in an IFrame using a [minimal web app](https://github.com/cal-itp/data-infra/tree/main/apps/maps).
 
@@ -100,7 +100,7 @@ This method is much more efficient, and we rely on it to maintain the quantity a
 
 `display_spa_map` will always show the most recent map generated with either `segment_speed_map` or `map_variance`, then saved via `map_gz_export`.
 
-#### `stop_segment_speed_view`
+### `stop_segment_speed_view`
 
 After generating a speed map, the underlying data is available at RtFilterMapper.stop_segment_speed_view, a geodataframe. This data can be easily exported into a geoparquet, geojson, shapefile, or spreadsheet with the appropriate geopandas method.
 
@@ -135,7 +135,7 @@ After generating a speed map, the underlying data is available at RtFilterMapper
 
 \*\*aggregated value -- based on all trips in filter
 
-#### Other Charts and Metrics
+### Other Charts and Metrics
 
 The `chart_variability` method provides a descriptitive view of the speeds experienced by each trip in each segments. It requires that a filter first be set to only one shape_id.
 
@@ -143,7 +143,7 @@ The `chart_speeds` and `chart_delays` methods provide aggregate charts showing s
 
 The `describe_slow_routes` method lists out the routes in the current filter experiencing the lowest speeds. It is mainly used on the California Transit Speed Maps site.
 
-#### Corridor Analysis
+### Corridor Analysis
 
 It's often useful to measure transit delay on a specific corridor to support technical metric generation for the Solutions for Congested Corridors Program, Local Partnership Program, and other analyses.
 
