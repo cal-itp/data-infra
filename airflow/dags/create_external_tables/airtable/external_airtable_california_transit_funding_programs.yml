@@ -1,6 +1,5 @@
 operator: operators.ExternalTable
-bucket: gs://calitp-airtable
-prefix_bucket: true
+bucket: "{{ env_var('CALITP_BUCKET__AIRTABLE') }}"
 post_hook: |
   SELECT *
   FROM `{{ get_project_id() }}`.external_airtable.california_transit__funding_programs

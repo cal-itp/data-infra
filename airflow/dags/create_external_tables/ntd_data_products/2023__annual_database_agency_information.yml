@@ -1,6 +1,5 @@
 operator: operators.ExternalTable
-bucket: gs://calitp-ntd-xlsx-products-clean
-prefix_bucket: false
+bucket: "{{ env_var('CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN') }}"
 post_hook: |
   SELECT *
   FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.2023__annual_database_agency_information

@@ -1,6 +1,5 @@
 operator: operators.ExternalTable
-bucket: gs://calitp-ntd-xlsx-products-clean
-prefix_bucket: false
+bucket: "{{ env_var('CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN') }}"
 post_hook: |
   SELECT *
   FROM `{{ get_project_id() }}`.external_ntd__funding_and_expenses.historical__service_data_and_operating_expenses_time_series_by_mode__upt
