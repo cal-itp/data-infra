@@ -67,22 +67,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: tj-actions/changed-files@v41
-        with:
-          files: |
-            warehouse/Dockerfile
-            warehouse/packages.yml
-            warehouse/poetry.lock
-            warehouse/pyproject.yml
-            warehouse/requirements.txt
-      - uses: docker/login-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Repository
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v6
-        if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') || steps.changed-files-specific.outputs.any_changed == 'true' }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v6
         with:
           context: warehouse
-          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{github.repository}}/warehouse:latest
+          push: true
+          tags: ghcr.io/${{ github.repository }}/warehouse:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'latest' || 'development' }}
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/warehouse:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'latest' || 'development' }}
+          cache-to: type=inline
