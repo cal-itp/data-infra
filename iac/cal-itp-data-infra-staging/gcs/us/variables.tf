@@ -19,6 +19,7 @@ locals {
     "calitp-staging-gtfs-schedule-validation",
     "calitp-staging-gtfs-schedule-validation-hourly",
     "calitp-staging-ntd-api-products",
+    "calitp-staging-ntd-report-validation",
     "calitp-staging-ntd-xlsx-products-clean",
     "calitp-staging-ntd-xlsx-products-raw",
     "calitp-staging-payments-littlepay-parsed",
