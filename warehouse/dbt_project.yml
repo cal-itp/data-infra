@@ -28,6 +28,7 @@ vars:
   INCREMENTAL_MAX_DT: ''
   'dbt_date:time_zone': 'America/Los_Angeles'
   SOURCE_DATABASE: cal-itp-data-infra # you can override with DBT_SOURCE_DATABASE env var rather than constantly using --vars
+  PUBLISH_BUCKET: "gs://calitp-staging-publish" # you can override with CALITP_BUCKET__PUBLISH  env var rather than constantly using --vars
 
 models:
   calitp_warehouse:

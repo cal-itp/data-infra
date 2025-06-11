@@ -36,6 +36,7 @@ env_vars:
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
   SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
   SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
+  CALITP_BUCKET__PUBLISH: "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
 
 secrets:
   - deploy_type: volume

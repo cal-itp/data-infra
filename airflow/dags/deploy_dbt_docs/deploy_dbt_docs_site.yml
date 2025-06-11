@@ -27,6 +27,7 @@ env_vars:
   BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
   CALITP_BUCKET__DBT_ARTIFACTS: "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}"
   CALITP_BUCKET__DBT_DOCS: "{{ env_var('CALITP_BUCKET__DBT_DOCS') }}"
+  CALITP_BUCKET__PUBLISH: "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
   DBT_PROJECT_DIR: /app
   DBT_PROFILE_DIR: /app
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
