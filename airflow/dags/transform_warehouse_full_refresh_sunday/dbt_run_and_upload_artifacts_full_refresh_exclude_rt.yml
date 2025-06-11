@@ -27,6 +27,7 @@ env_vars:
   AIRFLOW_ENV: "{{ env_var('AIRFLOW_ENV') }}"
   GOOGLE_CLOUD_PROJECT: "{{ env_var('GOOGLE_CLOUD_PROJECT') }}"
   CALITP_BUCKET__DBT_ARTIFACTS: "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}"
+  CALITP_BUCKET__PUBLISH: "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
   BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
   DBT_PROJECT_DIR: /app
   DBT_PROFILE_DIR: /app
