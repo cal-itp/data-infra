@@ -7,7 +7,8 @@ cosmos_payment = DbtDag(
     project_config=ProjectConfig(
         dbt_project_path="/home/airflow/gcs/data/warehouse",
         manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
-        project_name="cosmos_payment",
+        project_name="calitp_warehouse",
+        seeds_relative_path="seeds/",
     ),
     profile_config=ProfileConfig(
         target_name="staging",
