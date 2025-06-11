@@ -2,7 +2,7 @@ operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN') }}"
 post_hook: |
   SELECT *
-  FROM `{{ get_project_id() }}`.external_ntd__assets.historical__asset_inventory_time_series__avg_standing_capacity
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_ntd__assets.historical__asset_inventory_time_series__avg_standing_capacity
   LIMIT 1;
 source_objects:
   - "asset_inventory_time_series/historical/avg_standing_capacity/*.jsonl.gz"

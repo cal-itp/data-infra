@@ -2,7 +2,7 @@ operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG') }}"
 post_hook: |
   SELECT *
-  FROM `{{ get_project_id() }}`.external_gtfs_schedule.download_configs
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_gtfs_schedule.download_configs
   WHERE dt = '{{ ds }}'
   LIMIT 1;
 source_objects:

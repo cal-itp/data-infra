@@ -9,7 +9,7 @@ hive_options:
   require_partition_filter: false
   source_uri_prefix: "track_and_roadway_guideway_age_distribution/multi_year/{dt:DATE}/{execution_ts:TIMESTAMP}"
 destination_project_dataset_table: "external_ntd__annual_reporting.multi_year__track_and_roadway_guideway_age_distribution"
-post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.multi_year__track_and_roadway_guideway_age_distribution LIMIT 1;
+post_hook: SELECT * FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_ntd__annual_reporting.multi_year__track_and_roadway_guideway_age_distribution LIMIT 1;
 schema_fields:
   - name: _1940s
     type: NUMERIC

@@ -2,7 +2,7 @@ operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__AIRTABLE') }}"
 post_hook: |
   SELECT *
-  FROM `{{ get_project_id() }}`.external_airtable.transit_data_quality_issues__gtfs_datasets
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_airtable.transit_data_quality_issues__gtfs_datasets
   LIMIT 1;
 source_objects:
   - "transit_data_quality_issues__gtfs_datasets/*.jsonl.gz"

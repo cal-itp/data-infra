@@ -7,15 +7,15 @@ This DAG orchestrates the creation of [external tables](https://cloud.google.com
 Here is an annotated example external table YAML file showing what the fields mean:
 
 ```yaml
-# throughout this example, <> brackets denote sample content to be filled in based on your use case and should be removed 
+# throughout this example, <> brackets denote sample content to be filled in based on your use case and should be removed
 operator: operators.ExternalTable   # the name of the operator; this does not change
 bucket: "{{ env_var('<BUCKET_VARIABLE>') }}"    # fill in the environment variable pointing to your source data bucket here
 post_hook: |    # this is optional; can provide an example query to check that external table was created successfully. this query will run every time the external table DAG runs
   SELECT *
-  FROM `{{ get_project_id() }}`.<your dataset as defined below under destination_project_dataset_table>.<your table name as defined below under destination_project_dataset_table>
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.<your dataset as defined below under destination_project_dataset_table>.<your table name as defined below under destination_project_dataset_table>
   LIMIT 1;
-source_objects: # this tells the external table which path & file format to look in for the objects that will be queryable through this external table 
-  - "<the top level folder name within your bucket that should be used for this external table like my_data>/*.<your file extension, most likely '.jsonl.gz'>"     
+source_objects: # this tells the external table which path & file format to look in for the objects that will be queryable through this external table
+  - "<the top level folder name within your bucket that should be used for this external table like my_data>/*.<your file extension, most likely '.jsonl.gz'>"
 destination_project_dataset_table: "<desired dataset name like external_my_data_source>.<desired table name, may be like topic_name__specific_data_name>"   # this defines the external table name (dataset and table name) through which the data will be accessible in BigQuery
 source_format: NEWLINE_DELIMITED_JSON   # file format of raw data; generally should not change -- allowable options are specified here: https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#ExternalDataConfiguration.FIELDS.source_format
 use_bq_client: true     # this option only exists for backwards compatibility; should always be true for new tables
@@ -39,6 +39,6 @@ schema_fields:  # here you fill in the schema of the actual files, which will be
 ## Testing
 
 When testing external table creation locally, pay attention to test environment details:
-* External tables created by local Airflow will be created in the `cal-itp-data-infra-staging` environment. 
-   * If you're trying to test dbt changes that rely on unmerged external tables changes, you can set the `DBT_SOURCE_DATABASE` environment variable to `cal-itp-data-infra-staging`. This will cause the dbt project to use the staging environment's externabl tables. If the staging external tables are pointed at a `test-` buckets (as described in the bullet above), then the dbt project will run on that test data, which may lead to unexpected results. 
+* External tables created by local Airflow will be created in the `cal-itp-data-infra-staging` environment.
+   * If you're trying to test dbt changes that rely on unmerged external tables changes, you can set the `DBT_SOURCE_DATABASE` environment variable to `cal-itp-data-infra-staging`. This will cause the dbt project to use the staging environment's externabl tables. If the staging external tables are pointed at a `test-` buckets (as described in the bullet above), then the dbt project will run on that test data, which may lead to unexpected results.
    * For this reason, it is often easier to make external tables updates in one pull request, get that approved and merged, and then make dbt changes once the external tables are already updated in production so you can test on the production source data.
