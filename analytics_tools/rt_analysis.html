@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>RT Analysis Module &#8212; Cal-ITP Data Services</title>
+    <title>RT Analysis Module (Legacy) &#8212; Cal-ITP Data Services</title>
   
   
   
@@ -211,7 +211,7 @@
 <li class="toctree-l2"><a class="reference internal" href="local_oracle_db_connections.html">Local Oracle Database Connections</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_libraries.html">Useful Python Libraries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.html">Scripts</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">RT Analysis Module</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">RT Analysis Module (Legacy)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="saving_code.html">Saving Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="storing_data.html">Storing Data During Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_catalogs.html">Using Data Catalogs</a></li>
@@ -473,7 +473,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>RT Analysis Module</h1>
+    <h1>RT Analysis Module (Legacy)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -483,41 +483,14 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#start-here">Start Here</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#which-analyses-does-it-currently-support">Which analyses does it currently support?</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-it-work">How does it work?</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#which-data-does-it-require">Which data does it require?</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-is-it-structured">How is it structured?</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rt-parser-making-sense-of-vehicle-positions"><code class="docutils literal notranslate"><span class="pre">rt_parser</span></code>: making sense of Vehicle Positions</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-at-the-operatordayanalysis-stage"><strong>What happens at the OperatorDayAnalysis stage?</strong></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gathering-data">Gathering Data</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#asserts-data-checks">Asserts/Data Checks</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-position-interpolators">Generate Position Interpolators</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-stop-delay-view">Generate Stop Delay View</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vehiclepositionsinterpolator-a-foundational-building-block"><strong>VehiclePositionsInterpolator: a foundational building block</strong></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#constructor">Constructor</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-logging">Basic Logging</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#projection">Projection</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interpolating-quickly">Interpolating, quickly</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#saving-intermediate-data-largely-automatically">Saving Intermediate Data (largely automatically)</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-use-it">How do I use it?</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#viewing-data-availability-or-starting-from-scratch">Viewing Data Availability (or starting from scratch)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rt-filter-map-plot-your-flexible-analytics-and-mapping-interface"><code class="docutils literal notranslate"><span class="pre">rt_filter_map_plot</span></code>: your flexible analytics and mapping interface</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-intermediate-data-largely-automatically">Loading Intermediate Data (largely automatically)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#filtering">Filtering</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping">Mapping</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#more-performant-maps-via-embedded-app">More performant maps via embedded app</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stop-segment-speed-view"><code class="docutils literal notranslate"><span class="pre">stop_segment_speed_view</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#other-charts-and-metrics">Other Charts and Metrics</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#corridor-analysis">Corridor Analysis</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rt-filter-map-plot-your-flexible-analytics-and-mapping-interface"><code class="docutils literal notranslate"><span class="pre">rt_filter_map_plot</span></code>: your flexible analytics and mapping interface</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-intermediate-data-largely-automatically">Loading Intermediate Data (largely automatically)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filtering">Filtering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping">Mapping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#more-performant-maps-via-embedded-app">More performant maps via embedded app</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stop-segment-speed-view"><code class="docutils literal notranslate"><span class="pre">stop_segment_speed_view</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-charts-and-metrics">Other Charts and Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corridor-analysis">Corridor Analysis</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-workflow-california-transit-speed-maps">Example Workflow: California Transit Speed Maps</a></li>
@@ -533,313 +506,11 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="rt-analysis-module">
-<h1>RT Analysis Module<a class="headerlink" href="#rt-analysis-module" title="Link to this heading">#</a></h1>
-<section id="start-here">
-<h2>Start Here<a class="headerlink" href="#start-here" title="Link to this heading">#</a></h2>
-<p>This module, rt_analysis, applies various spatial processing, interpolation, and aggregation techniques in order to transform GTFS and GTFS-Realtime data into intermediate data products and production-ready visualizations. It can be found on GitHub at <a class="github reference external" href="https://github.com/cal-itp/data-analyses/tree/main/rt_delay/rt_analysis">cal-itp/data-analyses</a></p>
-<p>It includes its own interface and data model. Some functionality may shift to a more automated part of the pipeline in the future.</p>
-<section id="which-analyses-does-it-currently-support">
-<h3>Which analyses does it currently support?<a class="headerlink" href="#which-analyses-does-it-currently-support" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p><a class="reference external" href="https://analysis.calitp.org/rt/README.html">California Transit Speed Maps</a></p></li>
-<li><p>Technical Metric Generation for Solutions for Congested Corridors Program, Local Partnership Program</p></li>
-<li><p>Various prioritization exercises from intermediate data, such as using aggregated speed data as an input for identifying bus route improvements as part of a broader model</p></li>
-<li><p>Various ad-hoc speed and delay analyses, such as highlighting relevant examples for presentations to stakeholders, or providing a shapefile of bus speeds on certain routes to support a district’s grant application</p></li>
-</ul>
-</section>
-</section>
-<section id="how-does-it-work">
-<h2>How does it work?<a class="headerlink" href="#how-does-it-work" title="Link to this heading">#</a></h2>
-<p>This section includes detailed information about the data model and processing steps. Feel free to skip ahead to “How do I use it?” if you need a quicker start.</p>
-<section id="which-data-does-it-require">
-<h3>Which data does it require?<a class="headerlink" href="#which-data-does-it-require" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>GTFS-RT Vehicle Positions</p></li>
-<li><p>GTFS Schedule Trips</p></li>
-<li><p>GTFS Schedule Stops</p></li>
-<li><p>GTFS Schedule Routes</p></li>
-<li><p>GTFS Schedule Stop Times</p></li>
-<li><p>GTFS Schedule Shapes</p></li>
-</ul>
-<p>All of the above are sourced from the v2 warehouse. Note that all components must be present and consistently keyed in order to successfully analyze. This module works at the organization level in order to match the reports site and maintain the structure of the speedmap site.</p>
-<p>For each organization, this module will combine and analyze all related GTFS Schedule and GTFS Realtime datasets that are <code class="docutils literal notranslate"><span class="pre">public_customer_facing_or_regional_subfeed_fixed_route</span></code> in <a class="reference external" href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_provider_gtfs_data"><code class="docutils literal notranslate"><span class="pre">dim_provider_gtfs_data</span></code></a>. Some organizations share GTFS datasets (Sacramento RT and City of Rancho Cordova, San Diego Airport and San Diego MTS…), in those cases the module can generate separate analysis for each organization but they might duplicate each other. These are based on the underlying organization/dataset relationships in the Transit Database (Airtable).</p>
-</section>
-<section id="how-is-it-structured">
-<h3>How is it structured?<a class="headerlink" href="#how-is-it-structured" title="Link to this heading">#</a></h3>
-<p>The module is split into two major components, <code class="docutils literal notranslate"><span class="pre">rt_parser</span></code>, which generates intermediate data for detailed analysis, and <code class="docutils literal notranslate"><span class="pre">rt_filter_map_plot</span></code>, which provides a rich interface to analyze and generate products like speed maps.</p>
-</section>
-<section id="rt-parser-making-sense-of-vehicle-positions">
-<h3><code class="docutils literal notranslate"><span class="pre">rt_parser</span></code>: making sense of Vehicle Positions<a class="headerlink" href="#rt-parser-making-sense-of-vehicle-positions" title="Link to this heading">#</a></h3>
-<div class="mermaid">
-            flowchart TD
-    subgraph warehouse[&quot;Warehouse Data&quot;]
-        vp{{GTFS-RT Vehicle Positions}}
-        routes[GTFS Routes] --&gt;|id, names| trips[GTFS Trips]
-        stops[GTFS Stops]
-        st[GTFS Stop Times]
-        shapes[GTFS Shapes]
-    end
-    %% OperatorDayAnalysis processing step
-    subgraph op_day[&quot;OperatorDayAnalysis&quot;]
-        subgraph per_shp[process per shape:]
-            add_1k(add 1km segments if stops far apart)
-        end
-        subgraph per_trp[process per trip:]
-            gen_int(generate interpolator object)
-            store_int(self.position_interpolators) --&gt;
-            gen_sdv(generate stop_delay_view)
-        end
-        subgraph int_data[finished intermediate data]
-            stop_delay[&quot;self.stop_delay_view (all trips)&quot;]
-            rt_trips[&quot;self.rt_trips (trip-level info)&quot;]
-        end
-        %% local links
-        gen_int --&gt; vp_int --&gt; store_int
-        per_shp --&gt; per_trp --&gt;|combine all trips| int_data
-        --&gt;|self.export_views_gcs| gcs[(&quot;GCS (calitp-analytics-data/data_analyses/rt_delay)&quot;)]
-    end
-    %% VehiclePositionsInterpolator
-    subgraph vp_int[&quot;VehiclePositionsInterpolator&quot;]
-        ck_data[check data quality] --&gt;
-        proj[project vehicle positions to shape] --&gt;
-        cast[cast to monotonic increasing] ---
-        interface(&quot;interpolation interface: self.time_at_position&quot;)
-    end
-    %% top level links
-    warehouse --&gt;|single day of data| op_day
-        </div><section id="what-happens-at-the-operatordayanalysis-stage">
-<h4><strong>What happens at the OperatorDayAnalysis stage?</strong><a class="headerlink" href="#what-happens-at-the-operatordayanalysis-stage" title="Link to this heading">#</a></h4>
-<p>The OperatorDayAnalysis class is the top-level class for processing a day’s worth of data and outputting intermediate data to be used later for mapping and analysis through the RtFilterMapper interface. It’s useful to understand how it works when analyzing an organization’s RT data on a date for the first time, though once this is accomplished nearly any analysis need can be fulfilled without regenerating OperatorDayAnalysis.</p>
-<p>An OperatorDayAnalysis is generated for a specific organization on a specific date.</p>
-</section>
-<section id="gathering-data">
-<h4>Gathering Data<a class="headerlink" href="#gathering-data" title="Link to this heading">#</a></h4>
-<p>First, OperatorDayAnalysis gathers GTFS and GTFS Realtime Vehicle Positions data for the feed and date selected (for a complete list of source data, see above).</p>
-</section>
-<section id="asserts-data-checks">
-<h4>Asserts/Data Checks<a class="headerlink" href="#asserts-data-checks" title="Link to this heading">#</a></h4>
-<p>This step checks for the presence of Vehicle Positions data, with trip_ids matching schedule data, as well as the presence of GTFS Shapes data describing at least 90% of scheduled trips.</p>
-</section>
-<section id="generate-position-interpolators">
-<h4>Generate Position Interpolators<a class="headerlink" href="#generate-position-interpolators" title="Link to this heading">#</a></h4>
-<p>This step attempts to generate VehiclePositionInterpolator objects for all trips for which data is present. For a detailed description, see below.</p>
-</section>
-<section id="generate-stop-delay-view">
-<h4>Generate Stop Delay View<a class="headerlink" href="#generate-stop-delay-view" title="Link to this heading">#</a></h4>
-<p>This step uses the generated interpolator objects to estimate and store speed and delay information for every trip at each stop. Where stops are less frequent we add “virtual stops” every kilometer to support granular analysis of express and rural transit routes.</p>
-<p>The results of this step are saved in OperatorDayAnalysis.stop_delay_view, a geodataframe.</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p></p></th>
-<th class="head"><p></p></th>
-<th class="head"><p></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Column</p></td>
-<td><p>Source</p></td>
-<td><p>Type</p></td>
-</tr>
-<tr class="row-odd"><td><p>shape_meters</p></td>
-<td><p>Projection of GTFS Stop along GTFS Shape (with 0 being start of shape), additionally 1km segments generated where stops are infrequent</p></td>
-<td><p>float64</p></td>
-</tr>
-<tr class="row-even"><td><p>stop_id</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string*</p></td>
-</tr>
-<tr class="row-odd"><td><p>stop_name</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string*</p></td>
-</tr>
-<tr class="row-even"><td><p>geometry</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>geometry</p></td>
-</tr>
-<tr class="row-odd"><td><p>shape_id</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-even"><td><p>trip_id</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-odd"><td><p>stop_sequence</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>float64**</p></td>
-</tr>
-<tr class="row-even"><td><p>arrival_time</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>np.datetime64[ns]*</p></td>
-</tr>
-<tr class="row-odd"><td><p>route_id</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-even"><td><p>route_short_name</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-odd"><td><p>direction_id</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>float64</p></td>
-</tr>
-<tr class="row-even"><td><p>actual_time</p></td>
-<td><p>VehiclePositionInterpolator</p></td>
-<td><p>np.datetime64[ns]</p></td>
-</tr>
-<tr class="row-odd"><td><p>delay_seconds</p></td>
-<td><p>Calculated here (actual_time-arrival_time)***</p></td>
-<td><p>float64*</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>*null if location is an added 1km segment</p>
-<p>**integer values from GTFS, but added 1km segments are inserted in between the nearest 2 stops with a decimal</p>
-<p>***early arrivals currently represented as zero delay</p>
-</section>
-<section id="vehiclepositionsinterpolator-a-foundational-building-block">
-<h4><strong>VehiclePositionsInterpolator: a foundational building block</strong><a class="headerlink" href="#vehiclepositionsinterpolator-a-foundational-building-block" title="Link to this heading">#</a></h4>
-<p>Analyzing speed and position from GTFS-RT Vehicle Positions data requires somewhat complex algorithms for each trip. In this module, these are implemented in the VehiclePositionsInterpolator class. When analyzing a day’s worth of data, the module generates an instance of VehiclePositionsInterpolator for each trip with Vehicle Positions data. There’s little need to interact with VehiclePositionsInterpolator directly for most uses.</p>
-</section>
-<section id="constructor">
-<h4>Constructor<a class="headerlink" href="#constructor" title="Link to this heading">#</a></h4>
-<p>The constructor takes two arguments: a geodataframe of Vehicle Positions data, filtered to a single trip and joined with trip identifier information from GTFS Schedule, and a geodataframe of GTFS Shapes as line geometries, which must include the shape of the trip of interest. When constructed, it runs several data checks, enforcing that: Vehicle Positions and Shapes data are provided, both geodataframes have the same coordinate reference system (CA_NAD83Albers), and that Vehicle Positions data is only provided for a single trip and contains the required identifier information.</p>
-</section>
-<section id="basic-logging">
-<h4>Basic Logging<a class="headerlink" href="#basic-logging" title="Link to this heading">#</a></h4>
-<p>VehiclePositionsInterpolator has simple logging functionality built in through the VehiclePositionsInterpolator.logassert method. This method is a simple wrapper to Python’s assert keyword that also uses Python’s built in logging module to log which error occurred before raising an AssertionError. By default, the logfile will be <code class="docutils literal notranslate"><span class="pre">./rt_log</span></code>.</p>
-</section>
-<section id="projection">
-<h4>Projection<a class="headerlink" href="#projection" title="Link to this heading">#</a></h4>
-<p>Vehicle Positions data includes a series of positions for a single trip at different points in time. Since we’re interested in tracking speed and delay along the transit route, we need to project those lat/long positions to a linear reference along the actual transit route (GTFS Shape). This is accomplished by the constructor calling VehiclePositionsInterpolator._attach_shape, which first does a naive projection of each position using shapely.LineString.project. This linearly referenced value is stored in the shape_meters column.</p>
-<p>Since later stages will have to interpolate these times and positions, it’s necessary to undertake some additional data cleaning. This happens by calling VehiclePositionsInterpolator._linear_reference, which casts shape_meters to be monotonically increasing with respect to time. This removes multiple position reports at the same location, as well as any positions that suggest the vehicle traveled backwards along the route. While this introduces the assumption that the GPS-derived Vehicle Positions data is fairly accurate, our experience is that this process produces good results in most cases. Future updates will better accommodate <a class="reference external" href="https://gtfs.org/schedule/best-practices/#shapestxt">looping and inlining</a>; these currently get dropped in certain cases, which is undesirable.</p>
-</section>
-<section id="interpolating-quickly">
-<h4>Interpolating, quickly<a class="headerlink" href="#interpolating-quickly" title="Link to this heading">#</a></h4>
-<p>As you might expect, the main purpose of VehiclePositionsInterpolator is to provide a fast interface to estimate when a trip arrived at a point of interest (generally a transit stop or segment boundary) based on the two known nearest positions.</p>
-<p>VehiclePositionsInterpolator.time_at_position(self, desired_position) provides this interface. Desired position is given in meters, with zero being the start of the GTFS Shape. If the position requested is within the spatial bounds of Vehicle Position data for the trip, this method will quickly return the estimated timestamp using a fast numpy array function, further sped up with <a class="reference external" href="https://numba.pydata.org/">numba</a>.</p>
-</section>
-<section id="saving-intermediate-data-largely-automatically">
-<h4>Saving Intermediate Data (largely automatically)<a class="headerlink" href="#saving-intermediate-data-largely-automatically" title="Link to this heading">#</a></h4>
-<p>Intermediate data is saved using OperatorDayAnalysis.export_views_gcs()</p>
-<p>This method saves 2 artifacts: a geoparquet of OperatorDayAnalysis.stop_delay_view and a parquet of OperatorDayAnalysis.rt_trips. These are saved in Google Cloud Storage at calitp-analytics-data/data-analyses/rt_delay/stop_delay_views and calitp-analytics-data/data-analyses/rt_delay/rt_trips respectively.</p>
-<p>rt_trips is a dataframe of trip-level information for every trip for which a VehiclePositionsInterpolator was successfully generated. It supports filtering by various attributes and provides useful contextual information for maps and analyses.</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p></p></th>
-<th class="head"><p></p></th>
-<th class="head"><p></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Column</p></td>
-<td><p>Source</p></td>
-<td><p>Type</p></td>
-</tr>
-<tr class="row-odd"><td><p>feed_key*</p></td>
-<td><p>v2 warehouse (gtfs mart)</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-even"><td><p>trip_key</p></td>
-<td><p>Key from v2 warehouse</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_dataset_key*</p></td>
-<td><p>v2 warehouse (gtfs mart)</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-even"><td><p>activity_date</p></td>
-<td><p>v2 warehouse</p></td>
-<td><p>datetime.date</p></td>
-</tr>
-<tr class="row-odd"><td><p>trip_id</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-even"><td><p>route_id</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-odd"><td><p>route_short_name</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-even"><td><p>shape_id</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-odd"><td><p>direction_id</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-even"><td><p>route_type</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-odd"><td><p>route_long_name</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-even"><td><p>route_desc</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-odd"><td><p>route_long_name</p></td>
-<td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-even"><td><p>calitp_itp_id</p></td>
-<td><p>v2 warehouse (transit database)</p></td>
-<td><p>int64</p></td>
-</tr>
-<tr class="row-odd"><td><p>median_time</p></td>
-<td><p>VehiclePositionsInterpolator</p></td>
-<td><p>datetime.time</p></td>
-</tr>
-<tr class="row-even"><td><p>direction</p></td>
-<td><p>VehiclePositionsInterpolator</p></td>
-<td><p>string</p></td>
-</tr>
-<tr class="row-odd"><td><p>mean_speed_mph</p></td>
-<td><p>VehiclePositionsInterpolator</p></td>
-<td><p>float64</p></td>
-</tr>
-<tr class="row-even"><td><p>organization_name</p></td>
-<td><p>v2 warehouse (transit database)</p></td>
-<td><p>string</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<ul class="simple">
-<li><p>keys and IDs in this table refer to GTFS Schedule datasets</p></li>
-</ul>
-</section>
-</section>
-</section>
-<section id="how-do-i-use-it">
-<h2>How do I use it?<a class="headerlink" href="#how-do-i-use-it" title="Link to this heading">#</a></h2>
-<section id="viewing-data-availability-or-starting-from-scratch">
-<h3>Viewing Data Availability (or starting from scratch)<a class="headerlink" href="#viewing-data-availability-or-starting-from-scratch" title="Link to this heading">#</a></h3>
-<p>Use shared_utils.rt_utils.get_operators to see dates and feeds with the core analysis already run and intermediate data available. With the v2 warehouse transition, this module is currently set to only generate new data from Jan 1, 2023 onward. If necessary, we can run older dates from v2 data after confirming that the organization/dataset mapping is as-desired. Intermediate data available from this utility from before 2023 is currently based off of prior v1 warehouse results, which may include different underlying datasets from current results.</p>
-<p>To support commonality with other analyses, this module now generates the core analysis for dates recorded in <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/_shared_utils/shared_utils/rt_dates.py">data_analyses/shared_utils/rt_dates.py</a>.</p>
-<p>Intermediate data for those selected dates will usually be already generated as part of the speedmap deployment process. For reference, if not already ran, use the OperatorDayAnalysis constructor to generate the core analysis and save intermediate data for the dates and feeds of interest. Note that this process can be time-consuming, especially for larger feeds like LA Metro.</p>
-<p>This function supports an optional progress bar argument to show analysis progress. First make sure tqdm is installed, then create a blank progress bar and provide that as an argument to the function (see example notebook). Note that you may have to <a class="reference external" href="https://github.com/tqdm/tqdm/issues/394#issuecomment-384743637">enable the jupyter extension</a>.</p>
-<p>For example, to generate data for Big Blue Bus on April 12, 2023:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rt_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">rt_parser</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm.notebook</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
-
-<span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">()</span>
-<span class="n">rt_day</span> <span class="o">=</span> <span class="n">rt_parser</span><span class="o">.</span><span class="n">OperatorDayAnalysis</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">pbar</span><span class="p">)</span>
-<span class="n">rt_day</span><span class="o">.</span><span class="n">export_views_gcs</span><span class="p">()</span>
-</pre></div>
-</div>
-</section>
+  <section class="tex2jax_ignore mathjax_ignore" id="rt-analysis-module-legacy">
+<h1>RT Analysis Module (Legacy)<a class="headerlink" href="#rt-analysis-module-legacy" title="Link to this heading">#</a></h1>
+<p>The former <code class="docutils literal notranslate"><span class="pre">rt_parser</span></code> module, including the <code class="docutils literal notranslate"><span class="pre">OperatorDayAnalysis</span></code> and <code class="docutils literal notranslate"><span class="pre">VehiclePositionsInterpolator</span></code> classes, has been deprecated. A truncated version of these docs remains as a guide to accessing processed speeds outputs that predate the <code class="docutils literal notranslate"><span class="pre">rt_segment_speeds</span></code> pipeline. <code class="docutils literal notranslate"><span class="pre">rt_filter_map_plot</span></code> is still usable as of June 2025, or artifacts on GCS can be accessed directly.</p>
 <section id="rt-filter-map-plot-your-flexible-analytics-and-mapping-interface">
-<h3><code class="docutils literal notranslate"><span class="pre">rt_filter_map_plot</span></code>: your flexible analytics and mapping interface<a class="headerlink" href="#rt-filter-map-plot-your-flexible-analytics-and-mapping-interface" title="Link to this heading">#</a></h3>
+<h2><code class="docutils literal notranslate"><span class="pre">rt_filter_map_plot</span></code>: your flexible analytics and mapping interface<a class="headerlink" href="#rt-filter-map-plot-your-flexible-analytics-and-mapping-interface" title="Link to this heading">#</a></h2>
 <div class="mermaid">
             flowchart TD
     gcs[(&quot;GCS (calitp-analytics-data/data_analyses/rt_delay)&quot;)]
@@ -897,11 +568,11 @@ document.write(`
         </div><p><code class="docutils literal notranslate"><span class="pre">rt_filter_map_plot</span></code> exists to provide robust analytics functionality separately from the compute-intensive raw data processing steps. It includes the RtFilterMapper class, which provides an interface for loading and filtering a day of data, plus tools to generate various maps, charts, and metrics.</p>
 <p><em>Check out the <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/rt_delay/31_tutorial.ipynb">walkthrough notebook</a> for further explanation/demo of these steps</em></p>
 <section id="loading-intermediate-data-largely-automatically">
-<h4>Loading Intermediate Data (largely automatically)<a class="headerlink" href="#loading-intermediate-data-largely-automatically" title="Link to this heading">#</a></h4>
+<h3>Loading Intermediate Data (largely automatically)<a class="headerlink" href="#loading-intermediate-data-largely-automatically" title="Link to this heading">#</a></h3>
 <p>To load intermediate data, use <code class="docutils literal notranslate"><span class="pre">rt_filter_map_plot.from_gcs</span></code> to create an RtFilterMapper instance for the itp_id and date of interest.</p>
 </section>
 <section id="filtering">
-<h4>Filtering<a class="headerlink" href="#filtering" title="Link to this heading">#</a></h4>
+<h3>Filtering<a class="headerlink" href="#filtering" title="Link to this heading">#</a></h3>
 <p>Using the <code class="docutils literal notranslate"><span class="pre">set_filter</span></code> method, RtFilterMapper supports filtering based on at least one of these attributes at a time:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -943,18 +614,18 @@ document.write(`
 <p>Mapping, charting, and metric generation methods, listed under “dynamic tools” in the chart above, will respect the current filter. After generating your desired output, you can call <code class="docutils literal notranslate"><span class="pre">set_filter</span></code> again to set a new filter, or use <code class="docutils literal notranslate"><span class="pre">reset_filter</span></code> to remove the filter entirely. Then you can continue to analyze, without needing to create a new RtFilterMapper instance.</p>
 </section>
 <section id="mapping">
-<h4>Mapping<a class="headerlink" href="#mapping" title="Link to this heading">#</a></h4>
+<h3>Mapping<a class="headerlink" href="#mapping" title="Link to this heading">#</a></h3>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">segment_speed_map</span></code> method to generate a speed map. Depending on parameters, the speeds visualized will either be the 20th percentile or average speeds for all trips in each segment matching the current filter, if any. See function docstring for additional information.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">map_variance</span></code> method, currently under development, offers a spatial view of variation in speeds for all trips in each segment matching the current filter, if any. This is now quantified as the ratio between 80th percentile and 20th percentile speeds, and used on the CA Transit Speed Maps tool.</p>
 </section>
 <section id="more-performant-maps-via-embedded-app">
-<h4>More performant maps via embedded app<a class="headerlink" href="#more-performant-maps-via-embedded-app" title="Link to this heading">#</a></h4>
+<h3>More performant maps via embedded app<a class="headerlink" href="#more-performant-maps-via-embedded-app" title="Link to this heading">#</a></h3>
 <p>Rather than render the maps directly in the notebook via geopandas and folium, we now have the capability to save them as compressed GeoJSON to GCS and render them in an IFrame using a <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/apps/maps">minimal web app</a>.</p>
 <p>This method is much more efficient, and we rely on it to maintain the quantity and quality of maps on the <a class="reference external" href="https://analysis.calitp.org/rt/README.html">CA Transit Speed Maps</a> site.</p>
 <p><code class="docutils literal notranslate"><span class="pre">display_spa_map</span></code> will always show the most recent map generated with either <code class="docutils literal notranslate"><span class="pre">segment_speed_map</span></code> or <code class="docutils literal notranslate"><span class="pre">map_variance</span></code>, then saved via <code class="docutils literal notranslate"><span class="pre">map_gz_export</span></code>.</p>
 </section>
 <section id="stop-segment-speed-view">
-<h4><code class="docutils literal notranslate"><span class="pre">stop_segment_speed_view</span></code><a class="headerlink" href="#stop-segment-speed-view" title="Link to this heading">#</a></h4>
+<h3><code class="docutils literal notranslate"><span class="pre">stop_segment_speed_view</span></code><a class="headerlink" href="#stop-segment-speed-view" title="Link to this heading">#</a></h3>
 <p>After generating a speed map, the underlying data is available at RtFilterMapper.stop_segment_speed_view, a geodataframe. This data can be easily exported into a geoparquet, geojson, shapefile, or spreadsheet with the appropriate geopandas method.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -1067,13 +738,13 @@ document.write(`
 <p>**aggregated value – based on all trips in filter</p>
 </section>
 <section id="other-charts-and-metrics">
-<h4>Other Charts and Metrics<a class="headerlink" href="#other-charts-and-metrics" title="Link to this heading">#</a></h4>
+<h3>Other Charts and Metrics<a class="headerlink" href="#other-charts-and-metrics" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">chart_variability</span></code> method provides a descriptitive view of the speeds experienced by each trip in each segments. It requires that a filter first be set to only one shape_id.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">chart_speeds</span></code> and <code class="docutils literal notranslate"><span class="pre">chart_delays</span></code> methods provide aggregate charts showing speed and delay patterns throughout the day.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">describe_slow_routes</span></code> method lists out the routes in the current filter experiencing the lowest speeds. It is mainly used on the California Transit Speed Maps site.</p>
 </section>
 <section id="corridor-analysis">
-<h4>Corridor Analysis<a class="headerlink" href="#corridor-analysis" title="Link to this heading">#</a></h4>
+<h3>Corridor Analysis<a class="headerlink" href="#corridor-analysis" title="Link to this heading">#</a></h3>
 <p>It’s often useful to measure transit delay on a specific corridor to support technical metric generation for the Solutions for Congested Corridors Program, Local Partnership Program, and other analyses.</p>
 <p>If you’ve received a corridor from an SCCP/LPP applicant or elsewhere, load it as a geodataframe and add it using the <code class="docutils literal notranslate"><span class="pre">add_corridor</span></code> method. If you’re already looking at a speed map and want to measure delay for a portion of the map, you can use the <code class="docutils literal notranslate"><span class="pre">autocorridor</span></code> method to specify a corridor using a shape_id and two stop_sequences. This saves time by avoiding the need to generate the polygon elsewhere.</p>
 <p>The corridor must be a single polygon, and in order to generate metrics it must include at least one transit stop.</p>
@@ -1083,7 +754,6 @@ document.write(`
 <p>The schedule-based metric is a daily average of the sum of median trip stop delays along the corridor. To further explain, we take each corridor trip that we have data for and look at the delay in comparison to the schedule at each stop, after subtracting off any delay present as the trip entered the corridor. For each trip we then take the median delay of all stops along the corridor, and sum these medians to create the metric.</p>
 <p>Finally, you can use the <code class="docutils literal notranslate"><span class="pre">corridor</span> <span class="pre">=</span> <span class="pre">True</span></code> argument in the <code class="docutils literal notranslate"><span class="pre">segment_speed_map</span></code> method to generate a speed map for only corridor segments.</p>
 <p>While all of these methods respect any filter you may have set with <code class="docutils literal notranslate"><span class="pre">set_filter</span></code>, don’t set a filter for SCCP/LPP metric generation.</p>
-</section>
 </section>
 </section>
 <section id="example-workflow-california-transit-speed-maps">
@@ -1176,41 +846,14 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#start-here">Start Here</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#which-analyses-does-it-currently-support">Which analyses does it currently support?</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-it-work">How does it work?</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#which-data-does-it-require">Which data does it require?</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-is-it-structured">How is it structured?</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rt-parser-making-sense-of-vehicle-positions"><code class="docutils literal notranslate"><span class="pre">rt_parser</span></code>: making sense of Vehicle Positions</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-at-the-operatordayanalysis-stage"><strong>What happens at the OperatorDayAnalysis stage?</strong></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gathering-data">Gathering Data</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#asserts-data-checks">Asserts/Data Checks</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-position-interpolators">Generate Position Interpolators</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-stop-delay-view">Generate Stop Delay View</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vehiclepositionsinterpolator-a-foundational-building-block"><strong>VehiclePositionsInterpolator: a foundational building block</strong></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#constructor">Constructor</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-logging">Basic Logging</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#projection">Projection</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interpolating-quickly">Interpolating, quickly</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#saving-intermediate-data-largely-automatically">Saving Intermediate Data (largely automatically)</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-use-it">How do I use it?</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#viewing-data-availability-or-starting-from-scratch">Viewing Data Availability (or starting from scratch)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rt-filter-map-plot-your-flexible-analytics-and-mapping-interface"><code class="docutils literal notranslate"><span class="pre">rt_filter_map_plot</span></code>: your flexible analytics and mapping interface</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-intermediate-data-largely-automatically">Loading Intermediate Data (largely automatically)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#filtering">Filtering</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping">Mapping</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#more-performant-maps-via-embedded-app">More performant maps via embedded app</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stop-segment-speed-view"><code class="docutils literal notranslate"><span class="pre">stop_segment_speed_view</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#other-charts-and-metrics">Other Charts and Metrics</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#corridor-analysis">Corridor Analysis</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rt-filter-map-plot-your-flexible-analytics-and-mapping-interface"><code class="docutils literal notranslate"><span class="pre">rt_filter_map_plot</span></code>: your flexible analytics and mapping interface</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-intermediate-data-largely-automatically">Loading Intermediate Data (largely automatically)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filtering">Filtering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping">Mapping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#more-performant-maps-via-embedded-app">More performant maps via embedded app</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stop-segment-speed-view"><code class="docutils literal notranslate"><span class="pre">stop_segment_speed_view</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-charts-and-metrics">Other Charts and Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corridor-analysis">Corridor Analysis</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-workflow-california-transit-speed-maps">Example Workflow: California Transit Speed Maps</a></li>
