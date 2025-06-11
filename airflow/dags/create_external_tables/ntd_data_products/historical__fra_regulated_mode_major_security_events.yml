@@ -9,7 +9,7 @@ hive_options:
   require_partition_filter: false
   source_uri_prefix: "fra_regulated_mode_major_security_events/historical/{dt:DATE}/{execution_ts:TIMESTAMP}"
 destination_project_dataset_table: "external_ntd__safety_and_security.historical__fra_regulated_mode_major_security_events"
-post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__safety_and_security.historical__fra_regulated_mode_major_security_events LIMIT 1;
+post_hook: SELECT * FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_ntd__safety_and_security.historical__fra_regulated_mode_major_security_events LIMIT 1;
 schema_fields:
   - name: ntd_id
     type: STRING

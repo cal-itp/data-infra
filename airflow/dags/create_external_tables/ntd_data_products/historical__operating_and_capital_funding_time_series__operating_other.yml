@@ -2,7 +2,7 @@ operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN') }}"
 post_hook: |
   SELECT *
-  FROM `{{ get_project_id() }}`.external_ntd__funding_and_expenses.historical__operating_and_capital_funding_time_series__operating_other
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_ntd__funding_and_expenses.historical__operating_and_capital_funding_time_series__operating_other
   LIMIT 1;
 source_objects:
   - "operating_and_capital_funding_time_series/historical/operating_other/*.jsonl.gz"

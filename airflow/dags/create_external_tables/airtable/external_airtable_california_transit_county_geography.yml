@@ -2,7 +2,7 @@ operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__AIRTABLE') }}"
 post_hook: |
   SELECT *
-  FROM `{{ get_project_id() }}`.external_airtable.california_transit__county_geography
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_airtable.california_transit__county_geography
   LIMIT 1;
 source_objects:
   - "california_transit__county_geography/*.jsonl.gz"

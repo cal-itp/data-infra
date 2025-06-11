@@ -33,7 +33,7 @@ env_vars:
   BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
   DBT_PROJECT_DIR: /app
   DBT_PROFILE_DIR: /app
-  DBT_DATABASE: "{{ get_project_id() }}"
+  DBT_DATABASE: "{{ env_var('GOOGLE_CLOUD_PROJECT') }}"
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
   SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
   SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"

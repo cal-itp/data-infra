@@ -9,7 +9,7 @@ hive_options:
   require_partition_filter: false
   source_uri_prefix: "capital_expenses_by_mode/multi_year/{dt:DATE}/{execution_ts:TIMESTAMP}"
 destination_project_dataset_table: "external_ntd__annual_reporting.multi_year__capital_expenses_by_mode"
-post_hook: SELECT * FROM `{{ get_project_id() }}`.external_ntd__annual_reporting.multi_year__capital_expenses_by_mode LIMIT 1;
+post_hook: SELECT * FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_ntd__annual_reporting.multi_year__capital_expenses_by_mode LIMIT 1;
 schema_fields:
   - name: count_administrative_buildings_q
     type: NUMERIC
