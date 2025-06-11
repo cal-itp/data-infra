@@ -71,7 +71,7 @@ WITH latest AS (
         tracesampled,
         sourcelocation,
         split,
-    FROM cal-itp-data-infra.audit.cloudaudit_googleapis_com_data_access_{{ yesterday.strftime('%Y%m%d') }}
+    FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.audit.cloudaudit_googleapis_com_data_access_{{ yesterday.strftime('%Y%m%d') }}
 ),
 
 everything AS ( -- noqa: ST03
@@ -139,7 +139,7 @@ everything AS ( -- noqa: ST03
         tracesampled,
         sourcelocation,
         split,
-    FROM cal-itp-data-infra.audit.cloudaudit_googleapis_com_data_access_{{ current.strftime('%Y%m%d') }}
+    FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.audit.cloudaudit_googleapis_com_data_access_{{ current.strftime('%Y%m%d') }}
     {% if not loop.last %}
     UNION ALL
     {% endif %}
