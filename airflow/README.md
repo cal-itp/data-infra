@@ -26,13 +26,9 @@ To test any changes you've made to DAGs, operators, etc., you'll need to follow 
 Ensure you have a default authentication file by [installing Google SDK](https://cloud.google.com/sdk/docs/install) and running
 
 ```console
-gcloud auth login --login-config=iac/login.json
+gcloud auth application-default login --login-config=iac/login.json
 gcloud config set project cal-itp-data-infra-staging
 
-# When selecting the project, pick `cal-itp-data-infra`
-
-# may also need to run...
-gcloud auth application-default login --login-config=iac/login.json
 ```
 
 Next, run the initial database migration (which also creates a default local Airflow user named `airflow`).
