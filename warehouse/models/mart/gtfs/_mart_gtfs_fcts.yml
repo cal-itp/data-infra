@@ -58,7 +58,7 @@ x-common-fields:
             where: '__rt_sampled__'
   - &gtfs_rt_name
     name: gtfs_dataset_name
-    description: |
+    description: &gtfs_dataset_name_desc |
       Name from the associated GTFS dataset record.
   - &gtfs_dataset_key
     name: gtfs_dataset_key
@@ -458,6 +458,32 @@ x-common-fields:
       even if that does not correspond to the actual calendar date on which the
       given trip activity occurred.
 
+  - &day_type
+    name: day_type
+    description: |
+      Days of the week are categorized into weekday / Saturday / Sunday.
+
+  - &time_of_day
+    name: time_of_day
+    description: |
+      Categorized based on the Pacific Time departure of the trip's first departure.
+      Grouping each military hour into a time-of-day for transit service.
+      Ex: Hours 0-3 are inclusive, from 12:00 AM to 3:59 AM.
+      Hours 0-3: Owl
+      Hours 4-6: Early AM
+      Hours 7-9: AM Peak
+      Hours 10-14: Midday
+      Hours 15-19: PM Peak
+      Hours 20-23: Evening
+  - &month
+    name: month
+    description: |
+      Actual calendar month (Pacific Time dates) in which this service was scheduled to occur.
+  - &year
+    name: year
+    description: |
+        Actual calendar year (Pacific Time dates) in which this service was
+        scheduled to occur.
 
 models:
   - name: fct_daily_schedule_feeds
@@ -2139,6 +2165,7 @@ models:
           Only populated for flexible trips.
           If you are specifically concerned with activity outside of California,
           it may be preferable to use this rather than trip_last_end_pickup_drop_off_window_datetime_pacific.
+      - *time_of_day
 
   - name: fct_service_alerts_trip_summaries
     description: |
@@ -2477,46 +2504,58 @@ models:
         description: |
           Array of points describing this shape, looked up from
           `dim_shapes_arrays` via `shape_array_key`.
-  - name: fct_monthly_route_service_by_timeofday
+  - name: fct_monthly_scheduled_trips
     description: |
-      An aggregation of GTFS schedule service by day and time characteristics.
+      An monthly aggregation of GTFS scheduled trips by month-day_type (weekday/Sat/Sun).
+      Keeps the trip grain in `fct_scheduled_trips`, joins this with the shape_id present
+      in `fct_daily_scheduled_shapes`.
+      Each row is unique on gtfs_dataset_key-month-year-day_type-trip_id.
+      It can be interpreted as:
+      In a typical month, we observed weekday Trip 1 service (across 20+ days),
+      Saturday Trip 1 service (across 4 days that month),
+      and Sunday Trip 1 service (across 4 days that month).
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `source_record_id`, `route_id`,
-          `route_short_name`, `route_long_name`, `time_of_day`, `month`, `year`,
-          and `day_type`.
-        tests: *primary_key_tests
+      - name: gtfs_dataset_key
+        description: '{{ doc("column_rt_schedule_dataset_key") }}'
       - name: name
-      - name: source_record_id
-      - name: route_id
+        description: *gtfs_dataset_name_desc
+      - *month
+      - *year
+      - *day_type
+      - *time_of_day
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
       - name: route_short_name
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
       - name: route_long_name
-      - name: time_of_day
-        description: |
-          Categorized based on the Pacific Time departure of the trip's first departure.
-      - name: month
-        description: |
-          Actual calendar month (Pacific Time dates) in which this service was scheduled to occur.
-      - name: year
-        description: |
-          Actual calendar year (Pacific Time dates) in which this service was
-          scheduled to occur.
-      - name: day_type
-        description: |
-          Actual calendar day type (Pacific Time dates) in which this service was
-          scheduled to occur (Monday, Tuesday, etc).
-          This means that overnight service is associated with the calendar date
-          on which it was scheduled, even if it was associated with the prior
-          `service_date` by the agency.
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
+      - name: route_name
+      - name: route_desc
+      - name: route_color
+        description: '{{ doc("gtfs_routes__route_color") }}'
+      - name: route_text_color
+        description: '{{ doc("gtfs_routes__route_text_color") }}'
+      - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: shape_array_key
+        description: Foreign key to dim_shapes_arrays.
+        tests:
+          - relationships:
+              to: ref('dim_shapes_arrays')
+              field: key
+      - name: service_hours
+        description: '{{ doc("column_service_hours") }}'
       - name: n_trips
-        description: |
-          Total trips that occurred for the route for this month, `day_type` and
-          `time_of_day`.
-      - name: ttl_service_hours
-        description: |
-          Total scheduled service hours that occurred for the route for this
-          month, `day_type`, and `time_of_day`.
+        description: |-
+            Count of distinct trip_instance_keys, which capture a single
+            trip on a service_date.
+      - name: n_days
+        description: Count of distinct service_dates in this month for this day_type.
+      - name: pt_array
+        description: Ordered array of WKT points that describe this shape.
+
   - name: fct_vehicle_locations_grouped
     description: |
       Vehicle positions, grouped by location position. Uses fct_vehicle_locations and
