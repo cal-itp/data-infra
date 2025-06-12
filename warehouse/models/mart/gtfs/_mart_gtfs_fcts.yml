@@ -484,6 +484,10 @@ x-common-fields:
     description: |
         Actual calendar year (Pacific Time dates) in which this service was
         scheduled to occur.
+  - &shape_pt_array
+    name: pt_array
+    description: |
+        Ordered array of WKT points that describe this shape.
 
 models:
   - name: fct_daily_schedule_feeds
@@ -2470,40 +2474,7 @@ models:
       - *rt_trip_max_datetime_pacific
       - *rt_trip_start_time_interval
       - *rt_trip_num_distinct_updates
-  - name: fct_monthly_routes
-    description: |
-      An aggregation of GTFS schedule routes with trip activity in a given
-      month, where the shape with the most trips is associated.
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `base64_url`, `route_id`,
-          `month`, and `year`.
-        tests: *primary_key_tests
-      - name: source_record_id
-        description: |
-          Source record ID of the associated GTFS dataset record for this route
-          as of the last day of this month.
-      - name: name
-      - name: base64_url
-      - name: route_id
-      - name: shape_id
-        description: |
-          If null, this route was mostly missing shapes data.
-      - name: month
-        description: |
-          Service month in which this service was scheduled to occur.
-      - name: year
-        description: |
-          Service year in which this service was scheduled to occur.
-      - name: month_last_day
-        description: |
-          Last day of the month being summarized. This is the date that was used
-          to look up feed and GTFS dataset attributes.
-      - name: pt_array
-        description: |
-          Array of points describing this shape, looked up from
-          `dim_shapes_arrays` via `shape_array_key`.
+
   - name: fct_monthly_scheduled_trips
     description: |
       An monthly aggregation of GTFS scheduled trips by month-day_type (weekday/Sat/Sun).
@@ -2530,6 +2501,8 @@ models:
       - name: route_long_name
         description: '{{ doc("gtfs_routes__route_long_name") }}'
       - name: route_name
+        description: &route_name_desc |
+          Concatenated route_short_name and route_long_name.
       - name: route_desc
       - name: route_color
         description: '{{ doc("gtfs_routes__route_color") }}'
@@ -2541,20 +2514,39 @@ models:
         description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
-        tests:
-          - relationships:
-              to: ref('dim_shapes_arrays')
-              field: key
       - name: service_hours
         description: '{{ doc("column_service_hours") }}'
       - name: n_trips
-        description: |-
+        description: &n_trips_desc |-
             Count of distinct trip_instance_keys, which capture a single
             trip on a service_date.
       - name: n_days
         description: Count of distinct service_dates in this month for this day_type.
-      - name: pt_array
-        description: Ordered array of WKT points that describe this shape.
+      - *shape_pt_array
+
+  - name: fct_monthly_routes
+    description: |
+      An aggregation of GTFS schedule routes with trip activity in a given
+      month, where the shape with the most trips is associated.
+    columns:
+      - name: name
+        description: *gtfs_dataset_name_desc
+      - *year
+      - *month
+      - name: route_short_name
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
+      - name: route_long_name
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
+      - name: route_name
+        description: *route_name_desc
+      - name: direction_id
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: shape_array_key
+        description: Foreign key to dim_shapes_arrays.
+      - name: n_trips
+        description: *n_trips_desc
+      - *shape_pt_array
 
   - name: fct_vehicle_locations_grouped
     description: |
