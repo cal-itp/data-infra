@@ -482,12 +482,12 @@ x-common-fields:
   - &year
     name: year
     description: |
-        Actual calendar year (Pacific Time dates) in which this service was
-        scheduled to occur.
+      Actual calendar year (Pacific Time dates) in which this service was
+      scheduled to occur.
   - &shape_pt_array
     name: pt_array
     description: |
-        Ordered array of WKT points that describe this shape.
+      Ordered array of WKT points that describe this shape.
 
 models:
   - name: fct_daily_schedule_feeds
@@ -2505,6 +2505,7 @@ models:
         description: &route_name_desc |
           Concatenated route_short_name and route_long_name.
       - name: route_desc
+        description: '{{ doc("gtfs_routes__route_desc") }}'
       - name: route_color
         description: '{{ doc("gtfs_routes__route_color") }}'
       - name: route_text_color
@@ -2518,10 +2519,11 @@ models:
       - name: service_hours
         description: '{{ doc("column_service_hours") }}'
       - name: n_trips
-        description: &n_trips_desc |-
-            Count of distinct trip_instance_keys, which capture a single
-            trip on a service_date.
-      - name: &n_days
+        description: &n_trips_desc |
+          Count of distinct trip_instance_keys, which capture a single
+          trip on a service_date.
+      - &n_days
+        name: n_days
         description: Count of distinct service_dates in this month for this day_type.
       - *shape_pt_array
 
