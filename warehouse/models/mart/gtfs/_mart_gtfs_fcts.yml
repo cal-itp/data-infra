@@ -1429,7 +1429,8 @@ models:
       - name: tts_stop_name
         description: '{{ doc("gtfs_stops__tts_stop_name") }}'
       - name: pt_geom
-        description: GEOGPOINT created by the stop latitute and longitude
+        description: &stop_pt_geom |
+            GEOGPOINT created by the stop latitute and longitude
       - name: parent_station
         description: '{{ doc("gtfs_stops__parent_station") }}'
       - name: stop_code
@@ -2520,7 +2521,7 @@ models:
         description: &n_trips_desc |-
             Count of distinct trip_instance_keys, which capture a single
             trip on a service_date.
-      - name: n_days
+      - name: &n_days
         description: Count of distinct service_dates in this month for this day_type.
       - *shape_pt_array
 
@@ -2547,6 +2548,46 @@ models:
       - name: n_trips
         description: *n_trips_desc
       - *shape_pt_array
+
+  - name: fct_monthly_scheduled_stops
+    description: |
+      An aggregation of GTFS schedule stops with stop time activity in a given
+      month.
+    columns:
+      - name: gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: gtfs_dataset_name
+        description: *gtfs_dataset_name_desc
+      - *year
+      - *month
+      - *day_type
+      - name: stop_id
+        description: '{{ doc("gtfs_stops__stop_id") }}'
+      - name: stop_key
+        description: Foreign key to the `dim_stops` table.
+      - name: tts_stop_name
+        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
+      - name: ttl_stop_event_count
+        description: |
+            Total stop event count (stop time arrivals) at the stop
+            by gtfs_dataset_name-year-month-day_type.
+      - *n_days
+      - name: tts_stop_name
+        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
+      - name: pt_geom
+        description: *stop_pt_geom
+      - name: parent_station
+        description: '{{ doc("gtfs_stops__parent_station") }}'
+      - name: stop_code
+        description: '{{ doc("gtfs_stops__stop_code") }}'
+      - name: stop_name
+        description: '{{ doc("gtfs_stops__stop_name") }}'
+      - name: stop_desc
+        description: '{{ doc("gtfs_stops__stop_desc") }}'
+      - name: location_type
+        description: '{{ doc("gtfs_stops__location_type") }}'
+      - name: wheelchair_boarding
+        description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
 
   - name: fct_vehicle_locations_grouped
     description: |
