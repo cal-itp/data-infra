@@ -939,31 +939,26 @@ files = [
 
 [[package]]
 name = "calitp-data-infra"
-version = "2025.1.30"
+version = "2025.6.5"
 description = "Shared code for developing data pipelines that process Cal-ITP data."
 optional = false
-python-versions = ">=3.8,<3.12"
+python-versions = "<3.12,>=3.8"
 groups = ["main"]
-files = []
-develop = false
+files = [
+    {file = "calitp_data_infra-2025.6.5-py3-none-any.whl", hash = "sha256:0ffb49973334f5c052bcc3f4c37b06fad1aaa151aa524b406c4491a96bc99aa8"},
+    {file = "calitp_data_infra-2025.6.5.tar.gz", hash = "sha256:c0c84331cf8fa6befe71e110a78fa9879680c2b088d56ea49a6fa6673d2da427"},
+]
 
 [package.dependencies]
-backoff = "^2.2.1"
-gcsfs = "^2024.5.0"
-google-api-core = "^2.19.0"
-google-cloud-secret-manager = "^2.20.0"
-humanize = "^4.9.0"
-pendulum = "^2.1.2"
-pydantic = "^1.10.15"
-tqdm = "^4.64.1"
-typing_extensions = ">=4.12.1"
-
-[package.source]
-type = "git"
-url = "https://github.com/cal-itp/data-infra.git"
-reference = "mov/add-composer-dev"
-resolved_reference = "86fcaa3aa9ddfc01e259402bc790d2a67928aece"
-subdirectory = "packages/calitp-data-infra"
+backoff = ">=2.2.1,<3.0.0"
+gcsfs = "!=2022.7.1"
+google-api-core = ">=1.31.4"
+google-cloud-secret-manager = ">=2.16.4,<2.23"
+humanize = ">=4.6.0,<5.0.0"
+pendulum = ">=2.1.2,<3.0.0"
+pydantic = ">=1.9,<2.0"
+tqdm = ">=4.64.1,<5.0.0"
+typing-extensions = ">=3.10.0.2"
 
 [[package]]
 name = "cattrs"
@@ -2768,20 +2763,20 @@ protobuf = ">=3.20.2,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4
 
 [[package]]
 name = "google-cloud-secret-manager"
-version = "2.23.1"
+version = "2.22.1"
 description = "Google Cloud Secret Manager API client library"
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "google_cloud_secret_manager-2.23.1-py2.py3-none-any.whl", hash = "sha256:ed9a58750ec24be46dc17ea9b6cb1e7088490921b810a3c365b3e28be82984a1"},
-    {file = "google_cloud_secret_manager-2.23.1.tar.gz", hash = "sha256:4d779ed5666b5c4a4e24e52f808b2e159b60fc68ed7b1f230ca491918632a114"},
+    {file = "google_cloud_secret_manager-2.22.1-py2.py3-none-any.whl", hash = "sha256:f18c5094d2d462a58d1ef23cd62895f68ad0adebf96f6b8612f35197a456908c"},
+    {file = "google_cloud_secret_manager-2.22.1.tar.gz", hash = "sha256:f245e505b429990388f0f92cd4a24d424a4c4cdc2acb866e52c24e7680d15e77"},
 ]
 
 [package.dependencies]
 google-api-core = {version = ">=1.34.1,<2.0.dev0 || >=2.11.dev0,<3.0.0dev", extras = ["grpc"]}
 google-auth = ">=2.14.1,<2.24.0 || >2.24.0,<2.25.0 || >2.25.0,<3.0.0dev"
-grpc-google-iam-v1 = ">=0.14.0,<1.0.0dev"
+grpc-google-iam-v1 = ">=0.12.4,<1.0.0dev"
 proto-plus = ">=1.22.3,<2.0.0dev"
 protobuf = ">=3.20.2,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<6.0.0dev"
 
@@ -6821,4 +6816,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11.0,<3.12"
-content-hash = "1ec6b6e25b8e689cc03df0170bb3b4ccaf7d988160e26b3fed7b89e692e2b885"
+content-hash = "aaa558b62a2f92b30619f12359a10e9183b92671c695d15f1e5901e8b624d258"

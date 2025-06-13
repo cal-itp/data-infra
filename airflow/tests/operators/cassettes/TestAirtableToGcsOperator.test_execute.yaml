@@ -853,17 +853,17 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Fri, 13 Jun 2025 23:20:19 GMT
+      - Sat, 14 Jun 2025 00:18:54 GMT
       Server:
       - Tengine
       Set-Cookie:
-      - AWSALBTG=ipNVuNn+iCyTZyN+jNuZPMOvVbPfQDMXFQS8yWJpsksc7cEUnNIlLHdzqoXeKJN4pIWPhdLYF+U+tfdE9HBRSdgKrCmxk9swJpzx/u3o+0/NkA6LdDU21SG4LbOKgsLz3fudU9AQlIa5kfjGLXmc9bpSGV/AQzqFLxYOMPUHXOyQbvX7wYk=;
-        Expires=Fri, 20 Jun 2025 23:20:19 GMT; Path=/
-      - AWSALBTGCORS=ipNVuNn+iCyTZyN+jNuZPMOvVbPfQDMXFQS8yWJpsksc7cEUnNIlLHdzqoXeKJN4pIWPhdLYF+U+tfdE9HBRSdgKrCmxk9swJpzx/u3o+0/NkA6LdDU21SG4LbOKgsLz3fudU9AQlIa5kfjGLXmc9bpSGV/AQzqFLxYOMPUHXOyQbvX7wYk=;
-        Expires=Fri, 20 Jun 2025 23:20:19 GMT; Path=/; SameSite=None; Secure
-      - brw=brw01QHBprej52lhq; path=/; expires=Sat, 13 Jun 2026 23:20:19 GMT; domain=.airtable.com;
+      - AWSALBTG=ceiRqLfxt70HxXrEOESJ+iDRGPhnlr1I+x49StpcbbUnxjIEmLIB3LzTTxqylJwpOprl/8CnAmouqP6oMFYglWufwG63cH5Bqw3NziSi1IWYWlm/6BC+S2w99ODcika3xsxwHFq31WNSP1YxwI4pL7+sHTSkyCdCvXmOsT6ifS74pcTRpmY=;
+        Expires=Sat, 21 Jun 2025 00:18:54 GMT; Path=/
+      - AWSALBTGCORS=ceiRqLfxt70HxXrEOESJ+iDRGPhnlr1I+x49StpcbbUnxjIEmLIB3LzTTxqylJwpOprl/8CnAmouqP6oMFYglWufwG63cH5Bqw3NziSi1IWYWlm/6BC+S2w99ODcika3xsxwHFq31WNSP1YxwI4pL7+sHTSkyCdCvXmOsT6ifS74pcTRpmY=;
+        Expires=Sat, 21 Jun 2025 00:18:54 GMT; Path=/; SameSite=None; Secure
+      - brw=brwwNaPRLkpiKjlgY; path=/; expires=Sun, 14 Jun 2026 00:18:54 GMT; domain=.airtable.com;
         samesite=none; secure
-      - brwConsent=opt-in; path=/; expires=Fri, 13 Jun 2025 23:25:19 GMT; domain=.airtable.com;
+      - brwConsent=opt-in; path=/; expires=Sat, 14 Jun 2025 00:23:54 GMT; domain=.airtable.com;
         samesite=none; secure
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
@@ -890,11 +890,11 @@ interactions:
       message: OK
 - request:
     body: !!binary |
-      LS09PT09PT09PT09PT09PT00NjQ3MDMwMjc0Mjc4Mjk1MTc3PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      LS09PT09PT09PT09PT09PT05MDQwNjM2MDUwMDQzMzc4NjEyPT0NCmNvbnRlbnQtdHlwZTogYXBw
       bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAiY2FsaWZvcm5pYV90cmFu
       c2l0X19jb3VudHlfZ2VvZ3JhcGh5L2R0PTIwMjUtMDYtMDEvdHM9MjAyNS0wNi0wMVQwMDowMDow
-      MC9jb3VudHlfZ2VvZ3JhcGh5Lmpzb25sLmd6In0NCi0tPT09PT09PT09PT09PT09NDY0NzAzMDI3
-      NDI3ODI5NTE3Nz09DQpjb250ZW50LXR5cGU6IGFwcGxpY2F0aW9uL2pzb25sDQoNCh+LCAA0skxo
+      MC9jb3VudHlfZ2VvZ3JhcGh5Lmpzb25sLmd6In0NCi0tPT09PT09PT09PT09PT09OTA0MDYzNjA1
+      MDA0MzM3ODYxMj09DQpjb250ZW50LXR5cGU6IGFwcGxpY2F0aW9uL2pzb25sDQoNCh+LCADvv0xo
       Av/Mvdey5EiSJfi+X5HSz1uyYA6yb6AOzokDKyMtYA7AwTkZ2X/fm9VhyIysyKjq6pqefbx2ATfA
       TPXoUTVVxf/8tyr7t//7l3+b8hQiR1d9l0v26VRL+7f/85d/6+I2//Wfft4t6xT/OvSuhvlrCIdh
       +Ouvdo5//b9xdPGU/cUt+3WOu+wXI67nv/zupjRulinu5n/PqnmZqnT59Sbi1/9My/DrL/w/v85P
@@ -1718,8 +1718,8 @@ interactions:
       UkhwtmjDiEK4CAGOz3aJBKRZo4SoBfq8b9+F4Zcsis9o0SR6exqI6XwmjWO7qVkcBrNgcMCp8j7E
       qUahxJ5FwDLLStgZUpdrN5dXMGJWDLwXQzB94bLaPreXotip6yf01RSpA2r7qvMw1XtOiXIK9QDM
       NY0zxfWyWlO2fghJcVwWq4BsaiwwwJ86VBQLaRT+QtxrUOV7TXtqscaTFvPBFEGHfG1zeI6pPknK
-      DojYvcxtxyzKJbFo/tcF+P9LDv139wta0ZqJAQANCi0tPT09PT09PT09PT09PT09NDY0NzAzMDI3
-      NDI3ODI5NTE3Nz09LS0=
+      DojYvcxtxyzKJbFo/tcF+P9LDv139wta0ZqJAQANCi0tPT09PT09PT09PT09PT09OTA0MDYzNjA1
+      MDA0MzM3ODYxMj09LS0=
     headers:
       Accept:
       - application/json
@@ -1735,11 +1735,11 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
-        gccl-invocation-id/1c9f9a60-77f4-496f-a78f-15c3163ec1c8
+        gccl-invocation-id/17435f2c-16ee-449a-85b7-66643a86cc2f
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT00NjQ3MDMwMjc0Mjc4
-        Mjk1MTc3PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT05MDQwNjM2MDUwMDQz
+        Mzc4NjEyPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -1748,17 +1748,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/california_transit__county_geography/dt=2025-06-01/ts=2025-06-01T00:00:00/county_geography.jsonl.gz/1749856820697728\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/california_transit__county_geography/dt=2025-06-01/ts=2025-06-01T00:00:00/county_geography.jsonl.gz/1749860335621906\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/california_transit__county_geography%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2Fcounty_geography.jsonl.gz\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_transit__county_geography%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2Fcounty_geography.jsonl.gz?generation=1749856820697728&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_transit__county_geography%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2Fcounty_geography.jsonl.gz?generation=1749860335621906&alt=media\",\n
         \ \"name\": \"california_transit__county_geography/dt=2025-06-01/ts=2025-06-01T00:00:00/county_geography.jsonl.gz\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1749856820697728\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1749860335621906\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
         \ \"storageClass\": \"STANDARD\",\n  \"size\": \"46948\",\n  \"md5Hash\":
-        \"CQRyeFHGRVGDRlqMamz74g==\",\n  \"crc32c\": \"aX+vkA==\",\n  \"etag\": \"CIC10tHE740DEAE=\",\n
-        \ \"timeCreated\": \"2025-06-13T23:20:20.707Z\",\n  \"updated\": \"2025-06-13T23:20:20.707Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-06-13T23:20:20.707Z\",\n  \"timeFinalized\":
-        \"2025-06-13T23:20:20.707Z\"\n}\n"
+        \"0sogJ2BjZGdP9iEHqFEAzA==\",\n  \"crc32c\": \"TZvMwg==\",\n  \"etag\": \"CJKu2N3R740DEAE=\",\n
+        \ \"timeCreated\": \"2025-06-14T00:18:55.634Z\",\n  \"updated\": \"2025-06-14T00:18:55.634Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-06-14T00:18:55.634Z\",\n  \"timeFinalized\":
+        \"2025-06-14T00:18:55.634Z\"\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -1769,9 +1769,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 13 Jun 2025 23:20:20 GMT
+      - Sat, 14 Jun 2025 00:18:55 GMT
       ETag:
-      - CIC10tHE740DEAE=
+      - CJKu2N3R740DEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -1782,7 +1782,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - ABgVH892Kw5-CBhwIq8pTe5S4bh1h8074b0Al9mQDT_NCfef7Vb8PKJQrvHrjeEenEUow9rdgDiUDjM
+      - ABgVH8-ZizuD0Pc8iXc-4KsmWFpO4QWXoVBxXLIEQqFzeJ4vk_A2Tce96SGDficnY5TCfDmyg0AzQJA
     status:
       code: 200
       message: OK
@@ -1799,7 +1799,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
-        gccl-invocation-id/da294580-a521-4522-8efa-5bb1eaa8f141
+        gccl-invocation-id/4bc17e4e-9206-4289-9e43-d9464bca15cb
       accept-encoding:
       - gzip
       content-type:
@@ -1813,7 +1813,7 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIADSyTGgC/8y917LkSJIl+L5fkdLPW7JgDrJvoA7OiQMrIy1gDsDBORnZf9+b1WHIjKzIqOrq
+        H4sIAO+/TGgC/8y917LkSJIl+L5fkdLPW7JgDrJvoA7OiQMrIy1gDsDBORnZf9+b1WHIjKzIqOrq
         mp59vHYBN8BM9ehRNVXF//y3Kvu3//uXf5vyFCJHV32XS/bpVEv7t//zl3/r4jb/9Z9+3i3rFP86
         9K6G+WsIh2H46692jn/9v3F08ZT9xS37dY677Bcjrue//O6mNG6WKe7mf8+qeZmqdPn1JuLX/0zL
         8Osv/D+/zk/wOgFPc3RwwhFl//Y/fv39oQf/XY2MOwpKf+oiQb3++t+hidP834u8L6Z4KE9w5f4J
@@ -2649,13 +2649,13 @@ interactions:
       Content-Type:
       - application/jsonl
       Date:
-      - Fri, 13 Jun 2025 23:20:20 GMT
+      - Sat, 14 Jun 2025 00:18:55 GMT
       ETag:
-      - CIC10tHE740DEAE=
+      - CJKu2N3R740DEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Fri, 13 Jun 2025 23:20:20 GMT
+      - Sat, 14 Jun 2025 00:18:55 GMT
       Pragma:
       - no-cache
       Server:
@@ -2664,11 +2664,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - ABgVH89zOKH9hTgcxNC3sKUbI6hSgWXxOK65KgDEMRAetq8KOkerBhHHCyAluug9LZeiGD7Q7pkoV7s
+      - ABgVH88VUDPTaZyEey9WBnzPoULsmB6l33Er2eFyC1gOP3Dk6av-D4Dyr-_lkOtdJJce5sqn1Bl5mfXwYYDa
       X-Goog-Generation:
-      - '1749856820697728'
+      - '1749860335621906'
       X-Goog-Hash:
-      - crc32c=aX+vkA==,md5=CQRyeFHGRVGDRlqMamz74g==
+      - crc32c=TZvMwg==,md5=0sogJ2BjZGdP9iEHqFEAzA==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:
@@ -3536,17 +3536,17 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Fri, 13 Jun 2025 23:20:20 GMT
+      - Sat, 14 Jun 2025 00:18:56 GMT
       Server:
       - Tengine
       Set-Cookie:
-      - AWSALBTG=/S/oEQhmGtpYjr3XkbILe6nsRERfSrW1Cw9/c5oLl4kU4EGHwT73Tfrsy5yiKAf2TbfasVW3ca0UtpzFhxZU5YHabMco81VOStncrKLvvHKdbwe3u0zZ/Iu7sPfaGlZtFwBQ6luGcyWzppDaPPmFIHwRBeO0Jph+WTM8nc7c/JxhOLJMkWQ=;
-        Expires=Fri, 20 Jun 2025 23:20:20 GMT; Path=/
-      - AWSALBTGCORS=/S/oEQhmGtpYjr3XkbILe6nsRERfSrW1Cw9/c5oLl4kU4EGHwT73Tfrsy5yiKAf2TbfasVW3ca0UtpzFhxZU5YHabMco81VOStncrKLvvHKdbwe3u0zZ/Iu7sPfaGlZtFwBQ6luGcyWzppDaPPmFIHwRBeO0Jph+WTM8nc7c/JxhOLJMkWQ=;
-        Expires=Fri, 20 Jun 2025 23:20:20 GMT; Path=/; SameSite=None; Secure
-      - brw=brw01QHBprej52lhq; path=/; expires=Sat, 13 Jun 2026 23:20:20 GMT; domain=.airtable.com;
+      - AWSALBTG=vQvZTdP/Z3SCv/PrIWz3QI+i3HTlKKUJ0stkPnYeOz3z7IV1pBtLzRNAW8JxAickT8Gn3yRWEqwqHInle3cxljpLM4+yT6IVI0pjm7YR1zhsfpnCXt4DvkNT7mYkDo7r69ARHFZGzIUpuRAxduZ3+RAxr9y60sjZ3NnaiexHDD5trxqYF1g=;
+        Expires=Sat, 21 Jun 2025 00:18:55 GMT; Path=/
+      - AWSALBTGCORS=vQvZTdP/Z3SCv/PrIWz3QI+i3HTlKKUJ0stkPnYeOz3z7IV1pBtLzRNAW8JxAickT8Gn3yRWEqwqHInle3cxljpLM4+yT6IVI0pjm7YR1zhsfpnCXt4DvkNT7mYkDo7r69ARHFZGzIUpuRAxduZ3+RAxr9y60sjZ3NnaiexHDD5trxqYF1g=;
+        Expires=Sat, 21 Jun 2025 00:18:55 GMT; Path=/; SameSite=None; Secure
+      - brw=brwwNaPRLkpiKjlgY; path=/; expires=Sun, 14 Jun 2026 00:18:55 GMT; domain=.airtable.com;
         samesite=none; secure
-      - brwConsent=opt-in; path=/; expires=Fri, 13 Jun 2025 23:25:20 GMT; domain=.airtable.com;
+      - brwConsent=opt-in; path=/; expires=Sat, 14 Jun 2025 00:23:55 GMT; domain=.airtable.com;
         samesite=none; secure
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
