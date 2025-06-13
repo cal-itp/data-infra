@@ -1,0 +1,74 @@
+name: Test Airflow DAGs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/test-airflow.yml
+      - 'warehouse/**'
+  pull_request:
+    paths:
+      - .github/workflows/test-airflow.yml
+      - 'warehouse/**'
+
+env:
+  PYTHON_VERSION: '3.11'
+  POETRY_VERSION: '2.0.1'
+  SERVICE_ACCOUNT: github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com
+  WORKLOAD_IDENTITY_PROVIDER: projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra
+  PROJECT_ID: cal-itp-data-infra-staging
+
+jobs:
+  compile:
+    name: pytest
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache Poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        working-directory: airflow
+        run: poetry install
+
+      - name: Install dependencies
+        working-directory: airflow
+        run: poetry run pytest

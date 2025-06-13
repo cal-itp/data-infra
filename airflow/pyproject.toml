@@ -19,7 +19,7 @@ package-mode = false
 python = ">=3.11.0,<3.12"
 apache-airflow = "2.6.3"
 pandas = "2.1.4"
-calitp_data_infra = {git="git+https://github.com/cal-itp/data-infra.git", rev="mov/add-composer-dev", subdirectory="packages/calitp-data-infra"}
+calitp_data_infra = "2025.6.5"
 pyairtable = "2.2.1"
 google-cloud-bigquery = "3.20.1"
 typer = "0.4.1"
