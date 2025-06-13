@@ -80,6 +80,14 @@
 "Includes complete wheelchair accessibility data in both stops.txt and trips.txt"
 {% endmacro %}
 
+{% macro wheelchair_accessible_trips() %}
+"Includes wheelchair_accessible in trips.txt"
+{% endmacro %}
+
+{% macro wheelchair_boarding_stops() %}
+"Includes wheelchair_boarding in stops.txt"
+{% endmacro %}
+
 {% macro shapes_file_present() %}
 "Shapes.txt file is present"
 {% endmacro %}

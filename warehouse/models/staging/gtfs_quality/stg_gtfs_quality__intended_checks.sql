@@ -10,13 +10,17 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ complete_wheelchair_accessibility_data() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, false, null
     UNION ALL
+    SELECT {{ wheelchair_accessible_trips() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, false, 0
+    UNION ALL
+    SELECT {{ wheelchair_boarding_stops() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, false, 1
+    UNION ALL
     SELECT {{ shapes_for_all_trips() }}, {{ accurate_service_data() }}, {{ schedule_feed() }}, false, null
     UNION ALL
-    SELECT {{ include_tts() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, false, null
+    SELECT {{ include_tts() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, false, 2
     UNION ALL
     SELECT {{ shapes_valid() }}, {{ accurate_service_data() }}, {{ schedule_feed() }}, false, null
     UNION ALL
-    SELECT {{ pathways_valid() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, false, null
+    SELECT {{ pathways_valid() }}, {{ accurate_accessibility_data() }}, {{ schedule_feed() }}, false, 3
     UNION ALL
     SELECT {{ technical_contact_listed() }}, {{ technical_contact_availability() }}, {{ schedule_feed() }}, false, null
     UNION ALL
