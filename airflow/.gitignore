@@ -1,2 +1,4 @@
 logs/*
 airflow.sh
+*.db
+.env
