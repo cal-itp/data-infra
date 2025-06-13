@@ -1,3 +1,3 @@
 SELECT
     Organization as organization
-FROM `cal-itp-data-infra.blackcat_raw.2023_organizations`
+FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.blackcat_raw.2023_organizations
