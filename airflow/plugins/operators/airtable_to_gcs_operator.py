@@ -1,7 +1,7 @@
 import json
 import os
 import re
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any, Sequence
 
 from hooks.airtable_hook import AirtableHook
@@ -85,7 +85,6 @@ class AirtableCleaner:
 class AirtableToGCSOperator(BaseOperator):
     _gcs_hook: GCSHook
     _airtable_hook: AirtableHook
-    current_time: datetime
     template_fields: Sequence[str] = (
         "air_base_id",
         "air_base_name",
@@ -101,7 +100,6 @@ class AirtableToGCSOperator(BaseOperator):
         air_base_name: str,
         air_table_name: str,
         bucket: str,
-        current_time: datetime = datetime.now(timezone.utc),
         airtable_conn_id: str = "airtable_default",
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
@@ -114,7 +112,6 @@ class AirtableToGCSOperator(BaseOperator):
         self.air_base_name = air_base_name
         self.air_table_name = air_table_name
         self.bucket = bucket
-        self.current_time = current_time
         self.airtable_conn_id = airtable_conn_id
         self.gcp_conn_id = gcp_conn_id
 
@@ -130,8 +127,8 @@ class AirtableToGCSOperator(BaseOperator):
     def object_path(self) -> str:
         return os.path.join(
             f"{self.air_base_name}__{self._safe_air_table_name()}",
-            f"dt={self.current_time.date().isoformat()}",
-            f"ts={self.current_time.isoformat()}",
+            f"dt={self.start_date.date().isoformat()}",
+            f"ts={self.start_date.isoformat()}",
             f"{self._safe_air_table_name()}.jsonl.gz",
         )
 
