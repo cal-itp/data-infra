@@ -853,17 +853,17 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Thu, 12 Jun 2025 20:17:21 GMT
+      - Sat, 14 Jun 2025 01:16:32 GMT
       Server:
       - Tengine
       Set-Cookie:
-      - AWSALBTG=QaLqO2PGrjLp25bdEN0zPqWT6/XwK4dzXukPoob3QNxOM8VywkoL8Nz1L5ViBqcZQ/tpUDbwVF5EQktuOJOfbYk3dOTP4OfYJ5p16w3EBPmjXZZ03rAdx76dab6kKDpm0Xj/Osu8jjhdXEG4Ee8Q17+wnQUJHky0OvnlcZBjhMhEIiz2D9M=;
-        Expires=Thu, 19 Jun 2025 20:17:21 GMT; Path=/
-      - AWSALBTGCORS=QaLqO2PGrjLp25bdEN0zPqWT6/XwK4dzXukPoob3QNxOM8VywkoL8Nz1L5ViBqcZQ/tpUDbwVF5EQktuOJOfbYk3dOTP4OfYJ5p16w3EBPmjXZZ03rAdx76dab6kKDpm0Xj/Osu8jjhdXEG4Ee8Q17+wnQUJHky0OvnlcZBjhMhEIiz2D9M=;
-        Expires=Thu, 19 Jun 2025 20:17:21 GMT; Path=/; SameSite=None; Secure
-      - brw=brwA7b9DU0TUiyiJc; path=/; expires=Fri, 12 Jun 2026 20:17:21 GMT; domain=.airtable.com;
+      - AWSALBTG=1dxQAfD7shJToNAZz1kUgnFDLYU4QAUsnADH7adv10qg5YJkSGO/ze870ytsno6ceDLXPw2K42doqMo/P+ora5FQY3pceOs8xkZiyv3wPzNu/H1Udn0o5GWQyz4wuuEZ6Ov27/IBEadjlBLt7FOk+TIOCHe3zp9f4JOHUbnY3VYKdF1KEp4=;
+        Expires=Sat, 21 Jun 2025 01:16:32 GMT; Path=/
+      - AWSALBTGCORS=1dxQAfD7shJToNAZz1kUgnFDLYU4QAUsnADH7adv10qg5YJkSGO/ze870ytsno6ceDLXPw2K42doqMo/P+ora5FQY3pceOs8xkZiyv3wPzNu/H1Udn0o5GWQyz4wuuEZ6Ov27/IBEadjlBLt7FOk+TIOCHe3zp9f4JOHUbnY3VYKdF1KEp4=;
+        Expires=Sat, 21 Jun 2025 01:16:32 GMT; Path=/; SameSite=None; Secure
+      - brw=brwpZm3WHPMfwx5lp; path=/; expires=Sun, 14 Jun 2026 01:16:32 GMT; domain=.airtable.com;
         samesite=none; secure
-      - brwConsent=opt-in; path=/; expires=Thu, 12 Jun 2025 20:22:21 GMT; domain=.airtable.com;
+      - brwConsent=opt-in; path=/; expires=Sat, 14 Jun 2025 01:21:32 GMT; domain=.airtable.com;
         samesite=none; secure
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
