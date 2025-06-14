@@ -1,7 +1,7 @@
 import gzip
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 from operators.airtable_to_gcs_operator import AirtableToGCSOperator
@@ -18,7 +18,7 @@ class TestAirtableToGCSOperator:
             air_table_name="county geography",
             gcp_conn_id="google_cloud_default",
             bucket=os.environ.get("CALITP_BUCKET__AIRTABLE"),
-            current_time=datetime.fromisoformat("2025-06-01"),
+            start_date=datetime.fromisoformat("2025-06-01").replace(tzinfo=timezone.utc),
         )
 
     @pytest.mark.vcr
