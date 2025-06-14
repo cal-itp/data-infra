@@ -1,16 +1,10 @@
 import gzip
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime
 
 import pytest
 from operators.airtable_to_gcs_operator import AirtableToGCSOperator
-
-
-def before_record_cb(request):
-    if request.host == "sts.googleapis.com" and request.path == "/v1/oauthtoken":
-        return None
-    return request
 
 
 class TestAirtableToGCSOperator:
@@ -27,9 +21,7 @@ class TestAirtableToGCSOperator:
             current_time=datetime.fromisoformat("2025-06-01"),
         )
 
-    @pytest.mark.vcr(
-        allow_playback_repeats=True, before_record_request=before_record_cb
-    )
+    @pytest.mark.vcr
     def test_execute(self, operator: AirtableToGCSOperator):
         operator.execute({})
         compressed_result = operator.gcs_hook().download(

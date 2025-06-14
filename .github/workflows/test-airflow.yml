@@ -35,13 +35,15 @@ jobs:
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
         with:
-          create_credentials_file: 'true'
+          create_credentials_file: true
           project_id: ${{ env.PROJECT_ID }}
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
 
       - name: Setup GCloud utilities
         uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
