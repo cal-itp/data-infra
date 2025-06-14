@@ -147,7 +147,10 @@ class AirtableToGCSOperator(BaseOperator):
 
     def execute(self, context: Context) -> dict:
         result = self.airtable_hook().read(self.air_base_id, self.air_table_name)
-        rows = [json.dumps(x) for x in AirtableCleaner(result).clean()]
+        rows = [
+            json.dumps(x, separators=(",", ":"))
+            for x in AirtableCleaner(result).clean()
+        ]
         self.gcs_hook().upload(
             bucket_name=self.bucket_name(),
             object_name=self.object_path(),
