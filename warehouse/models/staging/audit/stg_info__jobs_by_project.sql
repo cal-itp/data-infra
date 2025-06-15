@@ -1,7 +1,7 @@
 {{ config(enabled=False) }}
 
 WITH source AS (
-    SELECT * FROM `cal-itp-data-infra.region-us.INFORMATION_SCHEMA.JOBS_BY_PROJECT` -- noqa
+    SELECT * FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.`region-us`.INFORMATION_SCHEMA.JOBS_BY_PROJECT -- noqa
 ),
 
 stg_info__jobs_by_project AS (
