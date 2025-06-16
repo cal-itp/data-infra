@@ -35,9 +35,8 @@ def get_most_recent_dag_run(dag_id: str):
 
 def get_dag(dag_bag: DagBag, file_name: str, dag_id: str):
     current_directory = os.path.dirname(os.path.realpath(__file__))
-    dag_folder = pathlib.Path(current_directory) / ".." / "dags"
-    filepath = dag_folder / file_name
-    dag_bag.process_file(filepath=str(filepath.resolve()))
+    filepath = os.path.join(current_directory, "fixture_dags", file_name)
+    dag_bag.process_file(filepath=filepath)
     assert dag_bag.import_errors == {}
     return dag_bag.get_dag(dag_id)
 
@@ -45,7 +44,7 @@ def get_dag(dag_bag: DagBag, file_name: str, dag_id: str):
 @pytest.fixture(scope="session")
 def dag_bag() -> DagBag:
     current_directory = os.path.dirname(os.path.realpath(__file__))
-    dag_folder = pathlib.Path(current_directory) / ".." / ".." / "dags"
+    dag_folder = pathlib.Path(current_directory) / "fixture_dags"
     dag_bag = DagBag(include_examples=False, dag_folder=dag_folder, collect_dags=False)
     assert dag_bag.import_errors == {}
     return dag_bag
@@ -62,6 +61,7 @@ def vcr_config():
             "run-actions-3-azure-eastus.actions.githubusercontent.com",
             "sts.googleapis.com",
             "iamcredentials.googleapis.com",
+            "oauth2.googleapis.com",
         ],
     }
 

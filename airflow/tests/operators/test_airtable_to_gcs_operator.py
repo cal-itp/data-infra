@@ -1,15 +1,47 @@
 import gzip
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pytest
-from operators.airtable_to_gcs_operator import AirtableToGCSOperator
+from hooks.airtable_hook import AirtableHook
+from operators.airtable_to_gcs_operator import AirtableObjectPath, AirtableToGCSOperator
+
+from airflow.models.dag import DAG
+from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
 class TestAirtableToGCSOperator:
     @pytest.fixture
-    def operator(self) -> AirtableToGCSOperator:
+    def execution_date(self) -> datetime:
+        return datetime.fromisoformat("2025-06-01").replace(tzinfo=timezone.utc)
+
+    @pytest.fixture
+    def gcs_hook(self) -> GCSHook:
+        return GCSHook()
+
+    @pytest.fixture
+    def airtable_hook(self) -> AirtableHook:
+        return AirtableHook()
+
+    @pytest.fixture
+    def object_path(self) -> AirtableObjectPath:
+        return AirtableObjectPath("california_transit", "county_geography")
+
+    @pytest.fixture
+    def test_dag(self, execution_date: datetime) -> DAG:
+        return DAG(
+            "test_dag",
+            default_args={
+                "owner": "airflow",
+                "start_date": execution_date,
+                "end_date": execution_date + timedelta(days=1),
+            },
+            schedule=timedelta(days=1),
+        )
+
+    @pytest.fixture
+    def operator(self, test_dag: DAG) -> AirtableToGCSOperator:
         return AirtableToGCSOperator(
             task_id="airtable_to_gcs",
             airtable_conn_id="airtable_default",
@@ -18,22 +50,35 @@ class TestAirtableToGCSOperator:
             air_table_name="county geography",
             gcp_conn_id="google_cloud_default",
             bucket=os.environ.get("CALITP_BUCKET__AIRTABLE"),
-            start_date=datetime.fromisoformat("2025-06-01").replace(tzinfo=timezone.utc),
+            dag=test_dag,
         )
 
     @pytest.mark.vcr
-    def test_execute(self, operator: AirtableToGCSOperator):
-        operator.execute({})
-        compressed_result = operator.gcs_hook().download(
-            bucket_name=os.environ.get("CALITP_BUCKET__AIRTABLE").replace("gs://", ""),
-            object_name=operator.object_path(),
+    def test_execute(
+        self,
+        operator: AirtableToGCSOperator,
+        execution_date: datetime,
+        object_path: AirtableObjectPath,
+        gcs_hook: GCSHook,
+        airtable_hook: AirtableHook,
+    ):
+        operator.run(
+            start_date=execution_date,
+            end_date=execution_date + timedelta(days=1),
+            ignore_first_depends_on_past=True,
         )
-        airtable_rows = operator.airtable_hook().read(
-            air_base_id="appPnJWrQ7ui4UmIl",
-            air_table_name="county geography",
+
+        compressed_result = gcs_hook.download(
+            bucket_name=os.environ.get("CALITP_BUCKET__AIRTABLE").replace("gs://", ""),
+            object_name=object_path.resolve(execution_date),
         )
         decompressed_result = gzip.decompress(compressed_result)
         result = [json.loads(x) for x in decompressed_result.splitlines()]
+
+        airtable_rows = airtable_hook.read(
+            air_base_id="appPnJWrQ7ui4UmIl",
+            air_table_name="county geography",
+        )
         assert result[0]["id"] == airtable_rows[0]["id"]
         for key, _ in airtable_rows[0]["fields"].items():
             assert key.lower().replace(" ", "_") in result[0]
