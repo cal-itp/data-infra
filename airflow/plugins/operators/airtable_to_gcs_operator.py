@@ -6,9 +6,32 @@ from typing import Any, Sequence
 
 from hooks.airtable_hook import AirtableHook
 
-from airflow.models import BaseOperator
+from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
+
+
+class AirtableObjectPath:
+    air_base_name: str
+    air_table_name: str
+
+    def __init__(self, air_base_name: str, air_table_name: str) -> None:
+        self.air_base_name = air_base_name
+        self.air_table_name = air_table_name
+
+    def safe_air_table_name(self) -> str:
+        result = str.lower("_".join(self.air_table_name.split(" ")))
+        result = result.replace("-", "_")
+        result = result.replace("+", "and")
+        return result
+
+    def resolve(self, logical_date: datetime) -> str:
+        return os.path.join(
+            f"{self.air_base_name}__{self.safe_air_table_name()}",
+            f"dt={logical_date.date().isoformat()}",
+            f"ts={logical_date.isoformat()}",
+            f"{self.air_table_name}.jsonl.gz",
+        )
 
 
 class AirtableValueCleaner:
@@ -115,43 +138,32 @@ class AirtableToGCSOperator(BaseOperator):
         self.airtable_conn_id = airtable_conn_id
         self.gcp_conn_id = gcp_conn_id
 
-    def _safe_air_table_name(self) -> str:
-        result = str.lower("_".join(self.air_table_name.split(" ")))
-        result = result.replace("-", "_")
-        result = result.replace("+", "and")
-        return result
-
     def bucket_name(self) -> str:
         return self.bucket.replace("gs://", "")
 
-    def object_path(self) -> str:
-        return os.path.join(
-            f"{self.air_base_name}__{self._safe_air_table_name()}",
-            f"dt={self.start_date.date().isoformat()}",
-            f"ts={self.start_date.isoformat()}",
-            f"{self._safe_air_table_name()}.jsonl.gz",
-        )
+    def object_path(self) -> AirtableObjectPath:
+        return AirtableObjectPath(self.air_base_name, self.air_table_name)
 
     def gcs_hook(self) -> GCSHook:
-        if not self._gcs_hook:
-            self._gcs_hook = GCSHook(gcp_conn_id=self.gcp_conn_id)
-        return self._gcs_hook
+        return GCSHook(gcp_conn_id=self.gcp_conn_id)
 
     def airtable_hook(self) -> AirtableHook:
-        if not self._airtable_hook:
-            self._airtable_hook = AirtableHook(airtable_conn_id=self.airtable_conn_id)
-        return self._airtable_hook
+        return AirtableHook(airtable_conn_id=self.airtable_conn_id)
 
-    def execute(self, context: Context) -> dict:
+    def cleaned_airtable_rows(self) -> list:
         result = self.airtable_hook().read(self.air_base_id, self.air_table_name)
-        rows = [
+        return [
             json.dumps(x, separators=(",", ":"))
             for x in AirtableCleaner(result).clean()
         ]
+
+    def execute(self, context: Context) -> str:
+        dag_run: DagRun = context["dag_run"]
+        object_name: str = self.object_path().resolve(dag_run.logical_date)
         self.gcs_hook().upload(
             bucket_name=self.bucket_name(),
-            object_name=self.object_path(),
-            data="\n".join(rows),
+            object_name=object_name,
+            data="\n".join(self.cleaned_airtable_rows()),
             mime_type="application/jsonl",
             gzip=True,
         )
