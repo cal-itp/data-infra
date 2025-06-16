@@ -16,7 +16,7 @@ resource "google_logging_project_sink" "audit" {
   unique_writer_identity = true
 
   bigquery_options {
-    use_partitioned_tables = true # always true if it is false, logs cant export to the bigquery
+    use_partitioned_tables = true
   }
 }
 
