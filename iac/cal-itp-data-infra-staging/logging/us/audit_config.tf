@@ -1,11 +1,12 @@
 resource "google_bigquery_dataset" "audit" {
-  dataset_id                 = "audit"
-  location                   = "us-west2"
   project                    = "cal-itp-data-infra-staging"
+  location                   = "us-west2"
+  dataset_id                 = "audit"
   delete_contents_on_destroy = true
 }
 
 resource "google_logging_project_sink" "audit" {
+  project     = "cal-itp-data-infra-staging"
   name        = "bigquery-sink"
   destination = "bigquery.googleapis.com/projects/cal-itp-data-infra-staging/datasets/${google_bigquery_dataset.audit.dataset_id}"
   filter      = <<-EOT
@@ -13,7 +14,6 @@ resource "google_logging_project_sink" "audit" {
   EOT
 
   unique_writer_identity = true
-  project                = "cal-itp-data-infra-staging"
 
   bigquery_options {
     use_partitioned_tables = true # always true if it is false, logs cant export to the bigquery
