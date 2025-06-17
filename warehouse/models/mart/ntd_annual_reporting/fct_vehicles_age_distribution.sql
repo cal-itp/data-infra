@@ -1,6 +1,13 @@
 WITH staging_vehicles_age_distribution AS (
     SELECT *
     FROM {{ ref('stg_ntd__vehicles_age_distribution') }}
+    -- remove bad rows
+    WHERE key NOT IN ('f8662a87cef6728dc5d415898ea961bc','362599715156a4b8a87e996e27fa7c66','300ad6405ebdad622b98c1e1464a097a',
+        'a2630b40e2986baeb869d6d2ddc157b6','5ce449ed74e71f9d2eb9213096d8e418','9b5c848686f7fa944fcff8c9583b83cd',
+        'c3abf27c17d79938826fcc0a5141dbfc','818d59d339e05f42c0996942a99d22ba','9d1d578074774050bc18ff6a637f6567',
+        '3f3359e99a866a62616c42ea3e712b27','f95c3dbb9c8afa819633f6324eee5666','b10bdbf9b36af9d6d43dae09b465cefb',
+        '3f68825803bd7f731ec76a8a2f06aef3','81c30900ef731ccdf1695c665c457d31','aa4a5909f80c759050da8e38191f8cb5',
+        'cc141bc5bbccafe985ac6cb8a0b6cf16')
 ),
 
 dim_agency_information AS (
