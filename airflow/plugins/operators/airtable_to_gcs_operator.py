@@ -30,7 +30,7 @@ class AirtableObjectPath:
             f"{self.air_base_name}__{self.safe_air_table_name()}",
             f"dt={logical_date.date().isoformat()}",
             f"ts={logical_date.isoformat()}",
-            f"{self.air_table_name}.jsonl.gz",
+            f"{self.safe_air_table_name()}.jsonl.gz",
         )
 
 
@@ -167,3 +167,4 @@ class AirtableToGCSOperator(BaseOperator):
             mime_type="application/jsonl",
             gzip=True,
         )
+        return object_name
