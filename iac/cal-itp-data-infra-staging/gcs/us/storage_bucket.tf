@@ -133,4 +133,19 @@ resource "google_storage_bucket" "calitp-staging" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "90"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
