@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__employees_by_mode_and_employee_type AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year', 'mode', 'type_of_service', 'full_or_part_time']) }} AS key,
         {{ trim_make_empty_string_null('agency') }} AS agency,
         SAFE_CAST(agency_voms AS NUMERIC) AS agency_voms,
         SAFE_CAST(capital_labor_count AS NUMERIC) AS capital_labor_count,

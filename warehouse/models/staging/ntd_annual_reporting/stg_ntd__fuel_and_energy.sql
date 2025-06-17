@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__fuel_and_energy AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year', 'modecd', 'typeofservicecd']) }} AS key,
         {{ trim_make_empty_string_null('agency') }} AS agency,
         SAFE_CAST(agency_voms AS NUMERIC) AS agency_voms,
         SAFE_CAST(bio_diesel_gal AS NUMERIC) AS bio_diesel_gal,
