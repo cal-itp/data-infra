@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__stations_by_mode_and_age AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year', 'modes', 'facility_type']) }} AS key,
         SAFE_CAST(_1940s AS NUMERIC) AS _1940s,
         SAFE_CAST(_1950s AS NUMERIC) AS _1950s,
         SAFE_CAST(_1960s AS NUMERIC) AS _1960s,

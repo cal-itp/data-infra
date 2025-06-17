@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__service_by_mode AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['_5_digit_ntd_id', 'report_year', 'mode', 'type_of_service']) }} AS key,
         {{ trim_make_empty_string_null('CAST(_5_digit_ntd_id AS STRING)') }} AS ntd_id,
         {{ trim_make_empty_string_null('max_agency') }} AS agency,
         SAFE_CAST(max_agency_voms AS NUMERIC) AS max_agency_voms,

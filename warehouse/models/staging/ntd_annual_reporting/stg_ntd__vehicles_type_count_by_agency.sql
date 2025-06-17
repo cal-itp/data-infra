@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__vehicles_type_count_by_agency AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year']) }} AS key,
         SAFE_CAST(aerial_tram AS NUMERIC) AS aerial_tram,
         SAFE_CAST(aerial_tram_rptulb AS NUMERIC) AS aerial_tram_rptulb,
         SAFE_CAST(aerial_tram_ulb AS NUMERIC) AS aerial_tram_ulb,

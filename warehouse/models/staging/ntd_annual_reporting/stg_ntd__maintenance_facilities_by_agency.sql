@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__maintenance_facilities_by_agency AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year']) }} AS key,
         {{ trim_make_empty_string_null('max_agency') }} AS agency,
         SAFE_CAST(max_agency_voms AS NUMERIC) AS max_agency_voms,
         {{ trim_make_empty_string_null('max_city') }} AS city,

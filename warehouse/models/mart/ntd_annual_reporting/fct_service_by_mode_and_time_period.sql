@@ -1,6 +1,11 @@
 WITH staging_service_by_mode_and_time_period AS (
     SELECT *
     FROM {{ ref('stg_ntd__service_by_mode_and_time_period') }}
+    -- remove bad rows for 'Advance Transit, Inc. NH', 'Southern Teton Area Rapid Transit', and 'Kalkaska Public Transit Authority'
+    WHERE key NOT IN ('8249c3edd6e3ce37e7663591c460d0a9','063e7d113742bab53d8e327b157df33c','61ca12e52b3e7fe6ea22cc9635c6f1a5',
+        '99709cd169b23eea637d5a9a9a8a6e32','71eeb5ff8553dfafb8cf6c5dba61fc69','2e24abdb740090bdeea934fdecee7d0f',
+        'eaa78d6ef093cceb176d4794c09b4c69','d171c06fce80055e26efdee455f23b91','1782b752dd706696ae543f000c794745',
+        '425aa98d3d9add78b5f46dc96f401038','8b1523481382724b8c342c484e64b04f','6ff561acc39510e268c3af39c3a42d07')
 ),
 
 dim_agency_information AS (
@@ -17,7 +22,7 @@ dim_agency_information AS (
 
 fct_service_by_mode_and_time_period AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.type_of_service', 'stg.time_period']) }} AS key,
+        stg.key,
         stg.ntd_id,
         stg.report_year,
 
