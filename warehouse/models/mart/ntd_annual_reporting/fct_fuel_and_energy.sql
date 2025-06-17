@@ -17,7 +17,7 @@ dim_agency_information AS (
 
 fct_fuel_and_energy AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.type_of_service']) }} AS key,
+        stg.key,
         stg.ntd_id,
         stg.report_year,
 

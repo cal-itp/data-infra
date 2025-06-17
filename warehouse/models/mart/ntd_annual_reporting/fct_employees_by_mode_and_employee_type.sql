@@ -17,7 +17,7 @@ dim_agency_information AS (
 
 fct_employees_by_mode_and_employee_type AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.type_of_service', 'stg.full_or_part_time']) }} AS key,
+        stg.key,
         stg.ntd_id,
         stg.report_year,
 

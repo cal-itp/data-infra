@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__capital_expenses_by_capital_use AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year', 'modecd', 'typeofservicecd', 'form_type']) }} AS key,
         SAFE_CAST(administrative_buildings AS NUMERIC) AS administrative_buildings,
         {{ trim_make_empty_string_null('administrative_buildings_1') }} AS administrative_buildings_1,
         {{ trim_make_empty_string_null('agency') }} AS agency,
