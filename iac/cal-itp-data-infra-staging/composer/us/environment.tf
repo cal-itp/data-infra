@@ -39,15 +39,15 @@ resource "google_composer_environment" "calitp-staging-composer" {
       image_version = "composer-2.8.3-airflow-2.6.3"
 
       airflow_config_overrides = {
-        core-dags_are_paused_at_creation           = "True"
-        core-dagbag_import_timeout                 = 600
-        core-dag_file_processor_timeout            = 1200
-        scheduler-min_file_process_interval        = 120
-        webserver-reload_on_plugin_change          = "True"
-        scheduler-scheduler_heartbeat_sec          = 5
-        scheduler-job_heartbeat_sec                = 5
-        scheduler-scheduler_health_check_threshold = 120
         celery-worker_concurrency                  = 1
+        core-dag_file_processor_timeout            = 1200
+        core-dagbag_import_timeout                 = 600
+        core-dags_are_paused_at_creation           = "True"
+        scheduler-job_heartbeat_sec                = 5
+        scheduler-min_file_process_interval        = 120
+        scheduler-scheduler_health_check_threshold = 120
+        scheduler-scheduler_heartbeat_sec          = 5
+        webserver-reload_on_plugin_change          = "True"
       }
 
       pypi_packages = local.pypi_packages
