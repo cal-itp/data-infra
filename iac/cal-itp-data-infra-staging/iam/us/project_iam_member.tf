@@ -223,9 +223,11 @@ resource "google_project_iam_member" "tfer--roles-002F-storage-002E-objectViewer
 resource "google_project_iam_member" "github-actions-terraform" {
   for_each = toset([
     "roles/resourcemanager.projectIamAdmin",
+    "roles/bigquery.dataOwner",
     "roles/editor",
     "roles/storage.admin",
-    "roles/iam.roleAdmin"
+    "roles/iam.roleAdmin",
+    "roles/logging.configWriter"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.github-actions-terraform.email}"
