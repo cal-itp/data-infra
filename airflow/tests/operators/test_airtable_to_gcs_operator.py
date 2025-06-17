@@ -8,6 +8,7 @@ from hooks.airtable_hook import AirtableHook
 from operators.airtable_to_gcs_operator import AirtableObjectPath, AirtableToGCSOperator
 
 from airflow.models.dag import DAG
+from airflow.models.taskinstance import TaskInstance
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
@@ -56,6 +57,7 @@ class TestAirtableToGCSOperator:
     @pytest.mark.vcr
     def test_execute(
         self,
+        test_dag: DAG,
         operator: AirtableToGCSOperator,
         execution_date: datetime,
         object_path: AirtableObjectPath,
@@ -66,6 +68,14 @@ class TestAirtableToGCSOperator:
             start_date=execution_date,
             end_date=execution_date + timedelta(days=1),
             ignore_first_depends_on_past=True,
+        )
+
+        task = test_dag.get_task("airtable_to_gcs")
+        task_instance = TaskInstance(task, execution_date=execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert (
+            xcom_value
+            == "california_transit__county_geography/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/county_geography.jsonl.gz"
         )
 
         compressed_result = gcs_hook.download(
