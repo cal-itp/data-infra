@@ -167,4 +167,4 @@ class AirtableToGCSOperator(BaseOperator):
             mime_type="application/jsonl",
             gzip=True,
         )
-        return object_name
+        return os.path.join(self.bucket, object_name)

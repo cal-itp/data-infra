@@ -75,7 +75,13 @@ class TestAirtableToGCSOperator:
         xcom_value = task_instance.xcom_pull()
         assert (
             xcom_value
-            == "california_transit__county_geography/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/county_geography.jsonl.gz"
+            == os.path.join(
+                os.environ.get("CALITP_BUCKET__AIRTABLE"),
+                "california_transit__county_geography",
+                "dt=2025-06-01",
+                "ts=2025-06-01T00:00:00+00:00",
+                "county_geography.jsonl.gz",
+            )
         )
 
         compressed_result = gcs_hook.download(
