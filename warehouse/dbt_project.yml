@@ -27,8 +27,8 @@ vars:
   PROD_GTFS_RT_START: '2022-09-15'
   INCREMENTAL_MAX_DT: ''
   'dbt_date:time_zone': 'America/Los_Angeles'
-  SOURCE_DATABASE: cal-itp-data-infra # you can override with DBT_SOURCE_DATABASE env var rather than constantly using --vars
-  PUBLISH_BUCKET: "gs://calitp-staging-publish" # you can override with CALITP_BUCKET__PUBLISH  env var rather than constantly using --vars
+  GOOGLE_CLOUD_PROJECT: cal-itp-data-infra-staging # you can override with GOOGLE_CLOUD_PROJECT env var rather than constantly using --vars
+  CALITP_BUCKET__PUBLISH: "gs://calitp-staging-publish" # you can override with CALITP_BUCKET__PUBLISH env var rather than constantly using --vars
 
 models:
   calitp_warehouse:
