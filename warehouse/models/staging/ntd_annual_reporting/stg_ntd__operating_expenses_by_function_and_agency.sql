@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__operating_expenses_by_function_and_agency AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year']) }} AS key,
         {{ trim_make_empty_string_null('agency') }} AS agency,
         {{ trim_make_empty_string_null('city') }} AS city,
         SAFE_CAST(max_agency_voms AS NUMERIC) AS max_agency_voms,

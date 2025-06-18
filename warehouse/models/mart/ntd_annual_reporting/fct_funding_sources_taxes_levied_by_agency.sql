@@ -1,6 +1,9 @@
 WITH staging_funding_sources_taxes_levied_by_agency AS (
     SELECT *
     FROM {{ ref('stg_ntd__funding_sources_taxes_levied_by_agency') }}
+    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
+    WHERE key NOT IN ('0610e7c75b67e0edd77f3ef3117b15ba','abd981f1eeb176cd71024b38c0ce24e6','ef4dab4a487ec44305b459568f3fb3f6',
+        '9d4f1caeda82b63dcee955f1009b34d6')
 ),
 
 dim_agency_information AS (
@@ -17,7 +20,7 @@ dim_agency_information AS (
 
 fct_funding_sources_taxes_levied_by_agency AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year']) }} AS key,
+        stg.key,
         stg.ntd_id,
         stg.report_year,
 

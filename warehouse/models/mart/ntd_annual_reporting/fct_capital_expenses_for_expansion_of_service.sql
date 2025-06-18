@@ -17,7 +17,7 @@ dim_agency_information AS (
 
 fct_capital_expenses_for_expansion_of_service AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year']) }} AS key,
+        stg.key,
         stg.ntd_id,
         stg.report_year,
 

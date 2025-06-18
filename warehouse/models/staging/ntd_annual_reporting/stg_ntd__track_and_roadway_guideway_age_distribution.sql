@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__track_and_roadway_guideway_age_distribution AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year', 'mode', 'type_of_service', 'guideway_element']) }} AS key,
         SAFE_CAST(_1940s AS NUMERIC) AS _1940s,
         {{ trim_make_empty_string_null('_1940s_q') }} AS _1940s_q,
         SAFE_CAST(_1950s AS NUMERIC) AS _1950s,

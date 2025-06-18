@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__maintenance_facilities AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year', 'mode', 'type_of_service']) }} AS key,
         SAFE_CAST(_200_to_300_vehicles AS NUMERIC) AS _200_to_300_vehicles,
         {{ trim_make_empty_string_null('_200_to_300_vehicles_1') }} AS _200_to_300_vehicles_1,
         {{ trim_make_empty_string_null('agency') }} AS agency,
