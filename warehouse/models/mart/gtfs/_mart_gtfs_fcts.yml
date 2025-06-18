@@ -2591,3 +2591,27 @@ models:
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
 
+  - name: fct_vehicle_locations_path
+    description: |
+      Transforms fct_vehicle_locations into an array of ordered
+      vehicle positions and timestamps.
+      Unique at the url/vehicle/trip level.
+    columns:
+      - *gtfs_dataset_key_errorif_sampled
+      - *base64_url
+      - *rt_schedule_base64_url
+      - *rt_service_date
+      - *gtfs_rt_name
+      - *gtfs_rt_schedule_dataset_key
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *rt_trip_id
+      - *trip_instance_key
+      - name: pt_array
+        description: |
+            Ordered array of WKT points that describe this trip's vehicle positions path.
+      - name: location_timestamp_pacific
+        description: |
+            Ordered array of location datetime, in the "America/Los_Angeles" time zone.
+      - name: n_vp
+        description: total number of vehicle positions (timestamp + location) for this trip
