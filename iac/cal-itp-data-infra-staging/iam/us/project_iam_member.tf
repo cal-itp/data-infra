@@ -253,7 +253,7 @@ resource "google_project_iam_member" "github-actions-service-account" {
 
 resource "google_project_iam_member" "composer-service-account" {
   for_each = toset([
-    "roles/bigquery.dataEditor",
+    "roles/bigquery.dataOwner",
     "roles/bigquery.jobUser",
     "roles/cloudbuild.builds.viewer",
     "roles/composer.ServiceAgentV2Ext",
