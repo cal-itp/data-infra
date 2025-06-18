@@ -1,10 +1,8 @@
-import concurrent
 import json
 import os
 import traceback
-from concurrent.futures import Future, ThreadPoolExecutor
 from datetime import datetime
-from typing import ClassVar, Dict, List, Optional
+from typing import ClassVar, List, Optional
 
 import boto3
 import pendulum
@@ -19,8 +17,6 @@ from calitp_data_infra.storage import (
 from pydantic.class_validators import validator
 from pydantic.error_wrappers import ValidationError
 from pydantic.main import BaseModel
-from tqdm import tqdm
-from tqdm.contrib.logging import logging_redirect_tqdm
 
 from airflow.models import BaseOperator
 
@@ -184,7 +180,7 @@ class LittlepayRawSyncV3(BaseOperator):
         files: List[RawLittlepayFileExtract] = []
 
         # 1000 objects per page; just stop us from accidentally going forever
-        for _ in tqdm(range(1000)):
+        for _ in range(1000):
             resp = s3client.list_objects_v2(**list_kwargs)
 
             for content in resp["Contents"]:
@@ -219,34 +215,24 @@ class LittlepayRawSyncV3(BaseOperator):
         fs = get_fs()
         extracted_files: List[RawLittlepayFileExtract] = []
         failures = []
-        with logging_redirect_tqdm():
-            pbar = tqdm(total=len(files))
-            with ThreadPoolExecutor(max_workers=4) as pool:
-                futures: Dict[Future, RawLittlepayFileExtract] = {
-                    pool.submit(
-                        sync_file,
-                        src_bucket=self.src_bucket,
-                        file=file,
-                        s3client=s3client,
-                        fs=fs,
-                    ): file
-                    for i, file in enumerate(files)
-                }
-                for future in concurrent.futures.as_completed(futures):
-                    pbar.update(1)
-                    try:
-                        ret = future.result()
-                        if ret:
-                            extracted_files.append(ret)
-                    except KeyboardInterrupt:
-                        raise
-                    except Exception as e:
-                        print(
-                            f"exception during processing of {futures[future].s3object.Key} -> {futures[future].path}: {str(e)}"
-                        )
-                        traceback.print_exc()
-                        failures.append(e)
-            del pbar
+        for i, file in enumerate(files):
+            try:
+                ret = sync_file(
+                    src_bucket=self.src_bucket,
+                    file=file,
+                    s3client=s3client,
+                    fs=fs,
+                )
+                if ret:
+                    extracted_files.append(ret)
+            except KeyboardInterrupt:
+                raise
+            except Exception as e:
+                print(
+                    f"exception during processing of {file.s3object.Key} -> {file.path}: {str(e)}"
+                )
+                traceback.print_exc()
+                failures.append(e)
 
         RawLittlepaySyncJobResult(
             instance=self.instance,
