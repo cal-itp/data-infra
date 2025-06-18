@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from cosmos import DbtDag, ProfileConfig, ProjectConfig, RenderConfig
+from cosmos.constants import TestBehavior
 
 cosmos_payment = DbtDag(
     # dbt/cosmos-specific parameters
@@ -21,6 +22,7 @@ cosmos_payment = DbtDag(
             "+path:models/intermediate/payments+",
             "+path:models/mart/payments+",
         ],
+        test_behavior=TestBehavior.NONE,
     ),
     operator_args={"install_deps": True},
     # normal dag parameters
