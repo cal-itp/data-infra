@@ -24,6 +24,8 @@ models:
   - name: int_gtfs_quality__persistent_ids_schedule
   - name: int_gtfs_quality__modification_date_present
   - name: int_gtfs_quality__lead_time
+  - name: int_gtfs_quality__wheelchair_accessible_trips
+  - name: int_gtfs_quality__wheelchair_boarding_stops
 
 # Schedule + RT combined URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
