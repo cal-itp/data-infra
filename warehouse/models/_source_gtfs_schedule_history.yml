@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: gtfs_schedule_history
     description: Data in the gtfs_schedule_history dataset in BigQuery
-    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: gtfs_schedule_history
     tables:
       - name: calitp_feed_parse_result

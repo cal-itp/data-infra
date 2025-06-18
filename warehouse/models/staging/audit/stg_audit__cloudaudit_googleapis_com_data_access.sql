@@ -71,7 +71,7 @@ WITH latest AS (
         tracesampled,
         sourcelocation,
         split,
-    FROM `{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}.audit.cloudaudit_googleapis_com_data_access*`
+    FROM `{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}.audit.cloudaudit_googleapis_com_data_access*`
     WHERE _table_suffix = "_{{ yesterday.strftime('%Y%m%d') }}"
 ),
 
@@ -140,7 +140,7 @@ everything AS ( -- noqa: ST03
         tracesampled,
         sourcelocation,
         split,
-    FROM `{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}.audit.cloudaudit_googleapis_com_data_access*`
+    FROM `{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}.audit.cloudaudit_googleapis_com_data_access*`
     WHERE _table_suffix = "_{{ current.strftime('%Y%m%d') }}"
     {% if not loop.last %}
     UNION ALL
