@@ -4,7 +4,7 @@ sources:
   - name: airtable
     description: |
       Data from Airtable.
-    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_airtable
     tables:
       - name: california_transit__county_geography

@@ -1471,7 +1471,7 @@ exposures:
     meta:
       destinations:
         - type: tiles
-          bucket: "{{ env_var('CALITP_BUCKET__PUBLISH', var('PUBLISH_BUCKET')) }}"
+          bucket: "{{ env_var('CALITP_BUCKET__PUBLISH', var('CALITP_BUCKET__PUBLISH')) }}"
           format: geojsonl # note that this is the intermediary format
           tile_format: mbtiles
           geo_column: pt_array

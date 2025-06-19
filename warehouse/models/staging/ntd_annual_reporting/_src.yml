@@ -275,7 +275,7 @@ x-common-fields:
 sources:
   - name: external_ntd__annual_reporting
     description: Annual data tables for multiple years, loaded from DOT NTD API https://www.transit.dot.gov/ntd/ntd-data.
-    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_ntd__annual_reporting
     tables:
       - name: 2022__annual_database_agency_information

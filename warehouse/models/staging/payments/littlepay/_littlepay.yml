@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: external_littlepay
     description: Hive-partitioned external tables reading Littlepay payments data.
-    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_littlepay
     tables:
       - name: authorisations

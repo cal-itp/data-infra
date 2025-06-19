@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: hqta_external_tables
-    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_hqta
     tables:
       - name: areas
@@ -27,7 +27,7 @@ exposures:
     meta:
       destinations:
         - type: tiles
-          bucket: "{{ env_var('CALITP_BUCKET__PUBLISH', var('PUBLISH_BUCKET')) }}"
+          bucket: "{{ env_var('CALITP_BUCKET__PUBLISH', var('CALITP_BUCKET__PUBLISH')) }}"
           format: geojsonl # note that this is the intermediary format
           tile_format: mbtiles
           geo_column: geometry

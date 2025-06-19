@@ -173,3 +173,7 @@ output "google_service_account_composer-service-account_id" {
 output "google_service_account_composer-service-account_email" {
   value = google_service_account.composer-service-account.email
 }
+
+output "google_service_account_composer-service-account_name" {
+  value = google_service_account.composer-service-account.name
+}

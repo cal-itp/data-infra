@@ -12,8 +12,6 @@ from calitp_data_infra.storage import (
     get_fs,
 )
 from operators.littlepay_raw_sync import RawLittlepayFileExtract
-from tqdm import tqdm
-from tqdm.contrib.logging import logging_redirect_tqdm
 
 from airflow.models import BaseOperator
 
@@ -99,33 +97,30 @@ class LittlepayToJSONL(BaseOperator):
             "settlements",
         ]
 
-        with logging_redirect_tqdm():
-            for entity in tqdm(entities):
-                files_to_process: List[RawLittlepayFileExtract]
-                # This is not very efficient but it should be approximately 1 file per day
-                # since the instance began
-                files_to_process, _, _ = fetch_all_in_partition(
-                    cls=RawLittlepayFileExtract,
-                    table=entity,
-                    partitions={
-                        "instance": self.instance,
-                    },
-                    verbose=True,
-                )
-                print(f"found {len(files_to_process)} files to check")
+        for entity in entities:
+            files_to_process: List[RawLittlepayFileExtract]
+            # This is not very efficient but it should be approximately 1 file per day
+            # since the instance began
+            files_to_process, _, _ = fetch_all_in_partition(
+                cls=RawLittlepayFileExtract,
+                table=entity,
+                partitions={
+                    "instance": self.instance,
+                },
+                verbose=True,
+            )
+            print(f"found {len(files_to_process)} files to check")
 
-                # subtract 30 minutes because we run 30 minutes past the hour
-                # in case of late-arriving data
-                period = context["data_interval_end"].subtract(
-                    minutes=30, microseconds=1
-                ) - context["data_interval_start"].subtract(minutes=30)
+            # subtract 30 minutes because we run 30 minutes past the hour
+            # in case of late-arriving data
+            period = context["data_interval_end"].subtract(
+                minutes=30, microseconds=1
+            ) - context["data_interval_start"].subtract(minutes=30)
 
-                print(f"filtering files created in {period}")
+            print(f"filtering files created in {period}")
 
-                files_to_process = [
-                    file for file in files_to_process if file.ts in period
-                ]
+            files_to_process = [f for f in files_to_process if f.ts in period]
 
-                file: RawLittlepayFileExtract
-                for file in tqdm(files_to_process, desc=entity):
-                    parse_raw_file(file, fs=fs)
+            file: RawLittlepayFileExtract
+            for file in files_to_process:
+                parse_raw_file(file, fs=fs)
