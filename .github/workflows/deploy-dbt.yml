@@ -386,8 +386,16 @@ jobs:
         working-directory: warehouse
         run: poetry run python scripts/visualize.py ci-report --latest-dir='./target/latest/'
 
+      - name: Archive CI report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-report
+          path: |
+            target/*.md
+            target/*.png
+
       - name: Create GitHub comment
         working-directory: warehouse
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: cml comment update target/report.md
+        run: cml comment update target/report.md || echo "Failed to generate GitHub comment"
