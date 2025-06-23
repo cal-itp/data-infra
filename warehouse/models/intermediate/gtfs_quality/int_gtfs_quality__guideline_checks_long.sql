@@ -55,7 +55,7 @@ unioned AS (
             ref('int_gtfs_quality__wheelchair_accessible_trips'),
             ref('int_gtfs_quality__wheelchair_boarding_stops')
         ],
-        include = ['date', 'key', 'check', 'status']
+        include = ['date', 'key', 'check', 'status', 'percentage']
     ) }}
 ),
 
@@ -64,7 +64,7 @@ int_gtfs_quality__guideline_checks_long AS (
         {{ dbt_utils.generate_surrogate_key(['unioned.key', 'date', 'check']) }} AS key,
         unioned.* EXCEPT(key),
         unioned.key AS assessed_entity_key,
-        idx.* EXCEPT(status, date, key, check)
+        idx.* EXCEPT(status, percentage, date, key, check)
     FROM unioned
     LEFT JOIN idx
     USING (date, key, check)
