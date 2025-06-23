@@ -1,6 +1,8 @@
 """
 This script reads a GeoJSON file containing transit facility data, processes it to standardize column names
 and formats, and then exports the relevant data to a CSV file for import as a seed."""
+import json
+
 import geopandas as gpd
 from shapely.geometry import mapping
 
@@ -9,7 +11,9 @@ geojson_file_path = "data-analyses_ntd_ntd_transit_facilities_facilities_invento
 gdf = gpd.read_file(geojson_file_path)
 gdf.columns = gdf.columns.str.lower().str.replace(" ", "_").str.replace("/", "_")
 
-gdf["geojson_geometry"] = gdf["geometry"].apply(mapping)
+gdf["geojson_geometry"] = gdf["geometry"].apply(
+    lambda geom: json.dumps(mapping(geom), separators=(",", ":")) if geom else None
+)
 
 columns_to_keep = [
     "ntd_id",
@@ -22,5 +26,5 @@ columns_to_keep = [
 ]
 
 gdf[columns_to_keep].to_csv(
-    "transit_centers.csv", index=True, index_label="id", encoding="utf-8"
+    "transit_facilities.csv", index=True, index_label="id", encoding="utf-8"
 )

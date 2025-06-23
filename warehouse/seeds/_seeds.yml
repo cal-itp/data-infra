@@ -268,17 +268,17 @@ seeds:
         tests:
           - unique
 
-  - name: transit_centers
+  - name: transit_facilities
     description: |
-      A list of major transit centers with their names and GeoJSON geometry.
-      Derived from ntd transit facilities dataset.
+      A list of major transit facilities with their names and GeoJSON geometry.
+      Derived from ntd transit facilities dataset.  Contains major transit centers.
     config:
       labels:
         domain: seeds
-        dataset: transit_centers
+        dataset: transit_facilities
     columns:
       - name: id
-        description: "Unique identifier for the transit center feature."
+        description: "Unique identifier for the transit facility feature."
         tests:
           - not_null
           - unique
@@ -291,7 +291,7 @@ seeds:
         tests:
           - not_null
       - name: facility_name
-        description: "Name of the transit center."
+        description: "Name of the transit facility."
         tests:
           - not_null
       - name: facility_type
@@ -303,6 +303,6 @@ seeds:
         tests:
           - not_null
       - name: geojson_geometry
-        description: "GeoJSON string representation of the transit center's location."
+        description: "GeoJSON string representation of the transit facility's location."
         tests:
           - not_null
