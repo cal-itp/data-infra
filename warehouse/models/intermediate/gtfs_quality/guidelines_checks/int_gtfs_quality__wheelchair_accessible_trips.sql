@@ -13,7 +13,7 @@ feed_trips_summary AS (
        feed_key,
        COUNTIF(wheelchair_accessible IS NOT NULL AND CAST(wheelchair_accessible AS STRING) != "0") AS ct_trips_accessibility_info,
        COUNT(*) AS ct_trips,
-       ROUND(COUNTIF(wheelchair_accessible IS NOT NULL AND CAST(wheelchair_accessible AS STRING) != "0")/COUNT(*)*100) AS percentage
+       ROUND(COUNTIF(wheelchair_accessible IS NOT NULL AND CAST(wheelchair_accessible AS STRING) != "0")/COUNT(*)*100, 1) AS percentage
     FROM dim_trips
    GROUP BY feed_key
 ),
