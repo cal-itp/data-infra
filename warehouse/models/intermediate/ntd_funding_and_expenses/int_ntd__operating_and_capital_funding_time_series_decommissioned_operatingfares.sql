@@ -47,6 +47,7 @@ WITH
             state,
             reporter_type,
             agency_name,
+            SAFE_CAST((SPLIT(year, '_')[OFFSET(1)]) AS INT64) AS year,
             ntd_id,
             dt,
             execution_ts

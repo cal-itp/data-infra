@@ -29,13 +29,14 @@ namespace: airflow-jobs
 
 env_vars:
   AIRFLOW_ENV: "{{ env_var('AIRFLOW_ENV') }}"
-  CALITP_BUCKET__DBT_ARTIFACTS: "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}"
+  GOOGLE_CLOUD_PROJECT: "{{ env_var('GOOGLE_CLOUD_PROJECT') }}"
   BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
   DBT_PROJECT_DIR: /app
   DBT_PROFILE_DIR: /app
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
   SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
   SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
+  CALITP_BUCKET__PUBLISH: "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
 
 secrets:
   - deploy_type: volume

@@ -42,7 +42,7 @@ def get_secret_by_name(
 ) -> str:
     project = project or get_gcp_project_id()
 
-    version = f"{project}/secrets/{name}/versions/latest"
+    version = f"projects/{project}/secrets/{name}/versions/latest"
     response = client.access_secret_version(name=version)
     return response.payload.data.decode("UTF-8").strip()
 
@@ -56,7 +56,7 @@ def get_secrets_by_label(
     project = project or get_gcp_project_id()
 
     # once we get on at least 2.0.0 of secret manager, we can filter server-side
-    for secret in client.list_secrets(parent=project):
+    for secret in client.list_secrets(parent=f"projects/{project}"):
         if label in secret.labels:
             version = f"{secret.name}/versions/latest"
             response = client.access_secret_version(name=version)

@@ -1,0 +1,4 @@
+operator: operators.LittlepayRawSyncV3
+instance: lake-transit-authority
+src_bucket: littlepay-datafeed-prod-lake-transit-authori-5cb54b30
+access_key_secret_name: LITTLEPAY_AWS_IAM_LAKE_TRANSIT_AUTHORITY_ACCESS_KEY_FEED_V3

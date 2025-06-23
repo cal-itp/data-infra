@@ -223,8 +223,11 @@ resource "google_project_iam_member" "tfer--roles-002F-storage-002E-objectViewer
 resource "google_project_iam_member" "github-actions-terraform" {
   for_each = toset([
     "roles/resourcemanager.projectIamAdmin",
+    "roles/bigquery.dataOwner",
     "roles/editor",
-    "roles/storage.admin"
+    "roles/storage.admin",
+    "roles/iam.roleAdmin",
+    "roles/logging.configWriter"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.github-actions-terraform.email}"
@@ -233,8 +236,13 @@ resource "google_project_iam_member" "github-actions-terraform" {
 
 resource "google_project_iam_member" "github-actions-service-account" {
   for_each = toset([
+    "roles/viewer",
+    "roles/bigquery.user",
+    "roles/bigquery.dataOwner",
     "roles/bigquery.filteredDataViewer",
     "roles/bigquery.metadataViewer",
+    "roles/composer.admin",
+    "roles/storage.objectAdmin",
     google_project_iam_custom_role.calitp-dds-analyst.id,
     google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-staging-002F-roles-002F-CustomGCSPublisher.id
   ])
@@ -243,9 +251,16 @@ resource "google_project_iam_member" "github-actions-service-account" {
   project = "cal-itp-data-infra-staging"
 }
 
-resource "google_project_iam_member" "custom_service_account" {
+resource "google_project_iam_member" "composer-service-account" {
   for_each = toset([
-    "roles/composer.worker"
+    "roles/bigquery.dataOwner",
+    "roles/bigquery.jobUser",
+    "roles/cloudbuild.builds.viewer",
+    "roles/composer.ServiceAgentV2Ext",
+    "roles/composer.serviceAgent",
+    "roles/composer.worker",
+    "roles/secretmanager.secretAccessor",
+    "roles/secretmanager.viewer"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.composer-service-account.email}"
@@ -255,6 +270,12 @@ resource "google_project_iam_member" "custom_service_account" {
 resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
   for_each = toset([
     "roles/viewer",
+    "roles/bigquery.user",
+    "roles/bigquery.dataEditor",
+    "roles/bigquery.filteredDataViewer",
+    "roles/storage.objectUser",
+    "roles/secretmanager.secretAccessor",
+    "roles/secretmanager.viewer",
     google_project_iam_custom_role.calitp-dds-analyst.id
   ])
   role    = each.key
@@ -265,6 +286,11 @@ resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Ware
 resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
   for_each = toset([
     "roles/editor",
+    "roles/bigquery.admin",
+    "roles/bigquery.dataEditor",
+    "roles/storage.objectAdmin",
+    "roles/composer.admin",
+    "roles/secretmanager.admin",
     google_project_iam_custom_role.calitp-dds-analyst.id
   ])
   role    = each.key

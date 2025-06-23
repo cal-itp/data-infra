@@ -1,9 +1,8 @@
 operator: operators.ExternalTable
-bucket: gs://calitp-ntd-xlsx-products-clean
-prefix_bucket: false
+bucket: "{{ env_var('CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN') }}"
 post_hook: |
   SELECT *
-  FROM `{{ get_project_id() }}`.external_ntd__funding_and_expenses.historical__operating_and_capital_funding_time_series__summary_total
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_ntd__funding_and_expenses.historical__operating_and_capital_funding_time_series__summary_total
   LIMIT 1;
 source_objects:
   - "operating_and_capital_funding_time_series/historical/summary_total/*.jsonl.gz"

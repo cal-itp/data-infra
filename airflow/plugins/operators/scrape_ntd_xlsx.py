@@ -20,6 +20,13 @@ from airflow.models import BaseOperator  # type: ignore
 RAW_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"]
 CLEAN_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"]
 
+headers = {
+    "User-Agent": "CalITP/1.0.0",
+    "sec-ch-ua": '"CalITP";v="1"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"macOS"',
+}
+
 # Map product and year combinations to their xcom keys for dynamic url scraping
 xcom_keys = {
     (
@@ -96,7 +103,7 @@ class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
     def _make_request(self, url: str) -> bytes:
         """Make HTTP request with proper error handling."""
         try:
-            response = requests.get(url)
+            response = requests.get(url, headers=headers)
             response.raise_for_status()
             return response.content
         except requests.exceptions.HTTPError as e:

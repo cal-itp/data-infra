@@ -541,6 +541,7 @@ resource "google_project_iam_member" "tfer--roles-002F-viewerserviceAccount-003A
 resource "google_project_iam_member" "github-actions-terraform" {
   for_each = toset([
     "roles/resourcemanager.projectIamAdmin",
+    "roles/iam.roleAdmin",
     "roles/editor",
     "roles/storage.admin"
   ])
@@ -551,6 +552,9 @@ resource "google_project_iam_member" "github-actions-terraform" {
 
 resource "google_project_iam_member" "github-actions-service-account" {
   for_each = toset([
+    "roles/viewer",
+    "roles/bigquery.user",
+    "roles/bigquery.dataOwner",
     "roles/bigquery.filteredDataViewer",
     "roles/bigquery.metadataViewer",
     "roles/composer.admin",
@@ -565,6 +569,12 @@ resource "google_project_iam_member" "github-actions-service-account" {
 resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
   for_each = toset([
     "roles/viewer",
+    "roles/bigquery.user",
+    "roles/bigquery.filteredDataViewer",
+    "roles/bigquery.metadataViewer",
+    "roles/storage.objectUser",
+    "roles/secretmanager.secretAccessor",
+    "roles/secretmanager.viewer",
     google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-DataAnalyst.id
   ])
   role    = each.key
@@ -575,6 +585,11 @@ resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Ware
 resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
   for_each = toset([
     "roles/editor",
+    "roles/bigquery.admin",
+    "roles/bigquery.dataEditor",
+    "roles/storage.objectAdmin",
+    "roles/composer.admin",
+    "roles/secretmanager.admin",
     google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-DataAnalyst.id
   ])
   role    = each.key

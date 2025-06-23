@@ -1,0 +1,4 @@
+operator: operators.LittlepayRawSyncV3
+instance: clean-air-express
+src_bucket: littlepay-datafeed-prod-cal-itp-5b3f9b20
+access_key_secret_name: LITTLEPAY_AWS_IAM_CALITP_ACCESS_KEY_FEED_V3

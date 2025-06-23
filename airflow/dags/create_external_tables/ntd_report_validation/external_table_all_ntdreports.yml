@@ -1,9 +1,8 @@
 operator: operators.ExternalTable
-bucket: gs://calitp-ntd-report-validation
-prefix_bucket: false
+bucket: "{{ env_var('CALITP_BUCKET__NTD_REPORT_VALIDATION') }}"
 post_hook: |
   SELECT *
-  FROM `{{ get_project_id() }}`.external_blackcat.all_ntdreports
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_blackcat.all_ntdreports
   LIMIT 1;
 source_objects:
   - "all_NTDReporting/*.jsonl.gz"

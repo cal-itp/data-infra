@@ -2,7 +2,6 @@
 
 import json
 import os
-import shutil
 import subprocess
 from pathlib import Path
 from typing import List, Optional
@@ -13,7 +12,8 @@ import sentry_sdk
 import typer
 from dbt_artifacts import Manifest, RunResults, RunResultStatus
 
-CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
+CALITP_BUCKET__DBT_ARTIFACTS = os.environ.get("CALITP_BUCKET__DBT_ARTIFACTS")
+CALITP_BUCKET__DBT_DOCS = os.environ.get("CALITP_BUCKET__DBT_DOCS")
 
 artifacts = map(
     Path, ["index.html", "catalog.json", "manifest.json", "run_results.json"]
@@ -111,8 +111,8 @@ def report_failures(
     verbose: bool = False,
 ):
     fs = gcsfs.GCSFileSystem(
-        project="cal-itp-data-infra",
-        token=os.getenv("BIGQUERY_KEYFILE_LOCATION"),
+        project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
+        token=os.environ.get("BIGQUERY_KEYFILE_LOCATION"),
     )
 
     openf = fs.open if run_results_path.startswith("gs://") else open
@@ -151,6 +151,9 @@ def run(
     assert (
         CALITP_BUCKET__DBT_ARTIFACTS or not save_artifacts
     ), "must specify an artifacts bucket if saving artifacts"
+    assert (
+        CALITP_BUCKET__DBT_DOCS or not deploy_docs
+    ), "must specify a dbt docs bucket if deploying docs"
     assert dbt_docs or not deploy_docs, "cannot deploy docs without generating them!"
 
     def get_command(*args) -> List[str]:
@@ -234,19 +237,13 @@ def run(
     if dbt_docs:
         subprocess.run(get_command("docs", "generate")).check_returncode()
 
-        try:
-            os.mkdir("target/docs_site/")
-        except FileExistsError:
-            pass
-
         fs = gcsfs.GCSFileSystem(
-            project="cal-itp-data-infra",
-            token=os.getenv("BIGQUERY_KEYFILE_LOCATION"),
+            project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
+            token=os.environ.get("BIGQUERY_KEYFILE_LOCATION"),
         )
 
         ts = pendulum.now()
 
-        # TODO: we need to save run_results from the run and not the docs generate
         for artifact in artifacts:
             _from = str(project_dir / Path("target") / artifact)
 
@@ -274,19 +271,13 @@ def run(
             # avoid copying run_results is unnecessary for the docs site
             # so just skip to avoid any potential information leakage
             if "run_results" not in str(artifact):
-                shutil.copy(_from, "target/docs_site/")
+                if deploy_docs:
+                    dbt_docs_to = f"{CALITP_BUCKET__DBT_DOCS}/{artifact}"
 
-        if deploy_docs:
-            args = [
-                "netlify",
-                "deploy",
-                "--dir=target/docs_site/",
-            ]
-
-            if target and target.startswith("prod"):
-                args.append("--prod")
-
-            results_to_check.append(subprocess.run(args))
+                    typer.echo(f"writing {_from} to {dbt_docs_to}")
+                    fs.put(lpath=_from, rpath=dbt_docs_to)
+                else:
+                    typer.echo(f"skipping upload of {artifact} to dbt documentation")
 
     for result in results_to_check:
         result.check_returncode()

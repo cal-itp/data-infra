@@ -36,14 +36,14 @@ jobs:
         with:
           matrix: true
           dir_names: true
-          files: 'iac/cal-itp-data-infra-staging/**'
+          files: 'iac/cal-itp-data-infra-staging/**/*.tf'
 
       - uses: tj-actions/changed-files@v46
         id: production-changes
         with:
           matrix: true
           dir_names: true
-          files: 'iac/cal-itp-data-infra/**'
+          files: 'iac/cal-itp-data-infra/**/*.tf'
 
   staging:
     name: Staging

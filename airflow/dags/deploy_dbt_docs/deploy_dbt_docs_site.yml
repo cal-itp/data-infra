@@ -10,6 +10,7 @@ arguments:
   - '--no-dbt-seed'
   - '--no-dbt-run'
   - '--dbt-docs'
+  - '--save-artifacts'
   - '--deploy-docs'
 
 is_delete_operator_pod: true
@@ -22,27 +23,27 @@ priority_class_name: dbt-high-priority
 
 env_vars:
   AIRFLOW_ENV: "{{ env_var('AIRFLOW_ENV') }}"
+  GOOGLE_CLOUD_PROJECT: "{{ env_var('GOOGLE_CLOUD_PROJECT') }}"
   BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
+  CALITP_BUCKET__DBT_ARTIFACTS: "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}"
+  CALITP_BUCKET__DBT_DOCS: "{{ env_var('CALITP_BUCKET__DBT_DOCS') }}"
+  CALITP_BUCKET__PUBLISH: "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
   DBT_PROJECT_DIR: /app
   DBT_PROFILE_DIR: /app
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
-  NETLIFY_SITE_ID: cal-itp-dbt-docs
 
 secrets:
   - deploy_type: volume
     deploy_target: /secrets/jobs-data/
     secret: jobs-data
     key: service-account.json
-  - deploy_type: env
-    deploy_target: NETLIFY_AUTH_TOKEN
-    secret: jobs-data
-    key: netlify-auth-token
 
 tolerations:
   - key: pod-role
     operator: Equal
     value: computetask
     effect: NoSchedule
+
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:

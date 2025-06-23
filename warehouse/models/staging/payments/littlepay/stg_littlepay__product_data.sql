@@ -119,6 +119,7 @@ stg_littlepay__product_data AS (
         configuration,
         _line_number,
         `instance`,
+        'v1' AS feed_version,
         extract_filename,
         littlepay_export_ts,
         littlepay_export_date,

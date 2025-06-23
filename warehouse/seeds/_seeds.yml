@@ -304,5 +304,31 @@ seeds:
           - not_null
       - name: geojson_geometry
         description: "GeoJSON string representation of the transit facility's location."
+
+  - name: gtfs_optional_shapes
+    description: |
+      GTFS shapes is optional, and where it is not provided, it can be
+      constructed based on route_id and direction_id, since shape_id
+      is associated with a trip_id.
+      https://gtfs.org/documentation/schedule/reference/#tripstxt
+    config:
+      labels:
+        domain: seeds
+        dataset: gtfs
+    columns:
+      - name: gtfs_dataset_name
+        description: The GTFS schedule name from dim_gtfs_datasets
+        tests:
+          - not_null
+      - name: route_id
+        description: GTFS trips route_id value
+        tests:
+          - not_null
+      - name: direction_id
+        description: GTFS trips direction_id value (0 or 1)
+        tests:
+          - not_null
+      - name: shape_id
+        description: Derived shape_id based on combination of route_id and direction_id.
         tests:
           - not_null

@@ -21,6 +21,7 @@ env:
   DBT_TARGET: ${{ github.ref == 'refs/heads/main' && 'prod' || 'staging' }}
   DBT_ARTIFACTS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-artifacts' || 'calitp-staging-dbt-artifacts' }}
   DBT_DOCS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-docs' || 'calitp-staging-dbt-docs' }}
+  CALITP_BUCKET__PUBLISH: ${{ github.ref == 'refs/heads/main' && 'calitp-publish' || 'calitp-staging-publish' }}
   DBT_SOURCE_DATABASE: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
   METABASE_DESTINATION_DATABASE: ${{ github.ref == 'refs/heads/main' && 'Data Marts (formerly Warehouse Views)' || '(Internal) Staging Warehouse Views' }}
 
@@ -205,16 +206,15 @@ jobs:
         working-directory: warehouse
         run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
 
-      # TODO: To be enabled when permission Terraform applies bigquery.tables.create
-      # - name: Download latest artifacts from GCS
-      #   working-directory: warehouse
-      #   if: ${{ env.DBT_TARGET  == 'staging' }}
-      #   run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ ./target/
-      #
-      # - name: Run changed models
-      #   working-directory: warehouse
-      #   if: ${{ env.DBT_TARGET  == 'staging' }}
-      #   run: poetry run dbt run --select state:modified+ --target ${{ env.DBT_TARGET }} --state ./target/latest
+      - name: Download latest artifacts from GCS
+        working-directory: warehouse
+        if: ${{ env.DBT_TARGET  == 'staging' }}
+        run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ ./target/
+
+      - name: Run changed models
+        working-directory: warehouse
+        if: ${{ env.DBT_TARGET  == 'staging' }}
+        run: poetry run dbt run --select state:modified+ --target ${{ env.DBT_TARGET }} --state ./target/latest
 
       - name: Synchronize Metabase
         working-directory: warehouse
@@ -386,8 +386,16 @@ jobs:
         working-directory: warehouse
         run: poetry run python scripts/visualize.py ci-report --latest-dir='./target/latest/'
 
+      - name: Archive CI report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-report
+          path: |
+            target/*.md
+            target/*.png
+
       - name: Create GitHub comment
         working-directory: warehouse
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: cml comment update target/report.md
+        run: cml comment update target/report.md || echo "Failed to generate GitHub comment"

@@ -19,6 +19,7 @@ SCHEDULE_UNZIPPED_BUCKET_HOURLY = os.environ[
 ]
 
 CALITP_BQ_LOCATION = os.environ.get("CALITP_BQ_LOCATION", "us-west2")
+CALITP_PROJECT_NAME = os.environ.get("GOOGLE_CLOUD_PROJECT")
 
 
 # TODO: this should be in calitp-data-infra maybe?
