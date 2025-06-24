@@ -12,6 +12,7 @@ get_latest_extract AS (
 
 stg_ntd__fra_regulated_mode_major_security_events AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'year', 'incident_number']) }} AS key,
         {{ trim_make_empty_string_null('ntd_id') }} AS ntd_id,
         {{ trim_make_empty_string_null('agency') }} AS agency,
         {{ trim_make_empty_string_null('incident_description') }} AS incident_description,
