@@ -39,8 +39,7 @@ def test_read_parquet(mocker, gcs_auth_setup, gcs_geopandas):
 
 def test_geo_data_frame_to_parquet(mocker, gcs_auth_setup, gcs_geopandas):
     mocker.patch("gcsfs.GCSFileSystem", return_value=GCS_FILESYSTEM)
-    geo_data_frame = mocker.Mock()
-    geo_data_frame.to_parquet = mocker.Mock()
+    geo_data_frame = mocker.create_autospec(geopandas.GeoDataFrame)
 
     gcs_geopandas.geo_data_frame_to_parquet(geo_data_frame, PATH, ANY_OTHER_ARGUMENT)
 
