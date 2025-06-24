@@ -24,6 +24,7 @@ dask = "~2024.5"
 shapely = "^2.0.1"
 gtfs-segments = "2.1.7"
 pyairtable = "2.2.2"
+black = "24.10.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"
