@@ -34,6 +34,7 @@ WITH
 
     int_ntd__capital_expenditures_time_series_total AS (
         SELECT
+            {{ dbt_utils.generate_surrogate_key(['ntd_id', 'year', 'legacy_ntd_id', 'mode']) }} AS key,
             agency_name,
             agency_status,
             census_year,

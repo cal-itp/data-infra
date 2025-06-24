@@ -1,6 +1,9 @@
 WITH int_ntd__operating_and_capital_funding_time_series_capital_other AS (
     SELECT *
     FROM {{ ref('int_ntd__operating_and_capital_funding_time_series_capital_other') }}
+    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
+    WHERE key NOT IN ('6e5a96d8378656e2ee7428a0cc61decb','7b2ee51e25e8aea66006028065199423','b75b4680b97baee024a124380dfcce14',
+        'c778c82f6ea72070ce856cdeb5409d03')
 ),
 
 dim_agency_information AS (
@@ -17,7 +20,7 @@ dim_agency_information AS (
 
 fct_operating_and_capital_funding_time_series_capital_other AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['int.ntd_id', 'int.year', 'int.legacy_ntd_id']) }} AS key,
+        int.key,
         int.ntd_id,
         int.year,
 
