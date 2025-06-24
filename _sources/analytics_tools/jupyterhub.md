@@ -61,26 +61,35 @@ Power User profile allocates a full node or a significant portion of resources t
 ### Connecting to the Warehouse
 
 Connecting to the warehouse requires a bit of setup after logging in to JupyterHub, but allows users to query data in the warehouse directly.
-To do this, you will need to download and install the gcloud commandline tool from the app.
 
 See the screencast below for a walkthrough of a similar process:
 
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
-Be in the root directory of either data-infra or the data-analyses repo.  Then run these commands:
+Copy the /iac/login.json from data-infra or the data-analyses repo to the root of your environment.  Then set up this alias in your .bash_profile:
 
 ```bash
-gcloud auth login --login-config=iac/login.json
-gcloud config set project cal-itp-data-infra
+# An alias to run application-default login
+alias glogin='gcloud auth application-default login --login-config=$HOME/iac/login.json'
 ```
 
-If you are developing in the warehouse, set your project to staging with:
+Now when you type in `glogin` it should initiate a login script.
+
+If you work in jupyterhub, consider modifying your .bash_profile further with code from this [gist](https://gist.github.com/vevetron/e04f74c4e55d13d5144f8207b1677e2d). This will make it attempt to login automatically if you open terminal.
+
+If you are developing in the warehouse, you may need to set your project to staging with:
 
 ```bash
 gcloud config set project cal-itp-data-infra-staging
 ```
 
-This will enable your authorization that should work.
+For work in prod:
+
+```bash
+gcloud config set project cal-itp-data-infra
+```
+
+If you want to view cloud resources [use this link](https://auth.cloud.google/signin/locations/global/workforcePools/dot-ca-gov/providers/dot-gcp?continueUrl=https://console.cloud.google/).
 
 If you are still not able to connect, make sure you have the suite of permissions associated with other analysts.
 
