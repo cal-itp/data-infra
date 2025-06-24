@@ -1,7 +1,14 @@
 {{ config(
     materialized='table',
-    cluster_by='year')
-}}
+    partition_by={
+      'field': 'year',
+      'data_type': 'int64',
+      "range": {
+        "start": 2021,
+        "end": 2030,
+        "interval": 1
+    }}, cluster_by=['year', 'gtfs_dataset_key'],
+) }}
 
 WITH trips AS (
     SELECT * FROM {{ ref('fct_scheduled_trips') }}
