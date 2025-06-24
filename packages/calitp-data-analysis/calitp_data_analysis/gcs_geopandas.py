@@ -1,6 +1,6 @@
-import gcsfs
-import geopandas
-import google.auth
+import gcsfs  # type: ignore
+import geopandas  # type: ignore
+import google.auth  # type: ignore
 
 
 class GCSGeoPandas:

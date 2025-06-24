@@ -1,5 +1,5 @@
-import gcsfs
-import geopandas
+import gcsfs  # type: ignore
+import geopandas  # type: ignore
 import pytest
 from calitp_data_analysis.gcs_geopandas import GCSGeoPandas
 
