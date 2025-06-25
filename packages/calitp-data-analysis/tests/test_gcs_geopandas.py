@@ -37,6 +37,16 @@ def test_read_parquet(mocker, gcs_auth_setup, gcs_geopandas):
     )
 
 
+def test_read_parquet_passed_storage_options(mocker, gcs_auth_setup, gcs_geopandas):
+    mocker.patch("geopandas.read_parquet")
+
+    gcs_geopandas.read_parquet(PATH, ANY_OTHER_ARGUMENT, storage_options={"foo": "bar"})
+
+    geopandas.read_parquet.assert_called_once_with(
+        PATH, ANY_OTHER_ARGUMENT, storage_options={"foo": "bar", "token": TOKEN}
+    )
+
+
 def test_geo_data_frame_to_parquet(mocker, gcs_auth_setup, gcs_geopandas):
     mocker.patch("gcsfs.GCSFileSystem", return_value=GCS_FILESYSTEM)
     geo_data_frame = mocker.create_autospec(geopandas.GeoDataFrame)

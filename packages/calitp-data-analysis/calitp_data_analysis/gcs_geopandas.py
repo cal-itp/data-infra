@@ -22,7 +22,8 @@ class GCSGeoPandas:
 
         Passes the auth credentials from Google auth as storage option token
         """
-        storage_options = kwargs.get("storage_options", {}) | {"token": self.token}
+        storage_options = kwargs.pop("storage_options", {}) | {"token": self.token}
+
         return geopandas.read_parquet(
             path, storage_options=storage_options, *args, **kwargs
         )
