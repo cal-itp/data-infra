@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: external_ntd__funding_and_expenses
     description: Historical funding and expense data tables, loaded from DOT NTD data portal https://www.transit.dot.gov/ntd/ntd-data.
-    database: "{{ env_var('DBT_SOURCE_DATABASE', var('SOURCE_DATABASE')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_ntd__funding_and_expenses
     tables:
       - name: historical__capital_expenditures_time_series__facilities

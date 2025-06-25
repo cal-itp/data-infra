@@ -106,8 +106,8 @@ resource "google_storage_bucket_iam_policy" "tfer--dataproc-temp-us-west2-473674
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--test-calitp-amplitude-benefits-events" {
-  bucket = "b/test-calitp-amplitude-benefits-events"
+resource "google_storage_bucket_iam_policy" "tfer--calitp-staging-gcp-components-tfstate" {
+  bucket = "b/calitp-staging-gcp-components-tfstate"
 
   policy_data = <<POLICY
 {
@@ -143,9 +143,9 @@ resource "google_storage_bucket_iam_policy" "tfer--test-calitp-amplitude-benefit
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--calitp-staging-gcp-components-tfstate" {
-  bucket = "b/calitp-staging-gcp-components-tfstate"
-
+resource "google_storage_bucket_iam_policy" "calitp-staging" {
+  for_each    = local.environment_buckets
+  bucket      = google_storage_bucket.calitp-staging[each.key].name
   policy_data = <<POLICY
 {
   "bindings": [

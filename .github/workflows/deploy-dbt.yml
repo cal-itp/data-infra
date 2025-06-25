@@ -22,7 +22,7 @@ env:
   DBT_ARTIFACTS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-artifacts' || 'calitp-staging-dbt-artifacts' }}
   DBT_DOCS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-docs' || 'calitp-staging-dbt-docs' }}
   CALITP_BUCKET__PUBLISH: ${{ github.ref == 'refs/heads/main' && 'calitp-publish' || 'calitp-staging-publish' }}
-  DBT_SOURCE_DATABASE: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
+  GOOGLE_CLOUD_PROJECT: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
   METABASE_DESTINATION_DATABASE: ${{ github.ref == 'refs/heads/main' && 'Data Marts (formerly Warehouse Views)' || '(Internal) Staging Warehouse Views' }}
 
 jobs:
@@ -105,8 +105,9 @@ jobs:
         with:
           name: dbt
           path: |
-            warehouse/target/*.json
             warehouse/target/*.html
+            warehouse/target/*.json
+            warehouse/target/*.msgpack
 
   models-changed:
     name: Detect dbt model changes
@@ -279,6 +280,15 @@ jobs:
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/manifest.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
+      - name: Upload partial_parse.msgpack
+        uses: google-github-actions/upload-cloud-storage@v1
+        with:
+          path: './warehouse/target/'
+          glob: 'partial_parse.msgpack'
+          parent: false
+          process_gcloudignore: false
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/partial_parse.msgpack/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+
       - name: Upload run_results.json
         uses: google-github-actions/upload-cloud-storage@v1
         with:
@@ -297,11 +307,11 @@ jobs:
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/index.html/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
 
-      - name: Upload documentation
+      - name: Upload latest artifacts
         uses: google-github-actions/upload-cloud-storage@v1
         with:
           path: './warehouse/target/'
-          glob: '{catalog.json,manifest.json,index.html}'
+          glob: '{catalog.json,manifest.json,index.html,partial_parse.msgpack}'
           parent: false
           process_gcloudignore: false
           destination: ${{ env.DBT_DOCS_BUCKET }}
