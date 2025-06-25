@@ -1,5 +1,5 @@
 import gcsfs  # type: ignore
-import geopandas  # type: ignore
+import geopandas as gpd  # type: ignore
 import pytest
 from calitp_data_analysis.gcs_geopandas import GCSGeoPandas
 
@@ -32,7 +32,7 @@ def test_read_parquet(mocker, gcs_auth_setup, gcs_geopandas):
 
     gcs_geopandas.read_parquet(PATH, ANY_OTHER_ARGUMENT)
 
-    geopandas.read_parquet.assert_called_once_with(
+    gpd.read_parquet.assert_called_once_with(
         PATH, ANY_OTHER_ARGUMENT, storage_options={"token": TOKEN}
     )
 
@@ -42,14 +42,14 @@ def test_read_parquet_passed_storage_options(mocker, gcs_auth_setup, gcs_geopand
 
     gcs_geopandas.read_parquet(PATH, ANY_OTHER_ARGUMENT, storage_options={"foo": "bar"})
 
-    geopandas.read_parquet.assert_called_once_with(
+    gpd.read_parquet.assert_called_once_with(
         PATH, ANY_OTHER_ARGUMENT, storage_options={"foo": "bar", "token": TOKEN}
     )
 
 
 def test_geo_data_frame_to_parquet(mocker, gcs_auth_setup, gcs_geopandas):
     mocker.patch("gcsfs.GCSFileSystem", return_value=GCS_FILESYSTEM)
-    geo_data_frame = mocker.create_autospec(geopandas.GeoDataFrame)
+    geo_data_frame = mocker.create_autospec(gpd.GeoDataFrame)
 
     gcs_geopandas.geo_data_frame_to_parquet(geo_data_frame, PATH, ANY_OTHER_ARGUMENT)
 

@@ -1,5 +1,5 @@
 import gcsfs  # type: ignore
-import geopandas  # type: ignore
+import geopandas as gpd  # type: ignore
 import google.auth  # type: ignore
 
 
@@ -18,15 +18,13 @@ class GCSGeoPandas:
         return gcsfs.GCSFileSystem(token=self.token, **kwargs)
 
     def read_parquet(self, path, *args, **kwargs):
-        """Delegates to geopandas.read_parquet with storage option token
+        """Delegates to gpd.read_parquet with storage option token
 
         Passes the auth credentials from Google auth as storage option token
         """
         storage_options = kwargs.pop("storage_options", {}) | {"token": self.token}
 
-        return geopandas.read_parquet(
-            path, storage_options=storage_options, *args, **kwargs
-        )
+        return gpd.read_parquet(path, storage_options=storage_options, *args, **kwargs)
 
     def geo_data_frame_to_parquet(self, geo_data_frame, path, *args, **kwargs):
         """Delegates to .to_parquet on the passed geo_data_frame, providing Google Cloud Storage file system
