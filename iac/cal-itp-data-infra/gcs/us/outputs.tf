@@ -2450,6 +2450,10 @@ output "google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-88ca8ec6-bucket_
   value = google_storage_bucket.tfer--us-west2-calitp-airflow2-pr-88ca8ec6-bucket.name
 }
 
+output "google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name" {
+  value = google_storage_bucket.tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket.name
+}
+
 output "google_storage_bucket_calitp-gtfs_name" {
   value = google_storage_bucket.calitp-gtfs.name
 }

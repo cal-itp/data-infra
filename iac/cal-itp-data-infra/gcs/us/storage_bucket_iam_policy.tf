@@ -3905,3 +3905,41 @@ resource "google_storage_bucket_iam_policy" "tfer--us-west2-calitp-airflow2-pr-8
 }
 POLICY
 }
+
+resource "google_storage_bucket_iam_policy" "tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket" {
+  bucket = "b/us-west2-calitp-airflow2-pr-f6bb9855-bucket"
+
+  policy_data = <<POLICY
+{
+  "bindings": [
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra",
+        "projectOwner:cal-itp-data-infra",
+        "serviceAccount:composer2-service-account@cal-itp-data-infra.iam.gserviceaccount.com"
+      ],
+      "role": "roles/storage.legacyBucketOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyBucketReader"
+    },
+    {
+      "members": [
+        "projectEditor:cal-itp-data-infra",
+        "projectOwner:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyObjectOwner"
+    },
+    {
+      "members": [
+        "projectViewer:cal-itp-data-infra"
+      ],
+      "role": "roles/storage.legacyObjectReader"
+    }
+  ]
+}
+POLICY
+}
