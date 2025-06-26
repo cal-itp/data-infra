@@ -54,7 +54,7 @@ stops_times_with_tz AS (
             OVER (PARTITION BY feed_key, trip_id
                 ORDER BY dim_stop_times.stop_sequence
                 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING), feed_timezone) AS trip_end_timezone,
-        stops.pt_geom
+        ST_GEOGFROMTEXT(stops.pt_geom) AS pt_geom,
 
     FROM dim_stop_times
     LEFT JOIN stops
