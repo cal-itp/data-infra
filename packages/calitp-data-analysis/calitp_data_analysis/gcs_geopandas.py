@@ -29,9 +29,7 @@ class GCSGeoPandas:
     def geo_data_frame_to_parquet(self, geo_data_frame, path, *args, **kwargs):
         """Delegates to .to_parquet on the passed geo_data_frame, providing Google Cloud Storage file system
 
-        Fetches gcsfs.GCSFileSystem instance
-
-        Passes the auth credentials from Google Cloud Storage as storage option token
+        Fetches gcsfs.GCSFileSystem instance and then delegates to .to_parquet passing the filesystem info
         """
         gcs_filesystem = self.gcs_filesystem()
         return geo_data_frame.to_parquet(
