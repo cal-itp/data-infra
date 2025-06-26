@@ -3,57 +3,45 @@ import geopandas as gpd  # type: ignore
 import pytest
 from calitp_data_analysis.gcs_geopandas import GCSGeoPandas
 
-TOKEN = "faketoken"
 PATH = "https://www.example.com/path/to/file"
 ANY_OTHER_ARGUMENT = "fakeargument"
-GCS_FILESYSTEM = "fakegcsfilesystem"
 
 
 @pytest.fixture
-def gcs_geopandas(mocker):
+def gcs_geopandas():
     return GCSGeoPandas()
 
 
 @pytest.fixture
-def gcs_auth_setup(mocker):
-    mocker.patch("google.auth.default", return_value=(TOKEN, None))
+def gcs_filesystem(mocker):
+    mocker.create_autospec(gcsfs.GCSFileSystem)
 
 
-def test_gcs_filesystem(mocker, gcs_auth_setup, gcs_geopandas):
-    mocker.patch("gcsfs.GCSFileSystem")
-
-    gcs_geopandas.gcs_filesystem()
-
-    gcsfs.GCSFileSystem.assert_called_once_with(token=TOKEN)
+@pytest.fixture
+def gcs_filesystem_setup(mocker, gcs_filesystem):
+    mocker.patch("gcsfs.GCSFileSystem", return_value=gcs_filesystem)
 
 
-def test_read_parquet(mocker, gcs_auth_setup, gcs_geopandas):
-    mocker.patch("geopandas.read_parquet")
+def test_read_parquet(mocker, gcs_filesystem, gcs_filesystem_setup, gcs_geopandas):
+    geo_data_frame = mocker.create_autospec(gpd.GeoDataFrame)
+    mocker.patch("geopandas.read_parquet", return_value=geo_data_frame)
 
-    gcs_geopandas.read_parquet(PATH, ANY_OTHER_ARGUMENT)
+    result = gcs_geopandas.read_parquet(PATH, ANY_OTHER_ARGUMENT)
 
     gpd.read_parquet.assert_called_once_with(
-        PATH, ANY_OTHER_ARGUMENT, storage_options={"token": TOKEN}
+        PATH, ANY_OTHER_ARGUMENT, filesystem=gcs_filesystem
     )
 
-
-def test_read_parquet_passed_storage_options(mocker, gcs_auth_setup, gcs_geopandas):
-    mocker.patch("geopandas.read_parquet")
-
-    gcs_geopandas.read_parquet(PATH, ANY_OTHER_ARGUMENT, storage_options={"foo": "bar"})
-
-    gpd.read_parquet.assert_called_once_with(
-        PATH, ANY_OTHER_ARGUMENT, storage_options={"foo": "bar", "token": TOKEN}
-    )
+    assert result == geo_data_frame
 
 
-def test_geo_data_frame_to_parquet(mocker, gcs_auth_setup, gcs_geopandas):
-    mocker.patch("gcsfs.GCSFileSystem", return_value=GCS_FILESYSTEM)
+def test_geo_data_frame_to_parquet(
+    mocker, gcs_filesystem, gcs_filesystem_setup, gcs_geopandas
+):
     geo_data_frame = mocker.create_autospec(gpd.GeoDataFrame)
 
     gcs_geopandas.geo_data_frame_to_parquet(geo_data_frame, PATH, ANY_OTHER_ARGUMENT)
 
-    gcsfs.GCSFileSystem.assert_called_once_with(token=TOKEN)
     geo_data_frame.to_parquet.assert_called_once_with(
-        PATH, ANY_OTHER_ARGUMENT, filesystem=GCS_FILESYSTEM
+        PATH, ANY_OTHER_ARGUMENT, filesystem=gcs_filesystem
     )
