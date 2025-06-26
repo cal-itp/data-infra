@@ -11,7 +11,6 @@ WITH vehicle_positions AS (
         location_timestamp,
         location
     FROM {{ ref('fct_vehicle_locations') }}
-    WHERE service_date = "2025-06-13"
     -- TODO: implementation note on filtering out timestamps after the last stop's likely arrival per trip
     -- https://github.com/cal-itp/data-analyses/blob/main/rt_predictions/06_update_completeness_vp.ipynb
 ),
@@ -21,8 +20,6 @@ trips AS (
         trip_instance_key,
         shape_array_key
     FROM {{ ref('fct_scheduled_trips') }}
-    --FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_scheduled_trips`
-    WHERE service_date = "2025-06-13"
 ),
 
 shapes AS (
@@ -30,9 +27,6 @@ shapes AS (
         key,
         pt_array
     FROM {{ ref('dim_shapes_arrays') }}
-    --FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.dim_shapes_arrays`
-    --INNER JOIN trips
-      --ON key = trips.shape_array_key
 ),
 
 
@@ -40,8 +34,6 @@ vp_trip_summaries AS (
     SELECT
         *
     FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
-    WHERE service_date = "2025-06-13"
-    --AND trip_schedule_relationships = "SCHEDULED" adding this reduces the rows to 0
 ),
 
 minute_bins AS (
@@ -81,7 +73,6 @@ derive_metrics AS (
         END AS is_complete,
 
         -- spatial accuracy metrics
-
         COUNT(
             ST_DWITHIN(location, ST_MAKELINE(pt_array), 35, FALSE)
         ) AS n_within_shape, --numerator
