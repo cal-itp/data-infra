@@ -1,3 +1,5 @@
+import io
+
 import gcsfs  # type: ignore
 import geopandas as gpd  # type: ignore
 import pytest
@@ -14,7 +16,7 @@ def gcs_geopandas():
 
 @pytest.fixture
 def gcs_filesystem(mocker):
-    mocker.create_autospec(gcsfs.GCSFileSystem)
+    return mocker.create_autospec(gcsfs.GCSFileSystem, instance=True)
 
 
 @pytest.fixture
@@ -31,6 +33,20 @@ def test_read_parquet(mocker, gcs_filesystem, gcs_filesystem_setup, gcs_geopanda
     gpd.read_parquet.assert_called_once_with(
         PATH, ANY_OTHER_ARGUMENT, filesystem=gcs_filesystem
     )
+
+    assert result == geo_data_frame
+
+
+def test_read_file(mocker, gcs_filesystem, gcs_filesystem_setup, gcs_geopandas):
+    file = io.StringIO("fakefile")
+    geo_data_frame = mocker.create_autospec(gpd.GeoDataFrame)
+    mocker.patch("geopandas.read_file", return_value=geo_data_frame)
+    gcs_filesystem.open.return_value = file
+
+    result = gcs_geopandas.read_file(PATH, ANY_OTHER_ARGUMENT)
+
+    gcs_filesystem.open.assert_called_once_with(PATH)
+    gpd.read_file.assert_called_once_with(file)
 
     assert result == geo_data_frame
 
