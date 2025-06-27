@@ -36,6 +36,7 @@ WITH
 
     int_ntd__service_data_and_operating_expenses_time_series_by_mode_opexp_ga AS (
         SELECT
+            {{ dbt_utils.generate_surrogate_key(['ntd_id', 'year', 'legacy_ntd_id', 'mode', 'service']) }} AS key,
             agency_name,
             agency_status,
             census_year,

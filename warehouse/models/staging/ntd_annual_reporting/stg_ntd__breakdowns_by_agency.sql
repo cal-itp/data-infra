@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__breakdowns_by_agency AS (
     SELECT
+       {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year']) }} AS key,
         SAFE_CAST(count_major_mechanical_failures_questionable AS NUMERIC) AS count_major_mechanical_failures_questionable,
         SAFE_CAST(count_other_mechanical_failures_questionable AS NUMERIC) AS count_other_mechanical_failures_questionable,
         SAFE_CAST(count_total_mechanical_failures_questionable AS NUMERIC) AS count_total_mechanical_failures_questionable,
