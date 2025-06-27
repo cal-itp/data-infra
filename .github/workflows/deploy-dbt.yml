@@ -264,58 +264,92 @@ jobs:
           timezone: "UTC"
 
       - name: Upload catalog.json
-        uses: google-github-actions/upload-cloud-storage@v1
+        uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
           glob: 'catalog.json'
           parent: false
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/catalog.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          headers: |-
+            content-type: 'application/json'
 
       - name: Upload manifest.json
-        uses: google-github-actions/upload-cloud-storage@v1
+        uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
           glob: 'manifest.json'
           parent: false
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/manifest.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          headers: |-
+            content-type: 'application/json'
 
       - name: Upload partial_parse.msgpack
-        uses: google-github-actions/upload-cloud-storage@v1
+        uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
           glob: 'partial_parse.msgpack'
           parent: false
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/partial_parse.msgpack/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          headers: |-
+            content-type: 'application/vnd.msgpack'
 
       - name: Upload run_results.json
-        uses: google-github-actions/upload-cloud-storage@v1
+        uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
           glob: 'run_results.json'
           parent: false
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/run_results.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          headers: |-
+            content-type: 'application/json'
 
       - name: Upload index.html
-        uses: google-github-actions/upload-cloud-storage@v1
+        uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
           glob: 'index.html'
           parent: false
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/index.html/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          headers: |-
+            content-type: 'text/html; charset=utf-8'
 
-      - name: Upload latest artifacts
-        uses: google-github-actions/upload-cloud-storage@v1
+      - name: Upload latest json artifacts
+        uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
-          glob: '{catalog.json,manifest.json,index.html,partial_parse.msgpack}'
+          glob: '{catalog.json,manifest.json}'
           parent: false
           process_gcloudignore: false
           destination: ${{ env.DBT_DOCS_BUCKET }}
+          headers: |-
+            content-type: 'application/json'
+
+      - name: Upload latest html artifacts
+        uses: google-github-actions/upload-cloud-storage@v2
+        with:
+          path: './warehouse/target/'
+          glob: '{index.html}'
+          parent: false
+          process_gcloudignore: false
+          destination: ${{ env.DBT_DOCS_BUCKET }}
+          headers: |-
+            content-type: 'text/html; charset=utf-8'
+
+      - name: Upload latest msgpack artifacts
+        uses: google-github-actions/upload-cloud-storage@v2
+        with:
+          path: './warehouse/target/'
+          glob: '{partial_parse.msgpack}'
+          parent: false
+          process_gcloudignore: false
+          destination: ${{ env.DBT_DOCS_BUCKET }}
+          headers: |-
+            content-type: 'application/vnd.msgpack'
 
       - name: Push Airflow code to Composer
         if: ${{ github.event_name == 'push' }}
