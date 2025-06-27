@@ -30,12 +30,6 @@ resource "google_storage_bucket_object" "calitp-staging-composer-index" {
   bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
 }
 
-resource "google_storage_bucket_object" "calitp-staging-composer-run_results" {
-  name    = "data/warehouse/target/run_results.json"
-  content = data.google_storage_bucket_object_content.calitp-staging-dbt-run_results.content
-  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
-}
-
 resource "google_storage_bucket_object" "calitp-staging-composer-partial_parse" {
   name    = "data/warehouse/target/partial_parse.msgpack"
   content = data.google_storage_bucket_object_content.calitp-staging-dbt-partial_parse.content
