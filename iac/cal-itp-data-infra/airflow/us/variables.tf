@@ -18,23 +18,23 @@ locals {
 }
 
 data "google_storage_bucket_object_content" "calitp-dbt-manifest" {
-  name   = "latest/manifest.json"
-  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--calitp-dbt-artifacts_name
+  name   = "manifest.json"
+  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-dbt-docs_name
 }
 
 data "google_storage_bucket_object_content" "calitp-dbt-catalog" {
-  name   = "latest/catalog.json"
-  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--calitp-dbt-artifacts_name
-}
-
-data "google_storage_bucket_object_content" "calitp-dbt-run_results" {
-  name   = "latest/run_results.json"
-  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--calitp-dbt-artifacts_name
+  name   = "catalog.json"
+  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-dbt-docs_name
 }
 
 data "google_storage_bucket_object_content" "calitp-dbt-index" {
-  name   = "latest/index.html"
-  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--calitp-dbt-artifacts_name
+  name   = "index.html"
+  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-dbt-docs_name
+}
+
+data "google_storage_bucket_object_content" "calitp-dbt-partial_parse" {
+  name   = "partial_parse.msgpack"
+  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-dbt-docs_name
 }
 
 data "terraform_remote_state" "networks" {

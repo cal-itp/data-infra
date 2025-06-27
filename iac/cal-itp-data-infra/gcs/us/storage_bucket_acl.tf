@@ -393,7 +393,3 @@ resource "google_storage_bucket_acl" "tfer--us-west2-calitp-airflow2-pr-31e41084
 resource "google_storage_bucket_acl" "tfer--us-west2-calitp-airflow2-pr-88ca8ec6-bucket" {
   bucket = "us-west2-calitp-airflow2-pr-88ca8ec6-bucket"
 }
-
-resource "google_storage_bucket_acl" "tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket" {
-  bucket = "us-west2-calitp-airflow2-pr-f6bb9855-bucket"
-}
