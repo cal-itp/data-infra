@@ -60,4 +60,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           add_github_comment: changes-only
-          path: iac/cal-itp-data-infra-staging/airflow/us
+          path: iac/cal-itp-data-infra/airflow/us
