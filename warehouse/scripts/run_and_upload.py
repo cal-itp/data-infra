@@ -16,7 +16,14 @@ CALITP_BUCKET__DBT_ARTIFACTS = os.environ.get("CALITP_BUCKET__DBT_ARTIFACTS")
 CALITP_BUCKET__DBT_DOCS = os.environ.get("CALITP_BUCKET__DBT_DOCS")
 
 artifacts = map(
-    Path, ["index.html", "catalog.json", "manifest.json", "run_results.json"]
+    Path,
+    [
+        "index.html",
+        "catalog.json",
+        "manifest.json",
+        "run_results.json",
+        "partial_parse.msgpack",
+    ],
 )
 
 sentry_sdk.init()
