@@ -616,6 +616,12 @@ resource "google_storage_bucket_iam_member" "tfer--us-west2-calitp-airflow2-pr-8
   role   = "roles/storage.legacyBucketReader"
 }
 
+resource "google_storage_bucket_iam_member" "tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket" {
+  bucket = "b/us-west2-calitp-airflow2-pr-f6bb9855-bucket"
+  member = "projectViewer:cal-itp-data-infra"
+  role   = "roles/storage.legacyBucketReader"
+}
+
 resource "google_storage_bucket_iam_member" "calitp_gtfs_public_web_access" {
   bucket = google_storage_bucket.calitp-gtfs.name
   role   = "roles/storage.objectViewer"

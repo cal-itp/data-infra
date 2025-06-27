@@ -404,3 +404,8 @@ resource "google_storage_default_object_acl" "tfer--us-west2-calitp-airflow2-pr-
   bucket      = "us-west2-calitp-airflow2-pr-88ca8ec6-bucket"
   role_entity = ["OWNER:project-editors-1005246706141", "OWNER:project-owners-1005246706141", "READER:project-viewers-1005246706141"]
 }
+
+resource "google_storage_default_object_acl" "tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket" {
+  bucket      = "us-west2-calitp-airflow2-pr-f6bb9855-bucket"
+  role_entity = ["OWNER:project-editors-1005246706141", "OWNER:project-owners-1005246706141", "READER:project-viewers-1005246706141"]
+}
