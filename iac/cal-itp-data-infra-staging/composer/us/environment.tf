@@ -14,8 +14,8 @@ resource "google_composer_environment" "calitp-staging-composer" {
 
     workloads_config {
       scheduler {
-        cpu        = 2
-        memory_gb  = 2
+        cpu        = 1
+        memory_gb  = 1
         storage_gb = 1
         count      = 1
       }
@@ -43,11 +43,10 @@ resource "google_composer_environment" "calitp-staging-composer" {
         core-dag_file_processor_timeout            = 1200
         core-dagbag_import_timeout                 = 600
         core-dags_are_paused_at_creation           = "True"
-        scheduler-job_heartbeat_sec                = 5
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
-        scheduler-scheduler_heartbeat_sec          = 5
         webserver-reload_on_plugin_change          = "True"
+        secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
       }
 
       pypi_packages = local.pypi_packages

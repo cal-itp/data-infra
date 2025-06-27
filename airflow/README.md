@@ -111,6 +111,39 @@ docker compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly va
 We have a [GitHub Action](../.github/workflows/deploy-airflow.yml) that runs when PRs touching this directory merge to the `main` branch. The GitHub Action updates the requirements sourced from [requirements.txt](./requirements.txt) and syncs the [DAGs](./dags) and [plugins](./plugins) directories to the bucket that Composer watches for code/data to parse. As of 2025-04-03, this bucket is `us-west2-calitp-airflow2-pr-f6bb9855-bucket`.
 
 
+## Secrets
+
+Airflow operators have dependencies on the following secrets, which are required to be set:
+
+- `airflow-connections-airtable_default` is a password formatted according to Airflow connection conventions (e.g. `airflow://login:abc123@airflow`), see <https://cloud.google.com/composer/docs/composer-2/configure-secret-manager>
+- `airflow-jobs_jobs-data` contains a Kubernetes secret blob, including `transitland-api-key`
+- `CALITP__ELAVON_SFTP_PASSWORD`
+
+The following are provided by Littlepay to DDS:
+
+- `LITTLEPAY_AWS_IAM_ANAHEIM_TRANSPORTATION_NETWORK_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_ATN_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_CAL_ITP_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_CALITP_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_CCJPA_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_CCJPA_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_HUMBOLDT_TRANSIT_AUTHORITY_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_HUMBOLDT_TRANSIT_AUTHORITY_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_LAKE_TRANSIT_AUTHORITY_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_LAKE_TRANSIT_AUTHORITY_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_MENDOCINO_TRANSIT_AUTHORITY_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_MENDOCINO_TRANSIT_AUTHORITY_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_MST_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_MST_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_NEVADA_COUNTY_CONNECTS_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_NEVADA_COUNTY_CONNECTS_ACCESS_KEY_V3`
+- `LITTLEPAY_AWS_IAM_REDWOOD_COAST_TRANSIT_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_REDWOOD_COAST_TRANSIT_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_SACRT_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_SBMTD_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_SBMTD_ACCESS_KEY_FEED_V3`
+
+
 ### Upgrading Airflow Itself
 
 Our production Composer instance is called [calitp-airflow2-prod-composer2-20250402](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod-composer2-20250402/monitoring); its configuration (including worker count, Airflow config overrides, and environment variables) is manually managed through the web console. When scoping upcoming upgrades to the specific Composer-managed Airflow version we use in production, it can be helpful to grab the corresponding list of requirements from the [Cloud Composer version list](https://cloud.google.com/composer/docs/concepts/versioning/composer-versions), copy it into `requirements-composer-[COMPOSER_VERSION_NUMBER]-airflow-[AIRFLOW_VERSION_NUMBER].txt`, change [Dockerfile.composer](./Dockerfile.composer) to reference that file (deleting the previous equivalent) and modify the `FROM` statement at the top to grab the correct Airflow and Python versions for that Composer version, and build the image locally.
