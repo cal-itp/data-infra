@@ -30,8 +30,8 @@ resource "google_storage_bucket_object" "calitp-composer-index" {
   bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name
 }
 
-resource "google_storage_bucket_object" "calitp-composer-run_results" {
-  name    = "data/warehouse/target/run_results.json"
-  content = data.google_storage_bucket_object_content.calitp-dbt-run_results.content
+resource "google_storage_bucket_object" "calitp--composer-partial_parse" {
+  name    = "data/warehouse/target/partial_parse.msgpack"
+  content = data.google_storage_bucket_object_content.calitp-dbt-partial_parse.content
   bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name
 }
