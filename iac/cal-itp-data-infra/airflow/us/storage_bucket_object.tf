@@ -13,25 +13,31 @@ resource "google_storage_bucket_object" "calitp-composer-dags" {
 }
 
 resource "google_storage_bucket_object" "calitp-composer-manifest" {
-  name    = "data/warehouse/target/manifest.json"
-  content = data.google_storage_bucket_object_content.calitp-dbt-manifest.content
-  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name
+  name         = "data/warehouse/target/manifest.json"
+  content      = data.google_storage_bucket_object_content.calitp-dbt-manifest.content
+  bucket       = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name
+  content_type = "application/json"
 }
 
 resource "google_storage_bucket_object" "calitp-composer-catalog" {
-  name    = "data/warehouse/target/catalog.json"
-  content = data.google_storage_bucket_object_content.calitp-dbt-catalog.content
-  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name
+  name         = "data/warehouse/target/catalog.json"
+  content      = data.google_storage_bucket_object_content.calitp-dbt-catalog.content
+  bucket       = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name
+  content_type = "application/json"
 }
 
 resource "google_storage_bucket_object" "calitp-composer-index" {
-  name    = "data/warehouse/target/index.html"
-  content = data.google_storage_bucket_object_content.calitp-dbt-index.content
-  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name
+  name         = "data/warehouse/target/index.html"
+  content      = data.google_storage_bucket_object_content.calitp-dbt-index.content
+  bucket       = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name
+  content_type = "text/html"
 }
 
 resource "google_storage_bucket_object" "calitp--composer-partial_parse" {
-  name    = "data/warehouse/target/partial_parse.msgpack"
-  content = data.google_storage_bucket_object_content.calitp-dbt-partial_parse.content
-  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name
+  depends_on     = [data.google_storage_bucket_object_content.calitp-dbt-partial_parse]
+  name           = "data/warehouse/target/partial_parse.msgpack"
+  content        = data.google_storage_bucket_object_content.calitp-dbt-partial_parse.content
+  source_md5hash = data.google_storage_bucket_object_content.calitp-dbt-partial_parse.md5hash
+  bucket         = data.terraform_remote_state.gcs.outputs.google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name
+  content_type   = "application/vnd.msgpack"
 }
