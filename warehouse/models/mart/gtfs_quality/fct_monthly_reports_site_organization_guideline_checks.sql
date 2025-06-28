@@ -11,6 +11,7 @@ checks AS (
            feature,
            check,
            reports_status,
+           percentage,
            is_manual,
            reports_order,
     FROM {{ ref('fct_daily_organization_combined_guideline_checks') }}
@@ -43,6 +44,7 @@ fct_monthly_reports_site_organization_guideline_checks AS (
         checks.feature,
         checks.check,
         checks.reports_status,
+        checks.percentage,
         checks.is_manual,
         checks.reports_order
     FROM idx_monthly_reports_site AS idx
