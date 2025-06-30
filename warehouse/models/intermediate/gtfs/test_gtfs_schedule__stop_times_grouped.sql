@@ -26,7 +26,7 @@ stops AS (
         stop_id,
         stop_timezone_coalesced,
         COUNT(*) AS ct,
-        MAX(ST_ASTEXT(pt_geom)) AS pt_geom, -- can this be written better
+        --MAX(ST_ASTEXT(pt_geom)) AS pt_geom, -- can this be written better
 
     FROM {{ ref('dim_stops') }}
 
@@ -54,7 +54,7 @@ stops_times_with_tz AS (
             OVER (PARTITION BY feed_key, trip_id
                 ORDER BY dim_stop_times.stop_sequence
                 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING), feed_timezone) AS trip_end_timezone,
-        ST_GEOGFROMTEXT(stops.pt_geom) AS pt_geom,
+        --ST_GEOGFROMTEXT(stops.pt_geom) AS pt_geom,
 
     FROM dim_stop_times
     LEFT JOIN stops
@@ -136,13 +136,21 @@ grouped AS (
         -- add stop position geometries and order of stops
         ARRAY_AGG(
             -- ignore nulls so it doesn't error out if there's a null point
-            pt_geom IGNORE NULLS
-            ORDER BY stop_sequence)
-        AS stop_pt_array,
+            stop_id IGNORE NULLS
+            ORDER BY stop_sequence, stop_id)
+        AS stop_id_array,
         ARRAY_AGG(
             stop_sequence
             ORDER BY stop_sequence
         ) AS stop_seq_array,
+        ARRAY_AGG(
+            trip_stop_arrival_sec IGNORE NULLS
+            ORDER BY stop_sequence, trip_stop_arrival_sec
+        ) AS arrival_sec_array,
+        ARRAY_AGG(
+            trip_stop_departure_sec IGNORE NULLS
+            ORDER BY stop_sequence, trip_stop_departure_sec
+        ) AS departure_sec_array,
 
     FROM stops_times_with_tz
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
@@ -208,8 +216,10 @@ int_gtfs_schedule__stop_times_grouped AS (
         num_arrival_times_populated_stop_times,
         num_departure_times_populated_stop_times,
 
-        stop_pt_array,
-        stop_seq_array
+        stop_id_array,
+        stop_seq_array,
+        arrival_sec_array,
+        departure_sec_array
 
     FROM grouped
 )
