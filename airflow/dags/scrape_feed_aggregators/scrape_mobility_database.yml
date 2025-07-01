@@ -11,16 +11,10 @@ arguments:
 
 is_delete_operator_pod: true
 get_logs: true
+service_account_name: composer-service-account
 
 env_vars:
   CALITP_BUCKET__AGGREGATOR_SCRAPER: "{{ env_var('CALITP_BUCKET__AGGREGATOR_SCRAPER') }}"
-  GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
-
-secrets:
-  - deploy_type: volume
-    deploy_target: /secrets/jobs-data/
-    secret: jobs-data
-    key: service_account.json
 
 tolerations:
   - key: pod-role

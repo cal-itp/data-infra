@@ -12,17 +12,13 @@ arguments:
 
 is_delete_operator_pod: true
 get_logs: true
+service_account_name: composer-service-account
 
 env_vars:
-  GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
   CALITP_BUCKET__DBT_ARTIFACTS: "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}"
   CALITP_BUCKET__PUBLISH: "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
 
 secrets:
-  - deploy_type: volume
-    deploy_target: /secrets/jobs-data/
-    secret: jobs-data
-    key: service-account.json
   - deploy_type: env
     deploy_target: CALITP_CKAN_GTFS_SCHEDULE_KEY
     secret: jobs-data
