@@ -627,3 +627,9 @@ resource "google_storage_bucket_iam_member" "calitp_gtfs_public_web_access" {
   role   = "roles/storage.objectViewer"
   member = "allUsers"
 }
+
+resource "google_storage_bucket_iam_member" "calitp_dbt_docs_public_web_access" {
+  bucket = google_storage_bucket.calitp-dbt-docs.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
