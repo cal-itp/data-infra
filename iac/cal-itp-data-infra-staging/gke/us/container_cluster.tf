@@ -10,4 +10,8 @@ resource "google_container_cluster" "airflow-jobs-staging" {
   secret_manager_config {
     enabled = true
   }
+
+  workload_identity_config {
+    workload_pool = "cal-itp-data-infra-staging.svc.id.goog"
+  }
 }
