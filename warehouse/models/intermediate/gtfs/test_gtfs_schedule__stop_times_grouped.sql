@@ -143,14 +143,11 @@ grouped AS (
             stop_sequence
             ORDER BY stop_sequence
         ) AS stop_seq_array,
+        -- just keep arrival for now
         ARRAY_AGG(
-            trip_stop_arrival_sec IGNORE NULLS
-            ORDER BY stop_sequence, trip_stop_arrival_sec
-        ) AS arrival_sec_array,
-        ARRAY_AGG(
-            trip_stop_departure_sec IGNORE NULLS
-            ORDER BY stop_sequence, trip_stop_departure_sec
-        ) AS departure_sec_array,
+            LEAST(COALESCE(trip_stop_arrival_sec, trip_stop_departure_sec)) IGNORE NULLS
+            ORDER BY stop_sequence
+          ) AS arrival_sec_array,
 
     FROM stops_times_with_tz
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
@@ -219,7 +216,6 @@ int_gtfs_schedule__stop_times_grouped AS (
         stop_id_array,
         stop_seq_array,
         arrival_sec_array,
-        departure_sec_array
 
     FROM grouped
 )
