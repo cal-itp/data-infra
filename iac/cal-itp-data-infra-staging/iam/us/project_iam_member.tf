@@ -227,6 +227,7 @@ resource "google_project_iam_member" "github-actions-terraform" {
     "roles/editor",
     "roles/storage.admin",
     "roles/iam.roleAdmin",
+    "roles/iam.serviceAccountAdmin",
     "roles/logging.configWriter"
   ])
   role    = each.key

@@ -542,6 +542,7 @@ resource "google_project_iam_member" "github-actions-terraform" {
   for_each = toset([
     "roles/resourcemanager.projectIamAdmin",
     "roles/iam.roleAdmin",
+    "roles/iam.serviceAccountAdmin",
     "roles/editor",
     "roles/storage.admin"
   ])
