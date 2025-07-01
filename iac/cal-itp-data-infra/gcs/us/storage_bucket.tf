@@ -2182,3 +2182,19 @@ resource "google_storage_bucket" "test-calitp-dbt-docs" {
     }
   }
 }
+
+resource "google_storage_bucket" "calitp-composer" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-composer"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  lifecycle {
+    ignore_changes = [labels]
+  }
+}

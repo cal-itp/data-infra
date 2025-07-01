@@ -567,6 +567,20 @@ resource "google_project_iam_member" "github-actions-service-account" {
   project = "cal-itp-data-infra"
 }
 
+resource "google_project_iam_member" "composer-service-account" {
+  for_each = toset([
+    "roles/bigquery.dataOwner",
+    "roles/bigquery.jobUser",
+    "roles/cloudbuild.builds.viewer",
+    "roles/composer.worker",
+    "roles/secretmanager.secretAccessor",
+    "roles/secretmanager.viewer"
+  ])
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.composer-service-account.email}"
+  project = "cal-itp-data-infra"
+}
+
 resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
   for_each = toset([
     "roles/viewer",
@@ -598,6 +612,7 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
   project = "cal-itp-data-infra"
 }
 
+# FIXME: if this exists after 8/1/2025, delete it and see if GitHub Actions fail
 resource "google_project_iam_member" "staging-github-actions-service-account" {
   role    = google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-DataAnalyst.id
   member  = "serviceAccount:github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com"
