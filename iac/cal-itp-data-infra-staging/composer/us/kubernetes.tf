@@ -22,8 +22,7 @@ resource "kubernetes_secret" "composer" {
     namespace = local.namespace
   }
   data = {
-    "service_account.json" = base64decode(google_service_account_key.composer.private_key)
-    transitland-api-key    = data.kubernetes_secret.composer.data.transitland-api-key
+    transitland-api-key = data.kubernetes_secret.composer.data.transitland-api-key
   }
 }
 
@@ -38,7 +37,7 @@ resource "kubernetes_priority_class" "dbt-high-priority" {
 
 resource "kubernetes_service_account" "composer-service-account" {
   metadata {
-    name      = local.service_account_name
+    name      = local.kubernetes_service_account
     namespace = local.namespace
     annotations = {
       "iam.gke.io/gcp-service-account" = data.terraform_remote_state.iam.outputs.google_service_account_composer-service-account_email
