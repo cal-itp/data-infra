@@ -17,3 +17,15 @@ output "google_container_node_pool_tfer--data-infra-apps_jobs-v1_id" {
 output "google_container_node_pool_tfer--data-infra-apps_jupyterhub-users_id" {
   value = google_container_node_pool.tfer--data-infra-apps_jupyterhub-users.id
 }
+
+output "google_container_cluster_airflow-jobs_name" {
+  value = google_container_cluster.airflow-jobs.name
+}
+
+output "google_container_cluster_airflow-jobs_endpoint" {
+  value = google_container_cluster.airflow-jobs.endpoint
+}
+
+output "google_container_cluster_airflow-jobs_ca_certificate" {
+  value = google_container_cluster.airflow-jobs.master_auth[0].cluster_ca_certificate
+}

@@ -505,3 +505,15 @@ output "google_service_account_tfer--117956330948086473326_id" {
 output "google_service_account_tfer--118350215382382143206_id" {
   value = google_service_account.tfer--118350215382382143206.id
 }
+
+output "google_service_account_composer-service-account_id" {
+  value = google_service_account.composer-service-account.id
+}
+
+output "google_service_account_composer-service-account_email" {
+  value = google_service_account.composer-service-account.email
+}
+
+output "google_service_account_composer-service-account_name" {
+  value = google_service_account.composer-service-account.name
+}

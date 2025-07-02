@@ -13,25 +13,31 @@ resource "google_storage_bucket_object" "calitp-staging-composer-dags" {
 }
 
 resource "google_storage_bucket_object" "calitp-staging-composer-manifest" {
-  name    = "data/warehouse/target/manifest.json"
-  content = data.google_storage_bucket_object_content.calitp-staging-dbt-manifest.content
-  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  name         = "data/warehouse/target/manifest.json"
+  content      = data.google_storage_bucket_object_content.calitp-staging-dbt-manifest.content
+  bucket       = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  content_type = "application/json"
 }
 
 resource "google_storage_bucket_object" "calitp-staging-composer-catalog" {
-  name    = "data/warehouse/target/catalog.json"
-  content = data.google_storage_bucket_object_content.calitp-staging-dbt-catalog.content
-  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  name         = "data/warehouse/target/catalog.json"
+  content      = data.google_storage_bucket_object_content.calitp-staging-dbt-catalog.content
+  bucket       = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  content_type = "application/json"
 }
 
 resource "google_storage_bucket_object" "calitp-staging-composer-index" {
-  name    = "data/warehouse/target/index.html"
-  content = data.google_storage_bucket_object_content.calitp-staging-dbt-index.content
-  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  name         = "data/warehouse/target/index.html"
+  content      = data.google_storage_bucket_object_content.calitp-staging-dbt-index.content
+  bucket       = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  content_type = "text/html; charset=utf-8"
 }
 
 resource "google_storage_bucket_object" "calitp-staging-composer-partial_parse" {
-  name    = "data/warehouse/target/partial_parse.msgpack"
-  content = data.google_storage_bucket_object_content.calitp-staging-dbt-partial_parse.content
-  bucket  = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  depends_on     = [data.google_storage_bucket_object_content.calitp-staging-dbt-partial_parse]
+  name           = "data/warehouse/target/partial_parse.msgpack"
+  source_md5hash = data.google_storage_bucket_object_content.calitp-staging-dbt-partial_parse.md5hash
+  content        = data.google_storage_bucket_object_content.calitp-staging-dbt-partial_parse.content
+  bucket         = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_id
+  content_type   = "application/vnd.msgpack"
 }

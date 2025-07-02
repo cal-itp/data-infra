@@ -75,8 +75,6 @@ resource "google_container_cluster" "tfer--data-infra-apps" {
     }
   }
 
-  node_version = "1.30.9-gke.1127000"
-
   private_cluster_config {
     enable_private_endpoint = "false"
     enable_private_nodes    = "false"
@@ -97,4 +95,22 @@ resource "google_container_cluster" "tfer--data-infra-apps" {
   }
 
   subnetwork = "projects/cal-itp-data-infra/regions/us-west1/subnetworks/default"
+}
+
+resource "google_container_cluster" "airflow-jobs" {
+  name     = "airflow-jobs"
+  location = "us-west2"
+  project  = "cal-itp-data-infra"
+
+  enable_autopilot    = true
+  deletion_protection = false
+  network             = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
+
+  secret_manager_config {
+    enabled = true
+  }
+
+  workload_identity_config {
+    workload_pool = "cal-itp-data-infra.svc.id.goog"
+  }
 }
