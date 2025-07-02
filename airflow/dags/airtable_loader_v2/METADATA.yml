@@ -19,3 +19,4 @@ default_args:
     #sla: !timedelta 'hours: 2'
 wait_for_defaults:
     timeout: 3600
+latest_only: True
