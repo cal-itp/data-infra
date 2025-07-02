@@ -24,6 +24,7 @@ env:
   CALITP_BUCKET__PUBLISH: ${{ github.ref == 'refs/heads/main' && 'calitp-publish' || 'calitp-staging-publish' }}
   GOOGLE_CLOUD_PROJECT: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
   METABASE_DESTINATION_DATABASE: ${{ github.ref == 'refs/heads/main' && 'Data Marts (formerly Warehouse Views)' || '(Internal) Staging Warehouse Views' }}
+  AIRFLOW_BUCKET: us-west2-calitp-airflow2-pr-f6bb9855-bucket
 
 jobs:
   compile:
@@ -315,6 +316,10 @@ jobs:
           parent: false
           process_gcloudignore: false
           destination: ${{ env.DBT_DOCS_BUCKET }}
+
+      - name: Push Airflow code to Composer
+        if: ${{ github.event_name == 'push' }}
+        run: gsutil -m rsync -d -c -r warehouse gs://${{ env.AIRFLOW_BUCKET }}/data/warehouse
 
   visualize:
     name: Pull Request visualization

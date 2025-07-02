@@ -21,3 +21,15 @@ resource "google_service_account_iam_member" "github-actions--github-actions-ser
   role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${local.data-infra_github_repository_name}"
 }
+
+resource "google_service_account_iam_member" "custom_service_account" {
+  service_account_id = google_service_account.composer-service-account.id
+  role               = "roles/composer.ServiceAgentV2Ext"
+  member             = "serviceAccount:service-${local.project_id}@cloudcomposer-accounts.iam.gserviceaccount.com"
+}
+
+resource "google_service_account_iam_member" "airflow-jobs_composer-service-account" {
+  service_account_id = google_service_account.composer-service-account.id
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "serviceAccount:${local.project_id}.svc.id.goog[airflow-jobs/composer-service-account]"
+}
