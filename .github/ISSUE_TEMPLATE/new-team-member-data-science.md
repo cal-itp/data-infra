@@ -1,6 +1,6 @@
 ---
 name: Data Science New Team Member
-about: Kick off the onboarding process.
+about: Kick off the onboarding process for Data Science.
 title: New Team Member - [Name]
 labels: new team member
 ---
