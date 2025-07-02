@@ -23,7 +23,9 @@ resource "kubernetes_secret" "composer" {
   }
 
   data = {
-    "service_account.json" = base64decode(google_service_account_key.composer.private_key)
+    calitp-ckan-gtfs-schedule-key = data.kubernetes_secret.composer.data.calitp-ckan-gtfs-schedule-key
+    "service_account.json"        = base64decode(google_service_account_key.composer.private_key)
+    transitland-api-key           = data.kubernetes_secret.composer.data.transitland-api-key
   }
 }
 
