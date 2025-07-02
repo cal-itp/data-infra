@@ -7,13 +7,11 @@ from pathlib import Path
 from typing import List, Optional
 
 import gcsfs  # type: ignore
-import pendulum
 import sentry_sdk
 import typer
 from dbt_artifacts import Manifest, RunResults, RunResultStatus
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.environ.get("CALITP_BUCKET__DBT_ARTIFACTS")
-CALITP_BUCKET__DBT_DOCS = os.environ.get("CALITP_BUCKET__DBT_DOCS")
 
 artifacts = map(
     Path,
@@ -145,23 +143,14 @@ def run(
     full_refresh: bool = False,
     dbt_test: bool = False,
     dbt_freshness: bool = False,
-    dbt_docs: bool = False,
     save_artifacts: bool = False,
-    deploy_docs: bool = False,
     select: Optional[str] = None,
     dbt_vars: Optional[str] = None,
     exclude: Optional[str] = None,
 ) -> None:
     assert (
-        dbt_docs or not save_artifacts
-    ), "cannot save artifacts without generating them!"
-    assert (
         CALITP_BUCKET__DBT_ARTIFACTS or not save_artifacts
     ), "must specify an artifacts bucket if saving artifacts"
-    assert (
-        CALITP_BUCKET__DBT_DOCS or not deploy_docs
-    ), "must specify a dbt docs bucket if deploying docs"
-    assert dbt_docs or not deploy_docs, "cannot deploy docs without generating them!"
 
     def get_command(*args) -> List[str]:
         cmd = [
@@ -240,51 +229,6 @@ def run(
         results_to_check.append(
             subprocess.run(get_command("source", "snapshot-freshness"))
         )
-
-    if dbt_docs:
-        subprocess.run(get_command("docs", "generate")).check_returncode()
-
-        fs = gcsfs.GCSFileSystem(
-            project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
-            token=os.environ.get("BIGQUERY_KEYFILE_LOCATION"),
-        )
-
-        ts = pendulum.now()
-
-        for artifact in artifacts:
-            _from = str(project_dir / Path("target") / artifact)
-
-            if save_artifacts:
-                # Save the latest ones for easy retrieval downstream
-                # but also save using the usual artifact types
-                latest_to = f"{CALITP_BUCKET__DBT_ARTIFACTS}/latest/{artifact}"
-                # TODO: this should use PartitionedGCSArtifact at some point
-                assert CALITP_BUCKET__DBT_ARTIFACTS  # unsure why mypy wants this
-                timestamped_to = "/".join(
-                    [
-                        CALITP_BUCKET__DBT_ARTIFACTS,
-                        str(artifact),
-                        f"dt={ts.to_date_string()}",
-                        f"ts={ts.to_iso8601_string()}",
-                        str(artifact),
-                    ]
-                )
-                typer.echo(f"writing {_from} to {latest_to} and {timestamped_to}")
-                fs.put(lpath=_from, rpath=latest_to)
-                fs.put(lpath=_from, rpath=timestamped_to)
-            else:
-                typer.echo(f"skipping upload of {artifact}")
-
-            # avoid copying run_results is unnecessary for the docs site
-            # so just skip to avoid any potential information leakage
-            if "run_results" not in str(artifact):
-                if deploy_docs:
-                    dbt_docs_to = f"{CALITP_BUCKET__DBT_DOCS}/{artifact}"
-
-                    typer.echo(f"writing {_from} to {dbt_docs_to}")
-                    fs.put(lpath=_from, rpath=dbt_docs_to)
-                else:
-                    typer.echo(f"skipping upload of {artifact} to dbt documentation")
 
     for result in results_to_check:
         result.check_returncode()

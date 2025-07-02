@@ -7,7 +7,6 @@ cmds:
 arguments:
   - '/app/scripts/run_and_upload.py'
   - 'run'
-  - '--dbt-docs'
   - '--save-artifacts'
   - '--select'
   - 'source:external_gtfs_rt+'

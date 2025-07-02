@@ -8,7 +8,6 @@ arguments:
   - '/app/scripts/run_and_upload.py'
   - 'run'
   - '--full-refresh'
-  - '--dbt-docs'
   - '--save-artifacts'
   - '--select'
   - "{{ dag_run.conf.get('dbt_select_statement', '') }}"
