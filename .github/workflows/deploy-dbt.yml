@@ -220,7 +220,7 @@ jobs:
 
       - name: Synchronize Metabase
         working-directory: warehouse
-        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --exclude-schemas="*staging, payments" --skip-sources --docs-url="https://dbt-docs.calitp.org" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
+        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --exclude-schemas="*staging, payments" --skip-sources --docs-url="https://dbt-docs.dds.dot.ca.gov" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
 
   upload:
     name: Upload to Google Cloud Storage
@@ -333,7 +333,7 @@ jobs:
         uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
-          glob: '{index.html}'
+          glob: 'index.html'
           parent: false
           process_gcloudignore: false
           destination: ${{ env.DBT_DOCS_BUCKET }}
@@ -344,7 +344,7 @@ jobs:
         uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
-          glob: '{partial_parse.msgpack}'
+          glob: 'partial_parse.msgpack'
           parent: false
           process_gcloudignore: false
           destination: ${{ env.DBT_DOCS_BUCKET }}
