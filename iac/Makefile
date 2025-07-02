@@ -1,4 +1,4 @@
-TARGETS := init plan apply fmt migrate-state
+TARGETS := init upgrade plan apply fmt migrate-state
 
 PATHS := $(wildcard */.)
 
