@@ -35,3 +35,20 @@ resource "google_iam_workload_identity_pool_provider" "gtfs-calitp-org" {
     issuer_uri = "https://token.actions.githubusercontent.com"
   }
 }
+
+resource "google_iam_workload_identity_pool_provider" "reports" {
+  workload_identity_pool_provider_id = "reports"
+  workload_identity_pool_id          = google_iam_workload_identity_pool.github-actions.workload_identity_pool_id
+  attribute_mapping = {
+    "google.subject"       = "assertion.sub"
+    "attribute.actor"      = "assertion.actor"
+    "attribute.aud"        = "assertion.aud"
+    "attribute.repository" = "assertion.repository"
+  }
+  attribute_condition = <<EOT
+    attribute.repository == "${local.reports_github_repository_name}"
+  EOT
+  oidc {
+    issuer_uri = "https://token.actions.githubusercontent.com"
+  }
+}
