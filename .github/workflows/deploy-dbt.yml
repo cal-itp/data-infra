@@ -404,6 +404,9 @@ jobs:
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
 
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
       - name: Push Airflow code to Composer
         run: gsutil -m rsync -d -c -r warehouse gs://${{ env.AIRFLOW_BUCKET }}/data/warehouse
 
