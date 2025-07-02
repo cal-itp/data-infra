@@ -23,13 +23,13 @@ Slack Username:
     - [ ] Permissions to consider: codeowner in `data-infra`
   - [ ] JupyterLab - use DOT email
   - [ ] Google Cloud Console - use DOT email
-     - permissions to consider: Secrets Manager (if adding API keys to Airflow)
+    - permissions to consider: Secrets Manager (if adding API keys to Airflow)
   - [ ] Metabase - use DOT email
   - [ ] Slack
   - [ ] Airtable - use DOT email
-     - permissions to consider: editing/make copy of grid views, added as collaborator on certain locked columns
+    - permissions to consider: editing/make copy of grid views, added as collaborator on certain locked columns
   - [ ] Hubspot - use DOT email
-     - permissions to consider: ability to make tickets, invited to workspace for transit agency contacts
+    - permissions to consider: ability to make tickets, invited to workspace for transit agency contacts
 
 - [ ] Added to meetings:
 
