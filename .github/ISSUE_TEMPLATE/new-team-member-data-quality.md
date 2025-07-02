@@ -23,7 +23,7 @@ Slack Username:
     - [ ] Permissions to consider: codeowner in `data-infra`
   - [ ] JupyterLab - use DOT email
   - [ ] Google Cloud Console - use DOT email
-     - permissions to consider: Secrets Manager (if adding API keys to Airtable)
+     - permissions to consider: Secrets Manager (if adding API keys to Airflow)
   - [ ] Metabase - use DOT email
   - [ ] Slack
   - [ ] Airtable - use DOT email
