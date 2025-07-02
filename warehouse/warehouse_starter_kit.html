@@ -514,7 +514,7 @@ document.write(`
 <section id="important-links">
 <span id="links"></span><h2>Important Links<a class="headerlink" href="#important-links" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://dbt-docs.calitp.org/#!/overview">DBT Docs Cal-ITP</a> contains information on all the tables in the warehouse.</p></li>
+<li><p><a class="reference external" href="https://dbt-docs.dds.dot.ca.gov/#!/overview">DBT Docs Cal-ITP</a> contains information on all the tables in the warehouse.</p></li>
 <li><p><a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/starter_kit/gtfs_utils_v2_examples.ipynb">Example notebook</a>
 uses functions in <code class="docutils literal notranslate"><span class="pre">shared_utils.gtfs_utils_v2</span></code> that query some of the tables below.</p></li>
 </ul>
@@ -523,13 +523,13 @@ uses functions in <code class="docutils literal notranslate"><span class="pre">s
 <span id="id1"></span><h2>Trips<a class="headerlink" href="#trips" title="Link to this heading">#</a></h2>
 <p>On a given day:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_scheduled_trips">fct_scheduled_trips</a></p>
+<li><p><a class="reference external" href="https://dbt-docs.dds.dot.ca.gov/#!/model/model.calitp_warehouse.fct_scheduled_trips">fct_scheduled_trips</a></p>
 <ul>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">gtfs_utils_v2.get_trips()</span></code>.</p></li>
 <li><p>Answer how many trips a provider is scheduled to run and how many trips a particular route may make?</p></li>
 </ul>
 </li>
-<li><p><a class="reference external" href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_observed_trips">fct_observed_trips</a></p>
+<li><p><a class="reference external" href="https://dbt-docs.dds.dot.ca.gov/#!/model/model.calitp_warehouse.fct_observed_trips">fct_observed_trips</a></p>
 <ul>
 <li><p>Realtime observations of trips to get a full picture of what occurred.</p></li>
 <li><p>Find a trip’s start time, where it went, and which route it is associated with.</p></li>
@@ -540,7 +540,7 @@ uses functions in <code class="docutils literal notranslate"><span class="pre">s
 <section id="shapes">
 <span id="id2"></span><h2>Shapes<a class="headerlink" href="#shapes" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_scheduled_shapes">fct_daily_scheduled_shapes</a></p>
+<li><p><a class="reference external" href="https://dbt-docs.dds.dot.ca.gov/#!/model/model.calitp_warehouse.fct_daily_scheduled_shapes">fct_daily_scheduled_shapes</a></p>
 <ul>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">gtfs_utils_v2.get_shapes()</span></code>.</p></li>
 <li><p>Contains <code class="docutils literal notranslate"><span class="pre">point</span></code> geometry, so you can see the length and location of a route a provider can run on a given date.</p></li>
@@ -554,7 +554,7 @@ uses functions in <code class="docutils literal notranslate"><span class="pre">s
 <span id="id3"></span><h2>Daily<a class="headerlink" href="#daily" title="Link to this heading">#</a></h2>
 <p>For a given day:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_scheduled_stops">fct_daily_scheduled_stops</a></p>
+<li><p><a class="reference external" href="https://dbt-docs.dds.dot.ca.gov/#!/model/model.calitp_warehouse.fct_daily_scheduled_stops">fct_daily_scheduled_stops</a></p>
 <ul>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">gtfs_utils_v2.get_stops()</span></code>.</p></li>
 <li><p>Contains <code class="docutils literal notranslate"><span class="pre">point</span></code> geometry.</p></li>
@@ -563,7 +563,7 @@ uses functions in <code class="docutils literal notranslate"><span class="pre">s
 <li><p>Detailed information such as how passengers embark/disembark (ex: on a stop/at a station) onto a vehicle.</p></li>
 </ul>
 </li>
-<li><p><a class="reference external" href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_schedule_feeds">fct_daily_schedule_feeds</a></p>
+<li><p><a class="reference external" href="https://dbt-docs.dds.dot.ca.gov/#!/model/model.calitp_warehouse.fct_daily_schedule_feeds">fct_daily_schedule_feeds</a></p>
 <ul>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">gtfs_utils_v2.schedule_daily_feed_to_organization()</span></code> to find feed names, regional feed type, and gtfs dataset key.</p></li>
 <li><p>Please note,the <code class="docutils literal notranslate"><span class="pre">name</span></code> column returned from the function above refers to a name of the feed, not to a provider.</p></li>
@@ -574,7 +574,7 @@ uses functions in <code class="docutils literal notranslate"><span class="pre">s
 <section id="other">
 <span id="id4"></span><h3>Other<a class="headerlink" href="#other" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_annual_database_agency_information">dim_annual_agency_information</a></p>
+<li><p><a class="reference external" href="https://dbt-docs.dds.dot.ca.gov/#!/model/model.calitp_warehouse.dim_annual_database_agency_information">dim_annual_agency_information</a></p>
 <ul>
 <li><p>View some of the data produced by the <a class="reference external" href="https://www.transit.dot.gov/ntd">US Department of Transportation</a> for the National Transit Database.</p></li>
 <li><p>Information from 2022 and 2023 are available.</p></li>
@@ -582,10 +582,10 @@ uses functions in <code class="docutils literal notranslate"><span class="pre">s
 <li><p>Not every provider is required to report their data to the NTD, so this is not a comprehensive dataset.</p></li>
 </ul>
 </li>
-<li><p><a class="reference external" href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_organization_combined_guideline_checks">fct_daily_organization_combined_guideline_checks</a></p>
+<li><p><a class="reference external" href="https://dbt-docs.dds.dot.ca.gov/#!/model/model.calitp_warehouse.fct_daily_organization_combined_guideline_checks">fct_daily_organization_combined_guideline_checks</a></p>
 <ul>
 <li><p>Understand GTFS quality - how well a transit provider’s GTFS data conforms to <a class="reference external" href="https://dot.ca.gov/cal-itp/california-transit-data-guidelines">California’s Transit Data Guidelines</a>.</p></li>
-<li><p>Each provider <a class="reference external" href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.int_gtfs_quality__guideline_checks_long">has one row per guideline check</a>. Each row details how well a provider’s GTFS data conforms to a certain guideline (availability on website, accurate accessibility data, etc).</p></li>
+<li><p>Each provider <a class="reference external" href="https://dbt-docs.dds.dot.ca.gov/#!/model/model.calitp_warehouse.int_gtfs_quality__guideline_checks_long">has one row per guideline check</a>. Each row details how well a provider’s GTFS data conforms to a certain guideline (availability on website, accurate accessibility data, etc).</p></li>
 </ul>
 </li>
 </ul>
