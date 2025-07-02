@@ -2,7 +2,7 @@
 
 Type: [Now / Scheduled](https://docs.calitp.org/data-infra/airflow/dags-maintenance.html)
 
-This DAG orchestrates the running of the Cal-ITP dbt project and deployment of associated artifacts like the [dbt docs site](https://dbt-docs.calitp.org/#!/overview) with the [`--full-refresh` flag set](https://docs.getdbt.com/docs/build/incremental-models#how-do-i-rebuild-an-incremental-model). This DAG runs every Sunday to allow non-RT incremental models to be regularly rebuilt from scratch, so as to reflect recent code changes if they occur.
+This DAG orchestrates the running of the Cal-ITP dbt project and deployment of associated artifacts like the [dbt docs site](https://dbt-docs.dds.dot.ca.gov/#!/overview) with the [`--full-refresh` flag set](https://docs.getdbt.com/docs/build/incremental-models#how-do-i-rebuild-an-incremental-model). This DAG runs every Sunday to allow non-RT incremental models to be regularly rebuilt from scratch, so as to reflect recent code changes if they occur.
 
 To be cost-effective, it only runs a `dbt run --full-refresh` on non-RT data, and afterwards runs a normal `dbt run` on the (more expensive) RT data. It also runs `dbt test` after each run for the data transformed.
 

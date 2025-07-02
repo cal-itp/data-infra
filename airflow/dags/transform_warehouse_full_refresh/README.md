@@ -2,7 +2,7 @@
 
 Type: [Now / Ad-Hoc](https://docs.calitp.org/data-infra/airflow/dags-maintenance.html)
 
-This DAG orchestrates the running of the Cal-ITP dbt project and deployment of associated artifacts like the [dbt docs site](https://dbt-docs.calitp.org/#!/overview) with the [`--full-refresh` flag set](https://docs.getdbt.com/docs/build/incremental-models#how-do-i-rebuild-an-incremental-model) so that incremental models will be rebuilt from scratch.
+This DAG orchestrates the running of the Cal-ITP dbt project and deployment of associated artifacts like the [dbt docs site](https://dbt-docs.dds.dot.ca.gov/#!/overview) with the [`--full-refresh` flag set](https://docs.getdbt.com/docs/build/incremental-models#how-do-i-rebuild-an-incremental-model) so that incremental models will be rebuilt from scratch.
 
 **This task should generally only be run with a `dbt_select` statement provided:** (use the `Trigger DAG w/ config` button in the Airflow UI (option under the "play" icon in the upper right corner when looking at an individual DAG) and provide a JSON configuration like `{"dbt_select": "<+ if you want to full refresh parents><your_model_here><+ if you want to full refresh children>"}` using [dbt selection syntax](https://docs.getdbt.com/reference/node-selection/syntax#specifying-resources)).  **Note that all models selected by the selection syntax will be full-refreshed! Check all the incremental models selected by your syntax using the following from the command line in the repo's warehouse folder `poetry run dbt ls -s <your select statement here>,config.materialized:incremental --resource-type model`.**
 
