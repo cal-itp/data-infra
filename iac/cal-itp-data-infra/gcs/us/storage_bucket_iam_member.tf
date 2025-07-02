@@ -633,3 +633,9 @@ resource "google_storage_bucket_iam_member" "calitp-composer" {
   member = "projectEditor:cal-itp-data-infra"
   role   = "roles/storage.legacyBucketOwner"
 }
+
+resource "google_storage_bucket_iam_member" "calitp-reports" {
+  bucket = google_storage_bucket.calitp-reports.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
