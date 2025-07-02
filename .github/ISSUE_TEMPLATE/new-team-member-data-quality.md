@@ -53,5 +53,9 @@ Slack Username:
 - [ ] Added to Team channels:
 
   - [ ] Transit Data Quality
+  - [ ] DOT PMP HQ - Data and Digital Services
+  - [ ] DOT PMP HQ - DDS + Contractors
+  - [ ] DOT HQ Cal-ITP External Collab
+  - [ ] DOT HQ Developers and Analysts 
 
 - [ ] url_placeholder: One stop shop for SOPs + rotational tasks
