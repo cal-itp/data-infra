@@ -16,6 +16,9 @@ def PodOperator(*args, **kwargs):
     if "secrets" in kwargs:
         kwargs["secrets"] = map(lambda d: Secret(**d), kwargs["secrets"])
 
+    if "SERVICE_ACCOUNT_NAME" in os.environ:
+        kwargs["service_account_name"] = os.environ.get("SERVICE_ACCOUNT_NAME")
+
     location = os.environ.get("POD_LOCATION")
     cluster_name = os.environ.get("POD_CLUSTER_NAME")
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
