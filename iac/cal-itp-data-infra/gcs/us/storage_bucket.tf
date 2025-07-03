@@ -2198,3 +2198,19 @@ resource "google_storage_bucket" "calitp-composer" {
     ignore_changes = [labels]
   }
 }
+
+resource "google_storage_bucket" "calitp-reports" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-reports"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  website {
+    main_page_suffix = "index.html"
+  }
+}
