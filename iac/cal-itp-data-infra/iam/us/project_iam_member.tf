@@ -585,7 +585,6 @@ resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Ware
   for_each = toset([
     "roles/viewer",
     "roles/bigquery.user",
-    "roles/bigquery.filteredDataViewer",
     "roles/bigquery.metadataViewer",
     "roles/storage.objectUser",
     "roles/secretmanager.secretAccessor",

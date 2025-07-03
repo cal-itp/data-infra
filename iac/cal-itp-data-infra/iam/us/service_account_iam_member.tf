@@ -31,5 +31,5 @@ resource "google_service_account_iam_member" "custom_service_account" {
 resource "google_service_account_iam_member" "airflow-jobs_composer-service-account" {
   service_account_id = google_service_account.composer-service-account.id
   role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${local.project_id}.svc.id.goog[airflow-jobs/composer-service-account]"
+  member             = "serviceAccount:cal-itp-data-infra.svc.id.goog[airflow-jobs/composer-service-account]"
 }
