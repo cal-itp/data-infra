@@ -273,7 +273,6 @@ resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Ware
     "roles/viewer",
     "roles/bigquery.user",
     "roles/bigquery.dataEditor",
-    "roles/bigquery.filteredDataViewer",
     "roles/storage.objectUser",
     "roles/secretmanager.secretAccessor",
     "roles/secretmanager.viewer",
