@@ -55,49 +55,49 @@ schema_fields:
   - name: address_line_2
     type: STRING
   - name: p_o__box
-    type: FLOAT
+    type: NUMERIC
   - name: city
     type: STRING
   - name: state
     type: STRING
   - name: zip_code
-    type: FLOAT
+    type: NUMERIC
   - name: zip_code_ext
-    type: FLOAT
+    type: NUMERIC
   - name: region
-    type: FLOAT
+    type: NUMERIC
   - name: url
     type: STRING
   - name: fta_recipient_id
-    type: FLOAT
+    type: NUMERIC
   - name: duns_number
-    type: FLOAT
+    type: NUMERIC
   - name: service_area_sq_miles
-    type: FLOAT
+    type: NUMERIC
   - name: service_area_pop
-    type: FLOAT
+    type: NUMERIC
   - name: primary_uza
-    type: FLOAT
+    type: NUMERIC
   - name: uza_name
     type: STRING
   - name: tribal_area_name
     type: STRING
   - name: population
-    type: FLOAT
+    type: NUMERIC
   - name: density
-    type: FLOAT
+    type: NUMERIC
   - name: sq_miles
-    type: FLOAT
+    type: NUMERIC
   - name: voms_do
-    type: FLOAT
+    type: NUMERIC
   - name: voms_pt
-    type: FLOAT
+    type: NUMERIC
   - name: total_voms
-    type: FLOAT
+    type: NUMERIC
   - name: volunteer_drivers
-    type: FLOAT
+    type: NUMERIC
   - name: personal_vehicles
-    type: FLOAT
+    type: NUMERIC
   - name: dt
     type: DATE
   - name: ts
