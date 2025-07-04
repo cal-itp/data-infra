@@ -1,7 +1,7 @@
 {{ config(
     materialized='table',
-    cluster_by='year')
-}}
+    cluster_by=['year', 'gtfs_dataset_key'],
+) }}
 
 WITH trips AS (
     SELECT * FROM {{ ref('fct_scheduled_trips') }}
