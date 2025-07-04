@@ -40,7 +40,7 @@ resource "kubernetes_priority_class" "dbt-high-priority" {
 
 resource "kubernetes_service_account" "composer-service-account" {
   metadata {
-    name      = "composer-service-account"
+    name      = local.service_account_name
     namespace = local.namespace
     annotations = {
       "iam.gke.io/gcp-service-account" = data.terraform_remote_state.iam.outputs.google_service_account_composer-service-account_email

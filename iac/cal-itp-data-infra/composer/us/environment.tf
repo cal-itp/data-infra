@@ -55,7 +55,7 @@ resource "google_composer_environment" "calitp-composer" {
         "POD_LOCATION"                                         = "us-west2",
         "POD_CLUSTER_NAME"                                     = data.terraform_remote_state.gke.outputs.google_container_cluster_airflow-jobs_name,
         "POD_SECRETS_NAMESPACE"                                = local.namespace,
-        "SERVICE_ACCOUNT_NAME"                                 = data.terraform_remote_state.iam.outputs.google_service_account_composer-service-account_email,
+        "SERVICE_ACCOUNT_NAME"                                 = local.service_account_name,
         "CALITP_BUCKET__AGGREGATOR_SCRAPER"                    = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-aggregator-scraper_name}",
         "CALITP_BUCKET__AIRTABLE"                              = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-airtable_name}",
         "CALITP_BUCKET__AMPLITUDE_BENEFITS_EVENTS"             = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-amplitude-benefits-events_name}",
