@@ -2,11 +2,11 @@
 
 {% set min_month_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_v2'), column='transaction_date_pacific', where='transaction_date_pacific IS NOT NULL', order_by = 'transaction_date_pacific', max_records = 1) %}
 
-{% set min_month = min_month_list[0] %}
+{% set min_month = min_month_list[0] if min_month_list[0] else modules.datetime.date.today() - modules.datetime.timedelta(days=30) %}
 
 {% set max_month_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_v2'), column='transaction_date_pacific', where='transaction_date_pacific IS NOT NULL', order_by = 'transaction_date_pacific DESC', max_records = 1) %}
 
-{% set max_month = max_month_list[0] %}
+{% set max_month = max_month_list[0] if max_month_list[0] else modules.datetime.date.today() %}
 
 {{ log(min_month ~ " " ~ max_month) }}
 
