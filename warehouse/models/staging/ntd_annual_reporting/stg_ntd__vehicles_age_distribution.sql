@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__vehicles_age_distribution AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year', 'vehicle_type']) }} AS key,
         SAFE_CAST(_0 AS NUMERIC) AS _0,
         SAFE_CAST(_1 AS NUMERIC) AS _1,
         SAFE_CAST(_10 AS NUMERIC) AS _10,

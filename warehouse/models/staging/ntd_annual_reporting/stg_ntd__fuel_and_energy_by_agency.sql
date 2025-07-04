@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__fuel_and_energy_by_agency AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year']) }} AS key,
         SAFE_CAST(diesel_gal_questionable AS NUMERIC) AS diesel_gal_questionable,
         SAFE_CAST(diesel_mpg_questionable AS NUMERIC) AS diesel_mpg_questionable,
         {{ trim_make_empty_string_null('max_agency') }} AS agency,
