@@ -491,13 +491,12 @@ jobs:
         run: poetry run python scripts/visualize.py ci-report --latest-dir='./target/latest/'
 
       - name: Archive CI report
-        working-directory: warehouse/target
         uses: actions/upload-artifact@v4
         with:
           name: ci-report
           path: |
-            *.md
-            *.png
+            warehouse/target/report.md
+            warehouse/target/dag.png
 
       - name: Create GitHub comment
         working-directory: warehouse
