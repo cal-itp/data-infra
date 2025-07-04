@@ -249,11 +249,12 @@ jobs:
       - name: Setup GCloud utilities
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Upload catalog.json, manifest.json, run_results.json
+      # Don't send run_results.json because DBT_DOCS_BUCKET is a public bucket
+      - name: Upload catalog.json and manifest.json
         uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
-          glob: '{catalog.json,manifest.json,run_results.json}'
+          glob: '{catalog.json,manifest.json}'
           parent: false
           process_gcloudignore: false
           destination: ${{ env.DBT_DOCS_BUCKET }}
