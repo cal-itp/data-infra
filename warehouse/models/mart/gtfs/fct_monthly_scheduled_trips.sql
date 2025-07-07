@@ -5,7 +5,7 @@
             'field': 'month_first_day',
             'data_type': 'date',
             'granularity': 'month'
-        }, cluster_by=['gtfs_dataset_key', 'year']
+        }, cluster_by=['gtfs_dataset_key', 'year', 'month']
     )
 }}
 
