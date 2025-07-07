@@ -42,6 +42,13 @@ initial_pt_array AS (
             DATETIME(location_timestamp, "America/Los_Angeles") IGNORE NULLS
             ORDER BY location_timestamp
         ) AS location_timestamp_pacific,
+        ARRAY_AGG(
+            EXTRACT(HOUR FROM DATETIME(location_timestamp, "America/Los_Angeles")) * 3600
+              + EXTRACT(MINUTE FROM DATETIME(location_timestamp, "America/Los_Angeles")) * 60
+              + EXTRACT(SECOND FROM DATETIME(location_timestamp, "America/Los_Angeles"))
+             IGNORE NULLS
+            ORDER BY location_timestamp
+        ) AS pacific_seconds,
         COUNT(*) AS n_vp,
 
     FROM fct_vehicle_locations
