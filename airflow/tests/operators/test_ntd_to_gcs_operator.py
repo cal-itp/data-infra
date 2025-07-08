@@ -48,7 +48,8 @@ class TestNTDToGCSOperator:
             bucket=os.environ.get("CALITP_BUCKET__NTD_API_DATA_PRODUCTS"),
             product="operating_expenses_by_type_and_agency",
             year="multi_year",
-            endpoint="i4ua-cjx4.json?$limit=10",
+            endpoint="resource/i4ua-cjx4.json",
+            parameters={"$limit": 10},
             dag=test_dag,
         )
 

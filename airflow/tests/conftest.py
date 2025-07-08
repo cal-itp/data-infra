@@ -105,5 +105,5 @@ def setup_module():
         session,
         conn_id="http_ntd",
         conn_type="http",
-        host="https://data.transportation.gov/resource/",
+        host="https://data.transportation.gov",
     )
