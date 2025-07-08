@@ -45,8 +45,8 @@ resource "google_composer_environment" "calitp-composer" {
         core-dags_are_paused_at_creation           = "True"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
-        webserver-reload_on_plugin_change          = "True"
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
+        webserver-reload_on_plugin_change          = "True"
       }
 
       pypi_packages = local.pypi_packages
