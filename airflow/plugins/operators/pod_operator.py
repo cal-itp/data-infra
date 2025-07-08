@@ -1,4 +1,3 @@
-import inspect
 import os
 from functools import wraps
 
@@ -11,37 +10,27 @@ from airflow.kubernetes.secret import Secret
 
 @wraps(KubernetesPodOperator)
 def PodOperator(*args, **kwargs):
-    # TODO: tune this, and add resource limits
-    namespace = kwargs.pop("namespace", "default")
-
     if "startup_timeout_seconds" not in kwargs:
         kwargs["startup_timeout_seconds"] = 300
-
-    is_gke = kwargs.pop("is_gke", False)  # we want to always pop()
 
     if "secrets" in kwargs:
         kwargs["secrets"] = map(lambda d: Secret(**d), kwargs["secrets"])
 
-    # do we ever have non-GKE pods?
-    if os.environ["AIRFLOW_ENV"] == "development" or is_gke:
-        return GKEPodOperator(
-            *args,
-            in_cluster=False,
-            project_id="cal-itp-data-infra",  # there currently isn't a staging cluster
-            location=kwargs.pop("pod_location", os.environ["POD_LOCATION"]),
-            cluster_name=kwargs.pop("cluster_name", os.environ["POD_CLUSTER_NAME"]),
-            namespace=namespace,
-            image_pull_policy="Always",
-            **kwargs,
-        )
+    if "SERVICE_ACCOUNT_NAME" in os.environ:
+        kwargs["service_account_name"] = os.environ.get("SERVICE_ACCOUNT_NAME")
 
-    else:
-        return KubernetesPodOperator(*args, namespace=namespace, **kwargs)
+    location = os.environ.get("POD_LOCATION")
+    cluster_name = os.environ.get("POD_CLUSTER_NAME")
+    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
+    namespace = os.environ.get("POD_SECRETS_NAMESPACE")
 
-
-PodOperator._gusty_parameters = (
-    *inspect.signature(KubernetesPodOperator.__init__).parameters.keys(),
-    "is_gke",
-    "pod_location",
-    "cluster_name",
-)
+    return GKEPodOperator(
+        *args,
+        in_cluster=False,
+        project_id=project_id,
+        location=location,
+        cluster_name=cluster_name,
+        namespace=namespace,
+        image_pull_policy="Always",
+        **kwargs,
+    )

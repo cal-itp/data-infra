@@ -22,12 +22,6 @@ resource "google_storage_bucket_iam_member" "tfer--dataproc-temp-us-west2-473674
   role   = "roles/storage.legacyBucketOwner"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-amplitude-benefits-events" {
-  bucket = "b/test-calitp-amplitude-benefits-events"
-  member = "projectEditor:cal-itp-data-infra-staging"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--calitp-staging-gcp-components-tfstate" {
   bucket = "b/calitp-staging-gcp-components-tfstate"
   member = "projectViewer:cal-itp-data-infra-staging"
@@ -44,4 +38,11 @@ resource "google_storage_bucket_iam_member" "calitp-staging-composer" {
   bucket = google_storage_bucket.calitp-staging-composer.name
   member = "projectEditor:cal-itp-data-infra-staging"
   role   = "roles/storage.legacyBucketOwner"
+}
+
+resource "google_storage_bucket_iam_member" "calitp-staging" {
+  for_each = local.environment_buckets
+  bucket   = google_storage_bucket.calitp-staging[each.key].name
+  member   = "projectViewer:cal-itp-data-infra-staging"
+  role     = "roles/storage.legacyBucketReader"
 }

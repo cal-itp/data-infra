@@ -2107,6 +2107,21 @@ resource "google_storage_bucket" "tfer--us-west2-calitp-airflow2-pr-88ca8ec6-buc
   }
 }
 
+resource "google_storage_bucket" "tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "us-west2-calitp-airflow2-pr-f6bb9855-bucket"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+  lifecycle {
+    ignore_changes = [labels]
+  }
+}
+
 resource "google_storage_bucket" "calitp-gtfs" {
   location                    = "US-WEST2"
   name                        = "calitp-gtfs"
@@ -2165,5 +2180,37 @@ resource "google_storage_bucket" "test-calitp-dbt-docs" {
       num_newer_versions         = "0"
       with_state                 = "ANY"
     }
+  }
+}
+
+resource "google_storage_bucket" "calitp-composer" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-composer"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  lifecycle {
+    ignore_changes = [labels]
+  }
+}
+
+resource "google_storage_bucket" "calitp-reports" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-reports"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  website {
+    main_page_suffix = "index.html"
   }
 }

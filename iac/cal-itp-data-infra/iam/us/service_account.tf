@@ -263,3 +263,11 @@ resource "google_service_account" "github-actions-service-account" {
   display_name = "github-actions"
   project      = "cal-itp-data-infra"
 }
+
+resource "google_service_account" "composer-service-account" {
+  account_id   = "composer-service-account"
+  description  = "Service account for Composer"
+  disabled     = "false"
+  display_name = "composer"
+  project      = "cal-itp-data-infra"
+}

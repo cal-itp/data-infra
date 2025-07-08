@@ -44,8 +44,6 @@ resource "google_project_iam_custom_role" "calitp-dds-analyst" {
     "bigquery.reservations.list",
     "bigquery.routines.get",
     "bigquery.routines.list",
-    "bigquery.rowAccessPolicies.create",
-    "bigquery.rowAccessPolicies.getFilteredData",
     "bigquery.savedqueries.get",
     "bigquery.savedqueries.list",
     "bigquery.tables.get",

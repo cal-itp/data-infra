@@ -13,3 +13,92 @@ hive_options:
   mode: AUTO
   require_partition_filter: false
   source_uri_prefix: "california_transit__ntd_agency_info/"
+schema_fields:
+  - name: id
+    type: STRING
+  - name: ntd_id
+    type: STRING
+  - name: legacy_ntd_id
+    type: STRING
+  - name: agency_name
+    type: STRING
+  - name: reporter_acronym
+    type: STRING
+  - name: doing_business_as
+    type: STRING
+  - name: reporter_status
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: reporting_module
+    type: STRING
+  - name: organization_type
+    type: STRING
+  - name: organizations_copy
+    type: STRING
+    mode: REPEATED
+  - name: organizations
+    type: STRING
+    mode: REPEATED
+  - name: reported_by_ntd_id
+    type: STRING
+  - name: reported_by_name
+    type: STRING
+  - name: subrecipient_type
+    type: STRING
+  - name: fy_end_date
+    type: STRING
+  - name: original_due_date
+    type: STRING
+  - name: address_line_1
+    type: STRING
+  - name: address_line_2
+    type: STRING
+  - name: p_o__box
+    type: NUMERIC
+  - name: city
+    type: STRING
+  - name: state
+    type: STRING
+  - name: zip_code
+    type: NUMERIC
+  - name: zip_code_ext
+    type: NUMERIC
+  - name: region
+    type: NUMERIC
+  - name: url
+    type: STRING
+  - name: fta_recipient_id
+    type: NUMERIC
+  - name: duns_number
+    type: NUMERIC
+  - name: service_area_sq_miles
+    type: NUMERIC
+  - name: service_area_pop
+    type: NUMERIC
+  - name: primary_uza
+    type: NUMERIC
+  - name: uza_name
+    type: STRING
+  - name: tribal_area_name
+    type: STRING
+  - name: population
+    type: NUMERIC
+  - name: density
+    type: NUMERIC
+  - name: sq_miles
+    type: NUMERIC
+  - name: voms_do
+    type: NUMERIC
+  - name: voms_pt
+    type: NUMERIC
+  - name: total_voms
+    type: NUMERIC
+  - name: volunteer_drivers
+    type: NUMERIC
+  - name: personal_vehicles
+    type: NUMERIC
+  - name: dt
+    type: DATE
+  - name: ts
+    type: TIMESTAMP

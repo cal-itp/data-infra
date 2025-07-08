@@ -13,10 +13,10 @@ tqdm = "^4.64.1"
 pendulum = "^2.1.2"
 humanize = "^4.6.0"
 backoff = "^2.2.1"
-google-api-core = ">=1.31.4"
 typing-extensions = ">=3.10.0.2"
-google-cloud-secret-manager = ">=2.16.4,<2.23"
 gcsfs = "!=2022.7.1"
+google-api-core = "^2.24.1"
+google-cloud-secret-manager = "^2.23.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"

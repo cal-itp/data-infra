@@ -2,7 +2,7 @@
 
 Type: [Now / Scheduled](https://docs.calitp.org/data-infra/airflow/dags-maintenance.html)
 
-This DAG orchestrates the running of the Cal-ITP dbt project and deployment of associated artifacts like the [dbt docs site](https://dbt-docs.calitp.org/#!/overview).
+This DAG orchestrates the running of the Cal-ITP dbt project and deployment of associated artifacts like the [dbt docs site](https://dbt-docs.dds.dot.ca.gov/#!/overview).
 
 This DAG has some special considerations:
 

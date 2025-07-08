@@ -17,7 +17,7 @@ dim_agency_information AS (
 
 fct_operating_and_capital_funding_time_series_decommissioned_operatingfares AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['int.ntd_id', 'int.year', 'int.legacy_ntd_id']) }} AS key,
+        int.key,
         int.ntd_id,
         int.year,
 

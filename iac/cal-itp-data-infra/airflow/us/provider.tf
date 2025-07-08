@@ -5,12 +5,12 @@ provider "google" {
 terraform {
   required_providers {
     google = {
-      version = "~> 6.29.0"
+      version = "~> 6.41.0"
     }
   }
 
   backend "gcs" {
     bucket = "calitp-prod-gcp-components-tfstate"
-    prefix = "cal-itp-data-infra/disks"
+    prefix = "cal-itp-data-infra/airflow"
   }
 }

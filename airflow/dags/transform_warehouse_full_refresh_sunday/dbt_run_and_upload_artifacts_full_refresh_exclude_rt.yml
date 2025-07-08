@@ -8,7 +8,6 @@ arguments:
   - '/app/scripts/run_and_upload.py'
   - 'run'
   - '--full-refresh'
-  - '--dbt-docs'
   - '--save-artifacts'
   - '--select'
   - "{{ dag_run.conf.get('dbt_select_statement', '') }}"
@@ -17,10 +16,6 @@ arguments:
 
 is_delete_operator_pod: true
 get_logs: true
-is_gke: true
-pod_location: us-west1
-cluster_name: data-infra-apps
-namespace: airflow-jobs
 priority_class_name: dbt-high-priority
 
 env_vars:
@@ -30,7 +25,7 @@ env_vars:
   CALITP_BUCKET__PUBLISH: "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
   BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
   DBT_PROJECT_DIR: /app
-  DBT_PROFILE_DIR: /app
+  DBT_PROFILES_DIR: /app
   DBT_DATABASE: "{{ env_var('GOOGLE_CLOUD_PROJECT') }}"
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
   SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"

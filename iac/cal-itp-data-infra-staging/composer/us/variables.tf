@@ -1,4 +1,8 @@
 locals {
+  namespace            = "airflow-jobs"
+  secret               = "jobs-data"
+  service_account_name = "composer-service-account"
+
   # This regular expression corresponds to the Python package name specification
   # https://packaging.python.org/en/latest/specifications/name-normalization/
   python_package_regex  = "(?P<name>[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9])(?P<version>.*)"
@@ -23,12 +27,31 @@ locals {
   })
 }
 
+data "kubernetes_secret" "composer" {
+  metadata {
+    name      = local.secret
+    namespace = local.namespace
+  }
+}
+
+
+data "google_client_config" "default" {}
+
 data "terraform_remote_state" "gcs" {
   backend = "gcs"
 
   config = {
     bucket = "calitp-staging-gcp-components-tfstate"
     prefix = "cal-itp-data-infra-staging/gcs"
+  }
+}
+
+data "terraform_remote_state" "gke" {
+  backend = "gcs"
+
+  config = {
+    bucket = "calitp-staging-gcp-components-tfstate"
+    prefix = "cal-itp-data-infra-staging/gke"
   }
 }
 

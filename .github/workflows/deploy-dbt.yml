@@ -22,8 +22,9 @@ env:
   DBT_ARTIFACTS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-artifacts' || 'calitp-staging-dbt-artifacts' }}
   DBT_DOCS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-docs' || 'calitp-staging-dbt-docs' }}
   CALITP_BUCKET__PUBLISH: ${{ github.ref == 'refs/heads/main' && 'calitp-publish' || 'calitp-staging-publish' }}
-  DBT_SOURCE_DATABASE: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
+  GOOGLE_CLOUD_PROJECT: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
   METABASE_DESTINATION_DATABASE: ${{ github.ref == 'refs/heads/main' && 'Data Marts (formerly Warehouse Views)' || '(Internal) Staging Warehouse Views' }}
+  AIRFLOW_BUCKET: us-west2-calitp-airflow2-pr-f6bb9855-bucket
 
 jobs:
   compile:
@@ -105,8 +106,9 @@ jobs:
         with:
           name: dbt
           path: |
-            warehouse/target/*.json
             warehouse/target/*.html
+            warehouse/target/*.json
+            warehouse/target/*.msgpack
 
   models-changed:
     name: Detect dbt model changes
@@ -218,10 +220,71 @@ jobs:
 
       - name: Synchronize Metabase
         working-directory: warehouse
-        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --exclude-schemas="*staging, payments" --skip-sources --docs-url="https://dbt-docs.calitp.org" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
+        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --exclude-schemas="*staging, payments" --skip-sources --docs-url="https://dbt-docs.dds.dot.ca.gov" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
 
-  upload:
-    name: Upload to Google Cloud Storage
+  upload_dbt_docs:
+    name: Upload to dbt-docs site
+    needs: [compile]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dbt
+          path: warehouse/target
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      # Don't send run_results.json because DBT_DOCS_BUCKET is a public bucket
+      - name: Upload catalog.json and manifest.json
+        uses: google-github-actions/upload-cloud-storage@v2
+        with:
+          path: './warehouse/target/'
+          glob: '{catalog.json,manifest.json}'
+          parent: false
+          process_gcloudignore: false
+          destination: ${{ env.DBT_DOCS_BUCKET }}
+          headers: |-
+            content-type: application/json
+
+      - name: Upload index.html
+        uses: google-github-actions/upload-cloud-storage@v2
+        with:
+          path: './warehouse/target/'
+          glob: 'index.html'
+          parent: false
+          process_gcloudignore: false
+          destination: ${{ env.DBT_DOCS_BUCKET }}
+          headers: |-
+            content-type: text/html; charset=utf-8
+
+      - name: Upload partial_parse.msgpack
+        uses: google-github-actions/upload-cloud-storage@v2
+        with:
+          path: './warehouse/target/'
+          glob: 'partial_parse.msgpack'
+          parent: false
+          process_gcloudignore: false
+          destination: ${{ env.DBT_DOCS_BUCKET }}
+          headers: |-
+            content-type: application/vnd.msgpack
+
+  upload_docs:
+    name: Upload to dbt artifacts bucket
     needs: [compile]
     runs-on: ubuntu-latest
 
@@ -262,49 +325,91 @@ jobs:
           timezone: "UTC"
 
       - name: Upload catalog.json
-        uses: google-github-actions/upload-cloud-storage@v1
+        uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
           glob: 'catalog.json'
           parent: false
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/catalog.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          headers: |-
+            content-type: application/json
 
       - name: Upload manifest.json
-        uses: google-github-actions/upload-cloud-storage@v1
+        uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
           glob: 'manifest.json'
           parent: false
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/manifest.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          headers: |-
+            content-type: application/json
+
+      - name: Upload partial_parse.msgpack
+        uses: google-github-actions/upload-cloud-storage@v2
+        with:
+          path: './warehouse/target/'
+          glob: 'partial_parse.msgpack'
+          parent: false
+          process_gcloudignore: false
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/partial_parse.msgpack/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          headers: |-
+            content-type: application/vnd.msgpack
 
       - name: Upload run_results.json
-        uses: google-github-actions/upload-cloud-storage@v1
+        uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
           glob: 'run_results.json'
           parent: false
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/run_results.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          headers: |-
+            content-type: application/json
 
       - name: Upload index.html
-        uses: google-github-actions/upload-cloud-storage@v1
+        uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
           glob: 'index.html'
           parent: false
           process_gcloudignore: false
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/index.html/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
+          headers: |-
+            content-type: text/html; charset=utf-8
 
-      - name: Upload documentation
-        uses: google-github-actions/upload-cloud-storage@v1
+  upload_to_composer:
+    name: Upload to composer bucket
+    needs: [compile]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    if: ${{ github.event_name == 'push' }}
+
+    steps:
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
         with:
-          path: './warehouse/target/'
-          glob: '{catalog.json,manifest.json,index.html}'
-          parent: false
-          process_gcloudignore: false
-          destination: ${{ env.DBT_DOCS_BUCKET }}
+          name: dbt
+          path: warehouse/target
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Push Airflow code to Composer
+        run: gsutil -m rsync -d -c -r warehouse gs://${{ env.AIRFLOW_BUCKET }}/data/warehouse
 
   visualize:
     name: Pull Request visualization
@@ -391,8 +496,8 @@ jobs:
         with:
           name: ci-report
           path: |
-            target/*.md
-            target/*.png
+            warehouse/target/report.md
+            warehouse/target/dag.png
 
       - name: Create GitHub comment
         working-directory: warehouse

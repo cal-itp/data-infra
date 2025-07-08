@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__capital_expenses_by_mode AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year', 'modecd', 'typeofservicecd']) }} AS key,
         SAFE_CAST(count_administrative_buildings_q AS NUMERIC) AS count_administrative_buildings_q,
         SAFE_CAST(count_communication_information_q AS NUMERIC) AS count_communication_information_q,
         SAFE_CAST(count_fare_collection_equipment_q AS NUMERIC) AS count_fare_collection_equipment_q,

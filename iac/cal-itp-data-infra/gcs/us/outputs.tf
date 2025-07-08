@@ -2450,12 +2450,8 @@ output "google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-88ca8ec6-bucket_
   value = google_storage_bucket.tfer--us-west2-calitp-airflow2-pr-88ca8ec6-bucket.name
 }
 
-output "google_storage_bucket_calitp-gtfs_name" {
-  value = google_storage_bucket.calitp-gtfs.name
-}
-
-output "google_storage_bucket_calitp-dbt-docs_name" {
-  value = google_storage_bucket.calitp-dbt-docs.name
+output "google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket_name" {
+  value = google_storage_bucket.tfer--us-west2-calitp-airflow2-pr-f6bb9855-bucket.name
 }
 
 output "google_storage_bucket_tfer--us-west2-calitp-airflow2-pr-88ca8ec6-bucket_self_link" {
@@ -2856,4 +2852,144 @@ output "google_storage_default_object_acl_tfer--us-west2-calitp-airflow2-pr-31e4
 
 output "google_storage_default_object_acl_tfer--us-west2-calitp-airflow2-pr-88ca8ec6-bucket_id" {
   value = google_storage_default_object_acl.tfer--us-west2-calitp-airflow2-pr-88ca8ec6-bucket.id
+}
+
+output "google_storage_bucket_calitp-gtfs_name" {
+  value = google_storage_bucket.calitp-gtfs.name
+}
+
+output "google_storage_bucket_calitp-dbt-docs_name" {
+  value = google_storage_bucket.calitp-dbt-docs.name
+}
+
+output "google_storage_bucket_calitp-reports_name" {
+  value = google_storage_bucket.calitp-reports.name
+}
+
+output "google_storage_bucket_calitp-aggregator-scraper_name" {
+  value = google_storage_bucket.tfer--calitp-aggregator-scraper.name
+}
+
+output "google_storage_bucket_calitp-airtable_name" {
+  value = google_storage_bucket.tfer--calitp-airtable.name
+}
+
+output "google_storage_bucket_calitp-amplitude-benefits-events_name" {
+  value = google_storage_bucket.tfer--calitp-amplitude-benefits-events.name
+}
+
+output "google_storage_bucket_calitp-analysis-output-models_name" {
+  value = google_storage_bucket.tfer--analysis-output-models.name
+}
+
+output "google_storage_bucket_calitp-dbt-artifacts_name" {
+  value = google_storage_bucket.tfer--calitp-dbt-artifacts.name
+}
+
+output "google_storage_bucket_calitp-elavon-parsed_name" {
+  value = google_storage_bucket.tfer--calitp-elavon-parsed.name
+}
+
+output "google_storage_bucket_calitp-elavon-raw_name" {
+  value = google_storage_bucket.tfer--calitp-elavon-raw.name
+}
+
+output "google_storage_bucket_calitp-gtfs-download-config_name" {
+  value = google_storage_bucket.tfer--calitp-gtfs-download-config.name
+}
+
+output "google_storage_bucket_calitp-gtfs-download-config-test_name" {
+  value = google_storage_bucket.tfer--test-calitp-gtfs-download-config.name
+}
+
+output "google_storage_bucket_calitp-gtfs-rt-parsed_name" {
+  value = google_storage_bucket.tfer--calitp-gtfs-rt-parsed.name
+}
+
+output "google_storage_bucket_calitp-gtfs-rt-raw-v2_name" {
+  value = google_storage_bucket.tfer--calitp-gtfs-rt-raw-v2.name
+}
+
+output "google_storage_bucket_calitp-gtfs-rt-validation_name" {
+  value = google_storage_bucket.tfer--calitp-gtfs-rt-validation.name
+}
+
+output "google_storage_bucket_calitp-gtfs-schedule-parsed_name" {
+  value = google_storage_bucket.tfer--calitp-gtfs-schedule-parsed.name
+}
+
+output "google_storage_bucket_calitp-gtfs-schedule-parsed-hourly_name" {
+  value = google_storage_bucket.tfer--calitp-gtfs-schedule-parsed-hourly.name
+}
+
+output "google_storage_bucket_calitp-gtfs-schedule-raw-v2_name" {
+  value = google_storage_bucket.tfer--calitp-gtfs-schedule-raw-v2.name
+}
+
+output "google_storage_bucket_calitp-gtfs-schedule-unzipped_name" {
+  value = google_storage_bucket.tfer--calitp-gtfs-schedule-unzipped.name
+}
+
+output "google_storage_bucket_calitp-gtfs-schedule-unzipped-hourly_name" {
+  value = google_storage_bucket.tfer--calitp-gtfs-schedule-unzipped-hourly.name
+}
+
+output "google_storage_bucket_calitp-gtfs-schedule-validation_name" {
+  value = google_storage_bucket.tfer--calitp-gtfs-schedule-validation.name
+}
+
+output "google_storage_bucket_calitp-gtfs-schedule-validation-hourly_name" {
+  value = google_storage_bucket.tfer--calitp-gtfs-schedule-validation-hourly.name
+}
+
+output "google_storage_bucket_calitp-payments-littlepay-parsed_name" {
+  value = google_storage_bucket.tfer--calitp-payments-littlepay-parsed.name
+}
+
+output "google_storage_bucket_calitp-payments-littlepay-parsed-v3_name" {
+  value = google_storage_bucket.tfer--calitp-payments-littlepay-parsed-v3.name
+}
+
+output "google_storage_bucket_calitp-payments-littlepay-raw_name" {
+  value = google_storage_bucket.tfer--calitp-payments-littlepay-raw.name
+}
+
+output "google_storage_bucket_calitp-payments-littlepay-raw-v3_name" {
+  value = google_storage_bucket.tfer--calitp-payments-littlepay-raw-v3.name
+}
+
+output "google_storage_bucket_calitp-ntd-api-products_name" {
+  value = google_storage_bucket.tfer--calitp-ntd-api-products.name
+}
+
+output "google_storage_bucket_calitp-ntd-report-validation_name" {
+  value = google_storage_bucket.tfer--calitp-ntd-report-validation.name
+}
+
+output "google_storage_bucket_calitp-ntd-xlsx-products-clean_name" {
+  value = google_storage_bucket.tfer--calitp-ntd-xlsx-products-clean.name
+}
+
+output "google_storage_bucket_calitp-ntd-xlsx-products-raw_name" {
+  value = google_storage_bucket.tfer--calitp-ntd-xlsx-products-raw.name
+}
+
+output "google_storage_bucket_calitp-publish_name" {
+  value = google_storage_bucket.tfer--calitp-publish.name
+}
+
+output "google_storage_bucket_calitp-sentry_name" {
+  value = google_storage_bucket.tfer--test-calitp-sentry.name
+}
+
+output "google_storage_bucket_calitp-state-geoportal-scrape_name" {
+  value = google_storage_bucket.tfer--calitp-state-geoportal-scrape.name
+}
+
+output "google_storage_bucket_calitp-composer_name" {
+  value = google_storage_bucket.calitp-composer.name
+}
+
+output "google_storage_bucket_calitp-composer_id" {
+  value = google_storage_bucket.calitp-composer.id
 }

@@ -5,7 +5,7 @@ tags:
 default_args:
     owner: airflow
     depends_on_past: False
-    start_date: "2022-06-27"
+    start_date: "2025-06-01"
     catchup: False
     email:
       - "hunter.owens@dot.ca.gov"
@@ -19,3 +19,4 @@ default_args:
     #sla: !timedelta 'hours: 2'
 wait_for_defaults:
     timeout: 3600
+latest_only: True

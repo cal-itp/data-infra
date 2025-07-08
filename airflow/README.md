@@ -7,6 +7,7 @@ The following folder contains the project level directory for all our [Apache Ai
 - *System configuration for worker count, environment variables, and overrides of Airflow configs* are deployed via the [Composer web console](https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra), not via an automated process.
   - Additional dependencies that we add to the standard Composer-managed Airflow install (listed in [requirements.txt](./requirements.txt)) are treated differently, deployed automatically upon merged changes to this repository just like DAG and plugin changes.
 
+
 ## Structure
 
 The DAGs for this project are stored and version controlled in the `dags` folder. Each DAG has its own `README` with further information about its specific purpose and considerations. We use [gusty](https://github.com/pipeline-tools/gusty) to simplify DAG management.
@@ -17,7 +18,18 @@ When developing locally, logs for DAG runs are stored in the `logs` subfolder. Y
 
 Finally, Airflow plugins can be found in the `plugins` subfolder; this includes general utility functions as well as custom [operator](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/operators.html) definitions.
 
-## Testing Changes
+
+## Running automated tests
+
+Each DAG for this project should have a corresponding test in the `tests/dags` folder. Tests are run from the command line and require a local installation of airflow to function.
+
+1. `cp .env.example .env`
+2. Fill in Kuba API credentials
+3. `poetry install`
+4. `poetry run pytest`
+
+
+## Testing changes
 
 This project is developed using Docker and docker compose, and we test most changes via a local version of Airflow that is similarly configured to the production Composer-managed Airflow instance - its dependencies are based on the dependency list from the Composer-managed production Airflow instance, copied into a file named `requirements-composer-[x.y.z]-airflow-[a.b.c].txt`. Before getting started, please make sure you have [installed Docker on your system](https://docs.docker.com/get-docker/). Docker will need to be running at the time you run any `docker compose` commands from the console.
 
@@ -60,6 +72,7 @@ Uncommon or new use cases, like implementing Python models, may also require add
 
 Additional reading about general Airflow setup via Docker can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html).
 
+
 ### PodOperators
 
 Airflow PodOperator tasks execute a specific Docker image; these images are pushed to [GitHub Container Registry](https://ghcr.io/) and production uses `:latest` tags while local uses `:development`. If you want to test these tasks locally, you must build and push development versions of the images used by the tasks, which requires [proper access](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry). The Dockerfiles and code that make up the images live in the [/jobs](../jobs) directory. For example:
@@ -77,6 +90,7 @@ Then, you could execute a task using this updated image.
 docker compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly validate_gtfs_schedule 2023-06-07T16:00:00
 ```
 
+
 ### Common Issues
 
 - `docker compose up` exits with code 137 - Check that Docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.
@@ -87,9 +101,44 @@ docker compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly va
 
 - If a task is producing errors but not producing complete logs for troubleshooting, or if it's reporting a memory issue, you may need to increase the RAM given by default to the Docker virtual machine that Airflow runs on. In Docker Desktop this setting can be accessed via the Preferences -> Advanced menu, and requires a restart of the VM to take effect.
 
+
 ## Deploying Changes to Production
 
 We have a [GitHub Action](../.github/workflows/deploy-airflow.yml) that runs when PRs touching this directory merge to the `main` branch. The GitHub Action updates the requirements sourced from [requirements.txt](./requirements.txt) and syncs the [DAGs](./dags) and [plugins](./plugins) directories to the bucket that Composer watches for code/data to parse. As of 2025-04-03, this bucket is `us-west2-calitp-airflow2-pr-f6bb9855-bucket`.
+
+
+## Secrets
+
+Airflow operators have dependencies on the following secrets, which are required to be set:
+
+- `airflow-connections-airtable_default` is a password formatted according to Airflow connection conventions (e.g. `airflow://login:abc123@airflow`), see <https://cloud.google.com/composer/docs/composer-2/configure-secret-manager>
+- `airflow-jobs_jobs-data` contains a Kubernetes secret blob, including `transitland-api-key`
+- `CALITP__ELAVON_SFTP_PASSWORD`
+
+The following are provided by Littlepay to DDS:
+
+- `LITTLEPAY_AWS_IAM_ANAHEIM_TRANSPORTATION_NETWORK_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_ATN_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_CAL_ITP_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_CALITP_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_CCJPA_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_CCJPA_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_HUMBOLDT_TRANSIT_AUTHORITY_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_HUMBOLDT_TRANSIT_AUTHORITY_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_LAKE_TRANSIT_AUTHORITY_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_LAKE_TRANSIT_AUTHORITY_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_MENDOCINO_TRANSIT_AUTHORITY_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_MENDOCINO_TRANSIT_AUTHORITY_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_MST_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_MST_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_NEVADA_COUNTY_CONNECTS_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_NEVADA_COUNTY_CONNECTS_ACCESS_KEY_V3`
+- `LITTLEPAY_AWS_IAM_REDWOOD_COAST_TRANSIT_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_REDWOOD_COAST_TRANSIT_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_SACRT_ACCESS_KEY_FEED_V3`
+- `LITTLEPAY_AWS_IAM_SBMTD_ACCESS_KEY`
+- `LITTLEPAY_AWS_IAM_SBMTD_ACCESS_KEY_FEED_V3`
+
 
 ### Upgrading Airflow Itself
 
