@@ -1,10 +1,6 @@
 WITH staging_funding_sources_by_expense_type AS (
     SELECT *
     FROM {{ ref('stg_ntd__funding_sources_by_expense_type') }}
-    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
-    WHERE key NOT IN ('6a1794e7bf7c786ac7c6278c48d18532','065cc04d5e8091177b9931485040fd47','1eef6b1521f4cf58b40a21e35ebf45a2',
-        'baaa3db5d4afc13f0ee55c683f42bf62','7d61960d93bb36b8059a70ed728d90c9','cd664c7a5a7ff6387859cc3bd35f116d',
-        '1b0cb4f9c03f630cfc28cbb1e7b3f2e7','f009e9f0645cf14a1e4a4edc1137a5e2')
 ),
 
 dim_agency_information AS (
@@ -59,6 +55,10 @@ fct_funding_sources_by_expense_type AS (
     LEFT JOIN dim_agency_information AS agency
         ON stg.ntd_id = agency.ntd_id
             AND stg.report_year = agency.year
+    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
+    WHERE stg.key NOT IN ('6a1794e7bf7c786ac7c6278c48d18532','065cc04d5e8091177b9931485040fd47','1eef6b1521f4cf58b40a21e35ebf45a2',
+        'baaa3db5d4afc13f0ee55c683f42bf62','7d61960d93bb36b8059a70ed728d90c9','cd664c7a5a7ff6387859cc3bd35f116d',
+        '1b0cb4f9c03f630cfc28cbb1e7b3f2e7','f009e9f0645cf14a1e4a4edc1137a5e2')
 )
 
 SELECT * FROM fct_funding_sources_by_expense_type

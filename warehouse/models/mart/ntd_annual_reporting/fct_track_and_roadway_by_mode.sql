@@ -1,8 +1,6 @@
 WITH staging_track_and_roadway_by_mode AS (
     SELECT *
     FROM {{ ref('stg_ntd__track_and_roadway_by_mode') }}
-    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
-    WHERE key NOT IN ('3c780a597dde8eaf20b9f658fe9c7b35','6aeb8a08568bae57b8a3a824d93b987d','0b3fcf1a1567f5fc197678ae4fd8eb4e')
 ),
 
 dim_agency_information AS (
@@ -89,6 +87,8 @@ fct_track_and_roadway_by_mode AS (
     LEFT JOIN dim_agency_information AS agency
         ON stg.ntd_id = agency.ntd_id
             AND stg.report_year = agency.year
+    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
+    WHERE stg.key NOT IN ('3c780a597dde8eaf20b9f658fe9c7b35','6aeb8a08568bae57b8a3a824d93b987d','0b3fcf1a1567f5fc197678ae4fd8eb4e')
 )
 
 SELECT * FROM fct_track_and_roadway_by_mode

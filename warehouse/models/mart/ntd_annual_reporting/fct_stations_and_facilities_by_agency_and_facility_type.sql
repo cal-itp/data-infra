@@ -1,16 +1,6 @@
 WITH staging_stations_and_facilities_by_agency_and_facility_type AS (
     SELECT *
     FROM {{ ref('stg_ntd__stations_and_facilities_by_agency_and_facility_type') }}
-    -- remove bad rows
-    WHERE key NOT IN ('889aa75ff154f55a32fa3afb74b6e236','345e37241f3883bfc08428a9a96faa97','6f507fa5717699c74202df80606a2557',
-        '814b5dc32062eed9be2eb59a5e6bb140','abd981f1eeb176cd71024b38c0ce24e6','0610e7c75b67e0edd77f3ef3117b15ba',
-        'd31729d3be4d8f0429dd102f94b77e7f','d65372e696a7bae859d00f3b10d42141','349183b4d6c1f92d3be13457ef8eea05',
-        '11206b74a3f2f7fd453aa01b79a0a52c','429b2f3e22cd8c75d6fe245048244fd3','a942d417813164b78586bd1bf2a0855d',
-        'ecd29c26452544cf60e3ebf40405fc65','10543c670a74cab09d939dbccfce5707','ab22087042cc49d054f00dd101797b84',
-        '7a4d62bedf9b28ae9012db3224801bd5','5dad5c44a23b526d4d304cb84291ca15','e3d99595799db399728cb66adcc07290',
-        '1bada0357021e156420bfab1ae31b3c1','6943d72da4b6ab0d8b2b8f1814d2dc0e','4afa0365bfdb0cc0883198fcd16ab293',
-        '373fcc547a381745c12710bb272211a2','2be3887bd681c16ca015539b5abf8529','145cb44ced40bd2d593eb242c05fd6b7',
-        'ef4dab4a487ec44305b459568f3fb3f6','9d4f1caeda82b63dcee955f1009b34d6')
 ),
 
 dim_agency_information AS (
@@ -78,6 +68,16 @@ fct_stations_and_facilities_by_agency_and_facility_type AS (
     LEFT JOIN dim_agency_information AS agency
         ON stg.ntd_id = agency.ntd_id
             AND stg.report_year = agency.year
+    -- remove bad rows
+    WHERE stg.key NOT IN ('889aa75ff154f55a32fa3afb74b6e236','345e37241f3883bfc08428a9a96faa97','6f507fa5717699c74202df80606a2557',
+        '814b5dc32062eed9be2eb59a5e6bb140','abd981f1eeb176cd71024b38c0ce24e6','0610e7c75b67e0edd77f3ef3117b15ba',
+        'd31729d3be4d8f0429dd102f94b77e7f','d65372e696a7bae859d00f3b10d42141','349183b4d6c1f92d3be13457ef8eea05',
+        '11206b74a3f2f7fd453aa01b79a0a52c','429b2f3e22cd8c75d6fe245048244fd3','a942d417813164b78586bd1bf2a0855d',
+        'ecd29c26452544cf60e3ebf40405fc65','10543c670a74cab09d939dbccfce5707','ab22087042cc49d054f00dd101797b84',
+        '7a4d62bedf9b28ae9012db3224801bd5','5dad5c44a23b526d4d304cb84291ca15','e3d99595799db399728cb66adcc07290',
+        '1bada0357021e156420bfab1ae31b3c1','6943d72da4b6ab0d8b2b8f1814d2dc0e','4afa0365bfdb0cc0883198fcd16ab293',
+        '373fcc547a381745c12710bb272211a2','2be3887bd681c16ca015539b5abf8529','145cb44ced40bd2d593eb242c05fd6b7',
+        'ef4dab4a487ec44305b459568f3fb3f6','9d4f1caeda82b63dcee955f1009b34d6')
 )
 
 SELECT * FROM fct_stations_and_facilities_by_agency_and_facility_type

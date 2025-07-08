@@ -1,9 +1,6 @@
 WITH staging_maintenance_facilities_by_agency AS (
     SELECT *
     FROM {{ ref('stg_ntd__maintenance_facilities_by_agency') }}
-    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
-    WHERE key NOT IN ('abd981f1eeb176cd71024b38c0ce24e6','0610e7c75b67e0edd77f3ef3117b15ba','9d4f1caeda82b63dcee955f1009b34d6',
-        'ef4dab4a487ec44305b459568f3fb3f6')
 ),
 
 dim_agency_information AS (
@@ -57,6 +54,9 @@ fct_maintenance_facilities_by_agency AS (
     LEFT JOIN dim_agency_information AS agency
         ON stg.ntd_id = agency.ntd_id
             AND stg.report_year = agency.year
+    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
+    WHERE stg.key NOT IN ('abd981f1eeb176cd71024b38c0ce24e6','0610e7c75b67e0edd77f3ef3117b15ba','9d4f1caeda82b63dcee955f1009b34d6',
+        'ef4dab4a487ec44305b459568f3fb3f6')
 )
 
 SELECT * FROM fct_maintenance_facilities_by_agency
