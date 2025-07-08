@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'employees_by_agency'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'brbd-9azc'
-file_format: '.json'
+year: multi_year
+product: employees_by_agency
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/brbd-9azc.json
+parameters:
+  $limit: 5000000

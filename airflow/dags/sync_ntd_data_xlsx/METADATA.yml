@@ -18,3 +18,4 @@ default_args:
     provide_context: True
 wait_for_defaults:
     timeout: 3600
+latest_only: True
