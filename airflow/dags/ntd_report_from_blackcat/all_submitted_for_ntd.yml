@@ -1,7 +1,6 @@
-operator: operators.BlackCatApiToGCSOperator
+operator: operators.BlackCatToGCSOperator
 
-bucket: "gs://calitp-ntd-report-validation"
-api_url: "https://services.blackcattransit.com/api/APIModules/GetNTDReportsByYear/BCG_CA/"
-api_tablename_suffix: "NTDReporting"
-form: "all"
-bq_table_name_suffix: "ntdreports"
+bucket: "{{ env_var('CALITP_BUCKET__NTD_REPORT_VALIDATION') }}"
+endpoint: "/api/APIModules/GetNTDReportsByYear/BCG_CA/{{ dag_run.logical_date.year }}"
+api_name: all_NTDReporting
+file_name: all_ntdreports

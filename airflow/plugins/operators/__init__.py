@@ -1,6 +1,6 @@
 # flake8: noqa
 from operators.airtable_to_gcs_operator import AirtableToGCSOperator
-from operators.blackcat_to_gcs import BlackCatApiToGCSOperator
+from operators.blackcat_to_gcs_operator import BlackCatToGCSOperator
 from operators.external_table import ExternalTable
 from operators.gtfs_csv_to_jsonl import GtfsGcsToJsonlOperator
 from operators.gtfs_csv_to_jsonl_hourly import GtfsGcsToJsonlOperatorHourly
