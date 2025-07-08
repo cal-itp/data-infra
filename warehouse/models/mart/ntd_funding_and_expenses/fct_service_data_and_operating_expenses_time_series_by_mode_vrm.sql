@@ -1,11 +1,6 @@
 WITH int_ntd__service_data_and_operating_expenses_time_series_by_mode_vrm AS (
     SELECT *
     FROM {{ ref('int_ntd__service_data_and_operating_expenses_time_series_by_mode_vrm') }}
-    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
-    WHERE key NOT IN ('e41f3812655066d28ec4bbc851545517','da108425cb2696446aa1017bca72340f','f5f160d19e3753e3a99d9ad55b4f2210',
-        '7d3e30725b3fa42c6d1722308f9cc855','98692053a5a16aae8ef8e2579f19b8a3','5b13563073a95faa05c9da4f77c0b3a8',
-        'd6809f84a9d19808f8b1f013fc1cd537','a31019318eddb35b747ab79470e10017','73f01d2aa1c268ec1dafbcf1fdaa84fc',
-        '0fab2ef186a2a74edc98d16427d4d61a','c3ae0b0299c10ffa25e1193404762136','564993fcc3a920cc0800005f3af9fd73')
 ),
 
 dim_agency_information AS (
@@ -56,6 +51,11 @@ fct_service_data_and_operating_expenses_time_series_by_mode_vrm AS (
     LEFT JOIN dim_agency_information AS agency
         ON int.ntd_id = agency.ntd_id
             AND int.year = agency.year
+    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
+    WHERE int.key NOT IN ('e41f3812655066d28ec4bbc851545517','da108425cb2696446aa1017bca72340f','f5f160d19e3753e3a99d9ad55b4f2210',
+        '7d3e30725b3fa42c6d1722308f9cc855','98692053a5a16aae8ef8e2579f19b8a3','5b13563073a95faa05c9da4f77c0b3a8',
+        'd6809f84a9d19808f8b1f013fc1cd537','a31019318eddb35b747ab79470e10017','73f01d2aa1c268ec1dafbcf1fdaa84fc',
+        '0fab2ef186a2a74edc98d16427d4d61a','c3ae0b0299c10ffa25e1193404762136','564993fcc3a920cc0800005f3af9fd73')
 )
 
 SELECT * FROM fct_service_data_and_operating_expenses_time_series_by_mode_vrm
