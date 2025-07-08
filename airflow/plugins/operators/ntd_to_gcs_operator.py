@@ -42,7 +42,8 @@ class NTDToGCSOperator(BaseOperator):
         product: str,
         year: str,
         endpoint: str,
-        http_conn_id: str = "http_default",
+        parameters: dict = {},
+        http_conn_id: str = "http_ntd",
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
@@ -52,6 +53,7 @@ class NTDToGCSOperator(BaseOperator):
         self.product = product
         self.year = year
         self.endpoint = endpoint
+        self.parameters = parameters
         self.http_conn_id = http_conn_id
         self.gcp_conn_id = gcp_conn_id
 
@@ -68,7 +70,9 @@ class NTDToGCSOperator(BaseOperator):
         return HttpHook(method="GET", http_conn_id=self.http_conn_id)
 
     def cleaned_rows(self) -> list:
-        result = self.http_hook().run(self.endpoint).json()
+        result = (
+            self.http_hook().run(endpoint=self.endpoint, data=self.parameters).json()
+        )
         return [
             json.dumps(x, separators=(",", ":"))
             for x in BigQueryCleaner(result).clean()
