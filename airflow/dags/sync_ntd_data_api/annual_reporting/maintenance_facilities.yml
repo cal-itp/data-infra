@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'maintenance_facilities'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: '9yj4-fiiz'
-file_format: '.json'
+year: multi_year
+product: maintenance_facilities
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/9yj4-fiiz.json
+parameters:
+  $limit: 5000000
