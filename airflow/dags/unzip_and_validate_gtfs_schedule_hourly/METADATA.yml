@@ -6,6 +6,7 @@ default_args:
     owner: airflow
     depends_on_past: False
     start_date: "2021-04-15"
+    catchup: False
     email:
       - "hello@calitp.org"
     email_on_failure: False
