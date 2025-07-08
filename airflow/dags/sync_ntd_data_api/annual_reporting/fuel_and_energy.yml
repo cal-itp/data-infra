@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'fuel_and_energy'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: '8ehq-7his'
-file_format: '.json'
+year: multi_year
+product: fuel_and_energy
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/8ehq-7his.json
+parameters:
+  $limit: 5000000

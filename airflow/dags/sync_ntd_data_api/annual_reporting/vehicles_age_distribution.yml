@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'vehicles_age_distribution'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: '6abt-uhgq'
-file_format: '.json'
+year: multi_year
+product: vehicles_age_distribution
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/6abt-uhgq.json
+parameters:
+  $limit: 5000000

@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'metrics'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'ekg5-frzt'
-file_format: '.json'
+year: multi_year
+product: metrics
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/ekg5-frzt.json
+parameters:
+  $limit: 5000000

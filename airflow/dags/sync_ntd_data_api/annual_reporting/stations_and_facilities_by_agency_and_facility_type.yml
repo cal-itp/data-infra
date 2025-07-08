@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'stations_and_facilities_by_agency_and_facility_type'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'aqct-knjk'
-file_format: '.json'
+year: multi_year
+product: stations_and_facilities_by_agency_and_facility_type
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/aqct-knjk.json
+parameters:
+  $limit: 5000000
