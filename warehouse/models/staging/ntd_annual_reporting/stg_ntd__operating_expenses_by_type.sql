@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__operating_expenses_by_type AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year', 'mode', 'type_of_service']) }} AS key,
         {{ trim_make_empty_string_null('agency') }} AS agency,
         SAFE_CAST(agency_voms AS NUMERIC) AS agency_voms,
         SAFE_CAST(casualty_and_liability AS NUMERIC) AS casualty_and_liability,

@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__service_by_mode_and_time_period AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['_5_digit_ntd_id', 'report_year', 'mode', 'type_of_service', 'time_period']) }} AS key,
         {{ trim_make_empty_string_null('_5_digit_ntd_id') }} AS ntd_id,
         SAFE_CAST(actual_vehicles_passenger_car_deadhead_hours AS NUMERIC) AS actual_vehicles_passenger_car_deadhead_hours,
         SAFE_CAST(actual_vehicles_passenger_car_hours AS NUMERIC) AS actual_vehicles_passenger_car_hours,

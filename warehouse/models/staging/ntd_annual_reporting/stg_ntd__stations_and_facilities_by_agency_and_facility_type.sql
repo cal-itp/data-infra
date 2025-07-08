@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__stations_and_facilities_by_agency_and_facility_type AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year']) }} AS key,
         SAFE_CAST(administrative_and_other_non_passenger_facilities AS NUMERIC) AS administrative_and_other_non_passenger_facilities,
         SAFE_CAST(administrative_office_sales AS NUMERIC) AS administrative_office_sales,
         {{ trim_make_empty_string_null('agency') }} AS agency,

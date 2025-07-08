@@ -17,7 +17,7 @@ dim_agency_information AS (
 
 fct_employees_by_agency AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year']) }} AS key,
+        stg.key,
         stg.ntd_id,
         stg.report_year,
 

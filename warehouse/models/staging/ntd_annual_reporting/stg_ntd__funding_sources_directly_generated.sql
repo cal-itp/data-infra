@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__funding_sources_directly_generated AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year']) }} AS key,
         SAFE_CAST(advertising AS NUMERIC) AS advertising,
         {{ trim_make_empty_string_null('advertising_questionable') }} AS advertising_questionable,
         {{ trim_make_empty_string_null('agency') }} AS agency,

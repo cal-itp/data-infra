@@ -33,6 +33,7 @@ WITH
 
     int_ntd__operating_and_capital_funding_time_series_capital_state AS (
         SELECT
+            {{ dbt_utils.generate_surrogate_key(['ntd_id', 'year', 'legacy_ntd_id']) }} AS key,
             agency_name,
             agency_status,
             census_year,
