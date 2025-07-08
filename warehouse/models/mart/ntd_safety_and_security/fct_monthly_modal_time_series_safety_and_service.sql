@@ -1,9 +1,6 @@
 WITH staging_monthly_modal_time_series_safety_and_service AS (
     SELECT *
     FROM {{ ref('stg_ntd__monthly_modal_time_series_safety_and_service') }}
-    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
-    WHERE key NOT IN ('6924aed27f4367ade41995c1a39b9ee2','aa7cd33a48228993bafcea02e71ff01d','aba850b8be6fecc443628f0214d4f43b',
-        'a81b1750d29aebc2bc3467fe32f38b9d','ffa790baa3240de7315997adedf09118','91b21259a46c1824487053fb07b12ce3')
 ),
 
 dim_agency_information AS (
@@ -107,6 +104,9 @@ fct_monthly_modal_time_series_safety_and_service AS (
     LEFT JOIN dim_agency_information AS agency
         ON stg.ntd_id = agency.ntd_id
             AND stg.year = agency.year
+    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
+    WHERE int.key NOT IN ('6924aed27f4367ade41995c1a39b9ee2','aa7cd33a48228993bafcea02e71ff01d','aba850b8be6fecc443628f0214d4f43b',
+        'a81b1750d29aebc2bc3467fe32f38b9d','ffa790baa3240de7315997adedf09118','91b21259a46c1824487053fb07b12ce3')
 )
 
 SELECT * FROM fct_monthly_modal_time_series_safety_and_service
