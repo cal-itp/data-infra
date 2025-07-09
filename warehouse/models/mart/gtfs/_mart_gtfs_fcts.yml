@@ -2623,7 +2623,7 @@ models:
             Ordered array of location datetime, in the "America/Los_Angeles" time zone.
       - name: n_vp
         description: total number of vehicle positions (timestamp + location) for this trip
-          
+
   - name: fct_vehicle_positions_trip_metrics
     description: |
       Summarizes trips observed in vehicle position messages, as long as
@@ -2706,4 +2706,3 @@ models:
         description: |
           Number of vehicle location timestamps within 35 meters
           of the scheduled shape (path of travel)
-
