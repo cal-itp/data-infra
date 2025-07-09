@@ -14,8 +14,8 @@ resource "google_composer_environment" "calitp-composer" {
 
     workloads_config {
       scheduler {
-        cpu        = 1
-        memory_gb  = 1
+        cpu        = 2
+        memory_gb  = 2
         storage_gb = 1
         count      = 1
       }
@@ -26,10 +26,10 @@ resource "google_composer_environment" "calitp-composer" {
       }
       worker {
         cpu        = 2
-        memory_gb  = 2
+        memory_gb  = 4
         storage_gb = 1
         min_count  = 1
-        max_count  = 2
+        max_count  = 6
       }
     }
 
@@ -45,8 +45,8 @@ resource "google_composer_environment" "calitp-composer" {
         core-dags_are_paused_at_creation           = "True"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
-        webserver-reload_on_plugin_change          = "True"
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
+        webserver-reload_on_plugin_change          = "True"
       }
 
       pypi_packages = local.pypi_packages
@@ -55,7 +55,7 @@ resource "google_composer_environment" "calitp-composer" {
         "POD_LOCATION"                                         = "us-west2",
         "POD_CLUSTER_NAME"                                     = data.terraform_remote_state.gke.outputs.google_container_cluster_airflow-jobs_name,
         "POD_SECRETS_NAMESPACE"                                = local.namespace,
-        "SERVICE_ACCOUNT_NAME"                                 = data.terraform_remote_state.iam.outputs.google_service_account_composer-service-account_email,
+        "SERVICE_ACCOUNT_NAME"                                 = local.service_account_name,
         "CALITP_BUCKET__AGGREGATOR_SCRAPER"                    = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-aggregator-scraper_name}",
         "CALITP_BUCKET__AIRTABLE"                              = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-airtable_name}",
         "CALITP_BUCKET__AMPLITUDE_BENEFITS_EVENTS"             = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-amplitude-benefits-events_name}",

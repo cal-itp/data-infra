@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__funding_sources_taxes_levied_by_agency AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year']) }} AS key,
         {{ trim_make_empty_string_null('agency') }} AS agency,
         SAFE_CAST(agency_voms AS NUMERIC) AS agency_voms,
         {{ trim_make_empty_string_null('city') }} AS city,

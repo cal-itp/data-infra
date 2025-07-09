@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__monthly_modal_time_series_safety_and_service AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['_5_digit_ntd_id', 'year', 'month', 'mode', 'type_of_service']) }} AS key,
         SAFE_CAST(major_non_physical_assaults_on_operators AS FLOAT64) AS major_non_physical_assaults_on_operators,
         SAFE_CAST(major_non_physical_assaults_on_other_transit_workers AS FLOAT64) AS major_non_physical_assaults_on_other_transit_workers,
         SAFE_CAST(major_physical_assaults_on_operators AS FLOAT64) AS major_physical_assaults_on_operators,

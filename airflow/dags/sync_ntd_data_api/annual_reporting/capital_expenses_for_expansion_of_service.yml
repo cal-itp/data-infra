@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'capital_expenses_for_expansion_of_service'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'nvgd-g6pj'
-file_format: '.json'
+year: multi_year
+product: capital_expenses_for_expansion_of_service
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/nvgd-g6pj.json
+parameters:
+  $limit: 5000000

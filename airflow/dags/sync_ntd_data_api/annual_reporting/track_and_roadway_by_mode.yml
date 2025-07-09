@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'track_and_roadway_by_mode'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'fzbb-f6kc'
-file_format: '.json'
+year: multi_year
+product: track_and_roadway_by_mode
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/fzbb-f6kc.json
+parameters:
+  $limit: 5000000

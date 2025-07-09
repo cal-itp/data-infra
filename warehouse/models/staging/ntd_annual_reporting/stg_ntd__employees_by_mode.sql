@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__employees_by_mode AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year', 'mode', 'type_of_service']) }} AS key,
         SAFE_CAST(count_capital_labor_count_q AS NUMERIC) AS count_capital_labor_count_q,
         SAFE_CAST(count_capital_labor_hours_q AS NUMERIC) AS count_capital_labor_hours_q,
         SAFE_CAST(count_facility_maintenance_count_q AS NUMERIC) AS count_facility_maintenance_count_q,

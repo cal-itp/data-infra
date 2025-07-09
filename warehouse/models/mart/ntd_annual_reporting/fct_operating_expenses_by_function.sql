@@ -17,7 +17,7 @@ dim_agency_information AS (
 
 fct_operating_expenses_by_function AS (
     SELECT
-       {{ dbt_utils.generate_surrogate_key(['stg.ntd_id', 'stg.report_year', 'stg.mode', 'stg.type_of_service']) }} AS key,
+        stg.key,
         stg.ntd_id,
         stg.report_year,
 
@@ -60,6 +60,11 @@ fct_operating_expenses_by_function AS (
     LEFT JOIN dim_agency_information AS agency
         ON stg.ntd_id = agency.ntd_id
             AND stg.report_year = agency.year
+    -- remove bad rows for 'Advance Transit, Inc. NH' and 'Southern Teton Area Rapid Transit'
+    WHERE stg.key NOT IN ('33c3d376e7d93b04c210041d62e015f2','1bebb98cd526881d0beab080dafd1e6a','f8b280fb1301a54725feefa098f519ec',
+        '1d5f79c7f06b68f023dd6513f8d797d4','e1503c0491fb6666f060aa64276fb707','1e9138bb433fed360f111c90866fc94a',
+        '04804150c414bd12329423ebf09442fd','9078bab61ab02779f9a4a5b043e377d9','faf75088d148925ea862051b49b54429',
+        '61eeee88a89ab9a2e63c24ac99d297b8')
 )
 
 SELECT * FROM fct_operating_expenses_by_function

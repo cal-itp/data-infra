@@ -1,0 +1,355 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.3
+    method: GET
+    uri: https://services.blackcattransit.com/api/APIModules/GetNTDReportsByYear/BCG_CA/2025
+  response:
+    body:
+      string: '[{"ReportId":1155,"Organization":"Tulare County Regional Transit Agency","ReportPeriod":"2025","ReportStatus":"Not
+        Submitted","ReportLastModifiedDate":"7/1/2025 4:36:01 PM","NTDReportingStationsAndMaintenance":{"Data":[]},"NTDTransitAssetManagementA15":{"Data":[]},"NTDAssetAndResourceInfo":{"Data":[]},"NTDReportingP10":{"Data":[]},"NTDReportingP20":{"Data":[{"Id":0,"ReportId":1155,"ServiceMode":"Bus
+        (MB) (Fixed Route)","TypeOfService":"PT - Purchased Transportation","CommitmentDate":null,"StartDate":null,"EndDate":null,"LastModifiedDate":null},{"Id":0,"ReportId":1155,"ServiceMode":"Demand
+        Response (DR)","TypeOfService":"PT - Purchased Transportation","CommitmentDate":null,"StartDate":null,"EndDate":null,"LastModifiedDate":null}]},"NTDReportingP50":{"Data":[{"Id":0,"ReportId":1155,"Mode":{"id":0,"Text":"Bus
+        (MB) (Fixed Route)","Value":"3","Group":null,"BoolValue":false},"Type":{"id":0,"Text":"PT
+        - Purchased Transportation","Value":"2","Group":null,"BoolValue":false},"WebLink":null,"FilePath":null,"LastModifiedDate":null},{"Id":0,"ReportId":1155,"Mode":{"id":0,"Text":"Demand
+        Response (DR)","Value":"9","Group":null,"BoolValue":false},"Type":{"id":0,"Text":"PT
+        - Purchased Transportation","Value":"2","Group":null,"BoolValue":false},"WebLink":null,"FilePath":null,"LastModifiedDate":null}]},"NTDReportingA35":{"Data":[]},"NTDReportingRR20_Intercity":{"Data":[]},"NTDReportingRR20_Rural":{"Data":[]},"NTDReportingRR20_Urban_Tribal":{"Data":[]},"NTDReportingTAMNarrative":{"Data":[]},"SS60":{"Data":[]}}]'
+    headers:
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1516'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Tue, 08 Jul 2025 19:28:24 GMT
+      Expires:
+      - '-1'
+      Pragma:
+      - no-cache
+      Server:
+      - Microsoft-IIS/10.0
+      Set-Cookie:
+      - AWSALB=Npb9bURgiRQzeC99NCazSSPZS95JlaFCrlPuhz93Vp7IV2303kyluWQT45+ry092z53hQvrBCcbbtyFfJzf8zEd1x8J5R5dmIAbGiaAhOap+RutjccZQMkkNJu13;
+        Expires=Tue, 15 Jul 2025 19:28:24 GMT; Path=/
+      - AWSALBCORS=Npb9bURgiRQzeC99NCazSSPZS95JlaFCrlPuhz93Vp7IV2303kyluWQT45+ry092z53hQvrBCcbbtyFfJzf8zEd1x8J5R5dmIAbGiaAhOap+RutjccZQMkkNJu13;
+        Expires=Tue, 15 Jul 2025 19:28:24 GMT; Path=/; SameSite=None; Secure
+      X-AspNet-Version:
+      - 4.0.30319
+      X-Frame-Options:
+      - AllowAll
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!binary |
+      LS09PT09PT09PT09PT09PT0yODAyOTg0NDk2NDc3MTEzMzc2PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAiYWxsX05URFJlcG9ydGlu
+      Zy95ZWFyPTIwMjUvZHQ9MjAyNS0wNi0wMS90cz0yMDI1LTA2LTAxVDAwOjAwOjAwKzAwOjAwL2Fs
+      bF9udGRyZXBvcnRzLmpzb25sLmd6In0NCi0tPT09PT09PT09PT09PT09MjgwMjk4NDQ5NjQ3NzEx
+      MzM3Nj09DQpjb250ZW50LXR5cGU6IGFwcGxpY2F0aW9uL2pzb25sDQoNCh+LCABZcW1oAv/VVF1v
+      00AQ/Cune0olo9oOLiJvpKGoUgNRasEDQtXG3rgn7Dvrbq9qiPLfWX8ktA0kES+IN3t3bnZ2xr61
+      tFgbSyqXoyhKkkAaW4BWP4CU0XIkU1+CRXFpvKaVmGPBZShFakE7ReJdgTpbyaCnqdEqw1QyDuNk
+      V3UE5B1XPxoSt35RKSLMd+0SHFUmV0uFeQ6EDHxzHp03FOL1aHgxCiMxmzJcU96r1UXDyVIc6LwC
+      pQk16IyPruUECOTo67dNe4A6oeAcUgUaCqxQE0TJPrTFMJ9FZ7zNUOml2UftFNRReKgbP+2u5TW7
+      EgZy3vavd27fon1QGU5N3qw99k4MpuMzMbhSj5iLufGEZ7x5uqrx07IHM3CWildixiLvwTGuTaMh
+      7lIL5KWp2ORm00lrqPZlycMI7LPCe50/fb3hIKZ9EL/qm+BE9RNkg1k0shTtUAwm83+ufS+W5KRY
+      uo3WUnXtFB/pUDyfofTNakN+/mCNr7eqxsaUfXMJpcNNZ8c+9TFTthPiEyZ8wcWN0t+3iCtV4gzo
+      /q9T/r0Zf0h7K/Ttf2zFy48GhsmBP93aOLxrbiCbKVodA1pvoTwG8nYB+o6sWhzEElQarGVjHl7e
+      fM5dPL+dNj8B74Ch2eoFAAANCi0tPT09PT09PT09PT09PT09MjgwMjk4NDQ5NjQ3NzExMzM3Nj09
+      LS0=
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '800'
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+        gccl-invocation-id/5f7277e0-144a-4edd-99fe-98d33ca65d4c
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yODAyOTg0NDk2NDc3
+        MTEzMzc2PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/all_NTDReporting/year=2025/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/all_ntdreports.jsonl.gz/1752002906271824\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/all_NTDReporting%2Fyear=2025%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fall_ntdreports.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/all_NTDReporting%2Fyear=2025%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fall_ntdreports.jsonl.gz?generation=1752002906271824&alt=media\",\n
+        \ \"name\": \"all_NTDReporting/year=2025/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/all_ntdreports.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1752002906271824\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"487\",\n  \"md5Hash\": \"txkrwzSqHjw2fK2IUdDoSw==\",\n
+        \ \"crc32c\": \"n36cQg==\",\n  \"etag\": \"CNDg/rb/rY4DEAE=\",\n  \"timeCreated\":
+        \"2025-07-08T19:28:26.276Z\",\n  \"updated\": \"2025-07-08T19:28:26.276Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-07-08T19:28:26.276Z\",\n  \"timeFinalized\":
+        \"2025-07-08T19:28:26.276Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1172'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 08 Jul 2025 19:28:26 GMT
+      ETag:
+      - CNDg/rb/rY4DEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - ABgVH8-cpbZHJA-m0Wyvcgkqw0Mr1pa9LsY6qNZ1qmzfrfCzE8Bpsy5Ch2DNq3ZihKKpYSq2FF2H3A
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.3
+    method: GET
+    uri: https://services.blackcattransit.com/api/APIModules/GetNTDReportsByYear/BCG_CA/2025
+  response:
+    body:
+      string: '[{"ReportId":1155,"Organization":"Tulare County Regional Transit Agency","ReportPeriod":"2025","ReportStatus":"Not
+        Submitted","ReportLastModifiedDate":"7/1/2025 4:36:01 PM","NTDReportingStationsAndMaintenance":{"Data":[]},"NTDTransitAssetManagementA15":{"Data":[]},"NTDAssetAndResourceInfo":{"Data":[]},"NTDReportingP10":{"Data":[]},"NTDReportingP20":{"Data":[{"Id":0,"ReportId":1155,"ServiceMode":"Bus
+        (MB) (Fixed Route)","TypeOfService":"PT - Purchased Transportation","CommitmentDate":null,"StartDate":null,"EndDate":null,"LastModifiedDate":null},{"Id":0,"ReportId":1155,"ServiceMode":"Demand
+        Response (DR)","TypeOfService":"PT - Purchased Transportation","CommitmentDate":null,"StartDate":null,"EndDate":null,"LastModifiedDate":null}]},"NTDReportingP50":{"Data":[{"Id":0,"ReportId":1155,"Mode":{"id":0,"Text":"Bus
+        (MB) (Fixed Route)","Value":"3","Group":null,"BoolValue":false},"Type":{"id":0,"Text":"PT
+        - Purchased Transportation","Value":"2","Group":null,"BoolValue":false},"WebLink":null,"FilePath":null,"LastModifiedDate":null},{"Id":0,"ReportId":1155,"Mode":{"id":0,"Text":"Demand
+        Response (DR)","Value":"9","Group":null,"BoolValue":false},"Type":{"id":0,"Text":"PT
+        - Purchased Transportation","Value":"2","Group":null,"BoolValue":false},"WebLink":null,"FilePath":null,"LastModifiedDate":null}]},"NTDReportingA35":{"Data":[]},"NTDReportingRR20_Intercity":{"Data":[]},"NTDReportingRR20_Rural":{"Data":[]},"NTDReportingRR20_Urban_Tribal":{"Data":[]},"NTDReportingTAMNarrative":{"Data":[]},"SS60":{"Data":[]}}]'
+    headers:
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1516'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Tue, 08 Jul 2025 19:28:26 GMT
+      Expires:
+      - '-1'
+      Pragma:
+      - no-cache
+      Server:
+      - Microsoft-IIS/10.0
+      Set-Cookie:
+      - AWSALB=cuIUVFxwhWBe0OkGzTDDYI+JsmOnwqqM8fvmapi4PkU6F6X9h2QVjBwGfnlcElvMFXyCdAjXdC+mavezgTqBh0ZBvOX0FG9fKah0nRM2KaBJ3IXBcaJWbdl21gNw;
+        Expires=Tue, 15 Jul 2025 19:28:26 GMT; Path=/
+      - AWSALBCORS=cuIUVFxwhWBe0OkGzTDDYI+JsmOnwqqM8fvmapi4PkU6F6X9h2QVjBwGfnlcElvMFXyCdAjXdC+mavezgTqBh0ZBvOX0FG9fKah0nRM2KaBJ3IXBcaJWbdl21gNw;
+        Expires=Tue, 15 Jul 2025 19:28:26 GMT; Path=/; SameSite=None; Secure
+      X-AspNet-Version:
+      - 4.0.30319
+      X-Frame-Options:
+      - AllowAll
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!binary |
+      LS09PT09PT09PT09PT09PT02MjEwMzgxMDYzODIzNzM0MDc5PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAiYWxsX05URFJlcG9ydGlu
+      Zy95ZWFyPTIwMjUvZHQ9MjAyNS0wNy0wMS90cz0yMDI1LTA3LTAxVDAwOjAwOjAwKzAwOjAwL2Fs
+      bF9udGRyZXBvcnRzLmpzb25sLmd6In0NCi0tPT09PT09PT09PT09PT09NjIxMDM4MTA2MzgyMzcz
+      NDA3OT09DQpjb250ZW50LXR5cGU6IGFwcGxpY2F0aW9uL2pzb25sDQoNCh+LCABbcW1oAv/VVF1v
+      00AQ/Cune0olo9oOLiJvpKGoUgNRasEDQtXG3rgn7Dvrbq9qiPLfWX8ktA0kES+IN3t3bnZ2xr61
+      tFgbSyqXoyhKkkAaW4BWP4CU0XIkU1+CRXFpvKaVmGPBZShFakE7ReJdgTpbyaCnqdEqw1QyDuNk
+      V3UE5B1XPxoSt35RKSLMd+0SHFUmV0uFeQ6EDHxzHp03FOL1aHgxCiMxmzJcU96r1UXDyVIc6LwC
+      pQk16IyPruUECOTo67dNe4A6oeAcUgUaCqxQE0TJPrTFMJ9FZ7zNUOml2UftFNRReKgbP+2u5TW7
+      EgZy3vavd27fon1QGU5N3qw99k4MpuMzMbhSj5iLufGEZ7x5uqrx07IHM3CWildixiLvwTGuTaMh
+      7lIL5KWp2ORm00lrqPZlycMI7LPCe50/fb3hIKZ9EL/qm+BE9RNkg1k0shTtUAwm83+ufS+W5KRY
+      uo3WUnXtFB/pUDyfofTNakN+/mCNr7eqxsaUfXMJpcNNZ8c+9TFTthPiEyZ8wcWN0t+3iCtV4gzo
+      /q9T/r0Zf0h7K/Ttf2zFy48GhsmBP93aOLxrbiCbKVodA1pvoTwG8nYB+o6sWhzEElQarGVjHl7e
+      fM5dPL+dNj8B74Ch2eoFAAANCi0tPT09PT09PT09PT09PT09NjIxMDM4MTA2MzgyMzczNDA3OT09
+      LS0=
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '800'
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+        gccl-invocation-id/7475bf80-7c2d-4621-b022-f0427171f1d6
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT02MjEwMzgxMDYzODIz
+        NzM0MDc5PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/all_NTDReporting/year=2025/dt=2025-07-01/ts=2025-07-01T00:00:00+00:00/all_ntdreports.jsonl.gz/1752002907806228\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/all_NTDReporting%2Fyear=2025%2Fdt=2025-07-01%2Fts=2025-07-01T00:00:00%2B00:00%2Fall_ntdreports.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/all_NTDReporting%2Fyear=2025%2Fdt=2025-07-01%2Fts=2025-07-01T00:00:00%2B00:00%2Fall_ntdreports.jsonl.gz?generation=1752002907806228&alt=media\",\n
+        \ \"name\": \"all_NTDReporting/year=2025/dt=2025-07-01/ts=2025-07-01T00:00:00+00:00/all_ntdreports.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1752002907806228\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"487\",\n  \"md5Hash\": \"zTkwJJGz1kCAx9sp+g1yVw==\",\n
+        \ \"crc32c\": \"ho6JrQ==\",\n  \"etag\": \"CJS03Lf/rY4DEAE=\",\n  \"timeCreated\":
+        \"2025-07-08T19:28:27.808Z\",\n  \"updated\": \"2025-07-08T19:28:27.808Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-07-08T19:28:27.808Z\",\n  \"timeFinalized\":
+        \"2025-07-08T19:28:27.808Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1172'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 08 Jul 2025 19:28:27 GMT
+      ETag:
+      - CJS03Lf/rY4DEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - ABgVH8_zJFTaMEvgc1mRISX2AbGklkVGLBJCk3eCY95lCQV6sT_nqGqWz5po3YonLxxRF5HOwR-Ggw
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+        gccl-invocation-id/7ca1a887-b71d-47c9-936e-4676a709effe
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/all_NTDReporting%2Fyear%3D2025%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fall_ntdreports.jsonl.gz?alt=media
+  response:
+    body:
+      string: !!binary |
+        H4sIAFlxbWgC/9VUXW/TQBD8K6d7SiWj2g4uIm+koahSA1FqwQNC1cbeuCfsO+tur2qI8t9ZfyS0
+        DSQRL4g3e3dudnbGvrW0WBtLKpejKEqSQBpbgFY/gJTRciRTX4JFcWm8ppWYY8FlKEVqQTtF4l2B
+        OlvJoKep0SrDVDIO42RXdQTkHVc/GhK3flEpIsx37RIcVSZXS4V5DoQMfHMenTcU4vVoeDEKIzGb
+        MlxT3qvVRcPJUhzovAKlCTXojI+u5QQI5Ojrt017gDqh4BxSBRoKrFATRMk+tMUwn0VnvM1Q6aXZ
+        R+0U1FF4qBs/7a7lNbsSBnLe9q93bt+ifVAZTk3erD32Tgym4zMxuFKPmIu58YRnvHm6qvHTsgcz
+        cJaKV2LGIu/BMa5NoyHuUgvkpanY5GbTSWuo9mXJwwjss8J7nT99veEgpn0Qv+qb4ET1E2SDWTSy
+        FO1QDCbzf659L5bkpFi6jdZSde0UH+lQPJ+h9M1qQ37+YI2vt6rGxpR9cwmlw01nxz71MVO2E+IT
+        JnzBxY3S37eIK1XiDOj+r1P+vRl/SHsr9O1/bMXLjwaGyYE/3do4vGtuIJspWh0DWm+hPAbydgH6
+        jqxaHMQSVBqsZWMeXt58zl08v502PwHvgKHZ6gUAAA==
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '487'
+      Content-Type:
+      - application/jsonl
+      Date:
+      - Tue, 08 Jul 2025 19:28:28 GMT
+      ETag:
+      - CNDg/rb/rY4DEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Tue, 08 Jul 2025 19:28:26 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - ABgVH8854NAY_BF-7ZnOZI8_tJGKG6Ui7c-SFw_N9PwbDW-Vbg_95LRzgp9Muvvn4aXxfN6ugCqUhQ
+      X-Goog-Generation:
+      - '1752002906271824'
+      X-Goog-Hash:
+      - crc32c=n36cQg==,md5=txkrwzSqHjw2fK2IUdDoSw==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '487'
+    status:
+      code: 200
+      message: OK
+version: 1

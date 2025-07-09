@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__employees_by_agency AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['max_ntd_id', 'report_year']) }} AS key,
         {{ trim_make_empty_string_null('max_agency_1') }} AS agency,
         SAFE_CAST(avgwagerate AS FLOAT64) AS avgwagerate,
         SAFE_CAST(count_capital_labor_count_q AS NUMERIC) AS count_capital_labor_count_q,

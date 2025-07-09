@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'historical'
-product: 'monthly_modal_time_series_safety_and_service'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: '5ti2-5uiv'
-file_format: '.json'
+year: historical
+product: monthly_modal_time_series_safety_and_service
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/5ti2-5uiv.json
+parameters:
+  $limit: 5000000

@@ -12,6 +12,7 @@ get_latest_extract AS(
 
 stg_ntd__track_and_roadway_by_mode AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['ntd_id', 'report_year', 'mode', 'type_of_service']) }} AS key,
         {{ trim_make_empty_string_null('agency') }} AS agency,
         SAFE_CAST(agency_voms AS NUMERIC) AS agency_voms,
         SAFE_CAST(at_grade_ballast_including AS NUMERIC) AS at_grade_ballast_including,

@@ -1,7 +1,7 @@
 locals {
-  namespace = "airflow-jobs"
-  secret    = "jobs-data"
-
+  namespace            = "airflow-jobs"
+  secret               = "jobs-data"
+  service_account_name = "composer-service-account"
   # This regular expression corresponds to the Python package name specification
   # https://packaging.python.org/en/latest/specifications/name-normalization/
   python_package_regex  = "(?P<name>[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9])(?P<version>.*)"

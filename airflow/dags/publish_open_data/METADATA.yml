@@ -5,7 +5,8 @@ tags:
 default_args:
     owner: airflow
     depends_on_past: False
-    start_date: "2022-09-12"
+    start_date: "2025-07-06"
+    catchup: False
     email:
       - "eric.dasmalchi@dot.ca.gov"
     email_on_failure: True
