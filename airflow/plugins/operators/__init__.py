@@ -1,4 +1,8 @@
 # flake8: noqa
+from operators.aggregator_to_gcs_operator import (
+    MobilityDatabaseToGCSOperator,
+    TransitlandToGCSOperator,
+)
 from operators.airtable_to_gcs_operator import AirtableToGCSOperator
 from operators.blackcat_to_gcs_operator import BlackCatToGCSOperator
 from operators.external_table import ExternalTable

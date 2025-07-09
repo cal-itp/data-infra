@@ -53,7 +53,11 @@ def dag_bag() -> DagBag:
 @pytest.fixture(scope="module")
 def vcr_config():
     return {
-        "filter_headers": [("cookie", "FILTERED"), ("Authorization", "FILTERED")],
+        "filter_headers": [
+            ("cookie", "FILTERED"),
+            ("Authorization", "FILTERED"),
+            ("apikey", "FILTERED"),
+        ],
         "allow_playback_repeats": True,
         "ignore_hosts": [
             "run-actions-1-azure-eastus.actions.githubusercontent.com",
@@ -120,4 +124,12 @@ def setup_module():
         conn_id="http_mobility_database",
         conn_type="http",
         host="https://bit.ly/catalogs-csv",
+    )
+    clean_connections(session, "http_transitland")
+    add_connection(
+        session,
+        conn_id="http_transitland",
+        conn_type="http",
+        host="https://transit.land/api/v2/rest/feeds",
+        extra={"apikey": os.environ.get("TRANSITLAND_API_KEY")},
     )
