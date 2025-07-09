@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'vehicles_type_count_by_agency'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'nimp-626k'
-file_format: '.json'
+year: multi_year
+product: vehicles_type_count_by_agency
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/nimp-626k.json
+parameters:
+  $limit: 5000000

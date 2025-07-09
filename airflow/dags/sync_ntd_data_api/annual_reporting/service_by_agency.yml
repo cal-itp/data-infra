@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'service_by_agency'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: '6y83-7vuw'
-file_format: '.json'
+year: multi_year
+product: service_by_agency
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/6y83-7vuw.json
+parameters:
+  $limit: 5000000

@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'historical'
-product: 'major_safety_events'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'urir-txqm'
-file_format: '.json'
+year: historical
+product: major_safety_events
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/urir-txqm.json
+parameters:
+  $limit: 5000000

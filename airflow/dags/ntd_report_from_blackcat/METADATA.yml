@@ -5,10 +5,9 @@ tags:
 default_args:
     owner: airflow
     depends_on_past: False
-    start_date: "2023-10-02"
+    start_date: "2025-07-06"
     catchup: False
     email:
-      - "kim.engie@slalom.com"
       - "christian.suyat@dot.ca.gov"
       - "katrina.kaiser@dot.ca.gov"
     email_on_failure: True
@@ -16,3 +15,4 @@ default_args:
     concurrency: 50
 wait_for_defaults:
     timeout: 3600
+latest_only: True

@@ -14,8 +14,8 @@ resource "google_composer_environment" "calitp-composer" {
 
     workloads_config {
       scheduler {
-        cpu        = 1
-        memory_gb  = 1
+        cpu        = 2
+        memory_gb  = 2
         storage_gb = 1
         count      = 1
       }
@@ -26,10 +26,10 @@ resource "google_composer_environment" "calitp-composer" {
       }
       worker {
         cpu        = 2
-        memory_gb  = 2
+        memory_gb  = 4
         storage_gb = 1
         min_count  = 1
-        max_count  = 2
+        max_count  = 6
       }
     }
 
@@ -45,8 +45,8 @@ resource "google_composer_environment" "calitp-composer" {
         core-dags_are_paused_at_creation           = "True"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
-        webserver-reload_on_plugin_change          = "True"
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
+        webserver-reload_on_plugin_change          = "True"
       }
 
       pypi_packages = local.pypi_packages

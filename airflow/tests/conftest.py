@@ -100,3 +100,17 @@ def setup_module():
         conn_type="generic",
         password=os.environ.get("CALITP_AIRTABLE_PERSONAL_ACCESS_TOKEN"),
     )
+    clean_connections(session, "http_ntd")
+    add_connection(
+        session,
+        conn_id="http_ntd",
+        conn_type="http",
+        host="https://data.transportation.gov",
+    )
+    clean_connections(session, "http_blackcat")
+    add_connection(
+        session,
+        conn_id="http_blackcat",
+        conn_type="http",
+        host="https://services.blackcattransit.com",
+    )

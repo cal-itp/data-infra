@@ -48,7 +48,7 @@ class TestAirtableCleaner:
         airtable_rows = [
             {
                 "id": "abc123",
-                "fields": {"daily_servings": {"monday": [1, None], "tuesday": [3]}},
+                "fields": {"daily servings": {"monday": [1, None], "tuesday": [3]}},
             }
         ]
         cleaner = AirtableCleaner(airtable_rows)
