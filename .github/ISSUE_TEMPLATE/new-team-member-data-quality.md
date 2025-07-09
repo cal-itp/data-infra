@@ -59,6 +59,7 @@ Slack Username:
   - [ ] DOT HQ Developers and Analysts
 
 - [ ] Onboarding trainings
+
   - [ ] Overview of the organization with supervisor
   - [ ] Airtable
   - [ ] JupyterHub / notebooks / data warehouse
