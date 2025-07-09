@@ -114,3 +114,10 @@ def setup_module():
         conn_type="http",
         host="https://services.blackcattransit.com",
     )
+    clean_connections(session, "http_mobility_database")
+    add_connection(
+        session,
+        conn_id="http_mobility_database",
+        conn_type="http",
+        host="https://bit.ly/catalogs-csv",
+    )
