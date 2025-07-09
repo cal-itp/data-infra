@@ -63,6 +63,7 @@ Slack Username:
   - [ ] Airtable
   - [ ] JupyterHub / notebooks / data warehouse
   - [ ] Metabase
-  - [ ] Remix   
+  - [ ] Remix
+  - [ ] Onramp [mandated trainings](https://ldo.onramp.dot.ca.gov/mandated-training)   
 
 - [ ] One stop shop for [SOPs + rotational tasks](https://caltrans.sharepoint.com/:w:/r/sites/DOTPMPHQ-DataandDigitalServices/_layouts/15/Doc.aspx?sourcedoc=%7B773692CD-A48F-47B9-B126-B2453FA9B5CD%7D&file=Transit%20Data%20Quality%20Analysis%20SOPs.docx)
