@@ -58,4 +58,11 @@ Slack Username:
   - [ ] DOT HQ Cal-ITP External Collab
   - [ ] DOT HQ Developers and Analysts
 
-- [ ] url_placeholder: One stop shop for SOPs + rotational tasks
+- [ ] Onboarding trainings
+  - [ ] Overview of the organization with supervisor
+  - [ ] Airtable
+  - [ ] JupyterHub / notebooks / data warehouse
+  - [ ] Metabase
+  - [ ] Remix   
+
+- [ ] One stop shop for [SOPs + rotational tasks](https://caltrans.sharepoint.com/:w:/r/sites/DOTPMPHQ-DataandDigitalServices/_layouts/15/Doc.aspx?sourcedoc=%7B773692CD-A48F-47B9-B126-B2453FA9B5CD%7D&file=Transit%20Data%20Quality%20Analysis%20SOPs.docx)
