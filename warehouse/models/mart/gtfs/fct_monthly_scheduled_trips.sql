@@ -10,6 +10,7 @@
     )
 }}
 
+
 WITH trips AS (
     SELECT * FROM {{ ref('fct_scheduled_trips') }}
     -- only run if new month is available. select dates <= last day of prior month
