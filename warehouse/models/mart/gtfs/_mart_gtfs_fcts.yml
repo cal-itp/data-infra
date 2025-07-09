@@ -2599,35 +2599,31 @@ models:
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
 
-  - name: fct_vehicle_locations_grouped
+  - name: fct_vehicle_locations_path
     description: |
-      Vehicle positions, grouped by location position. Uses fct_vehicle_locations and
-      calculates a first timestamp at location (location_timestamp) and
-      last timestamp at location (moving_timestamp).
-      Unique at the url/vehicle/trip/location_position level.
+      Transforms fct_vehicle_locations into an array of ordered
+      vehicle positions and timestamps.
+      Unique at the url/vehicle/trip level.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `service_date`, `base64_url`,
-          `location_timestamp`, `vehicle_id`, `vehicle_label`,
-          `trip_id`, and `trip_start_time`.
-      - *rt_service_date
-      - name: gtfs_dataset_key
-        description: Foreign key to the associated GTFS dataset record.
+      - *gtfs_dataset_key_errorif_sampled
       - *base64_url
+      - *rt_schedule_base64_url
+      - *rt_service_date
       - *gtfs_rt_name
-      - <<: *trip_instance_key
-        tests:
-          - not_null
-      - *rt_location_timestamp
-      - name: moving_timestamp
+      - *gtfs_rt_schedule_dataset_key
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *rt_trip_id
+      - *trip_instance_key
+      - name: pt_array
         description: |
-          The last location_timestamp at this position.
+            Ordered array of WKT points that describe this trip's vehicle positions path.
+      - name: location_timestamp_pacific
+        description: |
+            Ordered array of location datetime, in the "America/Los_Angeles" time zone.
       - name: n_vp
-        description: |
-          Number of vehicle positions observed at this location.
-      - *rt_location
-
+        description: total number of vehicle positions (timestamp + location) for this trip
+          
   - name: fct_vehicle_positions_trip_metrics
     description: |
       Summarizes trips observed in vehicle position messages, as long as
@@ -2709,4 +2705,5 @@ models:
       - name: n_within_shape
         description: |
           Number of vehicle location timestamps within 35 meters
-          of the scheduled shape (path of travel).
+          of the scheduled shape (path of travel)
+

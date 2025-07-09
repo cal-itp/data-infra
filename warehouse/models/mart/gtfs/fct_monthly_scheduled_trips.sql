@@ -1,10 +1,22 @@
-{{ config(
-    materialized='table',
-    cluster_by=['year', 'gtfs_dataset_key'],
-) }}
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by={
+            'field': 'month_first_day',
+            'data_type': 'date',
+            'granularity': 'month'
+        }, cluster_by=['month_first_day', 'gtfs_dataset_key']
+    )
+}}
+
 
 WITH trips AS (
     SELECT * FROM {{ ref('fct_scheduled_trips') }}
+    -- only run if new month is available. select dates <= last day of prior month
+    WHERE service_date <= LAST_DAY(
+        DATE_SUB(CURRENT_DATE("America/Los_Angeles"), INTERVAL 1 MONTH)
+    )
 ),
 
 dim_shapes_arrays AS (
@@ -20,8 +32,11 @@ monthly_trips AS (
 
         gtfs_dataset_key,
         name,
+
         EXTRACT(month FROM service_date) AS month,
         EXTRACT(year FROM service_date) AS year,
+        DATE_TRUNC(service_date, MONTH) AS month_first_day,
+
         CASE
             WHEN EXTRACT(DAYOFWEEK FROM service_date) = 1 THEN "Sunday"
             WHEN EXTRACT(DAYOFWEEK FROM service_date) = 7 THEN "Saturday"
@@ -46,7 +61,7 @@ monthly_trips AS (
         COUNT(DISTINCT service_date) as n_days,
 
     FROM trips
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
 
 ),
 
