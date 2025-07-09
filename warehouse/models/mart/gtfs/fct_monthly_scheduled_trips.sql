@@ -1,16 +1,21 @@
 {{
     config(
-        materialized='table',
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
         partition_by={
             'field': 'month_first_day',
             'data_type': 'date',
             'granularity': 'month'
-        }, cluster_by=['gtfs_dataset_key', 'year', 'month']
+        }, cluster_by=['month_first_day', 'gtfs_dataset_key']
     )
 }}
 
 WITH trips AS (
     SELECT * FROM {{ ref('fct_scheduled_trips') }}
+    -- only run if new month is available. select dates <= last day of prior month
+    WHERE service_date <= LAST_DAY(
+        DATE_SUB(CURRENT_DATE("America/Los_Angeles"), INTERVAL 1 MONTH)
+    )
 ),
 
 dim_shapes_arrays AS (
