@@ -2691,3 +2691,22 @@ models:
       - *rt_trip_max_datetime_pacific
       - *rt_trip_start_time_interval
       - *rt_trip_num_distinct_updates
+      - name: n_minutes_complete
+        description: |
+            Number of one minute bins with 2 or more
+            vehicle location_timestamps.
+      - name: avg_vp_per_minute
+        description: |
+            Total vehicle location timestamps (n_vp) divided by
+            number of minutes with information.
+      - name: vp_trip_minutes
+        description: |
+          Number of one-minute bins present. This may differ
+          from vehicle_duration_minutes if there are minutes where
+          RT data isn't available.
+      - name: n_vp
+        description: Total vehicle location timestamps available for the trip.
+      - name: n_within_shape
+        description: |
+          Number of vehicle location timestamps within 35 meters
+          of the scheduled shape (path of travel).
