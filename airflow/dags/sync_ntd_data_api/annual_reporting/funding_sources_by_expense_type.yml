@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'funding_sources_by_expense_type'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: '4tmr-gwuu'
-file_format: '.json'
+year: multi_year
+product: funding_sources_by_expense_type
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/4tmr-gwuu.json
+parameters:
+  $limit: 5000000

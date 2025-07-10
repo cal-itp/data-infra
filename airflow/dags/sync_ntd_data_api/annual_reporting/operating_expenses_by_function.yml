@@ -1,7 +1,8 @@
-operator: operators.NtdDataProductAPIOperator
+operator: operators.NTDToGCSOperator
 
-year: 'multi_year'
-product: 'operating_expenses_by_function'
-root_url: 'https://data.transportation.gov/resource/'
-endpoint_id: 'dkxx-zjd6'
-file_format: '.json'
+year: multi_year
+product: operating_expenses_by_function
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/dkxx-zjd6.json
+parameters:
+  $limit: 5000000
