@@ -24,6 +24,7 @@ env:
   CALITP_BUCKET__PUBLISH: ${{ github.ref == 'refs/heads/main' && 'calitp-publish' || 'calitp-staging-publish' }}
   GOOGLE_CLOUD_PROJECT: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
   METABASE_DESTINATION_DATABASE: ${{ github.ref == 'refs/heads/main' && 'Data Marts (formerly Warehouse Views)' || '(Internal) Staging Warehouse Views' }}
+  DBT_DOCS_URL: ${{ github.ref == 'refs/heads/main' && 'https://dbt-docs.dds.dot.ca.gov' || 'https://dbt-docs-staging.dds.dot.ca.gov' }}
 
 jobs:
   compile:
@@ -109,14 +110,15 @@ jobs:
             warehouse/target/*.json
             warehouse/target/*.msgpack
 
-  models-changed:
-    name: Detect dbt model changes
+  dbt-changed:
+    name: Detect dbt model and seed changes
     runs-on: ubuntu-latest
 
-    if: ${{ github.event_name == 'pull_request' }}
-
     outputs:
-      any_changed: ${{ steps.changed-files-warehouse.outputs.any_changed }}
+      has-changed: ${{ steps.changed.outputs.any_changed }}
+      changed: ${{ steps.changed.outputs.all_changed_files }}
+      has-changed-seeds: ${{ steps.changed-seeds.outputs.any_changed }}
+      changed-seeds: ${{ steps.changed-seeds.outputs.all_changed_files }}
 
     steps:
       - name: Checkout
@@ -125,19 +127,37 @@ jobs:
           fetch-depth: 0
 
       - uses: tj-actions/changed-files@v46
-        id: changed-files-warehouse
+        id: changed
         with:
-          files: 'warehouse/models/**/*.sql'
+          path: warehouse
+          separator: "+ "
+          files: |
+            models/**/*.sql
+            seeds/*.csv
 
-  metabase:
-    name: Sync Metabase
+      - uses: tj-actions/changed-files@v46
+        id: changed-seeds
+        with:
+          path: warehouse
+          separator: "+ "
+          files: seeds/*.csv
+
+      - name: List changed files
+        if: ${{ steps.changed.outputs.any_changed == 'true' }}
+        env:
+          CHANGED_MODELS: ${{ steps.changed.outputs.all_changed_files }}
+        run: |
+          echo "List changed files: $CHANGED_MODELS"
+
+  models_and_metabase:
+    name: Sync Models and Metabase
     runs-on: ubuntu-latest
 
     needs:
       - compile
-      - models-changed
+      - dbt-changed
 
-    if: ${{ needs.models-changed.outputs.any_changed == 'true' }}
+    if: ${{ needs.dbt-changed.outputs.has-changed == 'true' || needs.dbt-changed.outputs.has-changed-seeds == 'true' }}
 
     permissions:
       contents: read
@@ -207,19 +227,22 @@ jobs:
         working-directory: warehouse
         run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
 
-      - name: Download latest artifacts from GCS
+      - name: Run seeds
+        if: ${{ needs.dbt-changed.outputs.has-changed-seeds == 'true' }}
         working-directory: warehouse
-        if: ${{ env.DBT_TARGET  == 'staging' }}
-        run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ ./target/
+        run: poetry run dbt seed --select "${{ needs.dbt-changed.outputs.changed-seeds }}+" --target ${{ env.DBT_TARGET }}
 
-      - name: Run changed models
+      - name: List changed models
         working-directory: warehouse
-        if: ${{ env.DBT_TARGET  == 'staging' }}
-        run: poetry run dbt run --select state:modified+ --target ${{ env.DBT_TARGET }} --state ./target/latest
+        run: poetry run dbt list --select "${{ needs.dbt-changed.outputs.changed }}+" --target ${{ env.DBT_TARGET }}
+
+      - name: Run dbt against changed files
+        working-directory: warehouse
+        run: poetry run dbt run --select "${{ needs.dbt-changed.outputs.changed }}+" --target ${{ env.DBT_TARGET }} --full-refresh
 
       - name: Synchronize Metabase
         working-directory: warehouse
-        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --exclude-schemas="*staging, payments" --skip-sources --docs-url="https://dbt-docs.dds.dot.ca.gov" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
+        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --skip-sources --exclude-schemas=staging --docs-url="${{ env.DBT_DOCS_URL }}" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
 
   upload_dbt_docs:
     name: Upload to dbt-docs site
@@ -282,7 +305,7 @@ jobs:
           headers: |-
             content-type: application/vnd.msgpack
 
-  upload_docs:
+  upload_dbt_artifacts:
     name: Upload to dbt artifacts bucket
     needs: [compile]
     runs-on: ubuntu-latest
@@ -383,10 +406,10 @@ jobs:
     runs-on: ubuntu-latest
 
     needs:
-      - models-changed
+      - dbt-changed
       - compile
 
-    if: ${{ github.event_name == 'pull_request' && needs.models-changed.outputs.any_changed == 'true' }}
+    if: ${{ github.event_name == 'pull_request' && needs.dbt-changed.outputs.has-changed == 'true' }}
 
     permissions:
       contents: read
@@ -450,9 +473,13 @@ jobs:
         working-directory: warehouse
         run: poetry run dbt deps
 
-      - name: Download latest artifacts from GCS
+      - name: Create Latest folder
+        working-directory: warehouse/target
+        run: mkdir latest
+
+      - name: Download latest artifacts from production dbt docs
         working-directory: warehouse
-        run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ ./target/
+        run: gsutil cp gs://calitp-dbt-docs/*.json ./target/latest/
 
       - name: Create CI report
         working-directory: warehouse

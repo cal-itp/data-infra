@@ -6,7 +6,7 @@ from cosmos.constants import TestBehavior
 
 DBT_TARGET = os.environ.get("DBT_TARGET")
 
-cosmos_payment = DbtDag(
+dbt_payments = DbtDag(
     # dbt/cosmos-specific parameters
     project_config=ProjectConfig(
         dbt_project_path="/home/airflow/gcs/data/warehouse",
@@ -25,14 +25,15 @@ cosmos_payment = DbtDag(
             "+path:models/intermediate/payments+",
             "+path:models/mart/payments+",
         ],
-        test_behavior=TestBehavior.NONE,
+        test_behavior=TestBehavior.AFTER_ALL,
     ),
     operator_args={"install_deps": True},
-    # normal dag parameters
-    schedule_interval="@daily",
-    start_date=datetime(2025, 5, 1),
+    # Tuesday, Wednesday, Friday at 7am PDT/8am PST (2pm UTC)
+    schedule="0 14 * * 2,3,5",
+    start_date=datetime(2025, 7, 6),
     catchup=False,
-    dag_id="cosmos_payment",
+    latest_only=True,
+    dag_id="dbt_payments",
     tags=["dbt", "payments"],
     default_args={"retries": 0},
 )
