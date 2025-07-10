@@ -128,7 +128,10 @@ jobs:
       - uses: tj-actions/changed-files@v46
         id: changed-files-warehouse
         with:
-          files: 'warehouse/models/**/*.sql'
+          files: |
+            warehouse/models/**/*.sql
+            warehouse/seeds/**/*.csv
+            warehouse/seeds/**/*.yml
 
   metabase:
     name: Sync Metabase
