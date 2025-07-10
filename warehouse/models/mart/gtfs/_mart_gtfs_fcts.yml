@@ -2416,7 +2416,8 @@ models:
       - *num_distinct_header_timestamps
       - *num_distinct_message_keys
       - *num_distinct_extract_ts
-      - name: num_distinct_vehicle_timestamps
+      - &num_distinct_vehicle_timestamps
+        name: num_distinct_vehicle_timestamps
         description: |
           Distinct count of vehicle timestamps from the feed
           (https://gtfs.org/realtime/reference/#message-vehicleposition).
@@ -2434,13 +2435,16 @@ models:
       - *max_header_local_tz
       - *min_header_pacific
       - *max_header_pacific
-      - name: min_vehicle_timestamp
+      - &min_vehicle_timestamp
+        name: min_vehicle_timestamp
         description: |
           Earliest vehicle timestamp of a message referencing this trip.
-      - name: max_vehicle_timestamp
+      - &max_vehicle_timestamp
+        name: max_vehicle_timestamp
         description: |
           Latest vehicle timestamp of a message referencing this trip.
-      - name: vehicle_duration_minutes
+      - &vehicle_duration_minutes
+        name: vehicle_duration_minutes
         description: |
           The difference between `max_vehicle_timestamp` and
           `min_vehicle_timestamp` in minutes, representing the duration of time
@@ -2449,19 +2453,23 @@ models:
           Note that the trip may not have been present in every message between
           the minimum and maximum timestamps, and therefore may not have been
           present continuously for the duration listed here.
-      - name: min_vehicle_datetime_local_tz
+      - &min_vehicle_datetime_local_tz
+        name: min_vehicle_datetime_local_tz
         description: |
           `min_vehicle_timestamp` converted to a DATETIME type in
           `schedule_feed_timezone`.
-      - name: max_vehicle_datetime_local_tz
+      - &max_vehicle_datetime_local_tz
+        name: max_vehicle_datetime_local_tz
         description: |
           `max_vehicle_timestamp` converted to a DATETIME type in
           `schedule_feed_timezone`.
-      - name: min_vehicle_datetime_pacific
+      - &min_vehicle_datetime_pacific
+        name: min_vehicle_datetime_pacific
         description: |
           `min_vehicle_timestamp` converted to a DATETIME type in the
           "America/Los_Angeles" time zone.
-      - name: max_vehicle_datetime_pacific
+      - &max_vehicle_datetime_pacific
+        name: max_vehicle_datetime_pacific
         description: |
           `max_vehicle_timestamp` converted to a DATETIME type in the
           "America/Los_Angeles" time zone.
@@ -2591,31 +2599,110 @@ models:
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
 
-  - name: fct_vehicle_locations_grouped
+  - name: fct_vehicle_locations_path
     description: |
-      Vehicle positions, grouped by location position. Uses fct_vehicle_locations and
-      calculates a first timestamp at location (location_timestamp) and
-      last timestamp at location (moving_timestamp).
-      Unique at the url/vehicle/trip/location_position level.
+      Transforms fct_vehicle_locations into an array of ordered
+      vehicle positions and timestamps.
+      Unique at the url/vehicle/trip level.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `service_date`, `base64_url`,
-          `location_timestamp`, `vehicle_id`, `vehicle_label`,
-          `trip_id`, and `trip_start_time`.
-      - *rt_service_date
-      - name: gtfs_dataset_key
-        description: Foreign key to the associated GTFS dataset record.
+      - *gtfs_dataset_key_errorif_sampled
       - *base64_url
+      - *rt_schedule_base64_url
+      - *rt_service_date
       - *gtfs_rt_name
-      - <<: *trip_instance_key
-        tests:
-          - not_null
-      - *rt_location_timestamp
-      - name: moving_timestamp
+      - *gtfs_rt_schedule_dataset_key
+      - *gtfs_rt_schedule_dataset_name
+      - *gtfs_rt_schedule_feed_key
+      - *rt_trip_id
+      - *trip_instance_key
+      - name: pt_array
         description: |
-          The last location_timestamp at this position.
+            Ordered array of WKT points that describe this trip's vehicle positions path.
+      - name: location_timestamp_pacific
+        description: |
+            Ordered array of location datetime, in the "America/Los_Angeles" time zone.
       - name: n_vp
+        description: total number of vehicle positions (timestamp + location) for this trip
+
+  - name: fct_vehicle_positions_trip_metrics
+    description: |
+      Summarizes trips observed in vehicle position messages, as long as
+      trip_id was populated. Builds on `fct_vehicle_positions_trip_summaries`
+      with additional derived metrics.
+
+      TODO: Potential refactor to bring all the vp trip grain derived metrics
+      into 1 place.
+
+    columns:
+      - *rt_trip_summary_key
+      - *trip_instance_key
+      - *gtfs_rt_schedule_feed_timezone
+      - *rt_service_date
+      - *base64_url
+      - *rt_schedule_base64_url
+      - *rt_trip_id
+      - *rt_trip_start_time
+      - *rt_trip_start_date
+      - *rt_iteration_num
+      - *starting_schedule_relationship
+      - *ending_schedule_relationship
+      - *rt_trip_route_ids
+      - *rt_trip_direction_ids
+      - *rt_trip_schedule_relationships
+      - *warning_multiple_route_ids
+      - *warning_multiple_direction_ids
+      - *num_distinct_message_ids
+      - *num_distinct_header_timestamps
+      - *num_distinct_message_keys
+      - *num_distinct_extract_ts
+      - *num_distinct_vehicle_timestamps
+      - *min_extract_ts
+      - *max_extract_ts
+      - *extract_duration_minutes
+      - *min_extract_ts_local_tz
+      - *max_extract_ts_local_tz
+      - *min_extract_ts_pacific
+      - *max_extract_ts_pacific
+      - *min_header_timestamp
+      - *max_header_timestamp
+      - *header_duration_minutes
+      - *min_header_local_tz
+      - *max_header_local_tz
+      - *min_header_pacific
+      - *max_header_pacific
+      - *min_vehicle_timestamp
+      - *max_vehicle_timestamp
+      - *vehicle_duration_minutes
+      - *min_vehicle_datetime_local_tz
+      - *max_vehicle_datetime_local_tz
+      - *min_vehicle_datetime_pacific
+      - *max_vehicle_datetime_pacific
+      - name: first_position
+        description: *vp_first_position_desc
+      - name: last_position
+        description: *vp_last_position_desc
+      - *rt_trip_min_ts
+      - *rt_trip_max_ts
+      - *rt_trip_min_datetime_pacific
+      - *rt_trip_max_datetime_pacific
+      - *rt_trip_start_time_interval
+      - *rt_trip_num_distinct_updates
+      - name: n_minutes_complete
         description: |
-          Number of vehicle positions observed at this location.
-      - *rt_location
+            Number of one minute bins with 2 or more
+            vehicle location_timestamps.
+      - name: avg_vp_per_minute
+        description: |
+            Total vehicle location timestamps (n_vp) divided by
+            number of minutes with information.
+      - name: vp_trip_minutes
+        description: |
+          Number of one-minute bins present. This may differ
+          from vehicle_duration_minutes if there are minutes where
+          RT data isn't available.
+      - name: n_vp
+        description: Total vehicle location timestamps available for the trip.
+      - name: n_within_shape
+        description: |
+          Number of vehicle location timestamps within 35 meters
+          of the scheduled shape (path of travel)
