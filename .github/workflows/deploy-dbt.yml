@@ -216,6 +216,10 @@ jobs:
         if: ${{ env.DBT_TARGET  == 'staging' }}
         run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ ./target/
 
+      - name: Run dbt seed
+        working-directory: warehouse
+        run: poetry run dbt seed --target ${{ env.DBT_TARGET }} --full-refresh
+
       - name: Run changed models
         working-directory: warehouse
         if: ${{ env.DBT_TARGET  == 'staging' }}
