@@ -133,6 +133,11 @@ jobs:
             warehouse/seeds/**/*.csv
             warehouse/seeds/**/*.yml
 
+      - name: Print changed models and seeds
+        run: |
+          echo "Changed files:"
+          echo "${{ steps.changed-files-warehouse.outputs.all_changed_files }}"
+
   metabase:
     name: Sync Metabase
     runs-on: ubuntu-latest
