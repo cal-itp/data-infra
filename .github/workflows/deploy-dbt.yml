@@ -128,15 +128,7 @@ jobs:
       - uses: tj-actions/changed-files@v46
         id: changed-files-warehouse
         with:
-          files: |
-            warehouse/models/**/*.sql
-            warehouse/seeds/**/*.csv
-            warehouse/seeds/**/*.yml
-
-      - name: Print changed models and seeds
-        run: |
-          echo "Changed files:"
-          echo "${{ steps.changed-files-warehouse.outputs.all_changed_files }}"
+          files: 'warehouse/models/**/*.sql'
 
   metabase:
     name: Sync Metabase
@@ -220,14 +212,6 @@ jobs:
         working-directory: warehouse
         if: ${{ env.DBT_TARGET  == 'staging' }}
         run: gsutil cp -r gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/ ./target/
-
-      - name: Run dbt seed
-        working-directory: warehouse
-        run: poetry run dbt seed --target ${{ env.DBT_TARGET }} --full-refresh
-
-      - name: Print models that will be run
-        working-directory: warehouse
-        run: poetry run dbt ls --select state:modified+ --target ${{ env.DBT_TARGET }} --state ./target/latest
 
       - name: Run changed models
         working-directory: warehouse
