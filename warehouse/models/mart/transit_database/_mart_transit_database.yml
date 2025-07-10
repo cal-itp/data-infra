@@ -994,3 +994,14 @@ models:
       - name: waiting_since
       - name: outreach_status
       - name: should_wait_until
+  - name: dim_transit_centers
+    description: TODO
+    columns:
+      - name: id
+      - name: agency_name
+      - name: facility_id
+      - name: facility_name
+      - name: facility_type
+      - name: ntd_id
+      - name: geojson_geometry
+      - name: geometry

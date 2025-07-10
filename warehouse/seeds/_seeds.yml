@@ -268,6 +268,43 @@ seeds:
         tests:
           - unique
 
+  - name: transit_facilities
+    description: |
+      A list of major transit facilities with their names and GeoJSON geometry.
+      Derived from ntd transit facilities dataset.  Contains major transit centers.
+    config:
+      labels:
+        domain: seeds
+        dataset: transit_facilities
+    columns:
+      - name: id
+        description: "Unique identifier for the transit facility feature."
+        tests:
+          - not_null
+          - unique
+      - name: agency_name
+        description: "Agency name that manages the facility."
+        tests:
+          - not_null
+      - name: facility_id
+        description: "Id of the transit center."
+        tests:
+          - not_null
+      - name: facility_name
+        description: "Name of the transit facility."
+        tests:
+          - not_null
+      - name: facility_type
+        description: "Type of the facility."
+        tests:
+          - not_null
+      - name: ntd_id
+        description: "NTD id of the facility."
+        tests:
+          - not_null
+      - name: geojson_geometry
+        description: "GeoJSON string representation of the transit facility's location."
+
   - name: gtfs_optional_shapes
     description: |
       GTFS shapes is optional, and where it is not provided, it can be
