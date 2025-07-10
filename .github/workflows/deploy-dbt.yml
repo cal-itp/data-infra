@@ -225,6 +225,10 @@ jobs:
         working-directory: warehouse
         run: poetry run dbt seed --target ${{ env.DBT_TARGET }} --full-refresh
 
+      - name: Print models that will be run
+        working-directory: warehouse
+        run: poetry run dbt ls --select state:modified+ --target ${{ env.DBT_TARGET }} --state ./target/latest
+
       - name: Run changed models
         working-directory: warehouse
         if: ${{ env.DBT_TARGET  == 'staging' }}
