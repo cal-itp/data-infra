@@ -1,43 +1,6 @@
-operator: operators.PodOperator
-name: 'scrape-transitland'
-image: 'ghcr.io/cal-itp/data-infra/gtfs-aggregator-scraper:{{ image_tag() }}'
+operator: operators.TransitlandToGCSOperator
 
-cmds:
-  - python3
-
-arguments:
-  - "gtfs_aggregator_scraper.py"
-  - "transitland"
-
-is_delete_operator_pod: true
-get_logs: true
-
-env_vars:
-  CALITP_BUCKET__AGGREGATOR_SCRAPER: "{{ env_var('CALITP_BUCKET__AGGREGATOR_SCRAPER') }}"
-  GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
-
-secrets:
-  - deploy_type: env
-    deploy_target: TRANSITLAND_API_KEY
-    secret: jobs-data
-    key: transitland-api-key
-  - deploy_type: volume
-    deploy_target: /secrets/jobs-data/
-    secret: jobs-data
-    key: service_account.json
-
-tolerations:
-  - key: pod-role
-    operator: Equal
-    value: computetask
-    effect: NoSchedule
-
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: pod-role
-          operator: In
-          values:
-          - computetask
+bucket: "{{ env_var('CALITP_BUCKET__AGGREGATOR_SCRAPER') }}"
+pages: 10
+parameters:
+  limit: 1000
