@@ -20,7 +20,7 @@ calitp-data-infra = "2024.2.12.post1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
-black = "^22.6.0"
+black = "^24.3.0"
 mypy = "^1.13.0"
 types-protobuf = "^5.28.0.20240924"
 types-tqdm = "^4.66.0.20240417"
