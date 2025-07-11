@@ -29,13 +29,6 @@ shapes AS (
     FROM {{ ref('dim_shapes_arrays') }}
 ),
 
-
-vp_trip_summaries AS (
-    SELECT
-        *
-    FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
-),
-
 minute_bins AS (
     SELECT
         vehicle_positions.trip_instance_key,
@@ -97,20 +90,6 @@ vp_metrics AS (
 
     FROM derive_metrics
     GROUP BY trip_instance_key
-),
-
-fct_vehicle_positions_trip_metrics AS (
-    SELECT
-        vp_trip_summaries.*,
-
-        vp_metrics.n_minutes_complete,
-        vp_metrics.avg_vp_per_minute,
-        vp_metrics.vp_trip_minutes,
-        vp_metrics.n_vp,
-        vp_metrics.n_within_shape,
-
-    FROM vp_trip_summaries
-    INNER JOIN vp_metrics USING (trip_instance_key)
 )
 
-SELECT * FROM fct_vehicle_positions_trip_metrics
+SELECT * FROM vp_metrics
