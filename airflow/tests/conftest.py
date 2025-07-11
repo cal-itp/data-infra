@@ -87,10 +87,10 @@ def clean_connections(session, conn_id: str):
 @pytest.fixture(scope="session", autouse=True)
 def setup_module():
     session = Session()
-    clean_connections(session, "kuba_default")
+    clean_connections(session, "http_kuba")
     add_connection(
         session,
-        conn_id="kuba_default",
+        conn_id="http_kuba",
         conn_type="http",
         host=os.environ.get("KUBA_HOST"),
         login=os.environ.get("KUBA_LOGIN"),
