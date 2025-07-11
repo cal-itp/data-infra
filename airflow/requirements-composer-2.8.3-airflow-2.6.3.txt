@@ -241,7 +241,7 @@ objsize==0.7.0
 opt-einsum==3.3.0
 optree==0.11.0
 ordered-set==4.1.0
-orjson==3.10.3
+orjson==3.9.15
 overrides==6.5.0
 packaging==24.0
 pandas==2.1.4
