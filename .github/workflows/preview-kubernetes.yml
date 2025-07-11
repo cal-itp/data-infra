@@ -45,7 +45,7 @@ jobs:
           curl -LO "https://github.com/biome-sh/biome/releases/download/v${BIO_RELEASE}/bio-${BIO_RELEASE}-x86_64-linux.tar.gz"
           tar xzvf "bio-${BIO_RELEASE}-x86_64-linux.tar.gz"
           sudo mv bio /usr/local/bin/bio
-          sudo bio pkg install --binlink jarvus/hologit
+          sudo bio pkg install --binlink jarvus/hologit@latest
 
           git config user.name "Github Action $GITHUB_JOB"
           git config user.email "$(whoami)@$(uname -n)"
