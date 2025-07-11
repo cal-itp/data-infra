@@ -30,6 +30,7 @@ locals {
     "calitp-staging-pytest",
     "calitp-staging-sentry",
     "calitp-staging-state-geoportal-scrape",
+    "calitp-staging-kuba-raw",
   ])
 }
 
