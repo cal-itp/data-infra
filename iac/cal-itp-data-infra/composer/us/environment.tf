@@ -47,6 +47,11 @@ resource "google_composer_environment" "calitp-composer" {
         scheduler-scheduler_health_check_threshold = 120
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
         webserver-reload_on_plugin_change          = "True"
+        email-email_backend                        = "airflow.utils.email.send_email_smtp"
+        email-from_email                           = "bot@calitp.org"
+        email-email_conn_id                        = "smtp_postmark"
+        smtp-smtp_starttls                         = true
+        smtp-smtp_mail_from                        = "bot@calitp.org"
       }
 
       pypi_packages = local.pypi_packages
