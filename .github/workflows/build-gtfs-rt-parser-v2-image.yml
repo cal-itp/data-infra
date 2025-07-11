@@ -16,46 +16,77 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+env:
+  PYTHON_VERSION: '3.9'
+  POETRY_VERSION: '2.0.1'
+
 jobs:
   check:
-    name: Run static checkers
+    name: Run lint and Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - run: curl -sSL https://install.python-poetry.org | python -
-      - run: cd jobs/gtfs-rt-parser-v2 && poetry install && poetry run mypy .
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  test:
-    name: Run pytest
-    runs-on: ubuntu-latest
-    env:
-      CALITP_BUCKET__GTFS_RT_PARSED: gs://some-test-bucket
-      CALITP_BUCKET__GTFS_RT_VALIDATION: gs://some-test-bucket
-      GTFS_RT_VALIDATOR_VERSION: v0.0.0
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
-      - run: curl -sSL https://install.python-poetry.org | python -
-      - run: cd jobs/gtfs-rt-parser-v2 && poetry install && poetry run pytest
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache Poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        working-directory: jobs/gtfs-rt-parser-v2
+        run: poetry install
+
+      - name: Run linter
+        working-directory: jobs/gtfs-rt-parser-v2
+        run: poetry run mypy .
+
+      - name: Run pytest
+        working-directory: jobs/gtfs-rt-parser-v2
+        run: poetry run pytest
 
   build_push:
     name: Package docker image
     runs-on: ubuntu-latest
-    needs: [check, test]
+    needs: [check]
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
-      - uses: actions/checkout@v2
-      - uses: docker/login-action@v1
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Repository
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v2
+
+      - name: Build and Push
+        uses: docker/build-push-action@v6
         with:
           context: jobs/gtfs-rt-parser-v2
-          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{github.repository}}/gtfs-rt-parser-v2:latest
+          push: true
+          tags: ghcr.io/${{ github.repository }}/gtfs-rt-parser-v2:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'latest' || 'development' }}
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/gtfs-rt-parser-v2:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'latest' || 'development' }}
+          cache-to: type=inline
