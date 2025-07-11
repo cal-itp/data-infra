@@ -10,6 +10,7 @@ RUN apt-get update -y \
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:${PATH}"
+RUN poetry self add poetry-plugin-export@1.9.0
 
 # from https://github.com/MobilityData/gtfs-realtime-validator/packages/1268973
 COPY ./gtfs-realtime-validator-lib-1.0.0-20220223.003525-2.jar ${GTFS_RT_VALIDATOR_JAR}
