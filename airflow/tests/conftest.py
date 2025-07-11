@@ -1,14 +1,13 @@
 import datetime
 import os
 import pathlib
+import pytest
 import subprocess
 import sys
 
-import pytest
-
+from airflow.settings import Session
 from airflow.models import DagBag, DagRun
 from airflow.models.connection import Connection
-from airflow.settings import Session
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../plugins"))
 
@@ -87,6 +86,8 @@ def clean_connections(session, conn_id: str):
 @pytest.fixture(scope="session", autouse=True)
 def setup_module():
     session = Session()
+    clean_connections(session)
+
     clean_connections(session, "kuba_default")
     add_connection(
         session,
