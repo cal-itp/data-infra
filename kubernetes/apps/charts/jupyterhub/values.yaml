@@ -40,17 +40,17 @@ jupyterhub:
           mem_limit: "12G"
           mem_guarantee: "10G"
           cpu_guarantee: 1.5
-      - display_name: "Legacy Image - 2024.3.27, Python 3.9"
-        description: "This is the older environment for legacy processes."
+      - display_name: "Prototype Image - 2024.6.10, Python 3.11"
+        description: "This is the newer environment for new package testing."
         kubespawner_override:
-          image: ghcr.io/cal-itp/data-infra/jupyter-singleuser:2024.3.27
-      - display_name: "Power Legacy Image - 2024.3.27, Python 3.9"
+          image: ghcr.io/cal-itp/data-infra/jupyter-singleuser:2024.6.10
+      - display_name: "Power Prototype Image - 2024.6.10, Python 3.11"
         description: "Your code will run on a shared machine with 10–12G of memory and 1.5–1.9 CPU cores."
         kubespawner_override:
           mem_limit: "12G"
           mem_guarantee: "10G"
           cpu_guarantee: 1.5
-          image: ghcr.io/cal-itp/data-infra/jupyter-singleuser:2024.3.27
+          image: ghcr.io/cal-itp/data-infra/jupyter-singleuser:2024.6.10
   scheduling:
     userPods:
       nodeAffinity:
@@ -77,6 +77,7 @@ jupyterhub:
             - themightychris
             - evansiroky
             - charlie-costanzo
+            - raebot
     # holds github OAuth creds
     existingSecret: jupyterhub-github-config
   ingress:
