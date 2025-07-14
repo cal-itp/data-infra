@@ -1,4 +1,4 @@
-operator: operators.KubaToGCS
+operator: operators.KubaToGCSOperator
 
 product: device_properties
 endpoint: monitoring/deviceproperties/v1/ForLocations/all
