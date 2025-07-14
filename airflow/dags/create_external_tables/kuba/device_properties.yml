@@ -1,0 +1,196 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__KUBA') }}"
+source_objects:
+  - "device_properties/*.jsonl"
+destination_project_dataset_table: "kuba.device_properties"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "device_properties/{dt:DATE}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: device
+    type: RECORD
+    fields:
+      - name: fo_device_logical_id
+        type: STRING
+      - name: fo_device_type
+        type: STRING
+      - name: fo_device_type_model
+        type: STRING
+      - name: fo_device_serial_number
+        type: STRING
+      - name: fo_device_description
+        type: STRING
+      - name: fo_device_location_id
+        type: STRING
+      - name: fo_device_location
+        type: STRING
+      - name: fo_device_last_connection
+        type: STRING
+  - name: device_replicator_info
+    type: RECORD
+    fields:
+      - name: software_version
+        type: STRING
+      - name: software_last_connection
+        type: STRING
+      - name: cd_version
+        type: STRING
+      - name: cd_last_connection
+        type: STRING
+      - name: dataset_version
+        type: STRING
+      - name: dataset_last_connection
+        type: STRING
+      - name: denylist_version
+        type: STRING
+      - name: denylist_last_connection
+        type: STRING
+      - name: acceptlist_version
+        type: STRING
+      - name: acceptlist_last_connection
+        type: STRING
+      - name: binlist_version
+        type: STRING
+      - name: binlist_last_connection
+        type: STRING
+      - name: asset_last_connection
+        type: STRING
+      - name: monitoring_last_connection
+        type: STRING
+      - name: ud_last_transaction_time
+        type: STRING
+  - name: device_monitor_info
+    type: RECORD
+    fields:
+      - name: application__isdisabled
+        type: STRING
+      - name: application__isinservice
+        type: STRING
+      - name: application__servicestatus
+        type: RECORD
+        fields:
+          - name: Rows
+            type: RECORD
+            mode: REPEATED
+            fields:
+              - name: Id
+                type: STRING
+      - name: gps__position
+        type: RECORD
+        fields:
+          - name: altitude
+            type: STRING
+          - name: dateTime
+            type: STRING
+          - name: direction
+            type: STRING
+          - name: gpsFix
+            type: STRING
+          - name: groundSpeed
+            type: STRING
+          - name: hasAltitude
+            type: STRING
+          - name: hasDateTime
+            type: STRING
+          - name: hasDirection
+            type: STRING
+          - name: hasGpsFix
+            type: STRING
+          - name: hasGroundSpeed
+            type: STRING
+          - name: hasLatitude
+            type: STRING
+          - name: hasLongitude
+            type: STRING
+          - name: latitude
+            type: STRING
+          - name: longitude
+            type: STRING
+          - name: numberSatelites
+            type: STRING
+          - name: properties
+            type: RECORD
+            fields:
+              - name: Id
+                type: STRING
+      - name: location__location__servicestatus
+        type: STRING
+      - name: location__location__source
+        type: STRING
+      - name: os__uptime
+        type: STRING
+      - name: smartmedium__emv3000__batterylevel
+        type: STRING
+      - name: ngwifi__gps__apistatus
+        type: RECORD
+        fields:
+          - name: status
+            type: STRING
+      - name: ngwifi__gps__position
+        type: RECORD
+        fields:
+          - name: altitude
+            type: STRING
+          - name: fix
+            type: STRING
+          - name: heading
+            type: STRING
+          - name: latitude
+            type: STRING
+          - name: longitude
+            type: STRING
+          - name: speed
+            type: STRING
+          - name: success
+            type: STRING
+          - name: timestamp
+            type: STRING
+      - name: location__location__info
+        type: RECORD
+        fields:
+          - name: dataid
+            type: STRING
+          - name: dataversion
+            type: STRING
+          - name: locationProviderSource
+            type: STRING
+          - name: type
+            type: STRING
+          - name: properties
+            type: RECORD
+            fields:
+              - name: Id
+                type: STRING
+          - name: current
+            type: RECORD
+            fields:
+              - name: zoneinfo
+                type: RECORD
+                fields:
+                  - name: name
+                    type: STRING
+                  - name: reference
+                    type: STRING
+              - name: stopinfo
+                type: RECORD
+                fields:
+                  - name: abbreviation
+                    type: STRING
+                  - name: farematrixreference
+                    type: STRING
+                  - name: name
+                    type: STRING
+                  - name: reference
+                    type: STRING
+                  - name: shortname
+                    type: STRING
+                  - name: type
+                    type: STRING
+              - name: properties
+                type: RECORD
+                fields:
+                  - name: Id
+                    type: STRING
