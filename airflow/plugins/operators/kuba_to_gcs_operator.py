@@ -3,8 +3,8 @@ import os
 from datetime import datetime
 from typing import Sequence
 
-from src.bigquery_cleaner import BigQueryKeyCleaner, BigQueryValueCleaner
 from hooks.kuba_hook import KubaHook
+from src.bigquery_cleaner import BigQueryKeyCleaner, BigQueryValueCleaner
 
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
@@ -24,7 +24,9 @@ class KubaRowCleaner:
                 result = {}
                 for k, v in value.items():
                     if "::" in k and "{" in v:
-                        result[BigQueryKeyCleaner(k).clean()] = json.loads(v.replace("\\n", ""))
+                        result[BigQueryKeyCleaner(k).clean()] = json.loads(
+                            v.replace("\\n", "")
+                        )
                     else:
                         result[BigQueryKeyCleaner(k).clean()] = BigQueryValueCleaner(
                             v
@@ -56,7 +58,7 @@ class KubaObjectPath:
             self.product,
             f"dt={logical_date.date().isoformat()}",
             f"ts={logical_date.isoformat()}",
-            f"results.jsonl.gz",
+            "results.jsonl.gz",
         )
 
 

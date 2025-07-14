@@ -19,20 +19,22 @@ class KubaHook(BaseHook):
         data = {
             "UserName": conn.login,
             "Password": conn.password,
-            "OperatorIdentifier": int(conn.schema)
+            "OperatorIdentifier": int(conn.schema),
         }
         headers = {"Content-Type": "application/json"}
         kuba_api = HttpHook(method="POST", http_conn_id=self._http_conn_id)
         authenticate_path = "monitoring/authenticate/v1"
-        result = kuba_api.run(endpoint=authenticate_path, headers=headers, json=data).json()
-        assert result["Error"] == None
+        result = kuba_api.run(
+            endpoint=authenticate_path, headers=headers, json=data
+        ).json()
+        assert result["Error"] is None
         self._session_id = result["SessionId"]
 
     def get_headers(self):
         return {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Cookie": f"session-id={self._session_id}"
+            "Cookie": f"session-id={self._session_id}",
         }
 
     def run(self, endpoint, data=None, headers=None):

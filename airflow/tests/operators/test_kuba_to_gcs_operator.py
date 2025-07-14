@@ -1,11 +1,10 @@
 import gzip
 import json
 import os
-import pytest
 from datetime import datetime, timedelta, timezone
 
+import pytest
 from operators.kuba_to_gcs_operator import KubaObjectPath, KubaToGCSOperator
-from src.bigquery_cleaner import BigQueryValueCleaner
 
 from airflow.models.dag import DAG
 from airflow.models.taskinstance import TaskInstance
@@ -77,9 +76,7 @@ class TestKubaToGCSOperator:
         )
 
         compressed_result = gcs_hook.download(
-            bucket_name=os.environ.get("CALITP_BUCKET__KUBA").replace(
-                "gs://", ""
-            ),
+            bucket_name=os.environ.get("CALITP_BUCKET__KUBA").replace("gs://", ""),
             object_name=object_path.resolve(execution_date),
         )
         decompressed_result = gzip.decompress(compressed_result)
@@ -94,7 +91,7 @@ class TestKubaToGCSOperator:
                 "fo_device_description": None,
                 "fo_device_location_id": "604",
                 "fo_device_location": "604",
-                "fo_device_last_connection": "2025-03-20T13:46:52.4000000Z"
+                "fo_device_last_connection": "2025-03-20T13:46:52.4000000Z",
             },
             "device_replicator_info": {
                 "software_version": "1.2.3.4",
@@ -111,7 +108,7 @@ class TestKubaToGCSOperator:
                 "binlist_last_connection": "2025-03-20T08:30:45.4070000Z",
                 "asset_last_connection": None,
                 "monitoring_last_connection": None,
-                "ud_last_transaction_time": "2025-03-20T13:46:52.4000000Z"
+                "ud_last_transaction_time": "2025-03-20T13:46:52.4000000Z",
             },
             "device_monitor_info": {
                 "application__isdisabled": "false",
@@ -133,7 +130,7 @@ class TestKubaToGCSOperator:
                     "latitude": 36.58474333333334,
                     "longitude": -121.82932299999999,
                     "numberSatelites": 5,
-                    "properties": {}
+                    "properties": {},
                 },
                 "location__location__info": {
                     "current": {
@@ -144,18 +141,15 @@ class TestKubaToGCSOperator:
                             "name": "Davis",
                             "reference": 3,
                             "shortname": "",
-                            "type": 0
+                            "type": 0,
                         },
-                        "zoneinfo": {
-                            "name": "Davis",
-                            "reference": 3
-                        }
+                        "zoneinfo": {"name": "Davis", "reference": 3},
                     },
                     "dataid": "",
                     "dataversion": 0,
                     "locationProviderSource": "location::devicesettings::provider",
                     "properties": {},
-                    "type": 65535
+                    "type": 65535,
                 },
                 "location__location__servicestatus": "Closed",
                 "location__location__source": "location::ngwifi::provider",
@@ -168,9 +162,9 @@ class TestKubaToGCSOperator:
                     "longitude": -119.008193167,
                     "speed": 0.013,
                     "success": True,
-                    "timestamp": 1721886667
+                    "timestamp": 1721886667,
                 },
                 "os__uptime": "0 00:48:33.000",
-                "smartmedium__emv3000__batterylevel": "3118"
-            }
+                "smartmedium__emv3000__batterylevel": "3118",
+            },
         }
