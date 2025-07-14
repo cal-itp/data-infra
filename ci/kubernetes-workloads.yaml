@@ -31,7 +31,7 @@ calitp:
       secrets:
         - jupyterhub_jupyterhub-gcloud-service-key
         - jupyterhub_jupyterhub-github-config
-      timeout: 15m0s
+      timeout: 10m0s
     - name: loki
       driver: helm
       namespace: monitoring-loki
