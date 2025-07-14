@@ -39,14 +39,9 @@ jobs:
           location: ${{ env.GKE_REGION }}
       - run: curl -sSL https://install.python-poetry.org | python -
       - name: Set up hologit
-        env:
-          BIO_RELEASE: 1.6.821
+        run: npm install -g hologit
+      - name: Configure git identity
         run: |
-          curl -LO "https://github.com/biome-sh/biome/releases/download/v${BIO_RELEASE}/bio-${BIO_RELEASE}-x86_64-linux.tar.gz"
-          tar xzvf "bio-${BIO_RELEASE}-x86_64-linux.tar.gz"
-          sudo mv bio /usr/local/bin/bio
-          sudo bio pkg install --binlink --channel latest jarvus/hologit
-
           git config user.name "Github Action $GITHUB_JOB"
           git config user.email "$(whoami)@$(uname -n)"
 
