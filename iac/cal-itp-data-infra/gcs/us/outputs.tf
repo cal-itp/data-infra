@@ -2993,3 +2993,7 @@ output "google_storage_bucket_calitp-composer_name" {
 output "google_storage_bucket_calitp-composer_id" {
   value = google_storage_bucket.calitp-composer.id
 }
+
+output "google_storage_bucket_calitp-kuba_name" {
+  value = google_storage_bucket.calitp["calitp-kuba"].name
+}
