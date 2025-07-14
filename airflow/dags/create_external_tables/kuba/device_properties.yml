@@ -1,8 +1,12 @@
 operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__KUBA') }}"
+post_hook: |
+  SELECT *
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_kuba.device_properties
+  LIMIT 1;
 source_objects:
-  - "device_properties/*.jsonl"
-destination_project_dataset_table: "kuba.device_properties"
+  - "device_properties/*.jsonl.gz"
+destination_project_dataset_table: "external_kuba.device_properties"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
