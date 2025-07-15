@@ -18,7 +18,10 @@ class BigQueryValueCleaner:
         result = self.value
         if isinstance(result, dict):
             for k, v in result.items():
-                result[k] = BigQueryValueCleaner(v).clean()
+                if isinstance(v, dict):
+                    result[k] = BigQueryRowCleaner(v).clean()
+                else:
+                    result[k] = BigQueryValueCleaner(v).clean()
         elif isinstance(result, list):
             types = set(type(entry) for entry in result if entry is not None)
             if not types:

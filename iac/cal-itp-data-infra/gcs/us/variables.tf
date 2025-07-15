@@ -1,3 +1,9 @@
+locals {
+  environment_buckets = toset([
+    "calitp-kuba",
+  ])
+}
+
 data "terraform_remote_state" "iam" {
   backend = "gcs"
 
