@@ -50,6 +50,20 @@ def dag_bag() -> DagBag:
     return dag_bag
 
 
+FILTER_BODY_STRINGS: list = [
+    (os.environ.get("KUBA_PASSWORD"), "FILTERED"),
+]
+
+
+def scrub_sensitive_data(request):
+    for body_string, replacement in FILTER_BODY_STRINGS:
+        if request.body and body_string and replacement:
+            request.body = request.body.replace(
+                str.encode(body_string), str.encode(replacement)
+            )
+    return request
+
+
 @pytest.fixture(scope="module")
 def vcr_config():
     return {
@@ -58,6 +72,7 @@ def vcr_config():
             ("Authorization", "FILTERED"),
             ("apikey", "FILTERED"),
         ],
+        "before_record_request": scrub_sensitive_data,
         "allow_playback_repeats": True,
         "ignore_hosts": [
             "run-actions-1-azure-eastus.actions.githubusercontent.com",
@@ -92,10 +107,10 @@ def setup_module():
         session,
         conn_id="http_kuba",
         conn_type="http",
-        host=os.environ.get("KUBA_HOST"),
-        login=os.environ.get("KUBA_LOGIN"),
+        host="https://proxima-demo.pptexcellence.com/",
+        login="monitoringAPI",
         password=os.environ.get("KUBA_PASSWORD"),
-        schema=os.environ.get("KUBA_SCHEMA"),
+        schema="66",
     )
     clean_connections(session, "airtable_default")
     add_connection(

@@ -21,7 +21,7 @@ interactions:
     uri: https://proxima-demo.pptexcellence.com/monitoring/authenticate/v1
   response:
     body:
-      string: '{"Error":null,"UserId":"monitoringAPI","FirstName":"device","LastName":"monitoringAPI","SessionId":"03e113a3-9ece-47e8-a379-c2e1aba66d33"}'
+      string: '{"Error":null,"UserId":"monitoringAPI","FirstName":"device","LastName":"monitoringAPI","SessionId":"f259ea7f-14ab-4f7b-8e51-04793b4f5120"}'
     headers:
       Content-Length:
       - '138'
@@ -74,7 +74,7 @@ interactions:
     uri: https://proxima-demo.pptexcellence.com/monitoring/deviceproperties/v1/ForLocations/all?location_type=1
   response:
     body:
-      string: '{"Response_date_time":"2025-07-11T15:45:53.9371965Z","List":[{"Device":{"Fo_device_logical_id":"66001","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"604","Fo_device_location":"604","Fo_device_last_connection":"2025-03-20T13:46:52.4000000Z"},"Device_replicator_info":{"Software_version":"1.2.3.4","Software_last_connection":null,"Cd_version":"7","Cd_last_connection":"2025-03-20T12:55:50.3500000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":"2025-03-20T13:46:52.4000000Z"},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+      string: '{"Response_date_time":"2025-07-15T22:44:08.7724383Z","List":[{"Device":{"Fo_device_logical_id":"66001","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"604","Fo_device_location":"604","Fo_device_last_connection":"2025-03-20T13:46:52.4000000Z"},"Device_replicator_info":{"Software_version":"1.2.3.4","Software_last_connection":null,"Cd_version":"7","Cd_last_connection":"2025-03-20T12:55:50.3500000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":"2025-03-20T13:46:52.4000000Z"},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
         31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
         10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
         false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
@@ -216,7 +216,7 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Fri, 11 Jul 2025 15:45:53 GMT
+      - Tue, 15 Jul 2025 22:44:08 GMT
       Server:
       - Microsoft-IIS/8.5
       X-Powered-By:
