@@ -24,7 +24,6 @@ env:
   CALITP_BUCKET__PUBLISH: ${{ github.ref == 'refs/heads/main' && 'calitp-publish' || 'calitp-staging-publish' }}
   GOOGLE_CLOUD_PROJECT: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
   METABASE_DESTINATION_DATABASE: ${{ github.ref == 'refs/heads/main' && 'Data Marts (formerly Warehouse Views)' || '(Internal) Staging Warehouse Views' }}
-  AIRFLOW_BUCKET: us-west2-calitp-airflow2-pr-f6bb9855-bucket
 
 jobs:
   compile:
@@ -378,38 +377,6 @@ jobs:
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/index.html/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
           headers: |-
             content-type: text/html; charset=utf-8
-
-  upload_to_composer:
-    name: Upload to composer bucket
-    needs: [compile]
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      id-token: write
-
-    if: ${{ github.event_name == 'push' }}
-
-    steps:
-      - name: Download compilation artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dbt
-          path: warehouse/target
-
-      - name: Authenticate Google Service Account
-        uses: google-github-actions/auth@v2
-        with:
-          create_credentials_file: 'true'
-          project_id: ${{ env.PROJECT_ID }}
-          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.SERVICE_ACCOUNT }}
-
-      - name: Setup GCloud utilities
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Push Airflow code to Composer
-        run: gsutil -m rsync -d -c -r warehouse gs://${{ env.AIRFLOW_BUCKET }}/data/warehouse
 
   visualize:
     name: Pull Request visualization

@@ -17,25 +17,26 @@ Workflows prefixed with `preview-` deal with generating previews for pull reques
 
 ## composer-plan-files.yml
 
-When creating a PR that changes any file in the `airflow` directory, this workflow runs `Terraform plan` to create a comment with an execution plan to preview the changes that will be made to Staging Airflow DAGs.
+When creating a PR that changes any file in the `airflow` directory, this workflow runs `Terraform plan` to create a comment with an execution plan to preview the changes that will be made to Production and Staging Airflow DAGs.
 
 
 ## composer-apply-files.yml
 
-When merging a PR into the `main` branch with changes to any file in the `airflow` directory, this workflow runs `Terraform apply` to execute the actions proposed in the `Terraform plan` to Staging Airflow DAGs.
+When merging a PR into the `main` branch with changes to any file in the `airflow` directory, this workflow runs `Terraform apply` to execute the actions proposed in the `Terraform plan` to Production and Staging Airflow DAGs.
+
+This workflow replaced `deploy-airflow` and `deploy-airflow-requirements`.
+
+The GCP Composer deployment of Airflow [uploads composer, warehouse, and dbt artifact files](https://github.com/cal-itp/data-infra/blob/main/iac/cal-itp-data-infra/airflow/us/storage_bucket_object.tf) to a [GCS bucket](https://github.com/cal-itp/data-infra/blob/9a7d83b32018ebbebde07227c8241042418e62f6/iac/cal-itp-data-infra/composer/us/environment.tf#L7) that Composer reads.
 
 
-## deploy-airflow.yml
+  * Composer files: all `.py`, `.yml`, and `.md` files from `airflow/dags/` folder.
 
-While we're using GCP Composer, "deployment" of Airflow consists of two parts:
+  * Warehouse files: `dbt_project.yml`, `packages.yml`, `profiles.yml`, and all files from `macros/`, `models/`, `seeds/`, and `tests/` folders.
 
-1. Calling `gcloud composer environments update ...` to update the Composer environment with new (or specific versions of) packages
-2. Copying the `dags` and `plugins` folders to a GCS bucket that Composer reads (this is specified in the Composer Environment)
+  * dbt artifact files: `manifest.json`, `catalog.json`, `index.html`, and `partial_parse.msgpack`.
 
 
-## deploy-airflow-requirements.yml
-
-When merging `airflow/requirements.txt` changes into the `main` branch, this workflow updates composer dependencies.
+  For more details, check [iac/cal-itp-data-infra/airflow/us/variables.tf](https://github.com/cal-itp/data-infra/blob/main/iac/cal-itp-data-infra/airflow/us/variables.tf).
 
 
 ## deploy-apps-maps.yml
