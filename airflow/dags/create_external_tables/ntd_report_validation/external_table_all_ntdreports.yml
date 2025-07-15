@@ -23,7 +23,7 @@ schema_fields:
   - name: reportstatus
     type: STRING
   - name: reportlastmodifieddate
-    type: INTEGER
+    type: STRING
   - name: ntdreportingstationsandmaintenance_data
     type: RECORD
     mode: REPEATED
