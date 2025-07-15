@@ -18,6 +18,7 @@ locals {
     "calitp-staging-gtfs-schedule-unzipped-hourly",
     "calitp-staging-gtfs-schedule-validation",
     "calitp-staging-gtfs-schedule-validation-hourly",
+    "calitp-staging-kuba",
     "calitp-staging-ntd-api-products",
     "calitp-staging-ntd-report-validation",
     "calitp-staging-ntd-xlsx-products-clean",

@@ -1,0 +1,414 @@
+interactions:
+- request:
+    body: '{"UserName": "monitoringAPI", "Password": "FILTERED", "OperatorIdentifier":
+      66}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '82'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.32.3
+    method: POST
+    uri: https://proxima-demo.pptexcellence.com/monitoring/authenticate/v1
+  response:
+    body:
+      string: '{"Error":null,"UserId":"monitoringAPI","FirstName":"device","LastName":"monitoringAPI","SessionId":"4b04abfd-5699-4827-bffd-b3eab0c4acdf"}'
+    headers:
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 14 Jul 2025 02:49:01 GMT
+      Server:
+      - Microsoft-IIS/8.5
+      Set-Cookie:
+      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
+        07:49:02 GMT; domain=proxima-demo.pptexcellence.com; path=/
+      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
+        07:49:02 GMT; domain=localhost; path=/
+      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
+        07:49:02 GMT; domain=proxima-demo.pptexcellence.com; path=/
+      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
+        07:49:02 GMT; domain=proxima-eu.pptexcellence.com; path=/
+      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
+        07:49:02 GMT; domain=proxima-gapte.pptexcellence.com; path=/
+      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
+        07:49:02 GMT; domain=proxima-denmark.pptexcellence.com; path=/
+      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
+        07:49:02 GMT; domain=pptexcellence.com; path=/
+      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
+        07:49:02 GMT; domain=; path=/
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.32.3
+      cookie:
+      - FILTERED
+    method: GET
+    uri: https://proxima-demo.pptexcellence.com/monitoring/deviceproperties/v1/ForLocations/all?location_type=1
+  response:
+    body:
+      string: '{"Response_date_time":"2025-07-14T02:49:03.3165582Z","List":[{"Device":{"Fo_device_logical_id":"66001","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"604","Fo_device_location":"604","Fo_device_last_connection":"2025-03-20T13:46:52.4000000Z"},"Device_replicator_info":{"Software_version":"1.2.3.4","Software_last_connection":null,"Cd_version":"7","Cd_last_connection":"2025-03-20T12:55:50.3500000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":"2025-03-20T13:46:52.4000000Z"},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
+        10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
+        false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
+        true,\\n    \"hasLongitude\": true,\\n    \"latitude\": 36.58474333333334,\\n    \"longitude\":
+        -121.82932299999999,\\n    \"numberSatelites\": 5,\\n    \"properties\": {\\n    }\\n}\\n","location::location::info":"{\\n    \"current\":
+        {\\n        \"properties\": {\\n        },\\n        \"stopinfo\": {\\n            \"abbreviation\":
+        \"\",\\n            \"farematrixreference\": 3,\\n            \"name\": \"Davis\",\\n            \"reference\":
+        3,\\n            \"shortname\": \"\",\\n            \"type\": 0\\n        },\\n        \"zoneinfo\":
+        {\\n            \"name\": \"Davis\",\\n            \"reference\": 3\\n        }\\n    },\\n    \"dataid\":
+        \"\",\\n    \"dataversion\": 0,\\n    \"locationProviderSource\": \"location::devicesettings::provider\",\\n    \"properties\":
+        {\\n    },\\n    \"type\": 65535\\n}\\n","location::location::serviceStatus":"Closed","location::location::source":"location::ngwifi::provider","ngwifi::gps::apistatus":"{
+        \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
+        \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
+        \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66002","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"635","Fo_device_location":"635","Fo_device_last_connection":"2025-03-20T13:47:31.7230000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:41:28.0370000Z","Cd_version":"333","Cd_last_connection":"2025-03-20T12:19:23.2300000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":"2025-03-20T13:47:31.7230000Z"},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
+        10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
+        false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
+        true,\\n    \"hasLongitude\": true,\\n    \"latitude\": 36.58474333333334,\\n    \"longitude\":
+        -121.82932299999999,\\n    \"numberSatelites\": 5,\\n    \"properties\": {\\n    }\\n}\\n","location::location::info":"{\\n    \"current\":
+        {\\n        \"properties\": {\\n        },\\n        \"stopinfo\": {\\n            \"abbreviation\":
+        \"\",\\n            \"farematrixreference\": 3,\\n            \"name\": \"Davis\",\\n            \"reference\":
+        3,\\n            \"shortname\": \"\",\\n            \"type\": 0\\n        },\\n        \"zoneinfo\":
+        {\\n            \"name\": \"Davis\",\\n            \"reference\": 3\\n        }\\n    },\\n    \"dataid\":
+        \"\",\\n    \"dataversion\": 0,\\n    \"locationProviderSource\": \"location::devicesettings::provider\",\\n    \"properties\":
+        {\\n    },\\n    \"type\": 65535\\n}\\n","location::location::serviceStatus":"Closed","location::location::source":"location::ngwifi::provider","ngwifi::gps::apistatus":"{
+        \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
+        \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
+        \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66003","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"636","Fo_device_location":"636","Fo_device_last_connection":"2025-03-20T12:41:10.1870000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:41:10.1870000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
+        10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
+        false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
+        true,\\n    \"hasLongitude\": true,\\n    \"latitude\": 36.58474333333334,\\n    \"longitude\":
+        -121.82932299999999,\\n    \"numberSatelites\": 5,\\n    \"properties\": {\\n    }\\n}\\n","location::location::info":"{\\n    \"current\":
+        {\\n        \"properties\": {\\n        },\\n        \"stopinfo\": {\\n            \"abbreviation\":
+        \"\",\\n            \"farematrixreference\": 3,\\n            \"name\": \"Davis\",\\n            \"reference\":
+        3,\\n            \"shortname\": \"\",\\n            \"type\": 0\\n        },\\n        \"zoneinfo\":
+        {\\n            \"name\": \"Davis\",\\n            \"reference\": 3\\n        }\\n    },\\n    \"dataid\":
+        \"\",\\n    \"dataversion\": 0,\\n    \"locationProviderSource\": \"location::devicesettings::provider\",\\n    \"properties\":
+        {\\n    },\\n    \"type\": 65535\\n}\\n","location::location::serviceStatus":"Closed","location::location::source":"location::ngwifi::provider","ngwifi::gps::apistatus":"{
+        \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
+        \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
+        \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66004","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"637","Fo_device_location":"637","Fo_device_last_connection":"2025-03-20T12:40:57.4470000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:40:57.4470000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
+        10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
+        false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
+        true,\\n    \"hasLongitude\": true,\\n    \"latitude\": 36.58474333333334,\\n    \"longitude\":
+        -121.82932299999999,\\n    \"numberSatelites\": 5,\\n    \"properties\": {\\n    }\\n}\\n","location::location::info":"{\\n    \"current\":
+        {\\n        \"properties\": {\\n        },\\n        \"stopinfo\": {\\n            \"abbreviation\":
+        \"\",\\n            \"farematrixreference\": 3,\\n            \"name\": \"Davis\",\\n            \"reference\":
+        3,\\n            \"shortname\": \"\",\\n            \"type\": 0\\n        },\\n        \"zoneinfo\":
+        {\\n            \"name\": \"Davis\",\\n            \"reference\": 3\\n        }\\n    },\\n    \"dataid\":
+        \"\",\\n    \"dataversion\": 0,\\n    \"locationProviderSource\": \"location::devicesettings::provider\",\\n    \"properties\":
+        {\\n    },\\n    \"type\": 65535\\n}\\n","location::location::serviceStatus":"Closed","location::location::source":"location::ngwifi::provider","ngwifi::gps::apistatus":"{
+        \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
+        \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
+        \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66005","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"638","Fo_device_location":"638","Fo_device_last_connection":"2025-03-20T12:40:39.0870000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:40:39.0870000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
+        10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
+        false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
+        true,\\n    \"hasLongitude\": true,\\n    \"latitude\": 36.58474333333334,\\n    \"longitude\":
+        -121.82932299999999,\\n    \"numberSatelites\": 5,\\n    \"properties\": {\\n    }\\n}\\n","location::location::info":"{\\n    \"current\":
+        {\\n        \"properties\": {\\n        },\\n        \"stopinfo\": {\\n            \"abbreviation\":
+        \"\",\\n            \"farematrixreference\": 3,\\n            \"name\": \"Davis\",\\n            \"reference\":
+        3,\\n            \"shortname\": \"\",\\n            \"type\": 0\\n        },\\n        \"zoneinfo\":
+        {\\n            \"name\": \"Davis\",\\n            \"reference\": 3\\n        }\\n    },\\n    \"dataid\":
+        \"\",\\n    \"dataversion\": 0,\\n    \"locationProviderSource\": \"location::devicesettings::provider\",\\n    \"properties\":
+        {\\n    },\\n    \"type\": 65535\\n}\\n","location::location::serviceStatus":"Closed","location::location::source":"location::ngwifi::provider","ngwifi::gps::apistatus":"{
+        \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
+        \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
+        \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66006","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"639","Fo_device_location":"639","Fo_device_last_connection":"2025-03-20T12:40:23.9370000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:40:23.9370000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
+        10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
+        false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
+        true,\\n    \"hasLongitude\": true,\\n    \"latitude\": 36.58474333333334,\\n    \"longitude\":
+        -121.82932299999999,\\n    \"numberSatelites\": 5,\\n    \"properties\": {\\n    }\\n}\\n","location::location::info":"{\\n    \"current\":
+        {\\n        \"properties\": {\\n        },\\n        \"stopinfo\": {\\n            \"abbreviation\":
+        \"\",\\n            \"farematrixreference\": 3,\\n            \"name\": \"Davis\",\\n            \"reference\":
+        3,\\n            \"shortname\": \"\",\\n            \"type\": 0\\n        },\\n        \"zoneinfo\":
+        {\\n            \"name\": \"Davis\",\\n            \"reference\": 3\\n        }\\n    },\\n    \"dataid\":
+        \"\",\\n    \"dataversion\": 0,\\n    \"locationProviderSource\": \"location::devicesettings::provider\",\\n    \"properties\":
+        {\\n    },\\n    \"type\": 65535\\n}\\n","location::location::serviceStatus":"Closed","location::location::source":"location::ngwifi::provider","ngwifi::gps::apistatus":"{
+        \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
+        \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
+        \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66007","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"639","Fo_device_location":"639","Fo_device_last_connection":"2025-03-20T12:53:42.7270000Z"},"Device_replicator_info":{"Software_version":"5.16.48.6283","Software_last_connection":"2025-03-20T12:39:40.6170000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":"2025-03-20T12:53:42.7270000Z","Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
+        10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
+        false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
+        true,\\n    \"hasLongitude\": true,\\n    \"latitude\": 36.58474333333334,\\n    \"longitude\":
+        -121.82932299999999,\\n    \"numberSatelites\": 5,\\n    \"properties\": {\\n    }\\n}\\n","location::location::info":"{\\n    \"current\":
+        {\\n        \"properties\": {\\n        },\\n        \"stopinfo\": {\\n            \"abbreviation\":
+        \"\",\\n            \"farematrixreference\": 3,\\n            \"name\": \"Davis\",\\n            \"reference\":
+        3,\\n            \"shortname\": \"\",\\n            \"type\": 0\\n        },\\n        \"zoneinfo\":
+        {\\n            \"name\": \"Davis\",\\n            \"reference\": 3\\n        }\\n    },\\n    \"dataid\":
+        \"\",\\n    \"dataversion\": 0,\\n    \"locationProviderSource\": \"location::devicesettings::provider\",\\n    \"properties\":
+        {\\n    },\\n    \"type\": 65535\\n}\\n","location::location::serviceStatus":"Closed","location::location::source":"location::ngwifi::provider","ngwifi::gps::apistatus":"{
+        \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
+        \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
+        \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66008","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"640","Fo_device_location":"640","Fo_device_last_connection":"2025-03-20T12:51:25.5330000Z"},"Device_replicator_info":{"Software_version":"5.16.48.6283","Software_last_connection":"2025-03-20T12:39:30.4730000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":"2025-03-20T12:51:25.5300000Z","Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
+        10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
+        false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
+        true,\\n    \"hasLongitude\": true,\\n    \"latitude\": 36.58474333333334,\\n    \"longitude\":
+        -121.82932299999999,\\n    \"numberSatelites\": 5,\\n    \"properties\": {\\n    }\\n}\\n","location::location::info":"{\\n    \"current\":
+        {\\n        \"properties\": {\\n        },\\n        \"stopinfo\": {\\n            \"abbreviation\":
+        \"\",\\n            \"farematrixreference\": 3,\\n            \"name\": \"Davis\",\\n            \"reference\":
+        3,\\n            \"shortname\": \"\",\\n            \"type\": 0\\n        },\\n        \"zoneinfo\":
+        {\\n            \"name\": \"Davis\",\\n            \"reference\": 3\\n        }\\n    },\\n    \"dataid\":
+        \"\",\\n    \"dataversion\": 0,\\n    \"locationProviderSource\": \"location::devicesettings::provider\",\\n    \"properties\":
+        {\\n    },\\n    \"type\": 65535\\n}\\n","location::location::serviceStatus":"Closed","location::location::source":"location::ngwifi::provider","ngwifi::gps::apistatus":"{
+        \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
+        \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
+        \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66009","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"641","Fo_device_location":"641","Fo_device_last_connection":"2025-03-20T12:50:58.2230000Z"},"Device_replicator_info":{"Software_version":"5.16.48.6283","Software_last_connection":"2025-03-20T12:39:18.0100000Z","Cd_version":"333","Cd_last_connection":"2025-03-20T12:20:09.8670000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":"2025-03-20T12:50:58.2230000Z","Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
+        10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
+        false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
+        true,\\n    \"hasLongitude\": true,\\n    \"latitude\": 36.58474333333334,\\n    \"longitude\":
+        -121.82932299999999,\\n    \"numberSatelites\": 5,\\n    \"properties\": {\\n    }\\n}\\n","location::location::info":"{\\n    \"current\":
+        {\\n        \"properties\": {\\n        },\\n        \"stopinfo\": {\\n            \"abbreviation\":
+        \"\",\\n            \"farematrixreference\": 3,\\n            \"name\": \"Davis\",\\n            \"reference\":
+        3,\\n            \"shortname\": \"\",\\n            \"type\": 0\\n        },\\n        \"zoneinfo\":
+        {\\n            \"name\": \"Davis\",\\n            \"reference\": 3\\n        }\\n    },\\n    \"dataid\":
+        \"\",\\n    \"dataversion\": 0,\\n    \"locationProviderSource\": \"location::devicesettings::provider\",\\n    \"properties\":
+        {\\n    },\\n    \"type\": 65535\\n}\\n","location::location::serviceStatus":"Closed","location::location::source":"location::ngwifi::provider","ngwifi::gps::apistatus":"{
+        \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
+        \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
+        \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66010","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"642","Fo_device_location":"642","Fo_device_last_connection":null},"Device_replicator_info":{"Software_version":"0","Software_last_connection":null,"Cd_version":"0","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{}}]}'
+    headers:
+      Content-Length:
+      - '23814'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 14 Jul 2025 02:49:02 GMT
+      Server:
+      - Microsoft-IIS/8.5
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!binary |
+      LS09PT09PT09PT09PT09PT03OTMzNzk1MjAxNTE4NzUyMjM0PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAiZGV2aWNlX3Byb3BlcnRp
+      ZXMvZHQ9MjAyNS0wNi0wMS90cz0yMDI1LTA2LTAxVDAwOjAwOjAwKzAwOjAwL3Jlc3VsdHMuanNv
+      bmwuZ3oifQ0KLS09PT09PT09PT09PT09PT03OTMzNzk1MjAxNTE4NzUyMjM0PT0NCmNvbnRlbnQt
+      dHlwZTogYXBwbGljYXRpb24vanNvbmwNCg0KH4sIAC5wdGgC/+2cS2/jNhDH7/0Uhc4OwYcelG7b
+      LrqXPRTdoIcWC4G26CwBWRJIytk08Hfv6GFbsiNvvJt66yx9icwZzgzJP+cHx0gevUyu1UJ6yaO3
+      LNPuTZqXd2oh8lRlXuKFIcbEmw3M9qGCCd6fIleZsKU+MqarMpM5uLz55ZZhjEcORmoFsYt6NZca
+      fAjmGHPKCCGccMxCOnLPpFloVVlVFl5S1Hk+GxW6EI2lrxT73lPWp0zC2HRRFoVc9B4U0+AGsxuK
+      bwlL/DAJKPJx+/rL28z6fUq1rHLYG1h1qopl2eybKZf2XmiZrqU2XTCCKGKoSbkzHmXs1rLIBtMi
+      rx04XRxNgiAJMGJBXxzUJqww0g4i4cHoROZMFg+5MoNZB+MT88RiISs7ntnmGximV0D4LY4T4id+
+      ANsbbVcwV8VBRD/g8cBwck8wTxg+iCjMibWvykLBEaribsqj7o/BalEY0ZpSq1by+Urpc+xkIqpO
+      OU2kVJlMGTHPZaPbpciNbEoee6gCrkp3OT2r6yOP3mqssLVpMvxR3sPPvz9CDXeVSdOqNKpbE2TP
+      rbJ1BrEYaaUhb7vVNEJRert43E79TX3uHnVZF9mHSjZlEhj4JMybXaCmpnbo7S5au5JubB9zP/iu
+      D72b+W6YYDf6XhyleF8Wd6OxfOfDQhRwP/JZ//LBuPe+IZQgTmNGady/Zl7Xez5A2bmyEvYsmHmV
+      LiuprWrePm42TZDtRu+ftme5qLWWhW0ex/Pgwtuy2h35fK5BDNsm1HQgaAUrYbX6rOVSQozmdBlU
+      JNrDeCvWyoDb2Gg+ldr2HmDs2i+GXP+UhdzmOhGhWU3TDNom2TeG3UXD+5X+rsu1ymBjylq3qtsa
+      kqTTNNwoC3fGJEnVu3qzow3oyguDgAUTu3ggXO/XvDQggAnn42KKu3u1VKMiuqE0bXUvKrW/FNsn
+      sjnwevp2EAr6WDYibfUuRQYL7nZpr7gAsYjEJArD6EBsJEYAMxIz0phMJ2yMMGmOsYYGacxWwU03
+      geJWFaSKKOE8hHBQZAm11VXfa/DPGBobtDeGOo6aldB2JTNVr9JUrtYNXtN0LqyV+iGX6xa7wFLu
+      bTY/PT6P7vQ66M6CSbofmr5E9wi6IIoo+zq6B4hQFGEUMD8+ifgDbvskoRxhtmPUCP7Qup6HfxIn
+      lKGueIf/743/KSm9KP6fdHH8d/x3/Hf8/2b+syvhfzjN//AM/rcgJhgRHl2c/8O0z+Z/D2ZH+ctR
+      vrE7ljuWO5Y7ll8Vy/0rYXk0zfLoPJbjJIiQ71+a5eO0juU/JMvdr+Udyh3KHcr/E5QHV4JyPo1y
+      fi7KGRwUvzzKh2kdyh3KHcodyh3KHcpfCuXhlaA8nkZ5fC7KKUMxuzzKh2kdyh3KHcodyh3KHcpf
+      CuXRj4bygCU+wJh+PcpD5HMUUs7OQTmLgeYoJA7l3x3lpwXhvkZ3lHeUd5R/VZTn10F5H09S/tD0
+      paZOEhrA5212ccozjPyIOcr/3yjfCwI7yjvKO8o7yr9CysdXQnkyTXlyHuVxEnBE6eUpTzhoAX/b
+      H75RnOAY8TByf/h2Af6PpeL47/jv+O/4/5r4T/CV8J9O85+e5v+4NT+P8vjcf1uD3Yf0q/hWfbP5
+      FxlnhU3vSQAADQotLT09PT09PT09PT09PT09PTc5MzM3OTUyMDE1MTg3NTIyMzQ9PS0t
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1533'
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+        gccl-invocation-id/9602fbc9-171f-4ceb-a9ed-152d9b464222
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03OTMzNzk1MjAxNTE4
+        NzUyMjM0PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/device_properties/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/results.jsonl.gz/1752461359207855\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/device_properties%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fresults.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/device_properties%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fresults.jsonl.gz?generation=1752461359207855&alt=media\",\n
+        \ \"name\": \"device_properties/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/results.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1752461359207855\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1236\",\n  \"md5Hash\": \"pZZWRr2ctIGSk9tXc0+jBA==\",\n
+        \ \"crc32c\": \"UxSUAQ==\",\n  \"etag\": \"CK+rsaaru44DEAE=\",\n  \"timeCreated\":
+        \"2025-07-14T02:49:19.229Z\",\n  \"updated\": \"2025-07-14T02:49:19.229Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-07-14T02:49:19.229Z\",\n  \"timeFinalized\":
+        \"2025-07-14T02:49:19.229Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1105'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 14 Jul 2025 02:49:19 GMT
+      ETag:
+      - CK+rsaaru44DEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - ABgVH8_rBsM0DwKEW_dpMkD4VR7lru6eDMvOPJWE0duiNcxkz6sACuY_hx8SNDiuesO8guT6QSmTuuM
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+        gccl-invocation-id/2f0f47de-ff23-420c-812a-803963d74401
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/device_properties%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fresults.jsonl.gz?alt=media
+  response:
+    body:
+      string: !!binary |
+        H4sIAC5wdGgC/+2cS2/jNhDH7/0Uhc4OwYcelG7bLrqXPRTdoIcWC4G26CwBWRJIytk08Hfv6GFb
+        siNvvJt66yx9icwZzgzJP+cHx0gevUyu1UJ6yaO3LNPuTZqXd2oh8lRlXuKFIcbEmw3M9qGCCd6f
+        IleZsKU+MqarMpM5uLz55ZZhjEcORmoFsYt6NZcafAjmGHPKCCGccMxCOnLPpFloVVlVFl5S1Hk+
+        GxW6EI2lrxT73lPWp0zC2HRRFoVc9B4U0+AGsxuKbwlL/DAJKPJx+/rL28z6fUq1rHLYG1h1qopl
+        2eybKZf2XmiZrqU2XTCCKGKoSbkzHmXs1rLIBtMirx04XRxNgiAJMGJBXxzUJqww0g4i4cHoROZM
+        Fg+5MoNZB+MT88RiISs7ntnmGximV0D4LY4T4id+ANsbbVcwV8VBRD/g8cBwck8wTxg+iCjMibWv
+        ykLBEaribsqj7o/BalEY0ZpSq1by+Urpc+xkIqpOOU2kVJlMGTHPZaPbpciNbEoee6gCrkp3OT2r
+        6yOP3mqssLVpMvxR3sPPvz9CDXeVSdOqNKpbE2TPrbJ1BrEYaaUhb7vVNEJRert43E79TX3uHnVZ
+        F9mHSjZlEhj4JMybXaCmpnbo7S5au5JubB9zP/iuD72b+W6YYDf6XhyleF8Wd6OxfOfDQhRwP/JZ
+        //LBuPe+IZQgTmNGady/Zl7Xez5A2bmyEvYsmHmVLiuprWrePm42TZDtRu+ftme5qLWWhW0ex/Pg
+        wtuy2h35fK5BDNsm1HQgaAUrYbX6rOVSQozmdBlUJNrDeCvWyoDb2Gg+ldr2HmDs2i+GXP+Uhdzm
+        OhGhWU3TDNom2TeG3UXD+5X+rsu1ymBjylq3qtsakqTTNNwoC3fGJEnVu3qzow3oyguDgAUTu3gg
+        XO/XvDQggAnn42KKu3u1VKMiuqE0bXUvKrW/FNsnsjnwevp2EAr6WDYibfUuRQYL7nZpr7gAsYjE
+        JArD6EBsJEYAMxIz0phMJ2yMMGmOsYYGacxWwU03geJWFaSKKOE8hHBQZAm11VXfa/DPGBobtDeG
+        Oo6aldB2JTNVr9JUrtYNXtN0LqyV+iGX6xa7wFLubTY/PT6P7vQ66M6CSbofmr5E9wi6IIoo+zq6
+        B4hQFGEUMD8+ifgDbvskoRxhtmPUCP7Qup6HfxInlKGueIf/743/KSm9KP6fdHH8d/x3/Hf8/2b+
+        syvhfzjN//AM/rcgJhgRHl2c/8O0z+Z/D2ZH+ctRvrE7ljuWO5Y7ll8Vy/0rYXk0zfLoPJbjJIiQ
+        71+a5eO0juU/JMvdr+Udyh3KHcr/E5QHV4JyPo1yfi7KGRwUvzzKh2kdyh3KHcodyh3KHcpfCuXh
+        laA8nkZ5fC7KKUMxuzzKh2kdyh3KHcodyh3KHcpfCuXRj4bygCU+wJh+PcpD5HMUUs7OQTmLgeYo
+        JA7l3x3lpwXhvkZ3lHeUd5R/VZTn10F5H09S/tD0paZOEhrA5212ccozjPyIOcr/3yjfCwI7yjvK
+        O8o7yr9CysdXQnkyTXlyHuVxEnBE6eUpTzhoAX/bH75RnOAY8TByf/h2Af6PpeL47/jv+O/4/5r4
+        T/CV8J9O85+e5v+4NT+P8vjcf1uD3Yf0q/hWfbP5FxlnhU3vSQAA
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '1236'
+      Content-Type:
+      - application/jsonl
+      Date:
+      - Mon, 14 Jul 2025 02:49:19 GMT
+      ETag:
+      - CK+rsaaru44DEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Mon, 14 Jul 2025 02:49:19 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - ABgVH8_XEvjKeYfKPoPHdtdvzpOc253xd2vNtfr9xb-sVHoZekeMdZotM7fVKU9nEW8rIxemx6982i4
+      X-Goog-Generation:
+      - '1752461359207855'
+      X-Goog-Hash:
+      - crc32c=UxSUAQ==,md5=pZZWRr2ctIGSk9tXc0+jBA==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '1236'
+    status:
+      code: 200
+      message: OK
+version: 1

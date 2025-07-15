@@ -621,3 +621,10 @@ resource "google_storage_bucket_iam_binding" "calitp-composer" {
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra", "serviceAccount:${data.terraform_remote_state.iam.outputs.google_service_account_composer-service-account_email}"]
   role    = "roles/storage.legacyBucketOwner"
 }
+
+resource "google_storage_bucket_iam_binding" "calitp" {
+  for_each = local.environment_buckets
+  bucket   = google_storage_bucket.calitp[each.key].name
+  members  = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
+  role     = "roles/storage.legacyObjectOwner"
+}

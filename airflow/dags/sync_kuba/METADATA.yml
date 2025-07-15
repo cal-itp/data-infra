@@ -1,0 +1,17 @@
+description: "Capture the Kuba API to GCS"
+schedule_interval: "0 0 * * *"
+tags:
+  - all_gusty_features
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: "2025-07-14"
+    catchup: False
+    email:
+      - "hello@calitp.org"
+    email_on_failure: True
+    pool: default_pool
+    concurrency: 50
+wait_for_defaults:
+    timeout: 3600
+latest_only: True

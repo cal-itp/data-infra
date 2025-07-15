@@ -82,6 +82,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-unzipped-hourly_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION"              = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-validation_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"       = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-validation-hourly_name}",
+        "CALITP_BUCKET__KUBA"                                  = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-kuba_name}",
         "CALITP_BUCKET__LITTLEPAY_PARSED"                      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-parsed_name}",
         "CALITP_BUCKET__LITTLEPAY_PARSED_V3"                   = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-parsed-v3_name}",
         "CALITP_BUCKET__LITTLEPAY_RAW"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-raw_name}",

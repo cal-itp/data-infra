@@ -202,6 +202,10 @@ output "google_storage_bucket_calitp-staging-gtfs-schedule-validation-hourly_nam
   value = google_storage_bucket.calitp-staging["calitp-staging-gtfs-schedule-validation-hourly"].name
 }
 
+output "google_storage_bucket_calitp-staging-kuba_name" {
+  value = google_storage_bucket.calitp-staging["calitp-staging-kuba"].name
+}
+
 output "google_storage_bucket_calitp-staging-payments-littlepay-parsed_name" {
   value = google_storage_bucket.calitp-staging["calitp-staging-payments-littlepay-parsed"].name
 }

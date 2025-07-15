@@ -109,6 +109,7 @@ x-airflow-common:
     CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN: "gs://calitp-staging-ntd-xlsx-products-clean"
     CALITP_BUCKET__NTD_REPORT_VALIDATION: "gs://calitp-staging-ntd-report-validation"
     CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS: "gs://calitp-staging-state-geoportal-scrape"
+    CALITP_BUCKET__KUBA: "gs://calitp-staging-kuba"
 
     DBT_TARGET: staging_service_account
 
