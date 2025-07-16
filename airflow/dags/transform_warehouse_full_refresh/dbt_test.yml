@@ -26,19 +26,12 @@ get_logs: true
 env_vars:
   AIRFLOW_ENV: "{{ env_var('AIRFLOW_ENV') }}"
   GOOGLE_CLOUD_PROJECT: "{{ env_var('GOOGLE_CLOUD_PROJECT') }}"
-  BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
   DBT_PROJECT_DIR: /app
   DBT_PROFILES_DIR: /app
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
   SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
   SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
   CALITP_BUCKET__PUBLISH: "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
-
-secrets:
-  - deploy_type: volume
-    deploy_target: /secrets/jobs-data/
-    secret: jobs-data
-    key: service-account.json
 
 k8s_resources:
   request_memory: 2.0Gi

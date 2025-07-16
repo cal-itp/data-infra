@@ -17,18 +17,11 @@ is_delete_operator_pod: true
 get_logs: true
 
 env_vars:
-  GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
   AIRFLOW_ENV: "{{ env_var('AIRFLOW_ENV') }}"
   CALITP_USER: "{{ env_var('CALITP_USER') }}"
   CALITP_BUCKET__GTFS_SCHEDULE_RAW: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_RAW') }}"
   CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY') }}"
   GRAAS_SERVER_URL: "{{ env_var('GRAAS_SERVER_URL') }}"
-
-secrets:
-  - deploy_type: volume
-    deploy_target: /secrets/jobs-data/
-    secret: jobs-data
-    key: service_account.json
 
 k8s_resources:
   request_memory: 5.0Gi
