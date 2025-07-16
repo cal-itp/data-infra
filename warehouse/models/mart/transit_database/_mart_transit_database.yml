@@ -1003,5 +1003,4 @@ models:
       - name: facility_name
       - name: facility_type
       - name: ntd_id
-      - name: geojson_geometry
       - name: geometry
