@@ -1,21 +1,35 @@
-COMPOSER_ENVIRONMENT_PATH := composer/cal-itp-data-infra-development
+.PHONY: clean sync setup start restart stop
+
+COMPOSER_ENVIRONMENT_NAME := calitp-development-composer
+COMPOSER_ENVIRONMENT_PATH := composer/$(COMPOSER_ENVIRONMENT_NAME)
 DATA_PATH := $(COMPOSER_ENVIRONMENT_PATH)/data
-WAREHOUSE_PATH := $(DATA_PATH)/warehouse
+
+COMPOSER_VERSION := composer-2.8.6-airflow-2.6.3
+COMPOSER_PROJECT := cal-itp-data-infra-staging
 
 clean:
-ifneq (,$(wildcard $(WAREHOUSE_PATH)))
-	rm -r $(WAREHOUSE_PATH)
+ifneq (,$(wildcard $(DATA_PATH)))
+	rm -r $(DATA_PATH)
 endif
 
-install: clean
-	rsync -ar plugins $(DATA_PATH)
-	rsync -ar ../warehouse $(WAREHOUSE_PATH)
+sync:
+	rsync -ar plugins/ $(COMPOSER_ENVIRONMENT_PATH)/plugins/
+	rsync -ar ../warehouse/ $(DATA_PATH)/warehouse/
+	cp -f requirements.txt $(COMPOSER_ENVIRONMENT_PATH)/requirements.txt
+	cp -f .development.env $(COMPOSER_ENVIRONMENT_PATH)/variables.env
+	cat .env >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
 
-start: install
-	composer-dev start
+create: clean sync
+	poetry run composer-dev create --from-image-version $(COMPOSER_VERSION) --project $(COMPOSER_PROJECT) --port 8080 --dags-path dags/ --database postgresql $(COMPOSER_ENVIRONMENT_NAME)
 
-restart: install
-	composer-dev restart
+start: clean sync
+	poetry run composer-dev start
+
+restart: clean sync
+	poetry run composer-dev restart
 
 stop:
-	composer-dev stop
+	poetry run composer-dev stop
+
+teardown: stop clean
+	rm -r $(COMPOSER_ENVIRONMENT_PATH)
