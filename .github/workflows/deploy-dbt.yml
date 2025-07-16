@@ -242,7 +242,7 @@ jobs:
 
       - name: Synchronize Metabase
         working-directory: warehouse
-        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --skip-sources --exclude-schemas=staging --docs-url="${{ env.DBT_DOCS_URL }}" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
+        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --skip-sources --exclude-schemas=staging,payments,mart_payments --docs-url="${{ env.DBT_DOCS_URL }}" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
 
   upload_dbt_docs:
     name: Upload to dbt-docs site
