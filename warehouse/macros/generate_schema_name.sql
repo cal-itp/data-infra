@@ -6,7 +6,7 @@
 
     {%- if not custom_schema_name -%}
         {{ default_schema }}
-    {%- elif target.name.startswith('prod') -%}
+    {%- elif target.name.startswith('prod') or target.name.startswith('staging') -%}
         {{ custom_schema_name | trim }}
     {%- else -%}
         {{ default_schema }}_{{ custom_schema_name | trim }}

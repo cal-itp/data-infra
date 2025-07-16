@@ -1,7 +1,7 @@
 SELECT
   organization,
   reportstatus as api_report_status,
-  TIMESTAMP_MILLIS(reportlastmodifieddate) as api_report_last_modified_date,
+  reportlastmodifieddate as api_report_last_modified_date,
   reportperiod as api_report_period,
   ntdreportingrr20_urban_tribal_data.id as id,
   ntdreportingrr20_urban_tribal_data.ReportId as report_id,

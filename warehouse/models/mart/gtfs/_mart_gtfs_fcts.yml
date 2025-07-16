@@ -2607,7 +2607,6 @@ models:
     columns:
       - *gtfs_dataset_key_errorif_sampled
       - *base64_url
-      - *rt_schedule_base64_url
       - *rt_service_date
       - *gtfs_rt_name
       - *gtfs_rt_schedule_dataset_key
