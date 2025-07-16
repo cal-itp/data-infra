@@ -3,7 +3,7 @@ name: Build and push gtfs-rt-archiver-v3 image
 on:
   push:
     branches:
-      - 'main'
+      - main
     paths:
       - '.github/workflows/build-gtfs-rt-archiver-v3-image.yml'
       - 'services/gtfs-rt-archiver-v3/**'
@@ -16,47 +16,95 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
-jobs:
-  check:
-    name: Run static checkers
-    runs-on: ubuntu-latest
-    env:
-      CALITP_BUCKET__GTFS_RT_PARSED: gs://some-test-bucket
-      CALITP_BUCKET__GTFS_RT_VALIDATION: gs://some-test-bucket
-      GTFS_RT_VALIDATOR_VERSION: v0.0.0
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - run: curl -sSL https://install.python-poetry.org | python -
-      - run: cd services/gtfs-rt-archiver-v3 && poetry install && poetry run mypy .
+env:
+  PYTHON_VERSION: '3.11'
+  POETRY_VERSION: '2.0.1'
 
-  build_push:
-    name: Package docker image
+jobs:
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-    needs: [check]
     steps:
-      - uses: actions/checkout@v2
-      - uses: docker/login-action@v1
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Cache python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        working-directory: services/gtfs-rt-archiver-v3
+        run: poetry install
+
+      - name: Run mypy
+        working-directory: services/gtfs-rt-archiver-v3
+        run: poetry run mypy .
+
+  docker:
+    name: Push docker image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Repository
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - run: curl -sSL https://install.python-poetry.org | python -
-      # from https://forcepush.tech/python-package-ci-cd-with-git-hub-actions
-      - name: Get image tag from pyproject.toml and commit SHA
-        run: |
-          cd services/gtfs-rt-archiver-v3
-          PROJECT_VERSION=$(poetry version --short)
-          echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
 
-          echo "GITHUB_SHA_SHORT=${GITHUB_SHA:0:6}" >> $GITHUB_ENV
-      - uses: docker/build-push-action@v2
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Get image tag from poetry
+        working-directory: services/gtfs-rt-archiver-v3
+        run: echo "PROJECT_VERSION=$(poetry version --short)" >> $GITHUB_ENV
+
+      - name: Get short GitHub SHA
+        run: echo "GITHUB_SHA_SHORT=${GITHUB_SHA:0:6}" >> $GITHUB_ENV
+
+      - name: Build and Push
+        uses: docker/build-push-action@v6
         with:
           context: services/gtfs-rt-archiver-v3
-          push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{github.repository}}/gtfs-rt-archiver-v3:${{env.PROJECT_VERSION}}-${{env.GITHUB_SHA_SHORT}}
+          push: true
+          tags: ghcr.io/${{ github.repository }}/gtfs-rt-parser-v2:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'latest' || 'development' }}
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/gtfs-rt-parser-v2:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && env.PROJECT_VERSION || 'development' }}${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && '-' || '' }}${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && env.GITHUB_SHA_SHORT || '' }}
+          cache-to: type=inline
