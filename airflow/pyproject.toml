@@ -6,6 +6,7 @@ authors = [
     {name = "Cal-ITP Data Engineering",email = "hello@calitp.org"}
 ]
 readme = "README.md"
+requires-python = ">=3.11"
 
 
 [build-system]
