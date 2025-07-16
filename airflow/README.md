@@ -2,7 +2,84 @@
 
 The following folder contains the project level directory for all our [Apache Airflow](https://airflow.apache.org/) [DAGs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html). Airflow is an orchestration tool that we use to manage our raw data ingest. Airflow DAG tasks are scheduled at regular intervals to perform data processing steps, like unzipping raw GTFS zipfiles and writing the contents out to Google Cloud Storage.
 
+
+## Local Development
+
+This project uses [composer-local-dev](https://github.com/GoogleCloudPlatform/composer-local-dev) to run DAGs locally.
+
+In order to run most DAGs, you will need to follow a few setup steps.
+
+Login with `gcloud`:
+
+```bash
+$ gcloud auth application-default login --login-config=../iac/login.json
+```
+
+Compile dbt:
+
+```bash
+$ cd ../warehouse
+$ poetry install
+$ poetry run dbt deps
+$ poetry run dbt compile --target staging
+```
+
+Install poetry dependencies:
+
+```bash
+$ poetry install
+```
+
+Setup composer environment:
+
+```bash
+$ make setup
+```
+
+Synchronize the environment files:
+
+```bash
+$ make sync
+```
+
+Start the reactor (this also runs setup and sync):
+
+```bash
+$ make start
+```
+
+After a loading period, the Airflow UI will become available at [`http://localhost:8080`](http://localhost:8080).
+
+If you're running any DAGs that require secrets or service-specific connection values, you may need to set those in the `Connections` tab in Airflow.
+
+Additional reading about general Airflow setup via Docker can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html).
+
+### PodOperators
+
+Airflow PodOperator tasks execute a specific Docker image; these images are pushed to [GitHub Container Registry](https://ghcr.io/) and production uses `:latest` tags while local uses `:development`. If you want to test these tasks locally, you must build and push development versions of the images used by the tasks, which requires [proper access](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry). The Dockerfiles and code that make up the images live in the [/jobs](../jobs) directory. For example:
+
+```bash
+# running from jobs/gtfs-schedule-validator/
+docker build -t ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:development .
+docker push ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:development
+```
+
+### Common Issues
+
+- On macOS, if `composer-dev` complains it cannot connect to Docker, open Docker Desktop, `Settings > Advanced` and ensure that `Allow the default Docker socket to be used` is checked.
+
+- Airflow exits with code 137 - Check that Docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase Docker resources.
+
+- When testing a new or updated `requirements.txt`, you might not see packages update. You may need to run `make restart` to clear out old data.
+
+- If a task does not start when expected, its designated [pool](https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/pools.html) may not have been created locally. Pools can be created and managed in Airflow on a page accessed via the Admin -> Pools menu option. A DAG's designated pool can typically be found on its DAG Details page, and is generally defined in the `default_args` section of the DAG's `METADATA.yml` file.
+
+- If a task is producing errors but not producing complete logs for troubleshooting, or if it's reporting a memory issue, you may need to increase the RAM given by default to the Docker virtual machine that Airflow runs on. In Docker Desktop this setting can be accessed via the Preferences -> Advanced menu, and requires a restart of the VM to take effect.
+
+
 ## Deployment
+
+Airflow deployment is managed automatically by Terraform, automated by Github Actions. If you manually deploy Airflow, Terraform will delete the deployment the next time it applies a plan.
 
 - The `dags/`, `plugins/`, and `../warehouse` directories are deployed automatically when a PR is merged into the `main` branch via terraform from the `iac/cal-itp-data-infra/airflow` directory for production and the `iac/cal-itp-data-infra-staging/airflow` directory for staging.
 - System configuration for worker count, environment variables, `requirements.txt`, and overrides of Airflow configs are deployed via terraform from the `iac/cal-itp-data-infra/composer` directory for production and the `iac/cal-itp-data-infra-staging/composer` directory for staging.
@@ -38,65 +115,6 @@ Each DAG for this project should have a corresponding test in the `tests/dags` f
 2. Fill in requested credentials
 3. `poetry install`
 4. `poetry run pytest`
-
-
-## Local Development
-
-This project uses [composer-local-dev](https://github.com/GoogleCloudPlatform/composer-local-dev) to run DAGs locally.
-
-In order to run most DAGs, you will need to follow a few setup steps:
-
-Install composer-local-dev:
-
-```bash
-$ make install
-```
-
-Login with `gcloud`:
-
-```bash
-$ gcloud auth application-default login --login-config=../iac/login.json
-```
-
-Copy all files to the correct place:
-
-```bash
-$ make setup
-```
-
-Start the reactor:
-
-```bash
-$ make start
-```
-
-After a loading period, the Airflow UI will become available at [`http://localhost:8080`](http://localhost:8080).
-
-If you're running any DAGs that require secrets or service-specific connection values, you may need to set those in the `Connections` tab in Airflow.
-
-Additional reading about general Airflow setup via Docker can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html).
-
-
-### PodOperators
-
-Airflow PodOperator tasks execute a specific Docker image; these images are pushed to [GitHub Container Registry](https://ghcr.io/) and production uses `:latest` tags while local uses `:development`. If you want to test these tasks locally, you must build and push development versions of the images used by the tasks, which requires [proper access](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry). The Dockerfiles and code that make up the images live in the [/jobs](../jobs) directory. For example:
-
-```bash
-# running from jobs/gtfs-schedule-validator/
-docker build -t ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:development .
-docker push ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:development
-```
-
-
-### Common Issues
-
-- Airflow exits with code 137 - Check that Docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase Docker resources.
-
-- When testing a new or updated `requirements.txt`, you might not see packages update. You may need to run `make restart` to clear out old data.
-
-- If a task does not start when expected, its designated [pool](https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/pools.html) may not have been created locally. Pools can be created and managed in Airflow on a page accessed via the Admin -> Pools menu option. A DAG's designated pool can typically be found on its DAG Details page, and is generally defined in the `default_args` section of the DAG's `METADATA.yml` file.
-
-- If a task is producing errors but not producing complete logs for troubleshooting, or if it's reporting a memory issue, you may need to increase the RAM given by default to the Docker virtual machine that Airflow runs on. In Docker Desktop this setting can be accessed via the Preferences -> Advanced menu, and requires a restart of the VM to take effect.
 
 
 ## Deploying Changes to Production
