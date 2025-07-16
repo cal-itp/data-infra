@@ -3,25 +3,15 @@ import io
 import json
 import os
 from datetime import datetime
-from typing import Dict, Sequence
+from typing import Sequence
 
+from hooks.transitland_hook import TransitlandHook
 from src.bigquery_cleaner import BigQueryCleaner
 
 from airflow.hooks.http_hook import HttpHook
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
-
-TRANSITLAND_FEED_FLAVORS: Dict[str, str] = {
-    "gbfs_auto_discovery": "general_bikeshare_feed_specification",
-    "mds_provider": "mobility_data_specification",
-    "realtime_alerts": "service_alerts",
-    "realtime_trip_updates": "trip_updates",
-    "realtime_vehicle_positions": "vehicle_positions",
-    "static_current": "schedule",
-    "static_historic": "schedule",
-    "static_planned": "schedule",
-}
 
 
 class AggregatorObjectPath:
@@ -98,51 +88,6 @@ class MobilityDatabaseToGCSOperator(BaseOperator):
         return os.path.join(self.bucket, object_name)
 
 
-class TransitlandPage:
-    def __init__(self, results: dict) -> None:
-        self.results: dict = results
-
-    def after(self) -> str | None:
-        if "meta" in self.results and "after" in self.results["meta"]:
-            return self.results["meta"]["after"]
-        return None
-
-    def rows(self) -> list:
-        rows = []
-        for feed in self.results["feeds"]:
-            for flavor, urls in feed["urls"].items():
-                for i, url in enumerate([urls] if isinstance(urls, str) else urls):
-                    rows.append(
-                        {
-                            "key": f"{feed['id']}_{flavor}_{i}",
-                            "name": feed["name"],
-                            "feed_url_str": url,
-                            "feed_type": TRANSITLAND_FEED_FLAVORS[flavor],
-                            "raw_record": {flavor: urls},
-                        }
-                    )
-        return rows
-
-
-class TransitlandPaginator:
-    def __init__(self, http_hook: HttpHook, pages: int, parameters: dict) -> None:
-        self.http_hook: HttpHook = http_hook
-        self.pages: int = pages
-        self.parameters: dict = parameters
-
-    def result(self) -> dict:
-        data = self.parameters.copy()
-        rows = []
-        for _ in range(0, self.pages):
-            results = self.http_hook.run(data=data).json()
-            page = TransitlandPage(results=results)
-            rows.extend(page.rows())
-            if not page.after():
-                break
-            data["after"] = page.after()
-        return rows
-
-
 class TransitlandToGCSOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "bucket",
@@ -176,16 +121,16 @@ class TransitlandToGCSOperator(BaseOperator):
     def gcs_hook(self) -> GCSHook:
         return GCSHook(gcp_conn_id=self.gcp_conn_id)
 
-    def http_hook(self) -> HttpHook:
-        return HttpHook(method="GET", http_conn_id=self.http_conn_id)
+    def transitland_hook(self) -> TransitlandHook:
+        return TransitlandHook(conn_id=self.http_conn_id)
 
     def cleaned_rows(self) -> list:
-        paginator = TransitlandPaginator(
-            http_hook=self.http_hook(), pages=self.pages, parameters=self.parameters
+        result = self.transitland_hook().run(
+            pages=self.pages, parameters=self.parameters
         )
         return [
             json.dumps(x, separators=(",", ":"))
-            for x in BigQueryCleaner(paginator.result()).clean()
+            for x in BigQueryCleaner(result).clean()
         ]
 
     def execute(self, context: Context) -> str:
