@@ -1,0 +1,8 @@
+operator: operators.bigquery_to_ckan_operator.BigQueryToCKANOperator
+
+table_name: mart_gtfs.dim_agency_latest
+ckan_id: c3828596-e796-4b3b-a146-ebeb09b3a4d2
+description: |
+  Each row is a cleaned row from an agency.txt file.
+  Definitions for the original GTFS fields are available at:
+  https://gtfs.org/reference/static#agencytxt.
