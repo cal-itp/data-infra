@@ -476,7 +476,7 @@ jobs:
 
       - name: Download latest artifacts from production dbt docs
         working-directory: warehouse
-        run: gsutil cp gs://calitp-dbt-docs/*.json ./target/latest/
+        run: gsutil cp gs://calitp-dbt-artifacts/latest/*.json ./target/latest/
 
       - name: Setup Continuous Machine Learning tools
         uses: iterative/setup-cml@v2
@@ -496,7 +496,24 @@ jobs:
             warehouse/target/dag.png
 
       - name: Create GitHub comment
+        id: report-comment
         working-directory: warehouse
+        continue-on-error: true
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: cml comment update target/report.md || echo "Failed to generate GitHub comment"
+        run: cml comment update target/report.md
+
+      - uses: peter-evans/find-comment@v3
+        if: ${{ steps.report-comment.outcome == 'failure' }}
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: "Failed to add ci-report to a comment"
+
+      - uses: peter-evans/create-or-update-comment@v4
+        if: ${{ steps.report-comment.outcome == 'failure' }}
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.number }}
+          body: "Failed to add ci-report to a comment. You can download the ci-report in the [Summary](https://github.com/cal-itp/data-infra/actions/runs/${{ github.run_id }})."
+          edit-mode: replace
