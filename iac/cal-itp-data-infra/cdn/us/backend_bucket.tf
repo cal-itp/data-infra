@@ -5,7 +5,8 @@ resource "google_compute_managed_ssl_certificate" "calitp" {
     domains = [
       "dbt-docs.dds.dot.ca.gov.",
       "gtfs.dds.dot.ca.gov.",
-      "reports.dds.dot.ca.gov."
+      "reports.dds.dot.ca.gov.",
+      "analysis.dds.dot.ca.gov."
     ]
   }
 }
@@ -52,6 +53,20 @@ resource "google_compute_backend_bucket" "calitp-reports" {
   }
 }
 
+resource "google_compute_backend_bucket" "calitp-analysis" {
+  name        = "calitp-analysis-backend-bucket"
+  bucket_name = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-analysis_name
+  enable_cdn  = true
+  cdn_policy {
+    cache_mode        = "CACHE_ALL_STATIC"
+    client_ttl        = 3600
+    default_ttl       = 3600
+    max_ttl           = 86400
+    negative_caching  = true
+    serve_while_stale = 86400
+  }
+}
+
 resource "google_compute_url_map" "calitp-https" {
   name            = "calitp-https-load-balancer"
   default_service = google_compute_backend_bucket.calitp-dbt-docs.id
@@ -69,6 +84,11 @@ resource "google_compute_url_map" "calitp-https" {
   host_rule {
     path_matcher = "reports"
     hosts        = ["reports.dds.dot.ca.gov"]
+  }
+
+  host_rule {
+    path_matcher = "analysis"
+    hosts        = ["analysis.dds.dot.ca.gov"]
   }
 
   path_matcher {
@@ -98,6 +118,16 @@ resource "google_compute_url_map" "calitp-https" {
     path_rule {
       paths   = ["/*"]
       service = google_compute_backend_bucket.calitp-reports.id
+    }
+  }
+
+  path_matcher {
+    name            = "analysis"
+    default_service = google_compute_backend_bucket.calitp-analysis.id
+
+    path_rule {
+      paths   = ["/*"]
+      service = google_compute_backend_bucket.calitp-analysis.id
     }
   }
 }
