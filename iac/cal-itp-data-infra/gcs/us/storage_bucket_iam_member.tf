@@ -639,3 +639,9 @@ resource "google_storage_bucket_iam_member" "calitp-reports" {
   role   = "roles/storage.objectViewer"
   member = "allUsers"
 }
+
+resource "google_storage_bucket_iam_member" "calitp-analysis" {
+  bucket = google_storage_bucket.calitp-analysis.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
