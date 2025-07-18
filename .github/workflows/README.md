@@ -33,7 +33,7 @@ The GCP Composer deployment of Airflow [uploads composer, warehouse, and dbt art
 
   * Warehouse files: `dbt_project.yml`, `packages.yml`, `profiles.yml`, and all files from `macros/`, `models/`, `seeds/`, and `tests/` folders.
 
-  * dbt artifact files: `manifest.json`, `catalog.json`, `index.html`, and `partial_parse.msgpack`.
+  * dbt artifact files: `manifest.json`, `catalog.json`, and `index.html`.
 
 
   For more details, check [iac/cal-itp-data-infra/airflow/us/variables.tf](https://github.com/cal-itp/data-infra/blob/main/iac/cal-itp-data-infra/airflow/us/variables.tf).
