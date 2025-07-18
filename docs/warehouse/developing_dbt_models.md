@@ -59,7 +59,7 @@ Because the warehouse is collectively maintained and changes can affect a variet
 
 #### Video walkthrough
 
-For an example of working with dbt in JupyterHub, see the recording of the [original onboarding call in April 2023 (requires Cal-ITP Google Drive access).](https://drive.google.com/file/d/1NDh_4u0-ROsH0w8J3Z1ccn_ICLAHtDhX/view?usp=drive_link) A few notes on this video:
+For an example of working with dbt in JupyterHub, see the recording of the [original onboarding call in April 2023 (requires SharePoint access).](https://caltrans.sharepoint.com/sites/DOTPMPHQ-DataandDigitalServices/_layouts/15/stream.aspx?id=%2Fsites%2FDOTPMPHQ%2DDataandDigitalServices%2FShared%20Documents%2FData%20Quality%2FPresentations%2Fdbt%20%5F%20JupyterHub%20onboarding%2D2023%2D04%2D27%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E97c7cbba%2D07bc%2D47bc%2D89c8%2D6c290d7c95ff&ga=1) A few notes on this video:
 
 - The documentation shown is an older version of this docs page; the information shared verbally is correct but the page has been updated.
 - The bug encountered towards the end of the video (that prevented us from running dbt tests) has been fixed.
