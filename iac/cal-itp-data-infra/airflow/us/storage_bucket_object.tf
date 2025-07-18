@@ -32,12 +32,3 @@ resource "google_storage_bucket_object" "calitp-composer-index" {
   bucket       = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-composer_name
   content_type = "text/html; charset=utf-8"
 }
-
-resource "google_storage_bucket_object" "calitp-composer-partial_parse" {
-  depends_on     = [data.google_storage_bucket_object_content.calitp-dbt-partial_parse]
-  name           = "data/warehouse/target/partial_parse.msgpack"
-  content        = data.google_storage_bucket_object_content.calitp-dbt-partial_parse.content
-  bucket         = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-composer_name
-  source_md5hash = data.google_storage_bucket_object_content.calitp-dbt-partial_parse.md5hash
-  content_type   = "application/vnd.msgpack"
-}
