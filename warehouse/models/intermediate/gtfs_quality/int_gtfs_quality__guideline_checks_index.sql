@@ -164,6 +164,13 @@ int_gtfs_quality__guideline_checks_index AS (
             ELSE {{ guidelines_to_be_assessed_status() }}
         END AS status,
 
+        CASE
+            WHEN (check ='Includes wheelchair_accessible in trips.txt'
+            OR
+            check = 'Includes wheelchair_boarding in stops.txt')
+                THEN 0
+        END AS percentage,
+
         organization_key,
         service_key,
         gtfs_service_data_key,

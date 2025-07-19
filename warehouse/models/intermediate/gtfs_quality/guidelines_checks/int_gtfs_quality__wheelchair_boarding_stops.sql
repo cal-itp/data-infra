@@ -13,7 +13,7 @@ feed_stops_summary AS (
        feed_key,
        COUNTIF(wheelchair_boarding IS NOT NULL AND CAST(wheelchair_boarding AS STRING) != "0") AS ct_stops_accessibility_info,
        COUNT(*) AS ct_stops,
-       ROUND(COUNTIF(wheelchair_boarding IS NOT NULL AND CAST(wheelchair_boarding AS STRING) != "0")/COUNT(*) *100) AS wheelchair_boarding_stops_percentage
+       ROUND(COUNTIF(wheelchair_boarding IS NOT NULL AND CAST(wheelchair_boarding AS STRING) != "0")/COUNT(*) *100, 1) AS percentage
     FROM dim_stops
    GROUP BY feed_key
 ),
@@ -25,7 +25,7 @@ check_start AS (
 
 int_gtfs_quality__wheelchair_boarding_stops AS (
     SELECT
-        idx.* EXCEPT(status),
+        idx.* EXCEPT(status, percentage),
         CASE
             WHEN has_schedule_feed
                 THEN
@@ -37,7 +37,7 @@ int_gtfs_quality__wheelchair_boarding_stops AS (
                     END
             ELSE idx.status
         END AS status,
-        wheelchair_boarding_stops_percentage
+        stops.percentage
     FROM guideline_index AS idx
     CROSS JOIN check_start
     LEFT JOIN feed_stops_summary AS stops
