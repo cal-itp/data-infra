@@ -317,6 +317,26 @@ models:
         description: '{{ doc("column_num_arrival_times_populated_stop_times") }}'
       - name: num_departure_times_populated_stop_times
         description: '{{ doc("column_num_departure_times_populated_stop_times") }}'
+      - name: stop_pt_array
+        description: |
+          Array of ordered stop point geometries (dim_stop's pt_geom) for this trip_id.
+      - name: stop_id_array
+        description: |
+          Array of ordered stop IDs (dim_stop's stop_id) for this trip_id.
+      - name: stop_seq_array
+        description: |
+          Array of ordered stop sequences (dim_stop_time's stop_sequence) for this trip_id.
+      - name: arrival_sec_array
+        description: |
+          Array of ordered arrival seconds (dim_stop_time's arrival_time, departure_time converted to seconds from midnight)
+          for this trip_id. The minimum value between the two columns is used.
+      - name: avg_stop_spacing
+        description: |
+          The average distance between stops for this trip_id.
+          The difference between shape_dist_traveled is calculated for each ordered stop_id-stop_sequence,
+          and the average is taken across the stops included for the trip.
+          Units are the same as values provided in https://gtfs.org/documentation/schedule/reference/#stop_timestxt.
+          Note: this is an optional column in the GTFS specification, so may not be present for all operators.
   - name: int_gtfs_rt__distinct_download_configs
     description: |
       Distinct `dt`, `_config_extract_ts` pairs indicating
