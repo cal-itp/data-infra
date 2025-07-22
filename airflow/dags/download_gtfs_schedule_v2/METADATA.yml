@@ -1,7 +1,8 @@
 description: "Download GTFS Schedule feeds as specified in Airtable"
 schedule_interval: "0 3 * * *"
 tags:
-  - all_gusty_features
+  - gtfs
+  - airtable
 default_args:
     owner: airflow
     depends_on_past: False
