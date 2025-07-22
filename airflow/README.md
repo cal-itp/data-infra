@@ -42,13 +42,19 @@ Synchronize the environment files:
 $ make sync
 ```
 
-Start the reactor (this also runs setup and sync):
+Start the reactor (this also runs `make setup` and `make sync`):
 
 ```bash
 $ make start
 ```
 
 After a loading period, the Airflow UI will become available at [`http://localhost:8080`](http://localhost:8080).
+
+When setting up a new environment, you may want to create Airflow pools:
+
+```bash
+$ make pools
+```
 
 If you're running any DAGs that require secrets or service-specific connection values, you may need to set those in the `Connections` tab in Airflow.
 
@@ -65,6 +71,10 @@ docker push ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:development
 ```
 
 ### Common Issues
+
+- If you want to clear out old local Airflow data, you'll need to delete the DAG using `poetry run composer-dev run-airflow-cmd calitp-development-composer dags delete <DAG_ID>` where, for example, the `<DAG_ID>` is `create_external_tables`
+
+- If you want to reset the Airflow database entirely, you'll need to delete the direcotry where the Postges container stores its data: `make clean-postgres`
 
 - On macOS, if `composer-dev` complains it cannot connect to Docker, open Docker Desktop, `Settings > Advanced` and ensure that `Allow the default Docker socket to be used` is checked.
 
