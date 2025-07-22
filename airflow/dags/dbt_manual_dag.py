@@ -10,17 +10,16 @@ from airflow.operators.latest_only import LatestOnlyOperator
 DBT_TARGET = os.environ.get("DBT_TARGET")
 
 with DAG(
-    dag_id="dbt_all",
-    tags=["dbt", "all"],
-    # Monday, Thursday at 7am PDT/8am PST (2pm UTC)
-    schedule="0 14 * * 1,4",
-    start_date=datetime(2025, 7, 6),
+    dag_id="dbt_manual",
+    tags=["dbt", "manual", "ad-hoc"],
+    schedule=None,
+    start_date=datetime(2025, 7, 21),
     catchup=False,
 ):
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
-    dbt_all = DbtTaskGroup(
-        group_id="dbt_all",
+    dbt_manual = DbtTaskGroup(
+        group_id="dbt_manual",
         project_config=ProjectConfig(
             dbt_project_path="/home/airflow/gcs/data/warehouse",
             manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
@@ -33,7 +32,7 @@ with DAG(
             profiles_yml_filepath="/home/airflow/gcs/data/warehouse/profiles.yml",
         ),
         render_config=RenderConfig(
-            exclude=[
+            select=[
                 "models/mart/gtfs/fct_stop_time_arrivals_week.sql",
                 "models/mart/gtfs/fct_stop_time_updates_metrics_week.sql",
                 "models/mart/gtfs/fct_stop_time_updates_week.sql",
@@ -47,4 +46,4 @@ with DAG(
         default_args={"retries": 0},
     )
 
-    latest_only >> dbt_all
+    latest_only >> dbt_manual
