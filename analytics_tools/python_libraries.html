@@ -492,6 +492,12 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calitp-data-analysis">calitp-data-analysis</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-tbls">import tbls</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#query-sql">query_sql</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gcsgeopandas">GCSGeoPandas</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#read-parquet">read_parquet</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#read-file">read_file</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#geo-data-frame-to-parquet">geo_data_frame_to_parquet</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#siuba">siuba</a><ul class="nav section-nav flex-column">
@@ -629,44 +635,6 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
-      <td>93c44e614219c41696a8148018c1d83b</td>
-      <td>f87ac9abe81a7548325423ede69c3b86</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-09</td>
-      <td>2022-09-09 00:00:56+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>56112d81d62d71d408ea0247309178e4</td>
-      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
-      <td>21fa0b125d801eb5058da2ec5d748bda</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-15</td>
-      <td>2022-09-15 14:59:54.274779+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>282b4e07171c48ac08162e0dc8749066</td>
       <td>18fcf47148228c7b56c19726c854054b</td>
       <td>9b8e9b8befe560293a6c5b38dc19ffbb</td>
@@ -685,7 +653,7 @@ document.write(`
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>1</th>
       <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
       <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
       <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
@@ -704,7 +672,7 @@ document.write(`
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>2</th>
       <td>033d018b031002914fbfa48c872d4a65</td>
       <td>8f5e204872e6b7034479a6d11502547b</td>
       <td>3d30b02b9008f788eb89c41c137786c1</td>
@@ -719,6 +687,44 @@ document.write(`
       <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
       <td>2022-01-19</td>
       <td>2022-01-19 00:11:01+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
+      <td>93c44e614219c41696a8148018c1d83b</td>
+      <td>f87ac9abe81a7548325423ede69c3b86</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-09-09</td>
+      <td>2022-09-09 00:00:56+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>56112d81d62d71d408ea0247309178e4</td>
+      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
+      <td>21fa0b125d801eb5058da2ec5d748bda</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-09-15</td>
+      <td>2022-09-15 14:59:54.274779+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -795,44 +801,6 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
-      <td>93c44e614219c41696a8148018c1d83b</td>
-      <td>f87ac9abe81a7548325423ede69c3b86</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-09</td>
-      <td>2022-09-09 00:00:56+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>56112d81d62d71d408ea0247309178e4</td>
-      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
-      <td>21fa0b125d801eb5058da2ec5d748bda</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-15</td>
-      <td>2022-09-15 14:59:54.274779+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>282b4e07171c48ac08162e0dc8749066</td>
       <td>18fcf47148228c7b56c19726c854054b</td>
       <td>9b8e9b8befe560293a6c5b38dc19ffbb</td>
@@ -851,7 +819,7 @@ document.write(`
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>1</th>
       <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
       <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
       <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
@@ -870,7 +838,7 @@ document.write(`
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>2</th>
       <td>033d018b031002914fbfa48c872d4a65</td>
       <td>8f5e204872e6b7034479a6d11502547b</td>
       <td>3d30b02b9008f788eb89c41c137786c1</td>
@@ -888,10 +856,89 @@ document.write(`
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
+    <tr>
+      <th>3</th>
+      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
+      <td>93c44e614219c41696a8148018c1d83b</td>
+      <td>f87ac9abe81a7548325423ede69c3b86</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-09-09</td>
+      <td>2022-09-09 00:00:56+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>56112d81d62d71d408ea0247309178e4</td>
+      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
+      <td>21fa0b125d801eb5058da2ec5d748bda</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-09-15</td>
+      <td>2022-09-15 14:59:54.274779+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
+</section>
+<section id="gcsgeopandas">
+<h3>GCSGeoPandas<a class="headerlink" href="#gcsgeopandas" title="Link to this heading">#</a></h3>
+<p>The GCSGeoPandas class fetches the Google Cloud Storage (GCS) filesystem and surfaces functions to provide analysts a
+clear and consistent way of accessing geospatial resources.</p>
+<p>It’s recommended to memoize initialization of the class so that the GCS filesystem is fetched and cached the first time
+you call it and subsequent calls can reuse that cached filesystem.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cache</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis.gcs_geopandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">GCSGeoPandas</span>
+
+<span class="nd">@cache</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gcs_geopandas</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">GCSGeoPandas</span><span class="p">()</span>
+</pre></div>
+</div>
+<section id="read-parquet">
+<h4>read_parquet<a class="headerlink" href="#read-parquet" title="Link to this heading">#</a></h4>
+<p>Delegates to geopandas.read_parquet, providing GCS Filesystem</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gcs_geopandas</span><span class="p">()</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;gs://path/to/your/file.parquet&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="read-file">
+<h4>read_file<a class="headerlink" href="#read-file" title="Link to this heading">#</a></h4>
+<p>Delegates to geopandas.read_file with the file at the path specified in the GCS filesystem</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gcs_geopandas</span><span class="p">()</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;gs://path/to/your/file.geojson&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="geo-data-frame-to-parquet">
+<h4>geo_data_frame_to_parquet<a class="headerlink" href="#geo-data-frame-to-parquet" title="Link to this heading">#</a></h4>
+<p>Delegates to GeoDataFrame.to_parquet, providing the GCS filesystem</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;name1&#39;</span><span class="p">,</span> <span class="s1">&#39;name2&#39;</span><span class="p">],</span> <span class="s1">&#39;geometry&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">...</span><span class="p">]}</span>
+<span class="n">geo_data_frame</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+<span class="n">gcs_geopandas</span><span class="p">()</span><span class="o">.</span><span class="n">geo_data_frame_to_parquet</span><span class="p">(</span><span class="n">geo_data_frame</span><span class="p">,</span> <span class="s2">&quot;gs://path/to/your/file.parquet&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 <section id="siuba">
@@ -951,22 +998,22 @@ and showing SQL test queries that siuba code generates.</p>
     </tr>
     <tr>
       <th>1</th>
-      <td>b01a3ce6ba2e972a6acc08574a3e06a9</td>
+      <td>f4095db9282b859842d338f5db032561</td>
       <td>1</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>4697bb52eb4da8bcff925f503a623326</td>
+      <td>5ad87901f329be154545fec771aa2c21</td>
       <td>1</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>7eded7cbbf072a2fd9dd812f80bf2d2b</td>
+      <td>a64532640829f3eae9129cd5d5e9590b</td>
       <td>1</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>a64532640829f3eae9129cd5d5e9590b</td>
+      <td>7eded7cbbf072a2fd9dd812f80bf2d2b</td>
       <td>1</td>
     </tr>
   </tbody>
@@ -1027,44 +1074,6 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
   <tbody>
     <tr>
       <th>0</th>
-      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
-      <td>93c44e614219c41696a8148018c1d83b</td>
-      <td>f87ac9abe81a7548325423ede69c3b86</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-09</td>
-      <td>2022-09-09 00:00:56+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>56112d81d62d71d408ea0247309178e4</td>
-      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
-      <td>21fa0b125d801eb5058da2ec5d748bda</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-15</td>
-      <td>2022-09-15 14:59:54.274779+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>282b4e07171c48ac08162e0dc8749066</td>
       <td>18fcf47148228c7b56c19726c854054b</td>
       <td>9b8e9b8befe560293a6c5b38dc19ffbb</td>
@@ -1083,7 +1092,7 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>1</th>
       <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
       <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
       <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
@@ -1102,7 +1111,7 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>2</th>
       <td>033d018b031002914fbfa48c872d4a65</td>
       <td>8f5e204872e6b7034479a6d11502547b</td>
       <td>3d30b02b9008f788eb89c41c137786c1</td>
@@ -1117,6 +1126,44 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
       <td>2022-01-19</td>
       <td>2022-01-19 00:11:01+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
+      <td>93c44e614219c41696a8148018c1d83b</td>
+      <td>f87ac9abe81a7548325423ede69c3b86</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-09-09</td>
+      <td>2022-09-09 00:00:56+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>56112d81d62d71d408ea0247309178e4</td>
+      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
+      <td>21fa0b125d801eb5058da2ec5d748bda</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-09-15</td>
+      <td>2022-09-15 14:59:54.274779+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -1185,6 +1232,63 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
   <tbody>
     <tr>
       <th>0</th>
+      <td>5b8556e31e5d83b64664aff930108935</td>
+      <td>1537a46c315af2bdc04e9dd40a2b33ab</td>
+      <td>f3d0776cc624e46ec8eb33acb9254b36</td>
+      <td>960</td>
+      <td>Madera Metro</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(559) 661-RIDE (7433)</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
+      <td>2025-02-07</td>
+      <td>2025-02-07 03:00:32.553429+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4db1e4458fec07330417b4f27bae527e</td>
+      <td>1aae9998784e92ab4fefdbca9415a020</td>
+      <td>2900be32d7daff7b93d4d7f4a242fa68</td>
+      <td>960</td>
+      <td>Madera Metro</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(559) 661-RIDE (7433)</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
+      <td>2025-01-11</td>
+      <td>2025-01-11 03:00:37.352100+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9e1782ca894aff6f1a20d273002b31a8</td>
+      <td>46bb281dadd29531a7208ddb2d4ad911</td>
+      <td>eb45540bc9b652b8ec24a952481dadc4</td>
+      <td>960</td>
+      <td>Madera Metro</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(559) 661-RIDE (7433)</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
+      <td>2023-07-11</td>
+      <td>2023-07-11 03:00:46.743372+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>3</th>
       <td>7dde33f3c8629a4703af876c042aca24</td>
       <td>89aec1b29dcfdd86a5ee1632db4cf0ac</td>
       <td>58440d643369c3d8690e4c27ba3911bb</td>
@@ -1203,67 +1307,10 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>9a395f3d167d2c0088ebf8dd3d2e1da9</td>
-      <td>75ddeb651b8c6b5039add08b71e1464a</td>
-      <td>3f5795f479e908e5ea99de4a22bb2500</td>
-      <td>960</td>
-      <td>Madera Metro</td>
-      <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(559) 661-RIDE (7433)</td>
-      <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2022-07-19</td>
-      <td>2022-07-19 00:00:43+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>658ce6d521b06dac8eae6aa9ab687ef0</td>
-      <td>38e6213bccdba1a21f8e745386907e43</td>
-      <td>3eccac6a9a0be4649df3eb0fe967daa2</td>
-      <td>960</td>
-      <td>Madera Metro</td>
-      <td>https://www.madera.gov/home/departments/transi...</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(559) 661-RIDE (7433)</td>
-      <td>https://www.madera.gov/home/departments/transi...</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2024-01-31</td>
-      <td>2024-01-31 03:01:13.329722+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>8a786d43a3c1e8e620355a06d50a31b6</td>
-      <td>36fde7eedc560e48670dcde339e7e93d</td>
-      <td>9cb8e2f18ab3055f8b927f01ad57045b</td>
-      <td>960</td>
-      <td>Madera Metro</td>
-      <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(559) 661-RIDE (7433)</td>
-      <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2021-06-24</td>
-      <td>2021-06-24 00:09:42+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
       <th>4</th>
-      <td>4db1e4458fec07330417b4f27bae527e</td>
-      <td>1aae9998784e92ab4fefdbca9415a020</td>
-      <td>2900be32d7daff7b93d4d7f4a242fa68</td>
+      <td>149712407d0b279211c623c2e52a3d3c</td>
+      <td>513def24eef056315fb6ef128714f584</td>
+      <td>726a476a7c2917a2cd7c94a409c5d0c5</td>
       <td>960</td>
       <td>Madera Metro</td>
       <td>https://www.madera.gov/home/departments/transi...</td>
@@ -1273,8 +1320,8 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
       <td>https://www.madera.gov/home/departments/transi...</td>
       <td>None</td>
       <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2025-01-11</td>
-      <td>2025-01-11 03:00:37.352100+00:00</td>
+      <td>2024-02-06</td>
+      <td>2024-02-06 03:00:59.720405+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -1428,6 +1475,12 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calitp-data-analysis">calitp-data-analysis</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-tbls">import tbls</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#query-sql">query_sql</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gcsgeopandas">GCSGeoPandas</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#read-parquet">read_parquet</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#read-file">read_file</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#geo-data-frame-to-parquet">geo_data_frame_to_parquet</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#siuba">siuba</a><ul class="nav section-nav flex-column">
