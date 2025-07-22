@@ -105,6 +105,52 @@ LIMIT 10""", as_df=True)
 df_dim_agency.head()
 ```
 
+### GCSGeoPandas
+
+The GCSGeoPandas class fetches the Google Cloud Storage (GCS) filesystem and surfaces functions to provide analysts a
+clear and consistent way of accessing geospatial resources.
+
+It's recommended to memoize initialization of the class so that the GCS filesystem is fetched and cached the first time
+you call it and subsequent calls can reuse that cached filesystem.
+
+```python
+from functools import cache
+
+from calitp_data_analysis.gcs_geopandas import GCSGeoPandas
+
+@cache
+def gcs_geopandas():
+    return GCSGeoPandas()
+```
+
+#### read_parquet
+
+Delegates to geopandas.read_parquet, providing GCS Filesystem
+
+```python
+gcs_geopandas().read_parquet("gs://path/to/your/file.parquet")
+```
+
+#### read_file
+
+Delegates to geopandas.read_file with the file at the path specified in the GCS filesystem
+
+```python
+gcs_geopandas().read_file("gs://path/to/your/file.geojson")
+```
+
+#### geo_data_frame_to_parquet
+
+Delegates to GeoDataFrame.to_parquet, providing the GCS filesystem
+
+```python
+import geopandas as gpd
+
+data = {'col1': ['name1', 'name2'], 'geometry': [...]}
+geo_data_frame = gpd.GeoDataFrame(data, crs="EPSG:4326")
+gcs_geopandas().geo_data_frame_to_parquet(geo_data_frame, "gs://path/to/your/file.parquet")
+```
+
 (siuba)=
 
 ## siuba
