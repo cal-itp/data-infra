@@ -74,7 +74,8 @@ models:
           - not_null
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
-      - name: service_date
+      - &service_date
+        name: service_date
         description: |
           Date on which this service was active (i.e., this date is betweem the
           `start_date` and `end_date` for this service).
@@ -660,3 +661,29 @@ models:
           # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
           # even then the number of failures is very small
           where: '__rt_sampled__'
+  - name: int_gtfs_rt_vs_sched__stops_served_vehicle_positions
+    description: |
+      This table joins int_gtfs_schedule__stop_times_grouped (stop times grouped by trip)
+      and fct_vehicle_locations_path (vehicle positions grouped by trip).
+      It unnests the stop positions so that the table is unique on the
+      feed_key-trip_instance_key-stop_id.
+
+      The table buffers the scheduled stop's pt geom by 100 meters and
+      checks whether the vehicle locations path (linestring) intersects
+      with the buffered stop, to determine whether the stop is
+      serviced by vehicle positions data.
+
+    columns:
+      - *feed_key
+      - name: gtfs_dataset_key
+      - *service_date
+      - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+      - name: iteration_num
+      - name: trip_instance_key
+      - name: stop_id
+        description: '{{ doc("gtfs_stops__stop_id") }}'
+      - name: vp_near_stop
+        description: |
+          Boolean indicating whether the vehicle positions path got
+          within the stop's 100 meter buffer.
