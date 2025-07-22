@@ -6,6 +6,7 @@ WITH trips AS (
         gtfs_dataset_key,
         service_date,
         trip_id,
+        iteration_num,
         trip_instance_key,
     FROM {{ ref('fct_scheduled_trips') }}
 ),
@@ -14,11 +15,11 @@ vp_path AS (
     SELECT
         trip_instance_key,
         pt_array
-        FROM {{ ref('fct_vehicle_locations_path') }}
+    FROM {{ ref('fct_vehicle_locations_path') }}
 ),
 
 stop_times_grouped AS (
-    SELECT *
+    SELECT
         feed_key,
         trip_id,
         iteration_num,
