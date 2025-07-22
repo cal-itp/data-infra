@@ -1,7 +1,8 @@
 description: "Syncs Littlepay data from S3 bucket to our buckets"
 schedule_interval: "0 * * * *"
 tags:
-  - all_gusty_features
+  - littlepay
+  - payments
 default_args:
     owner: airflow
     depends_on_past: False

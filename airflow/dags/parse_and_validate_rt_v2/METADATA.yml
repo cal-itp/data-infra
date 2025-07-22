@@ -1,7 +1,7 @@
 description: "Parses GTFS RT Protobufs and writes as JSONL to GCS"
 schedule_interval: "15 * * * *"
 tags:
-  - all_gusty_features
+  - gtfs
 default_args:
     owner: airflow
     depends_on_past: False

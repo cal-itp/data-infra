@@ -2,7 +2,7 @@ description: "Creates all external tables in BigQuery"
 # Should run before dbt
 schedule_interval: "0 9 * * *"
 tags:
-  - all_gusty_features
+  - external_tables
 default_args:
     owner: airflow
     depends_on_past: False

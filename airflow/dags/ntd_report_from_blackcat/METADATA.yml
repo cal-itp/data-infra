@@ -1,7 +1,8 @@
 description: "Process raw files from a GCS bucket (NTD reports from BlackCat API) directly into BigQuery"
 schedule_interval: "0 10 * * 1" #10 am every Monday
 tags:
-  - ntd, blackcat
+  - ntd
+  - blackcat
 default_args:
     owner: airflow
     depends_on_past: False

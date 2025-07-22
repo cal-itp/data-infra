@@ -1,7 +1,8 @@
 description: "Parse Littlepay files into JSONL"
 schedule_interval: "30 * * * *"
 tags:
-  - all_gusty_features
+  - littlepay
+  - payments
 default_args:
     owner: airflow
     depends_on_past: False

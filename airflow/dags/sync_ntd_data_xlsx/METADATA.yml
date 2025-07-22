@@ -1,7 +1,7 @@
 description: "Scrape tables from DOT Ridership XLSX file weekly"
 schedule_interval: "0 10 * * 1" # 10am UTC every Monday
 tags:
-  - all_gusty_features
+  - ntd
 default_args:
     owner: airflow
     depends_on_past: False

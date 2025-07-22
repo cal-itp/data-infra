@@ -1,7 +1,7 @@
 description: "Capture the Kuba API to GCS"
 schedule_interval: "0 0 * * *"
 tags:
-  - all_gusty_features
+  - kuba
 default_args:
     owner: airflow
     depends_on_past: False

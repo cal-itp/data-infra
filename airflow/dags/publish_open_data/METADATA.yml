@@ -1,7 +1,7 @@
 description: "Publishes data to various open data portals"
 schedule_interval: "0 0 * * 1"
 tags:
-  - all_gusty_features
+  - open_data
 default_args:
     owner: airflow
     depends_on_past: False

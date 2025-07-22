@@ -1,7 +1,7 @@
 description: "Scrape State Highway Network from State Geoportal"
 schedule_interval: "0 4 1 * *" # 4am UTC first day of every month
 tags:
-  - all_gusty_features
+  - geoportal
 default_args:
     owner: airflow
     depends_on_past: False

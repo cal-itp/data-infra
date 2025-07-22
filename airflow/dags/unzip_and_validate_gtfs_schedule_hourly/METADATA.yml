@@ -1,7 +1,7 @@
 description: "Unzips and validates GTFS Schedule data"
 schedule_interval: "0 * * * *"
 tags:
-  - all_gusty_features
+  - gtfs
 default_args:
     owner: airflow
     depends_on_past: False

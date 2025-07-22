@@ -1,7 +1,8 @@
 description: "Process raw files from Elavon into a BQ-ready JSONL form"
 schedule_interval: "0 2 * * *"
 tags:
-  - all_gusty_features
+  - elavon
+  - payments
 default_args:
     owner: airflow
     depends_on_past: False

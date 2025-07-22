@@ -1,7 +1,7 @@
 description: "Load data from Airtable"
 schedule_interval: "0 2 * * *"
 tags:
-  - all_gusty_features
+  - airtable
 default_args:
     owner: airflow
     depends_on_past: False
