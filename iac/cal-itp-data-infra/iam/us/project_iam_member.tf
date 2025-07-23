@@ -543,6 +543,7 @@ resource "google_project_iam_member" "github-actions-terraform" {
     "roles/resourcemanager.projectIamAdmin",
     "roles/iam.roleAdmin",
     "roles/iam.serviceAccountAdmin",
+    "roles/iam.workloadIdentityPoolAdmin",
     "roles/editor",
     "roles/storage.admin"
   ])
