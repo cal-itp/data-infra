@@ -7,7 +7,7 @@
             'data_type': 'date',
             'granularity': 'day',
         },
-        cluster_by='base64_url',
+        cluster_by=['base64_url', 'schedule_feed_key'],
     )
 }}
 
