@@ -39,3 +39,9 @@ resource "google_service_account_iam_member" "airflow-jobs_composer-service-acco
   role               = "roles/iam.workloadIdentityUser"
   member             = "serviceAccount:cal-itp-data-infra.svc.id.goog[airflow-jobs/composer-service-account]"
 }
+
+resource "google_service_account_iam_member" "github-actions-service-account_analysis" {
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${local.analysis_github_repository_name}"
+  service_account_id = google_service_account.github-actions-service-account.id
+  role               = "roles/iam.workloadIdentityUser"
+}
