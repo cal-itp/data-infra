@@ -7,7 +7,7 @@
             'data_type': 'date',
             'granularity': 'day',
         },
-        cluster_by='feed_key',
+        cluster_by=['vp_base64_url', 'schedule_feed_key'],
     )
 }}
 
@@ -20,16 +20,20 @@ WITH trips AS (
         iteration_num,
         trip_instance_key,
     FROM {{ ref('fct_scheduled_trips') }}
+    --FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`
     -- clustered by service_date
 ),
 
 vp_path AS (
     SELECT
         service_date,
-        schedule_feed_key AS feed_key,
+        base64_url,
+        schedule_feed_key,
         trip_instance_key,
-        pt_array
+        ST_MAKELINE(pt_array) AS pt_array
     FROM {{ ref('fct_vehicle_locations_path') }}
+    --FROM `cal-itp-data-infra-staging.mart_gtfs.fct_vehicle_locations_path`
+    WHERE ARRAY_LENGTH(pt_array) > 1
     -- clustered by base64_url, schedule_feed_key, partitioned by service_date
 ),
 
@@ -45,37 +49,60 @@ stop_times_grouped AS (
 ),
 
 -- trip_grain: join trips to vp_path and attach an array of stop positions
+-- start with inner join otherwise query takes quite awhile
 vp_with_stops AS (
   SELECT
-        trips.*,
+        trips.feed_key AS schedule_feed_key,
+        trips.gtfs_dataset_key AS schedule_gtfs_dataset_key,
+        trips.service_date,
+        trips.trip_id,
+        trips.iteration_num,
+        trips.trip_instance_key,
+
         stop_times_grouped.stop_pt_array,
         stop_times_grouped.stop_id_array,
 
+        vp_path.base64_url AS vp_base64_url,
         vp_path.pt_array,
 
     FROM trips
-    LEFT JOIN stop_times_grouped USING (feed_key, trip_id, iteration_num)
-    LEFT JOIN vp_path USING (service_date, feed_key, trip_instance_key)
+    INNER JOIN stop_times_grouped
+        ON stop_times_grouped.feed_key = trips.feed_key
+        AND stop_times_grouped.trip_id = trips.trip_id
+        AND stop_times_grouped.iteration_num = trips.iteration_num
+    INNER JOIN vp_path
+        ON trips.service_date = vp_path.service_date
+        AND trips.feed_key = vp_path.schedule_feed_key
+        AND trips.trip_instance_key = vp_path.trip_instance_key
 ),
 
 -- unnest the arrays so that every stop_id, stop point geom is a row
 unnested_stops AS (
-  SELECT
-      vp_with_stops.* EXCEPT(stop_pt_array, stop_id_array),
-      stop_id,
-      pt_geom,
-  FROM vp_with_stops
-  LEFT JOIN UNNEST(stop_pt_array) AS pt_geom
-  LEFT JOIN UNNEST(stop_id_array) AS stop_id
+    SELECT
+        vp_with_stops.* EXCEPT(stop_pt_array, stop_id_array),
+        stop_id,
+        ST_BUFFER(pt_geom, 100) AS stop_buff100,
+        ST_BUFFER(pt_geom, 50) AS stop_buff50,
+        ST_BUFFER(pt_geom, 25) AS stop_buff25,
+        ST_BUFFER(pt_geom, 10) AS stop_buff10,
+
+    FROM vp_with_stops
+    LEFT JOIN UNNEST(stop_pt_array) AS pt_geom
+    LEFT JOIN UNNEST(stop_id_array) AS stop_id
 ),
 
--- if vp path gets within 100 meters of stop, it services the stop.
+
 stops_intersecting_vp AS (
     SELECT
-        unnested_stops.* EXCEPT(pt_geom, pt_array),
+        unnested_stops.* EXCEPT(stop_buff100, stop_buff50, stop_buff25, stop_buff10, pt_array),
 
         -- this is a boolean column, use this to aggregate to trip or stop grain
-        ST_INTERSECTS(ST_BUFFER(pt_geom, 100), ST_MAKELINE(pt_array)) AS vp_near_stop,
+        -- probably want to be around 25m? 10m might be too aggressively close, but 50m is rather generous
+        ST_INTERSECTS(stop_buff100, pt_array) AS near_stop_100m,
+        ST_INTERSECTS(stop_buff50, pt_array) AS near_stop_50m,
+        ST_INTERSECTS(stop_buff25, pt_array) AS near_stop_25m,
+        ST_INTERSECTS(stop_buff10, pt_array) AS near_stop_10m,
+
     FROM unnested_stops
 )
 
