@@ -1,4 +1,15 @@
-{{ config(materialized='table') }}
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by={
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by='feed_key',
+    )
+}}
 
 WITH trips AS (
     SELECT
@@ -9,13 +20,17 @@ WITH trips AS (
         iteration_num,
         trip_instance_key,
     FROM {{ ref('fct_scheduled_trips') }}
+    -- clustered by service_date
 ),
 
 vp_path AS (
     SELECT
+        service_date,
+        schedule_feed_key AS feed_key,
         trip_instance_key,
         pt_array
     FROM {{ ref('fct_vehicle_locations_path') }}
+    -- clustered by base64_url, schedule_feed_key, partitioned by service_date
 ),
 
 stop_times_grouped AS (
@@ -26,6 +41,7 @@ stop_times_grouped AS (
         stop_pt_array,
         stop_id_array,
     FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
+    -- clustered by feed_key
 ),
 
 -- trip_grain: join trips to vp_path and attach an array of stop positions
@@ -39,7 +55,7 @@ vp_with_stops AS (
 
     FROM trips
     LEFT JOIN stop_times_grouped USING (feed_key, trip_id, iteration_num)
-    LEFT JOIN vp_path USING (trip_instance_key)
+    LEFT JOIN vp_path USING (service_date, feed_key, trip_instance_key)
 ),
 
 -- unnest the arrays so that every stop_id, stop point geom is a row
