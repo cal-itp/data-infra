@@ -36,7 +36,7 @@ trip_counts_by_group AS (
         schedule_gtfs_dataset_key,
         service_date,
         stop_id,
-    
+
         COUNTIF(is_near_10m) AS near_10m,
         COUNTIF(is_near_25m) AS near_25m,
         COUNT(*) AS n_vp_trips,
