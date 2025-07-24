@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_gtfs_rt__trip_updates AS (
     SELECT
         dt,

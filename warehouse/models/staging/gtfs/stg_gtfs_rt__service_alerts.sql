@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_gtfs_rt__service_alerts AS (
     SELECT
         dt,
