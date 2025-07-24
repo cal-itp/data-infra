@@ -30,10 +30,9 @@ vp_path AS (
         base64_url,
         schedule_feed_key,
         trip_instance_key,
-        ST_MAKELINE(pt_array) AS pt_array
-    FROM {{ ref('fct_vehicle_locations_path') }}
-    --FROM `cal-itp-data-infra-staging.mart_gtfs.fct_vehicle_locations_path`
-    WHERE ARRAY_LENGTH(pt_array) > 1
+        ST_SIMPLIFY(ST_MAKELINE(pt_array), 5) AS pt_array
+    --FROM {{ ref('fct_vehicle_locations_path') }}
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_vp_path`
     -- clustered by base64_url, schedule_feed_key, partitioned by service_date
 ),
 
@@ -81,7 +80,6 @@ unnested_stops AS (
     SELECT
         vp_with_stops.* EXCEPT(stop_pt_array, stop_id_array),
         stop_id,
-        ST_BUFFER(pt_geom, 100) AS stop_buff100,
         ST_BUFFER(pt_geom, 50) AS stop_buff50,
         ST_BUFFER(pt_geom, 25) AS stop_buff25,
         ST_BUFFER(pt_geom, 10) AS stop_buff10,
@@ -91,14 +89,13 @@ unnested_stops AS (
     LEFT JOIN UNNEST(stop_id_array) AS stop_id
 ),
 
-
 stops_intersecting_vp AS (
     SELECT
-        unnested_stops.* EXCEPT(stop_buff100, stop_buff50, stop_buff25, stop_buff10, pt_array),
+        unnested_stops.* EXCEPT(stop_buff50, stop_buff25, stop_buff10, pt_array),
 
         -- this is a boolean column, use this to aggregate to trip or stop grain
-        -- probably want to be around 25m? 10m might be too aggressively close, but 50m is rather generous
-        ST_INTERSECTS(stop_buff100, pt_array) AS near_stop_100m,
+        -- probably want to be around 25m? 10m might be too aggressively close,
+        -- but 50m or 100m might be rather generous
         ST_INTERSECTS(stop_buff50, pt_array) AS near_stop_50m,
         ST_INTERSECTS(stop_buff25, pt_array) AS near_stop_25m,
         ST_INTERSECTS(stop_buff10, pt_array) AS near_stop_10m,
