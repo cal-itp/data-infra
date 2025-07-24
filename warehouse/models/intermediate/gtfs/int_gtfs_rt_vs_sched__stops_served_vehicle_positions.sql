@@ -18,9 +18,7 @@ WITH trips AS (
         trip_id,
         iteration_num,
         trip_instance_key,
-    --FROM {{ ref('fct_scheduled_trips') }}
-    FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`
-    WHERE service_date = "2025-07-11"
+    FROM {{ ref('fct_scheduled_trips') }}
 ),
 
 vp_path AS (
@@ -31,9 +29,7 @@ vp_path AS (
         trip_instance_key,
         ST_SIMPLIFY(ST_MAKELINE(pt_array), 5) AS pt_array
 
-    --FROM {{ ref('fct_vehicle_locations_path') }}
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_vp_path`
-    WHERE service_date = "2025-07-11"
+    FROM {{ ref('fct_vehicle_locations_path') }}
 ),
 
 stop_times_grouped AS (
