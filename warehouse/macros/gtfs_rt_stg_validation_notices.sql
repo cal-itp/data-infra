@@ -1,9 +1,6 @@
 {% macro gtfs_rt_stg_validation_notices(source_table) %}
-WITH raw_validation_notices AS (
-    SELECT * FROM {{ source_table }}
-),
 
-stg_gtfs_rt__validation_notices AS (
+WITH stg_gtfs_rt__validation_notices AS (
     SELECT
         -- this mainly exists so we can use WHERE in tests
         {{ dbt_utils.generate_surrogate_key(['metadata.extract_ts', 'base64_url', 'errorMessage.validationRule.errorId']) }} AS key,
@@ -25,7 +22,8 @@ stg_gtfs_rt__validation_notices AS (
         errorMessage.validationRule.errorDescription AS error_message_validation_rule_error_description,
         errorMessage.validationRule.occurrenceSuffix AS error_message_validation_rule_occurrence_suffix,
         occurrenceList AS occurrence_list
-    FROM raw_validation_notices
+    FROM {{ source_table }}
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH) -- last 6 months
 )
 
 SELECT * FROM stg_gtfs_rt__validation_notices

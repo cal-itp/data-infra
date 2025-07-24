@@ -1,9 +1,6 @@
-WITH external_vehicle_positions AS (
-    SELECT *
-    FROM {{ source('external_gtfs_rt', 'vehicle_positions') }}
-),
+{{ config(materialized='table') }}
 
-stg_gtfs_rt__vehicle_positions AS (
+WITH stg_gtfs_rt__vehicle_positions AS (
     SELECT
         dt,
         hour,
@@ -46,7 +43,8 @@ stg_gtfs_rt__vehicle_positions AS (
         vehicle.position.odometer AS position_odometer,
         vehicle.position.speed AS position_speed
 
-    FROM external_vehicle_positions
+    FROM {{ source('external_gtfs_rt', 'vehicle_positions') }}
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH) -- last 6 months
 )
 
 SELECT * FROM stg_gtfs_rt__vehicle_positions
