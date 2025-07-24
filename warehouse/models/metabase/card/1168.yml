@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: distinct_number_of_checks_by_day
+    label: Distinct Number of Checks by Day
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1168__
+
+
+      Created On: __2023-02-28T20:09:16.378061Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1168
+    maturity: medium
+    owner:
+      name: Julia Ma
+      email: julia.ma@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.662'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

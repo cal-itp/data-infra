@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: exercise_6__what_is_the_average_number_of_trips_per_day_of_the_week_for_an_organization_
+    label: 'Exercise 6: What is the average number of trips per day of the week for
+      an organization?'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1653__
+
+
+      Created On: __2023-08-29T21:26:00.744545Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1653
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.730'
+        last_used_at: '2025-03-05T05:28:21.588115Z'

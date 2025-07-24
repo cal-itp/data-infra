@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_santa_maria_trips_by_day
+    label: Number of Santa Maria trips by day
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2116__
+
+
+      Created On: __2024-01-26T20:16:50.762771Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2116
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.843'
+        last_used_at: '2024-12-17T22:34:57.80177Z'

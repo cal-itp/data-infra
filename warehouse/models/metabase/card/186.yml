@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_change_in_revenue_due_to_adjustments_per_week
+    label: Total Change in Revenue Due to Adjustments per Week
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __186__
+
+
+      Created On: __2021-11-18T16:42:34.735807Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/186
+    maturity: medium
+    owner:
+      name: Jochem Baud
+      email: jochem.baud@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.941'
+        last_used_at: '2025-02-28T19:54:58.534687Z'

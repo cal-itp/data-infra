@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: scheduled_trips_by_dataset_key
+    label: Scheduled Trips by Dataset Key
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __672__
+
+
+      Created On: __2023-01-05T22:08:24.300021Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/672
+    maturity: medium
+    owner:
+      name: Eric Dasmalchi
+      email: eric@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

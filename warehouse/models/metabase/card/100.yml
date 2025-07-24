@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: validation____daily_errors
+    label: Validation || Daily Errors
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __100__
+
+
+      Created On: __2021-08-26T15:39:22.530763Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/100
+    maturity: medium
+    owner:
+      name: Natalya Diaz
+      email: natalya.d@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: feeds_without_fares_v2_by_voms
+    label: Feeds without Fares v2 by VOMS
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2368__
+
+
+      Created On: __2024-06-19T21:22:38.591926Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2368
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.134'
+        last_used_at: '2024-11-27T20:39:41.553684Z'

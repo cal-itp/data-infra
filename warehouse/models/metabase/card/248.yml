@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_riders_per_month_receiving_fare_caps__by_ride_type
+    label: Number of Riders per Month receiving Fare Caps, by Ride Type
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __248__
+
+
+      Created On: __2021-12-30T20:47:22.114859Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/248
+    maturity: medium
+    owner:
+      name: Ben Bressette
+      email: ben@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.773'
+        last_used_at: '2025-02-20T19:31:22.527548Z'

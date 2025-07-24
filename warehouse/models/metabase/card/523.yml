@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_number_of_journeys_by_week__grouped_by_form_factor_8
+    label: Total Number of Journeys by Week, Grouped by Form Factor
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __523__
+
+
+      Created On: __2022-09-21T13:49:48.973397Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/523
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.047'
+        last_used_at: '2025-07-21T23:49:22.335169Z'

@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: individual_agency_percent_gtfs_rt_vehicle_positions_completeness__last_14_days__2
+    label: Individual Agency Percent GTFS-RT Vehicle Positions Completeness (last
+      14 days)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3340__
+
+
+      Created On: __2025-01-29T18:07:39.837048Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3340
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.222'
+        last_used_at: '2025-03-11T18:50:07.745386Z'

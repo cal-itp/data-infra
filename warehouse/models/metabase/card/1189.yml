@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: today_s_number_of_organizations_passing_100__of_checks
+    label: Today's Number of Organizations Passing 100% of Checks
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1189__
+
+
+      Created On: __2023-03-03T01:38:31.106306Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1189
+    maturity: medium
+    owner:
+      name: Julia Ma
+      email: julia.ma@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:11.196'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

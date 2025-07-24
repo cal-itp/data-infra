@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: lifetime_transactions_by_card_scheme
+    label: Lifetime Transactions by Card Scheme
+    description: '### Visualization: Pie
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __39__
+
+
+      Created On: __2021-07-21T22:24:22.308163Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/39
+    maturity: medium
+    owner:
+      name: Hunter Owens
+      email: hunter.owens@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

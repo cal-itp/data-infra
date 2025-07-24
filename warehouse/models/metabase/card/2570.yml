@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: current_district_6_gtfs_schedule_urls
+    label: Current District 6 GTFS Schedule URLs
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2570__
+
+
+      Created On: __2024-08-08T23:24:38.289026Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2570
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.567'
+        last_used_at: '2025-03-18T21:49:14.660861Z'

@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: cal_itp_benefits
+    label: Cal-ITP Benefits
+    description: '### Dashboard Cards: 6
+
+
+      Key metrics for the Cal-ITP Benefits product available at benefits.calitp.org.
+
+
+      #### Metadata
+
+
+      Metabase ID: __42__
+
+
+      Created On: __2022-01-31T22:06:21.01588Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/42
+    maturity: medium
+    owner:
+      name: Vyki Englert
+      email: vyki@compiler.la
+    depends_on: []

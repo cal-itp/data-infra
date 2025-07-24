@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: fct_ntd_rr20_funds_checks
+    label: Fct Ntd Rr20 Funds Checks
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3188__
+
+
+      Created On: __2024-11-05T00:12:45.159592Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3188
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.714'
+        last_used_at: '2025-07-15T18:28:43.107742Z'

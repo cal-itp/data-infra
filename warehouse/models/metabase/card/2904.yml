@@ -1,0 +1,30 @@
+version: 2
+exposures:
+  - name: multi_day_cap_riders_per_month__this_year
+    label: Multi Day Cap Riders per Month, this year
+    description: "### Visualization: Bar\n\nCount of Riders hitting the 30 day $52\
+      \ fare cap\n\n#### Query\n\n```\nWith multi_cap_riders AS (\n  SELECT customer_id\n\
+      \        ,transaction_date_pacific AS multi_cap_start_date\n    FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`\
+      \ AS payments_rides\n   WHERE participant_id = 'sbmtd'\n     AND adjustment_type\
+      \ = 'MULTI_DAY_CAP'\n     AND 0 = (SELECT COUNT(1)\n                FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`\
+      \ AS payments_rides_filter\n               WHERE payments_rides_filter.participant_id\
+      \ = 'sbmtd'\n                 AND payments_rides_filter.adjustment_type = 'MULTI_DAY_CAP'\n\
+      \                 AND payments_rides_filter.customer_id = payments_rides.customer_id\n\
+      \                 AND payments_rides_filter.transaction_date_pacific BETWEEN\
+      \ DATE_SUB(payments_rides.transaction_date_pacific, INTERVAL 10 DAY) AND DATE_SUB(payments_rides.transaction_date_pacific,\
+      \ INTERVAL 1 DAY))\n)\nSELECT date_trunc(multi_cap_start_date, month) AS multi_cap_start_month,\n\
+      \       COUNT(DISTINCT customer_id) riders_count\n  FROM multi_cap_riders\n\
+      \ WHERE multi_cap_start_date >= date_trunc(current_date('America/Los_Angeles'),\
+      \ year)\n GROUP BY multi_cap_start_month\n ORDER BY multi_cap_start_month\n\
+      ```\n\n#### Metadata\n\nMetabase ID: __2904__\n\nCreated On: __2024-08-20T02:58:33.971812Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2904
+    maturity: medium
+    owner:
+      name: Erika Pacheco
+      email: erika@ministryofvelocity.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.109'
+        last_used_at: '2025-07-21T23:49:22.08616Z'

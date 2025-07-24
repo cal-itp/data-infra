@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: transit_agencies_with_fares_v2_data
+    label: Transit agencies with Fares v2 data
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2287__
+
+
+      Created On: __2024-05-21T20:35:34.835856Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2287
+    maturity: medium
+    owner:
+      name: Md Saiful Islam
+      email: md.islam@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.773'
+        last_used_at: '2025-06-16T18:58:00.594177Z'

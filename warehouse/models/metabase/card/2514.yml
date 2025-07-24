@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: count_of_principal_customer_ids_per_participant_id
+    label: Count of Principal Customer IDs per Participant ID
+    description: '### Visualization: Pivot
+
+
+      Principal Customer ID is unique to the transit agency therefore for each PCID
+      only one agency colum should have a value.
+
+
+      #### Metadata
+
+
+      Metabase ID: __2514__
+
+
+      Created On: __2024-07-26T08:19:06.687412Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2514
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.275'
+        last_used_at: '2024-09-23T14:47:44.223232Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: interchange_fee__usd_
+    label: Interchange fee (USD)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1483__
+
+
+      Created On: __2023-07-26T12:35:26.543994Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1483
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.950'
+        last_used_at: '2025-05-28T16:42:17.799512Z'

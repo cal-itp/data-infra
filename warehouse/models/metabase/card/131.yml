@@ -1,0 +1,20 @@
+version: 2
+exposures:
+  - name: payments___earliest_transaction_times
+    label: Payments - Earliest transaction times
+    description: "### Visualization: Table\n\nThe earliest device_transaction we see\
+      \ for each participant_id in the payments data\n\n#### Query\n\n```\nSELECT\
+      \ \n    participant_id,\n    MIN(transaction_date_time_utc) AS earliest_transaction_time,\n\
+      \    COUNT(DISTINCT littlepay_transaction_id) AS n_unique_transaction_ids\n\
+      FROM `payments.device_transactions`\nGROUP BY `participant_id`\n```\n\n####\
+      \ Metadata\n\nMetabase ID: __131__\n\nCreated On: __2021-10-21T15:56:10.156472Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/131
+    maturity: medium
+    owner:
+      name: Michael Chow
+      email: michael.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

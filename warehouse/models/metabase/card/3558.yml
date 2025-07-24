@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: _ncc__reduced_fare_transactions
+    label: (NCC) Reduced Fare transactions
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3558__
+
+
+      Created On: __2025-04-04T01:41:03.869132Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3558
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.966'
+        last_used_at: '2025-07-10T21:32:20.837259Z'

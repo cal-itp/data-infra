@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: public_currently_operating_fixed_route_services_with_missing_rt_feeds
+    label: Public currently-operating fixed-route Services with missing RT feeds
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1446__
+
+
+      Created On: __2023-07-17T23:40:47.175382Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1446
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

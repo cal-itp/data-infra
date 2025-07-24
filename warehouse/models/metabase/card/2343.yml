@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: reduced_fare_open_loop_transactions_per_month_by_transit_agency__updated_
+    label: Reduced-fare open-loop transactions per month by transit agency (updated)
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2343__
+
+
+      Created On: __2024-06-05T23:37:27.285732Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2343
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.250'
+        last_used_at: '2025-07-23T16:58:49.547653Z'

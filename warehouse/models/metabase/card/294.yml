@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: gtfs_rt_files____of_4_320_pings_achieved_per_day___historical_chart
+    label: 'GTFS RT files: % of 4,320 pings achieved per day - historical chart'
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __294__
+
+
+      Created On: __2022-02-18T18:45:36.00545Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/294
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

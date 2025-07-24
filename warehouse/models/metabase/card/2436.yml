@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: free_journey_counts__capped_journeys____last_12_months__one_total_amount
+    label: Free journey counts (capped journeys) - Last 12 months- one total amount
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2436__
+
+
+      Created On: __2024-07-08T19:51:10.409128Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2436
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

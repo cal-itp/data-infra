@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: list_of_feeds_with_feed_expiration_date_validation_notices_as_of_yesterday
+    label: List of feeds with feed_expiration_date validation notices as of yesterday
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __238__
+
+
+      Created On: __2021-12-15T19:26:18.645094Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/238
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

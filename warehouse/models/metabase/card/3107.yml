@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: distinct_values_of_funding_source_vault_id_by_principal_customer_id
+    label: Distinct values of Funding Source Vault ID by Principal Customer ID
+    description: '### Visualization: Pivot
+
+
+      One PCID can have multiple FSVIDs associated with it, and this can be used as
+      an indicator for retokenisation.
+
+
+      #### Metadata
+
+
+      Metabase ID: __3107__
+
+
+      Created On: __2024-09-18T06:37:28.739803Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3107
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.093'
+        last_used_at: '2024-09-23T14:51:27.017194Z'

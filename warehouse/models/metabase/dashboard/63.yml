@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: gtfs_quality_reports___duplicate
+    label: GTFS Quality reports - Duplicate
+    description: '### Dashboard Cards: 4
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __63__
+
+
+      Created On: __2022-03-28T14:20:00.977821Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/63
+    maturity: medium
+    owner:
+      name: Natalya Diaz
+      email: natalya.d@jarv.us
+    depends_on: []

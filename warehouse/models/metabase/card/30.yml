@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: gtfs_schedule_service_daily_metrics__minimum_of_first_departure_ts_and_maximum_of_last_arrival_ts__grouped_by_cal_itp_itp_and_cal_itp_url_number
+    label: GTFS Schedule Service Daily Metrics, Minimum of First Departure Ts and
+      Maximum of Last Arrival Ts, Grouped by Cal Itp Itp and Cal Itp URL Number
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __30__
+
+
+      Created On: __2021-06-25T14:19:29.643339Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/30
+    maturity: medium
+    owner:
+      name: Michael Chow
+      email: michael.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

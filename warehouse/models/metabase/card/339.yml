@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: rt_daily_validation_errors
+    label: RT Daily Validation Errors
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __339__
+
+
+      Created On: __2022-03-10T19:32:42.160638Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/339
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

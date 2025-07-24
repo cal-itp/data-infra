@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: number_of_non_revenue_vehicles_vs_gtfs_service_hours___full_reporters___05_23_25
+    label: Number of Non-Revenue vehicles vs GTFS service hours - Full Reporters -
+      05/23/25
+    description: '### Visualization: Scatter
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3752__
+
+
+      Created On: __2025-05-23T22:28:08.862615Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3752
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.770'
+        last_used_at: '2025-05-23T22:40:56.057028Z'

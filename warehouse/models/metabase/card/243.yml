@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_realtime_urls
+    label: Number of Realtime URLs
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __243__
+
+
+      Created On: __2021-12-21T18:49:16.500008Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/243
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: __of_trips_with_tu_data_by_route_full_name__last_month__1
+    label: '% of trips with TU data by Route Full Name (last month)'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1458__
+
+
+      Created On: __2023-07-18T21:37:21.917077Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1458
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.315'
+        last_used_at: '2025-07-23T19:42:08.659522Z'

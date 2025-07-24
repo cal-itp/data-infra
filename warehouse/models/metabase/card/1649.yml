@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: exercise_5__what_percent_of_guideline_checks_are_passing_and_failing_each_day_
+    label: 'Exercise 5: What percent of guideline checks are passing and failing each
+      day?'
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1649__
+
+
+      Created On: __2023-08-28T23:07:47.573414Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1649
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.843'
+        last_used_at: '2025-07-10T21:17:05.993485Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: cumulative_estimated_cost_by_dbt_node__top_50_nodes_
+    label: Cumulative Estimated Cost by dbt Node (Top 50 Nodes)
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __748__
+
+
+      Created On: __2023-01-19T21:58:32.164565Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/748
+    maturity: medium
+    owner:
+      name: Soren Spicknall
+      email: soren.s@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.735'
+        last_used_at: '2024-10-21T17:02:39.15153Z'

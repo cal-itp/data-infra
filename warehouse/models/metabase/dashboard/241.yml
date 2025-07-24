@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: ntd_data_by_entity__2022__
+    label: NTD Data by Entity (2022+)
+    description: '### Dashboard Cards: 143
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __241__
+
+
+      Created On: __2024-11-25T16:45:05.577929Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/241
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

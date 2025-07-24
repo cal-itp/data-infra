@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: gtfs_schedule_fact_day_of_week_service_monthly_comparisons__filtered_by_calitp_itp__metric_year__and_metric_month__sorted_by_metric_month_descending
+    label: Gtfs Schedule Fact Day Of Week Service Monthly Comparisons, Filtered by
+      Calitp Itp, Metric Year, and Metric Month, Sorted by Metric Month descending
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __360__
+
+
+      Created On: __2022-03-28T15:25:27.766155Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/360
+    maturity: medium
+    owner:
+      name: Natalya Diaz
+      email: natalya.d@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

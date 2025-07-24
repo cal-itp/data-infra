@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: failed_checks__organization_
+    label: Failed Checks (Organization)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __645__
+
+
+      Created On: __2023-01-03T19:02:52.304319Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/645
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.721'
+        last_used_at: '2025-07-22T18:07:41.259111Z'

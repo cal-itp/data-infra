@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: pvvta_schedule_feed_versions
+    label: PVVTA Schedule Feed Versions
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3201__
+
+
+      Created On: __2024-11-13T22:59:14.733555Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3201
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.466'
+        last_used_at: '2025-07-16T23:15:25.764579Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_unique_riders_receiving_adjusted_price_rides__grouped_by_month_6
+    label: Number of Unique Riders Receiving Adjusted-Price Rides, Grouped by Month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1901__
+
+
+      Created On: __2023-11-06T16:24:11.821219Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1901
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.292'
+        last_used_at: '2025-06-10T15:13:44.757351Z'

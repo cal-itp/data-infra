@@ -1,0 +1,34 @@
+version: 2
+exposures:
+  - name: percent_of_riders_receiving_fare_adjustments_per_month__grouped_by_adjustment_type
+    label: Percent of Riders receiving Fare Adjustments per Month, grouped by Adjustment
+      Type
+    description: "### Visualization: Bar\n\nNo description provided in Metabase\n\n\
+      #### Query\n\n```\nWITH\nrides_with_adjustments AS (\n    SELECT\n        datetime_trunc(`views.payments_rides`.`transaction_date_time_pacific`,\
+      \ month) AS `transaction_date_time_pacific`,\n        `views.payments_rides`.`adjustment_description`,\n\
+      \        count(distinct `views.payments_rides`.`principal_customer_id`) AS `count`\n\
+      \    FROM `cal-itp-data-infra.views.payments_rides` AS `views.payments_rides`\n\
+      \    WHERE (`views.payments_rides`.`adjustment_id` IS NOT NULL\n        AND\
+      \ (`views.payments_rides`.`adjustment_id` <> ''\n        OR `views.payments_rides`.`adjustment_id`\
+      \ IS NULL))\n        [[AND (participant_id)]]\n        [[AND (transaction_date_time_pacific)]]\n\
+      \    GROUP BY `adjustment_description`, `transaction_date_time_pacific`\n),\n\
+      rides AS (\n    SELECT\n        datetime_trunc(`views.payments_rides`.`transaction_date_time_pacific`,\
+      \ month) AS `transaction_date_time_pacific`,\n        count(distinct `views.payments_rides`.`principal_customer_id`)\
+      \ AS `count`\n    FROM `cal-itp-data-infra.views.payments_rides` AS `views.payments_rides`\n\
+      \    WHERE true\n        [[AND (participant_id)]]\n        [[AND (transaction_date_time_pacific)]]\n\
+      \    GROUP BY `transaction_date_time_pacific`\n)\nSELECT\n    `transaction_date_time_pacific`,\n\
+      \    `adjustment_description`,\n    100.0 * rides_with_adjustments.count / rides.count\
+      \ AS `percent`\nFROM rides\nJOIN rides_with_adjustments USING (`transaction_date_time_pacific`)\n\
+      ORDER BY `adjustment_description` ASC\n```\n\n#### Metadata\n\nMetabase ID:\
+      \ __260__\n\nCreated On: __2022-01-28T20:35:21.736519Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/260
+    maturity: medium
+    owner:
+      name: Mjumbe Poe
+      email: mjumbe.p@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.054'
+        last_used_at: '2025-02-28T19:54:58.582304Z'

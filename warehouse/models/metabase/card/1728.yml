@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: service_area_density_table__filtered_
+    label: Service Area Density Table (Filtered)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1728__
+
+
+      Created On: __2023-09-22T22:02:37.499593Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1728
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:07.036'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

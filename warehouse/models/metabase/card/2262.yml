@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: v1__slow__daily_feeds_by_expiration_status
+    label: v1 (slow) Daily feeds by expiration status
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2262__
+
+
+      Created On: __2024-05-07T01:45:57.353952Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2262
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

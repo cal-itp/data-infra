@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: fct_monthly_routes___dim_providers_gtfs_data__no_dates__all_agencies
+    label: fct monthly routes & dim providers gtfs data, no dates, all agencies
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1957__
+
+
+      Created On: __2023-11-17T18:21:54.319758Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1957
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:06.625'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

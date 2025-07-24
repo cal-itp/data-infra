@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: last_day_in_dataset_7
+    label: Last day in dataset
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2089__
+
+
+      Created On: __2024-01-15T16:47:20.211309Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2089
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.865'
+        last_used_at: '2025-04-26T14:54:13.573055Z'

@@ -1,0 +1,30 @@
+version: 2
+exposures:
+  - name: current_trillium_services_feeds_with_fares_v2
+    label: Current Trillium Services/Feeds with Fares v2
+    description: "### Visualization: Table\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nSELECT DISTINCT `Dim_Provider_Gtfs_Data___Gtfs_Dataset_Key`.`organization_name`\
+      \ AS `Organization_name`,\n   `Dim_Provider_Gtfs_Data___Gtfs_Dataset_Key`.`service_name`\
+      \ AS `Srvice_name`,\n   `Dim_Provider_Gtfs_Data___Gtfs_Dataset_Key`.`schedule_gtfs_dataset_name`\
+      \ AS `Schedule_GTFS_Dataset_name`,\n   `Dim_Schedule_Feeds___Feed_Key`.`_valid_from`\
+      \ AS `Valid_from`\nFROM `mart_gtfs_quality.fct_schedule_feed_files`\nLEFT JOIN\
+      \ `mart_transit_database.dim_provider_gtfs_data` `Dim_Provider_Gtfs_Data___Gtfs_Dataset_Key`\
+      \ ON `mart_gtfs_quality.fct_schedule_feed_files`.`gtfs_dataset_key` = `Dim_Provider_Gtfs_Data___Gtfs_Dataset_Key`.`schedule_gtfs_dataset_key`\
+      \ LEFT JOIN `mart_gtfs.dim_schedule_feeds` `Dim_Schedule_Feeds___Feed_Key` ON\
+      \ `mart_gtfs_quality.fct_schedule_feed_files`.`feed_key` = `Dim_Schedule_Feeds___Feed_Key`.`key`\n\
+      WHERE (`mart_gtfs_quality.fct_schedule_feed_files`.`gtfs_filename` = 'fare_leg_rules'\
+      \ AND\n   (lower(`mart_gtfs_quality.fct_schedule_feed_files`.`string_url`) like\
+      \ '%trillium%') AND\n   `Dim_Schedule_Feeds___Feed_Key`.`_is_current` = TRUE)\n\
+      ORDER BY `Organization_name` ASC,\n   `Service_name` ASC\nLIMIT 1048575\n```\n\
+      \n#### Metadata\n\nMetabase ID: __751__\n\nCreated On: __2023-01-23T20:23:55.721172Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/751
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.677'
+        last_used_at: '2025-03-06T19:55:40.188703Z'

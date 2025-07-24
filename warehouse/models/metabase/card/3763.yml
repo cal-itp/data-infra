@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: wip__cal_itp_benefits_failures_by_type_month
+    label: 'WIP: Cal-ITP Benefits failures by type/month'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3763__
+
+
+      Created On: __2025-06-13T18:48:25.102348Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3763
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.532'
+        last_used_at: '2025-06-13T19:09:55.62444Z'

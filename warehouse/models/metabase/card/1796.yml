@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: number_of_organizations_visible_on_trip_planners
+    label: Number of Organizations Visible on Trip Planners
+    description: '### Visualization: Table
+
+
+      How many organizations GTFS feeds are discoverable on Trip Planners like Google
+      Maps, Transit App, etc.?
+
+
+      #### Metadata
+
+
+      Metabase ID: __1796__
+
+
+      Created On: __2023-10-04T18:33:42.243555Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1796
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:08.080'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

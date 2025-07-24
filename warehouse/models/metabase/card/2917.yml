@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: chargebacks____of_trx____per_month_8
+    label: Chargebacks (# of trx) - per month
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2917__
+
+
+      Created On: __2024-08-23T16:44:55.653909Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2917
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.675'
+        last_used_at: '2025-04-23T13:27:52.59008Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: annual_demand_response_unlinked_passenger_trips
+    label: Annual Demand-Response Unlinked Passenger Trips
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3408__
+
+
+      Created On: __2025-02-14T00:38:11.405834Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3408
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.530'
+        last_used_at: '2025-07-09T05:08:32.971364Z'

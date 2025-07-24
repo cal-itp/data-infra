@@ -1,0 +1,39 @@
+version: 2
+exposures:
+  - name: trips_made_with_prepaid_cards___by_issuer_bank_name
+    label: Trips made with prepaid cards - by issuer bank name
+    description: "### Visualization: Row\n\nNo description provided in Metabase\n\n\
+      #### Query\n\n```\nSELECT\r\n  `source`.`participant_id` AS `participant_id`,\r\
+      \n  DATE_TRUNC(`source`.`transaction_date_pacific`, month) AS `transaction_date_pacific`,\r\
+      \n  `source`.`bin` AS `bin`, -- Include the BIN in the SELECT clause\r\n  `Payments_Mastercard_Visa_Usa_Prepaid_Bin6_List___Bin`.`NETWORK`\
+      \ AS `network`,\r\n  `Payments_Mastercard_Visa_Usa_Prepaid_Bin6_List___Bin`.`COMPANY_NAME`\
+      \ AS `prepaid_issuer_name`,\r\n  SUM(`source`.`count`) AS `count_of_trips`\r\
+      \nFROM\r\n  (\r\n    SELECT\r\n      `mart_payments.fct_payments_rides_v2`.`participant_id`\
+      \ AS `participant_id`,\r\n      `mart_payments.fct_payments_rides_v2`.`bin`\
+      \ AS `bin`,\r\n      DATE_TRUNC(\r\n        `mart_payments.fct_payments_rides_v2`.`transaction_date_pacific`,\r\
+      \n        month\r\n      ) AS `transaction_date_pacific`,\r\n      COUNT(*)\
+      \ AS `count`\r\n    FROM\r\n      `mart_payments.fct_payments_rides_v2`\r\n\
+      \    WHERE\r\n      `mart_payments.fct_payments_rides_v2`.`transaction_date_time_pacific`\
+      \ >= DATETIME \"2023-01-01 00:00:00\"\r\n    GROUP BY\r\n      `participant_id`,\r\
+      \n      `bin`,\r\n      `transaction_date_pacific`\r\n    ORDER BY\r\n     \
+      \ `participant_id` ASC,\r\n      `bin` ASC,\r\n      `transaction_date_pacific`\
+      \ ASC\r\n  ) AS `source`\r\nLEFT JOIN `uploaded_data.payments__mastercard_visa_USA_prepaid_BIN6_list`\
+      \ AS `Payments_Mastercard_Visa_Usa_Prepaid_Bin6_List___Bin`\r\nON `source`.`bin`\
+      \ = CAST(`Payments_Mastercard_Visa_Usa_Prepaid_Bin6_List___Bin`.`BIN6` AS STRING)\r\
+      \nGROUP BY\r\n  `participant_id`,\r\n  `transaction_date_pacific`,\r\n  `bin`,\
+      \ -- Include the BIN in the GROUP BY clause\r\n  `network`,\r\n  `prepaid_issuer_name`\r\
+      \nORDER BY\r\n  `participant_id` ASC,\r\n  `transaction_date_pacific` ASC,\r\
+      \n  `bin` ASC, -- Optional: Add BIN to the ORDER BY clause for clarity\r\n \
+      \ `network` ASC,\r\n  `prepaid_issuer_name` ASC;\r\n```\n\n#### Metadata\n\n\
+      Metabase ID: __3236__\n\nCreated On: __2024-12-04T19:36:38.64846Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/3236
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.003'
+        last_used_at: '2025-07-09T23:59:48.986995Z'

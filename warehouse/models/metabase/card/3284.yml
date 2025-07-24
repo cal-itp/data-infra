@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: voms_pt__purchased__and_voms_do__directly_operated__by_year
+    label: VOMS PT (purchased) and VOMS DO (directly operated) by Year
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3284__
+
+
+      Created On: __2024-12-11T18:28:41.668563Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3284
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.010'
+        last_used_at: '2025-03-07T22:00:59.372916Z'

@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: slack_dashboard
+    label: Slack Dashboard
+    description: '### Dashboard Cards: 1
+
+
+      Used for notifications into Slack
+
+
+      #### Metadata
+
+
+      Metabase ID: __173__
+
+
+      Created On: __2024-01-18T23:31:51.971577Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/173
+    maturity: medium
+    owner:
+      name: Kegan Maher
+      email: kegan@compiler.la
+    depends_on: []

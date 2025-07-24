@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: __of_trips_with_vehicle_positions__grouped_by_trip__route_names
+    label: '% of trips with Vehicle Positions, Grouped by Trip, Route Names'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1321__
+
+
+      Created On: __2023-04-28T23:23:02.834512Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1321
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

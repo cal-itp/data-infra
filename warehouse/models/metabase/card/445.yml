@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: agency_url
+    label: Agency URL
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __445__
+
+
+      Created On: __2022-08-23T22:54:10.932101Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/445
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

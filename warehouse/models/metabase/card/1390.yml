@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_gtfs_schedule_feeds
+    label: Number of GTFS Schedule Feeds
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1390__
+
+
+      Created On: __2023-06-22T14:53:15.006845Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1390
+    maturity: medium
+    owner:
+      name: Soren Spicknall
+      email: soren.s@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.552'
+        last_used_at: '2025-06-14T23:31:38.923286Z'

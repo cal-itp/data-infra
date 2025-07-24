@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: rabbit_hole__all_organizations_that_are_a_company_not_operating_publicly
+    label: 'Rabbit Hole: All Organizations that are a Company not operating Publicly'
+    description: '### Visualization: Table
+
+
+      propose: new column with "operates transit or service" to distinguish vendors  from
+      transit organizations and services
+
+
+      #### Metadata
+
+
+      Metabase ID: __1843__
+
+
+      Created On: __2023-10-26T22:45:09.002341Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1843
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.638'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

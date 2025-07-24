@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: count_of_aggregated_micropayments__journeys____last_12_months
+    label: Count of aggregated micropayments (journeys) - Last 12 months
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2377__
+
+
+      Created On: __2024-06-20T21:11:29.16891Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2377
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.963'
+        last_used_at: '2025-05-16T19:19:31.454342Z'

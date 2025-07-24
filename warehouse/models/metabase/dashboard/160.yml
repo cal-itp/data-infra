@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: elavon___lp_comparison_v2
+    label: Elavon / LP Comparison v2
+    description: '### Dashboard Cards: 27
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __160__
+
+
+      Created On: __2023-10-24T14:59:15.749862Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/160
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []

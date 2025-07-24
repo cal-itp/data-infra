@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: long_beach_scheduled_trips___last_90_days
+    label: Long Beach Scheduled Trips - last 90 days
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2390__
+
+
+      Created On: __2024-06-27T20:38:02.065481Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2390
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.790'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

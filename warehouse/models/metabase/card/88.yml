@@ -1,0 +1,25 @@
+version: 2
+exposures:
+  - name: outcomes____valid_gtfs_schedule_feeds
+    label: Outcomes || Valid GTFS Schedule Feeds
+    description: "### Visualization: Line\n\nPercentage of all providers where the\
+      \ feed_start_date is in the past and feed_end_date is in the future\n\n####\
+      \ Query\n\n```\nWITH\ndaily_feeds_enh AS (\n    SELECT *\n    FROM `views.gtfs_schedule_fact_daily_feeds`\n\
+      \    LEFT JOIN `views.gtfs_schedule_dim_feeds` USING(feed_key)\n),\ndaily_feed_counts\
+      \ AS (\n    SELECT \n        date, \n        COUNT(*) as n_total_feeds\n   \
+      \ FROM daily_feeds_enh\n    GROUP BY date\n),\ndaily_metrics AS (\n    SELECT\
+      \ \n        date,\n        COUNT(*) AS n_valid_feeds\n    FROM daily_feeds_enh\n\
+      \    WHERE feed_start_date < date AND feed_end_date > date\n    GROUP BY date\n\
+      )\nSELECT *, n_valid_feeds/n_total_feeds as pct_valid_feeds FROM daily_metrics\n\
+      JOIN daily_feed_counts\nUSING (date)\n```\n\n#### Metadata\n\nMetabase ID: __88__\n\
+      \nCreated On: __2021-08-25T14:17:48.577318Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/88
+    maturity: medium
+    owner:
+      name: Natalya Diaz
+      email: natalya.d@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2025-06-18T04:17:46.727152Z'

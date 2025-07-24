@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_number_of_non_revenue_vehicles___frequency_table_less_than_50
+    label: Total number of Non-Revenue vehicles - Frequency Table less than 50
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3699__
+
+
+      Created On: __2025-04-28T23:12:16.652458Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3699
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.429'
+        last_used_at: '2025-05-23T22:40:55.571517Z'

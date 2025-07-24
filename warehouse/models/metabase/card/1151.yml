@@ -1,0 +1,66 @@
+version: 2
+exposures:
+  - name: total_passing_up_to_dateness
+    label: Total Passing Up-to-dateness
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Query
+
+
+      ```
+
+      SELECT datetime_trunc(`source`.`date`, day) AS `date`, sum(Numeric_pass_fail__1___pass_)
+      AS `Total Passing`
+
+      FROM (SELECT `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`key`
+      AS `key`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`date`
+      AS `date`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`organization_name`
+      AS `organization_name`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`feature`
+      AS `feature`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`check`
+      AS `check`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`status`
+      AS `status`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`organization_key`
+      AS `organization_key`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`service_names_included_array`
+      AS `service_names_included_array`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`gtfs_dataset_names_included_array`
+      AS `gtfs_dataset_names_included_array`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`base64_urls_included_array`
+      AS `base64_urls_included_array`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`service_keys_included_array`
+      AS `service_keys_included_array`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`gtfs_service_data_keys_included_array`
+      AS `gtfs_service_data_keys_included_array`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`gtfs_dataset_keys_included_array`
+      AS `gtfs_dataset_keys_included_array`, `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`schedule_feed_keys_included_array`
+      AS `schedule_feed_keys_included_array`, CASE WHEN `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`status`
+      = ''FAIL'' THEN 0 ELSE 1 END AS `Numeric_pass_fail__1___pass_`, `Dim_Organizations`.`key`
+      AS `Dim_Organizations__key` FROM `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`
+
+      LEFT JOIN `mart_transit_database.dim_organizations` `Dim_Organizations` ON `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`organization_key`
+      = `Dim_Organizations`.`key`) `source`
+
+      WHERE `source`.`feature` = ''Up-to-Dateness''
+
+      GROUP BY `date`
+
+      ORDER BY `date` ASC
+
+      ```
+
+
+      #### Metadata
+
+
+      Metabase ID: __1151__
+
+
+      Created On: __2023-02-23T04:29:55.751115Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1151
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.718'
+        last_used_at: '2025-03-11T22:41:48.659654Z'

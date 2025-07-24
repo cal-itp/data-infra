@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sum_by_charge_type_description____mst
+    label: Sum by Charge Type Description -- MST
+    description: '### Visualization: Row
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1312__
+
+
+      Created On: __2023-04-25T02:05:03.965299Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1312
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.785'
+        last_used_at: '2025-03-19T15:54:41.055777Z'

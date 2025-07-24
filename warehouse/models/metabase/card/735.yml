@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: freshness_checks___sacrt
+    label: Freshness Checks - SACRT
+    description: "### Visualization: Table\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nwith max_recency as (\n    select \n        participant_id,\
+      \ \n        max(cast(transaction_date_time_pacific as TIMESTAMP)) as max_timestamp\n\
+      \    from\n        `cal-itp-data-infra`.`mart_payments`.`fct_payments_rides_v2`\n\
+      \    where\n    -- to exclude erroneous future dates\n    cast(transaction_date_time_pacific\
+      \ as TIMESTAMP) <= timestamp(datetime(current_timestamp(), 'America/Los_Angeles'))\n\
+      \        AND participant_id = 'sacrt'\n    GROUP BY participant_id\n)\nselect\n\
+      \    *\nfrom\n    max_recency\nwhere\n-- if the row_condition excludes all rows,\
+      \ we need to compare against a default date\n-- to avoid false negatives\ncoalesce(max_timestamp,\
+      \ cast('1970-01-01' as TIMESTAMP)) <\n        cast(\n            datetime_add(\n\
+      \            cast( timestamp(datetime(current_timestamp(), 'America/Los_Angeles'))\
+      \ as datetime),\n        interval -3 day\n        ) as TIMESTAMP)\n```\n\n####\
+      \ Metadata\n\nMetabase ID: __735__\n\nCreated On: __2023-01-17T23:07:35.749454Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/735
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.953'
+        last_used_at: '2025-07-23T14:00:00.163709Z'

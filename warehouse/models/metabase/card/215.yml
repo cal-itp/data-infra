@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: 1__number_of_routes_for_a_given_agency_over_time
+    label: 1. Number of Routes for a Given Agency Over Time
+    description: '### Visualization: Combo
+
+
+      Example #1 in ''Tutorial- Querying the Data Warehouse''
+
+
+      #### Metadata
+
+
+      Metabase ID: __215__
+
+
+      Created On: __2021-12-02T21:41:20.614559Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/215
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

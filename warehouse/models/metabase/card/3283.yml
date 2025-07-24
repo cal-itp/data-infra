@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: vrm__vrh__upt__voms_over_time
+    label: VRM, VRH, UPT, VOMS over Time
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3283__
+
+
+      Created On: __2024-12-11T18:04:52.979585Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3283
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.550'
+        last_used_at: '2025-07-09T05:08:32.889757Z'

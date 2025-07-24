@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: deprecated__number_of_non_revenue_vehicles_vs_ntd_ridership___full_reporters
+    label: 'DEPRECATED: Number of Non-Revenue vehicles vs NTD ridership - Full Reporters'
+    description: '### Visualization: Scatter
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3591__
+
+
+      Created On: __2025-04-22T23:04:49.382851Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3591
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.420'
+        last_used_at: '2025-05-23T22:32:21.786277Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: net_sales__payments_1
+    label: 'Net Sales: Payments'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2211__
+
+
+      Created On: __2024-03-21T18:28:46.198015Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2211
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.052'
+        last_used_at: '2025-02-20T18:48:26.354131Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: anaheim_fct_elavon_transactions_test
+    label: anaheim_Fct Elavon Transactions test
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3563__
+
+
+      Created On: __2025-04-15T16:00:25.542321Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3563
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2025-04-15T16:00:25.542321Z'

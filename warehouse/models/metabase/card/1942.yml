@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: other_fees_as___of_net_sales
+    label: Other Fees as % of Net Sales
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1942__
+
+
+      Created On: __2023-11-13T12:40:37.117413Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1942
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.766'
+        last_used_at: '2025-05-28T16:42:17.205988Z'

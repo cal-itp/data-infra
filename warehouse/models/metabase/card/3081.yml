@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_unique_riders
+    label: Number of Unique Riders
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3081__
+
+
+      Created On: __2024-09-10T11:10:33.259418Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3081
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.818'
+        last_used_at: '2025-05-09T17:24:38.223989Z'

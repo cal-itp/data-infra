@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: fct_transit_data_quality_issues_with_duplicate_entries
+    label: fct_transit_data_quality_issues with duplicate entries
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2516__
+
+
+      Created On: __2024-07-26T23:51:37.36969Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2516
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.611'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

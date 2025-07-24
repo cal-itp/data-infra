@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_occurrence_of_each_charge_type_per_month
+    label: Number of occurrence of each charge type per month
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2087__
+
+
+      Created On: __2024-01-14T16:39:34.753604Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2087
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.703'
+        last_used_at: '2025-07-14T17:23:05.244399Z'

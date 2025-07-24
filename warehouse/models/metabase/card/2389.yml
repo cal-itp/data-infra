@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: b_line_scheduled_trips___last_90_days
+    label: B-Line Scheduled Trips - last 90 days
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2389__
+
+
+      Created On: __2024-06-27T20:11:58.776194Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2389
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.741'
+        last_used_at: '2025-01-29T21:27:03.105834Z'

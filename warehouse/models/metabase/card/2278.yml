@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: percent_of_services_with_complete_gtfs_rt_datasets_by_date
+    label: Percent of Services with Complete GTFS-RT datasets by date
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2278__
+
+
+      Created On: __2024-05-15T18:39:13.769041Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2278
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.979'
+        last_used_at: '2025-06-30T17:02:46.625237Z'

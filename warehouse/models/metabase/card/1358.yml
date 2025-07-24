@@ -1,0 +1,30 @@
+version: 2
+exposures:
+  - name: total_estimated_query_cost_by_reference_table__metabase_only_
+    label: Total Estimated Query Cost by Reference Table (Metabase only)
+    description: '### Visualization: Bar
+
+
+      Ranked sum of the estimated cost of BigQuery operations referencing a given
+      table. The cost isn''t necessarily solely due to that specific table; the table
+      in question is only one part of a larger query.
+
+
+      #### Metadata
+
+
+      Metabase ID: __1358__
+
+
+      Created On: __2023-05-15T13:59:47.582279Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1358
+    maturity: medium
+    owner:
+      name: Andrew Vaccaro
+      email: andrew.v@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.817'
+        last_used_at: '2024-10-21T17:02:39.015216Z'

@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: transit_organization_data_quality_overview
+    label: Transit Organization Data Quality Overview
+    description: '### Dashboard Cards: 5
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __103__
+
+
+      Created On: __2022-12-26T20:04:52.164874Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/103
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: services_missing_at_least_one_gtfs_realtime_feed
+    label: Services missing at least one GTFS Realtime feed
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3415__
+
+
+      Created On: __2025-02-15T00:48:37.290414Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3415
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.614'
+        last_used_at: '2025-07-23T17:23:52.694511Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_routes
+    label: Number of Routes
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2911__
+
+
+      Created On: __2024-08-23T16:22:03.292308Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2911
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.732'
+        last_used_at: '2025-07-23T17:23:13.519403Z'

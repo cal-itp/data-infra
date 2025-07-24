@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: agencies_with_5311_funding_with_total_voms
+    label: Agencies with 5311 funding with Total VOMS
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1713__
+
+
+      Created On: __2023-09-16T00:50:20.298123Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1713
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.115'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

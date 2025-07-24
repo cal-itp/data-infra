@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: draft_dashboard_transit_impacts
+    label: Draft Dashboard Transit Impacts
+    description: '### Dashboard Cards: 13
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __108__
+
+
+      Created On: __2023-01-04T23:11:24.046383Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/108
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []

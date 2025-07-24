@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: most_common_files_included_in_gtfs_schedule_data
+    label: Most Common Files included in GTFS Schedule Data
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3287__
+
+
+      Created On: __2024-12-12T01:25:12.855685Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3287
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.532'
+        last_used_at: '2025-07-23T17:23:13.519403Z'

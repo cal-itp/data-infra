@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: _ncc__adjustments
+    label: (NCC) Adjustments
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3704__
+
+
+      Created On: __2025-04-29T09:58:52.282777Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3704
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.831'
+        last_used_at: '2025-07-23T18:31:06.894397Z'

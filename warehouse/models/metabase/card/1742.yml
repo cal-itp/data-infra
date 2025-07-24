@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_organizations_undergoing_guideline_checks__filtered_
+    label: Number of Organizations Undergoing Guideline Checks (Filtered)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1742__
+
+
+      Created On: __2023-09-22T22:02:37.499593Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1742
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.907'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

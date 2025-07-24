@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_cancelled_trips_by_month_and_agency
+    label: Number of cancelled trips by month and agency
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3168__
+
+
+      Created On: __2024-10-24T20:18:47.316401Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3168
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.826'
+        last_used_at: '2025-07-23T17:23:13.643039Z'

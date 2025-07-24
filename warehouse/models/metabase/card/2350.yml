@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: list_of_fixed_route_or_demand_response_transit_agencies
+    label: List of Fixed-Route or Demand-Response Transit Agencies
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2350__
+
+
+      Created On: __2024-06-10T23:46:18.661103Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2350
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.632'
+        last_used_at: '2025-07-23T19:29:19.536006Z'

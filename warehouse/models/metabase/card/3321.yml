@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: agency_vehicles_age_distribution
+    label: Agency Vehicles Age Distribution
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3321__
+
+
+      Created On: __2025-01-13T17:44:54.160921Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3321
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.622'
+        last_used_at: '2025-07-09T05:08:32.982988Z'

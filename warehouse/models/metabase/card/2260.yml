@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: max_feed_end_date
+    label: Max Feed End Date
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2260__
+
+
+      Created On: __2024-05-07T00:36:46.384267Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2260
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.326'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

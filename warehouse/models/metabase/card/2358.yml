@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: vehicles_operating_in_maximum_service__voms__by_year
+    label: Vehicles Operating in Maximum Service (VOMS) by Year
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2358__
+
+
+      Created On: __2024-06-11T23:48:22.379185Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2358
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.066'
+        last_used_at: '2025-03-07T21:58:37.702431Z'

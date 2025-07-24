@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: elavon_net_billing_vs__deposits__doesn_t_include_adjustments_or_chargebacks_____duplicate
+    label: Elavon Net Billing vs. Deposits (Doesn't Include Adjustments or Chargebacks)
+      -- Duplicate
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2019__
+
+
+      Created On: __2023-12-06T23:29:12.171809Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2019
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.570'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

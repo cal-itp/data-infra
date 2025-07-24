@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: exercise_3___which_three_vendors_have_the_most_organizations_using_them_
+    label: 'Exercise 3:  Which three vendors have the most organizations using them?'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1652__
+
+
+      Created On: __2023-08-29T20:38:26.215498Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1652
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.620'
+        last_used_at: '2025-07-23T22:36:22.064029Z'

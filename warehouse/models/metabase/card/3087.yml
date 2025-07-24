@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_journeys_with_more_than_ride_by_agency
+    label: Number of journeys with more than ride by agency
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3087__
+
+
+      Created On: __2024-09-11T13:38:03.50128Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3087
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.518'
+        last_used_at: '2025-06-11T15:46:37.946866Z'

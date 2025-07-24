@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: gtfs_guidelines__timeseries_
+    label: GTFS Guidelines (Timeseries)
+    description: '### Dashboard Cards: 13
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __27__
+
+
+      Created On: __2021-10-26T19:30:33.865754Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/27
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

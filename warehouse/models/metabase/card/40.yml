@@ -1,0 +1,39 @@
+version: 2
+exposures:
+  - name: lifetime_trips_by_scheme
+    label: Lifetime Trips by Scheme
+    description: '### Visualization: Pie
+
+
+      No description provided in Metabase
+
+
+      #### Query
+
+
+      ```
+
+      SELECT card_scheme, COUNT(card_scheme) FROM `cal-itp-data-infra.views.mst_taps`
+      WHERE charge_type = "complete_variable_fare" OR charge_type = "flat_fare" GROUP
+      BY card_scheme
+
+      ```
+
+
+      #### Metadata
+
+
+      Metabase ID: __40__
+
+
+      Created On: __2021-07-21T22:31:59.991104Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/40
+    maturity: medium
+    owner:
+      name: Hunter Owens
+      email: hunter.owens@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

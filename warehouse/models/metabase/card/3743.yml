@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: daily_littlepay_settlements_report
+    label: Daily LittlePay Settlements Report
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3743__
+
+
+      Created On: __2025-05-20T16:27:08.563386Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3743
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.776'
+        last_used_at: '2025-07-23T23:00:00.261847Z'

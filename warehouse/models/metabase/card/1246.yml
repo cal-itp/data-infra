@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: identifying_spikes_in_checks__specific_check_look_up
+    label: 'Identifying spikes in checks: Specific check look up'
+    description: '### Visualization: Line
+
+
+      filter by feature and check to see what is happening with a specific check
+
+
+      #### Metadata
+
+
+      Metabase ID: __1246__
+
+
+      Created On: __2023-03-30T19:46:34.469222Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1246
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

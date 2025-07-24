@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: gtfs_rt_vehicle_positions_completeness__last_14_days_
+    label: GTFS-RT Vehicle Positions Completeness (last 14 days)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1451__
+
+
+      Created On: __2023-07-18T16:59:53.016939Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1451
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.321'
+        last_used_at: '2025-07-23T19:42:40.42058Z'

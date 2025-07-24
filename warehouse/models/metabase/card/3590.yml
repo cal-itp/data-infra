@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_number_of_non_revenue_vehicles
+    label: Total number of Non-Revenue vehicles
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3590__
+
+
+      Created On: __2025-04-22T22:59:32.610074Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3590
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.411'
+        last_used_at: '2025-05-23T22:40:55.345364Z'

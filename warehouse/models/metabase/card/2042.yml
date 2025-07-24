@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: fct_payments_rides_v2s__sum_of_nominal_amount__grouped_by_transaction_date_time_pacific__month___filtered_by_agency_name
+    label: Fct Payments Rides V2s, Sum of Nominal Amount, Grouped by Transaction Date
+      Time Pacific (month), Filtered by Agency Name
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2042__
+
+
+      Created On: __2023-12-20T20:09:56.125762Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2042
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.767'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

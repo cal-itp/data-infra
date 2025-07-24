@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: ex_10_what_are_the_different_customer_funding_sources_used_by_riders_of_mst__and_how_many_riders_use_each_source_on_a_monthly_basis
+    label: ex_10_What are the different customer funding sources used by riders of
+      MST, and how many riders use each source on a monthly basis
+    description: '### Visualization: Combo
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3431__
+
+
+      Created On: __2025-02-27T18:57:25.142475Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3431
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.024'
+        last_used_at: '2025-03-13T00:22:54.99578Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: which_cleaned_micropayments_have_more_than_one_adjustment_applied_
+    label: Which cleaned micropayments have more than one adjustment applied?
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __181__
+
+
+      Created On: __2021-11-16T16:37:00.012656Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/181
+    maturity: medium
+    owner:
+      name: Mjumbe Poe
+      email: mjumbe.p@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

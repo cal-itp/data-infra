@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: raw_data___chargebacks
+    label: Raw Data - Chargebacks
+    description: '### Visualization: Table
+
+
+      chargeback transaction details (without any further tables) - based on Elavon
+      Chargebacks table
+
+
+      #### Metadata
+
+
+      Metabase ID: __2187__
+
+
+      Created On: __2024-02-21T23:36:34.048631Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2187
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.885'
+        last_used_at: '2024-10-31T21:41:03.35568Z'

@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: cal_itp_benefits_enrollments__cumulative_total_
+    label: Cal-ITP Benefits enrollments (cumulative total)
+    description: '### Visualization: Progress
+
+
+      Successful benefit enrollments using the Cal-ITP Benefits app across all enrollment
+      pathways and all California transit agencies since launching the service.
+
+
+      #### Metadata
+
+
+      Metabase ID: __2041__
+
+
+      Created On: __2023-12-20T18:53:24.332698Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2041
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.518'
+        last_used_at: '2025-07-23T16:58:49.310303Z'

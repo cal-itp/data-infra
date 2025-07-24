@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 2__number_of_services_by_ct_district_v1
+    label: '2: Number of Services by CT District v1'
+    description: '### Visualization: Bar
+
+
+      hfhfkdahf
+
+
+      #### Metadata
+
+
+      Metabase ID: __1395__
+
+
+      Created On: __2023-06-29T22:44:47.653137Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1395
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.655'
+        last_used_at: '2025-03-14T17:32:42.010886Z'

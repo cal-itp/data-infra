@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex_5_what_percent_of_guideline_checks_are_passing_and_failing_each_day_
+    label: ex_5_What percent of guideline checks are passing and failing each day?
+    description: '### Visualization: Object
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3426__
+
+
+      Created On: __2025-02-26T17:56:31.487254Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3426
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.636'
+        last_used_at: '2025-03-19T22:02:22.144932Z'

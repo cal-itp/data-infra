@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: refunds___requested_for_settlement
+    label: Refunds / Requested for settlement
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2530__
+
+
+      Created On: __2024-07-29T22:21:45.8201Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2530
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:03.936'
+        last_used_at: '2025-04-26T14:49:39.826819Z'

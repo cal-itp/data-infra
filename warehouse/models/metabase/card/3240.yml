@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: veteran_eligibility_checks
+    label: Veteran eligibility checks
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3240__
+
+
+      Created On: __2024-12-09T18:30:08.682176Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3240
+    maturity: medium
+    owner:
+      name: Kegan Maher
+      email: kegan@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.488'
+        last_used_at: '2024-12-09T21:45:57.588015Z'

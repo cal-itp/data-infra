@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: grouped_by_orgs_observed_gtfs_rt_schedule_relationship__last_3_months_
+    label: 'Grouped by Orgs Observed GTFS-RT Schedule Relationship, Last 3 Months '
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2469__
+
+
+      Created On: __2024-07-10T22:58:52.111659Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2469
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.695'
+        last_used_at: '2025-07-23T20:41:09.896971Z'

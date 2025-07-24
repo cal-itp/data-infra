@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex_n_what_proportion_of_trips_were_reported_canceled_by_the_end_of_the_trip_by_county_
+    label: ex_n_What proportion of trips were reported canceled by the end of the
+      trip by county?
+    description: '### Visualization: Map
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3461__
+
+
+      Created On: __2025-03-19T23:22:55.233084Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3461
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2025-03-19T23:22:55.233084Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: all_d7_agencies__with_ntd_id_
+    label: All D7 Agencies (with ntd_id)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3783__
+
+
+      Created On: __2025-07-10T20:47:06.816505Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3783
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.550'
+        last_used_at: '2025-07-18T16:24:51.997709Z'

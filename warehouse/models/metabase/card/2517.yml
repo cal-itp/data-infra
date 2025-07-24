@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: same_funding_source_v__id_used_at_different_agencies
+    label: Same Funding Source V. ID used at different agencies
+    description: '### Visualization: Pivot
+
+
+      FSVID has the same value across all agencies, therefore can be used to track
+      if the same card has been used at different transit agencies.
+
+
+      #### Metadata
+
+
+      Metabase ID: __2517__
+
+
+      Created On: __2024-07-29T09:55:59.601085Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2517
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.028'
+        last_used_at: '2024-09-23T14:47:40.781723Z'

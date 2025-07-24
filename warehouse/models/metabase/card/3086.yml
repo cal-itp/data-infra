@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: share_of_journeys_with_more_than_one_ride
+    label: Share of journeys with more than one ride
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3086__
+
+
+      Created On: __2024-09-11T13:20:39.708536Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3086
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.435'
+        last_used_at: '2025-06-11T15:46:37.590003Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: elavon_chargeback_transactions_6
+    label: Elavon Chargeback Transactions
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2146__
+
+
+      Created On: __2024-02-06T21:24:03.330533Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2146
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.883'
+        last_used_at: '2025-07-07T17:34:27.854909Z'

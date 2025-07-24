@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sum_of_elavon_fees____mst
+    label: Sum of Elavon Fees -- MST
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1300__
+
+
+      Created On: __2023-04-20T16:10:35.325205Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1300
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.611'
+        last_used_at: '2025-03-19T15:54:41.055777Z'

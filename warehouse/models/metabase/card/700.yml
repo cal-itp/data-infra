@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: line_chart___success_prop_by_feed
+    label: Line Chart - Success Prop By Feed
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __700__
+
+
+      Created On: __2023-01-10T15:29:55.041593Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/700
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.082'
+        last_used_at: '2025-06-13T23:26:34.401763Z'

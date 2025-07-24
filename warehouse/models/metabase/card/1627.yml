@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: chargebacks____of_trx_
+    label: Chargebacks (# of trx)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1627__
+
+
+      Created On: __2023-08-18T10:54:17.903777Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1627
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.916'
+        last_used_at: '2025-05-28T16:42:17.799512Z'

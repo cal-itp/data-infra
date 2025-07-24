@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_charges_and_fees__usd_
+    label: Total Charges and Fees (USD)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1630__
+
+
+      Created On: __2023-08-18T11:57:01.801893Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1630
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.934'
+        last_used_at: '2025-05-28T16:42:17.799512Z'

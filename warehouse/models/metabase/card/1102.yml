@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_organizations_undergoing_guideline_checks_by_day
+    label: Number of Organizations Undergoing Guideline Checks By Day
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1102__
+
+
+      Created On: __2023-02-15T20:50:46.508765Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1102
+    maturity: medium
+    owner:
+      name: Julia Ma
+      email: julia.ma@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.203'
+        last_used_at: '2025-04-02T21:31:46.896702Z'

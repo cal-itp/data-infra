@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: trillium_feeds_with_fares_v2
+    label: Trillium Feeds with Fares v2
+    description: '### Visualization: Line
+
+
+      Indicated by presence of fare_leg_rules.txt file.
+
+
+      #### Metadata
+
+
+      Metabase ID: __617__
+
+
+      Created On: __2022-12-22T18:33:45.689222Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/617
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.862'
+        last_used_at: '2024-11-05T21:36:09.913399Z'

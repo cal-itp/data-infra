@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sacrt_graph_of_discounted_transactions_1
+    label: SacRT graph of discounted transactions
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3417__
+
+
+      Created On: __2025-02-19T20:42:46.033509Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3417
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.840'
+        last_used_at: '2025-07-17T16:11:34.742433Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_trips_with_or_without_wheelchair_accessibility_data_2
+    label: Number of Trips with or without wheelchair accessibility data
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3033__
+
+
+      Created On: __2024-08-29T21:57:51.262235Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3033
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.051'
+        last_used_at: '2025-07-23T17:23:52.877117Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: critical_validation_errors_by_day
+    label: Critical Validation Errors by Day
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __144__
+
+
+      Created On: __2021-10-26T19:33:50.500297Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/144
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

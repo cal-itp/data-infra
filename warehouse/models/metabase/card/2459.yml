@@ -1,0 +1,31 @@
+version: 2
+exposures:
+  - name: list_of_trip_updates_feeds_that_did_not_have_at_least_one_cancellation_in_the_past_3_months
+    label: List of trip updates feeds that DID NOT have at least one cancellation
+      in the past 3 months
+    description: "### Visualization: Table\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nWith agencies_with_cancels as (\r\nSELECT\r\n  `mart_gtfs.fct_observed_trips`.`schedule_name`\
+      \ AS `schedule_name`\r\nFROM\r\n  `mart_gtfs.fct_observed_trips`\r\nWHERE\r\n\
+      \  (\r\n    (\r\n      lower(\r\n        `mart_gtfs.fct_observed_trips`.`tu_trip_schedule_relationships`\r\
+      \n      ) like '%canceled%'\r\n    )\r\n   AND `mart_gtfs.fct_observed_trips`.`service_date`\
+      \ >= date_trunc(\r\n      date_add(\r\n        current_date('America/Los_Angeles'),\r\
+      \n        INTERVAL -90 day\r\n      ),\r\n      day\r\n    )\r\n    AND `mart_gtfs.fct_observed_trips`.`service_date`\
+      \ < date_trunc(current_date('America/Los_Angeles'), day)\r\n  )\r\nGROUP BY\r\
+      \n  `schedule_name`\r\nORDER BY\r\n  `schedule_name` ASC\r\n)\r\nSELECT distinct(schedule_name)\
+      \ FROM `mart_gtfs.fct_observed_trips`\r\nWHERE \r\n`mart_gtfs.fct_observed_trips`.`service_date`\
+      \ >= date_trunc(\r\n      date_add(\r\n        current_date('America/Los_Angeles'),\r\
+      \n        INTERVAL -90 day\r\n      ),\r\n      day\r\n    )\r\n    AND `mart_gtfs.fct_observed_trips`.`service_date`\
+      \ < date_trunc(current_date('America/Los_Angeles'), day)\r\nAND\r\nschedule_name\
+      \ not in (SELECT schedule_name from agencies_with_cancels)\r\norder by schedule_name\
+      \ ASC\n```\n\n#### Metadata\n\nMetabase ID: __2459__\n\nCreated On: __2024-07-09T21:29:04.640684Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2459
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.098'
+        last_used_at: '2025-07-23T22:45:56.463254Z'

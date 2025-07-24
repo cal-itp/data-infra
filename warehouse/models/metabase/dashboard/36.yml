@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: mobility_service_data_dashboard
+    label: Mobility Service Data Dashboard
+    description: '### Dashboard Cards: 3
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __36__
+
+
+      Created On: __2021-12-03T18:46:08.680015Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/36
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

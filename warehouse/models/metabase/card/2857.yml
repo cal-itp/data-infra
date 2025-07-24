@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: gtfs_rt_trip_updates_completeness_by_day_5
+    label: GTFS-RT Trip Updates Completeness by day
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2857__
+
+
+      Created On: __2024-08-16T00:17:41.350226Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2857
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.679'
+        last_used_at: '2024-10-21T23:34:31.533933Z'

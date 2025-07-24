@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: __of_transactions_without_aggregation___one_total_amount
+    label: '# of transactions without aggregation - one total amount'
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2430__
+
+
+      Created On: __2024-07-05T14:27:46.555952Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2430
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.905'
+        last_used_at: '2025-05-16T19:19:26.955204Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: by_agency___aggregation_ids_with_more_than_1_journey__last_12_months__
+    label: 'by agency - Aggregation IDs with more than 1 journey (last 12 months) '
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3029__
+
+
+      Created On: __2024-08-29T14:52:54.213013Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3029
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.474'
+        last_used_at: '2025-05-16T19:20:16.841824Z'

@@ -1,0 +1,38 @@
+version: 2
+exposures:
+  - name: agencies____warnings_trend
+    label: Agencies || Warnings Trend
+    description: "### Visualization: Smartscalar\n\n30-day count of agencies with\
+      \ warnings, now vs. one month ago.\n\n#### Query\n\n```\nWITH \n    severity_daily\
+      \ AS (\n        SELECT\n            metric_date,\n            COALESCE(severity,\
+      \ 'UNKNOWN') AS severity,\n            calitp_itp_id,\n            n_notices\n\
+      \        FROM views.validation_code_metrics\n        WHERE metric_date IS NOT\
+      \ NULL AND metric_date >= '2021-04-15'\n        ORDER BY 1 DESC\n    ),\n  \
+      \  dates AS (\n       SELECT date\n        FROM UNNEST(\n            GENERATE_DATE_ARRAY(DATE('2021-04-01'),\
+      \ CURRENT_DATE(), INTERVAL 1 DAY)\n        ) as date\n    ),\n    daily_metrics\
+      \ AS (\n        SELECT *\n        FROM (\n            SELECT\n             \
+      \   date,\n                severity,\n                COUNT(DISTINCT date_calitp_id)\
+      \ AS n_agencies,\n                COUNT(DISTINCT calitp_itp_id) AS n_agencies_30,\n\
+      \                SUM(DISTINCT date_n_notices) AS n_notices\n            FROM\
+      \ (\n                SELECT \n                    *,\n                    CASE\
+      \ WHEN date = metric_date THEN calitp_itp_id END AS date_calitp_id,\n      \
+      \              CASE WHEN date = metric_date THEN calitp_itp_id END AS date_n_notices\n\
+      \                FROM dates\n                CROSS JOIN severity_daily\n   \
+      \             WHERE date >= metric_date AND date < metric_date + 30\n      \
+      \          ORDER BY date, metric_date\n            )\n            GROUP BY 1,\
+      \ 2\n        )\n        WHERE date >= '2021-05-15'\n    )\nSELECT \n    date\
+      \ AS Date,\n    MAX(n_agencies_30) AS Value\nFROM daily_metrics\nWHERE \n  \
+      \  Severity = 'WARNING' AND (\n    Date = (SELECT MAX(date) AS Date FROM dates)\n\
+      \    OR\n    Date = (SELECT MAX(date) - 32 AS Date FROM dates)\n)\nGROUP BY\
+      \ 1\nORDER BY 1\n```\n\n#### Metadata\n\nMetabase ID: __70__\n\nCreated On:\
+      \ __2021-08-17T13:22:05.224612Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/70
+    maturity: medium
+    owner:
+      name: Chris Cardillo
+      email: chris.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

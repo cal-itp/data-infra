@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: trip_update_feed_total_completeness_levels__last_180_days_
+    label: Trip Update Feed Total Completeness Levels (last 180 days)
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2363__
+
+
+      Created On: __2024-06-12T01:04:56.403465Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2363
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:10.145'
+        last_used_at: '2025-03-26T21:03:56.458356Z'

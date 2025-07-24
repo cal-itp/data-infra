@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_transactions__testing_
+    label: Total transactions (testing)
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2197__
+
+
+      Created On: __2024-03-08T22:34:19.170568Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2197
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.936'
+        last_used_at: '2024-11-12T23:40:45.33037Z'

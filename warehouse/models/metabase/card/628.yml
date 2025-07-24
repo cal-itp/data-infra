@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: passed_checks__v2_
+    label: Passed checks (v2)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __628__
+
+
+      Created On: __2022-12-26T20:30:09.087102Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/628
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

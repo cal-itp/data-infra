@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_feeds_containing_a_fare_leg_rules_txt_file_by_date
+    label: Number of feeds containing a fare_leg_rules.txt file by date
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __151__
+
+
+      Created On: __2021-10-26T22:30:09.44744Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/151
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

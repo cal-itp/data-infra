@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 2023_funding_sources_statewide
+    label: 2023 Funding Sources Statewide
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3200__
+
+
+      Created On: __2024-11-13T05:49:17.063915Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3200
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.571'
+        last_used_at: '2025-07-23T17:22:44.517225Z'

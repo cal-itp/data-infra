@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _cae__contactless_payments_metrics_dashboard
+    label: (CAE) Contactless Payments Metrics Dashboard
+    description: '### Dashboard Cards: 68
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __81__
+
+
+      Created On: __2022-08-29T23:42:27.524514Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/81
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: charges_and_fees_per_transaction__usd_trx____per_month_3
+    label: Charges and Fees per transaction (USD/trx) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2706__
+
+
+      Created On: __2024-08-13T21:28:55.600911Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2706
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.032'
+        last_used_at: '2024-10-08T22:09:01.963125Z'

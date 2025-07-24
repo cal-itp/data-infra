@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: adjustments_2
+    label: Adjustments
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2056__
+
+
+      Created On: __2023-12-28T20:27:57.749639Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2056
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.416'
+        last_used_at: '2025-02-20T18:30:40.960305Z'

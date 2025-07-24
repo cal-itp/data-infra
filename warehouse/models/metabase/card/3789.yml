@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: declines_by_response_codes
+    label: Declines by Response Codes
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3789__
+
+
+      Created On: __2025-07-14T17:40:09.922099Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3789
+    maturity: medium
+    owner:
+      name: Julian Hernandez
+      email: julian.hernandez@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.090'
+        last_used_at: '2025-07-23T21:04:04.253331Z'

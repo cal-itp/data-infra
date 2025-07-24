@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: interchange_fees_as___of_net_sales___per_month_11
+    label: Interchange Fees as % of Net Sales - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2612__
+
+
+      Created On: __2024-08-12T18:32:06.914993Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2612
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.372'
+        last_used_at: '2025-04-25T23:20:54.502898Z'

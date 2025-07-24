@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: feeds_with_fares_v2_by_voms
+    label: Feeds with Fares v2 by VOMS
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2357__
+
+
+      Created On: __2024-06-11T17:53:35.490953Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2357
+    maturity: medium
+    owner:
+      name: Md Saiful Islam
+      email: md.islam@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.168'
+        last_used_at: '2024-11-27T20:39:41.550295Z'

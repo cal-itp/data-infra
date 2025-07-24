@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: cal_itp_benefits_enrollments_by_month_and_by_pathway___duplicate_1
+    label: Cal-ITP Benefits enrollments by month and by pathway - Duplicate
+    description: '### Visualization: Row
+
+
+      The number of successful benefit enrollments via the Benefits app each month,
+      broken out by enrollment pathway, across all California transit agencies using
+      the service.
+
+
+      #### Metadata
+
+
+      Metabase ID: __3745__
+
+
+      Created On: __2025-05-21T23:15:45.806705Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3745
+    maturity: medium
+    owner:
+      name: Andy Walker
+      email: andy@compiler.la
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2025-05-21T23:15:45.806705Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: draft_list_of_feeds_with_fares_v2___cs
+    label: DRAFT List of Feeds WITH Fares v2 - cs
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2291__
+
+
+      Created On: __2024-05-21T20:57:51.482823Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2291
+    maturity: medium
+    owner:
+      name: Md Saiful Islam
+      email: md.islam@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.921'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: retokenizations_count_by_month
+    label: Retokenizations Count by Month
+    description: "### Visualization: Bar\n\nOne PCID can have multiple FSVIDs associated\
+      \ with it, and this can be used as an indicator for retokenisation.\n\n####\
+      \ Query\n\n```\nWITH ranked_tokens AS (\n  SELECT\n    funding_source_vault_id,\n\
+      \    transaction_date_time_utc,\n    ROW_NUMBER() OVER (\n      PARTITION BY\
+      \ funding_source_vault_id\n      ORDER BY transaction_date_time_utc\n    ) AS\
+      \ usage_rank\n  FROM mart_payments.fct_payments_rides_v2\n  WHERE funding_source_vault_id\
+      \ IS NOT NULL\n),\nfirst_retokenizations AS (\n  SELECT\n    funding_source_vault_id,\n\
+      \    transaction_date_time_utc\n  FROM ranked_tokens\n  WHERE usage_rank = 2\n\
+      )\nSELECT\n  DATE_TRUNC(DATE(transaction_date_time_utc), MONTH) AS retokenization_week,\n\
+      \  COUNT(DISTINCT funding_source_vault_id) AS retokenization_count\nFROM first_retokenizations\n\
+      GROUP BY DATE_TRUNC(DATE(transaction_date_time_utc), MONTH)\nORDER BY DATE_TRUNC(DATE(transaction_date_time_utc),\
+      \ MONTH);\n```\n\n#### Metadata\n\nMetabase ID: __3110__\n\nCreated On: __2024-09-23T14:55:37.256705Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/3110
+    maturity: medium
+    owner:
+      name: Georgia Jones
+      email: georgia.jones@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.353'
+        last_used_at: '2025-07-23T21:03:48.858296Z'

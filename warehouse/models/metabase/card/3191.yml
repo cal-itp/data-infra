@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: fct_ntd_a10_facilitiescheck
+    label: Fct Ntd A10 Facilitiescheck
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3191__
+
+
+      Created On: __2024-11-05T00:13:19.612538Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3191
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.108'
+        last_used_at: '2025-07-15T18:28:43.107742Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: agencies_receiving_5311_or_5307_with_total_voms
+    label: Agencies receiving 5311 or 5307 with Total VOMS
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2191__
+
+
+      Created On: __2024-02-29T20:18:52.887044Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2191
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.645'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

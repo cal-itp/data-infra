@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: distinct_calitp_id_and_by_url
+    label: Distinct Calitp ID and by URL
+    description: '### Visualization: Table
+
+
+      Fact Daily Guideline Checks, Distinct values of Calitp URL Number, Grouped by
+      Calitp URL Number and Calitp Itp
+
+
+      #### Metadata
+
+
+      Metabase ID: __612__
+
+
+      Created On: __2022-12-19T21:58:58.56707Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/612
+    maturity: medium
+    owner:
+      name: Julia Ma
+      email: julia.ma@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

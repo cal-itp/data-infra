@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sum_of_elavon_deposits____mst
+    label: Sum of Elavon Deposits -- MST
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1299__
+
+
+      Created On: __2023-04-20T16:08:43.533566Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1299
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.669'
+        last_used_at: '2025-03-19T15:54:41.055777Z'

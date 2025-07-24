@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: charges_and_fees_as___of_net_sales___per_month_14
+    label: Charges and Fees as % of Net Sales - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2978__
+
+
+      Created On: __2024-08-23T17:07:02.160245Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2978
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.994'
+        last_used_at: '2025-07-10T18:30:29.149614Z'

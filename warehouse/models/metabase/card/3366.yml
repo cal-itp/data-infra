@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: maximum_of_vehicle_position_message_age_per_day_1
+    label: Maximum of Vehicle Position Message Age per Day
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3366__
+
+
+      Created On: __2025-01-29T18:19:50.374835Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3366
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.781'
+        last_used_at: '2025-03-11T18:50:07.232605Z'

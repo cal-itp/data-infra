@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: journeys_by_each_aggregation_id
+    label: Journeys by each Aggregation ID
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2238__
+
+
+      Created On: __2024-04-09T11:09:09.092901Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2238
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:04.424'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

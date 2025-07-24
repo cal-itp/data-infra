@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: refunds__settled_transactions
+    label: 'Refunds: Settled Transactions'
+    description: '### Visualization: Table
+
+
+      based on sales equivalent
+
+
+      #### Metadata
+
+
+      Metabase ID: __2121__
+
+
+      Created On: __2024-01-30T21:54:49.177901Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2121
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.077'
+        last_used_at: '2025-02-20T19:05:17.763049Z'

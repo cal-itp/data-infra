@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: etrans_median_vehicle_positions_message_age__last_2_weeks_
+    label: eTrans Median Vehicle Positions Message Age (last 2 weeks)
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1375__
+
+
+      Created On: __2023-06-14T21:01:47.079326Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1375
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.464'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

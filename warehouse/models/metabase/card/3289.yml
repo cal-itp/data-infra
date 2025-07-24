@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: monthly_statewide_ridership_and_service
+    label: Monthly Statewide Ridership and Service
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3289__
+
+
+      Created On: __2024-12-12T17:58:58.253473Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3289
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.539'
+        last_used_at: '2025-07-23T17:22:44.386213Z'

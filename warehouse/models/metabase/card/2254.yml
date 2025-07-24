@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: 5_3_2024__raw_data_table___zero_dollar_journeys
+    label: '5-3-2024: Raw Data Table - Zero-Dollar Journeys'
+    description: '### Visualization: Table
+
+
+      Zero-Dollar Journeys (have nominal amounts but zero charged amount via fare
+      capping). No settlement information
+
+
+      #### Metadata
+
+
+      Metabase ID: __2254__
+
+
+      Created On: __2024-05-06T17:46:26.759348Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2254
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.070'
+        last_used_at: '2025-03-19T16:35:01.29152Z'

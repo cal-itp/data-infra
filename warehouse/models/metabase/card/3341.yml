@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: catastrophic_validation_errors__last_14_days__2
+    label: Catastrophic Validation Errors (last 14 days)
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3341__
+
+
+      Created On: __2025-01-29T18:07:39.837048Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3341
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.964'
+        last_used_at: '2025-01-31T18:12:28.321745Z'

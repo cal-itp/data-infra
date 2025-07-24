@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: gtfs_rt_validation_errors__ids_not_in_gtfs_schedule__last_14_days_
+    label: 'GTFS-RT Validation Errors: IDs not in GTFS Schedule (last 14 days)'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1339__
+
+
+      Created On: __2023-05-05T19:53:38.296717Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1339
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

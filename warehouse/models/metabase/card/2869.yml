@@ -1,0 +1,64 @@
+version: 2
+exposures:
+  - name: higher_passenger_counts_per_date_and_station__last_30_days
+    label: Higher Passenger Counts per Date and Station, last 30 days
+    description: "### Visualization: Table\n\nProduce a report detailing the stations\
+      \ by date and route with the highest number of CCJPA passengers on board.\n\n\
+      #### Query\n\n```\nWith riders_per_station AS (\n SELECT stations.Station AS\
+      \ station_name\n       ,fct_payments_rides_v2.transaction_date_pacific\n   \
+      \    ,fct_payments_rides_v2.route_id\n       ,(SELECT COUNT(1)\n           FROM\
+      \ `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`AS fct_payments_rides_onboarding\n\
+      \          INNER JOIN `cal-itp-data-infra.uploaded_data.payments__ccjpa_stations_and_sequences`\
+      \ AS stations_onboarding\n             ON stations_onboarding.Station = fct_payments_rides_onboarding.location_name\n\
+      \            -- AND stations_onboarding.seq_west <= stations.seq_west\n    \
+      \        AND (CASE WHEN (CAST(route_id AS int64) - (2 * floor(CAST(route_id\
+      \ AS int64)/2))) > 0 \n                      THEN stations_onboarding.seq_west\
+      \ \n                      ELSE stations_onboarding.seq_east\n              \
+      \        END)\n                <=\n                (CASE WHEN (CAST(route_id\
+      \ AS int64) - (2 * floor(CAST(route_id AS int64)/2))) > 0\n                \
+      \      THEN stations.seq_west\n                      ELSE stations.seq_east\n\
+      \                      END)\n          WHERE fct_payments_rides_onboarding.participant_id\
+      \ = 'ccjpa'\n            AND fct_payments_rides_onboarding.charge_type = 'complete_variable_fare'\n\
+      \            AND fct_payments_rides_onboarding.transaction_date_pacific = fct_payments_rides_v2.transaction_date_pacific\n\
+      \            AND fct_payments_rides_onboarding.route_id = fct_payments_rides_v2.route_id\n\
+      \        )\n        -\n        (SELECT COUNT(1)\n           FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`\
+      \ AS fct_payments_rides_offboarding\n          INNER JOIN `cal-itp-data-infra.uploaded_data.payments__ccjpa_stations_and_sequences`\
+      \ AS stations_offboarding\n             ON stations_offboarding.Station = fct_payments_rides_offboarding.off_location_name\n\
+      \            -- AND stations_offboarding.seq_west <= stations.seq_west\n   \
+      \         AND (CASE WHEN (CAST(route_id AS int64) - (2 * floor(CAST(route_id\
+      \ AS int64)/2))) > 0 \n                      THEN stations_offboarding.seq_west\
+      \ \n                      ELSE stations_offboarding.seq_east\n             \
+      \         END)\n                <=\n                (CASE WHEN (CAST(route_id\
+      \ AS int64) - (2 * floor(CAST(route_id AS int64)/2))) > 0\n                \
+      \      THEN stations.seq_west\n                      ELSE stations.seq_east\n\
+      \                      END)\n          WHERE fct_payments_rides_offboarding.participant_id\
+      \ = 'ccjpa'\n            AND fct_payments_rides_offboarding.charge_type = 'complete_variable_fare'\n\
+      \            AND fct_payments_rides_offboarding.transaction_date_pacific = fct_payments_rides_v2.transaction_date_pacific\n\
+      \            AND fct_payments_rides_offboarding.route_id = fct_payments_rides_v2.route_id\
+      \           \n        ) AS riders_count\n  FROM `cal-itp-data-infra.uploaded_data.payments__ccjpa_stations_and_sequences`\
+      \ AS stations\n  LEFT JOIN `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`\
+      \ AS fct_payments_rides_v2\n    ON (stations.Station = fct_payments_rides_v2.location_name\
+      \ OR stations.Station = fct_payments_rides_v2.off_location_name)\n   AND fct_payments_rides_v2.participant_id\
+      \ = 'ccjpa'\n   AND fct_payments_rides_v2.charge_type = 'complete_variable_fare'\n\
+      \   AND fct_payments_rides_v2.route_id != 'CC'\n GROUP BY fct_payments_rides_v2.transaction_date_pacific\n\
+      \         ,fct_payments_rides_v2.route_id\n         ,stations.seq_west\n   \
+      \      ,stations.seq_east\n         ,stations.Station\n)\nSELECT transaction_date_pacific\n\
+      \      ,route_id\n      ,station_name\n      ,riders_count\n FROM riders_per_station\n\
+      WHERE riders_count = (SELECT MAX(riders_per_station_max.riders_count)\n    \
+      \                    FROM riders_per_station AS riders_per_station_max\n   \
+      \                    WHERE riders_per_station_max.route_id = riders_per_station.route_id\n\
+      \                         AND riders_per_station_max.transaction_date_pacific\
+      \ = riders_per_station.transaction_date_pacific\n                     )\nORDER\
+      \ BY transaction_date_pacific\n        ,route_id\n        ,station_name\n```\n\
+      \n#### Metadata\n\nMetabase ID: __2869__\n\nCreated On: __2024-08-16T21:47:43.430896Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2869
+    maturity: medium
+    owner:
+      name: Erika Pacheco
+      email: erika@ministryofvelocity.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.872'
+        last_used_at: '2025-07-07T17:34:31.041829Z'

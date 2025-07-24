@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: fct_ntd_rr20_equal_totals_check
+    label: Fct Ntd Rr20 Equal Totals Check
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3189__
+
+
+      Created On: __2024-11-05T00:12:58.089253Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3189
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.411'
+        last_used_at: '2025-07-15T18:28:43.109762Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: charges_and_fees_per_transaction__usd_trx_
+    label: Charges and Fees per transaction (USD/trx)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1633__
+
+
+      Created On: __2023-08-18T12:34:33.343246Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1633
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.085'
+        last_used_at: '2025-05-28T16:42:17.799512Z'

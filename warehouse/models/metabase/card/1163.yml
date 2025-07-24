@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: unlabeled_routes_by_week
+    label: Unlabeled Routes by Week
+    description: '### Visualization: Combo
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1163__
+
+
+      Created On: __2023-02-27T21:00:46.114219Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1163
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.783'
+        last_used_at: '2025-07-16T22:11:47.321151Z'

@@ -1,0 +1,30 @@
+version: 2
+exposures:
+  - name: cal_itp_benefits_enrollments_by_month_and_by_pathway
+    label: Cal-ITP Benefits enrollments by month and by pathway
+    description: '### Visualization: Bar
+
+
+      The number of successful benefit enrollments via the Benefits app each month,
+      broken out by enrollment pathway, across all California transit agencies using
+      the service.
+
+
+      #### Metadata
+
+
+      Metabase ID: __2040__
+
+
+      Created On: __2023-12-20T18:44:32.642791Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2040
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.559'
+        last_used_at: '2025-07-23T16:58:49.349674Z'

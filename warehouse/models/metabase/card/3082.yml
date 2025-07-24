@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: debt_per_ride
+    label: Debt per Ride
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3082__
+
+
+      Created On: __2024-09-10T13:32:47.694597Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3082
+    maturity: medium
+    owner:
+      name: Georgia Jones
+      email: georgia.jones@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.255'
+        last_used_at: '2025-07-23T21:02:29.451415Z'

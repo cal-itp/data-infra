@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: top_20_agencies_by_2022_ridership
+    label: Top 20 Agencies by 2022 Ridership
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2359__
+
+
+      Created On: __2024-06-11T23:54:38.895974Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2359
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.194'
+        last_used_at: '2024-10-10T23:09:30.468309Z'

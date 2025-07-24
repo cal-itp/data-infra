@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: _ncc__last_day_in_dataset__elavon_fees_
+    label: (NCC) Last day in dataset (Elavon Fees)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3728__
+
+
+      Created On: __2025-04-29T09:58:52.282777Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3728
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.857'
+        last_used_at: '2025-07-23T18:31:06.863502Z'

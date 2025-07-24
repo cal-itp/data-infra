@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: by_prefix_codes
+    label: By Prefix Codes
+    description: '### Dashboard Cards: 8
+
+
+      Looking at the data by Prefix Codes, or Funding Programs
+
+
+      #### Metadata
+
+
+      Metabase ID: __35__
+
+
+      Created On: __2021-11-23T17:55:24.63023Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/35
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie.a@jarv.us
+    depends_on: []

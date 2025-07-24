@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: exercise_7__how_many_organizations_are_in_each_ntd_reporter_type_by_district_
+    label: 'Exercise 7: How many organizations are in each NTD reporter type by District?'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1654__
+
+
+      Created On: __2023-08-29T21:57:55.913688Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1654
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.449'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

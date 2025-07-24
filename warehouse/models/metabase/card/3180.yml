@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: daily_vehicle_positions_latency_statistics
+    label: Daily Vehicle Positions Latency Statistics
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3180__
+
+
+      Created On: __2024-11-01T19:39:44.185501Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3180
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.758'
+        last_used_at: '2025-07-23T19:42:08.659522Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: elavon_billing_transactions_10
+    label: Elavon Billing Transactions
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2972__
+
+
+      Created On: __2024-08-23T17:04:15.080897Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2972
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.208'
+        last_used_at: '2025-04-25T23:21:21.556523Z'

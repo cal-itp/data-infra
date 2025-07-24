@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: median_vehicle_position_latency__avg__over_last_30_days_
+    label: Median Vehicle Position Latency (Avg. over last 30 days)
+    description: '### Visualization: Row
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3161__
+
+
+      Created On: __2024-10-18T01:04:05.280619Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3161
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.253'
+        last_used_at: '2025-05-19T18:24:08.40571Z'

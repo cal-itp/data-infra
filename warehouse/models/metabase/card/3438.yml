@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: percent_of_trips_with_shape_id_values_by_dim_gtfs_datasets
+    label: Percent of trips with shape ID values by Dim Gtfs Datasets
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3438__
+
+
+      Created On: __2025-03-06T19:57:30.583692Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3438
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.812'
+        last_used_at: '2025-03-25T17:05:59.757874Z'

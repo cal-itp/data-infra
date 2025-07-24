@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: by_agency___trips_per_aggregation
+    label: by agency - trips per aggregation
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3070__
+
+
+      Created On: __2024-09-04T02:35:14.322912Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3070
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.986'
+        last_used_at: '2025-05-16T19:20:16.841824Z'

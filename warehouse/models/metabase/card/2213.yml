@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: refunds_grouped_by_org___payment_months__payments___ccjpa_
+    label: refunds grouped by org & payment months (payments - ccjpa)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2213__
+
+
+      Created On: __2024-03-21T18:33:13.397609Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2213
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2025-03-20T14:49:49.058868Z'

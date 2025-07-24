@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex5__proportion_of_gtfs_quality_checks_passing___failing_by_day
+    label: 'Ex5: Proportion of GTFS Quality Checks Passing & Failing by Day'
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3446__
+
+
+      Created On: __2025-03-12T00:01:40.204014Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3446
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.644'
+        last_used_at: '2025-03-18T22:03:20.275979Z'

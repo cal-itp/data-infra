@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 5_1_2024__raw_data_table___refunds__confirmed__
+    label: '5-1-2024: Raw Data Table - Refunds (confirmed)"'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2250__
+
+
+      Created On: __2024-05-02T00:08:36.091964Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2250
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:04.181'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

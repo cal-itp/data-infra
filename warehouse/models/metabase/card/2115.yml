@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 7___ridership_by_train_and_day
+    label: 7 - Ridership by Train And Day
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2115__
+
+
+      Created On: __2024-01-25T18:58:12.908395Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2115
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.667'
+        last_used_at: '2025-07-15T15:00:09.014731Z'

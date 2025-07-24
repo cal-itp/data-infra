@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: count_by_card_plan____mst
+    label: Count by Card Plan -- MST
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1308__
+
+
+      Created On: __2023-04-21T15:08:08.132174Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1308
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.767'
+        last_used_at: '2025-03-19T15:54:40.997322Z'

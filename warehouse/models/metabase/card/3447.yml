@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex6____publicly_operating_organizations_with_gtfs___rt
+    label: 'Ex6: % Publicly Operating Organizations with GTFS - RT'
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3447__
+
+
+      Created On: __2025-03-12T16:00:05.727122Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3447
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.437'
+        last_used_at: '2025-03-14T16:39:14.33463Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: by_agency___aggregation_ids_with_only_1_journey___last_12_months_
+    label: by agency - Aggregation IDs with only 1 journey  (last 12 months)
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3026__
+
+
+      Created On: __2024-08-29T14:43:38.59039Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3026
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.546'
+        last_used_at: '2025-05-16T19:20:16.818678Z'

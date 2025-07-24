@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: feed_level_v2
+    label: Feed Level V2
+    description: '### Dashboard Cards: 4
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __112__
+
+
+      Created On: __2023-01-10T14:54:30.334968Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/112
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []

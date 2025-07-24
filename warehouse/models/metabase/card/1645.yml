@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: exercise_1___how_many_organizations_and_services_are_there_per_caltrans_district_
+    label: Exercise 1 - How many organizations and services are there per Caltrans
+      District?
+    description: '### Visualization: Bar
+
+
+      How many organizations and services are there per Caltrans District?
+
+
+      #### Metadata
+
+
+      Metabase ID: __1645__
+
+
+      Created On: __2023-08-28T21:30:03.920162Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1645
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.674'
+        last_used_at: '2025-07-10T21:17:05.993485Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: created_transit_data_quality_issues_by_month
+    label: Created Transit Data Quality Issues by Month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2060__
+
+
+      Created On: __2024-01-05T23:59:25.699006Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2060
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.544'
+        last_used_at: '2025-07-21T15:00:08.937702Z'

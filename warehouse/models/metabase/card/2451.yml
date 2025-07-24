@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: outstanding_debt_time_period
+    label: Outstanding Debt Time Period
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2451__
+
+
+      Created On: __2024-07-09T09:09:25.591776Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2451
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.997'
+        last_used_at: '2025-07-23T21:04:01.289208Z'

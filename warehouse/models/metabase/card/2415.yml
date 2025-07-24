@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ccjpa___unlabeled_routes_alert
+    label: CCJPA – Unlabeled Routes Alert
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2415__
+
+
+      Created On: __2024-07-03T18:59:13.836562Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2415
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.990'
+        last_used_at: '2025-07-21T15:00:02.504598Z'

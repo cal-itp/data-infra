@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: cumulative_number_of_feeds_by_service_expiration_date__next_4_years_
+    label: Cumulative Number of Feeds by Service Expiration Date (next 4 years)
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2039__
+
+
+      Created On: __2023-12-19T19:21:55.96308Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2039
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:04.317'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

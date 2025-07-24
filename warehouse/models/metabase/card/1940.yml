@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 1__initial_join__test_monthly_routes_to_dim_provider_gtfs_data
+    label: '1. Initial join: Test Monthly Routes to Dim Provider GTFS Data'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1940__
+
+
+      Created On: __2023-11-08T19:47:35.695223Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1940
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.042'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

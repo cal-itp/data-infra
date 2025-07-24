@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: statewide_unique_scheduled_trips_by_day
+    label: Statewide Unique Scheduled Trips by Day
+    description: '### Visualization: Bar
+
+
+      using median logic
+
+
+      #### Metadata
+
+
+      Metabase ID: __711__
+
+
+      Created On: __2023-01-12T18:50:31.659443Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/711
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

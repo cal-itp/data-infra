@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: exercise_9_v1__out_of_all_the_organizations_that_are_publicly_operating__what_percent_of_organizations_have_rt_feeds_present_for_yesterday_
+    label: 'Exercise 9 v1: Out of all the Organizations that are publicly operating,
+      what percent of organizations have RT Feeds present for yesterday?'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1661__
+
+
+      Created On: __2023-09-01T18:07:07.125764Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1661
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.371'
+        last_used_at: '2025-03-05T06:15:24.361541Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: temp_question___orgs_with_passing_rt_checks
+    label: temp question - orgs with passing rt checks
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3449__
+
+
+      Created On: __2025-03-12T20:31:20.300211Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3449
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.771'
+        last_used_at: '2025-03-13T20:54:09.821579Z'

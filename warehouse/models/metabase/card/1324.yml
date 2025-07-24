@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: fct_observed_trips_with_non_null_tu_gtfs_dataset_key
+    label: Fct Observed Trips with non-null Tu Gtfs Dataset Key
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1324__
+
+
+      Created On: __2023-05-01T22:56:44.07941Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1324
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:03.175'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

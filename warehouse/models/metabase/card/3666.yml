@@ -1,0 +1,66 @@
+version: 2
+exposures:
+  - name: charge_amount
+    label: Charge amount
+    description: "### Visualization: Scalar\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nWITH base_sales AS (\r\n  SELECT\r\n    participant_id,\r\
+      \n    micropayment_id,\r\n    aggregation_id,\r\n    principal_customer_id,\r\
+      \n    charge_amount,\r\n    nominal_amount,\r\n    transaction_date_pacific,\r\
+      \n    CONCAT(aggregation_id, 'Sales') AS Aggregation_ID____Sales_\r\n  FROM\r\
+      \n    `mart_payments.fct_payments_rides_v2`\r\n  WHERE\r\n    transaction_date_pacific\
+      \ > DATE('2023-12-31')\r\n),\r\naggregated_sales AS (\r\n  SELECT\r\n    aggregation_id,\r\
+      \n    participant_id,\r\n    principal_customer_id,\r\n    Aggregation_ID____Sales_,\r\
+      \n    SUM(nominal_amount) AS sum,\r\n    SUM(charge_amount) AS sum_2,\r\n  \
+      \  MAX(DATE_TRUNC(transaction_date_pacific, DAY)) AS max,\r\n    COUNT(DISTINCT\
+      \ micropayment_id) AS count\r\n  FROM\r\n    base_sales\r\n  GROUP BY\r\n  \
+      \  aggregation_id,\r\n    participant_id,\r\n    principal_customer_id,\r\n\
+      \    Aggregation_ID____Sales_\r\n),\r\nsettlements AS (\r\n  SELECT\r\n    CASE\r\
+      \n      WHEN settlement_type = 'DEBIT' THEN CONCAT(aggregation_id, 'Sales')\r\
+      \n      WHEN settlement_type = 'CREDIT' THEN CONCAT(aggregation_id, 'Refund')\r\
+      \n    END AS Aggregation_ID____Sales_Refund_,\r\n    CASE\r\n      WHEN settlement_type\
+      \ = 'DEBIT' THEN CONCAT(retrieval_reference_number, 'Sales')\r\n      WHEN settlement_type\
+      \ = 'CREDIT' THEN CONCAT(retrieval_reference_number, 'Refund')\r\n    END AS\
+      \ Retrieval_Reference_Number____Sales_Refund_,\r\n    participant_id,\r\n  \
+      \  customer_id,\r\n    aggregation_id,\r\n    retrieval_reference_number,\r\n\
+      \    settlement_type,\r\n    TIMESTAMP_TRUNC(record_updated_timestamp_utc, DAY,\
+      \ 'America/Los_Angeles') AS record_updated_timestamp_utc,\r\n    settlement_status,\r\
+      \n    SUM(transaction_amount) AS sum\r\n  FROM\r\n    `mart_payments.fct_payments_settlements`\r\
+      \n  WHERE\r\n    aggregation_id IS NOT NULL\r\n    AND aggregation_id <> ''\r\
+      \n    AND retrieval_reference_number IS NOT NULL\r\n    AND retrieval_reference_number\
+      \ <> ''\r\n    AND record_updated_timestamp_utc >= TIMESTAMP('2024-01-01 00:00:00-08:00')\r\
+      \n  GROUP BY\r\n    Aggregation_ID____Sales_Refund_,\r\n    Retrieval_Reference_Number____Sales_Refund_,\r\
+      \n    participant_id,\r\n    customer_id,\r\n    aggregation_id,\r\n    retrieval_reference_number,\r\
+      \n    settlement_type,\r\n    record_updated_timestamp_utc,\r\n    settlement_status\r\
+      \n),\r\ndeposits AS (\r\n  SELECT\r\n    purch_id,\r\n    SUM(amount) AS amount,\r\
+      \n    settlement_date,\r\n    payment_date,\r\n    CASE\r\n      WHEN amount\
+      \ > 0 THEN CONCAT(purch_id, 'Sales')\r\n      WHEN amount < 0 THEN CONCAT(purch_id,\
+      \ 'Refund')\r\n    END AS Purch_ID____Sales_Refund_\r\n  FROM\r\n    `mart_payments.fct_payments_deposit_transactions`\r\
+      \n  WHERE\r\n    purch_id IS NOT NULL\r\n    AND purch_id <> ''\r\n  GROUP BY\r\
+      \n    Purch_ID____Sales_Refund_,\r\n    purch_id,\r\n    settlement_date,\r\n\
+      \    payment_date\r\n),\r\nauthorisation AS (\r\n  SELECT\r\n    aggregation_id,\r\
+      \n    latest_authorisation_status\r\n  FROM\r\n    `mart_payments.fct_payments_aggregations`\r\
+      \n)\r\nSELECT\r\n  s.participant_id AS Partipicant_ID,\r\n  s.principal_customer_id\
+      \ AS Principal_Customer_ID,\r\n  s.aggregation_id AS Aggregation_ID,\r\n  st.retrieval_reference_number\
+      \ AS RRN,\r\n  s.count AS Micropayments_in_Aggregation,\r\n  s.max AS Transaction_Date_Pacific,\r\
+      \n  s.sum AS Nominal_Amount,\r\n  s.sum_2 AS Charge_Amount,\r\n  DATE(st.record_updated_timestamp_utc)\
+      \ AS Requested_for_Settlement_Date,\r\n  st.settlement_type AS Settlement_Type,\r\
+      \n  st.settlement_status AS Settlement_Status,\r\n  st.sum AS Requested_for_Settlement_Amount,\r\
+      \n  d.purch_id AS Elavon_Purch_ID,\r\n  d.amount AS Elavon_Amount,\r\n  d.settlement_date\
+      \ AS Elavon_Settlement_Date,\r\n  d.payment_date AS Elavon_Payment_Date,\r\n\
+      \  l.latest_authorisation_status\r\nFROM\r\n  aggregated_sales s\r\nLEFT JOIN\r\
+      \n  settlements st ON s.Aggregation_ID____Sales_ = st.Aggregation_ID____Sales_Refund_\r\
+      \nLEFT JOIN\r\n  deposits d ON st.Retrieval_Reference_Number____Sales_Refund_\
+      \ = d.Purch_ID____Sales_Refund_\r\nLEFT JOIN\r\n  authorisation l ON s.aggregation_id\
+      \ = l.aggregation_id  \r\nORDER BY\r\n  Transaction_Date_Pacific ASC\r\nLIMIT\r\
+      \n  1048575\n```\n\n#### Metadata\n\nMetabase ID: __3666__\n\nCreated On: __2025-04-26T14:00:38.09764Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/3666
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:05.717'
+        last_used_at: '2025-07-11T16:45:46.693357Z'

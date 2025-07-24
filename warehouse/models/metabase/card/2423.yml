@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sbmtd___unlabeled_routes_alert
+    label: SBMTD – Unlabeled Routes Alert
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2423__
+
+
+      Created On: __2024-07-03T19:07:26.950134Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2423
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.196'
+        last_used_at: '2025-07-21T15:00:02.366514Z'

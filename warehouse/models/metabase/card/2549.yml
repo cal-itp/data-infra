@@ -1,0 +1,33 @@
+version: 2
+exposures:
+  - name: vendors_that_have_no_cancellations_enabled__which_agencies
+    label: Vendors that have No Cancellations Enabled, which agencies
+    description: "### Visualization: Table\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nwith obs_trips as (\r\nSelect\r\n*,\r\n    CASE \r\n  \
+      \      WHEN tu_trip_schedule_relationships LIKE '%CANCELED%' THEN 1\r\n    \
+      \    ELSE 0 -- Or any other value you want for non-matching rows\r\n    END\
+      \ AS filtered_options,\r\n    CASE \r\n        WHEN tu_trip_schedule_relationships\
+      \ LIKE '%CANCELED%' THEN 0\r\n        ELSE 1 -- Or any other value you want\
+      \ for non-matching rows\r\n    END AS not_cancelled\r\nfrom mart_gtfs.fct_observed_trips\
+      \ fot\r\nLEFT JOIN `mart_transit_database.bridge_organizations_x_gtfs_datasets_produced`\
+      \ bo ON `fot`.`tu_gtfs_dataset_key` = `bo`.`gtfs_dataset_key`\r\nWHERE\r\nDATE(service_date)\
+      \ > DATE_SUB(CURRENT_DATE(), INTERVAL 3 MONTH)\r\nand bo._is_current = True),\r\
+      \nsummarized_cancels as (Select organization_name, schedule_name, sum(filtered_options)\
+      \ as cancelled_trips, sum(not_cancelled) as not_cancelled_trips\r\nfrom obs_trips\r\
+      \ngroup by organization_name, schedule_name\r\n)\r\nselect organization_name,\
+      \ schedule_name from summarized_cancels\r\nwhere cancelled_trips = 0\r\nand\r\
+      \norganization_name in (SELECT name FROM `cal-itp-data-infra.mart_transit_database.dim_organizations`\
+      \ \r\nwhere organization_type = 'Company'\r\nand _is_current = True)\r\norder\
+      \ by organization_name, schedule_name;\r\n```\n\n#### Metadata\n\nMetabase ID:\
+      \ __2549__\n\nCreated On: __2024-07-30T22:14:40.414405Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2549
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.666'
+        last_used_at: '2025-07-23T20:41:25.624003Z'

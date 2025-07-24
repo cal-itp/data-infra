@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: aggregation___journey_breakdown_with_values
+    label: Aggregation / Journey breakdown with values
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2239__
+
+
+      Created On: __2024-04-09T11:55:28.5497Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2239
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:03.793'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

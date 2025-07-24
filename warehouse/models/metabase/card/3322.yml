@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: mst_courtesy_card_downtime___number_of_verification_errors_per_day
+    label: MST Courtesy Card downtime - number of verification errors per day
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3322__
+
+
+      Created On: __2025-01-14T21:49:47.20203Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3322
+    maturity: medium
+    owner:
+      name: Kegan Maher
+      email: kegan@compiler.la
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2025-01-14T21:49:47.20203Z'

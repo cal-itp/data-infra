@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: max_vehicle_positions_message_age__last_30_days_
+    label: Max Vehicle Positions Message Age (last 30 days)
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3127__
+
+
+      Created On: __2024-10-09T20:34:55.000612Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3127
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.505'
+        last_used_at: '2025-01-17T00:47:40.632482Z'

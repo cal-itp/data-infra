@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales___charge_amount__not_settled_
+    label: Sales / Charge amount (not settled)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3597__
+
+
+      Created On: __2025-04-23T14:09:40.210714Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3597
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:05.721'
+        last_used_at: '2025-04-26T16:10:04.343797Z'

@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: 8__what_are_the_10_organizations_with_the_highest_number_of_distinct_vehicle_position_routes_in_yesterday_s_feed_
+    label: 8. What are the 10 organizations with the highest number of distinct vehicle
+      position routes in yesterday’s feed?
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1674__
+
+
+      Created On: __2023-09-06T20:50:48.103859Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1674
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.990'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

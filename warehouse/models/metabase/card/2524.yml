@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales___charge_amount
+    label: Sales / Charge amount
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2524__
+
+
+      Created On: __2024-07-29T21:50:55.803835Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2524
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:04.791'
+        last_used_at: '2025-04-26T15:17:48.319433Z'

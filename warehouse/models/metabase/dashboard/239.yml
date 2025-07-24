@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: new_vp_latency_statistics
+    label: New VP latency Statistics
+    description: '### Dashboard Cards: 2
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __239__
+
+
+      Created On: __2024-11-01T19:03:14.923672Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/239
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []

@@ -1,0 +1,40 @@
+version: 2
+exposures:
+  - name: 56_day_rolling_count_of_journeys
+    label: 56-day Rolling Count of Journeys
+    description: "### Visualization: Bar\n\nNo description provided in Metabase\n\n\
+      #### Query\n\n```\nWITH DateRange AS (\r\n  -- Use a fixed start date of 2023-03-15\
+      \ and determine the max transaction date\r\n  SELECT \r\n    DATE '2023-03-15'\
+      \ AS min_date,\r\n    MAX(DATE(transaction_date_pacific)) AS max_date\r\n  FROM\
+      \ `mart_payments.fct_payments_rides_v2`\r\n  WHERE transaction_date_pacific\
+      \ >= '2023-03-15'\r\n),\r\nDateSeries AS (\r\n  -- Generate a continuous list\
+      \ of dates from 2023-03-15 to the max_date\r\n  SELECT \r\n    DATE_ADD(dr.min_date,\
+      \ INTERVAL n DAY) AS date\r\n  FROM DateRange dr, \r\n       UNNEST(GENERATE_ARRAY(0,\
+      \ DATE_DIFF(dr.max_date, dr.min_date, DAY))) AS n\r\n),\r\nDailyUniqueRiders\
+      \ AS (\r\n  -- Count unique riders and trips per calendar day, including zero-trip\
+      \ days\r\n  SELECT\r\n    ds.date,\r\n    COALESCE(COUNT(DISTINCT fpr.customer_id),\
+      \ 0) AS daily_unique_riders,\r\n    COALESCE(COUNT(fpr.customer_id), 0) AS daily_trip_count\r\
+      \n  FROM DateSeries ds\r\n  LEFT JOIN `mart_payments.fct_payments_rides_v2`\
+      \ fpr\r\n    ON DATE(fpr.transaction_date_pacific) = ds.date\r\n  WHERE ds.date\
+      \ >= '2023-03-15'\r\n  GROUP BY 1\r\n),\r\nRolling56Days AS (\r\n  -- Compute\
+      \ rolling 56-day unique riders and total journey count, shifted by one day\r\
+      \n  SELECT\r\n    d1.date,\r\n    d1.daily_unique_riders,\r\n    d1.daily_trip_count,\r\
+      \n    COALESCE(COUNT(DISTINCT d2.customer_id), 0) AS rolling_56d_unique_riders,\r\
+      \n    COALESCE(COUNT(d2.customer_id), 0) AS rolling_56d_journey_count\r\n  FROM\
+      \ DailyUniqueRiders d1\r\n  LEFT JOIN `mart_payments.fct_payments_rides_v2`\
+      \ d2\r\n    ON d2.transaction_date_pacific BETWEEN DATE_SUB(d1.date, INTERVAL\
+      \ 55 DAY) \r\n                                      AND d1.date\r\n  WHERE d1.date\
+      \ >= '2023-03-15'\r\n  GROUP BY 1, 2, 3\r\n)\r\nSELECT * FROM Rolling56Days\r\
+      \nORDER BY date DESC;\n```\n\n#### Metadata\n\nMetabase ID: __3380__\n\nCreated\
+      \ On: __2025-02-07T11:46:58.450415Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/3380
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.360'
+        last_used_at: '2025-07-23T15:00:02.02703Z'

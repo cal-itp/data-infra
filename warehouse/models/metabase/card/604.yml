@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: _v2_pipeline__presence_of_gtfs_rt_files__hourly_view__color_coded_
+    label: '(v2 Pipeline) Presence of GTFS RT Files: Hourly View (Color Coded)'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __604__
+
+
+      Created On: __2022-12-08T15:46:10.168759Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/604
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.997'
+        last_used_at: '2025-06-30T16:22:20.289002Z'

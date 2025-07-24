@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_journeys_per_aggregation_one_amount
+    label: Number of journeys per aggregation one amount
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2480__
+
+
+      Created On: __2024-07-11T19:47:19.474428Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2480
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.108'
+        last_used_at: '2025-05-16T19:19:27.415851Z'

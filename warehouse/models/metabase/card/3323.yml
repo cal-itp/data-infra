@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: voms__5311_307_funding
+    label: VOMS, 5311/307 funding
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3323__
+
+
+      Created On: __2025-01-16T01:40:00.987679Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3323
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.963'
+        last_used_at: '2025-06-16T20:49:08.464094Z'

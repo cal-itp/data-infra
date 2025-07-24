@@ -1,0 +1,25 @@
+version: 2
+exposures:
+  - name: manual_assessments
+    label: Manual Assessments
+    description: '### Dashboard Cards: 4
+
+
+      This dashboard is to assist folks who are performing the manual portion of GTFS
+      assessments.
+
+
+      #### Metadata
+
+
+      Metabase ID: __79__
+
+
+      Created On: __2022-08-23T22:29:14.708284Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/79
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []

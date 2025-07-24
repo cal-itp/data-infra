@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: _mst__cal_itp_benefits_enrollments_by_month_and_by_pathway
+    label: (MST) Cal-ITP Benefits enrollments by month and by pathway
+    description: '### Visualization: Bar
+
+
+      The number of successful benefit enrollments via the Benefits app each month,
+      broken out by enrollment pathway, for MST
+
+
+      #### Metadata
+
+
+      Metabase ID: __3286__
+
+
+      Created On: __2024-12-11T18:50:44.026784Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3286
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.554'
+        last_used_at: '2025-06-10T15:13:44.876858Z'

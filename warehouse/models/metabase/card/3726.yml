@@ -1,0 +1,47 @@
+version: 2
+exposures:
+  - name: _ncc__elavon_amount__settled_refunds_
+    label: (NCC) Elavon Amount (Settled refunds)
+    description: "### Visualization: Scalar\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nWITH refund_settlements AS (\r\n    SELECT\r\n    CASE\r\
+      \n      WHEN settlement_type = 'DEBIT' THEN CONCAT(retrieval_reference_number,\
+      \ 'Sales')\r\n      WHEN settlement_type = 'CREDIT' THEN CONCAT(retrieval_reference_number,\
+      \ 'Refund')\r\n    END AS Retrieval_Reference_Number____Sales_Refund_,\r\n \
+      \   participant_id,\r\n    customer_id,\r\n    aggregation_id,\r\n    retrieval_reference_number,\r\
+      \n    settlement_type,\r\n    TIMESTAMP_TRUNC(record_updated_timestamp_utc,\
+      \ DAY, 'America/Los_Angeles') AS record_updated_timestamp_utc,\r\n    settlement_status,\r\
+      \n    SUM(transaction_amount) AS sum\r\n  FROM\r\n    `mart_payments.fct_payments_settlements`\r\
+      \n  WHERE\r\n    aggregation_id IS NOT NULL\r\n    AND aggregation_id <> ''\r\
+      \n    AND retrieval_reference_number IS NOT NULL\r\n    AND retrieval_reference_number\
+      \ <> ''\r\n    AND record_updated_timestamp_utc >= TIMESTAMP('2024-01-01 00:00:00-08:00')\r\
+      \n    AND settlement_type = \"CREDIT\"\r\n  GROUP BY\r\n    Retrieval_Reference_Number____Sales_Refund_,\r\
+      \n    participant_id,\r\n    customer_id,\r\n    aggregation_id,\r\n    retrieval_reference_number,\r\
+      \n    settlement_type,\r\n    record_updated_timestamp_utc,\r\n    settlement_status\r\
+      \n),\r\nrefund_deposits AS (\r\n  SELECT\r\n    purch_id,\r\n    SUM(amount)\
+      \ AS amount,\r\n    settlement_date,\r\n    payment_date,\r\n    CASE\r\n  \
+      \    WHEN amount > 0 THEN CONCAT(purch_id, 'Sales')\r\n      WHEN amount < 0\
+      \ THEN CONCAT(purch_id, 'Refund')\r\n    END AS Purch_ID____Sales_Refund_\r\n\
+      \  FROM\r\n    `mart_payments.fct_payments_deposit_transactions`\r\n  WHERE\r\
+      \n    purch_id IS NOT NULL\r\n    AND purch_id <> ''\r\n    AND amount < 0\r\
+      \n  GROUP BY\r\n    Purch_ID____Sales_Refund_,\r\n    purch_id,\r\n    settlement_date,\r\
+      \n    payment_date\r\n)\r\nSELECT\r\n  st.participant_id AS Participant_ID,\r\
+      \n  st.retrieval_reference_number AS RRN,\r\n  DATE(st.record_updated_timestamp_utc)\
+      \ AS Requested_for_Settlement_Date,\r\n  st.settlement_type AS Settlement_Type,\r\
+      \n  st.settlement_status AS Settlement_Status,\r\n  st.sum AS Requested_for_Settlement_Amount,\r\
+      \n  d.purch_id AS Elavon_Purch_ID,\r\n  d.amount AS Elavon_Amount,\r\n  d.settlement_date\
+      \ AS Elavon_Settlement_Date,\r\n  d.payment_date AS Elavon_Payment_Date\r\n\
+      FROM\r\n  refund_settlements st\r\nLEFT JOIN\r\n  refund_deposits d ON st.Retrieval_Reference_Number____Sales_Refund_\
+      \ = d.Purch_ID____Sales_Refund_\r\nORDER BY\r\n  Requested_for_Settlement_Date\
+      \ ASC\r\nLIMIT\r\n  1048575\n```\n\n#### Metadata\n\nMetabase ID: __3726__\n\
+      \nCreated On: __2025-04-29T09:58:52.282777Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/3726
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.187'
+        last_used_at: '2025-07-23T18:30:32.261598Z'

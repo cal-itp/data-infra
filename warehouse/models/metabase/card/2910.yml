@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: schedule_to_use_for_rt_validation_on_july_1
+    label: Schedule To Use For Rt Validation on July 1
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2910__
+
+
+      Created On: __2024-08-22T17:10:56.675812Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2910
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.406'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

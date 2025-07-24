@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: transit_agency_profile_dashboard
+    label: Transit Agency Profile Dashboard
+    description: '### Dashboard Cards: 29
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __184__
+
+
+      Created On: __2024-05-28T19:50:15.164601Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/184
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

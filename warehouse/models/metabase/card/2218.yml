@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales__payments__payments___ccjpa____duplicate
+    label: 'Sales: Payments (payments - ccjpa) - Duplicate'
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2218__
+
+
+      Created On: __2024-03-21T21:01:35.183894Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2218
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.927'
+        last_used_at: '2025-03-20T14:49:48.751612Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: vendor_vehicle_position_feed_latency_stats
+    label: Vendor Vehicle Position Feed Latency Stats
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3130__
+
+
+      Created On: __2024-10-13T19:17:15.741052Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3130
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.171'
+        last_used_at: '2025-05-19T18:24:08.351971Z'

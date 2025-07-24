@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales__settled_transactions___duplicate
+    label: 'Sales: Settled Transactions - Duplicate'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2169__
+
+
+      Created On: __2024-02-14T18:38:04.949832Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2169
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.224'
+        last_used_at: '2025-02-20T19:05:12.057828Z'

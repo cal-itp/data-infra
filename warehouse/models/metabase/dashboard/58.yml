@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: agencies_yml_urls_vs_airtable_uris___v1
+    label: agencies.yml URLs vs airtable URIs - v1
+    description: '### Dashboard Cards: 11
+
+
+      A few questions to make sure agencies.yml URLs and airtable URIs are consistent.
+
+
+      #### Metadata
+
+
+      Metabase ID: __58__
+
+
+      Created On: __2022-03-03T17:21:55.013045Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/58
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

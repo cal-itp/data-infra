@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex_n__proportion_of_canceled_trips_by_county
+    label: 'Ex n: Proportion of canceled trips by county'
+    description: '### Visualization: Map
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3460__
+
+
+      Created On: __2025-03-19T00:27:18.152136Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3460
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.731'
+        last_used_at: '2025-03-19T23:23:03.355967Z'

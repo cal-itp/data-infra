@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: exercise_8__what_are_the_10_organizations_with_the_highest_number_of_distinct_vehicle_position_routes_in_yesterday_s_feed_
+    label: 'Exercise 8: What are the 10 organizations with the highest number of distinct
+      vehicle position routes in yesterday’s feed?'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1658__
+
+
+      Created On: __2023-08-30T23:19:29.61951Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1658
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.629'
+        last_used_at: '2025-03-05T05:48:31.393259Z'

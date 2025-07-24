@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: agencies_with_non_federal_funding_types
+    label: Agencies with non-federal funding types
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1716__
+
+
+      Created On: __2023-09-16T00:56:27.156212Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1716
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.768'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

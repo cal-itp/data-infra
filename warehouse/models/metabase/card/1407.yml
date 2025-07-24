@@ -1,0 +1,30 @@
+version: 2
+exposures:
+  - name: 7__average_trips_by_day_of_the_week__city_and_county_of_sf
+    label: '7: Average Trips by Day of the Week: City and County of SF'
+    description: '### Visualization: Bar
+
+
+      What is the average number of trips by day of the week for City and County of
+      San Francisco? We can use this question to find out which day is the busiest
+      during the week.
+
+
+      #### Metadata
+
+
+      Metabase ID: __1407__
+
+
+      Created On: __2023-07-05T21:59:40.632886Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1407
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.968'
+        last_used_at: '2025-03-14T16:45:16.595029Z'

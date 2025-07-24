@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales__settled_transactions_1
+    label: 'Sales: Settled Transactions'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2023__
+
+
+      Created On: __2023-12-07T00:09:49.267376Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2023
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.898'
+        last_used_at: '2025-02-20T19:05:17.763049Z'

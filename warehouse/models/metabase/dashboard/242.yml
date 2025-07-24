@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: issuer_view
+    label: Issuer view
+    description: '### Dashboard Cards: 10
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __242__
+
+
+      Created On: __2024-12-03T10:31:05.852498Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/242
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: feed_contact_information
+    label: Feed contact information
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __253__
+
+
+      Created On: __2022-01-19T23:22:09.535796Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/253
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

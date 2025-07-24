@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: percent_of_trips_with_empty_shape_id
+    label: Percent of Trips with Empty Shape ID
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __250__
+
+
+      Created On: __2022-01-19T22:37:30.769458Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/250
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

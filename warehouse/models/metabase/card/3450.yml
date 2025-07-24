@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex7___average_trips_per_day_of_the_week_for_a_specific_organization__bart_
+    label: 'Ex7 : Average Trips per Day of the Week for a Specific Organization (BART)'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3450__
+
+
+      Created On: __2025-03-12T20:47:25.048221Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3450
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.832'
+        last_used_at: '2025-03-14T16:45:20.531505Z'

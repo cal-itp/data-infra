@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: outstanding_debt_by_domestic_issuers
+    label: Outstanding Debt by Domestic Issuers
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2450__
+
+
+      Created On: __2024-07-09T09:09:25.591776Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2450
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.055'
+        last_used_at: '2025-07-23T21:04:01.340013Z'

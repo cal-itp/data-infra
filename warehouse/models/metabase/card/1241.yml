@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: checks_n_a_for_every_service_over_last_30_days
+    label: Checks N/A for every service over last 30 days
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1241__
+
+
+      Created On: __2023-03-30T18:22:46.198674Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1241
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

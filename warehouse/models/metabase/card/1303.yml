@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sum_of_littlepay_charge_amounts
+    label: Sum of Littlepay Charge Amounts
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1303__
+
+
+      Created On: __2023-04-20T21:02:58.499589Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1303
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.578'
+        last_used_at: '2025-03-19T15:54:40.930764Z'

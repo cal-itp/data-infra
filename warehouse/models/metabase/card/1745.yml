@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: proportion_of_guideline_checks_passed_by_check__filtered_
+    label: Proportion of Guideline Checks Passed by Check (Filtered)
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1745__
+
+
+      Created On: __2023-09-22T22:02:37.499593Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1745
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:06.791'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

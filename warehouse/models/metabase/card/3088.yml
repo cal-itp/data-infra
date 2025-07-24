@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_rides_for_journeys_with_more_than_one_ride
+    label: Number of rides for journeys with more than one ride
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3088__
+
+
+      Created On: __2024-09-11T13:43:02.625973Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3088
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.543'
+        last_used_at: '2025-06-11T15:46:37.640982Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: raw_static_feed_url
+    label: Raw Static Feed URL
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __240__
+
+
+      Created On: __2021-12-21T01:39:01.736894Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/240
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales___charged_amount__declined_
+    label: Sales / Charged amount (declined)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3150__
+
+
+      Created On: __2024-10-16T13:33:11.27714Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3150
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.261'
+        last_used_at: '2025-04-26T15:30:10.29341Z'

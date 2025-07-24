@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 4__fct_monthly_routes__filtered_by_name__year__and_month
+    label: 4. Fct Monthly Routes, Filtered by Name, Year, and Month
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1947__
+
+
+      Created On: __2023-11-16T00:28:14.708561Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1947
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.787'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

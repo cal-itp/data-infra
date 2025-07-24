@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _lake_transit_authority__merchant_service_charge_tracking
+    label: (Lake Transit Authority) Merchant Service Charge tracking
+    description: '### Dashboard Cards: 36
+
+
+      Merchant Service Charges tracking dashboard, based on the Elavon data feed.
+
+
+      #### Metadata
+
+
+      Metabase ID: __205__
+
+
+      Created On: __2024-08-14T19:29:00.290682Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/205
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []

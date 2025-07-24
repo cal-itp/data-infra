@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex9__organization_type_by_caltrans_district
+    label: 'Ex9: Organization Type by Caltrans District'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3453__
+
+
+      Created On: __2025-03-12T21:37:59.334239Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3453
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.471'
+        last_used_at: '2025-03-18T22:14:10.308948Z'

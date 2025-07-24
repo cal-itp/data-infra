@@ -1,0 +1,59 @@
+version: 2
+exposures:
+  - name: weather_related_service_alerts_counts_v2
+    label: Weather Related Service Alerts Counts v2
+    description: "### Visualization: Line\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nWITH service_alerts AS (\nSELECT `mart_gtfs.fct_daily_service_alerts`.`key`\
+      \ AS `key`, `mart_gtfs.fct_daily_service_alerts`.`dt` AS `dt`, `mart_gtfs.fct_daily_service_alerts`.`gtfs_dataset_key`\
+      \ AS `gtfs_dataset_key`, `mart_gtfs.fct_daily_service_alerts`.`base64_url` AS\
+      \ `base64_url`, `mart_gtfs.fct_daily_service_alerts`.`id` AS `id`, `mart_gtfs.fct_daily_service_alerts`.`cause`\
+      \ AS `cause`, `mart_gtfs.fct_daily_service_alerts`.`effect` AS `effect`, `mart_gtfs.fct_daily_service_alerts`.`header_text_text`\
+      \ AS `header_text_text`, `mart_gtfs.fct_daily_service_alerts`.`description_text_text`\
+      \ AS `description_text_text`, `mart_gtfs.fct_daily_service_alerts`.`first_header_timestamp`\
+      \ AS `first_header_timestamp`, `mart_gtfs.fct_daily_service_alerts`.`last_header_timestamp`\
+      \ AS `last_header_timestamp`, `mart_gtfs.fct_daily_service_alerts`.`num_appearances`\
+      \ AS `num_appearances`, `Dim_Provider_Gtfs_Data`.`key` AS `Dim_Provider_Gtfs_Data__key`,\
+      \ `Dim_Provider_Gtfs_Data`.`organization_name` AS `Dim_Provider_Gtfs_Data__organization_name`,\
+      \ `Dim_Provider_Gtfs_Data`.`service_name` AS `Dim_Provider_Gtfs_Data__service_name`,\
+      \ `Dim_Provider_Gtfs_Data`.`organization_itp_id` AS `Dim_Provider_Gtfs_Data__organization_itp_id`,\
+      \ `Dim_Provider_Gtfs_Data`.`organization_hubspot_company_record_id` AS `Dim_Provider_Gtfs_Data__organization_hubspot_compan_203de6e2`,\
+      \ `Dim_Provider_Gtfs_Data`.`organization_ntd_id` AS `Dim_Provider_Gtfs_Data__organization_ntd_id`,\
+      \ `Dim_Provider_Gtfs_Data`.`schedule_gtfs_dataset_key` AS `Dim_Provider_Gtfs_Data__schedule_gtfs_dataset_key`,\
+      \ `Dim_Provider_Gtfs_Data`.`gtfs_service_data_customer_facing` AS `Dim_Provider_Gtfs_Data__gtfs_service_data_customer_facing`,\
+      \ `Dim_Provider_Gtfs_Data`.`organization_key` AS `Dim_Provider_Gtfs_Data__organization_key`,\
+      \ `Dim_Provider_Gtfs_Data`.`service_alerts_gtfs_dataset_key` AS `Dim_Provider_Gtfs_Data__service_alerts_gtfs_dataset_key`,\
+      \ `Dim_Provider_Gtfs_Data`.`associated_schedule_gtfs_dataset_key` AS `Dim_Provider_Gtfs_Data__associated_schedule_gtfs_dataset_key`,\
+      \ `Dim_Provider_Gtfs_Data`.`service_key` AS `Dim_Provider_Gtfs_Data__service_key`,\
+      \ `Dim_Provider_Gtfs_Data`.`schedule_gtfs_dataset_name` AS `Dim_Provider_Gtfs_Data__schedule_gtfs_dataset_name`,\
+      \ `Dim_Provider_Gtfs_Data`.`vehicle_positions_gtfs_dataset_key` AS `Dim_Provider_Gtfs_Data__vehicle_positions_gtfs_dataset_key`,\
+      \ `Dim_Provider_Gtfs_Data`.`service_alerts_gtfs_dataset_name` AS `Dim_Provider_Gtfs_Data__service_alerts_gtfs_dataset_name`,\
+      \ `Dim_Provider_Gtfs_Data`.`trip_updates_gtfs_dataset_key` AS `Dim_Provider_Gtfs_Data__trip_updates_gtfs_dataset_key`,\
+      \ `Dim_Provider_Gtfs_Data`.`vehicle_positions_gtfs_dataset_name` AS `Dim_Provider_Gtfs_Data__vehicle_positions_gtfs_dataset_name`,\
+      \ `Dim_Provider_Gtfs_Data`.`regional_feed_type` AS `Dim_Provider_Gtfs_Data__regional_feed_type`,\
+      \ `Dim_Provider_Gtfs_Data`.`trip_updates_gtfs_dataset_name` AS `Dim_Provider_Gtfs_Data__trip_updates_gtfs_dataset_name`,\
+      \ `Dim_Provider_Gtfs_Data`.`_valid_from` AS `Dim_Provider_Gtfs_Data___valid_from`,\
+      \ `Dim_Provider_Gtfs_Data`.`_valid_to` AS `Dim_Provider_Gtfs_Data___valid_to`,\
+      \ `Dim_Provider_Gtfs_Data`.`_is_current` AS `Dim_Provider_Gtfs_Data___is_current`\n\
+      FROM `mart_gtfs.fct_daily_service_alerts`\nLEFT JOIN `mart_transit_database.dim_provider_gtfs_data`\
+      \ `Dim_Provider_Gtfs_Data` ON `mart_gtfs.fct_daily_service_alerts`.`gtfs_dataset_key`\
+      \ = `Dim_Provider_Gtfs_Data`.`service_alerts_gtfs_dataset_key`\nWHERE (`mart_gtfs.fct_daily_service_alerts`.`dt`\
+      \ >= date \"2022-11-01\"\n   AND `mart_gtfs.fct_daily_service_alerts`.`dt` <\
+      \ date_trunc(current_date('America/Los_Angeles'), day))\n),\nweather_service_alerts\
+      \ AS (\nSELECT *\nFROM service_alerts\nWHERE (`description_text_text` LIKE '%weather%')\n\
+      \    OR (`description_text_text` LIKE '%flooding%')\n    OR (`description_text_text`\
+      \ LIKE '%downed tree%')\n    OR (`description_text_text` LIKE '%storm%')\n \
+      \   OR (header_text_text LIKE '%Weather%')\n    OR (header_text_text LIKE '%Flooding%')\n\
+      \    OR 'cause' = 'WEATHER'\n)\nSELECT \n    date_trunc(`dt`, day) AS `dt`,\n\
+      \    count(distinct `key`) AS `count`\nFROM weather_service_alerts\nGROUP BY\
+      \ `dt`\nORDER BY `dt` ASC\n```\n\n#### Metadata\n\nMetabase ID: __1154__\n\n\
+      Created On: __2023-02-24T07:44:31.833508Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/1154
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

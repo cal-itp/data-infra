@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: average_pass_rate_for_fixed_route_organizations_successful_gtfs_schedule_feed_downloads
+    label: Average Pass Rate for Fixed-Route Organizations Successful GTFS Schedule
+      Feed Downloads
+    description: '### Visualization: Scalar
+
+
+      Average Percent Pass over the last week
+
+
+      #### Metadata
+
+
+      Metabase ID: __1252__
+
+
+      Created On: __2023-04-03T18:43:05.44574Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1252
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

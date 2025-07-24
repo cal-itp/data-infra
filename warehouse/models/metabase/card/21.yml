@@ -1,0 +1,21 @@
+version: 2
+exposures:
+  - name: what_are_an_agency_s_service_hours_each_day_
+    label: What are an agency's service hours each day?
+    description: "### Visualization: Line\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nWITH agency_service_window AS (\n(snippet: agency_service_daily_metrics)\n\
+      )\nSELECT *\nFROM agency_service_window\nJOIN `views.gtfs_agency_names` USING\
+      \ (calitp_itp_id, calitp_url_number)\nWHERE \n    calitp_url_number=0\n    AND\
+      \ (agency_name)\n    AND CAST(service_date AS TIMESTAMP) >= (start_date)\n \
+      \   [[AND CAST(service_date AS TIMESTAMP) <= (end_date)]]\n```\n\n#### Metadata\n\
+      \nMetabase ID: __21__\n\nCreated On: __2021-06-22T20:19:52.56353Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/21
+    maturity: medium
+    owner:
+      name: Michael Chow
+      email: michael.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

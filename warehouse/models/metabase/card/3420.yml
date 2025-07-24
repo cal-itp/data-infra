@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: deprecated_ex_1_how_many_organizations_and_types_of_services_are_there_per_caltrans_district_
+    label: DEPRECATED_ex_1_How many organizations AND types of services are there
+      per Caltrans District?
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3420__
+
+
+      Created On: __2025-02-20T23:41:48.180905Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3420
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.524'
+        last_used_at: '2025-02-24T20:59:52.748555Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: max_calendar_dates_date_by_feed
+    label: Max Calendar Dates Date by Feed
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2264__
+
+
+      Created On: __2024-05-07T01:48:46.319768Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2264
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.737'
+        last_used_at: '2025-07-23T07:23:48.638691Z'

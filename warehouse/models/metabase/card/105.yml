@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: validation____errors_introduced____daily__drilldown
+    label: Validation || Errors Introduced || Daily  Drilldown
+    description: '### Visualization: Bar
+
+
+      Across all feeds, which codes didn''t have errors on the previous day, but do
+      today? Allows clicking through to see which agencies produced the error codes.
+
+
+      #### Metadata
+
+
+      Metabase ID: __105__
+
+
+      Created On: __2021-08-27T14:56:09.509032Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/105
+    maturity: medium
+    owner:
+      name: Michael Chow
+      email: michael.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

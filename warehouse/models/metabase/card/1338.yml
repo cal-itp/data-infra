@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: distinct_values_of_latlon__long_beach_vehicle_positions_route_22__2023_04_28_
+    label: Distinct values of LatLon (Long Beach Vehicle Positions Route 22, 2023-04-28)
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1338__
+
+
+      Created On: __2023-05-05T00:23:27.91533Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1338
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

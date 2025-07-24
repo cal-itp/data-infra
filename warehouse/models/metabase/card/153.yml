@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_trips_with_an_empty_shape_id_value
+    label: Number of trips with an empty shape_id value
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __153__
+
+
+      Created On: __2021-10-27T17:43:22.657371Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/153
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

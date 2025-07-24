@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: status_of_guideline_checks_per_day__total_
+    label: Status of Guideline Checks per Day (Total)
+    description: '### Visualization: Bar
+
+
+      Over the last three months, what is the breakdown of status for the guideline
+      checks?
+
+
+      #### Metadata
+
+
+      Metabase ID: __1405__
+
+
+      Created On: __2023-07-05T18:55:47.060798Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1405
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.320'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

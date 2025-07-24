@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: median_ride_distance_per_route__only_for_tap_on_off_rides_
+    label: Median Ride Distance per Route (only for tap on/off rides)
+    description: "### Visualization: Bar\n\nNo description provided in Metabase\n\n\
+      #### Query\n\n```\nSELECT DISTINCT\n  `participant_id`, \n  `route_short_name`,\
+      \ \n  PERCENTILE_CONT(\n    ST_DISTANCE(\n      ST_GEOGPOINT(CAST(`longitude`\
+      \ AS FLOAT64), CAST(`latitude` AS FLOAT64)),\n      ST_GEOGPOINT(CAST(`off_longitude`\
+      \ AS FLOAT64), CAST(`off_latitude` AS FLOAT64))\n    ), 0.5) OVER (PARTITION\
+      \ BY `participant_id`, `route_id`) / 1609.34 as `median_ride_distance`\nFROM\
+      \ `cal-itp-data-infra.views.payments_rides` AS `views.payments_rides`\nWHERE\
+      \ (`off_littlepay_transaction_id` IS NOT NULL\n  AND `off_littlepay_transaction_id`\
+      \ <> '')\n  AND (`route_short_name` IS NOT NULL\n  AND `route_short_name` <>\
+      \ '')\n[[AND (transaction_date_time_pacific)]]\n[[AND (participant_id)]]\nORDER\
+      \ BY `route_short_name`\nLIMIT 1048575\n```\n\n#### Metadata\n\nMetabase ID:\
+      \ __276__\n\nCreated On: __2022-02-03T19:08:41.243616Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/276
+    maturity: medium
+    owner:
+      name: Mjumbe Poe
+      email: mjumbe.p@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.039'
+        last_used_at: '2025-02-28T19:54:58.534687Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: monthly_transaction_deltas___failing
+    label: Monthly Transaction Deltas - Failing
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __731__
+
+
+      Created On: __2023-01-17T22:43:13.024667Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/731
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.690'
+        last_used_at: '2025-07-21T14:00:02.89646Z'

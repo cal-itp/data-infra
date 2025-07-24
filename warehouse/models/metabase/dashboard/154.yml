@@ -1,0 +1,25 @@
+version: 2
+exposures:
+  - name: exercise_10__create_a_dashboard_and_filter_it_by_organization_name_or_caltrans_district
+    label: 'Exercise 10: Create a Dashboard and filter it by Organization Name or
+      Caltrans District'
+    description: '### Dashboard Cards: 4
+
+
+      or both
+
+
+      #### Metadata
+
+
+      Metabase ID: __154__
+
+
+      Created On: __2023-09-01T23:07:12.217408Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/154
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []

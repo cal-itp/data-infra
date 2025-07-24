@@ -1,0 +1,18 @@
+version: 2
+exposures:
+  - name: 4_3_2024__raw_data_table___sales
+    label: '4-3-2024: Raw Data Table - Sales'
+    description: "### Visualization: Table\n\nTransaction level data for Sales. \n\
+      Data last confirmed by CS, 4/3/2024\n\n#### Metadata\n\nMetabase ID: __2233__\n\
+      \nCreated On: __2024-04-03T21:35:07.82755Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2233
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:05.196'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

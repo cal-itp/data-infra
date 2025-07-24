@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_feeds_with_at_least_one_cancelled_trip_by_day__last_30_days__
+    label: 'Number of feeds with at least one cancelled trip by day (last 30 days) '
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2457__
+
+
+      Created On: __2024-07-09T20:53:32.956949Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2457
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.752'
+        last_used_at: '2025-07-23T22:45:56.463254Z'

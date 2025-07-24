@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: annual_enrollment_numbers___all_time
+    label: Annual enrollment numbers - All time
+    description: '### Visualization: Bar
+
+
+      Used in annual CS reporting
+
+
+      #### Metadata
+
+
+      Metabase ID: __3319__
+
+
+      Created On: __2025-01-09T00:41:02.247991Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3319
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.436'
+        last_used_at: '2025-01-10T23:45:58.968476Z'

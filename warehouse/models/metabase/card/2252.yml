@@ -1,0 +1,18 @@
+version: 2
+exposures:
+  - name: _5_1_2024__raw_data_table___sales_
+    label: '"5-1-2024: Raw Data Table - Sales"'
+    description: "### Visualization: Table\n\nTransaction level data for Sales. \n\
+      Data last confirmed by CS, 4/3/2024\n\n#### Metadata\n\nMetabase ID: __2252__\n\
+      \nCreated On: __2024-05-02T02:24:59.366667Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2252
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:08.386'
+        last_used_at: '2024-10-31T21:40:41.392485Z'

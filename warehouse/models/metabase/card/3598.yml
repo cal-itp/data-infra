@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales___nominal_amount__non_zero_not_settled_sales__
+    label: 'Sales / Nominal amount (non-zero not settled sales) '
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3598__
+
+
+      Created On: __2025-04-23T14:15:05.084897Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3598
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:05.858'
+        last_used_at: '2025-04-26T16:10:04.343797Z'

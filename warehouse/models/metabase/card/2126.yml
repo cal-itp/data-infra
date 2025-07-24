@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: net_sales__settled_transactions_1
+    label: 'Net Sales: Settled Transactions'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2126__
+
+
+      Created On: __2024-01-31T20:19:42.521394Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2126
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.832'
+        last_used_at: '2025-02-20T18:52:01.591188Z'

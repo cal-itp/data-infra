@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex_1__how_many_organizations_and_types_of_services_are_in_the_warehouse
+    label: Ex 1. How many organizations and types of services are in the warehouse
+    description: '### Visualization: Object
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3805__
+
+
+      Created On: __2025-07-22T19:03:56.672423Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3805
+    maturity: medium
+    owner:
+      name: Jiaxi Liu
+      email: jiaxi.liu@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.563'
+        last_used_at: '2025-07-23T23:04:17.928875Z'

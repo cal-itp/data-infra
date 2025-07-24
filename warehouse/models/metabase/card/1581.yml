@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: returns____of_trx_
+    label: Returns (# of trx)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1581__
+
+
+      Created On: __2023-08-03T14:27:08.298876Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1581
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.903'
+        last_used_at: '2025-05-28T16:42:16.0418Z'

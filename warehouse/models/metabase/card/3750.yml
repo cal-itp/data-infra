@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_non_revenue_vehicles_vs_ntd_ridership___rural_reporters___05_23_25
+    label: Number of Non-Revenue vehicles vs NTD ridership - Rural Reporters - 05/23/25
+    description: '### Visualization: Scatter
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3750__
+
+
+      Created On: __2025-05-23T22:10:07.76857Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3750
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.407'
+        last_used_at: '2025-05-23T22:40:55.345364Z'

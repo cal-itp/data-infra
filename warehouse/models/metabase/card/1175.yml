@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: service_area_density
+    label: Service Area Density
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1175__
+
+
+      Created On: __2023-03-03T01:38:31.106306Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1175
+    maturity: medium
+    owner:
+      name: Julia Ma
+      email: julia.ma@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:11.047'
+        last_used_at: '2024-09-24T21:21:18.707673Z'

@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: alert_table___journeys_with_unlabeled_routes
+    label: Alert Table - Journeys with Unlabeled Routes
+    description: '### Visualization: Table
+
+
+      Results appear + email is sent if the most recent full week had unlabeled journeys
+      > 10%
+
+
+      #### Metadata
+
+
+      Metabase ID: __1371__
+
+
+      Created On: __2023-06-09T16:28:56.307154Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1371
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.727'
+        last_used_at: '2025-07-21T23:49:22.249692Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: reduced_fare_open_loop_transactions_processed_in_2025
+    label: Reduced fare open loop transactions processed in 2025
+    description: '### Visualization: Progress
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3375__
+
+
+      Created On: __2025-02-04T23:32:49.900427Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3375
+    maturity: medium
+    owner:
+      name: Andy Walker
+      email: andy@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.469'
+        last_used_at: '2025-07-23T16:58:49.310303Z'

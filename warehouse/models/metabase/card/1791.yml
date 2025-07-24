@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: relative_charges_______detailed_per_agency_per_month
+    label: Relative charges (%) - detailed per agency per month
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1791__
+
+
+      Created On: __2023-10-02T12:56:21.863418Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1791
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.564'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

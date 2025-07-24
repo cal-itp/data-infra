@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_fixed_route_transit_agencies_by_district
+    label: Number of Fixed-Route Transit Agencies by District
+    description: '### Visualization: Map
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2311__
+
+
+      Created On: __2024-05-28T23:53:41.011972Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2311
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.588'
+        last_used_at: '2025-07-23T19:29:19.536006Z'

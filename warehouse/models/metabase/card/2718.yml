@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: last_day_in_dataset_3
+    label: Last day in dataset
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2718__
+
+
+      Created On: __2024-08-13T22:00:06.790765Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2718
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.861'
+        last_used_at: '2024-10-08T22:09:01.64493Z'

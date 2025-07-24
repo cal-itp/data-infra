@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales____of_trx_
+    label: Sales (# of trx)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1488__
+
+
+      Created On: __2023-07-26T18:55:33.881295Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1488
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.544'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

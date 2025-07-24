@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex8__top_10_distinct_vp_trip_route_ids_by_organization
+    label: 'Ex8: Top 10 Distinct VP Trip Route IDs by Organization'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3451__
+
+
+      Created On: __2025-03-12T21:07:23.484061Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3451
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.994'
+        last_used_at: '2025-03-14T16:58:32.827619Z'

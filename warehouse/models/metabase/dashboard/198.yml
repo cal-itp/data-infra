@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _public__big_blue_bus_gtfs_rt_completeness
+    label: '[Public] Big Blue Bus GTFS-RT Completeness'
+    description: '### Dashboard Cards: 26
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __198__
+
+
+      Created On: __2024-08-06T01:32:44.498951Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/198
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

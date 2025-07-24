@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_cancelled_trips_by_day__last_30_days__1
+    label: Number of cancelled trips by day (last 30 days)
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1460__
+
+
+      Created On: __2023-07-18T22:30:52.930744Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1460
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.741'
+        last_used_at: '2025-07-23T19:42:08.907991Z'

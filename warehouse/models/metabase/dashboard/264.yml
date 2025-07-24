@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: reconciliation_dashboard__littlepay_to_elavon_
+    label: Reconciliation dashboard (LittlePay to Elavon)
+    description: '### Dashboard Cards: 61
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __264__
+
+
+      Created On: __2025-04-26T13:36:00.20818Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/264
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []

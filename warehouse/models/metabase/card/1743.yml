@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_unique_organizations_over_time_by_month__filtered_
+    label: Number of Unique Organizations over Time by Month (Filtered)
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1743__
+
+
+      Created On: __2023-09-22T22:02:37.499593Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1743
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.480'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

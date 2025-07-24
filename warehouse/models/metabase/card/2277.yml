@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_services_with_complete_gtfs_rt_feeds_by_date
+    label: Number of Services with complete GTFS-RT feeds by date
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2277__
+
+
+      Created On: __2024-05-15T17:15:03.251432Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2277
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.350'
+        last_used_at: '2025-06-30T16:48:43.382804Z'

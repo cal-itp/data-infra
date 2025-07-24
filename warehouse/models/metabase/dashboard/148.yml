@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _mta__contactless_payments_metrics_dashboard
+    label: (MTA) Contactless Payments Metrics Dashboard
+    description: '### Dashboard Cards: 68
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __148__
+
+
+      Created On: __2023-08-02T17:34:20.627143Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/148
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

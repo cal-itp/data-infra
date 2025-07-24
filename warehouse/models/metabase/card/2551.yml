@@ -1,0 +1,31 @@
+version: 2
+exposures:
+  - name: organization__schedule__voms
+    label: organization, schedule, voms
+    description: "### Visualization: Table\n\nNumber of cancelled trips by organization\
+      \ name and schedule name but everrything is MTC...  huh.\n\n#### Query\n\n```\n\
+      with obs_trips as (\nSelect\n*,\n    CASE \n        WHEN tu_trip_schedule_relationships\
+      \ LIKE '%CANCELED%' THEN 1\n        ELSE 0 -- Or any other value you want for\
+      \ non-matching rows\n    END AS filtered_options,\n    CASE \n        WHEN tu_trip_schedule_relationships\
+      \ LIKE '%CANCELED%' THEN 0\n        ELSE 1 -- Or any other value you want for\
+      \ non-matching rows\n    END AS not_cancelled\nfrom mart_gtfs.fct_observed_trips\
+      \ fot\nLEFT JOIN `mart_transit_database.bridge_organizations_x_gtfs_datasets_produced`\
+      \ bo ON `fot`.`tu_gtfs_dataset_key` = `bo`.`gtfs_dataset_key`\nleft join `mart_transit_database.dim_organizations`\
+      \ dm\nON\norganization_key = dm.key\nLEFT JOIN \n`mart_ntd.dim_annual_ntd_agency_information`\
+      \ ai\nON\ndm.ntd_id = ai.ntd_id\nWHERE\nDATE(service_date) > DATE_SUB(CURRENT_DATE(),\
+      \ INTERVAL 3 MONTH)\nand bo._is_current = True\nAND\nai.year = 2022 and ai._is_current\
+      \ = True),\nsummarized_cancels as (Select organization_name, schedule_name,\
+      \ sum(filtered_options) as cancelled_trips, sum(not_cancelled) as not_cancelled_trips,\
+      \ max(total_voms) as total_voms\nfrom obs_trips\ngroup by organization_name,\
+      \ schedule_name\n)\nselect * from summarized_cancels\norder by organization_name;\n\
+      ```\n\n#### Metadata\n\nMetabase ID: __2551__\n\nCreated On: __2024-07-31T23:22:30.285335Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2551
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

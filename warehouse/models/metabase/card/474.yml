@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: check_status_by_feature
+    label: Check Status by Feature
+    description: '### Visualization: Table
+
+
+      Summarizes Check results, grouping by Feature
+
+
+      #### Metadata
+
+
+      Metabase ID: __474__
+
+
+      Created On: __2022-08-31T16:40:22.587697Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/474
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

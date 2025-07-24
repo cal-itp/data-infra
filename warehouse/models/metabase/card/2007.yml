@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: elavon_organizations___mids_that_map_to_littlepay____duplicate
+    label: Elavon Organizations / MIDs that map to Littlepay -- Duplicate
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2007__
+
+
+      Created On: __2023-12-06T23:29:12.171809Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2007
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.520'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: deletable_total_voms_by_year__incomplete_table_
+    label: DELETABLE_Total VOMS by Year (Incomplete table)
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2371__
+
+
+      Created On: __2024-06-20T15:47:04.365713Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2371
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.425'
+        last_used_at: '2024-11-23T00:01:53.782342Z'

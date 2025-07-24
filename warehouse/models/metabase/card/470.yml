@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: percent_of_stops_with_non_empty_tts_stop_name__grouped_by_itp_id
+    label: Percent of Stops with Non-empty tts_stop_name, Grouped by ITP ID
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __470__
+
+
+      Created On: __2022-08-30T19:37:23.421887Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/470
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

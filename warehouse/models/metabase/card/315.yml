@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_rides_per_origin_stop_station
+    label: Number of Rides per Origin Stop/Station
+    description: '### Visualization: Row
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __315__
+
+
+      Created On: __2022-02-24T04:12:29.980067Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/315
+    maturity: medium
+    owner:
+      name: Mjumbe Poe
+      email: mjumbe.p@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.927'
+        last_used_at: '2025-02-28T19:54:58.582304Z'

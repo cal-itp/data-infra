@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: proportion_pass_by_checks_table__filtered_
+    label: Proportion Pass by Checks Table (Filtered)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1741__
+
+
+      Created On: __2023-09-22T22:02:37.499593Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1741
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:04.096'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

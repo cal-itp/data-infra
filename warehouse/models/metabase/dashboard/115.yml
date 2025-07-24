@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: reports_site_v2_service_hours_check
+    label: Reports site v2 service hours check
+    description: '### Dashboard Cards: 2
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __115__
+
+
+      Created On: __2023-02-02T18:54:30.696791Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/115
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []

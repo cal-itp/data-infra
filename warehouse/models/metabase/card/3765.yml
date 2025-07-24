@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: percent_of_stops_that_are_wheelchair_accessible
+    label: Percent of Stops that are Wheelchair Accessible
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3765__
+
+
+      Created On: __2025-06-24T22:47:36.77725Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3765
+    maturity: medium
+    owner:
+      name: Md Saiful Islam
+      email: md.islam@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.073'
+        last_used_at: '2025-06-24T22:48:54.058575Z'

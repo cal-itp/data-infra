@@ -1,0 +1,66 @@
+version: 2
+exposures:
+  - name: how_many_feeds_have_a_cancellation_vs_not_and_how_many_total_do_we_have
+    label: How many feeds have a cancellation vs not and how many total do we have
+    description: "### Visualization: Line\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nWITH \nobs_trips AS (\n  -- Select base trip observations\
+      \ and add month identifier\n  SELECT\n    fot.*,\n    -- Extract YYYY-MM for\
+      \ monthly grouping\n    FORMAT_DATE('%Y-%m', service_date) AS service_month_year,\
+      \ \n    CASE \n      WHEN tu_trip_schedule_relationships LIKE '%CANCELED%' THEN\
+      \ 1\n      ELSE 0 \n    END AS cancelled_count,\n    CASE \n      WHEN tu_trip_schedule_relationships\
+      \ LIKE '%CANCELED%' THEN 0\n      ELSE 1 \n    END AS not_cancelled_count\n\
+      \  FROM \n    mart_gtfs.fct_observed_trips fot\n  WHERE \n    -- Filter for\
+      \ the last 3 years from the current date (approx. 2022-04-29 onwards)\n    DATE(service_date)\
+      \ > DATE_SUB(CURRENT_DATE(), INTERVAL 3 YEAR) \n),\nmonthly_obs_trips AS (\n\
+      \  -- Aggregate cancellation counts per schedule per month\n  SELECT \n    service_month_year,\n\
+      \    schedule_name,\n    SUM(cancelled_count) AS monthly_cancelled_count, \n\
+      \    SUM(not_cancelled_count) AS monthly_not_cancelled_count  \n  FROM \n  \
+      \  obs_trips \n  GROUP BY \n    1, 2 -- Group by service_month_year, schedule_name\n\
+      ),\ngtfs_to_org_id AS (\n  -- Map GTFS schedule names to NTD organization IDs\n\
+      \  SELECT\n    DISTINCT schedule_gtfs_dataset_name, \n    organization_ntd_id,\n\
+      \    -- Extract standardized NTD ID format\n    IF(LENGTH(organization_ntd_id)\
+      \ >= 10,\n        SUBSTR(organization_ntd_id, -5),\n        organization_ntd_id)\
+      \ AS ntd_id_2022\n  FROM \n    `cal-itp-data-infra.mart_transit_database.dim_provider_gtfs_data`\
+      \ \n  WHERE \n    schedule_gtfs_dataset_name IS NOT NULL \n    AND organization_ntd_id\
+      \ IS NOT NULL \n    AND _is_current = True\n),\nagency_ntd AS (\n  -- Get agency\
+      \ information (using 2023 data as in original query)\n  SELECT \n    agency_name,\
+      \ \n    ntd_id, \n    legacy_ntd_id\n  FROM \n    `cal-itp-data-infra.mart_ntd_annual_reporting.dim_2023_agency_information`\
+      \ \n  WHERE \n    state = \"CA\" \n),\nmonthly_feed_cancellations AS (\n  --\
+      \ Join monthly trip data with agency info and determine monthly cancellation\
+      \ status\n  SELECT \n    m.service_month_year,\n    m.schedule_name,\n    m.monthly_cancelled_count,\n\
+      \    -- Define cancellation category based on *monthly* counts\n    CASE \n\
+      \      WHEN m.monthly_cancelled_count > 0 THEN 'Feed with a cancellation in\
+      \ this month'\n      ELSE 'Feed without a cancellation in this month'\n    END\
+      \ AS monthly_cancellation_category\n  FROM \n    monthly_obs_trips m\n  LEFT\
+      \ JOIN \n    gtfs_to_org_id g ON m.schedule_name = g.schedule_gtfs_dataset_name\n\
+      \  LEFT JOIN \n    agency_ntd a ON g.ntd_id_2022 = a.ntd_id\n  WHERE \n    --\
+      \ Apply original exclusions\n    m.schedule_name NOT IN ('Bay Area 511 Regional\
+      \ Schedule', 'Redwood Coast Schedulel') \n    AND (g.ntd_id_2022 IS NULL OR\
+      \ g.ntd_id_2022 NOT IN (\n        '90264', '91018', '91093', -- humboldt doubles\
+      \ \n        '91058', '90164', '90050', '90227', '90165', '90163' -- VCTC exclusions\n\
+      \        ))\n)\n-- Final aggregation: Combine counts per category and total\
+      \ counts per month\nSELECT \n  service_month_year,\n  monthly_cancellation_category,\n\
+      \  COUNT(DISTINCT schedule_name) AS `Number of feeds` -- Count distinct feeds\
+      \ for the category\nFROM \n  monthly_feed_cancellations\nGROUP BY \n  service_month_year,\
+      \ \n  monthly_cancellation_category\nUNION ALL\n-- Calculate Total Feeds per\
+      \ month\nSELECT\n  service_month_year,\n  'Total Feeds' AS monthly_cancellation_category,\
+      \ -- Assign category label for the total\n  COUNT(DISTINCT schedule_name) AS\
+      \ `Number of feeds` -- Count all distinct feeds for the month\nFROM\n  monthly_feed_cancellations\n\
+      GROUP BY\n  service_month_year\nORDER BY \n  service_month_year DESC, -- Order\
+      \ by month descending (most recent first)\n  -- Custom order for categories\
+      \ within each month\n  CASE monthly_cancellation_category\n      WHEN 'Feed\
+      \ with a cancellation in this month' THEN 1\n      WHEN 'Feed without a cancellation\
+      \ in this month' THEN 2\n      WHEN 'Total Feeds' THEN 3 -- Ensure 'Total Feeds'\
+      \ comes last\n      ELSE 4 -- Should not happen, but good practice\n  END;\n\
+      ```\n\n#### Metadata\n\nMetabase ID: __3736__\n\nCreated On: __2025-04-29T21:39:58.871144Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/3736
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.253'
+        last_used_at: '2025-07-23T22:45:52.613924Z'

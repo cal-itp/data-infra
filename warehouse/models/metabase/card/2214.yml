@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_sales
+    label: Total Sales
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2214__
+
+
+      Created On: __2024-03-21T19:01:32.933739Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2214
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.733'
+        last_used_at: '2025-02-20T18:30:40.833266Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: fct_ntd_a30_vomscheck
+    label: Fct Ntd A30 Vomscheck
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3190__
+
+
+      Created On: __2024-11-05T00:13:09.923843Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3190
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.171'
+        last_used_at: '2025-07-15T18:28:43.107351Z'

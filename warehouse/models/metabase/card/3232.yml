@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: count_of_rides_per_bin_per_ta_per_month
+    label: Count of rides per BIN per TA per month
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3232__
+
+
+      Created On: __2024-12-04T18:39:28.941502Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3232
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:05.156'
+        last_used_at: '2024-12-06T14:10:49.180252Z'

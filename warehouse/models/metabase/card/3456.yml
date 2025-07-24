@@ -1,0 +1,43 @@
+version: 2
+exposures:
+  - name: ex4b____organizations_passing_feed_checks_by_headquarters_geography__working_
+    label: 'Ex4b: # Organizations Passing Feed Checks by Headquarters Geography (working)'
+    description: "### Visualization: Map\n\nNo description provided in Metabase\n\n\
+      #### Query\n\n```\nSELECT\n  `source`.`Bridge_Organizations_X_Headquarters_County_Geograph_733d0b1a`\
+      \ AS `Bridge_Organizations_X_Headquarters_County_Geograph_733d0b1a`,\n  count(distinct\
+      \ `source`.`organization_source_record_id`) AS `count`\nFROM\n  (\n    SELECT\n\
+      \      `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`organization_source_record_id`\
+      \ AS `organization_source_record_id`,\n      `Bridge_Organizations_X_Headquarters_County_Geograph_f2db91d1`.`county_geography_name`\
+      \ AS `Bridge_Organizations_X_Headquarters_County_Geograph_733d0b1a`,\n     \
+      \ count(\n        distinct `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`check`\n\
+      \      ) AS `count`\n    FROM\n      `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`\n\
+      LEFT JOIN `mart_transit_database.bridge_organizations_x_headquarters_county_geography`\
+      \ AS `Bridge_Organizations_X_Headquarters_County_Geograph_f2db91d1` ON `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`organization_key`\
+      \ = `Bridge_Organizations_X_Headquarters_County_Geograph_f2db91d1`.`organization_key`\n\
+      WHERE\n      (\n        `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`date`\
+      \ >= DATETIME_TRUNC(\n          DATETIME_ADD(\n            CURRENT_DATETIME('America/Los_Angeles'),\n\
+      \            INTERVAL -1 day\n          ),\n          day\n        )\n     \
+      \ )\n   AND (\n        `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`date`\
+      \ < DATETIME_TRUNC(CURRENT_DATETIME('America/Los_Angeles'), day)\n      )\n\
+      \      AND (\n        `Bridge_Organizations_X_Headquarters_County_Geograph_f2db91d1`.`_is_current`\
+      \ = TRUE\n      )\n      AND (\n        (\n          `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`check`\
+      \ = 'Vehicle positions RT feed is present'\n        )\n    OR (\n          `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`check`\
+      \ = 'Trip updates RT feed is present'\n        )\n        OR (\n          `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`check`\
+      \ = 'Service alerts RT feed is present'\n        )\n      )\n      AND (\n \
+      \       `mart_gtfs_quality.fct_daily_organization_combined_guideline_checks`.`status`\
+      \ = 'PASS'\n      )\nGROUP BY\n      `organization_source_record_id`,\n    \
+      \  `Bridge_Organizations_X_Headquarters_County_Geograph_733d0b1a`\n  ) AS `source`\n\
+      WHERE\n  `source`.`count` = 3\nGROUP BY\n  `Bridge_Organizations_X_Headquarters_County_Geograph_733d0b1a`\n\
+      ORDER BY \n  `count` DESC\n```\n\n#### Metadata\n\nMetabase ID: __3456__\n\n\
+      Created On: __2025-03-13T20:18:48.069874Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/3456
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.690'
+        last_used_at: '2025-03-14T16:29:32.251529Z'

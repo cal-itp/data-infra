@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales___payments
+    label: Sales / Payments
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2528__
+
+
+      Created On: __2024-07-29T22:08:09.619196Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2528
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:05.856'
+        last_used_at: '2025-04-26T14:49:40.425752Z'

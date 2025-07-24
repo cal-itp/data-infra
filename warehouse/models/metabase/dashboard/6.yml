@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: gtfs_schedule_report_1
+    label: GTFS Schedule Report
+    description: '### Dashboard Cards: 9
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __6__
+
+
+      Created On: __2021-06-22T20:20:03.949821Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/6
+    maturity: medium
+    owner:
+      name: Michael Chow
+      email: michael.c@jarv.us
+    depends_on: []

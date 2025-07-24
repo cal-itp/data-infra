@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: feeds_with_or_without_fares_v2
+    label: Feeds with or without Fares v2
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2306__
+
+
+      Created On: __2024-05-23T17:28:25.309371Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2306
+    maturity: medium
+    owner:
+      name: Md Saiful Islam
+      email: md.islam@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.223'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

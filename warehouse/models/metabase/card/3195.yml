@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_passenger_miles_by_mode_and_time_period
+    label: Total Passenger Miles by Mode and Time Period
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3195__
+
+
+      Created On: __2024-11-06T03:28:49.976124Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3195
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.453'
+        last_used_at: '2025-07-09T05:08:32.889757Z'

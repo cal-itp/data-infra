@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: lp_aggregations___deduped_elavon_month_date_differences___lp_summary_1
+    label: LP Aggregations / Deduped Elavon Month Date Differences - LP summary
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1991__
+
+
+      Created On: __2023-12-06T22:02:15.467451Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1991
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.307'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

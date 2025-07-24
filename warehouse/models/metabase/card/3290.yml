@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 5311_recipients_in_2022_2023
+    label: 5311 recipients in 2022-2023
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3290__
+
+
+      Created On: __2024-12-12T21:23:55.093441Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3290
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.156'
+        last_used_at: '2025-07-22T22:00:47.627149Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: list_of_ca_of_vehicles_operating_in_maximum_service__voms__
+    label: 'List of CA of Vehicles Operating in Maximum Service (VOMS) '
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2902__
+
+
+      Created On: __2024-08-19T19:43:33.949439Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2902
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.035'
+        last_used_at: '2025-01-27T23:47:47.656172Z'

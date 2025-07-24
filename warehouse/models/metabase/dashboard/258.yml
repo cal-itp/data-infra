@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _ncc__contactless_payments_metrics_dashboard
+    label: (NCC) Contactless Payments Metrics Dashboard
+    description: '### Dashboard Cards: 75
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __258__
+
+
+      Created On: __2025-03-28T17:43:35.297528Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/258
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

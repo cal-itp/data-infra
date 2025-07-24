@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: gtfs_realtime_adoption
+    label: GTFS Realtime Adoption
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1608__
+
+
+      Created On: __2023-08-08T18:16:23.962669Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1608
+    maturity: medium
+    owner:
+      name: Samantha Lewis
+      email: samantha.lewis@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.202'
+        last_used_at: '2025-07-23T17:23:52.877117Z'

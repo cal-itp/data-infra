@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_bus_stops_in_latest_gtfs_feed
+    label: Number of bus stops in latest GTFS feed
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2483__
+
+
+      Created On: __2024-07-11T23:37:30.763159Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2483
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.655'
+        last_used_at: '2025-07-09T02:00:39.070905Z'

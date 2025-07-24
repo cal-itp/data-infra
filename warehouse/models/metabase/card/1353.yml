@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: fees_as_proportion_of_elavon_deposits____ccjpa
+    label: Fees as Proportion of Elavon Deposits -- CCJPA
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1353__
+
+
+      Created On: __2023-05-12T17:00:19.969161Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1353
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.630'
+        last_used_at: '2025-03-19T15:54:39.825696Z'

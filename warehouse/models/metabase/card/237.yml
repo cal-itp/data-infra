@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_feeds_with_expiration_warnings_by_day
+    label: Number of feeds with expiration warnings by day
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __237__
+
+
+      Created On: __2021-12-15T19:16:06.374896Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/237
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: open_transit_data_quality_issues_by_caltrans_district_and_outreach_status
+    label: Open Transit Data Quality Issues by Caltrans District and Outreach Status
+    description: '### Visualization: Row
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2117__
+
+
+      Created On: __2024-01-30T00:53:16.163052Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2117
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.710'
+        last_used_at: '2025-07-21T15:00:04.651451Z'

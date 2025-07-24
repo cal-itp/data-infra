@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: refunds_grouped_by_organization_and_payment_months_
+    label: 'Refunds grouped by organization and payment months '
+    description: '### Visualization: Table
+
+
+      based on sales equivalent (v2)
+
+
+      #### Metadata
+
+
+      Metabase ID: __2134__
+
+
+      Created On: __2024-01-31T21:35:34.797438Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2134
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.027'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

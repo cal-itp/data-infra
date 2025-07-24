@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: littlepay_journeys_base_table
+    label: LittlePay Journeys base table
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2521__
+
+
+      Created On: __2024-07-29T21:31:30.456928Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2521
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:05.808'
+        last_used_at: '2025-04-26T16:10:04.343797Z'

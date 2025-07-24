@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: error_count_by_day
+    label: Error Count by Day
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __679__
+
+
+      Created On: __2023-01-06T15:35:32.118993Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/679
+    maturity: medium
+    owner:
+      name: Soren Spicknall
+      email: soren.s@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.668'
+        last_used_at: '2024-10-21T17:02:39.015216Z'

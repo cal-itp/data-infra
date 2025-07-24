@@ -1,0 +1,40 @@
+version: 2
+exposures:
+  - name: what_are_estimated_route_ids_when_the_route_id_is_null_
+    label: What are estimated route ids when the route id is null?
+    description: "### Visualization: Table\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\n-- Use a Common Table Expression (CTE) to first derive\
+      \ the route_id\r\nWITH DerivedRoutes AS (\r\n  SELECT\r\n    participant_id,\r\
+      \n    device_id,\r\n    vehicle_id,\r\n    type,\r\n    transaction_timestamp_utc,\r\
+      \n    processed_timestamp_utc,\r\n    location_id,\r\n    location_name,\r\n\
+      \    route_id,\r\n    -- This is the derived_route_id, now partitioned by the\
+      \ PST/PDT date\r\n    FIRST_VALUE(\r\n      CASE WHEN route_id = '' THEN NULL\
+      \ ELSE route_id END IGNORE NULLS\r\n    ) OVER (\r\n      -- The partition now\
+      \ includes the date in Pacific Time\r\n      PARTITION BY device_id, DATE(transaction_timestamp_utc,\
+      \ 'America/Los_Angeles')\r\n      ORDER BY transaction_timestamp_utc\r\n   \
+      \   -- This frame looks from the current row to the end of the daily partition\r\
+      \n      ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING\r\n    ) AS derived_route_id,\r\
+      \n    mode,\r\n    direction,\r\n    latitude,\r\n    longitude,\r\n    _line_number\r\
+      \n  FROM\r\n    `cal-itp-data-infra.external_littlepay_v3.device_transactions`\r\
+      \n  WHERE\r\n    DATE(transaction_timestamp_utc, 'America/Los_Angeles') BETWEEN\
+      \ '2025-06-01' AND '2025-06-30'\r\n    AND participant_id = 'sbmtd'\r\n)\r\n\
+      -- Select from the CTE and add the final_route_id column\r\nSELECT\r\n  participant_id,\r\
+      \n  device_id,\r\n  vehicle_id,\r\n  type,\r\n  transaction_timestamp_utc,\r\
+      \n  processed_timestamp_utc,\r\n  location_id,\r\n  location_name,\r\n  route_id,\
+      \ -- Original route_id\r\n  derived_route_id, -- The next available route_id\
+      \ within the same day\r\n  -- This new column uses route_id if it exists, otherwise\
+      \ it uses the derived one\r\n  COALESCE(NULLIF(route_id, ''), derived_route_id)\
+      \ AS final_route_id,\r\n  mode,\r\n  direction,\r\n  latitude,\r\n  longitude,\r\
+      \n  _line_number\r\nFROM\r\n  DerivedRoutes\r\nORDER BY\r\n  device_id, transaction_timestamp_utc;\r\
+      \n```\n\n#### Metadata\n\nMetabase ID: __3790__\n\nCreated On: __2025-07-18T06:44:41.841302Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/3790
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:05.590'
+        last_used_at: '2025-07-21T15:14:23.762404Z'

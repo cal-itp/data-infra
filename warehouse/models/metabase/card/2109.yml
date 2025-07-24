@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 4___ridership_by_month
+    label: 4 - Ridership by Month
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2109__
+
+
+      Created On: __2024-01-25T17:00:57.08584Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2109
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.984'
+        last_used_at: '2025-07-15T15:00:00.665486Z'

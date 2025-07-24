@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 8__what_are_10_organizations_with_the_most_unique_routes_
+    label: '8: What are 10 organizations with the most unique routes?'
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1444__
+
+
+      Created On: __2023-07-13T22:45:04.582819Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1444
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.915'
+        last_used_at: '2025-03-14T17:32:43.553424Z'

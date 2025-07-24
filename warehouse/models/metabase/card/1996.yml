@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: littlepay_net_settlements_1
+    label: Littlepay Net Settlements
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1996__
+
+
+      Created On: __2023-12-06T22:02:15.467451Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1996
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.803'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

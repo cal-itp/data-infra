@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 8___station_boardings_by_train
+    label: 8 - Station Boardings By Train
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2113__
+
+
+      Created On: __2024-01-25T18:49:41.623252Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2113
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.667'
+        last_used_at: '2025-07-15T15:00:13.163271Z'

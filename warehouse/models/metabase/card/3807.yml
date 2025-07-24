@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex_3__top_20_vendors_that_transit_organizations_use
+    label: Ex 3. Top 20 Vendors that Transit Organizations Use
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3807__
+
+
+      Created On: __2025-07-23T22:48:15.381884Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3807
+    maturity: medium
+    owner:
+      name: Jiaxi Liu
+      email: jiaxi.liu@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.465'
+        last_used_at: '2025-07-23T23:06:25.592982Z'

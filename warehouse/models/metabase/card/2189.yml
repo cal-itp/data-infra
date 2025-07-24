@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_feeds_with_fares_v2_by_day___duplicate
+    label: Number of Feeds with Fares v2 by day - Duplicate
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2189__
+
+
+      Created On: __2024-02-26T19:49:27.845037Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2189
+    maturity: medium
+    owner:
+      name: Md Saiful Islam
+      email: md.islam@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.037'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

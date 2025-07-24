@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: daily_number_of_trips_by_route__santa_maria_
+    label: Daily number of trips by route (Santa Maria)
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1464__
+
+
+      Created On: __2023-07-20T18:59:43.008528Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1464
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.680'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

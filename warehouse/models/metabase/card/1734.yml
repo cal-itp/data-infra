@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: proportion_of_guideline_checks_per_day_table__filtered_
+    label: Proportion of Guideline Checks Per Day Table (Filtered)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1734__
+
+
+      Created On: __2023-09-22T22:02:37.499593Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1734
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:05.911'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

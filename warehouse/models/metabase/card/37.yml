@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: june_ridership_by_line
+    label: June Ridership By Line
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __37__
+
+
+      Created On: __2021-07-21T00:42:04.811419Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/37
+    maturity: medium
+    owner:
+      name: Hunter Owens
+      email: hunter.owens@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

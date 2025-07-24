@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: organizations_without_gtfs_rt_data_by_total_voms
+    label: Organizations without GTFS-RT Data by Total VOMS
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1613__
+
+
+      Created On: __2023-08-08T19:44:51.816148Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1613
+    maturity: medium
+    owner:
+      name: Samantha Lewis
+      email: samantha.lewis@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.656'
+        last_used_at: '2025-06-30T16:48:43.539355Z'

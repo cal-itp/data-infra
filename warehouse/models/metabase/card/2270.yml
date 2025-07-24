@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: percent_of_trip_update_feeds_that_are__80__complete_by_day__last_180_days_
+    label: Percent of Trip Update Feeds that are <80% Complete by Day (last 180 days)
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2270__
+
+
+      Created On: __2024-05-07T17:41:31.94269Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2270
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:10.091'
+        last_used_at: '2025-03-26T21:03:55.879356Z'

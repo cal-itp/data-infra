@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: feeds_with_tripupdates_that_lack_any_stoptimeupdates
+    label: Feeds with TripUpdates that lack any StopTimeUpdates
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __431__
+
+
+      Created On: __2022-08-04T23:53:52.168921Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/431
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

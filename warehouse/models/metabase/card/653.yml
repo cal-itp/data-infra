@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: passing_checks__service_
+    label: Passing Checks (Service)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __653__
+
+
+      Created On: __2023-01-04T20:29:00.135601Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/653
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.580'
+        last_used_at: '2025-04-28T23:52:42.467122Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: chargebacks__usd_
+    label: Chargebacks (USD)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1628__
+
+
+      Created On: __2023-08-18T10:54:59.379379Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1628
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.005'
+        last_used_at: '2025-05-28T16:42:17.799512Z'

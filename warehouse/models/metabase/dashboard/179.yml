@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: transit_data_quality_mega_dashboard
+    label: Transit Data Quality Mega-dashboard
+    description: '### Dashboard Cards: 7
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __179__
+
+
+      Created On: __2024-03-06T00:30:31.937839Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/179
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

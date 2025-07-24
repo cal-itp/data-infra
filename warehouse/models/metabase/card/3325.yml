@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: benefits_by_eligibility_type__2024_
+    label: Benefits by eligibility type (2024)
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3325__
+
+
+      Created On: __2025-01-22T00:02:10.144637Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3325
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.575'
+        last_used_at: '2025-06-13T17:58:33.003102Z'

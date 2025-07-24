@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: exercise_1
+    label: Exercise 1
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1798__
+
+
+      Created On: __2023-10-18T20:15:15.979063Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1798
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.658'
+        last_used_at: '2025-03-11T21:39:08.355225Z'

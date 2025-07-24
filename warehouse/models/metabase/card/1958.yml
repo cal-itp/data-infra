@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sacramento__fct_monthly_routes___dim_providers_gtfs_data__no_dates_
+    label: Sacramento- fct monthly routes & dim providers gtfs data, no dates,
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1958__
+
+
+      Created On: __2023-11-17T18:23:28.108103Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1958
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.862'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,25 @@
+version: 2
+exposures:
+  - name: graas_static_gtfs_requirements
+    label: GRaaS Static GTFS Requirements
+    description: '### Dashboard Cards: 8
+
+
+      Was originally based on GTFS Guidelines, Specific Date dashboard; created for
+      GitHub issue #997
+
+
+      #### Metadata
+
+
+      Metabase ID: __45__
+
+
+      Created On: __2022-02-09T22:31:56.416601Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/45
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []

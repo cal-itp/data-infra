@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: merchant_service_charges__fees_
+    label: Merchant Service Charges (Fees)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3676__
+
+
+      Created On: __2025-04-26T15:04:58.973865Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3676
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.751'
+        last_used_at: '2025-07-11T16:45:46.693357Z'

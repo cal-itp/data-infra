@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: median_vehicle_positions_message_age__last_14_weeks_
+    label: Median Vehicle Positions Message Age (last 14 weeks)
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2568__
+
+
+      Created On: __2024-08-06T01:52:46.362244Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2568
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.009'
+        last_used_at: '2025-03-11T23:25:18.215488Z'

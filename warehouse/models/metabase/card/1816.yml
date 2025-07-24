@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: exercise_9__part_2
+    label: 'Exercise 9: Part 2'
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1816__
+
+
+      Created On: __2023-10-23T20:30:52.599067Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1816
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.126'
+        last_used_at: '2025-03-05T06:15:49.606753Z'

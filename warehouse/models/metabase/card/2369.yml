@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: list_of_feeds_without_fares_v2
+    label: List of Feeds WITHOUT Fares v2
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2369__
+
+
+      Created On: __2024-06-19T21:26:06.286517Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2369
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.977'
+        last_used_at: '2025-06-24T22:45:09.461513Z'

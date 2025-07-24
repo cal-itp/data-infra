@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: net_sales__payments
+    label: 'Net Sales: Payments'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2127__
+
+
+      Created On: __2024-01-31T20:24:10.735449Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2127
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.802'
+        last_used_at: '2025-02-20T18:30:40.576463Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales___settled_transactions
+    label: Sales / Settled transactions
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2527__
+
+
+      Created On: __2024-07-29T22:06:44.708662Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2527
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:05.718'
+        last_used_at: '2025-04-26T14:49:39.99901Z'

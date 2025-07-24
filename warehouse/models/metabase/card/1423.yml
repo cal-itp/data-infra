@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 2021_ca_ntd_data
+    label: 2021 CA NTD Data
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1423__
+
+
+      Created On: __2023-07-06T23:44:40.323047Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1423
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.414'
+        last_used_at: '2025-07-15T20:26:47.410498Z'

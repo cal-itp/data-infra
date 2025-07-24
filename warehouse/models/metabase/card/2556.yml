@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: individual_agency_percent_gtfs_rt_trip_updates_completeness__last_14_days_
+    label: Individual Agency Percent GTFS-RT Trip Updates Completeness (last 14 days)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2556__
+
+
+      Created On: __2024-08-06T01:33:51.105895Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2556
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.029'
+        last_used_at: '2025-03-11T23:25:18.206557Z'

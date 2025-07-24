@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _vendor_gtfs_rt_statistics
+    label: ' Vendor GTFS-RT Statistics'
+    description: '### Dashboard Cards: 4
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __230__
+
+
+      Created On: __2024-10-09T20:03:33.019915Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/230
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []

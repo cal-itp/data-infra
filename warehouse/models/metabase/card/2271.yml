@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_incomplete_vehicle_position_feeds_by_day__last_180_days_
+    label: Number of Incomplete Vehicle Position Feeds by Day (last 180 days)
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2271__
+
+
+      Created On: __2024-05-07T19:34:10.647047Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2271
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:10.596'
+        last_used_at: '2025-03-26T21:03:56.258266Z'

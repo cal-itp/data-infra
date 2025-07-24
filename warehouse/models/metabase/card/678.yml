@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: combined_bar_chart_of_total_unique_trips_by_day
+    label: Combined bar chart of total unique trips by Day
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __678__
+
+
+      Created On: __2023-01-06T07:26:02.973945Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/678
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

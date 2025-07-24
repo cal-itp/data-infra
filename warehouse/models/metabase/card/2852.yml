@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: reconciliation_base_table___zero_dollar_sales
+    label: Reconciliation base table - Zero-dollar sales
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2852__
+
+
+      Created On: __2024-08-15T22:35:06.967585Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2852
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:04.687'
+        last_used_at: '2025-04-26T13:38:41.504349Z'

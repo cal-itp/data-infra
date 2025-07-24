@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: check_status_by_feature__service_
+    label: Check Status by Feature (Service)
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __650__
+
+
+      Created On: __2023-01-04T20:17:21.00416Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/650
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.495'
+        last_used_at: '2025-04-28T23:52:42.981238Z'

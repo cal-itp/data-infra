@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: assessment_fee_per_network__usd_
+    label: Assessment fee per network (USD)
+    description: '### Visualization: Pie
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1490__
+
+
+      Created On: __2023-07-26T19:24:06.033853Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1490
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.980'
+        last_used_at: '2025-05-28T16:42:17.799512Z'

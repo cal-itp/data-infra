@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: top_20_agencies_by_2023_ridership
+    label: Top 20 Agencies by 2023 Ridership
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3196__
+
+
+      Created On: __2024-11-06T03:39:31.586727Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3196
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.393'
+        last_used_at: '2025-07-23T17:22:44.395729Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: percent_passes_by_check_by_day
+    label: Percent Passes by Check by Day
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1247__
+
+
+      Created On: __2023-03-30T20:11:22.177216Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1247
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

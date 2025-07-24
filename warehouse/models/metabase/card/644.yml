@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: __checks_passed__last_3_months__organization_
+    label: '% Checks Passed: Last 3 Months (Organization)'
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __644__
+
+
+      Created On: __2023-01-03T18:58:28.576365Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/644
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.791'
+        last_used_at: '2025-07-22T18:07:41.306239Z'

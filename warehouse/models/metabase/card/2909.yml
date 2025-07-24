@@ -1,0 +1,56 @@
+version: 2
+exposures:
+  - name: all_feeds_on_july_1
+    label: All feeds on July 1
+    description: "### Visualization: Table\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nSELECT\n  `source`.`date` AS `date`,\n  `source`.`count`\
+      \ AS `count`,\n  `Dim_Gtfs_Datasets___Date__Day`.`name` AS `Dim_Gtfs_Datasets___Date__Day__name`,\n\
+      \  `Dim_Gtfs_Datasets___Date__Day`.`uri` AS `Dim_Gtfs_Datasets___Date__Day__uri`,\n\
+      \  `Dim_Gtfs_Datasets___Date__Day`.`base64_url` AS `Dim_Gtfs_Datasets___Date__Day__base64_url`,\n\
+      \  `Bridge_Organizations_X_Services_Managed___Service_Key`.`organization_name`\
+      \ AS `Bridge_Organizations_X_Services_Managed___Service_K_5311ea08`,\n  `Bridge_Organizations_X_Services_Managed___Service_Key`.`service_name`\
+      \ AS `Bridge_Organizations_X_Services_Managed___Service_K_40070ddd`\nFROM\n\
+      \  (\n    SELECT\n      datetime_trunc(`mart_gtfs.fct_daily_schedule_feeds`.`date`,\
+      \ day) AS `date`,\n      count(*) AS `count`\n    FROM\n      `mart_gtfs.fct_daily_schedule_feeds`\n\
+      WHERE\n      (\n        `mart_gtfs.fct_daily_schedule_feeds`.`date` >= datetime\
+      \ \"2024-07-01 00:00:00\"\n   AND `mart_gtfs.fct_daily_schedule_feeds`.`date`\
+      \ < datetime \"2024-07-02 00:00:00\"\n      )\nGROUP BY\n      `date`\nORDER\
+      \ BY\n      `date` ASC\n  ) `source`\nLEFT JOIN `mart_transit_database.dim_gtfs_datasets`\
+      \ `Dim_Gtfs_Datasets___Date__Day` ON (\n    datetime_trunc(`source`.`date`,\
+      \ day) >= datetime(\n      timestamp_trunc(\n        `Dim_Gtfs_Datasets___Date__Day`.`_valid_from`,\n\
+      \        day,\n        'America/Los_Angeles'\n      ),\n      'America/Los_Angeles'\n\
+      \    )\n    AND datetime_trunc(`source`.`date`, day) <= datetime(\n      timestamp_trunc(\n\
+      \        `Dim_Gtfs_Datasets___Date__Day`.`_valid_to`,\n        day,\n      \
+      \  'America/Los_Angeles'\n      ),\n      'America/Los_Angeles'\n    )\n  )\n\
+      \  LEFT JOIN `mart_transit_database.dim_gtfs_service_data` `Dim_Gtfs_Service_Data___Key`\
+      \ ON (\n    `Dim_Gtfs_Datasets___Date__Day`.`key` = `Dim_Gtfs_Service_Data___Key`.`gtfs_dataset_key`\n\
+      \    AND datetime_trunc(`source`.`date`, day) >= datetime(\n      timestamp_trunc(\n\
+      \        `Dim_Gtfs_Service_Data___Key`.`_valid_from`,\n        day,\n      \
+      \  'America/Los_Angeles'\n      ),\n      'America/Los_Angeles'\n    )\n   \
+      \ AND datetime_trunc(`source`.`date`, day) <= datetime(\n      timestamp_trunc(\n\
+      \        `Dim_Gtfs_Service_Data___Key`.`_valid_to`,\n        day,\n        'America/Los_Angeles'\n\
+      \      ),\n      'America/Los_Angeles'\n    )\n    )\n  LEFT JOIN `mart_transit_database.bridge_organizations_x_services_managed`\
+      \ `Bridge_Organizations_X_Services_Managed___Service_Key` ON (\n  `Dim_Gtfs_Service_Data___Key`.`service_key`\
+      \ = `Bridge_Organizations_X_Services_Managed___Service_Key`.`service_key`\n\
+      \  AND datetime_trunc(`source`.`date`, day) >= datetime(\n      timestamp_trunc(\n\
+      \        `Bridge_Organizations_X_Services_Managed___Service_Key`.`_valid_from`,\n\
+      \        day,\n        'America/Los_Angeles'\n      ),\n      'America/Los_Angeles'\n\
+      \    )\n    AND datetime_trunc(`source`.`date`, day) <= datetime(\n      timestamp_trunc(\n\
+      \        `Bridge_Organizations_X_Services_Managed___Service_Key`.`_valid_to`,\n\
+      \        day,\n        'America/Los_Angeles'\n      ),\n      'America/Los_Angeles'\n\
+      \    )\n    )\nWHERE\n  `Dim_Gtfs_Datasets___Date__Day`.`deprecated_date` IS\
+      \ NULL\nORDER BY\n  `Bridge_Organizations_X_Services_Managed___Service_K_5311ea08`\
+      \ ASC,\n  `Bridge_Organizations_X_Services_Managed___Service_K_40070ddd` ASC,\n\
+      \  `Dim_Gtfs_Datasets___Date__Day__name` ASC\nLIMIT\n  1048575\n```\n\n####\
+      \ Metadata\n\nMetabase ID: __2909__\n\nCreated On: __2024-08-22T16:43:15.890283Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2909
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.667'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

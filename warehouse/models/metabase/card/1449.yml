@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: gtfs_rt_trip_updates_completeness__last_14_days_
+    label: GTFS-RT Trip Updates Completeness (last 14 days)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1449__
+
+
+      Created On: __2023-07-18T16:44:00.840929Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1449
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.199'
+        last_used_at: '2025-07-23T19:42:40.276149Z'

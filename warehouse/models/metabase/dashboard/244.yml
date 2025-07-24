@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: customer_success_annual_reporting
+    label: Customer Success Annual Reporting
+    description: '### Dashboard Cards: 13
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __244__
+
+
+      Created On: __2025-01-06T22:41:37.071678Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/244
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []

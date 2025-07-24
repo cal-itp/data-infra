@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: quarterly_payment__taps__comparison
+    label: Quarterly payment "taps" comparison
+    description: '### Visualization: Smartscalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2388__
+
+
+      Created On: __2024-06-24T18:34:54.081573Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2388
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.669'
+        last_used_at: '2025-07-08T18:42:31.555896Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 1__how_many_organizations_and_services_are_there_per_caltrans_district__1
+    label: '1: How many organizations and services are there per Caltrans District?'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1794__
+
+
+      Created On: __2023-10-04T00:00:19.099058Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1794
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.720'
+        last_used_at: '2025-03-05T06:01:02.010958Z'

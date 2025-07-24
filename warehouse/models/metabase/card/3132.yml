@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: vendor_individual_feed_stats
+    label: Vendor-Individual Feed stats
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3132__
+
+
+      Created On: __2024-10-13T21:02:13.797353Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3132
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.705'
+        last_used_at: '2025-01-17T00:46:23.94831Z'

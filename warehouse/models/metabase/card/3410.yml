@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_operations_funding_by_year
+    label: Total Operations Funding by Year
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3410__
+
+
+      Created On: __2025-02-14T01:03:15.755948Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3410
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.534'
+        last_used_at: '2025-07-09T05:08:32.889757Z'

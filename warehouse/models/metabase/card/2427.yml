@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: __of_transactions_with_aggregation
+    label: '# of transactions with aggregation'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2427__
+
+
+      Created On: __2024-07-05T14:19:05.31652Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2427
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.604'
+        last_used_at: '2025-05-16T19:19:31.480304Z'

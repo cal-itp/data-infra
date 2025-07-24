@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: service_hours_to_ntd_id
+    label: service hours to ntd_id
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3599__
+
+
+      Created On: __2025-04-23T16:13:06.640889Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3599
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.804'
+        last_used_at: '2025-05-23T22:40:56.057028Z'

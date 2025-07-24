@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: assessment_fees_as___of_net_sales___per_month_7
+    label: Assessment Fees as % of Net Sales - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2097__
+
+
+      Created On: __2024-01-15T16:47:20.211309Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2097
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.216'
+        last_used_at: '2025-07-07T17:34:00.416605Z'

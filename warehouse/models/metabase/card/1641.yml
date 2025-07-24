@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: charges_and_fees__usd____detailed_per_agency_per_month
+    label: Charges and Fees (USD) - detailed per agency per month
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1641__
+
+
+      Created On: __2023-08-21T07:53:07.699999Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1641
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.652'
+        last_used_at: '2025-07-14T17:23:06.005608Z'

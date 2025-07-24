@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: exercise_4__how_many_organizations_have_all_3_realtime__rt__feeds_present_
+    label: 'Exercise 4: How many Organizations have all 3 RealTime (RT) Feeds Present?'
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1648__
+
+
+      Created On: __2023-08-28T22:40:52.08105Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1648
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.842'
+        last_used_at: '2025-03-11T21:46:52.38026Z'

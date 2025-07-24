@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: d7_agencies_w___5311
+    label: D7 agencies w/  5311
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3786__
+
+
+      Created On: __2025-07-10T22:03:46.042269Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3786
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.452'
+        last_used_at: '2025-07-18T16:24:51.94538Z'

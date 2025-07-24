@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_revenue_by_agency
+    label: Total Revenue by Agency
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1965__
+
+
+      Created On: __2023-12-01T19:36:37.363677Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1965
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.855'
+        last_used_at: '2025-03-27T19:49:33.85811Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: 3__for_a_given_agency__on_each_day__days_until_the_feed_expires
+    label: 3. For a Given Agency, on Each Day, Days Until the Feed Expires
+    description: '### Visualization: Table
+
+
+      Example #3 in ''Tutorial - Querying the Data Warehouse''
+
+
+      #### Metadata
+
+
+      Metabase ID: __227__
+
+
+      Created On: __2021-12-02T22:29:38.903339Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/227
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

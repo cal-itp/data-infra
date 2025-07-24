@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: last_month_gtfs_validation_warnings
+    label: Last Month GTFS Validation Warnings
+    description: '### Visualization: Bar
+
+
+      Here''s a count of the last month of GTFS validation warnings
+
+
+      #### Metadata
+
+
+      Metabase ID: __4__
+
+
+      Created On: __2021-06-16T17:19:17.280781Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/4
+    maturity: medium
+    owner:
+      name: Hunter Owens
+      email: hunter.owens@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

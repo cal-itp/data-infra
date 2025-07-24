@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_rides_per_week__grouped_by_adjustment_type
+    label: Number of Rides per Week, grouped by Adjustment Type
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __170__
+
+
+      Created On: __2021-11-09T20:12:34.539817Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/170
+    maturity: medium
+    owner:
+      name: Mjumbe Poe
+      email: mjumbe.p@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.935'
+        last_used_at: '2025-02-28T19:54:58.534687Z'

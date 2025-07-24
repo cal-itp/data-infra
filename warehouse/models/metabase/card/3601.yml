@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: deprecated__number_of_non_revenue_vehicles_vs_gtfs_service_hours_v3
+    label: 'DEPRECATED: Number of Non-Revenue vehicles vs GTFS service hours v3'
+    description: '### Visualization: Scatter
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3601__
+
+
+      Created On: __2025-04-23T17:15:11.366728Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3601
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.786'
+        last_used_at: '2025-04-23T17:28:53.207938Z'

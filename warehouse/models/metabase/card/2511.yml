@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: gtfs_rt_cancelled_trips_by_organization__schedule__last_3_months
+    label: GTFS-RT Cancelled trips by Organization, Schedule, Last 3 months
+    description: "### Visualization: Table\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nwith obs_trips as (\nSelect\n*,\n    CASE \n        WHEN\
+      \ tu_trip_schedule_relationships LIKE '%CANCELED%' THEN 1\n        ELSE 0 --\
+      \ Or any other value you want for non-matching rows\n    END AS filtered_options,\n\
+      \    CASE \n        WHEN tu_trip_schedule_relationships LIKE '%CANCELED%' THEN\
+      \ 0\n        ELSE 1 -- Or any other value you want for non-matching rows\n \
+      \   END AS not_cancelled\nfrom mart_gtfs.fct_observed_trips fot\nLEFT JOIN `mart_transit_database.bridge_organizations_x_gtfs_datasets_produced`\
+      \ bo ON `fot`.`tu_gtfs_dataset_key` = `bo`.`gtfs_dataset_key`\nWHERE\nDATE(service_date)\
+      \ > DATE_SUB(CURRENT_DATE(), INTERVAL 3 MONTH)\nand bo._is_current = True)\n\
+      Select organization_name, schedule_name, sum(filtered_options) as cancelled_trips,\
+      \ sum(not_cancelled) as not_cancelled_trips\nfrom obs_trips\ngroup by organization_name,\
+      \ schedule_name\norder by organization_name, schedule_name;\n```\n\n#### Metadata\n\
+      \nMetabase ID: __2511__\n\nCreated On: __2024-07-23T22:19:07.925125Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2511
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.663'
+        last_used_at: '2025-07-23T21:18:32.086527Z'

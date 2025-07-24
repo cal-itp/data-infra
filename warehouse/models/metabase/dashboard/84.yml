@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _sbmtd__contactless_payments_metrics_dashboard
+    label: (SBMTD) Contactless Payments Metrics Dashboard
+    description: '### Dashboard Cards: 83
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __84__
+
+
+      Created On: __2022-08-29T23:43:02.149825Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/84
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

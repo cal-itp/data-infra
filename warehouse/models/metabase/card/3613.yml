@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: _sacrt__cal_itp_benefits_enrollments_by_month_and_by_pathway
+    label: (SacRT) Cal-ITP Benefits enrollments by month and by pathway
+    description: '### Visualization: Bar
+
+
+      The number of successful benefit enrollments via the Benefits app each month,
+      broken out by enrollment pathway, for MST
+
+
+      #### Metadata
+
+
+      Metabase ID: __3613__
+
+
+      Created On: __2025-04-25T21:18:35.207164Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3613
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.670'
+        last_used_at: '2025-07-17T15:37:24.796471Z'

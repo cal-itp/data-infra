@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _ccjpa__contactless_payments_metrics_dashboard
+    label: (CCJPA) Contactless Payments Metrics Dashboard
+    description: '### Dashboard Cards: 73
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __126__
+
+
+      Created On: __2023-03-15T19:01:09.483953Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/126
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: v2_org_services_update3
+    label: V2_Org_Services_Update3
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __776__
+
+
+      Created On: __2023-01-31T21:22:15.573303Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/776
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:03.546'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

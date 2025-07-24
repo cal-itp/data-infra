@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_agencies_using_cal_itp_products
+    label: Number of Agencies using Cal-ITP products
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3739__
+
+
+      Created On: __2025-05-10T00:27:42.063892Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3739
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.555'
+        last_used_at: '2025-07-23T17:25:55.064369Z'

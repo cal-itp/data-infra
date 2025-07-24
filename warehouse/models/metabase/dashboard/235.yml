@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: vendor_individual_feed_dashboard
+    label: Vendor-Individual Feed Dashboard
+    description: '### Dashboard Cards: 2
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __235__
+
+
+      Created On: __2024-10-16T04:33:16.30376Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/235
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []

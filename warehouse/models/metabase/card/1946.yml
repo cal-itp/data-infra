@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 2__fct_monthly_routes___dim_providers_gtfs_data__no_date_parameters
+    label: 2. fct_monthly_routes & dim_providers_gtfs_data, no date parameters
+    description: '### Visualization: Table
+
+
+      trying to recreate natalies join, so i can get back the sacramento schedule.
+
+
+      #### Metadata
+
+
+      Metabase ID: __1946__
+
+
+      Created On: __2023-11-14T00:27:06.745181Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1946
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:06.266'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

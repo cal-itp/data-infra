@@ -1,0 +1,23 @@
+version: 2
+exposures:
+  - name: schedule_rt_feeds_count
+    label: Schedule+rt feeds count
+    description: "### Visualization: Line\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nwith sch as (SELECT count(*) as keys, DATE(date) as dates\
+      \ FROM `cal-itp-data-infra.mart_gtfs.fct_daily_schedule_feeds` \r\ngroup by\
+      \ DATE(date)),\r\nrt as (select count(key) as rt_count, DATE(date) as dates\
+      \ FROM `cal-itp-data-infra.mart_gtfs.fct_daily_rt_feed_files`\r\ngroup by dates)\r\
+      \nselect keys, sch.dates, rt_count, keys+coalesce(rt_count,0) as total from\
+      \ sch\r\nleft join rt\r\non sch.dates = rt.dates\r\norder by dates DESC\r\n\
+      ;\n```\n\n#### Metadata\n\nMetabase ID: __2339__\n\nCreated On: __2024-06-05T20:11:41.167257Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2339
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.382'
+        last_used_at: '2025-06-07T07:48:09.155148Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_issues_waiting_over_a_week
+    label: Total Issues Waiting Over A Week
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2064__
+
+
+      Created On: __2024-01-06T00:25:18.234188Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2064
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.615'
+        last_used_at: '2025-07-21T15:00:02.569439Z'

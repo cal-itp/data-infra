@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: transit_agencies_with_or_without_stops_on_the_state_highway_network
+    label: Transit Agencies with or without stops on the state highway network
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3439__
+
+
+      Created On: __2025-03-06T23:52:37.313224Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3439
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.103'
+        last_used_at: '2025-03-06T23:53:16.412335Z'

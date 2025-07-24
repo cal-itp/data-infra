@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: average_charge_amount_of_journeys__with_more_than_one_rides
+    label: Average charge amount of journeys  with more than one rides
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3092__
+
+
+      Created On: __2024-09-12T01:58:22.240362Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3092
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.517'
+        last_used_at: '2025-06-11T15:46:37.640982Z'

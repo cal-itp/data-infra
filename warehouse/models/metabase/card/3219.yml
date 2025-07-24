@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: gtfs_feeds_without_shapes_txt
+    label: GTFS Feeds without shapes.txt
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3219__
+
+
+      Created On: __2024-11-27T02:13:14.559016Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3219
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-11-27T02:13:14.559016Z'

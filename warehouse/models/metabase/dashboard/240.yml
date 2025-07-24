@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: ntd_validation_report_dashboard
+    label: ntd validation report dashboard
+    description: '### Dashboard Cards: 6
+
+
+      with agency filter
+
+
+      #### Metadata
+
+
+      Metabase ID: __240__
+
+
+      Created On: __2024-11-05T00:11:34.40666Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/240
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []

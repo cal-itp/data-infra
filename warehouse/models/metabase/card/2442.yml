@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: tokens_by_bin___date_tracking
+    label: Tokens by BIN - date tracking
+    description: '### Visualization: Line
+
+
+      Potential tokenisation tracking
+
+
+      #### Metadata
+
+
+      Metabase ID: __2442__
+
+
+      Created On: __2024-07-09T09:09:25.591776Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2442
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.619'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

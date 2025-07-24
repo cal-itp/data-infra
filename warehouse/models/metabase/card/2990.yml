@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: average_transaction_value__usd____per_month_14
+    label: Average transaction value (USD) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2990__
+
+
+      Created On: __2024-08-23T17:07:02.160245Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2990
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.135'
+        last_used_at: '2025-07-10T18:30:29.047222Z'

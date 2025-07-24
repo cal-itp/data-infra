@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: max_calendar_calendar_dates_end_date
+    label: Max calendar/calendar_dates end date
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1369__
+
+
+      Created On: __2023-06-01T20:26:25.650082Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1369
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:03.018'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

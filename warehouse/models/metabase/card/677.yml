@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: merge_new
+    label: Merge New
+    description: '### Visualization: Table
+
+
+      use dim_provider_gtfs_data, not bridge
+
+
+      #### Metadata
+
+
+      Metabase ID: __677__
+
+
+      Created On: __2023-01-06T00:51:43.963514Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/677
+    maturity: medium
+    owner:
+      name: Eric Dasmalchi
+      email: eric@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

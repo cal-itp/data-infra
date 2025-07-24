@@ -1,0 +1,26 @@
+version: 2
+exposures:
+  - name: catastrophic_gtfs_schedule_errors_dashboard
+    label: Catastrophic GTFS Schedule Errors Dashboard
+    description: '### Dashboard Cards: 9
+
+
+      A few questions seeking to highlight GTFS Schedule feeds that have catastrophic
+      errors, meaning errors that prevent any current service from being able to be
+      shown.
+
+
+      #### Metadata
+
+
+      Metabase ID: __46__
+
+
+      Created On: __2022-02-16T23:52:27.028874Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/46
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

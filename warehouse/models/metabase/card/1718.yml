@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: agencies_with_no_federal_funding_with_total_voms
+    label: Agencies with no federal funding with Total VOMS
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1718__
+
+
+      Created On: __2023-09-16T01:00:35.285612Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1718
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.391'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

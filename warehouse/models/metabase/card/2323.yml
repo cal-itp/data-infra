@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: gtfs_fares_v2_adoption
+    label: GTFS Fares v2 Adoption
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2323__
+
+
+      Created On: __2024-05-31T21:21:23.447104Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2323
+    maturity: medium
+    owner:
+      name: Md Saiful Islam
+      email: md.islam@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.928'
+        last_used_at: '2025-06-24T22:45:09.41956Z'

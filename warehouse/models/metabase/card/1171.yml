@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: which_vendors_are_transit_services_using_
+    label: Which Vendors are Transit Services using?
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1171__
+
+
+      Created On: __2023-03-03T01:38:31.106306Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1171
+    maturity: medium
+    owner:
+      name: Julia Ma
+      email: julia.ma@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:03.541'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

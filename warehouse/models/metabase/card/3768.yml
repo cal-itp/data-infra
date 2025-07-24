@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: cal_itp_benefits_enrollments__cumulative_growth__by_quarter
+    label: Cal-ITP Benefits enrollments (cumulative growth) by quarter
+    description: '### Visualization: Bar
+
+
+      Successful benefit enrollments using the Cal-ITP Benefits app across all enrollment
+      pathways and all California transit agencies since launching the service.
+
+
+      #### Metadata
+
+
+      Metabase ID: __3768__
+
+
+      Created On: __2025-06-25T22:05:05.718567Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3768
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.846'
+        last_used_at: '2025-06-27T18:15:53.703143Z'

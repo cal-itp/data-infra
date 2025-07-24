@@ -1,0 +1,39 @@
+version: 2
+exposures:
+  - name: voms___number_of_trip_update_feeds_that_have_or_don_t_have_cancellations
+    label: VOMS - Number of Trip Update feeds that have or don't have Cancellations
+    description: "### Visualization: Bar\n\nNo description provided in Metabase\n\n\
+      #### Query\n\n```\nWITH agencies_with_cancels AS (\n  SELECT\n    `mart_gtfs.fct_observed_trips`.`schedule_name`\
+      \ AS `schedule_name`\n  FROM\n    `mart_gtfs.fct_observed_trips`\n  WHERE\n\
+      \    (\n      lower(`mart_gtfs.fct_observed_trips`.`tu_trip_schedule_relationships`)\
+      \ LIKE '%canceled%'\n      AND `mart_gtfs.fct_observed_trips`.`service_date`\
+      \ >= DATE_TRUNC(DATE_ADD(CURRENT_DATE('America/Los_Angeles'), INTERVAL -90 DAY),\
+      \ DAY)\n      AND `mart_gtfs.fct_observed_trips`.`service_date` < DATE_TRUNC(CURRENT_DATE('America/Los_Angeles'),\
+      \ DAY)\n    )\n  GROUP BY\n    `schedule_name`\n),\nsummary_counts AS (\n  SELECT\
+      \ \n    COUNT(*) AS cancellation_count,\n    'At least one cancellation in last\
+      \ 3 months' AS cancellation_status\n  FROM (\n    SELECT\n      `mart_gtfs.fct_observed_trips`.`schedule_name`\
+      \ AS `schedule_name`\n    FROM\n      `mart_gtfs.fct_observed_trips`\n    WHERE\n\
+      \      (\n        lower(`mart_gtfs.fct_observed_trips`.`tu_trip_schedule_relationships`)\
+      \ LIKE '%canceled%'\n        AND `mart_gtfs.fct_observed_trips`.`service_date`\
+      \ >= DATE_TRUNC(DATE_ADD(CURRENT_DATE('America/Los_Angeles'), INTERVAL -90 DAY),\
+      \ DAY)\n        AND `mart_gtfs.fct_observed_trips`.`service_date` < DATE_TRUNC(CURRENT_DATE('America/Los_Angeles'),\
+      \ DAY)\n      )\n    GROUP BY\n      `schedule_name`\n  )\n  UNION ALL\n  SELECT\
+      \ \n    COUNT(DISTINCT schedule_name) AS cancellation_count,\n    'No cancellations\
+      \ in last 3 months' AS cancellation_status\n  FROM `mart_gtfs.fct_observed_trips`\n\
+      \  WHERE\n    `mart_gtfs.fct_observed_trips`.`service_date` >= DATE_TRUNC(DATE_ADD(CURRENT_DATE('America/Los_Angeles'),\
+      \ INTERVAL -90 DAY), DAY)\n    AND `mart_gtfs.fct_observed_trips`.`service_date`\
+      \ < DATE_TRUNC(CURRENT_DATE('America/Los_Angeles'), DAY)\n    AND schedule_name\
+      \ NOT IN (SELECT schedule_name FROM agencies_with_cancels)\n)\nSELECT * FROM\
+      \ summary_counts;\n```\n\n#### Metadata\n\nMetabase ID: __2550__\n\nCreated\
+      \ On: __2024-07-31T22:47:34.926328Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2550
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.091'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

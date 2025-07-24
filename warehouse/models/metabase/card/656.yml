@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: statewide_number_unique_vehicle_position_trips_by_day
+    label: Statewide Number Unique Vehicle Position Trips by Day
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __656__
+
+
+      Created On: __2023-01-04T21:23:21.330838Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/656
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: value_of_all_unauthorised_aggregations____duplicate
+    label: Value of All Unauthorised Aggregations -- Duplicate
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2005__
+
+
+      Created On: __2023-12-06T23:29:12.171809Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2005
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.745'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

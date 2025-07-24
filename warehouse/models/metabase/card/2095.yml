@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales____of_trx____per_month_5
+    label: Sales (# of trx) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2095__
+
+
+      Created On: __2024-01-15T16:47:20.211309Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2095
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.001'
+        last_used_at: '2025-04-26T14:54:54.753413Z'

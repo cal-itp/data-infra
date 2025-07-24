@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: 4__how_many_organizations_have_all_3_realtime__rt__feeds_present_and_are_passing_
+    label: 4. How many Organizations have all 3 RealTime (RT) Feeds Present and are
+      passing?
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1669__
+
+
+      Created On: __2023-09-05T23:15:44.903481Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1669
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.707'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: count_of_customer_facing
+    label: Count of Customer Facing
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __608__
+
+
+      Created On: __2022-12-14T23:28:38.445832Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/608
+    maturity: medium
+    owner:
+      name: Julia Ma
+      email: julia.ma@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.715'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

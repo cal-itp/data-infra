@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: sbmtd_benefits_dashboard
+    label: SBMTD Benefits Dashboard
+    description: '### Dashboard Cards: 4
+
+
+      Benefits metrics that are auto-emailed to SBMTD
+
+
+      #### Metadata
+
+
+      Metabase ID: __249__
+
+
+      Created On: __2025-02-19T00:16:31.95966Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/249
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []

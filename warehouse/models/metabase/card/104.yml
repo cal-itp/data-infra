@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: validation___validation_errors_resolved
+    label: Validation|| Validation Errors Resolved
+    description: "### Visualization: Line\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nWITH \ndaily_codes_enh AS (\n   SELECT date_trunc(`views.validation_fact_daily_feed_codes`.`date`,\
+      \ day) \n    AS `date`, count(distinct `views.validation_fact_daily_feed_codes`.`code`)\
+      \ AS `validation_errors`\n    FROM `views.validation_fact_daily_feed_codes`\n\
+      \    LEFT JOIN `views.validation_dim_codes` `validation_dim_codes__via__cod`\
+      \ \n    ON `views.validation_fact_daily_feed_codes`.`code` = `validation_dim_codes__via__cod`.`code`\n\
+      \    WHERE (`views.validation_fact_daily_feed_codes`.`n_notices` > 0 AND `validation_dim_codes__via__cod`.`severity`\
+      \ = 'ERROR')\n    GROUP BY date\n),\ndaily_code_count AS (\nSelect *, LAG (validation_errors,\
+      \ 1 )OVER (ORDER BY date) as validation_errors_previous_day\nfrom daily_codes_enh\n\
+      )\nSelect * , (select validation_errors_previous_day - validation_errors) as\
+      \ validation_errors_resolved \nfrom daily_code_count \n```\n\n#### Metadata\n\
+      \nMetabase ID: __104__\n\nCreated On: __2021-08-26T21:32:56.887542Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/104
+    maturity: medium
+    owner:
+      name: Natalya Diaz
+      email: natalya.d@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.948'
+        last_used_at: '2025-06-18T04:17:46.727152Z'

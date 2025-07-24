@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: payments_metrics____duplicate_test_for_mst_
+    label: Payments Metrics - (Duplicate Test for MST)
+    description: '### Dashboard Cards: 20
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __38__
+
+
+      Created On: __2022-01-27T19:09:19.325865Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/38
+    maturity: medium
+    owner:
+      name: Mjumbe Poe
+      email: mjumbe.p@jarv.us
+    depends_on: []

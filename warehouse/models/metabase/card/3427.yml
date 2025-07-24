@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: ex_6_what_percent_of_publicly_operating_organizations_have_rt_feeds_present_for_yesterday_
+    label: ex_6_What percent of publicly operating organizations have RT Feeds present
+      for yesterday?
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3427__
+
+
+      Created On: __2025-02-26T18:36:08.18919Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3427
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.671'
+        last_used_at: '2025-03-14T16:39:39.076932Z'

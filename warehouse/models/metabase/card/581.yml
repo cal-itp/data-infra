@@ -1,0 +1,33 @@
+version: 2
+exposures:
+  - name: tap_data__all_time_
+    label: Tap Data (All Time)
+    description: "### Visualization: Table\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nSELECT\n  `mart_payments.fct_payments_rides_v2`.`transaction_date_time_pacific`\
+      \ AS `transaction_date_time_pacific`,\n  `mart_payments.fct_payments_rides_v2`.`transaction_date_pacific`\
+      \ AS `transaction_date_pacific`,\n  EXTRACT(\n    TIME\n    FROM\n      `mart_payments.fct_payments_rides_v2`.`transaction_date_time_pacific`\n\
+      \  ) AS `transaction_time_pacific`,\n  `mart_payments.fct_payments_rides_v2`.`customer_id`\
+      \ AS `customer_id`,\n  `mart_payments.fct_payments_rides_v2`.`route_id` AS `route_id`,\n\
+      \  `mart_payments.fct_payments_rides_v2`.`route_long_name` AS `route_long_name`,\n\
+      \  `mart_payments.fct_payments_rides_v2`.`direction` AS `direction`,\n  `mart_payments.fct_payments_rides_v2`.`location_name`\
+      \ AS `location_name`,\n  `mart_payments.fct_payments_rides_v2`.`location_id`\
+      \ AS `location_id`,\n  `mart_payments.fct_payments_rides_v2`.`latitude` AS `latitude`,\n\
+      \  `mart_payments.fct_payments_rides_v2`.`longitude` AS `longitude`,\n  `mart_payments.fct_payments_rides_v2`.`on_geography`\
+      \ AS `geography`,\n  `mart_payments.fct_payments_rides_v2`.`vehicle_id` AS `vehicle_id`,\n\
+      \  `mart_payments.fct_payments_rides_v2`.`device_id` AS `device_id`,\n  `mart_payments.fct_payments_rides_v2`.`day_of_week`\
+      \ AS `day_of_week`,\n  `mart_payments.fct_payments_rides_v2`.`product_description`\
+      \ AS `product_description`,\n  `mart_payments.fct_payments_rides_v2`.`charge_amount`\
+      \ AS `charge_amount`\nFROM\n  `mart_payments.fct_payments_rides_v2`\nWHERE\n\
+      \  ( transaction_date_time_pacific )\nORDER BY\n  transaction_date_time_pacific\
+      \ DESC\n```\n\n#### Metadata\n\nMetabase ID: __581__\n\nCreated On: __2022-11-09T19:42:46.792156Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/581
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:05.967'
+        last_used_at: '2025-07-23T15:42:11.102215Z'

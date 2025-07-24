@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: mst_graph_of_discounted_transactions
+    label: MST graph of discounted transactions
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3285__
+
+
+      Created On: __2024-12-11T18:49:06.013148Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3285
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.992'
+        last_used_at: '2025-06-10T15:13:45.077185Z'

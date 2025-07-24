@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ntd_information_filtered_with_dim_organizations
+    label: NTD Information Filtered with Dim Organizations
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1420__
+
+
+      Created On: __2023-07-06T21:23:53.641181Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1420
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.278'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

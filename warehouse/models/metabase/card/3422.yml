@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex_2_how_many_services_do_organizations_manage__by_caltrans_district_
+    label: ex_2_How many services do organizations manage, by Caltrans District?
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3422__
+
+
+      Created On: __2025-02-21T00:19:09.702288Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3422
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.557'
+        last_used_at: '2025-07-22T21:37:32.991346Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: share_of_journeys_with_more_than_one_ride_by_month
+    label: Share of journeys with more than one ride by month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3103__
+
+
+      Created On: __2024-09-13T02:25:12.483758Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3103
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.395'
+        last_used_at: '2025-06-11T15:46:37.590003Z'

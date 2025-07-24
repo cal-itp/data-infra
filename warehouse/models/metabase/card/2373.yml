@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: aggregated_transactions__more_than_1_journey_per_aggr__id__average_charge_amount__last_12_months_
+    label: Aggregated transactions (more than 1 journey per aggr. ID) average charge
+      amount (last 12 months)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2373__
+
+
+      Created On: __2024-06-20T20:40:37.13386Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2373
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.884'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

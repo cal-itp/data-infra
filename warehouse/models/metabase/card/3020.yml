@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: other_fees_as___of_net_sales___per_month_15
+    label: Other Fees as % of Net Sales - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3020__
+
+
+      Created On: __2024-08-23T17:19:54.262389Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3020
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.814'
+        last_used_at: '2025-06-18T16:27:07.052523Z'

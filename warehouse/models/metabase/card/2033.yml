@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: estimated_total_number_of_discount_rider_transactions_across_agencies
+    label: Estimated total number of discount rider transactions across agencies
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2033__
+
+
+      Created On: __2023-12-15T00:48:17.775374Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2033
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:03.872'
+        last_used_at: '2025-05-01T17:58:35.381024Z'

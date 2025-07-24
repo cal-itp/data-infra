@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_checks_by_feature_by_day
+    label: Number of Checks by Feature by Day
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1143__
+
+
+      Created On: __2023-02-17T03:39:17.36829Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1143
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2025-07-15T20:26:47.410498Z'

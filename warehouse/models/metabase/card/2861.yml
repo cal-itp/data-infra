@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: __of_trips_with_vp_data_by_time_of_day__last_30_days__4
+    label: '% of trips with VP data by time of day (last 30 days)'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2861__
+
+
+      Created On: __2024-08-16T00:39:16.042767Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2861
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.146'
+        last_used_at: '2024-10-21T23:34:31.548037Z'

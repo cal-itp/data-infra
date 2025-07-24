@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: median_ride_duration_per_route__only_for_tap_on_off_rides__1
+    label: Median Ride Duration per Route (only for tap on/off rides)
+    description: "### Visualization: Bar\n\nNo description provided in Metabase\n\n\
+      #### Query\n\n```\nSELECT DISTINCT \n    `uploaded_data.synthetic_payments_rides`.`participant_id`\
+      \ AS `participant_id`, \n    `uploaded_data.synthetic_payments_rides`.`route_short_name`\
+      \ AS `route_short_name`, \nPERCENTILE_CONT(DATETIME_DIFF(`uploaded_data.synthetic_payments_rides`.`off_transaction_date_time_pacific`,\
+      \ `uploaded_data.synthetic_payments_rides`.`transaction_date_time_pacific`,\
+      \ MINUTE), 0.5) OVER (PARTITION BY `uploaded_data.synthetic_payments_rides`.`participant_id`,\
+      \ `uploaded_data.synthetic_payments_rides`.`route_id`) as `median_ride_duration`\n\
+      FROM `uploaded_data.synthetic_payments_rides`\nWHERE (`uploaded_data.synthetic_payments_rides`.`off_littlepay_transaction_id`\
+      \ IS NOT NULL\n   AND `uploaded_data.synthetic_payments_rides`.`off_littlepay_transaction_id`\
+      \ <> '')\n   AND (`uploaded_data.synthetic_payments_rides`.`route_short_name`\
+      \ IS NOT NULL\n   AND `uploaded_data.synthetic_payments_rides`.`route_short_name`\
+      \ <> '')\n   [[AND (transaction_date_time_pacific)]]\n   [[AND (participant_id)]]\n\
+      ORDER BY `uploaded_data.synthetic_payments_rides`.`route_short_name`\n```\n\n\
+      #### Metadata\n\nMetabase ID: __565__\n\nCreated On: __2022-09-28T20:58:36.942961Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/565
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.419'
+        last_used_at: '2025-04-17T18:24:33.020245Z'

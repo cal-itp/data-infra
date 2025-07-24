@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: cal_itp_contactless_usage
+    label: Cal-ITP Contactless Usage
+    description: '### Dashboard Cards: 11
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __189__
+
+
+      Created On: __2024-06-18T12:58:50.316748Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/189
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []

@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: all___non_aggregated_transactions__1_journey_per_aggr__id__average_charge_amount__last_12_months_
+    label: All - Non-aggregated transactions (1 journey per aggr. ID) average charge
+      amount (last 12 months)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3030__
+
+
+      Created On: __2024-08-29T17:06:26.398693Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3030
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.602'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

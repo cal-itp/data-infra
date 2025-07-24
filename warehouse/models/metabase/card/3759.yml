@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: wip__cal_itp_benefits_enrollment_by_method
+    label: 'WIP: Cal-ITP Benefits enrollment by method'
+    description: '### Visualization: Pie
+
+
+      Is there a field called event type?
+
+
+      #### Metadata
+
+
+      Metabase ID: __3759__
+
+
+      Created On: __2025-06-13T18:19:02.858181Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3759
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.586'
+        last_used_at: '2025-07-08T22:18:17.622366Z'

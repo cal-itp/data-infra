@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: median_vehicle_positions_message_age__last_30_days___
+    label: 'Median Vehicle Positions Message Age (last 30 days)  '
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3126__
+
+
+      Created On: __2024-10-09T19:56:05.424117Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3126
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.528'
+        last_used_at: '2025-01-17T00:47:40.596888Z'

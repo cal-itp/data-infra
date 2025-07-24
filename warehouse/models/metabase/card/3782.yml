@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: d7_transit_data_quality_issues_created_by_month
+    label: D7 Transit Data Quality issues created by month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3782__
+
+
+      Created On: __2025-07-10T20:26:23.715857Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3782
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.410'
+        last_used_at: '2025-07-10T22:20:09.863544Z'

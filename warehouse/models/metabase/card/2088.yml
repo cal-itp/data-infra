@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: net_sales__usd____per_month_7
+    label: Net sales (USD) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2088__
+
+
+      Created On: __2024-01-15T16:47:20.211309Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2088
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.108'
+        last_used_at: '2025-04-26T14:54:54.809472Z'

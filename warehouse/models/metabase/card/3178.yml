@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: _mst__enrollments_by_month_and_pathway
+    label: (MST) enrollments by month and pathway
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3178__
+
+
+      Created On: __2024-10-30T23:29:57.421086Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3178
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.538'
+        last_used_at: '2025-07-08T01:05:24.060695Z'

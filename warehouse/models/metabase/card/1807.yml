@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: exercise_4
+    label: Exercise 4
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1807__
+
+
+      Created On: __2023-10-20T19:13:39.224153Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1807
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.532'
+        last_used_at: '2025-03-12T16:41:02.156642Z'

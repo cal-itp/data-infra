@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: extra__how_many_scheduled_and_vp_trips_happened_by_route__culver_city
+    label: 'Extra: How many scheduled and vp trips happened by route: Culver City'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1841__
+
+
+      Created On: __2023-10-25T21:28:13.872812Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1841
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.705'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: 3__dim_provider_gtfs_data__filtered_by_schedule_gtfs_dataset_name_and_is_current
+    label: 3. Dim Provider Gtfs Data, Filtered by Schedule Gtfs Dataset Name and Is
+      Current
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1948__
+
+
+      Created On: __2023-11-16T00:31:23.987907Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1948
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.632'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

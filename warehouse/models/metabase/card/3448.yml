@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: ex4a____organizations_passing_rt_feed_checks___with_county_group
+    label: 'Ex4a: # Organizations passing RT feed checks - With County Group'
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3448__
+
+
+      Created On: __2025-03-12T18:25:00.60306Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3448
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2025-03-12T18:25:00.60306Z'

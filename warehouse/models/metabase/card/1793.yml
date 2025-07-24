@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: feed_expiration_warnings_by_code_by_day
+    label: Feed Expiration Warnings by Code by Day
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1793__
+
+
+      Created On: __2023-10-03T16:58:57.078718Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1793
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.278'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

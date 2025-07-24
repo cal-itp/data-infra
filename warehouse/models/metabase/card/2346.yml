@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: feeds_with_fares_v2_over_time
+    label: Feeds with Fares v2 Over Time
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2346__
+
+
+      Created On: __2024-06-10T20:24:05.882507Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2346
+    maturity: medium
+    owner:
+      name: Md Saiful Islam
+      email: md.islam@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.284'
+        last_used_at: '2025-06-24T22:45:09.450872Z'

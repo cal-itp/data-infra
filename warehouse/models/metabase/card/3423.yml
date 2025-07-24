@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex_1_how_many_organizations_and_types_of_of_services
+    label: ex_1_how many organizations and types of of services
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3423__
+
+
+      Created On: __2025-02-24T20:59:44.523814Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3423
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.474'
+        last_used_at: '2025-02-27T22:10:34.988261Z'

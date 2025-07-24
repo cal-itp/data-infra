@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: guidelines_bug_bash_laurie__abc_airport_shuttle_checks__service_with_no_feeds_
+    label: 'Guidelines Bug Bash Laurie: ABC Airport Shuttle checks (service with no
+      feeds)'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1238__
+
+
+      Created On: __2023-03-30T17:37:33.419688Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1238
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

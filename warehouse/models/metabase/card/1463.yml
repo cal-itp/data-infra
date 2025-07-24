@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 5311_agencies_and_their_voms
+    label: 5311 Agencies and their VOMS
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1463__
+
+
+      Created On: __2023-07-19T23:57:11.256384Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1463
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.070'
+        last_used_at: '2024-10-08T21:33:28.715621Z'

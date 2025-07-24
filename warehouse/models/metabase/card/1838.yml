@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: elavon_deposits___lp_settlements_date_differences
+    label: Elavon Deposits / LP Settlements Date Differences
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1838__
+
+
+      Created On: __2023-10-25T20:02:24.533318Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1838
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.557'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

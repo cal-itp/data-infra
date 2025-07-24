@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: journeys_data__for_t_2_daily_amtrak_reporting_
+    label: Journeys Data (for T-2 daily Amtrak reporting)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1961__
+
+
+      Created On: __2023-11-27T09:52:53.574171Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1961
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.204'
+        last_used_at: '2025-07-23T15:00:00.47004Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_payments___2024
+    label: Number of payments - 2024
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2494__
+
+
+      Created On: __2024-07-19T16:22:05.163295Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2494
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.907'
+        last_used_at: '2025-06-04T19:00:53.248147Z'

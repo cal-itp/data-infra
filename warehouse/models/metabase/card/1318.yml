@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: __of_daily_trips_with_observed_vehicle_positions__sacrt_
+    label: '% of daily trips with Observed Vehicle Positions (SacRT)'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1318__
+
+
+      Created On: __2023-04-28T18:50:39.425395Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1318
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

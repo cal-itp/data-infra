@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_gtfs_rt_feeds
+    label: Number of GTFS RT Feeds
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1389__
+
+
+      Created On: __2023-06-22T14:39:56.505984Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1389
+    maturity: medium
+    owner:
+      name: Soren Spicknall
+      email: soren.s@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.593'
+        last_used_at: '2025-06-14T23:31:38.929068Z'

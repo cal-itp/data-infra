@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_of_vehicles_of_maximum_service__voms__by_district__filtered_
+    label: Total of Vehicles of Maximum Service (VOMS) by District (Filtered)
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1736__
+
+
+      Created On: __2023-09-22T22:02:37.499593Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1736
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.192'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

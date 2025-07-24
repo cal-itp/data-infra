@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_feeds_by_vendor_that_did_or_did_not_have_one_cancellation_in_the_last_3_months
+    label: Number of feeds by vendor that did or did not have one cancellation in
+      the last 3 months
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2504__
+
+
+      Created On: __2024-07-23T19:10:02.100308Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2504
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

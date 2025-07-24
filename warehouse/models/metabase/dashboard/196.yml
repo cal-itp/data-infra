@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: reconciliation_dashboard
+    label: Reconciliation dashboard
+    description: '### Dashboard Cards: 48
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __196__
+
+
+      Created On: __2024-07-29T21:42:24.440725Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/196
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []

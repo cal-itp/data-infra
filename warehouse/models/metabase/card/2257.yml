@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: daily_calendar_ends_dates_with__0_associated_trips
+    label: Daily calendar ends dates with >0 associated trips
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2257__
+
+
+      Created On: __2024-05-06T22:52:02.087009Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2257
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:03.232'
+        last_used_at: '2025-03-06T19:56:25.331554Z'

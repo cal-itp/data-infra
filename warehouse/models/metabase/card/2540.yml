@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: reconciliation_base_table___refunds
+    label: Reconciliation base table - Refunds
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2540__
+
+
+      Created On: __2024-07-30T09:37:34.211906Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2540
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.457'
+        last_used_at: '2025-04-26T14:49:40.425752Z'

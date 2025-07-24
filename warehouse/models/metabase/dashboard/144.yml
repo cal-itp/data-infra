@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: fee_tracking
+    label: Fee tracking
+    description: '### Dashboard Cards: 85
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __144__
+
+
+      Created On: __2023-07-26T11:52:08.175333Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/144
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []

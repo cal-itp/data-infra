@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales_grouped_by_org___payment_months__payments___ccjpa_
+    label: sales grouped by org & payment months (payments - ccjpa)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2212__
+
+
+      Created On: __2024-03-21T18:31:33.929557Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2212
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.613'
+        last_used_at: '2025-03-20T14:49:49.058868Z'

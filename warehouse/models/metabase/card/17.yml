@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: payments____last_30_days_ridership_by_line
+    label: Payments || Last 30 Days Ridership By Line
+    description: '### Visualization: Row
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __17__
+
+
+      Created On: __2021-06-21T23:49:04.093193Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/17
+    maturity: medium
+    owner:
+      name: Hunter Owens
+      email: hunter.owens@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.642'
+        last_used_at: '2025-07-10T17:45:41.53864Z'

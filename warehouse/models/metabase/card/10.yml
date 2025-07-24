@@ -1,0 +1,26 @@
+version: 2
+exposures:
+  - name: validator_error_differences_from_prev_day
+    label: Validator error differences from prev day
+    description: "### Visualization: Bar\n\nNo description provided in Metabase\n\n\
+      #### Query\n\n```\nWITH daily_error_counts AS (\nSELECT `views.validation_code_metrics`.`metric_date`\
+      \ AS `metric_date`, `views.validation_code_metrics`.`calitp_itp_id` AS `calitp_itp_id`,\
+      \ `views.validation_code_metrics`.`calitp_url_number` AS `calitp_url_number`,\
+      \ sum(`views.validation_code_metrics`.`n_notices`) AS ttl_notices\nFROM `views.validation_code_metrics`\n\
+      WHERE `views.validation_code_metrics`.`severity` = 'ERROR'\nGROUP BY metric_date,\
+      \ `calitp_itp_id`, `calitp_url_number`\nORDER BY metric_date ASC, `calitp_itp_id`\
+      \ ASC, `calitp_url_number` ASC\n),\ndaily_lagged AS(\nSELECT \n  *\n  , LAG(ttl_notices)\
+      \ OVER (PARTITION BY calitp_itp_id, calitp_url_number ORDER BY metric_date)\
+      \ AS ttl_notices_prev\nFROM daily_error_counts\n)\nSELECT \n  *\n  , ttl_notices\
+      \ - ttl_notices_prev AS ttl_notices_diff\nFROM daily_lagged\n```\n\n#### Metadata\n\
+      \nMetabase ID: __10__\n\nCreated On: __2021-06-21T15:57:33.314299Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/10
+    maturity: medium
+    owner:
+      name: Michael Chow
+      email: michael.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_capital_expenditures_by_year
+    label: Total Capital Expenditures by Year
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3409__
+
+
+      Created On: __2025-02-14T00:47:07.448847Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3409
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.536'
+        last_used_at: '2025-07-09T05:08:32.889757Z'

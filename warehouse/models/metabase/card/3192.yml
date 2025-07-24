@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: fct_ntd_rr20_service_checks
+    label: Fct Ntd Rr20 Service Checks
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3192__
+
+
+      Created On: __2024-11-05T16:18:21.574363Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3192
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.928'
+        last_used_at: '2025-07-15T18:28:43.109762Z'

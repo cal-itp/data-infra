@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_rides_per_week__grouped_by_form_factor
+    label: Number of Rides per week, grouped by Form Factor
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __284__
+
+
+      Created On: __2022-02-10T18:11:04.005749Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/284
+    maturity: medium
+    owner:
+      name: Mjumbe Poe
+      email: mjumbe.p@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.945'
+        last_used_at: '2025-02-28T19:54:58.556583Z'

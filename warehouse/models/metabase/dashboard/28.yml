@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: payments_data_validation
+    label: Payments Data Validation
+    description: '### Dashboard Cards: 11
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __28__
+
+
+      Created On: __2021-11-04T14:35:51.867471Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/28
+    maturity: medium
+    owner:
+      name: Mjumbe Poe
+      email: mjumbe.p@jarv.us
+    depends_on: []

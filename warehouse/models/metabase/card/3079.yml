@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: parent_station_stops
+    label: Parent station stops
+    description: "### Visualization: Table\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nSELECT\n  `mart_gtfs_schedule_latest.dim_stops_latest`.`stop_lat`\
+      \ AS `stop_lat`,\n  `mart_gtfs_schedule_latest.dim_stops_latest`.`stop_lon`\
+      \ AS `stop_lon`,\n  `mart_gtfs_schedule_latest.dim_stops_latest`.`stop_name`\
+      \ AS `stop_name`,\n  `mart_gtfs_schedule_latest.dim_stops_latest`.`base64_url`\
+      \ AS `base64_url`\nFROM\n  `mart_gtfs_schedule_latest.dim_stops_latest`\nWHERE\n\
+      \    concat(`mart_gtfs_schedule_latest.dim_stops_latest`.`stop_id`, `mart_gtfs_schedule_latest.dim_stops_latest`.`base64_url`)\
+      \ IN \n    (\n        SELECT concat(`mart_gtfs_schedule_latest.dim_stops_latest`.`parent_station`,\
+      \ `mart_gtfs_schedule_latest.dim_stops_latest`.`base64_url`)\n        FROM `mart_gtfs_schedule_latest.dim_stops_latest`\n\
+      \        WHERE `mart_gtfs_schedule_latest.dim_stops_latest`.`parent_station`\
+      \ IS NOT NULL\n        )\nLIMIT\n  1048575\n```\n\n#### Metadata\n\nMetabase\
+      \ ID: __3079__\n\nCreated On: __2024-09-05T19:53:40.27354Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/3079
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.133'
+        last_used_at: '2025-03-18T21:48:16.614092Z'

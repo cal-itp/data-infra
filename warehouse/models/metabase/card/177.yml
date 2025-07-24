@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: histogram_of_settlement_amounts___all_demos
+    label: Histogram of settlement amounts - all demos
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __177__
+
+
+      Created On: __2021-11-12T15:26:08.46181Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/177
+    maturity: medium
+    owner:
+      name: Jochem Baud
+      email: jochem.baud@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

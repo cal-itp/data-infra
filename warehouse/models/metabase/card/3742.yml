@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: cal_itp_product_usage
+    label: Cal-ITP Product Usage
+    description: '### Visualization: Row
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3742__
+
+
+      Created On: __2025-05-10T00:42:24.460126Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3742
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.497'
+        last_used_at: '2025-07-23T17:25:55.057741Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: average_charge_of_transactions_without_aggregation___one_total_amount
+    label: Average charge of transactions without aggregation - one total amount
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2432__
+
+
+      Created On: __2024-07-05T14:30:48.609835Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2432
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.744'
+        last_used_at: '2025-05-16T19:19:27.336661Z'

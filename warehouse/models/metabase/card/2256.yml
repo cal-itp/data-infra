@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 5_3_2024__raw_data_table___declined_unrecoverable_journey
+    label: '5-3-2024: Raw Data Table - Declined/Unrecoverable journey'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2256__
+
+
+      Created On: __2024-05-06T17:53:57.797017Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2256
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.428'
+        last_used_at: '2025-03-19T16:35:01.320324Z'

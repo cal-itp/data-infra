@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: by_agency___free_journey_counts__capped_journeys____last_12_months
+    label: by agency - Free journey counts (capped journeys) - Last 12 months
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3028__
+
+
+      Created On: __2024-08-29T14:45:56.153942Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3028
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.175'
+        last_used_at: '2025-05-16T19:20:16.775562Z'

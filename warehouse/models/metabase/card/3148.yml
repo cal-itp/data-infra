@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales___nominal_amount__zero_dollar_charged_
+    label: Sales / Nominal amount (zero dollar charged)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3148__
+
+
+      Created On: __2024-10-16T12:35:25.863553Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3148
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:04.796'
+        last_used_at: '2025-04-26T13:38:41.434975Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: operating_districts_map
+    label: Operating Districts Map
+    description: '### Visualization: Map
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2310__
+
+
+      Created On: __2024-05-28T23:46:24.223736Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2310
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.576'
+        last_used_at: '2025-07-23T17:24:36.948395Z'

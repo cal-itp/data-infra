@@ -1,0 +1,30 @@
+version: 2
+exposures:
+  - name: mst_transactions_w__incorrect_product_label_aug_2023_feb_2024
+    label: MST transactions w/ incorrect product label Aug 2023-Feb 2024
+    description: '### Visualization: Table
+
+
+      Fct Payments Rides V2, Filtered by Product Description is 2 selections, Participant
+      ID is mst, Customer ID is not 16 selections, Charge Amount is equal to 1, and
+      Transaction Date Time Pacific is Aug 23, 2023 – Feb 21, 2024
+
+
+      #### Metadata
+
+
+      Metabase ID: __2198__
+
+
+      Created On: __2024-03-11T19:48:34.415144Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2198
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.730'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

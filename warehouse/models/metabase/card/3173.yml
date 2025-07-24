@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: percent_of_trips_cancelled___individual_agency
+    label: Percent of trips cancelled - individual agency
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3173__
+
+
+      Created On: __2024-10-24T22:29:11.227729Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3173
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.970'
+        last_used_at: '2025-07-09T02:00:39.167745Z'

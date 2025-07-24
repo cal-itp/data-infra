@@ -1,0 +1,26 @@
+version: 2
+exposures:
+  - name: capitol_corridor_tap2ride_daily_ridership_report_1
+    label: Capitol Corridor Tap2Ride Daily Ridership Report
+    description: '### Dashboard Cards: 6
+
+
+      Automatically generated daily ridership data for the Capitol Corridor Tap2Ride
+      program, delivered via email the following day, covering ridership statistics
+      for the current month.
+
+
+      #### Metadata
+
+
+      Metabase ID: __174__
+
+
+      Created On: __2024-01-25T18:34:29.331213Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/174
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []

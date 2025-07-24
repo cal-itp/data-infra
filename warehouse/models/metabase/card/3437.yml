@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 7__how_many_organizations_are_in_each_ntd_reporter_type_by_district__1
+    label: 7. How many organizations are in each NTD reporter type by District?
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3437__
+
+
+      Created On: __2025-03-05T06:49:24.862623Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3437
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.197'
+        last_used_at: '2025-03-11T21:40:11.941316Z'

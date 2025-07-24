@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: issues___gtfs_rt_trip_updates_completeness__last_14_days_
+    label: Issues + GTFS-RT Trip Updates Completeness (last 14 days)
+    description: '### Visualization: Table
+
+
+      Join open issues, filter by percentages, for use in making tickets.
+
+
+      #### Metadata
+
+
+      Metabase ID: __3039__
+
+
+      Created On: __2024-08-30T15:50:59.248031Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3039
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.020'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

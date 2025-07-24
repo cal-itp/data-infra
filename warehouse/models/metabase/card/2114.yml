@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 8___station_alightings_by_train
+    label: 8 - Station Alightings By Train
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2114__
+
+
+      Created On: __2024-01-25T18:50:41.419722Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2114
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.663'
+        last_used_at: '2025-07-15T15:00:16.869853Z'

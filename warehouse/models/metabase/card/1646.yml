@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: exercise_2___how_many_services_do_organizations_manage_by_caltrans_district__v1
+    label: Exercise 2 - How many services do organizations manage by Caltrans District?
+      v1
+    description: '### Visualization: Pivot
+
+
+      Pivot Chart of Caltrans District > Organizations > Services
+
+
+      #### Metadata
+
+
+      Metabase ID: __1646__
+
+
+      Created On: __2023-08-28T21:50:58.585988Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1646
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.572'
+        last_used_at: '2025-03-05T06:01:13.630626Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: net_sales___requested_for_settlement
+    label: Net Sales / Requested for settlement
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2533__
+
+
+      Created On: __2024-07-29T22:37:57.308304Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2533
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:04.359'
+        last_used_at: '2025-04-26T14:49:40.425752Z'

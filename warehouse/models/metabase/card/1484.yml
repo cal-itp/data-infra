@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: interchange_fee_per_category__usd_
+    label: Interchange fee per category (USD)
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1484__
+
+
+      Created On: __2023-07-26T12:42:08.313437Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1484
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.560'
+        last_used_at: '2025-05-28T16:42:20.13225Z'

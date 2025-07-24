@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: refunds__transaction_requested_for_settlement__littlepay
+    label: 'Refunds: Transaction Requested for Settlement, Littlepay'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2045__
+
+
+      Created On: __2023-12-20T23:22:53.479368Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2045
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.880'
+        last_used_at: '2025-03-20T14:49:49.058868Z'

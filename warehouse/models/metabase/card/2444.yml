@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: decline_rate_by_operator
+    label: Decline Rate by Operator
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2444__
+
+
+      Created On: __2024-07-09T09:09:25.591776Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2444
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.227'
+        last_used_at: '2025-07-23T21:04:04.28467Z'

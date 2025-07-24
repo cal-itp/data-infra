@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: 5__guideline_checks_percent_pass_and_fail_per_day
+    label: '5: Guideline Checks Percent Pass and Fail per Day'
+    description: '### Visualization: Line
+
+
+      In the guideline checks, what percent of guideline checks are passing? And what
+      percent are failing?
+
+
+      #### Metadata
+
+
+      Metabase ID: __1406__
+
+
+      Created On: __2023-07-05T18:58:19.037432Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1406
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.277'
+        last_used_at: '2025-03-14T17:32:42.144531Z'

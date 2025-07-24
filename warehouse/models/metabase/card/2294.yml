@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: authorisations_by_date
+    label: Authorisations by Date
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2294__
+
+
+      Created On: __2024-05-22T12:38:12.587739Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2294
+    maturity: medium
+    owner:
+      name: Georgia Jones
+      email: georgia.jones@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.427'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

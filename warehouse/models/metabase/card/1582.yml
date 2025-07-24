@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: raw_data
+    label: Raw data
+    description: '### Visualization: Table
+
+
+      (Fct Elavon Transactions)
+
+
+      #### Metadata
+
+
+      Metabase ID: __1582__
+
+
+      Created On: __2023-08-03T14:52:16.822541Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1582
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.215'
+        last_used_at: '2025-05-28T16:42:17.799512Z'

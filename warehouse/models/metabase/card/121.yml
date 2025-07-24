@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: monteray_salinas_transit_routes
+    label: Monteray-Salinas Transit Routes
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __121__
+
+
+      Created On: __2021-09-17T00:28:40.569682Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/121
+    maturity: medium
+    owner:
+      name: Michael Chow
+      email: michael.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

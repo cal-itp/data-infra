@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_rides_per_route
+    label: Number of Rides per Route
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __176__
+
+
+      Created On: __2021-11-11T17:23:51.522259Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/176
+    maturity: medium
+    owner:
+      name: Mjumbe Poe
+      email: mjumbe.p@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.931'
+        last_used_at: '2025-02-28T19:54:58.582304Z'

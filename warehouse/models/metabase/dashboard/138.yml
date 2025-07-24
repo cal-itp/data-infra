@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: cal_itp_system_performance_and_outcomes_monitoring
+    label: Cal-ITP System Performance and Outcomes Monitoring
+    description: '### Dashboard Cards: 6
+
+
+      Overall performance of the Cal-ITP warehouse and related GCP infrastructure.
+      Where available, metrics are included directly. Otherwise, access info is provided.
+      With this dashboard, a user can construct a weekly spreadsheet of high-level
+      system outcomes.
+
+
+      #### Metadata
+
+
+      Metabase ID: __138__
+
+
+      Created On: __2023-06-20T19:42:15.616546Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/138
+    maturity: medium
+    owner:
+      name: Soren Spicknall
+      email: soren.s@jarv.us
+    depends_on: []

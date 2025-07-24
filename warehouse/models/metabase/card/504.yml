@@ -1,0 +1,32 @@
+version: 2
+exposures:
+  - name: percent_of_adjusted_price_journeys__grouped_by_month_6
+    label: Percent of Adjusted-Price Journeys, Grouped by Month
+    description: "### Visualization: Bar\n\nNo description provided in Metabase\n\n\
+      #### Query\n\n```\nWITH\nrides_with_adjustments AS (\n    SELECT\n        datetime_trunc(`mart_payments.fct_payments_rides_v2`.`transaction_date_time_pacific`,\
+      \ month) AS `transaction_date_time_pacific`,\n        `mart_payments.fct_payments_rides_v2`.`adjustment_description`,\n\
+      \        count(distinct `mart_payments.fct_payments_rides_v2`.`principal_customer_id`)\
+      \ AS `count`\n    FROM `mart_payments.fct_payments_rides_v2`\n    WHERE (`mart_payments.fct_payments_rides_v2`.`adjustment_id`\
+      \ IS NOT NULL\n        AND (`mart_payments.fct_payments_rides_v2`.`adjustment_id`\
+      \ <> ''\n        OR `mart_payments.fct_payments_rides_v2`.`adjustment_id` IS\
+      \ NULL))\n        [[AND (transaction_date_time_pacific)]]\n    GROUP BY `adjustment_description`,\
+      \ `transaction_date_time_pacific`\n),\nrides AS (\n    SELECT\n        datetime_trunc(`mart_payments.fct_payments_rides_v2`.`transaction_date_time_pacific`,\
+      \ month) AS `transaction_date_time_pacific`,\n        count(distinct `mart_payments.fct_payments_rides_v2`.`principal_customer_id`)\
+      \ AS `count`\n    FROM `mart_payments.fct_payments_rides_v2`\n    WHERE true\n\
+      \        [[AND (transaction_date_time_pacific)]]\n    GROUP BY `transaction_date_time_pacific`\n\
+      )\nSELECT\n    `transaction_date_time_pacific`,\n    `adjustment_description`,\n\
+      \    100.0 * rides_with_adjustments.count / rides.count AS `percent`\nFROM rides\n\
+      JOIN rides_with_adjustments USING (`transaction_date_time_pacific`)\nORDER BY\
+      \ `adjustment_description` ASC\n```\n\n#### Metadata\n\nMetabase ID: __504__\n\
+      \nCreated On: __2022-09-20T13:53:56.622988Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/504
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.339'
+        last_used_at: '2025-06-10T15:13:44.911648Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_number_of_journeys_by_route__grouped_by_form_factor_5
+    label: Total Number of Journeys by Route, Grouped by Form Factor
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __487__
+
+
+      Created On: __2022-09-19T19:57:06.436007Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/487
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.167'
+        last_used_at: '2025-06-10T15:13:44.950375Z'

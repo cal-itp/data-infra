@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total___trips_per_aggregation
+    label: Total - trips per aggregation
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3071__
+
+
+      Created On: __2024-09-04T02:49:26.864675Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3071
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.993'
+        last_used_at: '2025-05-16T19:20:13.746782Z'

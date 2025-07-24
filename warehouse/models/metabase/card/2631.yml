@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: chargebacks__usd____per_month_12
+    label: Chargebacks (USD) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2631__
+
+
+      Created On: __2024-08-12T19:08:32.497278Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2631
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.012'
+        last_used_at: '2025-04-25T23:20:54.307705Z'

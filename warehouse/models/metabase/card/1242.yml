@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: base__number_of_unique_organization_names_in_last_30_days
+    label: 'Base: Number of Unique Organization Names in last 30 Days'
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1242__
+
+
+      Created On: __2023-03-30T18:32:46.319889Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1242
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.163'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

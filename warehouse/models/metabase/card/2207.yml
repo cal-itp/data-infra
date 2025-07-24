@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: refunds__requested_for_settlement_1
+    label: 'Refunds: Requested for settlement'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2207__
+
+
+      Created On: __2024-03-21T17:52:18.826382Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2207
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.297'
+        last_used_at: '2025-02-20T18:30:40.833266Z'

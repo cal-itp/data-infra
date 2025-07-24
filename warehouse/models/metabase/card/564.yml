@@ -1,0 +1,32 @@
+version: 2
+exposures:
+  - name: median_ride_distance_per_route__only_for_tap_on_off_rides__1
+    label: Median Ride Distance per Route (only for tap on/off rides)
+    description: "### Visualization: Bar\n\nNo description provided in Metabase\n\n\
+      #### Query\n\n```\nSELECT DISTINCT\n    `uploaded_data.synthetic_payments_rides`.`participant_id`\
+      \ AS `participant_id`, \n    `uploaded_data.synthetic_payments_rides`.`route_short_name`\
+      \ AS `route_short_name`, \n    PERCENTILE_CONT(\n        ST_DISTANCE(\n    \
+      \      ST_GEOGPOINT(CAST(`uploaded_data.synthetic_payments_rides`.`longitude`\
+      \ AS FLOAT64), CAST(`uploaded_data.synthetic_payments_rides`.`latitude` AS FLOAT64)),\n\
+      \          ST_GEOGPOINT(CAST(`uploaded_data.synthetic_payments_rides`.`off_longitude`\
+      \ AS FLOAT64), CAST(`uploaded_data.synthetic_payments_rides`.`off_latitude`\
+      \ AS FLOAT64))\n        ), 0.5) OVER (PARTITION BY `uploaded_data.synthetic_payments_rides`.`participant_id`,\
+      \ `uploaded_data.synthetic_payments_rides`.`route_id`) / 1609.34 as `median_ride_distance`\n\
+      FROM `uploaded_data.synthetic_payments_rides`\nWHERE (`uploaded_data.synthetic_payments_rides`.`off_littlepay_transaction_id`\
+      \ IS NOT NULL\n  AND `uploaded_data.synthetic_payments_rides`.`off_littlepay_transaction_id`\
+      \ <> '')\n  AND (`uploaded_data.synthetic_payments_rides`.`route_short_name`\
+      \ IS NOT NULL\n  AND `uploaded_data.synthetic_payments_rides`.`route_short_name`\
+      \ <> '')\n  [[AND (transaction_date_time_pacific)]]\n  [[AND (participant_id)]]\n\
+      ORDER BY `uploaded_data.synthetic_payments_rides`.`route_short_name`\n```\n\n\
+      #### Metadata\n\nMetabase ID: __564__\n\nCreated On: __2022-09-28T20:46:48.515567Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/564
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.557'
+        last_used_at: '2025-04-17T18:24:32.992576Z'

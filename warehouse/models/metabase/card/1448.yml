@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: state_district_wide_gtfs_rt_vehicle_positions_completeness_by_day__last_30_days_
+    label: State/District-Wide GTFS-RT Vehicle Positions Completeness by day (last
+      30 days)
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1448__
+
+
+      Created On: __2023-07-18T16:25:41.818064Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1448
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:03.119'
+        last_used_at: '2025-07-23T19:42:40.276149Z'

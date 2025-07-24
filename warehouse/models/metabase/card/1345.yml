@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: journeys_with_unlabeled_routes_9
+    label: Journeys with Unlabeled Routes
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1345__
+
+
+      Created On: __2023-05-11T15:59:43.335655Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1345
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.701'
+        last_used_at: '2025-07-21T23:49:22.230919Z'

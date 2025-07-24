@@ -1,0 +1,30 @@
+version: 2
+exposures:
+  - name: payments_____ucsb_tap_employee_discount____distinct_customers_per_week
+    label: Payments ||  UCSB Tap employee discount || Distinct customers per week
+    description: '### Visualization: Line
+
+
+      How many SBMDT employees applied a discount in a given week?
+
+
+      (Note: We count this by looking at microtransaction adjustements.)
+
+
+      #### Metadata
+
+
+      Metabase ID: __134__
+
+
+      Created On: __2021-10-22T13:57:26.665952Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/134
+    maturity: medium
+    owner:
+      name: Michael Chow
+      email: michael.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

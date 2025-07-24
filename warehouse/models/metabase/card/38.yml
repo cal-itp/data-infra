@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: payments____ridership_by_line
+    label: Payments || Ridership by Line
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __38__
+
+
+      Created On: __2021-07-21T18:17:23.202227Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/38
+    maturity: medium
+    owner:
+      name: Hunter Owens
+      email: hunter.owens@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.562'
+        last_used_at: '2025-07-10T17:45:41.57139Z'

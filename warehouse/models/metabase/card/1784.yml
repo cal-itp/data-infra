@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: how_many_organizations_are_passing_all_checks_
+    label: How Many Organizations are Passing All Checks?
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1784__
+
+
+      Created On: __2023-09-29T20:09:33.093393Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1784
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:11.816'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

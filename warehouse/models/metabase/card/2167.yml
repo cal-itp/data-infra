@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: refunds__settled_transactions___duplicate
+    label: 'Refunds: Settled Transactions - Duplicate'
+    description: '### Visualization: Table
+
+
+      based on sales equivalent
+
+
+      #### Metadata
+
+
+      Metabase ID: __2167__
+
+
+      Created On: __2024-02-14T18:38:04.949832Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2167
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.243'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,53 @@
+version: 2
+exposures:
+  - name: fixed_route_services
+    label: Fixed Route Services
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Query
+
+
+      ```
+
+      SELECT `mart_transit_database.dim_services`.`key` AS `key`,
+
+      `mart_transit_database.dim_services`.`name` AS `name`,
+
+      `mart_transit_database.dim_services`.`source_record_id` AS `source_record_id`,
+
+      `mart_transit_database.dim_services`.`service_type` AS `service_type`,
+
+      `mart_transit_database.dim_services`.`mode` AS `mode`,
+
+      `mart_transit_database.dim_services`.`_valid_to` AS `_valid_to`,
+
+      `mart_transit_database.dim_services`.`_is_current` AS `_is_current`
+
+      FROM `mart_transit_database.dim_services`
+
+      WHERE  (''fixed-route'' IN UNNEST(service_type) )
+
+      ```
+
+
+      #### Metadata
+
+
+      Metabase ID: __1141__
+
+
+      Created On: __2023-02-17T02:53:07.564631Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1141
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2025-07-01T21:18:44.940543Z'

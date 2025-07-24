@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: humboldt_transit_authority___unlabeled_routes_alert
+    label: Humboldt Transit Authority – Unlabeled Routes Alert
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2417__
+
+
+      Created On: __2024-07-03T19:02:51.207426Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2417
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.956'
+        last_used_at: '2025-07-21T15:00:00.834463Z'

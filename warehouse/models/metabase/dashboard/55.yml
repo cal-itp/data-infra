@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: graas_static_gtfs_critical_validation_errors
+    label: GRaaS Static GTFS Critical Validation Errors
+    description: '### Dashboard Cards: 2
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __55__
+
+
+      Created On: __2022-02-24T16:42:06.342128Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/55
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []

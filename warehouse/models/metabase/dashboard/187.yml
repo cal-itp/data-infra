@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: fares_v2_adoption_dashboard
+    label: Fares V2 Adoption Dashboard
+    description: '### Dashboard Cards: 6
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __187__
+
+
+      Created On: __2024-05-31T17:05:39.35206Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/187
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []

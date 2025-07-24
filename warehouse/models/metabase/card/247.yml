@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_riders_receiving_fare_adjustments_per_month__by_adjustment_type
+    label: Number of Riders receiving Fare Adjustments per Month, by Adjustment Type
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __247__
+
+
+      Created On: __2021-12-30T20:35:23.145088Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/247
+    maturity: medium
+    owner:
+      name: Ben Bressette
+      email: ben@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.988'
+        last_used_at: '2025-02-28T19:54:58.534687Z'

@@ -1,0 +1,31 @@
+version: 2
+exposures:
+  - name: extra__how_many_organizations_are_publicly_operating_and_have_fixed_route_service_
+    label: 'Extra: How Many Organizations are Publicly Operating and Have Fixed Route
+      service?'
+    description: '### Visualization: Bar
+
+
+      Chart depicting number of organizations with publicly available service and
+      at least one fixed route service. Can be either by Caltrans District or an overall
+      count Statewide.
+
+
+      #### Metadata
+
+
+      Metabase ID: __1403__
+
+
+      Created On: __2023-07-05T16:40:40.873729Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1403
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.755'
+        last_used_at: '2025-03-14T17:32:42.031Z'

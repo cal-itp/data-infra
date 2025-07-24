@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: discounted_masked_pans
+    label: Discounted masked pans
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2267__
+
+
+      Created On: __2024-05-07T05:29:26.831006Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2267
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.886'
+        last_used_at: '2025-06-03T11:04:36.091515Z'

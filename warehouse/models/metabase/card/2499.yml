@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_payments___2023___by_agency
+    label: Number of payments - 2023 - By Agency
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2499__
+
+
+      Created On: __2024-07-19T16:52:46.96827Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2499
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.826'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

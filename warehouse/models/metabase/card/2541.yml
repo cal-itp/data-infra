@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: reconciliation_base_table___net_sales
+    label: Reconciliation base table - Net Sales
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2541__
+
+
+      Created On: __2024-07-30T09:47:00.641976Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2541
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:04.304'
+        last_used_at: '2025-04-26T14:49:40.425752Z'

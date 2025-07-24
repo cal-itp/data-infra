@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: mst_discounted_transactions
+    label: MST discounted transactions
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3177__
+
+
+      Created On: __2024-10-30T23:19:35.579999Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3177
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.490'
+        last_used_at: '2025-07-08T01:05:05.876708Z'

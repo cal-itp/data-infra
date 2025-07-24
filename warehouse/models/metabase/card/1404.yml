@@ -1,0 +1,32 @@
+version: 2
+exposures:
+  - name: 4__how_many_organizations_are_passing_all_3_rt_feed_present_checks_
+    label: '4: How Many Organizations are Passing All 3 RT Feed Present Checks?'
+    description: '### Visualization: Scalar
+
+
+      Under the Guideline Checks, an organization undergoes multiple data quality
+      checks on their GTFS feeds. Under the RealTime (RT) Compliance checks, an organization
+      with present RT feeds should have 3 feeds present: Vehicle Positions, Service
+      Alerts and Trip Updates. This questions answers how many Organizations are passing
+      all three checks
+
+
+      #### Metadata
+
+
+      Metabase ID: __1404__
+
+
+      Created On: __2023-07-05T17:57:18.986569Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1404
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.033'
+        last_used_at: '2025-03-14T17:32:42.010886Z'

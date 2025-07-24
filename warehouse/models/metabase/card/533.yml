@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_adjusted_price_journeys_by_week__grouped_by_form_factor_8
+    label: Number of Adjusted-Price Journeys by week, Grouped by Form Factor
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __533__
+
+
+      Created On: __2022-09-21T16:16:23.587763Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/533
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.052'
+        last_used_at: '2025-07-21T23:49:22.230919Z'

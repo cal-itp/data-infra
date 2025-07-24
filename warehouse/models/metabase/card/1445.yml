@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 9__ntd_reporter_type_by_caltrans_district
+    label: '9: NTD Reporter Type by Caltrans District'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1445__
+
+
+      Created On: __2023-07-14T01:13:13.633897Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1445
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.874'
+        last_used_at: '2024-11-06T23:08:50.839843Z'

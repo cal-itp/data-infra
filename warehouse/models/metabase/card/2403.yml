@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: upt_agency_service_by_mode__time
+    label: UPT Agency service by mode, time
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2403__
+
+
+      Created On: __2024-07-01T21:09:29.3924Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2403
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.220'
+        last_used_at: '2024-10-17T22:46:59.923982Z'

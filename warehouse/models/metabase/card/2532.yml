@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: refunds___payments
+    label: Refunds / Payments
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2532__
+
+
+      Created On: __2024-07-29T22:33:10.845155Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2532
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:04.170'
+        last_used_at: '2025-04-26T14:49:40.425752Z'

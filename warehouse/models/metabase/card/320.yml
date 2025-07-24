@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: transactions_per_month
+    label: Transactions per Month
+    description: '### Visualization: Bar
+
+
+      Single Ride Discount Fares total per month (MST only)
+
+
+      #### Metadata
+
+
+      Metabase ID: __320__
+
+
+      Created On: __2022-02-25T02:30:36.001858Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/320
+    maturity: medium
+    owner:
+      name: Vyki Englert
+      email: vyki@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.870'
+        last_used_at: '2025-06-03T11:05:07.994329Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 3__the_20_most_popular_vendors_services_use
+    label: '3: The 20 Most Popular Vendors Services Use'
+    description: '### Visualization: Bar
+
+
+      q#3
+
+
+      #### Metadata
+
+
+      Metabase ID: __1650__
+
+
+      Created On: __2023-08-29T17:34:11.183639Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1650
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.894'
+        last_used_at: '2025-03-14T16:27:37.252926Z'

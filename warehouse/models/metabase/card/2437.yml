@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: count_of_aggregated_micropayments__journeys____last_12_months_
+    label: 'Count of aggregated micropayments (journeys) - Last 12 months '
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2437__
+
+
+      Created On: __2024-07-08T20:02:48.58543Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2437
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.679'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: percent_of_trips_cancelled_by_month_across_all_agencies_with_realtime_data
+    label: Percent of trips cancelled by month across all agencies with realtime data
+    description: '### Visualization: Area
+
+
+      Percent of trips cancelled by month and agency
+
+
+      #### Metadata
+
+
+      Metabase ID: __3170__
+
+
+      Created On: __2024-10-24T21:28:25.291697Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3170
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.086'
+        last_used_at: '2025-07-23T17:23:13.56621Z'

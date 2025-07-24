@@ -1,0 +1,30 @@
+version: 2
+exposures:
+  - name: no_cancellations_in_3_months
+    label: No Cancellations in 3 months
+    description: "### Visualization: Scalar\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nWith agencies_with_cancels as (\r\nSELECT\r\n  `mart_gtfs.fct_observed_trips`.`schedule_name`\
+      \ AS `schedule_name`\r\nFROM\r\n  `mart_gtfs.fct_observed_trips`\r\nWHERE\r\n\
+      \  (\r\n    (\r\n      lower(\r\n        `mart_gtfs.fct_observed_trips`.`tu_trip_schedule_relationships`\r\
+      \n      ) like '%canceled%'\r\n    )\r\n   AND `mart_gtfs.fct_observed_trips`.`service_date`\
+      \ >= date_trunc(\r\n      date_add(\r\n        current_date('America/Los_Angeles'),\r\
+      \n        INTERVAL -90 day\r\n      ),\r\n      day\r\n    )\r\n    AND `mart_gtfs.fct_observed_trips`.`service_date`\
+      \ < date_trunc(current_date('America/Los_Angeles'), day)\r\n  )\r\nGROUP BY\r\
+      \n  `schedule_name`\r\n)\r\nSelect count(*) FROM(\r\nSELECT distinct(schedule_name)\
+      \ FROM `mart_gtfs.fct_observed_trips`\r\nWHERE \r\n`mart_gtfs.fct_observed_trips`.`service_date`\
+      \ >= date_trunc(\r\n      date_add(\r\n        current_date('America/Los_Angeles'),\r\
+      \n        INTERVAL -90 day\r\n      ),\r\n      day\r\n    )\r\n    AND `mart_gtfs.fct_observed_trips`.`service_date`\
+      \ < date_trunc(current_date('America/Los_Angeles'), day)\r\nAND\r\nschedule_name\
+      \ not in (SELECT schedule_name from agencies_with_cancels)\r\n)\n```\n\n####\
+      \ Metadata\n\nMetabase ID: __2503__\n\nCreated On: __2024-07-23T18:56:27.17415Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2503
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.165'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

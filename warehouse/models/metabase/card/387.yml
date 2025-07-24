@@ -1,0 +1,30 @@
+version: 2
+exposures:
+  - name: reduced_fare_open_loop_transactions_processed__cumulative_total_
+    label: Reduced-fare open-loop transactions processed (cumulative total)
+    description: '### Visualization: Progress
+
+
+      The total number of transactions processed using a Littlepay product associated
+      with a benefit at all CA transit agencies using the service. Tracking began
+      in  December 2021.
+
+
+      #### Metadata
+
+
+      Metabase ID: __387__
+
+
+      Created On: __2022-05-12T19:53:13.866022Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/387
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.862'
+        last_used_at: '2025-05-20T22:29:53.567179Z'

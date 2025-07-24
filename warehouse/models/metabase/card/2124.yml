@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: refunds__payments_1
+    label: 'Refunds: Payments'
+    description: '### Visualization: Table
+
+
+      based on sales equivalent (v2)
+
+
+      #### Metadata
+
+
+      Metabase ID: __2124__
+
+
+      Created On: __2024-01-31T18:40:26.03372Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2124
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.125'
+        last_used_at: '2025-02-20T19:04:58.64935Z'

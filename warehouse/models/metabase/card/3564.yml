@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: cal_itp_benefits_enrollments_per_day_by_agency
+    label: Cal-ITP Benefits enrollments per day by agency
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3564__
+
+
+      Created On: __2025-04-16T17:14:18.417564Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3564
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.561'
+        last_used_at: '2025-04-25T21:36:58.832604Z'

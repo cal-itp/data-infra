@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: latest_data_1
+    label: Latest data
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2367__
+
+
+      Created On: __2024-06-18T13:09:29.132867Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2367
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.882'
+        last_used_at: '2025-06-04T19:00:53.195151Z'

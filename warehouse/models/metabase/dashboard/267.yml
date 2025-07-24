@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: d7_5307_5311_agencies
+    label: D7 5307 5311 agencies
+    description: '### Dashboard Cards: 4
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __267__
+
+
+      Created On: __2025-07-10T20:47:31.625165Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/267
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []

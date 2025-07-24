@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: valid_versions_of_gtfs_files_for_an_agency
+    label: Valid versions of Gtfs Files for an agency
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3557__
+
+
+      Created On: __2025-04-02T22:53:31.753214Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3557
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.590'
+        last_used_at: '2025-07-23T19:42:08.907991Z'

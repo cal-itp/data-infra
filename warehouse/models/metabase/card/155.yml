@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: percent_of_stops_with_explicitly_defined_wheelchair_boarding_code
+    label: Percent of stops with explicitly defined wheelchair_boarding code
+    description: '### Visualization: Progress
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __155__
+
+
+      Created On: __2021-10-27T18:34:40.166424Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/155
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

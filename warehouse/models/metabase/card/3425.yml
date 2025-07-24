@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: ex_4_how_many_organizations_have_all_3_realtime__rt__feeds_present_and_are_passing_the_rt_guideline_checks_yesterday_
+    label: ex_4_How many Organizations have all 3 RealTime (RT) Feeds Present and
+      are passing the RT guideline checks yesterday?
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3425__
+
+
+      Created On: __2025-02-26T00:32:32.138558Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3425
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.877'
+        last_used_at: '2025-03-14T16:31:41.008815Z'

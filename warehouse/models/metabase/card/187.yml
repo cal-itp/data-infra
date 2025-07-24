@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: dla_function_data__count_and_average_of_total_requested__grouped_by_prefix__filtered_by_agency
+    label: Dla Function Data, Count and Average of Total Requested, Grouped by Prefix,
+      Filtered by Agency
+    description: '### Visualization: Scatter
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __187__
+
+
+      Created On: __2021-11-19T17:01:28.803783Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/187
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie.a@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

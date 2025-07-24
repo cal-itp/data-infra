@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_facilities_by_type
+    label: Total Facilities by Type
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3280__
+
+
+      Created On: __2024-12-10T02:32:28.404429Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3280
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.576'
+        last_used_at: '2025-07-09T05:02:55.21969Z'

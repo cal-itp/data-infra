@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: monthly_transaction_deltas_1
+    label: Monthly Transaction Deltas
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __795__
+
+
+      Created On: __2023-02-03T00:28:31.484536Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/795
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.575'
+        last_used_at: '2025-07-09T23:59:42.949891Z'

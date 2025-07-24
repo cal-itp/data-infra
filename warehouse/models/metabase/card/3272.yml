@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: operating_expenses_total
+    label: Operating Expenses Total
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3272__
+
+
+      Created On: __2024-12-09T23:54:03.070255Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3272
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.517'
+        last_used_at: '2025-07-09T05:02:54.762432Z'

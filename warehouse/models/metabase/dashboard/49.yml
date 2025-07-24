@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: gtfs_rt_files__monthly_performance
+    label: 'GTFS RT Files: Monthly performance'
+    description: '### Dashboard Cards: 3
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __49__
+
+
+      Created On: __2022-02-22T16:10:47.633517Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/49
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []

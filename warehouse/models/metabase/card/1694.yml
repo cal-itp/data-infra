@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_revenue_by_day
+    label: Total Revenue by Day
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1694__
+
+
+      Created On: __2023-09-07T16:35:42.873651Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1694
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.195'
+        last_used_at: '2025-07-21T15:00:22.246981Z'

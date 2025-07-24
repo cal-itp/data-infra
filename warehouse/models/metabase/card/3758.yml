@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: wip__cal_itp_benefits_medicare_enrollment_breakdown
+    label: 'WIP: Cal-ITP Benefits Medicare enrollment breakdown'
+    description: '### Visualization: Table
+
+
+      Where is extra claims?
+
+
+      #### Metadata
+
+
+      Metabase ID: __3758__
+
+
+      Created On: __2025-06-13T18:14:39.825511Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3758
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.470'
+        last_used_at: '2025-07-08T22:18:50.923601Z'

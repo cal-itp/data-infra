@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: individual_agency_gtfs_rt_completeness
+    label: Individual Agency GTFS-RT Completeness
+    description: '### Dashboard Cards: 15
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __133__
+
+
+      Created On: __2023-04-28T23:18:40.771354Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/133
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []

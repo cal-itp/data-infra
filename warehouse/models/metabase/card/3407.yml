@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: annual_fixed_route_unlinked_passenger_trips
+    label: Annual Fixed-Route Unlinked Passenger Trips
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3407__
+
+
+      Created On: __2025-02-14T00:36:14.723871Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3407
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.541'
+        last_used_at: '2025-07-09T05:08:32.971364Z'

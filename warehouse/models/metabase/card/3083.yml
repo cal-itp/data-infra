@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: outstanding_debt
+    label: Outstanding Debt
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3083__
+
+
+      Created On: __2024-09-10T13:49:01.191223Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3083
+    maturity: medium
+    owner:
+      name: Georgia Jones
+      email: georgia.jones@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.895'
+        last_used_at: '2025-07-23T21:02:29.554825Z'

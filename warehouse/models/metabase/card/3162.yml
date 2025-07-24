@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: individual_agency_vehicle_position_latency_stats
+    label: Individual Agency Vehicle Position Latency Stats
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3162__
+
+
+      Created On: __2024-10-18T04:25:11.770138Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3162
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.572'
+        last_used_at: '2025-06-13T23:31:34.477954Z'

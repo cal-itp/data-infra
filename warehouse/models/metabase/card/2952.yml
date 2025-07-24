@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales____of_trx__per_month_2
+    label: Sales (# of trx) per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2952__
+
+
+      Created On: __2024-08-23T17:03:44.940807Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2952
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.965'
+        last_used_at: '2025-07-10T22:01:01.681595Z'

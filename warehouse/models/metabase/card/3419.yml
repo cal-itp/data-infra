@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_rides_per_month__grouped_by_fare_payment_methods_used
+    label: Number of Rides per month, grouped by Fare Payment Methods Used
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3419__
+
+
+      Created On: __2025-02-20T19:43:25.203642Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3419
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.929'
+        last_used_at: '2025-03-14T17:30:53.996779Z'

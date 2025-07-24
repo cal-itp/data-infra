@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: fee_amount_grouped_by_day____mst
+    label: Fee Amount Grouped by Day -- MST
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1310__
+
+
+      Created On: __2023-04-21T17:32:14.723551Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1310
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.684'
+        last_used_at: '2025-03-19T15:54:41.055777Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex1__number_of_distinct_organizations___services
+    label: 'Ex1: Number of Distinct Organizations & Services'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3442__
+
+
+      Created On: __2025-03-11T18:31:56.35951Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3442
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.488'
+        last_used_at: '2025-07-23T22:16:42.774582Z'

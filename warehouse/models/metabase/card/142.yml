@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: critical_validation_errors
+    label: Critical Validation Errors
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __142__
+
+
+      Created On: __2021-10-25T23:52:47.844364Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/142
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

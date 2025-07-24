@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex10____riders_by_funding_source_type___month_for_mst
+    label: 'Ex10: # Riders by Funding Source Type & Month for MST'
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3454__
+
+
+      Created On: __2025-03-13T00:14:05.948555Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3454
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.920'
+        last_used_at: '2025-07-23T22:16:37.821862Z'

@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: gtfs_rt__individual_feed
+    label: 'GTFS RT: Individual feed'
+    description: '### Dashboard Cards: 4
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __50__
+
+
+      Created On: __2022-02-22T20:34:58.449607Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/50
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: chargebacks____of_trx____per_month_15
+    label: Chargebacks (# of trx) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3649__
+
+
+      Created On: __2025-04-25T21:19:10.425951Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3649
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.743'
+        last_used_at: '2025-07-18T17:44:29.422265Z'

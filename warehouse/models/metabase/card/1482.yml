@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: net_sales__usd_
+    label: Net Sales (USD)
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1482__
+
+
+      Created On: __2023-07-26T12:15:08.605585Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1482
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.970'
+        last_used_at: '2025-05-28T16:42:17.205988Z'

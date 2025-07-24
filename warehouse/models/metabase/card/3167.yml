@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: _sbmtd__cal_itp_benefits_enrollments_by_month_and_by_pathway
+    label: (SBMTD) Cal-ITP Benefits enrollments by month and by pathway
+    description: '### Visualization: Bar
+
+
+      The number of successful benefit enrollments via the Benefits app each month,
+      broken out by enrollment pathway, across SBMTD.
+
+
+      #### Metadata
+
+
+      Metabase ID: __3167__
+
+
+      Created On: __2024-10-22T00:55:37.194816Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3167
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.849'
+        last_used_at: '2025-07-21T23:49:22.181757Z'

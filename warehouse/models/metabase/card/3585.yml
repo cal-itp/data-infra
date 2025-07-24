@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: contractual_relationships_where_agency_is_the_buyer
+    label: Contractual Relationships Where Agency is the Buyer
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3585__
+
+
+      Created On: __2025-04-22T19:26:20.003561Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3585
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.765'
+        last_used_at: '2025-04-27T15:14:01.660443Z'

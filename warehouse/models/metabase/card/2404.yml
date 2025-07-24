@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sum_of_passenger_miles_by_service_type__day_of_week
+    label: Sum of Passenger Miles by Service type, day of week
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2404__
+
+
+      Created On: __2024-07-01T21:14:02.230043Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2404
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.227'
+        last_used_at: '2024-10-17T22:46:59.902509Z'

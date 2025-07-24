@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ab_2022_routes
+    label: AB 2022 Routes
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3075__
+
+
+      Created On: __2024-09-04T23:19:52.526226Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3075
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.956'
+        last_used_at: '2025-03-18T21:42:38.008534Z'

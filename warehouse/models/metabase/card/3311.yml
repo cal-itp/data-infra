@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: annual_payments_quarterly_taps
+    label: Annual payments quarterly taps
+    description: '### Visualization: Bar
+
+
+      used in annual CS reporting
+
+
+      #### Metadata
+
+
+      Metabase ID: __3311__
+
+
+      Created On: __2025-01-06T22:29:32.734911Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3311
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.922'
+        last_used_at: '2025-01-10T23:45:58.787447Z'

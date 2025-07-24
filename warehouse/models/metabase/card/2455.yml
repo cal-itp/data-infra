@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: avg_tokens___customer_per_operator
+    label: Avg Tokens / Customer per Operator
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2455__
+
+
+      Created On: __2024-07-09T09:09:25.591776Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2455
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.572'
+        last_used_at: '2024-09-23T14:55:55.239762Z'

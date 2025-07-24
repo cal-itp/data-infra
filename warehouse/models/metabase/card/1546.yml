@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: adjusted_price_journeys_relative_to_total_journey_count__grouped_by_week_4
+    label: Adjusted-Price Journeys Relative to Total Journey Count, Grouped by Week
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1546__
+
+
+      Created On: __2023-08-02T17:10:43.234305Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1546
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.954'
+        last_used_at: '2025-07-10T22:01:03.034611Z'

@@ -1,0 +1,97 @@
+version: 2
+exposures:
+  - name: which_transit_services_don_t_account_for_holidays_in_gtfs_
+    label: Which transit services don't account for holidays in gtfs?
+    description: "### Visualization: Table\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nwith the_bridge as (\nselect organization_name, service_name,\
+      \ gtfs_dataset_name, organization_source_record_id, service_source_record_id,\
+      \ gtfs_dataset_source_record_id, \npublic_customer_facing_or_regional_subfeed_fixed_route,\
+      \ organization_hubspot_company_record_id, gtfs_service_data_customer_facing,\
+      \ regional_feed_type, use_subfeed_for_reports, \ngtfs_dataset_key, schedule_feed_key\n\
+      from `cal-itp-data-infra.staging.int_gtfs_quality__daily_assessment_candidate_entities`\
+      \ \nwhere date = (select date from `cal-itp-data-infra.staging.int_gtfs_quality__daily_assessment_candidate_entities`\
+      \ order by date DESC limit 1)\nand gtfs_dataset_type = 'schedule'),\nholiday_info\
+      \ as (\nSELECT\n    id as service_source_record_id,\n    -- dt,\n    name as\
+      \ service_name,\n    holiday_schedule___veterans_day__observed_ as hs_vets_day_obs,\n\
+      \    holiday_schedule___veterans_day as hs_vets_day_actual,\n    holiday_schedule___thanksgiving_day\
+      \ as hs_thanksgiving,\n    holiday_schedule___day_after_thanksgiving_day as\
+      \ hs_day_after_thanksgiving,\n    holiday_schedule___christmas_eve as hs_xmas_eve,\n\
+      \    holiday_schedule___christmas_day as hs_xmas,\n    holiday_schedule___new_year_s_eve\
+      \ as hs_nye,\n    holiday_schedule___new_year_s_day as hs_new_years_day,\n \
+      \   holiday_website_condition,\n    holiday_schedule_notes\n    -- gtfs_service_data_source_record_id\n\
+      \  FROM\n    `cal-itp-data-infra.external_airtable.california_transit__services`\n\
+      \  WHERE holiday_website_condition IS NOT NULL\n  and dt = EXTRACT(DATE FROM\
+      \ CURRENT_TIMESTAMP() AT TIME ZONE 'America/Los_Angeles') \n  -- (select dt\
+      \ from `cal-itp-data-infra.external_airtable.california_transit__services` order\
+      \ by dt DESC limit 1)\n),\npred AS (\n    SELECT\n        ss.feed_key,\n   \
+      \     feed_publisher_name,\n        feed_start_date,\n        feed_end_date,\n\
+      \        feed_info.base64_url,\n        ss.service_date,\n        ss.service_id\n\
+      \    FROM\n        `cal-itp-data-infra.mart_gtfs_schedule_latest.dim_feed_info_latest`\
+      \ AS feed_info\n    LEFT JOIN\n        `cal-itp-data-infra.staging.int_gtfs_schedule__all_scheduled_service`\
+      \ AS ss\n        ON feed_info.feed_key = ss.feed_key\n    WHERE ss.service_date\
+      \ IN ('2024-11-11', '2024-11-27', '2024-11-28','2024-11-29', '2024-12-18', '2024-12-23',\
+      \ '2024-12-24', '2024-12-25','2024-12-31','2025-01-01')\n),\nadd_trips AS (\n\
+      \    SELECT \n        pred.*, \n        dtl.trip_id\n    FROM pred\n    LEFT\
+      \ JOIN `cal-itp-data-infra.mart_gtfs_schedule_latest.dim_trips_latest` dtl\n\
+      \        ON pred.feed_key = dtl.feed_key \n        AND pred.service_id = dtl.service_id\n\
+      ),\n-- grouped_trips as (\n-- SELECT\n--     *\n-- FROM\n--   (SELECT feed_key,\
+      \ feed_publisher_name, base64_url, feed_start_date, feed_end_date, service_date,\
+      \ trip_id FROM add_trips)\n--   PIVOT(COUNT(trip_id) FOR service_date IN ('2024-11-11',\
+      \ '2024-11-27', '2024-11-28','2024-11-29', '2024-12-24', '2024-12-25','2024-12-31','2025-01-01')\n\
+      --   )\n-- )\ngrouped_trips AS (\n    SELECT\n        feed_key,\n        feed_publisher_name,\n\
+      \        base64_url,\n        feed_start_date,\n        feed_end_date,\n   \
+      \     SUM(CASE WHEN service_date = '2024-11-11' THEN 1 ELSE NULL END) AS _2024_11_11,\n\
+      \        SUM(CASE WHEN service_date = '2024-11-27' THEN 1 ELSE NULL END) AS\
+      \ _2024_11_27,\n        SUM(CASE WHEN service_date = '2024-11-28' THEN 1 ELSE\
+      \ NULL END) AS _2024_11_28,\n        SUM(CASE WHEN service_date = '2024-11-29'\
+      \ THEN 1 ELSE NULL END) AS _2024_11_29,\n        SUM(CASE WHEN service_date\
+      \ = '2024-12-18' THEN 1 ELSE NULL END) AS _2024_12_18,\n        SUM(CASE WHEN\
+      \ service_date = '2024-12-23' THEN 1 ELSE NULL END) AS _2024_12_23,\n      \
+      \  SUM(CASE WHEN service_date = '2024-12-24' THEN 1 ELSE NULL END) AS _2024_12_24,\n\
+      \        SUM(CASE WHEN service_date = '2024-12-25' THEN 1 ELSE NULL END) AS\
+      \ _2024_12_25,\n        SUM(CASE WHEN service_date = '2024-12-31' THEN 1 ELSE\
+      \ NULL END) AS _2024_12_31,\n        SUM(CASE WHEN service_date = '2025-01-01'\
+      \ THEN 1 ELSE NULL END) AS _2025_01_01\n    FROM\n        add_trips\n    GROUP\
+      \ BY\n        1, 2, 3, 4, 5\n),\nfull_results as (\nSELECT\n        holiday_info.service_source_record_id,\n\
+      \        holiday_info.service_name,\n        holiday_info.hs_vets_day_obs,\n\
+      \        holiday_info.hs_vets_day_actual,\n        holiday_info.hs_thanksgiving,\n\
+      \        holiday_info.hs_day_after_thanksgiving,\n        holiday_info.hs_xmas_eve,\n\
+      \        holiday_info.hs_xmas,\n        holiday_info.hs_nye,\n        holiday_info.hs_new_years_day,\n\
+      \        holiday_info.holiday_website_condition,\n        holiday_info.holiday_schedule_notes,\n\
+      \        the_bridge.organization_name,\n        the_bridge.gtfs_dataset_name,\n\
+      \        the_bridge.public_customer_facing_or_regional_subfeed_fixed_route,\n\
+      \        the_bridge.organization_hubspot_company_record_id,\n        the_bridge.gtfs_service_data_customer_facing,\n\
+      \        the_bridge.regional_feed_type,\n        the_bridge.use_subfeed_for_reports,\n\
+      \        the_bridge.gtfs_dataset_key,\n        the_bridge.schedule_feed_key,\n\
+      \        grouped_trips.feed_key,\n        grouped_trips.feed_publisher_name,\n\
+      \        grouped_trips.base64_url,\n        grouped_trips.feed_start_date,\n\
+      \        grouped_trips.feed_end_date,\n        grouped_trips._2024_11_11,\n\
+      \        grouped_trips._2024_11_27,\n        grouped_trips._2024_11_28,\n  \
+      \      grouped_trips._2024_11_29,\n        grouped_trips._2024_12_18,\n    \
+      \    grouped_trips._2024_12_23,\n        grouped_trips._2024_12_24,\n      \
+      \  grouped_trips._2024_12_25,\n        grouped_trips._2024_12_31,\n        grouped_trips._2025_01_01\n\
+      \        from holiday_info \nleft join the_bridge\non \nholiday_info.service_source_record_id\
+      \ = the_bridge.service_source_record_id\nleft join grouped_trips\non the_bridge.schedule_feed_key\
+      \ = grouped_trips.feed_key)\nselect \norganization_name, \nservice_name, \n\
+      gtfs_dataset_name, \nholiday_website_condition, \nhs_vets_day_actual, \n_2024_11_11,\n\
+      _2024_11_27 as weekday_exp_11_27,\nhs_thanksgiving, \n_2024_11_28,\nhs_day_after_thanksgiving,\
+      \ \n_2024_11_29,\n_2024_12_18 as weekday_exp_12_18,\n_2024_12_23 as weekday_exp_12_23,\n\
+      hs_xmas_eve, \n_2024_12_24,\nhs_xmas, \n_2024_12_25,\nhs_nye, \n_2024_12_31,\n\
+      hs_new_years_day,\n_2025_01_01,\npublic_customer_facing_or_regional_subfeed_fixed_route,\n\
+      use_subfeed_for_reports,\nCAST(FROM_BASE64(REPLACE(REPLACE(base64_url, '-',\
+      \ '+'), '_', '/')) AS STRING) as website, \nfeed_start_date,\nfeed_end_date,\n\
+      organization_hubspot_company_record_id,\nfrom full_results\nwhere gtfs_dataset_name\
+      \ != 'Bay Area 511 Regional Schedule'\n-- where public_customer_facing_or_regional_subfeed_fixed_route\
+      \ is False\norder by organization_name, service_name\n```\n\n#### Metadata\n\
+      \nMetabase ID: __3198__\n\nCreated On: __2024-11-06T23:15:45.146025Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/3198
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:07.531'
+        last_used_at: '2025-05-12T20:44:01.740973Z'

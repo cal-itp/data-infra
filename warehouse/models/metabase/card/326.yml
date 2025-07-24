@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: schedule_urls_in_agencies_yml_not_in_airtable_gtfs_datasets
+    label: Schedule URLs in agencies.yml not in airtable gtfs datasets
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __326__
+
+
+      Created On: __2022-03-03T17:20:56.91048Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/326
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

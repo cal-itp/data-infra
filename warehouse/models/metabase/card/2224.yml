@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: ccjpa_dashboard___refunds_requested_for_settlement__settled__payments__payments___ccjpa_
+    label: CCJPA Dashboard - Refunds Requested for Settlement, Settled, Payments (payments
+      - ccjpa)
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2224__
+
+
+      Created On: __2024-03-21T21:23:16.161517Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2224
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.887'
+        last_used_at: '2025-03-20T14:49:49.058868Z'

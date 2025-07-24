@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ccjpa_dashboard___sales_nominal__charged__request_for_settlement_amount
+    label: CCJPA Dashboard - Sales Nominal, Charged, Request for Settlement Amount
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2178__
+
+
+      Created On: __2024-02-14T22:20:40.671007Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2178
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.949'
+        last_used_at: '2025-03-20T14:49:49.058868Z'

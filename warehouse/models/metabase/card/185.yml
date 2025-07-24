@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: top_50_prefix_codes
+    label: Top 50 Prefix Codes
+    description: '### Visualization: Bar
+
+
+      Top 50 prefix codes across all agencies
+
+
+      #### Metadata
+
+
+      Metabase ID: __185__
+
+
+      Created On: __2021-11-17T22:48:36.652064Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/185
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie.a@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: mc_debit_and_prepaid_interchange_as___of_total_mc_interchange___per_month
+    label: MC debit and prepaid interchange as % of total MC interchange - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1968__
+
+
+      Created On: __2023-12-04T21:36:42.781598Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1968
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.755'
+        last_used_at: '2025-07-14T16:21:46.586656Z'

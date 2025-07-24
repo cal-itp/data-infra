@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: total_2022_voms_and_vehicles__all_ca_ntd_reporters_
+    label: Total 2022 VOMS and Vehicles (all CA NTD Reporters)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3307__
+
+
+      Created On: __2024-12-18T20:33:07.011885Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3307
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-12-18T20:33:07.011885Z'

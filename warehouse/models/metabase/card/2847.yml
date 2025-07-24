@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: assessment_fees_as___of_net_sales_1
+    label: Assessment Fees as % of Net Sales
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2847__
+
+
+      Created On: __2024-08-15T22:02:32.021205Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2847
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.203'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

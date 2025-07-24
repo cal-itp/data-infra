@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: net_sales__requested_for_settlement
+    label: 'Net Sales: Requested for settlement'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2048__
+
+
+      Created On: __2023-12-21T16:44:49.593169Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2048
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.132'
+        last_used_at: '2025-03-20T14:49:49.058868Z'

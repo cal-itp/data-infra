@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: net_sales__settled_transactions
+    label: 'Net Sales: Settled Transactions'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2210__
+
+
+      Created On: __2024-03-21T18:04:59.067444Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2210
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.057'
+        last_used_at: '2025-02-20T18:30:40.868759Z'

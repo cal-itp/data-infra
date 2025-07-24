@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 5311_recipients_in_2022_2023__d7_
+    label: 5311 recipients in 2022-2023 (D7)
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3780__
+
+
+      Created On: __2025-07-10T19:56:06.319042Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3780
+    maturity: medium
+    owner:
+      name: Md Saiful Islam
+      email: md.islam@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.305'
+        last_used_at: '2025-07-10T21:42:46.961765Z'

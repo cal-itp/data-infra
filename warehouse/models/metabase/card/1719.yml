@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: feed_expiration_warnings
+    label: Feed Expiration Warnings
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1719__
+
+
+      Created On: __2023-09-21T04:01:14.889166Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1719
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.768'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

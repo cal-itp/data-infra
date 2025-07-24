@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: non_revenue_vehicle_fleet_sizes__1236
+    label: 'Non-Revenue Vehicle Fleet Sizes #1236'
+    description: '### Dashboard Cards: 16
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __260__
+
+
+      Created On: __2025-04-22T22:57:04.265798Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/260
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []

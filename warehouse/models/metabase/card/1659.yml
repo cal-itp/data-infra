@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: exercise_8_v2___observed_trips_to_bridge_org_x_gtfs_datasets_produced
+    label: Exercise 8 v2 - observed_trips to bridge_org_x_gtfs_datasets_produced
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1659__
+
+
+      Created On: __2023-08-31T17:45:57.816734Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1659
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.173'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

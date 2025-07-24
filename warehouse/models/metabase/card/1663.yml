@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: exercise_9_pt1__just_count_of_currently_operating
+    label: 'Exercise 9 pt1: just count of currently operating'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1663__
+
+
+      Created On: __2023-09-01T21:44:04.680403Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1663
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.590'
+        last_used_at: '2025-03-05T06:15:18.981065Z'

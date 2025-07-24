@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: caltrans_district_enrichment_of_dim_organizations_demo
+    label: Caltrans District enrichment of Dim Organizations Demo
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3433__
+
+
+      Created On: __2025-03-04T18:41:45.144076Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3433
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.750'
+        last_used_at: '2025-04-08T14:04:44.336451Z'

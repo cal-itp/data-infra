@@ -1,0 +1,37 @@
+version: 2
+exposures:
+  - name: outcomes____patterns_txt_by_provider
+    label: Outcomes || patterns.txt by Provider
+    description: "### Visualization: Line\n\nProviders with a patterns.txt file, filterable\
+      \ by provider.\n\n#### Query\n\n```\nWITH\n    dates AS (\n       SELECT date\n\
+      \        FROM UNNEST(\n            GENERATE_DATE_ARRAY(DATE('2021-07-01'), CURRENT_DATE()\
+      \ - 1, INTERVAL 1 DAY)\n        ) as date\n    ),\n    providers AS (\n    \
+      \    SELECT *\n        FROM `views.gtfs_agency_names`\n        WHERE (providers)\n\
+      \    ),\n    provider_feeds AS (\n        SELECT *\n        FROM views.gtfs_schedule_dim_feeds\n\
+      \        INNER JOIN providers\n            USING (calitp_itp_id, calitp_url_number)\n\
+      \    ),\n    provider_count AS (\n        SELECT\n            date,\n      \
+      \      COUNT(*) AS n_providers\n        FROM (\n            SELECT DISTINCT\n\
+      \                service_date AS date,\n                calitp_itp_id\n    \
+      \        FROM views.gtfs_schedule_service_daily_trips\n            INNER JOIN\
+      \ providers\n                USING (calitp_itp_id, calitp_url_number)\n    \
+      \        WHERE \n                service_date < CURRENT_DATE() AND\n       \
+      \         service_date >= '2021-07-01'\n        )\n        GROUP BY 1\n    \
+      \    ORDER BY 1 DESC\n    ),\n    pattern_count AS (\n        SELECT \n    \
+      \        date,\n            COUNT(DISTINCT feed_key) AS n_patterns\n       \
+      \ FROM views.gtfs_schedule_fact_daily_files\n        INNER JOIN provider_feeds\n\
+      \            USING (feed_key)\n        WHERE date >= '2021-07-01' AND TRIM(LOWER(file_key))\
+      \ = 'patterns.txt' -- this sanititzation should happen in the pipeline\n   \
+      \     GROUP BY 1\n        ORDER BY 1 DESC\n    )\nSELECT \n    date,\n    COALESCE(n_patterns/n_providers,\
+      \ 0) AS pct_providers \nFROM dates\nLEFT JOIN provider_count\n    USING (date)\n\
+      LEFT JOIN pattern_count\n    USING (date)\nORDER BY date DESC\n```\n\n#### Metadata\n\
+      \nMetabase ID: __81__\n\nCreated On: __2021-08-20T13:17:02.670876Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/81
+    maturity: medium
+    owner:
+      name: Chris Cardillo
+      email: chris.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

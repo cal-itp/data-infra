@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: list_of_routes
+    label: List of routes
+    description: '### Visualization: Table
+
+
+      Comprehensive list of agency''s routes. To download full CSV, click on name
+      to view the "question" and then click the "Download" button on the bottom-right.
+      Select "CSV".
+
+
+      #### Metadata
+
+
+      Metabase ID: __444__
+
+
+      Created On: __2022-08-23T22:31:51.084429Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/444
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

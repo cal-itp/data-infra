@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_fares
+    label: Total Fares
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3281__
+
+
+      Created On: __2024-12-10T02:35:30.406697Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3281
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.494'
+        last_used_at: '2025-07-09T05:02:54.762432Z'

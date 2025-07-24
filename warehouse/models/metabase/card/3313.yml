@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: annual_reduced_fare_transactions
+    label: Annual reduced fare transactions
+    description: '### Visualization: Bar
+
+
+      Used in Annual reporting
+
+
+      #### Metadata
+
+
+      Metabase ID: __3313__
+
+
+      Created On: __2025-01-06T22:36:22.293221Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3313
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.418'
+        last_used_at: '2025-01-10T23:45:59.175722Z'

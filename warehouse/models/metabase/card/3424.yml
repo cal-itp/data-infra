@@ -1,0 +1,30 @@
+version: 2
+exposures:
+  - name: ex_3_which_technology_vendors_are_utilized_by_the_highest_number_of_transit_organizations__who_are_the_top_20_most_popular_tech_vendors_that_transit_organizations_use_
+    label: ex_3_Which technology vendors are utilized by the highest number of transit
+      organizations? Who are the top 20 most popular tech vendors that transit organizations
+      use?
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3424__
+
+
+      Created On: __2025-02-25T00:04:28.38737Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3424
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.525'
+        last_used_at: '2025-03-14T17:32:50.619795Z'

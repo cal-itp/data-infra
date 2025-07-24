@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: profile_testing
+    label: Profile testing
+    description: '### Dashboard Cards: 23
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __59__
+
+
+      Created On: __2022-03-07T17:59:08.493996Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/59
+    maturity: medium
+    owner:
+      name: Vyki Englert
+      email: vyki@compiler.la
+    depends_on: []

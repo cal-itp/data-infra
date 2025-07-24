@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: resolved_gtfs_rt_issues_with_ridership_data
+    label: Resolved GTFS-RT issues with ridership data
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2816__
+
+
+      Created On: __2024-08-15T20:02:22.334375Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2816
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.777'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

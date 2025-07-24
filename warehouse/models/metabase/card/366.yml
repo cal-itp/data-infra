@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: gtfs_schedule_fact_day_of_week_service_monthly_comparisons__grouped_by_metric_month_and_metric_day_of_week_and_metric_median_and_calitp_itp_and_calitp_url_number__filtered_by_metric_year
+    label: Gtfs Schedule Fact Day Of Week Service Monthly Comparisons, Grouped by
+      Metric Month and Metric Day Of Week and Metric Median and Calitp Itp and Calitp
+      URL Number, Filtered by Metric Year
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __366__
+
+
+      Created On: __2022-03-30T16:23:36.649106Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/366
+    maturity: medium
+    owner:
+      name: Natalya Diaz
+      email: natalya.d@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

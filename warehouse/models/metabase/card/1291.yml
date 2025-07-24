@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: 5311_orgs_cleaned
+    label: 5311 orgs cleaned
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1291__
+
+
+      Created On: __2023-04-14T21:30:22.94319Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1291
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

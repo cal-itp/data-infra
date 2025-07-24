@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: elavon_billing_transactions_6
+    label: Elavon Billing Transactions
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2145__
+
+
+      Created On: __2024-02-06T21:23:39.095776Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2145
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.029'
+        last_used_at: '2025-07-07T17:34:04.386194Z'

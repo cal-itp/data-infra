@@ -1,0 +1,26 @@
+version: 2
+exposures:
+  - name: journeys_by_hour_of_day_and_day_of_week_9
+    label: Journeys by Hour of Day and Day of Week
+    description: "### Visualization: Line\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nWITH\n  add_hour_and_day AS (\n    SELECT\n      *,\n \
+      \     EXTRACT(hour\n      FROM\n        CAST(`mart_payments.fct_payments_rides_v2`.`transaction_date_time_pacific`\
+      \ AS timestamp)) AS transaction_date_time_pacific_hour,\n      EXTRACT(DAYOFWEEK\n\
+      \      FROM\n        CAST(`mart_payments.fct_payments_rides_v2`.`transaction_date_time_pacific`\
+      \ AS timestamp)) AS transaction_date_time_pacific_dow,\n    FROM\n      `mart_payments.fct_payments_rides_v2`\n\
+      \    WHERE (transaction_date_time_pacific)\n)\n  SELECT \n    count (*) as counts_by_hour_and_day,\n\
+      \    transaction_date_time_pacific_hour,\n    transaction_date_time_pacific_dow\n\
+      \  FROM add_hour_and_day\n  GROUP BY\n    transaction_date_time_pacific_hour,\
+      \ transaction_date_time_pacific_dow\n```\n\n#### Metadata\n\nMetabase ID: __578__\n\
+      \nCreated On: __2022-11-04T00:02:14.892276Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/578
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.917'
+        last_used_at: '2025-07-21T23:49:22.213243Z'

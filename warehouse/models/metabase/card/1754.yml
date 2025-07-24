@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: today_s_number_of_organizations_passing_100__of_checks__filtered____wip
+    label: Today's Number of Organizations Passing 100% of Checks (Filtered) --WIP
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1754__
+
+
+      Created On: __2023-09-23T00:10:58.209608Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1754
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:09.217'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

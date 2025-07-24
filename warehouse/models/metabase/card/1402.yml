@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 2__how_many_services_do_most_organizations_manage_
+    label: '2: How many Services do most Organizations Manage?'
+    description: '### Visualization: Bar
+
+
+      By Caltrans District, how many services does an organization manage?
+
+
+      #### Metadata
+
+
+      Metabase ID: __1402__
+
+
+      Created On: __2023-07-05T16:30:34.5117Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1402
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.708'
+        last_used_at: '2025-03-05T06:01:58.670826Z'

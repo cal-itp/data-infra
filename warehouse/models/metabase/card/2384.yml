@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: quarterly_enrollment_comparison
+    label: Quarterly enrollment comparison
+    description: '### Visualization: Smartscalar
+
+
+      Used in external CS reporting
+
+
+      #### Metadata
+
+
+      Metabase ID: __2384__
+
+
+      Created On: __2024-06-24T18:15:22.250494Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2384
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.664'
+        last_used_at: '2025-07-08T18:42:31.494618Z'

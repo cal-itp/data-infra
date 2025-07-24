@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: additional_saturday_riders
+    label: Additional Saturday Riders
+    description: '### Visualization: Scalar
+
+
+      Ahsc Pred Data Tests, Sum of N Addtl Riders, Saturday
+
+
+      #### Metadata
+
+
+      Metabase ID: __598__
+
+
+      Created On: __2022-12-07T16:41:17.106093Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/598
+    maturity: medium
+    owner:
+      name: Katrina Kaiser
+      email: katrina.kaiser@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.430'
+        last_used_at: '2025-07-14T15:30:52.848432Z'

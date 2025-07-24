@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: form_factor_by_month
+    label: Form Factor by Month
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3744__
+
+
+      Created On: __2025-05-20T16:34:44.324028Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3744
+    maturity: medium
+    owner:
+      name: Robin Van Valkenburgh
+      email: robin.vanvalkenburgh@nevadacountyca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.882'
+        last_used_at: '2025-05-20T18:34:40.755154Z'

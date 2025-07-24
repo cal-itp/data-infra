@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: share_of_aggregated_journeys_one_amount
+    label: Share of aggregated journeys one amount
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2479__
+
+
+      Created On: __2024-07-11T19:45:55.143366Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2479
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.299'
+        last_used_at: '2025-05-16T19:19:27.336661Z'

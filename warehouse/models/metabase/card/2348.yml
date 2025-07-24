@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_fixed_route_or_demand_response_transit_agencies
+    label: Number of Fixed-Route or Demand Response Transit Agencies
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2348__
+
+
+      Created On: __2024-06-10T23:32:23.343273Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2348
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.571'
+        last_used_at: '2025-07-23T19:29:19.607101Z'

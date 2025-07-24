@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: net_sales__payments___duplicate
+    label: 'Net Sales: Payments - Duplicate'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2176__
+
+
+      Created On: __2024-02-14T18:38:04.949832Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2176
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.068'
+        last_used_at: '2025-02-20T19:04:58.64935Z'

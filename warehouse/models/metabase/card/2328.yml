@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: agencies_with_fares_v2_over_time
+    label: Agencies with Fares v2 over time
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2328__
+
+
+      Created On: __2024-06-03T17:27:15.787147Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2328
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.227'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

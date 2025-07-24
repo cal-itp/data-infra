@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: summary_dashboard
+    label: Summary Dashboard
+    description: '### Dashboard Cards: 4
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __269__
+
+
+      Created On: __2025-07-23T22:58:17.00881Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/269
+    maturity: medium
+    owner:
+      name: Jiaxi Liu
+      email: jiaxi.liu@dot.ca.gov
+    depends_on: []

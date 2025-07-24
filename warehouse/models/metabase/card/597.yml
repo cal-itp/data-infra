@@ -1,0 +1,29 @@
+version: 2
+exposures:
+  - name: additional_weekday_riders
+    label: Additional Weekday Riders
+    description: '### Visualization: Scalar
+
+
+      Ahsc Pred Data Tests, Sum of N Addtl Riders, Filtered by Name, Route Name, and
+      N Addtl Trips, Weekday
+
+
+      #### Metadata
+
+
+      Metabase ID: __597__
+
+
+      Created On: __2022-12-07T16:31:17.729969Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/597
+    maturity: medium
+    owner:
+      name: Katrina Kaiser
+      email: katrina.kaiser@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.439'
+        last_used_at: '2025-07-14T15:30:52.842935Z'

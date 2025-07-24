@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: service_area_density_table
+    label: Service Area Density Table
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1425__
+
+
+      Created On: __2023-07-10T17:19:18.607032Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1425
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:11.067'
+        last_used_at: '2024-09-24T21:26:34.460491Z'

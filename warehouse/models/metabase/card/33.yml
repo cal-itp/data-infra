@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: when_are_specific_gtfs_schedule_files_added_for_an_agency_v2
+    label: When are specific GTFS Schedule Files added for an agency V2
+    description: "### Visualization: Line\n\nNo description provided in Metabase\n\
+      \n#### Query\n\n```\nWITH\nfiles_of_interest AS (\n    SELECT * FROM UNNEST([\"\
+      agency.txt\", \"shapes.txt\", \"pathways.txt\", \"fare_rules.txt\", \"feed_info.txt\"\
+      ,\"levels.txt\"]) name\n),\nupdates_of_interest AS (\n    SELECT * FROM `views.calitp_gtfs_files_updates`\n\
+      \    JOIN files_of_interest USING(name)\n),\nnumbered_files AS (\n    SELECT\
+      \ \n       *\n       , DENSE_RANK() OVER (ORDER BY name) AS name_order\n   \
+      \ FROM updates_of_interest\n),\nweekly_files AS (\n    SELECT * FROM numbered_files\
+      \ t1\n    JOIN views.dim_date t2 ON t1.calitp_extracted_at = t2.full_date\n\
+      \    WHERE t2.day_name = \"Sunday\"\n),\nagency_files AS (\n    SELECT * FROM\
+      \ weekly_files\n    JOIN `views.gtfs_agency_names` USING (calitp_itp_id, calitp_url_number)\n\
+      )\nSELECT name, calitp_itp_id, calitp_url_number, calitp_extracted_at, name_order\
+      \ FROM agency_files\nRIGHT JOIN files_of_interest USING (name) WHERE (agency_name)\
+      \ and calitp_url_number = 0\n```\n\n#### Metadata\n\nMetabase ID: __33__\n\n\
+      Created On: __2021-06-30T14:48:32.013876Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/33
+    maturity: medium
+    owner:
+      name: Natalya Diaz
+      email: natalya.d@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

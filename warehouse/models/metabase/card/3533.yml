@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: total_trip_count
+    label: Total Trip Count
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3533__
+
+
+      Created On: __2025-03-28T17:43:35.297528Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3533
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.872'
+        last_used_at: '2025-07-10T21:32:20.868228Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ccjpa_dashboard___sales_settled_transaction__payments__payments__ccjpa_
+    label: CCJPA Dashboard - Sales Settled Transaction, Payments (payments -ccjpa)
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2223__
+
+
+      Created On: __2024-03-21T21:17:59.055688Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2223
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.642'
+        last_used_at: '2025-03-20T14:49:48.751612Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: mc_discount_refunds__usd____per_month
+    label: MC discount refunds (USD) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2086__
+
+
+      Created On: __2024-01-14T08:53:50.551499Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2086
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.249'
+        last_used_at: '2025-07-14T16:21:46.586656Z'

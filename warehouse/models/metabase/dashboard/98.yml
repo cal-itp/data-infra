@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _v2_pipeline__gtfs_rt_files__hourly_view_by_day
+    label: '(v2 Pipeline) GTFS RT Files: Hourly View by Day'
+    description: '### Dashboard Cards: 2
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __98__
+
+
+      Created On: __2022-12-08T15:46:59.310145Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/98
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_fixed_route_transit_agencies_by_county
+    label: Number of Fixed-Route Transit Agencies by County
+    description: '### Visualization: Map
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2312__
+
+
+      Created On: __2024-05-28T23:54:45.508539Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2312
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.590'
+        last_used_at: '2025-07-23T19:29:19.478449Z'

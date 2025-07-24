@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ex4____organizations_passing_rt_feed_checks
+    label: 'Ex4: # Organizations passing RT feed checks'
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3445__
+
+
+      Created On: __2025-03-11T22:17:37.80212Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3445
+    maturity: medium
+    owner:
+      name: Anna Paten
+      email: anna.paten@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.880'
+        last_used_at: '2025-03-14T16:30:02.591163Z'

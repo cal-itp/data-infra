@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: extra_2
+    label: Extra 2
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1829__
+
+
+      Created On: __2023-10-25T17:14:53.825513Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1829
+    maturity: medium
+    owner:
+      name: Shweta Adhikari
+      email: shweta.adhikari@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.474'
+        last_used_at: '2025-01-22T18:29:46.558981Z'

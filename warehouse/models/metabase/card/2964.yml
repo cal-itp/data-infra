@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: charges_and_fees__usd____detailed_charge_type_per_month_10
+    label: Charges and Fees (USD) - detailed charge type per month
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2964__
+
+
+      Created On: __2024-08-23T17:04:15.080897Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2964
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.584'
+        last_used_at: '2025-04-25T23:21:24.873005Z'

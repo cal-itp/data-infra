@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: maximum_of_vehicle_position_message_age_per_day
+    label: Maximum of Vehicle Position Message Age per Day
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3182__
+
+
+      Created On: __2024-11-01T19:52:27.278983Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3182
+    maturity: medium
+    owner:
+      name: Farhad Salemi
+      email: farhad.salemi@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.757'
+        last_used_at: '2025-07-23T19:42:08.907991Z'

@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: mv_shuttle_in_dim_provider_gtfs_data
+    label: MV Shuttle in Dim Provider GTFS Data
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3090__
+
+
+      Created On: __2024-09-11T22:53:34.894468Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3090
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.529'
+        last_used_at: '2024-10-14T20:59:41.549861Z'

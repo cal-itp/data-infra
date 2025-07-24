@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: reconciliation_base_table___settled_non_zero_sales
+    label: Reconciliation base table - Settled Non-zero Sales
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2520__
+
+
+      Created On: __2024-07-29T21:17:56.274493Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2520
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:06.090'
+        last_used_at: '2025-04-26T15:17:48.368392Z'

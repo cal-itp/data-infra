@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: check_status_by_feature__organization_
+    label: Check Status by Feature (Organization)
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __643__
+
+
+      Created On: __2023-01-03T18:36:17.551346Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/643
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.557'
+        last_used_at: '2025-07-22T18:07:42.164161Z'

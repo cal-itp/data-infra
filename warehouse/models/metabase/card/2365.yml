@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: number_of_payments
+    label: Number of payments
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2365__
+
+
+      Created On: __2024-06-18T13:05:09.460561Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2365
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.988'
+        last_used_at: '2025-06-04T19:00:53.334129Z'

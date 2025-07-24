@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: ccjpa_dashboard___net_sales_requested_for_settlement
+    label: CCJPA Dashboard - Net Sales Requested for Settlement
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2183__
+
+
+      Created On: __2024-02-14T23:07:42.678227Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2183
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.212'
+        last_used_at: '2025-03-20T14:49:49.273741Z'

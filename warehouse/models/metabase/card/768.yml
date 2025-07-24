@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: total_number_of_unique_scheduled_trips_by_day_with_regular_day_line
+    label: Total Number of Unique Scheduled Trips by Day with Regular Day Line
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __768__
+
+
+      Created On: __2023-01-31T02:14:48.962927Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/768
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

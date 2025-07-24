@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: payments_metrics___demo
+    label: Payments Metrics - DEMO
+    description: '### Dashboard Cards: 39
+
+
+      Demo dashboard from synthetic data
+
+
+      #### Metadata
+
+
+      Metabase ID: __88__
+
+
+      Created On: __2022-09-20T16:49:05.267026Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/88
+    maturity: medium
+    owner:
+      name: Jameelah Young
+      email: jameelah.y@jarv.us
+    depends_on: []

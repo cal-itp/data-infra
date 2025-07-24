@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: net_sales__usd____per_month_3
+    label: Net sales (USD) - per month
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2703__
+
+
+      Created On: __2024-08-13T21:23:18.019455Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2703
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.059'
+        last_used_at: '2024-10-08T22:09:01.996018Z'

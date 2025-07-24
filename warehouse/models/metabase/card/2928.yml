@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: elavon_chargeback_transactions_8
+    label: Elavon Chargeback Transactions
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2928__
+
+
+      Created On: __2024-08-23T16:51:42.921162Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2928
+    maturity: medium
+    owner:
+      name: Dmitriy Morgunov
+      email: dmitriy.morgunov@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.747'
+        last_used_at: '2025-07-17T20:34:16.799537Z'

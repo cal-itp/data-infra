@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: metric_service_hour_ratio_mom_less_than_0_8
+    label: Metric Service Hour Ratio MoM less than 0.8
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __368__
+
+
+      Created On: __2022-03-30T16:48:08.384641Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/368
+    maturity: medium
+    owner:
+      name: Natalya Diaz
+      email: natalya.d@jarv.us
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.697'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

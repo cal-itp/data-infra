@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 6__percent_of_all_organizations_with_all_3_rt_feeds_present_yesterday
+    label: '6: Percent of all organizations with all 3 RT feeds present yesterday'
+    description: '### Visualization: Scalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1657__
+
+
+      Created On: __2023-08-30T22:01:11.035199Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1657
+    maturity: medium
+    owner:
+      name: Natalie Amberg
+      email: natalie@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.194'
+        last_used_at: '2025-03-14T16:39:43.713088Z'

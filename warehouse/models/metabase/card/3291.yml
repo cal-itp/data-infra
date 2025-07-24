@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: check_recent_trips_by_agency
+    label: Check recent trips by agency
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3291__
+
+
+      Created On: __2024-12-16T21:34:36.485345Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3291
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.512'
+        last_used_at: '2025-03-18T21:48:39.935002Z'

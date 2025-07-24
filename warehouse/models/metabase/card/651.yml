@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: __checks_passed__last_3_months__service_
+    label: '% Checks Passed: Last 3 Months (Service)'
+    description: '### Visualization: Line
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __651__
+
+
+      Created On: __2023-01-04T20:21:26.377624Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/651
+    maturity: medium
+    owner:
+      name: Scott Owades
+      email: scott.owades@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.634'
+        last_used_at: '2025-04-28T23:52:42.467122Z'

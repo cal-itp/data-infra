@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: list__feeds_with_fares_v2___saiful_2___
+    label: 'list: Feeds with Fares v2 - Saiful 2  -'
+    description: '### Visualization: Bar
+
+
+      CS
+
+
+      #### Metadata
+
+
+      Metabase ID: __2326__
+
+
+      Created On: __2024-05-31T22:09:55.996661Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2326
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.776'
+        last_used_at: '2024-09-20T17:54:54.131902Z'

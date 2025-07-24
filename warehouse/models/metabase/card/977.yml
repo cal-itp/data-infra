@@ -1,0 +1,41 @@
+version: 2
+exposures:
+  - name: daily_sacrt_gtfs_rt_e003_errors
+    label: Daily SacRT GTFS-RT E003 Errors
+    description: "### Visualization: Line
+    No description provided in Metabase
+    \
+
+      #### Query
+      ```
+      SELECT `mart_transit_database.dim_gtfs_datasets`.`uri`\
+      \ AS `uri`, `Fct_Daily_Rt_Feed_Validation_Notices`.`code` AS `Fct_Daily_Rt_Feed_Validation_Notices__code`,\
+      \ date_trunc(`Fct_Daily_Rt_Feed_Validation_Notices`.`date`, day) AS `Date`,\
+      \ sum(`Fct_Daily_Rt_Feed_Validation_Notices`.`total_notices`) AS `Total_E003_Errors`
+      \
+      FROM `mart_transit_database.dim_gtfs_datasets`
+      LEFT JOIN `mart_gtfs_quality.fct_daily_rt_feed_validation_notices`\
+      \ `Fct_Daily_Rt_Feed_Validation_Notices` ON `mart_transit_database.dim_gtfs_datasets`.`base64_url`\
+      \ = `Fct_Daily_Rt_Feed_Validation_Notices`.`base64_url`
+      WHERE ((lower(`mart_transit_database.dim_gtfs_datasets`.`name`)\
+      \ like '%sacramento%')
+         AND `Fct_Daily_Rt_Feed_Validation_Notices`.`code`\
+      \ = 'E003')
+      GROUP BY `uri`, `Fct_Daily_Rt_Feed_Validation_Notices__code`, `Date`
+      \
+      ORDER BY `uri` ASC, `Fct_Daily_Rt_Feed_Validation_Notices__code` ASC, `Date`\
+      \ ASC
+      ```
+      #### Metadata
+      Metabase ID: __977__
+      Created On: __2023-02-10T01:57:36.460133Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/977
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

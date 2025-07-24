@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: 2___current_month_ridership_by_train__day_and_journey_type
+    label: 2 - Current Month Ridership By Train, Day and Journey Type
+    description: '### Visualization: Pivot
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2108__
+
+
+      Created On: __2024-01-25T16:51:07.418779Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2108
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.755'
+        last_used_at: '2025-07-23T15:00:10.179006Z'

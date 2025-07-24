@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: __of_total_feeds_that_are_expired_or_about_to_expire_feeds_by_day
+    label: '% of Total Feeds that are Expired or About to Expire Feeds by Day'
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2266__
+
+
+      Created On: __2024-05-07T02:41:01.133337Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2266
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:02.038'
+        last_used_at: '2025-07-03T17:24:29.252922Z'

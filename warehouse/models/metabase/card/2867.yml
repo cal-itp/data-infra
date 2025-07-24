@@ -1,0 +1,61 @@
+version: 2
+exposures:
+  - name: gtfs_realtime___vendors_that_provide_cancellations_or_don_t
+    label: GTFS Realtime - vendors that provide cancellations or don't
+    description: "### Visualization: Bar\n\nFiltered out agencies\n\nMost of the MTC\
+      \ agencies we have coverage of their original RT systems, but not all.  This\
+      \ is pretty close.\n\n#### Query\n\n```\nwith obs_trips as (\nSelect\n*,\n \
+      \   CASE \n        WHEN tu_trip_schedule_relationships LIKE '%CANCELED%' THEN\
+      \ 1\n        ELSE 0 -- Or any other value you want for non-matching rows\n \
+      \   END AS cancelled_count,\n    CASE \n        WHEN tu_trip_schedule_relationships\
+      \ LIKE '%CANCELED%' THEN 0\n        ELSE 1 -- Or any other value you want for\
+      \ non-matching rows\n    END AS not_cancelled_count\nfrom mart_gtfs.fct_observed_trips\
+      \ fot\nWHERE DATE(service_date) > DATE_SUB(CURRENT_DATE(), INTERVAL 3 MONTH)\n\
+      ),\ngrouped_obs_trips as (\nselect schedule_name,vp_name,\n#vp_name, vp_gtfs_dataset_key,\
+      \ schedule_gtfs_dataset_key, \nsum(cancelled_count) as cancelled_count, sum(not_cancelled_count)\
+      \ as not_cancelled_count  from obs_trips \ngroup by 1,2),\ngtfs_to_org_id as\
+      \ (\nselect\ndistinct(schedule_gtfs_dataset_name), organization_ntd_id,\n  \
+      \      IF(LENGTH(organization_ntd_id) >= 10,\n            SUBSTR(organization_ntd_id,\
+      \ -5),\n            organization_ntd_id) AS ntd_id_2022\nFROM `cal-itp-data-infra.mart_transit_database.dim_provider_gtfs_data`\
+      \ \nwhere schedule_gtfs_dataset_name is not null and organization_ntd_id is\
+      \ not null and _is_current = True),\nagency_ntd as (\n  SELECT \n  -- *\n  agency_name,\
+      \ ntd_id, legacy_ntd_id, total_voms\n   FROM `cal-itp-data-infra.mart_ntd_annual_reporting.dim_2023_agency_information`\
+      \ \nwhere state = \"CA\" ),\njoined_agency_voms as (select \n*\nfrom gtfs_to_org_id\
+      \ \nleft join agency_ntd\nON gtfs_to_org_id.ntd_id_2022 = agency_ntd.ntd_id\n\
+      where schedule_gtfs_dataset_name not in ('Bay Area 511 Regional Schedule')\n\
+      AND\nntd_id_2022 NOT IN ('90264',\n'91018', '91093', # humboldt doubles \n'91058','90164','90050','90227','90165','90163')\
+      \ #VCTC\n),\n-- select * from joined_agency_voms\n-- order by agency_name, schedule_gtfs_dataset_name\
+      \  ;\ncleaned_names_count_ids_voms as (\nselect *,\n   CASE \n      WHEN total_voms\
+      \ IS NULL OR total_voms BETWEEN 0 AND 5 THEN '0-5'  -- Include nulls here\n\
+      \      WHEN total_voms BETWEEN 6 AND 20 THEN '6-20'\n      WHEN total_voms BETWEEN\
+      \ 21 AND 50 THEN '21-50'\n      WHEN total_voms BETWEEN 51 AND 100 THEN '51-100'\n\
+      \      ELSE '101+' \n    END AS voms_category, \n   CASE \n      WHEN cancelled_count\
+      \ > 0 then 'Feed with a cancellation in last 3 months'\n      ELSE 'Feed without\
+      \ a cancellation in last 3 months'\n    END AS cancellation_category\nfrom grouped_obs_trips\n\
+      left join joined_agency_voms\nON\ngrouped_obs_trips.schedule_name = joined_agency_voms.schedule_gtfs_dataset_name\n\
+      where schedule_name not in ('Bay Area 511 Regional Schedule','Redwood Coast\
+      \ Schedulel')\n),\njoined_with_bridge_orgs as (select * from cleaned_names_count_ids_voms\
+      \ cn\n#This produces duplicates because there might be multiple organizations\
+      \ producing the same dataset.\nleft join mart_transit_database.bridge_organizations_x_gtfs_datasets_produced\
+      \ bo\nON cn.vp_name = bo.gtfs_dataset_name\nwhere bo._is_current=True),\n--\
+      \ select * from joined_with_bridge_orgs\n#If I want to get the proper organization\
+      \ name, I need to join from gtfs_dataset_name but the gtfs_dataset_Name needs\
+      \ to be vehicle positions and/or Trip updates.  Just joining to schedule dataset\
+      \ will not work, will actually be wrong.\nfinal as (select *\nfrom joined_with_bridge_orgs\n\
+      #Goes down from 150ish to 55\nwhere organization_name in ((SELECT name FROM\
+      \ `cal-itp-data-infra.mart_transit_database.dim_organizations` \nwhere organization_type\
+      \ = 'Company'\nand _is_current = True)))\n-- select * from final\nselect count(*)\
+      \ as org_count,organization_name, cancellation_category from final\ngroup by\
+      \ organization_name, cancellation_category\n```\n\n#### Metadata\n\nMetabase\
+      \ ID: __2867__\n\nCreated On: __2024-08-16T18:39:29.448291Z__"
+    type: analysis
+    url: https://dashboards.calitp.org/card/2867
+    maturity: medium
+    owner:
+      name: Vivek Bansal
+      email: vivek.bansal@dot.ca.gov
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.352'
+        last_used_at: '2025-07-23T22:45:56.463254Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: number_of_rides_per_route__grouped_by_fare_payment_methods_used_1
+    label: Number of Rides per Route, grouped by Fare Payment Methods Used
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __249__
+
+
+      Created On: __2022-01-06T17:15:24.346109Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/249
+    maturity: medium
+    owner:
+      name: Ben Bressette
+      email: ben@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

@@ -1,0 +1,27 @@
+version: 2
+exposures:
+  - name: __of_trips_with_tu_messages__last_180_days_
+    label: '% of trips with TU messages (last 180 days)'
+    description: '### Visualization: Area
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2361__
+
+
+      Created On: __2024-06-12T00:45:03.956403Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2361
+    maturity: medium
+    owner:
+      name: Evan Siroky
+      email: evan@calitp.org
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

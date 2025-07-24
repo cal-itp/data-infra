@@ -1,0 +1,24 @@
+version: 2
+exposures:
+  - name: _sacrt__contactless_payments_metrics_dashboard
+    label: (SacRT) Contactless Payments Metrics Dashboard
+    description: '### Dashboard Cards: 75
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __262__
+
+
+      Created On: __2025-04-25T21:18:35.207164Z__'
+    type: dashboard
+    url: https://dashboards.calitp.org/dashboard/262
+    maturity: medium
+    owner:
+      name: Charlie Costanzo
+      email: charlie.c@jarv.us
+    depends_on: []

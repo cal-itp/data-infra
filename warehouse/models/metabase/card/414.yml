@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: vehicle_positions_urls_in_agencies_yml_not_in_airtable_gtfs_datasets___v2
+    label: Vehicle Positions URLs in agencies.yml not in airtable gtfs datasets -
+      v2
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __414__
+
+
+      Created On: __2022-07-18T14:57:34.750412Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/414
+    maturity: medium
+    owner:
+      name: Laurie Merrell
+      email: laurie.m@jarv.us
+    depends_on: []
+    config:
+      meta:
+        last_used_at: '2024-09-20T17:54:54.131902Z'

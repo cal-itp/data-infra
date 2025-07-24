@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sbmtd_graph_of_discounted_transactions
+    label: SBMTD graph of discounted transactions
+    description: '### Visualization: Bar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __3166__
+
+
+      Created On: __2024-10-22T00:10:10.702565Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/3166
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.100'
+        last_used_at: '2025-07-21T23:49:22.08616Z'

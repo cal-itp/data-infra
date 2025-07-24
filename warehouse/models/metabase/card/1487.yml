@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: sales____of_trx__per_network
+    label: Sales (# of trx) per network
+    description: '### Visualization: Pie
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __1487__
+
+
+      Created On: __2023-07-26T18:34:53.01783Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/1487
+    maturity: medium
+    owner:
+      name: Akos Matzon
+      email: akos.matzon@rebelgroup.com
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.929'
+        last_used_at: '2025-05-28T16:42:17.799512Z'

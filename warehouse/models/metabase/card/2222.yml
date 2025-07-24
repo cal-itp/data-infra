@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: net_sales__payments__payments___ccjpa____duplicate
+    label: 'Net Sales: Payments (payments - ccjpa) - Duplicate'
+    description: '### Visualization: Table
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2222__
+
+
+      Created On: __2024-03-21T21:04:44.805155Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2222
+    maturity: medium
+    owner:
+      name: Christian Suyat
+      email: christian@calitp.org
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:01.572'
+        last_used_at: '2025-03-20T14:49:49.273741Z'

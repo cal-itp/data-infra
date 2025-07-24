@@ -1,0 +1,28 @@
+version: 2
+exposures:
+  - name: enrollment_comparison_by_month
+    label: Enrollment comparison by month
+    description: '### Visualization: Smartscalar
+
+
+      No description provided in Metabase
+
+
+      #### Metadata
+
+
+      Metabase ID: __2203__
+
+
+      Created On: __2024-03-15T00:38:25.758988Z__'
+    type: analysis
+    url: https://dashboards.calitp.org/card/2203
+    maturity: medium
+    owner:
+      name: Olivia Ramacier
+      email: olivia@compiler.la
+    depends_on: []
+    config:
+      meta:
+        average_query_time: '0:00.799'
+        last_used_at: '2025-06-27T02:40:35.014192Z'
