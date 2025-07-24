@@ -31,7 +31,7 @@ WITH stg_gtfs_rt__service_alerts AS (
         alert.severityLevel AS severity_level
 
     FROM {{ source('external_gtfs_rt', 'service_alerts') }}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH) -- last 6 months
+    WHERE dt >= '2025-07-01' -- Temporary filter
 )
 
 SELECT * FROM stg_gtfs_rt__service_alerts
