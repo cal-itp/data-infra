@@ -668,10 +668,8 @@ models:
       It unnests the stop positions so that the table is unique on the
       feed_key-trip_instance_key-stop_id.
 
-      The table buffers the scheduled stop's pt geom by 100 meters and
-      checks whether the vehicle locations path (linestring) intersects
-      with the buffered stop, to determine whether the stop is
-      serviced by vehicle positions data.
+      The table finds the nearest distance between the scheduled stop's pt geom
+      and the vehicle locations path (linestring), in meters.
 
     columns:
       - *feed_key
@@ -683,7 +681,6 @@ models:
       - name: trip_instance_key
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
-      - name: vp_near_stop
+      - name: meters_to_vp
         description: |
-          Boolean indicating whether the vehicle positions path got
-          within the stop's 100 meter buffer.
+          Meters from a stop's pt_geom to the vehicle positions path.
