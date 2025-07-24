@@ -1,12 +1,13 @@
 {{ config(
     materialized='incremental',
     incremental_strategy='insert_overwrite',
-    partition_by = {
+    partition_by={
         'field': 'dt',
         'data_type': 'date',
         'granularity': 'day',
     },
-    cluster_by = 'base64_url'
+    cluster_by='base64_url',
+    full_refresh=False
 ) }}
 
 WITH int_gtfs_rt__service_alerts_fully_unnested AS (
