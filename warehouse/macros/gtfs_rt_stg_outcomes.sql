@@ -5,6 +5,7 @@ WITH raw_outcomes AS (
         *,
         {{ to_url_safe_base64('`extract`.config.url') }} AS base64_url
     FROM {{ source_table }}
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH) -- last 6 months
 ),
 
 stg_gtfs_rt__agg_outcomes AS (

@@ -1,9 +1,6 @@
-WITH external_service_alerts AS (
-    SELECT *
-    FROM {{ source('external_gtfs_rt', 'service_alerts') }}
-),
+{{ config(materialized='table') }}
 
-stg_gtfs_rt__service_alerts AS (
+WITH stg_gtfs_rt__service_alerts AS (
     SELECT
         dt,
         hour,
@@ -19,8 +16,8 @@ stg_gtfs_rt__service_alerts AS (
 
         id,
 
-        external_service_alerts.alert.activePeriod AS active_period,
-        external_service_alerts.alert.informedEntity AS informed_entity,
+        alert.activePeriod AS active_period,
+        alert.informedEntity AS informed_entity,
 
         alert.cause AS cause,
         alert.effect AS effect,
@@ -33,7 +30,8 @@ stg_gtfs_rt__service_alerts AS (
 
         alert.severityLevel AS severity_level
 
-    FROM external_service_alerts
+    FROM {{ source('external_gtfs_rt', 'service_alerts') }}
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH) -- last 6 months
 )
 
 SELECT * FROM stg_gtfs_rt__service_alerts
