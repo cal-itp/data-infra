@@ -238,7 +238,7 @@ jobs:
 
       - name: Run dbt against changed files
         working-directory: warehouse
-        run: poetry run dbt run --select "${{ needs.dbt-changed.outputs.changed }}+" --target ${{ env.DBT_TARGET }} --full-refresh
+        run: poetry run dbt run --select "${{ needs.dbt-changed.outputs.changed }}+" --target ${{ env.DBT_TARGET }} --exclude source:external_gtfs_rt+ source:gtfs_rt_external_tables+ --full-refresh
 
       - name: Synchronize Metabase
         working-directory: warehouse

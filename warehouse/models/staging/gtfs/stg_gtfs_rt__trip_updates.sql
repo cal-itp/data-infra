@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_gtfs_rt__trip_updates AS (
     SELECT
         dt,
@@ -35,7 +33,7 @@ WITH stg_gtfs_rt__trip_updates AS (
         tripUpdate.stopTimeUpdate AS stop_time_updates,
 
     FROM {{ source('external_gtfs_rt', 'trip_updates') }}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH) -- last 6 months
+    WHERE dt >= '2025-07-01' -- Temporary filter
 )
 
 SELECT * FROM stg_gtfs_rt__trip_updates
