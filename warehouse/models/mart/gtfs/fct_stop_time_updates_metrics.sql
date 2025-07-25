@@ -1,8 +1,8 @@
 WITH fct_stop_time_updates AS (
     SELECT *
-    FROM {{ ref('fct_stop_time_updates_with_arrivals') }}
+    FROM {{ ref('int_gtfs_rt__trip_updates_stop_times_with_arrivals') }}
 ),
-    
+
 prediction_difference AS (
     SELECT
         base64_url,
