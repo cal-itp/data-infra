@@ -95,7 +95,7 @@ jobs:
 
       - name: Compile dbt
         working-directory: warehouse
-        run: poetry run dbt compile --target ${{ env.DBT_TARGET }} --full-refresh
+        run: poetry run dbt compile --target ${{ env.DBT_TARGET }}
 
       - name: Generate dbt documentation
         working-directory: warehouse
