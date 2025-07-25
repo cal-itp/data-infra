@@ -1,9 +1,4 @@
-{{
-    config(
-        materialized='table',
-        cluster_by='base64_url',
-    )
-}}
+-- Probably need to be an incremental table
 
 WITH vehicle_positions AS (
     SELECT
