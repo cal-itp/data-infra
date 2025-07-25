@@ -23,7 +23,6 @@ WITH stg_gtfs_rt__validation_notices AS (
         errorMessage.validationRule.occurrenceSuffix AS error_message_validation_rule_occurrence_suffix,
         occurrenceList AS occurrence_list
     FROM {{ source_table }}
-    WHERE dt >= '2025-07-01' -- Temporary filter
 )
 
 SELECT * FROM stg_gtfs_rt__validation_notices
