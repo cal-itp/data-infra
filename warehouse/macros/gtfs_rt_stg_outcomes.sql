@@ -5,7 +5,6 @@ WITH raw_outcomes AS (
         *,
         {{ to_url_safe_base64('`extract`.config.url') }} AS base64_url
     FROM {{ source_table }}
-    WHERE dt >= '2025-07-01' -- Temporary filter
 ),
 
 stg_gtfs_rt__agg_outcomes AS (

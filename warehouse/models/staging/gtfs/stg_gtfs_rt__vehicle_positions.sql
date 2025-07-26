@@ -42,7 +42,6 @@ WITH stg_gtfs_rt__vehicle_positions AS (
         vehicle.position.speed AS position_speed
 
     FROM {{ source('external_gtfs_rt', 'vehicle_positions') }}
-    WHERE dt >= '2025-07-01' -- Temporary filter
 )
 
 SELECT * FROM stg_gtfs_rt__vehicle_positions
