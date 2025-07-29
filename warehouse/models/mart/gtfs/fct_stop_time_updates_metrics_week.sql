@@ -103,14 +103,14 @@ stop_time_metrics AS (
 
         -- 04_reliable_prediction_accuracy
         AVG(prediction_error) AS avg_prediction_error_sec,
-        SUM(is_accurate) AS n_accurate_minutes,
+        SUM(is_accurate) AS n_tu_accurate_minutes,
 
         -- 01_update_completeness.ipynb
-        SUM(is_complete) AS n_complete_minutes,
-        COUNT(*) AS n_minute_bins,
+        SUM(is_complete) AS n_tu_complete_minutes,
+        COUNT(*) AS n_tu_minutes_available,
 
         -- 03_prediction_inconsistency.ipynb
-        SUM(prediction_spread_minutes) / COUNT(*) AS avg_prediction_spread, -- wobble
+        SUM(prediction_spread_minutes) / COUNT(*) AS avg_prediction_spread_minutes, -- wobble
 
         -- other derived metrics from this prediction window of 30 minutes prior
         SUM(n_predictions_minute) AS n_predictions,
