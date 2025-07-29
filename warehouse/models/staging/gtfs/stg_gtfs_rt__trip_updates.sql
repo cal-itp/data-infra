@@ -33,7 +33,6 @@ WITH stg_gtfs_rt__trip_updates AS (
         tripUpdate.stopTimeUpdate AS stop_time_updates,
 
     FROM {{ source('external_gtfs_rt', 'trip_updates') }}
-    WHERE dt >= '2025-07-01' -- Temporary filter
 )
 
 SELECT * FROM stg_gtfs_rt__trip_updates
