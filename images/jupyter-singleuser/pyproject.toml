@@ -1,58 +1,62 @@
-[tool.poetry]
+[project]
 name = "jupyter-singleuser"
 version = "2025.6.10"
-description = ""
-package-mode = false
-authors = ["Vevetron"]
+description = "This is the notebook image that individual users are served via JupyterHub."
+authors = [
+    { name = "Vevetron" },
+]
+requires-python = "~3.11"
 
-[tool.poetry.dependencies]
-python = "~3.11"
-black = "24.10.0"
-intake = "0.6.4"
-intake-dcat = "0.4.0"
-intake-geopandas = ">=0.3.0"
-intake-parquet = ">=0.2.3"
-ipyleaflet = "0.15.0"
-jupytext = ">=1.13.5"
-jupyterlab-code-formatter = ">=1.4.10"
-lxml_html_clean = ">=0.4.1"
-plotnine = ">=0.8.0"
-plotly = "5.5.0"
-folium = ">=0.12.1.post1"
-branca = "0.4.2"
-vega = "3.5.0"
-pygeos = "0.14.0"
-Rtree = "0.9.7"
-openpyxl = "3.0.9"
-python-dotenv = "0.19.2"
-isort = "5.10.1"
-seaborn = "^0.11.2"
-csvkit = "1.0.7"
-pre-commit = "2.18.1"
-jupyter-resource-usage = "0.6.1"
-dask-labextension = "^5.3.0"
-matplotlib = "<=3.5"
-dask-geopandas = "^0.2.0"
-dask-bigquery = "^2022.5.0"
-dask = "~2024.5"
-# distributed = "~2022.8" Should show up in package regardless
-pyodbc = "^4.0.34"
-sqlalchemy-bigquery = "^1.4.4"
-siuba = ">=0.4.0"
-graphviz = "^0.20.1"
-rasterio = "1.3.11" # the highest version that works with GDAL 3.4.1
-ydata-profiling = {extras = ["notebook"], version = "^4.0.0"}
-# https://github.com/statsmodels/statsmodels/issues/8543
-statsmodels = "<0.13.3 || >0.13.3,<0.13.4 || >0.13.4,<0.13.5 || >0.13.5"
-pendulum = "^2.1.2"
-calitp-data-analysis = "2025.6.24"
-calitp-map-utils = "2024.5.23"
-jupyter-server-proxy = "^4.1.1"
-setuptools = "68.2.2" # For some reason, poetry/pip installs setuptools 75 then it starts to break.  Probably be a conda backports related issue.  Update later and test
+dependencies = [
+    "black==24.10.0",
+    "intake==0.6.4",
+    "intake-dcat==0.4.0",
+    "intake-geopandas>=0.3.0",
+    "intake-parquet>=0.2.3",
+    "ipyleaflet==0.15.0",
+    "jupytext>=1.13.5",
+    "jupyterlab-code-formatter>=1.4.10",
+    "lxml_html_clean>=0.4.1",
+    "plotnine>=0.8.0",
+    "plotly==5.5.0",
+    "folium>=0.12.1.post1",
+    "branca==0.4.2",
+    "vega==3.5.0",
+    "pygeos==0.14.0",
+    "Rtree==0.9.7",
+    "openpyxl==3.0.9",
+    "python-dotenv==0.19.2",
+    "isort==5.10.1",
+    "seaborn (>=0.11.2, <0.12.0)",
+    "csvkit==1.0.7",
+    "pre-commit==2.18.1",
+    "jupyter-resource-usage==0.6.1",
+    "dask-labextension (>=5.3.0, <6.0.0)",
+    "matplotlib<=3.5",
+    "dask-geopandas (>=0.2.0, <0.3.0)",
+    "dask-bigquery==2022.5.0",
+    "dask (>=2024.5.0, <2024.6.0)",
+    "pyodbc (>=4.0.34, <5.0.0)",
+    "sqlalchemy-bigquery (>=1.4.4, <2.0.0)",
+    "siuba>=0.4.0",
+    "graphviz (>=0.20.1, <0.21.0)",
+    "rasterio==1.3.11", # the highest version that works with GDAL 3.4.1
+    "ydata-profiling[notebook] (>=4.0.0, <5.0.0)",
+    "statsmodels==0.14.5",
+    "pendulum (>=2.1.2, <3.0.0)",
+    "calitp-data-analysis==2025.6.24",
+    "calitp-map-utils==2024.5.23",
+    "jupyter-server-proxy (>=4.1.1, <5.0.0)",
+    "setuptools==68.2.2" # For some reason, poetry/pip installs setuptools 75 then it starts to break.  Probably be a conda backports related issue.  Update later and test
+]
+
+[tool.poetry]
+package-mode = false
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"
 llvmlite= "^0.40.0"
+
 [tool.poetry.group.shared_utils.dependencies]
 cpi = "^1.0.17"
 xmltodict = "^0.13.0"
