@@ -1,21 +1,21 @@
-gtfs_dataset_source_record_id,organization_source_record_id,littlepay_participant_id,elavon_customer_name
-recysP9m9kjCJwHZe,receZJ9sEnP9vy3g0,mst,MST TAP TO RIDE
-rectQfIeiKDBeJSAV,recswCrw6a6htmXJ4,sbmtd,SANTA BARBARA MTD
-recbzZQUIdMmFvm1r,recX9lccSE1jmjsmG,sacrt,SACRAMENTO REGIONAL TRANSIT DIST
-recbzZQUIdMmFvm1r,recX9lccSE1jmjsmG,,SACRT TAP TO RIDE
-recbzZQUIdMmFvm1r,recX9lccSE1jmjsmG,,SACRT MOBILE
-recLhUJUDjFXcmOte,recBiunkSvSVhXa6J,clean-air-express,CLEAN AIR EXPRESS FARE
-recIUAJZhamq51hyM,recvEBkSBc7UxlarC,ccjpa,CAPITOL CORRIDOR TAP2RIDE
-recGTiyx7VcxcUkRu,recaa3naoNR4a5RsJ,humboldt-transit-authority,HTA TAP TO PAY
-recGTiyx7VcxcUkRu,recaa3naoNR4a5RsJ,,HTA OFFICE SALES
-recGTiyx7VcxcUkRu,recaa3naoNR4a5RsJ,,HTA PARATRANSIT
-recGTiyx7VcxcUkRu,recaa3naoNR4a5RsJ,,HTA VIRTUAL
-rec7FygKkATPJZtFR,recPwXKbGLL4aIqXV,lake-transit-authority,LAKE TRANSIT AUTHORITY
-rec7FygKkATPJZtFR,recPwXKbGLL4aIqXV,,LTA DIAL A RIDE
-recxvrgxNkScGIidy,recpWBEjXzLHqCjhE,mendocino-transit-authority,MENDOCINO TRANSIT AUTHORITY
-recxvrgxNkScGIidy,recpWBEjXzLHqCjhE,,MTA DIAL A RIDE
-recGGy7HVkFGILMgO,recZgWVXkpix390of,,SAN JOAQUIN REGIONAL TRANSIT DIS
-recWJJ4dRk4lHXaWX,recOnKhqF25crJt4q,redwood-coast-transit,REDWOOD COAST TRANSIT AUTHORITY
-recWJJ4dRk4lHXaWX,recOnKhqF25crJt4q,,RCTA DIAL A RIDE
-recrxmzfLImgBGwUH,recsrIZdx5Wt6n3ol,atn,ANAHEIM TRANSPORTATION NETWORK
-rec9i3cd99vZ1qdYt,reczUcQgqgtMpkpKC,nevada-county-connects,NEVCO TAP TO PAY
+gtfs_dataset_source_record_id,organization_source_record_id,littlepay_participant_id,elavon_customer_name,_in_use_from,_in_use_until
+recysP9m9kjCJwHZe,receZJ9sEnP9vy3g0,mst,MST TAP TO RIDE,2000-01-01,2099-12-31
+rectQfIeiKDBeJSAV,recswCrw6a6htmXJ4,sbmtd,SANTA BARBARA MTD,2000-01-01,2099-12-31
+recbzZQUIdMmFvm1r,recX9lccSE1jmjsmG,sacrt,SACRAMENTO REGIONAL TRANSIT DIST,2025-04-01,2099-12-31
+recbzZQUIdMmFvm1r,recX9lccSE1jmjsmG,sacrt,SACRT TAP TO RIDE,2000-01-01,2024-10-01
+recbzZQUIdMmFvm1r,recX9lccSE1jmjsmG,,SACRT MOBILE,2000-01-01,2099-12-31
+recLhUJUDjFXcmOte,recBiunkSvSVhXa6J,clean-air-express,CLEAN AIR EXPRESS FARE,2000-01-01,2099-12-31
+recIUAJZhamq51hyM,recvEBkSBc7UxlarC,ccjpa,CAPITOL CORRIDOR TAP2RIDE,2000-01-01,2099-12-31
+recGTiyx7VcxcUkRu,recaa3naoNR4a5RsJ,humboldt-transit-authority,HTA TAP TO PAY,2000-01-01,2099-12-31
+recGTiyx7VcxcUkRu,recaa3naoNR4a5RsJ,,HTA OFFICE SALES,2000-01-01,2099-12-31
+recGTiyx7VcxcUkRu,recaa3naoNR4a5RsJ,,HTA PARATRANSIT,2000-01-01,2099-12-31
+recGTiyx7VcxcUkRu,recaa3naoNR4a5RsJ,,HTA VIRTUAL,2000-01-01,2099-12-31
+rec7FygKkATPJZtFR,recPwXKbGLL4aIqXV,lake-transit-authority,LAKE TRANSIT AUTHORITY,2000-01-01,2099-12-31
+rec7FygKkATPJZtFR,recPwXKbGLL4aIqXV,,LTA DIAL A RIDE,2000-01-01,2099-12-31
+recxvrgxNkScGIidy,recpWBEjXzLHqCjhE,mendocino-transit-authority,MENDOCINO TRANSIT AUTHORITY,2000-01-01,2099-12-31
+recxvrgxNkScGIidy,recpWBEjXzLHqCjhE,,MTA DIAL A RIDE,2000-01-01,2099-12-31
+recGGy7HVkFGILMgO,recZgWVXkpix390of,,SAN JOAQUIN REGIONAL TRANSIT DIS,2000-01-01,2099-12-31
+recWJJ4dRk4lHXaWX,recOnKhqF25crJt4q,redwood-coast-transit,REDWOOD COAST TRANSIT AUTHORITY,2000-01-01,2099-12-31
+recWJJ4dRk4lHXaWX,recOnKhqF25crJt4q,,RCTA DIAL A RIDE,2000-01-01,2099-12-31
+recrxmzfLImgBGwUH,recsrIZdx5Wt6n3ol,atn,ANAHEIM TRANSPORTATION NETWORK,2000-01-01,2099-12-31
+rec9i3cd99vZ1qdYt,reczUcQgqgtMpkpKC,nevada-county-connects,NEVCO TAP TO PAY,2000-01-01,2099-12-31
