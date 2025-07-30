@@ -40,7 +40,9 @@ join_orgs AS (
         orgs.name AS organization_name,
         orgs.source_record_id AS organization_source_record_id,
     FROM impute_settlement_type
-    LEFT JOIN payments_entity_mapping USING (participant_id)
+    LEFT JOIN payments_entity_mapping
+        ON impute_settlement_type.participant_id = payments_entity_mapping.participant_id
+        AND CAST(impute_settlement_type.record_updated_timestamp_utc AS TIMESTAMP) BETWEEN CAST(payments_entity_mapping._in_use_from AS TIMESTAMP) AND CAST(payments_entity_mapping._in_use_until AS TIMESTAMP)
     LEFT JOIN orgs
         ON payments_entity_mapping.organization_source_record_id = orgs.source_record_id
         AND CAST(impute_settlement_type.record_updated_timestamp_utc AS TIMESTAMP) BETWEEN orgs._valid_from AND orgs._valid_to
