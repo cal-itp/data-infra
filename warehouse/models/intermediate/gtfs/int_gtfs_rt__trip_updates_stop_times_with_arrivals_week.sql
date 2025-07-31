@@ -30,7 +30,6 @@ WITH stop_time_updates AS (
 
     FROM {{ ref('fct_stop_time_updates_week') }}
     WHERE dt = "2025-06-21" AND trip_id IS NOT NULL
-    --{{ incremental_where(default_start_var='PROD_GTFS_RT_START') }} AND trip_id IS NOT NULL
 ),
 
 -- follow pattern in int_gtfs_rt__vehicle_positions_trip_day_map_grouping / fct_vehicle_locations,
@@ -42,7 +41,6 @@ WITH stop_time_updates AS (
 -- this allows us to handle the dt/service_date mismatch by grouping in two stages
 grouped AS (
     SELECT DISTINCT
-
         stop_time_updates.dt,
         stop_time_updates.service_date,
         stop_time_updates.base64_url,
