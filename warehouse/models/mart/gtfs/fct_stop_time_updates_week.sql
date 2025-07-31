@@ -11,8 +11,7 @@
 
 WITH fct_stop_time_updates_filtered AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_stop_time_updates`
-    --{{ ref('fct_stop_time_updates') }}
+    FROM {{ ref('fct_stop_time_updates') }}
     -- add extra date boundaries to grab relevant service_dates
     WHERE dt = '2025-06-21'
 )
