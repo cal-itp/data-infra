@@ -23,8 +23,7 @@ WITH arrivals AS (
         stop_sequence,
         actual_arrival
     FROM {{ ref('int_gtfs_rt__trip_updates_stop_times_with_arrivals_week') }}
-    --FROM `cal-itp-data-infra-staging.tiffany_staging.int_gtfs_rt__trip_updates_stop_times_with_arrivals_week`
-    WHERE dt = "2025-06-21" AND base64_url = "aHR0cDovL3Nsby5jb25uZXhpb256Lm5ldC9ydHQvcHVibGljL3V0aWxpdHkvZ3Rmc3JlYWx0aW1lLmFzcHgvdHJpcHVwZGF0ZQ=="
+    WHERE dt = "2025-06-21"
 ),
 
 trip_updates AS (
@@ -42,8 +41,7 @@ trip_updates AS (
         arrival_time,
         departure_time
     FROM {{ ref('fct_stop_time_updates_week') }}
-    --FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_stop_time_updates_week`
-    WHERE dt = "2025-06-21" AND base64_url = "aHR0cDovL3Nsby5jb25uZXhpb256Lm5ldC9ydHQvcHVibGljL3V0aWxpdHkvZ3Rmc3JlYWx0aW1lLmFzcHgvdHJpcHVwZGF0ZQ=="
+    WHERE dt = "2025-06-21"
 ),
 
 trip_updates2 AS (
