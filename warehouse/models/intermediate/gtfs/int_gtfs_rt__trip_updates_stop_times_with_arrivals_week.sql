@@ -49,6 +49,7 @@ grouped AS (
         stop_time_updates.trip_id,
         stop_time_updates.trip_start_date,
         stop_time_updates.trip_start_time,
+
         stop_time_updates.stop_id,
         stop_time_updates.stop_sequence,
 
