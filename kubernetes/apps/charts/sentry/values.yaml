@@ -118,7 +118,7 @@ sentry:
     clickhouse:
       persistentVolumeClaim:
         dataPersistentVolume:
-          storage: "50Gi"
+          storage: "120Gi"
 
   hooks:
     activeDeadlineSeconds: 1200
