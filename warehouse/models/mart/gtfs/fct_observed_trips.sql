@@ -1,11 +1,19 @@
 {{
     config(
-        materialized='table',
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by = {
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by='base64_url',
+        on_schema_change='append_new_columns'
     )
 }}
 
 WITH trip_updates AS (
-    SELECT * FROM {{ ref('fct_trip_updates_summaries') }}
+    SELECT * FROM {{ ref('fct_trip_updates_trip_summaries') }}
 ),
 
 vehicle_positions AS (
