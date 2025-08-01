@@ -1,0 +1,155 @@
+version: 2
+
+sources:
+  - name: external_enghouse
+    description: Hive-partitioned external tables reading Enghouse payments data.
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    schema: external_enghouse
+    tables:
+      - name: taps
+      - name: tickets
+      - name: transactions
+      - name: pay_windows
+
+models:
+  - name: stg_enghouse__taps
+    description: Add description
+    columns:
+      - name: tap_id
+        description: To do
+      - name: mapping_terminal_id
+        description: To do
+      - name: mapping_merchant_id
+        description: To do
+      - name: terminal
+        description: To do
+      - name: token
+        description: To do
+      - name: masked_pan
+        description: To do
+      - name: expiry
+        description: To do
+      - name: server_date
+        description: To do
+      - name: terminal_date
+        description: To do
+      - name: tx_number
+        description: To do
+      - name: tx_status
+        description: To do
+      - name: payment_reference
+        description: To do
+      - name: terminal_spdh_code
+        description: To do
+      - name: denylist_version
+        description: To do
+      - name: transit_data
+        description: To do
+      - name: currency
+        description: To do
+      - name: par
+        description: To do
+
+  - name: stg_enghouse__tickets
+    description: Add description
+    columns:
+      - name: id
+        description: To do
+      - name: ticket_id
+        description: To do
+      - name: station_name
+        description: To do
+      - name: amount
+        description: To do
+      - name: clearing_id
+        description: To do
+      - name: operator_id
+        description: To do
+      - name: reason
+        description: To do
+      - name: tap_id
+        description: To do
+      - name: ticket_type
+        description: To do
+      - name: created_dttm
+        description: To do
+      - name: kafka_send_status
+        description: To do
+      - name: line
+        description: To do
+      - name: start_station
+        description: To do
+      - name: end_station
+        description: To do
+      - name: start_dttm
+        description: To do
+      - name: end_dttm
+        description: To do
+      - name: ticket_code
+        description: To do
+      - name: additional_infos
+        description: To do
+
+  - name: stg_enghouse__transactions
+    description: Add description
+    columns:
+      - name: id
+        description: To do
+      - name: operation
+        description: To do
+      - name: terminal_id
+        description: To do
+      - name: mapping_terminal_id
+        description: To do
+      - name: mapping_merchant_id
+        description: To do
+      - name: timestamp
+        description: To do
+      - name: amount
+        description: To do
+      - name: payment_reference
+        description: To do
+      - name: spdh_response
+        description: To do
+      - name: response_type
+        description: To do
+      - name: response_message
+        description: To do
+      - name: token
+        description: To do
+      - name: issuer_response
+        description: To do
+      - name: core_response
+        description: To do
+      - name: rrn
+        description: To do
+      - name: authorization_code
+        description: To do
+      - name: par
+        description: To do
+      - name: brand
+        description: To do
+
+  - name: stg_enghouse__pay_windows
+    description: Add description
+    columns:
+      - name: id
+        description: To do
+      - name: token
+        description: To do
+      - name: amount_settled
+        description: To do
+      - name: amount_to_settle
+        description: To do
+      - name: debt_settled
+        description: To do
+      - name: stage
+        description: To do
+      - name: vs
+        description: To do
+      - name: terminal_id
+        description: To do
+      - name: open_date
+        description: To do
+      - name: close_date
+        description: To do
