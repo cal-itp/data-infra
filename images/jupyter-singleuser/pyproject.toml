@@ -46,8 +46,7 @@ dependencies = [
     "pendulum (>=2.1.2, <3.0.0)",
     "calitp-data-analysis==2025.6.24",
     "jupyter-server-proxy (>=4.1.1, <5.0.0)",
-    "tornado (>=6.5.1, <7.0.0)",
-    "setuptools==68.2.2" # For some reason, poetry/pip installs setuptools 75 then it starts to break.  Probably be a conda backports related issue.  Update later and test
+    "tornado (>=6.5.1, <7.0.0)"
 ]
 
 [tool.poetry]
