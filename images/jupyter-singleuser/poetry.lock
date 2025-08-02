@@ -728,28 +728,6 @@ sqlalchemy = "1.4.46"
 sqlalchemy-bigquery = ">=1.6.1,<2.0.0"
 
 [[package]]
-name = "calitp-map-utils"
-version = "2024.5.23"
-description = ""
-optional = false
-python-versions = "<3.12,>=3.11"
-groups = ["main"]
-files = [
-    {file = "calitp_map_utils-2024.5.23-py3-none-any.whl", hash = "sha256:f07b4d0e3e133635e5c5f56f9090774615071da214670cf98ce5d9b11d200b96"},
-    {file = "calitp_map_utils-2024.5.23.tar.gz", hash = "sha256:ed941c229c5d9f2bc8ecc7f7c807e6350a855ec2c8b1d067aabd0ffedbcc876d"},
-]
-
-[package.dependencies]
-furl = ">=2.1.3,<3.0.0"
-gcsfs = ">=2023.6.0,<2024.0.0"
-geojson-pydantic = ">=0.6.1,<0.7.0"
-pydantic = ">=1.10.7,<2.0.0"
-pyyaml = ">=6.0,<7.0"
-requests = ">=2.24.0,<3.0.0"
-tqdm = ">=4.64.0,<5.0.0"
-typer = ">=0.9.0,<0.10.0"
-
-[[package]]
 name = "certifi"
 version = "2024.12.14"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -2070,22 +2048,6 @@ ssh = ["paramiko"]
 tqdm = ["tqdm"]
 
 [[package]]
-name = "furl"
-version = "2.1.3"
-description = "URL manipulation made simple."
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "furl-2.1.3-py2.py3-none-any.whl", hash = "sha256:9ab425062c4217f9802508e45feb4a83e54324273ac4b202f1850363309666c0"},
-    {file = "furl-2.1.3.tar.gz", hash = "sha256:5a6188fe2666c484a12159c18be97a1977a71d632ef5bb867ef15f54af39cc4e"},
-]
-
-[package.dependencies]
-orderedmultidict = ">=1.0.1"
-six = ">=1.8.0"
-
-[[package]]
 name = "gcsfs"
 version = "2023.12.2.post1"
 description = "Convenient Filesystem interface over GCS"
@@ -2121,25 +2083,6 @@ files = [
     {file = "geographiclib-2.0-py3-none-any.whl", hash = "sha256:6b7225248e45ff7edcee32becc4e0a1504c606ac5ee163a5656d482e0cd38734"},
     {file = "geographiclib-2.0.tar.gz", hash = "sha256:f7f41c85dc3e1c2d3d935ec86660dc3b2c848c83e17f9a9e51ba9d5146a15859"},
 ]
-
-[[package]]
-name = "geojson-pydantic"
-version = "0.6.3"
-description = "Pydantic data models for the GeoJSON spec."
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-files = [
-    {file = "geojson_pydantic-0.6.3-py3-none-any.whl", hash = "sha256:acce3c6c898bcf99864be2766e7c4758b0c9506e5093238b7ddbf529702b8d7c"},
-    {file = "geojson_pydantic-0.6.3.tar.gz", hash = "sha256:4c32bd11251d938360ab56886934bf99bd5ff2fa20d8c8502f7c7ed2c3ddfa79"},
-]
-
-[package.dependencies]
-pydantic = ">=1.0,<2.0"
-
-[package.extras]
-dev = ["pre-commit"]
-test = ["pytest", "pytest-cov", "shapely"]
 
 [[package]]
 name = "geopandas"
@@ -4889,21 +4832,6 @@ files = [
 
 [package.dependencies]
 et-xmlfile = "*"
-
-[[package]]
-name = "orderedmultidict"
-version = "1.0.1"
-description = "Ordered Multivalue Dictionary"
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "orderedmultidict-1.0.1-py2.py3-none-any.whl", hash = "sha256:43c839a17ee3cdd62234c47deca1a8508a3f2ca1d0678a3bf791c87cf84adbf3"},
-    {file = "orderedmultidict-1.0.1.tar.gz", hash = "sha256:04070bbb5e87291cc9bfa51df413677faf2141c73c61d2a5f7b26bea3cd882ad"},
-]
-
-[package.dependencies]
-six = ">=1.8.0"
 
 [[package]]
 name = "packaging"
@@ -8007,7 +7935,7 @@ version = "0.9.4"
 description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
 optional = false
 python-versions = ">=3.6"
-groups = ["main", "portfolio"]
+groups = ["portfolio"]
 files = [
     {file = "typer-0.9.4-py3-none-any.whl", hash = "sha256:aa6c4a4e2329d868b80ecbaf16f807f2b54e192209d7ac9dd42691d63f7a54eb"},
     {file = "typer-0.9.4.tar.gz", hash = "sha256:f714c2d90afae3a7929fcd72a3abb08df305e1ff61719381384211c4070af57f"},
@@ -8772,4 +8700,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.11"
-content-hash = "aceaf7a24676db973e8d1c1d8722ecdd55b79dcbbf3212e7172b9f4d0ef52dfb"
+content-hash = "f221f4792160b8136e1420817786b7b7d3729302a93c2a7d83d4d664b7eefa2b"
