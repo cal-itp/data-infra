@@ -2,6 +2,7 @@
     config(
         materialized='incremental',
         incremental_strategy='insert_overwrite',
+        unique_key = "key",
         partition_by={
             'field': 'month_first_day',
             'data_type': 'date',
@@ -14,21 +15,15 @@
 WITH trips AS (
     SELECT * FROM {{ ref('fct_scheduled_trips') }}
     -- only run if new month is available. select dates <= last day of prior month
-    WHERE service_date <= LAST_DAY(
+    WHERE service_date >= "2024-01-01" AND service_date <= LAST_DAY(
         DATE_SUB(CURRENT_DATE("America/Los_Angeles"), INTERVAL 1 MONTH)
     )
-),
-
-dim_shapes_arrays AS (
-    SELECT
-        key,
-        pt_array
-    FROM {{ ref('dim_shapes_arrays') }}
 ),
 
 monthly_trips AS (
 
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['year', 'month', 'gtfs_dataset_key', 'day_type', 'trip_id', 'iteration_num']) }} AS key,
 
         gtfs_dataset_key,
         name,
@@ -53,6 +48,7 @@ monthly_trips AS (
         route_color,
         route_text_color,
         trip_id,
+        iteration_num,
         shape_id,
         shape_array_key,
 
@@ -61,19 +57,8 @@ monthly_trips AS (
         COUNT(DISTINCT service_date) as n_days,
 
     FROM trips
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
 
-),
-
-monthly_trips_with_geom AS (
-    SELECT
-        monthly_trips.*,
-        dim_shapes_arrays.pt_array
-
-    FROM monthly_trips
-    INNER JOIN dim_shapes_arrays
-        ON monthly_trips.shape_array_key = dim_shapes_arrays.key
 )
 
-
-SELECT * FROM monthly_trips_with_geom
+SELECT * FROM monthly_trips
