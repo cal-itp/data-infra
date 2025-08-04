@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table',
+        materialized='incremental',
+        unique_key = 'key',
         partition_by={
             'field': 'service_date',
             'data_type': 'date',
@@ -9,54 +10,87 @@
     )
 }}
 
-
-WITH fct_stop_time_updates AS (
-    SELECT *
-    FROM {{ ref('fct_stop_time_updates_with_arrivals_week') }}
-    WHERE service_date >= '2025-06-22' AND service_date <= '2025-06-28'
-),
-
-fct_tu_summaries AS (
-    SELECT DISTINCT
-        trip_instance_key,
+WITH arrivals AS (
+    SELECT
+        key,
+        dt,
         service_date,
         base64_url,
         schedule_base64_url,
-        trip_id
-    FROM {{ ref('fct_trip_updates_summaries') }}
-    WHERE service_date >= '2025-06-22' AND service_date <= '2025-06-28'
+        trip_id,
+        trip_start_time,
+        stop_id,
+        stop_sequence,
+        actual_arrival
+    FROM {{ ref('int_gtfs_rt__trip_updates_stop_times_with_arrivals_week') }}
+    WHERE dt = "2025-06-21"
+),
+
+trip_updates AS (
+    SELECT
+        dt,
+        service_date,
+        base64_url,
+        schedule_base64_url,
+        trip_id,
+        trip_start_time,
+        stop_id,
+        stop_sequence,
+
+        _extract_ts,
+        arrival_time,
+        departure_time
+    FROM {{ ref('fct_stop_time_updates_week') }}
+    WHERE dt = "2025-06-21"
+),
+
+trip_updates2 AS (
+    SELECT
+        * EXCEPT(_extract_ts, arrival_time, departure_time),
+
+        DATETIME(tu._extract_ts) AS _extract_ts,
+        EXTRACT(HOUR FROM tu._extract_ts) AS extract_hour,
+        EXTRACT(MINUTE FROM tu._extract_ts) AS extract_minute,
+        DATETIME(TIMESTAMP_SECONDS(tu.arrival_time)) AS arrival_time, -- turn posix time into UTC
+        DATETIME(TIMESTAMP_SECONDS(tu.departure_time)) AS departure_time,
+    FROM trip_updates as tu
 ),
 
 prediction_difference AS (
     SELECT
-        base64_url,
-        service_date,
-        trip_id,
-        stop_id,
-        stop_sequence,
-        DATETIME(_extract_ts) AS _extract_ts,
-        arrival_time,
-        actual_arrival,
-        extract_hour,
-        extract_minute,
-        DATETIME_DIFF(actual_arrival, arrival_time, SECOND) AS prediction_seconds_difference,
-        DATETIME_DIFF(actual_arrival, DATETIME(_extract_ts), MINUTE) as minutes_until_arrival,
-    FROM fct_stop_time_updates
-    WHERE DATETIME(_extract_ts) <= actual_arrival
-    -- filter out the times we ask for predictions after bus has arrived
+        arrivals.key,
+        tu2.extract_hour,
+        tu2.extract_minute,
+
+        tu2.arrival_time,
+        arrivals.actual_arrival,
+
+        DATETIME_DIFF(arrivals.actual_arrival, tu2.arrival_time, SECOND) AS prediction_seconds_difference,
+        DATETIME_DIFF(arrivals.actual_arrival, tu2._extract_ts, MINUTE) as minutes_until_arrival,
+
+    FROM trip_updates2 as tu2
+    INNER JOIN arrivals
+        ON tu2.dt = arrivals.dt
+        AND tu2.base64_url = arrivals.base64_url
+        AND tu2.service_date = arrivals.service_date
+        AND tu2.schedule_base64_url = arrivals.schedule_base64_url
+        AND tu2.trip_id = arrivals.trip_id
+        -- this is how fct_vehicle_locations is handled
+        -- this is often null but we need to include it for frequency based trips
+        AND COALESCE(tu2.trip_start_time, "") = COALESCE(arrivals.trip_start_time, "")
+        AND tu2.stop_id = arrivals.stop_id
+        AND tu2.stop_sequence = arrivals.stop_sequence
+    WHERE tu2._extract_ts <= arrivals.actual_arrival AND DATETIME_DIFF(arrivals.actual_arrival, tu2._extract_ts, MINUTE) <= 30
 ),
 
 minute_bins AS (
     SELECT
-        base64_url,
-        service_date,
-        trip_id,
-        stop_id,
-        stop_sequence,
+        key,
         extract_hour,
         extract_minute,
 
         -- wobble metric: https://github.com/cal-itp/data-analyses/blob/main/rt_predictions/03_prediction_inconsistency.ipynb
+        -- this returns an interval type
         MAX(arrival_time) - MIN(arrival_time) AS prediction_spread_seconds,
 
         -- prediction accuracy metric: https://github.com/cal-itp/data-analyses/blob/main/rt_predictions/04_reliable_prediction_accuracy.ipynb
@@ -68,17 +102,12 @@ minute_bins AS (
 
     FROM prediction_difference
     -- filter out predictions more than 30 minutes before bus arrives at stop
-    WHERE ABS(minutes_until_arrival) <= 30
-    GROUP BY base64_url, service_date, trip_id, stop_id, stop_sequence, extract_hour, extract_minute
+    GROUP BY key, extract_hour, extract_minute
 ),
 
 derive_metrics AS (
     SELECT
-        base64_url,
-        service_date,
-        trip_id,
-        stop_id,
-        stop_sequence,
+        key,
 
         -- 04_reliable_prediction_accuracy.ipynb
         prediction_error,
@@ -100,47 +129,59 @@ derive_metrics AS (
         -- 03_prediction_inconsistency.ipynb.ipynb
         -- wobble: expected change means the prediction shortens with each passing minute?
         -- can this be just the prediction spread, in minutes, averaged over all the minutes?
-        prediction_spread_seconds / 60 AS prediction_spread_minutes,
+        -- convert from prediction_spread_seconds (interval) to minutes
+        (EXTRACT(DAY FROM prediction_spread_seconds) * 24 * 60 * 60
+         + EXTRACT(HOUR FROM prediction_spread_seconds) * 60 * 60
+         + EXTRACT(MINUTE FROM prediction_spread_seconds) * 60
+         + EXTRACT(SECOND FROM prediction_spread_seconds)) / 60 AS prediction_spread_minutes,
     FROM minute_bins
 ),
 
+-- should this be joined back with key to get base64_url, etc?
 stop_time_metrics AS (
-    -- TODO: can this table be combined with other CTEs?
     SELECT
-        base64_url,
-        service_date,
-        trip_id,
-        stop_id,
-        stop_sequence,
+        key,
 
         -- 04_reliable_prediction_accuracy
         AVG(prediction_error) AS avg_prediction_error_sec,
-        SUM(is_accurate) AS n_accurate_minutes,
+        SUM(is_accurate) AS n_tu_accurate_minutes,
 
         -- 01_update_completeness.ipynb
-        SUM(is_complete) AS n_complete_minutes,
-        COUNT(*) AS n_minute_bins,
+        SUM(is_complete) AS n_tu_complete_minutes,
+        COUNT(*) AS n_tu_minutes_available,
 
         -- 03_prediction_inconsistency.ipynb
-        SUM(prediction_spread_minutes) / COUNT(*) AS avg_prediction_spread, -- wobble
+        SUM(prediction_spread_minutes) / COUNT(*) AS avg_prediction_spread_minutes, -- wobble
 
         -- other derived metrics from this prediction window of 30 minutes prior
         SUM(n_predictions_minute) AS n_predictions,
 
     FROM derive_metrics
-    GROUP BY base64_url, service_date, trip_id, stop_id, stop_sequence
+    GROUP BY key
 ),
 
 fct_stop_time_metrics AS (
     SELECT
-        stop_time_metrics.*,
-        fct_tu_summaries.trip_instance_key,
-        fct_tu_summaries.schedule_base64_url
-    FROM stop_time_metrics
-    LEFT JOIN fct_tu_summaries -- inner join has left us with zero rows before, is this because of incremental settings?
-        ON stop_time_metrics.service_date = fct_tu_summaries.service_date
-        AND stop_time_metrics.base64_url = fct_tu_summaries.base64_url
-        AND stop_time_metrics.trip_id = fct_tu_summaries.trip_id
+        arrivals.key,
+        arrivals.dt,
+        arrivals.service_date,
+        arrivals.base64_url,
+        arrivals.schedule_base64_url,
+        arrivals.trip_id,
+        arrivals.trip_start_time,
+        arrivals.stop_id,
+        arrivals.stop_sequence,
+
+        arrivals.actual_arrival,
+        stop_time_metrics.avg_prediction_error_sec,
+        stop_time_metrics.n_tu_accurate_minutes,
+        stop_time_metrics.n_tu_complete_minutes,
+        stop_time_metrics.n_tu_minutes_available,
+        stop_time_metrics.avg_prediction_spread_minutes,
+        stop_time_metrics.n_predictions
+
+    FROM arrivals
+    INNER JOIN stop_time_metrics USING (key)
 )
 
 SELECT * FROM fct_stop_time_metrics
