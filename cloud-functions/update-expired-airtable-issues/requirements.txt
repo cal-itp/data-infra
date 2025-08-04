@@ -1,0 +1,8 @@
+pyairtable
+pandas
+numpy
+google-cloud-bigquery
+pytz
+functions-framework
+db-dtypes
+google-cloud-storage
