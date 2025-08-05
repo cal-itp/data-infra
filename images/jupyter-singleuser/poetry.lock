@@ -3323,56 +3323,61 @@ test = ["click", "pre-commit", "pytest (>=7.0)", "pytest-asyncio (>=0.19.0)", "p
 
 [[package]]
 name = "jupyter-resource-usage"
-version = "0.6.1"
+version = "1.1.1"
 description = "Jupyter Extension to show resource usage"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "jupyter-resource-usage-0.6.1.tar.gz", hash = "sha256:8b766b9dded49e582cc38ebeb7f19af2eae50ccf77730afbe96f4a09def9874b"},
-    {file = "jupyter_resource_usage-0.6.1-py3-none-any.whl", hash = "sha256:29e7eaaaff9044d53b8e7e0ebcc4b414d5f8449a3c2529ebf5f55d92ff7eaec2"},
+    {file = "jupyter_resource_usage-1.1.1-py3-none-any.whl", hash = "sha256:1f163b51b1960801c84d01753907be695e4b23e6ce3f3291f6b03cab09cc438d"},
+    {file = "jupyter_resource_usage-1.1.1.tar.gz", hash = "sha256:f7a3451caec9f5e6343f60b0a8e4034652138df65ece7a9153242115845f9bbb"},
 ]
 
 [package.dependencies]
-jupyter-server = ">=1.0,<2.0"
+jupyter-server = ">=2.0"
 prometheus-client = "*"
 psutil = ">=5.6,<6.0"
+pyzmq = ">=19"
 
 [package.extras]
 dev = ["autopep8", "black", "flake8", "mock", "pytest", "pytest-cov (>=2.6.1)"]
 
 [[package]]
 name = "jupyter-server"
-version = "1.24.0"
+version = "2.16.0"
 description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "jupyter_server-1.24.0-py3-none-any.whl", hash = "sha256:c88ddbe862966ea1aea8c3ccb89a5903abd8fbcfe5cd14090ef549d403332c37"},
-    {file = "jupyter_server-1.24.0.tar.gz", hash = "sha256:23368e8e214baf82b313d4c5a0d828ca73015e1a192ce3829bd74e62fab8d046"},
+    {file = "jupyter_server-2.16.0-py3-none-any.whl", hash = "sha256:3d8db5be3bc64403b1c65b400a1d7f4647a5ce743f3b20dbdefe8ddb7b55af9e"},
+    {file = "jupyter_server-2.16.0.tar.gz", hash = "sha256:65d4b44fdf2dcbbdfe0aa1ace4a842d4aaf746a2b7b168134d5aaed35621b7f6"},
 ]
 
 [package.dependencies]
-anyio = ">=3.1.0,<4"
-argon2-cffi = "*"
-jinja2 = "*"
-jupyter-client = ">=6.1.12"
+anyio = ">=3.1.0"
+argon2-cffi = ">=21.1"
+jinja2 = ">=3.0.3"
+jupyter-client = ">=7.4.4"
 jupyter-core = ">=4.12,<5.0.dev0 || >=5.1.dev0"
+jupyter-events = ">=0.11.0"
+jupyter-server-terminals = ">=0.4.4"
 nbconvert = ">=6.4.4"
-nbformat = ">=5.2.0"
-packaging = "*"
-prometheus-client = "*"
-pywinpty = {version = "*", markers = "os_name == \"nt\""}
-pyzmq = ">=17"
-Send2Trash = "*"
+nbformat = ">=5.3.0"
+overrides = ">=5.0"
+packaging = ">=22.0"
+prometheus-client = ">=0.9"
+pywinpty = {version = ">=2.0.1", markers = "os_name == \"nt\""}
+pyzmq = ">=24"
+send2trash = ">=1.8.2"
 terminado = ">=0.8.3"
-tornado = ">=6.1.0"
-traitlets = ">=5.1"
-websocket-client = "*"
+tornado = ">=6.2.0"
+traitlets = ">=5.6.0"
+websocket-client = ">=1.7"
 
 [package.extras]
-test = ["coverage", "ipykernel", "pre-commit", "pytest (>=7.0)", "pytest-console-scripts", "pytest-cov", "pytest-mock", "pytest-timeout", "pytest-tornasync", "requests"]
+docs = ["ipykernel", "jinja2", "jupyter-client", "myst-parser", "nbformat", "prometheus-client", "pydata-sphinx-theme", "send2trash", "sphinx-autodoc-typehints", "sphinxcontrib-github-alt", "sphinxcontrib-openapi (>=0.8.0)", "sphinxcontrib-spelling", "sphinxemoji", "tornado", "typing-extensions"]
+test = ["flaky", "ipykernel", "pre-commit", "pytest (>=7.0,<9)", "pytest-console-scripts", "pytest-jupyter[server] (>=0.7)", "pytest-timeout", "requests"]
 
 [[package]]
 name = "jupyter-server-fileid"
@@ -3418,6 +3423,26 @@ acceptance = ["pytest", "pytest-asyncio", "pytest-cov", "pytest-html", "robotfra
 classic = ["jupyter-server (<2)", "jupyterlab (>=3.0.0,<4.0.0a0)", "notebook (<7.0.0a0)"]
 lab = ["jupyter-server (>=2)", "jupyterlab (>=4.0.5,<5.0.0a0)", "nbclassic", "notebook (>=7)"]
 test = ["pytest", "pytest-asyncio", "pytest-cov", "pytest-html"]
+
+[[package]]
+name = "jupyter-server-terminals"
+version = "0.5.3"
+description = "A Jupyter Server Extension Providing Terminals."
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "jupyter_server_terminals-0.5.3-py3-none-any.whl", hash = "sha256:41ee0d7dc0ebf2809c668e0fc726dfaf258fcd3e769568996ca731b6194ae9aa"},
+    {file = "jupyter_server_terminals-0.5.3.tar.gz", hash = "sha256:5ae0295167220e9ace0edcfdb212afd2b01ee8d179fe6f23c899590e9b8a5269"},
+]
+
+[package.dependencies]
+pywinpty = {version = ">=2.0.3", markers = "os_name == \"nt\""}
+terminado = ">=0.8.3"
+
+[package.extras]
+docs = ["jinja2", "jupyter-server", "mistune (<4.0)", "myst-parser", "nbformat", "packaging", "pydata-sphinx-theme", "sphinxcontrib-github-alt", "sphinxcontrib-openapi", "sphinxcontrib-spelling", "sphinxemoji", "tornado"]
+test = ["jupyter-server (>=2.0.0)", "pytest (>=7.0)", "pytest-jupyter[server] (>=0.5.3)", "pytest-timeout"]
 
 [[package]]
 name = "jupyter-server-ydoc"
@@ -4829,6 +4854,18 @@ files = [
 
 [package.dependencies]
 et-xmlfile = "*"
+
+[[package]]
+name = "overrides"
+version = "7.7.0"
+description = "A decorator to automatically detect mismatch when overriding a method."
+optional = false
+python-versions = ">=3.6"
+groups = ["main"]
+files = [
+    {file = "overrides-7.7.0-py3-none-any.whl", hash = "sha256:c7ed9d062f78b8e4c1a7b70bd8796b35ead4d9f510227ef9c5dc7626c60d7e49"},
+    {file = "overrides-7.7.0.tar.gz", hash = "sha256:55158fa3d93b98cc75299b1e67078ad9003ca27945c76162c1c0766d6f91820a"},
+]
 
 [[package]]
 name = "packaging"
@@ -8762,4 +8799,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11.0, <3.12.0"
-content-hash = "46af710853789c9d9f0e0f7445957f09ac459b05da9958e208c9251a66df6c56"
+content-hash = "1906950ab855eb28b2fff0bd1e89ed2e76f551615b4705c5d7eb59ac84d2f243"
