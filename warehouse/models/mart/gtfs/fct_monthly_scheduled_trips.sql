@@ -7,7 +7,8 @@
             'field': 'month_first_day',
             'data_type': 'date',
             'granularity': 'month'
-        }, cluster_by=['month_first_day', 'gtfs_dataset_key']
+        },
+        cluster_by=['month_first_day', 'gtfs_dataset_key', 'name']
     )
 }}
 
@@ -23,8 +24,7 @@ WITH trips AS (
 monthly_trips AS (
 
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['year', 'month', 'gtfs_dataset_key', 'day_type', 'trip_id', 'iteration_num']) }} AS key,
-
+        {{ dbt_utils.generate_surrogate_key(['year', 'month', 'name', 'day_type', 'trip_id', 'iteration_num']) }} AS key,
         gtfs_dataset_key,
         name,
 
@@ -57,7 +57,7 @@ monthly_trips AS (
         COUNT(DISTINCT service_date) as n_days,
 
     FROM trips
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+    GROUP BY 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 
 )
 

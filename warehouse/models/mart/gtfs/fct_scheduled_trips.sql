@@ -1,6 +1,15 @@
-{{ config(
-    materialized='table',
-    cluster_by='service_date') }}
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        unique_key = "trip_instance_key",
+        partition_by={
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day'
+        }, cluster_by=['service_date', 'feed_key', 'base64_url']
+    )
+}}
 
 WITH int_gtfs_schedule__daily_scheduled_service_index AS (
     SELECT *
