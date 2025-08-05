@@ -21,10 +21,10 @@ resource "google_cloudfunctions2_function" "update_airtable" {
   }
 
   service_config {
-    available_memory       = "256M"
-    timeout_seconds        = 540
-    service          = "update-expired-airtable-issues-tf-service"  # <-- UNIQUE NAME
-    service_account_email  = var.service_account_email
+    available_memory      = "256M"
+    timeout_seconds       = 540
+    service               = "update-expired-airtable-issues-tf-service" # <-- UNIQUE NAME
+    service_account_email = var.service_account_email
 
     # Secrets from Secret Manager
     secret_environment_variables {
