@@ -5,7 +5,7 @@ provider "google" {
 
 # Cloud Function v2
 resource "google_cloudfunctions2_function" "update_airtable" {
-  name     = "update-expired-airtable-issues"
+  name     = "update-expired-airtable-issues-tf"
   location = var.region
 
   build_config {
@@ -21,9 +21,10 @@ resource "google_cloudfunctions2_function" "update_airtable" {
   }
 
   service_config {
-    available_memory      = "256M"
-    timeout_seconds       = 540
-    service_account_email = var.service_account_email
+    available_memory       = "256M"
+    timeout_seconds        = 540
+    service          = "update-expired-airtable-issues-tf-service"  # <-- UNIQUE NAME
+    service_account_email  = var.service_account_email
 
     # Secrets from Secret Manager
     secret_environment_variables {
@@ -46,5 +47,7 @@ resource "google_cloudfunctions2_function" "update_airtable" {
     }
   }
 }
+
+
 
 # Optional: Output the function URL
