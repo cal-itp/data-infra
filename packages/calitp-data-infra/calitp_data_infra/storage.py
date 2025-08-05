@@ -33,7 +33,7 @@ import gcsfs  # type: ignore
 import humanize
 import pendulum
 from google.cloud import storage  # type: ignore
-from pydantic import (
+from pydantic.v1 import (
     BaseModel,
     ConstrainedStr,
     Extra,
@@ -42,8 +42,8 @@ from pydantic import (
     ValidationError,
     validator,
 )
-from pydantic.class_validators import root_validator
-from pydantic.tools import parse_obj_as
+from pydantic.v1.class_validators import root_validator
+from pydantic.v1.tools import parse_obj_as
 from requests import Request, Session
 from typing_extensions import Annotated, Literal
 
