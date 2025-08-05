@@ -40,7 +40,6 @@ models:
       - *name
   - name: stg_transit_database__relationships_service_components
     description: |
-    description: |
       Each row is an individual row from an individual download (snapshot) of the
       Relationships Service-Components table in Airtable.
   - name: stg_transit_database__data_schemas
