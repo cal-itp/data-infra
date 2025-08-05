@@ -274,7 +274,6 @@ models:
   - name: fct_payments_settlements
     description: Littlepay settlements (completed transactions.)
     columns:
-    columns:
       - name: settlement_id
         description: '{{ doc("lp_settlement_id") }}'
       - *organization_name

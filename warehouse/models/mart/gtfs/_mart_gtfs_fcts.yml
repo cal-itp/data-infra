@@ -2268,7 +2268,7 @@ models:
           An individual trip can be associated with multiple alerts so this
           array can contain multiple distinct structs.
 
-  - name: fct_trip_updates_summaries
+  - name: fct_trip_updates_trip_summaries
     description: |
       Summarizes trips observed in trip update messages, as long as trip_id was
       populated.

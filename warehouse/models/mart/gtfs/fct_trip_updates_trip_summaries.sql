@@ -1,13 +1,21 @@
 {{
     config(
-        materialized='table',
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by = {
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
         cluster_by='base64_url',
+        on_schema_change='append_new_columns'
     )
 }}
 
 WITH trip_updates AS( --noqa: ST03
     SELECT *
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
+    WHERE dt >= "2024-01-01" AND dt <= '2024-02-29'
 ),
 
  base_fct AS (
