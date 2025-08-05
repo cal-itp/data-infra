@@ -1,4 +1,15 @@
-{{ config(materialized='table') }}
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        unique_key = "key",
+        partition_by={
+            'field': 'month_first_day',
+            'data_type': 'date',
+            'granularity': 'month'
+        }, cluster_by=['month_first_day', 'gtfs_dataset_key', 'name']
+    )
+}}
 
 WITH fct_scheduled_trips AS (
     SELECT * FROM {{ ref('fct_monthly_scheduled_trips') }}
@@ -13,9 +24,11 @@ dim_shapes_arrays AS (
 
 trip_counts AS (
     SELECT
+        gtfs_dataset_key,
         name,
         year,
         month,
+        month_first_day,
         route_short_name,
         route_long_name,
         route_name,
@@ -26,14 +39,17 @@ trip_counts AS (
         COUNT(*) AS n_trips,
 
     FROM fct_scheduled_trips
-    GROUP BY name, year, month, route_short_name, route_long_name, route_name, direction_id, shape_id, shape_array_key
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY
-                               name, year, month, route_short_name, route_long_name, route_name, direction_id
-                               ORDER BY n_trips DESC) = 1
+    GROUP BY name, year, month, month_first_day, route_short_name, route_long_name, route_name, direction_id, shape_id, shape_array_key
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY
+        name, year, month, month_first_day,
+        route_short_name, route_long_name, route_name, direction_id
+        ORDER BY n_trips DESC) = 1
 ),
 
 fct_monthly_routes AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key(['year', 'month', 'name', 'route_name', 'direction_id']) }} AS key,
         trip_counts.*,
         dim_shapes_arrays.pt_array
     FROM trip_counts
