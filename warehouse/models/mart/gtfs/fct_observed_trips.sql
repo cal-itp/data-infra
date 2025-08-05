@@ -7,7 +7,7 @@
             'data_type': 'date',
             'granularity': 'day',
         },
-        cluster_by='base64_url',
+        cluster_by=['service_date', 'schedule_base64_url'],
         on_schema_change='append_new_columns'
     )
 }}

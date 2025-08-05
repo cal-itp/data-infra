@@ -15,7 +15,7 @@
 WITH trip_updates AS( --noqa: ST03
     SELECT *
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
-    WHERE {{ incremental_where(default_start_var='2024-01-01') }} AND dt <= '2024-01-31'
+    WHERE dt >= "2024-01-1" AND dt <= '2024-01-31'
 ),
 
  base_fct AS (
