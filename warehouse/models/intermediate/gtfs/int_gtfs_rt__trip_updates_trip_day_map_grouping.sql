@@ -14,7 +14,7 @@
 WITH stop_time_updates AS (
     SELECT *
     FROM {{ ref('fct_stop_time_updates') }}
-    WHERE dt >= '2024-01-01' AND dt <= '2024-01-31'
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 -- group by *both* the UTC date that data was scraped (dt) *and* calculated service date
