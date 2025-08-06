@@ -24,8 +24,7 @@ WITH arrivals AS (
         stop_sequence,
         actual_arrival
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_stop_day_map_grouping') }}
-    WHERE dt >= "2025-06-23" AND dt <= "2025-06-24" AND base64_url = "aHR0cHM6Ly90cmFjay1pdC5hdnRhLmNvbS9JbmZvUG9pbnQvR1RGUy1SZWFsdGltZS5hc2h4P1R5cGU9VHJpcFVwZGF0ZQ=="
-    --AND trip_id = "t78A-b6B-sl1C"
+    WHERE dt >= "2025-06-23" AND dt <= "2025-06-24"
 ),
 
 trip_updates AS (
@@ -62,12 +61,8 @@ trip_updates2 AS (
 prediction_difference AS (
     SELECT
         arrivals.key,
-
         tu2.trip_id,
-        --tu2.trip_start_time AS one,
-        --arrivals.trip_start_time AS two,
-        --tu2.stop_id,
-        --tu2.stop_sequence,
+
 
         tu2.extract_hour,
         tu2.extract_minute,
@@ -90,7 +85,7 @@ prediction_difference AS (
         AND COALESCE(tu2.trip_start_time, "") = COALESCE(arrivals.trip_start_time, "")
         AND tu2.stop_id = arrivals.stop_id
         AND tu2.stop_sequence = arrivals.stop_sequence
-    WHERE tu2._extract_ts <= arrivals.actual_arrival --AND DATETIME_DIFF(arrivals.actual_arrival, tu2._extract_ts, MINUTE) <= 30
+    WHERE tu2._extract_ts <= arrivals.actual_arrival AND DATETIME_DIFF(arrivals.actual_arrival, tu2._extract_ts, MINUTE) <= 30
 ),
 
 minute_bins AS (

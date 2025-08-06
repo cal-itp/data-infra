@@ -12,9 +12,8 @@
 
 WITH stop_time_updates AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_stop_time_updates`
-    WHERE dt >= "2025-06-23" AND dt <= "2025-06-24" AND base64_url = "aHR0cHM6Ly90cmFjay1pdC5hdnRhLmNvbS9JbmZvUG9pbnQvR1RGUy1SZWFsdGltZS5hc2h4P1R5cGU9VHJpcFVwZGF0ZQ==" --AND trip_id = "t78A-b6B-sl1C"
-
+    FROM {{ ref('test_stop_time_updates') }}
+    WHERE dt >= "2025-06-23" AND dt <= "2025-06-24"
 ),
 
 -- follow pattern in int_gtfs_rt__vehicle_positions_trip_day_map_grouping / fct_vehicle_locations,
