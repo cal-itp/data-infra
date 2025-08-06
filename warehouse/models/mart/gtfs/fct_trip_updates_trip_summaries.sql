@@ -15,7 +15,8 @@
 WITH trip_updates AS( --noqa: ST03
     SELECT *
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
-    WHERE dt >= "2024-01-01" AND dt <= '2024-02-29'
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', this_dt_column='service_date', filter_dt_column='service_date') }}
+    #TODO make sure this is the correct incremental filter - 3 days worth
 ),
 
  base_fct AS (

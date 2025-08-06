@@ -606,7 +606,7 @@ models:
       to enable:
         1. Incremental materialization based on `dt` (to make efficient use of upstream partitions)
         2. Downstream grouping by `service_date` alone (since that is the appropriate final grain for trip-based analysis)
-      See downstream `fct_trip_updates_summaries` table for further documentation.
+      See downstream `fct_trip_updates_trip_summaries` table for further documentation.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
