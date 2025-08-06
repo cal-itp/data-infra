@@ -15,9 +15,9 @@
 WITH trip_updates AS( --noqa: ST03
     SELECT *
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', this_dt_column='service_date', filter_dt_column='service_date') }}
-    #TODO make sure this is the correct incremental filter - 3 days worth
-),
+    WHERE service_date >= DATE_SUB("{{ incremental_max_date(default_start_var='PROD_GTFS_RT_START',
+                this_dt_column='service_date', filter_dt_column='service_date') | trim }}", INTERVAL 2 DAY)
+ ),
 
  base_fct AS (
     {{ gtfs_rt_trip_summaries(
@@ -56,7 +56,7 @@ canceled_stops AS (
     output_column_name = 'num_distinct_canceled_stops') }}
 ),
 
-fct_trip_updates_summaries AS (
+fct_trip_updates_trip_summaries AS (
     SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         base_fct.key,
@@ -120,4 +120,4 @@ fct_trip_updates_summaries AS (
     LEFT JOIN canceled_stops USING (key)
 )
 
-SELECT * FROM fct_trip_updates_summaries
+SELECT * FROM fct_trip_updates_trip_summaries
