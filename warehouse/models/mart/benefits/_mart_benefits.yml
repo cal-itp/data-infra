@@ -71,6 +71,8 @@ models:
         description: The `error` value from the `event_properties` column
       - name: event_properties_error_sub
         description: The `error` value from the `event_properties` column
+      - name: event_properties_extra_claims
+        description: The `extra_claims` value from the `event_properties` column
       - name: event_properties_href
         description: The `href` value from the `event_properties` column
       - name: event_properties_language
