@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.11-buster
 
 LABEL org.opencontainers.image.source=https://github.com/cal-itp/data-infra
 
