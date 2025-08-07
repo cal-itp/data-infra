@@ -10,8 +10,8 @@ from airflow.operators.latest_only import LatestOnlyOperator
 DBT_TARGET = os.environ.get("DBT_TARGET")
 
 with DAG(
-    dag_id="dbt_payments",
-    tags=["dbt", "payments"],
+    dag_id="dbt_daily",
+    tags=["dbt", "daily"],
     # Tuesday, Wednesday, Friday at 7am PDT/8am PST (2pm UTC)
     schedule="0 14 * * 2,3,5",
     start_date=datetime(2025, 7, 6),
@@ -19,8 +19,8 @@ with DAG(
 ):
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
-    dbt_payments = DbtTaskGroup(
-        group_id="dbt_payments",
+    dbt_daily = DbtTaskGroup(
+        group_id="dbt_daily",
         project_config=ProjectConfig(
             dbt_project_path="/home/airflow/gcs/data/warehouse",
             manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
@@ -37,6 +37,7 @@ with DAG(
                 "+path:models/staging/payments+",
                 "+path:models/intermediate/payments+",
                 "+path:models/mart/payments+",
+                "+path:models/mart/gtfs/fct_schedule_feed_downloads",
             ],
             test_behavior=TestBehavior.AFTER_ALL,
         ),
@@ -46,4 +47,4 @@ with DAG(
         default_args={"retries": 0},
     )
 
-    latest_only >> dbt_payments
+    latest_only >> dbt_daily
