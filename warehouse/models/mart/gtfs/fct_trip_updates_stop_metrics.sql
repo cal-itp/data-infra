@@ -22,15 +22,14 @@ daily_scheduled_stops AS (
         service_date,
         stop_id,
         stop_key
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_scheduled_stops`
-    --FROM {{ ref('fct_daily_scheduled_stops') }}
+    FROM {{ ref('fct_daily_scheduled_stops') }}
 ),
 
 rt_feeds AS (
     SELECT DISTINCT
         base64_url,
         schedule_feed_key
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_rt_feed_files`--{{ ref('fct_daily_rt_feed_files') }}
+    FROM {{ ref('fct_daily_rt_feed_files') }}
 ),
 
 stop_metrics AS (

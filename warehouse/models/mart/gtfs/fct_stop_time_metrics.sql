@@ -36,7 +36,7 @@ tu_trip_keys AS (
         trip_id,
         trip_start_time
 
-    FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}--`cal-itp-data-infra.staging.int_gtfs_rt__trip_updates_trip_day_map_grouping`
+    FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
 ),
 
 trip_updates AS (
@@ -53,7 +53,7 @@ trip_updates AS (
         _extract_ts,
         arrival_time,
         departure_time
-    FROM {{ ref('test_stop_time_updates') }}
+    FROM {{ ref('fct_stop_time_updates_sample') }}
 ),
 
 trip_updates2 AS (
@@ -71,13 +71,11 @@ trip_updates2 AS (
 prediction_difference AS (
     SELECT
         arrivals.key,
-        tu2.trip_id,
-
         tu2.extract_hour,
         tu2.extract_minute,
 
-        tu2.arrival_time, -- this is null
-        arrivals.actual_arrival, -- this is blank, this is why keys don't match
+        tu2.arrival_time,
+        arrivals.actual_arrival,
 
         DATETIME_DIFF(arrivals.actual_arrival, tu2.arrival_time, SECOND) AS prediction_seconds_difference,
         DATETIME_DIFF(arrivals.actual_arrival, tu2._extract_ts, MINUTE) as minutes_until_arrival,
