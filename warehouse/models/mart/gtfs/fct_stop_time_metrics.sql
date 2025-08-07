@@ -27,6 +27,21 @@ WITH arrivals AS (
     WHERE dt >= "2025-06-23" AND dt <= "2025-06-24"
 ),
 
+tu_trip_keys AS (
+    SELECT
+        key AS trip_key,
+        dt,
+        service_date,
+        base64_url,
+        schedule_base64_url,
+        trip_id,
+        trip_start_time
+
+    FROM `cal-itp-data-infra.staging.int_gtfs_rt__trip_updates_trip_day_map_grouping`
+    WHERE dt >= "2025-06-23" AND dt <= "2025-06-24"
+    --{{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
+),
+
 trip_updates AS (
     SELECT
         dt,
@@ -42,8 +57,7 @@ trip_updates AS (
         arrival_time,
         departure_time
     FROM {{ ref('test_stop_time_updates') }}
-    WHERE dt = "2025-06-23" AND base64_url = "aHR0cHM6Ly90cmFjay1pdC5hdnRhLmNvbS9JbmZvUG9pbnQvR1RGUy1SZWFsdGltZS5hc2h4P1R5cGU9VHJpcFVwZGF0ZQ=="
-    --AND trip_id = "t78A-b6B-sl1C"
+    WHERE dt >= "2025-06-23" AND dt <= "2025-06-24"
 ),
 
 trip_updates2 AS (
@@ -62,7 +76,6 @@ prediction_difference AS (
     SELECT
         arrivals.key,
         tu2.trip_id,
-
 
         tu2.extract_hour,
         tu2.extract_minute,
@@ -168,6 +181,7 @@ stop_time_metrics AS (
 fct_stop_time_metrics AS (
     SELECT
         arrivals.key,
+        tu_trip_keys.trip_key,
         arrivals.dt,
         arrivals.service_date,
         arrivals.base64_url,
@@ -187,6 +201,13 @@ fct_stop_time_metrics AS (
 
     FROM arrivals
     INNER JOIN stop_time_metrics USING (key)
+    INNER JOIN tu_trip_keys
+        ON arrivals.dt = tu_trip_keys.dt
+        AND arrivals.service_date = tu_trip_keys.service_date
+        AND arrivals.base64_url = tu_trip_keys.base64_url
+        AND arrivals.schedule_base64_url = tu_trip_keys.schedule_base64_url
+        AND arrivals.trip_id = tu_trip_keys.trip_id
+        AND arrivals.trip_start_time = tu_trip_keys.trip_start_time
 )
 
 SELECT * FROM fct_stop_time_metrics
