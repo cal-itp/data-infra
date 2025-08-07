@@ -13,7 +13,6 @@
 WITH fct_stop_time_metrics AS (
     SELECT *
     FROM {{ ref('fct_stop_time_metrics') }}
-    WHERE service_date = "2025-06-24"
 ),
 
 daily_scheduled_stops AS (
@@ -25,7 +24,6 @@ daily_scheduled_stops AS (
         stop_key
     FROM `cal-itp-data-infra.mart_gtfs.fct_daily_scheduled_stops`
     --FROM {{ ref('fct_daily_scheduled_stops') }}
-    WHERE service_date = "2025-06-24"
 ),
 
 rt_feeds AS (

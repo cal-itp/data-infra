@@ -12,8 +12,8 @@
 
 WITH stop_time_updates AS (
     SELECT *
-    FROM {{ ref('test_stop_time_updates') }}
-    WHERE dt >= "2025-06-23" AND dt <= "2025-06-24"
+    FROM {{ ref('fct_stop_time_updates') }}
+    WHERE dt >= '2025-06-01' AND dt <= '2025-07-31' AND trip_id IS NOT NULL AND stop_id IS NOT NULL AND stop_sequence IS NOT NULL
 ),
 
 -- follow pattern in int_gtfs_rt__vehicle_positions_trip_day_map_grouping / fct_vehicle_locations,
