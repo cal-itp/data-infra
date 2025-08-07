@@ -24,7 +24,6 @@ WITH arrivals AS (
         stop_sequence,
         actual_arrival
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_stop_day_map_grouping') }}
-    WHERE dt >= "2025-06-23" AND dt <= "2025-06-24"
 ),
 
 tu_trip_keys AS (
@@ -37,9 +36,7 @@ tu_trip_keys AS (
         trip_id,
         trip_start_time
 
-    FROM `cal-itp-data-infra.staging.int_gtfs_rt__trip_updates_trip_day_map_grouping`
-    WHERE dt >= "2025-06-23" AND dt <= "2025-06-24"
-    --{{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
+    FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}--`cal-itp-data-infra.staging.int_gtfs_rt__trip_updates_trip_day_map_grouping`
 ),
 
 trip_updates AS (
@@ -57,7 +54,6 @@ trip_updates AS (
         arrival_time,
         departure_time
     FROM {{ ref('test_stop_time_updates') }}
-    WHERE dt >= "2025-06-23" AND dt <= "2025-06-24"
 ),
 
 trip_updates2 AS (
