@@ -16,11 +16,7 @@ SELECT
     orgs.source_record_id AS organization_source_record_id,
     littlepay_participant_id,
 FROM {{ input_model }} AS input
-LEFT JOIN payments_entity_mapping
-    ON input.customer_name = payments_entity_mapping.customer_name
-    AND CAST(input.payment_date AS TIMESTAMP)
-        BETWEEN CAST(payments_entity_mapping._in_use_from AS TIMESTAMP)
-        AND CAST(payments_entity_mapping._in_use_until AS TIMESTAMP)
+LEFT JOIN payments_entity_mapping USING (customer_name)
 LEFT JOIN orgs
     ON payments_entity_mapping.organization_source_record_id = orgs.source_record_id
     AND CAST(input.{{ date_col }} AS TIMESTAMP) BETWEEN orgs._valid_from AND orgs._valid_to
