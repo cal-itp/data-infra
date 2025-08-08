@@ -1,0 +1,30 @@
+version: 2
+
+macros:
+  - name: incremental_where
+    description: >
+      Serves as a "where" clause that can be used for date-based incremental models, on the CTE that pulls in
+      data from an upstream source that should be filtered by date.
+
+      Macro handles logic about environment (production vs. non-production) and run type to determine how much
+      history should be run.
+    arguments:
+      - name: default_start_var
+        type: date string formatted YYYY-MM-DD
+        description: >
+          The oldest date from which data should ever be pulled on a full
+          refresh / non-incremental run. This will be the "start date" for all data in the model.
+      - name: this_dt_column
+        type: string
+        description: >
+          The column name in the current model (i.e., the incremental model in whose definition this macro is being called)
+          on which date logic should be based.
+          This column is used to look up the latest available data in the model to determine what needs
+          to be refreshed in an incremental run.
+      - name: filter_dt_column
+        type: string
+        description: >
+          The column name in the upstream model (i.e., the parent model referenced in the specific CTE filtered by this macro)
+          on which date logic should be based.
+          This column in the parent model is used to filter the data that is pulled into the present model on both incremental
+          and full-refresh runs.
