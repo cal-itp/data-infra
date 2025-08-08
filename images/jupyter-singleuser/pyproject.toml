@@ -1,6 +1,6 @@
 [project]
 name = "jupyter-singleuser"
-version = "2025.8.5"
+version = "2025.8.8"
 description = "This is the notebook image that individual users are served via JupyterHub."
 authors = [
     { name = "Vevetron" },
