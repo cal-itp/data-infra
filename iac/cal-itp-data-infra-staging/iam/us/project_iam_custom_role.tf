@@ -33,6 +33,7 @@ resource "google_project_iam_custom_role" "calitp-dds-analyst" {
     "bigquery.datasets.getIamPolicy",
     "bigquery.jobs.create",
     "bigquery.jobs.list",
+    "bigquery.jobs.listAll",
     "bigquery.models.list",
     "bigquery.models.getMetadata",
     "bigquery.readsessions.create",
