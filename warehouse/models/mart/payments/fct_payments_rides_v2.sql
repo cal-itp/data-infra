@@ -164,6 +164,9 @@ fct_payments_rides_v2 AS (
             -- (don't have to handle unkowns the way we do with route_id)
             AND EXTRACT(DATE FROM TIMESTAMP(device_transactions.transaction_date_time_utc)) = routes.date
             AND routes.route_id = device_transactions.route_id
+            AND CAST(device_transactions.transaction_date_time_utc AS TIMESTAMP)
+                BETWEEN CAST(routes._in_use_from AS TIMESTAMP)
+                AND CAST(routes._in_use_until AS TIMESTAMP)
 
 )
 
