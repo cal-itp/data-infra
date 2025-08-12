@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: elavon_external_tables
     description: Hive-partitioned external tables reading Elavon transactions from GCS.
-    database: "{{ env_var('SOURCE_GOOGLE_CLOUD_PROJECT', var('SOURCE_GOOGLE_CLOUD_PROJECT')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_elavon
     tables:
       - name: transactions
