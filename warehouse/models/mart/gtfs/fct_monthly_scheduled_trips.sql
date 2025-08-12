@@ -16,7 +16,7 @@
 WITH trips AS (
     SELECT * FROM {{ ref('fct_scheduled_trips') }}
     -- only run if new month is available. select dates <= last day of prior month
-    WHERE service_date >= "2024-01-01" AND service_date <= LAST_DAY(
+    WHERE service_date <= LAST_DAY(
         DATE_SUB(CURRENT_DATE("America/Los_Angeles"), INTERVAL 1 MONTH)
     )
 ),

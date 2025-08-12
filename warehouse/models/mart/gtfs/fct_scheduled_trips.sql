@@ -2,7 +2,7 @@
     config(
         materialized='incremental',
         incremental_strategy='insert_overwrite',
-        unique_key = "trip_instance_key",
+        unique_key = "key",
         partition_by={
             'field': 'service_date',
             'data_type': 'date',
