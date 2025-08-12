@@ -6,13 +6,31 @@ macros:
       Serves as a "where" clause that can be used for date-based incremental models, on the CTE that pulls in
       data from an upstream source that should be filtered by date.
 
+      For general information on dbt incremental models, see: https://docs.getdbt.com/docs/build/incremental-models.
+
       Macro handles logic about environment (production vs. non-production) and run type to determine how much
       history should be run.
+
+      The macro logic is based on identifying a date value on which to filter the parent
+         table's `filter_dt_column`.
+
+      * In an incremental run, it will filter for values in the parent greater than:
+        * `INCREMENTAL_MAX_DT` variable value if it's set (for non-prod environments, it must also be
+            less than `dev_lookback_days` in the past relative to the date the model is being run)
+        * The largest value of `this_dt_column` in the table that's being updated (for non-prod environments, it must also be
+            less than `dev_lookback_days` in the past relative to the date the model is being run)
+        * `Current date - dev_lookback_days` if in a non-prod environment and neither
+            of the above conditions is met.
+      * In a full-refresh / non-incremental run, it will filter for values in the parent greater than:
+        * The value of `default_start_var` (for non-prod environments, it must also be
+            less than `dev_lookback_days` in the past relative to the date the model is being run)
+        * `Current date - dev_lookback_days` if in a non-prod environment
     arguments:
       - name: default_start_var
-        type: date string formatted YYYY-MM-DD
+        type: string name of a variable
         description: >
-          The oldest date from which data should ever be pulled on a full
+          This should reference a variable containing a date string formatted 'YYYY-MM-DD'.
+          This is the oldest date from which data should ever be pulled on a full
           refresh / non-incremental run. This will be the "start date" for all data in the model.
       - name: this_dt_column
         type: string
@@ -28,3 +46,8 @@ macros:
           on which date logic should be based.
           This column in the parent model is used to filter the data that is pulled into the present model on both incremental
           and full-refresh runs.
+      - name: dev_lookback_days
+        type: int
+        description: >
+          The maximum number of days of history that will ever be read in in a non-prod
+          environment.
