@@ -28,7 +28,6 @@ vars:
   INCREMENTAL_MAX_DT: ''
   'dbt_date:time_zone': 'America/Los_Angeles'
   GOOGLE_CLOUD_PROJECT: cal-itp-data-infra-staging # you can override with GOOGLE_CLOUD_PROJECT env var rather than constantly using --vars
-  SOURCE_GOOGLE_CLOUD_PROJECT: cal-itp-data-infra # you can override with GOOGLE_CLOUD_PROJECT env var rather than constantly using --vars
   CALITP_BUCKET__PUBLISH: "gs://calitp-staging-publish" # you can override with CALITP_BUCKET__PUBLISH env var rather than constantly using --vars
 
 models:
