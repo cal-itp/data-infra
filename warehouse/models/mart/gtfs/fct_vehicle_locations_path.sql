@@ -1,13 +1,14 @@
 {{
     config(
         materialized='incremental',
+        unique_key="trip_instance_key",
         incremental_strategy='insert_overwrite',
         partition_by={
             'field': 'service_date',
             'data_type': 'date',
             'granularity': 'day',
         },
-        cluster_by='base64_url',
+        cluster_by=['base64_url', 'schedule_base64_url'],
     )
 }}
 
@@ -26,6 +27,7 @@ initial_pt_array AS (
         schedule_gtfs_dataset_key,
         schedule_name,
         schedule_feed_key,
+        schedule_base64_url,
         trip_id,
         trip_instance_key,
         -- don't try to make LINESTRING because of this issue:

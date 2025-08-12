@@ -7,7 +7,7 @@
             'field': 'month_first_day',
             'data_type': 'date',
             'granularity': 'month'
-        }, cluster_by=['month_first_day', 'gtfs_dataset_key', 'name']
+        }, cluster_by=['month_first_day', 'name']
     )
 }}
 
@@ -24,7 +24,6 @@ dim_shapes_arrays AS (
 
 trip_counts AS (
     SELECT
-        gtfs_dataset_key,
         name,
         year,
         month,
