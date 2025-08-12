@@ -6,6 +6,8 @@ from datetime import datetime, timedelta, timezone
 import pytest
 from operators.kuba_to_gcs_operator import KubaObjectPath, KubaToGCSOperator
 
+from airflow.hooks.base import BaseHook
+from airflow.models.connection import Connection
 from airflow.models.dag import DAG
 from airflow.models.taskinstance import TaskInstance
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
@@ -22,7 +24,10 @@ class TestKubaToGCSOperator:
 
     @pytest.fixture
     def object_path(self) -> KubaObjectPath:
-        return KubaObjectPath(product="device_properties")
+        connection: Connection = BaseHook.get_connection("http_kuba")
+        return KubaObjectPath(
+            product="device_properties", operator_identifier=connection.schema
+        )
 
     @pytest.fixture
     def test_dag(self, execution_date: datetime) -> DAG:
@@ -72,6 +77,7 @@ class TestKubaToGCSOperator:
             "device_properties",
             "dt=2025-06-01",
             "ts=2025-06-01T00:00:00+00:00",
+            "operator_identifier=66",
             "results.jsonl.gz",
         )
 

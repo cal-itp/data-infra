@@ -6,20 +6,24 @@ from typing import Sequence
 from hooks.kuba_hook import KubaHook
 from src.kuba_cleaner import KubaCleaner
 
+from airflow.hooks.base import BaseHook
 from airflow.models import BaseOperator, DagRun
+from airflow.models.connection import Connection
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
 class KubaObjectPath:
-    def __init__(self, product: str) -> None:
+    def __init__(self, product: str, operator_identifier: int) -> None:
         self.product = product
+        self.operator_identifier = operator_identifier
 
     def resolve(self, logical_date: datetime) -> str:
         return os.path.join(
             self.product,
             f"dt={logical_date.date().isoformat()}",
             f"ts={logical_date.isoformat()}",
+            f"operator_identifier={self.operator_identifier}",
             "results.jsonl.gz",
         )
 
@@ -57,10 +61,14 @@ class KubaToGCSOperator(BaseOperator):
         return self.bucket.replace("gs://", "")
 
     def object_path(self) -> KubaObjectPath:
-        return KubaObjectPath(product=self.product)
+        schema = self.kuba_connection().schema
+        return KubaObjectPath(product=self.product, operator_identifier=schema)
 
     def gcs_hook(self) -> GCSHook:
         return GCSHook(gcp_conn_id=self.gcp_conn_id)
+
+    def kuba_connection(self) -> Connection:
+        return BaseHook.get_connection(self.http_conn_id)
 
     def kuba_hook(self) -> KubaHook:
         return KubaHook(method="GET", http_conn_id=self.http_conn_id)

@@ -12,7 +12,7 @@ use_bq_client: true
 hive_options:
   mode: CUSTOM
   require_partition_filter: false
-  source_uri_prefix: "device_properties/{dt:DATE}/{ts:TIMESTAMP}/"
+  source_uri_prefix: "device_properties/{dt:DATE}/{ts:TIMESTAMP}/{operator_identifier:INTEGER}"
 schema_fields:
   - name: device
     type: RECORD
