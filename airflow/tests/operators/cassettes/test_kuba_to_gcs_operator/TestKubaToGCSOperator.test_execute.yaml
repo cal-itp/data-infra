@@ -21,33 +21,33 @@ interactions:
     uri: https://proxima-demo.pptexcellence.com/monitoring/authenticate/v1
   response:
     body:
-      string: '{"Error":null,"UserId":"monitoringAPI","FirstName":"device","LastName":"monitoringAPI","SessionId":"4b04abfd-5699-4827-bffd-b3eab0c4acdf"}'
+      string: '{"Error":null,"UserId":"monitoringAPI","FirstName":"device","LastName":"monitoringAPI","SessionId":"abbe672f-a335-4412-a924-c42596022bc4"}'
     headers:
       Content-Length:
       - '138'
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 14 Jul 2025 02:49:01 GMT
+      - Tue, 12 Aug 2025 22:06:45 GMT
       Server:
       - Microsoft-IIS/8.5
       Set-Cookie:
-      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
-        07:49:02 GMT; domain=proxima-demo.pptexcellence.com; path=/
-      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
-        07:49:02 GMT; domain=localhost; path=/
-      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
-        07:49:02 GMT; domain=proxima-demo.pptexcellence.com; path=/
-      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
-        07:49:02 GMT; domain=proxima-eu.pptexcellence.com; path=/
-      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
-        07:49:02 GMT; domain=proxima-gapte.pptexcellence.com; path=/
-      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
-        07:49:02 GMT; domain=proxima-denmark.pptexcellence.com; path=/
-      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
-        07:49:02 GMT; domain=pptexcellence.com; path=/
-      - session-id=4b04abfd-5699-4827-bffd-b3eab0c4acdf; expires=Mon, 14 Jul 2025
-        07:49:02 GMT; domain=; path=/
+      - session-id=abbe672f-a335-4412-a924-c42596022bc4; expires=Wed, 13 Aug 2025
+        03:06:46 GMT; domain=proxima-demo.pptexcellence.com; path=/
+      - session-id=abbe672f-a335-4412-a924-c42596022bc4; expires=Wed, 13 Aug 2025
+        03:06:46 GMT; domain=localhost; path=/
+      - session-id=abbe672f-a335-4412-a924-c42596022bc4; expires=Wed, 13 Aug 2025
+        03:06:46 GMT; domain=proxima-demo.pptexcellence.com; path=/
+      - session-id=abbe672f-a335-4412-a924-c42596022bc4; expires=Wed, 13 Aug 2025
+        03:06:46 GMT; domain=proxima-eu.pptexcellence.com; path=/
+      - session-id=abbe672f-a335-4412-a924-c42596022bc4; expires=Wed, 13 Aug 2025
+        03:06:46 GMT; domain=proxima-gapte.pptexcellence.com; path=/
+      - session-id=abbe672f-a335-4412-a924-c42596022bc4; expires=Wed, 13 Aug 2025
+        03:06:46 GMT; domain=proxima-denmark.pptexcellence.com; path=/
+      - session-id=abbe672f-a335-4412-a924-c42596022bc4; expires=Wed, 13 Aug 2025
+        03:06:46 GMT; domain=pptexcellence.com; path=/
+      - session-id=abbe672f-a335-4412-a924-c42596022bc4; expires=Wed, 13 Aug 2025
+        03:06:46 GMT; domain=; path=/
       X-Powered-By:
       - ASP.NET
     status:
@@ -74,7 +74,7 @@ interactions:
     uri: https://proxima-demo.pptexcellence.com/monitoring/deviceproperties/v1/ForLocations/all?location_type=1
   response:
     body:
-      string: '{"Response_date_time":"2025-07-14T02:49:03.3165582Z","List":[{"Device":{"Fo_device_logical_id":"66001","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"604","Fo_device_location":"604","Fo_device_last_connection":"2025-03-20T13:46:52.4000000Z"},"Device_replicator_info":{"Software_version":"1.2.3.4","Software_last_connection":null,"Cd_version":"7","Cd_last_connection":"2025-03-20T12:55:50.3500000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":"2025-03-20T13:46:52.4000000Z"},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+      string: '{"Response_date_time":"2025-08-12T22:06:47.5244236Z","List":[{"Device":{"Fo_device_logical_id":"66001","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"604","Fo_device_location":"604","Fo_device_last_connection":"2025-03-20T13:46:52.4000000Z"},"Device_replicator_info":{"Software_version":"1.2.3.4","Software_last_connection":null,"Cd_version":"7","Cd_last_connection":"2025-03-20T12:55:50.3500000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":"2025-03-20T13:46:52.4000000Z"},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
         31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
         10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
         false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
@@ -216,7 +216,7 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 14 Jul 2025 02:49:02 GMT
+      - Tue, 12 Aug 2025 22:06:46 GMT
       Server:
       - Microsoft-IIS/8.5
       X-Powered-By:
@@ -226,33 +226,34 @@ interactions:
       message: OK
 - request:
     body: !!binary |
-      LS09PT09PT09PT09PT09PT03OTMzNzk1MjAxNTE4NzUyMjM0PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      LS09PT09PT09PT09PT09PT0zNzk4MTcyNjg0OTgxNjIyNTk3PT0NCmNvbnRlbnQtdHlwZTogYXBw
       bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAiZGV2aWNlX3Byb3BlcnRp
-      ZXMvZHQ9MjAyNS0wNi0wMS90cz0yMDI1LTA2LTAxVDAwOjAwOjAwKzAwOjAwL3Jlc3VsdHMuanNv
-      bmwuZ3oifQ0KLS09PT09PT09PT09PT09PT03OTMzNzk1MjAxNTE4NzUyMjM0PT0NCmNvbnRlbnQt
-      dHlwZTogYXBwbGljYXRpb24vanNvbmwNCg0KH4sIAC5wdGgC/+2cS2/jNhDH7/0Uhc4OwYcelG7b
-      LrqXPRTdoIcWC4G26CwBWRJIytk08Hfv6GFbsiNvvJt66yx9icwZzgzJP+cHx0gevUyu1UJ6yaO3
-      LNPuTZqXd2oh8lRlXuKFIcbEmw3M9qGCCd6fIleZsKU+MqarMpM5uLz55ZZhjEcORmoFsYt6NZca
-      fAjmGHPKCCGccMxCOnLPpFloVVlVFl5S1Hk+GxW6EI2lrxT73lPWp0zC2HRRFoVc9B4U0+AGsxuK
-      bwlL/DAJKPJx+/rL28z6fUq1rHLYG1h1qopl2eybKZf2XmiZrqU2XTCCKGKoSbkzHmXs1rLIBtMi
-      rx04XRxNgiAJMGJBXxzUJqww0g4i4cHoROZMFg+5MoNZB+MT88RiISs7ntnmGximV0D4LY4T4id+
-      ANsbbVcwV8VBRD/g8cBwck8wTxg+iCjMibWvykLBEaribsqj7o/BalEY0ZpSq1by+Urpc+xkIqpO
-      OU2kVJlMGTHPZaPbpciNbEoee6gCrkp3OT2r6yOP3mqssLVpMvxR3sPPvz9CDXeVSdOqNKpbE2TP
-      rbJ1BrEYaaUhb7vVNEJRert43E79TX3uHnVZF9mHSjZlEhj4JMybXaCmpnbo7S5au5JubB9zP/iu
-      D72b+W6YYDf6XhyleF8Wd6OxfOfDQhRwP/JZ//LBuPe+IZQgTmNGady/Zl7Xez5A2bmyEvYsmHmV
-      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
+      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
+      MjY4NDk4MTYyMjU5Nz09LS0=
     headers:
       Accept:
       - application/json
@@ -263,16 +264,16 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '1533'
+      - '1556'
       User-Agent:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
-        gccl-invocation-id/9602fbc9-171f-4ceb-a9ed-152d9b464222
+        gccl-invocation-id/6d6110ba-aed0-47e8-8d81-a8e0ce28950a
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03OTMzNzk1MjAxNTE4
-        NzUyMjM0PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0zNzk4MTcyNjg0OTgx
+        NjIyNTk3PT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -281,30 +282,30 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/device_properties/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/results.jsonl.gz/1752461359207855\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/device_properties%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fresults.jsonl.gz\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/device_properties%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fresults.jsonl.gz?generation=1752461359207855&alt=media\",\n
-        \ \"name\": \"device_properties/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/results.jsonl.gz\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1752461359207855\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/device_properties/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/operator_identifier=66/results.jsonl.gz/1755036414258730\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/device_properties%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Foperator_identifier=66%2Fresults.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/device_properties%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Foperator_identifier=66%2Fresults.jsonl.gz?generation=1755036414258730&alt=media\",\n
+        \ \"name\": \"device_properties/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/operator_identifier=66/results.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1755036414258730\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1236\",\n  \"md5Hash\": \"pZZWRr2ctIGSk9tXc0+jBA==\",\n
-        \ \"crc32c\": \"UxSUAQ==\",\n  \"etag\": \"CK+rsaaru44DEAE=\",\n  \"timeCreated\":
-        \"2025-07-14T02:49:19.229Z\",\n  \"updated\": \"2025-07-14T02:49:19.229Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-07-14T02:49:19.229Z\",\n  \"timeFinalized\":
-        \"2025-07-14T02:49:19.229Z\"\n}\n"
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1236\",\n  \"md5Hash\": \"2NkpvWh5oPoVC1V/8Hw4TA==\",\n
+        \ \"crc32c\": \"5QSjTQ==\",\n  \"etag\": \"CKrcqJCkho8DEAE=\",\n  \"timeCreated\":
+        \"2025-08-12T22:06:54.262Z\",\n  \"updated\": \"2025-08-12T22:06:54.262Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-08-12T22:06:54.262Z\",\n  \"timeFinalized\":
+        \"2025-08-12T22:06:54.262Z\"\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Content-Length:
-      - '1105'
+      - '1201'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 14 Jul 2025 02:49:19 GMT
+      - Tue, 12 Aug 2025 22:06:54 GMT
       ETag:
-      - CK+rsaaru44DEAE=
+      - CKrcqJCkho8DEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -315,7 +316,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - ABgVH8_rBsM0DwKEW_dpMkD4VR7lru6eDMvOPJWE0duiNcxkz6sACuY_hx8SNDiuesO8guT6QSmTuuM
+      - ABgVH8_c2W01VD5FGdt7Hjqa7i1hbJXYKGRflQ0g-SIHBfVE5QUyXHskpWrfGvJQkvrxzqVR
     status:
       code: 200
       message: OK
@@ -332,7 +333,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
-        gccl-invocation-id/2f0f47de-ff23-420c-812a-803963d74401
+        gccl-invocation-id/8cdd3bf4-764b-4a91-a67b-b60359c4962a
       accept-encoding:
       - gzip
       content-type:
@@ -342,11 +343,11 @@ interactions:
       x-upload-content-type:
       - application/json; charset=UTF-8
     method: GET
-    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/device_properties%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fresults.jsonl.gz?alt=media
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/device_properties%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Foperator_identifier%3D66%2Fresults.jsonl.gz?alt=media
   response:
     body:
       string: !!binary |
-        H4sIAC5wdGgC/+2cS2/jNhDH7/0Uhc4OwYcelG7bLrqXPRTdoIcWC4G26CwBWRJIytk08Hfv6GFb
+        H4sIAP66m2gC/+2cS2/jNhDH7/0Uhc4OwYcelG7bLrqXPRTdoIcWC4G26CwBWRJIytk08Hfv6GFb
         siNvvJt66yx9icwZzgzJP+cHx0gevUyu1UJ6yaO3LNPuTZqXd2oh8lRlXuKFIcbEmw3M9qGCCd6f
         IleZsKU+MqarMpM5uLz55ZZhjEcORmoFsYt6NZcafAjmGHPKCCGccMxCOnLPpFloVVlVFl5S1Hk+
         GxW6EI2lrxT73lPWp0zC2HRRFoVc9B4U0+AGsxuKbwlL/DAJKPJx+/rL28z6fUq1rHLYG1h1qopl
@@ -380,13 +381,13 @@ interactions:
       Content-Type:
       - application/jsonl
       Date:
-      - Mon, 14 Jul 2025 02:49:19 GMT
+      - Tue, 12 Aug 2025 22:06:54 GMT
       ETag:
-      - CK+rsaaru44DEAE=
+      - CKrcqJCkho8DEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Mon, 14 Jul 2025 02:49:19 GMT
+      - Tue, 12 Aug 2025 22:06:54 GMT
       Pragma:
       - no-cache
       Server:
@@ -395,11 +396,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - ABgVH8_XEvjKeYfKPoPHdtdvzpOc253xd2vNtfr9xb-sVHoZekeMdZotM7fVKU9nEW8rIxemx6982i4
+      - ABgVH8_1tGbA0zx8-RaVmKTUmHhPe5aq-J4T66fqLnBIOG4xvAXp3gGBUecG3LGuJRRmaCdv
       X-Goog-Generation:
-      - '1752461359207855'
+      - '1755036414258730'
       X-Goog-Hash:
-      - crc32c=UxSUAQ==,md5=pZZWRr2ctIGSk9tXc0+jBA==
+      - crc32c=5QSjTQ==,md5=2NkpvWh5oPoVC1V/8Hw4TA==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:
