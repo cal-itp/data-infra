@@ -4,49 +4,11 @@ from datetime import datetime
 from typing import Sequence
 
 from hooks.kuba_hook import KubaHook
-from src.bigquery_cleaner import BigQueryKeyCleaner, BigQueryValueCleaner
+from src.kuba_cleaner import KubaCleaner
 
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
-
-
-class KubaRowCleaner:
-    row: dict
-
-    def __init__(self, row: dict):
-        self.row = row
-
-    def clean(self) -> dict:
-        columns = {}
-        for key, value in self.row.items():
-            if isinstance(value, dict):
-                result = {}
-                for k, v in value.items():
-                    if "::" in k and "{" in v:
-                        result[BigQueryKeyCleaner(k).clean()] = json.loads(
-                            v.replace("\\n", "")
-                        )
-                    else:
-                        result[BigQueryKeyCleaner(k).clean()] = BigQueryValueCleaner(
-                            v
-                        ).clean()
-                columns[BigQueryKeyCleaner(key).clean()] = result
-            else:
-                columns[BigQueryKeyCleaner(key).clean()] = BigQueryValueCleaner(
-                    value
-                ).clean()
-        return columns
-
-
-class KubaCleaner:
-    rows: list
-
-    def __init__(self, rows: list):
-        self.rows = rows
-
-    def clean(self) -> list:
-        return [KubaRowCleaner(row).clean() for row in self.rows]
 
 
 class KubaObjectPath:
