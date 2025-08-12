@@ -1,6 +1,6 @@
 [project]
 name = "jupyter-singleuser"
-version = "2025.8.8"
+version = "2025.8.11"
 description = "This is the notebook image that individual users are served via JupyterHub."
 authors = [
     { name = "Vevetron" },
@@ -9,67 +9,68 @@ requires-python = ">=3.11.0, <3.12.0"
 
 dependencies = [
     "black==24.10.0",
-    "intake==0.6.4",
+    "branca (>=0.8.1, <0.9.0)",
+    "calitp-data-analysis==2025.6.24",
+    "csvkit (>=2.1.0, <3.0.0)",
+    "dask-bigquery==2024.7.0",
+    "dask-geopandas (>=0.2.0, <0.3.0)",
+    "dask-labextension (>=7.0.0, <8.0.0)",
+    "dask==2024.5.2",
+    "folium (>=0.20.0, <0.21.0)",
+    "graphviz (>=0.21.0, <0.22.0)",
+    "intake (>=2.0.8,  <3.0.0)",
     "intake-dcat==0.4.0",
     "intake-geopandas>=0.3.0",
     "intake-parquet>=0.2.3",
-    "ipyleaflet==0.15.0",
-    "jupytext>=1.13.5",
-    "jupyterlab-code-formatter>=1.4.10",
-    "lxml_html_clean>=0.4.1",
-    "plotnine>=0.8.0",
-    "plotly==5.5.0",
-    "folium>=0.12.1.post1",
-    "branca==0.4.2",
-    "vega==3.5.0",
-    "pygeos==0.14.0",
-    "Rtree==0.9.7",
-    "openpyxl==3.0.9",
-    "python-dotenv==0.19.2",
-    "isort==5.10.1",
-    "seaborn (>=0.11.2, <0.12.0)",
-    "csvkit==1.0.7",
-    "pre-commit==2.18.1",
+    "ipyleaflet (>=0.20.0, <0.21.0)",
+    "isort (>=6.0.1, <7.0.0)",
     "jupyter-resource-usage (>=1.1.1, <2.0.0)",
-    "dask-labextension (>=5.3.0, <6.0.0)",
-    "matplotlib (>=3.10.5, <4.0.0)",
-    "dask-geopandas (>=0.2.0, <0.3.0)",
-    "dask-bigquery==2022.5.0",
-    "dask (>=2024.5.0, <2024.6.0)",
-    "pyodbc (>=4.0.34, <5.0.0)",
-    "sqlalchemy-bigquery (>=1.4.4, <2.0.0)",
-    "siuba>=0.4.0",
-    "graphviz (>=0.20.1, <0.21.0)",
-    "rasterio==1.3.11", # the highest version that works with GDAL 3.4.1
-    "ydata-profiling[notebook] (>=4.9.0, <5.0.0)",
-    "statsmodels==0.14.5",
-    "pendulum (>=2.1.2, <3.0.0)",
-    "calitp-data-analysis==2025.6.24",
     "jupyter-server-proxy (>=4.1.1, <5.0.0)",
+    "jupyterlab-code-formatter>=1.4.10",
+    "jupytext>=1.13.5",
+    "lxml_html_clean>=0.4.1",
+    "matplotlib (>=3.10.5, <4.0.0)",
+    "numpy (>=1.26.4, <2.0.0)",
+    "openpyxl (>=3.1.5, <4.0.0)",
+    "pendulum (>=3.1.0, <4.0.0)",
+    "plotly (>=6.2.0, <7.0.0)",
+    "plotnine (>=0.12.0, <0.13.0)",
+    "pre-commit (>=4.3.0, <5.0.0)",
+    "pygeos==0.14.0",
+    "pyodbc (>=5.2.0, <6.0.0)",
+    "python-dotenv (>=1.1.1, <2.0.0)",
+    "rasterio (>=1.4.3, <2.0.0)",
+    "Rtree (>=1.4.0, <2.0.0)",
+    "seaborn (>=0.13.2, <0.14.0)",
+    "siuba>=0.4.0",
+    "sqlalchemy-bigquery (>=1.4.4, <2.0.0)",
+    "statsmodels==0.14.5",
+    "vega (>=4.1.0, <5.0.0)",
+    "ydata-profiling[notebook] (>=4.9.0, <5.0.0)"
 ]
 
 [tool.poetry]
 package-mode = false
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.2.0"
 llvmlite= "^0.44.0"
+pytest = "^8.4.1"
 
 [tool.poetry.group.shared_utils.dependencies]
-cpi = "^1.0.17"
-xmltodict = "^0.13.0"
-loguru = "^0.6.0"
-mapclassify = "^2.5.0"
+cpi = "^2.0.7"
+loguru = "^0.7.3"
+mapclassify = "^2.8.0"
+xmltodict = "^0.14.2"
 
 [tool.poetry.group.portfolio.dependencies]
-pydantic = ">=2.0"
 humanize = "^4.6.0"
-typer = "^0.9.0"
+jupyter-book = ">=1.0.0"
 nbformat = "^5.8.0"
 papermill = "^2.4.0"
-python-slugify = "^6.1.1"
-pyaml = "^21.10.1"
-jupyter-book = ">=1.0.0"
+pyaml = "^25.7.0"
+pydantic = ">=2.0"
+python-slugify = "^8.0.4"
+typer = "^0.16.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
