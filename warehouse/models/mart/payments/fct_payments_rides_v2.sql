@@ -52,6 +52,8 @@ int_littlepay__unioned_product_data AS (
 participants_to_routes_and_agency AS (
     SELECT
         map.littlepay_participant_id,
+        map._in_use_from,
+        map._in_use_until,
         feeds.date,
         routes.route_id,
         routes.route_short_name,
