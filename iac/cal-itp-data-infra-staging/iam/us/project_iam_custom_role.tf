@@ -69,3 +69,14 @@ resource "google_project_iam_custom_role" "calitp-dds-analyst" {
   project = "cal-itp-data-infra-staging"
   title   = "DDS Analyst"
 }
+
+resource "google_project_iam_custom_role" "metabase_additional" {
+  description = "Extra permission to view all BigQuery query jobs for cost estimation"
+  permissions = [
+    "bigquery.jobs.listAll"
+  ]
+  project = "cal-itp-data-infra-staging"
+  role_id = "MetabaseAdditional"
+  stage   = "GA"
+  title   = "Metabase additional custom permission jobs.listAll"
+}

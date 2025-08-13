@@ -618,3 +618,9 @@ resource "google_project_iam_member" "staging-github-actions-service-account" {
   member  = "serviceAccount:github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com"
   project = "cal-itp-data-infra"
 }
+
+resource "google_project_iam_member" "metabase_custom_role_assignment" {
+  member  = "serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com"
+  project = "cal-itp-data-infra"
+  role    = google_project_iam_custom_role.metabase_additional.id
+}

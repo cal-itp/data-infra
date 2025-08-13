@@ -298,3 +298,9 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
   member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Cloud_Admins"
   project = "cal-itp-data-infra-staging"
 }
+
+resource "google_project_iam_member" "metabase_custom_role_assignment" {
+  member  = "serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com"
+  project = "cal-itp-data-infra-staging"
+  role    = google_project_iam_custom_role.metabase_additional.id
+}
