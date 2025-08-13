@@ -47,7 +47,7 @@ WITH fct_benefits_events_raw AS (
     {{ json_extract_column('event_properties', 'error.name') }},
     {{ json_extract_column('event_properties', 'error.status') }},
     {{ json_extract_column('event_properties', 'error.sub') }},
-    {{ json_extract_column('event_properties', 'extra_claims') }},
+    {{ json_extract_flattened_column('event_properties', 'extra_claims') }},
     {{ json_extract_column('event_properties', 'href') }},
     {{ json_extract_column('event_properties', 'language') }},
     {{ json_extract_column('event_properties', 'origin') }},
