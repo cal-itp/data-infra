@@ -15,10 +15,8 @@
 WITH fct_vehicle_positions_messages AS (
     SELECT *,
         COALESCE(vehicle_timestamp, header_timestamp) AS location_timestamp
-    FROM `cal-itp-data-infra.mart_gtfs.fct_vehicle_positions_messages`
-    WHERE dt IN ("2025-07-23", "2025-07-24")
-    --FROM {{ ref('fct_vehicle_positions_messages') }}
-    --WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
+    FROM {{ ref('fct_vehicle_positions_messages') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = None) }}
 ),
 
 vp_trips AS (
@@ -29,9 +27,8 @@ vp_trips AS (
         trip_id,
         trip_start_time,
         trip_instance_key
-    --FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
-    FROM `cal-itp-data-infra.mart_gtfs.fct_vehicle_positions_trip_summaries`
-    WHERE service_date = "2025-07-23"
+    FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', this_dt_column='service_date', filter_dt_column='service_date', dev_lookback_days=None) }}
 
 ),
 

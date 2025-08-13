@@ -1,7 +1,6 @@
 {{
     config(
         materialized='incremental',
-        unique_key="trip_instance_key",
         incremental_strategy='insert_overwrite',
         partition_by={
             'field': 'service_date',
@@ -15,6 +14,7 @@
 WITH fct_vehicle_locations AS (
     SELECT *
     FROM {{ ref('fct_vehicle_locations') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', this_dt_column='service_date', filter_dt_column='service_date', dev_lookback_days=None)}}
 ),
 
 -- collect points into an array
@@ -44,6 +44,7 @@ initial_pt_array AS (
             DATETIME(location_timestamp, "America/Los_Angeles") IGNORE NULLS
             ORDER BY location_timestamp
         ) AS location_timestamp_pacific,
+        -- tried to use gtfs_interval_to_seconds, but can't wrap column with DATETIME()
         ARRAY_AGG(
             EXTRACT(HOUR FROM DATETIME(location_timestamp, "America/Los_Angeles")) * 3600
               + EXTRACT(MINUTE FROM DATETIME(location_timestamp, "America/Los_Angeles")) * 60
@@ -54,7 +55,7 @@ initial_pt_array AS (
         COUNT(*) AS n_vp,
 
     FROM fct_vehicle_locations
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
 fct_vehicle_locations_path AS (
