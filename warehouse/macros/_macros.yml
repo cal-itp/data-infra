@@ -32,6 +32,7 @@ macros:
           This should reference a variable containing a date string formatted 'YYYY-MM-DD'.
           This is the oldest date from which data should ever be pulled on a full
           refresh / non-incremental run. This will be the "start date" for all data in the model.
+          There is no default value for this argument.
       - name: this_dt_column
         type: string
         description: >
@@ -39,6 +40,7 @@ macros:
           on which date logic should be based.
           This column is used to look up the latest available data in the model to determine what needs
           to be refreshed in an incremental run.
+          Default value is `'dt'`.
       - name: filter_dt_column
         type: string
         description: >
@@ -46,8 +48,10 @@ macros:
           on which date logic should be based.
           This column in the parent model is used to filter the data that is pulled into the present model on both incremental
           and full-refresh runs.
+          Default value is `'dt'`.
       - name: dev_lookback_days
         type: int
         description: >
           The maximum number of days of history that will ever be read in in a non-prod
           environment.
+          Default value is 7 (days).
