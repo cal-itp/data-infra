@@ -1,8 +1,6 @@
 {{
     config(
-        materialized='incremental',
-        incremental_strategy='insert_overwrite',
-        unique_key = "key",
+        materialized='table',
         partition_by={
             'field': 'service_date',
             'data_type': 'date',
