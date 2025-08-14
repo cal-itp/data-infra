@@ -1,0 +1,4 @@
+version: 2
+
+models:
+  - name: stg_kuba__device_properties
