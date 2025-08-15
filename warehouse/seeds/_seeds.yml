@@ -52,6 +52,14 @@ seeds:
         tests:
           - not_null
           - unique
+      - name: _in_use_from
+        description: Start date from which this mapping is valid (inclusive). Used to handle cases where the same littlepay_participant_id maps to different elavon customer_name and customer_id over time.
+        tests:
+          - not_null
+      - name: _in_use_until
+        description: End date until which this mapping is valid (inclusive). Used to handle cases where the same littlepay_participant_id maps to different elavon customer_name and customer_id over time.
+        tests:
+          - not_null
 
   - name: gtfs_rt_validation_code_descriptions
     description: |
