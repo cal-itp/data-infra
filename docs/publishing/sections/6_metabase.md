@@ -12,4 +12,4 @@ Ex: [Payments Dashboard](https://dashboards.calitp.org/dashboard/3-payments-perf
 
 ## Metabase Training Guide 2024
 
-Please see the [Cal-ITP Metabase Training Guide](https://docs.google.com/document/d/1ag9qmSDWF9d30lGyKcvAAjILt1sCIJhK7wuUYkfAals/edit?tab=t.0#heading=h.xdjzmfck1e7) to see how to utilize the data warehouse to create meaningful and effective visuals and analyses.
+Please see the [Cal-ITP Metabase Training Guide](https://caltrans.sharepoint.com/:w:/s/DOTPMPHQ-DataandDigitalServices/ERzyWpy88EJMmgaJhtfEEIwBK8p9LXWIzGr7p6xDsTg3XQ?e=rIEdQR) to see how to utilize the data warehouse to create meaningful and effective visuals and analyses.

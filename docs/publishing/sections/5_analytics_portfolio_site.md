@@ -174,7 +174,7 @@ After your Jupyter Notebook (refer to the previous section), `README.md`, and `.
 
 4. Add the files using `git add` and commit!
 
-5. Your notebook should now be displayed in the [Cal-ITP Analytics Portfolio](https://analysis.calitp.org/)
+5. Your notebook should now be displayed in the [Data and Digital Services Portfolio](https://analysis.dds.dot.ca.gov/)
 
    - If your work isn't showing up on the Index page above, run `python portfolio/portfolio.py index --deploy --prod` to add it.
 
@@ -214,4 +214,7 @@ build_my_reports:
 
 When redeploying your portfolio with new content and there’s an old version with existing files or content on your portfolio site or in your local environment, it’s important to clean up the old files before adding new content.
 
-Use python `portfolio/portfolio.py clean my_report` before deploying your report.
+Use python `portfolio/portfolio.py clean my_report` before deploying your report to remove the local folders that are not checked in.
+
+We use Git Large File Storage git lfs to store these parameterized notebooks. However, we are also moving to storing these parameterized notebooks in Google Cloud Storage in the long run.
+Swap out the `git add` and `git rm` steps. If using `gcsfs`, we can use the `fs.put` and `fs.rm` to cache the parameterized notebooks and built HTML files for JupyterBook.
