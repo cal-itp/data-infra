@@ -57,7 +57,7 @@ resource "google_cloudfunctions2_function" "update_expired_airtable_issues" {
   }
 
   service_config {
-    available_memory      = "256M"
+    available_memory      = "512M"
     timeout_seconds       = 540
     service               = "update-expired-airtable-issues-tf-service" # <-- UNIQUE NAME
     service_account_email = local.service_account_email
