@@ -483,7 +483,6 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#netlify-setup">Netlify Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-setup">File Setup</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#readme-md">README.md</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#yml">YML</a></li>
@@ -511,42 +510,9 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="the-cal-itp-analytics-portfolio">
 <span id="publishing-analytics-portfolio-site"></span><h1>The Cal-ITP Analytics Portfolio<a class="headerlink" href="#the-cal-itp-analytics-portfolio" title="Link to this heading">#</a></h1>
 <p>Now that your notebook(s) are portfolio-ready, it’s time to publish your work to the portfolio!</p>
-<section id="netlify-setup">
-<h2>Netlify Setup<a class="headerlink" href="#netlify-setup" title="Link to this heading">#</a></h2>
-<p>Netlify is the platform turns our Jupyter Notebooks uploaded to GitHub into a webpage.</p>
-<p><strong>To setup your netlify key:</strong></p>
-<ul class="simple">
-<li><p>Ask on the Teams <code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Analysis</span></code> channel for a Netlify key if you don’t have one yet.</p></li>
-<li><p>If you already have your Netlify key set up, find it by typing <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">~/.bash_profile</span></code> into the root of your repo.</p></li>
-<li><p>Install netlify: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">-g</span> <span class="pre">netlify-cli</span></code></p></li>
-<li><p>Navigate to your main directory</p></li>
-<li><p>Edit your bash profile using Nano:</p>
-<ul>
-<li><p>In your terminal, enter <code class="docutils literal notranslate"><span class="pre">nano</span> <span class="pre">~/.bash_profile</span></code> to edit.</p></li>
-<li><p>Navigate using arrows (down, right, etc) to create 2 new lines. Paste (<code class="docutils literal notranslate"><span class="pre">CTRL</span></code> + <code class="docutils literal notranslate"><span class="pre">V</span></code>) your netlify key in the lines in the following format, each line prefixed with “export”</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">NETLIFY_AUTH_TOKEN=</span> <span class="pre">YOURTOKENHERE123</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">NETLIFY_SITE_ID=cal-itp-data-analyses</span></code></p></li>
-</ul>
-</li>
-<li><p>To exit, press <code class="docutils literal notranslate"><span class="pre">CTRL</span></code> + <code class="docutils literal notranslate"><span class="pre">X</span></code></p></li>
-<li><p>Nano will ask if you want to save your changes. Type <code class="docutils literal notranslate"><span class="pre">Y</span></code> to save.</p>
-<ul>
-<li><p>Type <code class="docutils literal notranslate"><span class="pre">N</span></code> to discard your changes and exit</p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>For the changes to take effect, open a new terminal or run <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.bash_profile</span></code></p>
-<ul>
-<li><p>Back in your terminal, enter <code class="docutils literal notranslate"><span class="pre">env</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">NETLIFY</span></code> to see that your Netlify token is there</p></li>
-</ul>
-</li>
-</ul>
-</section>
 <section id="file-setup">
 <h2>File Setup<a class="headerlink" href="#file-setup" title="Link to this heading">#</a></h2>
-<p>In order to publish to <a class="reference external" href="http://analysis.calitp.org">analysis.calitp.org</a>, you need to create two different files.</p>
+<p>In order to publish to <a class="reference external" href="http://analysis.dds.dot.ca.gov">analysis.dds.dot.ca.gov</a>, you need to create two different files.</p>
 <ul class="simple">
 <li><p>A <a class="reference external" href="http://README.md">README.md</a>.</p></li>
 <li><p>A YML.</p></li>
@@ -569,7 +535,7 @@ document.write(`
 </section>
 <section id="yml">
 <h3>YML<a class="headerlink" href="#yml" title="Link to this heading">#</a></h3>
-<p>Each <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file creates a new site on the <a class="reference external" href="https://analysis.calitp.org/">Portfolio’s Index Page</a>, so every project needs its own file. DLA Grant Analysis, SB125 Route Illustrations, and Active Transportation Program all have their own <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file.</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file creates a new site on the Portfolio’s Index Page, so every project needs its own file. DLA Grant Analysis, SB125 Route Illustrations, and Active Transportation Program all have their own <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file.</p>
 <p>All the <code class="docutils literal notranslate"><span class="pre">.yml</span></code> files live here at <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites">data-analyses/portfolio/sites</a>. Navigate to this folder to create the .yml file.</p>
 <p>Here’s how to create a <code class="docutils literal notranslate"><span class="pre">yml</span></code> file:</p>
 <ul>
@@ -704,12 +670,13 @@ document.write(`
 </ul>
 </li>
 <li><p>Add the files using <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> and commit!</p></li>
-<li><p>Your notebook should now be displayed in the <a class="reference external" href="https://analysis.calitp.org/">Cal-ITP Analytics Portfolio</a></p>
+<li><p>Your notebook should now be displayed in the <a class="reference external" href="https://analysis.dds.dot.ca.gov/">Data and Digital Services Portfolio</a></p>
 <ul class="simple">
 <li><p>If your work isn’t showing up on the Index page above, run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">portfolio/portfolio.py</span> <span class="pre">index</span> <span class="pre">--deploy</span> <span class="pre">--prod</span></code> to add it.</p></li>
 </ul>
 </li>
 </ol>
+<p>Note: A new GitHub Action now automatically updates the index whenever a PR modifying the <code class="docutils literal notranslate"><span class="pre">portfolio</span> <span class="pre">folder</span></code> is merged.</p>
 </section>
 <section id="other-specifications">
 <h3>Other Specifications<a class="headerlink" href="#other-specifications" title="Link to this heading">#</a></h3>
@@ -764,7 +731,9 @@ document.write(`
 <section id="redeploying-portfolio-refresh-index-page">
 <h3>Redeploying Portfolio/ Refresh Index Page<a class="headerlink" href="#redeploying-portfolio-refresh-index-page" title="Link to this heading">#</a></h3>
 <p>When redeploying your portfolio with new content and there’s an old version with existing files or content on your portfolio site or in your local environment, it’s important to clean up the old files before adding new content.</p>
-<p>Use python <code class="docutils literal notranslate"><span class="pre">portfolio/portfolio.py</span> <span class="pre">clean</span> <span class="pre">my_report</span></code> before deploying your report.</p>
+<p>Use python <code class="docutils literal notranslate"><span class="pre">portfolio/portfolio.py</span> <span class="pre">clean</span> <span class="pre">my_report</span></code> before deploying your report to remove the local folders that are not checked in.
+We currently use Git Large File Storage (lfs) to store these parameterized notebooks.
+Swap out the <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rm</span></code> steps. If using <code class="docutils literal notranslate"><span class="pre">gcsfs</span></code>, we can use the <code class="docutils literal notranslate"><span class="pre">fs.put</span></code> and <code class="docutils literal notranslate"><span class="pre">fs.rm</span></code> to cache the parameterized notebooks and built HTML files for JupyterBook.</p>
 </section>
 </section>
 </section>
@@ -833,7 +802,6 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#netlify-setup">Netlify Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-setup">File Setup</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#readme-md">README.md</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#yml">YML</a></li>
