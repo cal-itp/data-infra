@@ -4,30 +4,9 @@
 
 Now that your notebook(s) are portfolio-ready, it's time to publish your work to the portfolio!
 
-## Netlify Setup
-
-Netlify is the platform turns our Jupyter Notebooks uploaded to GitHub into a webpage.
-
-**To setup your netlify key:**
-
-- Ask on the Teams `Data Analysis` channel for a Netlify key if you don't have one yet.
-- If you already have your Netlify key set up, find it by typing `cat ~/.bash_profile` into the root of your repo.
-- Install netlify: `npm install -g netlify-cli`
-- Navigate to your main directory
-- Edit your bash profile using Nano:
-  - In your terminal, enter `nano ~/.bash_profile` to edit.
-  - Navigate using arrows (down, right, etc) to create 2 new lines. Paste (`CTRL` + `V`) your netlify key in the lines in the following format, each line prefixed with "export"
-    - `export NETLIFY_AUTH_TOKEN= YOURTOKENHERE123`
-    - `export NETLIFY_SITE_ID=cal-itp-data-analyses`
-  - To exit, press `CTRL` + `X`
-  - Nano will ask if you want to save your changes. Type `Y` to save.
-    - Type `N` to discard your changes and exit
-- For the changes to take effect, open a new terminal or run `source ~/.bash_profile`
-  - Back in your terminal, enter `env | grep NETLIFY` to see that your Netlify token is there
-
 ## File Setup
 
-In order to publish to analysis.calitp.org, you need to create two different files.
+In order to publish to analysis.dds.dot.ca.gov, you need to create two different files.
 
 - A README.md.
 - A YML.
@@ -46,7 +25,7 @@ Create a `README.md` file in the repo where your work lies. This also forms the 
 
 ### YML
 
-Each `.yml` file creates a new site on the [Portfolio's Index Page](https://analysis.calitp.org/), so every project needs its own file. DLA Grant Analysis, SB125 Route Illustrations, and Active Transportation Program all have their own `.yml` file.
+Each `.yml` file creates a new site on the Portfolio's Index Page, so every project needs its own file. DLA Grant Analysis, SB125 Route Illustrations, and Active Transportation Program all have their own `.yml` file.
 
 All the `.yml` files live here at [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Navigate to this folder to create the .yml file.
 
@@ -174,9 +153,11 @@ After your Jupyter Notebook (refer to the previous section), `README.md`, and `.
 
 4. Add the files using `git add` and commit!
 
-5. Your notebook should now be displayed in the [Cal-ITP Analytics Portfolio](https://analysis.calitp.org/)
+5. Your notebook should now be displayed in the [Data and Digital Services Portfolio](https://analysis.dds.dot.ca.gov/)
 
    - If your work isn't showing up on the Index page above, run `python portfolio/portfolio.py index --deploy --prod` to add it.
+
+Note: A new GitHub Action now automatically updates the index whenever a PR modifying the `portfolio folder` is merged.
 
 ### Other Specifications
 
@@ -214,4 +195,6 @@ build_my_reports:
 
 When redeploying your portfolio with new content and there’s an old version with existing files or content on your portfolio site or in your local environment, it’s important to clean up the old files before adding new content.
 
-Use python `portfolio/portfolio.py clean my_report` before deploying your report.
+Use python `portfolio/portfolio.py clean my_report` before deploying your report to remove the local folders that are not checked in.
+We currently use Git Large File Storage (lfs) to store these parameterized notebooks.
+Swap out the `git add` and `git rm` steps. If using `gcsfs`, we can use the `fs.put` and `fs.rm` to cache the parameterized notebooks and built HTML files for JupyterBook.
