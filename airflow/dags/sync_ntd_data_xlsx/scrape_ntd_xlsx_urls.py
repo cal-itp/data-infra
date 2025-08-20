@@ -22,11 +22,14 @@ xlsx_urls = {
     "asset_inventory_time_series_url": "https://www.transit.dot.gov/ntd/data-product/ts41-asset-inventory-time-series-4",
 }
 
+# We want to look like a real browser, in this case Chrome 139
 headers = {
-    "User-Agent": "CalITP/1.0.0",
-    "sec-ch-ua": '"CalITP";v="1"',
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": '"macOS"',
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+    "sec-ch-ua": '"Not A;Brand"',
+    "sec-fetch-dest": "document",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-site": "none",
+    "sec-fetch-user": "?1",
 }
 
 
