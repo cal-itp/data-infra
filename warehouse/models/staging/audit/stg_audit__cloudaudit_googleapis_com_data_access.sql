@@ -1,3 +1,4 @@
+-- This code is designed to only run every day.  If you don't run it every day, it will skip dates.
 {{
     config(
         materialized='incremental',

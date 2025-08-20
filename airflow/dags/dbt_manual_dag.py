@@ -33,10 +33,11 @@ with DAG(
         ),
         render_config=RenderConfig(
             select=[
-                "models/mart/gtfs/fct_stop_time_arrivals_week.sql",
-                "models/mart/gtfs/fct_stop_time_updates_metrics_week.sql",
-                "models/mart/gtfs/fct_stop_time_updates_week.sql",
-                "models/mart/gtfs/fct_stop_time_updates_with_arrivals_week.sql",
+                "models/intermediate/gtfs/int_gtfs_rt__trip_updates_trip_stop_day_map_grouping.sql",
+                "models/mart/gtfs/fct_stop_time_metrics.sql",
+                "models/mart/gtfs/fct_stop_time_updates_sample.sql",
+                "models/mart/gtfs/fct_trip_updates_stop_metrics.sql",
+                "models/mart/gtfs/fct_trip_updates_trip_metrics.sql",
             ],
             test_behavior=TestBehavior.AFTER_ALL,
         ),
