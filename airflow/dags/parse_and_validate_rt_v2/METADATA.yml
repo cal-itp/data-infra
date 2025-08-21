@@ -17,5 +17,5 @@ default_args:
     concurrency: 5
     #sla: !timedelta 'hours: 2'
 wait_for_defaults:
-    timeout: 3600
+    timeout: 7200
 latest_only: False
