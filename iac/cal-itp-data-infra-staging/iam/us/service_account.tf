@@ -49,3 +49,11 @@ resource "google_service_account" "composer-service-account" {
   display_name = "composer"
   project      = "cal-itp-data-infra-staging"
 }
+
+resource "google_service_account" "sftp-pod-service-account" {
+  account_id   = "sftp-pod-service-account"
+  description  = "Service account for sftp server"
+  disabled     = "false"
+  display_name = "sftp-pod"
+  project      = "cal-itp-data-infra-staging"
+}
