@@ -21,3 +21,9 @@ resource "google_service_account_iam_member" "airflow-jobs_composer-service-acco
   role               = "roles/iam.workloadIdentityUser"
   member             = "serviceAccount:cal-itp-data-infra-staging.svc.id.goog[airflow-jobs/composer-service-account]"
 }
+
+resource "google_service_account_iam_member" "enghouse-raw-sftp-service-account" {
+  service_account_id = google_service_account.sftp-pod-service-account.id
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "serviceAccount:cal-itp-data-infra-staging.svc.id.goog[default/sftp-pod-service-account]"
+}
