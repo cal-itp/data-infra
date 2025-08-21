@@ -1,12 +1,7 @@
-# from __future__ import annotations
-# import os
 from datetime import datetime
 
 from airflow import DAG
 from airflow.providers.google.cloud.transfers.gcs_to_gcs import GCSToGCSOperator
-
-# from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
-# from cosmos.constants import TestBehavior
 
 
 # Define buckets
@@ -74,12 +69,21 @@ with DAG(
     # )
 
     # This remains a full bucket copy as it is not partitioned by date.
+    # copy_airtable_task = GCSToGCSOperator(
+    #     task_id="copy_airtable_data",
+    #     source_bucket=SOURCE_AIRTABLE_BUCKET,
+    #     source_object=f"**/{YESTERDAY_PARTITION}/*",  # Copy all objects
+    #     replace=False,
+    #     destination_bucket=DEST_AIRTABLE_BUCKET,
+    #     # destination_object=f"",
+    #     match_glob=True,
+    # )
+
     copy_airtable_task = GCSToGCSOperator(
         task_id="copy_airtable_data",
         source_bucket=SOURCE_AIRTABLE_BUCKET,
-        source_object=f"**/{YESTERDAY_PARTITION}/*",  # Copy all objects
+        #source_objects=f["**/{YESTERDAY_PARTITION}/*"],  # Copy all objects
         replace=False,
         destination_bucket=DEST_AIRTABLE_BUCKET,
-        # destination_object=f"",
-        match_glob=True,
+        match_glob: "**/dt={YESTERDAY_PARTITION}/*"
     )
