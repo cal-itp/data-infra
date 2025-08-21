@@ -14,5 +14,6 @@ from operators.littlepay_to_jsonl import LittlepayToJSONL
 from operators.littlepay_to_jsonl_feed_v3 import LittlepayToJSONLV3
 from operators.ntd_to_gcs_operator import NTDToGCSOperator
 from operators.pod_operator import PodOperator
+from operators.replicate_bucket_data_operator import ReplicateBucketDataOperator
 from operators.scrape_ntd_xlsx import NtdDataProductXLSXOperator
 from operators.scrape_state_geoportal import StateGeoportalAPIOperator

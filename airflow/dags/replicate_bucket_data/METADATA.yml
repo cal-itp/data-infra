@@ -1,0 +1,19 @@
+description: "Copy files from prod to staging buckets"
+schedule_interval: "0 9 * * 0" # Every Day at 1am PDT/2am PST (9am UTC)
+tags:
+  - copy_buckets
+  - replicate_data
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: "2025-08-19"
+    catchup: False
+    email:
+      - "hello@calitp.org"
+    email_on_failure: True
+    email_on_retry: False
+    retries: 1
+    retry_delay: !timedelta 'minutes: 2'
+    concurrency: 50
+    #sla: !timedelta 'hours: 2'
+latest_only: True

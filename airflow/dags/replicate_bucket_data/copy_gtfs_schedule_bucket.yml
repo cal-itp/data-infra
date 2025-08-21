@@ -1,0 +1,6 @@
+operator: operators.ReplicateBucketDataOperator
+
+origin_bucket: "calitp-gtfs-schedule-raw-v2"
+destination_bucket: "calitp-staging-gtfs-schedule-raw-v2"
+source_name: "xx"
+source_date: {{ yesterday_ds }}

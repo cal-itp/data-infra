@@ -1,0 +1,6 @@
+operator: operators.ReplicateBucketDataOperator
+
+origin_bucket: "calitp-airtable"
+destination_bucket: "calitp-staging-airtable"
+source_name: "xx"
+source_date: {{ yesterday_ds }}
