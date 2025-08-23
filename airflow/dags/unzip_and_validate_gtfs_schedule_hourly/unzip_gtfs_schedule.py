@@ -274,7 +274,7 @@ def airflow_unzip_extracts(
     unzip_extracts(
         data_interval_start,
         data_interval_end,
-        threads=2,
+        threads=1,
         progress=True,
     )
 
