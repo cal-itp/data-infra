@@ -5663,7 +5663,7 @@ files = [
     {file = "ptyprocess-0.7.0-py2.py3-none-any.whl", hash = "sha256:4b41f3967fce3af57cc7e94b888626c18bf37a083e3651ca8feeb66d492fef35"},
     {file = "ptyprocess-0.7.0.tar.gz", hash = "sha256:5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220"},
 ]
-markers = {main = "os_name != \"nt\" or sys_platform != \"win32\" and sys_platform != \"emscripten\"", portfolio = "sys_platform != \"win32\" and sys_platform != \"emscripten\""}
+markers = {main = "sys_platform != \"win32\" and sys_platform != \"emscripten\" or os_name != \"nt\"", portfolio = "sys_platform != \"win32\" and sys_platform != \"emscripten\""}
 
 [[package]]
 name = "pure-eval"
@@ -8926,4 +8926,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11.0, <3.12.0"
-content-hash = "744cec7dd7849669f56ad05b5330a1b9dc3d5c8c66735418c746ff5bf277431c"
+content-hash = "d825343664e490085ee3104f81d62f9912ba2c70b51389a40ac7a47b396ccf9a"
