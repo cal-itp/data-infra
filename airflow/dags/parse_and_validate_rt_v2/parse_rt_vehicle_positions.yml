@@ -1,55 +1,6 @@
-operator: operators.PodOperator
-name: 'parse-rt-vehicle-positions'
-image: 'ghcr.io/cal-itp/data-infra/gtfs-rt-parser-v2:{{image_tag()}}'
+operator: airflow.operators.bash.BashOperator
 pool: rt_parse_pool
+append_env: true
 
-cmds:
-  - python3
-
-arguments:
-  - "gtfs_rt_parser.py"
-  - "parse"
-  - "vehicle_positions"
-  # we run on a delay because of archiver write latency but then we process the prior _hour_
-  - "{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH:mm:ss') }}"
-  - "--verbose"
-  - "--threads=1"
-
-is_delete_operator_pod: true
-get_logs: true
-
-env_vars:
-  CALITP_BUCKET__AIRTABLE: "{{ env_var('CALITP_BUCKET__AIRTABLE') }}"
-  CALITP_BUCKET__GTFS_RT_RAW: "{{ env_var('CALITP_BUCKET__GTFS_RT_RAW') }}"
-  CALITP_BUCKET__GTFS_RT_PARSED: "{{ env_var('CALITP_BUCKET__GTFS_RT_PARSED') }}"
-  CALITP_BUCKET__GTFS_RT_VALIDATION: "{{ env_var('CALITP_BUCKET__GTFS_RT_VALIDATION') }}"
-  CALITP_BUCKET__GTFS_SCHEDULE_RAW: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_RAW') }}"
-  GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
-  GRAAS_SERVER_URL: "{{ env_var('GRAAS_SERVER_URL') }}"
-  SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
-  SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
-
-secrets:
-  - deploy_type: volume
-    deploy_target: /secrets/jobs-data/
-    secret: jobs-data
-    key: service_account.json
-
-k8s_resources:
-  request_memory: 2.0Gi
-  request_cpu: 1
-
-tolerations:
-  - key: pod-role
-    operator: Equal
-    value: computetask
-    effect: NoSchedule
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: pod-role
-          operator: In
-          values:
-          - computetask
+# we run on a delay because of archiver write latency but then we process the prior _hour_
+bash_command: "python3 $HOME/gcs/plugins/scripts/gtfs_rt_parser.py parse vehicle_positions {{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH:mm:ss') }} --threads 1 --verbose"

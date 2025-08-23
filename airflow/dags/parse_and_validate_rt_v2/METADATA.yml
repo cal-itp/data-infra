@@ -5,7 +5,7 @@ tags:
 default_args:
     owner: airflow
     depends_on_past: False
-    start_date: "2025-07-06"
+    start_date: "2025-08-22"
     catchup: False
     email:
       - "hello@calitp.org"
