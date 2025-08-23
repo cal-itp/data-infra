@@ -46,6 +46,7 @@ dependencies = [
     "pendulum (>=2.1.2, <3.0.0)",
     "calitp-data-analysis==2025.6.24",
     "jupyter-server-proxy (>=4.1.1, <5.0.0)",
+    "numpy (>=1.26.4, <2.0.0)"
 ]
 
 [tool.poetry]
