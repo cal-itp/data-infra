@@ -9,3 +9,4 @@ boto3>=1.26.87,<2
 openpyxl==3.1.5
 beautifulsoup4==4.12.3
 astronomer-cosmos
+gtfs-realtime-bindings>=1.0.0
