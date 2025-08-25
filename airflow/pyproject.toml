@@ -18,7 +18,7 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.11.0,<3.12"
-apache-airflow = "2.6.3"
+apache-airflow = "2.7.3"
 pandas = "2.1.4"
 calitp_data_infra = "2025.6.5"
 pyairtable = "2.2.1"

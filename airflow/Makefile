@@ -5,7 +5,7 @@ COMPOSER_ENVIRONMENT_NAME := calitp-development-composer
 COMPOSER_PATH := composer
 COMPOSER_ENVIRONMENT_PATH := $(COMPOSER_PATH)/$(COMPOSER_ENVIRONMENT_NAME)
 
-COMPOSER_VERSION := composer-2.8.6-airflow-2.6.3
+COMPOSER_VERSION := composer-2.8.6-airflow-2.7.3
 COMPOSER_PROJECT := cal-itp-data-infra-staging
 COMPOSER_LOCATION := us-west2
 
