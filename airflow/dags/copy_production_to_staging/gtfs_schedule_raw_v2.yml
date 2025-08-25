@@ -1,0 +1,5 @@
+operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
+source_bucket: calitp-gtfs-schedule-raw-v2
+source_object: schedule/dt={{ ds }}/*
+destination_bucket: calitp-staging-gtfs-schedule-raw-v2
+replace: false

@@ -1,0 +1,17 @@
+description: Copies data from production buckets to staging buckets
+schedule_interval: "@hourly"
+tags:
+  - production
+default_args:
+  owner: airflow
+  depends_on_past: False
+  start_date: "2025-08-22"
+  catchup: False
+  email:
+    - "hello@calitp.org"
+  email_on_failure: True
+  pool: default_pool
+  max_active_dag_runs: 1
+  concurrency: 1
+wait_for_defaults:
+  timeout: 3600
