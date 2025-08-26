@@ -27,7 +27,7 @@ resource "google_composer_environment" "calitp-composer" {
       worker {
         cpu        = 2
         memory_gb  = 8
-        storage_gb = 2
+        storage_gb = 10
         min_count  = 1
         max_count  = 6
       }
