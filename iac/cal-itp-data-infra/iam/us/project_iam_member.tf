@@ -582,6 +582,13 @@ resource "google_project_iam_member" "composer-service-account" {
   project = "cal-itp-data-infra"
 }
 
+# Allow composer to copy data to staging buckets
+resource "google_project_iam_member" "composer-service-account__staging" {
+  role    = "roles/storage.objectUser"
+  member  = "serviceAccount:${google_service_account.composer-service-account.email}"
+  project = "cal-itp-data-infra-staging"
+}
+
 resource "google_project_iam_member" "ms-entra-id-DOT_DDS_Data_Pipeline_and_Warehouse_Users" {
   for_each = toset([
     "roles/viewer",
