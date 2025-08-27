@@ -1,0 +1,5 @@
+operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
+source_bucket: "{{ env_var('CALITP_BUCKET__AGGREGATOR_SCRAPER') }}"
+source_object: gtfs_aggregator_scrape_results/dt={{ ds }}/*
+destination_bucket: calitp-staging-aggregator-scraper
+replace: false

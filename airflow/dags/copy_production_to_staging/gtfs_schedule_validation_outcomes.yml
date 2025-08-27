@@ -1,0 +1,5 @@
+operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
+source_bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY') }}"
+source_object: validation_job_results/dt={{ ds }}/*
+destination_bucket: calitp-staging-gtfs-schedule-validation-hourly
+replace: false

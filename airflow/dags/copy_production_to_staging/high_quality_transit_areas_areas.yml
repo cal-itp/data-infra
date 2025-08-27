@@ -1,0 +1,7 @@
+operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
+source_bucket: "{{ env_var('CALITP_BUCKET__ANALYSIS_OUTPUT_MODELS') }}"
+source_objects:
+  - high_quality_transit_areas_areas/dt={{ ds }}/*
+  - high_quality_transit_areas_stops/dt={{ ds }}/*
+destination_bucket: calitp-staging-analysis-output-models
+replace: false
