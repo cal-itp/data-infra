@@ -54,11 +54,17 @@ def href_matcher(href):
 
 
 def make_http_request(url, key):
-    """Make HTTP request with proper error handling."""
+    """Make HTTP request with proper error handling and timeout."""
     try:
-        response = requests.get(url, headers=headers)
+        # Add timeout to prevent infinite hangs that cause SIGTERM
+        response = requests.get(url, headers=headers, timeout=30)
         response.raise_for_status()
         return response
+    except requests.exceptions.Timeout as e:
+        logging.error(f"Timeout occurred while fetching {url}: {e}")
+        raise AirflowException(
+            f"Request timeout for {key}: The website appears to be unresponsive. {e}"
+        )
     except requests.exceptions.HTTPError as e:
         logging.error(f"HTTP error occurred while fetching {url}: {e}")
         raise AirflowException(f"HTTP error for {key}: {e}")
