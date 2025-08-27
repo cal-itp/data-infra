@@ -236,6 +236,15 @@ resource "google_project_iam_member" "github-actions-terraform" {
   project = "cal-itp-data-infra-staging"
 }
 
+resource "google_project_iam_member" "production-composer-service-account" {
+  for_each = toset([
+    "roles/storage.objectUser"
+  ])
+  role    = each.key
+  member  = "serviceAccount:composer-service-account@cal-itp-data-infra.iam.gserviceaccount.com"
+  project = "cal-itp-data-infra-staging"
+}
+
 resource "google_project_iam_member" "github-actions-service-account" {
   for_each = toset([
     "roles/viewer",
