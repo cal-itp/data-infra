@@ -1,0 +1,17 @@
+operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
+source_bucket: calitp-airtable
+source_objects:
+  - california_transit__county_geography/dt={{ ds }}/*
+  - california_transit__eligibility_programs/dt={{ ds }}/*
+  - california_transit__fare_systems/dt={{ ds }}/*
+  - california_transit__funding_programs/dt={{ ds }}/*
+  - california_transit__gtfs_datasets/dt={{ ds }}/*
+  - california_transit__gtfs_service_data/dt={{ ds }}/*
+  - california_transit__modes/dt={{ ds }}/*
+  - california_transit__ntd_agency_info/dt={{ ds }}/*
+  - california_transit__organizations/dt={{ ds }}/*
+  - california_transit__place_geography/dt={{ ds }}/*
+  - california_transit__rider_requirements/dt={{ ds }}/*
+  - california_transit__services/dt={{ ds }}/*
+destination_bucket: calitp-staging-airtable
+replace: false

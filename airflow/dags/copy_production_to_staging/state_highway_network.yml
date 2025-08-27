@@ -1,0 +1,5 @@
+operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
+source_bucket: calitp-state-geoportal-scrape
+source_object: state_highway_network_geodata/dt={{ ds }}/*
+destination_bucket: calitp-staging-state-geoportal-scrape
+replace: false

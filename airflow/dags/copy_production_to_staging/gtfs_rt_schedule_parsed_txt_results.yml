@@ -1,0 +1,28 @@
+operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
+source_bucket: calitp-gtfs-schedule-parsed-hourly
+source_objects:
+  - agency.txt_parsing_results/dt={{ ds }}/*
+  - areas.txt_parsing_results/dt={{ ds }}/*
+  - attributions.txt_parsing_results/dt={{ ds }}/*
+  - calendar_dates.txt_parsing_results/dt={{ ds }}/*
+  - calendar.txt_parsing_results/dt={{ ds }}/*
+  - fare_attributes.txt_parsing_results/dt={{ ds }}/*
+  - feed_info.txt_parsing_results/dt={{ ds }}/*
+  - fare_leg_rules.txt_parsing_results/dt={{ ds }}/*
+  - fare_media.txt_parsing_results/dt={{ ds }}/*
+  - fare_products.txt_parsing_results/dt={{ ds }}/*
+  - fare_rules.txt_parsing_results/dt={{ ds }}/*
+  - fare_transfer_rules.txt_parsing_results/dt={{ ds }}/*
+  - frequencies.txt_parsing_results/dt={{ ds }}/*
+  - levels.txt_parsing_results/dt={{ ds }}/*
+  - pathways.txt_parsing_results/dt={{ ds }}/*
+  - routes.txt_parsing_results/dt={{ ds }}/*
+  - shapes.txt_parsing_results/dt={{ ds }}/*
+  - stop_areas.txt_parsing_results/dt={{ ds }}/*
+  - stop_times.txt_parsing_results/dt={{ ds }}/*
+  - stops.txt_parsing_results/dt={{ ds }}/*
+  - transfers.txt_parsing_results/dt={{ ds }}/*
+  - translations.txt_parsing_results/dt={{ ds }}/*
+  - trips.txt_parsing_results/dt={{ ds }}/*
+destination_bucket: calitp-staging-gtfs-schedule-parsed-hourly
+replace: false

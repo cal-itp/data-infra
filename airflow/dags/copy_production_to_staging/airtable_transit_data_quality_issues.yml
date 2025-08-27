@@ -1,0 +1,9 @@
+operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
+source_bucket: calitp-airtable
+source_objects:
+  - transit_data_quality_issues__gtfs_datasets/dt={{ ds }}/*
+  - transit_data_quality_issues__issue_types/dt={{ ds }}/*
+  - transit_data_quality_issues__services/dt={{ ds }}/*
+  - transit_data_quality_issues__transit_data_quality_issues/dt={{ ds }}/*
+destination_bucket: calitp-staging-airtable
+replace: false
