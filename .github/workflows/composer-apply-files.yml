@@ -1,6 +1,12 @@
-name: Apply Airflow DAGs
+name: Apply Airflow DAGs and Composer Requirements
 
 on:
+  pull_request:
+    paths:
+      - 'airflow/**'
+      - 'warehouse/**'
+    # branches:
+    #   - 'staging*'
   push:
     branches:
       - 'main'
@@ -9,12 +15,33 @@ on:
       - 'warehouse/**'
 
 jobs:
+  requirements-changed:
+    name: Detect requirements changed
+    runs-on: ubuntu-latest
+
+    outputs:
+      any_changed: ${{ steps.changed.outputs.any_changed }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: tj-actions/changed-files@v46
+        id: changed
+        with:
+          files: 'airflow/requirements.txt'
+
   staging:
     name: Staging
     runs-on: ubuntu-latest
+    needs: [requirements-changed]
+
     permissions:
       contents: read
       id-token: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,16 +53,29 @@ jobs:
           workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
           service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
 
-      - name: Terraform Apply
+      - name: Terraform Apply Airflow
         uses: dflook/terraform-apply@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          path: iac/cal-itp-data-infra-staging/airflow/us
+          path:
+            iac/cal-itp-data-infra-staging/airflow/us
+
+      - name: Terraform Apply Composer
+        uses: dflook/terraform-apply@v1
+        if: ${{ needs.requirements-changed.outputs.any_changed == 'true' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path:
+            iac/cal-itp-data-infra-staging/composer/us
 
   production:
     name: Production
     runs-on: ubuntu-latest
+    needs: [requirements-changed]
+
+    if: ${{ github.ref == 'refs/heads/main' }}
 
     permissions:
       contents: read
@@ -53,9 +93,17 @@ jobs:
           workload_identity_provider: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
           service_account: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
 
-      - name: Terraform Apply
+      - name: Terraform Apply Airflow
         uses: dflook/terraform-apply@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra/airflow/us
+
+      - name: Terraform Apply Composer
+        uses: dflook/terraform-apply@v1
+        if: ${{ needs.requirements-changed.outputs.any_changed == 'true' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: iac/cal-itp-data-infra/composer/us
