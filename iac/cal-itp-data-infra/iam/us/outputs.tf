@@ -517,7 +517,3 @@ output "google_service_account_composer-service-account_email" {
 output "google_service_account_composer-service-account_name" {
   value = google_service_account.composer-service-account.name
 }
-
-output "google_service_account_github-actions-terraform_email" {
-  value = google_service_account.github-actions-terraform.email
-}
