@@ -1,0 +1,28 @@
+operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
+source_bucket: calitp-gtfs-schedule-parsed-hourly
+source_objects:
+  - agency/dt={{ ds }}/*
+  - areas/dt={{ ds }}/*
+  - attributions/dt={{ ds }}/*
+  - calendar/dt={{ ds }}/*
+  - calendar_dates/dt={{ ds }}/*
+  - fare_attributes/dt={{ ds }}/*
+  - fare_leg_rules/dt={{ ds }}/*
+  - fare_media/dt={{ ds }}/*
+  - fare_products/dt={{ ds }}/*
+  - fare_rules/dt={{ ds }}/*
+  - fare_transfer_rules/dt={{ ds }}/*
+  - feed_info/dt={{ ds }}/*
+  - frequencies/dt={{ ds }}/*
+  - levels/dt={{ ds }}/*
+  - pathways/dt={{ ds }}/*
+  - routes/dt={{ ds }}/*
+  - shapes/dt={{ ds }}/*
+  - stop_areas/dt={{ ds }}/*
+  - stop_times/dt={{ ds }}/*
+  - stops/dt={{ ds }}/*
+  - transfers/dt={{ ds }}/*
+  - translations/dt={{ ds }}/*
+  - trips/dt={{ ds }}/*
+destination_bucket: calitp-staging-gtfs-schedule-parsed-hourly
+replace: false

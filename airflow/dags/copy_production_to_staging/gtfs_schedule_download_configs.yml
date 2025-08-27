@@ -1,0 +1,5 @@
+operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
+source_bucket: calitp-gtfs-download-config
+source_object: gtfs_download_configs/dt={{ ds }}/*
+destination_bucket: calitp-staging-gtfs-download-config
+replace: false

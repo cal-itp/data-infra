@@ -1,0 +1,7 @@
+operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
+source_bucket: calitp-gtfs-rt-parsed
+source_objects:
+  - vehicle_positions/dt={{ ds }}/hour={{ ts }}/*
+  - vehicle_positions_outcomes/dt={{ ds }}/hour={{ ts }}/*
+destination_bucket: calitp-staging-gtfs-rt-parsed
+replace: false
