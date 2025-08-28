@@ -42,7 +42,6 @@ dependencies = [
     "siuba>=0.4.0",
     "sqlalchemy-bigquery (>=1.4.4, <2.0.0)",
     "statsmodels==0.14.5",
-    "vega==3.5.0",
     "ydata-profiling[notebook] (>=4.9.0, <5.0.0)"
 ]
 
