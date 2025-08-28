@@ -8348,22 +8348,6 @@ files = [
 ]
 
 [[package]]
-name = "vega"
-version = "3.5.0"
-description = "A Jupyter widget for Vega 5 and Vega-Lite 4"
-optional = false
-python-versions = ">=3.6.1"
-groups = ["main"]
-files = [
-    {file = "vega-3.5.0-py3-none-any.whl", hash = "sha256:69150edbed69725f8bdf3798184e95d68ad8e53be678c1c4b65626e116b2c63e"},
-    {file = "vega-3.5.0.tar.gz", hash = "sha256:1c22877758cef97e81dbb665c83d31f7427bbc804a01503fa2845a35403c54ad"},
-]
-
-[package.dependencies]
-jupyter = ">=1.0.0,<2.0.0"
-pandas = ">=1.0.0,<2.0.0"
-
-[[package]]
 name = "virtualenv"
 version = "20.34.0"
 description = "Virtual Python Environment builder"
@@ -8926,4 +8910,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11.0, <3.12.0"
-content-hash = "d825343664e490085ee3104f81d62f9912ba2c70b51389a40ac7a47b396ccf9a"
+content-hash = "ea0b15a99ed25d28569bb20871d4f28e732acef0ade3adf0beed33629dec15a5"
