@@ -12,8 +12,8 @@ DBT_TARGET = os.environ.get("DBT_TARGET")
 with DAG(
     dag_id="dbt_payments",
     tags=["dbt", "payments"],
-    # Tuesday, Wednesday, Friday at 7am PDT/8am PST (2pm UTC)
-    schedule="0 14 * * 2,3,5,6,7",
+    # Sunday, Tuesday, Wednesday, Friday, Saturday at 7am PDT/8am PST (2pm UTC)
+    schedule="0 14 * * 0,2,3,5,6",
     start_date=datetime(2025, 7, 6),
     catchup=False,
 ):
