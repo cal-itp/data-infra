@@ -1,8 +1,8 @@
 operator: operators.NTDToGCSOperator
 
 year: historical
-product: nonmajor_safety_and_security_events
+product: complete_monthly_ridership_with_adjustments_and_estimates
 bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
-endpoint: resource/9ivb-8ae9.json
+endpoint: resource/8bui-9xvu.json
 parameters:
   $limit: 100000
