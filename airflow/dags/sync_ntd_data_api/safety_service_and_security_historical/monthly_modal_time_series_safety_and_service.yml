@@ -5,4 +5,4 @@ product: monthly_modal_time_series_safety_and_service
 bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
 endpoint: resource/5ti2-5uiv.json
 parameters:
-  $limit: 5000000
+  $limit: 100000
