@@ -13,7 +13,7 @@ with DAG(
     dag_id="dbt_payments",
     tags=["dbt", "payments"],
     # Tuesday, Wednesday, Friday at 7am PDT/8am PST (2pm UTC)
-    schedule="0 14 * * 2,3,5",
+    schedule="0 14 * * 2,3,5,6,7",
     start_date=datetime(2025, 7, 6),
     catchup=False,
 ):
