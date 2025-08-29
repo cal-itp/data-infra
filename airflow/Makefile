@@ -58,10 +58,10 @@ pools:
 		pools set external_table_pool 4 ""
 	poetry run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
-		pools set rt_parse_pool 4 ""
+		pools set rt_parse_pool 1 ""
 	poetry run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
-		pools set rt_validate_pool 4 ""
+		pools set rt_validate_pool 1 ""
 	poetry run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set schedule_parse_pool 4 ""
