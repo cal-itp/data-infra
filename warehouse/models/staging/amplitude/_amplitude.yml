@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: amplitude
     description: Data exported from Amplitude's Data Destination.
-    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    database: "{{ env_var('DEV_SOURCE_GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_amplitude
     tables:
       - name: benefits_events
