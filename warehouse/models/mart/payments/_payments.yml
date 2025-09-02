@@ -672,3 +672,56 @@ models:
       - *ent_num
       - *dt
       - *execution_ts
+
+  - name: fct_payments_authorisations
+    columns:
+      - *organization_name
+      - *organization_source_record_id
+      - *participant_id
+      - name: aggregation_id
+        description: The aggregation that is being authorised. A single aggregation can have multiple authorisations. The authorisations that are submitted depend on the scheme and the result of the initial authorisation (if declined, debt recovery authorisations may be performed).
+      - name: acquirer_id
+        description: The institution that acquired the transaction
+      - name: request_type
+        description: One of (`Card_Check`, `Authorisation`, `Debt Recovery`)
+      - name: transaction_amount
+        description: The amount to authorise
+      - name: currency_code
+        description: The ISO 4217 numeric currency code for the amount to authorise
+      - name: retrieval_reference_number
+      - name: littlepay_reference_number
+      - name: external_reference_number
+      - name: response_code
+        description: Response code - varies based on acquirer and scheme. Generally `00` if successful.
+      - name: status
+        description: Status of authorisation. One of (`Authorised`, `Declined`, `Failed`, `Invalid`, `Lost`, `Stolen`, `Unavailable`, `Unknown`, `Verified`)
+      - name: authorisation_date_time_utc
+      - &lp_export_date
+        name: littlepay_export_date
+        description: |
+          Date of the source file from Littlepay. Date is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - &lp_export_ts
+        name: littlepay_export_ts
+        description: |
+          Timestamp of the source file from Littlepay. Timestamp is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - &lp_line_number
+        name: _line_number
+        description: |
+          Line number of this row in the source file.
+          Some line numbers may be missing because we drop extra copies of rows that are full duplicates of another row.
+      - &payments_input_row_key
+        name: _key
+        description: |
+          Synthetic key composed of Littlepay file date and line number to uniquely identify a row within source data.
+      - name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+      - name: request_type
+      - name: aggregation_id
+      - &_content_hash
+        name: _content_hash
+        description: |
+          Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
+          Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
