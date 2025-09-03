@@ -1,5 +1,5 @@
 operator: airflow.operators.bash.BashOperator
-pool: rt_parse_pool
+pool: rt_validate_pool
 append_env: true
 
 # we run on a delay because of archiver write latency but then we process the prior _hour_
