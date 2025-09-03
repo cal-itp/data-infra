@@ -15,7 +15,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
     workloads_config {
       scheduler {
         cpu        = 1
-        memory_gb  = 1
+        memory_gb  = 2
         storage_gb = 1
         count      = 1
       }
