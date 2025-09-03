@@ -1,4 +1,4 @@
-name: Plan Airflow DAGs
+name: Plan Terraform for Warehouse and DAG changes
 
 on:
   pull_request:
@@ -7,9 +7,69 @@ on:
       - 'warehouse/**'
 
 jobs:
-  staging:
-    name: Staging
+  airflow-changes:
+    name: Detect Airflow Terraform changes
+
     runs-on: ubuntu-latest
+
+    outputs:
+      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
+      production: ${{ steps.production-changes.outputs.all_changed_files }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: tj-actions/changed-files@v46
+        id: staging-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'iac/cal-itp-data-infra-staging/airflow/**/*.tf'
+
+      - uses: tj-actions/changed-files@v46
+        id: production-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'iac/cal-itp-data-infra/airflow/**/*.tf'
+
+  composer-changes:
+    name: Detect Composer Terraform changes
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
+      production: ${{ steps.production-changes.outputs.all_changed_files }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: tj-actions/changed-files@v46
+        id: staging-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'iac/cal-itp-data-infra-staging/composer/**/*.tf'
+
+      - uses: tj-actions/changed-files@v46
+        id: production-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'iac/cal-itp-data-infra/composer/**/*.tf'
+
+  airflow-staging:
+    name: Staging Airflow
+    runs-on: ubuntu-latest
+    needs: [airflow-changes]
+    if: ${{ needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '' }}
 
     permissions:
       contents: read
@@ -20,7 +80,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: 'google-github-actions/auth@v2'
+      - uses: google-github-actions/auth@v2
         with:
           create_credentials_file: 'true'
           project_id: cal-itp-data-infra-staging
@@ -35,9 +95,11 @@ jobs:
           add_github_comment: changes-only
           path: iac/cal-itp-data-infra-staging/airflow/us
 
-  production:
-    name: Production
+  composer-staging:
+    name: Staging Composer
     runs-on: ubuntu-latest
+    needs: [composer-changes]
+    if: ${{ needs.composer-changes.outputs.staging == '[]' || needs.composer-changes.outputs.staging == '' }}
 
     permissions:
       contents: read
@@ -48,7 +110,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: 'google-github-actions/auth@v2'
+      - uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra-staging
+          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+          service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+
+      - name: Terraform Plan
+        uses: dflook/terraform-plan@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          add_github_comment: changes-only
+          path: iac/cal-itp-data-infra-staging/composer/us
+
+  airflow-production:
+    name: Production Airflow
+    runs-on: ubuntu-latest
+    needs: [airflow-changes]
+    if: ${{ needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '' }}
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
         with:
           create_credentials_file: 'true'
           project_id: cal-itp-data-infra
@@ -62,3 +154,33 @@ jobs:
         with:
           add_github_comment: changes-only
           path: iac/cal-itp-data-infra/airflow/us
+
+  composer-production:
+    name: Production Composer
+    runs-on: ubuntu-latest
+    needs: [composer-changes]
+    if: ${{ needs.composer-changes.outputs.production == '[]' || needs.composer-changes.outputs.production == '' }}
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra
+          workload_identity_provider: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+          service_account: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
+
+      - name: Terraform Plan
+        uses: dflook/terraform-plan@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          add_github_comment: changes-only
+          path: iac/cal-itp-data-infra/composer/us
