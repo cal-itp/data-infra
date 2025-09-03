@@ -11,9 +11,9 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "^2.0.0",
-    "@sveltejs/adapter-static": "^2.0.2",
-    "@sveltejs/kit": "^1.30.4",
+    "@sveltejs/adapter-auto": "^6.1.0",
+    "@sveltejs/adapter-static": "^3.0.9",
+    "@sveltejs/kit": "^2.37.0",
     "@types/leaflet": "^1.9.3",
     "bulma": "^0.9.4",
     "colormap": "^2.3.2",
