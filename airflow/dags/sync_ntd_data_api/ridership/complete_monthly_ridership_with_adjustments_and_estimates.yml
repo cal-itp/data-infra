@@ -1,0 +1,8 @@
+operator: operators.NTDToGCSOperator
+
+year: historical
+product: complete_monthly_ridership_with_adjustments_and_estimates
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+endpoint: resource/8bui-9xvu.json
+parameters:
+  $limit: 5000000
