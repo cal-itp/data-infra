@@ -249,3 +249,7 @@ output "google_storage_bucket_calitp-staging-sentry_name" {
 output "google_storage_bucket_calitp-staging-state-geoportal-scrape_name" {
   value = google_storage_bucket.calitp-staging["calitp-staging-state-geoportal-scrape"].name
 }
+
+output "google_storage_bucket_cal-itp-data-infra-enghouse-raw_name" {
+  value = google_storage_bucket.cal-itp-data-infra-enghouse-raw.name
+}
