@@ -12,7 +12,7 @@ default_args:
     email_on_failure: False
     email_on_retry: False
     max_active_dag_runs: 6
-    retries: 1
+    retries: 0
     retry_delay: !timedelta 'minutes: 2'
     concurrency: 5
     #sla: !timedelta 'hours: 2'
