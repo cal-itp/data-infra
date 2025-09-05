@@ -3,7 +3,8 @@ locals {
     fileset("../../../../airflow", "dags/**/*.py"),
     fileset("../../../../airflow", "dags/**/*.yml"),
     fileset("../../../../airflow", "dags/**/*.md"),
-    fileset("../../../../airflow", "plugins/**/*.py")
+    fileset("../../../../airflow", "plugins/**/*.py"),
+    fileset("../../../../airflow", "plugins/**/*.jar")
   )
 
   warehouse_files = setunion(

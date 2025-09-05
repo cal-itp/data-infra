@@ -36,6 +36,7 @@ sentry-sdk = "1.17.0"
 flask = "2.2.5"
 flask-session = "0.5.0"
 connexion = "2.14.2"
+gtfs-realtime-bindings = "^1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"

@@ -15,7 +15,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
     workloads_config {
       scheduler {
         cpu        = 1
-        memory_gb  = 1
+        memory_gb  = 2
         storage_gb = 1
         count      = 1
       }
@@ -26,7 +26,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
       }
       worker {
         cpu        = 2
-        memory_gb  = 4
+        memory_gb  = 8
         storage_gb = 1
         min_count  = 1
         max_count  = 2
@@ -39,7 +39,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
       image_version = "composer-2.8.6-airflow-2.7.3"
 
       airflow_config_overrides = {
-        celery-worker_concurrency                  = 2
+        celery-worker_concurrency                  = 4
         core-dag_file_processor_timeout            = 1200
         core-dagbag_import_timeout                 = 600
         core-dags_are_paused_at_creation           = "True"
