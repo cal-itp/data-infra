@@ -13,6 +13,7 @@ arguments:
   # we run on a delay because of archiver write latency but then we process the prior _hour_
   - "{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH:mm:ss') }}"
   - "--verbose"
+  - "--threads=1"
 
 is_delete_operator_pod: true
 get_logs: true

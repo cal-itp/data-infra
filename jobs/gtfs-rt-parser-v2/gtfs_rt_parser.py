@@ -830,6 +830,9 @@ def main(
     verbose: bool = False,
     base64url: Optional[str] = None,
 ):
+    typer.secho(f"INFO: threads set to {threads}.", fg=typer.colors.MAGENTA)
+    typer.secho(f"INFO: verbose set to {verbose}.", fg=typer.colors.MAGENTA)
+
     hourly_feed_files = FeedStorage(feed_type).get_hour(hour)
     if not hourly_feed_files.valid():
         typer.secho(f"missing: {hourly_feed_files.files_missing_metadata}")
