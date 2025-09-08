@@ -44,7 +44,7 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "found 5158 vehicle_positions files in 136 aggregations to process"
+            "found 24657 vehicle_positions files in 137 aggregations to process"
             in result.stdout
         )
         assert "url filter applied, only processing nope" in result.stdout
@@ -66,12 +66,12 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "found 5158 vehicle_positions files in 136 aggregations to process"
+            "found 24657 vehicle_positions files in 137 aggregations to process"
             in result.stdout
         )
         assert f"url filter applied, only processing {base64url}" in result.stdout
         assert "WARNING: no records at all" in result.stdout
-        assert "saving 38 outcomes" in result.stdout
+        assert "saving 180 outcomes" in result.stdout
 
     def test_trip_updates(self, runner):
         base64url = (
@@ -79,19 +79,26 @@ class TestGtfsRtParser:
         )
         result = runner.invoke(
             app,
-            ["parse", "trip_updates", "2024-10-22T18:00:00", "--base64url", base64url],
+            [
+                "parse",
+                "trip_updates",
+                "2024-10-22T18:00:00",
+                "--base64url",
+                base64url,
+            ],
         )
         assert result.exit_code == 0
         assert (
-            "calitp-staging-pytest/trip_updates/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00"
+            "/trip_updates/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00"
             in result.stdout
         )
-        assert "4489 trip_updates files in 132 aggregations to process" in result.stdout
-
+        assert (
+            "24115 trip_updates files in 134 aggregations to process" in result.stdout
+        )
         assert f"url filter applied, only processing {base64url}" in result.stdout
-        assert "writing 180 lines" in result.stdout
-        assert "calitp-staging-gtfs-rt-parsed" in result.stdout
-        assert "saving 49 outcomes" in result.stdout
+        assert "writing 660 lines" in result.stdout
+        assert "calitp-staging-pytest-parsed" in result.stdout
+        assert "saving 180 outcomes" in result.stdout
 
     def test_service_alerts(self, runner):
         base64url = (
@@ -109,16 +116,19 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "calitp-staging-pytest/service_alerts/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00"
+            "/service_alerts/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00"
             in result.stdout
         )
         assert (
-            "4569 service_alerts files in 131 aggregations to process" in result.stdout
+            "23940 service_alerts files in 133 aggregations to process" in result.stdout
         )
         assert f"url filter applied, only processing {base64url}" in result.stdout
-        assert "writing 24 lines" in result.stdout
-        assert "calitp-staging-gtfs-rt-parsed" in result.stdout
-        assert "saving 30 outcomes" in result.stdout
+        assert "writing 153 lines" in result.stdout
+        assert (
+            "calitp-staging-pytest-parsed/service_alerts_outcomes/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00/service_alerts.jsonl"
+            in result.stdout
+        )
+        assert "saving 180 outcomes" in result.stdout
 
     def test_validation(self, runner):
         base64url = "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbWVuZG9jaW5vL2d0ZnMtcnQtdHJpcC11cGRhdGVz"
@@ -134,14 +144,16 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "calitp-staging-pytest/trip_updates/dt=2024-08-28/hour=2024-08-28T19:00:00+00:00"
+            "/trip_updates/dt=2024-08-28/hour=2024-08-28T19:00:00+00:00"
             in result.stdout
         )
-        assert "3269 trip_updates files in 125 aggregations to process" in result.stdout
+        assert (
+            "22483 trip_updates files in 125 aggregations to process" in result.stdout
+        )
         assert "validating" in result.stdout
         assert "executing rt_validator" in result.stdout
-        assert "writing 50 lines" in result.stdout
-        assert "saving 30 outcomes" in result.stdout
+        assert "writing 180 lines" in result.stdout
+        assert "saving 180 outcomes" in result.stdout
 
     def test_no_recent_schedule_for_vehicle_positions_on_validation(self, runner):
         base64url = (
@@ -159,18 +171,21 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "calitp-staging-pytest/vehicle_positions/dt=2024-09-14/hour=2024-09-14T18:00:00+00:00"
+            "/vehicle_positions/dt=2024-09-14/hour=2024-09-14T18:00:00+00:00"
             in result.stdout
         )
         assert (
-            "5158 vehicle_positions files in 136 aggregations to process"
+            "24657 vehicle_positions files in 137 aggregations to process"
             in result.stdout
         )
         assert f"url filter applied, only processing {base64url}" in result.stdout
         assert "no schedule data found" in result.stdout
         assert "no recent schedule data found" in result.stdout
-        assert "calitp-staging-gtfs-rt-validation" in result.stdout
-        assert "saving 38 outcomes" in result.stdout
+        assert (
+            "calitp-staging-pytest-validation/vehicle_positions_validation_outcomes/dt=2024-09-14/hour=2024-09-14T18:00:00+00:00/vehicle_positions.jsonl"
+            in result.stdout
+        )
+        assert "saving 180 outcomes" in result.stdout
 
     def test_no_output_file_for_vehicle_positions_on_validation(self, runner):
         result = runner.invoke(
@@ -186,15 +201,15 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "calitp-staging-pytest/vehicle_positions/dt=2024-10-17/hour=2024-10-17T00:00:00+00:00"
+            "/vehicle_positions/dt=2024-10-17/hour=2024-10-17T00:00:00+00:00"
             in result.stdout
         )
         assert (
-            "5487 vehicle_positions files in 139 aggregations to process"
+            "25017 vehicle_positions files in 139 aggregations to process"
             in result.stdout
         )
         assert "limit of 3 feeds was set" in result.stdout
         assert "validating" in result.stdout
         assert "executing rt_validator" in result.stdout
-        assert "writing 69 lines" in result.stdout
-        assert "saving 114 outcomes" in result.stdout
+        assert "writing 180 lines" in result.stdout
+        assert "saving 540 outcomes" in result.stdout

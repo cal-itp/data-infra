@@ -2,7 +2,6 @@
 Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited JSON
 """
 import base64
-import concurrent.futures
 import copy
 import datetime
 import gzip
@@ -13,7 +12,6 @@ import subprocess
 import tempfile
 import traceback
 from collections import defaultdict
-from concurrent.futures import Future, ThreadPoolExecutor
 from enum import Enum
 from functools import lru_cache
 from itertools import islice
@@ -830,13 +828,9 @@ def main(
     feed_type: GTFSFeedType,
     hour: datetime.datetime,
     limit: int = 0,
-    threads: int = 4,
     verbose: bool = False,
     base64url: Optional[str] = None,
 ):
-    typer.secho(f"INFO: threads set to {threads}.", fg=typer.colors.MAGENTA)
-    typer.secho(f"INFO: verbose set to {verbose}.", fg=typer.colors.MAGENTA)
-
     hourly_feed_files = FeedStorage(feed_type).get_hour(hour)
     if not hourly_feed_files.valid():
         typer.secho(f"missing: {hourly_feed_files.files_missing_metadata}")
@@ -882,36 +876,21 @@ def main(
     ]
     exceptions = []
 
-    # from https://stackoverflow.com/a/55149491
-    # could be cleaned up a bit with a namedtuple
-
-    # gcfs does not seem to play nicely with multiprocessing right now, so use threads :(
-    # https://github.com/fsspec/gcsfs/issues/379
-
-    with ThreadPoolExecutor(max_workers=threads) as pool:
-        futures: Dict[Future, RTHourlyAggregation] = {
-            pool.submit(
-                parse_and_validate,
-                aggregation=aggregation,
-                verbose=verbose,
-            ): aggregation
-            for aggregation in aggregations_to_process
-        }
-
-        for future in concurrent.futures.as_completed(futures):
-            aggregation = futures[future]
-            try:
-                outcomes.extend(future.result())
-            except KeyboardInterrupt:
-                raise
-            except Exception as e:
-                typer.secho(
-                    f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {aggregation.path}\n{traceback.format_exc()}",
-                    err=True,
-                    fg=typer.colors.RED,
-                )
-                sentry_sdk.capture_exception(e)
-                exceptions.append((e, aggregation.path, traceback.format_exc()))
+    for aggregation in aggregations_to_process:
+        try:
+            outcomes.extend(
+                parse_and_validate(aggregation=aggregation, verbose=verbose)
+            )
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
+            typer.secho(
+                f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {aggregation.path}\n{traceback.format_exc()}",
+                err=True,
+                fg=typer.colors.RED,
+            )
+            sentry_sdk.capture_exception(e)
+            exceptions.append((e, aggregation.path, traceback.format_exc()))
 
     if aggregations_to_process:
         result = GTFSRTJobResult(
