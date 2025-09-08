@@ -172,3 +172,6 @@ schema_fields:
   - name: private_dataset
     type: BOOLEAN
     mode: NULLABLE
+  - name: analysis_name
+    type: STRING
+    mode: NULLABLE
