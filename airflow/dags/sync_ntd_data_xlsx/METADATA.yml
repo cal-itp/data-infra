@@ -11,11 +11,11 @@ default_args:
       - "hello@calitp.org"
     email_on_failure: True
     email_on_retry: False
-    retries: 2  # Increased retries since we have better retry logic
-    retry_delay: !timedelta 'minutes: 5'  # Longer delay between retries
+    retries: 1  # Keep original retry count
+    retry_delay: !timedelta 'minutes: 2'  # Keep original retry delay
     concurrency: 50
     #sla: !timedelta 'hours: 2'
     provide_context: True
 wait_for_defaults:
-    timeout: 7200  # Increased timeout to 2 hours for more reliability
+    timeout: 3600  # Keep original 1 hour timeout
 latest_only: True
