@@ -40,6 +40,12 @@ resource "google_storage_bucket_iam_member" "calitp-staging-composer" {
   role   = "roles/storage.legacyBucketOwner"
 }
 
+resource "google_storage_bucket_iam_member" "calitp-staging-pytest" {
+  bucket = google_storage_bucket.calitp-staging-pytest.name
+  member = "projectViewer:cal-itp-data-infra-staging"
+  role   = "roles/storage.legacyBucketReader"
+}
+
 resource "google_storage_bucket_iam_member" "calitp-staging" {
   for_each = local.environment_buckets
   bucket   = google_storage_bucket.calitp-staging[each.key].name

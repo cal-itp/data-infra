@@ -122,6 +122,18 @@ resource "google_storage_bucket" "calitp-staging-composer" {
   }
 }
 
+resource "google_storage_bucket" "calitp-staging-pytest" {
+  name                        = "calitp-staging-pytest"
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
 resource "google_storage_bucket" "calitp-staging" {
   for_each                    = local.environment_buckets
   name                        = each.key

@@ -28,7 +28,8 @@ locals {
     "calitp-staging-payments-littlepay-raw",
     "calitp-staging-payments-littlepay-raw-v3",
     "calitp-staging-publish",
-    "calitp-staging-pytest",
+    "calitp-staging-pytest-validation",
+    "calitp-staging-pytest-parsed",
     "calitp-staging-sentry",
     "calitp-staging-state-geoportal-scrape",
   ])
