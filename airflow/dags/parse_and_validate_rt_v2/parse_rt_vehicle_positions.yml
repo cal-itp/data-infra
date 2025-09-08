@@ -3,4 +3,4 @@ pool: rt_parse_pool
 append_env: true
 
 # we run on a delay because of archiver write latency but then we process the prior _hour_
-bash_command: "python3 $HOME/gcs/plugins/scripts/gtfs_rt_parser.py parse vehicle_positions {{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH:mm:ss') }} --threads 1 --verbose"
+bash_command: "python3 $HOME/gcs/plugins/scripts/gtfs_rt_parser.py parse vehicle_positions {{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH:mm:ss') }} --verbose"
