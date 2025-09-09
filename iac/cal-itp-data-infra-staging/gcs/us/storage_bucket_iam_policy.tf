@@ -157,7 +157,8 @@ resource "google_storage_bucket_iam_policy" "calitp-staging-pytest" {
     },
     {
       "members": [
-        "projectViewer:cal-itp-data-infra-staging"
+        "projectViewer:cal-itp-data-infra-staging",
+        "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
       ],
       "role": "roles/storage.legacyBucketReader"
     },
@@ -173,6 +174,12 @@ resource "google_storage_bucket_iam_policy" "calitp-staging-pytest" {
         "projectViewer:cal-itp-data-infra-staging"
       ],
       "role": "roles/storage.legacyObjectReader"
+    },
+    {
+      "members": [
+        "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
+      ],
+      "role": "roles/storage.objectAdmin"
     }
   ]
 }
@@ -194,7 +201,8 @@ resource "google_storage_bucket_iam_policy" "calitp-staging" {
     },
     {
       "members": [
-        "projectViewer:cal-itp-data-infra-staging"
+        "projectViewer:cal-itp-data-infra-staging",
+        "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
       ],
       "role": "roles/storage.legacyBucketReader"
     },
@@ -210,6 +218,12 @@ resource "google_storage_bucket_iam_policy" "calitp-staging" {
         "projectViewer:cal-itp-data-infra-staging"
       ],
       "role": "roles/storage.legacyObjectReader"
+    },
+    {
+      "members": [
+        "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
+      ],
+      "role": "roles/storage.objectAdmin"
     }
   ]
 }
