@@ -3,10 +3,13 @@
 # provide_context: true
 # ---
 import logging
+import time
 
 import requests
 from bs4 import BeautifulSoup
 from pydantic import HttpUrl, ValidationError, parse_obj_as
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from airflow.exceptions import AirflowException
 
@@ -25,12 +28,39 @@ xlsx_urls = {
 # We want to look like a real browser, in this case Chrome 139
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1",
     "sec-ch-ua": '"Not A;Brand"',
     "sec-fetch-dest": "document",
     "sec-fetch-mode": "navigate",
     "sec-fetch-site": "none",
     "sec-fetch-user": "?1",
 }
+
+
+def create_robust_session():
+    """Create a requests session with retry strategy and connection pooling."""
+    session = requests.Session()
+
+    # Configure retry strategy for production resilience
+    retry_strategy = Retry(
+        total=3,  # Total number of retries
+        status_forcelist=[429, 500, 502, 503, 504],  # HTTP status codes to retry
+        backoff_factor=1,  # Wait time between retries (1, 2, 4 seconds)
+        raise_on_status=False,  # Don't raise exception on retry-able status codes
+    )
+
+    # Mount adapter with retry strategy
+    adapter = HTTPAdapter(
+        max_retries=retry_strategy, pool_connections=10, pool_maxsize=10
+    )
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+
+    return session
 
 
 def push_url_to_xcom(key, scraped_url, context):
@@ -54,23 +84,73 @@ def href_matcher(href):
 
 
 def make_http_request(url, key):
-    """Make HTTP request with proper error handling and timeout."""
-    try:
-        # Add timeout to prevent infinite hangs that cause SIGTERM
-        response = requests.get(url, headers=headers, timeout=30)
-        response.raise_for_status()
-        return response
-    except requests.exceptions.Timeout as e:
-        logging.error(f"Timeout occurred while fetching {url}: {e}")
-        raise AirflowException(
-            f"Request timeout for {key}: The website appears to be unresponsive. {e}"
-        )
-    except requests.exceptions.HTTPError as e:
-        logging.error(f"HTTP error occurred while fetching {url}: {e}")
-        raise AirflowException(f"HTTP error for {key}: {e}")
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error occurred while fetching {url}: {e}")
-        raise AirflowException(f"Request failed for {key}: {e}")
+    """Make HTTP request with robust error handling, retries, and extended timeout for production."""
+    session = create_robust_session()
+
+    # Increased timeout for production environments with potential network delays
+    # Connect timeout: 10s, Read timeout: 60s (total max ~70s per attempt)
+    timeout = (10, 60)
+
+    max_attempts = 3
+    base_delay = 2
+
+    for attempt in range(max_attempts):
+        try:
+            logging.info(
+                f"Attempting to fetch {url} (attempt {attempt + 1}/{max_attempts}) for {key}"
+            )
+
+            response = session.get(url, headers=headers, timeout=timeout)
+            response.raise_for_status()
+
+            logging.info(f"Successfully fetched {url} for {key}")
+            return response
+
+        except requests.exceptions.Timeout as e:
+            if attempt < max_attempts - 1:
+                delay = base_delay * (2**attempt)  # Exponential backoff
+                logging.warning(
+                    f"Timeout on attempt {attempt + 1} for {key}, retrying in {delay}s: {e}"
+                )
+                time.sleep(delay)
+                continue
+            else:
+                logging.error(f"Final timeout occurred while fetching {url}: {e}")
+                raise AirflowException(
+                    f"Request timeout for {key} after {max_attempts} attempts: The website appears to be unresponsive. {e}"
+                )
+
+        except requests.exceptions.HTTPError as e:
+            if (
+                e.response.status_code in [429, 500, 502, 503, 504]
+                and attempt < max_attempts - 1
+            ):
+                delay = base_delay * (2**attempt)
+                logging.warning(
+                    f"HTTP error {e.response.status_code} on attempt {attempt + 1} for {key}, retrying in {delay}s"
+                )
+                time.sleep(delay)
+                continue
+            else:
+                logging.error(f"HTTP error occurred while fetching {url}: {e}")
+                raise AirflowException(f"HTTP error for {key}: {e}")
+
+        except requests.exceptions.RequestException as e:
+            if attempt < max_attempts - 1:
+                delay = base_delay * (2**attempt)
+                logging.warning(
+                    f"Request error on attempt {attempt + 1} for {key}, retrying in {delay}s: {e}"
+                )
+                time.sleep(delay)
+                continue
+            else:
+                logging.error(f"Error occurred while fetching {url}: {e}")
+                raise AirflowException(
+                    f"Request failed for {key} after {max_attempts} attempts: {e}"
+                )
+
+    # This should never be reached, but just in case
+    raise AirflowException(f"Unexpected error: All retry attempts exhausted for {key}")
 
 
 def parse_html_content(response_text, url, key):
