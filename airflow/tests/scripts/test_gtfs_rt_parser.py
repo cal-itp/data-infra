@@ -89,7 +89,7 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "/trip_updates/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00"
+            "/trip_updates/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00/trip_updates_aHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL2d0ZnNydC8xL1ZlaGljbGVQb3NpdGlvbi5wYg==.jsonl"
             in result.stdout
         )
         assert (
@@ -116,7 +116,7 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "/service_alerts/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00"
+            "/service_alerts/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00/vehicle_positions_aHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL2d0ZnNydC8xL1ZlaGljbGVQb3NpdGlvbi5wYg==.jsonl"
             in result.stdout
         )
         assert (
@@ -144,7 +144,7 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "/trip_updates/dt=2024-08-28/hour=2024-08-28T19:00:00+00:00"
+            "/trip_updates/dt=2024-08-28/hour=2024-08-28T19:00:00+00:00/vehicle_positions_aHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL2d0ZnNydC8xL1ZlaGljbGVQb3NpdGlvbi5wYg==.jsonl"
             in result.stdout
         )
         assert (
@@ -171,7 +171,7 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "/vehicle_positions/dt=2024-09-14/hour=2024-09-14T18:00:00+00:00"
+            "/vehicle_positions/dt=2024-09-14/hour=2024-09-14T18:00:00+00:00/vehicle_positions_aHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL2d0ZnNydC8xL1ZlaGljbGVQb3NpdGlvbi5wYg==.jsonl"
             in result.stdout
         )
         assert (
