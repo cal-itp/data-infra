@@ -9,9 +9,42 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.4
+      - python-requests/2.32.3
     method: GET
-    uri: https://data.transportation.gov/resource/i4ua-cjx4.json?$limit=10
+    uri: http://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
+  response:
+    body:
+      string: "<html>\r\n<head><title>301 Moved Permanently</title></head>\r\n<body>\r\n<center><h1>301
+        Moved Permanently</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '162'
+      Content-Type:
+      - text/html
+      Date:
+      - Tue, 09 Sep 2025 21:34:20 GMT
+      Location:
+      - https://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
+      Server:
+      - nginx
+    status:
+      code: 301
+      message: Moved Permanently
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.3
+    method: GET
+    uri: https://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
   response:
     body:
       string: !!binary |
@@ -50,7 +83,7 @@ interactions:
       Access-Control-Allow-Origin:
       - '*'
       Age:
-      - '0'
+      - '2'
       Connection:
       - keep-alive
       Content-Encoding:
@@ -58,7 +91,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Tue, 08 Jul 2025 01:18:50 GMT
+      - Tue, 09 Sep 2025 21:34:21 GMT
       ETag:
       - '"anVsaWV0dC44NjU4XzlfMTMzQ01mcUxHYmxmMTluUzJYZXN1TGdld0s1ek53---gzipMKINCextl6UnyKTLIewt521-skM--gzip--gzip"'
       Last-Modified:
@@ -84,19 +117,19 @@ interactions:
       X-Socrata-Region:
       - aws-us-east-1-fedramp-prod
       X-Socrata-RequestId:
-      - 911233f94c468b78fe97f36997bb6038
+      - c1eae1d71df057b04de9c383e525e745
     status:
       code: 200
       message: OK
 - request:
     body: !!binary |
-      LS09PT09PT09PT09PT09PT0zODI4Mzk4MDE4MzA4Mjc3NDU2PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      LS09PT09PT09PT09PT09PT0yNDc3NTk1ODU2NzI4MzgxOTAyPT0NCmNvbnRlbnQtdHlwZTogYXBw
       bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAib3BlcmF0aW5nX2V4cGVu
       c2VzX2J5X3R5cGVfYW5kX2FnZW5jeS9tdWx0aV95ZWFyL2R0PTIwMjUtMDYtMDEvZXhlY3V0aW9u
       X3RzPTIwMjUtMDYtMDFUMDA6MDA6MDArMDA6MDAvbXVsdGlfeWVhcl9fb3BlcmF0aW5nX2V4cGVu
-      c2VzX2J5X3R5cGVfYW5kX2FnZW5jeS5qc29ubC5neiJ9DQotLT09PT09PT09PT09PT09PTM4Mjgz
-      OTgwMTgzMDgyNzc0NTY9PQ0KY29udGVudC10eXBlOiBhcHBsaWNhdGlvbi9qc29ubA0KDQofiwgA
-      +nFsaAL/7ZlZb9w2EIDf+ysEP9sAr+HhN9dpi6JpksYJgvZFoHdpm7BWUnU4cYL894xO7+pYrY2k
+      c2VzX2J5X3R5cGVfYW5kX2FnZW5jeS5qc29ubC5neiJ9DQotLT09PT09PT09PT09PT09PTI0Nzc1
+      OTU4NTY3MjgzODE5MDI9PQ0KY29udGVudC10eXBlOiBhcHBsaWNhdGlvbi9qc29ubA0KDQofiwgA
+      XZ3AaAL/7ZlZb9w2EIDf+ysEP9sAr+HhN9dpi6JpksYJgvZFoHdpm7BWUnU4cYL894xO7+pYrY2k
       QNr6wYDJISnO8JvLn47iYh369dHpEcEfenR8tLEfQnvt4tU9Dv7m4+vgPCnj4v44WF/a02BrJPjd
       FVnSLln5olpw4WxRRK4dzAtbOBx9d9YOJNm1jf1HW/gkDov7tJo899Xm7ZZJFjxPVjYKfknuXBZv
       XFwEb2NfVBPPXGqzoh5KroI3mY3zNMmKerN2/8xVIy7r9v65jKLgdTt4GrxMXYbi8TWKN6LhvbMZ
@@ -126,7 +159,7 @@ interactions:
       yeswelKByifmkB49frwhk51ApjR6ObLIMaVGEzrsIbC+MboHZCGkwCPmMluupdRPiqWSK4ZahcVg
       SgU6Qfw1JtqM/sdmI181AJr2QUVM0zDIdyE9L3O/uv0P9QjI1+kRaCXMsEPQjA1NUwe0XdNEFp/3
       TdvYaT3oH6X1lbHw98BCNz5K/i59/Bg/+k2NJOjYSE00ONhAABwzjml/+HUMZAi6TjVs1TWDn78A
-      xSaSGKEeAAANCi0tPT09PT09PT09PT09PT09MzgyODM5ODAxODMwODI3NzQ1Nj09LS0=
+      xSaSGKEeAAANCi0tPT09PT09PT09PT09PT09MjQ3NzU5NTg1NjcyODM4MTkwMj09LS0=
     headers:
       Accept:
       - application/json
@@ -139,14 +172,14 @@ interactions:
       Content-Length:
       - '2102'
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.73.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.73.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/a7c23fa7-2588-4736-86e2-93bfd2d40373
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+        gccl-invocation-id/cf2d4d6d-d4c3-4e5b-a6dc-2ec6aa5bc534
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0zODI4Mzk4MDE4MzA4
-        Mjc3NDU2PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yNDc3NTk1ODU2NzI4
+        MzgxOTAyPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -155,17 +188,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/operating_expenses_by_type_and_agency/multi_year/dt=2025-06-01/execution_ts=2025-06-01T00:00:00+00:00/multi_year__operating_expenses_by_type_and_agency.jsonl.gz/1751937531965075\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/operating_expenses_by_type_and_agency/multi_year/dt=2025-06-01/execution_ts=2025-06-01T00:00:00+00:00/multi_year__operating_expenses_by_type_and_agency.jsonl.gz/1757453662144072\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/operating_expenses_by_type_and_agency%2Fmulti_year%2Fdt=2025-06-01%2Fexecution_ts=2025-06-01T00:00:00%2B00:00%2Fmulti_year__operating_expenses_by_type_and_agency.jsonl.gz\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/operating_expenses_by_type_and_agency%2Fmulti_year%2Fdt=2025-06-01%2Fexecution_ts=2025-06-01T00:00:00%2B00:00%2Fmulti_year__operating_expenses_by_type_and_agency.jsonl.gz?generation=1751937531965075&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/operating_expenses_by_type_and_agency%2Fmulti_year%2Fdt=2025-06-01%2Fexecution_ts=2025-06-01T00:00:00%2B00:00%2Fmulti_year__operating_expenses_by_type_and_agency.jsonl.gz?generation=1757453662144072&alt=media\",\n
         \ \"name\": \"operating_expenses_by_type_and_agency/multi_year/dt=2025-06-01/execution_ts=2025-06-01T00:00:00+00:00/multi_year__operating_expenses_by_type_and_agency.jsonl.gz\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1751937531965075\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1757453662144072\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1722\",\n  \"md5Hash\": \"KYrswhznjK0V+cNXWAphAg==\",\n
-        \ \"crc32c\": \"3d+uYA==\",\n  \"etag\": \"CJPdi/KLrI4DEAE=\",\n  \"timeCreated\":
-        \"2025-07-08T01:18:51.976Z\",\n  \"updated\": \"2025-07-08T01:18:51.976Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-07-08T01:18:51.976Z\",\n  \"timeFinalized\":
-        \"2025-07-08T01:18:51.976Z\"\n}\n"
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1722\",\n  \"md5Hash\": \"plCLcd8d8OSuJoihX4znNA==\",\n
+        \ \"crc32c\": \"XqCAsQ==\",\n  \"etag\": \"CMiM94nRzI8DEAE=\",\n  \"timeCreated\":
+        \"2025-09-09T21:34:22.156Z\",\n  \"updated\": \"2025-09-09T21:34:22.156Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-09-09T21:34:22.156Z\",\n  \"timeFinalized\":
+        \"2025-09-09T21:34:22.156Z\"\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -176,9 +209,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Tue, 08 Jul 2025 01:18:51 GMT
+      - Tue, 09 Sep 2025 21:34:22 GMT
       ETag:
-      - CJPdi/KLrI4DEAE=
+      - CMiM94nRzI8DEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -189,7 +222,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - ABgVH89IrRPXcqLq3xdcy0l1KLVoSACCqi4vblG3ZkSoFivlLEJrso8nV6qdlJKlT7jmnHLn
+      - ABgVH89IuDboro5T76NyU_EPvn9l0labmvo9omp13BoKuydKguZaaLWhEdw-2Eju_n9JQGrV0FwIIqG9L6TW
     status:
       code: 200
       message: OK
@@ -203,9 +236,42 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.4
+      - python-requests/2.32.3
     method: GET
-    uri: https://data.transportation.gov/resource/i4ua-cjx4.json?$limit=10
+    uri: http://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
+  response:
+    body:
+      string: "<html>\r\n<head><title>301 Moved Permanently</title></head>\r\n<body>\r\n<center><h1>301
+        Moved Permanently</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '162'
+      Content-Type:
+      - text/html
+      Date:
+      - Tue, 09 Sep 2025 21:34:22 GMT
+      Location:
+      - https://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
+      Server:
+      - nginx
+    status:
+      code: 301
+      message: Moved Permanently
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.3
+    method: GET
+    uri: https://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
   response:
     body:
       string: !!binary |
@@ -252,7 +318,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Tue, 08 Jul 2025 01:18:52 GMT
+      - Tue, 09 Sep 2025 21:34:22 GMT
       ETag:
       - '"anVsaWV0dC44NjU4XzlfMTMzQ01mcUxHYmxmMTluUzJYZXN1TGdld0s1ek53---gzipMKINCextl6UnyKTLIewt521-skM--gzip--gzip"'
       Last-Modified:
@@ -278,19 +344,19 @@ interactions:
       X-Socrata-Region:
       - aws-us-east-1-fedramp-prod
       X-Socrata-RequestId:
-      - f13ffc7257975abd0d106b34a9f055f8
+      - 714e9314e18eb6cf80316ce00ddde4dc
     status:
       code: 200
       message: OK
 - request:
     body: !!binary |
-      LS09PT09PT09PT09PT09PT03ODQ2NTMzNDgwNTk4NjMwMzE1PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      LS09PT09PT09PT09PT09PT0wMzYwMzAzNDE4OTk1MDM4ODQzPT0NCmNvbnRlbnQtdHlwZTogYXBw
       bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAib3BlcmF0aW5nX2V4cGVu
       c2VzX2J5X3R5cGVfYW5kX2FnZW5jeS9tdWx0aV95ZWFyL2R0PTIwMjUtMDctMDEvZXhlY3V0aW9u
       X3RzPTIwMjUtMDctMDFUMDA6MDA6MDArMDA6MDAvbXVsdGlfeWVhcl9fb3BlcmF0aW5nX2V4cGVu
-      c2VzX2J5X3R5cGVfYW5kX2FnZW5jeS5qc29ubC5neiJ9DQotLT09PT09PT09PT09PT09PTc4NDY1
-      MzM0ODA1OTg2MzAzMTU9PQ0KY29udGVudC10eXBlOiBhcHBsaWNhdGlvbi9qc29ubA0KDQofiwgA
-      /HFsaAL/7ZlZb9w2EIDf+ysEP9sAr+HhN9dpi6JpksYJgvZFoHdpm7BWUnU4cYL894xO7+pYrY2k
+      c2VzX2J5X3R5cGVfYW5kX2FnZW5jeS5qc29ubC5neiJ9DQotLT09PT09PT09PT09PT09PTAzNjAz
+      MDM0MTg5OTUwMzg4NDM9PQ0KY29udGVudC10eXBlOiBhcHBsaWNhdGlvbi9qc29ubA0KDQofiwgA
+      X53AaAL/7ZlZb9w2EIDf+ysEP9sAr+HhN9dpi6JpksYJgvZFoHdpm7BWUnU4cYL894xO7+pYrY2k
       QNr6wYDJISnO8JvLn47iYh369dHpEcEfenR8tLEfQnvt4tU9Dv7m4+vgPCnj4v44WF/a02BrJPjd
       FVnSLln5olpw4WxRRK4dzAtbOBx9d9YOJNm1jf1HW/gkDov7tJo899Xm7ZZJFjxPVjYKfknuXBZv
       XFwEb2NfVBPPXGqzoh5KroI3mY3zNMmKerN2/8xVIy7r9v65jKLgdTt4GrxMXYbi8TWKN6LhvbMZ
@@ -320,7 +386,7 @@ interactions:
       yeswelKByifmkB49frwhk51ApjR6ObLIMaVGEzrsIbC+MboHZCGkwCPmMluupdRPiqWSK4ZahcVg
       SgU6Qfw1JtqM/sdmI181AJr2QUVM0zDIdyE9L3O/uv0P9QjI1+kRaCXMsEPQjA1NUwe0XdNEFp/3
       TdvYaT3oH6X1lbHw98BCNz5K/i59/Bg/+k2NJOjYSE00ONhAABwzjml/+HUMZAi6TjVs1TWDn78A
-      xSaSGKEeAAANCi0tPT09PT09PT09PT09PT09Nzg0NjUzMzQ4MDU5ODYzMDMxNT09LS0=
+      xSaSGKEeAAANCi0tPT09PT09PT09PT09PT09MDM2MDMwMzQxODk5NTAzODg0Mz09LS0=
     headers:
       Accept:
       - application/json
@@ -333,14 +399,14 @@ interactions:
       Content-Length:
       - '2102'
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.73.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.73.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/288b3044-b326-47a8-9fc3-35ecb3109858
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+        gccl-invocation-id/d5c2532e-4f4f-4f7a-b5d5-fe28a1b06a58
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03ODQ2NTMzNDgwNTk4
-        NjMwMzE1PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0wMzYwMzAzNDE4OTk1
+        MDM4ODQzPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -349,17 +415,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/operating_expenses_by_type_and_agency/multi_year/dt=2025-07-01/execution_ts=2025-07-01T00:00:00+00:00/multi_year__operating_expenses_by_type_and_agency.jsonl.gz/1751937533760755\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/operating_expenses_by_type_and_agency/multi_year/dt=2025-07-01/execution_ts=2025-07-01T00:00:00+00:00/multi_year__operating_expenses_by_type_and_agency.jsonl.gz/1757453663920543\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/operating_expenses_by_type_and_agency%2Fmulti_year%2Fdt=2025-07-01%2Fexecution_ts=2025-07-01T00:00:00%2B00:00%2Fmulti_year__operating_expenses_by_type_and_agency.jsonl.gz\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/operating_expenses_by_type_and_agency%2Fmulti_year%2Fdt=2025-07-01%2Fexecution_ts=2025-07-01T00:00:00%2B00:00%2Fmulti_year__operating_expenses_by_type_and_agency.jsonl.gz?generation=1751937533760755&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/operating_expenses_by_type_and_agency%2Fmulti_year%2Fdt=2025-07-01%2Fexecution_ts=2025-07-01T00:00:00%2B00:00%2Fmulti_year__operating_expenses_by_type_and_agency.jsonl.gz?generation=1757453663920543&alt=media\",\n
         \ \"name\": \"operating_expenses_by_type_and_agency/multi_year/dt=2025-07-01/execution_ts=2025-07-01T00:00:00+00:00/multi_year__operating_expenses_by_type_and_agency.jsonl.gz\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1751937533760755\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1757453663920543\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1722\",\n  \"md5Hash\": \"E44h3QMBR9nC9k/hj5FcRA==\",\n
-        \ \"crc32c\": \"PyLzxg==\",\n  \"etag\": \"CPOp+fKLrI4DEAE=\",\n  \"timeCreated\":
-        \"2025-07-08T01:18:53.768Z\",\n  \"updated\": \"2025-07-08T01:18:53.768Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-07-08T01:18:53.768Z\",\n  \"timeFinalized\":
-        \"2025-07-08T01:18:53.768Z\"\n}\n"
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1722\",\n  \"md5Hash\": \"l0wQscQusvzgGPtcHvBCkA==\",\n
+        \ \"crc32c\": \"/FBmfA==\",\n  \"etag\": \"CJ/D44rRzI8DEAE=\",\n  \"timeCreated\":
+        \"2025-09-09T21:34:23.927Z\",\n  \"updated\": \"2025-09-09T21:34:23.927Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-09-09T21:34:23.927Z\",\n  \"timeFinalized\":
+        \"2025-09-09T21:34:23.927Z\"\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -370,9 +436,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Tue, 08 Jul 2025 01:18:53 GMT
+      - Tue, 09 Sep 2025 21:34:23 GMT
       ETag:
-      - CPOp+fKLrI4DEAE=
+      - CJ/D44rRzI8DEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -383,7 +449,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - ABgVH88vtfG4EnWXzEO0XPy_bCmtYSFbkkp5gEzeGcbA22Cgv53cYnlo0MQIQ5tyZO-TGtouOURK-KY
+      - ABgVH88L5xoYEzusUB8mLtmUneuKu0_QoKS3M80IbglpC0lU_6PmkEJsDs-jYGsvZfjyRqbJtc3A7ofDVoao
     status:
       code: 200
       message: OK
@@ -397,10 +463,10 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.73.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.73.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/0398bb9e-69be-4a94-a804-d61f194e3691
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
+        gccl-invocation-id/d9043823-2a25-42a3-9add-18d4708438ef
       accept-encoding:
       - gzip
       content-type:
@@ -414,7 +480,7 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAPpxbGgC/+2ZWW/cNhCA3/srBD/bAK/h4TfXaYuiaZLGCYL2RaB3aZuwVlJ1OHGC/PeMTu/q
+        H4sIAF2dwGgC/+2ZWW/cNhCA3/srBD/bAK/h4TfXaYuiaZLGCYL2RaB3aZuwVlJ1OHGC/PeMTu/q
         WK2NpEDa+sGAySEpzvCby5+O4mId+vXR6RHBH3p0fLSxH0J77eLVPQ7+5uPr4Dwp4+L+OFhf2tNg
         ayT43RVZ0i5Z+aJacOFsUUSuHcwLWzgcfXfWDiTZtY39R1v4JA6L+7SaPPfV5u2WSRY8T1Y2Cn5J
         7lwWb1xcBG9jX1QTz1xqs6IeSq6CN5mN8zTJinqzdv/MVSMu6/b+uYyi4HU7eBq8TF2G4vE1ijei
@@ -457,13 +523,13 @@ interactions:
       Content-Type:
       - application/jsonl
       Date:
-      - Tue, 08 Jul 2025 01:18:54 GMT
+      - Tue, 09 Sep 2025 21:34:24 GMT
       ETag:
-      - CJPdi/KLrI4DEAE=
+      - CMiM94nRzI8DEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Tue, 08 Jul 2025 01:18:51 GMT
+      - Tue, 09 Sep 2025 21:34:22 GMT
       Pragma:
       - no-cache
       Server:
@@ -472,11 +538,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - ABgVH8-JcXZ8IYKNNGSOBgpBbf1JEoB_CNmPWyxRElB2fms1BXz4wgCDwS0zmv2rTyeZsktw
+      - ABgVH8_vWKtfTcAy-VFUj995GMbCPQdycTE8l8KTV7jo8db7p6tfLa0yx8yIcEq0ZI4etRQ
       X-Goog-Generation:
-      - '1751937531965075'
+      - '1757453662144072'
       X-Goog-Hash:
-      - crc32c=3d+uYA==,md5=KYrswhznjK0V+cNXWAphAg==
+      - crc32c=XqCAsQ==,md5=plCLcd8d8OSuJoihX4znNA==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:

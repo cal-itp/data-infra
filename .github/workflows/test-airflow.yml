@@ -71,6 +71,6 @@ jobs:
         working-directory: airflow
         run: poetry install
 
-      - name: Install dependencies
+      - name: Run Pytest
         working-directory: airflow
         run: poetry run pytest
