@@ -1,6 +1,7 @@
 import gzip
 import logging
 import os
+import time
 from io import BytesIO
 from typing import ClassVar, Dict, List, Optional, Tuple
 
@@ -13,6 +14,8 @@ from calitp_data_infra.storage import (  # type: ignore
     make_name_bq_safe,
 )
 from pydantic import HttpUrl, parse_obj_as
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator  # type: ignore
@@ -22,10 +25,37 @@ CLEAN_XLSX_BUCKET = os.environ["CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"]
 
 headers = {
     "User-Agent": "CalITP/1.0.0",
+    "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,*/*",
+    "Accept-Language": "en-US,en;q=0.5",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
     "sec-ch-ua": '"CalITP";v="1"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"macOS"',
 }
+
+
+def create_robust_download_session():
+    """Create a requests session optimized for large file downloads with retry strategy."""
+    session = requests.Session()
+
+    # Configure retry strategy for production resilience
+    retry_strategy = Retry(
+        total=3,  # Total number of retries
+        status_forcelist=[429, 500, 502, 503, 504],  # HTTP status codes to retry
+        backoff_factor=1,  # Wait time between retries (1, 2, 4 seconds)
+        raise_on_status=False,  # Don't raise exception on retry-able status codes
+    )
+
+    # Mount adapter with retry strategy and larger connection pool for file downloads
+    adapter = HTTPAdapter(
+        max_retries=retry_strategy, pool_connections=5, pool_maxsize=5
+    )
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+
+    return session
+
 
 # Map product and year combinations to their xcom keys for dynamic url scraping
 xcom_keys = {
@@ -101,17 +131,97 @@ class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
         arbitrary_types_allowed = True
 
     def _make_request(self, url: str) -> bytes:
-        """Make HTTP request with proper error handling."""
-        try:
-            response = requests.get(url, headers=headers)
-            response.raise_for_status()
-            return response.content
-        except requests.exceptions.HTTPError as e:
-            logging.error(f"HTTP error occurred: {e}")
-            raise AirflowException(f"HTTP error in XLSX download: {e}")
-        except requests.exceptions.RequestException as e:
-            logging.error(f"Request error occurred: {e}")
-            raise AirflowException(f"Error downloading XLSX file: {e}")
+        """Make HTTP request with robust error handling, retries, and extended timeout for large file downloads."""
+        session = create_robust_download_session()
+
+        # Extended timeout for large XLSX file downloads in production
+        # Connect timeout: 15s, Read timeout: 300s (5 minutes) for large files
+        timeout = (15, 300)
+
+        max_attempts = 3
+        base_delay = 3
+
+        for attempt in range(max_attempts):
+            try:
+                logging.info(
+                    f"Attempting to download XLSX file from {url} (attempt {attempt + 1}/{max_attempts})"
+                )
+
+                response = session.get(
+                    url, headers=headers, timeout=timeout, stream=True
+                )
+                response.raise_for_status()
+
+                # Download content in chunks to handle large files better
+                content = b""
+                content_length = response.headers.get("content-length")
+                if content_length:
+                    logging.info(
+                        f"Downloading file of size: {int(content_length):,} bytes"
+                    )
+
+                for chunk in response.iter_content(chunk_size=8192):
+                    if chunk:  # filter out keep-alive chunks
+                        content += chunk
+
+                logging.info(
+                    f"Successfully downloaded XLSX file ({len(content):,} bytes)"
+                )
+                return content
+
+            except requests.exceptions.Timeout as e:
+                if attempt < max_attempts - 1:
+                    delay = base_delay * (2**attempt)  # Exponential backoff
+                    logging.warning(
+                        f"Timeout on attempt {attempt + 1} for XLSX download, retrying in {delay}s: {e}"
+                    )
+                    time.sleep(delay)
+                    continue
+                else:
+                    logging.error(
+                        f"Final timeout occurred while downloading XLSX file: {e}"
+                    )
+                    raise AirflowException(
+                        f"XLSX download timeout after {max_attempts} attempts: The file download appears to be unresponsive. {e}"
+                    )
+
+            except requests.exceptions.HTTPError as e:
+                if (
+                    e.response.status_code in [429, 500, 502, 503, 504]
+                    and attempt < max_attempts - 1
+                ):
+                    delay = base_delay * (2**attempt)
+                    logging.warning(
+                        f"HTTP error {e.response.status_code} on attempt {attempt + 1} for XLSX download, retrying in {delay}s"
+                    )
+                    time.sleep(delay)
+                    continue
+                else:
+                    logging.error(
+                        f"HTTP error occurred while downloading XLSX file: {e}"
+                    )
+                    raise AirflowException(f"HTTP error in XLSX download: {e}")
+
+            except requests.exceptions.RequestException as e:
+                if attempt < max_attempts - 1:
+                    delay = base_delay * (2**attempt)
+                    logging.warning(
+                        f"Request error on attempt {attempt + 1} for XLSX download, retrying in {delay}s: {e}"
+                    )
+                    time.sleep(delay)
+                    continue
+                else:
+                    logging.error(
+                        f"Request error occurred while downloading XLSX file: {e}"
+                    )
+                    raise AirflowException(
+                        f"Error downloading XLSX file after {max_attempts} attempts: {e}"
+                    )
+
+        # This should never be reached, but just in case
+        raise AirflowException(
+            "Unexpected error: All retry attempts exhausted for XLSX download"
+        )
 
     def _validate_content(self, content: bytes) -> Optional[bytes]:
         """Validate downloaded content."""
