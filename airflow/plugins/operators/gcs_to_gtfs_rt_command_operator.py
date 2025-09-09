@@ -1,17 +1,16 @@
-import json
-import os
-import pendulum
 from typing import Sequence
 
-from airflow.hooks.base import BaseHook
+import pendulum
+
 from airflow.models import BaseOperator, DagRun
-from airflow.models.connection import Connection
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
 class UniquePartitionValues:
-    def __init__(self, gcs_hook: GCSHook, bucket_name: str, partition_name: str, feed: str) -> None:
+    def __init__(
+        self, gcs_hook: GCSHook, bucket_name: str, partition_name: str, feed: str
+    ) -> None:
         self.gcs_hook = gcs_hook
         self.bucket_name = bucket_name
         self.partition_name = partition_name
@@ -74,7 +73,7 @@ class GCSToGTFSRTCommandOperator(BaseOperator):
             gcs_hook=self.gcs_hook(),
             bucket_name=self.bucket_name(),
             feed=self.feed,
-            partition_name="base64_url"
+            partition_name="base64_url",
         )
 
     def command_builder(self) -> CommandBuilder:
@@ -87,14 +86,16 @@ class GCSToGTFSRTCommandOperator(BaseOperator):
                 "{timestamp}",
                 "--base64url",
                 "{base64_url}",
-                "--verbose"
+                "--verbose",
             ]
         )
 
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
         logical_date: pendulum.DateTime = pendulum.instance(dag_run.logical_date)
-        timestamp = logical_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH:mm:ss')
+        timestamp = logical_date.replace(minute=0, second=0).format(
+            "YYYY-MM-DDTHH:mm:ss"
+        )
         commands = [
             self.command_builder().format(timestamp=timestamp, base64_url=base64_url)
             for base64_url in self.base64_urls().get(logical_date)

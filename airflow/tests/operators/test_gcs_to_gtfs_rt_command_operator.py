@@ -1,16 +1,11 @@
-import gzip
-import json
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 import pytest
 from operators.gcs_to_gtfs_rt_command_operator import GCSToGTFSRTCommandOperator
 
-from airflow.hooks.base import BaseHook
-from airflow.models.connection import Connection
 from airflow.models.dag import DAG
 from airflow.models.taskinstance import TaskInstance
-from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
 class TestGCSToGTFSRTCommandOperator:
@@ -59,13 +54,12 @@ class TestGCSToGTFSRTCommandOperator:
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert (
-            "python3 " \
-            "$HOME/gcs/plugins/scripts/gtfs_rt_parser.py " \
-            "parse " \
-            "service_alerts " \
-            "2024-10-22T18:00:00 " \
-            "--base64url " \
-            "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3NlcnZpY2VhbGVydHM_YWdlbmN5PUFN " \
-            "--verbose"
-            in xcom_value
+            "python3 "
+            "$HOME/gcs/plugins/scripts/gtfs_rt_parser.py "
+            "parse "
+            "service_alerts "
+            "2024-10-22T18:00:00 "
+            "--base64url "
+            "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3NlcnZpY2VhbGVydHM_YWdlbmN5PUFN "
+            "--verbose" in xcom_value
         )
