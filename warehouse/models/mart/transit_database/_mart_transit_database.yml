@@ -346,6 +346,9 @@ models:
       - name: private_dataset
         description: |
           If True, indicates that dataset is marked non-public and the feeds will not be published to any public open data portal.
+      - name: analysis_name
+        description: |
+          Disambiguated name for GTFS-feed level analyses and dashboards.
       - *valid_from_actual
       - *valid_to_actual
       - *is_current_actual

@@ -51,6 +51,7 @@ int_transit_database__gtfs_datasets_dim AS (
         base64_url,
         type,
         private_dataset,
+        analysis_name,
         _is_current,
         _valid_from,
         _valid_to

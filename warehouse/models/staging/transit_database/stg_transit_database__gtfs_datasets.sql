@@ -102,6 +102,7 @@ stg_transit_database__gtfs_datasets AS (
             WHEN data = "GTFS TripUpdates" THEN "trip_updates"
         END AS type,
         private_dataset,
+        analysis_name,
         ts,
         dt
     FROM construct_base64_url
