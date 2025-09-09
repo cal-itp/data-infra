@@ -1,0 +1,15 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+post_hook: |
+  SELECT *
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates
+  LIMIT 1;
+source_objects:
+  - "complete_monthly_ridership_with_adjustments_and_estimates/historical/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd__ridership.historical__complete_monthly_ridership_with_adjustments_and_estimates"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "complete_monthly_ridership_with_adjustments_and_estimates/historical/{dt:DATE}/{execution_ts:TIMESTAMP}"
