@@ -131,15 +131,27 @@ class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
         arbitrary_types_allowed = True
 
     def _make_request(self, url: str) -> bytes:
-        """Make HTTP request with robust error handling, retries, and extended timeout for large file downloads."""
-        session = create_robust_download_session()
+        """Make HTTP request with robust error handling, retries, and optimized timeout for large file downloads."""
+        # Create a fresh session for each download attempt to avoid connection reuse issues
+        session = requests.Session()
 
-        # Extended timeout for large XLSX file downloads in production
-        # Connect timeout: 15s, Read timeout: 300s (5 minutes) for large files
-        timeout = (15, 300)
+        # Disable urllib3 retries to handle retries at our level
+        from requests.adapters import HTTPAdapter
+        from urllib3.util.retry import Retry
 
-        max_attempts = 3
-        base_delay = 3
+        retry_strategy = Retry(total=0)  # Disable urllib3 retries
+        adapter = HTTPAdapter(
+            max_retries=retry_strategy, pool_connections=1, pool_maxsize=1
+        )
+        session.mount("http://", adapter)
+        session.mount("https://", adapter)
+
+        # Shorter timeout but more attempts - better for unreliable connections
+        # Connect timeout: 30s, Read timeout: 120s (2 minutes) per attempt
+        timeout = (30, 120)
+
+        max_attempts = 5  # More attempts with shorter timeouts
+        base_delay = 5
 
         for attempt in range(max_attempts):
             try:
@@ -152,37 +164,58 @@ class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
                 )
                 response.raise_for_status()
 
-                # Download content in chunks to handle large files better
+                # Download content in chunks with progress tracking
                 content = b""
                 content_length = response.headers.get("content-length")
                 if content_length:
-                    logging.info(
-                        f"Downloading file of size: {int(content_length):,} bytes"
-                    )
+                    total_size = int(content_length)
+                    logging.info(f"Downloading file of size: {total_size:,} bytes")
+                else:
+                    total_size = None
+                    logging.info("Downloading file (size unknown)")
 
-                for chunk in response.iter_content(chunk_size=8192):
+                downloaded = 0
+                chunk_size = 32768  # 32KB chunks for better performance
+
+                for chunk in response.iter_content(chunk_size=chunk_size):
                     if chunk:  # filter out keep-alive chunks
                         content += chunk
+                        downloaded += len(chunk)
+
+                        # Log progress every 10MB
+                        if downloaded % (10 * 1024 * 1024) == 0:
+                            if total_size:
+                                progress = (downloaded / total_size) * 100
+                                logging.info(
+                                    f"Download progress: {downloaded:,} / {total_size:,} bytes ({progress:.1f}%)"
+                                )
+                            else:
+                                logging.info(f"Download progress: {downloaded:,} bytes")
 
                 logging.info(
                     f"Successfully downloaded XLSX file ({len(content):,} bytes)"
                 )
                 return content
 
-            except requests.exceptions.Timeout as e:
+            except (
+                requests.exceptions.Timeout,
+                requests.exceptions.ConnectionError,
+            ) as e:
                 if attempt < max_attempts - 1:
-                    delay = base_delay * (2**attempt)  # Exponential backoff
+                    delay = base_delay * (
+                        2**attempt
+                    )  # Exponential backoff: 5s, 10s, 20s, 40s
                     logging.warning(
-                        f"Timeout on attempt {attempt + 1} for XLSX download, retrying in {delay}s: {e}"
+                        f"Network error on attempt {attempt + 1} for XLSX download, retrying in {delay}s: {e}"
                     )
                     time.sleep(delay)
                     continue
                 else:
                     logging.error(
-                        f"Final timeout occurred while downloading XLSX file: {e}"
+                        f"Final network error occurred while downloading XLSX file: {e}"
                     )
                     raise AirflowException(
-                        f"XLSX download timeout after {max_attempts} attempts: The file download appears to be unresponsive. {e}"
+                        f"XLSX download failed after {max_attempts} attempts due to network issues: {e}"
                     )
 
             except requests.exceptions.HTTPError as e:
@@ -217,6 +250,9 @@ class NtdDataProductXLSXExtract(PartitionedGCSArtifact):
                     raise AirflowException(
                         f"Error downloading XLSX file after {max_attempts} attempts: {e}"
                     )
+            finally:
+                # Always close the session to free resources
+                session.close()
 
         # This should never be reached, but just in case
         raise AirflowException(
