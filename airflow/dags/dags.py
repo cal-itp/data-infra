@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 
-import macros
 import requests
 from gusty import create_dag
 
@@ -55,7 +54,12 @@ for dag_directory in dag_directories:
         task_group_defaults={"tooltip": "this is a default tooltip"},
         wait_for_defaults={"retries": 24, "check_existence": True, "timeout": 10 * 60},
         latest_only=False,
-        user_defined_macros=macros.data_infra_macros,
+        user_defined_macros={
+            "image_tag": lambda: "development"
+            if os.environ["AIRFLOW_ENV"] == "development"
+            else "latest",
+            "env_var": os.environ.get,
+        },
         default_args={
             "on_failure_callback": log_failure_to_slack,
             # "on_retry_callback": log_failure_to_slack,
