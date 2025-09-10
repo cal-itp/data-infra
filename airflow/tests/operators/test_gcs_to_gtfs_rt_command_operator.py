@@ -37,7 +37,6 @@ class TestGCSToGTFSRTCommandOperator:
         )
 
     @pytest.mark.vcr
-    @pytest.mark.focus
     def test_execute(
         self,
         test_dag: DAG,
