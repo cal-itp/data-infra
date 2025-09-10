@@ -24,5 +24,8 @@ with DAG(
             )
 
             BashOperator.partial(
-                task_id=f"{process}_rt_{feed}", append_env=True, do_xcom_push=False
+                task_id=f"{process}_rt_{feed}",
+                pool=f"rt_{process}_pool",
+                append_env=True,
+                do_xcom_push=False,
             ).expand(bash_command=XComArg(commands))
