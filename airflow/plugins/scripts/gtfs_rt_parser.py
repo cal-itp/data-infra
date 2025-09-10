@@ -421,7 +421,7 @@ class HourlyFeedQuery:
         return [
             RTHourlyAggregation(
                 step=self.step,
-                filename=f"{self.feed_type.value}{JSONL_GZIP_EXTENSION}",
+                filename=f"{self.feed_type.value}_{base64_url}{JSONL_GZIP_EXTENSION}",
                 first_extract=entries[0],
                 extracts=entries,
             )

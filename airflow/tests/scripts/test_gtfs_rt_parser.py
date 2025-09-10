@@ -89,7 +89,7 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "/trip_updates/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00"
+            "calitp-staging-pytest-parsed/trip_updates_outcomes/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00/trip_updates_aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1TQQ==.jsonl"
             in result.stdout
         )
         assert (
@@ -116,16 +116,12 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "/service_alerts/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00"
-            in result.stdout
-        )
-        assert (
             "23940 service_alerts files in 133 aggregations to process" in result.stdout
         )
         assert f"url filter applied, only processing {base64url}" in result.stdout
         assert "writing 153 lines" in result.stdout
         assert (
-            "calitp-staging-pytest-parsed/service_alerts_outcomes/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00/service_alerts.jsonl"
+            "calitp-staging-pytest-parsed/service_alerts_outcomes/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00/service_alerts_aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3NlcnZpY2VhbGVydHM_YWdlbmN5PUFN.jsonl"
             in result.stdout
         )
         assert "saving 180 outcomes" in result.stdout
@@ -144,7 +140,7 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "/trip_updates/dt=2024-08-28/hour=2024-08-28T19:00:00+00:00"
+            "calitp-staging-pytest-validation/trip_updates_validation_outcomes/dt=2024-08-28/hour=2024-08-28T19:00:00+00:00/trip_updates_aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbWVuZG9jaW5vL2d0ZnMtcnQtdHJpcC11cGRhdGVz.jsonl"
             in result.stdout
         )
         assert (
@@ -171,7 +167,7 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "/vehicle_positions/dt=2024-09-14/hour=2024-09-14T18:00:00+00:00"
+            "calitp-staging-pytest/vehicle_positions/dt=2024-09-14/hour=2024-09-14T18:00:00+00:00/ts=2024-09-14T18:00:00+00:00/base64_url=aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3ZlaGljbGVwb3NpdGlvbnM_YWdlbmN5PVNJ/feed"
             in result.stdout
         )
         assert (
@@ -182,7 +178,7 @@ class TestGtfsRtParser:
         assert "no schedule data found" in result.stdout
         assert "no recent schedule data found" in result.stdout
         assert (
-            "calitp-staging-pytest-validation/vehicle_positions_validation_outcomes/dt=2024-09-14/hour=2024-09-14T18:00:00+00:00/vehicle_positions.jsonl"
+            "calitp-staging-pytest-validation/vehicle_positions_validation_outcomes/dt=2024-09-14/hour=2024-09-14T18:00:00+00:00/vehicle_positions_aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3ZlaGljbGVwb3NpdGlvbnM_YWdlbmN5PVNJ.jsonl"
             in result.stdout
         )
         assert "saving 180 outcomes" in result.stdout
