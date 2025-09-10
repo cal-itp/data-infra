@@ -120,7 +120,7 @@ sources:
       This file will be updated periodically by FTA to include data for subsequent months, and to incorporate revisions
       to prior months in the calendar year made by the transit properties. In some cases, this may include revisions to data
       from previous report years.
-    database: "{{ env_var('DEV_SOURCE_GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_ntd__ridership
     tables:
       - name: historical__complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_upt
