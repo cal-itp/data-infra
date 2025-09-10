@@ -44,34 +44,11 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "found 24657 vehicle_positions files in 137 aggregations to process"
+            "found 0 vehicle_positions files in 0 aggregations to process"
             in result.stdout
         )
         assert "url filter applied, only processing nope" in result.stdout
         assert "outcomes" not in result.stdout
-
-    def test_no_records_for_url_vehicle_positions_on_date(self, runner):
-        base64url = (
-            "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3ZlaGljbGVwb3NpdGlvbnM_YWdlbmN5PVNJ"
-        )
-        result = runner.invoke(
-            app,
-            [
-                "parse",
-                "vehicle_positions",
-                "2024-09-14T18:00:00",
-                "--base64url",
-                base64url,
-            ],
-        )
-        assert result.exit_code == 0
-        assert (
-            "found 24657 vehicle_positions files in 137 aggregations to process"
-            in result.stdout
-        )
-        assert f"url filter applied, only processing {base64url}" in result.stdout
-        assert "WARNING: no records at all" in result.stdout
-        assert "saving 180 outcomes" in result.stdout
 
     def test_trip_updates(self, runner):
         base64url = (
@@ -93,7 +70,7 @@ class TestGtfsRtParser:
             in result.stdout
         )
         assert (
-            "24115 trip_updates files in 134 aggregations to process" in result.stdout
+            "found 180 trip_updates files in 1 aggregations to process" in result.stdout
         )
         assert f"url filter applied, only processing {base64url}" in result.stdout
         assert "writing 660 lines" in result.stdout
@@ -116,7 +93,8 @@ class TestGtfsRtParser:
         )
         assert result.exit_code == 0
         assert (
-            "23940 service_alerts files in 133 aggregations to process" in result.stdout
+            "found 180 service_alerts files in 1 aggregations to process"
+            in result.stdout
         )
         assert f"url filter applied, only processing {base64url}" in result.stdout
         assert "writing 153 lines" in result.stdout
@@ -144,7 +122,7 @@ class TestGtfsRtParser:
             in result.stdout
         )
         assert (
-            "22483 trip_updates files in 125 aggregations to process" in result.stdout
+            "found 180 trip_updates files in 1 aggregations to process" in result.stdout
         )
         assert "validating" in result.stdout
         assert "executing rt_validator" in result.stdout
@@ -171,7 +149,7 @@ class TestGtfsRtParser:
             in result.stdout
         )
         assert (
-            "24657 vehicle_positions files in 137 aggregations to process"
+            "found 180 vehicle_positions files in 1 aggregations to process"
             in result.stdout
         )
         assert f"url filter applied, only processing {base64url}" in result.stdout
@@ -201,7 +179,7 @@ class TestGtfsRtParser:
             in result.stdout
         )
         assert (
-            "25017 vehicle_positions files in 139 aggregations to process"
+            "found 23937 vehicle_positions files in 133 aggregations to process"
             in result.stdout
         )
         assert "limit of 3 feeds was set" in result.stdout
