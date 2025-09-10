@@ -7,7 +7,9 @@ import datetime
 import gzip
 import hashlib
 import json
+import logging
 import os
+import re
 import subprocess
 import tempfile
 import traceback
@@ -15,7 +17,7 @@ from collections import defaultdict
 from enum import Enum
 from functools import lru_cache
 from itertools import islice
-from typing import Any, ClassVar, Dict, List, Optional, Tuple
+from typing import Any, ClassVar, Dict, List, Optional, Tuple, Type
 
 import gcsfs  # type: ignore
 import pendulum
@@ -23,21 +25,26 @@ import sentry_sdk
 import typer
 from calitp_data_infra.storage import (  # type: ignore
     JSONL_GZIP_EXTENSION,
+    PARTITIONED_ARTIFACT_METADATA_KEY,
     GTFSDownloadConfig,
     GTFSFeedType,
     GTFSRTFeedExtract,
     GTFSScheduleFeedExtract,
     PartitionedGCSArtifact,
+    PartitionType,
     ProcessingOutcome,
+    ValidationError,
     fetch_all_in_partition,
     get_fs,
     make_name_bq_safe,
+    serialize_partitions,
 )
-from google.cloud.storage import Blob  # type: ignore
+from google.cloud import storage  # type: ignore
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2  # type: ignore
 from pydantic import BaseModel, Field, validator
+from pydantic.tools import parse_obj_as
 
 JAR_DEFAULT = os.path.normpath(
     os.path.join(
@@ -436,8 +443,8 @@ class HourlyFeedFiles:
     def __init__(
         self,
         files: List[GTFSRTFeedExtract],
-        files_missing_metadata: List[Blob],
-        files_invalid_metadata: List[Blob],
+        files_missing_metadata: List[storage.Blob],
+        files_invalid_metadata: List[storage.Blob],
     ):
         self.files = files
         self.files_missing_metadata = files_missing_metadata
@@ -463,10 +470,86 @@ class FeedStorage:
     def __init__(self, feed_type: GTFSFeedType):
         self.feed_type = feed_type
 
+    # TODO: this should really use a typevar
+    # This contains several assignment ignores because they are actually ClassVars.
+    # Maybe the underlying abstract property definition is an anti-pattern.
+    def fetch_all_in_partition(
+        self,
+        cls: Type[PartitionedGCSArtifact],
+        partitions: Dict[str, PartitionType],
+        bucket: Optional[str] = None,
+        table: Optional[str] = None,
+        match_glob: bool = None,
+        verbose: bool = False,
+    ) -> Tuple[List[PartitionedGCSArtifact], List[storage.Blob], List[storage.Blob]]:
+        if not bucket:
+            bucket = cls.bucket  # type: ignore[assignment]
+
+            if not isinstance(bucket, str):
+                raise TypeError(
+                    f"must either pass bucket, or the bucket must resolve to a string; got {type(bucket)}"  # noqa: E702
+                )
+
+        if not table:
+            table = cls.table  # type: ignore[assignment]
+
+            if not isinstance(table, str):
+                raise TypeError(
+                    f"must either pass table, or the table must resolve to a string; got {type(table)}"  # noqa: E702
+                )
+
+        prefix = "/".join(
+            [
+                table,
+                *serialize_partitions(partitions),
+                "",
+            ]
+        )
+        if verbose:
+            print(f"listing all files in {bucket}/{prefix}")
+        client = storage.Client()
+        # once Airflow is upgraded to Python 3.9, can use:
+        # files = client.list_blobs(bucket.removeprefix("gs://"), prefix=prefix, delimiter=None)
+        files = client.list_blobs(
+            re.sub(r"^gs://", "", bucket),
+            prefix=prefix,
+            match_glob=match_glob,
+        )
+
+        parsed: List[PartitionedGCSArtifact] = []
+        blobs_with_missing_metadata: List[storage.Blob] = []
+        blobs_with_invalid_metadata: List[storage.Blob] = []
+
+        for file in files:
+            try:
+                parsed.append(
+                    parse_obj_as(
+                        cls,
+                        json.loads(file.metadata[PARTITIONED_ARTIFACT_METADATA_KEY]),
+                    )
+                )
+            except (TypeError, KeyError):
+                logging.exception(f"metadata missing on {bucket}/{file.name}")
+                blobs_with_missing_metadata.append(file)
+            except ValidationError:
+                logging.exception(f"invalid metadata found on {bucket}/{file.name}")
+                blobs_with_invalid_metadata.append(file)
+
+        return parsed, blobs_with_missing_metadata, blobs_with_invalid_metadata
+
     @lru_cache
-    def get_hour(self, hour: datetime.datetime) -> HourlyFeedFiles:
+    def get_hour(
+        self, hour: datetime.datetime, base64_url: Optional[str] = None
+    ) -> HourlyFeedFiles:
         pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
-        files, files_missing_metadata, files_invalid_metadata = fetch_all_in_partition(
+        match_glob = "**/feed"
+        if base64_url is not None:
+            match_glob = f"**/base64_url={base64_url}/feed"
+        (
+            files,
+            files_missing_metadata,
+            files_invalid_metadata,
+        ) = self.fetch_all_in_partition(
             cls=GTFSRTFeedExtract,
             partitions={
                 "dt": pendulum_hour.date(),
@@ -474,6 +557,7 @@ class FeedStorage:
             },
             table=self.feed_type.value,
             verbose=True,
+            match_glob=match_glob,
         )
         return HourlyFeedFiles(files, files_missing_metadata, files_invalid_metadata)
 
@@ -831,7 +915,7 @@ def main(
     verbose: bool = False,
     base64url: Optional[str] = None,
 ):
-    hourly_feed_files = FeedStorage(feed_type).get_hour(hour)
+    hourly_feed_files = FeedStorage(feed_type).get_hour(hour=hour, base64_url=base64url)
     if not hourly_feed_files.valid():
         typer.secho(f"missing: {hourly_feed_files.files_missing_metadata}")
         typer.secho(f"invalid: {hourly_feed_files.files_invalid_metadata}")
