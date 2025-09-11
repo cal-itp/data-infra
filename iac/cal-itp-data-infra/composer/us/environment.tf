@@ -27,13 +27,13 @@ resource "google_composer_environment" "calitp-composer" {
       worker {
         cpu        = 3
         memory_gb  = 13
-        storage_gb = 10
+        storage_gb = 5
         min_count  = 1
-        max_count  = 16
+        max_count  = 32
       }
     }
 
-    environment_size = "ENVIRONMENT_SIZE_SMALL"
+    environment_size = "ENVIRONMENT_SIZE_MEDIUM"
 
     software_config {
       image_version = "composer-2.8.6-airflow-2.7.3"
