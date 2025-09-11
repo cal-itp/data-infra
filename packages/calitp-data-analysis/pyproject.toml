@@ -8,34 +8,34 @@ authors = ["Andrew Vaccaro"]
 
 [tool.poetry.dependencies]
 python = "~3.11"
-ipython = "^8.9.0"
-siuba = "0.4.2" # pinned because new versions might need better sqlalchemy
-jinja2 = "^3.1.3"
-sqlalchemy-bigquery = "^1.6.1"
-sqlalchemy = "1.4.46" # pinned because 2.0 breaks the sql.py file
-pandas-gbq = "^0.19.1"
-pandas = "<2" # keep us below pandas 2.0 since pandas-gbq does not specify, and siuba errors currently
-gcsfs = "!=2022.7.1"
 altair = "^5.1.1"
-dask-geopandas = "^0.2.0"
-geopandas = "^0.14.0"
-requests = "^2.31.0"
-dask = "~2024.5"
-shapely = "^2.0.1"
-gtfs-segments = "2.1.7"
-pyairtable = "2.2.2"
 black = "24.10.0"
+dask = "~2024.5"
+dask-geopandas = "^0.2.0"
+gcsfs = "!=2022.7.1"
+geopandas = "^0.14.0"
+gtfs-segments = "2.1.7"
+ipython = "^8.9.0"
+jinja2 = "^3.1.3"
+pandas = "<2" # keep us below pandas 2.0 since pandas-gbq does not specify, and siuba errors currently
+pandas-gbq = "^0.19.1"
+pyairtable = "2.2.2"
+requests = "^2.31.0"
+shapely = "^2.0.1"
+siuba = "0.4.2" # pinned because new versions might need better sqlalchemy
+sqlalchemy = "1.4.46" # pinned because 2.0 breaks the sql.py file
+sqlalchemy-bigquery = "^1.6.1"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.2.1"
-mypy = "^1.0.0"
 hypothesis = "^6.68.0"
-types-pyyaml = "^6.0.12.11"
+mypy = "^1.0.0"
+pandas-stubs = "^2.0.2.230605"
+pytest = "^7.2.1"
+pytest-mock = "^3.14.1"
+pytest-spec = "^3.2.0"
 # note: this is deprecated in sqlalchemy 2.0
 sqlalchemy-stubs = "^0.4"
-pandas-stubs = "^2.0.2.230605"
-pytest-spec = "^3.2.0"
-pytest-mock = "^3.14.1"
+types-pyyaml = "^6.0.12.11"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
