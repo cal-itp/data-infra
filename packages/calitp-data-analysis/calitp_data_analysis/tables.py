@@ -1,3 +1,5 @@
+from warnings import warn
+
 from siuba.sql import LazyTbl  # type: ignore[import]
 from sqlalchemy.engine.reflection import Inspector
 
@@ -6,6 +8,12 @@ from .sql import get_engine
 
 class AttributeDict:
     def __init__(self):
+        warn(
+            f"{self.__class__.__name__} is deprecated and will be removed in the version after 2025.8.10.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         self._d = {}
 
     def __getattr__(self, k):
@@ -23,6 +31,18 @@ class AttributeDict:
 
 class AutoTable:
     def __init__(self, engine, table_formatter=None, table_filter=None):
+        warn(
+            (
+                f"{self.__class__.__name__} is deprecated and will be removed in the version after 2025.8.10. "
+                "Instead of AutoTable or the tbls instance, use get_engine() from calitp_data_analysis.sql to get and "
+                "connect to a database Engine. See "
+                "https://docs.calitp.org/data-infra/analytics_tools/python_libraries.html#calitp-data-analysis "
+                "for more details."
+            ),
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         self._engine = engine
         self._table_formatter = table_formatter
         self._table_filter = table_filter
@@ -75,6 +95,11 @@ class AutoTable:
 
 class TableFactory:
     def __init__(self, engine, table_name):
+        warn(
+            f"{self.__class__.__name__} is deprecated and will be removed in the version after 2025.8.10.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         self.engine = engine
         self.table_name = table_name
 
