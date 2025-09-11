@@ -16,6 +16,7 @@ class BigQueryValueCleaner:
         to the type of data in the array.
         """
         result = self.value
+
         if isinstance(result, dict):
             for k, v in result.items():
                 if isinstance(v, dict):
@@ -30,6 +31,9 @@ class BigQueryValueCleaner:
                 result = [x if x is not None else -1 for x in result]
             else:
                 result = [x if x is not None else "" for x in result]
+        elif isinstance(result, float):
+            result = round(result, 8)
+
         return result
 
 
