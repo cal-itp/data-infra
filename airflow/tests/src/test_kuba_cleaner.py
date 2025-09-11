@@ -11,9 +11,6 @@ class TestKubaCleaner:
         rows = [
             {"id": "abc123", "fields": "", "nested": {"other": "", "keys": "jangly"}}
         ]
-        rows = [
-            {"id": "abc123", "fields": "", "nested": {"other": "", "keys": "jangly"}}
-        ]
         cleaner = KubaCleaner(rows)
         assert cleaner.clean() == [{"id": "abc123", "nested": {"keys": "jangly"}}]
 
