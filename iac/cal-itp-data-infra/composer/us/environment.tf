@@ -29,7 +29,7 @@ resource "google_composer_environment" "calitp-composer" {
         memory_gb  = 13
         storage_gb = 10
         min_count  = 1
-        max_count  = 6
+        max_count  = 16
       }
     }
 
