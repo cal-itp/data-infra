@@ -13,6 +13,7 @@ with DAG(
     schedule="15 * * * *",
     start_date=datetime(2025, 9, 2),
     catchup=False,
+    max_active_tasks=128,
 ):
     for process in ["parse", "validate"]:
         for feed in ["service_alerts", "trip_updates", "vehicle_positions"]:
