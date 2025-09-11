@@ -42,7 +42,7 @@ with DAG(
         operator_args={
             "install_deps": True,
         },
-        default_args={"retries": 0},
+        default_args={"retries": 1},
     )
 
     latest_only >> dbt_daily
