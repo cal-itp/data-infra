@@ -2,6 +2,36 @@ import re
 from typing import Any
 
 
+def is_float(value) -> bool:
+    if isinstance(value, float):
+        return True
+    elif isinstance(value, str):
+        try:
+            return (
+                True
+                if value.replace(".", "", 1).isdigit()
+                and value.count(".") == 1
+                and float(value)
+                else False
+            )
+        except ValueError:
+            return False
+    else:
+        return False
+
+
+def is_dict(value) -> bool:
+    if isinstance(value, dict):
+        return True
+    elif isinstance(value, str):
+        if value[0:1] == "{" and value[-1:1] == "}":
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
 class BigQueryValueCleaner:
     value: Any
 
@@ -17,7 +47,9 @@ class BigQueryValueCleaner:
         """
         result = self.value
 
-        if isinstance(result, dict):
+        # if isinstance(result, str):
+
+        if is_dict(result):
             for k, v in result.items():
                 if isinstance(v, dict):
                     result[k] = BigQueryRowCleaner(v).clean()
@@ -31,8 +63,8 @@ class BigQueryValueCleaner:
                 result = [x if x is not None else -1 for x in result]
             else:
                 result = [x if x is not None else "" for x in result]
-        elif isinstance(result, float):
-            result = round(result, 8)
+        elif is_float(result):
+            result = round(float(result), 8)
 
         return result
 
