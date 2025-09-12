@@ -53,7 +53,7 @@ A set of shared utility functions can also be installed, similarly to any Python
 
 ### In notebook
 
-```python
+```{code-cell} python
 from calitp_data_analysis import geography_utils
 
 geography_utils.WGS84
@@ -69,31 +69,38 @@ See [data-analyses/starter_kit](https://github.com/cal-itp/data-analyses/tree/ma
 
 ### import tbls
 
+__DEPRECATED:__ `tbls` will be removed after `calitp_data_analysis` version 2025.8.10. Instead of `AutoTable` or the `tbls`
+instance, use `query_sql()` from `calitp_data_analysis.sql` to connect to and query a SQL database. See the [`query_sql()`
+section](#calitp-data-analysis-query-sql) below.
+
 Most notably, you can include `import tbls` at the top of your notebook to import a table from the warehouse in the form of a `tbls`:
 
-```python
+```{code-cell} python
 from calitp_data_analysis.tables import tbls
 ```
 
 Example:
 
-```{code-cell}
+```{code-cell} python
 from calitp_data_analysis.tables import tbls
 
 tbls.mart_gtfs.dim_agency()
 ```
 
+(calitp-data-analysis-query-sql)=
+
 ### query_sql
 
-`query_sql` is another useful function to use inside of JupyterHub notebooks to turn a SQL query into a pandas DataFrame.
+`query_sql()` is a useful function to connect to and query a SQL database. You can optionally pass `as_df=True`
+to turn a SQL query result into a pandas DataFrame.
 
 As an example, in a notebook:
 
-```{code-cell}
+```{code-cell} python
 from calitp_data_analysis.sql import query_sql
 ```
 
-```{code-cell}
+```{code-cell} python
 df_dim_agency = query_sql("""
 SELECT
     *
@@ -101,7 +108,7 @@ FROM `mart_gtfs.dim_agency`
 LIMIT 10""", as_df=True)
 ```
 
-```{code-cell}
+```{code-cell} python
 df_dim_agency.head()
 ```
 
@@ -113,7 +120,7 @@ clear and consistent way of accessing geospatial resources.
 It's recommended to memoize initialization of the class so that the GCS filesystem is fetched and cached the first time
 you call it and subsequent calls can reuse that cached filesystem.
 
-```python
+```{code-cell} python
 from functools import cache
 
 from calitp_data_analysis.gcs_geopandas import GCSGeoPandas
@@ -127,7 +134,7 @@ def gcs_geopandas():
 
 Delegates to geopandas.read_parquet, providing GCS Filesystem
 
-```python
+```{code-cell} python
 gcs_geopandas().read_parquet("gs://path/to/your/file.parquet")
 ```
 
@@ -135,7 +142,7 @@ gcs_geopandas().read_parquet("gs://path/to/your/file.parquet")
 
 Delegates to geopandas.read_file with the file at the path specified in the GCS filesystem
 
-```python
+```{code-cell} python
 gcs_geopandas().read_file("gs://path/to/your/file.geojson")
 ```
 
@@ -143,7 +150,7 @@ gcs_geopandas().read_file("gs://path/to/your/file.geojson")
 
 Delegates to GeoDataFrame.to_parquet, providing the GCS filesystem
 
-```python
+```{code-cell} python
 import geopandas as gpd
 
 data = {'col1': ['name1', 'name2'], 'geometry': [...]}
@@ -154,6 +161,9 @@ gcs_geopandas().geo_data_frame_to_parquet(geo_data_frame, "gs://path/to/your/fil
 (siuba)=
 
 ## siuba
+
+__DEPRECATED:__ siuba will be removed from `calitp_data_analysis` after version 2025.8.10 and other shared code within the
+next few months. Use SQLAlchemy and Pandas or GeoPandas functions directly instead. siuba uses these under the hood.
 
 `siuba` is a tool that allows the same analysis code to run on a pandas DataFrame,
 as well as generate SQL for different databases.
@@ -166,7 +176,9 @@ and showing SQL test queries that siuba code generates.
 
 ### Basic query
 
-```{code-cell}
+#### siuba
+
+```{code-cell} python
 from calitp_data_analysis.tables import tbls
 from siuba import _, filter, count, collect, show_query
 
@@ -178,6 +190,25 @@ from siuba import _, filter, count, collect, show_query
 )
 ```
 
+#### Equivalent BigQuery SQL using `query_sql()`
+
+```{code-cell} python
+from calitp_data_analysis.sql import query_sql
+
+# query agency information, then filter for a single gtfs feed,
+# and then count how often each feed key occurs
+query_sql(
+    """
+    SELECT feed_key, COUNT(*) AS n
+    FROM mart_gtfs.dim_agency
+    WHERE agency_id = 'BA' AND base64_url = 'aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1SRw=='
+    GROUP BY feed_key
+    ORDER BY n DESC
+    LIMIT 5
+    """
+)
+```
+
 (collect-query-results)=
 
 ### Collect query results
@@ -185,12 +216,25 @@ from siuba import _, filter, count, collect, show_query
 Note that siuba by default prints out a preview of the SQL query results.
 In order to fetch the results of the query as a pandas DataFrame, run `collect()`.
 
-```{code-cell}
+#### siuba
+
+```{code-cell} python
 tbl_agency_names = tbls.mart_gtfs.dim_agency() >> collect()
 
-# Use pandas .head() method to show first 5 rows of data
+# Use pandas `head()` method to show first 5 rows of data
 tbl_agency_names.head()
 
+```
+
+#### Equivalent BigQuery SQL using `query_sql()`
+
+```{code-cell} python
+from calitp_data_analysis.sql import query_sql
+
+tbl_agency_names = query_sql('SELECT * FROM mart_gtfs.dim_agency', as_df=True)
+
+# Use pandas `head()` method to show first 5 rows of data
+tbl_agency_names.head()
 ```
 
 (show-query-sql)=
@@ -199,7 +243,7 @@ tbl_agency_names.head()
 
 While `collect()` fetches query results, `show_query()` prints out the SQL code that siuba generates.
 
-```{code-cell}
+```{code-cell} python
 (tbls.mart_gtfs.dim_agency()
   >> filter(_.agency_name.str.contains("Metro"))
   >> show_query(simplify=True)
@@ -208,6 +252,104 @@ While `collect()` fetches query results, `show_query()` prints out the SQL code 
 ```
 
 Note that here the pandas Series method `str.contains` corresponds to `regexp_contains` in Google BigQuery.
+
+### filter() & collect()
+
+#### siuba
+
+```{code-cell} python
+from calitp_data_analysis.tables import tbls
+from siuba import _, collect, filter
+
+annnual_service_agencies = (
+    tbls.mart_ntd.dim_annual_service_agencies()
+    >> filter(_.state == "CA", _.report_year == 2023)
+    >> collect()
+)
+```
+
+#### Equivalent BigQuery SQL using `query_sql()`
+
+Use SQL with `SELECT` and `WHERE` clauses for filtering
+
+```{code-cell} python
+from calitp_data_analysis.sql import query_sql
+
+query_sql(
+    """
+    SELECT * 
+    FROM cal-itp-data-infra.mart_ntd.dim_annual_service_agencies
+    WHERE state = 'CA' AND report_year = 2023
+    """,
+    as_df=True
+)
+```
+
+### select()
+
+#### siuba
+
+```{code-cell} python
+import geopandas as gpd
+from siuba import _, select
+
+
+blocks = gpd.read_file('./tl_2020_06_tabblock20.zip')
+blocks = blocks >> select(_.GEOID20, _.POP20, _.HOUSING20, _.geometry)
+```
+
+#### pandas/geopandas
+
+```{code-cell} python
+import geopandas as gpd
+
+blocks = gpd.read_file('./tl_2020_06_tabblock20.zip')
+blocks = blocks[['GEOID20', 'POP20', 'HOUSING20', 'geometry']]
+```
+
+### rename
+
+#### siuba
+
+```{code-cell} python
+import geopandas as gpd
+from siuba import _, rename
+
+blocks = gpd.read_file('./tl_2020_06_tabblock20.zip')
+blocks = blocks >> rename(GEO_ID = _.GEOID20)
+```
+
+#### pandas/geopandas
+
+```{code-cell} python
+import geopandas as gpd
+
+blocks = gpd.read_file('./tl_2020_06_tabblock20.zip')
+blocks = blocks.rename(columns={'GEOID20': 'GEO_ID'})
+```
+
+### inner_join
+
+#### siuba
+
+```{code-cell} python
+# df and df2 are both DataFrame
+joined = df2 >> inner_join(_, df, on={'GEO_ID':'w_geocode'})
+```
+
+#### pandas/geopandas
+
+The below code will result in table having both `GEO_ID` and `w_geocode` columns with redundant data.
+To avoid this, you could either (a) first rename one of the columns to match the other and
+do a simpler merge using just the `on` parameter (no need then for `left_on` and
+`right_on`) or (b) do as show below and subsequently drop one of the redundant columns.
+
+```{code-cell} python
+# df and df2 are both DataFrame
+joined = df2.merge(df, left_on='GEO_ID', right_on='w_geocode')
+```
+
+#### siuba
 
 (more-siuba-resources)=
 
