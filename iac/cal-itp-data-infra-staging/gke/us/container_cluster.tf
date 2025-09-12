@@ -47,7 +47,7 @@ resource "google_container_cluster" "sftp-endpoints" {
   }
 
   timeouts {
-    create = "10m"
-    delete = "10m"
+    create = "20m"
+    delete = "20m"
   }
 }
