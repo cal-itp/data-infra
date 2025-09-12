@@ -4,14 +4,14 @@ sources:
   - name: feed_aggregator_scrapes
     description: |
       URLs scraped at moments in time from various feed aggregators.
-    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    database: "{{ env_var('DEV_SOURCE_GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_feed_aggregator
     tables:
       - name: scraped_urls
 
   - name: external_gtfs_schedule
     description: Hive-partitioned external tables reading GTFS schedule data and validation errors from GCS.
-    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    database: "{{ env_var('DEV_SOURCE_GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_gtfs_schedule
     tables:
       - name: download_outcomes
