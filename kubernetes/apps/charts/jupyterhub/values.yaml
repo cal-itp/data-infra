@@ -9,7 +9,7 @@ jupyterhub:
     startTimeout: 300
     image:
       name: ghcr.io/cal-itp/data-infra/jupyter-singleuser
-      tag: 2025.8.8
+      tag: 2025.8.28
     memory:
       # Much more than 10 and we risk bumping up against the actual capacity of e2-highmem-2
       limit: 10G
@@ -31,26 +31,26 @@ jupyterhub:
               mkdir -p -- /home/jovyan/.jupyter;
               cp /tmp/jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py;
     profileList:
-      - display_name: "Default Image - 2025.8.8, Python 3.11"
+      - display_name: "Default Image - 2025.8.28, Python 3.11"
         description: "Your code will run on a shared machine with 3–10G of memory and 0.7–1.9 CPU cores."
         default: true
-      - display_name: "Power Default Image - 2025.8.8, Python 3.11"
+      - display_name: "Power Default Image - 2025.8.28, Python 3.11"
         description: "Your code will run on a shared machine with 10–12G of memory and 1.5–1.9 CPU cores."
         kubespawner_override:
           mem_limit: "12G"
           mem_guarantee: "10G"
           cpu_guarantee: 1.5
-      - display_name: "Prototype Image - 2025.8.28, Python 3.11"
+      - display_name: "Prototype Image - 2025.9.12, Python 3.11"
         description: "This is the newer environment proposed for promotion to default. Recommended for analysts to use and report any issues. Your code will run on a shared machine with 3–10G of memory and 0.7–1.9 CPU cores."
         kubespawner_override:
-          image: ghcr.io/cal-itp/data-infra/jupyter-singleuser:2025.8.28
-      - display_name: "Power Prototype Image - 2025.8.28, Python 3.11"
+          image: ghcr.io/cal-itp/data-infra/jupyter-singleuser:2025.9.12
+      - display_name: "Power Prototype Image - 2025.9.12, Python 3.11"
         description: "This is the newer environment proposed for promotion to default. Recommended for analysts to use and report any issues. Your code will run on a shared machine with 10–12G of memory and 1.5–1.9 CPU cores."
         kubespawner_override:
           mem_limit: "12G"
           mem_guarantee: "10G"
           cpu_guarantee: 1.5
-          image: ghcr.io/cal-itp/data-infra/jupyter-singleuser:2025.8.28
+          image: ghcr.io/cal-itp/data-infra/jupyter-singleuser:2025.9.12
       - display_name: "Legacy Image - 2025.6.10, Python 3.11"
         description: "This is the older environment from before the dependency updates work. Your code will run on a shared machine with 3–10G of memory and 0.7–1.9 CPU cores."
         kubespawner_override:
