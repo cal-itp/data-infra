@@ -5,4 +5,5 @@ product: vehicles_age_distribution
 bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
 endpoint: resource/6abt-uhgq.json
 parameters:
-  $limit: 5000000
+  $limit: 50000000
+page_size: 100000

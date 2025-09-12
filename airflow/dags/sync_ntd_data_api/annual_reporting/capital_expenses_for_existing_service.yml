@@ -5,4 +5,5 @@ product: capital_expenses_for_existing_service
 bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
 endpoint: resource/7kqv-yqbn.json
 parameters:
-  $limit: 5000000
+  $limit: 50000000
+page_size: 100000

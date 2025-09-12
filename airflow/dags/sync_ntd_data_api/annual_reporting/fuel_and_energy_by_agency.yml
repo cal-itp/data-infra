@@ -5,4 +5,5 @@ product: fuel_and_energy_by_agency
 bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
 endpoint: resource/wwem-ata9.json
 parameters:
-  $limit: 5000000
+  $limit: 50000000
+page_size: 100000

@@ -5,4 +5,5 @@ product: major_safety_events
 bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
 endpoint: resource/9ivb-8ae9.json
 parameters:
-  $limit: 5000000
+  $limit: 50000000
+page_size: 100000
