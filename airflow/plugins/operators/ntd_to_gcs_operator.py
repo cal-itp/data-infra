@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from datetime import datetime
 from typing import Sequence
@@ -45,6 +46,7 @@ class NTDToGCSOperator(BaseOperator):
         parameters: dict = {},
         http_conn_id: str = "http_ntd",
         gcp_conn_id: str = "google_cloud_default",
+        page_size: int = 100000,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -56,6 +58,7 @@ class NTDToGCSOperator(BaseOperator):
         self.parameters = parameters
         self.http_conn_id = http_conn_id
         self.gcp_conn_id = gcp_conn_id
+        self.page_size = page_size
 
     def bucket_name(self) -> str:
         return self.bucket.replace("gs://", "")
@@ -70,13 +73,61 @@ class NTDToGCSOperator(BaseOperator):
         return HttpHook(method="GET", http_conn_id=self.http_conn_id)
 
     def cleaned_rows(self) -> list:
-        result = (
-            self.http_hook().run(endpoint=self.endpoint, data=self.parameters).json()
+        """Fetch all data using pagination and return cleaned rows."""
+        all_rows = []
+        offset = 0
+
+        # Get the original limit from parameters, or use a large default
+        original_limit = self.parameters.get("$limit", 5000000)
+
+        logging.info(
+            f"Starting paginated fetch for {self.product} with page size {self.page_size}"
         )
-        return [
-            json.dumps(x, separators=(",", ":"))
-            for x in BigQueryCleaner(result).clean()
-        ]
+
+        while True:
+            # Create parameters for this page
+            page_params = self.parameters.copy()
+            page_params["$limit"] = min(self.page_size, original_limit - offset)
+            page_params["$offset"] = offset
+
+            logging.info(
+                f"Fetching page: offset={offset}, limit={page_params['$limit']}"
+            )
+
+            # Fetch this page
+            try:
+                result = (
+                    self.http_hook()
+                    .run(endpoint=self.endpoint, data=page_params)
+                    .json()
+                )
+            except Exception as e:
+                logging.error(f"Error fetching page at offset {offset}: {e}")
+                raise
+
+            # If no results, we're done
+            if not result or len(result) == 0:
+                logging.info(
+                    f"No more data found at offset {offset}. Pagination complete."
+                )
+                break
+
+            # Clean and add rows from this page
+            cleaned_page = BigQueryCleaner(result).clean()
+            page_rows = [json.dumps(x, separators=(",", ":")) for x in cleaned_page]
+            all_rows.extend(page_rows)
+
+            logging.info(f"Fetched {len(result)} rows, total so far: {len(all_rows)}")
+
+            # Check if we've reached the original limit or got fewer rows than requested
+            offset += len(result)
+            if len(result) < page_params["$limit"] or offset >= original_limit:
+                logging.info(
+                    f"Pagination complete. Total rows fetched: {len(all_rows)}"
+                )
+                break
+
+        return all_rows
 
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
