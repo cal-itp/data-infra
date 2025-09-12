@@ -3,6 +3,6 @@ operator: operators.NTDToGCSOperator
 year: historical
 product: nonmajor_safety_and_security_events
 bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
-endpoint: resource/9ivb-8ae9.json
+endpoint: resource/urir-txqm.json
 parameters:
   $limit: 5000000
