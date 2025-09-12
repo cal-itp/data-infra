@@ -167,6 +167,7 @@ resource "kubernetes_service" "enghouse-sftp" {
       target_port = 22
     }
 
-    type = "LoadBalancer"
+    type             = "LoadBalancer"
+    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_global_address_enghouse-sftp_ip
   }
 }

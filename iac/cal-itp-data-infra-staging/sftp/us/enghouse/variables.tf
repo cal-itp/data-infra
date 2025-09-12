@@ -24,3 +24,12 @@ data "terraform_remote_state" "iam" {
     prefix = "cal-itp-data-infra-staging/iam"
   }
 }
+
+data "terraform_remote_state" "networks" {
+  backend = "gcs"
+
+  config = {
+    bucket = "calitp-staging-gcp-components-tfstate"
+    prefix = "cal-itp-data-infra-staging/networks"
+  }
+}
