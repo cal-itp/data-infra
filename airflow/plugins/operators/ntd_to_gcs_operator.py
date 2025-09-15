@@ -1,9 +1,10 @@
-import json
+import gzip
 import logging
 import os
 from datetime import datetime
 from typing import Sequence
 
+import pandas as pd
 from src.bigquery_cleaner import BigQueryCleaner
 
 from airflow.hooks.http_hook import HttpHook
@@ -72,71 +73,78 @@ class NTDToGCSOperator(BaseOperator):
     def http_hook(self) -> HttpHook:
         return HttpHook(method="GET", http_conn_id=self.http_conn_id)
 
-    def cleaned_rows(self) -> list:
-        """Fetch all data using pagination and return cleaned rows."""
-        all_rows = []
-        offset = 0
-
-        # Get the original limit from parameters, or use a large default
-        original_limit = self.parameters.get("$limit", 5000000)
-
-        logging.info(
-            f"Starting paginated fetch for {self.product} with page size {self.page_size}"
-        )
-
-        while True:
-            # Create parameters for this page
-            page_params = self.parameters.copy()
-            page_params["$limit"] = min(self.page_size, original_limit - offset)
-            page_params["$offset"] = offset
-
-            logging.info(
-                f"Fetching page: offset={offset}, limit={page_params['$limit']}"
-            )
-
-            # Fetch this page
-            try:
-                result = (
-                    self.http_hook()
-                    .run(endpoint=self.endpoint, data=page_params)
-                    .json()
-                )
-            except Exception as e:
-                logging.error(f"Error fetching page at offset {offset}: {e}")
-                raise
-
-            # If no results, we're done
-            if not result or len(result) == 0:
-                logging.info(
-                    f"No more data found at offset {offset}. Pagination complete."
-                )
-                break
-
-            # Clean and add rows from this page
-            cleaned_page = BigQueryCleaner(result).clean()
-            page_rows = [json.dumps(x, separators=(",", ":")) for x in cleaned_page]
-            all_rows.extend(page_rows)
-
-            logging.info(f"Fetched {len(result)} rows, total so far: {len(all_rows)}")
-
-            # Check if we've reached the original limit or got fewer rows than requested
-            offset += len(result)
-            if len(result) < page_params["$limit"] or offset >= original_limit:
-                logging.info(
-                    f"Pagination complete. Total rows fetched: {len(all_rows)}"
-                )
-                break
-
-        return all_rows
-
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
         object_name: str = self.object_path().resolve(dag_run.logical_date)
-        self.gcs_hook().upload(
-            bucket_name=self.bucket_name(),
-            object_name=object_name,
-            data="\n".join(self.cleaned_rows()),
-            mime_type="application/jsonl",
-            gzip=True,
-        )
+
+        # Stream data directly to compressed buffer to avoid memory accumulation
+        import io
+
+        buffer = io.BytesIO()
+
+        with gzip.GzipFile(fileobj=buffer, mode="wb") as gz_file:
+            offset = 0
+            total_rows = 0
+            original_limit = self.parameters.get("$limit", 5000000)
+
+            logging.info(f"Downloading NTD data for {self.year} / {self.product}.")
+
+            while True:
+                # Create parameters for this page
+                page_params = self.parameters.copy()
+                page_params["$limit"] = min(self.page_size, original_limit - offset)
+                page_params["$offset"] = offset
+
+                try:
+                    result = (
+                        self.http_hook()
+                        .run(endpoint=self.endpoint, data=page_params)
+                        .json()
+                    )
+                except Exception as e:
+                    logging.error(f"An error occurred: {e}")
+                    raise
+
+                # If no results, we're done
+                if not result or len(result) == 0:
+                    break
+
+                # Clean the data and stream directly to file
+                cleaned_data = BigQueryCleaner(result).clean()
+                df_page = pd.DataFrame(cleaned_data)
+
+                # Stream each row as JSONL directly to compressed file
+                for _, row in df_page.iterrows():
+                    json_line = row.to_json() + "\n"
+                    gz_file.write(json_line.encode("utf-8"))
+                    total_rows += 1
+
+                logging.info(
+                    f"Downloaded {len(result)} rows, total rows so far: {total_rows}"
+                )
+
+                # Check if we've reached the original limit or got fewer rows than requested
+                offset += len(result)
+                if len(result) < page_params["$limit"] or offset >= original_limit:
+                    break
+
+        if total_rows > 0:
+            logging.info(
+                f"Downloaded {self.product} data for {self.year} with {total_rows} rows!"
+            )
+
+            # Upload the compressed data
+            buffer.seek(0)
+            self.gcs_hook().upload(
+                bucket_name=self.bucket_name(),
+                object_name=object_name,
+                data=buffer.getvalue(),
+                mime_type="application/jsonl",
+                gzip=False,  # Already compressed
+            )
+        else:
+            logging.info(
+                f"There is no data to download for {self.year} / {self.product}. Ending pipeline."
+            )
+
         return os.path.join(self.bucket, object_name)
