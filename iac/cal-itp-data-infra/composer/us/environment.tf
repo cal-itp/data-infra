@@ -33,7 +33,7 @@ resource "google_composer_environment" "calitp-composer" {
       }
     }
 
-    environment_size = "ENVIRONMENT_SIZE_SMALL"
+    environment_size = "ENVIRONMENT_SIZE_MEDIUM"
 
     software_config {
       image_version = "composer-2.8.6-airflow-2.7.3"
