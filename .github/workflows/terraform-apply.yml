@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'staging/*'
     paths:
       - 'iac/**'
 
@@ -40,6 +41,7 @@ jobs:
 
       - uses: tj-actions/changed-files@v46
         id: production-changes
+        if: ${{ !contains(github.ref, 'refs/heads/staging') }}
         with:
           matrix: true
           dir_names: true
@@ -80,6 +82,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: ${{ matrix.path }}
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
 
   production:
     name: Production
