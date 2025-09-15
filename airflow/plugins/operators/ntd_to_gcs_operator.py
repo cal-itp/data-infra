@@ -133,15 +133,41 @@ class NTDToGCSOperator(BaseOperator):
                 f"Downloaded {self.product} data for {self.year} with {total_rows} rows!"
             )
 
-            # Upload the compressed data
+            # Upload the compressed data with extended timeout and retry logic
             buffer.seek(0)
-            self.gcs_hook().upload(
-                bucket_name=self.bucket_name(),
-                object_name=object_name,
-                data=buffer.getvalue(),
-                mime_type="application/jsonl",
-                gzip=False,  # Already compressed
-            )
+            data_size = len(buffer.getvalue())
+            logging.info(f"Uploading {data_size} bytes to GCS...")
+
+            # Retry upload up to 3 times with increasing timeout
+            for attempt in range(3):
+                try:
+                    timeout = 300 + (attempt * 300)  # 5, 10, 15 minutes
+                    logging.info(
+                        f"Upload attempt {attempt + 1}/3 with {timeout}s timeout"
+                    )
+
+                    self.gcs_hook().upload(
+                        bucket_name=self.bucket_name(),
+                        object_name=object_name,
+                        data=buffer.getvalue(),
+                        mime_type="application/jsonl",
+                        gzip=False,  # Already compressed
+                        timeout=timeout,
+                    )
+                    logging.info(
+                        f"Successfully uploaded {data_size} bytes to {object_name}"
+                    )
+                    break
+                except Exception as e:
+                    logging.warning(f"Upload attempt {attempt + 1} failed: {e}")
+                    if attempt == 2:  # Last attempt
+                        logging.error(f"All upload attempts failed. Final error: {e}")
+                        raise
+                    else:
+                        logging.info("Retrying upload in 30 seconds...")
+                        import time
+
+                        time.sleep(30)
         else:
             logging.info(
                 f"There is no data to download for {self.year} / {self.product}. Ending pipeline."
