@@ -333,10 +333,6 @@ resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-schedule-va
   bucket = "test-calitp-gtfs-schedule-validation-hourly"
 }
 
-resource "google_storage_default_object_acl" "tfer--test-calitp-ntd-api-products" {
-  bucket = "test-calitp-ntd-api-products"
-}
-
 resource "google_storage_default_object_acl" "tfer--test-calitp-ntd-report-validation" {
   bucket = "test-calitp-ntd-report-validation"
 }

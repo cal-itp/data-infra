@@ -502,12 +502,6 @@ resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-schedule-val
   role   = "roles/storage.legacyBucketOwner"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-ntd-api-products" {
-  bucket = "b/test-calitp-ntd-api-products"
-  member = "projectOwner:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--test-calitp-ntd-report-validation" {
   bucket = "b/test-calitp-ntd-report-validation"
   member = "projectViewer:cal-itp-data-infra"

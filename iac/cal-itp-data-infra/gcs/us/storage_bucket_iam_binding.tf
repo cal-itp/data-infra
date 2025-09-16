@@ -502,12 +502,6 @@ resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-va
   role    = "roles/storage.legacyBucketOwner"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-ntd-api-products" {
-  bucket  = "b/test-calitp-ntd-api-products"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-ntd-report-validation" {
   bucket  = "b/test-calitp-ntd-report-validation"
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
