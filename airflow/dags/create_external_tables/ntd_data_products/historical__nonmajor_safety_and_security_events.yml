@@ -11,253 +11,43 @@ hive_options:
 destination_project_dataset_table: "external_ntd__safety_and_security.historical__nonmajor_safety_and_security_events"
 post_hook: SELECT * FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_ntd__safety_and_security.historical__nonmajor_safety_and_security_events LIMIT 1;
 schema_fields:
-  - name: _5_digit_ntd_id
+  - name: ntdid
     type: STRING
-  - name: agency
+  - name: reportername
     type: STRING
-  - name: uace_code
+  - name: modecd
     type: STRING
-  - name: mode
+  - name: typeofservicecd
     type: STRING
-  - name: mode_name
+  - name: mo
     type: STRING
-  - name: type_of_service
+  - name: yr
     type: STRING
-  - name: year
-    type: INTEGER
-  - name: fixed_route_flag
-    type: BOOLEAN
-  - name: incident_description
+  - name: sftsecfl
     type: STRING
-  - name: incident_number
-    type: INTEGER
-  - name: incident_date
-    type: TIMESTAMP
-  - name: incident_time
+  - name: eventtype
     type: STRING
-  - name: event_type
+  - name: location
     type: STRING
-  - name: event_type_group
+  - name: location_group
     type: STRING
-  - name: event_category
+  - name: minor_physical_assaults_on_operators
     type: STRING
-  - name: safety_security
+  - name: non_physical_assaults_on_operators_security_events_only_
     type: STRING
-  - name: collision_with
+  - name: minor_physical_assaults_on_other_transit_workers
     type: STRING
-  - name: property_damage
-    type: NUMERIC
-  - name: property_damage_type
+  - name: minor_nonphysical_assaults_on_other_transit_workers
     type: STRING
-  - name: location_type
+  - name: total_incidents
     type: STRING
-  - name: multiple_locations_list
+  - name: customer
     type: STRING
-  - name: latitude
-    type: NUMERIC
-  - name: longitude
-    type: NUMERIC
-  - name: latlon
-    type: RECORD
-    fields:
-      - name: coordinates
-        mode: REPEATED
-        type: FLOAT
-      - name: type
-        type: STRING
-  - name: approximate_address
+  - name: worker
+    type: STRING
+  - name: other
     type: STRING
   - name: total_injuries
-    type: INTEGER
-  - name: total_fatalities
-    type: INTEGER
-  - name: number_of_transit_vehicles
-    type: INTEGER
-  - name: number_of_vehicles_involved
-    type: INTEGER
-  - name: number_of_cars_on_involved_transit_vehicles
-    type: INTEGER
-  - name: derailed_cars_count
-    type: NUMERIC
-  - name: other_vehicle_type_list
     type: STRING
-  - name: evacuation
-    type: BOOLEAN
-  - name: evac_to_right_of_way
-    type: STRING
-  - name: evacuation_comment
-    type: STRING
-  - name: evacuation_location
-    type: STRING
-  - name: towed_y_n
-    type: STRING
-  - name: life_safety_y_n
-    type: STRING
-  - name: self_evacuation_y_n
-    type: STRING
-  - name: intentional_y_n
-    type: BOOLEAN
-  - name: transit_y_n
-    type: STRING
-  - name: hazmat_type
-    type: STRING
-  - name: hazmat_type_description
-    type: STRING
-  - name: fire_type
-    type: STRING
-  - name: fire_fuel
-    type: STRING
-  - name: other_fire_fuel_description
-    type: STRING
-  - name: weather
-    type: STRING
-  - name: weather_comment
-    type: STRING
-  - name: lighting
-    type: STRING
-  - name: current_condition
-    type: STRING
-  - name: tide
-    type: STRING
-  - name: road_configuration
-    type: STRING
-  - name: track_configuration
-    type: STRING
-  - name: path_condition
-    type: STRING
-  - name: rail_alignment
-    type: STRING
-  - name: rail_grade_crossing_control
-    type: STRING
-  - name: rail_grade_crossing_comment
-    type: STRING
-  - name: rail_bus_ferry
-    type: STRING
-  - name: runaway_train_flag
-    type: STRING
-  - name: right_of_way_condition
-    type: STRING
-  - name: intersection
-    type: STRING
-  - name: service_stop_control_device
-    type: STRING
-  - name: operator_location
-    type: STRING
-  - name: vehicle_action
-    type: STRING
-  - name: action_type
-    type: STRING
-  - name: derailment_type
-    type: STRING
-  - name: fuel_type
-    type: STRING
-  - name: vehicle_speed
-    type: NUMERIC
-  - name: non_rail_transit_vehicle
-    type: STRING
-  - name: non_transit_vehicle_action_list
-    type: STRING
-  - name: manufacturer
-    type: STRING
-  - name: manufacturer_description
-    type: STRING
-  - name: assault_homicide_person_type_desc
-    type: STRING
-  - name: assault_homicide_type_desc
-    type: STRING
-  - name: assault_homicide_transit_worker_flag
-    type: BOOLEAN
-  - name: other_event_type_description
-    type: STRING
-  - name: bicyclist_fatalities
-    type: INTEGER
-  - name: bicyclist_injuries
-    type: INTEGER
-  - name: bicyclist_serious_injuries
-    type: INTEGER
-  - name: occupant_of_other_vehicle
-    type: INTEGER
-  - name: occupant_of_other_vehicle_1
-    type: INTEGER
-  - name: occupant_of_other_vehicle_2
-    type: INTEGER
-  - name: pedestrian_in_crosswalk
-    type: INTEGER
-  - name: pederstiran_in_crosswalk
-    type: INTEGER
-  - name: pederstiran_in_crosswalk_1
-    type: INTEGER
-  - name: pedestrian_not_in_crosswalk
-    type: INTEGER
-  - name: pedestrian_not_in_crosswalk_1
-    type: INTEGER
-  - name: pedestrian_not_in_crosswalk_2
-    type: INTEGER
-  - name: pedestrian_crossing_tracks
-    type: INTEGER
-  - name: pedestrian_crossing_tracks_1
-    type: INTEGER
-  - name: pedestrian_crossing_tracks_2
-    type: INTEGER
-  - name: pedestrian_walking_along
-    type: INTEGER
-  - name: pedestrian_walking_along_1
-    type: INTEGER
-  - name: pedestrian_walking_along_2
-    type: INTEGER
-  - name: people_waiting_or_leaving
-    type: INTEGER
-  - name: people_waiting_or_leaving_1
-    type: INTEGER
-  - name: people_waiting_or_leaving_2
-    type: INTEGER
-  - name: suicide_fatalities
-    type: INTEGER
-  - name: suicide_injuries
-    type: INTEGER
-  - name: suicide_serious_injuries
-    type: INTEGER
-  - name: transit_employee_fatalities
-    type: INTEGER
-  - name: transit_employee_injuries
-    type: INTEGER
-  - name: transit_employee_serious
-    type: INTEGER
-  - name: transit_vehicle_type
-    type: STRING
-  - name: transit_vehicle_operator
-    type: INTEGER
-  - name: transit_vehicle_operator_1
-    type: INTEGER
-  - name: transit_vehicle_operator_2
-    type: INTEGER
-  - name: transit_vehicle_rider
-    type: INTEGER
-  - name: transit_vehicle_rider_injuries
-    type: INTEGER
-  - name: transit_vehicle_rider_serious
-    type: INTEGER
-  - name: trespasser_fatalities_subtotal_
-    type: INTEGER
-  - name: trespasser_inuries_subtotal_
-    type: INTEGER
-  - name: trespasser_serious_injuries_subtotal_
-    type: INTEGER
-  - name: other_fatalities
-    type: INTEGER
-  - name: other_injuries
-    type: INTEGER
-  - name: other_serious_injuries
-    type: INTEGER
-  - name: other_worker_fatalities
-    type: INTEGER
-  - name: other_worker_injuries
-    type: INTEGER
-  - name: other_worker_serious_injuries
-    type: INTEGER
-  - name: total_serious_injuries
-    type: INTEGER
-  - name: person_list
-    type: STRING
-  - name: revenue_vehicle_identifier_list
+  - name: additional_assault_information
     type: STRING
