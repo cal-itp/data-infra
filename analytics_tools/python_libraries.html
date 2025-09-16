@@ -501,9 +501,38 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#siuba">siuba</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-query">Basic query</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collect-query-results">Collect query results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-query">Basic query</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalent-bigquery-sql-using-query-sql">Equivalent BigQuery SQL using <code class="docutils literal notranslate"><span class="pre">query_sql()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collect-query-results">Collect query results</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Equivalent BigQuery SQL using <code class="docutils literal notranslate"><span class="pre">query_sql()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#show-query-sql">Show query SQL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filter-collect">filter() &amp; collect()</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Equivalent BigQuery SQL using <code class="docutils literal notranslate"><span class="pre">query_sql()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#select">select()</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pandas-geopandas">pandas/geopandas</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rename">rename</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">pandas/geopandas</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inner-join">inner_join</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">pandas/geopandas</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">siuba</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#more-siuba-resources">More siuba Resources</a></li>
 </ul>
 </li>
@@ -579,163 +608,24 @@ document.write(`
 <p><code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> is an internal library of utility functions used to access our warehouse data for analysis purposes.</p>
 <section id="import-tbls">
 <h3>import tbls<a class="headerlink" href="#import-tbls" title="Link to this heading">#</a></h3>
+<p><strong>DEPRECATED:</strong> <code class="docutils literal notranslate"><span class="pre">tbls</span></code> will be removed after <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> version 2025.8.10. Instead of <code class="docutils literal notranslate"><span class="pre">AutoTable</span></code> or the <code class="docutils literal notranslate"><span class="pre">tbls</span></code>
+instance, use <code class="docutils literal notranslate"><span class="pre">query_sql()</span></code> from <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis.sql</span></code> to connect to and query a SQL database. See the <a class="reference internal" href="#calitp-data-analysis-query-sql"><code class="docutils literal notranslate"><span class="pre">query_sql()</span></code>
+section</a> below.</p>
 <p>Most notably, you can include <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">tbls</span></code> at the top of your notebook to import a table from the warehouse in the form of a <code class="docutils literal notranslate"><span class="pre">tbls</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">tbls</span>
 </pre></div>
 </div>
 <p>Example:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">tbls</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">tbls</span>
 
 <span class="n">tbls</span><span class="o">.</span><span class="n">mart_gtfs</span><span class="o">.</span><span class="n">dim_agency</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div><pre># Source: lazy query
-# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
-# Preview:
-</pre><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>key</th>
-      <th>_gtfs_key</th>
-      <th>feed_key</th>
-      <th>agency_id</th>
-      <th>agency_name</th>
-      <th>agency_url</th>
-      <th>agency_timezone</th>
-      <th>agency_lang</th>
-      <th>agency_phone</th>
-      <th>agency_fare_url</th>
-      <th>agency_email</th>
-      <th>base64_url</th>
-      <th>_dt</th>
-      <th>_feed_valid_from</th>
-      <th>_line_number</th>
-      <th>feed_timezone</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1d48492cd90930d6612fc70ef18bf8d4</td>
-      <td>93c44e614219c41696a8148018c1d83b</td>
-      <td>f87ac9abe81a7548325423ede69c3b86</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-09</td>
-      <td>2022-09-09 00:00:56+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
-      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
-      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-05-14</td>
-      <td>2022-05-14 00:01:18+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>282b4e07171c48ac08162e0dc8749066</td>
-      <td>18fcf47148228c7b56c19726c854054b</td>
-      <td>9b8e9b8befe560293a6c5b38dc19ffbb</td>
-      <td>MT</td>
-      <td>None</td>
-      <td>http://www.mantecatransit.com</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(209) 456-8000</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
-      <td>2021-07-28</td>
-      <td>2021-07-28 13:56:16+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>56112d81d62d71d408ea0247309178e4</td>
-      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
-      <td>21fa0b125d801eb5058da2ec5d748bda</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-15</td>
-      <td>2022-09-15 14:59:54.274779+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>033d018b031002914fbfa48c872d4a65</td>
-      <td>8f5e204872e6b7034479a6d11502547b</td>
-      <td>3d30b02b9008f788eb89c41c137786c1</td>
-      <td>MT</td>
-      <td>None</td>
-      <td>http://www.mantecatransit.com</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(209) 456-8000</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
-      <td>2022-01-19</td>
-      <td>2022-01-19 00:11:01+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-  </tbody>
-</table>
-</div><p># .. may have more rows</p></div></div></div>
-</div>
 </section>
 <section id="query-sql">
-<h3>query_sql<a class="headerlink" href="#query-sql" title="Link to this heading">#</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">query_sql</span></code> is another useful function to use inside of JupyterHub notebooks to turn a SQL query into a pandas DataFrame.</p>
+<span id="calitp-data-analysis-query-sql"></span><h3>query_sql<a class="headerlink" href="#query-sql" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">query_sql()</span></code> is a useful function to connect to and query a SQL database. You can optionally pass <code class="docutils literal notranslate"><span class="pre">as_df=True</span></code>
+to turn a SQL query result into a pandas DataFrame.</p>
 <p>As an example, in a notebook:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -801,6 +691,25 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
+      <td>56112d81d62d71d408ea0247309178e4</td>
+      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
+      <td>21fa0b125d801eb5058da2ec5d748bda</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-09-15</td>
+      <td>2022-09-15 14:59:54.274779+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>1</th>
       <td>1d48492cd90930d6612fc70ef18bf8d4</td>
       <td>93c44e614219c41696a8148018c1d83b</td>
       <td>f87ac9abe81a7548325423ede69c3b86</td>
@@ -815,25 +724,6 @@ document.write(`
       <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
       <td>2022-09-09</td>
       <td>2022-09-09 00:00:56+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
-      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
-      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-05-14</td>
-      <td>2022-05-14 00:01:18+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -858,25 +748,6 @@ document.write(`
     </tr>
     <tr>
       <th>3</th>
-      <td>56112d81d62d71d408ea0247309178e4</td>
-      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
-      <td>21fa0b125d801eb5058da2ec5d748bda</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-15</td>
-      <td>2022-09-15 14:59:54.274779+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>4</th>
       <td>033d018b031002914fbfa48c872d4a65</td>
       <td>8f5e204872e6b7034479a6d11502547b</td>
       <td>3d30b02b9008f788eb89c41c137786c1</td>
@@ -891,6 +762,25 @@ document.write(`
       <td>aHR0cHM6Ly93d3cuY2kubWFudGVjYS5jYS51cy9Db21tdW...</td>
       <td>2022-01-19</td>
       <td>2022-01-19 00:11:01+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>a196a8996bb74b7bd6d92f0cc2802620</td>
+      <td>00e77c29f2ce1986407cb93f53936dff</td>
+      <td>25915c089571c49be33b59e10c25d2ac</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-09-15</td>
+      <td>2022-09-15 00:01:13+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -943,6 +833,8 @@ you call it and subsequent calls can reuse that cached filesystem.</p>
 </section>
 <section id="siuba">
 <span id="id3"></span><h2>siuba<a class="headerlink" href="#siuba" title="Link to this heading">#</a></h2>
+<p><strong>DEPRECATED:</strong> siuba will be removed from <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> after version 2025.8.10 and other shared code within the
+next few months. Use SQLAlchemy and Pandas or GeoPandas functions directly instead. siuba uses these under the hood.</p>
 <p><code class="docutils literal notranslate"><span class="pre">siuba</span></code> is a tool that allows the same analysis code to run on a pandas DataFrame,
 as well as generate SQL for different databases.
 It supports most <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/series.html">pandas Series methods</a> analysts use. See the <a class="reference external" href="https://siuba.readthedocs.io">siuba docs</a> for more information.</p>
@@ -950,6 +842,8 @@ It supports most <a class="reference external" href="https://pandas.pydata.org/p
 and showing SQL test queries that siuba code generates.</p>
 <section id="basic-query">
 <span id="id4"></span><h3>Basic query<a class="headerlink" href="#basic-query" title="Link to this heading">#</a></h3>
+<section id="id5">
+<h4>siuba<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">tbls</span>
@@ -993,12 +887,12 @@ and showing SQL test queries that siuba code generates.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>8f5949d03a0cb1243ac9301df8adef14</td>
+      <td>a64532640829f3eae9129cd5d5e9590b</td>
       <td>1</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>b01a3ce6ba2e972a6acc08574a3e06a9</td>
+      <td>8f5949d03a0cb1243ac9301df8adef14</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1013,7 +907,7 @@ and showing SQL test queries that siuba code generates.</p>
     </tr>
     <tr>
       <th>4</th>
-      <td>4697bb52eb4da8bcff925f503a623326</td>
+      <td>b01a3ce6ba2e972a6acc08574a3e06a9</td>
       <td>1</td>
     </tr>
   </tbody>
@@ -1021,15 +915,37 @@ and showing SQL test queries that siuba code generates.</p>
 </div><p># .. may have more rows</p></div></div></div>
 </div>
 </section>
+<section id="equivalent-bigquery-sql-using-query-sql">
+<h4>Equivalent BigQuery SQL using <code class="docutils literal notranslate"><span class="pre">query_sql()</span></code><a class="headerlink" href="#equivalent-bigquery-sql-using-query-sql" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">query_sql</span>
+
+<span class="c1"># query agency information, then filter for a single gtfs feed,</span>
+<span class="c1"># and then count how often each feed key occurs</span>
+<span class="n">query_sql</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    SELECT feed_key, COUNT(*) AS n</span>
+<span class="sd">    FROM mart_gtfs.dim_agency</span>
+<span class="sd">    WHERE agency_id = &#39;BA&#39; AND base64_url = &#39;aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1SRw==&#39;</span>
+<span class="sd">    GROUP BY feed_key</span>
+<span class="sd">    ORDER BY n DESC</span>
+<span class="sd">    LIMIT 5</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
 <section id="collect-query-results">
-<span id="id5"></span><h3>Collect query results<a class="headerlink" href="#collect-query-results" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>Collect query results<a class="headerlink" href="#collect-query-results" title="Link to this heading">#</a></h3>
 <p>Note that siuba by default prints out a preview of the SQL query results.
 In order to fetch the results of the query as a pandas DataFrame, run <code class="docutils literal notranslate"><span class="pre">collect()</span></code>.</p>
+<section id="id7">
+<h4>siuba<a class="headerlink" href="#id7" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tbl_agency_names</span> <span class="o">=</span> <span class="n">tbls</span><span class="o">.</span><span class="n">mart_gtfs</span><span class="o">.</span><span class="n">dim_agency</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
 
-<span class="c1"># Use pandas .head() method to show first 5 rows of data</span>
+<span class="c1"># Use pandas `head()` method to show first 5 rows of data</span>
 <span class="n">tbl_agency_names</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1074,6 +990,25 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
   <tbody>
     <tr>
       <th>0</th>
+      <td>56112d81d62d71d408ea0247309178e4</td>
+      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
+      <td>21fa0b125d801eb5058da2ec5d748bda</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-09-15</td>
+      <td>2022-09-15 14:59:54.274779+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>1</th>
       <td>1d48492cd90930d6612fc70ef18bf8d4</td>
       <td>93c44e614219c41696a8148018c1d83b</td>
       <td>f87ac9abe81a7548325423ede69c3b86</td>
@@ -1088,25 +1023,6 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
       <td>2022-09-09</td>
       <td>2022-09-09 00:00:56+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>fdbd4bd9cc406a651ec80dba6ac4a1c1</td>
-      <td>ebfb64604b1c18bdf8ab91a2e4394491</td>
-      <td>ba587fd71b4f9a956ff36e309e6acf3f</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-05-14</td>
-      <td>2022-05-14 00:01:18+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -1131,25 +1047,6 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
     </tr>
     <tr>
       <th>3</th>
-      <td>56112d81d62d71d408ea0247309178e4</td>
-      <td>090343c89ab8fe1d5e3b79e5687bbcca</td>
-      <td>21fa0b125d801eb5058da2ec5d748bda</td>
-      <td>LAX FlyAway</td>
-      <td>None</td>
-      <td>http://www.LAXFlyAway.org</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(714) 507-1170</td>
-      <td>None</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
-      <td>2022-09-15</td>
-      <td>2022-09-15 14:59:54.274779+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>4</th>
       <td>033d018b031002914fbfa48c872d4a65</td>
       <td>8f5e204872e6b7034479a6d11502547b</td>
       <td>3d30b02b9008f788eb89c41c137786c1</td>
@@ -1167,13 +1064,44 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
+    <tr>
+      <th>4</th>
+      <td>a196a8996bb74b7bd6d92f0cc2802620</td>
+      <td>00e77c29f2ce1986407cb93f53936dff</td>
+      <td>25915c089571c49be33b59e10c25d2ac</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>http://www.LAXFlyAway.org</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(714) 507-1170</td>
+      <td>None</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly93d3cuZmx5bGF4LmNvbS8tL21lZGlhL2ZseW...</td>
+      <td>2022-09-15</td>
+      <td>2022-09-15 00:01:13+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
 </section>
+<section id="id8">
+<h4>Equivalent BigQuery SQL using <code class="docutils literal notranslate"><span class="pre">query_sql()</span></code><a class="headerlink" href="#id8" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">query_sql</span>
+
+<span class="n">tbl_agency_names</span> <span class="o">=</span> <span class="n">query_sql</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM mart_gtfs.dim_agency&#39;</span><span class="p">,</span> <span class="n">as_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Use pandas `head()` method to show first 5 rows of data</span>
+<span class="n">tbl_agency_names</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
 <section id="show-query-sql">
-<span id="id6"></span><h3>Show query SQL<a class="headerlink" href="#show-query-sql" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>Show query SQL<a class="headerlink" href="#show-query-sql" title="Link to this heading">#</a></h3>
 <p>While <code class="docutils literal notranslate"><span class="pre">collect()</span></code> fetches query results, <code class="docutils literal notranslate"><span class="pre">show_query()</span></code> prints out the SQL code that siuba generates.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1232,9 +1160,9 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
   <tbody>
     <tr>
       <th>0</th>
-      <td>8a786d43a3c1e8e620355a06d50a31b6</td>
-      <td>36fde7eedc560e48670dcde339e7e93d</td>
-      <td>9cb8e2f18ab3055f8b927f01ad57045b</td>
+      <td>3d00853c3a6634cba7a650b240057e0d</td>
+      <td>45be61a1cffaca77873a82d81b83f4fa</td>
+      <td>995bc341c731451ec41fcdceb1a83586</td>
       <td>960</td>
       <td>Madera Metro</td>
       <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
@@ -1244,13 +1172,51 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
       <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
       <td>None</td>
       <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2021-06-24</td>
-      <td>2021-06-24 00:09:42+00:00</td>
+      <td>2022-08-17</td>
+      <td>2022-08-17 00:01:19+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>1</th>
+      <td>9a395f3d167d2c0088ebf8dd3d2e1da9</td>
+      <td>75ddeb651b8c6b5039add08b71e1464a</td>
+      <td>3f5795f479e908e5ea99de4a22bb2500</td>
+      <td>960</td>
+      <td>Madera Metro</td>
+      <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(559) 661-RIDE (7433)</td>
+      <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
+      <td>2022-07-19</td>
+      <td>2022-07-19 00:00:43+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4db1e4458fec07330417b4f27bae527e</td>
+      <td>1aae9998784e92ab4fefdbca9415a020</td>
+      <td>2900be32d7daff7b93d4d7f4a242fa68</td>
+      <td>960</td>
+      <td>Madera Metro</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
+      <td>America/Los_Angeles</td>
+      <td>en</td>
+      <td>(559) 661-RIDE (7433)</td>
+      <td>https://www.madera.gov/home/departments/transi...</td>
+      <td>None</td>
+      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
+      <td>2025-01-11</td>
+      <td>2025-01-11 03:00:37.352100+00:00</td>
+      <td>1</td>
+      <td>America/Los_Angeles</td>
+    </tr>
+    <tr>
+      <th>3</th>
       <td>b22bc5c21e3e90bef6e0fc91c66199db</td>
       <td>f3271fec250502a41da3848717b9eeaf</td>
       <td>149ad0155813993026db844421248c4a</td>
@@ -1269,48 +1235,10 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>0cd97b3be5aeb3c1d6caeaebf6eb823b</td>
-      <td>b2cb4c2659f278a891f69cc26cd89efa</td>
-      <td>a0c77b0ae8cb6c4d2b0786b878aa975e</td>
-      <td>960</td>
-      <td>Madera Metro</td>
-      <td>https://www.cityofmadera.ca.gov/home/departmen...</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(559) 661-RIDE (7433)</td>
-      <td>https://www.cityofmadera.ca.gov/wp-content/upl...</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2021-08-07</td>
-      <td>2021-08-07 00:16:25+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>9e1782ca894aff6f1a20d273002b31a8</td>
-      <td>46bb281dadd29531a7208ddb2d4ad911</td>
-      <td>eb45540bc9b652b8ec24a952481dadc4</td>
-      <td>960</td>
-      <td>Madera Metro</td>
-      <td>https://www.madera.gov/home/departments/transi...</td>
-      <td>America/Los_Angeles</td>
-      <td>en</td>
-      <td>(559) 661-RIDE (7433)</td>
-      <td>https://www.madera.gov/home/departments/transi...</td>
-      <td>None</td>
-      <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2023-07-11</td>
-      <td>2023-07-11 03:00:46.743372+00:00</td>
-      <td>1</td>
-      <td>America/Los_Angeles</td>
-    </tr>
-    <tr>
       <th>4</th>
-      <td>2c37e2744b994268a70c7c3604a4b8e7</td>
-      <td>30e4e7b71cbd7068aee2807a230729dd</td>
-      <td>d8aee8e7d149a7f09bdcb0b198579049</td>
+      <td>d446468eef9ef231e51334f6b9855172</td>
+      <td>12d88e1dc31ea07b32cbb96e830223b0</td>
+      <td>d5ed5c6d7c25ebd77b99655a3dcf2c05</td>
       <td>960</td>
       <td>Madera Metro</td>
       <td>https://www.madera.gov/home/departments/transi...</td>
@@ -1320,8 +1248,8 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
       <td>https://www.madera.gov/home/departments/transi...</td>
       <td>None</td>
       <td>aHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3...</td>
-      <td>2025-07-10</td>
-      <td>2025-07-10 03:04:59.537861+00:00</td>
+      <td>2023-11-02</td>
+      <td>2023-11-02 03:00:25.764956+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -1331,8 +1259,109 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
 </div>
 <p>Note that here the pandas Series method <code class="docutils literal notranslate"><span class="pre">str.contains</span></code> corresponds to <code class="docutils literal notranslate"><span class="pre">regexp_contains</span></code> in Google BigQuery.</p>
 </section>
+<section id="filter-collect">
+<h3>filter() &amp; collect()<a class="headerlink" href="#filter-collect" title="Link to this heading">#</a></h3>
+<section id="id10">
+<h4>siuba<a class="headerlink" href="#id10" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">tbls</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siuba</span><span class="w"> </span><span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">collect</span><span class="p">,</span> <span class="nb">filter</span>
+
+<span class="n">annnual_service_agencies</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">tbls</span><span class="o">.</span><span class="n">mart_ntd</span><span class="o">.</span><span class="n">dim_annual_service_agencies</span><span class="p">()</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">report_year</span> <span class="o">==</span> <span class="mi">2023</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id11">
+<h4>Equivalent BigQuery SQL using <code class="docutils literal notranslate"><span class="pre">query_sql()</span></code><a class="headerlink" href="#id11" title="Link to this heading">#</a></h4>
+<p>Use SQL with <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> and <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> clauses for filtering</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">query_sql</span>
+
+<span class="n">query_sql</span><span class="p">(</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    SELECT * </span>
+<span class="sd">    FROM cal-itp-data-infra.mart_ntd.dim_annual_service_agencies</span>
+<span class="sd">    WHERE state = &#39;CA&#39; AND report_year = 2023</span>
+<span class="sd">    &quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="n">as_df</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="select">
+<h3>select()<a class="headerlink" href="#select" title="Link to this heading">#</a></h3>
+<section id="id12">
+<h4>siuba<a class="headerlink" href="#id12" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siuba</span><span class="w"> </span><span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">select</span>
+
+
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;./tl_2020_06_tabblock20.zip&#39;</span><span class="p">)</span>
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">blocks</span> <span class="o">&gt;&gt;</span> <span class="n">select</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">GEOID20</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">POP20</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">HOUSING20</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pandas-geopandas">
+<h4>pandas/geopandas<a class="headerlink" href="#pandas-geopandas" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;./tl_2020_06_tabblock20.zip&#39;</span><span class="p">)</span>
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[[</span><span class="s1">&#39;GEOID20&#39;</span><span class="p">,</span> <span class="s1">&#39;POP20&#39;</span><span class="p">,</span> <span class="s1">&#39;HOUSING20&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="rename">
+<h3>rename<a class="headerlink" href="#rename" title="Link to this heading">#</a></h3>
+<section id="id13">
+<h4>siuba<a class="headerlink" href="#id13" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siuba</span><span class="w"> </span><span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">rename</span>
+
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;./tl_2020_06_tabblock20.zip&#39;</span><span class="p">)</span>
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">blocks</span> <span class="o">&gt;&gt;</span> <span class="n">rename</span><span class="p">(</span><span class="n">GEO_ID</span> <span class="o">=</span> <span class="n">_</span><span class="o">.</span><span class="n">GEOID20</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id14">
+<h4>pandas/geopandas<a class="headerlink" href="#id14" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;./tl_2020_06_tabblock20.zip&#39;</span><span class="p">)</span>
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;GEOID20&#39;</span><span class="p">:</span> <span class="s1">&#39;GEO_ID&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="inner-join">
+<h3>inner_join<a class="headerlink" href="#inner-join" title="Link to this heading">#</a></h3>
+<section id="id15">
+<h4>siuba<a class="headerlink" href="#id15" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># df and df2 are both DataFrame</span>
+<span class="n">joined</span> <span class="o">=</span> <span class="n">df2</span> <span class="o">&gt;&gt;</span> <span class="n">inner_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;GEO_ID&#39;</span><span class="p">:</span><span class="s1">&#39;w_geocode&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</section>
+<section id="id16">
+<h4>pandas/geopandas<a class="headerlink" href="#id16" title="Link to this heading">#</a></h4>
+<p>The below code will result in table having both <code class="docutils literal notranslate"><span class="pre">GEO_ID</span></code> and <code class="docutils literal notranslate"><span class="pre">w_geocode</span></code> columns with redundant data.
+To avoid this, you could either (a) first rename one of the columns to match the other and
+do a simpler merge using just the <code class="docutils literal notranslate"><span class="pre">on</span></code> parameter (no need then for <code class="docutils literal notranslate"><span class="pre">left_on</span></code> and
+<code class="docutils literal notranslate"><span class="pre">right_on</span></code>) or (b) do as show below and subsequently drop one of the redundant columns.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># df and df2 are both DataFrame</span>
+<span class="n">joined</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;GEO_ID&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;w_geocode&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id17">
+<h4>siuba<a class="headerlink" href="#id17" title="Link to this heading">#</a></h4>
+</section>
+</section>
 <section id="more-siuba-resources">
-<span id="id7"></span><h3>More siuba Resources<a class="headerlink" href="#more-siuba-resources" title="Link to this heading">#</a></h3>
+<span id="id18"></span><h3>More siuba Resources<a class="headerlink" href="#more-siuba-resources" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://siuba.readthedocs.io">siuba docs</a></p></li>
 <li><p><a class="reference external" href="https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf">‘Tidy Tuesday’ live analyses with siuba</a></p></li>
@@ -1347,7 +1376,7 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
 </ul>
 </section>
 <section id="add-new-packages">
-<span id="id8"></span><h2>Add New Packages<a class="headerlink" href="#add-new-packages" title="Link to this heading">#</a></h2>
+<span id="id19"></span><h2>Add New Packages<a class="headerlink" href="#add-new-packages" title="Link to this heading">#</a></h2>
 <p>While most Python packages an analyst uses come in JupyterHub, there may be additional packages you’ll want to use in your analysis.</p>
 <ul class="simple">
 <li><p>Install <a class="reference internal" href="#shared-utils">shared utility functions</a>,</p></li>
@@ -1356,7 +1385,7 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
 </ul>
 </section>
 <section id="updating-calitp-data-analysis">
-<span id="id9"></span><h2>Updating calitp-data-analysis<a class="headerlink" href="#updating-calitp-data-analysis" title="Link to this heading">#</a></h2>
+<span id="id20"></span><h2>Updating calitp-data-analysis<a class="headerlink" href="#updating-calitp-data-analysis" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> is a <a class="reference external" href="https://pypi.org/project/calitp-data-analysis/">package</a> that lives <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis">here</a> in the <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> repo. Follow the steps below update to the package.</p>
 <p><b>Steps </b></p>
 <p>Adapted from <a class="reference external" href="https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809">this</a> and <a class="reference external" href="https://cal-itp.slack.com/archives/C02KH3DGZL7/p1707252389227829">this Slack thread</a>.</p>
@@ -1484,9 +1513,38 @@ WHERE regexp_contains(`mart_gtfs.dim_agency_1`.`agency_name`, &#39;Metro&#39;)
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#siuba">siuba</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-query">Basic query</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collect-query-results">Collect query results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-query">Basic query</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalent-bigquery-sql-using-query-sql">Equivalent BigQuery SQL using <code class="docutils literal notranslate"><span class="pre">query_sql()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collect-query-results">Collect query results</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Equivalent BigQuery SQL using <code class="docutils literal notranslate"><span class="pre">query_sql()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#show-query-sql">Show query SQL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filter-collect">filter() &amp; collect()</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Equivalent BigQuery SQL using <code class="docutils literal notranslate"><span class="pre">query_sql()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#select">select()</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pandas-geopandas">pandas/geopandas</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rename">rename</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">pandas/geopandas</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inner-join">inner_join</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">siuba</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">pandas/geopandas</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">siuba</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#more-siuba-resources">More siuba Resources</a></li>
 </ul>
 </li>
