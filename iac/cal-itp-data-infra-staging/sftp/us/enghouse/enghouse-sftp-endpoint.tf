@@ -146,11 +146,6 @@ resource "kubernetes_pod_v1" "enghouse-sftp" {
     }
     service_account_name = kubernetes_service_account.sftp-pod-service-account.metadata.0.name # Ensure this has GCS permissions to access data bucket
   }
-
-  timeouts {
-    create = "2m"
-    delete = "2m"
-  }
 }
 
 resource "kubernetes_service" "enghouse-sftp" {
@@ -168,6 +163,6 @@ resource "kubernetes_service" "enghouse-sftp" {
     }
 
     type             = "LoadBalancer"
-    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_global_address_enghouse-sftp_ip
+    # load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_enghouse-sftp-address_ip
   }
 }
