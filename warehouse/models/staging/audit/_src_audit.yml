@@ -1,15 +1,12 @@
 version: 2
 
-# NOTE: many of these sources lack enumerated tables and/or are manually
-# queried in SQL without the source() macros for a variety of reasons;
-
 sources:
   - name: cloudaudit
-    database: "{{ env_var('DEV_SOURCE_GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: audit
 
   - name: information_schema
-    database: "{{ env_var('DEV_SOURCE_GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     # this schema is queried as `region-us`.information_schema
     schema: information_schema
     tables:

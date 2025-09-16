@@ -6,7 +6,7 @@ sources:
       Data from BlackCat API. Each org's data is be in 1 row, and for each separate table in the API,
             a nested column holds all of it's data.
             NOTE: all of the snapshots of the API data that are stored in Google Cloud, are viewed together in this ONE table.
-    database: "{{ env_var('DEV_SOURCE_GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('EXTERNAL_TABLE_SOURCE')) }}"
     schema: external_blackcat
     tables:
       - name: all_ntdreports

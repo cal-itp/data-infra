@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: hqta_external_tables
-    database: "{{ env_var('DEV_SOURCE_GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('EXTERNAL_TABLE_SOURCE')) }}"
     schema: external_hqta
     tables:
       - name: areas
