@@ -15,7 +15,7 @@ Login with `gcloud`:
 $ gcloud auth application-default login --login-config=../iac/login.json
 ```
 
-Compile dbt:
+Install poetry dependencies inside the warehouse and compile dbt:
 
 ```bash
 $ cd ../warehouse
@@ -24,9 +24,10 @@ $ poetry run dbt deps
 $ poetry run dbt compile --target staging
 ```
 
-Install poetry dependencies:
+Install poetry dependencies for airflow:
 
 ```bash
+$ cd ../airflow
 $ poetry install
 ```
 
