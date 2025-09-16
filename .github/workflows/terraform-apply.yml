@@ -42,7 +42,6 @@ jobs:
 
       - name: Production Changes
         uses: tj-actions/changed-files@v46
-        if: github.base_ref == 'main' && github.head_ref != startsWith(github.head_ref, 'staging/')
         id: production-changes
         with:
           matrix: true
@@ -89,7 +88,7 @@ jobs:
   production:
     name: Production
     needs: [targets]
-    if: ${{ needs.targets.outputs.production != '[]' && needs.targets.outputs.production != '' }}
+    if: ${{ github.ref == 'refs/heads/main' && needs.targets.outputs.production != '[]' && needs.targets.outputs.production != '' }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -117,7 +116,6 @@ jobs:
 
       - name: Terraform Apply
         uses: dflook/terraform-apply@v1
-        if: github.base_ref == 'main' && github.head_ref != startsWith(github.head_ref, 'staging/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
