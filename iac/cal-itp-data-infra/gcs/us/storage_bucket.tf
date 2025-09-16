@@ -1671,60 +1671,6 @@ resource "google_storage_bucket" "tfer--test-calitp-ntd-report-validation" {
   }
 }
 
-resource "google_storage_bucket" "tfer--test-calitp-ntd-xlsx-products-clean" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US"
-  name                        = "test-calitp-ntd-xlsx-products-clean"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-ntd-xlsx-products-raw" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US"
-  name                        = "test-calitp-ntd-xlsx-products-raw"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
 resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-parsed" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
