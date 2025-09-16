@@ -21,94 +21,142 @@ schema_fields:
     type: STRING
   - name: type_of_service
     type: STRING
+  - name: rail_bus_ferry
+    type: STRING
   - name: fixed_route_flag
     type: BOOLEAN
   - name: year
-    type: INTEGER
+    type: STRING
   - name: incident_number
-    type: INTEGER
+    type: STRING
   - name: incident_date
     type: STRING
   - name: incident_time
     type: STRING
   - name: event_type
     type: STRING
-  - name: runaway_train_flag
-    type: BOOLEAN
   - name: safety_security
     type: STRING
-  - name: collision_with
-    type: STRING
   - name: property_damage
-    type: NUMERIC
-  - name: property_damage_type
     type: STRING
   - name: total_injuries
-    type: INTEGER
+    type: STRING
   - name: total_fatalities
-    type: INTEGER
-  - name: derailment_type
     type: STRING
   - name: number_of_transit_vehicles
-    type: INTEGER
+    type: STRING
   - name: towed_y_n
-    type: BOOLEAN
+    type: STRING
   - name: number_of_vehicles_involved
-    type: INTEGER
-  - name: number_of_derailed_cars
-    type: NUMERIC
+    type: STRING
   - name: event_location
     type: STRING
   - name: approximate_address
     type: STRING
-  - name: latitude
-    type: NUMERIC
-  - name: longitude
-    type: NUMERIC
-  - name: evacuation_comment
-    type: STRING
-  - name: evacuation_location
-    type: STRING
   - name: self_evacuation_y_n
     type: STRING
-  - name: hazmat_type
+  - name: intentional_y_n
     type: STRING
-  - name: hazmat_type_description
+  - name: transit_vehicle_rider
+    type: STRING
+  - name: people_waiting_or_leaving
+    type: STRING
+  - name: transit_vehicle_operator
+    type: STRING
+  - name: transit_employee_fatalities
+    type: STRING
+  - name: other_worker_fatalities
+    type: STRING
+  - name: bicyclist_fatalities
+    type: STRING
+  - name: pedestrian_in_crosswalk
+    type: STRING
+  - name: pedestrian_not_in_crosswalk
+    type: STRING
+  - name: pedestrian_crossing_tracks
+    type: STRING
+  - name: pedestrian_walking_along
+    type: STRING
+  - name: occupant_of_other_vehicle
+    type: STRING
+  - name: other_fatalities
+    type: STRING
+  - name: suicide_fatalities
+    type: STRING
+  - name: transit_vehicle_rider_injuries
+    type: STRING
+  - name: transit_vehicle_rider_serious
+    type: STRING
+  - name: people_waiting_or_leaving_1
+    type: STRING
+  - name: people_waiting_or_leaving_2
+    type: STRING
+  - name: transit_vehicle_operator_1
+    type: STRING
+  - name: transit_vehicle_operator_2
+    type: STRING
+  - name: transit_employee_injuries
+    type: STRING
+  - name: transit_employee_serious
+    type: STRING
+  - name: other_worker_injuries
+    type: STRING
+  - name: other_worker_serious_injuries
+    type: STRING
+  - name: bicyclist_injuries
+    type: STRING
+  - name: bicyclist_serious_injuries
+    type: STRING
+  - name: pedestrian_in_crosswalk_1
+    type: STRING
+  - name: pedestrian_in_crosswalk_2
+    type: STRING
+  - name: pedestrian_not_in_crosswalk_1
+    type: STRING
+  - name: pedestrian_not_in_crosswalk_2
+    type: STRING
+  - name: pedestrian_crossing_tracks_1
+    type: STRING
+  - name: pedestrian_crossing_tracks_2
+    type: STRING
+  - name: pedestrian_walking_along_1
+    type: STRING
+  - name: pedestrian_walking_along_2
+    type: STRING
+  - name: occupant_of_other_vehicle_1
+    type: STRING
+  - name: occupant_of_other_vehicle_2
+    type: STRING
+  - name: other_injuries
+    type: STRING
+  - name: other_serious_injuries
+    type: STRING
+  - name: suicide_injuries
+    type: STRING
+  - name: suicide_serious_injuries
+    type: STRING
+  - name: person_list
     type: STRING
   - name: fire_type
     type: STRING
   - name: fire_fuel
     type: STRING
-  - name: other_fire_fuel_description
+  - name: collision_with
+    type: STRING
+  - name: number_of_derailed_cars
     type: STRING
   - name: weather
     type: STRING
   - name: lighting
     type: STRING
-  - name: current_condition
-    type: STRING
-  - name: tide
-    type: STRING
-  - name: road_config
-    type: STRING
-  - name: configuration
-    type: STRING
   - name: path_condition
     type: STRING
   - name: rail_alignment
-    type: STRING
-  - name: rail_bus_ferry
     type: STRING
   - name: rail_grade_crossing_control
     type: STRING
   - name: right_of_way_condition
     type: STRING
-  - name: intersection
-    type: STRING
-  - name: service_stop_control_device
-    type: STRING
-  - name: intentional_y_n
-    type: BOOLEAN
   - name: vehicle_action
     type: STRING
   - name: action_type
@@ -118,94 +166,26 @@ schema_fields:
   - name: fuel_type
     type: STRING
   - name: vehicle_speed
-    type: NUMERIC
+    type: STRING
   - name: non_rail_transit_vehicle
     type: STRING
   - name: manufacturer
     type: STRING
+  - name: evacuation_comment
+    type: STRING
+  - name: evacuation_location
+    type: STRING
+  - name: configuration
+    type: STRING
   - name: manufacturer_description
+    type: STRING
+  - name: longitude
+    type: STRING
+  - name: latitude
     type: STRING
   - name: other_involved_veh
     type: STRING
   - name: other_vehicle_action
     type: STRING
-  - name: transit_vehicle_rider
-    type: INTEGER
-  - name: people_waiting_or_leaving
-    type: INTEGER
-  - name: people_waiting_or_leaving_1
-    type: INTEGER
-  - name: people_waiting_or_leaving_2
-    type: INTEGER
-  - name: transit_vehicle_operator
-    type: INTEGER
-  - name: transit_vehicle_operator_1
-    type: INTEGER
-  - name: transit_vehicle_operator_2
-    type: INTEGER
-  - name: transit_employee_fatalities
-    type: INTEGER
-  - name: other_worker_fatalities
-    type: INTEGER
-  - name: bicyclist_fatalities
-    type: INTEGER
-  - name: pedestrian_in_crosswalk
-    type: INTEGER
-  - name: pedestrian_in_crosswalk_1
-    type: INTEGER
-  - name: pedestrian_in_crosswalk_2
-    type: INTEGER
-  - name: pedestrian_not_in_crosswalk
-    type: INTEGER
-  - name: pedestrian_not_in_crosswalk_1
-    type: INTEGER
-  - name: pedestrian_not_in_crosswalk_2
-    type: INTEGER
-  - name: pedestrian_crossing_tracks
-    type: INTEGER
-  - name: pedestrian_crossing_tracks_1
-    type: INTEGER
-  - name: pedestrian_crossing_tracks_2
-    type: INTEGER
-  - name: pedestrian_walking_along
-    type: INTEGER
-  - name: pedestrian_walking_along_1
-    type: INTEGER
-  - name: pedestrian_walking_along_2
-    type: INTEGER
-  - name: occupant_of_other_vehicle
-    type: INTEGER
-  - name: occupant_of_other_vehicle_1
-    type: INTEGER
-  - name: occupant_of_other_vehicle_2
-    type: INTEGER
-  - name: other_fatalities
-    type: INTEGER
-  - name: suicide_fatalities
-    type: INTEGER
-  - name: transit_vehicle_rider_injuries
-    type: INTEGER
-  - name: transit_vehicle_rider_serious
-    type: INTEGER
-  - name: transit_employee_injuries
-    type: INTEGER
-  - name: transit_employee_serious
-    type: INTEGER
-  - name: other_worker_injuries
-    type: INTEGER
-  - name: other_worker_serious_injuries
-    type: INTEGER
-  - name: bicyclist_injuries
-    type: INTEGER
-  - name: bicyclist_serious_injuries
-    type: INTEGER
-  - name: other_injuries
-    type: INTEGER
-  - name: other_serious_injuries
-    type: INTEGER
-  - name: suicide_injuries
-    type: INTEGER
-  - name: suicide_serious_injuries
-    type: INTEGER
-  - name: person_list
+  - name: property_damage_type
     type: STRING
