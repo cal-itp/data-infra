@@ -12,8 +12,7 @@ with DAG(
     # Every hour at 15 minutes past the hour
     schedule="15 * * * *",
     start_date=datetime(2025, 9, 2),
-    catchup=False,
-    max_active_tasks=128,
+    catchup=True,
 ):
     for process in ["parse", "validate"]:
         for feed in ["service_alerts", "trip_updates", "vehicle_positions"]:
