@@ -694,14 +694,14 @@ files = [
 
 [[package]]
 name = "calitp-data-analysis"
-version = "2025.6.24"
+version = "2025.8.10"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
 optional = false
 python-versions = "<3.12,>=3.11"
 groups = ["main"]
 files = [
-    {file = "calitp_data_analysis-2025.6.24-py3-none-any.whl", hash = "sha256:0e23d33a2fa5a21d84dc5e5a0c3ecd8053008d9b2c8aa1fe928caab93428b6dd"},
-    {file = "calitp_data_analysis-2025.6.24.tar.gz", hash = "sha256:c44780dc109c9e0e71cdb5c483854427c3fd2ec799ba2adae2a9371fa81c8607"},
+    {file = "calitp_data_analysis-2025.8.10-py3-none-any.whl", hash = "sha256:fe3966c88a7735e056cab740358822cc28571c340b9a311bbb2476dd217eb3a3"},
+    {file = "calitp_data_analysis-2025.8.10.tar.gz", hash = "sha256:78618153af8e42a888f2896e56a300f685e3dcff067f3c905bdb18b78f312d9a"},
 ]
 
 [package.dependencies]
@@ -8885,4 +8885,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11.0, <3.12.0"
-content-hash = "ba9892bc36c80d3d58ab17c759b379b7795b1bc539c2a0c344aa9c1b4fa0ef66"
+content-hash = "fb8f755e607b2c27c4c4ce20b0ccee8c1f93e9583c8146d6102c59d712b87c48"
