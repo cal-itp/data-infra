@@ -508,18 +508,6 @@ resource "google_storage_bucket_iam_member" "tfer--test-calitp-ntd-report-valida
   role   = "roles/storage.legacyBucketReader"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-ntd-xlsx-products-clean" {
-  bucket = "b/test-calitp-ntd-xlsx-products-clean"
-  member = "projectViewer:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectReader"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-ntd-xlsx-products-raw" {
-  bucket = "b/test-calitp-ntd-xlsx-products-raw"
-  member = "projectOwner:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--test-calitp-payments-littlepay-parsed" {
   bucket = "b/test-calitp-payments-littlepay-parsed"
   member = "projectEditor:cal-itp-data-infra"

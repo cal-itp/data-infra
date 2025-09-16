@@ -330,14 +330,6 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-report-validation" {
   bucket = "test-calitp-ntd-report-validation"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-xlsx-products-clean" {
-  bucket = "test-calitp-ntd-xlsx-products-clean"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-xlsx-products-raw" {
-  bucket = "test-calitp-ntd-xlsx-products-raw"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-payments-littlepay-parsed" {
   bucket = "test-calitp-payments-littlepay-parsed"
 }
