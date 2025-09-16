@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'staging/**'
     paths:
       - 'airflow/**'
       - 'warehouse/**'
@@ -24,14 +25,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: tj-actions/changed-files@v46
+      - name: Staging Changes
+        uses: tj-actions/changed-files@v46
         id: staging-changes
         with:
           matrix: true
           dir_names: true
           files: 'iac/cal-itp-data-infra-staging/airflow/**/*.tf'
 
-      - uses: tj-actions/changed-files@v46
+      - name: Production Changes
+        uses: tj-actions/changed-files@v46
+        if: github.base_ref == 'main' && github.head_ref != startsWith(github.head_ref, 'staging/')
         id: production-changes
         with:
           matrix: true
@@ -53,14 +57,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: tj-actions/changed-files@v46
+      - name: Staging Changes
+        uses: tj-actions/changed-files@v46
         id: staging-changes
         with:
           matrix: true
           dir_names: true
           files: 'iac/cal-itp-data-infra-staging/composer/**/*.tf'
 
-      - uses: tj-actions/changed-files@v46
+      - name: Production Changes
+        uses: tj-actions/changed-files@v46
+        if: github.base_ref == 'main' && github.head_ref != startsWith(github.head_ref, 'staging/')
         id: production-changes
         with:
           matrix: true
@@ -94,6 +101,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra-staging/airflow/us
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
 
   composer-staging:
     name: Staging Composer
@@ -122,6 +130,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra-staging/composer/us
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
 
   airflow-production:
     name: Production Airflow
@@ -146,6 +155,7 @@ jobs:
 
       - name: Terraform Apply
         uses: dflook/terraform-apply@v1
+        if: github.base_ref == 'main' && github.head_ref != startsWith(github.head_ref, 'staging/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -174,6 +184,7 @@ jobs:
 
       - name: Terraform Apply
         uses: dflook/terraform-apply@v1
+        if: github.base_ref == 'main' && github.head_ref != startsWith(github.head_ref, 'staging/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
