@@ -10,3 +10,136 @@ hive_options:
   source_uri_prefix: "monthly_modal_time_series_safety_and_service/historical/{dt:DATE}/{execution_ts:TIMESTAMP}"
 destination_project_dataset_table: "external_ntd__safety_and_security.historical__monthly_modal_time_series_safety_and_service"
 post_hook: SELECT * FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_ntd__safety_and_security.historical__monthly_modal_time_series_safety_and_service LIMIT 1;
+schema_fields:
+  - name: _5_digit_ntd_id
+    type: STRING
+  - name: agency
+    type: STRING
+  - name: organization_type
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: type_of_service
+    type: STRING
+  - name: rail_y_n
+    type: BOOLEAN
+  - name: uace_code
+    type: STRING
+  - name: primary_uza_name
+    type: STRING
+  - name: primary_uza_sq_miles
+    type: STRING
+  - name: primary_uza_population
+    type: STRING
+  - name: service_area_sq_miles
+    type: STRING
+  - name: service_area_population
+    type: STRING
+  - name: year
+    type: STRING
+  - name: month
+    type: STRING
+  - name: month_year
+    type: STRING
+  - name: vehicles
+    type: STRING
+  - name: vehicle_revenue_miles
+    type: STRING
+  - name: vehicle_revenue_hours
+    type: STRING
+  - name: ridership
+    type: STRING
+  - name: collisions_with_motor_vehicle
+    type: STRING
+  - name: collisions_with_person
+    type: STRING
+  - name: collisions_with_fixed_object
+    type: STRING
+  - name: collisions_with_rail_vehicle
+    type: STRING
+  - name: collisions_with_bus_vehicle
+    type: STRING
+  - name: collisions_with_other
+    type: STRING
+  - name: total_collisions
+    type: STRING
+  - name: total_derailments
+    type: STRING
+  - name: total_fires
+    type: STRING
+  - name: total_security_events
+    type: STRING
+  - name: total_events_not_otherwise
+    type: STRING
+  - name: total_events
+    type: STRING
+  - name: passenger_fatalities
+    type: STRING
+  - name: people_waiting_or_leaving
+    type: STRING
+  - name: operator_fatalities
+    type: STRING
+  - name: other_employee_fatalities
+    type: STRING
+  - name: total_employee_fatalities
+    type: STRING
+  - name: other_worker_fatalities
+    type: STRING
+  - name: bicyclist_fatalities
+    type: STRING
+  - name: pedestrian_in_crosswalk
+    type: STRING
+  - name: pedestrian_not_in_crosswalk
+    type: STRING
+  - name: pedestrian_crossing_tracks
+    type: STRING
+  - name: pedestrian_walking_along
+    type: STRING
+  - name: other_vehicle_occupant
+    type: STRING
+  - name: other_fatalities
+    type: STRING
+  - name: trespasser_fatalities
+    type: STRING
+  - name: suicide_fatalities
+    type: STRING
+  - name: total_other_fatalities
+    type: STRING
+  - name: total_fatalities
+    type: STRING
+  - name: passenger_injuries
+    type: STRING
+  - name: people_waiting_or_leaving_1
+    type: STRING
+  - name: operator_injuries
+    type: STRING
+  - name: other_employee_injuries
+    type: STRING
+  - name: total_employee_injuries
+    type: STRING
+  - name: other_worker_injuries
+    type: STRING
+  - name: bicyclist_injuries
+    type: STRING
+  - name: pedestrian_in_corsswalk
+    type: STRING
+  - name: pedestrian_not_in_crosswalk_1
+    type: STRING
+  - name: pedestrian_crossing_tracks_1
+    type: STRING
+  - name: pedestrian_walking_along_1
+    type: STRING
+  - name: other_vehicle_occupant_1
+    type: STRING
+  - name: other_injuries
+    type: STRING
+  - name: trespasser_injuries
+    type: STRING
+  - name: suicide_injuries
+    type: STRING
+  - name: total_other_injuries
+    type: STRING
+  - name: total_injuries
+    type: STRING
+  - name: moyr
+    type: STRING
