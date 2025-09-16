@@ -2,7 +2,8 @@ version: 2
 
 sources:
   - name: external_ntd__safety_and_security
-    description: Historical safety and security data tables, loaded from DOT NTD API https://www.transit.dot.gov/ntd/ntd-data.
+    description: |
+      Historical safety and security data tables, loaded from DOT NTD API https://www.transit.dot.gov/ntd/ntd-data.
     database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_ntd__safety_and_security
     tables:
