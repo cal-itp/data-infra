@@ -24,16 +24,17 @@ class UniquePartitionValues:
         )
 
         partitions = []
+        partition_name = f"{self.partition_name}="  # "base64_url="
+
         for path in keys:
             # path = trip_updates/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00/ts=2024-10-22T18:59:40+00:00/base64_url=aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw==/feed
             for partition in path.split("/"):
                 # partition = [ "trip_updates", "dt=2024-10-22", "hour=2024-10-22T18:00:00+00:00", "ts=2024-10-22T18:59:40+00:00", "base64_url=aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw==", "feed"]
-                if partition.startswith(f"{self.partition_name}="):
-                    # partition_name = "base64_url"
-                    # partition = "base64_url=aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw=="
-                    name_size = len(f"{self.partition_name}=")
-                    # Append value without the partition name and first equals sign: "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw=="
-                    partitions.append(partition[name_size:])
+                if partition.startswith(partition_name):
+                    # base64_url=aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw==
+                    # Append the value: aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw==
+                    partitions.append(partition.split(partition_name[1]))
+
         return list(set(partitions))
 
 
