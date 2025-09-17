@@ -13,7 +13,7 @@
 WITH stop_time_updates AS (
     SELECT *
     FROM {{ ref('fct_stop_time_updates_sample') }}
-    WHERE dt >= '2025-06-01' AND dt <= '2025-06-15'
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }} AND dt >= '2025-06-01' AND dt <= '2025-06-15'
 ),
 
 -- follow pattern in int_gtfs_rt__vehicle_positions_trip_day_map_grouping / fct_vehicle_locations,

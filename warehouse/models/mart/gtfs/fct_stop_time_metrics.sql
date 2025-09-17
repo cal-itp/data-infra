@@ -24,6 +24,7 @@ WITH arrivals AS (
         stop_sequence,
         actual_arrival
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_stop_day_map_grouping') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 tu_trip_keys AS (
@@ -37,6 +38,7 @@ tu_trip_keys AS (
         trip_start_time
 
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 trip_updates AS (
@@ -54,6 +56,7 @@ trip_updates AS (
         arrival_time,
         departure_time
     FROM {{ ref('fct_stop_time_updates_sample') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 trip_updates2 AS (
