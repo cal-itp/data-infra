@@ -32,6 +32,7 @@ class TestGCSToGTFSRTCommandOperator:
             gcp_conn_id="google_cloud_default",
             process="parse",
             feed="service_alerts",
+            filter_by="=",
             bucket=os.environ.get("CALITP_BUCKET__GTFS_RT_RAW"),
             dag=test_dag,
         )
