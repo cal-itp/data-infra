@@ -31,7 +31,7 @@ class UniquePartitionValues:
                 if partition.startswith(f"{self.partition_name}="):
                     # partition_name = "base64_url"
                     # partition = "base64_url=aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw=="
-                    name_size = len("{self.partition_name}=")
+                    name_size = len(f"{self.partition_name}=")
                     # Append value without the partition name and first equals sign: "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw=="
                     partitions.append(partition[name_size:])
         return list(set(partitions))
