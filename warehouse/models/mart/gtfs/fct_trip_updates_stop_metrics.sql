@@ -12,7 +12,7 @@
 
 WITH fct_stop_time_metrics AS (
     SELECT *
-    FROM {{ ref('fct_stop_time_metrics') }}
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_stop_time_metrics`
 ),
 
 daily_scheduled_stops AS (
@@ -22,14 +22,15 @@ daily_scheduled_stops AS (
         service_date,
         stop_id,
         stop_key
-    FROM {{ ref('fct_daily_scheduled_stops') }}
+    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_scheduled_stops`
+    WHERE service_date >= "2025-06-01" AND service_date <= "2025-06-15"
 ),
 
 rt_feeds AS (
     SELECT DISTINCT
         base64_url,
         schedule_feed_key
-    FROM {{ ref('fct_daily_rt_feed_files') }}
+    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_rt_feed_files`
 ),
 
 stop_metrics AS (
@@ -53,6 +54,10 @@ stop_metrics AS (
         SUM(fct_stop_time_metrics.n_tu_minutes_available) AS n_tu_minutes_available,
         AVG(fct_stop_time_metrics.avg_prediction_spread_minutes) AS avg_prediction_spread_minutes,
         SUM(fct_stop_time_metrics.n_predictions) AS n_predictions,
+
+        SUM(fct_stop_time_metrics.n_predictions_early) AS n_predictions_early,
+        SUM(fct_stop_time_metrics.n_predictions_ontime) AS n_predictions_ontime,
+        SUM(fct_stop_time_metrics.n_predictions_late) AS n_predictions_late,
 
         -- this key comes from intermediate and approximates trip_instance_key,
         -- which is available in fct_trip_updates_trip_summaries

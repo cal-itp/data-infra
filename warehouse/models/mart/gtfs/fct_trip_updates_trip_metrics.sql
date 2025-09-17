@@ -12,7 +12,7 @@
 
 WITH fct_stop_time_metrics AS (
     SELECT *
-    FROM {{ ref('fct_stop_time_metrics') }}
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_stop_time_metrics_table`--{{ ref('fct_stop_time_metrics') }}
 ),
 
 trip_metrics AS (
@@ -29,6 +29,10 @@ trip_metrics AS (
         SUM(fct_stop_time_metrics.n_tu_minutes_available) AS n_tu_minutes_available,
         AVG(fct_stop_time_metrics.avg_prediction_spread_minutes) AS avg_prediction_spread_minutes,
         SUM(fct_stop_time_metrics.n_predictions) AS n_predictions,
+
+        SUM(fct_stop_time_metrics.n_predictions_early) AS n_predictions_early,
+        SUM(fct_stop_time_metrics.n_predictions_ontime) AS n_predictions_ontime,
+        SUM(fct_stop_time_metrics.n_predictions_late) AS n_predictions_late,
 
         COUNT(DISTINCT fct_stop_time_metrics.key) AS n_stops,
 
