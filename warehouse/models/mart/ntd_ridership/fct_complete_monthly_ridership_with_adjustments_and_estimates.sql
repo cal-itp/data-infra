@@ -1,3 +1,5 @@
+{{ config(materialized="table") }}
+
 WITH staging_complete_monthly_ridership_with_adjustments_and_estimates AS (
     SELECT *
     FROM {{ ref('stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates') }}
