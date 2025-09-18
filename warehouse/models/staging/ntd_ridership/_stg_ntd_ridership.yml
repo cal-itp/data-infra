@@ -286,6 +286,22 @@ models:
       from the static Excel file in its formatting as well as being updated weekly, to capture data as it is reported
       and validated for a given publication month.
     columns:
+      - *ntd_id
+      - *agency
+      - name: date
+        description: |
+          The month (in Month-Year format) for which UPT, VRM, VRH and VOM was reported by the agency for the given Mode and TOS.
+      - name: period_month
+        description: |
+          The month portion extracted from the date field (MM format).
+      - name: period_year
+        description: |
+          The year portion extracted from the date field (YYYY format).
+      - name: period_year_month
+        description: |
+          The year and month in YYYY-MM format extracted from the date field.
+      - *tos
+      - *mode
       - name: agency_mode_tos_date
         description: |
           Unique row identifier derived by concatenating agency, mode, TOS, UZA, status, reporter type and date columns.
@@ -297,11 +313,9 @@ models:
           The number of passengers who board public transportation vehicles. Passengers are counted each time they board
           vehicles no matter how many vehicles they use to travel from their origin to their destination.
       - *_3_mode
-      - *tos
       - name: vrm
         description: |
           The miles that vehicles are scheduled to or actually travel while in revenue service
-      - *mode
       - *uza_name
       - *uace_cd
       - name: fta_region
@@ -318,10 +332,5 @@ models:
           The hours that vehicles are scheduled to or actually travel while in revenue service. Vehicle revenue hours
           include layovers and driver recovery time.
       - *legacy_ntd_id
-      - name: date
-        description: |
-          The month (in Month-Year format) for which UPT, VRM, VRH and VOM was reported by the agency for the given Mode and TOS.
-      - *agency
-      - *ntd_id
       - *dt
       - *execution_ts
