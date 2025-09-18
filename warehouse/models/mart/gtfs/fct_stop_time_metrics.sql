@@ -21,12 +21,11 @@ WITH arrivals AS (
         trip_start_time,
         stop_id,
         stop_sequence,
-        last_trip_updates_arrival,
-        last_trip_updates_departure,
         actual_arrival,
-        GREATEST(COALESCE(last_trip_updates_arrival, last_trip_updates_departure)) AS actual_departure
-    FROM `cal-itp-data-infra-staging.staging.int_gtfs_rt__trip_updates_trip_stop_day_map_grouping`
-    WHERE dt >= "2025-06-01" AND dt <= "2025-06-02"
+        actual_departure,
+
+    FROM {{ ref('int_gtfs_rt__trip_updates_trip_stop_day_map_grouping') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= "2025-06-03"
 ),
 
 tu_trip_keys AS (
@@ -56,8 +55,8 @@ trip_updates AS (
         _extract_ts,
         arrival_time,
         departure_time
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_stop_time_updates_sample`
-    WHERE dt >= "2025-06-01" AND dt <= "2025-06-02"
+    FROM {{ ref('fct_stop_time_updates_sample') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= "2025-06-03"
 ),
 
 trip_updates2 AS (
@@ -120,18 +119,9 @@ predictions_categorized AS (
             WHEN prediction_category = "is_late" THEN predictions_seconds_difference_from_departure
         END AS prediction_seconds_difference,
         -- save out boolean dummy variables
-        CASE
-            WHEN prediction_category = 'is_ontime' THEN TRUE
-            ELSE FALSE
-        END AS is_ontime,
-        CASE
-            WHEN prediction_category = 'is_early' THEN TRUE
-            ELSE FALSE
-        END AS is_early,
-        CASE
-            WHEN prediction_category = 'is_late' THEN TRUE
-            ELSE FALSE
-        END AS is_late,
+        COALESCE(prediction_category="is_ontime", True) AS is_ontime,
+        COALESCE(prediction_category="is_early", True) AS is_early,
+        COALESCE(prediction_category="is_late", True) AS is_late,
     FROM prediction_difference
 ),
 

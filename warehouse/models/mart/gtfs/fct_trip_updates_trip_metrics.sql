@@ -12,7 +12,8 @@
 
 WITH fct_stop_time_metrics AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_stop_time_metrics_table`--{{ ref('fct_stop_time_metrics') }}
+    FROM {{ ref('fct_stop_time_metrics') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= "2025-06-03"
 ),
 
 trip_metrics AS (
