@@ -170,6 +170,12 @@ filter using (
 ) }};
 
 {{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Monterey-Salinas Transit',
+    principals = ['serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
     principals = [
         'serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
