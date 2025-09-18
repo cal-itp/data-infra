@@ -29,7 +29,7 @@ WITH stop_time_updates AS (
         departure_time,
 
     FROM {{ ref('fct_stop_time_updates') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }} AND dt >= '2025-06-01' AND dt <= '2025-06-15' AND trip_id IS NOT NULL AND stop_id IS NOT NULL AND stop_sequence IS NOT NULL
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= '2025-06-15' AND trip_id IS NOT NULL AND stop_id IS NOT NULL AND stop_sequence IS NOT NULL
 )
 
 SELECT * FROM stop_time_updates
