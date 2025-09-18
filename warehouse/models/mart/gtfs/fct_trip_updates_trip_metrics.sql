@@ -13,7 +13,7 @@
 WITH fct_stop_time_metrics AS (
     SELECT *
     FROM {{ ref('fct_stop_time_metrics') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= "2025-06-03"
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= "2025-06-15"
 ),
 
 trip_metrics AS (

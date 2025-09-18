@@ -13,7 +13,18 @@
 WITH fct_stop_time_metrics AS (
     SELECT *
     FROM {{ ref('fct_stop_time_metrics') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= "2025-06-03"
+    WHERE {{ incremental_where(
+        default_start_var='GTFS_SCHEDULE_START',
+        this_dt_column='service_date',
+        filter_dt_column='service_date',
+        dev_lookback_days = 250) }} AND service_date >= '2025-06-01' AND service_date <= "2025-06-15"
+),
+
+rt_feeds AS (
+    SELECT DISTINCT
+        base64_url,
+        schedule_feed_key
+    FROM {{ ref('fct_daily_rt_feed_files') }}
 ),
 
 daily_scheduled_stops AS (
@@ -23,15 +34,10 @@ daily_scheduled_stops AS (
         service_date,
         stop_id,
         stop_key
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_scheduled_stops`
-    WHERE service_date >= "2025-06-01" AND service_date <= "2025-06-03"
-),
-
-rt_feeds AS (
-    SELECT DISTINCT
-        base64_url,
-        schedule_feed_key
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_rt_feed_files`
+    FROM {{ ref('fct_daily_scheduled_stops') }} AS stops
+    INNER JOIN rt_feeds
+        ON rt_feeds.schedule_feed_key = stops.feed_key
+    WHERE service_date >= "2025-06-01" AND service_date <= "2025-06-15"
 ),
 
 stop_metrics AS (
@@ -62,7 +68,7 @@ stop_metrics AS (
 
         -- this key comes from intermediate and approximates trip_instance_key,
         -- which is available in fct_trip_updates_trip_summaries
-        COUNT(DISTINCT fct_stop_time_metrics.trip_key) AS n_trips,
+        COUNT(DISTINCT fct_stop_time_metrics.trip_key) AS n_tu_trips,
 
     FROM fct_stop_time_metrics
     INNER JOIN rt_feeds
