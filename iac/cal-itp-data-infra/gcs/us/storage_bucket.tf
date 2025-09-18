@@ -633,7 +633,7 @@ resource "google_storage_bucket" "tfer--calitp-state-geoportal-scrape" {
 resource "google_storage_bucket" "tfer--calitp-state-highway-network-stops" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
-  location                    = "US"
+  location                    = "US-WEST2"
   name                        = "calitp-state-highway-network-stops"
   project                     = "cal-itp-data-infra"
   public_access_prevention    = "enforced"
