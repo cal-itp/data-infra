@@ -271,3 +271,9 @@ resource "google_service_account" "composer-service-account" {
   display_name = "composer"
   project      = "cal-itp-data-infra"
 }
+
+resource "google_service_account" "vctc-payments-user" {
+  account_id = "vctc-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
