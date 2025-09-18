@@ -26,7 +26,7 @@ stg_ntd__complete_monthly_ridership_with_adjustments_and_estimates AS (
         {{ trim_make_empty_string_null('_3_mode') }} AS _3_mode,
         SAFE_CAST(vrm AS NUMERIC) AS vrm,
         {{ trim_make_empty_string_null('uza_name') }} AS uza_name,
-        FORMAT("%05d", CAST(uace_cd AS INT64)) AS uace_cd,
+        FORMAT("%05d", SAFE_CAST(uace_cd AS INT64)) AS uace_cd,
         {{ trim_make_empty_string_null('fta_region') }} AS fta_region,
         {{ trim_make_empty_string_null('state') }} AS state,
         {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
