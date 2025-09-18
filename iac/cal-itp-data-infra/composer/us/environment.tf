@@ -17,7 +17,7 @@ resource "google_composer_environment" "calitp-composer" {
         cpu        = 2
         memory_gb  = 2
         storage_gb = 1
-        count      = 1
+        count      = 2
       }
       web_server {
         cpu        = 1
@@ -25,33 +25,34 @@ resource "google_composer_environment" "calitp-composer" {
         storage_gb = 1
       }
       worker {
-        cpu        = 2
+        cpu        = 4
         memory_gb  = 13
-        storage_gb = 10
+        storage_gb = 5
         min_count  = 1
-        max_count  = 6
+        max_count  = 32
       }
     }
 
-    environment_size = "ENVIRONMENT_SIZE_SMALL"
+    environment_size = "ENVIRONMENT_SIZE_LARGE"
 
     software_config {
       image_version = "composer-2.8.6-airflow-2.7.3"
 
       airflow_config_overrides = {
-        celery-worker_concurrency                  = 4
+        celery-worker_concurrency                  = 6
         core-dag_file_processor_timeout            = 1200
         core-dagbag_import_timeout                 = 600
-        core-dags_are_paused_at_creation           = "True"
+        core-dags_are_paused_at_creation           = true
+        email-email_backend                        = "airflow.utils.email.send_email_smtp"
+        email-email_conn_id                        = "smtp_postmark"
+        email-from_email                           = "bot@calitp.org"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
-        webserver-reload_on_plugin_change          = "True"
-        email-email_backend                        = "airflow.utils.email.send_email_smtp"
-        email-from_email                           = "bot@calitp.org"
-        email-email_conn_id                        = "smtp_postmark"
-        smtp-smtp_starttls                         = true
         smtp-smtp_mail_from                        = "bot@calitp.org"
+        smtp-smtp_starttls                         = true
+        webserver-reload_on_plugin_change          = true
+        webserver-show_trigger_form_if_no_params   = true
       }
 
       pypi_packages = local.pypi_packages

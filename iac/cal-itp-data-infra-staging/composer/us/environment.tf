@@ -42,16 +42,17 @@ resource "google_composer_environment" "calitp-staging-composer" {
         celery-worker_concurrency                  = 4
         core-dag_file_processor_timeout            = 1200
         core-dagbag_import_timeout                 = 600
-        core-dags_are_paused_at_creation           = "True"
+        core-dags_are_paused_at_creation           = true
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
-        email-from_email                           = "bot@calitp.org"
         email-email_conn_id                        = "smtp_postmark"
+        email-from_email                           = "bot@calitp.org"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
-        smtp-smtp_starttls                         = true
         smtp-smtp_mail_from                        = "bot@calitp.org"
-        webserver-reload_on_plugin_change          = "True"
+        smtp-smtp_starttls                         = true
+        webserver-reload_on_plugin_change          = true
+        webserver-show_trigger_form_if_no_params   = true
       }
 
       pypi_packages = local.pypi_packages

@@ -13,3 +13,40 @@ hive_options:
   mode: CUSTOM
   require_partition_filter: false
   source_uri_prefix: "complete_monthly_ridership_with_adjustments_and_estimates/historical/{dt:DATE}/{execution_ts:TIMESTAMP}"
+schema_fields:
+  - name: ntd_id
+    type: STRING
+  - name: legacy_ntd_id
+    type: STRING
+  - name: agency
+    type: STRING
+  - name: mode_type_of_service_status
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: uace_cd
+    type: STRING
+  - name: uza_name
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: tos
+    type: STRING
+  - name: _3_mode
+    type: STRING
+  - name: date
+    type: DATETIME
+  - name: upt
+    type: NUMERIC
+  - name: voms
+    type: NUMERIC
+  - name: vrh
+    type: NUMERIC
+  - name: vrm
+    type: NUMERIC
+  - name: agency_mode_tos_date
+    type: STRING
+  - name: state
+    type: STRING
+  - name: fta_region
+    type: STRING

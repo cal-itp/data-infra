@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'staging/**'
     paths:
       - 'iac/**'
 
@@ -31,14 +32,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: tj-actions/changed-files@v46
+      - name: Staging Changes
+        uses: tj-actions/changed-files@v46
         id: staging-changes
         with:
           matrix: true
           dir_names: true
           files: 'iac/cal-itp-data-infra-staging/**/*.tf'
 
-      - uses: tj-actions/changed-files@v46
+      - name: Production Changes
+        uses: tj-actions/changed-files@v46
         id: production-changes
         with:
           matrix: true
@@ -80,11 +83,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: ${{ matrix.path }}
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
 
   production:
     name: Production
     needs: [targets]
-    if: ${{ needs.targets.outputs.production != '[]' && needs.targets.outputs.production != '' }}
+    if: ${{ github.ref == 'refs/heads/main' && needs.targets.outputs.production != '[]' && needs.targets.outputs.production != '' }}
     runs-on: ubuntu-latest
 
     permissions:

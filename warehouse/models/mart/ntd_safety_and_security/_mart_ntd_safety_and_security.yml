@@ -2,42 +2,713 @@ version: 2
 
 models:
   - name: fct_fra_regulated_mode_major_security_events
-    description: |
-      Add description
+    description: Fact table for NTD FRA regulated mode major security events data with agency information
     columns:
       - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `incident_number`.
+        description: Synthetic primary key constructed from ntd_id, year, and incident_number
         tests:
           - not_null
           - unique
+      - name: ntd_id
+        description: A five-digit identifying number for each agency used in the current NTD system.
+      - name: year
+        description: The calendar year in which the event occurred.
+      - name: agency_name
+        description: Agency name from dimension table
+      - name: city
+        description: Agency city from dimension table
+      - name: state
+        description: Agency state from dimension table
+      - name: caltrans_district_current
+        description: Current Caltrans district from dimension table
+      - name: caltrans_district_name_current
+        description: Current Caltrans district name from dimension table
+      - name: incident_number
+        description: A unique system-generated identification number for each Major Safety Event.
+      - name: event_type
+        description: The type of event that occurred.
+      - name: mode
+        description: |
+          Abbreviation of mode. For a complete list of modes, please find the most current Safety and Security Policy Manual at https://www.transit.dot.gov/ntd/manuals
+      - name: type_of_service
+        description: Abbreviation for "Type of Service." Describes how public transportation services are provided by the transit agency - directly operated (DO) or purchased transportation which also includes from Taxi Operators and Transportation Network Companies (PT, TX, TN) services.
+      - name: other_vehicle_action
+        description: Identifies the other involved vehicle's action at the time of the collision or derailment.
+      - name: manufacturer_description
+        description: Text explanation from the 'Please describe" box used when "Other'' is selected for the Manufacturer type.
+      - name: evacuation_comment
+        description: The details of the evacuation. A reportable evacuation is a condition that occurs when persons depart from transit vehicles or facilities for life safety reasons. Evacuations to a location that may put passengers or patrons in imminent danger (such as controlled rail right-of-way) must also be reported.
+      - name: manufacturer
+        description: Identifies the manufacturer of the transit vehicle for collisions.
+      - name: non_rail_transit_vehicle
+        description: Identifies the form of passenger conveyance used for revenue operations.
+      - name: fuel_type
+        description: Identifies the type of fuel used to power the transit vehicle involved.
+      - name: transit_y_n
+        description: Identifies the number of transit (Y) and non-transit (N) vehicles involved in the event.
+      - name: evacuation_location
+        description: Identifies what was evacuated.
+      - name: rail_alignment
+        description: Identifies the rail alignment of the track on which the collision or derailment occurred.
+      - name: path_condition
+        description: Identifies the pathway (roadway) conditions for a non-rail collision.
+      - name: weather
+        description: Identifies the weather at the time of the event.
+      - name: collision_with
+        description: Identifies what the transit vehicle collided with - Motor Vehicle, Non-Transit Motor Vehicle, Non-Rail Transit Vehicle, Rail Transit Vehicle/Rail Passenger Train – Revenue Service, Rail Transit Vehicle/Rail Passenger Train – Not in Revenue Service, Rail Transit Vehicle/Rail Transit Maintenance or Service Vehicle on the rail fixed guideway, Person, Animal, Fixed Object, Transit vehicle, Vessel, Dock/Terminal center, Non-revenue vehicle, Other.
+      - name: fire_type
+        description: Identifies the source of the fire. A fire is an uncontrolled combustion made evident by flame that requires suppression by equipment or personnel.
+      - name: suicide_serious_injuries
+        description: Count of serious Suicide related injuries for the given event.
+      - name: other_serious_injuries
+        description: Count of serious Other Injuries for the given event.
+      - name: other_injuries
+        description: Count of Other Injuries for the given event.
+      - name: occupant_of_other_vehicle_2
+        description: Count of serious Occupant of other vehicle Injuries for the given event.
+      - name: other_involved_veh
+        description: Identifies the other involved vehicle type in the collision or derailment.
+      - name: vehicle_speed
+        description: Identifies the actual or estimated speed at the time of the collision or derailment.
+      - name: occupant_of_other_vehicle_1
+        description: Count of Occupant of other vehicle Injuries for the given event.
+      - name: pedestrian_walking_along_1
+        description: |
+          Count of Pedestrian: person walking along tracks Injuries for the given event.
+      - name: vehicle_action
+        description: Identifies the Non-rail, ferry or rail vehicle action at the time of the collision or derailment.
+      - name: pedestrian_crossing_tracks_1
+        description: |
+          Count of Pedestrian: person crossing tracks Injuries for the given event.
+      - name: pedestrian_not_in_crosswalk_1
+        description: |
+          Count of Pedestrian: not in crosswalk Injuries for the given event.
+      - name: pedestrian_in_crosswalk_2
+        description: |
+          Count of serious Pedestrian: in crosswalk Injuries for the given event.
+      - name: pedestrian_in_crosswalk_1
+        description: |
+          Count of Pedestrian: in crosswalk Injuries for the given event.
+      - name: rail_bus_ferry
+        description: Groups modes based on whether they are - Rail Running Non-Rail Surface Transportation Ferryboat
+      - name: people_waiting_or_leaving
+        description: Count of Person waiting / leaving from transit fatalities for the given event.
+      - name: other_worker_serious_injuries
+        description: Count of serious Other worker (e.g., commercial worker / utilities worker / etc.) Injuries for the given event.
+      - name: transit_employee_injuries
+        description: Count of Transit employee or contractor Injuries for the given event. Includes "Other Transit Staff" inside the vehicle. Does not include vehicle operators.
+      - name: configuration
+        description: Identifies the railway configuration at the scene for derailments.
+      - name: transit_vehicle_rider_serious
+        description: Count of serious Transit vehicle rider Injuries for the given event.
+      - name: longitude
+        description: The geographic coordinate that specifies the east–west position of a point on the Earth's surface. NTD requires a minimum of 4 decimal places, and if 7 decimals are not provided, the NTD systems fills to 7 decimals.
+      - name: occupant_of_other_vehicle
+        description: Count of Occupant of other vehicle fatalities for the given event.
+      - name: pedestrian_crossing_tracks
+        description: |
+          Count of Pedestrian: person crossing tracks fatalities for the given event.
+      - name: latitude
+        description: The geographic coordinate that specifies the north–south position of a point on the Earth's surface. NTD requires a minimum of 4 decimal places, and if 7 decimals are not provided, the NTD systems fills to 7 decimals.
+      - name: lighting
+        description: Identifies the indoor or outdoor lighting conditions at the time of the collision or derailment.
+      - name: people_waiting_or_leaving_2
+        description: Count of serious Person waiting / leaving from transit Injuries for the given event.
+      - name: other_worker_injuries
+        description: Count of Other worker (e.g., commercial worker / utilities worker / etc.) Injuries for the given event.
+      - name: transit_vehicle_rider_injuries
+        description: Count of Transit vehicle rider Injuries for the given event.
+      - name: suicide_fatalities
+        description: Count of Suicide related fatalities for the given event.
+      - name: transit_vehicle_rider
+        description: Count of vehicle passenger fatalities for the given event
+      - name: pedestrian_in_crosswalk
+        description: |
+          Count of Pedestrian: in crosswalk fatalities for the given event.
+      - name: action_type
+        description: Identifies the Non-rail, ferry or rail vehicle impact point at the time of the collision.
+      - name: bicyclist_serious_injuries
+        description: |
+          Count of serious Pedestrian: bicyclist Injuries for the given event.
+      - name: total_fatalities
+        description: Total number of involved fatalities as a result of the event
+      - name: people_waiting_or_leaving_1
+        description: Count of Person waiting / leaving from transit Injuries for the given event.
+      - name: pedestrian_crossing_tracks_2
+        description: |
+          Count of serious Pedestrian: person crossing tracks Injuries for the given event.
+      - name: bicyclist_fatalities
+        description: |
+          Count of Pedestrian: bicyclist fatalities for the given event.
+      - name: safety_security
+        description: |
+          Identifier of a Safety (SFT) or (Security Event). Safety Event - A collision, derailment, fire, hazardous material spill, act of nature (Act of God), evacuation, or OSONOC occurring on transit right-of-way, in a transit revenue facility, in a transit maintenance facility, or involving a transit revenue vehicle and meeting established NTD thresholds. Security event - An occurrence of a bomb threat, bombing, arson, hijacking, sabotage, cyber security event, assault, robbery, rape, burglary, suicide, attempted suicide (not involving a transit vehicle), larceny, theft, vandalism, homicide, CBR (chemical/biological/radiological) or nuclear release, or other event.
+      - name: transit_employee_fatalities
+        description: Count of Transit employee or contractor fatalities for the given event. Includes "Other Transit Staff" inside the vehicle. Does not include vehicle operators.
+      - name: transit_vehicle_operator
+        description: Count of Transit vehicle operator fatalities for the given event.
+      - name: property_damage_type
+        description: Non-rail mode - The estimated dollar value of all property that is damaged in a Reportable Event. This includes transit-owned property and other vehicles and property involved in the event that are not owned by the transit agency (excludes personal property such as cell phones and computers). Property damage also includes the cost of clearing wreckage.
+      - name: transit_employee_serious
+        description: Count of serious Transit employee or contractor Injuries for the given event.
+      - name: rail_grade_crossing_control
+        description: Identifies the grade crossing control device used at the grade crossing for non-rail or rail collision or rail derailment.
+      - name: intentional_y_n
+        description: Identifies if the security event was intentional or not.
+      - name: total_injuries
+        description: Total number of involved injuries as a result of the event.
+      - name: event_location
+        description: Location of the event
+      - name: number_of_vehicles_involved
+        description: Identifies the number of non-transit vehicles involved in the event.
+      - name: suicide_injuries
+        description: Count of Suicide related injuries for the given event.
+      - name: pedestrian_walking_along
+        description: |
+          Count of Pedestrian: person walking along tracks fatalities for the given event.
+      - name: person_list
+        description: For each person injured or killed in an event, the following information is supplied separated by semi colons - I (Injury) or F (Fatality), Person Type, T if the person was a trespasser, Age Group, Gender, Y if medical transport was required
+      - name: self_evacuation_y_n
+        description: Identifies a Self-evacuation, which occur when people vacate transit property without direction from transit personnel or another authority, are not automatically reportable.
+      - name: bicyclist_injuries
+        description: |
+          Count of Pedestrian: bicyclist Injuries for the given event.
+      - name: property_damage
+        description: Non-rail mode - The estimated dollar value of all property that is damaged in a Reportable Event. This includes transit-owned property and other vehicles and property involved in the event that are not owned by the transit agency (excludes personal property such as cell phones and computers). Property damage also includes the cost of clearing wreckage.
+      - name: pedestrian_not_in_crosswalk_2
+        description: |
+          Count of serious Pedestrian: not in crosswalk Injuries for the given event.
+      - name: fixed_route_flag
+        description: Identifies whether the Mode reported is operating on a fixed route.
+      - name: transit_vehicle_operator_1
+        description: Count of Transit vehicle operator Injuries for the given event.
+      - name: incident_description
+        description: A 2000 character field used to describe the details of the event.
+      - name: incident_date
+        description: The date on which the event occurred.
+      - name: approximate_address
+        description: Identifies the exact or approximate address or location of the event.
+      - name: other_worker_fatalities
+        description: Count of Other worker (e.g., commercial worker / utilities worker / etc.) fatalities for the given event.
+      - name: incident_time
+        description: The actual time of day the event occurred.
+      - name: pedestrian_walking_along_2
+        description: |
+          Count of serious Pedestrian: person walking along tracks Injuries for the given event.
+      - name: towed_y_n
+        description: Identifier of collisions involving towing away from the scene for a transit roadway vehicle or other non-transit roadway vehicle that incurred disabling damage as a result of a collision.
+      - name: right_of_way_condition
+        description: Identifies the right-of-way (ROW) conditions for non-rail or rail collision or rail derailment.
+      - name: fire_fuel
+        description: For vehicle fires, identifies the type of fuel used to power the vehicle.
+      - name: number_of_transit_vehicles
+        description: Identifies the number of transit vehicles involved in the event.
+      - name: transit_vehicle_operator_2
+        description: Count of serious Transit vehicle operator Injuries for the given event.
+      - name: other_fatalities
+        description: Count of Other fatalities for the given event.
+      - name: pedestrian_not_in_crosswalk
+        description: |
+          Count of Pedestrian: not in crosswalk fatalities for the given event.
+      - name: number_of_derailed_cars
+        description: Identifies the number of derailed cars.
+      - name: source_agency
+        description: The legal name of the entity reporting to the NTD.
+      - name: dt
+        description: Date of data extraction
+      - name: execution_ts
+        description: Timestamp of data extraction execution
   - name: fct_major_safety_events
-    description: |
-      Add description
+    description: Fact table for NTD major safety events data - detailed incident records with agency information
     columns:
-      - name: _content_hash
-        description: |
-          Synthetic primary key constructed from hashing all row values (aside from internally-created columns `dt` and `execution_ts`).
+      - name: key
+        description: Synthetic primary key constructed from ntd_id, year, and incident_number
         tests:
           - not_null
           - unique
+      - name: ntd_id
+        description: A five-digit identifying number for each agency used in the current NTD system.
+      - name: year
+        description: The calendar year in which the event occurred.
+      - name: agency_name
+        description: Agency name from dimension table
+      - name: city
+        description: Agency city from dimension table
+      - name: state
+        description: Agency state from dimension table
+      - name: caltrans_district_current
+        description: Current Caltrans district from dimension table
+      - name: caltrans_district_name_current
+        description: Current Caltrans district name from dimension table
+      - name: source_agency
+        description: The legal name of the entity reporting to the NTD.
+      - name: uace_code
+        description: The Census Bureau's Urban Area Census Code (UACE). This five-digit code uniquely identifies an urban area and remains unchanged from census to census.
+      - name: rail_bus_ferry
+        description: Groups modes based on whether they are - Rail, Running Non-Rail Surface Transportation, or Ferryboat.
+      - name: mode_name
+        description: A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
+      - name: mode
+        description: Abbreviation of mode name.
+      - name: type_of_service
+        description: Abbreviation for "Type of Service." Describes how public transportation services are provided by the transit agency - directly operated (DO) or purchased transportation which also includes from Taxi Operators and Transportation Network Companies (PT, TX, TN) services.
+      - name: fixed_route_flag
+        description: Fixed Route Flag
+      - name: incident_description
+        description: A 2000 character field used to describe the details of the event.
+      - name: incident_number
+        description: A unique system-generated identification number for each Major Safety Event.
+      - name: incident_date
+        description: The date on which the event occurred.
+      - name: incident_time
+        description: The actual time of day the event occurred.
+      - name: event_type
+        description: The type of event that occurred.
+      - name: event_type_group
+        description: A derived column to allow users to filter based on broader event type (e.g., Collision, Derailment, Assault).
+      - name: assault_homicide_person_type_desc
+        description: Indicates whether the person assaulted is a transit operator, other transit worker, not a transit worker, or not specified. Only applies to assaults.
+      - name: assault_homicide_type_desc
+        description: Identifies the type of assault on a transit worker as physical, non-physical, or not specified. Only applies to assaults.
+      - name: assault_homicide_transit_worker_flag
+        description: When the value is True, the event is reported as an Assault on Transit Worker of any type. Otherwise, the value is false. Note, the value will appear as False for all events prior to 2023.
+      - name: event_category
+        description: Overall category of the event type
+      - name: safety_security
+        description: Identifier of a Safety (SFT) or (Security Event). Safety Event - A collision, derailment, fire, hazardous material spill, act of nature (Act of God), evacuation, or OSONOC occurring on transit right-of-way, in a transit revenue facility, in a transit maintenance facility, or involving a transit revenue vehicle and meeting established NTD thresholds. Security event - An occurrence of a bomb threat, bombing, arson, hijacking, sabotage, cyber security event, assault, robbery, rape, burglary, suicide, attempted suicide (not involving a transit vehicle), larceny, theft, vandalism, homicide, CBR (chemical/biological/radiological) or nuclear release, or other event.
+      - name: property_damage
+        description: Non-rail mode - The estimated dollar value of all property that is damaged in a Reportable Event. This includes transit-owned property and other vehicles and property involved in the event that are not owned by the transit agency (excludes personal property such as cell phones and computers). Property damage also includes the cost of clearing wreckage.
+      - name: total_injuries
+        description: Total number of involved injuries as a result of the event.
+      - name: total_fatalities
+        description: Total number of involved fatalities as a result of the event
+      - name: towed_y_n
+        description: Identifier of collisions involving towing away from the scene for a transit roadway vehicle or other non-transit roadway vehicle that incurred disabling damage as a result of a collision.
+      - name: number_of_transit_vehicles
+        description: Identifies the number of transit vehicles involved in the event.
+      - name: number_of_vehicles_involved
+        description: Identifies the number of non-transit vehicles involved in the event.
+      - name: number_of_cars_on_involved_transit_vehicles
+        description: The number of rail cars on transit vehicle consists involved in the event.
+      - name: location_type
+        description: Location of the event
+      - name: approximate_address
+        description: Identifies the exact or approximate address or location of the event.
+      - name: latitude
+        description: The geographic coordinate that specifies the north–south position of a point on the Earth's surface. NTD requires a minimum of 4 decimal places, and if 7 decimals are not provided, the NTD systems fills to 7 decimals.
+      - name: longitude
+        description: The geographic coordinate that specifies the east–west position of a point on the Earth's surface. NTD requires a minimum of 4 decimal places, and if 7 decimals are not provided, the NTD systems fills to 7 decimals.
+      - name: latlon
+        description: This is a point field containing the georeference for the location of the event (combines and formats Latitude and Longitude).
+      - name: evacuation
+        description: Identifies if persons were evacuated from a transit facility or vehicle (True) or not (False) during the event.
+      - name: life_safety_y_n
+        description: Identifier of events involving an evacuation for life-safety reasons. A reportable evacuation is a condition that occurs when persons depart from transit vehicles or facilities.
+      - name: evac_to_right_of_way
+        description: Identifies if the evacuation reported was to a controlled right-of-way (True) nor not (False).
+      - name: self_evacuation_y_n
+        description: Identifies a self-evacuation, which occurs when people vacate transit property without direction from transit personnel or another authority.
+      - name: intentional_y_n
+        description: Identifies if the security event was intentional or not.
+      - name: transit_vehicle_rider
+        description: Count of vehicle passenger fatalities for the given event
+      - name: people_waiting_or_leaving
+        description: Count of Person waiting / leaving from transit fatalities for the given event.
+      - name: transit_vehicle_operator
+        description: Count of Transit vehicle operator fatalities for the given event.
+      - name: transit_employee_fatalities
+        description: Count of Transit employee or contractor fatalities for the given event. Includes "Other Transit Staff" inside the vehicle. Does not include vehicle operators.
+      - name: other_worker_fatalities
+        description: Count of Other worker (e.g.,commercial worker / utilites worker / etc.) fatalities for the given event.
+      - name: bicyclist_fatalities
+        description: |
+          Count of Pedestrian: bicyclist fatalities for the given event.
+      - name: pedestrian_in_crosswalk
+        description: |
+          Count of Pedestrian: in crosswalk fatalities for the given event.
+      - name: pedestrian_not_in_crosswalk
+        description: |
+          Count of Pedestrian: not in crosswalk fatalities for the given event.
+      - name: pedestrian_crossing_tracks
+        description: |
+          Count of Pedestrian: person crossing tracks fatalities for the given event.
+      - name: pedestrian_walking_along
+        description: |
+          Count of Pedestrian: person walking along tracks fatalities for the given event.
+      - name: occupant_of_other_vehicle
+        description: Count of Occupant of other vehicle fatalities for the given event.
+      - name: other_fatalities
+        description: Count of Other fatalities for the given event.
+      - name: suicide_fatalities
+        description: Count of Suicide related fatalities for the given event.
+      - name: trespasser_fatalities_subtotal_
+        description: The count of trespasser fatalities in the event. A trespasser is any person in an area of transit property not intended for public use (i.e., an unauthorized area). Note that trespassers are also counted in the respective person type column to describe the action of the trespasser at the time of the event.
+      - name: transit_vehicle_rider_injuries
+        description: Count of Transit vehicle rider Injuries for the given event.
+      - name: transit_vehicle_rider_serious
+        description: Count of serious Transit vehicle rider Injuries for the given event.
+      - name: people_waiting_or_leaving_1
+        description: Count of Person waiting / leaving from transit Injuries for the given event.
+      - name: people_waiting_or_leaving_2
+        description: Count of serious Person waiting / leaving from transit Injuries for the given event.
+      - name: transit_vehicle_operator_1
+        description: Count of Transit vehicle operator Injuries for the given event.
+      - name: transit_vehicle_operator_2
+        description: Count of serious Transit vehicle operator Injuries for the given event.
+      - name: transit_employee_injuries
+        description: Count of Transit employee or contractor Injuries for the given event. Includes "Other Transit Staff" inside the vehicle. Does not include vehicle operators.
+      - name: transit_employee_serious
+        description: Count of serious Transit employee or contractor Injuries for the given event.
+      - name: other_worker_injuries
+        description: Count of Other worker (e.g.,commercial worker / utilites worker / etc.) Injuries for the given event.
+      - name: other_worker_serious_injuries
+        description: Count of serious Other worker (e.g.,commercial worker / utilites worker / etc.) Injuries for the given event.
+      - name: bicyclist_injuries
+        description: |
+          Count of Pedestrian: bicyclist Injuries for the given event.
+      - name: bicyclist_serious_injuries
+        description: |
+          Count of serious Pedestrian: bicyclist Injuries for the given event.
+      - name: pederstiran_in_crosswalk
+        description: |
+          Count of Pedestrian: in crosswalk Injuries for the given event.
+      - name: pederstiran_in_crosswalk_1
+        description: |
+          Count of serious Pedestrian: in crosswalk Injuries for the given event.
+      - name: pedestrian_not_in_crosswalk_1
+        description: |
+          Count of Pedestrian: not in crosswalk Injuries for the given event.
+      - name: pedestrian_not_in_crosswalk_2
+        description: |
+          Count of serious Pedestrian: not in crosswalk Injuries for the given event.
+      - name: pedestrian_crossing_tracks_1
+        description: |
+          Count of Pedestrian: person crossing tracks Injuries for the given event.
+      - name: pedestrian_crossing_tracks_2
+        description: |
+          Count of serious Pedestrian: person crossing tracks Injuries for the given event.
+      - name: pedestrian_walking_along_1
+        description: |
+          Count of Pedestrian: person walking along tracks Injuries for the given event.
+      - name: pedestrian_walking_along_2
+        description: |
+          Count of serious Pedestrian: person walking along tracks Injuries for the given event.
+      - name: occupant_of_other_vehicle_1
+        description: Count of Occupant of other vehicle Injuries for the given event.
+      - name: occupant_of_other_vehicle_2
+        description: Count of serious Occupant of other vehicle Injuries for the given event.
+      - name: other_injuries
+        description: Count of Other Injuries for the given event.
+      - name: other_serious_injuries
+        description: Count of serious Other Injuries for the given event.
+      - name: suicide_injuries
+        description: Count of Suicide related injuries for the given event.
+      - name: suicide_serious_injuries
+        description: Count of serious Suicide related injuries for the given event.
+      - name: trespasser_inuries_subtotal_
+        description: The count of injuries to trespassers in the event. A trespasser is any person in an area of transit property not intended for public use (i.e., an unauthorized area). Note that trespassers are also counted in the respective person type column to describe the action of the trespasser at the time of the event.
+      - name: trespasser_serious_injuries_subtotal_
+        description: The count of serious injuries to trespassers in the event. A trespasser is any person in an area of transit property not intended for public use (i.e., an unauthorized area). Note that trespassers are also counted in the respective person type column to describe the action of the trespasser at the time of the event.
+      - name: total_serious_injuries
+        description: Sum of the Count of all serious person type injuries for the given event.
+      - name: computed_region_m2nu_4dib
+        description: Computed region identifier
+      - name: computed_region_8fe2_rd7y
+        description: Computed region identifier
+      - name: person_list
+        description: For each injury or fatality in an event, the following information is supplied separated by semicolons - I (Injury) or F (Fatality), H (Homicide or Assault) or S (Suicide or Attempted Suicide), T (if the person was trespassing) or U (if the trespassing status is unknown), Person Type, Age Group, Gender, Y (if medical transport was required)
+      - name: evacuation_comment
+        description: The details of the evacuation. A reportable evacuation is a condition that occurs when persons depart from transit vehicles or facilities.
+      - name: evacuation_location
+        description: Identifies what was evacuated.
+      - name: other_event_type_description
+        description: Text explanation from the 'Please describe" box used when "Other Security Event " is selected
+      - name: collision_with
+        description: Identifies what the transit vehicle collided with - Motor Vehicle, Non-Transit Motor Vehicle, Non-Rail Transit Vehicle, Rail Transit Vehicle/Rail Passenger Train – Revenue Service, Rail Transit Vehicle/Rail Passenger Train – Not in Revenue Service, Rail Transit Vehicle/Rail Transit Maintenance or Service Vehicle on the rail fixed guideway, Person, Animal, Fixed Object, Transit vehicle, Vessel, Dock/Terminal center, Non-revenue vehicle, Other.
+      - name: other_vehicle_type_list
+        description: The list of types of non-transit vehicles involved in the event.
+      - name: weather
+        description: Identifies the weather at the time of the event.
+      - name: lighting
+        description: Identifies the indoor or outdoor lighting conditions at the time of the collision or derailment.
+      - name: road_configuration
+        description: Identifies the roadway configuration at the scene of non-rail collision.
+      - name: path_condition
+        description: Identifies the pathway (roadway) conditions for a non-rail collision.
+      - name: right_of_way_condition
+        description: Identifies the right-of-way (ROW) conditions for non-rail or rail collision or rail derailment.
+      - name: vehicle_action
+        description: Identifies the non-rail, ferry, or rail vehicle action at the time of the collision or derailment.
+      - name: action_type
+        description: Text explanation from the "Please Describe" box used when "Other" is selected for the Transit Vehicle Action.
+      - name: non_transit_vehicle_action_list
+        description: Identifies the other vehicle action at the time of the collision or derailment.
+      - name: transit_y_n
+        description: Identifies the number of transit (Y) and non-transit (N) vehicles involved in the event.
+      - name: revenue_vehicle_identifier_list
+        description: |
+          A list of transit revenue vehicle fleet IDs with which to identify the transit vehicles involved in the event. Please find details about the transit vehicle fleet using the most recent Revenue Vehicle Inventory from https://transit.dot.gov/ntd/ntd-data.
+      - name: fuel_type
+        description: Identifies the type of fuel used to power the transit vehicle involved.
+      - name: vehicle_speed
+        description: Identifies the actual or estimated speed at the time of the collision or derailment.
+      - name: transit_vehicle_type
+        description: Identifies the form of passenger conveyance used for revenue operations.
+      - name: non_rail_transit_vehicle
+        description: A list of vehicle types for non-transit vehicles involved in the event.
+      - name: manufacturer
+        description: Identifies the manufacturer of the transit vehicle for collisions.
+      - name: manufacturer_description
+        description: Text explanation from the 'Please describe" box used when "Other'' is selected for the Manufacturer type.
+      - name: fire_type
+        description: Identifies the source of the fire. A fire is an uncontrolled combustion made evident by flame that requires suppression by equipment or personnel.
+      - name: fire_fuel
+        description: For vehicle fires, identifies the type of fuel used to power the vehicle.
+      - name: property_damage_type
+        description: When a value is reported, this indicates Substantial Damage, which is defined as damage to transit or non-transit property including vehicles, facilities, equipment, rolling stock, or infrastructure that disrupts the operations of the rail transit agency and adversely affects the structural strength, performance, or operating characteristics of the property, requiring towing, rescue, on-site maintenance, or immediate removal prior to safe operation.
+      - name: rail_grade_crossing_control
+        description: Identifies the grade crossing control device used at the grade crossing for non-rail or rail collision or rail derailment.
+      - name: intersection
+        description: Identifies the intersection control device located at the intersection for a non-rail collision or rail collision.
+      - name: multiple_locations_list
+        description: A list of event locations in "Act of God" events.
+      - name: derailed_cars_count
+        description: The number of cars that derailed during the event.
+      - name: rail_alignment
+        description: Identifies the rail alignment of the track on which the collision or derailment occurred.
+      - name: rail_grade_crossing_comment
+        description: Details for the grade crossing control device.
+      - name: track_configuration
+        description: Identifies the railway configuration at the scene for derailments.
+      - name: derailment_type
+        description: Identifies the type of rail derailment.
+      - name: runaway_train_flag
+        description: Identifier of events involving a runaway train. A train which is no longer under the control of a driver regardless of whether the operator is physically on the vehicle at the time. This is limited to revenue vehicles.
+      - name: operator_location
+        description: Identifies the operator's location relative to the transit vehicle during a runaway train event.
+      - name: service_stop_control_device
+        description: Identifies the service stop control device located at the service stop for a rail collision.
+      - name: current_condition
+        description: Identifies the water current conditions at the time of the ferryboat collision
+      - name: tide
+        description: Identifies the tide conditions at the time of the ferryboat collision.
+      - name: weather_comment
+        description: Details for the weather at the time of the event.
+      - name: hazmat_type
+        description: Identifies the type of substance that caused the Hazardous Material Spill. The spill or release of any amount of hazardous material that creates an imminent danger to life, health, or the environment and requires special attention be given to clean up the material.
+      - name: dt
+        description: Date of data extraction
+      - name: execution_ts
+        description: Timestamp of data extraction execution
   - name: fct_monthly_modal_time_series_safety_and_service
-    description: |
-      Add description
+    description: Fact table for NTD monthly modal time series safety and service data with agency information
     columns:
       - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `mode`, `month`, and `type_of_service`.
+        description: Synthetic primary key constructed from ntd_id, year, month, mode, and type_of_service
         tests:
           - not_null
           - unique
+      - name: ntd_id
+        description: A five-digit identifying number for each agency used in the current NTD system.
+      - name: year
+        description: The calendar year in which the events occurred.
+      - name: month
+        description: The month in which the events occurred.
+      - name: agency_name
+        description: Agency name from dimension table
+      - name: city
+        description: Agency city from dimension table
+      - name: state
+        description: Agency state from dimension table
+      - name: caltrans_district_current
+        description: Current Caltrans district from dimension table
+      - name: caltrans_district_name_current
+        description: Current Caltrans district name from dimension table
+      - name: mode
+        description: A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
+      - name: type_of_service
+        description: Describes how public transportation services are provided by the transit agency - directly operated (DO) or purchased transportation which also includes from Taxi Operators and Transportation Network Companies (PT, TX, TN) services.
+      - name: total_injuries
+        description: All injuries - "Passenger," "People Waiting or Leaving," "Total Employee," "Other Worker," and "Total Other."
+      - name: trespasser_injuries
+        description: Number of trespasser injuries.
+      - name: other_injuries
+        description: For 2002-2007, included the sum of "Bicyclist," "Ped in Crossing," "Ped Not In Crossing," "Ped Crossing Tracks," "Ped Walking Along Tracks," and "Other Vehicle Occupant." For 2008 and later, includes other members of the public not specified.
+      - name: other_vehicle_occupant_1
+        description: Number of occupants of other vehicle injuries. This data point is not collected prior to 2008.
+      - name: pedestrian_walking_along_1
+        description: Number of pedestrian injuries walking along tracks. This data point is not collected prior to 2008 or after 2015.
+      - name: pedestrian_in_corsswalk
+        description: Number of pedestrian injuries in crosswalks. This data point is not collected prior to 2008.
+      - name: bicyclist_injuries
+        description: Number of cyclist injuries. This data point is not collected prior to 2008.
+      - name: other_worker_injuries
+        description: Number of non-transit employee injuries.
+      - name: total_employee_injuries
+        description: Total Employee Injuries (Other Employee and Operator aggregated)
+      - name: other_employee_injuries
+        description: Number of non-operator transit employee fatalities. This data point is not collected prior to 2008.
+      - name: operator_injuries
+        description: Number of transit operator injuries. This data point is not collected prior to 2008.
+      - name: total_other_fatalities
+        description: For 2002-2007, the sum of "Other," "Trespasser," and "Suicide." For 2008-2016, the sum of "Bicyclist," "Ped in Crossing," "Ped not in Crossing," "Ped Crossing Tracks," "Ped Walking Along Tracks," "Other Vehicle Occupant," "Other," and "Suicide."
+      - name: other_vehicle_occupant
+        description: Number of occupants of other vehicle fatalities. This data point is not collected prior to 2008.
+      - name: people_waiting_or_leaving_1
+        description: Number of revenue facility occupant injuries. Revenue facility occupants include individuals waiting for or leaving transit.
+      - name: total_fatalities
+        description: All fatalities - "Passenger," "People Waiting or Leaving," "Total Employee," "Other Worker," and "Total Other."
+      - name: trespasser_fatalities
+        description: Number of trespasser fatalities.
+      - name: suicide_injuries
+        description: Number of attempted suicides or other injuries involved in suicide events.
+      - name: collisions_with_other
+        description: The number of collisions with another object for the given agency/mode/month.
+      - name: pedestrian_walking_along
+        description: Number of pedestrian fatalities walking along tracks. This data point is not collected prior to 2008 or after 2015.
+      - name: suicide_fatalities
+        description: Number of suicides.
+      - name: pedestrian_in_crosswalk
+        description: Number of pedestrian fatalities in crosswalks. This data point is not collected prior to 2008.
+      - name: bicyclist_fatalities
+        description: Number of cyclist fatalities. This data point is not collected prior to 2008.
+      - name: other_worker_fatalities
+        description: Number of non-transit employee fatalities.
+      - name: passenger_fatalities
+        description: Number of passenger fatalities. Passengers include individuals onboard a transit vehicle (including between cars or on top of vehicle).
+      - name: total_employee_fatalities
+        description: Total Employee Fatalities (Other Employee and Operator aggregated)
+      - name: operator_fatalities
+        description: Number of transit operator fatalities. This data point is not collected prior to 2008.
+      - name: people_waiting_or_leaving
+        description: Number of revenue facility occupant fatalities. Revenue facility occupants include individuals waiting for or leaving transit.
+      - name: uace_code
+        description: The Census Bureau's Urban Area Census Code (UACE). This five-digit code uniquely identifies an urban area and remains unchanged from census to census.
+      - name: total_events_not_otherwise
+        description: Total number of accidents "not otherwise classified" (NOC) reported to NTD. These events include slips, trips and falls, electric shocks, vehicles leaving roadway, yard derailments, and other events that are not reported as a collision, derailment, or fire.
+      - name: primary_uza_population
+        description: The population of the primary UZA from the most recent decennial Census.
+      - name: collisions_with_bus_vehicle
+        description: The number of collisions with a bus vehicle for the given agency/mode/month.
+      - name: total_security_events
+        description: Total number of major security events reported to NTD, including assaults on transit workers and other security events.
+      - name: total_events
+        description: Total number reportable major and non-major events for the given agency/mode/type of service/month.
+      - name: rail_y_n
+        description: Separates Rail (True) from Non-Rail (False) modes.
+      - name: total_fires
+        description: Total number of fires reported to NTD.
+      - name: total_derailments
+        description: Total number of main line derailments reported to NTD. Yard derailments are reported as Not-Otherwise Classified (NOC) events.
+      - name: pedestrian_crossing_tracks
+        description: Number of pedestrian fatalities crossing tracks. This data point is not collected prior to 2008 or after 2015.
+      - name: total_collisions
+        description: The total number of collisions for the given agency/mode/month.
+      - name: collisions_with_rail_vehicle
+        description: The number of collisions with a rail vehicle for the given agency/mode/month.
+      - name: passenger_injuries
+        description: Number of passenger injuries. Passengers include individuals onboard a transit vehicle (including between cars or on top of vehicle).
+      - name: collisions_with_fixed_object
+        description: The number of collisions with a fixed object for the given agency/mode/month.
+      - name: ridership
+        description: The number of boardings on transit vehicles reported by the system for the same calendar year. The value is year to date for calendar years that are not yet complete.
+      - name: service_area_population
+        description: The population residing within the service area for the agency as of the most recently concluded report year.
+      - name: collisions_with_person
+        description: The number of collisions with a person for the given agency/mode/month.
+      - name: collisions_with_motor_vehicle
+        description: The number of collisions with a motor vehicle for the given agency/mode/month.
+      - name: service_area_sq_miles
+        description: The service area as measured in square miles for the agency as of the most recently concluded report year.
+      - name: other_employee_fatalities
+        description: Number of non-operator transit employee fatalities. This data point is not collected prior to 2008.
+      - name: vehicle_revenue_hours
+        description: The number of hours operated by transit vehicles in revenue service, as reported by the system for the same calendar year. The value is year to date for calendar years that are not yet complete.
+      - name: pedestrian_not_in_crosswalk_1
+        description: Number of pedestrian injuries not in crosswalks. This data point is not collected prior to 2008.
+      - name: vehicle_revenue_miles
+        description: The number of miles traveled by transit vehicles in revenue service, as reported by the system for the same calendar year. The value is year to date for calendar years that are not yet complete. For rail modes, "passenger car revenue miles" is used.
+      - name: vehicles
+        description: The number of revenue vehicles operated by the given mode and type of service to meet the annual maximum service requirement. This is the revenue vehicle count during the peak season of the reporting period; on the week and day that maximum service is provided. Vehicles operated in maximum service (VOMS) exclude atypical days and one-time special events.
+      - name: organization_type
+        description: The organization type, as defined by FTA and reported by transit agencies on the most recent annual report, of the agency.
+      - name: pedestrian_crossing_tracks_1
+        description: Number of pedestrian injuries crossing tracks. This data point is not collected prior to 2008 or after 2015.
+      - name: primary_uza_sq_miles
+        description: The square miles of the primary UZA from the most recent decennial Census.
+      - name: primary_uza_name
+        description: The name of the Census-designated Urbanized Area, from the most recent census, in which the system primarily operates.
+      - name: source_agency
+        description: The legal name of the entity reporting to the NTD.
+      - name: total_other_injuries
+        description: For 2002-2007, the sum of "Other," "Trespasser," and "Suicide." For 2008-2016, the sum of "Bicyclist," "Ped in Crossing," "Ped not in Crossing," "Ped Crossing Tracks," "Ped Walking Along Tracks," "Other Vehicle Occupant," "Other," and "Suicide."
+      - name: other_fatalities
+        description: For 2002-2007, included the sum of "Bicyclist," "Ped in Crossing," "Ped Not In Crossing," "Ped Crossing Tracks," "Ped Walking Along Tracks," and "Other Vehicle Occupant." For 2008 and later, includes other members of the public not specified.
+      - name: pedestrian_not_in_crosswalk
+        description: Number of pedestrian fatalities not in crosswalks. This data point is not collected prior to 2008.
+      - name: dt
+        description: Date of data extraction
+      - name: execution_ts
+        description: Timestamp of data extraction execution
   - name: fct_nonmajor_safety_and_security_events
-    description: |
-      Add description
+    description: Fact table for NTD nonmajor safety and security events data with agency information
     columns:
       - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `incident_number`.
+        description: Synthetic primary key constructed from ntdid, yr, mo, modecd, typeofservicecd, eventtype, and location
         tests:
           - not_null
           - unique
+      - name: ntd_id
+        description: A five-digit identifying number for each agency used in the current NTD system.
+      - name: year
+        description: The year in which the Non-major incident occurred.
+      - name: agency_name
+        description: Agency name from dimension table
+      - name: city
+        description: Agency city from dimension table
+      - name: state
+        description: Agency state from dimension table
+      - name: caltrans_district_current
+        description: Current Caltrans district from dimension table
+      - name: caltrans_district_name_current
+        description: Current Caltrans district name from dimension table
+      - name: reporter_name
+        description: The legal name of the entity reporting to the National Transit Database.
+      - name: mode_cd
+        description: A system for carrying transit passengers described by specific right-of-way (ROW), technology and operational features.
+      - name: type_of_service_cd
+        description: Describes how public transportation services are provided by the transit agency - directly operated (DO) or purchased transportation which also includes from Taxi Operators and Transportation Network Companies (PT, TX, TN) services.
+      - name: month
+        description: The month in which the Non-major incident occurred.
+      - name: safety_security_flag
+        description: Identifier of a Safety (SFT) or (Security Event). Safety Event - A collision, derailment, fire, hazardous material spill, act of nature (Act of God), evacuation, or OSONOC occurring on transit right-of-way, in a transit revenue facility, in a transit maintenance facility, or involving a transit revenue vehicle and meeting established NTD thresholds. Security event - An occurrence of a bomb threat, bombing, arson, hijacking, sabotage, cyber security event, assault, robbery, rape, burglary, suicide, attempted suicide (not involving a transit vehicle), larceny, theft, vandalism, homicide, CBR (chemical/biological/radiological) or nuclear release, or other event.
+      - name: event_type
+        description: The type of event that occurred.
+      - name: location
+        description: The area in facility, vehicle, or other where the event took place.
+      - name: location_group
+        description: General grouping of the location column that can fall into either facility, vehicle, or other.
+      - name: minor_physical_assaults_on_operators
+        description: Count of non-major physical assaults on transit vehicle operators.
+      - name: non_physical_assaults_on_operators_security_events_only
+        description: Count of non-major non-physical assaults on transit vehicle operators.
+      - name: minor_physical_assaults_on_other_transit_workers
+        description: Count of non-major physical assaults on transit workers who are not vehicle operators.
+      - name: minor_nonphysical_assaults_on_other_transit_workers
+        description: Count of non-major non-physical assaults on transit workers who are not vehicle operators.
+      - name: total_incidents
+        description: Less severe incidents or events that do not meet the requirements of Reportable Events - Other safety occurrences not otherwise classified (injuries); and Fires. The number is determined by mode, type of service, month, and location.
+      - name: customer
+        description: Count of patrons of the transit system or people waiting for transit injured during the given safety event.
+      - name: worker
+        description: Count of Transit Workers injured for the given safety event.
+      - name: other
+        description: Count of pedestrians and others not using transit or working for the transit system injured for the given safety event.
+      - name: total_injuries
+        description: Count of all people injured for the given safety event. The count should not exceed one (1), as events with multiple injuries meet a major reporting threshold.
+      - name: additional_assault_information
+        description: Additional information about an assault event.
+      - name: dt
+        description: Date of data extraction
+      - name: execution_ts
+        description: Timestamp of data extraction execution

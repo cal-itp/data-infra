@@ -7,12 +7,13 @@ from airflow import DAG, XComArg
 from airflow.operators.bash import BashOperator
 
 with DAG(
-    dag_id="parse_and_validate_rt",
+    dag_id="parse_and_validate_rt_filtered",
     tags=["gtfs", "gtfs-rt"],
     # Every hour at 15 minutes past the hour
     schedule="15 * * * *",
-    start_date=datetime(2025, 9, 2),
+    start_date=datetime(2025, 7, 8),
     catchup=True,
+    max_active_tasks=128,
 ):
     for process in ["parse", "validate"]:
         for feed in ["service_alerts", "trip_updates", "vehicle_positions"]:
@@ -21,6 +22,7 @@ with DAG(
                 bucket=os.environ["CALITP_BUCKET__GTFS_RT_RAW"],
                 process=process,
                 feed=feed,
+                filter_by="=",
             )
 
             BashOperator.partial(

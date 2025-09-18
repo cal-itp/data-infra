@@ -326,20 +326,8 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-validation
   bucket = "test-calitp-gtfs-schedule-validation-hourly"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-api-products" {
-  bucket = "test-calitp-ntd-api-products"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-report-validation" {
   bucket = "test-calitp-ntd-report-validation"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-xlsx-products-clean" {
-  bucket = "test-calitp-ntd-xlsx-products-clean"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-xlsx-products-raw" {
-  bucket = "test-calitp-ntd-xlsx-products-raw"
 }
 
 resource "google_storage_bucket_acl" "tfer--test-calitp-payments-littlepay-parsed" {

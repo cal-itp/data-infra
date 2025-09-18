@@ -32,6 +32,7 @@ class TestGCSToGTFSRTCommandOperator:
             gcp_conn_id="google_cloud_default",
             process="parse",
             feed="service_alerts",
+            filter_by="=",
             bucket=os.environ.get("CALITP_BUCKET__GTFS_RT_RAW"),
             dag=test_dag,
         )
@@ -59,6 +60,6 @@ class TestGCSToGTFSRTCommandOperator:
             "service_alerts "
             "2024-10-22T18:00:00 "
             "--base64url "
-            "aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3NlcnZpY2VhbGVydHM_YWdlbmN5PUFN "
+            "aHR0cHM6Ly90aGVidXNsaXZlLmNvbS9ndGZzLXJ0L2FsZXJ0cw== "
             "--verbose" in xcom_value
         )

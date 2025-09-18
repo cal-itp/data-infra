@@ -9,12 +9,18 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 class UniquePartitionValues:
     def __init__(
-        self, gcs_hook: GCSHook, bucket_name: str, partition_name: str, feed: str
+        self,
+        gcs_hook: GCSHook,
+        bucket_name: str,
+        partition_name: str,
+        feed: str,
+        filter_by: str,
     ) -> None:
         self.gcs_hook = gcs_hook
         self.bucket_name = bucket_name
         self.partition_name = partition_name
         self.feed = feed
+        self.filter_by = filter_by
 
     def get(self, logical_date: str):
         date = logical_date.replace(minute=0, second=0)
@@ -24,10 +30,19 @@ class UniquePartitionValues:
         )
 
         partitions = []
+        partition_name = f"{self.partition_name}="  # "base64_url="
+
         for path in keys:
+            # path = trip_updates/dt=2024-10-22/hour=2024-10-22T18:00:00+00:00/ts=2024-10-22T18:59:40+00:00/base64_url=aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw==/feed
             for partition in path.split("/"):
-                if partition.startswith(f"{self.partition_name}="):
-                    partitions.append(partition.split("=")[1])
+                # partition = [ "trip_updates", "dt=2024-10-22", "hour=2024-10-22T18:00:00+00:00", "ts=2024-10-22T18:59:40+00:00", "base64_url=aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw==", "feed"]
+                if partition.startswith(partition_name):
+                    # base64_url=aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw==
+                    value = partition.split(partition_name)[1]
+                    # aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1HRw==
+                    if self.filter_by in value:
+                        partitions.append(value)
+
         return list(set(partitions))
 
 
@@ -45,6 +60,7 @@ class GCSToGTFSRTCommandOperator(BaseOperator):
         "process",
         "feed",
         "gcp_conn_id",
+        "filter_by",
     )
 
     def __init__(
@@ -53,6 +69,7 @@ class GCSToGTFSRTCommandOperator(BaseOperator):
         process: str,
         feed: str,
         gcp_conn_id: str = "google_cloud_default",
+        filter_by: str = "",
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -61,6 +78,7 @@ class GCSToGTFSRTCommandOperator(BaseOperator):
         self.process = process
         self.feed = feed
         self.gcp_conn_id = gcp_conn_id
+        self.filter_by = filter_by
 
     def bucket_name(self) -> str:
         return self.bucket.replace("gs://", "")
@@ -74,6 +92,7 @@ class GCSToGTFSRTCommandOperator(BaseOperator):
             bucket_name=self.bucket_name(),
             feed=self.feed,
             partition_name="base64_url",
+            filter_by=self.filter_by,
         )
 
     def command_builder(self) -> CommandBuilder:
