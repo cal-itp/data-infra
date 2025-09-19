@@ -217,7 +217,8 @@ stop_time_metrics AS (
         COUNT(*) AS n_tu_minutes_available,
 
         -- 03_prediction_inconsistency.ipynb
-        SUM(prediction_spread_minutes) / COUNT(*) AS avg_prediction_spread_minutes, -- wobble
+        SUM(prediction_spread_minutes) AS sum_prediction_spread_minutes, -- wobble
+        MAX(minutes_until_arrival) AS max_minutes_until_arrival, -- this is the denominator
 
         -- other derived metrics from this prediction window of 30 minutes prior
         SUM(n_predictions_minute) AS n_predictions,
@@ -250,7 +251,8 @@ fct_stop_time_metrics AS (
         stop_time_metrics.n_predictions_late,
         stop_time_metrics.n_tu_complete_minutes,
         stop_time_metrics.n_tu_minutes_available,
-        stop_time_metrics.avg_prediction_spread_minutes,
+        stop_time_metrics.sum_prediction_spread_minutes,
+        stop_time_metrics.max_minutes_until_arrival,
         stop_time_metrics.n_predictions,
         stop_time_metrics.prediction_error_by_minute_array,
         stop_time_metrics.minutes_until_arrival_array,

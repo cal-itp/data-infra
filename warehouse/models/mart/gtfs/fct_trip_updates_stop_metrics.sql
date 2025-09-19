@@ -17,7 +17,8 @@ WITH fct_stop_time_metrics AS (
         default_start_var='PROD_GTFS_RT_START',
         this_dt_column='service_date',
         filter_dt_column='service_date',
-        dev_lookback_days = 250) }} AND service_date >= '2025-06-01' AND service_date <= "2025-06-15"
+        dev_lookback_days = 250)
+    }} AND service_date >= '2025-06-01' AND service_date <= "2025-06-15"
 ),
 
 rt_feeds AS (
@@ -57,11 +58,12 @@ stop_metrics AS (
 
         SUM(fct_stop_time_metrics.n_tu_accurate_minutes) AS n_tu_accurate_minutes,
         SUM(fct_stop_time_metrics.n_tu_complete_minutes) AS n_tu_complete_minutes,
-
         SUM(fct_stop_time_metrics.n_tu_minutes_available) AS n_tu_minutes_available,
-        AVG(fct_stop_time_metrics.avg_prediction_spread_minutes) AS avg_prediction_spread_minutes,
-        SUM(fct_stop_time_metrics.n_predictions) AS n_predictions,
 
+        -- safe_divide because there are some rows where denominator is 0
+        SAFE_DIVIDE(SUM(fct_stop_time_metrics.sum_prediction_spread_minutes),  SUM(fct_stop_time_metrics.max_minutes_until_arrival)) AS avg_prediction_spread_minutes,
+
+        SUM(fct_stop_time_metrics.n_predictions) AS n_predictions,
         SUM(fct_stop_time_metrics.n_predictions_early) AS n_predictions_early,
         SUM(fct_stop_time_metrics.n_predictions_ontime) AS n_predictions_ontime,
         SUM(fct_stop_time_metrics.n_predictions_late) AS n_predictions_late,
@@ -69,6 +71,10 @@ stop_metrics AS (
         -- this key comes from intermediate and approximates trip_instance_key,
         -- which is available in fct_trip_updates_trip_summaries
         COUNT(DISTINCT fct_stop_time_metrics.trip_key) AS n_tu_trips,
+
+        -- check how combining these arrays (stop_time to stop grain) works for error percentiles
+        ARRAY_CONCAT_AGG(fct_stop_time_metrics.prediction_error_by_minute_array) AS prediction_error_by_minute_array,
+        ARRAY_CONCAT_AGG(fct_stop_time_metrics.minutes_until_arrival_array) AS minutes_until_arrival_array,
 
     FROM fct_stop_time_metrics
     INNER JOIN rt_feeds
