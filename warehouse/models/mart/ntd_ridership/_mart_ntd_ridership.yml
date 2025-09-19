@@ -1,5 +1,43 @@
 version: 2
 
+x-common-fields:
+  - &_3_mode
+    name: _3_mode
+    description: '{{ doc("ntd_3_mode") }}'
+  - &tos
+    name: tos
+    description: '{{ doc("ntd_type_of_service") }}'
+  - &mode
+    name: mode
+    description: '{{ doc("ntd_mode") }}'
+  - &uza_name
+    name: uza_name
+    description: '{{ doc("ntd_primary_uza_name") }}'
+  - &uace_cd
+    name: uace_cd
+    description: '{{ doc("ntd_primary_uza_code") }}'
+  - &reporter_type
+    name: reporter_type
+    description: '{{ doc("ntd_reporter_type") }}'
+  - &mode_type_of_service_status
+    name: mode_type_of_service_status
+    description: '{{ doc("ntd_mode_type_of_service_status") }}'
+  - &legacy_ntd_id
+    name: legacy_ntd_id
+    description: '{{ doc("ntd_legacy_id") }}'
+  - &agency
+    name: agency
+    description: '{{ doc("ntd_agency") }}'
+  - &ntd_id
+    name: ntd_id
+    description: '{{ doc("ntd_id") }}'
+  - &dt
+    name: dt
+    description: '{{ doc("ntd_extracting_date") }}'
+  - &execution_ts
+    name: execution_ts
+    description: '{{ doc("ntd_execution_timestamp") }}'
+
 models:
   - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_upt
   - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_vrm
@@ -10,3 +48,87 @@ models:
   - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__vrh
   - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__vrm_estimates
   - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__vrm
+  - name: fct_complete_monthly_ridership_with_adjustments_and_estimates
+    description: |
+      The Monthly module includes a limited set of key indicators reported by transit properties. Data is reported on a
+      monthly basis, by mode and type of service, for a fiscal year.
+
+      The four data items included are:
+
+      1. Unlinked Passenger Trips
+      2. Vehicle Revenue Miles
+      3. Vehicle Revenue Hours
+      4. Vehicles Operated in Maximum Service (Peak Vehicles)
+
+      This dataset presents these values in their own column in a long format (each row of the file is an individual
+      Agency/Mode/TOS/Date). The data source is shared with the static Excel file hosted on the FTA website
+      here: https://www.transit.dot.gov/ntd/data-product/monthly-module-adjusted-data-release. This dataset differs
+      from the static Excel file in its formatting as well as being updated weekly, to capture data as it is reported
+      and validated for a given publication month.
+    columns:
+      - name: key
+        description: |
+          Surrogate key generated from ntd_id, mode, tos, period_month, and period_year.
+        tests:
+          - not_null
+          - unique
+      - *ntd_id
+      - *agency
+      - name: caltrans_district_current
+        description: |
+          Current Caltrans district number for the agency.
+      - name: caltrans_district_name_current
+        description: |
+          Current Caltrans district name for the agency.
+      - name: date
+        description: |
+          The month (in Month-Year format) for which UPT, VRM, VRH and VOM was reported by the agency for the given Mode and TOS.
+      - name: period_month
+        description: |
+          The month portion extracted from the date field (MM format).
+      - name: period_year
+        description: |
+          The year portion extracted from the date field (YYYY format).
+      - name: period_year_month
+        description: |
+          The year and month in YYYY-MM format extracted from the date field.
+      - *tos
+      - *mode
+      - name: mode_name
+        description: |
+          Full name of the transit mode (e.g., "Bus" for mode "MB").
+      - name: service_type
+        description: |
+          Categorization of service as either "Fixed Route", "Demand Response", or "Unknown" based on the mode.
+      - name: agency_mode_tos_date
+        description: |
+          Unique row identifier derived by concatenating agency, mode, TOS, UZA, status, reporter type and date columns.
+      - name: voms
+        description: |
+          The number of revenue vehicles operated to meet the maximum service requirement for the respective month.
+      - name: upt
+        description: |
+          The number of passengers who board public transportation vehicles. Passengers are counted each time they board
+          vehicles no matter how many vehicles they use to travel from their origin to their destination.
+      - *_3_mode
+      - name: vrm
+        description: |
+          The miles that vehicles are scheduled to or actually travel while in revenue service
+      - *uza_name
+      - *uace_cd
+      - name: fta_region
+        description: |
+          The FTA region in which the reporter is located.
+      - name: state
+        description: |
+          State that the headquarters of the NTD Reporter is located in (not necessarily reflective of the entire
+          extent of their transit operations, which may overlap multiple states).
+      - *reporter_type
+      - *mode_type_of_service_status
+      - name: vrh
+        description: |
+          The hours that vehicles are scheduled to or actually travel while in revenue service. Vehicle revenue hours
+          include layovers and driver recovery time.
+      - *legacy_ntd_id
+      - *dt
+      - *execution_ts
