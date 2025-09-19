@@ -14,7 +14,7 @@ WITH fct_stop_time_metrics AS (
     SELECT *
     FROM {{ ref('fct_stop_time_metrics') }}
     WHERE {{ incremental_where(
-        default_start_var='GTFS_SCHEDULE_START',
+        default_start_var='PROD_GTFS_RT_START',
         this_dt_column='service_date',
         filter_dt_column='service_date',
         dev_lookback_days = 250) }} AND service_date >= '2025-06-01' AND service_date <= "2025-06-15"
