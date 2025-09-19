@@ -18,7 +18,7 @@ WITH fct_stop_time_metrics AS (
         this_dt_column='service_date',
         filter_dt_column='service_date',
         dev_lookback_days = 250)
-    }} AND service_date >= '2025-06-01' AND service_date <= "2025-06-15"
+    }} AND service_date >= '2025-06-01' AND service_date <= '2025-06-15'
 ),
 
 rt_feeds AS (
@@ -38,7 +38,7 @@ daily_scheduled_stops AS (
     FROM {{ ref('fct_daily_scheduled_stops') }} AS stops
     INNER JOIN rt_feeds
         ON rt_feeds.schedule_feed_key = stops.feed_key
-    WHERE service_date >= "2025-06-01" AND service_date <= "2025-06-15"
+    WHERE service_date >= '2025-06-01' AND service_date <= '2025-06-15'
 ),
 
 stop_metrics AS (

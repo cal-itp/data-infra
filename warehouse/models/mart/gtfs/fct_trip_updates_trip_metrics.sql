@@ -18,7 +18,7 @@ WITH fct_stop_time_metrics AS (
         this_dt_column='service_date',
         filter_dt_column='service_date',
         dev_lookback_days = 250
-    ) }} AND service_date >= '2025-06-01' AND service_date <= "2025-06-15"
+    ) }} AND service_date >= '2025-06-01' AND service_date <= '2025-06-15'
 ),
 
 trip_metrics AS (
