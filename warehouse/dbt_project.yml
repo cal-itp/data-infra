@@ -23,13 +23,14 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 vars:
   surrogate_key_treat_nulls_as_empty_strings: true # enable legacy behavior for dbt_utils surrogate keys, i.e. coalesce nulls to empty strings
-  GTFS_SCHEDULE_START: '2021-04-16'
-  PROD_GTFS_RT_START: '2022-09-15'
-  KUBA_DEVICE_START: '2025-08-11'
-  INCREMENTAL_MAX_DT: ''
+  GTFS_SCHEDULE_START: '2021-04-16' # oldest date that GTFS Schedule tables would be populated if full-refreshed
+  PROD_GTFS_RT_START: '2022-09-15' # oldest date that GTFS RT tables would be populated if full-refreshed
+  KUBA_DEVICE_START: '2025-08-11' # oldest date that Kuba tables would be populated if full-refreshed
+  INCREMENTAL_MAX_DT: '' # it is used by the incremental_where macro, but you can override to a different date if you need to re-run incremental tables: poetry run dbt compile -s model_to_run --vars 'INCREMENTAL_MAX_DT: 2025-07-01'
   'dbt_date:time_zone': 'America/Los_Angeles'
-  GOOGLE_CLOUD_PROJECT: cal-itp-data-infra-staging # you can override with GOOGLE_CLOUD_PROJECT env var rather than constantly using --vars
   CALITP_BUCKET__PUBLISH: "gs://calitp-staging-publish" # you can override with CALITP_BUCKET__PUBLISH env var rather than constantly using --vars
+  GOOGLE_CLOUD_PROJECT: cal-itp-data-infra-staging # only override it if you need to use a different data source: cal-itp-data-infra-staging or cal-itp-data-infra (prod)
+  EXTERNAL_TABLE_SOURCE: cal-itp-data-infra-staging # you can override it to point external tables to a different data source to test the data, but it may increase extra running costs. Be careful. How to use: poetry run dbt compile -s model_to_run --vars 'EXTERNAL_TABLE_SOURCE: cal-itp-data-infra-staging'
 
 models:
   calitp_warehouse:
