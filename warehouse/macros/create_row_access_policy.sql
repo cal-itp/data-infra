@@ -171,7 +171,7 @@ filter using (
 
 {{ create_row_access_policy(
     filter_column = 'organization_name',
-    filter_value = 'Monterey-Salinas Transit',
+    filter_value = 'Ventura County Transportation Commission',
     principals = ['serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
