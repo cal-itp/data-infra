@@ -25,7 +25,7 @@ WITH arrivals AS (
         actual_departure,
 
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_stop_day_map_grouping') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= "2025-06-03"
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= "2025-06-15"
 ),
 
 tu_trip_keys AS (
@@ -38,8 +38,8 @@ tu_trip_keys AS (
         trip_id,
         trip_start_time
 
-    FROM `cal-itp-data-infra.staging.int_gtfs_rt__trip_updates_trip_day_map_grouping`--{{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= '2025-06-03'
+    FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= '2025-06-15'
 ),
 
 trip_updates AS (
@@ -57,7 +57,7 @@ trip_updates AS (
         arrival_time,
         departure_time
     FROM {{ ref('fct_stop_time_updates_sample') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= "2025-06-03"
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= "2025-06-15"
 ),
 
 trip_updates2 AS (
