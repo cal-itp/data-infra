@@ -11,7 +11,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.3
     method: GET
-    uri: http://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
+    uri: http://data.transportation.gov/resource/j9q7-53ae.json?%24limit=10
   response:
     body:
       string: "<html>\r\n<head><title>301 Moved Permanently</title></head>\r\n<body>\r\n<center><h1>301
@@ -24,9 +24,9 @@ interactions:
       Content-Type:
       - text/html
       Date:
-      - Tue, 09 Sep 2025 21:34:20 GMT
+      - Fri, 19 Sep 2025 02:05:56 GMT
       Location:
-      - https://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
+      - https://data.transportation.gov/resource/j9q7-53ae.json?%24limit=10
       Server:
       - nginx
     status:
@@ -44,41 +44,26 @@ interactions:
       User-Agent:
       - python-requests/2.32.3
     method: GET
-    uri: https://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
+    uri: https://data.transportation.gov/resource/j9q7-53ae.json?%24limit=10
   response:
     body:
       string: !!binary |
-        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
+        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
+        mhxfdPzx5m/CH5DvRxgAAA==
     headers:
       Access-Control-Allow-Origin:
       - '*'
@@ -91,11 +76,11 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Tue, 09 Sep 2025 21:34:21 GMT
+      - Fri, 19 Sep 2025 02:05:57 GMT
       ETag:
-      - '"anVsaWV0dC44NjU4XzlfMTMzQ01mcUxHYmxmMTluUzJYZXN1TGdld0s1ek53---gzipMKINCextl6UnyKTLIewt521-skM--gzip--gzip"'
+      - '"anVsaWV0dC44NjU5XzVfNjU3WGRudHBacThNY1BIeU1JQ0VOUmFSYk1QM28---gziqVG5J53D-2y_m_qfMHUUpDMvAczQ--gzip--gzip"'
       Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Mon, 16 Dec 2024 19:43:58 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -107,59 +92,44 @@ interactions:
       X-SODA2-Data-Out-Of-Date:
       - 'false'
       X-SODA2-Fields:
-      - '["ntd_id","max_agency","max_city","max_state","max_organization_type","max_reporter_type","report_year","max_uace_code","max_uza_name","max_primary_uza_population","max_agency_voms","sum_operators_wages","sum_other_salaries_wages","sum_operator_paid_absences","sum_other_paid_absences","sum_fringe_benefits","sum_services","sum_fuel_and_lube","sum_tires","sum_other_materials_supplies","sum_utilities","sum_casualty_and_liability","sum_taxes","sum_purchased_transportation","sum_miscellaneous","sum_reduced_reporter_expenses","sum_total","sum_separate_report_amount"]'
+      - '["agency","city","state","ntd_id","organization_type","reporter_type","report_year","uace_code","uza_name","primary_uza_population","agency_voms","mode","mode_name","type_of_service","guideway_element","pre1940s","pre1940s_q","_1940s","_1940s_q","_1950s","_1950s_q","_1960s","_1960s_q","_1970s","_1970s_q","_1980s","_1980s_q","_1990s","_1990s_q","_2000s","_2000s_q","_2010s","_2010s_q","_2020s","_2020s_q"]'
       X-SODA2-Secondary-Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Mon, 16 Dec 2024 19:43:58 GMT
       X-SODA2-Truth-Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Mon, 16 Dec 2024 19:43:58 GMT
       X-SODA2-Types:
-      - '["text","text","text","text","text","text","text","text","text","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number"]'
+      - '["text","text","text","text","text","text","text","text","text","number","number","text","text","text","text","number","text","number","text","number","text","number","text","number","text","number","text","number","text","number","text","number","text","number","text"]'
       X-Socrata-Region:
       - aws-us-east-1-fedramp-prod
       X-Socrata-RequestId:
-      - c1eae1d71df057b04de9c383e525e745
+      - a09d4241bbf5f3f7e7bc436b27ce46fa
     status:
       code: 200
       message: OK
 - request:
     body: !!binary |
-      LS09PT09PT09PT09PT09PT0yNDc3NTk1ODU2NzI4MzgxOTAyPT0NCmNvbnRlbnQtdHlwZTogYXBw
-      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAib3BlcmF0aW5nX2V4cGVu
-      c2VzX2J5X3R5cGVfYW5kX2FnZW5jeS9tdWx0aV95ZWFyL2R0PTIwMjUtMDYtMDEvZXhlY3V0aW9u
-      X3RzPTIwMjUtMDYtMDFUMDA6MDA6MDArMDA6MDAvbXVsdGlfeWVhcl9fb3BlcmF0aW5nX2V4cGVu
-      c2VzX2J5X3R5cGVfYW5kX2FnZW5jeS5qc29ubC5neiJ9DQotLT09PT09PT09PT09PT09PTI0Nzc1
-      OTU4NTY3MjgzODE5MDI9PQ0KY29udGVudC10eXBlOiBhcHBsaWNhdGlvbi9qc29ubA0KDQofiwgA
-      XZ3AaAL/7ZlZb9w2EIDf+ysEP9sAr+HhN9dpi6JpksYJgvZFoHdpm7BWUnU4cYL894xO7+pYrY2k
-      QNr6wYDJISnO8JvLn47iYh369dHpEcEfenR8tLEfQnvt4tU9Dv7m4+vgPCnj4v44WF/a02BrJPjd
-      FVnSLln5olpw4WxRRK4dzAtbOBx9d9YOJNm1jf1HW/gkDov7tJo899Xm7ZZJFjxPVjYKfknuXBZv
-      XFwEb2NfVBPPXGqzoh5KroI3mY3zNMmKerN2/8xVIy7r9v65jKLgdTt4GrxMXYbi8TWKN6LhvbMZ
-      CjLCeLtHaVcuXCXrar0mXJtu/KMNY7txD7c8OXljV8nGHgf9BdPMb2x2XwunSVpGzdedHnEQgtBd
-      BYd3ySavDmeK4ERebsKk/sIky8P3KFNNUqOk5IrzTqK4wfvlNrKZd1tiwI3gXA43ClPr16G9zPHA
-      WpCB1lwqubPdUIgzwVBMt0JXGerMhZcudle+qI9T0jCpOW0lcpfd+WYtFVxpxo3qFpcuCm28DqPy
-      slIeF5JrvFM7Xfis+S6jjAbY+awNPp/M2ygP8zJNI18LCgWUStOdXBY+8kUzpSgTwLqdVzYvbVTc
-      N4d7e1kJVo+UKbzf1hfYD/Vqg5rR3bZpma1ubO7WYbH70HC5AGBA+3M2Pl+5KLKxS8r6JpwI3m+U
-      uXW5wm36p+k+pC7O6xM7YxVJYaPqC5iWRkjGe63ii0cdtItDu6koqdVPOGGMiKPPP3zaZZgNGb5I
-      k1v8tgYYJOmsLG6SrNLELrmN2GPI/TVeO7zLuiLyVXkZ+VVwVp9a0dof08OKZ180z+Rb0cqVFBO0
-      Njc7hFIhFFNmElJO5hllIKnWYPYjivaSCBVfIpQzppGFBUAVCAqzfDLGOEgGYzxBCdI4oik40TFw
-      amDAppRSUbGMpgKDPsFMkEkllaJX0DyZDBCdIZhAlIZlLiU1Rgk2QyX6DKWlfgKVlGihOTCzRCUZ
-      08iHNL7yLlu5LtztBrHgx8aAwVnm7ANAbeRtV7Yo7cL73N6690my/q7p/UdireB7Qq2WhGqiFzBG
-      zy+UUosYE4LxaD/GghJDuNwTZg0loMUYY80YhZ6UUYyVqMwe8g5jIBhg+TLGgG4KcZnCGGMfetlF
-      jLkypk9FOowpUQrYARwzSigQmAuvAlCv5Cnh1Qhm5FbOMsMxUDQvyo5xFkOcz5P4yq2rF+DWyIm/
-      dHlFDOoWEY/ufBS5AEHzNkY0KvNtZ6stvC9cnrrIbR4Db33UDIgXG4skXtznhdvkPZGHYoi3BD7G
-      8J3Nb/B1FuilXiTxydu/Fimk2oCq88wxhQd480MMzARRQsLAzN3oyHowsl7r4H7CWsMVReto27+m
-      PW07+X+B8xinC/M+FxRILul+lyupAsUXPS56BWL6umPa42KKL9i8wwXMfgg1E1WNrpKbubQJUwRU
-      sBj4WypRvWbZ31KQYAib8LdAsFqiS+4WqyFO+qKhL2cMl/3pB4A2Tpg40eoJbhbLK8w9+wrzMemS
-      nCP0T3vrq3dYA9r8Mc1nM/dvwdMozH3HeHbaWKaSck4FTGdCbE8iBBTBXOg4cA2iz0Dm+w0Ssyq+
-      l0lqpOif70QShK6FcjbBJMcsSJkZJrVQWrEBkopSypaJxAJMCz6VACmi9RKPknP5cHKLI1kmEdUu
-      Vd/YGOU9hPWbPq58oQofgX4CjmqI4/PtRsIznxeZXw0DZInCwzbCy9ffUSHCMPmdgK652HHQ32UW
-      OqZQ5dNdhId3PKZOY3YOeqH6MEIoodliKNRUUEr2Y4e1+kN0meDOcKAS5EQPASsJ0+8+BI8JYUhf
-      affBEDSR5AD0DMO4BRPsaYW5ymIwRHJZr8QOPvmwcB9/BP2tgrnCA7A47Gu1xxAoQTB9QN0xQaAe
-      EoiJ/8l2+z1N8N5YXQw6CR2bFTUvM3edxG3sxPW4bhfZV7gMr7n+nqFVlE9B212twvbkZDleYumJ
-      oUhPsquommXXAAfO2VLIZBIjHRYni/gKrFWHPf9RZNXMENOnaBMAS6CMGcon2gfoIICzuR49wyiH
-      yeswelKByifmkB49frwhk51ApjR6ObLIMaVGEzrsIbC+MboHZCGkwCPmMluupdRPiqWSK4ZahcVg
-      SgU6Qfw1JtqM/sdmI181AJr2QUVM0zDIdyE9L3O/uv0P9QjI1+kRaCXMsEPQjA1NUwe0XdNEFp/3
-      TdvYaT3oH6X1lbHw98BCNz5K/i59/Bg/+k2NJOjYSE00ONhAABwzjml/+HUMZAi6TjVs1TWDn78A
-      xSaSGKEeAAANCi0tPT09PT09PT09PT09PT09MjQ3NzU5NTg1NjcyODM4MTkwMj09LS0=
+      LS09PT09PT09PT09PT09PT00NzUyNDg0ODcyMDI1MzYwNjkyPT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAidHJhY2tfYW5kX3JvYWR3
+      YXlfZ3VpZGV3YXlfYWdlX2Rpc3RyaWJ1dGlvbi9tdWx0aV95ZWFyL2R0PTIwMjUtMDgtMDEvZXhl
+      Y3V0aW9uX3RzPTIwMjUtMDgtMDFUMDA6MDA6MDArMDA6MDAvbXVsdGlfeWVhcl9fdHJhY2tfYW5k
+      X3JvYWR3YXlfZ3VpZGV3YXlfYWdlX2Rpc3RyaWJ1dGlvbi5qc29ubC5neiJ9DQotLT09PT09PT09
+      PT09PT09PTQ3NTI0ODQ4NzIwMjUzNjA2OTI9PQ0KY29udGVudC10eXBlOiBhcHBsaWNhdGlvbi9q
+      c29ubA0KDQofiwgAhbrMaAL/7ZhNb9s4EIbv+ysIn7aApYj6Vm6O0xZFs3Bge7tHgZGmLgGKFGgq
+      rVv0v+9QtiPGrYsFmiwK1xfD73A0nOE8oER+GbEVyGozuhxdg7wHTeaw4koyQZaayXWrtGEGDeSa
+      r43mlRmNRxU3wwOo1+gCaJjOUEhTl7xGlQdBkKJB6RWT/HMfpTSb1nq+kTW0gD/SkNvuTvCKTPo8
+      iNJk0pkPSuMcRL3fZsENWYC+5xVgPA02KdD7WK86ITDrrfGSzFrQOJdcPbiWG2AaHcMgDNHYsQrK
+      StX22TBKwszaPrNSsgYeqvK8SaeVZmPSF9Vq3jC9Ka1fq9pO9NXYAGme0tiG2K5jea+aNdqLiKKt
+      2c4yne/+7+eYqqbpjF1sxgWO2UpK9b5c74q8HN0u0bzqeA0f2aYEAQ0uFdpfCrjHxa4v5mAYl1CT
+      V1yIPkOgRRzYuQOU5YFIXJG6InNF7opiECH20hHUitQPaa/C3dDXP74MNL3FDpCp6iS28Rpapo2t
+      wHb0LzBa7fs6JvUduySudz8+ULYAZowAB7N/Ji5mmFlAj2A2xRDjfVwk60ZVCPZrhQ2WfTp/S0QL
+      Bx5n+Jj8J0YuD6K8eIzcrkTPW7JKNchcX+FR5qIkjgNKv2EOJysG6BaH0C2MBjAV+wF117PvUzcx
+      3mvNarh4I71tmIuXzR3UNdT/F3qRT5OBvcTPk+PsLTX3XJhaJbhh8tiOZls+07DqW72j7ha9BJO1
+      g91sfohd/ovvbhmN6MHutq9rTGZzz/sxZyEN4jDKv+EsS6IBs5tDzG746oP5CcSumBBsbcifXFai
+      q+3GAJ8QsfUaH3jxtLiFoU+LAbgw9lOHuMCn+YAcpX6Snpk7Seaee1tDriIHMz8pBswKP8scyvwo
+      P0N2SpBdgVAf93ub0vjFhmt1Zbc4/LvspITn/HxL/OLI59tenEE7QdCmnfEwR+yhPdI9B2WBH8UD
+      ZoGfRGfOfj/OHk6hCNxT8xUkj/jKz3z9Hnw9XHFMlaw0GPhpsJCl1CWryFyyMucNGe7PlXSrsvDM
+      1kmy9YzXZ3T7LtzxRf0sdflyj5TIXnzm6yT5WhgAQd5xVndVf8N4pXm9gqd+R8bhf7mpDfz04Obi
+      X4s+Op33FwAADQotLT09PT09PT09PT09PT09PTQ3NTI0ODQ4NzIwMjUzNjA2OTI9PS0t
     headers:
       Accept:
       - application/json
@@ -170,16 +140,16 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '2102'
+      - '1248'
       User-Agent:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
-        gccl-invocation-id/cf2d4d6d-d4c3-4e5b-a6dc-2ec6aa5bc534
+        gccl-invocation-id/bc14741f-5bef-4ffe-9a08-88537eecd9ea
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yNDc3NTk1ODU2NzI4
-        MzgxOTAyPT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT00NzUyNDg0ODcyMDI1
+        MzYwNjkyPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -188,30 +158,30 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/operating_expenses_by_type_and_agency/multi_year/dt=2025-06-01/execution_ts=2025-06-01T00:00:00+00:00/multi_year__operating_expenses_by_type_and_agency.jsonl.gz/1757453662144072\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/operating_expenses_by_type_and_agency%2Fmulti_year%2Fdt=2025-06-01%2Fexecution_ts=2025-06-01T00:00:00%2B00:00%2Fmulti_year__operating_expenses_by_type_and_agency.jsonl.gz\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/operating_expenses_by_type_and_agency%2Fmulti_year%2Fdt=2025-06-01%2Fexecution_ts=2025-06-01T00:00:00%2B00:00%2Fmulti_year__operating_expenses_by_type_and_agency.jsonl.gz?generation=1757453662144072&alt=media\",\n
-        \ \"name\": \"operating_expenses_by_type_and_agency/multi_year/dt=2025-06-01/execution_ts=2025-06-01T00:00:00+00:00/multi_year__operating_expenses_by_type_and_agency.jsonl.gz\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1757453662144072\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/track_and_roadway_guideway_age_distribution/multi_year/dt=2025-08-01/execution_ts=2025-08-01T00:00:00+00:00/multi_year__track_and_roadway_guideway_age_distribution.jsonl.gz/1758247558368052\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/track_and_roadway_guideway_age_distribution%2Fmulti_year%2Fdt=2025-08-01%2Fexecution_ts=2025-08-01T00:00:00%2B00:00%2Fmulti_year__track_and_roadway_guideway_age_distribution.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/track_and_roadway_guideway_age_distribution%2Fmulti_year%2Fdt=2025-08-01%2Fexecution_ts=2025-08-01T00:00:00%2B00:00%2Fmulti_year__track_and_roadway_guideway_age_distribution.jsonl.gz?generation=1758247558368052&alt=media\",\n
+        \ \"name\": \"track_and_roadway_guideway_age_distribution/multi_year/dt=2025-08-01/execution_ts=2025-08-01T00:00:00+00:00/multi_year__track_and_roadway_guideway_age_distribution.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1758247558368052\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1722\",\n  \"md5Hash\": \"plCLcd8d8OSuJoihX4znNA==\",\n
-        \ \"crc32c\": \"XqCAsQ==\",\n  \"etag\": \"CMiM94nRzI8DEAE=\",\n  \"timeCreated\":
-        \"2025-09-09T21:34:22.156Z\",\n  \"updated\": \"2025-09-09T21:34:22.156Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-09-09T21:34:22.156Z\",\n  \"timeFinalized\":
-        \"2025-09-09T21:34:22.156Z\"\n}\n"
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"856\",\n  \"md5Hash\": \"/qiHhV/LSnTkoVZznOJJWw==\",\n
+        \ \"crc32c\": \"uUy1qA==\",\n  \"etag\": \"CLSWk8ne448DEAE=\",\n  \"timeCreated\":
+        \"2025-09-19T02:05:58.377Z\",\n  \"updated\": \"2025-09-19T02:05:58.377Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-09-19T02:05:58.377Z\",\n  \"timeFinalized\":
+        \"2025-09-19T02:05:58.377Z\"\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Content-Length:
-      - '1441'
+      - '1488'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Tue, 09 Sep 2025 21:34:22 GMT
+      - Fri, 19 Sep 2025 02:05:58 GMT
       ETag:
-      - CMiM94nRzI8DEAE=
+      - CLSWk8ne448DEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -222,7 +192,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - ABgVH89IuDboro5T76NyU_EPvn9l0labmvo9omp13BoKuydKguZaaLWhEdw-2Eju_n9JQGrV0FwIIqG9L6TW
+      - AAwnv3JbJDRSV8uqvOqP0RK1FhmCA0P6a8aZNsaMjbZG6MXmSH7br7kIUSZGuDotB5Kq8p2jVFAy7g
     status:
       code: 200
       message: OK
@@ -238,7 +208,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.3
     method: GET
-    uri: http://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
+    uri: http://data.transportation.gov/resource/j9q7-53ae.json?%24limit=10
   response:
     body:
       string: "<html>\r\n<head><title>301 Moved Permanently</title></head>\r\n<body>\r\n<center><h1>301
@@ -251,9 +221,9 @@ interactions:
       Content-Type:
       - text/html
       Date:
-      - Tue, 09 Sep 2025 21:34:22 GMT
+      - Fri, 19 Sep 2025 02:05:58 GMT
       Location:
-      - https://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
+      - https://data.transportation.gov/resource/j9q7-53ae.json?%24limit=10
       Server:
       - nginx
     status:
@@ -271,46 +241,31 @@ interactions:
       User-Agent:
       - python-requests/2.32.3
     method: GET
-    uri: https://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=10
+    uri: https://data.transportation.gov/resource/j9q7-53ae.json?%24limit=10
   response:
     body:
       string: !!binary |
-        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
+        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
+        mhxfdPzx5m/CH5DvRxgAAA==
     headers:
       Access-Control-Allow-Origin:
       - '*'
       Age:
-      - '0'
+      - '2'
       Connection:
       - keep-alive
       Content-Encoding:
@@ -318,11 +273,11 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Tue, 09 Sep 2025 21:34:22 GMT
+      - Fri, 19 Sep 2025 02:05:59 GMT
       ETag:
-      - '"anVsaWV0dC44NjU4XzlfMTMzQ01mcUxHYmxmMTluUzJYZXN1TGdld0s1ek53---gzipMKINCextl6UnyKTLIewt521-skM--gzip--gzip"'
+      - '"anVsaWV0dC44NjU5XzVfNjU3WGRudHBacThNY1BIeU1JQ0VOUmFSYk1QM28---gziqVG5J53D-2y_m_qfMHUUpDMvAczQ--gzip--gzip"'
       Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Mon, 16 Dec 2024 19:43:58 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -334,59 +289,44 @@ interactions:
       X-SODA2-Data-Out-Of-Date:
       - 'false'
       X-SODA2-Fields:
-      - '["ntd_id","max_agency","max_city","max_state","max_organization_type","max_reporter_type","report_year","max_uace_code","max_uza_name","max_primary_uza_population","max_agency_voms","sum_operators_wages","sum_other_salaries_wages","sum_operator_paid_absences","sum_other_paid_absences","sum_fringe_benefits","sum_services","sum_fuel_and_lube","sum_tires","sum_other_materials_supplies","sum_utilities","sum_casualty_and_liability","sum_taxes","sum_purchased_transportation","sum_miscellaneous","sum_reduced_reporter_expenses","sum_total","sum_separate_report_amount"]'
+      - '["agency","city","state","ntd_id","organization_type","reporter_type","report_year","uace_code","uza_name","primary_uza_population","agency_voms","mode","mode_name","type_of_service","guideway_element","pre1940s","pre1940s_q","_1940s","_1940s_q","_1950s","_1950s_q","_1960s","_1960s_q","_1970s","_1970s_q","_1980s","_1980s_q","_1990s","_1990s_q","_2000s","_2000s_q","_2010s","_2010s_q","_2020s","_2020s_q"]'
       X-SODA2-Secondary-Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Mon, 16 Dec 2024 19:43:58 GMT
       X-SODA2-Truth-Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Mon, 16 Dec 2024 19:43:58 GMT
       X-SODA2-Types:
-      - '["text","text","text","text","text","text","text","text","text","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number"]'
+      - '["text","text","text","text","text","text","text","text","text","number","number","text","text","text","text","number","text","number","text","number","text","number","text","number","text","number","text","number","text","number","text","number","text","number","text"]'
       X-Socrata-Region:
       - aws-us-east-1-fedramp-prod
       X-Socrata-RequestId:
-      - 714e9314e18eb6cf80316ce00ddde4dc
+      - 5e6fbb30f995a3c0bedebe2bafe1551f
     status:
       code: 200
       message: OK
 - request:
     body: !!binary |
-      LS09PT09PT09PT09PT09PT0wMzYwMzAzNDE4OTk1MDM4ODQzPT0NCmNvbnRlbnQtdHlwZTogYXBw
-      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAib3BlcmF0aW5nX2V4cGVu
-      c2VzX2J5X3R5cGVfYW5kX2FnZW5jeS9tdWx0aV95ZWFyL2R0PTIwMjUtMDctMDEvZXhlY3V0aW9u
-      X3RzPTIwMjUtMDctMDFUMDA6MDA6MDArMDA6MDAvbXVsdGlfeWVhcl9fb3BlcmF0aW5nX2V4cGVu
-      c2VzX2J5X3R5cGVfYW5kX2FnZW5jeS5qc29ubC5neiJ9DQotLT09PT09PT09PT09PT09PTAzNjAz
-      MDM0MTg5OTUwMzg4NDM9PQ0KY29udGVudC10eXBlOiBhcHBsaWNhdGlvbi9qc29ubA0KDQofiwgA
-      X53AaAL/7ZlZb9w2EIDf+ysEP9sAr+HhN9dpi6JpksYJgvZFoHdpm7BWUnU4cYL894xO7+pYrY2k
-      QNr6wYDJISnO8JvLn47iYh369dHpEcEfenR8tLEfQnvt4tU9Dv7m4+vgPCnj4v44WF/a02BrJPjd
-      FVnSLln5olpw4WxRRK4dzAtbOBx9d9YOJNm1jf1HW/gkDov7tJo899Xm7ZZJFjxPVjYKfknuXBZv
-      XFwEb2NfVBPPXGqzoh5KroI3mY3zNMmKerN2/8xVIy7r9v65jKLgdTt4GrxMXYbi8TWKN6LhvbMZ
-      CjLCeLtHaVcuXCXrar0mXJtu/KMNY7txD7c8OXljV8nGHgf9BdPMb2x2XwunSVpGzdedHnEQgtBd
-      BYd3ySavDmeK4ERebsKk/sIky8P3KFNNUqOk5IrzTqK4wfvlNrKZd1tiwI3gXA43ClPr16G9zPHA
-      WpCB1lwqubPdUIgzwVBMt0JXGerMhZcudle+qI9T0jCpOW0lcpfd+WYtFVxpxo3qFpcuCm28DqPy
-      slIeF5JrvFM7Xfis+S6jjAbY+awNPp/M2ygP8zJNI18LCgWUStOdXBY+8kUzpSgTwLqdVzYvbVTc
-      N4d7e1kJVo+UKbzf1hfYD/Vqg5rR3bZpma1ubO7WYbH70HC5AGBA+3M2Pl+5KLKxS8r6JpwI3m+U
-      uXW5wm36p+k+pC7O6xM7YxVJYaPqC5iWRkjGe63ii0cdtItDu6koqdVPOGGMiKPPP3zaZZgNGb5I
-      k1v8tgYYJOmsLG6SrNLELrmN2GPI/TVeO7zLuiLyVXkZ+VVwVp9a0dof08OKZ180z+Rb0cqVFBO0
-      Njc7hFIhFFNmElJO5hllIKnWYPYjivaSCBVfIpQzppGFBUAVCAqzfDLGOEgGYzxBCdI4oik40TFw
-      amDAppRSUbGMpgKDPsFMkEkllaJX0DyZDBCdIZhAlIZlLiU1Rgk2QyX6DKWlfgKVlGihOTCzRCUZ
-      08iHNL7yLlu5LtztBrHgx8aAwVnm7ANAbeRtV7Yo7cL73N6690my/q7p/UdireB7Qq2WhGqiFzBG
-      zy+UUosYE4LxaD/GghJDuNwTZg0loMUYY80YhZ6UUYyVqMwe8g5jIBhg+TLGgG4KcZnCGGMfetlF
-      jLkypk9FOowpUQrYARwzSigQmAuvAlCv5Cnh1Qhm5FbOMsMxUDQvyo5xFkOcz5P4yq2rF+DWyIm/
-      dHlFDOoWEY/ufBS5AEHzNkY0KvNtZ6stvC9cnrrIbR4Db33UDIgXG4skXtznhdvkPZGHYoi3BD7G
-      8J3Nb/B1FuilXiTxydu/Fimk2oCq88wxhQd480MMzARRQsLAzN3oyHowsl7r4H7CWsMVReto27+m
-      PW07+X+B8xinC/M+FxRILul+lyupAsUXPS56BWL6umPa42KKL9i8wwXMfgg1E1WNrpKbubQJUwRU
-      sBj4WypRvWbZ31KQYAib8LdAsFqiS+4WqyFO+qKhL2cMl/3pB4A2Tpg40eoJbhbLK8w9+wrzMemS
-      nCP0T3vrq3dYA9r8Mc1nM/dvwdMozH3HeHbaWKaSck4FTGdCbE8iBBTBXOg4cA2iz0Dm+w0Ssyq+
-      l0lqpOif70QShK6FcjbBJMcsSJkZJrVQWrEBkopSypaJxAJMCz6VACmi9RKPknP5cHKLI1kmEdUu
-      Vd/YGOU9hPWbPq58oQofgX4CjmqI4/PtRsIznxeZXw0DZInCwzbCy9ffUSHCMPmdgK652HHQ32UW
-      OqZQ5dNdhId3PKZOY3YOeqH6MEIoodliKNRUUEr2Y4e1+kN0meDOcKAS5EQPASsJ0+8+BI8JYUhf
-      affBEDSR5AD0DMO4BRPsaYW5ymIwRHJZr8QOPvmwcB9/BP2tgrnCA7A47Gu1xxAoQTB9QN0xQaAe
-      EoiJ/8l2+z1N8N5YXQw6CR2bFTUvM3edxG3sxPW4bhfZV7gMr7n+nqFVlE9B212twvbkZDleYumJ
-      oUhPsquommXXAAfO2VLIZBIjHRYni/gKrFWHPf9RZNXMENOnaBMAS6CMGcon2gfoIICzuR49wyiH
-      yeswelKByifmkB49frwhk51ApjR6ObLIMaVGEzrsIbC+MboHZCGkwCPmMluupdRPiqWSK4ZahcVg
-      SgU6Qfw1JtqM/sdmI181AJr2QUVM0zDIdyE9L3O/uv0P9QjI1+kRaCXMsEPQjA1NUwe0XdNEFp/3
-      TdvYaT3oH6X1lbHw98BCNz5K/i59/Bg/+k2NJOjYSE00ONhAABwzjml/+HUMZAi6TjVs1TWDn78A
-      xSaSGKEeAAANCi0tPT09PT09PT09PT09PT09MDM2MDMwMzQxODk5NTAzODg0Mz09LS0=
+      LS09PT09PT09PT09PT09PT0yMTEwOTM3MTM2MDAwMzg0MDI0PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAidHJhY2tfYW5kX3JvYWR3
+      YXlfZ3VpZGV3YXlfYWdlX2Rpc3RyaWJ1dGlvbi9tdWx0aV95ZWFyL2R0PTIwMjUtMDktMDEvZXhl
+      Y3V0aW9uX3RzPTIwMjUtMDktMDFUMDA6MDA6MDArMDA6MDAvbXVsdGlfeWVhcl9fdHJhY2tfYW5k
+      X3JvYWR3YXlfZ3VpZGV3YXlfYWdlX2Rpc3RyaWJ1dGlvbi5qc29ubC5neiJ9DQotLT09PT09PT09
+      PT09PT09PTIxMTA5MzcxMzYwMDAzODQwMjQ9PQ0KY29udGVudC10eXBlOiBhcHBsaWNhdGlvbi9q
+      c29ubA0KDQofiwgAh7rMaAL/7ZhNb9s4EIbv+ysIn7aApYj6Vm6O0xZFs3Bge7tHgZGmLgGKFGgq
+      rVv0v+9QtiPGrYsFmiwK1xfD73A0nOE8oER+GbEVyGozuhxdg7wHTeaw4koyQZaayXWrtGEGDeSa
+      r43mlRmNRxU3wwOo1+gCaJjOUEhTl7xGlQdBkKJB6RWT/HMfpTSb1nq+kTW0gD/SkNvuTvCKTPo8
+      iNJk0pkPSuMcRL3fZsENWYC+5xVgPA02KdD7WK86ITDrrfGSzFrQOJdcPbiWG2AaHcMgDNHYsQrK
+      StX22TBKwszaPrNSsgYeqvK8SaeVZmPSF9Vq3jC9Ka1fq9pO9NXYAGme0tiG2K5jea+aNdqLiKKt
+      2c4yne/+7+eYqqbpjF1sxgWO2UpK9b5c74q8HN0u0bzqeA0f2aYEAQ0uFdpfCrjHxa4v5mAYl1CT
+      V1yIPkOgRRzYuQOU5YFIXJG6InNF7opiECH20hHUitQPaa/C3dDXP74MNL3FDpCp6iS28Rpapo2t
+      wHb0LzBa7fs6JvUduySudz8+ULYAZowAB7N/Ji5mmFlAj2A2xRDjfVwk60ZVCPZrhQ2WfTp/S0QL
+      Bx5n+Jj8J0YuD6K8eIzcrkTPW7JKNchcX+FR5qIkjgNKv2EOJysG6BaH0C2MBjAV+wF117PvUzcx
+      3mvNarh4I71tmIuXzR3UNdT/F3qRT5OBvcTPk+PsLTX3XJhaJbhh8tiOZls+07DqW72j7ha9BJO1
+      g91sfohd/ovvbhmN6MHutq9rTGZzz/sxZyEN4jDKv+EsS6IBs5tDzG746oP5CcSumBBsbcifXFai
+      q+3GAJ8QsfUaH3jxtLiFoU+LAbgw9lOHuMCn+YAcpX6Snpk7Seaee1tDriIHMz8pBswKP8scyvwo
+      P0N2SpBdgVAf93ub0vjFhmt1Zbc4/LvspITn/HxL/OLI59tenEE7QdCmnfEwR+yhPdI9B2WBH8UD
+      ZoGfRGfOfj/OHk6hCNxT8xUkj/jKz3z9Hnw9XHFMlaw0GPhpsJCl1CWryFyyMucNGe7PlXSrsvDM
+      1kmy9YzXZ3T7LtzxRf0sdflyj5TIXnzm6yT5WhgAQd5xVndVf8N4pXm9gqd+R8bhf7mpDfz04Obi
+      X4s+Op33FwAADQotLT09PT09PT09PT09PT09PTIxMTA5MzcxMzYwMDAzODQwMjQ9PS0t
     headers:
       Accept:
       - application/json
@@ -397,16 +337,16 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '2102'
+      - '1248'
       User-Agent:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
-        gccl-invocation-id/d5c2532e-4f4f-4f7a-b5d5-fe28a1b06a58
+        gccl-invocation-id/e0c8307c-6c88-45c2-8959-28b054dff4a8
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0wMzYwMzAzNDE4OTk1
-        MDM4ODQzPT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yMTEwOTM3MTM2MDAw
+        Mzg0MDI0PT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -415,30 +355,30 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/operating_expenses_by_type_and_agency/multi_year/dt=2025-07-01/execution_ts=2025-07-01T00:00:00+00:00/multi_year__operating_expenses_by_type_and_agency.jsonl.gz/1757453663920543\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/operating_expenses_by_type_and_agency%2Fmulti_year%2Fdt=2025-07-01%2Fexecution_ts=2025-07-01T00:00:00%2B00:00%2Fmulti_year__operating_expenses_by_type_and_agency.jsonl.gz\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/operating_expenses_by_type_and_agency%2Fmulti_year%2Fdt=2025-07-01%2Fexecution_ts=2025-07-01T00:00:00%2B00:00%2Fmulti_year__operating_expenses_by_type_and_agency.jsonl.gz?generation=1757453663920543&alt=media\",\n
-        \ \"name\": \"operating_expenses_by_type_and_agency/multi_year/dt=2025-07-01/execution_ts=2025-07-01T00:00:00+00:00/multi_year__operating_expenses_by_type_and_agency.jsonl.gz\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1757453663920543\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/track_and_roadway_guideway_age_distribution/multi_year/dt=2025-09-01/execution_ts=2025-09-01T00:00:00+00:00/multi_year__track_and_roadway_guideway_age_distribution.jsonl.gz/1758247559720974\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/track_and_roadway_guideway_age_distribution%2Fmulti_year%2Fdt=2025-09-01%2Fexecution_ts=2025-09-01T00:00:00%2B00:00%2Fmulti_year__track_and_roadway_guideway_age_distribution.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/track_and_roadway_guideway_age_distribution%2Fmulti_year%2Fdt=2025-09-01%2Fexecution_ts=2025-09-01T00:00:00%2B00:00%2Fmulti_year__track_and_roadway_guideway_age_distribution.jsonl.gz?generation=1758247559720974&alt=media\",\n
+        \ \"name\": \"track_and_roadway_guideway_age_distribution/multi_year/dt=2025-09-01/execution_ts=2025-09-01T00:00:00+00:00/multi_year__track_and_roadway_guideway_age_distribution.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1758247559720974\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1722\",\n  \"md5Hash\": \"l0wQscQusvzgGPtcHvBCkA==\",\n
-        \ \"crc32c\": \"/FBmfA==\",\n  \"etag\": \"CJ/D44rRzI8DEAE=\",\n  \"timeCreated\":
-        \"2025-09-09T21:34:23.927Z\",\n  \"updated\": \"2025-09-09T21:34:23.927Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-09-09T21:34:23.927Z\",\n  \"timeFinalized\":
-        \"2025-09-09T21:34:23.927Z\"\n}\n"
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"856\",\n  \"md5Hash\": \"P5AA1mQfsODHCCsZHTZU9w==\",\n
+        \ \"crc32c\": \"tS7FTQ==\",\n  \"etag\": \"CI7g5cne448DEAE=\",\n  \"timeCreated\":
+        \"2025-09-19T02:05:59.730Z\",\n  \"updated\": \"2025-09-19T02:05:59.730Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-09-19T02:05:59.730Z\",\n  \"timeFinalized\":
+        \"2025-09-19T02:05:59.730Z\"\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Content-Length:
-      - '1441'
+      - '1488'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Tue, 09 Sep 2025 21:34:23 GMT
+      - Fri, 19 Sep 2025 02:05:59 GMT
       ETag:
-      - CJ/D44rRzI8DEAE=
+      - CI7g5cne448DEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -449,7 +389,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - ABgVH88L5xoYEzusUB8mLtmUneuKu0_QoKS3M80IbglpC0lU_6PmkEJsDs-jYGsvZfjyRqbJtc3A7ofDVoao
+      - AAwnv3Insf2sGXaWuuR8sx5aw3f6ye71AJEbKWiaAYxlH3l4NxnPTK-ZPGkEjrvbx4KVVdSXYzFt5U8
     status:
       code: 200
       message: OK
@@ -466,7 +406,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.70.0 gax/2.24.1 gccl/2.19.0
-        gccl-invocation-id/d9043823-2a25-42a3-9add-18d4708438ef
+        gccl-invocation-id/78a926eb-f4cb-421e-b42c-dcac9c10b2ad
       accept-encoding:
       - gzip
       content-type:
@@ -476,41 +416,26 @@ interactions:
       x-upload-content-type:
       - application/json; charset=UTF-8
     method: GET
-    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/operating_expenses_by_type_and_agency%2Fmulti_year%2Fdt%3D2025-06-01%2Fexecution_ts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fmulti_year__operating_expenses_by_type_and_agency.jsonl.gz?alt=media
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/track_and_roadway_guideway_age_distribution%2Fmulti_year%2Fdt%3D2025-08-01%2Fexecution_ts%3D2025-08-01T00%3A00%3A00%2B00%3A00%2Fmulti_year__track_and_roadway_guideway_age_distribution.jsonl.gz?alt=media
   response:
     body:
       string: !!binary |
-        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
-        g5+/AMUmkhihHgAA
+        H4sIAIW6zGgC/+2YTW/bOBCG7/srCJ+2gKWI+lZujtMWRbNwYHu7R4GRpi4BihRoKq1b9L/vULYj
+        xq2LBZosCtcXw+9wNJzhPKBEfhmxFchqM7ocXYO8B03msOJKMkGWmsl1q7RhBg3kmq+N5pUZjUcV
+        N8MDqNfoAmiYzlBIU5e8RpUHQZCiQekVk/xzH6U0m9Z6vpE1tIA/0pDb7k7wikz6PIjSZNKZD0rj
+        HES932bBDVmAvucVYDwNNinQ+1ivOiEw663xksxa0DiXXD24lhtgGh3DIAzR2LEKykrV9tkwSsLM
+        2j6zUrIGHqryvEmnlWZj0hfVat4wvSmtX6vaTvTV2ABpntLYhtiuY3mvmjXai4iirdnOMp3v/u/n
+        mKqm6YxdbMYFjtlKSvW+XO+KvBzdLtG86ngNH9mmBAENLhXaXwq4x8WuL+ZgGJdQk1dciD5DoEUc
+        2LkDlOWBSFyRuiJzRe6KYhAh9tIR1IrUD2mvwt3Q1z++DDS9xQ6QqeoktvEaWqaNrcB29C8wWu37
+        Oib1Hbskrnc/PlC2AGaMAAezfyYuZphZQI9gNsUQ431cJOtGVQj2a4UNln06f0tECwceZ/iY/CdG
+        Lg+ivHiM3K5Ez1uySjXIXF/hUeaiJI4DSr9hDicrBugWh9AtjAYwFfsBddez71M3Md5rzWq4eCO9
+        bZiLl80d1DXU/xd6kU+Tgb3Ez5Pj7C0191yYWiW4YfLYjmZbPtOw6lu9o+4WvQSTtYPdbH6IXf6L
+        724ZjejB7rava0xmc8/7MWchDeIwyr/hLEuiAbObQ8xu+OqD+QnErpgQbG3In1xWoqvtxgCfELH1
+        Gh948bS4haFPiwG4MPZTh7jAp/mAHKV+kp6ZO0nmnntbQ64iBzM/KQbMCj/LHMr8KD9DdkqQXYFQ
+        H/d7m9L4xYZrdWW3OPy77KSE5/x8S/ziyOfbXpxBO0HQpp3xMEfsoT3SPQdlgR/FA2aBn0Rnzn4/
+        zh5OoQjcU/MVJI/4ys98/R58PVxxTJWsNBj4abCQpdQlq8hcsjLnDRnuz5V0q7LwzNZJsvWM12d0
+        +y7c8UX9LHX5co+UyF585usk+VoYAEHecVZ3VX/DeKV5vYKnfkfG4X+5qQ389ODm4l+LPjqd9xcA
+        AA==
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -519,17 +444,17 @@ interactions:
       Content-Disposition:
       - attachment
       Content-Length:
-      - '1722'
+      - '856'
       Content-Type:
       - application/jsonl
       Date:
-      - Tue, 09 Sep 2025 21:34:24 GMT
+      - Fri, 19 Sep 2025 02:06:00 GMT
       ETag:
-      - CMiM94nRzI8DEAE=
+      - CLSWk8ne448DEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Tue, 09 Sep 2025 21:34:22 GMT
+      - Fri, 19 Sep 2025 02:05:58 GMT
       Pragma:
       - no-cache
       Server:
@@ -538,11 +463,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - ABgVH8_vWKtfTcAy-VFUj995GMbCPQdycTE8l8KTV7jo8db7p6tfLa0yx8yIcEq0ZI4etRQ
+      - AAwnv3Io_KNM_7JDCNW_WwfJtT1hYjwuXTmffqpKKF00IIQqrTqAAS4XQwLHFs7qzhHf7pe_pC5Y1QE
       X-Goog-Generation:
-      - '1757453662144072'
+      - '1758247558368052'
       X-Goog-Hash:
-      - crc32c=XqCAsQ==,md5=plCLcd8d8OSuJoihX4znNA==
+      - crc32c=uUy1qA==,md5=/qiHhV/LSnTkoVZznOJJWw==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:
@@ -550,7 +475,7 @@ interactions:
       X-Goog-Stored-Content-Encoding:
       - identity
       X-Goog-Stored-Content-Length:
-      - '1722'
+      - '856'
     status:
       code: 200
       message: OK

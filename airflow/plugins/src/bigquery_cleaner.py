@@ -33,6 +33,12 @@ class BigQueryValueCleaner:
                 result = [x if x is not None else "" for x in result]
         elif isinstance(result, float):
             result = round(result, 8)
+        elif isinstance(result, str):
+            try:
+                if result.replace(".", "", 1).isdigit() and result.count(".") == 1:
+                    result = round(float(result), 8)
+            except ValueError:
+                pass
 
         return result
 
@@ -64,10 +70,22 @@ class BigQueryRowCleaner:
 
     def clean(self) -> dict:
         columns = {}
-        for key, value in self.row.items():
-            columns[BigQueryKeyCleaner(key).clean()] = BigQueryValueCleaner(
-                value
-            ).clean()
+        for k, v in self.row.items():
+            key = BigQueryKeyCleaner(k).clean()
+            value = v
+
+            if isinstance(value, list):
+                columns[key] = [
+                    item
+                    if isinstance(item, str)
+                    else BigQueryValueCleaner(item).clean()
+                    for item in value
+                ]
+            elif isinstance(value, dict):
+                columns[key] = BigQueryRowCleaner(value).clean()
+            else:
+                columns[key] = BigQueryValueCleaner(value).clean()
+
         return columns
 
 

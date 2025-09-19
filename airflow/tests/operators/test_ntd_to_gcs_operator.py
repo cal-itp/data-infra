@@ -15,7 +15,7 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 class TestNTDToGCSOperator:
     @pytest.fixture
     def execution_date(self) -> datetime:
-        return datetime.fromisoformat("2025-06-01").replace(tzinfo=timezone.utc)
+        return datetime.fromisoformat("2025-08-01").replace(tzinfo=timezone.utc)
 
     @pytest.fixture
     def gcs_hook(self) -> GCSHook:
@@ -24,7 +24,7 @@ class TestNTDToGCSOperator:
     @pytest.fixture
     def object_path(self) -> NTDObjectPath:
         return NTDObjectPath(
-            product="operating_expenses_by_type_and_agency", year="multi_year"
+            product="track_and_roadway_guideway_age_distribution", year="multi_year"
         )
 
     @pytest.fixture
@@ -46,9 +46,9 @@ class TestNTDToGCSOperator:
             http_conn_id="http_ntd",
             gcp_conn_id="google_cloud_default",
             bucket=os.environ.get("CALITP_BUCKET__NTD_API_DATA_PRODUCTS"),
-            product="operating_expenses_by_type_and_agency",
+            product="track_and_roadway_guideway_age_distribution",
             year="multi_year",
-            endpoint="resource/i4ua-cjx4.json",
+            endpoint="resource/j9q7-53ae.json",
             parameters={"$limit": 10},
             dag=test_dag,
         )
@@ -75,11 +75,11 @@ class TestNTDToGCSOperator:
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == os.path.join(
             os.environ.get("CALITP_BUCKET__NTD_API_DATA_PRODUCTS"),
-            "operating_expenses_by_type_and_agency",
+            "track_and_roadway_guideway_age_distribution",
             "multi_year",
-            "dt=2025-06-01",
-            "execution_ts=2025-06-01T00:00:00+00:00",
-            "multi_year__operating_expenses_by_type_and_agency.jsonl.gz",
+            "dt=2025-08-01",
+            "execution_ts=2025-08-01T00:00:00+00:00",
+            "multi_year__track_and_roadway_guideway_age_distribution.jsonl.gz",
         )
 
         compressed_result = gcs_hook.download(
@@ -90,4 +90,58 @@ class TestNTDToGCSOperator:
         )
         decompressed_result = gzip.decompress(compressed_result)
         result = [json.loads(x) for x in decompressed_result.splitlines()]
-        assert "max_agency" in result[0]
+        # Original record
+        # {
+        #   "agency": "King County Department of Metro Transit, dba: King County Metro",
+        #   "city": "Seattle",
+        #   "state": "WA",
+        #   "ntd_id": "00001",
+        #   "organization_type": "City, County or Local Government Unit or Department of Transportation",
+        #   "reporter_type": "Full Reporter: Operating",
+        #   "report_year": "2022",
+        #   "uace_code": "80389",
+        #   "uza_name": "Seattle--Tacoma, WA",
+        #   "primary_uza_population": "3544011",
+        #   "agency_voms": "2029",
+        #   "mode": "SR",
+        #   "mode_name": "Streetcar Rail",
+        #   "type_of_service": "DO",
+        #   "guideway_element": "At-Grade/In-Street/Embedded",
+        #   "pre1940s": "0",
+        #   "_1940s": "0",
+        #   "_1950s": "0",
+        #   "_1960s": "0",
+        #   "_1970s": "0",
+        #   "_1980s": "0",
+        #   "_1990s": "0",
+        #   "_2000s": "3.15",
+        #   "_2010s": "5.8500000000000005",
+        #   "_2020s": "0",
+        # }
+        assert result[1] == {
+            "agency": "King County Department of Metro Transit, dba: King County Metro",
+            "city": "Seattle",
+            "state": "WA",
+            "ntd_id": "00001",
+            "organization_type": "City, County or Local Government Unit or Department of Transportation",
+            "reporter_type": "Full Reporter: Operating",
+            "report_year": "2022",
+            "uace_code": "80389",
+            "uza_name": "Seattle--Tacoma, WA",
+            "primary_uza_population": "3544011",
+            "agency_voms": "2029",
+            "mode": "SR",
+            "mode_name": "Streetcar Rail",
+            "type_of_service": "DO",
+            "guideway_element": "At-Grade/In-Street/Embedded",
+            "pre1940s": "0",
+            "_1940s": "0",
+            "_1950s": "0",
+            "_1960s": "0",
+            "_1970s": "0",
+            "_1980s": "0",
+            "_1990s": "0",
+            "_2000s": 3.15,
+            "_2010s": 5.85,
+            "_2020s": "0",
+        }
