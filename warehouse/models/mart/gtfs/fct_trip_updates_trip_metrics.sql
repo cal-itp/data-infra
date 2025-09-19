@@ -13,6 +13,12 @@
 WITH fct_stop_time_metrics AS (
     SELECT *
     FROM {{ ref('fct_stop_time_metrics') }}
+    WHERE {{ incremental_where(
+        default_start_var='PROD_GTFS_RT_START',
+        this_dt_column='service_date',
+        filter_dt_column='service_date',
+        dev_lookback_days = 250
+    ) }} AND service_date >= '2025-06-01' AND service_date <= "2025-06-15"
 ),
 
 trip_metrics AS (
@@ -27,8 +33,12 @@ trip_metrics AS (
         SUM(fct_stop_time_metrics.n_tu_complete_minutes) AS n_tu_complete_minutes,
 
         SUM(fct_stop_time_metrics.n_tu_minutes_available) AS n_tu_minutes_available,
-        AVG(fct_stop_time_metrics.avg_prediction_spread_minutes) AS avg_prediction_spread_minutes,
+        SAFE_DIVIDE(SUM(fct_stop_time_metrics.sum_prediction_spread_minutes),  SUM(fct_stop_time_metrics.max_minutes_until_arrival)) AS avg_prediction_spread_minutes,
         SUM(fct_stop_time_metrics.n_predictions) AS n_predictions,
+
+        SUM(fct_stop_time_metrics.n_predictions_early) AS n_predictions_early,
+        SUM(fct_stop_time_metrics.n_predictions_ontime) AS n_predictions_ontime,
+        SUM(fct_stop_time_metrics.n_predictions_late) AS n_predictions_late,
 
         COUNT(DISTINCT fct_stop_time_metrics.key) AS n_stops,
 

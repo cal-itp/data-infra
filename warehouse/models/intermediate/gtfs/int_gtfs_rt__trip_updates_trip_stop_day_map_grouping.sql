@@ -13,7 +13,7 @@
 WITH stop_time_updates AS (
     SELECT *
     FROM {{ ref('fct_stop_time_updates_sample') }}
-    WHERE dt >= '2025-06-01' AND dt <= '2025-06-15'
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', dev_lookback_days = 250) }} AND dt >= '2025-06-01' AND dt <= "2025-06-15"
 ),
 
 -- follow pattern in int_gtfs_rt__vehicle_positions_trip_day_map_grouping / fct_vehicle_locations,
@@ -77,10 +77,13 @@ int_gtfs_rt__trip_updates_trip_stop_day_map_grouping AS (
 
         -- usually one of these columns is null, but we want to use it to compare against _extract_ts
         COALESCE(last_trip_updates_arrival, last_trip_updates_departure) AS actual_arrival,
+        GREATEST(COALESCE(last_trip_updates_arrival, last_trip_updates_departure)) AS actual_departure,
         -- get this in Pacific
-        DATETIME(TIMESTAMP(COALESCE(last_trip_updates_arrival, last_trip_updates_departure)), "America/Los_Angeles") AS actual_arrival_pacific
+        DATETIME(TIMESTAMP(COALESCE(last_trip_updates_arrival, last_trip_updates_departure)), "America/Los_Angeles") AS actual_arrival_pacific,
+        DATETIME(TIMESTAMP(GREATEST(COALESCE(last_trip_updates_arrival, last_trip_updates_departure))), "America/Los_Angeles") AS actual_departure_pacific,
+        -- 9_540_105 left, but started with 10_000_000 ish once stop_id and stop_sequence being null are dropped
+
     FROM grouped
-    -- 9_540_105 left, but started with 10_000_000 ish once stop_id and stop_sequence being null are dropped
 )
 
 SELECT * FROM int_gtfs_rt__trip_updates_trip_stop_day_map_grouping
