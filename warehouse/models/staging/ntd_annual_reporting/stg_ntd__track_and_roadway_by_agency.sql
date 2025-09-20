@@ -44,7 +44,7 @@ stg_ntd__track_and_roadway_by_agency AS (
         SAFE_CAST(sum_single_turnout AS NUMERIC) AS sum_single_turnout,
         SAFE_CAST(sum_slip_switch AS NUMERIC) AS sum_slip_switch,
         SAFE_CAST(sum_total_miles AS NUMERIC) AS sum_total_miles,
-        SAFE_CAST(sum_total_track_miles AS NUMERIC) AS sum_total_track_miles,
+        SAFE_CAST(sum_total_track_miles AS BIGNUMERIC) AS sum_total_track_miles,
         dt,
         execution_ts
     FROM get_latest_extract

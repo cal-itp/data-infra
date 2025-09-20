@@ -12,39 +12,39 @@ destination_project_dataset_table: "external_ntd__annual_reporting.multi_year__t
 post_hook: SELECT * FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_ntd__annual_reporting.multi_year__track_and_roadway_guideway_age_distribution LIMIT 1;
 schema_fields:
   - name: _1940s
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: _1940s_q
     type: STRING
   - name: _1950s
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: _1950s_q
     type: STRING
   - name: _1960s
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: _1960s_q
     type: STRING
   - name: _1970s
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: _1970s_q
     type: STRING
   - name: _1980s
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: _1980s_q
     type: STRING
   - name: _1990s
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: _1990s_q
     type: STRING
   - name: _2000s
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: _2000s_q
     type: STRING
   - name: _2010s
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: _2010s_q
     type: STRING
   - name: _2020s
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: _2020s_q
     type: STRING
   - name: agency
@@ -64,7 +64,7 @@ schema_fields:
   - name: organization_type
     type: STRING
   - name: pre1940s
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: pre1940s_q
     type: STRING
   - name: primary_uza_population
