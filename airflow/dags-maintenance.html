@@ -493,7 +493,8 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#podoperators"><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backfilling-from-the-command-line">Backfilling from the command line</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#re-triggering-from-the-command-line">Re-triggering from the command line</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-large-number-of-tasks">Running a large number of tasks</a></li>
 </ul>
             </nav>
         </div>
@@ -558,13 +559,54 @@ document.write(`
 <h2><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code><a class="headerlink" href="#podoperators" title="Link to this heading">#</a></h2>
 <p>When restarting a failed run of a DAG that utilizes a <code class="docutils literal notranslate"><span class="pre">PodOperator</span></code>, check the logs before restarting. If the logs show any indication that the prior run’s pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/">Kubernetes pod</a> associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. Users with proper access to Kubernetes Engine in Google Cloud can check for any <a class="reference external" href="https://console.cloud.google.com/kubernetes/workload/overview?project=cal-itp-data-infra&amp;amp;pli=1&amp;amp;pageState=(%22savedViews%22:(%22i%22:%229699ac902c0a41ae918282ebfa4f5fb2%22,%22c%22:%5B%5D,%22n%22:%5B%5D),%22workload_list_table%22:(%22p%22:0))">live workloads</a> that correspond to the pod referenced in the failed Airflow task’s run logs.</p>
 </section>
-<section id="backfilling-from-the-command-line">
-<h2>Backfilling from the command line<a class="headerlink" href="#backfilling-from-the-command-line" title="Link to this heading">#</a></h2>
-<p>From time to time some DAGs may need to be re-run in order to populate new data.</p>
-<p>Subject to the considerations outlined above, backfilling can be performed by clearing historical runs in the web interface, or via the CLI:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>gcloud<span class="w"> </span>composer<span class="w"> </span>environments<span class="w"> </span>run<span class="w"> </span>calitp-airflow-prod<span class="w"> </span>--location<span class="o">=</span>us-west2<span class="w"> </span>backfill<span class="w"> </span>--<span class="w"> </span>--start_date<span class="w"> </span><span class="m">2021</span>-04-18<span class="w"> </span>--end_date<span class="w"> </span><span class="m">2021</span>-11-03<span class="w"> </span>-x<span class="w"> </span>--reset_dagruns<span class="w"> </span>-y<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;gtfs_schedule_history_load&quot;</span><span class="w"> </span>-i<span class="w"> </span>gtfs_loader
+<section id="re-triggering-from-the-command-line">
+<h2>Re-triggering from the command line<a class="headerlink" href="#re-triggering-from-the-command-line" title="Link to this heading">#</a></h2>
+<p>If you need to re-run a large number of DAGs, you can use the <code class="docutils literal notranslate"><span class="pre">dags</span> <span class="pre">trigger</span></code> Airflow 2.x command. Later versions of Airflow may have a different syntax.</p>
+<p>This example creates a new DAG run for <code class="docutils literal notranslate"><span class="pre">parse_and_validate_rt</span></code> for the execution date of August 30, 2025 at 11:15pm UTC in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging</span></code> environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>gcloud<span class="w"> </span>composer<span class="w"> </span>environments<span class="w"> </span>run<span class="w"> </span>calitp-staging-composer<span class="w"> </span>--project<span class="w"> </span>cal-itp-data-infra-staging<span class="w"> </span>--location<span class="w"> </span>us-west2<span class="w"> </span>dags<span class="w"> </span>trigger<span class="w"> </span>--<span class="w"> </span>-e<span class="w"> </span><span class="m">2025</span>-08-30T23:15:00+00:00<span class="w"> </span>parse_and_validate_rt
 </pre></div>
 </div>
+</section>
+<section id="running-a-large-number-of-tasks">
+<h2>Running a large number of tasks<a class="headerlink" href="#running-a-large-number-of-tasks" title="Link to this heading">#</a></h2>
+<p>If you need to process a large number of tasks, you will need to increase the size of the Google Cloud Composer environment, add another scheduler, and increase the pool of running worker instances.</p>
+<p>We use Terraform to manage the Composer environment. To tell Terraform to make these changes, open the <code class="docutils literal notranslate"><span class="pre">environment.tf</span></code> file for your environment, then make the following edits:</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- a/iac/cal-itp-data-infra-staging/composer/us/environment.tf</span>
+<span class="gi">+++ b/iac/cal-itp-data-infra-staging/composer/us/environment.tf</span>
+<span class="gu">@@ -16,8 +16,8 @@ resource &quot;google_composer_environment&quot; &quot;calitp-composer&quot; {</span>
+<span class="w"> </span>     scheduler {
+<span class="w"> </span>        cpu        = 2
+<span class="w"> </span>        memory_gb  = 2
+<span class="w"> </span>        storage_gb = 1
+<span class="gd">-        count      = 1</span>
+<span class="gi">+        count      = 2</span>
+<span class="w"> </span>      }
+<span class="w"> </span>      web_server {
+<span class="w"> </span>        cpu        = 1
+<span class="gu">@@ -29,17 +29,17 @@ resource &quot;google_composer_environment&quot; &quot;calitp-composer&quot; {</span>
+<span class="w"> </span>        memory_gb  = 13
+<span class="w"> </span>        storage_gb = 5
+<span class="w"> </span>        min_count  = 1
+<span class="gd">-        max_count  = 8</span>
+<span class="gi">+        max_count  = 32</span>
+<span class="w"> </span>      }
+<span class="w"> </span>    }
+
+<span class="gd">-    environment_size = &quot;ENVIRONMENT_SIZE_MEDIUM&quot;</span>
+<span class="gi">+    environment_size = &quot;ENVIRONMENT_SIZE_LARGE&quot;</span>
+
+<span class="w"> </span>    software_config {
+<span class="w"> </span>      image_version = &quot;composer-2.8.6-airflow-2.7.3&quot;
+
+<span class="w"> </span>      airflow_config_overrides = {
+<span class="gd">-        celery-worker_concurrency                  = 4</span>
+<span class="gi">+        celery-worker_concurrency                  = 6</span>
+<span class="w"> </span>        core-dag_file_processor_timeout            = 1200
+<span class="w"> </span>        core-dagbag_import_timeout                 = 600
+<span class="w"> </span>        core-dags_are_paused_at_creation           = true
+</pre></div>
+</div>
+<p>You will need to open a pull request in order for Terraform to apply these changes. You will need to revert these changes when you are done.</p>
 </section>
 </section>
 
@@ -642,7 +684,8 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#podoperators"><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backfilling-from-the-command-line">Backfilling from the command line</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#re-triggering-from-the-command-line">Re-triggering from the command line</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-large-number-of-tasks">Running a large number of tasks</a></li>
 </ul>
   </nav></div>
 
