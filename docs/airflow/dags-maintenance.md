@@ -48,12 +48,56 @@ Failures can be cleared (re-run) via the Airflow user interface ([accessible via
 
 When restarting a failed run of a DAG that utilizes a `PodOperator`, check the logs before restarting. If the logs show any indication that the prior run's pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the [Kubernetes pod](https://kubernetes.io/docs/concepts/workloads/pods/) associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. Users with proper access to Kubernetes Engine in Google Cloud can check for any [live workloads](<https://console.cloud.google.com/kubernetes/workload/overview?project=cal-itp-data-infra&pli=1&pageState=(%22savedViews%22:(%22i%22:%229699ac902c0a41ae918282ebfa4f5fb2%22,%22c%22:%5B%5D,%22n%22:%5B%5D),%22workload_list_table%22:(%22p%22:0))>) that correspond to the pod referenced in the failed Airflow task's run logs.
 
-## Backfilling from the command line
+## Re-triggering from the command line
 
-From time to time some DAGs may need to be re-run in order to populate new data.
+If you need to re-run a large number of DAGs, you can use the `dags trigger` Airflow 2.x command. Later versions of Airflow may have a different syntax.
 
-Subject to the considerations outlined above, backfilling can be performed by clearing historical runs in the web interface, or via the CLI:
+This example creates a new DAG run for `parse_and_validate_rt` for the execution date of August 30, 2025 at 11:15pm UTC in the `cal-itp-data-infra-staging` environment:
 
-```shell
-gcloud composer environments run calitp-airflow-prod --location=us-west2 backfill -- --start_date 2021-04-18 --end_date 2021-11-03 -x --reset_dagruns -y -t "gtfs_schedule_history_load" -i gtfs_loader
+```bash
+$ gcloud composer environments run calitp-staging-composer --project cal-itp-data-infra-staging --location us-west2 dags trigger -- -e 2025-08-30T23:15:00+00:00 parse_and_validate_rt
 ```
+
+## Running a large number of tasks
+
+If you need to process a large number of tasks, you will need to increase the size of the Google Cloud Composer environment, add another scheduler, and increase the pool of running worker instances.
+
+We use Terraform to manage the Composer environment. To tell Terraform to make these changes, open the `environment.tf` file for your environment, then make the following edits:
+
+```diff
+--- a/iac/cal-itp-data-infra-staging/composer/us/environment.tf
++++ b/iac/cal-itp-data-infra-staging/composer/us/environment.tf
+@@ -16,8 +16,8 @@ resource "google_composer_environment" "calitp-composer" {
+      scheduler {
+         cpu        = 2
+         memory_gb  = 2
+         storage_gb = 1
+-        count      = 1
++        count      = 2
+       }
+       web_server {
+         cpu        = 1
+@@ -29,17 +29,17 @@ resource "google_composer_environment" "calitp-composer" {
+         memory_gb  = 13
+         storage_gb = 5
+         min_count  = 1
+-        max_count  = 8
++        max_count  = 32
+       }
+     }
+
+-    environment_size = "ENVIRONMENT_SIZE_MEDIUM"
++    environment_size = "ENVIRONMENT_SIZE_LARGE"
+
+     software_config {
+       image_version = "composer-2.8.6-airflow-2.7.3"
+
+       airflow_config_overrides = {
+-        celery-worker_concurrency                  = 4
++        celery-worker_concurrency                  = 6
+         core-dag_file_processor_timeout            = 1200
+         core-dagbag_import_timeout                 = 600
+         core-dags_are_paused_at_creation           = true
+```
+
+You will need to open a pull request in order for Terraform to apply these changes. You will need to revert these changes when you are done.

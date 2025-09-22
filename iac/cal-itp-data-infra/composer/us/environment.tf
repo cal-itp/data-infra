@@ -17,7 +17,7 @@ resource "google_composer_environment" "calitp-composer" {
         cpu        = 2
         memory_gb  = 2
         storage_gb = 1
-        count      = 2
+        count      = 1
       }
       web_server {
         cpu        = 1
@@ -29,17 +29,17 @@ resource "google_composer_environment" "calitp-composer" {
         memory_gb  = 13
         storage_gb = 5
         min_count  = 1
-        max_count  = 32
+        max_count  = 8
       }
     }
 
-    environment_size = "ENVIRONMENT_SIZE_LARGE"
+    environment_size = "ENVIRONMENT_SIZE_MEDIUM"
 
     software_config {
       image_version = "composer-2.8.6-airflow-2.7.3"
 
       airflow_config_overrides = {
-        celery-worker_concurrency                  = 6
+        celery-worker_concurrency                  = 4
         core-dag_file_processor_timeout            = 1200
         core-dagbag_import_timeout                 = 600
         core-dags_are_paused_at_creation           = true
