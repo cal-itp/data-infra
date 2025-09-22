@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import yaml
 from jinja2 import Environment
-from sqlalchemy import MetaData, Table, create_engine
+from sqlalchemy import MetaData, Table, create_engine, text
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.sql.expression import ClauseElement, Executable
 
@@ -79,7 +79,7 @@ def get_table(table_name, as_df=False):
     engine = get_engine()
     src_table = format_table_name(table_name)
 
-    table = Table(src_table, MetaData(bind=engine), autoload=True)
+    table = Table(src_table, MetaData(), autoload_with=engine)
 
     if as_df:
         return pd.read_sql_query(table.select(), engine)
@@ -114,7 +114,10 @@ def query_sql(fname, dry_run=False, as_df=True, engine=None):
         if as_df:
             return pd.read_sql_query(sql_code, engine)
 
-        return engine.execute(sql_code)
+        with engine.connect() as connection:
+            result = connection.execute(text(sql_code))
+
+        return result
 
 
 def to_snakecase(df):
