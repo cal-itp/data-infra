@@ -3712,28 +3712,6 @@ docs = ["matplotlib", "numpydoc (==1.1.*)", "sphinx", "sphinx-book-theme", "sphi
 test = ["pytest", "pytest-cov"]
 
 [[package]]
-name = "siuba"
-version = "0.4.2"
-description = "A package for quick, scrappy analyses with pandas and SQL"
-optional = false
-python-versions = ">=3.7"
-groups = ["main"]
-files = [
-    {file = "siuba-0.4.2-py3-none-any.whl", hash = "sha256:6070a1c99d9ae6994f0f591a82509dd8e2edc6eee1ff4f3d6678cbf03a81a7ad"},
-    {file = "siuba-0.4.2.tar.gz", hash = "sha256:f60fe925467400812a8748b37531105a0c56b841a244d7f1cd8147769760c548"},
-]
-
-[package.dependencies]
-numpy = ">=1.12.0"
-pandas = ">=0.24.0"
-PyYAML = ">=3.0.0"
-SQLAlchemy = ">=1.2.19"
-
-[package.extras]
-docs = ["gapminder (==0.1)", "jupyter", "jupytext", "nbsphinx", "nbval", "plotnine", "sphinx"]
-test = ["hypothesis", "pytest"]
-
-[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -4213,4 +4191,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.11"
-content-hash = "7b135baf4352279c8e9da7b5355932f212487f7a0975ed9a3ac32295bdcbbd26"
+content-hash = "5eb963ecbec08b595a52c8467075ca59e327be80a2dfb33739c0e231241fc3b3"

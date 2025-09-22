@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "calitp-data-analysis"
 requires-poetry = "~=2.0"
-version = "2025.8.10"
+version = "2025.9.22"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
 package-mode = true
 authors = ["Andrew Vaccaro"]
@@ -22,7 +22,6 @@ pandas-gbq = "^0.19.1"
 pyairtable = "2.2.2"
 requests = "^2.31.0"
 shapely = "^2.0.1"
-siuba = "0.4.2" # pinned because new versions might need better sqlalchemy
 sqlalchemy = "1.4.46" # pinned because 2.0 breaks the sql.py file
 sqlalchemy-bigquery = "^1.6.1"
 
