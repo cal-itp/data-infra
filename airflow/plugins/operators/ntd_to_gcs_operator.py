@@ -1,6 +1,8 @@
 import gzip
+import io
 import logging
 import os
+import time
 from datetime import datetime
 from typing import Sequence
 
@@ -44,7 +46,7 @@ class NTDToGCSOperator(BaseOperator):
         product: str,
         year: str,
         endpoint: str,
-        parameters: dict = {},
+        parameters: dict = None,
         http_conn_id: str = "http_ntd",
         gcp_conn_id: str = "google_cloud_default",
         page_size: int = 100000,
@@ -56,7 +58,7 @@ class NTDToGCSOperator(BaseOperator):
         self.product = product
         self.year = year
         self.endpoint = endpoint
-        self.parameters = parameters
+        self.parameters = parameters if parameters is not None else {}
         self.http_conn_id = http_conn_id
         self.gcp_conn_id = gcp_conn_id
         self.page_size = page_size
@@ -78,8 +80,6 @@ class NTDToGCSOperator(BaseOperator):
         object_name: str = self.object_path().resolve(dag_run.logical_date)
 
         # Stream data directly to compressed buffer to avoid memory accumulation
-        import io
-
         buffer = io.BytesIO()
 
         with gzip.GzipFile(fileobj=buffer, mode="wb") as gz_file:
@@ -165,8 +165,6 @@ class NTDToGCSOperator(BaseOperator):
                         raise
                     else:
                         logging.info("Retrying upload in 30 seconds...")
-                        import time
-
                         time.sleep(30)
         else:
             logging.info(
