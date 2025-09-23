@@ -1,29 +1,28 @@
-[tool.poetry]
+[project]
 name = "calitp-data-analysis"
-requires-poetry = "~=2.0"
-version = "2025.9.22"
+version = "2025.9.23"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
-package-mode = true
-authors = ["Andrew Vaccaro"]
+authors = [{ name = "Andrew Vaccaro" }]
+requires-python = ">=3.11.0, <3.12.0"
 
-[tool.poetry.dependencies]
-python = "~3.11"
-altair = "^5.1.1"
-black = "24.10.0"
-dask = "~2024.5"
-dask-geopandas = "^0.2.0"
-gcsfs = "!=2022.7.1"
-geopandas = "^0.14.0"
-gtfs-segments = "2.1.7"
-ipython = "^8.9.0"
-jinja2 = "^3.1.3"
-pandas = "<2" # keep us below pandas 2.0 since pandas-gbq does not specify, and siuba errors currently
-pandas-gbq = "^0.19.1"
-pyairtable = "2.2.2"
-requests = "^2.31.0"
-shapely = "^2.0.1"
-sqlalchemy = "1.4.46" # pinned because 2.0 breaks the sql.py file
-sqlalchemy-bigquery = "^1.6.1"
+dependencies = [
+    "altair (>=5.1.1, <6.0.0)",
+    "black==24.10.0",
+    "dask (>=2024.5.0, <2024.6.0)",
+    "dask-geopandas (>=0.2.0, <0.3.0)",
+    "gcsfs==2024.5.0",
+    "geopandas (>=0.14.0, <0.15.0)",
+    "gtfs-segments==2.1.7",
+    "ipython (>=8.9.0, <9.0.0)",
+    "jinja2  (>=3.1.3, <4.0.0)",
+    "pandas (>=2.0.0, <3.0.0)",
+    "pandas-gbq (>=0.19.1, <0.20.0)",
+    "pyairtable==2.2.2",
+    "requests (>=2.31.0, <3.0.0)",
+    "shapely (>=2.0.1, <3.0.0)",
+    "sqlalchemy (>=2.0.0, <3.0.0)",
+    "sqlalchemy-bigquery (>=1.6.1, <2.0.0)"
+]
 
 [tool.poetry.group.dev.dependencies]
 hypothesis = "^6.68.0"
@@ -32,8 +31,6 @@ pandas-stubs = "^2.0.2.230605"
 pytest = "^7.2.1"
 pytest-mock = "^3.14.1"
 pytest-spec = "^3.2.0"
-# note: this is deprecated in sqlalchemy 2.0
-sqlalchemy-stubs = "^0.4"
 types-pyyaml = "^6.0.12.11"
 
 [build-system]
@@ -42,9 +39,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 120
-
-[tool.mypy]
-plugins = "sqlmypy"
-exclude = [
-    "dist/",
-]
