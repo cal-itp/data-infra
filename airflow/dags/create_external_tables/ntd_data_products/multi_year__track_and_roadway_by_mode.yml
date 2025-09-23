@@ -114,7 +114,7 @@ schema_fields:
   - name: total_miles
     type: STRING
   - name: total_track_miles
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: total_track_miles_q
     type: STRING
   - name: type_of_service
