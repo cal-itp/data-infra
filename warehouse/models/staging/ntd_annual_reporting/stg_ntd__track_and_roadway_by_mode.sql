@@ -64,7 +64,7 @@ stg_ntd__track_and_roadway_by_mode AS (
         {{ trim_make_empty_string_null('slip_switch_q') }} AS slip_switch_q,
         {{ trim_make_empty_string_null('state') }} AS state,
         SAFE_CAST(total_miles AS NUMERIC) AS total_miles,
-        SAFE_CAST(total_track_miles AS NUMERIC) AS total_track_miles,
+        SAFE_CAST(total_track_miles AS BIGNUMERIC) AS total_track_miles,
         {{ trim_make_empty_string_null('total_track_miles_q') }} AS total_track_miles_q,
         {{ trim_make_empty_string_null('type_of_service') }} AS type_of_service,
         {{ trim_make_empty_string_null('uace_code') }} AS uace_code,
