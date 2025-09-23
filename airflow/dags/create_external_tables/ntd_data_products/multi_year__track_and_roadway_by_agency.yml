@@ -72,6 +72,6 @@ schema_fields:
   - name: sum_slip_switch
     type: NUMERIC
   - name: sum_total_miles
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: sum_total_track_miles
     type: BIGNUMERIC
