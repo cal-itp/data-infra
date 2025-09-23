@@ -1,8 +1,5 @@
-operator: operators.NTDToGCSOperator
+operator: operators.soda_to_gcs_operator.SODAToGCSOperator
 
-year: historical
-product: monthly_modal_time_series_safety_and_service
-bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
-endpoint: resource/5ti2-5uiv.json
-parameters:
-  $limit: 5000000
+object_path: historical/monthly_modal_time_series_safety_and_service/dt={{ dag_run.logical_date.date().isoformat() }}/execution_ts={{ dag_run.logical_date.isoformat() }}
+bucket_name: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+resource: 5ti2-5uiv

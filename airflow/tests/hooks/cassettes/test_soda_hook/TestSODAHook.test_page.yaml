@@ -1,0 +1,70 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.3
+    method: GET
+    uri: https://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=1&%24offset=0
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAF1Ty47UMBC88xVRzrNSYjuvuaFFcACEBIs4IGT1JD2zlhzb8mOYLOLfsfMYZjbH
+        6qrq7nLn559c+YGLId/nRfzKfJePcOFwQtVPEfwo1Cl71EH5aZcNB9hnN0j2Gb3Vq6QXPgm+IXgv
+        cQWdB48R/fF2BbQ9gRIv4IVW3E8mFR9FMl8ttc0+6R5k9kGf0aoRlc++K+FT4R0asH6G9DF7sqCc
+        0dbPZqu/xYSg3bzfBymzryu4z74YtJGuTpG+UPmEYCORFISuHgF65L0ekr4taNtt+AtwBSP+3/Lh
+        4Ql6PcIuuy5orBjBTjPZaBPkMt0+pxVjRXkfMD/r0aXmpCliwYWR63lCbR3/HTmpWHZNXdOG0o3h
+        n+N+DiRYgTe0inaM0vq1ETcgBg4HFxvORFK1La2b+s7uNYkSRiKtXUlHGzNDfkCFR+Hndk3dkbql
+        5cpwaM9i0ZaMNi2hXbOJA0oOauAyHFJ4lNW0jTutZS/sMlfXdG1V3Y01xvOxAqTjLhgjxUxkTVWW
+        dbd1Dl5I4ZdSUxJWkc25BxdA+mlpLuCQiOlISRP3u5kALrO6i8m0m60Jtn8GhwP394cW5ayqSFVe
+        +4zC9SglKNRh3oQWjF6NLA6hjzbX08SLQeXmjttjee1BpglIW3esJvSaarz4mMEq5jCmv2SOv6AF
+        IQXL//568w+/NwDsxgMAAA==
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '2'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Sep 2025 00:39:32 GMT
+      ETag:
+      - '"anVsaWV0dC44NjU4XzlfMTMzQ01mcUxHYmxmMTluUzJYZXN1TGdld0s1ek53---gzipnKgXU1ump9acvHqPdPEz7-nJNvs--gzip--gzip"'
+      Last-Modified:
+      - Mon, 16 Dec 2024 19:34:47 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-SODA2-Data-Out-Of-Date:
+      - 'false'
+      X-SODA2-Fields:
+      - '["ntd_id","max_agency","max_city","max_state","max_organization_type","max_reporter_type","report_year","max_uace_code","max_uza_name","max_primary_uza_population","max_agency_voms","sum_operators_wages","sum_other_salaries_wages","sum_operator_paid_absences","sum_other_paid_absences","sum_fringe_benefits","sum_services","sum_fuel_and_lube","sum_tires","sum_other_materials_supplies","sum_utilities","sum_casualty_and_liability","sum_taxes","sum_purchased_transportation","sum_miscellaneous","sum_reduced_reporter_expenses","sum_total","sum_separate_report_amount"]'
+      X-SODA2-Secondary-Last-Modified:
+      - Mon, 16 Dec 2024 19:34:47 GMT
+      X-SODA2-Truth-Last-Modified:
+      - Mon, 16 Dec 2024 19:34:47 GMT
+      X-SODA2-Types:
+      - '["text","text","text","text","text","text","text","text","text","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number"]'
+      X-Socrata-Region:
+      - aws-us-east-1-fedramp-prod
+      X-Socrata-RequestId:
+      - 70cc9b94d19c9f618ff4fb7ad6c831d9
+    status:
+      code: 200
+      message: OK
+version: 1
