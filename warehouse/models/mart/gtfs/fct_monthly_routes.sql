@@ -1,4 +1,7 @@
-{{ config(materialized='table') }}
+{{ config(
+    materialized='table',
+    cluster_by=['month_first_day', 'name']
+) }}
 
 WITH fct_scheduled_trips AS (
     SELECT * FROM {{ ref('fct_monthly_scheduled_trips') }}
@@ -16,6 +19,7 @@ trip_counts AS (
         name,
         year,
         month,
+        month_first_day,
         route_short_name,
         route_long_name,
         route_name,
@@ -26,9 +30,9 @@ trip_counts AS (
         COUNT(*) AS n_trips,
 
     FROM fct_scheduled_trips
-    GROUP BY name, year, month, route_short_name, route_long_name, route_name, direction_id, shape_id, shape_array_key
+    GROUP BY name, year, month, month_first_day, route_short_name, route_long_name, route_name, direction_id, shape_id, shape_array_key
     QUALIFY ROW_NUMBER() OVER (PARTITION BY
-                               name, year, month, route_short_name, route_long_name, route_name, direction_id
+                               name, year, month, month_first_day, route_short_name, route_long_name, route_name, direction_id
                                ORDER BY n_trips DESC) = 1
 ),
 

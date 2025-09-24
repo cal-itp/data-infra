@@ -1,7 +1,7 @@
 {{
     config(
         materialized='table',
-        cluster_by=['month_first_day', 'gtfs_dataset_key', 'name']
+        cluster_by=['month_first_day', 'name']
     )
 }}
 
@@ -18,7 +18,6 @@ monthly_trips AS (
 
     SELECT
 
-        gtfs_dataset_key,
         name,
 
         EXTRACT(month FROM service_date) AS month,
@@ -46,7 +45,7 @@ monthly_trips AS (
         ARRAY_AGG(DISTINCT route_id IGNORE NULLS) AS route_id_array
 
     FROM trips
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
 
 )
 
