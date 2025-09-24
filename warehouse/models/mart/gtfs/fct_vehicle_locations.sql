@@ -26,7 +26,7 @@ vp_trips AS (
         schedule_base64_url,
         trip_id,
         trip_start_time,
-        trip_instance_key
+        trip_instance_key,
     FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
 ),
 
