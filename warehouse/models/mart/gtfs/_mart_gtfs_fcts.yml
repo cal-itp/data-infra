@@ -2489,7 +2489,7 @@ models:
       An monthly aggregation of GTFS scheduled trips by month-day_type (weekday/Sat/Sun).
       Keeps the trip grain in `fct_scheduled_trips`, joins this with the shape_id present
       in `fct_daily_scheduled_shapes`.
-      Each row is unique on gtfs_dataset_key-month-year-day_type-trip_id.
+      Each row is unique on gtfs_dataset_key-month-year-day_type-trip_id-iteration_num.
       It can be interpreted as:
       In a typical month, we observed weekday Trip 1 service (across 20+ days),
       Saturday Trip 1 service (across 4 days that month),
@@ -2533,7 +2533,6 @@ models:
       - &n_days
         name: n_days
         description: Count of distinct service_dates in this month for this day_type.
-      - *shape_pt_array
 
   - name: fct_monthly_routes
     description: |

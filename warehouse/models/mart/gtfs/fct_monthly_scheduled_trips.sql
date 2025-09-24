@@ -1,12 +1,7 @@
 {{
     config(
-        materialized='incremental',
-        incremental_strategy='insert_overwrite',
-        partition_by={
-            'field': 'month_first_day',
-            'data_type': 'date',
-            'granularity': 'month'
-        }, cluster_by=['month_first_day', 'gtfs_dataset_key']
+        materialized='table',
+        cluster_by=['month_first_day', 'gtfs_dataset_key', 'name']
     )
 }}
 
@@ -17,13 +12,6 @@ WITH trips AS (
     WHERE service_date <= LAST_DAY(
         DATE_SUB(CURRENT_DATE("America/Los_Angeles"), INTERVAL 1 MONTH)
     )
-),
-
-dim_shapes_arrays AS (
-    SELECT
-        key,
-        pt_array
-    FROM {{ ref('dim_shapes_arrays') }}
 ),
 
 monthly_trips AS (
@@ -37,12 +25,7 @@ monthly_trips AS (
         EXTRACT(year FROM service_date) AS year,
         DATE_TRUNC(service_date, MONTH) AS month_first_day,
 
-        CASE
-            WHEN EXTRACT(DAYOFWEEK FROM service_date) = 1 THEN "Sunday"
-            WHEN EXTRACT(DAYOFWEEK FROM service_date) = 7 THEN "Saturday"
-            ELSE "Weekday"
-        END
-        AS day_type,
+        {{ generate_day_type('service_date') }} AS day_type,
         time_of_day,
         --route_id, # this might change over longer time periods
         direction_id,
@@ -53,27 +36,18 @@ monthly_trips AS (
         route_color,
         route_text_color,
         trip_id,
+        iteration_num,
         shape_id,
         shape_array_key,
 
         AVG(service_hours) AS service_hours,
         COUNT(DISTINCT trip_instance_key) as n_trips,
         COUNT(DISTINCT service_date) as n_days,
+        ARRAY_AGG(DISTINCT route_id IGNORE NULLS) AS route_id_array
 
     FROM trips
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
 
-),
-
-monthly_trips_with_geom AS (
-    SELECT
-        monthly_trips.*,
-        dim_shapes_arrays.pt_array
-
-    FROM monthly_trips
-    INNER JOIN dim_shapes_arrays
-        ON monthly_trips.shape_array_key = dim_shapes_arrays.key
 )
 
-
-SELECT * FROM monthly_trips_with_geom
+SELECT * FROM monthly_trips
