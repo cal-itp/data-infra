@@ -6,10 +6,12 @@ on:
       - main
     paths:
       - .github/workflows/test-airflow.yml
+      - 'airflow/**'
       - 'warehouse/**'
   pull_request:
     paths:
       - .github/workflows/test-airflow.yml
+      - 'airflow/**'
       - 'warehouse/**'
 
 env:
