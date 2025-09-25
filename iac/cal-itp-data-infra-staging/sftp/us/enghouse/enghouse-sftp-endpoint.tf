@@ -103,7 +103,7 @@ resource "kubernetes_deployment" "enghouse-sftp" {
           command = [
             "/bin/sh", "-c", <<EOT
             apk update
-            apk add openssh-server
+            apk add openssl openssh openssh-server
             addgroup sftpusers
             adduser -S -G sftpusers -s /sbin/nologin -D -H ${local.sftp_user}
             echo '${local.sftp_user}:enghousesftpuserpassword' | chpasswd
