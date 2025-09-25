@@ -1,0 +1,61 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.3
+    method: GET
+    uri: https://data.transportation.gov/resource/i4ua-cjx4.json?%24select=count%28%2A%29
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAIuuVkrOL80rUbJSMjExNFCqjeUCAAemZ9wTAAAA
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '6'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Sep 2025 04:36:40 GMT
+      ETag:
+      - '"anVsaWV0dC44NjU4XzlfMTMzVEtxWFVabkFIbEFlSmlNRmw1TVE3dUFYRWNN--gziqxMz_uEceBQREd1EqnnHpg6DxW_---gzip"'
+      Last-Modified:
+      - Mon, 16 Dec 2024 19:34:47 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-SODA2-Data-Out-Of-Date:
+      - 'false'
+      X-SODA2-Fields:
+      - '["count"]'
+      X-SODA2-Secondary-Last-Modified:
+      - Mon, 16 Dec 2024 19:34:47 GMT
+      X-SODA2-Truth-Last-Modified:
+      - Mon, 16 Dec 2024 19:34:47 GMT
+      X-SODA2-Types:
+      - '["number"]'
+      X-Socrata-Region:
+      - aws-us-east-1-fedramp-prod
+      X-Socrata-RequestId:
+      - 64b6a16b6125c781d61f1c21c3501bc0
+    status:
+      code: 200
+      message: OK
+version: 1
