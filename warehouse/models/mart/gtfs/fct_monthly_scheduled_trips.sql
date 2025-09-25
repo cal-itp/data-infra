@@ -42,6 +42,7 @@ monthly_trips AS (
         AVG(service_hours) AS service_hours,
         COUNT(DISTINCT trip_instance_key) as n_trips,
         COUNT(DISTINCT service_date) as n_days,
+        COUNT(DISTINCT feed_key) AS n_feeds,
         ARRAY_AGG(DISTINCT route_id IGNORE NULLS) AS route_id_array
 
     FROM trips
