@@ -1,8 +1,5 @@
-operator: operators.NTDToGCSOperator
+operator: operators.soda_to_gcs_operator.SODAToGCSOperator
 
-year: multi_year
-product: capital_expenses_for_expansion_of_service
-bucket: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
-endpoint: resource/nvgd-g6pj.json
-parameters:
-  $limit: 5000000
+object_path: multi_year/capital_expenses_for_expansion_of_service/dt={{ dag_run.logical_date.date().isoformat() }}/execution_ts={{ dag_run.logical_date.isoformat() }}
+bucket_name: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
+resource: nvgd-g6pj
