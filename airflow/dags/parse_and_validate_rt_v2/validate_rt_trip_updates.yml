@@ -1,6 +1,0 @@
-operator: airflow.operators.bash.BashOperator
-pool: rt_validate_pool
-append_env: true
-
-# we run on a delay because of archiver write latency but then we process the prior _hour_
-bash_command: "python3 $HOME/gcs/plugins/scripts/gtfs_rt_parser.py validate trip_updates {{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH:mm:ss') }} --verbose"
