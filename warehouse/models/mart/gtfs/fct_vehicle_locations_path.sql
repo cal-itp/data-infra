@@ -16,10 +16,8 @@ WITH fct_vehicle_locations AS (
     FROM {{ ref('fct_vehicle_locations') }}
     WHERE {{ incremental_where(
         default_start_var='PROD_GTFS_RT_START',
-        this_dt_column='dt',
-        filter_dt_column='dt',
-        dev_lookback_days=14)
-    }}
+        this_dt_column = 'service_date',
+        filter_dt_column = 'service_date') }}
 ),
 
 -- collect points into an array
