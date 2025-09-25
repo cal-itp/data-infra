@@ -11,6 +11,9 @@ WITH stops AS (
         * EXCEPT(tts_stop_name, pt_geom, parent_station, stop_code,
         stop_name, stop_desc, location_type, wheelchair_boarding)
     FROM {{ ref('fct_daily_scheduled_stops') }}
+    WHERE service_date <= LAST_DAY(
+        DATE_SUB(CURRENT_DATE("America/Los_Angeles"), INTERVAL 1 MONTH)
+    )
 ),
 
 dim_stops AS (

@@ -2639,6 +2639,7 @@ models:
       - *gtfs_rt_schedule_dataset_key
       - *gtfs_rt_schedule_dataset_name
       - *gtfs_rt_schedule_feed_key
+      - *rt_schedule_base64_url
       - *rt_trip_id
       - *trip_instance_key
       - name: pt_array
