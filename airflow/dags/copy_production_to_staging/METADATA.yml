@@ -1,5 +1,5 @@
 description: Copies data from production buckets to staging buckets
-schedule_interval: "@hourly"
+schedule_interval: "@daily"
 tags:
   - production
 default_args:
@@ -13,5 +13,6 @@ default_args:
   pool: default_pool
   max_active_dag_runs: 1
   concurrency: 1
+  retries: 0
 wait_for_defaults:
   timeout: 3600

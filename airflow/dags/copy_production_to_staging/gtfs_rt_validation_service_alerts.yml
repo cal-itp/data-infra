@@ -1,7 +1,8 @@
 operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
 source_bucket: calitp-gtfs-rt-validation
 source_objects:
-  - service_alerts_validation_notices/dt={{ ds }}/hour={{ ts }}/*
-  - service_alerts_validation_outcomes/dt={{ ds }}/hour={{ ts }}/*
+  - service_alerts_validation_notices/dt={{ macros.ds_add(ds, -1) }}/*
+  - service_alerts_validation_outcomes/dt={{ macros.ds_add(ds, -1) }}/*
 destination_bucket: calitp-staging-gtfs-rt-validation
 replace: false
+source_object_required: true

@@ -1,28 +1,29 @@
 operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
 source_bucket: calitp-gtfs-schedule-parsed-hourly
 source_objects:
-  - agency/dt={{ ds }}/*
-  - areas/dt={{ ds }}/*
-  - attributions/dt={{ ds }}/*
-  - calendar/dt={{ ds }}/*
-  - calendar_dates/dt={{ ds }}/*
-  - fare_attributes/dt={{ ds }}/*
-  - fare_leg_rules/dt={{ ds }}/*
-  - fare_media/dt={{ ds }}/*
-  - fare_products/dt={{ ds }}/*
-  - fare_rules/dt={{ ds }}/*
-  - fare_transfer_rules/dt={{ ds }}/*
-  - feed_info/dt={{ ds }}/*
-  - frequencies/dt={{ ds }}/*
-  - levels/dt={{ ds }}/*
-  - pathways/dt={{ ds }}/*
-  - routes/dt={{ ds }}/*
-  - shapes/dt={{ ds }}/*
-  - stop_areas/dt={{ ds }}/*
-  - stop_times/dt={{ ds }}/*
-  - stops/dt={{ ds }}/*
-  - transfers/dt={{ ds }}/*
-  - translations/dt={{ ds }}/*
-  - trips/dt={{ ds }}/*
+  - agency/dt={{ macros.ds_add(ds, -1) }}/*
+  - areas/dt={{ macros.ds_add(ds, -1) }}/*
+  - attributions/dt={{ macros.ds_add(ds, -1) }}/*
+  - calendar/dt={{ macros.ds_add(ds, -1) }}/*
+  - calendar_dates/dt={{ macros.ds_add(ds, -1) }}/*
+  - fare_attributes/dt={{ macros.ds_add(ds, -1) }}/*
+  - fare_leg_rules/dt={{ macros.ds_add(ds, -1) }}/*
+  - fare_media/dt={{ macros.ds_add(ds, -1) }}/*
+  - fare_products/dt={{ macros.ds_add(ds, -1) }}/*
+  - fare_rules/dt={{ macros.ds_add(ds, -1) }}/*
+  - fare_transfer_rules/dt={{ macros.ds_add(ds, -1) }}/*
+  - feed_info/dt={{ macros.ds_add(ds, -1) }}/*
+  - frequencies/dt={{ macros.ds_add(ds, -1) }}/*
+  - levels/dt={{ macros.ds_add(ds, -1) }}/*
+  - pathways/dt={{ macros.ds_add(ds, -1) }}/*
+  - routes/dt={{ macros.ds_add(ds, -1) }}/*
+  - shapes/dt={{ macros.ds_add(ds, -1) }}/*
+  - stop_areas/dt={{ macros.ds_add(ds, -1) }}/*
+  - stop_times/dt={{ macros.ds_add(ds, -1) }}/*
+  - stops/dt={{ macros.ds_add(ds, -1) }}/*
+  - transfers/dt={{ macros.ds_add(ds, -1) }}/*
+  - translations/dt={{ macros.ds_add(ds, -1) }}/*
+  - trips/dt={{ macros.ds_add(ds, -1) }}/*
 destination_bucket: calitp-staging-gtfs-schedule-parsed-hourly
 replace: false
+source_object_required: true
