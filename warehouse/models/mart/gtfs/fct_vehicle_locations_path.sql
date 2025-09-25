@@ -7,13 +7,17 @@
             'data_type': 'date',
             'granularity': 'day',
         },
-        cluster_by='base64_url',
+        cluster_by=['base64_url', 'schedule_base64_url'],
     )
 }}
 
 WITH fct_vehicle_locations AS (
     SELECT *
     FROM {{ ref('fct_vehicle_locations') }}
+    WHERE {{ incremental_where(
+        default_start_var='PROD_GTFS_RT_START',
+        this_dt_column = 'service_date',
+        filter_dt_column = 'service_date') }}
 ),
 
 -- collect points into an array
@@ -26,6 +30,7 @@ initial_pt_array AS (
         schedule_gtfs_dataset_key,
         schedule_name,
         schedule_feed_key,
+        schedule_base64_url,
         trip_id,
         trip_instance_key,
         -- don't try to make LINESTRING because of this issue:
@@ -52,7 +57,7 @@ initial_pt_array AS (
         COUNT(*) AS n_vp,
 
     FROM fct_vehicle_locations
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
 fct_vehicle_locations_path AS (

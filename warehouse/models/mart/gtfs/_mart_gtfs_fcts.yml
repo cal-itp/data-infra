@@ -1329,39 +1329,50 @@ models:
       - name: stop_event_count
         description: |
           The number of stop events associated with this stop on the given date.
-      - name: route_type_0
+      - &route_type_0
+        name: route_type_0
         description: |
           The count of stop events associated with route_type 0 - Tram,
           Streetcar, Light rail
-      - name: route_type_1
+      - &route_type_1
+        name: route_type_1
         description: |
           The count of stop events associated with route_type 1 - Subway, Metro
-      - name: route_type_2
+      - &route_type_2
+        name: route_type_2
         description: |
           The count of stop events associated with route_type 2 - Rail
-      - name: route_type_3
+      - &route_type_3
+        name: route_type_3
         description: |
           The count of stop events associated with route_type 3 - Bus
-      - name: route_type_4
+      - &route_type_4
+        name: route_type_4
         description: |
           The count of stop events associated with route_type 4 - Ferry
-      - name: route_type_5
+      - &route_type_5
+        name: route_type_5
         description: |
           The count of stop events associated with route_type 5 - Cable Tram
-      - name: route_type_6
+      - &route_type_6
+        name: route_type_6
         description: |
           The count of stop events associated with route_type 6 - Aerial lift,
           suspended cable car (e.g., gondola lift, aerial tramway)
-      - name: route_type_7
+      - &route_type_7
+        name: route_type_7
         description: |
           The count of stop events associated with route_type 7 - Cable Tram
-      - name: route_type_11
+      - &route_type_11
+        name: route_type_11
         description: |
           The count of stop events associated with route_type 11 - Trolleybus
-      - name: route_type_12
+      - &route_type_12
+        name: route_type_12
         description: |
           The count of stop events associated with route_type 12 - Monorail
-      - name: missing_route_type
+      - &missing_route_type
+        name: missing_route_type
         description: |
           The count of stop events associated with a `stop_id` that had a null `route_type` value in `dim_routes`
       - name: first_stop_arrival_datetime_pacific
@@ -2489,18 +2500,21 @@ models:
       An monthly aggregation of GTFS scheduled trips by month-day_type (weekday/Sat/Sun).
       Keeps the trip grain in `fct_scheduled_trips`, joins this with the shape_id present
       in `fct_daily_scheduled_shapes`.
-      Each row is unique on gtfs_dataset_key-month-year-day_type-trip_id.
+      Each row is unique on name-month-year-day_type-trip_id-iteration_num.
       It can be interpreted as:
       In a typical month, we observed weekday Trip 1 service (across 20+ days),
       Saturday Trip 1 service (across 4 days that month),
       and Sunday Trip 1 service (across 4 days that month).
     columns:
-      - name: gtfs_dataset_key
-        description: '{{ doc("column_rt_schedule_dataset_key") }}'
       - name: name
         description: *gtfs_dataset_name_desc
       - *month
       - *year
+      - &month_first_day
+        name: month_first_day
+        description: |
+          First day of the month saved as a date.
+          Service_date of 2025-09-15 would become 2025-09-01.
       - *day_type
       - *time_of_day
       - name: direction_id
@@ -2533,7 +2547,9 @@ models:
       - &n_days
         name: n_days
         description: Count of distinct service_dates in this month for this day_type.
-      - *shape_pt_array
+      - &n_feeds
+        name: n_feeds
+        description: Count of distinct feed_keys in this month for this day_type.
 
   - name: fct_monthly_routes
     description: |
@@ -2544,6 +2560,7 @@ models:
         description: *gtfs_dataset_name_desc
       - *year
       - *month
+      - *month_first_day
       - name: route_short_name
         description: '{{ doc("gtfs_routes__route_short_name") }}'
       - name: route_long_name
@@ -2564,9 +2581,7 @@ models:
       An aggregation of GTFS schedule stops with stop time activity in a given
       month.
     columns:
-      - name: gtfs_dataset_key
-        description: *gtfs_dataset_key_desc
-      - name: gtfs_dataset_name
+      - name: name
         description: *gtfs_dataset_name_desc
       - *year
       - *month
@@ -2582,6 +2597,18 @@ models:
             Total stop event count (stop time arrivals) at the stop
             by gtfs_dataset_name-year-month-day_type.
       - *n_days
+      - *n_feeds
+      - *route_type_0
+      - *route_type_1
+      - *route_type_2
+      - *route_type_3
+      - *route_type_4
+      - *route_type_5
+      - *route_type_6
+      - *route_type_7
+      - *route_type_11
+      - *route_type_12
+      - *missing_route_type
       - name: tts_stop_name
         description: '{{ doc("gtfs_stops__tts_stop_name") }}'
       - name: pt_geom
@@ -2612,6 +2639,7 @@ models:
       - *gtfs_rt_schedule_dataset_key
       - *gtfs_rt_schedule_dataset_name
       - *gtfs_rt_schedule_feed_key
+      - *rt_schedule_base64_url
       - *rt_trip_id
       - *trip_instance_key
       - name: pt_array
