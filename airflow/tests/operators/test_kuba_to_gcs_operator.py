@@ -4,7 +4,7 @@ import os
 from datetime import datetime, timedelta, timezone
 
 import pytest
-from operators.kuba_to_gcs_operator import KubaObjectPath, KubaToGCSOperator
+from operators.kuba_to_gcs_operator import KubaToGCSOperator
 
 from airflow.hooks.base import BaseHook
 from airflow.models.connection import Connection
@@ -23,11 +23,9 @@ class TestKubaToGCSOperator:
         return GCSHook()
 
     @pytest.fixture
-    def object_path(self) -> KubaObjectPath:
+    def object_name(self) -> str:
         connection: Connection = BaseHook.get_connection("http_kuba")
-        return KubaObjectPath(
-            product="device_properties", operator_identifier=connection.schema
-        )
+        return f"device_properties/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/operator_identifier={connection.schema}/results.jsonl.gz"
 
     @pytest.fixture
     def test_dag(self, execution_date: datetime) -> DAG:
@@ -47,7 +45,7 @@ class TestKubaToGCSOperator:
             task_id="kuba_to_gcs",
             http_conn_id="http_kuba",
             gcp_conn_id="google_cloud_default",
-            product="device_properties",
+            object_path="device_properties/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00",
             endpoint="monitoring/deviceproperties/v1/ForLocations/all",
             parameters={"location_type": "1"},
             bucket=os.environ.get("CALITP_BUCKET__KUBA"),
@@ -60,7 +58,7 @@ class TestKubaToGCSOperator:
         test_dag: DAG,
         operator: KubaToGCSOperator,
         execution_date: datetime,
-        object_path: KubaObjectPath,
+        object_name: str,
         gcs_hook: GCSHook,
     ):
         operator.run(
@@ -83,7 +81,7 @@ class TestKubaToGCSOperator:
 
         compressed_result = gcs_hook.download(
             bucket_name=os.environ.get("CALITP_BUCKET__KUBA").replace("gs://", ""),
-            object_name=object_path.resolve(execution_date),
+            object_name=object_name,
         )
         decompressed_result = gzip.decompress(compressed_result)
         result = [json.loads(x) for x in decompressed_result.splitlines()]
