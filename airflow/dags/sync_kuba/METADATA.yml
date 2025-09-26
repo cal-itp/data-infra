@@ -1,5 +1,5 @@
 description: "Capture the Kuba API to GCS"
-schedule_interval: "0 0 * * *"
+schedule_interval: "0 * * * *"
 tags:
   - kuba
 default_args:

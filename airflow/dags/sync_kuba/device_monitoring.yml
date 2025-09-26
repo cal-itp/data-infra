@@ -5,3 +5,4 @@ endpoint: monitoring/deviceproperties/v1/ForLocations/all
 parameters:
     location_type: 1
 bucket: "{{ env_var('CALITP_BUCKET__KUBA') }}"
+object_path: "device_properties/dt={{ ds }}/ts={{ ts }}"
