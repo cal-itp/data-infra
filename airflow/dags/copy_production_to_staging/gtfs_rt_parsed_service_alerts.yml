@@ -1,7 +1,8 @@
 operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
 source_bucket: calitp-gtfs-rt-parsed
 source_objects:
-  - service_alerts/dt={{ ds }}/hour={{ ts }}/*
-  - service_alerts_outcomes/dt={{ ds }}/hour={{ ts }}/*
+  - service_alerts/dt={{ macros.ds_add(ds, -1) }}/*
+  - service_alerts_outcomes/dt={{ macros.ds_add(ds, -1) }}/*
 destination_bucket: calitp-staging-gtfs-rt-parsed
 replace: false
+source_object_required: true

@@ -1,14 +1,15 @@
 operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
 source_bucket: calitp-airtable
 source_objects:
-  - transit_technology_stacks__components/dt={{ ds }}/*
-  - transit_technology_stacks__contracts/dt={{ ds }}/*
-  - transit_technology_stacks__data_schemas/dt={{ ds }}/*
-  - transit_technology_stacks__organizations/dt={{ ds }}/*
-  - transit_technology_stacks__products/dt={{ ds }}/*
-  - transit_technology_stacks__properties_and_features/dt={{ ds }}/*
-  - transit_technology_stacks__relationships_service_components/dt={{ ds }}/*
-  - transit_technology_stacks__service_components/dt={{ ds }}/*
-  - transit_technology_stacks__services/dt={{ ds }}/*
+  - transit_technology_stacks__components/dt={{ macros.ds_add(ds, -1) }}/*
+  - transit_technology_stacks__contracts/dt={{ macros.ds_add(ds, -1) }}/*
+  - transit_technology_stacks__data_schemas/dt={{ macros.ds_add(ds, -1) }}/*
+  - transit_technology_stacks__organizations/dt={{ macros.ds_add(ds, -1) }}/*
+  - transit_technology_stacks__products/dt={{ macros.ds_add(ds, -1) }}/*
+  - transit_technology_stacks__properties_and_features/dt={{ macros.ds_add(ds, -1) }}/*
+  - transit_technology_stacks__relationships_service_components/dt={{ macros.ds_add(ds, -1) }}/*
+  - transit_technology_stacks__service_components/dt={{ macros.ds_add(ds, -1) }}/*
+  - transit_technology_stacks__services/dt={{ macros.ds_add(ds, -1) }}/*
 destination_bucket: calitp-staging-airtable
 replace: false
+source_object_required: true

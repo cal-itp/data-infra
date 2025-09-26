@@ -1,5 +1,6 @@
 operator: airflow.providers.google.cloud.transfers.gcs_to_gcs.GCSToGCSOperator
 source_bucket: calitp-gtfs-schedule-validation-hourly
-source_object: validation_job_results/dt={{ ds }}/*
+source_object: validation_job_results/dt={{ macros.ds_add(ds, -1) }}/*
 destination_bucket: calitp-staging-gtfs-schedule-validation-hourly
 replace: false
+source_object_required: true

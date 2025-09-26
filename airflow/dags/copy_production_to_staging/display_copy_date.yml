@@ -1,0 +1,2 @@
+operator: airflow.operators.bash.BashOperator
+bash_command: echo "Running Current date={{ ds }} and Previous date={{ macros.ds_add(ds, -1) }}"
