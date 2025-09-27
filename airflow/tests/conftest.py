@@ -148,3 +148,11 @@ def setup_module():
         host="https://transit.land/api/v2/rest/feeds",
         extra={"apikey": os.environ.get("TRANSITLAND_API_KEY")},
     )
+    clean_connections(session, "http_ckan")
+    add_connection(
+        session,
+        conn_id="http_ckan",
+        conn_type="http",
+        host="https://data.ca.gov",
+        extra={"apikey": os.environ.get("CKAN_API_KEY")},
+    )
