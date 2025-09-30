@@ -8,7 +8,7 @@ from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
-from typing import Literal, Optional
+from typing import Literal, Optional, Sequence
 from pydantic import BaseModel, constr
 
 class ListOfStrings(BaseModel):
@@ -53,42 +53,43 @@ class MetadataRow(BaseModel):
             ListOfStrings: lambda los: ",".join(los.__root__),
         }
 
-class DbtExposureObjectPath:
-    def __init__(self, product: str) -> None:
-        self.product = product
-
-    def resolve(self, logical_date: datetime) -> str:
-        return os.path.join(
-            f"california_open_data__{self.product}",
-            f"dt={logical_date.date().isoformat()}",
-            f"ts={logical_date.isoformat()}",
-            f"{self.product}.csv",
-        )
 
 class DbtExposureMetadataToGcsOperator(BaseOperator):
+    template_fields: Sequence[str] = (
+        "source_bucket_name",
+        "source_object_name",
+        "destination_bucket_name",
+        "destination_object_name",
+        "gcp_conn_id",
+    )
+
     def __init__(
         self,
-        bucket: str,
+        source_bucket_name: str,
+        source_object_name: str,
+        destination_bucket_name: str,
+        destination_object_name: str,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.bucket = bucket
+
+        self.destination_bucket_name = destination_bucket_name
+        self.source_bucket_name = source_bucket_name
+        self.source_object_name = source_object_name
+        self.destination_object_name = destination_object_name
         self.gcp_conn_id = gcp_conn_id
 
     def bucket_name(self) -> str:
-        return self.bucket.replace("gs://", "")
-
-    def object_path(self) -> DbtExposureObjectPath:
-        return DbtExposureObjectPath("metadata")
+        return self.destination_bucket_name.replace("gs://", "")
 
     def gcs_hook(self) -> GCSHook:
         return GCSHook(gcp_conn_id=self.gcp_conn_id)
 
     def read_manifest(self) -> dict:
         manifest = self.gcs_hook().download(
-            bucket_name=os.environ.get("CALITP_BUCKET__DBT_DOCS").replace("gs://", ""),
-            object_name="manifest.json"
+            bucket_name=self.source_bucket_name.replace("gs://", ""),
+            object_name=self.source_object_name
         )
         return json.loads(manifest)
 
@@ -159,11 +160,10 @@ class DbtExposureMetadataToGcsOperator(BaseOperator):
 
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
-        object_name: str = self.object_path().resolve(dag_run.logical_date)
         self.gcs_hook().upload(
             bucket_name=self.bucket_name(),
-            object_name=object_name,
+            object_name=self.destination_object_name,
             data=self.metadata_csv(logical_date=dag_run.logical_date),
             mime_type="text/csv",
         )
-        return os.path.join(self.bucket, object_name)
+        return os.path.join(self.destination_bucket_name, self.destination_object_name)

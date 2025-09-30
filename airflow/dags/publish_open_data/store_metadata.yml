@@ -1,0 +1,7 @@
+operator: operators.dbt_exposure_metadata_to_gcs_operator.DbtExposureMetadataToGcsOperator
+
+source_bucket_name: "{{ env_var('CALITP_BUCKET__DBT_DOCS') }}"
+source_object_name: "manifest.json"
+destination_bucket_name: "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
+destination_object_name: "california_open_data__metadata/dt={{ ds }}/ts={{ ts }}/metadata.csv"
+
