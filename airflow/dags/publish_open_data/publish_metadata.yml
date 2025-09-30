@@ -1,0 +1,7 @@
+operator: operators.gcs_to_ckan_operator.GCSToCKANOperator
+
+bucket_name: "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
+object_name: "california_open_data__metadata/dt={{ ds }}/ts={{ ts }}/metadata.csv"
+resource_id: 53c05c25-e467-407a-bb29-303875215adc
+dependencies:
+  - store_metadata

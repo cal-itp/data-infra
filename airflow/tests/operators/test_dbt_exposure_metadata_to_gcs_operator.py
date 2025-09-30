@@ -38,7 +38,15 @@ class TestDbtExposureMetadataToGcsOperator:
         return DbtExposureMetadataToGcsOperator(
             task_id="dbt_metadata_manifest_to_gcs",
             gcp_conn_id="google_cloud_default",
-            bucket=os.environ.get("CALITP_BUCKET__PUBLISH"),
+            source_bucket_name=os.environ.get("CALITP_BUCKET__DBT_DOCS"),
+            source_object_name="manifest.json",
+            destination_bucket_name=os.environ.get("CALITP_BUCKET__PUBLISH"),
+            destination_object_name=os.path.join(
+                "california_open_data__metadata",
+                "dt=2025-06-01",
+                "ts=2025-06-01T00:00:00+00:00",
+                "metadata.csv",
+            ),
             dag=test_dag,
         )
 

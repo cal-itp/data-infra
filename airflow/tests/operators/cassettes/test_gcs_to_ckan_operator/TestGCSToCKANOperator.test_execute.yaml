@@ -1,0 +1,948 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/c70fb94f-5983-496d-8192-2e15e7c3cd59
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__metadata%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fmetadata.csv?alt=media
+  response:
+    body:
+      string: "DATASET_NAME\tTAGS\tDESCRIPTION\tMETHODOLOGY\tTOPIC\tPUBLISHER_ORGANIZATION\tPLACE\tFREQUENCY\tNEXT_UPDATE\tCREATION_DATE\tLAST_UPDATE\tSTATUS\tTEMPORAL_COVERAGE_BEGIN\tTEMPORAL_COVERAGE_END\tDATA_DICTIONARY\tDATA_DICTIONARY_TYPE\tCONTACT_ORGANIZATION\tCONTACT_POSITION\tCONTACT_NAME\tCONTACT_EMAIL\tPUBLIC_ACCESS_LEVEL\tACCESS_CONSTRAINTS\tUSE_CONSTRAINTS\tDATA_LIFE_SPAN\tCALTRANS_LINK\tDATA_STANDARD\tNOTES\tGIS_THEME\tGIS_HORIZ_ACCURACY\tGIS_VERT_ACCURACY\tGIS_COORDINATE_SYSTEM_EPSG\tGIS_VERT_DATUM_EPSG\r\nagency\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an agency.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#agencytxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nareas\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an areas.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#areastxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nattributions\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an attributions.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#attributionstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ncalendar\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a calendar.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#calendartxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ncalendar_dates\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a Each row is a cleaned rowrow from a calendar_dates.txt file. Definitions
+        for the original GTFS fields are available at: https://gtfs.org/reference/static#calendar_datestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_attributes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a fare_attributes.txt file. Definitions for the
+        original GTFS fields are available at: https://gtfs.org/reference/static#fare_attributestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_leg_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an fare_leg_rules.txt file. Definitions for the
+        original GTFS fields are available at: https://gtfs.org/reference/static#fare_leg_rulestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_media\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an fare_media.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#fare_mediatxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_products\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an fare_products.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#fare_productstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a fare_rules.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#fare_rulestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_transfer_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an fare_transfer_rules.txt file. Definitions for
+        the original GTFS fields are available at: https://gtfs.org/reference/static#fare_transfer_rulestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfeed_info\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a feed_info.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#feed_infotxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfrequencies\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a frequencies.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#frequenciestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ngtfs_datasets\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        record represents a GTFS dataset (feed), and provides base64-encoded URLs
+        used to access that feed.\tCal-ITP collects the GTFS feeds from a statewide
+        list every night and aggegrates it into a statewide table for analysis purposes
+        only. Do not use for trip planner ingestion, rather is meant to be used for
+        statewide analytics and other use cases. Note: These data may or may or may
+        not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nlevels\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a levels.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#levelstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\npathways\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a pathways.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#pathwaystxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nroutes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a routes.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#routestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nshapes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a shapes.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#shapestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstop_areas\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an stop_areas.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#stop_areastxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstop_times\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a stop_times.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#stop_timestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstops\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a stops.txt file. Definitions for the original GTFS
+        fields are available at: https://gtfs.org/reference/static#stopstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntransfers\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a transfers.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#transferstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntranslations\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a translations.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#translationstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntrips\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a trips.txt file. Definitions for the original GTFS
+        fields are available at: https://gtfs.org/reference/static#tripstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '19173'
+      Content-Type:
+      - text/csv
+      Date:
+      - Wed, 01 Oct 2025 22:35:21 GMT
+      ETag:
+      - CLWYhdS/948DEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Fri, 26 Sep 2025 22:40:54 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAwnv3Iuapshlw0cen-ceZe2uOO5l8m4FwWAANwdF9Js6C3TdZ5SybdQt5WUohv3-uTTgynCSg64fEg
+      X-Goog-Generation:
+      - '1758926454475829'
+      X-Goog-Hash:
+      - crc32c=AmKYrw==,md5=VA/1fzidaZ7QJyCOLrp2qA==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '19173'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--35d4d8f3807871ce8ee46dcd86df330e\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--35d4d8f3807871ce8ee46dcd86df330e\r\nContent-Disposition:
+      form-data; name=\"upload\"; filename=\"upload\"\r\n\r\nDATASET_NAME\tTAGS\tDESCRIPTION\tMETHODOLOGY\tTOPIC\tPUBLISHER_ORGANIZATION\tPLACE\tFREQUENCY\tNEXT_UPDATE\tCREATION_DATE\tLAST_UPDATE\tSTATUS\tTEMPORAL_COVERAGE_BEGIN\tTEMPORAL_COVERAGE_END\tDATA_DICTIONARY\tDATA_DICTIONARY_TYPE\tCONTACT_ORGANIZATION\tCONTACT_POSITION\tCONTACT_NAME\tCONTACT_EMAIL\tPUBLIC_ACCESS_LEVEL\tACCESS_CONSTRAINTS\tUSE_CONSTRAINTS\tDATA_LIFE_SPAN\tCALTRANS_LINK\tDATA_STANDARD\tNOTES\tGIS_THEME\tGIS_HORIZ_ACCURACY\tGIS_VERT_ACCURACY\tGIS_COORDINATE_SYSTEM_EPSG\tGIS_VERT_DATUM_EPSG\r\nagency\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an agency.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#agencytxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nareas\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an areas.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#areastxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nattributions\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an attributions.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#attributionstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ncalendar\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a calendar.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#calendartxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ncalendar_dates\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a Each row is a cleaned rowrow from a calendar_dates.txt file. Definitions
+      for the original GTFS fields are available at: https://gtfs.org/reference/static#calendar_datestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_attributes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a fare_attributes.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#fare_attributestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_leg_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an fare_leg_rules.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#fare_leg_rulestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_media\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an fare_media.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#fare_mediatxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_products\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an fare_products.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#fare_productstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a fare_rules.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#fare_rulestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_transfer_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an fare_transfer_rules.txt file. Definitions for the
+      original GTFS fields are available at: https://gtfs.org/reference/static#fare_transfer_rulestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfeed_info\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a feed_info.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#feed_infotxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfrequencies\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a frequencies.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#frequenciestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ngtfs_datasets\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      record represents a GTFS dataset (feed), and provides base64-encoded URLs used
+      to access that feed.\tCal-ITP collects the GTFS feeds from a statewide list
+      every night and aggegrates it into a statewide table for analysis purposes only.
+      Do not use for trip planner ingestion, rather is meant to be used for statewide
+      analytics and other use cases. Note: These data may or may or may not have passed
+      GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nlevels\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a levels.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#levelstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\npathways\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a pathways.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#pathwaystxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nroutes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a routes.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#routestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nshapes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a shapes.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#shapestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstop_areas\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an stop_areas.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#stop_areastxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstop_times\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a stop_times.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#stop_timestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstops\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a stops.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#stopstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntransfers\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a transfers.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#transferstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntranslations\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a translations.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#translationstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntrips\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a trips.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#tripstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--35d4d8f3807871ce8ee46dcd86df330e--\r\n"
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '19436'
+      Content-Type:
+      - multipart/form-data; boundary=35d4d8f3807871ce8ee46dcd86df330e
+      User-Agent:
+      - ckanapi/1.0 (+https://dds.dot.ca.gov)
+      X-CKAN-API-Key:
+      - FILTERED
+    method: POST
+    uri: https://test-data.technology.ca.gov/api/action/resource_patch
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA8xTwY7bIBD9FYtzHBOwY2Op6qHnnrrqFY1hiFGIsQDvarvaf6/wOk0qVerubU+I
+        x7x5M/OGFzKim0lfkDGlOfZVlTCmUkOCfUI1Tt750/Newf7kHyuYbcUrUMn6qcpEGUf/9HWCC34J
+        GP0SFMoZkhrJriBxUQpjJH2RwoK7ggSMi0ukL16IAjWidBCTXGYNCTXpi2lxbldsb0twd9AZpg15
+        T6FZXQXc0hJGWVNSUXL6wHh/oH3D9oKJQ9fmwJwiJh9Q5sYe8Vbv7UX5KYGdogTnZEDlg47SG7m1
+        bKy7p2FUwc55SFk9axgfLpA7J99+/MzACHHM16amxjSt4Z3QRyFQU9Yy2iHDAdojdDnWrk0MqEEJ
+        rMvaKCxr1rXlYI60pPRYaw1GCKHW6NOUK94EDLiYa7JR5m6ktirJ2c+L24ZzDVituHhtjb0b2oGW
+        9PDAWM+bnrF9zZumY1nlggnWhP+lNKLhfKXYC6bnGW+uXhFppwnDDc/7lPN930Qy2wd7shO4D2xB
+        tfqHqRqAQUcVlowem7Jm7VBCZ4ayw2ZAXdfKKF5d97d6z6Ar7Z8m50FXy5yPXOEM6gwnlJtd79Bc
+        WT7abVPo2xd5W6mPmf6H9veAI6Y8ryt69TraX/l6EOwo8jVBWue97f+uIAniWf7zBxWM95z1B75v
+        eCfYuqCf1pK73smGvr7+BgAA//8DAKgJna/zBAAA
+    headers:
+      CF-RAY:
+      - 987f6ec60883cf26-SJC
+      Cache-Control:
+      - max-age=0
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Wed, 01 Oct 2025 22:35:23 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      expires:
+      - Wed, 01 Oct 2025 22:35:23 GMT
+      strict-transport-security:
+      - max-age=31536000; includeSubdomains
+      x-content-type-options:
+      - nosniff
+      x-xss-protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/8de6036a-8122-41ed-b807-d5a718f2e4c2
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__metadata%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fmetadata.csv?alt=media
+  response:
+    body:
+      string: "DATASET_NAME\tTAGS\tDESCRIPTION\tMETHODOLOGY\tTOPIC\tPUBLISHER_ORGANIZATION\tPLACE\tFREQUENCY\tNEXT_UPDATE\tCREATION_DATE\tLAST_UPDATE\tSTATUS\tTEMPORAL_COVERAGE_BEGIN\tTEMPORAL_COVERAGE_END\tDATA_DICTIONARY\tDATA_DICTIONARY_TYPE\tCONTACT_ORGANIZATION\tCONTACT_POSITION\tCONTACT_NAME\tCONTACT_EMAIL\tPUBLIC_ACCESS_LEVEL\tACCESS_CONSTRAINTS\tUSE_CONSTRAINTS\tDATA_LIFE_SPAN\tCALTRANS_LINK\tDATA_STANDARD\tNOTES\tGIS_THEME\tGIS_HORIZ_ACCURACY\tGIS_VERT_ACCURACY\tGIS_COORDINATE_SYSTEM_EPSG\tGIS_VERT_DATUM_EPSG\r\nagency\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an agency.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#agencytxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nareas\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an areas.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#areastxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nattributions\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an attributions.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#attributionstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ncalendar\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a calendar.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#calendartxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ncalendar_dates\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a Each row is a cleaned rowrow from a calendar_dates.txt file. Definitions
+        for the original GTFS fields are available at: https://gtfs.org/reference/static#calendar_datestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_attributes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a fare_attributes.txt file. Definitions for the
+        original GTFS fields are available at: https://gtfs.org/reference/static#fare_attributestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_leg_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an fare_leg_rules.txt file. Definitions for the
+        original GTFS fields are available at: https://gtfs.org/reference/static#fare_leg_rulestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_media\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an fare_media.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#fare_mediatxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_products\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an fare_products.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#fare_productstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a fare_rules.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#fare_rulestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_transfer_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an fare_transfer_rules.txt file. Definitions for
+        the original GTFS fields are available at: https://gtfs.org/reference/static#fare_transfer_rulestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfeed_info\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a feed_info.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#feed_infotxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfrequencies\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a frequencies.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#frequenciestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ngtfs_datasets\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        record represents a GTFS dataset (feed), and provides base64-encoded URLs
+        used to access that feed.\tCal-ITP collects the GTFS feeds from a statewide
+        list every night and aggegrates it into a statewide table for analysis purposes
+        only. Do not use for trip planner ingestion, rather is meant to be used for
+        statewide analytics and other use cases. Note: These data may or may or may
+        not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nlevels\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a levels.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#levelstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\npathways\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a pathways.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#pathwaystxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nroutes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a routes.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#routestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nshapes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a shapes.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#shapestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstop_areas\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from an stop_areas.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#stop_areastxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstop_times\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a stop_times.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#stop_timestxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstops\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a stops.txt file. Definitions for the original GTFS
+        fields are available at: https://gtfs.org/reference/static#stopstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntransfers\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a transfers.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#transferstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntranslations\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a translations.txt file. Definitions for the original
+        GTFS fields are available at: https://gtfs.org/reference/static#translationstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntrips\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+        row is a cleaned row from a trips.txt file. Definitions for the original GTFS
+        fields are available at: https://gtfs.org/reference/static#tripstxt.\tCal-ITP
+        collects the GTFS feeds from a statewide list every night and aggegrates it
+        into a statewide table for analysis purposes only. Do not use for trip planner
+        ingestion, rather is meant to be used for statewide analytics and other use
+        cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+        Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '19173'
+      Content-Type:
+      - text/csv
+      Date:
+      - Wed, 01 Oct 2025 22:35:24 GMT
+      ETag:
+      - CLWYhdS/948DEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Fri, 26 Sep 2025 22:40:54 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAwnv3IjGie53C2kOFYN9EE08LSCxqkhFDzA0NuqDUJ2t_vuJ197a9Fo10RwRU1AMMQ938yP
+      X-Goog-Generation:
+      - '1758926454475829'
+      X-Goog-Hash:
+      - crc32c=AmKYrw==,md5=VA/1fzidaZ7QJyCOLrp2qA==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '19173'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--6fb0f00b03f67ba9599ccafc65970c48\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--6fb0f00b03f67ba9599ccafc65970c48\r\nContent-Disposition:
+      form-data; name=\"upload\"; filename=\"upload\"\r\n\r\nDATASET_NAME\tTAGS\tDESCRIPTION\tMETHODOLOGY\tTOPIC\tPUBLISHER_ORGANIZATION\tPLACE\tFREQUENCY\tNEXT_UPDATE\tCREATION_DATE\tLAST_UPDATE\tSTATUS\tTEMPORAL_COVERAGE_BEGIN\tTEMPORAL_COVERAGE_END\tDATA_DICTIONARY\tDATA_DICTIONARY_TYPE\tCONTACT_ORGANIZATION\tCONTACT_POSITION\tCONTACT_NAME\tCONTACT_EMAIL\tPUBLIC_ACCESS_LEVEL\tACCESS_CONSTRAINTS\tUSE_CONSTRAINTS\tDATA_LIFE_SPAN\tCALTRANS_LINK\tDATA_STANDARD\tNOTES\tGIS_THEME\tGIS_HORIZ_ACCURACY\tGIS_VERT_ACCURACY\tGIS_COORDINATE_SYSTEM_EPSG\tGIS_VERT_DATUM_EPSG\r\nagency\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an agency.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#agencytxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nareas\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an areas.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#areastxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nattributions\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an attributions.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#attributionstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ncalendar\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a calendar.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#calendartxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ncalendar_dates\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a Each row is a cleaned rowrow from a calendar_dates.txt file. Definitions
+      for the original GTFS fields are available at: https://gtfs.org/reference/static#calendar_datestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_attributes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a fare_attributes.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#fare_attributestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_leg_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an fare_leg_rules.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#fare_leg_rulestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_media\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an fare_media.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#fare_mediatxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_products\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an fare_products.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#fare_productstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a fare_rules.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#fare_rulestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfare_transfer_rules\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an fare_transfer_rules.txt file. Definitions for the
+      original GTFS fields are available at: https://gtfs.org/reference/static#fare_transfer_rulestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfeed_info\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a feed_info.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#feed_infotxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nfrequencies\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a frequencies.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#frequenciestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ngtfs_datasets\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      record represents a GTFS dataset (feed), and provides base64-encoded URLs used
+      to access that feed.\tCal-ITP collects the GTFS feeds from a statewide list
+      every night and aggegrates it into a statewide table for analysis purposes only.
+      Do not use for trip planner ingestion, rather is meant to be used for statewide
+      analytics and other use cases. Note: These data may or may or may not have passed
+      GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nlevels\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a levels.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#levelstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\npathways\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a pathways.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#pathwaystxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nroutes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a routes.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#routestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nshapes\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a shapes.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#shapestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstop_areas\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from an stop_areas.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#stop_areastxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstop_times\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a stop_times.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#stop_timestxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\nstops\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a stops.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#stopstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntransfers\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a transfers.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#transferstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntranslations\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a translations.txt file. Definitions for the original
+      GTFS fields are available at: https://gtfs.org/reference/static#translationstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\ntrips\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
+      row is a cleaned row from a trips.txt file. Definitions for the original GTFS
+      fields are available at: https://gtfs.org/reference/static#tripstxt.\tCal-ITP
+      collects the GTFS feeds from a statewide list every night and aggegrates it
+      into a statewide table for analysis purposes only. Do not use for trip planner
+      ingestion, rather is meant to be used for statewide analytics and other use
+      cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--6fb0f00b03f67ba9599ccafc65970c48--\r\n"
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '19436'
+      Content-Type:
+      - multipart/form-data; boundary=6fb0f00b03f67ba9599ccafc65970c48
+      User-Agent:
+      - ckanapi/1.0 (+https://dds.dot.ca.gov)
+      X-CKAN-API-Key:
+      - FILTERED
+    method: POST
+    uri: https://test-data.technology.ca.gov/api/action/resource_patch
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA8xTTW/cIBD9Kxbn9RrjTyxVPfTcU6Ne0RiGNVrWWIATpVH+e4Xj7W6lSk1uOSEe
+        8+bNzBteyIR2IUNGphiXMBRFxBBzBRGOEeU0O+tOz0cJx5N7LGAxRVWAjMbNRSKKMLmnrzNc8IvH
+        4FYvUSwQ5UQOGQmrlBgCGbLoVzxkxGNYbSRD9kIkyAmFhRDFuiiIqMiQzau1h2x/W729g84w78h7
+        Ck3q0uOeljDKmpzyvKIPrBpKOjTsyBkv+y4FphQhOo8iNfaIt3pvL9LNEcwcBFgrPErnVRBOi71l
+        bew9DYP0ZklDSupJQzt/gdQ5+fbjZwImCFO6NjXVuul01XPVco6Kso7RHhmO0LXQp1izNTGiAsmx
+        zmstMa9Z3+WjbmlOaVsrBZpzLrfo05wq3gU02JBqMkGkboQyMorFLavdh3MN2Ky4OGW0uRtaSXNa
+        PjA2VM3A6mNT8o7SpHLBCFvC/1KqlrbVRjEXjM8L3ly9IsLMM/obnvYp5fu+iyS28+ZkZrAf2IJi
+        8w9jMQKDnkrMGW2bvGbdmEOvx7zHZkRV11LLqrjub/GeQRfKPc3WgSrWJR2pwgXkGU4odrveobmx
+        XDD7ptC3L/K2Uh8z/Q/t7wEHjGleV/TqdTC/0rXkrOXpGiFu8973/5CRCOEs/vmDMlYNFRvK6thU
+        PWfbgn5aS+56Jzv6+vobAAD//wMAddJoxvMEAAA=
+    headers:
+      CF-RAY:
+      - 987f6ed3c92deb24-SJC
+      Cache-Control:
+      - max-age=0
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Wed, 01 Oct 2025 22:35:25 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      expires:
+      - Wed, 01 Oct 2025 22:35:25 GMT
+      strict-transport-security:
+      - max-age=31536000; includeSubdomains
+      x-content-type-options:
+      - nosniff
+      x-xss-protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1
