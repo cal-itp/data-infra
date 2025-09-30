@@ -33,7 +33,7 @@ ENV V5_VALIDATOR_JAR=/gtfs-validator-5.0.0-cli.jar
 COPY ./gtfs-validator-5.0.0-cli.jar ${V5_VALIDATOR_JAR}
 
 # v7.1 from https://github.com/MobilityData/gtfs-validator/releases/download/v7.1.0/gtfs-validator-7.1.0-cli.jar
-ENV V5_VALIDATOR_JAR=/gtfs-validator-7.1.0-cli.jar
+ENV V7_1_VALIDATOR_JAR=/gtfs-validator-7.1.0-cli.jar
 COPY ./gtfs-validator-7.1.0-cli.jar ${V7_1_VALIDATOR_JAR}
 
 WORKDIR /app
