@@ -104,8 +104,8 @@ resource "kubernetes_deployment" "enghouse-sftp" {
             "/bin/sh", "-c", <<EOT
             apk update
             apk add openssl openssh openssh-server
-            addgroup sftpusers
-            adduser -S -G sftpusers -s /sbin/nologin -D -H ${local.sftp_user}
+            addgroup -g 2222 sftpusers
+            adduser -u 2222 -S -G sftpusers -s /sbin/nologin -D -H ${local.sftp_user}
             echo '${local.sftp_user}:enghousesftpuserpassword' | chpasswd
 
             mkdir -p /home/${local.sftp_user}/.ssh
@@ -119,6 +119,8 @@ resource "kubernetes_deployment" "enghouse-sftp" {
             echo "PermitRootLogin no" >> /etc/ssh/sshd_config
             echo "X11Forwarding no" >> /etc/ssh/sshd_config
             echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
+            echo "Match User ${local.sftp_user}" >> /etc/ssh/sshd_config
+            echo "Subsystem sftp internal-sftp" >> /etc/ssh/sshd_config
             echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
             echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
             /usr/sbin/sshd -D -e
@@ -139,7 +141,7 @@ resource "kubernetes_deployment" "enghouse-sftp" {
             driver = "gcsfuse.csi.storage.gke.io"
             volume_attributes = {
               bucketName   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_cal-itp-data-infra-enghouse-raw_name
-              mountOptions = "file-mode=666,dir-mode=777"
+              mountOptions = "uid=2222,gid=2222,file-mode=777,dir-mode=777"
             }
           }
         }
@@ -177,7 +179,7 @@ resource "kubernetes_service" "enghouse-sftp" {
       target_port = 22
     }
 
-    type = "LoadBalancer"
-    # load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_enghouse-sftp-address_ip
+    type             = "LoadBalancer"
+    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_enghouse-sftp-address_ip
   }
 }
