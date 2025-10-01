@@ -291,7 +291,7 @@ class MostRecentSchedule:
                 )
             except KeyError:
                 typer.secho(
-                    f"no schedule data found for {self.base64_validation_url} on day {day}"
+                    f"no schedule data found for {self.base64_validation_url} ({base64.urlsafe_b64decode(self.base64_validation_url)}) on day {day}"
                 )
                 continue
 
@@ -301,7 +301,7 @@ class MostRecentSchedule:
                 return gtfs_zip
             except FileNotFoundError:
                 typer.secho(
-                    f"no schedule file found for {self.base64_validation_url} on day {day}"
+                    f"no schedule file found for {self.base64_validation_url} ({base64.urlsafe_b64decode(self.base64_validation_url)}) on day {day}"
                 )
                 continue
         return None
@@ -935,7 +935,8 @@ def main(
 
     if base64url:
         typer.secho(
-            f"url filter applied, only processing {base64url}", fg=typer.colors.YELLOW
+            f"url filter applied, only processing {base64url} ({base64.urlsafe_b64decode(base64url)})",
+            fg=typer.colors.YELLOW,
         )
 
     if limit:
