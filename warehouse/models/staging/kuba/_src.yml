@@ -7,3 +7,4 @@ sources:
     schema: external_kuba
     tables:
       - name: device_properties
+        description: Monitoring data from all devices with 1-Bus location type
