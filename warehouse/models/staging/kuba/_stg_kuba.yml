@@ -1,4 +1,163 @@
 version: 2
 
+x-common-fields:
+  - &fare_collector_device_logical_id
+    name: fare_collector_device_logical_id
+    description: '{{ doc("fare_collector_device_logical_id") }}'
+  - &fare_collector_device_type
+    name: fare_collector_device_type
+    description: '{{ doc("fare_collector_device_type") }}'
+  - &fare_collector_device_type_model
+    name: fare_collector_device_type_model
+    description: '{{ doc("fare_collector_device_type_model") }}'
+  - &fare_collector_device_serial_number
+    name: fare_collector_device_serial_number
+    description: '{{ doc("fare_collector_device_serial_number") }}'
+  - &fare_collector_device_description
+    name: fare_collector_device_description
+    description: '{{ doc("fare_collector_device_description") }}'
+  - &fare_collector_device_location_id
+    name: fare_collector_device_location_id
+    description: '{{ doc("fare_collector_device_location_id") }}'
+  - &fare_collector_device_location
+    name: fare_collector_device_location
+    description: '{{ doc("fare_collector_device_location") }}'
+  - &fare_collector_device_last_connection
+    name: fare_collector_device_last_connection
+    description: '{{ doc("fare_collector_device_last_connection") }}'
+  - &device_replicator_info_software_version
+    name: device_replicator_info_software_version
+    description: '{{ doc("device_replicator_info_software_version") }}'
+  - &device_replicator_info_software_last_connection
+    name: device_replicator_info_software_last_connection
+    description: '{{ doc("device_replicator_info_software_last_connection") }}'
+  - &device_replicator_info_cd_version
+    name: device_replicator_info_cd_version
+    description: '{{ doc("device_replicator_info_cd_version") }}'
+  - &device_replicator_info_cd_last_connection
+    name: device_replicator_info_cd_last_connection
+    description: '{{ doc("device_replicator_info_cd_last_connection") }}'
+  - &device_replicator_info_dataset_version
+    name: device_replicator_info_dataset_version
+    description: '{{ doc("device_replicator_info_dataset_version") }}'
+  - &device_replicator_info_dataset_last_connection
+    name: device_replicator_info_dataset_last_connection
+    description: '{{ doc("device_replicator_info_dataset_last_connection") }}'
+  - &device_replicator_info_denylist_version
+    name: device_replicator_info_denylist_version
+    description: '{{ doc("device_replicator_info_denylist_version") }}'
+  - &device_replicator_info_deny_list_last_connection
+    name: device_replicator_info_deny_list_last_connection
+    description: '{{ doc("device_replicator_info_deny_list_last_connection") }}'
+  - &device_replicator_info_acceptlist_version
+    name: device_replicator_info_acceptlist_version
+    description: '{{ doc("device_replicator_info_acceptlist_version") }}'
+  - &device_replicator_info_accept_list_last_connection
+    name: device_replicator_info_accept_list_last_connection
+    description: '{{ doc("device_replicator_info_accept_list_last_connection") }}'
+  - &device_replicator_info_bin_list_version
+    name: device_replicator_info_bin_list_version
+    description: '{{ doc("device_replicator_info_bin_list_version") }}'
+  - &device_replicator_info_bin_list_last_connection
+    name: device_replicator_info_bin_list_last_connection
+    description: '{{ doc("device_replicator_info_bin_list_last_connection") }}'
+  - &device_replicator_info_asset_last_connection
+    name: device_replicator_info_asset_last_connection
+    description: '{{ doc("device_replicator_info_asset_last_connection") }}'
+  - &device_replicator_info_monitoring_last_connection
+    name: device_replicator_info_monitoring_last_connection
+    description: '{{ doc("device_replicator_info_monitoring_last_connection") }}'
+  - &device_replicator_info_ud_last_transaction_time
+    name: device_replicator_info_ud_last_transaction_time
+    description: '{{ doc("device_replicator_info_ud_last_transaction_time") }}'
+  - &device_monitor_info_application_is_disabled
+    name: device_monitor_info_application_is_disabled
+    description: '{{ doc("device_monitor_info_application_is_disabled") }}'
+  - &device_monitor_info_application_is_in_service
+    name: device_monitor_info_application_is_in_service
+    description: '{{ doc("device_monitor_info_application_is_in_service") }}'
+  - &device_monitor_info_os_uptime
+    name: device_monitor_info_os_uptime
+    description: '{{ doc("device_monitor_info_os_uptime") }}'
+  - &dt
+    name: dt
+    description: '{{ doc("dt") }}'
+  - &ts
+    name: ts
+    description: '{{ doc("ts") }}'
+
 models:
   - name: stg_kuba__device_properties
+    description: Monitoring data from all devices with 1-Bus location type
+    columns:
+      - *fare_collector_device_logical_id
+      - *fare_collector_device_type
+      - *fare_collector_device_type_model
+      - *fare_collector_device_serial_number
+      - *fare_collector_device_description
+      - *fare_collector_device_location_id
+      - *fare_collector_device_location
+      - *fare_collector_device_last_connection
+      - *device_replicator_info_software_version
+      - *device_replicator_info_software_last_connection
+      - *device_replicator_info_cd_version
+      - *device_replicator_info_cd_last_connection
+      - *device_replicator_info_dataset_version
+      - *device_replicator_info_dataset_last_connection
+      - *device_replicator_info_denylist_version
+      - *device_replicator_info_deny_list_last_connection
+      - *device_replicator_info_acceptlist_version
+      - *device_replicator_info_accept_list_last_connection
+      - *device_replicator_info_bin_list_version
+      - *device_replicator_info_bin_list_last_connection
+      - *device_replicator_info_asset_last_connection
+      - *device_replicator_info_monitoring_last_connection
+      - *device_replicator_info_ud_last_transaction_time
+      - *device_monitor_info_application_is_disabled
+      - *device_monitor_info_application_is_in_service
+      - name: device_monitor_info_application_service_status
+      - name: device_monitor_info_gps_position_altitude
+      - name: device_monitor_info_gps_position_datetime
+      - name: device_monitor_info_gps_position_direction
+      - name: device_monitor_info_gps_position_fix
+      - name: device_monitor_info_gps_position_ground_speed
+      - name: device_monitor_info_gps_position_has_altitude
+      - name: device_monitor_info_gps_position_has_datetime
+      - name: device_monitor_info_gps_position_has_direction
+      - name: device_monitor_info_gps_position_has_fix
+      - name: device_monitor_info_gps_position_has_ground_speed
+      - name: device_monitor_info_gps_position_has_latitude
+      - name: device_monitor_info_gps_position_has_longitude
+      - name: device_monitor_info_gps_position_latitude
+      - name: device_monitor_info_gps_position_longitude
+      - name: device_monitor_info_gps_position_number_satelites
+      - name: device_monitor_info_gps_position_properties_id
+      - *device_monitor_info_os_uptime
+      - name: device_monitor_info_smart_medium_emv3000_battery_level
+      - name: device_monitor_info_ngwifi_gps_api_status
+      - name: device_monitor_info_ngwifi_gps_position_altitude
+      - name: device_monitor_info_ngwifi_gps_position_fix
+      - name: device_monitor_info_ngwifi_gps_position_heading
+      - name: device_monitor_info_ngwifi_gps_position_latitude
+      - name: device_monitor_info_ngwifi_gps_position_longitude
+      - name: device_monitor_info_ngwifi_gps_position_speed
+      - name: device_monitor_info_ngwifi_gps_position_success
+      - name: device_monitor_info_ngwifi_gps_position_timestamp
+      - name: device_monitor_info_location_service_status
+      - name: device_monitor_info_location_source
+      - name: device_monitor_info_location_data_id
+      - name: device_monitor_info_location_data_version
+      - name: device_monitor_info_location_provider_source
+      - name: device_monitor_info_location_type
+      - name: device_monitor_info_location_properties_id
+      - name: device_monitor_info_location_current_zone_name
+      - name: device_monitor_info_location_current_zone_reference
+      - name: device_monitor_info_location_current_stop_abbreviation
+      - name: device_monitor_info_location_current_stop_fare_matrix_reference
+      - name: device_monitor_info_location_current_stop_name
+      - name: device_monitor_info_location_current_stop_reference
+      - name: device_monitor_info_location_current_stop_short_name
+      - name: device_monitor_info_location_current_stop_type
+      - name: device_monitor_info_location_current_properties_id
+      - *dt
+      - *ts
