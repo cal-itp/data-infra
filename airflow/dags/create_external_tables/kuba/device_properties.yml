@@ -32,40 +32,40 @@ schema_fields:
       - name: fo_device_location
         type: STRING
       - name: fo_device_last_connection
-        type: STRING
+        type: TIMESTAMP
   - name: device_replicator_info
     type: RECORD
     fields:
       - name: software_version
         type: STRING
       - name: software_last_connection
-        type: STRING
+        type: TIMESTAMP
       - name: cd_version
         type: STRING
       - name: cd_last_connection
-        type: STRING
+        type: TIMESTAMP
       - name: dataset_version
         type: STRING
       - name: dataset_last_connection
-        type: STRING
+        type: TIMESTAMP
       - name: denylist_version
         type: STRING
       - name: denylist_last_connection
-        type: STRING
+        type: TIMESTAMP
       - name: acceptlist_version
         type: STRING
       - name: acceptlist_last_connection
-        type: STRING
+        type: TIMESTAMP
       - name: binlist_version
         type: STRING
       - name: binlist_last_connection
-        type: STRING
+        type: TIMESTAMP
       - name: asset_last_connection
-        type: STRING
+        type: TIMESTAMP
       - name: monitoring_last_connection
-        type: STRING
+        type: TIMESTAMP
       - name: ud_last_transaction_time
-        type: STRING
+        type: TIMESTAMP
   - name: device_monitor_info
     type: RECORD
     fields:
@@ -110,9 +110,9 @@ schema_fields:
           - name: hasLongitude
             type: STRING
           - name: latitude
-            type: STRING
+            type: FLOAT
           - name: longitude
-            type: STRING
+            type: FLOAT
           - name: numberSatelites
             type: STRING
           - name: properties
@@ -143,9 +143,9 @@ schema_fields:
           - name: heading
             type: STRING
           - name: latitude
-            type: STRING
+            type: FLOAT
           - name: longitude
-            type: STRING
+            type: FLOAT
           - name: speed
             type: STRING
           - name: success
