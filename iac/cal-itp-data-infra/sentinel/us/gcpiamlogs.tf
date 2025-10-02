@@ -4,7 +4,6 @@ resource "google_project_service" "enable-logging-api" {
 }
 
 resource "google_pubsub_topic" "sentineliam-topic" {
-  count   = var.topic-name != "sentineliam-topic" ? 0 : 1
   name    = var.topic-name
   project = data.google_project.project.project_id
 }
