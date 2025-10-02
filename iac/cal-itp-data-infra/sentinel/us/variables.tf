@@ -7,5 +7,5 @@ variable "topic-name" {
 variable "organization-id" {
   type        = string
   default     = "977441775313"
-  description = "Organization id"
+  description = "Organization Identifier"
 }
