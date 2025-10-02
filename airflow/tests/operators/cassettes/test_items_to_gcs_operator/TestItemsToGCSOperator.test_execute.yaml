@@ -1,0 +1,212 @@
+interactions:
+- request:
+    body: "--===============7267434585525975681==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv\"}\r\n--===============7267434585525975681==\r\ncontent-type:
+      text/csv\r\n\r\ntesting_date\r\n2025-06-01\r\n\r\n--===============7267434585525975681==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '321'
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/a426e2c6-2e4d-433a-a233-912107732224
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03MjY3NDM0NTg1NTI1
+        OTc1NjgxPT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - text/csv
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv/1759364461170224\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/california_open_data__testing%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Ftesting.csv\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__testing%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Ftesting.csv?generation=1759364461170224&alt=media\",\n
+        \ \"name\": \"california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1759364461170224\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"text/csv\",\n  \"storageClass\":
+        \"STANDARD\",\n  \"size\": \"26\",\n  \"md5Hash\": \"KKs5MusYBmeUcUR+KTkjIQ==\",\n
+        \ \"crc32c\": \"aCkoQQ==\",\n  \"etag\": \"CLCc9K2fhJADEAE=\",\n  \"timeCreated\":
+        \"2025-10-02T00:21:01.175Z\",\n  \"updated\": \"2025-10-02T00:21:01.175Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-10-02T00:21:01.175Z\",\n  \"timeFinalized\":
+        \"2025-10-02T00:21:01.175Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1122'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 02 Oct 2025 00:21:01 GMT
+      ETag:
+      - CLCc9K2fhJADEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAwnv3LJHRxi5R8ge_ZyT5HaxiOlIWZRccSnnLJzYrfCxOpXhAxMHZk2zJJLGwJggaGhm9asgOhyxoc
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============4114164849333912953==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv\"}\r\n--===============4114164849333912953==\r\ncontent-type:
+      text/csv\r\n\r\ntesting_date\r\n2025-06-01\r\n\r\n--===============4114164849333912953==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '321'
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/56c1a413-26c1-450e-9cbf-ab70e3411c47
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT00MTE0MTY0ODQ5MzMz
+        OTEyOTUzPT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - text/csv
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv/1759364461907910\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/california_open_data__testing%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Ftesting.csv\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__testing%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Ftesting.csv?generation=1759364461907910&alt=media\",\n
+        \ \"name\": \"california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1759364461907910\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"text/csv\",\n  \"storageClass\":
+        \"STANDARD\",\n  \"size\": \"26\",\n  \"md5Hash\": \"KKs5MusYBmeUcUR+KTkjIQ==\",\n
+        \ \"crc32c\": \"aCkoQQ==\",\n  \"etag\": \"CMafoa6fhJADEAE=\",\n  \"timeCreated\":
+        \"2025-10-02T00:21:01.941Z\",\n  \"updated\": \"2025-10-02T00:21:01.941Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-10-02T00:21:01.941Z\",\n  \"timeFinalized\":
+        \"2025-10-02T00:21:01.941Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1122'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 02 Oct 2025 00:21:01 GMT
+      ETag:
+      - CMafoa6fhJADEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAwnv3KTz35PJ8jD5x8dWfzdMhBh0ksHfAbupdp94XoG1zYa3GR2dTuwwKVQL849thMG255Lvt0xekc
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/329b64ee-3bfb-4341-a2d1-adfc02079dc9
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__testing%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Ftesting.csv?alt=media
+  response:
+    body:
+      string: "testing_date\r\n2025-06-01\r\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '26'
+      Content-Type:
+      - text/csv
+      Date:
+      - Thu, 02 Oct 2025 00:21:02 GMT
+      ETag:
+      - CMafoa6fhJADEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Thu, 02 Oct 2025 00:21:01 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAwnv3LZq6NOqndGO78CPFgm85N38rWCLw5RNceqBxESdkc9VDyTVDqIZ11Soaw9xrtMg-bGYETC2eg
+      X-Goog-Generation:
+      - '1759364461907910'
+      X-Goog-Hash:
+      - crc32c=aCkoQQ==,md5=KKs5MusYBmeUcUR+KTkjIQ==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '26'
+    status:
+      code: 200
+      message: OK
+version: 1

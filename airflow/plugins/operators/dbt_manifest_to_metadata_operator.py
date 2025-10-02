@@ -54,51 +54,42 @@ class MetadataRow(BaseModel):
         }
 
 
-class DbtExposureMetadataToGcsOperator(BaseOperator):
+class DBTManifestToMetadataOperator(BaseOperator):
     template_fields: Sequence[str] = (
-        "source_bucket_name",
-        "source_object_name",
-        "destination_bucket_name",
-        "destination_object_name",
+        "bucket_name",
+        "object_name",
         "gcp_conn_id",
     )
 
     def __init__(
         self,
-        source_bucket_name: str,
-        source_object_name: str,
-        destination_bucket_name: str,
-        destination_object_name: str,
+        bucket_name: str,
+        object_name: str,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ):
         super().__init__(**kwargs)
 
-        self.destination_bucket_name = destination_bucket_name
-        self.source_bucket_name = source_bucket_name
-        self.source_object_name = source_object_name
-        self.destination_object_name = destination_object_name
+        self.bucket_name = bucket_name
+        self.object_name = object_name
         self.gcp_conn_id = gcp_conn_id
-
-    def bucket_name(self) -> str:
-        return self.destination_bucket_name.replace("gs://", "")
 
     def gcs_hook(self) -> GCSHook:
         return GCSHook(gcp_conn_id=self.gcp_conn_id)
 
     def read_manifest(self) -> dict:
         manifest = self.gcs_hook().download(
-            bucket_name=self.source_bucket_name.replace("gs://", ""),
-            object_name=self.source_object_name
+            bucket_name=self.bucket_name.replace("gs://", ""),
+            object_name=self.object_name
         )
         return json.loads(manifest)
 
-    def metadata_csv(self, logical_date: datetime) -> str:
+    def metadata_items(self, logical_date: datetime) -> str:
         manifest = self.read_manifest()
         exposure = manifest.get("exposures", {}).get("exposure.calitp_warehouse.california_open_data", {})
         destinations = exposure.get("meta", {}).get("destinations", {})
         depends_on_nodes = [name.split(".")[-1] for name in exposure.get("depends_on", {}).get("nodes", [])]
-        rows: list[dict] = []
+        items: dict[str, dict] = {}
         for destination in destinations:
             for resource_name, resource in destination.get("resources", {}).items():
                 if resource_name in depends_on_nodes:
@@ -144,26 +135,13 @@ class DbtExposureMetadataToGcsOperator(BaseOperator):
                         gis_coordinate_system_epsg=exposure.get("meta").get("coordinate_system_epsg"),
                         gis_vert_datum_epsg=None,
                     )
-                    rows.append(
-                        {
-                            k.upper(): v
-                            for k, v in json.loads(metadata_row.json(models_as_dict=False)).items()
-                        }
-                    )
+                    items[resource.get("id")] = {
+                        k.upper(): v
+                        for k, v in json.loads(metadata_row.json(models_as_dict=False)).items()
+                    }
 
-        output = io.StringIO()
-        writer = csv.DictWriter(output, fieldnames=rows[0].keys(), delimiter='\t')
-        writer.writeheader()
-        writer.writerows(rows)
-
-        return output.getvalue()
+        return items
 
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
-        self.gcs_hook().upload(
-            bucket_name=self.bucket_name(),
-            object_name=self.destination_object_name,
-            data=self.metadata_csv(logical_date=dag_run.logical_date),
-            mime_type="text/csv",
-        )
-        return os.path.join(self.destination_bucket_name, self.destination_object_name)
+        return self.metadata_items(logical_date=dag_run.logical_date)
