@@ -1,8 +1,9 @@
 from io import StringIO
 
+from ckanapi import RemoteCKAN
+
 from airflow.hooks.base import BaseHook
 from airflow.models.connection import Connection
-from ckanapi import RemoteCKAN
 
 
 class CKANHook(BaseHook):
@@ -18,17 +19,17 @@ class CKANHook(BaseHook):
 
     def remote_ckan(self) -> RemoteCKAN:
         if not self._remote_ckan:
-            self._remote_ckan = RemoteCKAN(self.connection.host, apikey=self.connection.password, user_agent=self.user_agent)
+            self._remote_ckan = RemoteCKAN(
+                self.connection.host,
+                apikey=self.connection.password,
+                user_agent=self.user_agent,
+            )
         return self._remote_ckan
 
     def read_metadata(self, resource_id: str):
-        return self.remote_ckan().call_action(
-            "resource_show", {"id": resource_id}
-        )
+        return self.remote_ckan().call_action("resource_show", {"id": resource_id})
 
     def upload(self, resource_id: str, file: StringIO):
         return self.remote_ckan().call_action(
-            "resource_patch",
-            {"id": resource_id},
-            files={"upload": file}
+            "resource_patch", {"id": resource_id}, files={"upload": file}
         )

@@ -71,7 +71,7 @@ def vcr_config():
             ("cookie", "FILTERED"),
             ("Authorization", "FILTERED"),
             ("apikey", "FILTERED"),
-            ("X-CKAN-API-Key", "FILTERED")
+            ("X-CKAN-API-Key", "FILTERED"),
         ],
         "before_record_request": scrub_sensitive_data,
         "allow_playback_repeats": True,

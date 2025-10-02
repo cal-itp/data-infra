@@ -1,13 +1,11 @@
-from datetime import datetime, timedelta
+import csv
 import io
 import os
-import csv
+from typing import Sequence
 
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
-
-from typing import Sequence
 
 
 class ItemsToGCSOperator(BaseOperator):
@@ -38,7 +36,7 @@ class ItemsToGCSOperator(BaseOperator):
 
     def csv(self) -> str:
         output = io.StringIO()
-        writer = csv.DictWriter(output, fieldnames=self.items[0].keys(), delimiter='\t')
+        writer = csv.DictWriter(output, fieldnames=self.items[0].keys(), delimiter="\t")
         writer.writeheader()
         writer.writerows(self.items)
         return output.getvalue()

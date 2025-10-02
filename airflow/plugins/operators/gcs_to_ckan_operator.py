@@ -46,7 +46,6 @@ class GCSToCKANOperator(BaseOperator):
             object_name=self.object_name,
         )
         return self.ckan_hook().upload(
-
             resource_id=self.resource_id,
             file=StringIO(data.decode()),
         )
