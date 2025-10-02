@@ -1,7 +1,7 @@
+import csv
 import os
 from datetime import datetime, timezone
 from io import StringIO
-import csv
 
 import pytest
 from dateutil.relativedelta import relativedelta
@@ -73,19 +73,17 @@ class TestItemsToGCSOperator:
             "california_open_data__testing",
             "dt=2025-06-01",
             "ts=2025-06-01T00:00:00+00:00",
-            "testing.csv"
+            "testing.csv",
         )
 
         result = gcs_hook.download(
-            bucket_name=os.environ.get("CALITP_BUCKET__PUBLISH").replace(
-                "gs://", ""
-            ),
+            bucket_name=os.environ.get("CALITP_BUCKET__PUBLISH").replace("gs://", ""),
             object_name=os.path.join(
                 "california_open_data__testing",
                 "dt=2025-06-01",
                 "ts=2025-06-01T00:00:00+00:00",
-                "testing.csv"
-            )
+                "testing.csv",
+            ),
         )
 
         f = StringIO(result.decode("utf-8"))
