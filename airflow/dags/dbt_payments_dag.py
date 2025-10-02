@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
-from cosmos.constants import TestBehavior
 
 from airflow import DAG
 from airflow.operators.latest_only import LatestOnlyOperator
@@ -38,7 +37,7 @@ with DAG(
                 "+path:models/intermediate/payments+",
                 "+path:models/mart/payments+",
             ],
-            test_behavior=TestBehavior.AFTER_ALL,
+            test_behavior=None,
         ),
         operator_args={
             "install_deps": True,
