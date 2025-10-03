@@ -1,6 +1,4 @@
 import csv
-import gzip
-import json
 import os
 from datetime import datetime, timezone
 from io import StringIO
@@ -92,19 +90,19 @@ class TestDBTBigQueryToGCSOperator:
                 "dt=2025-06-01",
                 "ts=2025-06-01T00:00:00+00:00",
                 "agency.csv",
-            )
+            ),
         )
 
         f = StringIO(result.decode())
         reader = csv.DictReader(f, delimiter="\t")
         assert list(reader)[0] == {
-            'agency_id': '1',
-            'agency_email': '',
-            'agency_fare_url': '',
-            'agency_lang': 'en',
-            'agency_name': 'AC TRANSIT',
-            'agency_phone': '5108914777',
-            'agency_timezone': 'US/Pacific',
-            'agency_url': 'http://www.actransit.org',
-            'base64_url': 'aHR0cHM6Ly9hcGkuYWN0cmFuc2l0Lm9yZy90cmFuc2l0L2d0ZnMvZG93bmxvYWQ=',
+            "agency_id": "1",
+            "agency_email": "",
+            "agency_fare_url": "",
+            "agency_lang": "en",
+            "agency_name": "AC TRANSIT",
+            "agency_phone": "5108914777",
+            "agency_timezone": "US/Pacific",
+            "agency_url": "http://www.actransit.org",
+            "base64_url": "aHR0cHM6Ly9hcGkuYWN0cmFuc2l0Lm9yZy90cmFuc2l0L2d0ZnMvZG93bmxvYWQ=",
         }

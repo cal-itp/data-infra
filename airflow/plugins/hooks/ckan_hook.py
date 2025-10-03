@@ -28,7 +28,10 @@ class CKANHook(BaseHook):
 
     def find_resource_id(self, dataset_id: str, resource_name: str):
         dataset = self.remote_ckan().call_action("package_show", {"id": dataset_id})
-        resources = {resource["name"]: resource["id"] for resource in dataset.get("resources", [])}
+        resources = {
+            resource["name"]: resource["id"]
+            for resource in dataset.get("resources", [])
+        }
         return resources[resource_name]
 
     def upload(self, resource_id: str, file: StringIO):

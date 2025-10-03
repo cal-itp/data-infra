@@ -97,7 +97,7 @@ class DBTManifestToMetadataOperator(BaseOperator):
         for destination in destinations:
             for resource_name, resource in destination.get("resources", {}).items():
                 if resource_name in depends_on_nodes:
-                    metadata_row = MetadataRow(
+                    row = MetadataRow(
                         dataset_name=resource_name.removeprefix("dim_").removesuffix(
                             "_latest"
                         ),
@@ -145,12 +145,14 @@ class DBTManifestToMetadataOperator(BaseOperator):
                         ),
                         gis_vert_datum_epsg=None,
                     )
-                    items.append({
-                        k.upper(): v
-                        for k, v in json.loads(
-                            metadata_row.json(models_as_dict=False)
-                        ).items()
-                    })
+                    items.append(
+                        {
+                            k.upper(): v
+                            for k, v in json.loads(
+                                row.json(models_as_dict=False)
+                            ).items()
+                        }
+                    )
 
         return items
 
