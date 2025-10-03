@@ -60,7 +60,7 @@ class TestDBTManifestToMetadataOperator:
         task = test_dag.get_task("dbt_manifest_to_metadata")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
-        assert xcom_value["c3828596-e796-4b3b-a146-ebeb09b3a4d2"] == {
+        assert xcom_value[0] == {
             "ACCESS_CONSTRAINTS": None,
             "CALTRANS_LINK": None,
             "CONTACT_EMAIL": "hunter.owens@dot.ca.gov",

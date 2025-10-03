@@ -5,6 +5,7 @@ import pytest
 from hooks.ckan_hook import CKANHook
 
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
+from ckanapi import errors
 
 
 class TestCKANHook:
@@ -15,6 +16,30 @@ class TestCKANHook:
     @pytest.fixture
     def gcs_hook(self) -> GCSHook:
         return GCSHook()
+
+    @pytest.mark.vcr()
+    def test_find_resource_id(self, hook: CKANHook):
+        resource_id = hook.find_resource_id(
+            dataset_id="cal-itp-gtfs-ingest-pipeline-dataset",
+            resource_name="Cal-ITP GTFS Schedule Metadata",
+        )
+        assert resource_id == "bedac9e4-4fce-4287-bf60-0064ddaf999c"
+
+    @pytest.mark.vcr()
+    def test_find_nonexistent_resource(self, hook: CKANHook):
+        with pytest.raises(KeyError):
+            hook.find_resource_id(
+                dataset_id="cal-itp-gtfs-ingest-pipeline-dataset",
+                resource_name="Nope",
+            )
+
+    @pytest.mark.vcr()
+    def test_find_nonexistent_dataset(self, hook: CKANHook):
+        with pytest.raises(errors.NotFound):
+            hook.find_resource_id(
+                dataset_id="rick-astley-metrics",
+                resource_name="Nope",
+            )
 
     @pytest.mark.vcr()
     def test_upload(self, gcs_hook: GCSHook, hook: CKANHook):
@@ -28,10 +53,7 @@ class TestCKANHook:
             ),
         )
         file = StringIO(metadata_csv.decode())
-        hook.upload(resource_id="bedac9e4-4fce-4287-bf60-0064ddaf999c", file=file)
-        metadata_result = hook.read_metadata(
-            resource_id="bedac9e4-4fce-4287-bf60-0064ddaf999c",
-        )
+        metadata_result = hook.upload(resource_id="bedac9e4-4fce-4287-bf60-0064ddaf999c", file=file)
         assert (
             metadata_result
             == {

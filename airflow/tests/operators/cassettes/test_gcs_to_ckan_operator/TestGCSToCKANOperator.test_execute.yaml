@@ -12,7 +12,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/c70fb94f-5983-496d-8192-2e15e7c3cd59
+        gccl-invocation-id/006e83de-214e-45bc-a2c8-738dc3e1192f
       accept-encoding:
       - gzip
       content-type:
@@ -206,7 +206,7 @@ interactions:
       Content-Type:
       - text/csv
       Date:
-      - Wed, 01 Oct 2025 22:35:21 GMT
+      - Fri, 03 Oct 2025 18:05:39 GMT
       ETag:
       - CLWYhdS/948DEAE=
       Expires:
@@ -221,7 +221,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AAwnv3Iuapshlw0cen-ceZe2uOO5l8m4FwWAANwdF9Js6C3TdZ5SybdQt5WUohv3-uTTgynCSg64fEg
+      - AAwnv3InXyzw7c1ZOuYN-lwiBTTxFz3LyjhoRgZJZuCa833Z8-R3LYWh1O9ioOe54IpgzMw0
       X-Goog-Generation:
       - '1758926454475829'
       X-Goog-Hash:
@@ -238,7 +238,91 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: "--35d4d8f3807871ce8ee46dcd86df330e\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--35d4d8f3807871ce8ee46dcd86df330e\r\nContent-Disposition:
+    body: '{"id": "cal-itp-gtfs-ingest-pipeline-dataset"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '46'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - ckanapi/1.0 (+https://dds.dot.ca.gov)
+      X-CKAN-API-Key:
+      - FILTERED
+    method: POST
+    uri: https://test-data.technology.ca.gov/api/action/package_show
+  response:
+    body:
+      string: !!binary |
+        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
+        ff0PAAAA//8DALHSa8KoDgAA
+    headers:
+      CF-RAY:
+      - 988e5e73ab4e67b2-SJC
+      Cache-Control:
+      - max-age=0
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 03 Oct 2025 18:05:40 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      expires:
+      - Fri, 03 Oct 2025 18:05:40 GMT
+      strict-transport-security:
+      - max-age=31536000; includeSubdomains
+      x-content-type-options:
+      - nosniff
+      x-xss-protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--5ce53fa9179c01a8e5bcaddd96f1a573\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--5ce53fa9179c01a8e5bcaddd96f1a573\r\nContent-Disposition:
       form-data; name=\"upload\"; filename=\"upload\"\r\n\r\nDATASET_NAME\tTAGS\tDESCRIPTION\tMETHODOLOGY\tTOPIC\tPUBLISHER_ORGANIZATION\tPLACE\tFREQUENCY\tNEXT_UPDATE\tCREATION_DATE\tLAST_UPDATE\tSTATUS\tTEMPORAL_COVERAGE_BEGIN\tTEMPORAL_COVERAGE_END\tDATA_DICTIONARY\tDATA_DICTIONARY_TYPE\tCONTACT_ORGANIZATION\tCONTACT_POSITION\tCONTACT_NAME\tCONTACT_EMAIL\tPUBLIC_ACCESS_LEVEL\tACCESS_CONSTRAINTS\tUSE_CONSTRAINTS\tDATA_LIFE_SPAN\tCALTRANS_LINK\tDATA_STANDARD\tNOTES\tGIS_THEME\tGIS_HORIZ_ACCURACY\tGIS_VERT_ACCURACY\tGIS_COORDINATE_SYSTEM_EPSG\tGIS_VERT_DATUM_EPSG\r\nagency\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
       row is a cleaned row from an agency.txt file. Definitions for the original GTFS
       fields are available at: https://gtfs.org/reference/static#agencytxt.\tCal-ITP
@@ -407,7 +491,7 @@ interactions:
       into a statewide table for analysis purposes only. Do not use for trip planner
       ingestion, rather is meant to be used for statewide analytics and other use
       cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
-      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--35d4d8f3807871ce8ee46dcd86df330e--\r\n"
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--5ce53fa9179c01a8e5bcaddd96f1a573--\r\n"
     headers:
       Accept:
       - '*/*'
@@ -420,7 +504,7 @@ interactions:
       Content-Length:
       - '19436'
       Content-Type:
-      - multipart/form-data; boundary=35d4d8f3807871ce8ee46dcd86df330e
+      - multipart/form-data; boundary=5ce53fa9179c01a8e5bcaddd96f1a573
       User-Agent:
       - ckanapi/1.0 (+https://dds.dot.ca.gov)
       X-CKAN-API-Key:
@@ -430,19 +514,18 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA8xTwY7bIBD9FYtzHBOwY2Op6qHnnrrqFY1hiFGIsQDvarvaf6/wOk0qVerubU+I
-        x7x5M/OGFzKim0lfkDGlOfZVlTCmUkOCfUI1Tt750/Newf7kHyuYbcUrUMn6qcpEGUf/9HWCC34J
-        GP0SFMoZkhrJriBxUQpjJH2RwoK7ggSMi0ukL16IAjWidBCTXGYNCTXpi2lxbldsb0twd9AZpg15
-        T6FZXQXc0hJGWVNSUXL6wHh/oH3D9oKJQ9fmwJwiJh9Q5sYe8Vbv7UX5KYGdogTnZEDlg47SG7m1
-        bKy7p2FUwc55SFk9axgfLpA7J99+/MzACHHM16amxjSt4Z3QRyFQU9Yy2iHDAdojdDnWrk0MqEEJ
-        rMvaKCxr1rXlYI60pPRYaw1GCKHW6NOUK94EDLiYa7JR5m6ktirJ2c+L24ZzDVituHhtjb0b2oGW
-        9PDAWM+bnrF9zZumY1nlggnWhP+lNKLhfKXYC6bnGW+uXhFppwnDDc/7lPN930Qy2wd7shO4D2xB
-        tfqHqRqAQUcVlowem7Jm7VBCZ4ayw2ZAXdfKKF5d97d6z6Ar7Z8m50FXy5yPXOEM6gwnlJtd79Bc
-        WT7abVPo2xd5W6mPmf6H9veAI6Y8ryt69TraX/l6EOwo8jVBWue97f+uIAniWf7zBxWM95z1B75v
-        eCfYuqCf1pK73smGvr7+BgAA//8DAKgJna/zBAAA
+        H4sIAAAAAAAAA5STwYrbMBCGX8XoHMWyLMeWofRQaOmhUEjo1YylcSyqWEaSd9ku++5FjtNsT01P
+        Zkbz+59vNHolI9qZtBkZY5xDm+cRQ6QaIuwjqnFy1p1f9gr2Z/eUw2zyMgcVjZvyJOzC6J4/TnDB
+        Dx6DW7zCboaoRrLLSFiUwhBIm0W/4C4jHsNiI2mzV6JAjdhZCLFbZg0RNWmzabF2l21ni7fvUh63
+        GsIZryiTtGQnXrYFayu+l1wWTZ08U+MhOo9d6vIJ7+b3E+WmCGYKHVjbeVTO69C5odv6H4x9L8Og
+        vJkTcXJPHoPzF0gY5NPxR0qMEMYUFjDISkrdH6TEXpcoRA2q5n2jNO9BpFqzQvSoQUkUVAwKqeBN
+        TfvhwChjB6E1DFJKlarXAV2cNoN5R18wyspT0bSsagXbN2UtCpnKLxghcf5bUjW8rlaJuWB8mfE+
+        61umM9OE/p5Pt7xCg6VfT9+zL6fPx+yoRtSLxezbZp3+OYP6CWfsNlbg0DCFlLNDRQWvewrN0NMG
+        qx61EGpQ5apywWxjZtdlud7H/03sj+xvqGB+paiQ/CBTGCGuMNuW7DJy3beHnsG6ShjzR8jyW0P5
+        IwS5ds+TdaDzZU6frbEbDNmyb2+/AQAA//8DACLMBBW4AwAA
     headers:
       CF-RAY:
-      - 987f6ec60883cf26-SJC
+      - 988e5e773da78e72-PHX
       Cache-Control:
       - max-age=0
       Connection:
@@ -452,7 +535,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Wed, 01 Oct 2025 22:35:23 GMT
+      - Fri, 03 Oct 2025 18:05:42 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -462,7 +545,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Wed, 01 Oct 2025 22:35:23 GMT
+      - Fri, 03 Oct 2025 18:05:42 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -485,7 +568,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/8de6036a-8122-41ed-b807-d5a718f2e4c2
+        gccl-invocation-id/fb33cf72-4f34-4722-9549-62324b518bad
       accept-encoding:
       - gzip
       content-type:
@@ -679,7 +762,7 @@ interactions:
       Content-Type:
       - text/csv
       Date:
-      - Wed, 01 Oct 2025 22:35:24 GMT
+      - Fri, 03 Oct 2025 18:05:42 GMT
       ETag:
       - CLWYhdS/948DEAE=
       Expires:
@@ -694,7 +777,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AAwnv3IjGie53C2kOFYN9EE08LSCxqkhFDzA0NuqDUJ2t_vuJ197a9Fo10RwRU1AMMQ938yP
+      - AAwnv3IMiY5XOc50R3XxAYXPTO5kUYASGOIDzgS2KOzUy38d8K6_DYq1wft-tDdUjrhG-38-
       X-Goog-Generation:
       - '1758926454475829'
       X-Goog-Hash:
@@ -711,7 +794,91 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: "--6fb0f00b03f67ba9599ccafc65970c48\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--6fb0f00b03f67ba9599ccafc65970c48\r\nContent-Disposition:
+    body: '{"id": "cal-itp-gtfs-ingest-pipeline-dataset"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '46'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - ckanapi/1.0 (+https://dds.dot.ca.gov)
+      X-CKAN-API-Key:
+      - FILTERED
+    method: POST
+    uri: https://test-data.technology.ca.gov/api/action/package_show
+  response:
+    body:
+      string: !!binary |
+        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
+        X6gOAAA=
+    headers:
+      CF-RAY:
+      - 988e5e865af07c24-LAX
+      Cache-Control:
+      - max-age=0
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 03 Oct 2025 18:05:43 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      expires:
+      - Fri, 03 Oct 2025 18:05:43 GMT
+      strict-transport-security:
+      - max-age=31536000; includeSubdomains
+      x-content-type-options:
+      - nosniff
+      x-xss-protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--9014a1bb12b6c11d4b877e4f4d4e2d4b\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--9014a1bb12b6c11d4b877e4f4d4e2d4b\r\nContent-Disposition:
       form-data; name=\"upload\"; filename=\"upload\"\r\n\r\nDATASET_NAME\tTAGS\tDESCRIPTION\tMETHODOLOGY\tTOPIC\tPUBLISHER_ORGANIZATION\tPLACE\tFREQUENCY\tNEXT_UPDATE\tCREATION_DATE\tLAST_UPDATE\tSTATUS\tTEMPORAL_COVERAGE_BEGIN\tTEMPORAL_COVERAGE_END\tDATA_DICTIONARY\tDATA_DICTIONARY_TYPE\tCONTACT_ORGANIZATION\tCONTACT_POSITION\tCONTACT_NAME\tCONTACT_EMAIL\tPUBLIC_ACCESS_LEVEL\tACCESS_CONSTRAINTS\tUSE_CONSTRAINTS\tDATA_LIFE_SPAN\tCALTRANS_LINK\tDATA_STANDARD\tNOTES\tGIS_THEME\tGIS_HORIZ_ACCURACY\tGIS_VERT_ACCURACY\tGIS_COORDINATE_SYSTEM_EPSG\tGIS_VERT_DATUM_EPSG\r\nagency\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
       row is a cleaned row from an agency.txt file. Definitions for the original GTFS
       fields are available at: https://gtfs.org/reference/static#agencytxt.\tCal-ITP
@@ -880,7 +1047,7 @@ interactions:
       into a statewide table for analysis purposes only. Do not use for trip planner
       ingestion, rather is meant to be used for statewide analytics and other use
       cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
-      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--6fb0f00b03f67ba9599ccafc65970c48--\r\n"
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--9014a1bb12b6c11d4b877e4f4d4e2d4b--\r\n"
     headers:
       Accept:
       - '*/*'
@@ -893,7 +1060,7 @@ interactions:
       Content-Length:
       - '19436'
       Content-Type:
-      - multipart/form-data; boundary=6fb0f00b03f67ba9599ccafc65970c48
+      - multipart/form-data; boundary=9014a1bb12b6c11d4b877e4f4d4e2d4b
       User-Agent:
       - ckanapi/1.0 (+https://dds.dot.ca.gov)
       X-CKAN-API-Key:
@@ -903,19 +1070,18 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA8xTTW/cIBD9Kxbn9RrjTyxVPfTcU6Ne0RiGNVrWWIATpVH+e4Xj7W6lSk1uOSEe
-        8+bNzBteyIR2IUNGphiXMBRFxBBzBRGOEeU0O+tOz0cJx5N7LGAxRVWAjMbNRSKKMLmnrzNc8IvH
-        4FYvUSwQ5UQOGQmrlBgCGbLoVzxkxGNYbSRD9kIkyAmFhRDFuiiIqMiQzau1h2x/W729g84w78h7
-        Ck3q0uOeljDKmpzyvKIPrBpKOjTsyBkv+y4FphQhOo8iNfaIt3pvL9LNEcwcBFgrPErnVRBOi71l
-        bew9DYP0ZklDSupJQzt/gdQ5+fbjZwImCFO6NjXVuul01XPVco6Kso7RHhmO0LXQp1izNTGiAsmx
-        zmstMa9Z3+WjbmlOaVsrBZpzLrfo05wq3gU02JBqMkGkboQyMorFLavdh3MN2Ky4OGW0uRtaSXNa
-        PjA2VM3A6mNT8o7SpHLBCFvC/1KqlrbVRjEXjM8L3ly9IsLMM/obnvYp5fu+iyS28+ZkZrAf2IJi
-        8w9jMQKDnkrMGW2bvGbdmEOvx7zHZkRV11LLqrjub/GeQRfKPc3WgSrWJR2pwgXkGU4odrveobmx
-        XDD7ptC3L/K2Uh8z/Q/t7wEHjGleV/TqdTC/0rXkrOXpGiFu8973/5CRCOEs/vmDMlYNFRvK6thU
-        PWfbgn5aS+56Jzv6+vobAAD//wMAddJoxvMEAAA=
+        H4sIAAAAAAAAA5STwYrbMBCGX0XoHMWybMeWofRQaOmhUEjo1YylcSyqWEaSd9ku++5FjtNsT01P
+        ZkYz/v9vNHqlI9qZtoSOMc6hzbKIITINEfYR1Tg5684vewX7s3vKYDZZkYGKxk1ZauzC6J4/TnDB
+        Dx6DW7zCboaoRrojNCxKYQi0JdEvuCPUY1hspC15pQrUiJ2FELtl1hBR05ZMi7U7sp0t3r5Ledxq
+        qOCiYlyygp9E0ea8rcReCpk3ddJMxkN0Hrvk8gnv4vcT5aYIZgodWNt5VM7r0Lmh2/wPxr5vw6C8
+        mRNxUk8ag/MXSBj00/FHSowQxhTmMMhKSt0fpMReF1iWNaha9I3Soocy1ZoVokcNSmLJykEhK0VT
+        s344cMb5odQaBimlStXrgC5Om8G8o88548Upb1petWWxrziXdZ7KLxghcf67RYiqLtYWc8H4MuN9
+        1rdMZ6YJ/T2fbnmFBsu+nr6TL6fPR3JUI+rFIvm2Sad/zqB+whm7jRUENFwhE/xQsVLUPYNm6FmD
+        VY+6LNWgViezC2YbM78uy/U+/m9if9r+hgrmV4pyKQ4yhRHiCrNtyY7Q67499AzWVcKYPUKW3Qxl
+        jxBk2j1P1oHOljl9NmM3GLpl395+AwAA//8DAHQ9f7e4AwAA
     headers:
       CF-RAY:
-      - 987f6ed3c92deb24-SJC
+      - 988e5e890e717a20-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -925,7 +1091,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Wed, 01 Oct 2025 22:35:25 GMT
+      - Fri, 03 Oct 2025 18:05:44 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -935,7 +1101,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Wed, 01 Oct 2025 22:35:25 GMT
+      - Fri, 03 Oct 2025 18:05:44 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:

@@ -53,25 +53,22 @@ with DAG(
         task_id="metadata_to_ckan",
         bucket_name=os.getenv("CALITP_BUCKET__PUBLISH"),
         object_name="california_open_data__metadata/dt={{ ds }}/ts={{ ts }}/metadata.csv",
-        resource_id=os.getenv(
-            "CALIFORNIA_OPEN_DATA__METADATA_RESOURCE_ID",
-            "53c05c25-e467-407a-bb29-303875215adc",
-        ),
+        dataset_id="cal-itp-gtfs-ingest-pipeline-dataset",
+        resource_name="Cal-ITP GTFS Schedule Metadata",
     )
 
     # GCSToCKANOperator(
     #     task_id="dictionary_to_ckan",
     #     bucket_name=os.getenv("CALITP_BUCKET__PUBLISH"),
     #     object_name="california_open_data__dictionary/dt={{ ds }}/ts={{ ts }}/dictionary.csv",
-    #     resource_id=os.getenv(
-    #         "CALIFORNIA_OPEN_DATA__DICTIONARY_RESOURCE_ID",
-    #         "e26bf6ee-419d-4a95-8e4c-e2b13d5de793",
-    #     ),
+    #     dataset_id="cal-itp-gtfs-ingest-pipeline-dataset",
+    #     resource_name="Cal-ITP GTFS Schedule Data Dictionary",
     # )
 
     GCSToCKANOperator.partial(
         task_id="table_to_ckan",
         bucket_name=os.getenv("CALITP_BUCKET__PUBLISH"),
-        object_name="california_open_data__{{ task.metadata_item[1]['DATASET_NAME'] }}/dt={{ ds }}/ts={{ ts }}/{{ task.metadata_item['DATASET_NAME'] }}.csv",
-        resource_id="{{ task.metadata_item[0] }}",
+        object_name="california_open_data__{{ task.metadata_item['DATASET_NAME'] }}/dt={{ ds }}/ts={{ ts }}/{{ task.metadata_item['DATASET_NAME'] }}.csv",
+        dataset_id="cal-itp-gtfs-ingest-pipeline-dataset",
+        resource_name="{{ task.metadata_item['DATASET_NAME'] }}",
     ).expand(metadata_item=XComArg(metadata_items))
