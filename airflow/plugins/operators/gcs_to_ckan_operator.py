@@ -10,7 +10,8 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 class GCSToCKANOperator(BaseOperator):
     template_fields: Sequence[str] = (
-        "resource_id",
+        "dataset_id",
+        "resource_name",
         "bucket_name",
         "object_name",
         "ckan_conn_id",
@@ -19,7 +20,8 @@ class GCSToCKANOperator(BaseOperator):
 
     def __init__(
         self,
-        resource_id: str,
+        dataset_id: str,
+        resource_name: str,
         bucket_name: str,
         object_name: str,
         ckan_conn_id: str = "ckan_default",
@@ -28,7 +30,8 @@ class GCSToCKANOperator(BaseOperator):
     ) -> None:
         super().__init__(**kwargs)
 
-        self.resource_id = resource_id
+        self.dataset_id = dataset_id
+        self.resource_name = resource_name
         self.bucket_name = bucket_name
         self.object_name = object_name
         self.gcp_conn_id = gcp_conn_id
@@ -40,12 +43,18 @@ class GCSToCKANOperator(BaseOperator):
     def ckan_hook(self) -> CKANHook:
         return CKANHook(ckan_conn_id=self.ckan_conn_id)
 
+    def resource_id(self) -> str:
+        return self.ckan_hook().find_resource_id(
+            dataset_id=self.dataset_id,
+            resource_name=self.resource_name,
+        )
+
     def execute(self, context: Context) -> dict[str, str | bool | int | float]:
         data = self.gcs_hook().download(
             bucket_name=self.bucket_name.replace("gs://", ""),
             object_name=self.object_name,
         )
         return self.ckan_hook().upload(
-            resource_id=self.resource_id,
+            resource_id=self.resource_id(),
             file=StringIO(data.decode()),
         )

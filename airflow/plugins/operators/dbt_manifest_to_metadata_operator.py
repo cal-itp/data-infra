@@ -83,7 +83,7 @@ class DBTManifestToMetadataOperator(BaseOperator):
         )
         return json.loads(manifest)
 
-    def metadata_items(self, logical_date: datetime) -> str:
+    def metadata_items(self, logical_date: datetime) -> list[dict]:
         manifest = self.read_manifest()
         exposure = manifest.get("exposures", {}).get(
             "exposure.calitp_warehouse.california_open_data", {}
@@ -93,7 +93,7 @@ class DBTManifestToMetadataOperator(BaseOperator):
             name.split(".")[-1]
             for name in exposure.get("depends_on", {}).get("nodes", [])
         ]
-        items: dict[str, dict] = {}
+        items: list[dict] = []
         for destination in destinations:
             for resource_name, resource in destination.get("resources", {}).items():
                 if resource_name in depends_on_nodes:
@@ -145,15 +145,15 @@ class DBTManifestToMetadataOperator(BaseOperator):
                         ),
                         gis_vert_datum_epsg=None,
                     )
-                    items[resource.get("id")] = {
+                    items.append({
                         k.upper(): v
                         for k, v in json.loads(
                             metadata_row.json(models_as_dict=False)
                         ).items()
-                    }
+                    })
 
         return items
 
-    def execute(self, context: Context) -> str:
+    def execute(self, context: Context) -> list[dict]:
         dag_run: DagRun = context["dag_run"]
         return self.metadata_items(logical_date=dag_run.logical_date)
