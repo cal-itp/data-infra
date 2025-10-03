@@ -44,10 +44,12 @@ with DAG(
 
     bigquery_tables = DBTBigQueryToGCSOperator.partial(
         task_id="bigquery_to_gcs",
-        bucket_name=os.getenv("CALITP_BUCKET__PUBLISH"),
-        object_name="california_open_data__{{ task.metadata_item[1]['DATASET_NAME'] }}/dt={{ ds }}/ts={{ ts }}/{{ task.metadata_item['DATASET_NAME'] }}.csv",
-        table_name="",
-    ).expand(metadata_item=XComArg(metadata_items))
+        source_bucket_name=os.getenv("CALITP_BUCKET__DBT_DOCS"),
+        source_object_name="manifest.json",
+        destination_bucket_name=os.getenv("CALITP_BUCKET__PUBLISH"),
+        destination_object_name="california_open_data__{{ task.parameters['DATASET_NAME'] }}/dt={{ ds }}/ts={{ ts }}/{{ task.parameters['DATASET_NAME'] }}.csv",
+        table_name="{{ task.parameters['DATASET_NAME'] }}",
+    ).expand(parameters=XComArg(metadata_items))
 
     GCSToCKANOperator(
         task_id="metadata_to_ckan",
@@ -68,7 +70,7 @@ with DAG(
     GCSToCKANOperator.partial(
         task_id="table_to_ckan",
         bucket_name=os.getenv("CALITP_BUCKET__PUBLISH"),
-        object_name="california_open_data__{{ task.metadata_item['DATASET_NAME'] }}/dt={{ ds }}/ts={{ ts }}/{{ task.metadata_item['DATASET_NAME'] }}.csv",
+        object_name="california_open_data__{{ task.parameters['DATASET_NAME'] }}/dt={{ ds }}/ts={{ ts }}/{{ task.parameters['DATASET_NAME'] }}.csv",
         dataset_id="cal-itp-gtfs-ingest-pipeline-dataset",
-        resource_name="{{ task.metadata_item['DATASET_NAME'] }}",
-    ).expand(metadata_item=XComArg(metadata_items))
+        resource_name="{{ task.parameters['DATASET_NAME'] }}",
+    ).expand(parameters=XComArg(metadata_items))
