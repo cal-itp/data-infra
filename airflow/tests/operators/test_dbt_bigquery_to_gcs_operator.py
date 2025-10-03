@@ -1,7 +1,9 @@
+import csv
 import gzip
 import json
 import os
 from datetime import datetime, timezone
+from io import StringIO
 
 import pytest
 from dateutil.relativedelta import relativedelta
@@ -12,7 +14,7 @@ from airflow.models.taskinstance import TaskInstance
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
-class TestSODAToGCSOperator:
+class TestDBTBigQueryToGCSOperator:
     @pytest.fixture
     def execution_date(self) -> datetime:
         return datetime.fromisoformat("2025-06-01").replace(tzinfo=timezone.utc)
@@ -95,4 +97,14 @@ class TestSODAToGCSOperator:
 
         f = StringIO(result.decode())
         reader = csv.DictReader(f, delimiter="\t")
-        assert list(reader) == [{"testing": "stuff"}]
+        assert list(reader)[0] == {
+            'agency_id': '1',
+            'agency_email': '',
+            'agency_fare_url': '',
+            'agency_lang': 'en',
+            'agency_name': 'AC TRANSIT',
+            'agency_phone': '5108914777',
+            'agency_timezone': 'US/Pacific',
+            'agency_url': 'http://www.actransit.org',
+            'base64_url': 'aHR0cHM6Ly9hcGkuYWN0cmFuc2l0Lm9yZy90cmFuc2l0L2d0ZnMvZG93bmxvYWQ=',
+        }

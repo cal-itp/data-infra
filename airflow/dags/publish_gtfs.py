@@ -9,7 +9,7 @@ from operators.items_to_gcs_operator import ItemsToGCSOperator
 from airflow import DAG, XComArg
 
 with DAG(
-    dag_id="publish_open_data",
+    dag_id="publish_gtfs",
     tags=["gtfs", "open-data"],
     # Every month
     schedule="0 0 0 * *",
@@ -22,11 +22,11 @@ with DAG(
         object_name="manifest.json",
     )
 
-    # dictionary_items = DBTManifestToDictionaryOperator(
-    #     task_id="dbt_manifest_to_dictionary",
-    #     bucket_name=os.getenv("CALITP_BUCKET__DBT_DOCS"),
-    #     object_name="manifest.json",
-    # )
+    dictionary_items = DBTManifestToDictionaryOperator(
+        task_id="dbt_manifest_to_dictionary",
+        bucket_name=os.getenv("CALITP_BUCKET__DBT_DOCS"),
+        object_name="manifest.json",
+    )
 
     ItemsToGCSOperator(
         task_id="metadata_to_gcs",
@@ -35,12 +35,12 @@ with DAG(
         items=metadata_items,
     )
 
-    # ItemsToGCSOperator(
-    #     task_id="dictionary_to_gcs",
-    #     bucket_name=os.getenv("CALITP_BUCKET__PUBLISH"),
-    #     object_name="california_open_data__dictionary/dt={{ ds }}/ts={{ ts }}/dictionary.csv",
-    #     items=dictionary_items,
-    # )
+    ItemsToGCSOperator(
+        task_id="dictionary_to_gcs",
+        bucket_name=os.getenv("CALITP_BUCKET__PUBLISH"),
+        object_name="california_open_data__dictionary/dt={{ ds }}/ts={{ ts }}/dictionary.csv",
+        items=dictionary_items,
+    )
 
     bigquery_tables = DBTBigQueryToGCSOperator.partial(
         task_id="bigquery_to_gcs",
@@ -59,13 +59,13 @@ with DAG(
         resource_name="Cal-ITP GTFS Schedule Metadata",
     )
 
-    # GCSToCKANOperator(
-    #     task_id="dictionary_to_ckan",
-    #     bucket_name=os.getenv("CALITP_BUCKET__PUBLISH"),
-    #     object_name="california_open_data__dictionary/dt={{ ds }}/ts={{ ts }}/dictionary.csv",
-    #     dataset_id="cal-itp-gtfs-ingest-pipeline-dataset",
-    #     resource_name="Cal-ITP GTFS Schedule Data Dictionary",
-    # )
+    GCSToCKANOperator(
+        task_id="dictionary_to_ckan",
+        bucket_name=os.getenv("CALITP_BUCKET__PUBLISH"),
+        object_name="california_open_data__dictionary/dt={{ ds }}/ts={{ ts }}/dictionary.csv",
+        dataset_id="cal-itp-gtfs-ingest-pipeline-dataset",
+        resource_name="Cal-ITP GTFS Schedule Data Dictionary",
+    )
 
     GCSToCKANOperator.partial(
         task_id="table_to_ckan",
