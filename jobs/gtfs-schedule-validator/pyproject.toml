@@ -19,6 +19,9 @@ python-slugify = "^7.0.0"
 sentry-sdk = "^1.12.1"
 calitp-data-infra = "2024.2.12.post1"
 
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
+
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 mypy = "^0.991"
