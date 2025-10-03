@@ -2,6 +2,9 @@ import os
 from datetime import datetime
 
 from operators.dbt_big_query_to_gcs_operator import DBTBigQueryToGCSOperator
+from operators.dbt_manifest_to_dictionary_operator import (
+    DBTManifestToDictionaryOperator,
+)
 from operators.dbt_manifest_to_metadata_operator import DBTManifestToMetadataOperator
 from operators.gcs_to_ckan_operator import GCSToCKANOperator
 from operators.items_to_gcs_operator import ItemsToGCSOperator

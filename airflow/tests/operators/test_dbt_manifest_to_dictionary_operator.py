@@ -3,7 +3,9 @@ from datetime import datetime, timezone
 
 import pytest
 from dateutil.relativedelta import relativedelta
-from operators.dbt_manifest_to_dictionary_operator import DBTManifestToDictionaryOperator
+from operators.dbt_manifest_to_dictionary_operator import (
+    DBTManifestToDictionaryOperator,
+)
 
 from airflow.models.dag import DAG
 from airflow.models.taskinstance import TaskInstance
@@ -61,22 +63,22 @@ class TestDBTManifestToDictionaryOperator:
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value[0] == {
-            'ALLOWABLE_MAX_VALUE': None,
-            'ALLOWABLE_MIN_VALUE': None,
-            'CONFIDENTIAL': 'N',
-            'DOMAIN_TYPE': 'Unrepresented',
-            'FIELD_ALIAS': None,
-            'FIELD_DESCRIPTION': 'Base 64 encoded URL from which this data was scraped.\n',
-            'FIELD_DESCRIPTION_AUTHORITY': 'https://gtfs.org/schedule/reference/#agencytxt',
-            'FIELD_LENGTH': 1024,
-            'FIELD_NAME': 'base64_url',
-            'FIELD_PRECISION': None,
-            'FIELD_TYPE': 'STRING',
-            'PCI': 'N',
-            'PII': 'N',
-            'SENSITIVE': 'N',
-            'SYSTEM_NAME': 'Cal-ITP GTFS-Ingest Pipeline',
-            'TABLE_NAME': 'agency',
-            'UNITS': None,
-            'USAGE_NOTES': None
+            "ALLOWABLE_MAX_VALUE": None,
+            "ALLOWABLE_MIN_VALUE": None,
+            "CONFIDENTIAL": "N",
+            "DOMAIN_TYPE": "Unrepresented",
+            "FIELD_ALIAS": None,
+            "FIELD_DESCRIPTION": "Base 64 encoded URL from which this data was scraped.\n",
+            "FIELD_DESCRIPTION_AUTHORITY": "https://gtfs.org/schedule/reference/#agencytxt",
+            "FIELD_LENGTH": 1024,
+            "FIELD_NAME": "base64_url",
+            "FIELD_PRECISION": None,
+            "FIELD_TYPE": "STRING",
+            "PCI": "N",
+            "PII": "N",
+            "SENSITIVE": "N",
+            "SYSTEM_NAME": "Cal-ITP GTFS-Ingest Pipeline",
+            "TABLE_NAME": "agency",
+            "UNITS": None,
+            "USAGE_NOTES": None,
         }

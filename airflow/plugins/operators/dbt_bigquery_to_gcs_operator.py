@@ -1,13 +1,13 @@
 import csv
-import json
 import io
+import json
 import os
 from typing import Sequence
 
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
-from airflow.providers.google.cloud.hooks.gcs import GCSHook
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
+from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
 class DBTBigQueryToGCSOperator(BaseOperator):
@@ -62,14 +62,24 @@ class DBTBigQueryToGCSOperator(BaseOperator):
         return self._manifest
 
     def node(self) -> str:
-        exposure = self.manifest().get("exposures", {}).get("exposure.calitp_warehouse.california_open_data", {} )
+        exposure = (
+            self.manifest()
+            .get("exposures", {})
+            .get("exposure.calitp_warehouse.california_open_data", {})
+        )
         destinations = exposure.get("meta", {}).get("destinations", {})
         depends_on_nodes = exposure.get("depends_on", {}).get("nodes", [])
         depends_on_names = [node_name.split(".")[-1] for node_name in depends_on_nodes]
         for destination in destinations:
             for resource_name, resource in destination.get("resources", {}).items():
-                if resource_name in depends_on_names and resource_name.removeprefix("dim_").removesuffix("_latest") == self.table_name:
-                    return self.manifest().get("nodes", {})[f"model.calitp_warehouse.{resource_name}"]
+                if (
+                    resource_name in depends_on_names
+                    and resource_name.removeprefix("dim_").removesuffix("_latest")
+                    == self.table_name
+                ):
+                    return self.manifest().get("nodes", {})[
+                        f"model.calitp_warehouse.{resource_name}"
+                    ]
 
     def dataset_id(self) -> str:
         return self.node()["schema"]

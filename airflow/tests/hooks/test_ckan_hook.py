@@ -2,10 +2,10 @@ import os
 from io import StringIO
 
 import pytest
+from ckanapi import errors
 from hooks.ckan_hook import CKANHook
 
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
-from ckanapi import errors
 
 
 class TestCKANHook:
@@ -53,7 +53,9 @@ class TestCKANHook:
             ),
         )
         file = StringIO(metadata_csv.decode())
-        metadata_result = hook.upload(resource_id="bedac9e4-4fce-4287-bf60-0064ddaf999c", file=file)
+        metadata_result = hook.upload(
+            resource_id="bedac9e4-4fce-4287-bf60-0064ddaf999c", file=file
+        )
         assert (
             metadata_result
             == {

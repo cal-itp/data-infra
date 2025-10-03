@@ -1,14 +1,11 @@
-import csv
 import json
-import io
-import os
-from typing import Sequence, Literal, Optional
+from typing import Literal, Optional, Sequence
+
 from pydantic import BaseModel, validator
 
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
-from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 
 
 # This is DDP-8
@@ -72,7 +69,11 @@ class DBTManifestToDictionaryOperator(BaseOperator):
         return self._manifest
 
     def rows(self) -> list[dict]:
-        exposure = self.manifest().get("exposures", {}).get("exposure.calitp_warehouse.california_open_data", {} )
+        exposure = (
+            self.manifest()
+            .get("exposures", {})
+            .get("exposure.calitp_warehouse.california_open_data", {})
+        )
         destinations = exposure.get("meta", {}).get("destinations", {})
         depends_on_nodes = exposure.get("depends_on", {}).get("nodes", [])
         depends_on_names = [node_name.split(".")[-1] for node_name in depends_on_nodes]
@@ -80,16 +81,22 @@ class DBTManifestToDictionaryOperator(BaseOperator):
         for destination in destinations:
             for resource_name, resource in destination.get("resources", {}).items():
                 if resource_name in depends_on_names:
-                    node = self.manifest().get("nodes", {})[f"model.calitp_warehouse.{resource_name}"]
+                    node = self.manifest().get("nodes", {})[
+                        f"model.calitp_warehouse.{resource_name}"
+                    ]
                     for column_name, column in node["columns"].items():
                         if column.get("meta", {}).get("publish.include", False):
                             row = DictionaryRow(
                                 system_name="Cal-ITP GTFS-Ingest Pipeline",
-                                table_name=node["name"].replace("dim_", "").replace("_latest", ""),
+                                table_name=node["name"]
+                                .replace("dim_", "")
+                                .replace("_latest", ""),
                                 field_name=column_name,
                                 field_alias=None,
                                 field_description=column["description"],
-                                field_description_authority=column["meta"].get("ckan.authority", node["meta"].get("ckan.authority")),
+                                field_description_authority=column["meta"].get(
+                                    "ckan.authority", node["meta"].get("ckan.authority")
+                                ),
                                 confidential="N",
                                 sensitive="N",
                                 pii="N",
@@ -103,13 +110,14 @@ class DBTManifestToDictionaryOperator(BaseOperator):
                                 allowable_max_value=None,
                                 usage_notes=None,
                             )
-                            result.append({
-                                k.upper(): v
-                                for k, v in json.loads(
-                                    row.json(models_as_dict=False)
-                                ).items()
-                            })
-
+                            result.append(
+                                {
+                                    k.upper(): v
+                                    for k, v in json.loads(
+                                        row.json(models_as_dict=False)
+                                    ).items()
+                                }
+                            )
 
         return result
 
