@@ -107,7 +107,9 @@ class DBTBigQueryToGCSOperator(BaseOperator):
     def execute(self, context: Context) -> str:
         self.gcs_hook().upload(
             bucket_name=self.destination_bucket_name.replace("gs://", ""),
-            object_name=self.destination_object_name,
+            object_name=context["task"].render_template(
+                self.destination_object_name, context
+            ),
             data=self.csv(),
             mime_type="text/csv",
         )
