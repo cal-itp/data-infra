@@ -71,6 +71,7 @@ def vcr_config():
             ("cookie", "FILTERED"),
             ("Authorization", "FILTERED"),
             ("apikey", "FILTERED"),
+            ("X-CKAN-API-Key", "FILTERED"),
         ],
         "before_record_request": scrub_sensitive_data,
         "allow_playback_repeats": True,
@@ -147,4 +148,12 @@ def setup_module():
         conn_type="http",
         host="https://transit.land/api/v2/rest/feeds",
         extra={"apikey": os.environ.get("TRANSITLAND_API_KEY")},
+    )
+    clean_connections(session, "http_ckan")
+    add_connection(
+        session,
+        conn_id="http_ckan",
+        conn_type="http",
+        host="https://test-data.technology.ca.gov",
+        password=os.environ.get("CKAN_API_KEY"),
     )
