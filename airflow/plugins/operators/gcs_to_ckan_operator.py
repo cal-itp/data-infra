@@ -52,7 +52,7 @@ class GCSToCKANOperator(BaseOperator):
     def execute(self, context: Context) -> dict[str, str | bool | int | float]:
         data = self.gcs_hook().download(
             bucket_name=self.bucket_name.replace("gs://", ""),
-            object_name=self.object_name,
+            object_name=context["task"].render_template(self.object_name, context),
         )
         return self.ckan_hook().upload(
             resource_id=self.resource_id(),
