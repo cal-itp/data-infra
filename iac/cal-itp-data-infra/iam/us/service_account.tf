@@ -277,3 +277,9 @@ resource "google_service_account" "vctc-payments-user" {
   disabled   = "false"
   project    = "cal-itp-data-infra"
 }
+
+resource "google_service_account" "eldorado-payments-user" {
+  account_id = "eldorado-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
