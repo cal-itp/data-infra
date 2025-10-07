@@ -20,7 +20,7 @@ class CKANHook(BaseHook):
     def remote_ckan(self) -> RemoteCKAN:
         if not self._remote_ckan:
             self._remote_ckan = RemoteCKAN(
-                self.connection.host,
+                f"{self.connection.conn_type}://{self.connection.host}",
                 apikey=self.connection.password,
                 user_agent=self.user_agent,
             )

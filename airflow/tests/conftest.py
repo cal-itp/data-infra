@@ -153,7 +153,7 @@ def setup_module():
     add_connection(
         session,
         conn_id="http_ckan",
-        conn_type="http",
-        host="https://test-data.technology.ca.gov",
+        conn_type="https",
+        host="test-data.technology.ca.gov",
         password=os.environ.get("CKAN_API_KEY"),
     )
