@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
-from cosmos.constants import TestBehavior
 
 from airflow import DAG
 from airflow.operators.latest_only import LatestOnlyOperator
@@ -40,7 +39,7 @@ with DAG(
                 "models/mart/gtfs/fct_trip_updates_stop_metrics.sql",
                 "models/mart/gtfs/fct_trip_updates_trip_metrics.sql",
             ],
-            test_behavior=TestBehavior.AFTER_ALL,
+            test_behavior=None,
         ),
         operator_args={
             "install_deps": True,

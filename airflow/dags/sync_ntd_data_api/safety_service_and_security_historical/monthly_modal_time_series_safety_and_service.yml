@@ -1,5 +1,5 @@
 operator: operators.soda_to_gcs_operator.SODAToGCSOperator
 
-object_path: historical/monthly_modal_time_series_safety_and_service/dt={{ dag_run.logical_date.date().isoformat() }}/execution_ts={{ dag_run.logical_date.isoformat() }}
+object_path: monthly_modal_time_series_safety_and_service/historical/dt={{ dag_run.logical_date.date().isoformat() }}/execution_ts={{ dag_run.logical_date.isoformat() }}
 bucket_name: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
 resource: 5ti2-5uiv
