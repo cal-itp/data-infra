@@ -623,7 +623,7 @@
         {/if}
       </div>
       {#if (state)}
-        <a class="navbar-item has-text-teal" href="{state.layers.slice(-1)[0].url}">
+        <a class="navbar-item has-text-teal-bold" href="{state.layers.slice(-1)[0].url}">
           <div class="icon-text">
             <span class="icon">
               <i class="fas fa-file-arrow-down"></i>
