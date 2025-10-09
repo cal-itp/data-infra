@@ -32,7 +32,7 @@ jobs:
       if: ${{ github.ref == 'refs/heads/main' }}
       run: |
         npm install --location=global netlify-cli@17.x.x
-        netlify deploy --site=embeddable-maps-calitp-org --dir=apps/maps/build --prod --auth=${{ NETLIFY_AUTH_TOKEN }}
+        netlify deploy --site=embeddable-maps-calitp-org --dir=apps/maps/build --prod --auth=${NETLIFY_AUTH_TOKEN}
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
@@ -41,7 +41,7 @@ jobs:
       if: ${{ github.event_name == 'pull_request' }}
       run: |
         npm install --location=global netlify-cli@17.x.x
-        netlify deploy --site=embeddable-maps-calitp-org --dir=apps/maps/build --alias=${GITHUB_REPOSITORY#*/}-${PR_NUMBER} --auth=${{ NETLIFY_AUTH_TOKEN }}
+        netlify deploy --site=embeddable-maps-calitp-org --dir=apps/maps/build --alias=${GITHUB_REPOSITORY#*/}-${PR_NUMBER} --auth=${NETLIFY_AUTH_TOKEN}
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         PR_NUMBER: ${{ github.event.number }}
