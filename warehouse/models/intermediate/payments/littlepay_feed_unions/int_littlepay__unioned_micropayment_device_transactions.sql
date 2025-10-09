@@ -16,7 +16,7 @@ micropayment_device_transactions_v3 AS (
 
         -- For the following participants only, keep records including and after 5/17/2025 (cutover date for agencies that had both feeds at some point)
         OR (
-            instance IN ('clean-air-express', 'mendocino-transit-authority', 'ccjpa', 'atn', 'mst', 'lake-transit-authority', 'sbmtd', 'humboldt-transit-authority', 'redwood-coast-transit')
+            instance NOT IN ('nevada-county-connects', 'sacrt')
             AND littlepay_export_date >= '2025-05-17'
         )
 ),
