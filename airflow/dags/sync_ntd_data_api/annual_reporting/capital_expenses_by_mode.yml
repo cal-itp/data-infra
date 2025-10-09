@@ -1,5 +1,5 @@
 operator: operators.soda_to_gcs_operator.SODAToGCSOperator
 
-object_path: multi_year/capital_expenses_by_mode/dt={{ dag_run.logical_date.date().isoformat() }}/execution_ts={{ dag_run.logical_date.isoformat() }}
+object_path: capital_expenses_by_mode/multi_year/dt={{ dag_run.logical_date.date().isoformat() }}/execution_ts={{ dag_run.logical_date.isoformat() }}
 bucket_name: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
 resource: 2667-vitc

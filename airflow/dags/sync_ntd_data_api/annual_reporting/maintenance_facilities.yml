@@ -1,5 +1,5 @@
 operator: operators.soda_to_gcs_operator.SODAToGCSOperator
 
-object_path: multi_year/maintenance_facilities/dt={{ dag_run.logical_date.date().isoformat() }}/execution_ts={{ dag_run.logical_date.isoformat() }}
+object_path: maintenance_facilities/multi_year/dt={{ dag_run.logical_date.date().isoformat() }}/execution_ts={{ dag_run.logical_date.isoformat() }}
 bucket_name: "{{ env_var('CALITP_BUCKET__NTD_API_DATA_PRODUCTS') }}"
 resource: 9yj4-fiiz
