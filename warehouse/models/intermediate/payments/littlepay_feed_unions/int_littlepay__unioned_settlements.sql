@@ -14,7 +14,7 @@ settlements_v3 AS (
         -- Keep all records for agencies that didn't have a competing feed v1
         participant_id NOT IN ('clean-air-express', 'mendocino-transit-authority', 'ccjpa', 'atn', 'mst', 'lake-transit-authority', 'sbmtd', 'humboldt-transit-authority', 'redwood-coast-transit')
 
-        -- For the following participants only, keep records including and after 5/17/2025 (cutover date for agencies that had both feeds at some point)
+        -- For the following participants only, keep records including and after 5/17/2025 (cutover date for agencies that had a feed v1)
         OR (
             participant_id IN ('clean-air-express', 'mendocino-transit-authority', 'ccjpa', 'atn', 'mst', 'lake-transit-authority', 'sbmtd', 'humboldt-transit-authority', 'redwood-coast-transit')
             AND littlepay_export_date >= '2025-05-17'
