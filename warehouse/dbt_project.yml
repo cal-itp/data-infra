@@ -27,6 +27,8 @@ vars:
   PROD_GTFS_RT_START: '2022-09-15'
   KUBA_DEVICE_START: '2025-08-11'
   INCREMENTAL_MAX_DT: ''
+  DBT_START_DATE: '' # placeholder to use as start data range on incremental models
+  DBT_END_DATE: '' # placeholder to use as end data range on incremental models
   'dbt_date:time_zone': 'America/Los_Angeles'
   GOOGLE_CLOUD_PROJECT: cal-itp-data-infra-staging # you can override with GOOGLE_CLOUD_PROJECT env var rather than constantly using --vars
   CALITP_BUCKET__PUBLISH: "gs://calitp-staging-publish" # you can override with CALITP_BUCKET__PUBLISH env var rather than constantly using --vars
