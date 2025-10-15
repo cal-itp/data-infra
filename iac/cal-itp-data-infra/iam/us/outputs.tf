@@ -517,3 +517,15 @@ output "google_service_account_composer-service-account_email" {
 output "google_service_account_composer-service-account_name" {
   value = google_service_account.composer-service-account.name
 }
+
+output "google_service_account_enghouse-sftp-service-account_name" {
+  value = google_service_account.enghouse-sftp-service-account.name
+}
+
+output "google_service_account_enghouse-sftp-service-account_email" {
+  value = google_service_account.enghouse-sftp-service-account.email
+}
+
+output "google_service_account_enghouse-sftp-service-account_id" {
+  value = google_service_account.enghouse-sftp-service-account.id
+}
