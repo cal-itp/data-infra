@@ -128,6 +128,54 @@ Each DAG for this project should have a corresponding test in the `tests/dags` f
 4. `poetry run pytest`
 
 
+You can specify which tests you want to run by adding them after the `pytest` command.
+
+To run all tests files from a specific path, add the path like this:
+
+```bash
+$ poetry run pytest tests/scripts
+```
+
+To run a specific test file, add the file like this:
+
+```bash
+$ poetry run pytest tests/scripts/test_gtfs_rt_parser.py
+```
+
+To run a specific test within a test file, you can add like this:
+
+```bash
+$ poetry run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date
+```
+
+
+## Testing Changes on Staging
+
+If you want to test changes on Airflow Staging without changing Production, you have two options described bellow.
+
+Changes applied only to Staging can be overwride at any time, whenever a PR is merged or if someone else also applies to Staging.
+
+So, before applying your changes, inform on `#data-infra` channel in the Cal-ITP Slack.
+
+
+### Apply automaticaly via staging branch
+
+  1. Create a new branch starting with `staging/` (for example: `staging/my-changes`).
+  2. Make your changes and push to Github.
+  3. Visualize the progress of the workflow applying the changes through Terraform on [Github Actions](https://github.com/cal-itp/data-infra/actions).
+  4. Once it is completed, you can test your changes on [Airflow Staging](https://console.cloud.google/composer/environments/detail/us-west2/calitp-staging-composer).
+
+
+### Manually apply
+
+  1. Make your changes
+  2. Login with google cloud `gcloud auth application-default login --login-config=../iac/login.json`
+  3. Go to Terraform-Staging-Airflow path: `iac/cal-itp-data-infra-staging/airflow/us/`
+  4. Run `terraform plan` to view the changes
+  5. Run `terraform apply` to apply your changes
+  6. Once it completes, you can test your changes on [Airflow Staging](https://console.cloud.google/composer/environments/detail/us-west2/calitp-staging-composer).
+
+
 ## Deploying Changes to Production
 
 We have a [GitHub Action](../.github/workflows/deploy-airflow.yml) that runs when PRs touching this directory merge to the `main` branch. The GitHub Action updates the requirements sourced from [requirements.txt](./requirements.txt) and syncs the [DAGs](./dags) and [plugins](./plugins) directories to the bucket that Composer watches for code/data to parse. As of 2025-07-16, this bucket is `calitp-composer` on production and `calitp-staging-composer` on staging.
