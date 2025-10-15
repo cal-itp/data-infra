@@ -7,6 +7,7 @@ WITH fct_bigquery_data_access AS (
         severity,
         resource_name,
         principal_email,
+        principal_subject,
         job_name,
         job_type,
         dbt_invocation_id,
