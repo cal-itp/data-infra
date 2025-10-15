@@ -9,6 +9,7 @@
             'granularity': 'day',
         },
         cluster_by='job_type',
+        on_schema_change='append_new_columns'
     )
 }}
 -- we should use https://cloud.google.com/bigquery/docs/reference/standard-sql/json_functions#parse_json when available
