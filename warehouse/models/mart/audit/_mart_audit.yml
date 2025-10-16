@@ -59,6 +59,7 @@ models:
       - name: table_data_read_job_name
       - name: dbt_header
       - name: dbt_node
+      - name: dbt_node_short_name
       - name: payload
       - name: metadata
       - name: job
@@ -125,6 +126,7 @@ models:
       - name: table_data_read_job_name
       - name: dbt_header
       - name: dbt_node
+      - name: dbt_node_short_name
       - name: payload
       - name: metadata
       - name: job

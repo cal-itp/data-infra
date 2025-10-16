@@ -36,6 +36,11 @@ WITH fct_bigquery_data_access AS (
         table_data_read_job_name,
         dbt_header,
         dbt_node,
+        -- Short name from dbt_node or fallback to destination_table_short_name
+        COALESCE(
+            SPLIT(dbt_node, '.')[SAFE_OFFSET(ARRAY_LENGTH(SPLIT(dbt_node, '.')) - 1)],
+            SPLIT(destination_table, '/')[SAFE_OFFSET(ARRAY_LENGTH(SPLIT(destination_table, '/')) - 1)]
+        ) AS dbt_node_short_name,
         payload,
         metadata,
         job
