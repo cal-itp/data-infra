@@ -2,6 +2,7 @@
 
 This dbt project is intended to be the source of truth for the cal-itp-data-infra BigQuery warehouse.
 
+
 ## Setting up the project in your JupyterHub personal server
 
 If you are developing dbt models in JupyterHub, the following pieces
@@ -13,6 +14,7 @@ are already configured/installed.
 
 > You may have already authenticated gcloud and the GitHub CLI (gh) if you followed the
 > [JupyterHub setup docs](https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html). If not, follow those instructions before proceeding.
+
 
 ### Clone and install the warehouse project
 
@@ -27,14 +29,14 @@ are already configured/installed.
 
 3. Execute `poetry install` to create a virtual environment and install requirements.
 
-   > [!NOTE]
-   > If you run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
-   >
-   > ```bash
-   > export CFLAGS="-I $(brew --prefix graphviz)/include"
-   > export LDFLAGS="-L $(brew --prefix graphviz)/lib"
-   > poetry install
-   > ```
+> [!NOTE]
+> If you run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
+>
+> ```bash
+> export CFLAGS="-I $(brew --prefix graphviz)/include"
+> export LDFLAGS="-L $(brew --prefix graphviz)/lib"
+> poetry install
+> ```
 
 4. Execute `poetry run dbt deps` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`).
 
@@ -59,15 +61,16 @@ are already configured/installed.
 
    See [the dbt docs on profiles.yml](https://docs.getdbt.com/dbt-cli/configure-your-profile) for more background on this file.
 
-   > [!NOTE]
-   > This default profile template will set a maximum bytes billed of 2 TB; no models should fail with the default lookbacks in our development environment, even with a full refresh. You can override this limit during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
-   >
-   > [!WARNING]
-   > If you receive a warning similar to the following, do **NOT** overwrite the file. This is a sign that you do not have a `DBT_PROFILES_DIR` variable available in your environment and need to address that first (see step 5).
-   >
-   > ```text
-   > The profile calitp_warehouse already exists in /data-infra/warehouse/profiles.yml. Continue and overwrite it? [y/N]:
-   > ```
+> [!NOTE]
+> This default profile template will set a maximum bytes billed of 2 TB; no models should fail with the default lookbacks in our development environment, even with a full refresh. You can override this limit during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
+>
+
+> [!WARNING]
+> If you receive a warning similar to the following, do **NOT** overwrite the file. This is a sign that you do not have a `DBT_PROFILES_DIR` variable available in your environment and need to address that first (see step 5).
+>
+> ```text
+> The profile calitp_warehouse already exists in /data-infra/warehouse/profiles.yml. Continue and overwrite it? [y/N]:
+> ```
 
 7. Check whether `~/.dbt/profiles.yml` was successfully created, e.g. `cat ~/.dbt/profiles.yml`. If you encountered an error, you may create it by hand and fill it with the same content - this will point your models at BigQuery datasets (schemas) in the `cal-itp-data-infra-staging` project that are prefixed with your name, where operations on them will not impact production data:
 
@@ -137,37 +140,149 @@ are already configured/installed.
    All checks passed!
    ```
 
+
 ## dbt Commands
 
 Once you have performed the setup above, you are good to go run
 [dbt commands](https://docs.getdbt.com/reference/dbt-commands) locally! Run the following commands in order.
 
 1. `poetry run dbt seed`
-   1. Will create tables in your personally-named schema from the CSV files present in [./seeds](./seeds), which can then be referenced by dbt models.
-   2. You will need to re-run seeds if new seeds are added, or existing ones are changed.
-2. `poetry run dbt run`
-   1. Wll run all the models, i.e. execute SQL in the warehouse.
-   2. In the future, you can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) (via the `-s` or `--select` flags) to run only a subset of models, otherwise this will run _all_ the tables.
-   3. By default, your very first `run` is a [full refresh](https://docs.getdbt.com/reference/commands/run#refresh-incremental-models) but you'll need to pass the `--full-refresh` flag in the future if you want to change the schema of incremental tables, or "backfill" existing rows with new logic.
+
+   This command creates tables in your personally-named schema from the CSV files present in [./seeds](./seeds), which can then be referenced by dbt models.
+   You will need to re-run seeds if new seeds are added, or existing ones are changed.
+
+2. `poetry run dbt compile`
+
+   This command generates executable SQL from the source model, but will not execute anything in the warehouse. It is useful for visualizing what dbt will actually execute.
+   You can find these compiled SQL files in the `target/` directory.
+
+3. `poetry run dbt run`
+
+   This command executes compiled SQL model files in the warehouse. The default target is `dev` that points to `cal-itp-data-infra-staging` project.
+
+   During development, you can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) (via the `-s` or `--select` flags) to run only a subset of models, otherwise this will run _all_ the tables.
+   By default, your very first `run` is a [full refresh](https://docs.getdbt.com/reference/commands/run#refresh-incremental-models) but you'll need to pass the `--full-refresh` flag in the future if you want to change the schema of incremental tables, or "backfill" existing rows with new logic.
 
 > [!NOTE]
-> In general, it's a good idea to run `seed` and `run --full-refresh` if you think your local environment is substantially outdated (for example, if you haven't worked on dbt models in a few weeks but want to create or modify a model). We have macros in the project that prevent a non-production "full refresh" from actually processing all possible data.
+> In general, it is a good idea to run `seed` and `run --full-refresh` if you think your local environment is substantially outdated (for example, if you haven't worked on dbt models in a few weeks but want to create or modify a model). We have macros in the project that prevent a non-production "full refresh" from actually processing all possible data.
 
 Some additional helpful commands:
 
-- `poetry run dbt test` -- will test all the models (this executes SQL in the warehouse to check tables); for this to work, you first need to `dbt run` to generate all the tables to be tested
-- `poetry run dbt compile` -- will compile all the models (generate SQL, with references resolved) but won't execute anything in the warehouse; useful for visualizing what dbt will actually execute
-- `poetry run dbt docs generate` -- will generate the dbt documentation
-- `poetry run dbt docs serve` -- will "serve" the dbt docs locally so you can access them via `http://localhost:8080`; note that you must `docs generate` before you can `docs serve`
+- `poetry run dbt test`
+
+   This command runs data tests defined on models, sources, seeds, and unit tests defined on SQL models.
+
+   You can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) (via the `-s` or `--select` flags) to test only a specific model.
+
+   ```bash
+   $ poetry run dbt test -s <<model_name>>
+   ```
+
+- `poetry run dbt docs generate`
+
+   This command generates the dbt documentation website by:
+   * Copying the website `index.html` file into the `target/` directory.
+   * Compiling the resources in the project to included in `manifest.json`.
+   * Running queries against database metadata to produce the `catalog.json` file, which contains metadata about the tables and views produced by the models in the project.
+
+
+- `poetry run dbt docs serve`
+
+   This command starts a webserver on `http://localhost:8080` to "serve" your dbt documentation locally so you can access it in your default browser.
+
+   Be sure to run `poetry run dbt docs generate` first.
+
 
 ### Incremental model considerations
 
 We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/incremental-models) in the Cal-ITP warehouse since we have large data volumes, but that data arrives in a relatively consistent pattern (i.e. temporal).
 
-**In development**, there is a maximum lookback defined for incremental runs. The purpose of this is to handle situations where a developer may not have executed a model for a period of time. It's easy to handle full refreshes with a maximum lookback; we simply template in `N days ago` rather than the "true" start of the data for full refreshes. However, we also template in `MAX(N days ago, max DT of existing table)` for developer incremental runs; otherwise, going a month without executing a model would mean that a naive incremental implementation would then read in that full month of data. This means that your development environment can end up with gaps of data; if you've gone a month without executing a model, and then you execute a regular `run` that reads in the past `N` (7 currently) days of data, you will have a ~23 day gap. If this gap is unacceptable, you can resolve this in one of two ways.
+**In development**, there is a maximum lookback defined for incremental runs (`dev_lookback_days`). The purpose of this is to handle situations where a developer may not have executed a model for a period of time. It's easy to handle full refreshes with a maximum lookback; we simply template in `N days ago` rather than the "true" start of the data for full refreshes. However, we also template in `MAX(N days ago, max DT of existing table)` for developer incremental runs; otherwise, going a month without executing a model would mean that a naive incremental implementation would then read in that full month of data. This means that your development environment can end up with gaps of data; if you've gone a month without executing a model, and then you execute a regular `run` that reads in the past `N` (7 currently) days of data, you will have a ~23 day gap. If this gap is unacceptable, you can resolve this in one of two ways.
 
 - If you are able to develop and test with only recent data, execute a `--full-refresh` on your model(s) and all parents. This will drop the existing tables and re-build them with the last 7 days of data.
-- If you need historical data for your analysis, copy the production table with `CREATE TABLE <your_schema>.<tablename> COPY <production_schema>.<tablename`; copies are free in BigQuery so this is substantially cheaper than fully building the model yourself.
+
+- If you need historical data for your analysis, copy the production table with `CREATE TABLE <your_schema>.<tablename> COPY <production_schema>.<tablename>`; copies are free in BigQuery so this is substantially cheaper than fully building the model yourself.
+
+- If you need to change the date of which your incremental model is running, you can include the date using the `INCREMENTAL_MAX_DT` variable.
+
+   Follow this example replacing the `<<incremental_model_name>>` and `2025-07-08` date with the relevant model name and date for your specific case.
+
+   1. Compile the model with the date you need.
+
+      ```bash
+      $ poetry run dbt compile -s <<incremental_model_name>> --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
+      ```
+
+   2. Inspect the code generated by the command to confirm if the date was replaced.
+
+      ```
+      Compiled node 'incremental_model_name' is:
+
+       SELECT *
+         FROM incremental_model_name
+        WHERE dt >= '2025-07-08'
+      ```
+   3. Run the model in the warehouse.
+
+      ```bash
+      $ poetry run dbt run -s <<incremental_model_name>> --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
+      ```
+
+- If you need to rebuild specific date ranges:
+
+   1. If your model uses the [incremental_where](https://dbt-docs.dds.dot.ca.gov/#!/macro/macro.calitp_warehouse.incremental_where) macro, you need to replace your local file TEMPORARILY by a date range.
+
+      ```diff
+      --- a/warehouse/models/.../incremental_model_name.sql
+      +++ b/warehouse/models/.../incremental_model_name.sql
+        SELECT *
+          FROM incremental_model_name
+      -  WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
+      +  WHERE dt BETWEEN '{{ var("DBT_START_DATE") }}' AND '{{ var("DBT_END_DATE") }}'
+      ```
+
+   2. Compile your model to make sure it has the expected date range.
+
+      ```bash
+      $ poetry run dbt compile -s <<incremental_model_name>> --vars '{DBT_START_DATE: 2025-01-02, DBT_END_DATE: 2025-01-31}'
+      ```
+
+      It should return a SQL code like this:
+
+      ```
+      Compiled node 'incremental_model_name' is:
+
+      SELECT *
+        FROM incremental_model_name
+       WHERE dt BETWEEN '2025-01-02' AND '2025-01-31'
+      ```
+
+   3. Run your model.
+
+      ```bash
+      $ poetry run dbt run -s <<incremental_model_name>> --vars '{DBT_START_DATE: 2025-01-02, DBT_END_DATE: 2025-01-31}'
+      ```
+
+- If you need to compile or run models in Staging instead of in your personally-named schema, you need to include the configuration in your `~/.dbt/profiles.yml` and add the `--target staging` flag in your command.
+
+   ```bash
+   $ poetry run dbt compile -s <<incremental_model_name>> --target staging --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
+   ```
+
+
+**In production**, avoid using `--full-refresh` for larger incremental models. BigQuery does not have enough resources to run a full-refresh in some of GTFS RT tables, but you can rebuild data (if needed) in batches for specific ranges.
+
+> [!CAUTION]
+>
+> Be extremely careful when executing commands in the production environment. Please ensure all variables are correctly configured before proceeding.
+
+To change models in Production, you need to include the configuration in your `~/.dbt/profiles.yml` and add `--target prod` flag in your command.
+You also need to specify the source of your external tables. So when compiling or running models in production use `GOOGLE_CLOUD_PROJECT: cal-itp-data-infra` or you may get less or no data as result.
+
+```bash
+$ poetry run dbt compile -s <<incremental_model_name>> --target prod --vars '{GOOGLE_CLOUD_PROJECT: cal-itp-data-infra, INCREMENTAL_MAX_DT: 2025-07-02}'
+```
+
 
 ## Setting up the project on your local machine
 
@@ -180,13 +295,15 @@ You can enable [displaying hidden folders/files in macOS Finder](https://www.mac
 > [!NOTE]
 > These instructions assume you are on macOS, but are largely similar for other operating systems. Most \*nix OSes will have a package manager that you should use instead of Homebrew.
 >
-> [!NOTE]
 > If you get `Operation not permitted` when attempting to use the terminal, you may need to [fix your terminal permissions](https://osxdaily.com/2018/10/09/fix-operation-not-permitted-terminal-error-macos/)
+
+
 
 ### Install Homebrew (if you haven't)
 
 1. Follow the installation instructions at [https://brew.sh/](https://brew.sh/)
 2. Then, `brew install gdal graphviz` to install libraries used by some Python libraries.
+
 
 ### Install the Google SDK (if you haven't)
 
@@ -235,6 +352,7 @@ You can enable [displaying hidden folders/files in macOS Finder](https://www.mac
 
 5. If `bq ls` shows output, you are good to go.
 
+
 ### Install poetry
 
 1. Install [poetry](https://python-poetry.org/docs/#installing-with-the-official-installer) (used for package/dependency management).
@@ -244,6 +362,7 @@ You can enable [displaying hidden folders/files in macOS Finder](https://www.mac
    1. `brew install python@3.9`
    2. `brew link python@3.9`
    3. After restarting the terminal, confirm with `python3 --version` and retry `poetry install`
+
 
 #### Upgrading Poetry from legacy installer
 
@@ -276,6 +395,7 @@ If you installed Poetry using their legacy `get-poetry.py` script, you may run i
    # mv ~/Library/Application\ Support/pypoetry/config.toml ~/Library/Preferences/pypoetry/
    ```
 
+
 ### Dataproc configuration
 
 > If you are not using Python models or are just using the existing Dataproc configuration, you can ignore this section.
@@ -299,6 +419,7 @@ In addition to the steps specified in the dbt docs, [Google Private Access was e
 and the cal-itp-data-infra-staging project's default service account (`473674835135-compute@developer.gserviceaccount.com`) was granted access to the production project
 since the buckets for compiled Python models (`gs://calitp-dbt-python-models` and `gs://test-calitp-dbt-python-models`)
 as well as external tables exist in the production project.
+
 
 ## Run with VS Code Dev Containers
 
@@ -339,6 +460,7 @@ E.g.
 docker compose run dbt debug
 ```
 
+
 ## Testing Warehouse Image Changes
 
 A person with Docker set up locally can build a development version of the underlying warehouse image at any time after making changes to the Dockerfile or its requirements. From the relevant subfolder, run
@@ -348,6 +470,7 @@ docker build -t ghcr.io/cal-itp/data-infra/warehouse:development .
 ```
 
 That image can be used alongside [a local Airflow instance](../airflow/README.md) to test changes locally prior to merging, [if pushed to GHCR first](https://github.com/cal-itp/data-infra/tree/main/airflow#podoperators).
+
 
 ## Deploying Changes to Production
 
