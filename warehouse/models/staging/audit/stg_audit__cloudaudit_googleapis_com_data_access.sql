@@ -9,6 +9,7 @@
             'granularity': 'day',
         },
         cluster_by='job_type',
+        on_schema_change='append_new_columns'
     )
 }}
 -- we should use https://cloud.google.com/bigquery/docs/reference/standard-sql/json_functions#parse_json when available
@@ -80,7 +81,7 @@ everything AS ( -- noqa: ST03
     -- without this limited lookback, we'd eventually exhaust query resources on full refreshes
     -- since we might end up unioning hundreds of tables
     -- technically we have data back to 2022-04-11
-    {% set days = 90 %}
+    {% set days = 180 %}
 
     {% for day in range(days) %}
 
@@ -88,7 +89,7 @@ everything AS ( -- noqa: ST03
 
     SELECT
         -- This was previously a SELECT *, but changes to the audit logs required us to align old
-        -- columns (including nested fields) with new ones in late 2023 for the 90-day lookback to
+        -- columns (including nested fields) with new ones in late 2023 for the 180-day lookback to
         -- work as expected. A SELECT * can likely be restored by March of 2024.
         logname,
         STRUCT(
@@ -174,8 +175,9 @@ stg_audit__cloudaudit_googleapis_com_data_access AS (
         severity,
         payload.resourceName as resource_name,
         payload.authenticationInfo.principalEmail AS principal_email,
+        SPLIT(payload.authenticationInfo.principalsubject, '/')[SAFE_OFFSET(ARRAY_LENGTH(SPLIT(payload.authenticationInfo.principalsubject, '/')) - 1)]
+        AS principal_subject,
         JSON_VALUE(metadata, '$.jobChange.job.jobName') as job_name,
-
         JSON_VALUE(job, '$.jobConfig.type') as job_type,
         JSON_VALUE(job, '$.jobConfig.labels.dbt_invocation_id') AS dbt_invocation_id,
         JSON_VALUE(job, '$.jobConfig.queryConfig.createDisposition') AS create_disposition,
@@ -192,7 +194,7 @@ stg_audit__cloudaudit_googleapis_com_data_access AS (
         ) AS duration_in_seconds,
         JSON_VALUE_ARRAY(job, '$.jobStats.queryStats.referencedTables') as referenced_tables,
         CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS int64) AS total_billed_bytes,
-        5.0 * CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS int64) / POWER(2, 40) AS estimated_cost_usd, -- $5/TB
+        6.25 * CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS int64) / POWER(2, 40) AS estimated_cost_usd, -- $6.25/TB
         CAST(JSON_VALUE(job, '$.jobStats.totalSlotMs') AS int64) / 1000 AS total_slots_seconds,
 
         JSON_VALUE(metadata, '$.tableDataRead.jobName') as table_data_read_job_name,

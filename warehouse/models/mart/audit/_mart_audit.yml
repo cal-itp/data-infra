@@ -20,6 +20,7 @@ models:
         tests:
           - not_null
       - name: principal_email
+      - name: email
         tests:
           - not_null
       - name: job_name
@@ -35,6 +36,7 @@ models:
       - name: dbt_invocation_id
       - name: create_disposition
       - name: destination_table
+      - name: destination_table_short_name
       - name: priority
       - name: query
       - name: statement_type
@@ -87,6 +89,7 @@ models:
         tests:
           - not_null
       - name: principal_email
+      - name: email
         tests:
           - not_null
       - name: job_name
@@ -102,6 +105,7 @@ models:
       - name: dbt_invocation_id
       - name: create_disposition
       - name: destination_table
+      - name: destination_table_short_name
       - name: priority
       - name: query
       - name: statement_type

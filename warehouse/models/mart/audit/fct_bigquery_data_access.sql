@@ -1,4 +1,12 @@
-{{ config(materialized='table') }}
+{{ config(
+    materialized='incremental',
+    partition_by={
+        'field': 'date',
+        'data_type': 'date',
+        'granularity': 'day',
+    },
+    on_schema_change='append_new_columns'
+) }}
 
 WITH fct_bigquery_data_access AS (
     SELECT
@@ -7,11 +15,15 @@ WITH fct_bigquery_data_access AS (
         severity,
         resource_name,
         principal_email,
+        principal_subject,
+        -- Use principal_email if present, otherwise principal_subject
+        COALESCE(NULLIF(principal_email, ''), principal_subject) AS email,
         job_name,
         job_type,
         dbt_invocation_id,
         create_disposition,
         destination_table,
+        SPLIT(destination_table, '/')[SAFE_OFFSET(ARRAY_LENGTH(SPLIT(destination_table, '/')) - 1)] AS destination_table_short_name,
         priority,
         query,
         statement_type,
@@ -28,6 +40,9 @@ WITH fct_bigquery_data_access AS (
         metadata,
         job
     FROM {{ ref('stg_audit__cloudaudit_googleapis_com_data_access') }}
+    {% if is_incremental() %}
+        WHERE date > (SELECT MAX(date) FROM {{ this }})
+    {% endif %}
 )
 
 SELECT * FROM fct_bigquery_data_access
