@@ -2,6 +2,7 @@
 This pretty much exists just to start an in-process Prometheus server since
 Huey's startup hooks are per _worker_ and not the overall consumer process.
 """
+
 import logging
 import os
 import re

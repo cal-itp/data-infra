@@ -1,6 +1,7 @@
 """
 Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited JSON
 """
+
 import base64
 import copy
 import datetime
@@ -414,9 +415,9 @@ class HourlyFeedQuery:
     def get_aggregates(
         self,
     ) -> List[RTHourlyAggregation]:
-        aggregates: Dict[
-            Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]
-        ] = defaultdict(list)
+        aggregates: Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]] = (
+            defaultdict(list)
+        )
 
         for file in self.files:
             if self.base64_url is None or file.base64_url == self.base64_url:
@@ -892,9 +893,9 @@ def parse_and_validate(
 
 def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
     return {
-        make_name_bq_safe(key): make_dict_bq_safe(value)
-        if isinstance(value, dict)
-        else value
+        make_name_bq_safe(key): (
+            make_dict_bq_safe(value) if isinstance(value, dict) else value
+        )
         for key, value in d.items()
     }
 
