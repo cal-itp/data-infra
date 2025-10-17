@@ -229,7 +229,8 @@ resource "google_project_iam_member" "github-actions-terraform" {
     "roles/iam.roleAdmin",
     "roles/iam.workloadIdentityPoolAdmin",
     "roles/iam.serviceAccountAdmin",
-    "roles/logging.configWriter"
+    "roles/logging.configWriter",
+    "roles/run.admin"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.github-actions-terraform.email}"
@@ -259,6 +260,15 @@ resource "google_project_iam_member" "github-actions-service-account" {
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.github-actions-service-account.email}"
+  project = "cal-itp-data-infra-staging"
+}
+
+resource "google_project_iam_member" "cal-bc-service-account" {
+  for_each = toset([
+    "roles/cloudsql.client",
+  ])
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.cal-bc-service-account.email}"
   project = "cal-itp-data-infra-staging"
 }
 

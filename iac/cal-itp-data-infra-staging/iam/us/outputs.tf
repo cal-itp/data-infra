@@ -166,6 +166,18 @@ output "google_service_account_tfer--111881979116192190399_id" {
   value = google_service_account.tfer--111881979116192190399.id
 }
 
+output "google_service_account_cal-bc-service-account_id" {
+  value = google_service_account.cal-bc-service-account.id
+}
+
+output "google_service_account_cal-bc-service-account_email" {
+  value = google_service_account.cal-bc-service-account.email
+}
+
+output "google_service_account_cal-bc-service-account_name" {
+  value = google_service_account.cal-bc-service-account.name
+}
+
 output "google_service_account_composer-service-account_id" {
   value = google_service_account.composer-service-account.id
 }

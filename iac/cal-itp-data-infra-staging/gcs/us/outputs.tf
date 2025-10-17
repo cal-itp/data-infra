@@ -102,6 +102,10 @@ output "google_storage_bucket_calitp-staging-dbt-docs_name" {
   value = google_storage_bucket.calitp-staging-dbt-docs.name
 }
 
+output "google_storage_bucket_calitp-staging-cal-bc_name" {
+  value = google_storage_bucket.calitp-staging-cal-bc.name
+}
+
 output "google_storage_bucket_calitp-staging-composer_name" {
   value = google_storage_bucket.calitp-staging-composer.name
 }

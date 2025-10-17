@@ -42,6 +42,14 @@ resource "google_service_account" "github-actions-service-account" {
   project      = "cal-itp-data-infra-staging"
 }
 
+resource "google_service_account" "cal-bc-service-account" {
+  account_id   = "cal-bc-service-account"
+  description  = "Service account for Cal B/C"
+  disabled     = "false"
+  display_name = "cal-bc"
+  project      = "cal-itp-data-infra-staging"
+}
+
 resource "google_service_account" "composer-service-account" {
   account_id   = "composer-service-account"
   description  = "Service account for Composer"
