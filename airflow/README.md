@@ -148,6 +148,29 @@ To run a specific test within a test file, you can add like this:
 $ poetry run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date
 ```
 
+We use [pytest-recording](https://github.com/kiwicom/pytest-recording) to record and replay HTTP traffic (the flow of data exchanged between a client and a web server).
+
+To use VCR cassettes in your tests:
+
+1. Add `@pytest.mark.vcr` before your test.
+
+  ```
+    @pytest.mark.vcr
+    def test_execute():
+  ```
+
+2. Run `pytest` using `--record-mode=once`.
+
+  ```bash
+  $ poetry run pytest tests/operators/test_airtable_to_gcs_operator.py::TestAirtableToGCSOperator --record-mode=once
+  ```
+
+If you need to rewrite VCR cassettes, use `--record-mode=rewrite`:
+
+```bash
+$ poetry run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date --record-mode=rewrite
+```
+
 
 ## Testing Changes on Staging
 
