@@ -82,9 +82,7 @@ class TestDBTBigQueryToGCSOperator:
         )
 
         result = gcs_hook.download(
-            bucket_name=os.environ.get("CALITP_BUCKET__NTD_API_DATA_PRODUCTS").replace(
-                "gs://", ""
-            ),
+            bucket_name=os.environ.get("CALITP_BUCKET__PUBLISH").replace("gs://", ""),
             object_name=os.path.join(
                 "california_open_data__agency",
                 "dt=2025-06-01",

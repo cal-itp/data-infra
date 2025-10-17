@@ -304,8 +304,6 @@ interactions:
       - Fri, 03 Oct 2025 18:05:40 GMT
       Server:
       - cloudflare
-      Transfer-Encoding:
-      - chunked
       alt-svc:
       - h3=":443"; ma=86400
       cf-cache-status:
@@ -538,8 +536,6 @@ interactions:
       - Fri, 03 Oct 2025 18:05:42 GMT
       Server:
       - cloudflare
-      Transfer-Encoding:
-      - chunked
       alt-svc:
       - h3=":443"; ma=86400
       cf-cache-status:
@@ -1108,6 +1104,52 @@ interactions:
       - nosniff
       x-xss-protection:
       - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/4e2ac8f9-a366-4462-a26a-dea037246cf7
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?projection=noAcl&prefix=california_open_data__metadata%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fmetadata.csv&prettyPrint=false
+  response:
+    body:
+      string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/california_open_data__metadata/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/metadata.csv/1758926454475829","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/california_open_data__metadata%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fmetadata.csv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__metadata%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fmetadata.csv?generation=1758926454475829&alt=media","name":"california_open_data__metadata/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/metadata.csv","bucket":"calitp-staging-pytest","generation":"1758926454475829","metageneration":"1","contentType":"text/csv","storageClass":"STANDARD","size":"19173","md5Hash":"VA/1fzidaZ7QJyCOLrp2qA==","crc32c":"AmKYrw==","etag":"CLWYhdS/948DEAE=","timeCreated":"2025-09-26T22:40:54.492Z","updated":"2025-09-26T22:40:54.492Z","timeStorageClassUpdated":"2025-09-26T22:40:54.492Z","timeFinalized":"2025-09-26T22:40:54.492Z"}]}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1096'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 22 Oct 2025 22:04:41 GMT
+      Expires:
+      - Wed, 22 Oct 2025 22:04:41 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAwnv3JjsB8X9_DC5L-cwNZRHAKIOxvUbTOcPdGU9zip4gDOL7P5XVmKxyuAF2kEvBdkrtEyMGmekg
     status:
       code: 200
       message: OK
