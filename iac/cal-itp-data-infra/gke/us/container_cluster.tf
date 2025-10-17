@@ -114,3 +114,34 @@ resource "google_container_cluster" "airflow-jobs" {
     workload_pool = "cal-itp-data-infra.svc.id.goog"
   }
 }
+
+resource "google_container_cluster" "sftp-endpoints" {
+
+  name     = "sftp-endpoints"
+  location = "us-west2"
+  project  = "cal-itp-data-infra"
+
+  enable_autopilot    = true
+  deletion_protection = false
+  network             = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
+
+  secret_manager_config {
+    enabled = true
+  }
+
+  workload_identity_config {
+    workload_pool = "cal-itp-data-infra.svc.id.goog"
+  }
+
+  node_config {
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
+  }
+
+  addons_config {
+    gcs_fuse_csi_driver_config {
+      enabled = true
+    }
+  }
+}
