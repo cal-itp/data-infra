@@ -95,14 +95,10 @@ class DBTBigQueryToGCSOperator(BaseOperator):
         ]
 
     def csv(self) -> str:
-        items = self.bigquery_hook().get_records(
+        items = self.bigquery_hook().get_pandas_df(
             f"SELECT {','.join(self.column_names())} FROM {self.dataset_id()}.{self.table_id()}",
         )
-        output = io.StringIO()
-        writer = csv.DictWriter(output, fieldnames=self.column_names(), delimiter="\t")
-        writer.writeheader()
-        writer.writerows([dict(zip(self.column_names(), item)) for item in items])
-        return output.getvalue()
+        return items.to_csv(index=False)
 
     def execute(self, context: Context) -> str:
         self.gcs_hook().upload(
