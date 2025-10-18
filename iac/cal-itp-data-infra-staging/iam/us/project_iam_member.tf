@@ -231,7 +231,6 @@ resource "google_project_iam_member" "github-actions-terraform" {
     "roles/iam.serviceAccountAdmin",
     "roles/logging.configWriter",
     "roles/run.admin",
-    "roles/cloudsql.admin",
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.github-actions-terraform.email}"
@@ -256,6 +255,8 @@ resource "google_project_iam_member" "github-actions-service-account" {
     "roles/bigquery.metadataViewer",
     "roles/composer.admin",
     "roles/storage.objectAdmin",
+    "roles/run.admin",
+    "roles/cloudsql.admin",
     google_project_iam_custom_role.calitp-dds-analyst.id,
     google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-staging-002F-roles-002F-CustomGCSPublisher.id
   ])
