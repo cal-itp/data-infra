@@ -100,13 +100,30 @@ class DBTBigQueryToGCSOperator(BaseOperator):
         )
         return items.to_csv(index=False)
 
+    def run_query(self) -> bool:
+        client = self.bigquery_hook().get_client()
+        query = f"""
+            EXPORT DATA OPTIONS(
+                uri='{self.destination_bucket_name}/{self.destination_object_name.replace(".csv", "")}*.csv',
+                format='CSV',
+                overwrite=true,
+                header=true,
+                field_delimiter='\t'
+            ) AS
+            SELECT {','.join(self.column_names())} FROM {self.dataset_id()}.{self.table_id()};
+            """
+
+        query_job = client.query(query)
+        query_job.result()
+
     def execute(self, context: Context) -> str:
-        self.gcs_hook().upload(
-            bucket_name=self.destination_bucket_name.replace("gs://", ""),
-            object_name=context["task"].render_template(
-                self.destination_object_name, context
-            ),
-            data=self.csv(),
-            mime_type="text/csv",
-        )
+        # self.gcs_hook().upload(
+        #     bucket_name=self.destination_bucket_name.replace("gs://", ""),
+        #     object_name=context["task"].render_template(
+        #         self.destination_object_name, context
+        #     ),
+        #     data=self.csv(),
+        #     mime_type="text/csv",
+        # )
+        result = self.run_query() # Wait for the job to complete
         return os.path.join(self.destination_bucket_name, self.destination_object_name)

@@ -32,9 +32,14 @@ class CKANHook(BaseHook):
             resource["name"]: resource["id"]
             for resource in dataset.get("resources", [])
         }
-        return resources[resource_name]
+        return resources.get(resource_name)
 
     def upload(self, resource_id: str, file: StringIO):
         return self.remote_ckan().call_action(
             "resource_patch", {"id": resource_id}, files={"upload": file}
+        )
+
+    def create(self, package_id: str, resource_name: str, file: StringIO):
+        return self.remote_ckan().call_action(
+            "resource_create", {"package_id": package_id, "name": resource_name}, files={"upload": file}
         )

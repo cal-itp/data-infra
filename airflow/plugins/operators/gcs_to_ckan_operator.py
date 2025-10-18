@@ -1,5 +1,6 @@
 from io import StringIO
 from typing import Sequence
+import pandas as pd
 
 from hooks.ckan_hook import CKANHook
 
@@ -49,12 +50,42 @@ class GCSToCKANOperator(BaseOperator):
             resource_name=self.resource_name,
         )
 
+    def get_csv(self):
+        combined_data_stream = StringIO()
+        header_written = False
+
+        csv_file_names = self.gcs_hook().list(bucket_name=self.bucket_name.replace("gs://", ""), prefix=self.object_name)
+        for file_name in csv_file_names:
+            data = self.gcs_hook().download(
+                bucket_name=self.bucket_name.replace("gs://", ""),
+                object_name=file_name,
+            )
+
+            df = pd.read_csv(StringIO(data.decode()))
+
+            if not header_written:
+                df.to_csv(combined_data_stream, index=False)
+                header_written = True
+            else:
+                df.to_csv(combined_data_stream, index=False, header=False)
+
+        return combined_data_stream.getvalue()
+
     def execute(self, context: Context) -> dict[str, str | bool | int | float]:
-        data = self.gcs_hook().download(
-            bucket_name=self.bucket_name.replace("gs://", ""),
-            object_name=context["task"].render_template(self.object_name, context),
-        )
-        return self.ckan_hook().upload(
-            resource_id=self.resource_id(),
-            file=StringIO(data.decode()),
-        )
+        # data = self.gcs_hook().download(
+        #     bucket_name=self.bucket_name.replace("gs://", ""),
+        #     object_name=context["task"].render_template(self.object_name, context),
+        # )
+        if self.resource_id():
+            result = self.ckan_hook().upload(
+                resource_id=self.resource_id(),
+                file=self.get_csv(),
+            )
+        else:
+            result = self.ckan_hook().create(
+                package_id=self.dataset_id,
+                resource_name=self.resource_name,
+                file=self.get_csv(),
+            )
+
+        return result

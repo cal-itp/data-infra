@@ -88,7 +88,7 @@ with DAG(
                 f"california_open_data__{metadata_item['DATASET_NAME']}",
                 "dt={{ ds }}",
                 "ts={{ ts }}",
-                f"{metadata_item['DATASET_NAME']}.csv",
+                f"{metadata_item['DATASET_NAME']}",
             ),
             "resource_name": metadata_item["DATASET_NAME"],
         }
