@@ -23,7 +23,7 @@ def mirror_raw_files_from_elavon():
 
     # Establish connection to SFTP server
     client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client.set_missing_host_key_policy(paramiko.RejectPolicy())
     client.connect(
         hostname=CALITP__ELAVON_SFTP_HOSTNAME,
         port=CALITP__ELAVON_SFTP_PORT,
