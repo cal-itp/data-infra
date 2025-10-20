@@ -222,15 +222,16 @@ resource "google_project_iam_member" "tfer--roles-002F-storage-002E-objectViewer
 
 resource "google_project_iam_member" "github-actions-terraform" {
   for_each = toset([
-    "roles/resourcemanager.projectIamAdmin",
     "roles/bigquery.dataOwner",
     "roles/editor",
-    "roles/storage.admin",
     "roles/iam.roleAdmin",
-    "roles/iam.workloadIdentityPoolAdmin",
     "roles/iam.serviceAccountAdmin",
+    "roles/iam.serviceAccountUser",
+    "roles/iam.workloadIdentityPoolAdmin",
     "roles/logging.configWriter",
+    "roles/resourcemanager.projectIamAdmin",
     "roles/run.admin",
+    "roles/storage.admin",
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.github-actions-terraform.email}"
@@ -248,15 +249,16 @@ resource "google_project_iam_member" "production-composer-service-account" {
 
 resource "google_project_iam_member" "github-actions-service-account" {
   for_each = toset([
-    "roles/viewer",
-    "roles/bigquery.user",
     "roles/bigquery.dataOwner",
     "roles/bigquery.filteredDataViewer",
     "roles/bigquery.metadataViewer",
-    "roles/composer.admin",
-    "roles/storage.objectAdmin",
-    "roles/run.admin",
+    "roles/bigquery.user",
     "roles/cloudsql.admin",
+    "roles/composer.admin",
+    "roles/iam.serviceAccountUser",
+    "roles/run.admin",
+    "roles/storage.objectAdmin",
+    "roles/viewer",
     google_project_iam_custom_role.calitp-dds-analyst.id,
     google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-staging-002F-roles-002F-CustomGCSPublisher.id
   ])
