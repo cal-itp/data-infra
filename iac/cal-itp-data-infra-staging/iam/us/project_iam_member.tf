@@ -270,6 +270,7 @@ resource "google_project_iam_member" "github-actions-service-account" {
 resource "google_project_iam_member" "cal-bc-service-account" {
   for_each = toset([
     "roles/cloudsql.client",
+    "roles/secretmanager.secretAccessor",
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.cal-bc-service-account.email}"
