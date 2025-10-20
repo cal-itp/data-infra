@@ -31,7 +31,7 @@ repos:
       - id: isort
         name: isort (python)
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.5
+    rev: 1.8.6
     hooks:
       - id: bandit
         args: ["-ll", "--skip=B108,B608,B310,B303,B324,B113"]
