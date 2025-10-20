@@ -34,7 +34,7 @@ repos:
     rev: 1.8.6
     hooks:
       - id: bandit
-        args: ["-ll", "--skip=B608,B113"]
+        args: ["-ll", "--skip=B608"]
         files: .py$
   - repo: https://github.com/sqlfluff/sqlfluff
     rev: 3.0.6
