@@ -53,7 +53,9 @@ stops_times_with_tz AS (
         COALESCE(LAST_VALUE(stop_timezone_coalesced)
             OVER (PARTITION BY feed_key, trip_id
                 ORDER BY dim_stop_times.stop_sequence
-                ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING), feed_timezone) AS trip_end_timezone
+                ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING), feed_timezone) AS trip_end_timezone,
+        --ST_GEOGFROMTEXT(stops.pt_geom) AS pt_geom,
+        COALESCE(dim_stop_times.shape_dist_traveled, freq.shape_dist_traveled) AS shape_dist,
     FROM dim_stop_times
     LEFT JOIN stops
         USING (feed_key, stop_id)
