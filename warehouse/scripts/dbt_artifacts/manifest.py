@@ -24,9 +24,9 @@ class ManifestMetadata(BaseModel):
     class Config:
         extra = Extra.allow
 
-    dbt_schema_version: Optional[
-        str
-    ] = "https://schemas.getdbt.com/dbt/manifest/v9.json"
+    dbt_schema_version: Optional[str] = (
+        "https://schemas.getdbt.com/dbt/manifest/v9.json"
+    )
     dbt_version: Optional[str] = "1.6.0a1"
     generated_at: Optional[datetime] = "2023-04-21T11:09:06.496436Z"
     invocation_id: Optional[str] = "c4b245be-8edb-4ad7-ba54-9337ce594f5d"

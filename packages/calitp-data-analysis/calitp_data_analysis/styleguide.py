@@ -24,6 +24,7 @@ matplotlib:
 https://github.com/CityOfLosAngeles/los-angeles-citywide-data-style
 
 """
+
 import altair as alt  # type: ignore
 from calitp_data_analysis import calitp_color_palette as cp
 

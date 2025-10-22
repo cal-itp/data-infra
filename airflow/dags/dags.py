@@ -55,9 +55,11 @@ for dag_directory in dag_directories:
         wait_for_defaults={"retries": 24, "check_existence": True, "timeout": 10 * 60},
         latest_only=False,
         user_defined_macros={
-            "image_tag": lambda: "development"
-            if os.environ["AIRFLOW_ENV"] == "development"
-            else "latest",
+            "image_tag": lambda: (
+                "development"
+                if os.environ["AIRFLOW_ENV"] == "development"
+                else "latest"
+            ),
             "env_var": os.environ.get,
         },
         default_args={

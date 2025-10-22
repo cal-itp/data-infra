@@ -3,6 +3,7 @@ Publishes various dbt models to various sources.
 
 TODO: consider using https://github.com/ckan/ckanapi?
 """
+
 import csv
 import enum
 import functools
@@ -528,9 +529,9 @@ def _publish_exposure(
                             ["geometry_to_publish"] + destination.metadata_columns
                         ]
                     gdf.to_file(geojsonl_fpath, driver="GeoJSONSeq")
-                    layer_geojson_paths[
-                        strip_modelname(node.name).title()
-                    ] = geojsonl_fpath
+                    layer_geojson_paths[strip_modelname(node.name).title()] = (
+                        geojsonl_fpath
+                    )
                     hive_path = destination.hive_path(
                         exposure=exposure,
                         model=strip_modelname(node.name),

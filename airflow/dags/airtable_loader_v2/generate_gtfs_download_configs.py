@@ -49,18 +49,22 @@ def gtfs_datasets_to_extract_configs(
                         name=record.name,
                         url=record.pipeline_url,
                         feed_type=record.data,
-                        auth_query_params={
-                            record.authorization_url_parameter_name: record.url_secret_key_name
-                        }
-                        if record.authorization_url_parameter_name
-                        and record.url_secret_key_name
-                        else {},
-                        auth_headers={
-                            record.authorization_header_parameter_name: record.header_secret_key_name
-                        }
-                        if record.authorization_header_parameter_name
-                        and record.header_secret_key_name
-                        else {},
+                        auth_query_params=(
+                            {
+                                record.authorization_url_parameter_name: record.url_secret_key_name
+                            }
+                            if record.authorization_url_parameter_name
+                            and record.url_secret_key_name
+                            else {}
+                        ),
+                        auth_headers=(
+                            {
+                                record.authorization_header_parameter_name: record.header_secret_key_name
+                            }
+                            if record.authorization_header_parameter_name
+                            and record.header_secret_key_name
+                            else {}
+                        ),
                     ),
                 )
             except ValidationError as e:

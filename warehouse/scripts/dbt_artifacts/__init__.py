@@ -1,6 +1,7 @@
 """
 Built off the starting point of https://guitton.co/posts/dbt-artifacts
 """
+
 import abc
 import os
 from enum import Enum
@@ -64,9 +65,9 @@ def num_bytes(self) -> Optional[int]:
 CatalogTable.num_bytes = property(num_bytes)  # type: ignore[attr-defined]
 
 DependsOn.resolved_nodes = property(  # type: ignore[attr-defined]
-    lambda self: [NodeModelMixin._instances[node] for node in self.nodes]
-    if self.nodes
-    else []
+    lambda self: (
+        [NodeModelMixin._instances[node] for node in self.nodes] if self.nodes else []
+    )
 )
 ColumnInfo.publish = property(lambda self: self.meta.get("publish.include", False))  # type: ignore[attr-defined]
 

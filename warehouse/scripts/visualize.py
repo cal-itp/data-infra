@@ -1,6 +1,7 @@
 """
 Provide more visualizations than what dbt provides.
 """
+
 import json
 import os
 import webbrowser

@@ -1,6 +1,7 @@
 """
 This script reads a GeoJSON file containing transit facility data, processes it to standardize column names
 and formats, and then exports the relevant data to a CSV file for import as a seed."""
+
 import json
 
 import geopandas as gpd
