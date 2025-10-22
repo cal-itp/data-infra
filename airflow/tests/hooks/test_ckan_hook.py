@@ -27,11 +27,11 @@ class TestCKANHook:
 
     @pytest.mark.vcr()
     def test_find_nonexistent_resource(self, hook: CKANHook):
-        with pytest.raises(KeyError):
-            hook.find_resource_id(
-                dataset_id="cal-itp-gtfs-ingest-pipeline-dataset",
-                resource_name="Nope",
-            )
+        resource_id = hook.find_resource_id(
+            dataset_id="cal-itp-gtfs-ingest-pipeline-dataset",
+            resource_name="Nope",
+        )
+        assert resource_id is None
 
     @pytest.mark.vcr()
     def test_find_nonexistent_dataset(self, hook: CKANHook):
