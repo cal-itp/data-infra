@@ -55,7 +55,8 @@ unioned AS (
             ref('int_gtfs_quality__wheelchair_accessible_trips'),
             ref('int_gtfs_quality__wheelchair_boarding_stops')
         ],
-        include = ['date', 'key', 'check', 'status', 'percentage']
+        include = ['date', 'key', 'check', 'status', 'percentage'],
+        column_override={"percentage": "FLOAT64"}
     ) }}
 ),
 
