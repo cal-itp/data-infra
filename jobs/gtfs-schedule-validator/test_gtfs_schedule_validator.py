@@ -30,7 +30,7 @@ class TestGtfsScheduleValidator:
         return CliRunner()
 
     def test_no_extracts(self, runner):
-        hour_start = "2020-02-20T20:00"
+        hour_start = "2020-02-20T20"
         result = runner.invoke(
             app,
             [
