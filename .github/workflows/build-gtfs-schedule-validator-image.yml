@@ -58,3 +58,8 @@ jobs:
           context: jobs/gtfs-schedule-validator
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           tags: ghcr.io/${{github.repository}}/gtfs-schedule-validator:latest
+      - uses: docker/build-push-action@v2
+        with:
+          context: jobs/gtfs-schedule-validator
+          push: ${{ github.event_name == 'push' && github.ref != 'refs/heads/main' }}
+          tags: ghcr.io/${{github.repository}}/gtfs-schedule-validator:development
