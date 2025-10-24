@@ -92,14 +92,16 @@ def download_all(task_instance, execution_date, **kwargs):
     ]
     outcomes: List[GTFSDownloadOutcome] = []
 
-    logging.info(f"processing {len(configs)} configs")
+    print(f"processing {len(configs)} configs")
 
     for i, config in enumerate(configs, start=1):
         with sentry_sdk.push_scope() as scope:
-            logging.info(f"attempting to fetch {i}/{len(configs)} {config.url}")
+            print(f"attempting to fetch {i}/{len(configs)} {config.url}")
+
             scope.set_tag("config_name", config.name)
             scope.set_tag("config_url", config.url)
             scope.set_context("config", config.dict())
+
             try:
                 extract, content = download_feed(
                     config=config,
@@ -137,7 +139,7 @@ def download_all(task_instance, execution_date, **kwargs):
                 )
 
     print(
-        f"took {humanize.naturaltime(pendulum.now() - start)} to process {len(configs)} configs"
+        f"took {humanize.naturaldelta(pendulum.now() - start)} to process {len(configs)} configs"
     )
 
     result = DownloadFeedsResult(
@@ -162,12 +164,13 @@ def download_all(task_instance, execution_date, **kwargs):
                 str(f.exception) or str(type(f.exception)) for f in result.failures
             ),
         )
-        task_instance.xcom_push(
-            key="download_failures",
-            value=[
-                json.loads(f.json()) for f in result.failures
-            ],  # use the Pydantic serializer
-        )
+        # Commenting out since it is used only for email_download_failures.py (temporarily disabled)
+        # task_instance.xcom_push(
+        #     key="download_failures",
+        #     value=[
+        #         json.loads(f.json()) for f in result.failures
+        #     ],  # use the Pydantic serializer
+        # )
 
     success_rate = len(result.successes) / len(configs)
     if success_rate < GTFS_FEED_LIST_ERROR_THRESHOLD:
