@@ -7,6 +7,7 @@ Now, the pipeline aims to use bigquery's sqlalchemy client where possible.
 However, it's cumbersome to convert the http api style schema fields to SQL, so
 we provide a fallback for these old-style tasks.
 """
+
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
 from utils import CALITP_BQ_LOCATION, CALITP_PROJECT_NAME
