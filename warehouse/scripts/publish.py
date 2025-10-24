@@ -176,6 +176,7 @@ def upload_to_ckan(
             f"{url}/api/action/{action}",
             data=encoder,
             headers={"Content-Type": encoder.content_type, "X-CKAN-API-Key": API_KEY},  # type: ignore
+            timeout=5,
         )
 
     if fsize <= CHUNK_SIZE:
@@ -185,6 +186,7 @@ def upload_to_ckan(
             data={"id": resource_id},
             headers={"Authorization": API_KEY},  # type: ignore
             files={"upload": file},
+            timeout=5,
         )
         try:
             response.raise_for_status()

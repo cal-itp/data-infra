@@ -138,7 +138,7 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
 
     @property
     def name_hash(self) -> str:
-        return hashlib.md5(self.name.encode("utf-8")).hexdigest()
+        return hashlib.md5(self.name.encode("utf-8"), usedforsecurity=False).hexdigest()
 
     @property
     def unique_filename(self):
@@ -324,7 +324,7 @@ class AggregationExtract:
         with open(
             os.path.join(self.path, self.extract.timestamped_filename), "rb"
         ) as f:
-            file_hash = hashlib.md5()
+            file_hash = hashlib.md5(usedforsecurity=False)
             while chunk := f.read(8192):
                 file_hash.update(chunk)
         return file_hash.digest()

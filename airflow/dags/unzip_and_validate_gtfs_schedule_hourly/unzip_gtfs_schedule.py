@@ -120,7 +120,7 @@ def process_feed_files(
     pbar=None,
 ) -> Tuple[List[GTFSScheduleFeedFileHourly], str]:
     zipfile_files = []
-    md5hash = hashlib.md5()
+    md5hash = hashlib.md5(usedforsecurity=False)
     if not is_valid:
         raise ValueError(
             "Unparseable zip: File/directory structure within zipfile cannot be unpacked"

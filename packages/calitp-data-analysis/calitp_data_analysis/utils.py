@@ -267,6 +267,7 @@ def upload_file_to_github(
         f"{BASE}/repos/{repo}/contents/{os.path.dirname(path)}",
         params={"ref": branch},
         headers={"Authorization": f"token {token}"},
+        timeout=5,
     )
     r.raise_for_status()
     item = next(i for i in r.json() if i["path"] == path)
@@ -286,6 +287,7 @@ def upload_file_to_github(
             "sha": sha,
             "content": base64.b64encode(contents).decode("utf-8"),
         },
+        timeout=5,
     )
     r.raise_for_status()
     return

@@ -81,7 +81,7 @@ def validate_geojson(
     is_compressed = path.endswith(".gz")
 
     if path.startswith("https://"):
-        resp = requests.get(path)
+        resp = requests.get(path, timeout=5)
         resp.raise_for_status()
         d = json.loads(
             gzip.decompress(resp.content).decode() if is_compressed else resp.text
@@ -155,7 +155,7 @@ class State(BaseModel):
                 typer.secho(
                     f"Checking that {typer.style(layer.url, fg=typer.colors.CYAN)} exists..."
                 )
-            resp = requests.head(layer.url)
+            resp = requests.head(layer.url, timeout=5)
 
             try:
                 resp.raise_for_status()
