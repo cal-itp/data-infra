@@ -56,5 +56,5 @@ jobs:
       - uses: docker/build-push-action@v2
         with:
           context: jobs/gtfs-schedule-validator
-          push: false
+          push: true
           tags: ghcr.io/${{github.repository}}/gtfs-schedule-validator:${{ github.ref == 'refs/heads/main' && 'latest' || 'development'  }}
