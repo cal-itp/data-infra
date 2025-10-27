@@ -19,7 +19,6 @@ WITH trips AS (
         trip_instance_key,
         trip_first_departure_sec,
     FROM {{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= "2025-10-01"
 ),
 
 stop_times_grouped AS (
@@ -29,8 +28,6 @@ stop_times_grouped AS (
         trip_id,
         trip_first_departure_sec,
         stop_id_array,
-        --stop_seq_array, -- is this needed?
-    -- we can't differentiate anyway, since we're using stop's geom, and if a stop is visited twice with 2 different stop_seq, we can't tell
 
     FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
 ),
@@ -46,9 +43,8 @@ stops AS (
     WHERE {{ incremental_where(
         default_start_var='GTFS_SCHEDULE_START',
         this_dt_column='service_date',
-        filter_dt_column='service_date',
-        dev_lookback_days = 60)
-    }} AND service_date >= '2025-10-01'
+        filter_dt_column='service_date')
+    }}
 ),
 
 daily_rt_feeds AS (
@@ -70,9 +66,8 @@ vehicle_locations AS (
 
     FROM {{ ref('fct_vehicle_locations') }}
     WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
-        dev_lookback_days = 60)
-    }} AND dt >= '2025-10-01'
+        default_start_var='PROD_GTFS_RT_START')
+    }}
 ),
 
 schedule_joins AS (
