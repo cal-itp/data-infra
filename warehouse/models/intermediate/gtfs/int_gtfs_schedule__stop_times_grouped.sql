@@ -143,12 +143,6 @@ grouped AS (
             departure_time IS NOT NULL
         ) AS num_departure_times_populated_stop_times,
 
-        -- add stop position geometries and order of stops
-        --ARRAY_AGG(
-            -- ignore nulls so it doesn't error out if there's a null point
-        --    pt_geom IGNORE NULLS
-        --    ORDER BY stop_sequence, stop_id)
-        --AS stop_pt_array,
         ARRAY_AGG(
             -- ignore nulls so it doesn't error out if there's a null point
             stop_id IGNORE NULLS
@@ -233,7 +227,6 @@ int_gtfs_schedule__stop_times_grouped AS (
         num_arrival_times_populated_stop_times,
         num_departure_times_populated_stop_times,
 
-        --stop_pt_array
         stop_id_array,
         stop_seq_array,
         arrival_sec_array,
