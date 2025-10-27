@@ -166,6 +166,15 @@ Once you have performed the setup above, you are good to go run
 > [!NOTE]
 > In general, it is a good idea to run `seed` and `run --full-refresh` if you think your local environment is substantially outdated (for example, if you haven't worked on dbt models in a few weeks but want to create or modify a model). We have macros in the project that prevent a non-production "full refresh" from actually processing all possible data.
 
+> [!NOTE]
+> If your workflow requires querying historical source data in our production environment, you will need to:
+
+1. Ensure that you have the appropriate permissions to query our production Google Cloud environment `cal-itp-data-infra`. If you're don't have the permissions, or are unsure, contact an administrator of our Google Cloud Platform.
+
+2. Add the appropriate flag and variable to your command: `--vars 'GOOGLE_CLOUD_PROJECT: cal-itp-data-infra'`
+
+   ex. `poetry run dbt run -s schema.table --vars 'GOOGLE_CLOUD_PROJECT: cal-itp-data-infra'`
+
 Some additional helpful commands:
 
 - `poetry run dbt test`
