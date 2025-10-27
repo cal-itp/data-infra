@@ -59,8 +59,13 @@ daily_rt_feeds AS (
     SELECT DISTINCT
         schedule_feed_key,
         base64_url AS vp_base64_url
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_rt_feed_files` AS t1--{{ ref('fct_daily_rt_feed_files') }} AS t1
-    WHERE t1.date > "2025-09-30" AND feed_type = "vehicle_positions"
+    FROM {{ ref('fct_daily_rt_feed_files') }} AS t1
+    WHERE {{ incremental_where(
+        default_start_var='GTFS_SCHEDULE_START',
+        this_dt_column='date',
+        filter_dt_column='date',
+        dev_lookback_days = 30
+    ) }} AND feed_type = "vehicle_positions"
 ),
 
 vehicle_locations AS (
