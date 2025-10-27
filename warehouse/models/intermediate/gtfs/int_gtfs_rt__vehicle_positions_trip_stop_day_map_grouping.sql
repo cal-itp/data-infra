@@ -30,6 +30,14 @@ stop_times_grouped AS (
         stop_id_array,
 
     FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
+    WHERE {{ incremental_where(
+        default_start_var='GTFS_SCHEDULE_START',
+        this_dt_column='_feed_valid_from',
+        filter_dt_column='_feed_valid_from',
+        dev_lookback_days = 120)
+    -- unsure how long feeds last for, is 4 months enough? 120 days had same results as 365 days
+    -- so we should be capturing all the relevant scheduled stop times needed
+    }}
 ),
 
 stops AS (
