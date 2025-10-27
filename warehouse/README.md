@@ -168,12 +168,9 @@ Once you have performed the setup above, you are good to go run
 
 > [!NOTE]
 > If your workflow requires querying historical source data in our production environment, you will need to:
-
-1. Ensure that you have the appropriate permissions to query our production Google Cloud environment `cal-itp-data-infra`. If you're don't have the permissions, or are unsure, contact an administrator of our Google Cloud Platform.
-
-2. Add the appropriate flag and variable to your command: `--vars 'GOOGLE_CLOUD_PROJECT: cal-itp-data-infra'`
-
-   ex. `poetry run dbt run -s schema.table --vars 'GOOGLE_CLOUD_PROJECT: cal-itp-data-infra'`
+> 1. Ensure that you have the appropriate permissions to query our production Google Cloud environment `cal-itp-data-infra`. If you're don't have the permissions, or are unsure, contact an administrator of our Google Cloud Platform.
+> 2. Add the appropriate flag and variable to your command: `--vars 'GOOGLE_CLOUD_PROJECT: cal-itp-data-infra'`
+>   ex. `poetry run dbt run -s schema.table --vars 'GOOGLE_CLOUD_PROJECT: cal-itp-data-infra'`
 
 Some additional helpful commands:
 
