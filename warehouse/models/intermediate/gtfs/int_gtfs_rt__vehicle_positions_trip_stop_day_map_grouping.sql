@@ -34,9 +34,10 @@ stop_times_grouped AS (
         default_start_var='GTFS_SCHEDULE_START',
         this_dt_column='_feed_valid_from',
         filter_dt_column='_feed_valid_from',
-        dev_lookback_days = 60
+        dev_lookback_days = 120
     ) }}
     -- unsure how long feeds last for. 120 days had same results as 365 days.
+    -- dropping to 60 did get fewer rows, so somewhere between 2 months-4 months is a sweet spot.
     -- so we should be capturing all the relevant scheduled stop times needed
 ),
 
