@@ -105,12 +105,16 @@ vp_near_stops AS (
         vehicle_locations.service_date,
         vehicle_locations.base64_url,
         vehicle_locations.key AS vp_key,
+        --vehicle_locations.location,
+
         schedule_joins.feed_key,
         schedule_joins.trip_instance_key,
         schedule_joins.stop_id,
         schedule_joins.st_trip_key, -- use to key back into schedule trip info found in stop times (int_gtfs_schedule__stop_times_grouped)
+        --schedule_joins.pt_geom,
 
         ROUND(ST_DISTANCE(vehicle_locations.location, schedule_joins.pt_geom), 2) AS distance_meters,
+        --ST_CLOSESTPOINT(vehicle_locations.location, schedule_joins.pt_geom) is returning a point useful? It'll be difficult to match against, use vp_keys instead and distances
 
     FROM vehicle_locations
     INNER JOIN daily_rt_feeds
@@ -123,16 +127,6 @@ vp_near_stops AS (
         -- 100 meters ~ 0.1 miles, 328 ft
 ),
 
-vp_near_stops2 AS (
-    SELECT
-        vp_near_stops.* EXCEPT(distance_meters),
-        MIN(distance_meters) AS distance_meters,
-
-    FROM vp_near_stops
-    GROUP BY service_date, base64_url, feed_key, trip_instance_key, stop_id, vp_key
-    -- remove dupes (stop_id-vp_key should only have 1 distance calculated, but seems like the same result can be returned in multiple rows
-),
-
 vp_counts_near_stops AS (
     SELECT
         service_date,
@@ -140,6 +134,7 @@ vp_counts_near_stops AS (
         feed_key,
         trip_instance_key,
         stop_id,
+        st_trip_key,
 
         COUNTIF(distance_meters <= 100) AS near_100m,
         COUNTIF(distance_meters <= 50) AS near_50m,
@@ -148,8 +143,8 @@ vp_counts_near_stops AS (
         ARRAY_AGG(distance_meters ORDER BY distance_meters, vp_key) AS distance_meters_array,
         ARRAY_AGG(vp_key ORDER BY distance_meters, vp_key) AS vp_key_array,
 
-    FROM vp_near_stops2
-    GROUP BY service_date, base64_url, feed_key, trip_instance_key, stop_id
+    FROM vp_near_stops
+    GROUP BY service_date, base64_url, feed_key, trip_instance_key, stop_id, st_trip_key
 )
 
 SELECT * FROM vp_counts_near_stops
