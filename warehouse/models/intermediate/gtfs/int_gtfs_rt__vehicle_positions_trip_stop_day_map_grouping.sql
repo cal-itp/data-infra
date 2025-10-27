@@ -80,7 +80,7 @@ schedule_joins AS (
         trips.feed_key,
         trips.service_date,
         trips.trip_instance_key,
-        stop_times_grouped.key AS stop_times_grouped_key,
+        stop_times_grouped.key AS st_trip_key,
         stop_id,
         stops.pt_geom,
         daily_rt_feeds.vp_base64_url,
@@ -105,11 +105,11 @@ vp_near_stops AS (
         vehicle_locations.service_date,
         vehicle_locations.base64_url,
         vehicle_locations.key AS vp_key,
-        --vehicle_locations.location,
         schedule_joins.feed_key,
         schedule_joins.trip_instance_key,
         schedule_joins.stop_id,
-        --schedule_joins.pt_geom,
+        schedule_joins.st_trip_key, -- use to key back into schedule trip info found in stop times (int_gtfs_schedule__stop_times_grouped)
+
         ROUND(ST_DISTANCE(vehicle_locations.location, schedule_joins.pt_geom), 2) AS distance_meters,
 
     FROM vehicle_locations
@@ -119,7 +119,8 @@ vp_near_stops AS (
         ON schedule_joins.vp_base64_url = vehicle_locations.base64_url
         AND schedule_joins.service_date = vehicle_locations.service_date
         AND schedule_joins.trip_instance_key = vehicle_locations.trip_instance_key
-        AND ST_DWITHIN(vehicle_locations.location, schedule_joins.pt_geom, 100) -- 100 meters ~ 0.1 miles, 328 ft
+        AND ST_DWITHIN(vehicle_locations.location, schedule_joins.pt_geom, 100)
+        -- 100 meters ~ 0.1 miles, 328 ft
 ),
 
 vp_near_stops2 AS (
