@@ -34,10 +34,10 @@ stop_times_grouped AS (
         default_start_var='GTFS_SCHEDULE_START',
         this_dt_column='_feed_valid_from',
         filter_dt_column='_feed_valid_from',
-        dev_lookback_days = 120)
-    -- unsure how long feeds last for, is 4 months enough? 120 days had same results as 365 days
+        dev_lookback_days = 60
+    ) }}
+    -- unsure how long feeds last for. 120 days had same results as 365 days.
     -- so we should be capturing all the relevant scheduled stop times needed
-    }}
 ),
 
 stops AS (
@@ -59,12 +59,11 @@ daily_rt_feeds AS (
     SELECT DISTINCT
         schedule_feed_key,
         base64_url AS vp_base64_url
-    FROM {{ ref('fct_daily_rt_feed_files') }} AS t1
+    FROM {{ ref('fct_daily_rt_feed_files') }}
     WHERE {{ incremental_where(
         default_start_var='GTFS_SCHEDULE_START',
         this_dt_column='date',
-        filter_dt_column='date',
-        dev_lookback_days = 30
+        filter_dt_column='date'
     ) }} AND feed_type = "vehicle_positions"
 ),
 
@@ -135,6 +134,16 @@ vp_near_stops AS (
         -- 100 meters ~ 0.1 miles, 328 ft
 ),
 
+vp_near_stops2 AS (
+    SELECT
+        vp_near_stops.* EXCEPT(distance_meters),
+        MIN(distance_meters) AS distance_meters,
+
+    FROM vp_near_stops
+    GROUP BY service_date, base64_url, feed_key, trip_instance_key, stop_id, st_trip_key, vp_key
+    -- remove dupes (stop_id-vp_key should only have 1 distance calculated, but seems like the same result can be returned in multiple rows
+),
+
 vp_counts_near_stops AS (
     SELECT
         service_date,
@@ -151,7 +160,7 @@ vp_counts_near_stops AS (
         ARRAY_AGG(distance_meters ORDER BY distance_meters, vp_key) AS distance_meters_array,
         ARRAY_AGG(vp_key ORDER BY distance_meters, vp_key) AS vp_key_array,
 
-    FROM vp_near_stops
+    FROM vp_near_stops2
     GROUP BY service_date, base64_url, feed_key, trip_instance_key, stop_id, st_trip_key
 )
 
