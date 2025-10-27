@@ -30,15 +30,6 @@ stop_times_grouped AS (
         stop_id_array,
 
     FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
-    WHERE {{ incremental_where(
-        default_start_var='GTFS_SCHEDULE_START',
-        this_dt_column='_feed_valid_from',
-        filter_dt_column='_feed_valid_from',
-        dev_lookback_days = 120
-    ) }}
-    -- unsure how long feeds last for. 120 days had same results as 365 days.
-    -- dropping to 60 did get fewer rows, so somewhere between 2 months-4 months is a sweet spot.
-    -- so we should be capturing all the relevant scheduled stop times needed
 ),
 
 stops AS (
@@ -59,13 +50,10 @@ stops AS (
 daily_rt_feeds AS (
     SELECT DISTINCT
         schedule_feed_key,
-        base64_url AS vp_base64_url
-    FROM {{ ref('fct_daily_rt_feed_files') }}
-    WHERE {{ incremental_where(
-        default_start_var='GTFS_SCHEDULE_START',
-        this_dt_column='date',
-        filter_dt_column='date'
-    ) }} AND feed_type = "vehicle_positions"
+        base64_url AS vp_base64_url,
+    FROM {{ ref('fct_daily_rt_feed_files') }} AS t1
+    WHERE t1.date >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY) AND feed_type = "vehicle_positions"
+    -- write the where filter this way, because the column is called date, not working with incremental_where macro
 ),
 
 vehicle_locations AS (
@@ -79,7 +67,9 @@ vehicle_locations AS (
 
     FROM {{ ref('fct_vehicle_locations') }}
     WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START')
+        default_start_var='PROD_GTFS_RT_START',
+        this_dt_column='dt',
+        filter_dt_column='dt')
     }}
 ),
 
