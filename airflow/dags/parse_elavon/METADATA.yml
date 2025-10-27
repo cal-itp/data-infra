@@ -9,7 +9,7 @@ default_args:
     start_date: "2025-07-06"
     catchup: False
     email:
-      - "soren.s@jarv.us"
+      - "dds.app.notify@dot.ca.gov"
     email_on_failure: True
     pool: default_pool
     concurrency: 50

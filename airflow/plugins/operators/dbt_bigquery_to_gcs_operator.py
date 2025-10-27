@@ -1,6 +1,5 @@
-import csv
-import io
 import json
+import logging
 import os
 from typing import Sequence
 
@@ -87,30 +86,40 @@ class DBTBigQueryToGCSOperator(BaseOperator):
     def table_id(self) -> str:
         return self.node()["name"]
 
-    def column_names(self) -> list[str]:
+    def column_select(self) -> list[str]:
+        def round_name(name, precision):
+            return f"ROUND({name}, {precision}) AS {name}" if precision else name
+
         return [
-            name
+            round_name(name, column.get("meta", {}).get("ckan.precision"))
             for name, column in self.node()["columns"].items()
             if column.get("meta", {}).get("publish.include", False)
         ]
 
-    def csv(self) -> str:
-        items = self.bigquery_hook().get_records(
-            f"SELECT {','.join(self.column_names())} FROM {self.dataset_id()}.{self.table_id()}",
-        )
-        output = io.StringIO()
-        writer = csv.DictWriter(output, fieldnames=self.column_names(), delimiter="\t")
-        writer.writeheader()
-        writer.writerows([dict(zip(self.column_names(), item)) for item in items])
-        return output.getvalue()
+    def run_query(self):
+        client = self.bigquery_hook().get_client()
+
+        query = f"SELECT {','.join(self.column_select())} FROM {self.dataset_id()}.{self.table_id()}"
+
+        gcs_export = f"""
+            EXPORT DATA OPTIONS(
+                uri='{self.destination_bucket_name}/{self.destination_object_name.replace(".csv", "")}*.csv',
+                format='CSV',
+                overwrite=true,
+                header=true,
+                field_delimiter='\t'
+            ) AS
+            {query};
+            """
+        logging.info(gcs_export)
+
+        query_job = client.query(gcs_export)
+        return query_job.result()
 
     def execute(self, context: Context) -> str:
-        self.gcs_hook().upload(
-            bucket_name=self.destination_bucket_name.replace("gs://", ""),
-            object_name=context["task"].render_template(
-                self.destination_object_name, context
-            ),
-            data=self.csv(),
-            mime_type="text/csv",
+        logging.info(
+            f"Exporting {self.destination_bucket_name}/{self.destination_object_name}..."
         )
+        result = self.run_query()  # Wait for the job to complete
+        logging.info(f"Query job id: {result.job_id}")
         return os.path.join(self.destination_bucket_name, self.destination_object_name)
