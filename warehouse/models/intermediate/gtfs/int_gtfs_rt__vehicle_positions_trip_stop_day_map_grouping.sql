@@ -3,10 +3,10 @@
         materialized='incremental',
         incremental_strategy = 'insert_overwrite',
         partition_by={
-            'field': 'service_date',
+            'field': 'dt',
             'data_type': 'date',
             'granularity': 'day'
-        }, cluster_by=['service_date', 'base64_url']
+        }, cluster_by=['dt', 'base64_url']
     )
 }}
 
@@ -56,6 +56,30 @@ daily_rt_feeds AS (
     -- write the where filter this way, because the column is called date, not working with incremental_where macro
 ),
 
+int_vp_trips AS (
+    SELECT DISTINCT
+        dt,
+        service_date,
+        base64_url,
+        trip_id,
+    FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_day_map_grouping') }}
+    WHERE {{ incremental_where(
+        default_start_var='PROD_GTFS_RT_START',
+        this_dt_column='dt',
+        filter_dt_column='dt')
+    }}
+),
+
+vp_trips AS (
+    SELECT DISTINCT
+        service_date,
+        base64_url,
+        trip_id,
+        trip_instance_key,
+    FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
+),
+
+
 vehicle_locations AS (
     SELECT
         key,
@@ -75,6 +99,7 @@ vehicle_locations AS (
 
 schedule_joins AS (
     SELECT
+        int_vp_trips.dt,
         trips.feed_key,
         trips.service_date,
         trips.trip_instance_key,
@@ -82,6 +107,7 @@ schedule_joins AS (
         stop_id,
         stops.pt_geom,
         daily_rt_feeds.vp_base64_url,
+
 
     FROM trips
     INNER JOIN stop_times_grouped
@@ -96,12 +122,22 @@ schedule_joins AS (
         AND stop_id = stops.stop_id
     INNER JOIN daily_rt_feeds
         ON trips.feed_key = daily_rt_feeds.schedule_feed_key
+    INNER JOIN vp_trips
+        ON trips.service_date = vp_trips.service_date
+        AND daily_rt_feeds.vp_base64_url = vp_trips.base64_url
+        AND trips.trip_id = vp_trips.trip_id
+        AND trips.trip_instance_key = vp_trips.trip_instance_key
+    INNER JOIN int_vp_trips
+        ON trips.service_date = int_vp_trips.service_date
+        AND vp_trips.base64_url = int_vp_trips.base64_url
+        AND vp_trips.trip_id = int_vp_trips.trip_id
 ),
 
 vp_near_stops AS (
-    SELECT
-        vehicle_locations.service_date,
-        vehicle_locations.base64_url,
+   SELECT
+        schedule_joins.dt,
+        schedule_joins.service_date,
+        schedule_joins.vp_base64_url,
         vehicle_locations.key AS vp_key,
         --vehicle_locations.location,
 
@@ -111,34 +147,25 @@ vp_near_stops AS (
         schedule_joins.st_trip_key, -- use to key back into schedule trip info found in stop times (int_gtfs_schedule__stop_times_grouped)
         --schedule_joins.pt_geom,
 
-        ROUND(ST_DISTANCE(vehicle_locations.location, schedule_joins.pt_geom), 2) AS distance_meters,
+        MIN(ROUND(ST_DISTANCE(vehicle_locations.location, schedule_joins.pt_geom), 2)) AS distance_meters,
         --ST_CLOSESTPOINT(vehicle_locations.location, schedule_joins.pt_geom) is returning a point useful? It'll be difficult to match against, use vp_keys instead and distances
 
-    FROM vehicle_locations
-    INNER JOIN daily_rt_feeds
-        ON daily_rt_feeds.vp_base64_url = vehicle_locations.base64_url
-    INNER JOIN schedule_joins
+    FROM schedule_joins
+    INNER JOIN vehicle_locations
         ON schedule_joins.vp_base64_url = vehicle_locations.base64_url
         AND schedule_joins.service_date = vehicle_locations.service_date
         AND schedule_joins.trip_instance_key = vehicle_locations.trip_instance_key
         AND ST_DWITHIN(vehicle_locations.location, schedule_joins.pt_geom, 100)
         -- 100 meters ~ 0.1 miles, 328 ft
+    GROUP BY dt, service_date, vp_base64_url, feed_key, trip_instance_key, stop_id, st_trip_key, vp_key
 ),
 
-vp_near_stops2 AS (
-    SELECT
-        vp_near_stops.* EXCEPT(distance_meters),
-        MIN(distance_meters) AS distance_meters,
-
-    FROM vp_near_stops
-    GROUP BY service_date, base64_url, feed_key, trip_instance_key, stop_id, st_trip_key, vp_key
-    -- remove dupes (stop_id-vp_key should only have 1 distance calculated, but seems like the same result can be returned in multiple rows
-),
 
 vp_counts_near_stops AS (
     SELECT
+        dt,
         service_date,
-        base64_url,
+        vp_base64_url,
         feed_key,
         trip_instance_key,
         stop_id,
@@ -151,8 +178,8 @@ vp_counts_near_stops AS (
         ARRAY_AGG(distance_meters ORDER BY distance_meters, vp_key) AS distance_meters_array,
         ARRAY_AGG(vp_key ORDER BY distance_meters, vp_key) AS vp_key_array,
 
-    FROM vp_near_stops2
-    GROUP BY service_date, base64_url, feed_key, trip_instance_key, stop_id, st_trip_key
+    FROM vp_near_stops
+    GROUP BY dt, service_date, vp_base64_url, feed_key, trip_instance_key, stop_id, st_trip_key
 )
 
 SELECT * FROM vp_counts_near_stops
