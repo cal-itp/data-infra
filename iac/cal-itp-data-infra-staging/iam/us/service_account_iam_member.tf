@@ -33,3 +33,9 @@ resource "google_service_account_iam_member" "enghouse-raw-sftp-service-account"
   role               = "roles/iam.workloadIdentityUser"
   member             = "serviceAccount:cal-itp-data-infra-staging.svc.id.goog[default/sftp-pod-service-account]"
 }
+
+resource "google_service_account_iam_member" "github-actions-service-account_data-analyses" {
+  service_account_id = google_service_account.github-actions-service-account.id
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${local.data-analyses_github_repository_name}"
+}
