@@ -6,7 +6,7 @@
             'field': 'dt',
             'data_type': 'date',
             'granularity': 'day'
-        }, cluster_by=['dt', 'base64_url']
+        }, cluster_by=['dt', 'vp_base64_url', 'feed_key']
     )
 }}
 
