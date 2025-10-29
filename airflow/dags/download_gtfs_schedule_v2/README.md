@@ -53,3 +53,16 @@ Follow the following steps:
     $ GOOGLE_CLOUD_PROJECT=cal-itp-data-infra CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG="gs://calitp-gtfs-download-config" CALITP_BUCKET__GTFS_SCHEDULE_RAW="gs://calitp-gtfs-schedule-raw-v2" poetry run python download_schedule_feeds.py
     ```
 
+4. Check the timestamp of the result files.
+
+    Go to Google Cloud Storage and check if the destination bucket (_CALITP_BUCKET__GTFS_SCHEDULE_RAW_) contains the new files with the timestamp in UTC time.
+
+    For example:
+
+      The schedule file and the Download Schedule Feed Results were created with `ts=2025-10-29T03:00:23.941260+00:00` where `+00:00` means that the time is in UTC.
+
+      * `gs://calitp-gtfs-schedule-raw-v2/schedule/dt=2025-10-29/ts=2025-10-29T03:00:23.941260+00:00/base64_url=XXXXX`
+      * `gs://calitp-gtfs-schedule-raw-v2/download_schedule_feed_results/dt=2025-10-29/ts=2025-10-29T03:00:23.941260+00:00/results.jsonl`
+
+
+    If the Timestamp is in Pacific time or other time the next process `Unizp and Validate GTFS Schedule Hourly` may not process those files.
