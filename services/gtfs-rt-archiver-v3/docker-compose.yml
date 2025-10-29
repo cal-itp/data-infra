@@ -3,7 +3,7 @@ x-gtfs-rt-archiver-v3-common:
   &gtfs-rt-archiver-v3-common
   build: .
   environment:
-    AIRFLOW_ENV: development
+    AIRFLOW_ENV: cal-itp-data-infra-staging
     CALITP_BUCKET__AIRTABLE: "gs://test-calitp-airtable"
     CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://test-calitp-gtfs-download-config"
     CALITP_BUCKET__GTFS_RT_RAW: "gs://dev-calitp-gtfs-rt-raw"
