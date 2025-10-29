@@ -6,12 +6,17 @@
     )
 }}
 
-WITH
-
-dim_stop_times AS (
-    SELECT * FROM {{ ref('dim_stop_times') }}
-    WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START', this_dt_column='_feed_valid_from', filter_dt_column='_feed_valid_from', dev_lookback_days = None) }}
+WITH dim_stop_times AS (
+    SELECT
+        *
+    FROM {{ ref('dim_stop_times') }}
+    WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START',
+                               this_dt_column='_feed_valid_from',
+                               filter_dt_column='_feed_valid_from',
+                               dev_lookback_days = None)
+    }}
 ),
+
 
 int_gtfs_schedule__frequencies_stop_times AS (
     SELECT * FROM {{ ref('int_gtfs_schedule__frequencies_stop_times') }}
@@ -48,12 +53,24 @@ stops_times_with_tz AS (
         COALESCE(LAST_VALUE(stop_timezone_coalesced)
             OVER (PARTITION BY feed_key, trip_id
                 ORDER BY dim_stop_times.stop_sequence
-                ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING), feed_timezone) AS trip_end_timezone
+                ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING), feed_timezone) AS trip_end_timezone,
+        --ST_GEOGFROMTEXT(stops.pt_geom) AS pt_geom,
+        COALESCE(dim_stop_times.shape_dist_traveled, freq.shape_dist_traveled) AS shape_dist,
     FROM dim_stop_times
     LEFT JOIN stops
         USING (feed_key, stop_id)
     LEFT JOIN int_gtfs_schedule__frequencies_stop_times freq
         USING (feed_key, trip_id, stop_id)
+),
+
+-- add difference in shape_dist_traveled
+stops_times_with_tz2 AS (
+  SELECT
+    *,
+    LEAD(shape_dist) OVER (
+        PARTITION BY feed_key, trip_id, iteration_num ORDER BY stop_sequence
+    ) - shape_dist AS difference_dist_traveled
+  FROM stops_times_with_tz
 ),
 
 grouped AS (
@@ -126,7 +143,28 @@ grouped AS (
             departure_time IS NOT NULL
         ) AS num_departure_times_populated_stop_times,
 
-    FROM stops_times_with_tz
+        ARRAY_AGG(
+            -- ignore nulls so it doesn't error out if there's a null point
+            stop_id IGNORE NULLS
+            ORDER BY stop_sequence, stop_id)
+        AS stop_id_array,
+        ARRAY_AGG(
+            stop_sequence
+            ORDER BY stop_sequence
+        ) AS stop_seq_array,
+
+        -- also get arrival_sec and departure_sec
+        ARRAY_AGG(
+            LEAST(COALESCE(trip_stop_arrival_sec, trip_stop_departure_sec)) IGNORE NULLS
+            ORDER BY stop_sequence
+        ) AS arrival_sec_array,
+        ARRAY_AGG(
+            GREATEST(COALESCE(trip_stop_arrival_sec, trip_stop_departure_sec)) IGNORE NULLS
+            ORDER BY stop_sequence
+        ) AS departure_sec_array,
+        AVG(difference_dist_traveled) AS avg_stop_spacing,
+
+    FROM stops_times_with_tz2
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
 ),
 
@@ -187,7 +225,14 @@ int_gtfs_schedule__stop_times_grouped AS (
         num_approximate_timepoint_stop_times,
         num_exact_timepoint_stop_times,
         num_arrival_times_populated_stop_times,
-        num_departure_times_populated_stop_times
+        num_departure_times_populated_stop_times,
+
+        stop_id_array,
+        stop_seq_array,
+        arrival_sec_array,
+        departure_sec_array,
+        avg_stop_spacing,
+
     FROM grouped
 )
 

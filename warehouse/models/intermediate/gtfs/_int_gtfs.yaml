@@ -317,6 +317,39 @@ models:
         description: '{{ doc("column_num_arrival_times_populated_stop_times") }}'
       - name: num_departure_times_populated_stop_times
         description: '{{ doc("column_num_departure_times_populated_stop_times") }}'
+      - name: stop_id_array
+        description: Array of stop_ids on this trip ordered by stop_sequence.
+      - name: stop_seq_array
+        description: Array of stop_sequences on this trip in ascending order.
+      - name: arrival_sec_array
+        description: |
+          Array of the calculated `arrival_sec` field in `dim_stop_times` ordered by stop_sequence.
+          This is a calculated field that does not appear directly in GTFS -
+          it is not a timestamp and can't be treated as such.
+          Represents `arrival_time` as a total number of seconds after twelve
+          hours before noon (usually midnight) on the first day of the given trip.
+          For example, `arrival_time = 21:30:45` would lead to
+          `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps
+          that wrap past midnight like `25:40:00`, which are allowed in GTFS.
+      - name: departure_sec_array
+        description: |
+          Array of the calculated `departure_sec` field in `dim_stop_times` ordered by stop_sequence.
+          This is a calculated field that does not appear directly in GTFS -
+          it is not a timestamp and can't be treated as such.
+          Represents `departure_time` as a total number of seconds after twelve
+          hours before noon (usually midnight) on the first day of the given trip.
+          For example, `departure_time = 21:30:45` would lead to
+          `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps
+          that wrap past midnight like `25:40:00`, which are allowed in GTFS.
+      - name: avg_stop_spacing
+        description: |
+          This is a calculated field based on `shape_dist_traveled` (optional in GTFS).
+          Once the change in shape_dist_traveled can be calculated between each stop along a trip,
+          the average is taken to be a trip's average stop spacing. The units are the same as
+          the units in shapes.txt.
+
   - name: int_gtfs_rt__distinct_download_configs
     description: |
       Distinct `dt`, `_config_extract_ts` pairs indicating
@@ -620,6 +653,14 @@ models:
           # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
           # even then the number of failures is very small
           where: '__rt_sampled__'
+  - name: int_gtfs_rt__trip_updates_trip_stop_day_map_grouping
+    description: |
+      This table groups trip updates (stop_time_updates) messages by `dt` (UTC) and `service_date` (usually Pacific)
+      to enable:
+        1. Incremental materialization based on `dt` (to make efficient use of upstream partitions)
+        2. Downstream grouping by `service_date` alone (since that is the appropriate final grain for trip-based analysis)
+      See downstream `fct_stop_time_metrics` table for further documentation.
+
   - name: int_gtfs_rt__vehicle_positions_trip_day_map_grouping
     description: |
       This table groups vehicle positions messages by `dt` (UTC) and `service_date` (usually Pacific)
@@ -640,3 +681,10 @@ models:
           # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
           # even then the number of failures is very small
           where: '__rt_sampled__'
+  - name: int_gtfs_rt__vehicle_positions_trip_stop_day_map_grouping
+    description: |
+      This table groups vehicle positions messages by `dt` (UTC) and `service_date` (usually Pacific)
+      to enable:
+        1. Incremental materialization based on `dt` (to make efficient use of upstream partitions)
+        2. Downstream grouping by `service_date` alone (since that is the appropriate final grain for trip-based analysis)
+      See downstream `fct_vehicle_positions_stop_metrics` table for further documentation.
