@@ -59,6 +59,10 @@ models:
         description: The `enrollment_method` value from the `event_properties` column
       - name: event_properties_claims_provider
         description: The `claims_provider` value from the `event_properties` column (previously `event_properties_auth_provider`)
+      - name: event_properties_card_category
+        description: The `card_category` value from the `event_properties` column
+      - name: event_properties_card_scheme
+        description: The `card_scheme` value from the `event_properties` column
       - name: event_properties_card_tokenize_func
         description: The `card_tokenize_func` value from the `event_properties` column
       - name: event_properties_card_tokenize_url
@@ -87,6 +91,8 @@ models:
         description: The `status` value from the `event_properties` column
       - name: event_properties_transit_agency
         description: The `transit_agency` value from the `event_properties` column
+      - name: event_properties_transit_processor
+        description: The `transit_processor` value from the `event_properties` column
       - name: event_properties_enrollment_flows
         description: A semi-colon delimited list of `enrollment_flows` values from the `event_properties` column (previously `event_properties_eligibility_types`)
       - name: user_properties_enrollment_method
