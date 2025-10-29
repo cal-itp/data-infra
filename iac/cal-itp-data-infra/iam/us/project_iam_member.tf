@@ -558,7 +558,8 @@ resource "google_project_iam_member" "github-actions-terraform" {
     "roles/iam.workloadIdentityPoolAdmin",
     "roles/editor",
     "roles/storage.admin",
-    "roles/logging.configWriter"
+    "roles/logging.configWriter",
+    "roles/secretmanager.secretAccessor",
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.github-actions-terraform.email}"
