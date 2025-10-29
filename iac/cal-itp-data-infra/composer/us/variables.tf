@@ -2,6 +2,7 @@ locals {
   namespace            = "airflow-jobs"
   secret               = "jobs-data"
   service_account_name = "composer-service-account"
+
   # This regular expression corresponds to the Python package name specification
   # https://packaging.python.org/en/latest/specifications/name-normalization/
   python_package_regex  = "(?P<name>[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9])(?P<version>.*)"
@@ -33,6 +34,10 @@ data "kubernetes_secret" "composer" {
   }
 }
 
+data "google_secret_manager_secret_version" "slack-airflow-url" {
+  # The secret name is case sensitive
+  secret = "SLACK_AIRFLOW_WEBHOOK_URL"
+}
 
 data "google_client_config" "default" {}
 
