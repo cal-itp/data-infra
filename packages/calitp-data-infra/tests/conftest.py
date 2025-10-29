@@ -1,3 +1,3 @@
 import os
 
-os.environ["AIRFLOW_ENV"] = "development"
+os.environ["AIRFLOW_ENV"] = "cal-itp-data-infra-staging"
