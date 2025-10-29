@@ -34,6 +34,10 @@ data "kubernetes_secret" "composer" {
   }
 }
 
+data "google_secret_manager_secret_version" "slack-airflow-url" {
+  # The secret name is case sensitive
+  secret = "SLACK_AIRFLOW_WEBHOOK_URL"
+}
 
 data "google_client_config" "default" {}
 
