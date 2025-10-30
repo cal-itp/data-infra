@@ -71,7 +71,7 @@ schema_fields:
     - name: YearBuilt
       type: INTEGER
     - name: Size
-      type: STRING
+      type: INTEGER
     - name: Type
       type: STRING
     - name: DOTCapitalResponsibility
@@ -79,7 +79,7 @@ schema_fields:
     - name: OrganizationCapitalResponsibility
       type: FLOAT
     - name: ConditionAssessment
-      type: FLOAT
+      type: STRING
     - name: ConditionAssessmentDate
       type: TIMESTAMP
     - name: SectionOfLargerFacility
@@ -96,7 +96,7 @@ schema_fields:
       type: STRING
     - name: PrivateMode
       type: STRING
-    - name: Note
+    - name: Notes
       type: STRING
     - name: LastModifiedDate
       type: TIMESTAMP
@@ -113,7 +113,7 @@ schema_fields:
     - name: VehicleStatus
       type: STRING
     - name: Vin
-      type: INTEGER
+      type: STRING
     - name: NTDID
       type: STRING
     - name: ADAAccess
@@ -296,7 +296,7 @@ schema_fields:
     - name: SecondaryMode
       type: STRING
     - name: TotalVehicles
-      type: STRING
+      type: INTEGER
     - name: UsefulLifeBenchmark
       type: BOOLEAN
     - name: YearOfManufacture
