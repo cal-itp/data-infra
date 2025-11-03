@@ -75,7 +75,7 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
 
 def download_all(task_instance, execution_date, **kwargs):
     sentry_sdk.init()
-    start = pendulum.now()
+    start = pendulum.now("UTC")
     auth_dict = get_secrets_by_label("gtfs_schedule")
 
     extract = get_latest(GTFSDownloadConfigExtract)
