@@ -32,7 +32,7 @@
 #     {html_report}
 #     """  # noqa: E231,E241
 
-#     if os.environ["AIRFLOW_ENV"] == "development":
+#     if os.environ["AIRFLOW_ENV"] == "cal-itp-data-infra-staging":
 #         print(
 #             f"Skipping since in development mode! Would have emailed {failures_df.shape[0]} failures."
 #         )
