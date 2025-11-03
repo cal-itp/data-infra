@@ -102,14 +102,19 @@ class DBTBigQueryToGCSOperator(BaseOperator):
         query = f"SELECT {','.join(self.column_select())} FROM {self.dataset_id()}.{self.table_id()}"
 
         gcs_export = f"""
-            EXPORT DATA OPTIONS(
-                uri='{self.destination_bucket_name}/{self.destination_object_name.replace(".csv", "")}*.csv',
-                format='CSV',
-                overwrite=true,
-                header=true,
-                field_delimiter='\t'
-            ) AS
-            {query};
+            BEGIN
+                CREATE TEMP TABLE _SESSION.tmpExport{self.table_id()} AS (
+                    {query}
+                );
+                EXPORT DATA OPTIONS(
+                    uri='{self.destination_bucket_name}/{self.destination_object_name.replace(".csv", "")}*.csv',
+                    format='CSV',
+                    overwrite=true,
+                    header=true,
+                    field_delimiter='\t'
+                ) AS
+                SELECT * FROM _SESSION.tmpExport{self.table_id()};
+            END;
             """
         logging.info(gcs_export)
 
