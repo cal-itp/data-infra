@@ -24,7 +24,7 @@ x-common-fields:
     tests:
       - not_null
       - accepted_values:
-          values: [2022, 2023]
+          values: [2022, 2023, 2024]
   - &reporter_type
     name: reporter_type
     description: '{{ doc("ntd_reporter_type") }}'
