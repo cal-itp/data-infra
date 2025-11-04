@@ -40,6 +40,7 @@ with DAG(
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
     # tested
+    # gs://calitp-airtable/california_transit__gtfs_datasets/dt=2025-10-29/ts=2025-10-29T02:00:00+00:00/gtfs_datasets.jsonl.gz
     dataset = AirtableToGCSOperator(
         task_id="california_transit_gtfs_datasets",
         air_base_id="appPnJWrQ7ui4UmIl",

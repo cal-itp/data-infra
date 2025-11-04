@@ -27,7 +27,7 @@ class TestAirtableToGCSOperator:
 
     @pytest.fixture
     def object_path(self) -> AirtableObjectPath:
-        return AirtableObjectPath("california_transit", "county_geography")
+        return AirtableObjectPath("california_transit", "gtfs datasets")
 
     @pytest.fixture
     def test_dag(self, execution_date: datetime) -> DAG:
@@ -48,7 +48,7 @@ class TestAirtableToGCSOperator:
             airtable_conn_id="airtable_default",
             air_base_id="appPnJWrQ7ui4UmIl",
             air_base_name="california_transit",
-            air_table_name="county geography",
+            air_table_name="gtfs datasets",
             gcp_conn_id="google_cloud_default",
             bucket=os.environ.get("CALITP_BUCKET__AIRTABLE"),
             dag=test_dag,
@@ -75,10 +75,10 @@ class TestAirtableToGCSOperator:
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == os.path.join(
             os.environ.get("CALITP_BUCKET__AIRTABLE"),
-            "california_transit__county_geography",
+            "california_transit__gtfs_datasets",
             "dt=2025-06-01",
             "ts=2025-06-01T00:00:00+00:00",
-            "county_geography.jsonl.gz",
+            "gtfs_datasets.jsonl.gz",
         )
 
         compressed_result = gcs_hook.download(
@@ -90,8 +90,16 @@ class TestAirtableToGCSOperator:
 
         airtable_rows = airtable_hook.read(
             air_base_id="appPnJWrQ7ui4UmIl",
-            air_table_name="county geography",
+            air_table_name="gtfs datasets",
         )
         assert result[0]["id"] == airtable_rows[0]["id"]
         for key, _ in airtable_rows[0]["fields"].items():
-            assert key.lower().replace(" ", "_") in result[0]
+            assert (
+                key.lower()
+                .replace(" ", "_")
+                .replace("(", "_")
+                .replace(")", "_")
+                .replace(":", "_")
+                .replace("-", "_")
+                in result[0]
+            )
