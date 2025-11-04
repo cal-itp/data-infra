@@ -36,7 +36,7 @@ resource "google_composer_environment" "calitp-composer" {
     environment_size = "ENVIRONMENT_SIZE_MEDIUM"
 
     software_config {
-      image_version = "composer-2.10.1-airflow-2.9.3"
+      image_version = "composer-2.10.2-airflow-2.9.3"
 
       airflow_config_overrides = {
         celery-worker_concurrency                  = 4
