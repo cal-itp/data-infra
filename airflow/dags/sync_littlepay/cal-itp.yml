@@ -1,3 +1,0 @@
-operator: operators.LittlepayRawSync
-instance: cal-itp
-access_key_secret_name: LITTLEPAY_AWS_IAM_CAL_ITP_ACCESS_KEY
