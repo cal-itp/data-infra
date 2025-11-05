@@ -19,8 +19,12 @@ Secrets must be tagged with `gtfs_schedule: true` to be loaded and are reference
 
 To download the GTFS schedule data manually you can also run from the command line using `poetry run python download_schedule_feeds.py`.
 
-Follow the following steps:
+> [!IMPORTANT]
+> This command should be executed after the scheduled DAG runs but before noon Pacific Time to be a part of the regular GTFS Feed.
+> Unless the schedule changes, aim for 9am to noon Pacific Time due to some business logic rules.
 
+
+To execute the command, follow these steps:
 
 1. Login with gcloud.
 
