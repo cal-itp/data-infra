@@ -110,8 +110,7 @@ class DBTBigQueryToGCSOperator(BaseOperator):
                     uri='{self.destination_bucket_name}/{self.destination_object_name.replace(".csv", "")}*.csv',
                     format='CSV',
                     overwrite=true,
-                    header=true,
-                    field_delimiter='\t'
+                    header=true
                 ) AS
                 SELECT * FROM _SESSION.tmpExport{self.table_id()};
             END;

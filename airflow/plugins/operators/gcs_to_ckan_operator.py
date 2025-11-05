@@ -2,7 +2,6 @@ import logging
 from io import StringIO
 from typing import Sequence
 
-import pandas as pd
 from hooks.ckan_hook import CKANHook
 
 from airflow.models import BaseOperator
@@ -51,10 +50,7 @@ class GCSToCKANOperator(BaseOperator):
             resource_name=self.resource_name,
         )
 
-    def build_csv(self):
-        combined_data_stream = StringIO()
-        header_written = False
-
+    def upload(self):
         csv_file_names = self.gcs_hook().list(
             bucket_name=self.bucket_name.replace("gs://", ""), prefix=self.object_name
         )
@@ -63,31 +59,25 @@ class GCSToCKANOperator(BaseOperator):
         )
         assert len(csv_file_names) > 0
 
-        for file_name in csv_file_names:
-            logging.info(f"Reading {self.bucket_name}/{file_name}")
-            data = self.gcs_hook().download(
-                bucket_name=self.bucket_name.replace("gs://", ""),
-                object_name=file_name,
-            )
+        with CKANHook(
+            ckan_conn_id=self.ckan_conn_id,
+            resource_id=self.resource_id(),
+            resource_name=self.resource_name,
+        ) as ckan:
+            logging.info(f"ckan: {ckan}")
+            for file_name in csv_file_names:
+                data = self.gcs_hook().download(
+                    bucket_name=self.bucket_name.replace("gs://", ""),
+                    object_name=file_name,
+                )
+                file = StringIO(data.decode())
+                result = ckan.multi_upload(file=file)
+                logging.info(f"Uploaded: {file_name} as {result}")
 
-            df = pd.read_csv(StringIO(data.decode()), sep="\t", dtype=str)
-
-            if not header_written:
-                df.to_csv(combined_data_stream, index=False)
-                header_written = True
-            else:
-                df.to_csv(combined_data_stream, index=False, header=False)
-
-        logging.info("Build success")
-        return combined_data_stream.getvalue()
+        return result
 
     def execute(self, context: Context) -> dict[str, str | bool | int | float]:
         logging.info(f"Publishing {self.resource_name}...")
 
-        csv = self.build_csv()
-        result = self.ckan_hook().upload(
-            resource_id=self.resource_id(),
-            file=csv,
-        )
-        logging.info(result)
+        result = self.upload()
         return result

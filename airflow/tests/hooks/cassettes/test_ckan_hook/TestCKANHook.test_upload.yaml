@@ -9,16 +9,16 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/8fbf84fa-3258-4977-bfa8-37b7c207b4a8
+      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/1705ea6b-67e9-4ced-ae07-a8cb5aedbec8
       accept-encoding:
       - gzip
       content-type:
       - application/json; charset=UTF-8
       x-goog-user-project:
-      - cal-itp-data-infra-staging
+      - cal-itp-data-infra
       x-upload-content-type:
       - application/json; charset=UTF-8
     method: GET
@@ -206,7 +206,7 @@ interactions:
       Content-Type:
       - text/csv
       Date:
-      - Wed, 01 Oct 2025 00:19:58 GMT
+      - Thu, 06 Nov 2025 18:33:33 GMT
       ETag:
       - CLWYhdS/948DEAE=
       Expires:
@@ -221,7 +221,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AAwnv3JsXx2Xl7KRH-jD2l9BiNLb_nRGMmP3VxzotLzSG7H6V2Fv1bFtVYYMJwdVQgJYeAqs
+      - AOCedOFiRSfh9M9BJzekt8X3MKXucQ00Qg0Fymp5FnFUTF9nGsHwbqKjbmS9gJZGt9mvUPXgURx8MA
       X-Goog-Generation:
       - '1758926454475829'
       X-Goog-Hash:
@@ -238,7 +238,7 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: "--7f2e45942cea80b744cc94ffdc44511a\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--7f2e45942cea80b744cc94ffdc44511a\r\nContent-Disposition:
+    body: "--b07bb109ae9fecae9a69b540e0329cff\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--b07bb109ae9fecae9a69b540e0329cff\r\nContent-Disposition:
       form-data; name=\"upload\"; filename=\"upload\"\r\n\r\nDATASET_NAME\tTAGS\tDESCRIPTION\tMETHODOLOGY\tTOPIC\tPUBLISHER_ORGANIZATION\tPLACE\tFREQUENCY\tNEXT_UPDATE\tCREATION_DATE\tLAST_UPDATE\tSTATUS\tTEMPORAL_COVERAGE_BEGIN\tTEMPORAL_COVERAGE_END\tDATA_DICTIONARY\tDATA_DICTIONARY_TYPE\tCONTACT_ORGANIZATION\tCONTACT_POSITION\tCONTACT_NAME\tCONTACT_EMAIL\tPUBLIC_ACCESS_LEVEL\tACCESS_CONSTRAINTS\tUSE_CONSTRAINTS\tDATA_LIFE_SPAN\tCALTRANS_LINK\tDATA_STANDARD\tNOTES\tGIS_THEME\tGIS_HORIZ_ACCURACY\tGIS_VERT_ACCURACY\tGIS_COORDINATE_SYSTEM_EPSG\tGIS_VERT_DATUM_EPSG\r\nagency\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
       row is a cleaned row from an agency.txt file. Definitions for the original GTFS
       fields are available at: https://gtfs.org/reference/static#agencytxt.\tCal-ITP
@@ -407,7 +407,7 @@ interactions:
       into a statewide table for analysis purposes only. Do not use for trip planner
       ingestion, rather is meant to be used for statewide analytics and other use
       cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
-      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--7f2e45942cea80b744cc94ffdc44511a--\r\n"
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--b07bb109ae9fecae9a69b540e0329cff--\r\n"
     headers:
       Accept:
       - '*/*'
@@ -420,29 +420,28 @@ interactions:
       Content-Length:
       - '19436'
       Content-Type:
-      - multipart/form-data; boundary=7f2e45942cea80b744cc94ffdc44511a
+      - multipart/form-data; boundary=b07bb109ae9fecae9a69b540e0329cff
       User-Agent:
       - ckanapi/1.0 (+https://dds.dot.ca.gov)
       X-CKAN-API-Key:
       - FILTERED
     method: POST
-    uri: https://test-data.technology.ca.gov/api/action/resource_patch
+    uri: https://test-data.technology.ca.gov/api/action/resource_update
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA8xTTW/cIBD9Kxbn9RrjTyxVPfTcU6Ne0RiGNVrWWIATpVH+e4Xj7W6lSk1uOSEe
-        8+bNzBteyIR2IUNGphiXMBRFxBBzBRGOEeU0O+tOz0cJx5N7LGAxRVWAjMbNRSKKMLmnrzNc8IvH
-        4FYvUSwQ5UQOGQmrlBgCGbLoVzxkxGNYbSRD9kIkyAmFhRDFuiiIqMiQzau1h2x/W729g84w78h7
-        Ck3q0uOeljDKmpzyvKIPrBpKOjTsyBkv+y4FphQhOo8iNfaIt3pvL9LNEcwcBFgrPErnVRBOi71l
-        bew9DYP0ZklDSupJQzt/gdQ5+fbjZwImCFO6NjXVuul01XPVco6Kso7RHhmO0LXQp1izNTGiAsmx
-        zmstMa9Z3+WjbmlOaVsrBZpzLrfo05wq3gU02JBqMkGkboQyMorFLavdh3MN2Ky4OGW0uRtaSXNa
-        PlA6lHxo+mPb9bQsk8oFI2wJ/0vhfcnoRjEXjM8L3ly9IsLMM/obnvYp5fu+iyS28+ZkZrAf2IJi
-        8w9jMQKDnkrMGW2bvGbdmEOvx7zHZkRV11LLqrjub/GeQRfKPc3WgSrWJR2pwgXkGU4odrveobmx
-        XDD7ptC3L/K2Uh8z/Q/t7wEHjGleV/TqdTC/0rXkrOXpGiFu8973/5CRCOEs/vmDMlYNFRvK6thU
-        PWfbgn5aS+56Jzv6+vobAAD//wMAowRHufMEAAA=
+        H4sIAAAAAAAAA4xSwYrbMBD9FaFzFMuS7ciG0kOhpYdCIaFXM5bGsahiGUneZbvsvxclXrI9NScz
+        o3me9968VzqhW2hH6JTSEruiSBgTM5Bgn1BPs3f+/LLXsD/7pwIWW8gCdLJ+LjKwj5N//jzDBT8F
+        jH4NGvt1MZCQ7giNq9YYI+1ICivuCA0YV5doR16pBj1h7yCmDWBoR+bVuR3Z3tbgPrQCbjNUcFEz
+        3jLJT0J2Je9qsW9FW6pD3pmZx+QD9pnmE96X31+0nxPYOfbgXB9Q+2Bi78d+EzBal2EjuJhxow8X
+        yKTpl+OvvGKCOOUSQNWyRAFK1pWBw1gN6mAaJXUjmlLLPGuvlAc0oFusWDVqZJVQBzaMDWecN5Ux
+        MLZtq/P01Y6LN3a0H7SWJePNqVSdlJ2s9lzUUog8fsEEWdX/IaqWUl0h9oLpZcG7s++d3s4zhns/
+        H/UqGhz7fvpJvp2+HslRT2hWh+THtjr/cwH9G87Yb1pBgOIameBNzSpxGBiocWAK6wFNVenx5szi
+        o805oh3ht2jc3P+XXbR/clW2omlzmXK0sve34+4IvcXkofheE4CpeIRi8U6oeOR4hfHPs/NginXJ
+        n43Yuxi6dd/e/gIAAP//AwCxJ7X6cAMAAA==
     headers:
       CF-RAY:
-      - 9877caa1e92d909c-SJC
+      - 99a6ae108c0cac0d-PDX
       Cache-Control:
       - max-age=0
       Connection:
@@ -452,7 +451,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Wed, 01 Oct 2025 00:19:59 GMT
+      - Thu, 06 Nov 2025 18:33:37 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -462,73 +461,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Wed, 01 Oct 2025 00:19:59 GMT
-      strict-transport-security:
-      - max-age=31536000; includeSubdomains
-      x-content-type-options:
-      - nosniff
-      x-xss-protection:
-      - 1; mode=block
-    status:
-      code: 200
-      message: OK
-- request:
-    body: '{"id": "bedac9e4-4fce-4287-bf60-0064ddaf999c"}'
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip, deflate
-      Authorization:
-      - FILTERED
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '46'
-      Content-Type:
-      - application/json
-      User-Agent:
-      - ckanapi/1.0 (+https://dds.dot.ca.gov)
-      X-CKAN-API-Key:
-      - FILTERED
-    method: POST
-    uri: https://test-data.technology.ca.gov/api/action/resource_show
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA8xTTW/cIBD9Kxbn9RrjTyxVPfTcU6Ne0RiGNVrWWIATpVH+e4Xj7W6lSk1uOSEe
-        8+bNzBteyIR2IUNGphiXMBRFxBBzBRGOEeU0O+tOz0cJx5N7LGAxRVWAjMbNRSKKMLmnrzNc8IvH
-        4FYvcYPIISNhlRJDIEMW/YqHjHgMq41kyF6IBDmhsBCiWBcFERUZsnm19pDtb6u3d9AZ5h15T51J
-        XXrc0xJGWZNTnlf0gVVDSYeGHTnjZd+lwJQiROdRpL4e8Vbv7UW6OYKZgwBrhUfpvArCabF3rI29
-        p2GQ3ixpRkk9aWjnL5A6J99+/EzABGFK16amWjedrnquWs5RUdYx2iPDEboW+hRrtiZGVCA51nmt
-        JeY167t81C3NKW1rpUBzzuUWfZpTxbuABhtSTSaI1I1QRkaxuGW1+3CuAZsVF6eMNndDK2lOywdK
-        h5IPTX9su56WZVK5YIQt4X8pvC8Z3SjmgvF5wZurV0SYeUZ/w9M6pXzfd5HEdt6czAz2A1tQbP5h
-        LEZg0FOJOaNtk9esG3Po9Zj32Iyo6lpqWRXX9S3eM+hCuafZOlDFuqQjVbiAPMMJxW7XOzQ3lgtm
-        3xT69kXeVupjpv+h/T3ggDHN64pevQ7mV7qWnLU8XSPEbd77/h8yEiGcxT9/UMaqoWJDWR2bquds
-        W9BPa8ld72RHX19/AwAA//8DALdi/2jyBAAA
-    headers:
-      CF-RAY:
-      - 9877caa81ff7909c-SJC
-      Cache-Control:
-      - max-age=0
-      Connection:
-      - keep-alive
-      Content-Encoding:
-      - gzip
-      Content-Type:
-      - application/json;charset=utf-8
-      Date:
-      - Wed, 01 Oct 2025 00:19:59 GMT
-      Server:
-      - cloudflare
-      Transfer-Encoding:
-      - chunked
-      alt-svc:
-      - h3=":443"; ma=86400
-      cf-cache-status:
-      - DYNAMIC
-      expires:
-      - Wed, 01 Oct 2025 00:19:59 GMT
+      - Thu, 06 Nov 2025 18:33:37 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
