@@ -473,7 +473,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [2022, 2023]
+              values: [2022, 2023, 2024]
               quote: false
       - *reporter_type
       - name: sales_tax
@@ -503,7 +503,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [2022, 2023]
+              values: [2022, 2023, 2024]
               quote: false
       - *ntd_id
       - *agency
@@ -549,7 +549,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [2022, 2023]
+              values: [2022, 2023, 2024]
               quote: false
       - *reporter_type
       - *ntd_id
@@ -731,7 +731,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [2022, 2023]
+              values: [2022, 2023, 2024]
               quote: false
       - *ntd_id
       - *type_of_service
