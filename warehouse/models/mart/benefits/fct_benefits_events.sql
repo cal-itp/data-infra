@@ -17,6 +17,8 @@ WITH fct_benefits_events_raw AS (
     device_id,
     device_type,
     event_id,
+    {{ json_extract_column('event_properties', 'card_category') }},
+    {{ json_extract_column('event_properties', 'card_scheme') }},
     {{ json_extract_column('event_properties', 'card_tokenize_func') }},
     {{ json_extract_column('event_properties', 'card_tokenize_url') }},
     -- Historical data existed in `auth_provider` but new data is in `claims_provider`
@@ -58,6 +60,12 @@ WITH fct_benefits_events_raw AS (
     {{ json_extract_column('event_properties', 'path') }},
     {{ json_extract_column('event_properties', 'status') }},
     {{ json_extract_column('event_properties', 'transit_agency') }},
+    -- Auto-populate `transit_processor` with 'littlepay' for all events prior to first confirmed Switchio enrollment
+    COALESCE(
+      {{ json_extract_column('event_properties', 'transit_processor', no_alias = true) }},
+      CASE WHEN client_event_time < '2025-10-24T19:00:00Z' THEN "littlepay" END,
+      ""
+    ) AS event_properties_transit_processor,
     event_time,
     event_type,
     language,
@@ -116,6 +124,8 @@ fct_benefits_events AS (
     device_id,
     device_type,
     event_id,
+    event_properties_card_category,
+    event_properties_card_scheme,
     event_properties_card_tokenize_func,
     event_properties_card_tokenize_url,
     CASE
@@ -164,6 +174,7 @@ fct_benefits_events AS (
     event_properties_path,
     event_properties_status,
     event_properties_transit_agency,
+    event_properties_transit_processor,
     event_time,
     CASE
       WHEN event_type = "selected eligibility verifier"
@@ -278,6 +289,8 @@ fct_benefits_historic_enrollments AS (
     device_id,
     device_type,
     event_id,
+    event_properties_card_category,
+    event_properties_card_scheme,
     event_properties_card_tokenize_func,
     event_properties_card_tokenize_url,
     CASE
@@ -305,6 +318,7 @@ fct_benefits_historic_enrollments AS (
     event_properties_path,
     "success" AS event_properties_status,
     "Monterey-Salinas Transit" AS event_properties_transit_agency,
+    event_properties_transit_processor,
     event_time,
     "returned enrollment" AS event_type,
     language,
