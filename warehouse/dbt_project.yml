@@ -170,6 +170,11 @@ models:
           domain: mart
           dataset: gtfs_schedule_latest
         schema: mart_gtfs_schedule_latest
+      gtfs_rollup:
+        +labels:
+          domain: mart
+          dataset: gtfs_rollup
+        schema: mart_gtfs_rollup
       kuba:
         +labels:
           domain: mart

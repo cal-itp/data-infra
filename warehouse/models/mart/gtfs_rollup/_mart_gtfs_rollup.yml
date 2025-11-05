@@ -1,0 +1,234 @@
+version: 2
+
+x-common-fields:
+  # Roughly alphabetical + category (feed_*, rt_* original defs, schedule to RT)
+  - &base64_url
+    name: base64_url
+    description: '{{ doc("column_base64_url") }}'
+  - &feed_key
+    name: feed_key
+    description: '{{ doc("gtfs_schedule_feed_key") }}'
+    tests:
+      - not_null
+      - relationships:
+          to: ref('dim_schedule_feeds')
+          field: key
+  - &gtfs_rt_name
+    name: gtfs_dataset_name
+    description: &gtfs_dataset_name_desc |
+      Name from the associated GTFS dataset record.
+  # GTFS schedule tables: dim_routes, dim_stops, dim_shapes, etc
+  - &route_type_0
+    name: route_type_0
+    description: |
+      The count of stop events associated with route_type 0 - Tram,
+      Streetcar, Light rail
+  - &route_type_1
+    name: route_type_1
+    description: |
+      The count of stop events associated with route_type 1 - Subway, Metro
+  - &route_type_2
+    name: route_type_2
+    description: |
+      The count of stop events associated with route_type 2 - Rail
+  - &route_type_3
+    name: route_type_3
+    description: |
+      The count of stop events associated with route_type 3 - Bus
+  - &route_type_4
+    name: route_type_4
+    description: |
+      The count of stop events associated with route_type 4 - Ferry
+  - &route_type_5
+    name: route_type_5
+    description: |
+      The count of stop events associated with route_type 5 - Cable Tram
+  - &route_type_6
+    name: route_type_6
+    description: |
+      The count of stop events associated with route_type 6 - Aerial lift,
+      suspended cable car (e.g., gondola lift, aerial tramway)
+  - &route_type_7
+    name: route_type_7
+    description: |
+      The count of stop events associated with route_type 7 - Cable Tram
+  - &route_type_11
+    name: route_type_11
+    description: |
+      The count of stop events associated with route_type 11 - Trolleybus
+  - &route_type_12
+    name: route_type_12
+    description: |
+      The count of stop events associated with route_type 12 - Monorail
+  - &missing_route_type
+    name: missing_route_type
+    description: |
+      The count of stop events associated with a `stop_id` that had a null `route_type` value in `dim_routes`
+  - &stop_pt_geom
+    name: pt_geom
+    description:  |
+      GEOGPOINT created by the stop latitute and longitude
+  - &shape_pt_array
+    name: pt_array
+    description: |
+      Ordered array of WKT points that describe this shape.
+  # time aggregation
+  - &day_type
+    name: day_type
+    description: |
+      Days of the week are categorized into weekday / Saturday / Sunday.
+  - &time_of_day
+    name: time_of_day
+    description: |
+      Categorized based on the Pacific Time departure of the trip's first departure.
+      Grouping each military hour into a time-of-day for transit service.
+      Ex: Hours 0-3 are inclusive, from 12:00 AM to 3:59 AM.
+      Hours 0-3: Owl
+      Hours 4-6: Early AM
+      Hours 7-9: AM Peak
+      Hours 10-14: Midday
+      Hours 15-19: PM Peak
+      Hours 20-23: Evening
+  - &month
+    name: month
+    description: |
+      Actual calendar month (Pacific Time dates) in which this service was scheduled to occur.
+  - &year
+    name: year
+    description: |
+      Actual calendar year (Pacific Time dates) in which this service was
+      scheduled to occur.
+  - &n_trip_instance_keys
+    name: n_trips
+    description: |
+      Count of distinct trip_instance_keys, which capture a single
+      trip on a service_date.
+  - &n_days
+    name: n_days
+    description: Count of distinct service_dates in this month for this day_type.
+  - &n_feeds
+    name: n_feeds
+    description: Count of distinct feed_keys in this month for this day_type.
+
+models:
+  - name: fct_monthly_scheduled_trips
+    description: |
+      An monthly aggregation of GTFS scheduled trips by month-day_type (weekday/Sat/Sun).
+      Keeps the trip grain in `fct_scheduled_trips`, joins this with the shape_id present
+      in `fct_daily_scheduled_shapes`.
+      Each row is unique on name-month-year-day_type-trip_id-iteration_num.
+      It can be interpreted as:
+      In a typical month, we observed weekday Trip 1 service (across 20+ days),
+      Saturday Trip 1 service (across 4 days that month),
+      and Sunday Trip 1 service (across 4 days that month).
+    columns:
+      - name: name
+        description: *gtfs_dataset_name_desc
+      - *month
+      - *year
+      - &month_first_day
+        name: month_first_day
+        description: |
+          First day of the month saved as a date.
+          Service_date of 2025-09-15 would become 2025-09-01.
+      - *day_type
+      - *time_of_day
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: route_short_name
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
+      - name: route_long_name
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
+      - name: route_name
+        description: &route_name_desc |
+          Concatenated route_short_name and route_long_name.
+      - name: route_desc
+        description: '{{ doc("gtfs_routes__route_desc") }}'
+      - name: route_color
+        description: '{{ doc("gtfs_routes__route_color") }}'
+      - name: route_text_color
+        description: '{{ doc("gtfs_routes__route_text_color") }}'
+      - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: shape_array_key
+        description: Foreign key to dim_shapes_arrays.
+      - name: service_hours
+        description: '{{ doc("column_service_hours") }}'
+      - *n_trip_instance_keys
+      - *n_days
+      - *n_feeds
+
+  - name: fct_monthly_routes
+    description: |
+      An aggregation of GTFS schedule routes with trip activity in a given
+      month, where the shape with the most trips is associated.
+    columns:
+      - name: name
+        description: *gtfs_dataset_name_desc
+      - *year
+      - *month
+      - *month_first_day
+      - name: route_short_name
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
+      - name: route_long_name
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
+      - name: route_name
+        description: *route_name_desc
+      - name: direction_id
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: shape_array_key
+        description: Foreign key to dim_shapes_arrays.
+      - *n_trip_instance_keys
+      - *shape_pt_array
+
+  - name: fct_monthly_scheduled_stops
+    description: |
+      An aggregation of GTFS schedule stops with stop time activity in a given
+      month.
+    columns:
+      - name: name
+        description: *gtfs_dataset_name_desc
+      - *year
+      - *month
+      - *day_type
+      - name: stop_id
+        description: '{{ doc("gtfs_stops__stop_id") }}'
+      - name: stop_key
+        description: Foreign key to the `dim_stops` table.
+      - name: tts_stop_name
+        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
+      - name: ttl_stop_event_count
+        description: |
+            Total stop event count (stop time arrivals) at the stop
+            by gtfs_dataset_name-year-month-day_type.
+      - *n_days
+      - *n_feeds
+      - *route_type_0
+      - *route_type_1
+      - *route_type_2
+      - *route_type_3
+      - *route_type_4
+      - *route_type_5
+      - *route_type_6
+      - *route_type_7
+      - *route_type_11
+      - *route_type_12
+      - *missing_route_type
+      - name: tts_stop_name
+        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
+      - *stop_pt_geom
+      - name: parent_station
+        description: '{{ doc("gtfs_stops__parent_station") }}'
+      - name: stop_code
+        description: '{{ doc("gtfs_stops__stop_code") }}'
+      - name: stop_name
+        description: '{{ doc("gtfs_stops__stop_name") }}'
+      - name: stop_desc
+        description: '{{ doc("gtfs_stops__stop_desc") }}'
+      - name: location_type
+        description: '{{ doc("gtfs_stops__location_type") }}'
+      - name: wheelchair_boarding
+        description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'

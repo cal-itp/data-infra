@@ -3,3 +3,5 @@ packages:
     version: 1.3.0
   - package: metaplane/dbt_expectations
     version: 0.10.9
+  - package: dbt-labs/codegen
+    version: 0.13.1
