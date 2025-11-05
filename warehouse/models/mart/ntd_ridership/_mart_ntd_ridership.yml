@@ -39,15 +39,6 @@ x-common-fields:
     description: '{{ doc("ntd_execution_timestamp") }}'
 
 models:
-  - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_upt
-  - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__calendar_year_vrm
-  - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__master
-  - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__upt_estimates
-  - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__upt
-  - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__voms
-  - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__vrh
-  - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__vrm_estimates
-  - name: fct_complete_monthly_ridership_with_adjustments_and_estimates__vrm
   - name: fct_complete_monthly_ridership_with_adjustments_and_estimates
     description: |
       The Monthly module includes a limited set of key indicators reported by transit properties. Data is reported on a
