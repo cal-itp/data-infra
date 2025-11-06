@@ -1,0 +1,81 @@
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+          - projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+          - bucket: $${sys.get_env("CALITP_BUCKET__GTFS_RT_RAW")}
+          - base64Url: $${args.base64Url}
+          - pipelineUrl: $${args.pipelineUrl}
+          - startAt: $${args.startAt}
+          - type: $${args.type}
+          - authorizationUrlParameterName: $${args.authorizationUrlParameterName}
+          - urlSecretKeyName: $${args.urlSecretKeyName}
+          - authorizationHeaderParameterName: $${args.authorizationHeaderParameterName}
+          - headerSecretKeyName: $${args.headerSecretKeyName}
+          - headers: {}
+          - query: {}
+          - fetchDate: $${text.split(startAt, "T")[0]}
+          - fetchTime: $${text.split(startAt, "T")[1]}
+          - fetchHour: $${text.split(fetchTime, ":")[0]}
+          - fetchMinute: $${text.split(fetchTime, ":")[1]}
+    - applySecrets:
+        switch:
+          - condition: $${headerSecretKeyName != null}
+            steps:
+              - headerSecret:
+                  call: googleapis.secretmanager.v1.projects.secrets.versions.accessString
+                  args:
+                    project_id: $${projectId}
+                    secret_id: $${headerSecretKeyName}
+                  result: headerSecret
+              - assignHeaders:
+                  assign:
+                    - headers:
+                        $${authorizationHeaderParameterName}: $${headerSecret}
+          - condition: $${urlSecretKeyName != null}
+            steps:
+              - querySecret:
+                  call: googleapis.secretmanager.v1.projects.secrets.versions.accessString
+                  args:
+                    project_id: $${projectId}
+                    secret_id: $${urlSecretKeyName}
+                  result: fetchQuerySecret
+              - assignQuery:
+                  assign:
+                    - query:
+                        $${authorizationUrlParameterName}: $${fetchQuerySecret}
+    - fetch:
+        parallel:
+          for:
+            value: fetchSecond
+            in: [0, 20, 40]
+            steps:
+              - wait:
+                  call: sys.sleep
+                  args:
+                    seconds: $${fetchSecond}
+              - fetchUrl:
+                  call: http.get
+                  args:
+                    url: $${pipelineUrl}
+                    timeout: 20
+                    headers: $${headers}
+                    query: $${query}
+                  result: result
+              - writeResult:
+                  call: http.post
+                  args:
+                    url: $${"https://storage.googleapis.com/upload/storage/v1/b/" + bucket + "/o"}
+                    auth:
+                      type: OAuth2
+                    query:
+                      name: $${
+                        type +
+                        "/dt=" + fetchDate +
+                        "/hour=" + fetchDate + "T" + fetchHour + ":00:00+00:00" +
+                        "/ts=" + fetchDate + "T" + fetchHour + ":" + fetchMinute + ":" + if(fetchSecond == 0, "00", fetchSecond) + "+00:00" +
+                        "/base64_url=" + base64Url +
+                        "/feed"
+                        }
+                    body: $${result.body}
