@@ -35,6 +35,7 @@ with DAG(
         render_config=RenderConfig(
             select=[
                 "+path:models/mart/gtfs/fct_schedule_feed_downloads",
+                "+path:models/mart/benefits/fct_benefits_events"
                 "path:models/staging/audit/stg_audit__cloudaudit_googleapis_com_data_access+",
             ],
             test_behavior=TestBehavior.AFTER_ALL,
