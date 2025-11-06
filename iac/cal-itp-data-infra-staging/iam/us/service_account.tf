@@ -58,6 +58,14 @@ resource "google_service_account" "composer-service-account" {
   project      = "cal-itp-data-infra-staging"
 }
 
+resource "google_service_account" "workflow-service-account" {
+  account_id   = "workflow-service-account"
+  description  = "Service account for Workflow"
+  disabled     = "false"
+  display_name = "workflow"
+  project      = "cal-itp-data-infra-staging"
+}
+
 resource "google_service_account" "sftp-pod-service-account" {
   account_id   = "sftp-pod-service-account"
   description  = "Service account for sftp server"

@@ -1,0 +1,7 @@
+- getCurrentTime:
+    call: http.get
+    args:
+        url: http://worldtimeapi.org/api/timezone/America/Santiago
+    result: CurrentDateTime
+- returnOutput:
+    return: $${CurrentDateTime.body.day_of_week}
