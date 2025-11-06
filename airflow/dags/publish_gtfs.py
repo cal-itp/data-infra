@@ -93,8 +93,8 @@ with DAG(
             "resource_name": metadata_item["DATASET_NAME"],
         }
 
-    bigquery_to_ckan = GCSToCKANOperator.partial(
-        task_id="bigquery_to_ckan",
+    gcs_to_ckan = GCSToCKANOperator.partial(
+        task_id="gcs_to_ckan",
         bucket_name=os.getenv("CALITP_BUCKET__PUBLISH"),
         dataset_id="cal-itp-gtfs-ingest-pipeline-dataset",
     ).expand_kwargs(metadata_items.output.map(create_ckan_kwargs))
@@ -103,4 +103,4 @@ with DAG(
     latest_only >> dictionary_items
     metadata_to_gcs >> metadata_to_ckan
     dictionary_to_gcs >> dictionary_to_ckan
-    bigquery_to_gcs >> bigquery_to_ckan
+    bigquery_to_gcs >> gcs_to_ckan

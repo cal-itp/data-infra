@@ -70,25 +70,6 @@ class TestGCSToCKANOperator:
         xcom_value = task_instance.xcom_pull()
         assert (
             xcom_value
-            == {
-                "cache_last_updated": None,
-                "cache_url": None,
-                "datastore_active": True,
-                "datastore_contains_all_records_of_source_file": True,
-                "description": "",
-                "format": "CSV",
-                "hash": "540ff57f389d699ed027208e2eba76a8",
-                "id": "bedac9e4-4fce-4287-bf60-0064ddaf999c",
-                "mimetype": None,
-                "mimetype_inner": None,
-                "name": "Metadata",
-                "package_id": "ba2a80ce-2065-427b-a8fb-8e5bed44cfc3",
-                "position": 0,
-                "resource_type": None,
-                "size": 19269,
-                "state": "active",
-                "url": "https://test-data.technology.ca.gov/dataset/ba2a80ce-2065-427b-a8fb-8e5bed44cfc3/resource/bedac9e4-4fce-4287-bf60-0064ddaf999c/download/upload",
-                "url_type": "upload",
-            }
+            == {"partNumber": "1", "ETag": '"540ff57f389d699ed027208e2eba76a8"'}
             | xcom_value
         )
