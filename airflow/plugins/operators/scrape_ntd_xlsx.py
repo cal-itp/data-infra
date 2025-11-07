@@ -68,14 +68,19 @@ xcom_keys = {
     ): "ridership_url",
     ("annual_database_agency_information", "2022"): "2022_agency_url",
     ("annual_database_agency_information", "2023"): "2023_agency_url",
+    ("annual_database_agency_information", "2024"): "2024_agency_url",
+    (
+        "annual_database_contractual_relationship",
+        "2022",
+    ): "2022_contractual_relationship_url",
     (
         "annual_database_contractual_relationship",
         "2023",
     ): "2023_contractual_relationship_url",
     (
         "annual_database_contractual_relationship",
-        "2022",
-    ): "2022_contractual_relationship_url",
+        "2024",
+    ): "2024_contractual_relationship_url",
     (
         "operating_and_capital_funding_time_series",
         "historical",
