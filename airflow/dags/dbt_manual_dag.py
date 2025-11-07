@@ -3,6 +3,7 @@ from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
 from cosmos.constants import TestBehavior
+from src.dbt_dag_lists import manual_list
 
 from airflow import DAG
 from airflow.operators.latest_only import LatestOnlyOperator
@@ -32,13 +33,7 @@ with DAG(
             profiles_yml_filepath="/home/airflow/gcs/data/warehouse/profiles.yml",
         ),
         render_config=RenderConfig(
-            select=[
-                "models/intermediate/gtfs/int_gtfs_rt__trip_updates_trip_stop_day_map_grouping.sql",
-                "models/mart/gtfs/fct_stop_time_metrics.sql",
-                "models/mart/gtfs/fct_stop_time_updates_sample.sql",
-                "models/mart/gtfs/fct_trip_updates_stop_metrics.sql",
-                "models/mart/gtfs/fct_trip_updates_trip_metrics.sql",
-            ],
+            select=manual_list,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
         operator_args={

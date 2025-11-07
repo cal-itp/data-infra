@@ -3,11 +3,31 @@ from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
 from cosmos.constants import TestBehavior
+from src.dbt_dag_lists import (
+    daily_audit_list,
+    daily_benefits_list,
+    daily_gtfs_schedule_list,
+    daily_kuba_list,
+)
 
 from airflow import DAG
 from airflow.operators.latest_only import LatestOnlyOperator
 
 DBT_TARGET = os.environ.get("DBT_TARGET")
+
+project_config = ProjectConfig(
+    project_name="calitp_warehouse",
+    dbt_project_path="/home/airflow/gcs/data/warehouse",
+    manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
+    models_relative_path="models",
+    seeds_relative_path="seeds/",
+)
+
+profile_config = ProfileConfig(
+    target_name=DBT_TARGET,
+    profile_name="calitp_warehouse",
+    profiles_yml_filepath="/home/airflow/gcs/data/warehouse/profiles.yml",
+)
 
 with DAG(
     dag_id="dbt_daily",
@@ -19,25 +39,12 @@ with DAG(
 ):
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
-    dbt_daily = DbtTaskGroup(
-        group_id="dbt_daily",
-        project_config=ProjectConfig(
-            dbt_project_path="/home/airflow/gcs/data/warehouse",
-            manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
-            project_name="calitp_warehouse",
-            seeds_relative_path="seeds/",
-        ),
-        profile_config=ProfileConfig(
-            target_name=DBT_TARGET,
-            profile_name="calitp_warehouse",
-            profiles_yml_filepath="/home/airflow/gcs/data/warehouse/profiles.yml",
-        ),
+    dbt_audit = DbtTaskGroup(
+        group_id="audit",
+        project_config=project_config,
+        profile_config=profile_config,
         render_config=RenderConfig(
-            select=[
-                "+fct_schedule_feed_downloads",
-                "+fct_benefits_events",
-                "stg_audit__cloudaudit_googleapis_com_data_access+",
-            ],
+            select=daily_audit_list,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
         operator_args={
@@ -46,4 +53,49 @@ with DAG(
         default_args={"retries": 1},
     )
 
-    latest_only >> dbt_daily
+    dbt_benefits = DbtTaskGroup(
+        group_id="benefits",
+        project_config=project_config,
+        profile_config=profile_config,
+        render_config=RenderConfig(
+            select=daily_benefits_list,
+            test_behavior=TestBehavior.AFTER_ALL,
+        ),
+        operator_args={
+            "install_deps": True,
+        },
+        default_args={"retries": 1},
+    )
+
+    dbt_gtfs_schedule = DbtTaskGroup(
+        group_id="gtfs_schedule",
+        project_config=project_config,
+        profile_config=profile_config,
+        render_config=RenderConfig(
+            select=daily_gtfs_schedule_list,
+            test_behavior=TestBehavior.AFTER_ALL,
+        ),
+        operator_args={
+            "install_deps": True,
+        },
+        default_args={"retries": 1},
+    )
+
+    dbt_kuba = DbtTaskGroup(
+        group_id="kuba",
+        project_config=project_config,
+        profile_config=profile_config,
+        render_config=RenderConfig(
+            select=daily_kuba_list,
+            test_behavior=TestBehavior.AFTER_ALL,
+        ),
+        operator_args={
+            "install_deps": True,
+        },
+        default_args={"retries": 1},
+    )
+
+    latest_only >> dbt_audit
+    latest_only >> dbt_benefits
+    latest_only >> dbt_gtfs_schedule
+    latest_only >> dbt_kuba

@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
+from src.dbt_dag_lists import payments_list
 
 from airflow import DAG
 from airflow.operators.latest_only import LatestOnlyOperator
@@ -19,7 +20,7 @@ with DAG(
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
     dbt_payments = DbtTaskGroup(
-        group_id="dbt_payments",
+        group_id="payments",
         project_config=ProjectConfig(
             dbt_project_path="/home/airflow/gcs/data/warehouse",
             manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
@@ -32,11 +33,7 @@ with DAG(
             profiles_yml_filepath="/home/airflow/gcs/data/warehouse/profiles.yml",
         ),
         render_config=RenderConfig(
-            select=[
-                "+path:models/staging/payments+",
-                "+path:models/intermediate/payments+",
-                "+path:models/mart/payments+",
-            ],
+            select=payments_list,
             test_behavior=None,
         ),
         operator_args={
