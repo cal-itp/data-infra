@@ -68,8 +68,4 @@ class TestGCSToCKANOperator:
         task = test_dag.get_task("gcs_to_ckan")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
-        assert (
-            xcom_value
-            == {"partNumber": "1", "ETag": '"540ff57f389d699ed027208e2eba76a8"'}
-            | xcom_value
-        )
+        assert xcom_value == {"result": True} | xcom_value

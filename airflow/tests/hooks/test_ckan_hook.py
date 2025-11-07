@@ -89,7 +89,7 @@ class TestCKANHook:
         with CKANHook(
             ckan_conn_id="http_ckan",
             resource_id="7cdf8cef-ddcb-4c17-8820-74ee2f29a06c",
-            resource_name="agency",
+            file_name="agency.csv",
         ) as ckan:
             for file_name in csv_file_names:
                 data = gcs_hook.download(

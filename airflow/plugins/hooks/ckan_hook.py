@@ -17,21 +17,21 @@ class CKANHook(BaseHook):
         self,
         ckan_conn_id: str = "ckan_default",
         resource_id: Optional[str] = None,
-        resource_name: Optional[str] = None,
+        file_name: Optional[str] = None,
     ):
         super().__init__()
         self._remote_ckan = None
         self.connection: Connection = BaseHook.get_connection(ckan_conn_id)
         self.user_agent: str = "ckanapi/1.0 (+https://dds.dot.ca.gov)"
         self.resource_id = resource_id
-        self.resource_name = resource_name
+        self.file_name = file_name
         self.upload_id = None
         self.part_number = 0
 
     def __enter__(self):
         multipart = self.remote_ckan().call_action(
             "cloudstorage_initiate_multipart",
-            {"id": self.resource_id, "name": self.resource_name, "size": "1"},
+            {"id": self.resource_id, "name": self.file_name, "size": "1"},
         )
 
         self.upload_id = multipart.get("id")
@@ -53,13 +53,22 @@ class CKANHook(BaseHook):
             )
         else:
             logging.info("Completed upload")
-            logging.info(f"RELEASING RESOURCE: {self.resource_name}")
+            logging.info(f"RELEASING RESOURCE: {self.file_name}")
             self.remote_ckan().call_action(
                 "cloudstorage_finish_multipart",
                 {
                     "id": self.resource_id,
                     "uploadId": self.upload_id,
                     "save_action": "go-metadata",
+                },
+            )
+            self.remote_ckan().call_action(
+                "resource_patch",
+                {
+                    "id": self.resource_id,
+                    "multipart_name": self.file_name,
+                    "url": self.file_name,
+                    "url_type": "upload",
                 },
             )
         return False  # Returning False (or None) propagates the exception, True suppresses it
@@ -87,6 +96,7 @@ class CKANHook(BaseHook):
         )
 
     def multi_upload(self, file: StringIO):
+        assert self.upload_id is not None
         self.part_number += 1
         return self.remote_ckan().call_action(
             "cloudstorage_upload_multipart",

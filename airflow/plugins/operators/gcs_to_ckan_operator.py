@@ -62,9 +62,8 @@ class GCSToCKANOperator(BaseOperator):
         with CKANHook(
             ckan_conn_id=self.ckan_conn_id,
             resource_id=self.resource_id(),
-            resource_name=self.resource_name,
+            file_name=f"{self.resource_name}.csv",
         ) as ckan:
-            logging.info(f"ckan: {ckan}")
             for file_name in csv_file_names:
                 data = self.gcs_hook().download(
                     bucket_name=self.bucket_name.replace("gs://", ""),
@@ -74,10 +73,7 @@ class GCSToCKANOperator(BaseOperator):
                 result = ckan.multi_upload(file=file)
                 logging.info(f"Uploaded: {file_name} as {result}")
 
-        return result
-
     def execute(self, context: Context) -> dict[str, str | bool | int | float]:
         logging.info(f"Publishing {self.resource_name}...")
-
-        result = self.upload()
-        return result
+        self.upload()
+        return {"result": True}
