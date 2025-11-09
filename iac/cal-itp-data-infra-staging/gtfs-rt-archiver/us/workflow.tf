@@ -1,22 +1,29 @@
-resource "google_workflows_workflow" "gtfs-rt-feed-archiver" {
-  name            = "gtfs-rt-feed-archiver"
-  region          = "us-west2"
-  project         = "cal-itp-data-infra-staging"
-  description     = "GTFS-RT Feed Archiver"
-  service_account = data.terraform_remote_state.iam.outputs.google_service_account_workflow-service-account_email
-  source_contents = templatefile("${local.workflow_path}/gtfs-rt-feed-archiver.yaml", {})
-
-  call_log_level          = "LOG_ALL_CALLS"
-  execution_history_level = "EXECUTION_HISTORY_DETAILED"
-
-  user_env_vars = {
-    "CALITP_BUCKET__GTFS_RT_RAW" = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-rt-raw-v2_name
-  }
+resource "google_pubsub_topic" "gtfs-rt-feed-archiver" {
+  name    = "gtfs-rt-feed-archiver"
+  project = "cal-itp-data-infra-staging"
 }
 
-resource "google_cloud_tasks_queue" "gtfs-rt-feed-archiver" {
-  name     = "gtfs-rt-feed-archiver-1"
+resource "google_eventarc_trigger" "gtfs-rt-feed-archiver" {
+  name     = "gtfs-rt-feed-archiver"
   location = "us-west2"
+  project  = "cal-itp-data-infra-staging"
+
+  service_account = data.terraform_remote_state.iam.outputs.google_service_account_workflow-service-account_email
+
+  matching_criteria {
+    attribute = "type"
+    value     = "google.cloud.pubsub.topic.v1.messagePublished"
+  }
+
+  destination {
+    workflow = google_workflows_workflow.gtfs-rt-feed-archiver.id
+  }
+
+  transport {
+    pubsub {
+      topic = google_pubsub_topic.gtfs-rt-feed-archiver.id
+    }
+  }
 }
 
 resource "google_workflows_workflow" "gtfs-rt-archiver" {
@@ -31,9 +38,7 @@ resource "google_workflows_workflow" "gtfs-rt-archiver" {
   execution_history_level = "EXECUTION_HISTORY_DETAILED"
 
   user_env_vars = {
-    "GTFS_RT_ARCHIVER__TASK_QUEUE"      = google_cloud_tasks_queue.gtfs-rt-feed-archiver.id,
-    "GTFS_RT_ARCHIVER__CHILD_WORKFLOW"  = google_workflows_workflow.gtfs-rt-feed-archiver.name,
-    "GTFS_RT_ARCHIVER__SERVICE_ACCOUNT" = data.terraform_remote_state.iam.outputs.google_service_account_workflow-service-account_email,
+    "GTFS_RT_ARCHIVER__TOPIC" = google_pubsub_topic.gtfs-rt-feed-archiver.id
   }
 }
 
@@ -49,15 +54,26 @@ resource "google_cloud_scheduler_job" "gtfs-rt-archiver" {
   http_target {
     http_method = "POST"
     uri         = "https://workflowexecutions.googleapis.com/v1/${google_workflows_workflow.gtfs-rt-archiver.id}/executions"
-    body = base64encode(
-      jsonencode({
-        argument     = jsonencode({ limit = 1 }),
-        callLogLevel = "CALL_LOG_LEVEL_UNSPECIFIED"
-      })
-    )
+    body        = base64encode(jsonencode({ argument = jsonencode({ limit = 1 }) }))
 
     oauth_token {
       service_account_email = data.terraform_remote_state.iam.outputs.google_service_account_workflow-service-account_email
     }
+  }
+}
+
+resource "google_workflows_workflow" "gtfs-rt-feed-archiver" {
+  name            = "gtfs-rt-feed-archiver"
+  region          = "us-west2"
+  project         = "cal-itp-data-infra-staging"
+  description     = "GTFS-RT Feed Archiver"
+  service_account = data.terraform_remote_state.iam.outputs.google_service_account_workflow-service-account_email
+  source_contents = templatefile("${local.workflow_path}/gtfs-rt-feed-archiver.yaml", {})
+
+  call_log_level          = "LOG_ALL_CALLS"
+  execution_history_level = "EXECUTION_HISTORY_DETAILED"
+
+  user_env_vars = {
+    "CALITP_BUCKET__GTFS_RT_RAW" = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-rt-raw-v2_name
   }
 }

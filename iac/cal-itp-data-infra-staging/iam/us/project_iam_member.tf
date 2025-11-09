@@ -299,10 +299,10 @@ resource "google_project_iam_member" "workflow-service-account" {
     "roles/storage.objectUser",
     "roles/bigquery.dataViewer",
     "roles/bigquery.jobUser",
-    "roles/cloudtasks.enqueuer",
+    "roles/pubsub.publisher",
     "roles/secretmanager.secretAccessor",
     "roles/workflows.invoker",
-    "roles/iam.serviceAccountUser"
+    "roles/iam.serviceAccountTokenCreator"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.workflow-service-account.email}"

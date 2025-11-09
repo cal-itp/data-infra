@@ -1,81 +1,71 @@
 main:
-  params: [args]
+  params: [event]
   steps:
     - init:
         assign:
           - projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
           - bucket: $${sys.get_env("CALITP_BUCKET__GTFS_RT_RAW")}
-          - base64Url: $${args.base64Url}
-          - pipelineUrl: $${args.pipelineUrl}
-          - startAt: $${args.startAt}
-          - type: $${args.type}
-          - authorizationUrlParameterName: $${args.authorizationUrlParameterName}
-          - urlSecretKeyName: $${args.urlSecretKeyName}
-          - authorizationHeaderParameterName: $${args.authorizationHeaderParameterName}
-          - headerSecretKeyName: $${args.headerSecretKeyName}
-          - headers: {}
-          - query: {}
-          - fetchDate: $${text.split(startAt, "T")[0]}
-          - fetchTime: $${text.split(startAt, "T")[1]}
+          - arguments: $${json.decode(base64.decode(event.data.message.data))}
+          - fetchDate: $${text.split(arguments.startAt, "T")[0]}
+          - fetchTime: $${text.split(arguments.startAt, "T")[1]}
           - fetchHour: $${text.split(fetchTime, ":")[0]}
           - fetchMinute: $${text.split(fetchTime, ":")[1]}
+          - fetchSecond: $${if(arguments.fetchSecond == 0, "00", arguments.fetchSecond)}
+          - headers: {}
+          - query: {}
+          - userAgentHeaders:
+              User-Agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
+              priority: 'u=0, i'
+              sec-ch-ua: '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"'
+              sec-ch-ua-mobile: '?0'
+              sec-ch-ua-platform: '"macOS"'
     - applySecrets:
         switch:
-          - condition: $${headerSecretKeyName != null}
+          - condition: $${arguments.headerSecretKeyName != null}
             steps:
               - headerSecret:
                   call: googleapis.secretmanager.v1.projects.secrets.versions.accessString
                   args:
                     project_id: $${projectId}
-                    secret_id: $${headerSecretKeyName}
+                    secret_id: $${arguments.headerSecretKeyName}
                   result: headerSecret
               - assignHeaders:
                   assign:
                     - headers:
-                        $${authorizationHeaderParameterName}: $${headerSecret}
-          - condition: $${urlSecretKeyName != null}
+                        $${arguments.authorizationHeaderParameterName}: $${headerSecret}
+          - condition: $${arguments.urlSecretKeyName != null}
             steps:
               - querySecret:
                   call: googleapis.secretmanager.v1.projects.secrets.versions.accessString
                   args:
                     project_id: $${projectId}
-                    secret_id: $${urlSecretKeyName}
-                  result: fetchQuerySecret
+                    secret_id: $${arguments.urlSecretKeyName}
+                  result: querySecret
               - assignQuery:
                   assign:
                     - query:
-                        $${authorizationUrlParameterName}: $${fetchQuerySecret}
-    - fetch:
-        parallel:
-          for:
-            value: fetchSecond
-            in: [0, 20, 40]
-            steps:
-              - wait:
-                  call: sys.sleep
-                  args:
-                    seconds: $${fetchSecond}
-              - fetchUrl:
-                  call: http.get
-                  args:
-                    url: $${pipelineUrl}
-                    timeout: 20
-                    headers: $${headers}
-                    query: $${query}
-                  result: result
-              - writeResult:
-                  call: http.post
-                  args:
-                    url: $${"https://storage.googleapis.com/upload/storage/v1/b/" + bucket + "/o"}
-                    auth:
-                      type: OAuth2
-                    query:
-                      name: $${
-                        type +
-                        "/dt=" + fetchDate +
-                        "/hour=" + fetchDate + "T" + fetchHour + ":00:00+00:00" +
-                        "/ts=" + fetchDate + "T" + fetchHour + ":" + fetchMinute + ":" + if(fetchSecond == 0, "00", fetchSecond) + "+00:00" +
-                        "/base64_url=" + base64Url +
-                        "/feed"
-                        }
-                    body: $${result.body}
+                        $${arguments.authorizationUrlParameterName}: $${querySecret}
+    - fetchUrl:
+        call: http.get
+        args:
+          url: $${arguments.pipelineUrl}
+          timeout: 20
+          headers: $${map.merge(userAgentHeaders, headers)}
+          query: $${query}
+        result: result
+    - writeResult:
+        call: http.post
+        args:
+          url: $${"https://storage.googleapis.com/upload/storage/v1/b/" + bucket + "/o"}
+          auth:
+            type: OAuth2
+          query:
+            name: $${
+              arguments.type +
+              "/dt=" + fetchDate +
+              "/hour=" + fetchDate + "T" + fetchHour + ":00:00+00:00" +
+              "/ts=" + fetchDate + "T" + fetchHour + ":" + fetchMinute + ":" + fetchSecond + "+00:00" +
+              "/base64_url=" + arguments.base64Url +
+              "/feed"
+              }
+          body: $${result.body}
