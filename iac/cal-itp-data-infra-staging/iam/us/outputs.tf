@@ -178,6 +178,18 @@ output "google_service_account_cal-bc-service-account_name" {
   value = google_service_account.cal-bc-service-account.name
 }
 
+output "google_service_account_metabase-service-account_id" {
+  value = google_service_account.metabase-service-account.id
+}
+
+output "google_service_account_metabase-service-account_email" {
+  value = google_service_account.metabase-service-account.email
+}
+
+output "google_service_account_metabase-service-account_name" {
+  value = google_service_account.metabase-service-account.name
+}
+
 output "google_service_account_composer-service-account_id" {
   value = google_service_account.composer-service-account.id
 }
