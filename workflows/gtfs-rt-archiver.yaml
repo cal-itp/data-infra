@@ -5,13 +5,12 @@ main:
         assign:
           - projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
           - location: $${sys.get_env("GOOGLE_CLOUD_LOCATION")}
-          - taskQueue: $${sys.get_env("GTFS_RT_ARCHIVER__TASK_QUEUE")}
-          - serviceAccount: $${sys.get_env("GTFS_RT_ARCHIVER__SERVICE_ACCOUNT")}
-          - childWorkflow: $${sys.get_env("GTFS_RT_ARCHIVER__CHILD_WORKFLOW")}
+          - topic: $${sys.get_env("GTFS_RT_ARCHIVER__TOPIC")}
           - dataset: staging
           - table: int_transit_database__gtfs_datasets_dim
           - limit: $${int(default(map.get(args, "limit"), "-1"))}
-          - startAt: $${time.format(sys.now())}
+          - startTime: $${sys.now()}
+          - startAt: $${time.format(startTime)}
     - runQuery:
         call: googleapis.bigquery.v2.jobs.query
         args:
@@ -21,39 +20,49 @@ main:
             useQueryCache: true
             timeoutMs: 30000
             query: $${
-              "SELECT pipeline_url, type, base64_url, authorization_header_parameter_name, header_secret_key_name, authorization_url_parameter_name, url_secret_key_name " +
+              "SELECT type, pipeline_url, authorization_header_parameter_name, header_secret_key_name, authorization_url_parameter_name, url_secret_key_name, base64_url " +
               "FROM `" + projectId + "." + dataset + "." + table + "` " +
               "WHERE _is_current = true " +
               "AND type IN ('service_alerts', 'trip_updates', 'vehicle_positions') " +
               if(limit < 0, "", "LIMIT " + limit)
               }
         result: queryResult
-    - dispatchChildren:
-        for:
-          value: row
-          in: $${queryResult.rows}
-          steps:
-            - prepareChildArgs:
-                assign:
-                  - data:
-                      startAt: $${startAt}
-                      pipelineUrl: $${row.f[0].v}
-                      type: $${row.f[1].v}
-                      base64Url: $${row.f[2].v}
-                      authorizationHeaderParameterName: $${row.f[3].v}
-                      headerSecretKeyName: $${row.f[4].v}
-                      authorizationUrlParameterName: $${row.f[5].v}
-                      urlSecretKeyName: $${row.f[6].v}
-                  - exec:
-                      argument: $${json.encode_to_string(data)}
-            - enqueueChild:
-                call: googleapis.cloudtasks.v2.projects.locations.queues.tasks.create
-                args:
-                    parent: $${taskQueue}
+    - publishMessages:
+        parallel:
+          for:
+            value: delay
+            in: [0, 20, 40]
+            steps:
+              - sleep:
+                  call: sys.sleep
+                  args:
+                    seconds: $${delay}
+              - prepareArgs:
+                  assign:
+                    - messages: []
+              - prepareMessages:
+                  for:
+                    value: row
+                    in: $${queryResult.rows}
+                    steps:
+                      - prepareChildArgs:
+                          assign:
+                            - data: {}
+                            - data.startAt: $${startAt}
+                            - data.fetchSecond: $${delay}
+                            - data.type: $${row.f[0].v}
+                            - data.pipelineUrl: $${row.f[1].v}
+                            - data.authorizationHeaderParameterName: $${row.f[2].v}
+                            - data.headerSecretKeyName: $${row.f[3].v}
+                            - data.authorizationUrlParameterName: $${row.f[4].v}
+                            - data.urlSecretKeyName: $${row.f[5].v}
+                            - data.base64Url: $${row.f[6].v}
+                            - message: {}
+                            - message.data: $${base64.encode(json.encode(data))}
+                            - messages: $${list.concat(messages, message)}
+              - publish:
+                  call: googleapis.pubsub.v1.projects.topics.publish
+                  args:
+                    topic: $${topic}
                     body:
-                      task:
-                        httpRequest:
-                          body: $${base64.encode(json.encode(exec))}
-                          url: $${"https://workflowexecutions.googleapis.com/v1/projects/" + projectId + "/locations/" + location + "/workflows/" + childWorkflow + "/executions"}
-                          oauthToken:
-                            serviceAccountEmail: $${serviceAccount}
+                      messages: $${messages}
