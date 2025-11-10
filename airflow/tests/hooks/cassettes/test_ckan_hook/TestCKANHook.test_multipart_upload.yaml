@@ -14,7 +14,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/d3136644-a6df-4704-a391-b9e2bff36767
+        gccl-invocation-id/93d75ec4-efa1-4f84-806c-ac2f8fa9f131
       x-goog-user-project:
       - cal-itp-data-infra
     method: GET
@@ -32,16 +32,16 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 07 Nov 2025 00:20:43 GMT
+      - Mon, 10 Nov 2025 18:21:53 GMT
       Expires:
-      - Fri, 07 Nov 2025 00:20:43 GMT
+      - Mon, 10 Nov 2025 18:21:53 GMT
       Server:
       - UploadServer
       Vary:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOHL9v-DVLXWbvYX0umSqmZJ1MNsp8U3aHbxbjURd2PK8j80Nz0VWYZFitkjttnjgPPRX36fSw
+      - AOCedOH3CjZqvbprQzmEBN8B25Hc67Ras9c4rTapue9fSrH7_4I4hPr1f7QmAcHvvGYR7WD4sxLELA
     status:
       code: 200
       message: OK
@@ -70,17 +70,17 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA4yQy27bMBBFf0XgOhRJWS8KKArbTesGTpw6gdFmI1AkJbGWRZUPJUqQfy/kwIvu
-        uhxg7pkz9w20shtAEYDWucEWCDlpHRTMsdBJ3va6080UchY2ekRsUGiBGHdK92gOlrbVz597dpKf
-        eKe9sE4b1shS9cop5mR58p1TAzMOXAXAes6ltaAInPHyKgBGWt85UARvQIlZYsPx79X39Hb98qDv
-        nrYRfmo3uRq9HO4PmCz3/JrhaVC3zc/Xfdn9OVa78DRO293qh2+mdr1dxOzrryzpHof16vgtj/sH
-        n4sqvGt3Jt6TZWLpMVw+iht2XR1yYmS2kbR7oYfxaL7c30wN+JDS3nBZfihlXNQ5lzUUglcw5iSD
-        eR5hmMVSRnVEGU75HJtLmPc5E/Kk0YVi0f8AEGtkz6eQ23FmXeo7C0Q4SiAhEGcBxkWEi3gR0iyh
-        GT13ql7PZ8k8aKMa1bOuvMj8i/VWmstXbMGinApIRFrDOMkqSCtCYB2nMc5rnNK0Au/vfwEAAP//
-        AwDKcSPlHwIAAA==
+        H4sIAAAAAAAAA4yQwW6jMBCGXwX5XAN2gADSarWtUpK2SVdtuk17QWYw4JZggodkSdV3X5Eqh972
+        ONL833zzf5BK1i2JLVIhtiZ2HJQGaS5Q2CihanSty8EGYZd674hWORNHACrdOGMwNZU+/GzEVv6A
+        Wve5Qd2JUqaqUagEynTb16ha0SG5sIjpAaQxJLaw6+WFRTpp+hpJbH0QlZ8k7u2bx78D//UCZSQ4
+        1JvVUF2x9Hn20O8PgcnWZXaQ+11tVwkkT+Fxju1ut77MRJOoAZcNX75BsjiqBI9zDIbXzaVeycOE
+        X29uFg9/Hnf2ir2Xz/6r+b2+RbzHaDZrmHcnFnfz5Tveki8p3Xcg0y+lKeRFCLKgeQ4Z9YBNaRhy
+        l049KXnBI+EGMMbGEsZ9ELncaudMMc7/ABxRygYGG8x+ZJ3rOwlwl/uUMcpci4UxZ7E/scPAZX50
+        6lQdT2fZOOhOlaoRdXqW+Y7tjezOX4mJ4GGUU5YHBfX8aUajjDFaeIHnhoUbREFGPj//AQAA//8D
+        AOl03WcfAgAA
     headers:
       CF-RAY:
-      - 99a8aa9bea5ec62a-PDX
+      - 99c792774e39ff1a-PDX
       Cache-Control:
       - max-age=0
       Connection:
@@ -90,7 +90,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:20:44 GMT
+      - Mon, 10 Nov 2025 18:21:53 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -100,7 +100,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:20:43 GMT
+      - Mon, 10 Nov 2025 18:21:53 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -123,7 +123,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/7bb806fa-d44c-448d-baeb-4cbf695b2584
+        gccl-invocation-id/95e434b4-6120-44c3-aa5e-812be928f01e
       accept-encoding:
       - gzip
       content-type:
@@ -322,7 +322,7 @@ interactions:
       Content-Type:
       - application/octet-stream
       Date:
-      - Fri, 07 Nov 2025 00:20:44 GMT
+      - Mon, 10 Nov 2025 18:21:54 GMT
       ETag:
       - CLK35K7cuJADEAE=
       Expires:
@@ -337,7 +337,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOEoYc6Egi33dS8bei_Pa3JxdLXVM05lDjoesobVQYJY_E4RI3HMt0a_Mlb_eCoyubP7gR583Q
+      - AOCedOGAAZb9fSSzHbkJx5kaB61GFXs1K_fwWtrdEHSnuCpRp0nnQ_aKXSfCRSMQEcXt0nxl43ZAcA
       X-Goog-Generation:
       - '1761167543966642'
       X-Goog-Hash:
@@ -354,9 +354,9 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: "--2838ae750269bc6ccfa1b9b969881dd9\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\n7cdf8cef-ddcb-4c17-8820-74ee2f29a06c\r\n--2838ae750269bc6ccfa1b9b969881dd9\r\nContent-Disposition:
-      form-data; name=\"uploadId\"\r\n\r\nHc0jBI6MCxSoNZL20ZhH8ivuepPV01ARcEa0ypiMgXzR_lqkbO.mvyLOBQugyhCL34aFY75lTpCBkG84nSu8db.NhOr4R1A5s9k.ATdJaEbV81re7He9lx9VvkrDPJyg\r\n--2838ae750269bc6ccfa1b9b969881dd9\r\nContent-Disposition:
-      form-data; name=\"partNumber\"\r\n\r\n1\r\n--2838ae750269bc6ccfa1b9b969881dd9\r\nContent-Disposition:
+    body: "--eaaa3ea40b4a6f2acd97d820d13b3348\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\n7cdf8cef-ddcb-4c17-8820-74ee2f29a06c\r\n--eaaa3ea40b4a6f2acd97d820d13b3348\r\nContent-Disposition:
+      form-data; name=\"uploadId\"\r\n\r\nhO.JSxy2AYcg9a2clXNyhC1_WERuvw6sbTgbwevql.hGcGU8zHtpqqTBbanGiytMn2MjcGIziGtzHt6yZXBoNew32FXJIRVSq.N1kgW5ZsPTKttOt9EEn14LaILHMktK\r\n--eaaa3ea40b4a6f2acd97d820d13b3348\r\nContent-Disposition:
+      form-data; name=\"partNumber\"\r\n\r\n1\r\n--eaaa3ea40b4a6f2acd97d820d13b3348\r\nContent-Disposition:
       form-data; name=\"upload\"; filename=\"upload\"\r\n\r\nbase64_url\tagency_id\tagency_name\tagency_url\tagency_timezone\tagency_lang\tagency_phone\tagency_fare_url\tagency_email\naHR0cHM6Ly9hcGkuYWN0cmFuc2l0Lm9yZy90cmFuc2l0L2d0ZnMvZG93bmxvYWQ=\t1\tAC
       TRANSIT\thttp://www.actransit.org\tUS/Pacific\ten\t5108914777\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1BQw==\tAC\tAC
       TRANSIT\thttp://www.actransit.org\tUS/Pacific\ten\t5108914777\t\t\naHR0cHM6Ly9hY2VzaHV0dGxlcy50cmFuc2xvYy5jb20vU2VjdXJlL0FkbWluL1JlcG9ydHMvR1RGU0Rvd25sb2FkLmFzcHg=\t1116\tACE
@@ -526,7 +526,7 @@ interactions:
       443-0826\thttps://hta.org/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t1716\tSamoa
       Transit System\thttps://hta.org/samoa-transit-system/\tAmerica/Los_Angeles\ten\t\thttps://hta.org/fares/\t\naHR0cHM6Ly9ydC5wYXNhZGVuYXRyYW5zaXQubmV0L3J0dC9wdWJsaWMvdXRpbGl0eS9ndGZzLmFzcHg=\t1\tPasadena
       Transit\thttps://www.cityofpasadena.net/pasadena-transit/\tAmerica/Los_Angeles\ten\t(626)
-      744-4094\thttps://www.cityofpasadena.net/pasadena-transit/fares/\t\n\r\n--2838ae750269bc6ccfa1b9b969881dd9--\r\n"
+      744-4094\thttps://www.cityofpasadena.net/pasadena-transit/fares/\t\n\r\n--eaaa3ea40b4a6f2acd97d820d13b3348--\r\n"
     headers:
       Accept:
       - '*/*'
@@ -539,7 +539,7 @@ interactions:
       Content-Length:
       - '34499'
       Content-Type:
-      - multipart/form-data; boundary=2838ae750269bc6ccfa1b9b969881dd9
+      - multipart/form-data; boundary=eaaa3ea40b4a6f2acd97d820d13b3348
       User-Agent:
       - ckanapi/1.0 (+https://dds.dot.ca.gov)
       X-CKAN-API-Key:
@@ -555,7 +555,7 @@ interactions:
         ff8DAAD//wMA3Daub8kAAAA=
     headers:
       CF-RAY:
-      - 99a8aaa01b0ec62a-PDX
+      - 99c7927e584fff1a-PDX
       Cache-Control:
       - max-age=0
       Connection:
@@ -565,7 +565,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:20:44 GMT
+      - Mon, 10 Nov 2025 18:21:54 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -575,7 +575,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:20:44 GMT
+      - Mon, 10 Nov 2025 18:21:54 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -586,7 +586,7 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: '{"id": "7cdf8cef-ddcb-4c17-8820-74ee2f29a06c", "uploadId": "Hc0jBI6MCxSoNZL20ZhH8ivuepPV01ARcEa0ypiMgXzR_lqkbO.mvyLOBQugyhCL34aFY75lTpCBkG84nSu8db.NhOr4R1A5s9k.ATdJaEbV81re7He9lx9VvkrDPJyg",
+    body: '{"id": "7cdf8cef-ddcb-4c17-8820-74ee2f29a06c", "uploadId": "hO.JSxy2AYcg9a2clXNyhC1_WERuvw6sbTgbwevql.hGcGU8zHtpqqTBbanGiytMn2MjcGIziGtzHt6yZXBoNew32FXJIRVSq.N1kgW5ZsPTKttOt9EEn14LaILHMktK",
       "save_action": "go-metadata"}'
     headers:
       Accept:
@@ -615,7 +615,7 @@ interactions:
         Ji8OBussBtGdQFJrNt7+eF1fAAAA//8DAOnmTYqYAAAA
     headers:
       CF-RAY:
-      - 99a8aaa27873c62a-PDX
+      - 99c792815f65ff1a-PDX
       Cache-Control:
       - max-age=0
       Connection:
@@ -625,7 +625,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:20:45 GMT
+      - Mon, 10 Nov 2025 18:21:55 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -635,7 +635,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:20:45 GMT
+      - Mon, 10 Nov 2025 18:21:55 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -670,17 +670,17 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA4yS3W7jIBCFX8XiOhjsOP5BWu1L9B5NhnGMlhgLcKq06rtXxIma3qxyZ4Y5nu/M
-        4ZNN5BamCjaltEQlRKKYuIEEZSKcZu/86VoilCd/EbBYsReAyfpZZKGOk3//O8OZ/gSKfg1IeoGE
-        E9sVLK6IFCNTRQor7QoWKK4uMVV8MgScSDuISa+LgUSGqWJendsV97s1uKdSoHsPq2V94JXkVf8m
-        K7Xv1H4oh7bt5D7PzOAx+UA6U16IqWIEF+nXFfo5gZ2jBud0IPTBRO1HfTcwWvesG304Q6ZmecAE
-        cXp82xtQh2bskUZuDB55g1XH+76WvGuI6rEeQLaYu29mz97Y0T47qbjs3qRUtVRNUw5t38tDbj9T
-        goz8H0nVq6otD307DO1NYs+Urgv97O1R0XaeKfzUc2L5f3CiGa9ZuwD+gxPpzdMRauglEq9le+BN
-        3R059OOR93Q4kmkaHPG27sVHmx8DU0W7Bbyt8DdFtB/PpwRpG74ltCvYlvVLT/CWIiXxCqF48IhX
-        MhLGv8/OgxHbVkqMlzvcww9bl9zAvr6+AQAA//8DAK9NbC44AwAA
+        H4sIAAAAAAAAA4ySTY7jIBCFr2KxDgY78R/SaC6RPaoU5RgNMRbgtDKtvvuIOFGnpVlkZ4p6ru/V
+        45NN5BamCjaltEQlRKKYuIEEZSKcZu/8+VYilGd/FbBYsReAyfpZZKGOk//4PcOFfgWKfg1IeoGE
+        E9sVLK6IFCNTRQor7QoWKK4uMVV8MgScSDuISa+LgUSGqWJendsVj7s1uJdSoEcPq2Xd8Eryqj/K
+        Su07tR/KoW07uc8zM3hMPpDOlFdiqhjBRfpxhX5OYOeowTkdCH0wUftRPwyM1r3qRh8ukKlZHjBB
+        nJ7f9g7UoRl7pJEbgyd+wKrjfV9L3h2I6rEeQLaYu+9mL97Y0b46qXglj1Wv6ko1TVn3w9A0uf1C
+        CTLyfyWyO0qpql5Vbdn07TC0d4m9ULot9L23Z0XbeabwXc+J5f/BmWa8Ze0C+AfOpDdPJ6ihl0i8
+        lm3DD3V34tCPJ95TcyJzOOCI93UvPtr8GJgq2i3gbYU/KaL9+3pKkLbhW0K7gm1Zv/UE7ylSEu8Q
+        iiePeCcjYfzH7DwYsW2lxHh9wD39sHXJDezr6x8AAAD//wMAPb2+tjgDAAA=
     headers:
       CF-RAY:
-      - 99a8aaa73a16c62a-PDX
+      - 99c79286fdd3ff1a-PDX
       Cache-Control:
       - max-age=0
       Connection:
@@ -690,7 +690,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:20:47 GMT
+      - Mon, 10 Nov 2025 18:22:01 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -700,7 +700,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:20:47 GMT
+      - Mon, 10 Nov 2025 18:22:01 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:

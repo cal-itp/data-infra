@@ -64,12 +64,14 @@ class GCSToCKANOperator(BaseOperator):
             resource_id=self.resource_id(),
             file_name=f"{self.resource_name}.csv",
         ) as ckan:
-            for file_name in csv_file_names:
+            for i, file_name in enumerate(csv_file_names):
                 data = self.gcs_hook().download(
                     bucket_name=self.bucket_name.replace("gs://", ""),
                     object_name=file_name,
                 )
                 file = StringIO(data.decode())
+                if i > 0:
+                    next(file)
                 result = ckan.multi_upload(file=file)
                 logging.info(f"Uploaded: {file_name} as {result}")
 
