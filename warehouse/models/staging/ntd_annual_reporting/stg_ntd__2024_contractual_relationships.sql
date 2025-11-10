@@ -1,6 +1,6 @@
 WITH external_contractual_relationships AS (
     SELECT *
-    FROM {{ source('external_ntd__annual_reporting', '2023__annual_database_contractual_relationships') }}
+    FROM {{ source('external_ntd__annual_reporting', '2024__annual_database_contractual_relationships') }}
 ),
 
 get_latest_extract AS(
@@ -10,7 +10,7 @@ get_latest_extract AS(
     QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
 ),
 
-stg_ntd__2023_contractual_relationships AS (
+stg_ntd__2024_contractual_relationships AS (
     SELECT
         SAFE_CAST(other_reconciling_item_expenses_incurred_by_the_buyer AS INTEGER) AS other_reconciling_item_expenses_incurred_by_the_buyer,
         SAFE_CAST(total_modal_expenses AS INTEGER) AS total_modal_expenses,
@@ -44,4 +44,4 @@ stg_ntd__2023_contractual_relationships AS (
     FROM get_latest_extract
 )
 
-SELECT * FROM stg_ntd__2023_contractual_relationships
+SELECT * FROM stg_ntd__2024_contractual_relationships

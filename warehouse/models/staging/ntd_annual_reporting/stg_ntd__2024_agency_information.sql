@@ -1,6 +1,6 @@
 WITH external_agency_information AS (
     SELECT *
-    FROM {{ source('external_ntd__annual_reporting', '2023__annual_database_agency_information') }}
+    FROM {{ source('external_ntd__annual_reporting', '2024__annual_database_agency_information') }}
 ),
 
 get_latest_extract AS(
@@ -10,7 +10,7 @@ get_latest_extract AS(
     QUALIFY DENSE_RANK() OVER (ORDER BY execution_ts DESC) = 1
 ),
 
-stg_ntd__2023_agency_information AS (
+stg_ntd__2024_agency_information AS (
     SELECT
         SAFE_CAST(number_of_state_counties AS NUMERIC) AS number_of_state_counties,
         {{ trim_make_empty_string_null('tam_tier') }} AS tam_tier,
@@ -60,4 +60,4 @@ stg_ntd__2023_agency_information AS (
     FROM get_latest_extract
 )
 
-SELECT * FROM stg_ntd__2023_agency_information
+SELECT * FROM stg_ntd__2024_agency_information
