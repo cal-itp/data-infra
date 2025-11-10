@@ -1,0 +1,15 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN') }}"
+post_hook: |
+  SELECT *
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_ntd__annual_reporting.2024__annual_database_agency_information
+  LIMIT 1;
+source_objects:
+  - "annual_database_agency_information/2024/agency_information/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd__annual_reporting.2024__annual_database_agency_information"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "annual_database_agency_information/2024/agency_information/"
