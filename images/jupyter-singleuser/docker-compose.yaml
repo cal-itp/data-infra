@@ -7,6 +7,6 @@ services:
       - "8888:8888"
     volumes:
       - jovyan_home:/home/jovyan/
-    entrypoint: sh -c 'mkdir -p -- /home/jovyan/.jupyter && cp /tmp/jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py && jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --notebook-dir=/home/jovyan --allow-root'
+    entrypoint: sh -c 'mkdir -p -- /home/jovyan/.jupyter && cp /tmp/jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py && jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --notebook-dir=/home/jovyan --allow-root --show-config --debug'
 volumes:
   jovyan_home:
