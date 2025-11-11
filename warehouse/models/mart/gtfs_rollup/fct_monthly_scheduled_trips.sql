@@ -39,11 +39,14 @@ monthly_trips AS (
         shape_id,
         shape_array_key,
 
+        MIN(trip_first_departure_sec) AS trip_first_departure_sec,
+        MAX(is_gtfs_flex_trip) AS is_gtfs_flex_trip,
+
         AVG(service_hours) AS service_hours,
         COUNT(DISTINCT trip_instance_key) as n_trips,
         COUNT(DISTINCT service_date) as n_days,
         COUNT(DISTINCT feed_key) AS n_feeds,
-        ARRAY_AGG(DISTINCT route_id IGNORE NULLS) AS route_id_array
+        ARRAY_AGG(DISTINCT route_id IGNORE NULLS) AS route_id_array,
 
     FROM trips
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
