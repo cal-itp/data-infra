@@ -1,6 +1,6 @@
 [project]
 name = "jupyter-singleuser"
-version = "2025.11.10a"
+version = "2025.11.10b"
 description = "This is the notebook image that individual users are served via JupyterHub."
 requires-python = ">=3.11.0, <3.12.0"
 
