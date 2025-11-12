@@ -39,7 +39,7 @@ fct_capital_expenditures_time_series_rolling_stock AS (
         int.uza_name,
         int.uza_population,
         int.rolling_stock,
-        int._2023_mode_status,
+        int._2024_mode_status,
         int.agency_name AS source_agency,
         int.city AS source_city,
         int.state AS source_state,
