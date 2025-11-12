@@ -67,9 +67,6 @@ jupyterhub:
       nodeAffinity:
         matchNodePurpose: require
   hub:
-    args:
-      - "--show-config"
-      - "--debug"
     db:
       pvc:
         storage: 32Gi
