@@ -16,7 +16,6 @@ stg_ntd__service_data_and_operating_expenses_time_series_by_mode__voms AS (
         SAFE_CAST(_2020 AS FLOAT64) AS _2020,
         SAFE_CAST(_2016 AS FLOAT64) AS _2016,
         SAFE_CAST(_2019 AS FLOAT64) AS _2019,
-        SAFE_CAST(_2014 AS FLOAT64) AS _2014,
         SAFE_CAST(_2012 AS FLOAT64) AS _2012,
         SAFE_CAST(_2008 AS FLOAT64) AS _2008,
         {{ trim_make_empty_string_null('state') }} AS state,
