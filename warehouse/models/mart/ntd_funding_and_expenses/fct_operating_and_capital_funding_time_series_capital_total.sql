@@ -38,7 +38,7 @@ fct_operating_and_capital_funding_time_series_capital_total AS (
         int.primary_uza_name,
         int.uza_population,
         int.capital_total,
-        int._2023_status,
+        int._2024_status,
         int.agency_name AS source_agency,
         int.city AS source_city,
         int.state AS source_state,
