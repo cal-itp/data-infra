@@ -41,7 +41,6 @@ fct_service_data_and_operating_expenses_time_series_by_mode_vrh AS (
         int.primary_uza_name,
         int.uza_population,
         int.vrh,
-        int._2023_mode_status,
         int.agency_name AS source_agency,
         int.city AS source_city,
         int.state AS source_state,
