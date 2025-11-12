@@ -24,7 +24,7 @@ fct_daily_trip_updates_vehicle_positions_completeness AS (
   LEFT JOIN  ot
     ON st.trip_instance_key = ot.trip_instance_key
   LEFT JOIN  map
-    ON map.schedule_feed_key = st.feed_key
+    ON map.schedule_feed_key = st.feed_key AND map.date = st.service_date
   WHERE st.service_date < DATE_TRUNC(CURRENT_DATE('America/Los_Angeles'), DAY)
     AND organization_itp_id IS NOT NULL
   GROUP BY 1, 2, 3, 4
