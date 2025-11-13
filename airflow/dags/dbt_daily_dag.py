@@ -4,10 +4,10 @@ from datetime import datetime
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
 from cosmos.constants import TestBehavior
 from src.dbt_dag_lists import (
-    daily_audit_list,
-    daily_benefits_list,
+    audit_list,
+    benefits_list,
     daily_gtfs_schedule_list,
-    daily_kuba_list,
+    kuba_list,
 )
 
 from airflow import DAG
@@ -44,7 +44,7 @@ with DAG(
         project_config=project_config,
         profile_config=profile_config,
         render_config=RenderConfig(
-            select=daily_audit_list,
+            select=audit_list,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
         operator_args={
@@ -58,7 +58,7 @@ with DAG(
         project_config=project_config,
         profile_config=profile_config,
         render_config=RenderConfig(
-            select=daily_benefits_list,
+            select=benefits_list,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
         operator_args={
@@ -86,7 +86,7 @@ with DAG(
         project_config=project_config,
         profile_config=profile_config,
         render_config=RenderConfig(
-            select=daily_kuba_list,
+            select=kuba_list,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
         operator_args={
