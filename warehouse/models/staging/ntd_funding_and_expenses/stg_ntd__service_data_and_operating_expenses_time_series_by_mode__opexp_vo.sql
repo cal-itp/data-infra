@@ -13,12 +13,11 @@ get_latest_extract AS(
 stg_ntd__service_data_and_operating_expenses_time_series_by_mode__opexp_vo AS (
     SELECT
         {{ trim_make_empty_string_null('CAST(ntd_id AS STRING)') }} AS ntd_id,
-        {{ trim_make_empty_string_null('CAST(legacy_ntd_id AS STRING)') }} AS legacy_ntd_id,
         {{ trim_make_empty_string_null('agency_name') }} AS agency_name,
         {{ trim_make_empty_string_null('agency_status') }} AS agency_status,
         {{ trim_make_empty_string_null('reporter_type') }} AS reporter_type,
         {{ trim_make_empty_string_null('reporting_module') }} AS reporting_module,
-        {{ trim_make_empty_string_null('service') }} AS service,
+        {{ trim_make_empty_string_null('type_of_service') }} AS type_of_service,
         {{ trim_make_empty_string_null('mode') }} AS mode,
         {{ trim_make_empty_string_null('mode_status') }} AS mode_status,
         SAFE_CAST(last_report_year AS INT64) AS last_report_year,

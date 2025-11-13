@@ -23,7 +23,7 @@ stg_ntd__asset_inventory_time_series__active_fleet AS (
         {{ trim_make_empty_string_null('mode_status') }} AS mode_status,
         {{ trim_make_empty_string_null('_2024_mode_status') }} AS _2024_mode_status,
         SAFE_CAST(last_report_year AS INTEGER) AS last_report_year,
-        {{ trim_make_empty_string_null('city') }} AS city
+        {{ trim_make_empty_string_null('city') }} AS city,
         {{ trim_make_empty_string_null('state') }} AS state,
         {{ trim_make_empty_string_null('uza_name') }} AS uza_name,
         SAFE_CAST(uace_code AS INTEGER) AS uace_code,
