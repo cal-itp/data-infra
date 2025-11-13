@@ -39,7 +39,7 @@ fct_capital_expenditures_time_series_total AS (
         int.uza_name,
         int.uza_population,
         int.total,
-        int._2023_mode_status,
+        int._2024_mode_status,
         int.agency_name AS source_agency,
         int.city AS source_city,
         int.state AS source_state,

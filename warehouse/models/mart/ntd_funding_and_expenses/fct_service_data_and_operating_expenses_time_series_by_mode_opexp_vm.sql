@@ -27,9 +27,8 @@ fct_service_data_and_operating_expenses_time_series_by_mode_opexp_vm AS (
         agency.caltrans_district_current,
         agency.caltrans_district_name_current,
 
-        int.legacy_ntd_id,
         int.mode,
-        int.service,
+        int.type_of_service,
         int.agency_status,
         int.census_year,
         int.last_report_year,
@@ -41,7 +40,6 @@ fct_service_data_and_operating_expenses_time_series_by_mode_opexp_vm AS (
         int.primary_uza_name,
         int.uza_population,
         int.opexp_vm,
-        int._2023_mode_status,
         int.agency_name AS source_agency,
         int.city AS source_city,
         int.state AS source_state,

@@ -35,7 +35,7 @@ fct_asset_inventory_time_series_avg_fleet_age AS (
         int.uace_code,
         int.last_report_year,
         int.mode_status,
-        int._2023_mode_status,
+        int._2024_mode_status,
         int.agency_status,
         int.uza_population,
         int.uza_name,

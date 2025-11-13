@@ -7,7 +7,7 @@ WITH
                 cast_to="int",
                 relation=ref("stg_ntd__operating_and_capital_funding_time_series__operating_federal"),
                 exclude=[
-                    "_2023_status",
+                    "_2024_status",
                     "agency_name",
                     "agency_status",
                     "census_year",
@@ -50,7 +50,7 @@ WITH
             uza_population,
             SAFE_CAST((SPLIT(year, '_')[OFFSET(1)]) AS INT64) AS year,
             operating_federal,
-            _2023_status,
+            _2024_status,
             dt,
             execution_ts
           FROM source_pivoted
