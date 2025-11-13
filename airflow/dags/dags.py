@@ -39,11 +39,13 @@ def log_failure_to_slack(context):
 
     <{ti.log_url}| Check Log >
     """  # noqa: E221, E222
-        requests.post(slack_url, json={"text": message})
+        requests.post(slack_url, json={"text": message}, timeout=5)
 
     # This is very broad but we want to try to log _any_ exception to slack
     except Exception as e:
-        requests.post(slack_url, json={"text": f"failed to log {type(e)} to slack"})
+        requests.post(
+            slack_url, json={"text": f"failed to log {type(e)} to slack"}, timeout=5
+        )
 
 
 for dag_directory in dag_directories:
