@@ -7,7 +7,7 @@ from gusty import create_dag
 import airflow  # noqa
 
 # pointed at #alerts-data-infra as of 2024-02-05
-CALITP_SLACK_URL_KEY = "CALITP_SLACK_URL"
+CALITP_SLACK_URL = os.environ.get("CALITP_SLACK_URL")
 
 # DAG Directories =============================================================
 
@@ -25,25 +25,26 @@ for child in dag_parent_dir.iterdir():
 
 
 def log_failure_to_slack(context):
-    slack_url = os.environ.get(CALITP_SLACK_URL_KEY)
-    if not slack_url:
+    if not CALITP_SLACK_URL:
         print("Skipping email to slack channel. No CALITP_SLACK_URL in environment")
-        return
+    else:
+        try:
+            ti = context["ti"]
+            message = f"""
+            Task Failed: {ti.dag_id}.{ti.task_id}
+            Execution Date: {ti.execution_date}
+            Try {ti.try_number} of {ti.max_tries}
 
-    try:
-        ti = context["ti"]
-        message = f"""
-    Task Failed: {ti.dag_id}.{ti.task_id}
-    Execution Date: {ti.execution_date}
-    Try {ti.try_number} of {ti.max_tries}
+            <{ti.log_url}| Check Log >
+            """  # noqa: E221, E222
 
-    <{ti.log_url}| Check Log >
-    """  # noqa: E221, E222
-        requests.post(slack_url, json={"text": message})
+            requests.post(CALITP_SLACK_URL, json={"text": message})
 
-    # This is very broad but we want to try to log _any_ exception to slack
-    except Exception as e:
-        requests.post(slack_url, json={"text": f"failed to log {type(e)} to slack"})
+        except Exception as e:
+            # This is very broad but we want to try to log _any_ exception to slack
+            requests.post(
+                CALITP_SLACK_URL, json={"text": f"failed to log {type(e)} to slack"}
+            )
 
 
 for dag_directory in dag_directories:
