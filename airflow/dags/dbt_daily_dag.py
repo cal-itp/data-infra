@@ -8,6 +8,7 @@ from src.dbt_dag_lists import (
     benefits_list,
     daily_gtfs_schedule_list,
     kuba_list,
+    payments_list,
 )
 
 from airflow import DAG
@@ -95,7 +96,22 @@ with DAG(
         default_args={"retries": 1},
     )
 
+    dbt_payments = DbtTaskGroup(
+        group_id="payments",
+        project_config=project_config,
+        profile_config=profile_config,
+        render_config=RenderConfig(
+            select=payments_list,
+            test_behavior=None,
+        ),
+        operator_args={
+            "install_deps": True,
+        },
+        default_args={"retries": 1},
+    )
+
     latest_only >> dbt_audit
     latest_only >> dbt_benefits
     latest_only >> dbt_gtfs_schedule
     latest_only >> dbt_kuba
+    latest_only >> dbt_payments
