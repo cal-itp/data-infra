@@ -1,34 +1,21 @@
-import os
 from datetime import datetime
 
-from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
+from cosmos import DbtTaskGroup, RenderConfig
 from cosmos.constants import TestBehavior
-from src.dbt_dag_lists import (
-    audit_list,
-    benefits_list,
-    daily_gtfs_schedule_list,
-    kuba_list,
-    payments_list,
+from src.dag_utils import (
+    dbt_audit_list,
+    dbt_benefits_list,
+    dbt_daily_gtfs_schedule_list,
+    dbt_kuba_list,
+    dbt_payments_list,
+    default_args,
+    operator_args,
+    profile_config,
+    project_config,
 )
 
 from airflow import DAG
 from airflow.operators.latest_only import LatestOnlyOperator
-
-DBT_TARGET = os.environ.get("DBT_TARGET")
-
-project_config = ProjectConfig(
-    project_name="calitp_warehouse",
-    dbt_project_path="/home/airflow/gcs/data/warehouse",
-    manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
-    models_relative_path="models",
-    seeds_relative_path="seeds/",
-)
-
-profile_config = ProfileConfig(
-    target_name=DBT_TARGET,
-    profile_name="calitp_warehouse",
-    profiles_yml_filepath="/home/airflow/gcs/data/warehouse/profiles.yml",
-)
 
 with DAG(
     dag_id="dbt_daily",
@@ -44,70 +31,79 @@ with DAG(
         group_id="audit",
         project_config=project_config,
         profile_config=profile_config,
+        operator_args=operator_args,
+        default_args=default_args,
         render_config=RenderConfig(
-            select=audit_list,
+            select=dbt_audit_list,
+            source_pruning=True,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
-        operator_args={
-            "install_deps": True,
-        },
-        default_args={"retries": 1},
     )
 
     dbt_benefits = DbtTaskGroup(
         group_id="benefits",
         project_config=project_config,
         profile_config=profile_config,
+        operator_args=operator_args,
+        default_args=default_args,
         render_config=RenderConfig(
-            select=benefits_list,
+            select=dbt_benefits_list,
+            source_pruning=True,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
-        operator_args={
-            "install_deps": True,
-        },
-        default_args={"retries": 1},
     )
 
     dbt_gtfs_schedule = DbtTaskGroup(
         group_id="gtfs_schedule",
         project_config=project_config,
         profile_config=profile_config,
+        operator_args=operator_args,
+        default_args=default_args,
         render_config=RenderConfig(
-            select=daily_gtfs_schedule_list,
+            select=dbt_daily_gtfs_schedule_list,
+            source_pruning=True,
+            test_behavior=None,
+        ),
+    )
+    # TEMP Only for testing
+    dbt_gtfs_test_schedule = DbtTaskGroup(
+        group_id="gtfs_test_schedule",
+        project_config=project_config,
+        profile_config=profile_config,
+        operator_args=operator_args,
+        default_args=default_args,
+        render_config=RenderConfig(
+            select=["models/mart/gtfs/dim_agency.sql"],
+            source_pruning=True,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
-        operator_args={
-            "install_deps": True,
-        },
-        default_args={"retries": 1},
     )
+    #
 
     dbt_kuba = DbtTaskGroup(
         group_id="kuba",
         project_config=project_config,
         profile_config=profile_config,
+        operator_args=operator_args,
+        default_args=default_args,
         render_config=RenderConfig(
-            select=kuba_list,
+            select=dbt_kuba_list,
+            source_pruning=True,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
-        operator_args={
-            "install_deps": True,
-        },
-        default_args={"retries": 1},
     )
 
     dbt_payments = DbtTaskGroup(
         group_id="payments",
         project_config=project_config,
         profile_config=profile_config,
+        operator_args=operator_args,
+        default_args=default_args,
         render_config=RenderConfig(
-            select=payments_list,
+            select=dbt_payments_list,
+            source_pruning=True,
             test_behavior=None,
         ),
-        operator_args={
-            "install_deps": True,
-        },
-        default_args={"retries": 1},
     )
 
     latest_only >> dbt_audit

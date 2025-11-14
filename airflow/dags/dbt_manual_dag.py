@@ -1,14 +1,17 @@
-import os
 from datetime import datetime
 
-from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
+from cosmos import DbtTaskGroup, RenderConfig
 from cosmos.constants import TestBehavior
-from src.dbt_dag_lists import manual_list
+from src.dag_utils import (
+    dbt_manual_list,
+    default_args,
+    operator_args,
+    profile_config,
+    project_config,
+)
 
 from airflow import DAG
 from airflow.operators.latest_only import LatestOnlyOperator
-
-DBT_TARGET = os.environ.get("DBT_TARGET")
 
 with DAG(
     dag_id="dbt_manual",
@@ -21,25 +24,15 @@ with DAG(
 
     dbt_manual = DbtTaskGroup(
         group_id="dbt_manual",
-        project_config=ProjectConfig(
-            dbt_project_path="/home/airflow/gcs/data/warehouse",
-            manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
-            project_name="calitp_warehouse",
-            seeds_relative_path="seeds/",
-        ),
-        profile_config=ProfileConfig(
-            target_name=DBT_TARGET,
-            profile_name="calitp_warehouse",
-            profiles_yml_filepath="/home/airflow/gcs/data/warehouse/profiles.yml",
-        ),
+        project_config=project_config,
+        profile_config=profile_config,
+        operator_args=operator_args,
+        default_args=default_args,
         render_config=RenderConfig(
-            select=manual_list,
+            select=dbt_manual_list,
+            source_pruning=True,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
-        operator_args={
-            "install_deps": True,
-        },
-        default_args={"retries": 0},
     )
 
     latest_only >> dbt_manual
