@@ -1,7 +1,7 @@
 from math import ceil
 
 from airflow.hooks.base import BaseHook
-from airflow.hooks.http_hook import HttpHook
+from airflow.providers.http.hooks.http import HttpHook
 
 
 class SODAHook(BaseHook):

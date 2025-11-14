@@ -1,7 +1,7 @@
 import json
 from typing import Literal, Optional, Sequence
 
-from pydantic import BaseModel, validator
+from pydantic.v1 import BaseModel, validator
 
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
