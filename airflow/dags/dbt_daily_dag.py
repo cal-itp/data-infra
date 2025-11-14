@@ -65,20 +65,6 @@ with DAG(
             test_behavior=None,
         ),
     )
-    # TEMP Only for testing
-    dbt_gtfs_test_schedule = DbtTaskGroup(
-        group_id="gtfs_test_schedule",
-        project_config=project_config,
-        profile_config=profile_config,
-        operator_args=operator_args,
-        default_args=default_args,
-        render_config=RenderConfig(
-            select=["models/mart/gtfs/dim_agency.sql"],
-            source_pruning=True,
-            test_behavior=TestBehavior.AFTER_ALL,
-        ),
-    )
-    #
 
     dbt_kuba = DbtTaskGroup(
         group_id="kuba",
