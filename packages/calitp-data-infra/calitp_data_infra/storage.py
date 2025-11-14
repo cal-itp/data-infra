@@ -645,7 +645,7 @@ class GTFSDownloadConfig(BaseModel, extra=Extra.forbid):
         # some web servers require user agents or they will throw a 4XX error
         headers[
             "User-Agent"
-        ] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0"
+        ] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
 
         # inspired by: https://stackoverflow.com/questions/18869074/create-url-without-request-execution
         return Request(
