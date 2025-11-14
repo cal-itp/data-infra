@@ -234,7 +234,7 @@ jobs:
 
       - name: List changed models
         working-directory: warehouse
-        run: poetry run dbt list --select "${{ needs.dbt-changed.outputs.changed }}+" --target ${{ env.DBT_TARGET }}
+        run: poetry run dbt list --select "${{ needs.dbt-changed.outputs.changed }}+" --target ${{ env.DBT_TARGET }} --resource-type=model
 
       - name: Run dbt against changed files
         working-directory: warehouse
