@@ -42,6 +42,8 @@ monthly_trips AS (
         MAX(is_gtfs_flex_trip) AS is_gtfs_flex_trip,
 
         AVG(service_hours) AS service_hours,
+        AVG(flex_service_hours) AS flex_service_hours,
+
         COUNT(DISTINCT trip_instance_key) as n_trips,
         COUNT(DISTINCT service_date) as n_days,
         COUNT(DISTINCT feed_key) AS n_feeds,
