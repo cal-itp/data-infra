@@ -8,10 +8,10 @@ from typing import Sequence
 from hooks.transitland_hook import TransitlandHook
 from src.bigquery_cleaner import BigQueryCleaner
 
-from airflow.hooks.http_hook import HttpHook
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
+from airflow.providers.http.hooks.http import HttpHook
 
 
 class AggregatorObjectPath:
