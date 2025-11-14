@@ -30,7 +30,6 @@ with DAG(
         default_args=default_args,
         render_config=RenderConfig(
             select=dbt_manual_list,
-            source_pruning=True,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
     )

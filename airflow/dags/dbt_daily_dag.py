@@ -35,7 +35,6 @@ with DAG(
         default_args=default_args,
         render_config=RenderConfig(
             select=dbt_audit_list,
-            source_pruning=True,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
     )
@@ -48,7 +47,6 @@ with DAG(
         default_args=default_args,
         render_config=RenderConfig(
             select=dbt_benefits_list,
-            source_pruning=True,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
     )
@@ -61,7 +59,6 @@ with DAG(
         default_args=default_args,
         render_config=RenderConfig(
             select=dbt_daily_gtfs_schedule_list,
-            source_pruning=True,
             test_behavior=None,
         ),
     )
@@ -74,7 +71,6 @@ with DAG(
         default_args=default_args,
         render_config=RenderConfig(
             select=dbt_kuba_list,
-            source_pruning=True,
             test_behavior=TestBehavior.AFTER_ALL,
         ),
     )
@@ -87,7 +83,6 @@ with DAG(
         default_args=default_args,
         render_config=RenderConfig(
             select=dbt_payments_list,
-            source_pruning=True,
             test_behavior=None,
         ),
     )
