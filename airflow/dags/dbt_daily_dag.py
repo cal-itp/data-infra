@@ -34,7 +34,11 @@ with DAG(
         operator_args=operator_args,
         default_args=default_args,
         render_config=RenderConfig(
-            select=dbt_audit_list,
+            select=[
+                "source:external_kuba+",
+                "models/staging/audit",
+                "models/mart/audit",
+            ],
             test_behavior=TestBehavior.AFTER_ALL,
         ),
     )
