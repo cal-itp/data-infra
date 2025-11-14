@@ -3,6 +3,7 @@ from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
 from cosmos.constants import TestBehavior
+from src.dbt_utils import log_group_failure_to_slack
 
 from airflow import DAG
 from airflow.operators.latest_only import LatestOnlyOperator
@@ -44,7 +45,10 @@ with DAG(
         operator_args={
             "install_deps": True,
         },
-        default_args={"retries": 0},
+        default_args={
+            "on_failure_callback": log_group_failure_to_slack,
+            "retries": 0,
+        },
     )
 
     latest_only >> dbt_manual
