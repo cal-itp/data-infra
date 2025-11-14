@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM openjdk:21
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
