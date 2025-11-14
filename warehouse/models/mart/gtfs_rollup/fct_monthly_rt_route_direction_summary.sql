@@ -8,7 +8,9 @@
 WITH observed_trips AS (
     SELECT *
     FROM `cal-itp-data-infra.mart_gtfs.fct_observed_trips` --{{ ref('fct_observed_trips') }}
-    WHERE service_date >= "2025-10-01"
+    WHERE service_date >= "2025-01-01" AND service_date <= LAST_DAY(
+        DATE_SUB(CURRENT_DATE("America/Los_Angeles"), INTERVAL 1 MONTH)
+    )
     -- incremental; partitioned by service_date
     -- clustered by service_date, schedule_base64_url
 ),
@@ -18,12 +20,13 @@ scheduled_trips AS (
         service_date,
         base64_url,
         trip_instance_key,
-        route_short_name,
-        route_long_name,
+        {{ get_combined_route_name('name', 'route_id', 'route_short_name', 'route_long_name') }} AS route_name,
         direction_id,
 
     FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips` -- {{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= "2025-10-01"
+    WHERE service_date >= "2025-01-01" AND service_date <= LAST_DAY(
+        DATE_SUB(CURRENT_DATE("America/Los_Angeles"), INTERVAL 1 MONTH)
+    )
     -- table; clustered by service_date'
 ),
 
@@ -43,7 +46,7 @@ route_direction_aggregation AS (
         observed_trips.vp_base64_url,
 
         -- route direction columns
-        CONCAT(COALESCE(scheduled_trips.route_short_name, ""), ' ', COALESCE(scheduled_trips.route_long_name, "")) AS route_name,
+        scheduled_trips.route_name,
         scheduled_trips.direction_id,
 
         -- metrics from trip updates
