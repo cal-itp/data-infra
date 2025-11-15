@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM openjdk:21
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
@@ -32,10 +32,15 @@ COPY ./gtfs-validator-4.2.0-cli.jar ${V4_2_VALIDATOR_JAR}
 ENV V5_VALIDATOR_JAR=/gtfs-validator-5.0.0-cli.jar
 COPY ./gtfs-validator-5.0.0-cli.jar ${V5_VALIDATOR_JAR}
 
+# v7.1 from https://github.com/MobilityData/gtfs-validator/releases/download/v7.1.0/gtfs-validator-7.1.0-cli.jar
+ENV V7_1_VALIDATOR_JAR=/gtfs-validator-7.1.0-cli.jar
+COPY ./gtfs-validator-7.1.0-cli.jar ${V7_1_VALIDATOR_JAR}
+
 WORKDIR /app
 
 COPY ./pyproject.toml /app/pyproject.toml
 COPY ./poetry.lock /app/poetry.lock
+RUN poetry self add poetry-plugin-export
 RUN poetry export -f requirements.txt --without-hashes --output requirements.txt \
     && pip install -r requirements.txt
 RUN pip install memray
