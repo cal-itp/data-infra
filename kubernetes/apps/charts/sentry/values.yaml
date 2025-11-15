@@ -5,6 +5,9 @@ sentry:
   existingSecretKey: session-secret
 
   redis:
+    enabled: true
+    image:
+      repository: bitnamilegacy/redis
     replica:
       replicaCount: 1
       resources:
@@ -16,6 +19,9 @@ sentry:
           memory: 3Gi
 
   postgresql:
+    enabled: true
+    image:
+      repository: bitnamilegacy/postgresql
     global:
       postgresql:
         auth:
@@ -100,6 +106,10 @@ sentry:
       replicas: 2
 
   zookeeper:
+    enabled: true
+    image:
+      repository: bitnamilegacy/zookeeper
+      tag: 3.8.1-debian-11-r9
     persistence:
       size: 32Gi
     autopurge:
@@ -107,6 +117,9 @@ sentry:
       purgeInterval: 1
 
   kafka:
+    enabled: true
+    image:
+      repository: bitnamilegacy/kafka
     logRetentionHours: 72 # 3 days, the default is 7
     numPartitions: 12
     kraft:
@@ -122,3 +135,7 @@ sentry:
 
   hooks:
     activeDeadlineSeconds: 1200
+  rabbitmq:
+      enabled: true
+      image:
+        repository: bitnamilegacy/rabbitmq
