@@ -278,6 +278,16 @@ resource "google_project_iam_member" "cal-bc-service-account" {
   project = "cal-itp-data-infra-staging"
 }
 
+resource "google_project_iam_member" "metabase-service-account" {
+  for_each = toset([
+    "roles/cloudsql.client",
+    "roles/secretmanager.secretAccessor",
+  ])
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.metabase-service-account.email}"
+  project = "cal-itp-data-infra-staging"
+}
+
 resource "google_project_iam_member" "composer-service-account" {
   for_each = toset([
     "roles/bigquery.dataOwner",
@@ -291,6 +301,21 @@ resource "google_project_iam_member" "composer-service-account" {
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.composer-service-account.email}"
+  project = "cal-itp-data-infra-staging"
+}
+
+resource "google_project_iam_member" "workflow-service-account" {
+  for_each = toset([
+    "roles/storage.objectUser",
+    "roles/bigquery.dataViewer",
+    "roles/bigquery.jobUser",
+    "roles/pubsub.publisher",
+    "roles/secretmanager.secretAccessor",
+    "roles/workflows.invoker",
+    "roles/iam.serviceAccountTokenCreator"
+  ])
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.workflow-service-account.email}"
   project = "cal-itp-data-infra-staging"
 }
 

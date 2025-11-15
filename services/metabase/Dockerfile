@@ -1,0 +1,9 @@
+FROM metabase/metabase
+
+RUN apk update && apk add --no-cache socat
+
+RUN ln -s /cloudsql/cal-itp-data-infra-staging:us-west2:metabase-staging/.s.PGSQL.5432 pg.sock
+
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+ENTRYPOINT ["/app/entrypoint.sh"]
