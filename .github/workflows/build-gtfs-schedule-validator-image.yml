@@ -56,7 +56,7 @@ jobs:
       - name: Build and Push
         uses: docker/build-push-action@v6
         with:
-          context: gtfs-schedule-validator
+          context: jobs/gtfs-schedule-validator
           push: true
           tags: ghcr.io/${{ github.repository }}/gtfs-schedule-validator:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'latest' || 'development' }}
           cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/gtfs-schedule-validator:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'latest' || 'development' }}
