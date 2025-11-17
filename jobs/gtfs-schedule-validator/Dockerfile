@@ -40,10 +40,11 @@ WORKDIR /app
 
 COPY ./pyproject.toml /app/pyproject.toml
 COPY ./poetry.lock /app/poetry.lock
-RUN poetry self add poetry-plugin-export
-RUN poetry export -f requirements.txt --without-hashes --output requirements.txt \
-    && pip install -r requirements.txt --break-system-packages
+# RUN poetry self add poetry-plugin-export
+# RUN poetry export -f requirements.txt --without-hashes --output requirements.txt \
+#     && pip install -r requirements.txt --break-system-packages
 
 COPY . /app
 
-CMD ["python3", "-m", "gtfs_schedule_validator", "--help"]
+RUN poetry install --no-interaction
+CMD ["poetry", "run", "python3", "-m", "gtfs_schedule_validator", "--help"]
