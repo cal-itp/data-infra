@@ -53,8 +53,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v2
+      - name: Build and Push
+        uses: docker/build-push-action@v6
         with:
-          context: jobs/gtfs-schedule-validator
+          context: gtfs-schedule-validator
           push: true
-          tags: ghcr.io/${{github.repository}}/gtfs-schedule-validator:${{ github.ref == 'refs/heads/main' && 'latest' || 'development'  }}
+          tags: ghcr.io/${{ github.repository }}/gtfs-schedule-validator:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'latest' || 'development' }}
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/gtfs-schedule-validator:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'latest' || 'development' }}
+          cache-to: type=inline
