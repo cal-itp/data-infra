@@ -6,7 +6,7 @@ authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 package-mode = false
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.10"
+python = ">=3.8,<3.12"
 toml = "^0.10.2"
 gcsfs = "^2022.5.0"
 typer = "^0.6.1"
@@ -17,7 +17,7 @@ tqdm = "^4.64.0"
 backoff = "^2.2.1"
 python-slugify = "^7.0.0"
 sentry-sdk = "^1.12.1"
-calitp-data-infra = "2024.2.12.post1"
+calitp-data-infra = "2025.6.5"
 
 [tool.poetry.requires-plugins]
 poetry-plugin-export = ">=1.8"
