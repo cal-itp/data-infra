@@ -1,6 +1,28 @@
 version: 2
 
 models:
+  - name: stg_gtfs_schedule__download_configs
+    description: Displays all existing download configs with related schedule validation url
+    columns:
+      - name: name
+      - name: url
+      - name: base64_url
+      - name: feed_type
+      - name: auth_headers
+      - name: auth_query_params
+      - name: first_extracted_date
+        description: First date this configuration was extracted
+      - name: last_extracted_date
+        description: Last date this configuration was extracted
+      - name: schedule_url
+      - name: schedule_base64_url
+      - name: schedule_name
+      - name: schedule_auth_headers
+      - name: schedule_auth_query_params
+      - name: schedule_first_extracted_date
+        description: First date this configuration schedule was extracted
+      - name: schedule_last_extracted_date
+        description: Last date this configuration schedule was extracted
   - name: stg_gtfs_schedule__download_outcomes
     description: Outcomes from download attempts of GTFS schedule data.
     tests:
