@@ -13,27 +13,22 @@ WITH fct_scheduled_trips AS (
     WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START',
                                this_dt_column='service_date',
                                filter_dt_column='service_date',
-                               dev_lookback_days = 60) }}
+                               dev_lookback_days = None) }}
 ),
 
 dim_stop_times AS (
     SELECT *
     FROM {{ ref('dim_stop_times') }}
-    WHERE DATE(_feed_valid_from) > "2025-06-01"
 ),
 
 dim_stops AS (
     SELECT *
     FROM {{ ref('dim_stops') }}
-    WHERE DATE(_feed_valid_from) > "2025-06-01"
-
 ),
 
 dim_routes AS (
     SELECT *
     FROM {{ ref('dim_routes') }}
-    WHERE DATE(_feed_valid_from) > "2025-06-01"
-
 ),
 
 int_gtfs_schedule__frequencies_stop_times AS (
