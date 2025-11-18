@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
-from src.dbt_utils import log_group_failure_to_slack
+from src.dag_utils import log_group_failure_to_slack
 
 from airflow import DAG
 from airflow.operators.latest_only import LatestOnlyOperator
