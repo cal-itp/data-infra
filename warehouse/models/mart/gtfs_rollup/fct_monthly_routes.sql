@@ -20,7 +20,7 @@ trip_counts AS (
         year,
         month,
         month_first_day,
-        {{ get_combined_route_name('name', 'route_id', 'route_short_name', 'route_long_name') }} AS route_name,
+        route_name,
         direction_id,
         shape_id,
         shape_array_key,
