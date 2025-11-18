@@ -1,34 +1,32 @@
-[tool.poetry]
+[project]
 name = "gtfs-schedule-validator"
 version = "0.1.0"
-description = ""
-authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
-package-mode = false
+description = "Wrapper for the GTFS Schedule validator JAR"
+readme = "README.md"
+requires-python = "==3.11.*"
+dependencies = [
+    "backoff>=2.2.1",
+    "gcsfs>=2022.5.0",
+    "humanize>=4.2.3",
+    "pendulum>=3.0.0",
+    "pydantic>=1.9.1",
+    "python-slugify>=7.0.0",
+    "sentry-sdk>=2.44.0",
+    "toml>=0.10.2",
+    "tqdm>=4.64.0",
+    "typer>=0.6.1",
+]
+package=false
 
-[tool.poetry.dependencies]
-python = ">=3.8,<3.12"
-toml = "^0.10.2"
-gcsfs = "^2022.5.0"
-typer = "^0.6.1"
-humanize = "^4.2.3"
-pydantic = "^1.9.1"
-pendulum = "^2.1.2"
-tqdm = "^4.64.0"
-backoff = "^2.2.1"
-python-slugify = "^7.0.0"
-sentry-sdk = "^1.12.1"
-calitp-data-infra = "2025.6.5"
-
-[tool.poetry.requires-plugins]
-poetry-plugin-export = ">=1.8"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^5.2"
-mypy = "^0.991"
-types-tqdm = "^4.64.7"
-types-toml = "^0.10.8"
-types-python-slugify = "^8.0.0"
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
+    "pytest>=9.0.1",
+    "types-python-slugify>=8.0.2.20240310",
+    "types-toml>=0.10.8.20240310",
+    "types-tqdm>=4.67.0.20250809",
+]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.8.22,<0.9.0"]
+build-backend = "uv_build"
