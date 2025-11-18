@@ -267,7 +267,8 @@ models:
       - *day_type
       - *route_name
       - *direction_id
-      - name: route_type
+      - &route_type
+        name: route_type
         description: '{{ doc("gtfs_routes__route_type") }}'
       - name: route_color
         description: '{{ doc("gtfs_routes__route_color") }}'
