@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
-from cosmos.constants import TestBehavior
 from src.dag_utils import log_group_failure_to_slack
 
 from airflow import DAG
@@ -42,8 +41,10 @@ with DAG(
                 "models/staging/payments",
                 "models/intermediate/payments",
                 "models/mart/payments",
+                "models/staging/kuba",
+                "models/mart/kuba",
             ],
-            test_behavior=TestBehavior.AFTER_ALL,
+            test_behavior=None,
         ),
         operator_args={
             "install_deps": True,
