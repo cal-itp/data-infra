@@ -17,6 +17,19 @@ x-common-fields:
     name: gtfs_dataset_name
     description: &gtfs_dataset_name_desc |
       Name from the associated GTFS dataset record.
+  - &rt_schedule_base64_url
+    name: schedule_base64_url
+    description: '{{ doc("column_rt_schedule_base64_url") }}'
+  - &gtfs_rt_schedule_dataset_key
+    name: schedule_gtfs_dataset_key
+    description: '{{ doc("column_rt_schedule_dataset_key") }}'
+  - &gtfs_rt_schedule_dataset_name
+    name: schedule_name
+    description: '{{ doc("column_rt_schedule_dataset_name") }}'
+  - &gtfs_rt_schedule_feed_key
+    name: schedule_feed_key
+    description: '{{ doc("column_rt_schedule_feed_key") }}'
+
   # GTFS schedule tables: dim_routes, dim_stops, dim_shapes, etc
   - &route_type_0
     name: route_type_0
@@ -72,6 +85,7 @@ x-common-fields:
     name: pt_array
     description: |
       Ordered array of WKT points that describe this shape.
+
   # time aggregation
   - &day_type
     name: day_type
@@ -109,6 +123,15 @@ x-common-fields:
   - &n_feeds
     name: n_feeds
     description: Count of distinct feed_keys in this month for this day_type.
+  - &route_name
+    name: route_name
+    description: |
+      Within a month, route_id, route_short_name, and route_long_name values can
+      change slightly while referring to the same physical route, so trips have been have been
+      aggregated based on a cleaned up, combined name.
+      route_ids that are updated when feeds change with suffixes are parsed and cleaned.
+      (LA Metro, 1-[suffix_for_feed1], 1-[suffix_for_feed2]).
+      route_short_name and route_long_name are combined and cleaned up for easier labeling.
 
 models:
   - name: fct_monthly_scheduled_trips
@@ -139,9 +162,7 @@ models:
         description: '{{ doc("gtfs_routes__route_short_name") }}'
       - name: route_long_name
         description: '{{ doc("gtfs_routes__route_long_name") }}'
-      - name: route_name
-        description: &route_name_desc |
-          Concatenated route_short_name and route_long_name.
+      - *route_name
       - name: route_desc
         description: '{{ doc("gtfs_routes__route_desc") }}'
       - name: route_color
@@ -174,9 +195,9 @@ models:
         description: '{{ doc("gtfs_routes__route_short_name") }}'
       - name: route_long_name
         description: '{{ doc("gtfs_routes__route_long_name") }}'
-      - name: route_name
-        description: *route_name_desc
+      - *route_name
       - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: shape_array_key
@@ -236,7 +257,8 @@ models:
   - name: fct_monthly_schedule_route_direction_summary
     description: |
       An aggregation of GTFS schedule trips to the month-day_type-route-direction grain.
-      This table
+      This table adds columns to describe routes, such as
+      daily trips and frequency.
       Within a month, route_id, route_short_name, and route_long_name values can
       change slightly while referring to the same physical route, so trips have been have been
       aggregated based on a cleaned up, combined name.
@@ -247,14 +269,7 @@ models:
       - *month
       - *year
       - *day_type
-      - name: route_name
-        description: |
-          Within a month, route_id, route_short_name, and route_long_name values can
-          change slightly while referring to the same physical route, so trips have been have been
-          aggregated based on a cleaned up, combined name.
-          route_ids that are updated when feeds change with suffixes are parsed and cleaned.
-          (LA Metro, 1-[suffix_for_feed1], 1-[suffix_for_feed2]).
-          route_short_name and route_long_name are combined and cleaned up for easier labeling.
+      - *route_name
       - name: direction_id
         description: '{{ doc("gtfs_trips__direction_id") }}'
       - name: route_type
@@ -372,3 +387,94 @@ models:
           (Owl, Early AM, Midday, Evening).
           To convert to headway, use: 60 / frequency.
           Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
+
+  - name: fct_monthly_rt_route_direction_summary
+    description: |
+      An aggregation of GTFS RT trips (fct_observed_trips) to the month-day_type-route-direction grain.
+      This table adds columns to describe routes, such as
+      daily trips and frequency.
+      Within a month, route_id, route_short_name, and route_long_name values can
+      change slightly while referring to the same physical route, so trips have been have been
+      aggregated based on a cleaned up, combined name.
+    columns:
+      - *month
+      - *year
+      - *month_first_day
+      - *day_type
+      - *rt_schedule_base64_url
+      - name: tu_name
+        description: "Name from the trip updates GTFS dataset record associated\nwith this trip. If null, this trip did not appear in a trip updates\nfeed.\nThis field is provided for convenience and should not be used as a\njoin key.\n"
+      - name: vp_name
+        description: |
+          Name from the vehicle positions GTFS dataset record associated
+          with this trip. If null, this trip did not appear in a vehicle
+          positions feed.
+      - name: schedule_name
+        description: |
+          Name from the schedule GTFS dataset record associated
+          with the RT feed(s) in which this trip appeared.
+      - <<: *base64_url
+        name: tu_base64_url
+      - <<: *base64_url
+        name: vp_base64_url
+      - *route_name
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: tu_num_distinct_updates
+        description: &rt_trip_num_distinct_updates_desc |
+          The number of distinct producer-produced timestamps for messages
+          containing this trip.
+          If trip update or vehicle timestamps are available, use the count of
+          distinct values of that timestamp. Otherwise use count of distinct
+          header timestamps for messages containing this trip.
+          This should generally reflect how many distinct data updates there were
+          for this trip in our data, though note that the producer timestamps
+          can increment without the actual data values changing.
+      - name: daily_tu_num_distinct_updates
+        description: &rt_trip_num_distinct_updates_per_day |
+          The average number of distinct producer-produced timestamps for messages
+          containing per day.
+          It is the total number of distinct producer-produced timestamps for
+          messages divided by the number of days we had data.
+      - name: daily_tu_num_skipped_stops
+        description: &tu_num_skipped_stops_per_day_desc |
+          Total count of stop_ids in messages where the stop time update
+          schedule_relationship was SKIPPED divided by the number of days we have data
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
+      - name: daily_tu_num_canceled_stops
+        description: &tu_num_canceled_stops_per_day_desc  |
+          Total count of stop_ids in messages where the stop time update
+          schedule_relationship was CANCELED divided by the number of days we have data
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
+      - name: daily_tu_num_added_stops
+        description: &tu_num_added_stops_per_day_desc |
+          Total count of stop_ids in messages where the stop time update
+          schedule_relationship was ADDED divided by the number of days we have data
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
+      - name: daily_tu_num_scheduled_stops
+        description: &tu_num_scheduled_stops_per_day_desc |
+          Total count of stop_ids in messages where the stop time update
+          schedule_relationship was SCHEDULED divided by the number of days we have data
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
+      - name: n_tu_trips
+        description: Total number of trips that appeared in the trip updates feed.
+      - name: daily_tu_trips
+        description: |
+          Total number of trips that appeared in the trip updates feed
+          divided by the number of days we have data.
+      - name: vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: daily_vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_per_day
+      - name: n_vp_trips
+        description: Total number of trips that appeared in the vehicle positions feed.
+      - name: daily_vp_trips
+        description: |
+          Total number of trips that appeared in the vehicle positions feed
+          divided by the number of days we have data.
+      - *n_trips
+      - *n_days
