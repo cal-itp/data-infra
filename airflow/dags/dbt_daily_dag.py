@@ -41,6 +41,8 @@ with DAG(
                 "models/staging/payments",
                 "models/intermediate/payments",
                 "models/mart/payments",
+                "models/staging/kuba",
+                "models/mart/kuba",
             ],
             test_behavior=None,
         ),
