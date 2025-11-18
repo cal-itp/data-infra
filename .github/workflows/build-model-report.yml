@@ -1,0 +1,295 @@
+name: Build dbt Model Report
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/build-model-report.yml
+      - 'warehouse/**'
+  pull_request:
+    paths:
+      - .github/workflows/build-model-report.yml
+      - 'warehouse/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  PYTHON_VERSION: '3.11'
+  POETRY_VERSION: '2.0.1'
+  SERVICE_ACCOUNT: 'github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+  PROJECT_ID: 'cal-itp-data-infra-staging'
+  DBT_TARGET: 'staging'
+  DBT_ARTIFACTS_BUCKET: 'calitp-staging-dbt-artifacts'
+  GOOGLE_CLOUD_PROJECT: 'cal-itp-data-infra-staging'
+
+jobs:
+  compile:
+    name: Compile dbt
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache Poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        working-directory: warehouse
+        run: poetry install
+
+      - name: Cache dbt packages
+        uses: actions/cache@v3
+        with:
+          path: warehouse/dbt_packages
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
+
+      - name: Install dbt dependencies
+        working-directory: warehouse
+        run: poetry run dbt deps
+
+      - name: Print dbt environment
+        working-directory: warehouse
+        run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
+
+      - name: Compile dbt
+        working-directory: warehouse
+        run: poetry run dbt compile --target ${{ env.DBT_TARGET }}
+
+      - name: Generate dbt documentation
+        working-directory: warehouse
+        run: poetry run dbt docs generate --target ${{ env.DBT_TARGET }} --no-compile
+
+      - name: Archive compilation artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt
+          path: |
+            warehouse/target/*.html
+            warehouse/target/*.json
+            warehouse/target/*.msgpack
+
+  visualize:
+    name: Model Visualization
+    needs: [compile]
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event_name == 'pull_request' }}
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dbt
+          path: warehouse/target
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-{{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Cache python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: python-cache-{{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        working-directory: warehouse
+        run: poetry install
+
+      - name: Install dbt dependencies
+        working-directory: warehouse
+        run: poetry run dbt deps
+
+      - name: Create Latest folder
+        working-directory: warehouse/target
+        run: mkdir latest
+
+      - name: Download latest artifacts from production dbt docs
+        working-directory: warehouse
+        run: gsutil cp gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/*.json ./target/latest/
+
+      - name: List local target folder
+        working-directory: warehouse/target
+        run: ls
+
+      - name: List local latest folder
+        working-directory: warehouse/target/latest
+        run: ls
+
+      - name: Setup Continuous Machine Learning tools
+        uses: iterative/setup-cml@v2
+
+      - name: Create CI report
+        working-directory: warehouse
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: poetry run python scripts/visualize.py ci-report --latest-dir='./target/latest/'
+
+      - name: Archive CI report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-report
+          path: |
+            warehouse/target/report.md
+            warehouse/target/dag.png
+
+      - name: Create GitHub comment
+        id: report-comment
+        working-directory: warehouse
+        continue-on-error: true
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: cml comment update target/report.md
+
+      - uses: peter-evans/find-comment@v3
+        if: ${{ steps.report-comment.outcome == 'failure' }}
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: "Warehouse report"
+
+      - uses: peter-evans/create-or-update-comment@v4
+        if: ${{ steps.report-comment.outcome == 'failure' }}
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.number }}
+          body: "Warehouse report: Failed to add ci-report to a comment. Review the ci-report in the [Summary](https://github.com/cal-itp/data-infra/actions/runs/${{ github.run_id }})."
+          edit-mode: replace
+
+  upload_latest_artifacts:
+    name: Upload to latest dbt artifacts folder (Staging)
+    needs: [compile]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    if: ${{ github.ref == 'refs/heads/main' }}
+
+    steps:
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dbt
+          path: warehouse/target
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Upload catalog.json, manifest.json, and run_results.json
+        uses: google-github-actions/upload-cloud-storage@v2
+        with:
+          path: './warehouse/target/'
+          glob: '{catalog.json,manifest.json,run_results.json}'
+          parent: false
+          process_gcloudignore: false
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/latest/"
+          headers: |-
+            content-type: application/json
+
+      - name: Upload index.html
+        uses: google-github-actions/upload-cloud-storage@v2
+        with:
+          path: './warehouse/target/'
+          glob: 'index.html'
+          parent: false
+          process_gcloudignore: false
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/latest/"
+          headers: |-
+            content-type: text/html; charset=utf-8
+
+      - name: Upload partial_parse.msgpack
+        uses: google-github-actions/upload-cloud-storage@v2
+        with:
+          path: './warehouse/target/'
+          glob: 'partial_parse.msgpack'
+          parent: false
+          process_gcloudignore: false
+          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/latest/"
+          headers: |-
+            content-type: application/vnd.msgpack

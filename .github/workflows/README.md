@@ -15,6 +15,11 @@ Workflows prefixed with `build-` generally lint, test, and (usually) publish eit
 Workflows prefixed with `preview-` deal with generating previews for pull request changes.
 
 
+## build-model-report.yml
+
+This workflow builds a visual comment about model changes and uploads latest dbt artifacts (staging) when merging to the Main branch.
+
+
 ## composer-plan-files.yml
 
 When creating a PR that changes any file in the `airflow` directory, this workflow runs `Terraform plan` to create a comment with an execution plan to preview the changes that will be made to Production and Staging Airflow DAGs.
@@ -46,7 +51,7 @@ This workflow builds a static website from the Svelte app and deploys it to Netl
 
 ## deploy-dbt.yml
 
-This workflow compiles dbt models and docs, syncs Metabase, uploads dbt artifacts, builds a visual comment about model changes.
+This workflow compiles dbt models and docs, syncs Metabase, and uploads dbt artifacts.
 
 
 ## deploy-kubernetes.yml
