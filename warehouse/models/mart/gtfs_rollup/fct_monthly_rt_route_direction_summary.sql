@@ -7,8 +7,8 @@
 
 WITH observed_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_observed_trips` --{{ ref('fct_observed_trips') }}
-    WHERE service_date >= "2025-01-01" AND service_date <= LAST_DAY(
+    FROM {{ ref('fct_observed_trips') }}
+    WHERE service_date <= LAST_DAY(
         DATE_SUB(CURRENT_DATE("America/Los_Angeles"), INTERVAL 1 MONTH)
     )
     -- incremental; partitioned by service_date

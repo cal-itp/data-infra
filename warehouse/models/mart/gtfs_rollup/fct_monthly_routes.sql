@@ -20,9 +20,7 @@ trip_counts AS (
         year,
         month,
         month_first_day,
-        route_short_name,
-        route_long_name,
-        route_name,
+        {{ get_combined_route_name('name', 'route_id', 'route_short_name', 'route_long_name') }} AS route_name,
         direction_id,
         shape_id,
         shape_array_key,
@@ -30,10 +28,11 @@ trip_counts AS (
         COUNT(*) AS n_trips,
 
     FROM fct_scheduled_trips
-    GROUP BY name, year, month, month_first_day, route_short_name, route_long_name, route_name, direction_id, shape_id, shape_array_key
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY
-                               name, year, month, month_first_day, route_short_name, route_long_name, route_name, direction_id
-                               ORDER BY n_trips DESC) = 1
+    GROUP BY name, year, month, month_first_day, route_name, direction_id, shape_id, shape_array_key
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY
+            name, year, month, month_first_day, route_name, direction_id
+        ORDER BY n_trips DESC) = 1
 ),
 
 fct_monthly_routes AS (

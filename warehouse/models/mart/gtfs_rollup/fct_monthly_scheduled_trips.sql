@@ -29,7 +29,7 @@ monthly_trips AS (
         direction_id,
         route_short_name,
         route_long_name,
-        {{ get_combined_route_name('name', 'route_short_name', 'route_long_name') }} AS route_name,
+        {{ get_combined_route_name('name', 'route_id', 'route_short_name', 'route_long_name') }} AS route_name,
         route_desc,
         route_color,
         route_text_color,
