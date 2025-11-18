@@ -232,3 +232,95 @@ models:
         description: '{{ doc("gtfs_stops__location_type") }}'
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+
+  - name: fct_monthly_schedule_route_direction_summary
+    description: |
+      An aggregation of GTFS schedule trips to the month-day_type-route-direction grain.
+      This table
+      Within a month, route_id, route_short_name, and route_long_name values can
+      change slightly while referring to the same physical route, so trips have been have been
+      aggregated based on a cleaned up, combined name.
+    columns:
+      - name: name
+        description: *gtfs_dataset_name_desc
+      - *month_first_day
+      - *month
+      - *year
+      - *day_type
+      - name: route_name
+        description: |
+          Within a month, route_id, route_short_name, and route_long_name values can
+          change slightly while referring to the same physical route, so trips have been have been
+          aggregated based on a cleaned up, combined name.
+          route_ids that are updated when feeds change with suffixes are parsed and cleaned.
+          (LA Metro, 1-[suffix_for_feed1], 1-[suffix_for_feed2]).
+          route_short_name and route_long_name are combined and cleaned up for easier labeling.
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
+      - name: route_color
+        description: '{{ doc("gtfs_routes__route_color") }}'
+      - name: route_typology
+        description: ""
+      - name: daily_trips_all_day
+        description: |
+          Average daily trips all day for this month-day_type-route_name-direction_id.
+          This is the total number of trips divided by the number of days.
+          Average daily trips are used because weekdays have 5 days and Saturdays and Sundays
+          are 1 day each. This column normalizes the total number of trips
+          that occurred and allows for comparison across Weekday/Saturday/Sunday service.
+      - name: daily_stop_arrivals_all_day
+        description: |
+          Average daily stop arrivals (scheduled stop times)
+          all day for this month-day_type-route_name-direction_id.
+          This is the total number of stop arrivals divided by the number of days.
+          Average daily stop arrivals are used because weekdays have 5 days and Saturdays and Sundays
+          are 1 day each. This column normalizes the total number of stop arrivals
+          that occurred and allows for comparison across Weekday/Saturday/Sunday service.
+      - name: daily_distinct_stops_all_day
+        description: |
+          Average distinct stop_ids (scheduled stops)
+          all day for this month-day_type-route_name-direction_id.
+          This is the total number of unique stops divided by the number of days.
+          Average daily distinct stops are used because weekdays have 5 days and Saturdays and Sundays
+          are 1 day each. This column normalizes the total number of stops
+          that are serviced and allows for comparison across Weekday/Saturday/Sunday service.
+      - name: frequency_all_day
+        description: Number of trips per hour all day.
+      - name: daily_service_hours
+        description: Average daily service hours
+      - name: daily_flex_service_hours
+        description: ""
+      - name: daily_trips_owl
+        description: ""
+      - name: daily_trips_early_am
+        description: ""
+      - name: daily_trips_am_peak
+        description: ""
+      - name: daily_trips_midday
+        description: ""
+      - name: daily_trips_pm_peak
+        description: ""
+      - name: daily_trips_evening
+        description: ""
+      - name: daily_trips_peak
+        description: ""
+      - name: daily_trips_offpeak
+        description: ""
+      - name: frequency_owl
+        description: ""
+      - name: frequency_early_am
+        description: ""
+      - name: frequency_am_peak
+        description: ""
+      - name: frequency_midday
+        description: ""
+      - name: frequency_pm_peak
+        description: ""
+      - name: frequency_evening
+        description: ""
+      - name: frequency_peak
+        description: ""
+      - name: frequency_offpeak
+        description: ""
