@@ -3,7 +3,7 @@ FROM eclipse-temurin:21
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
 RUN apt-get update -y && apt install -y software-properties-common && add-apt-repository ppa:deadsnakes/ppa && apt-get update -y \
-    && apt-get install -y python3.11 python3.11-pip python3.11-venv libunwind-dev liblz4-dev
+    && apt-get install -y python3.11 libunwind-dev liblz4-dev
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:${PATH}"
