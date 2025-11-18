@@ -272,7 +272,8 @@ models:
         description: '{{ doc("gtfs_routes__route_type") }}'
       - name: route_color
         description: '{{ doc("gtfs_routes__route_color") }}'
-      - name: route_typology
+      - &route_typology
+        name: route_typology
         description: |
           Route typologies derived from route_type, route_short_name,
           or route_long_name.
@@ -533,7 +534,8 @@ models:
       - *route_name
       - *direction_id
       - *route_type
-      - *route_color
+      - name: route_color
+        description: '{{ doc("gtfs_routes__route_color") }}'
       - *route_typology
       - *daily_trips_all_day
       - *daily_stop_arrivals_all_day
@@ -557,12 +559,14 @@ models:
       - *frequency_evening
       - *frequency_peak
       - *frequency_offpeak
-      - *schedule_base64_url
+      - *rt_schedule_base64_url
       - *tu_name
       - *vp_name
-      - *schedule_name
-      - *tu_base64_url
-      - *vp_base64_url
+      - *gtfs_rt_schedule_dataset_name
+      - <<: *base64_url
+        name: tu_base64_url
+      - <<: *base64_url
+        name: vp_base64_url
       - name: tu_num_distinct_updates
         description: *rt_trip_num_distinct_updates_desc
       - name: daily_tu_num_distinct_updates
