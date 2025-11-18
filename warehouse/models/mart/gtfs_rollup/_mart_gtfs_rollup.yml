@@ -289,38 +289,86 @@ models:
       - name: frequency_all_day
         description: Number of trips per hour all day.
       - name: daily_service_hours
-        description: Average daily service hours
+        description: '{{ doc("column_service_hours") }}'
       - name: daily_flex_service_hours
-        description: ""
+        description: '{{ doc("column_flex_service_hours") }}'
       - name: daily_trips_owl
-        description: ""
+        description: |
+          Average number of trips per day in the Owl time period
+          (0-3 hours inclusive in a 24 hour period, 12 AM - 3:59 AM).
       - name: daily_trips_early_am
-        description: ""
+        description: |
+          Average number of trips per day in the Early AM time period
+          (4-6 hours inclusive in a 24 hour period, 4 AM - 6:59 AM).
       - name: daily_trips_am_peak
-        description: ""
+        description: |
+          Average number of trips per day in the AM Peak time period
+          (7-9 hours inclusive in a 24 hour period, 7 AM - 9:59 AM).
       - name: daily_trips_midday
-        description: ""
+        description: |
+          Average number of trips per day in the Midday time period
+          (10-14 hours inclusive in a 24 hour period, 10 AM - 2:59 PM).
       - name: daily_trips_pm_peak
-        description: ""
+        description: |
+          Average number of trips per day in the PM Peak time period
+          (15-19 hours inclusive in a 24 hour period, 3 PM - 7:59 PM).
       - name: daily_trips_evening
-        description: ""
+        description: |
+          Average number of trips per day in the Evening time period
+          (20-23 hours inclusive in a 24 hour period, 8 PM - 11:59 PM).
       - name: daily_trips_peak
-        description: ""
+        description: |
+          Average number of trips per day in the Peak time period
+          (AM Peak and PM peak).
       - name: daily_trips_offpeak
-        description: ""
+        description: |
+          Average number of trips per day in the Offpeak time period
+          (Owl, Early AM, Midday, Evening).
       - name: frequency_owl
-        description: ""
+        description: |
+          Average trips per hour in the Owl time period
+          (0-3 hours inclusive in a 24 hour period, 12 AM - 3:59 AM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
       - name: frequency_early_am
-        description: ""
+        description: |
+          Average trips per hour in the Early AM time period
+          (7-9 hours inclusive in a 24 hour period, 7 AM - 9:59 AM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
       - name: frequency_am_peak
-        description: ""
+        description: |
+          Average trips per hour in the AM Peak time period
+          (7-9 hours inclusive in a 24 hour period, 7 AM - 9:59 AM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
       - name: frequency_midday
-        description: ""
+        description: |
+          Average trips per hour in the Midday time period
+          (10-14 hours inclusive in a 24 hour period, 10 AM - 2:59 PM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
       - name: frequency_pm_peak
-        description: ""
+        description: |
+          Average trips per hour in the PM Peak time period
+          (15-19 hours inclusive in a 24 hour period, 3 PM - 7:59 PM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
       - name: frequency_evening
-        description: ""
+        description: |
+          Average trips per hour in the Evening time period
+          (20-23 hours inclusive in a 24 hour period, 8 PM - 11:59 PM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
       - name: frequency_peak
-        description: ""
+        description: |
+          Average trips per hour in the Peak time period
+          (AM Peak and PM peak).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
       - name: frequency_offpeak
-        description: ""
+        description: |
+          Average trips per hour in the Offpeak time period
+          (Owl, Early AM, Midday, Evening).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
