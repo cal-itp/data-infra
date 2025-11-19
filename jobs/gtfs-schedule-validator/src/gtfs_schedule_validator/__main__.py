@@ -225,7 +225,7 @@ def download_and_validate_extract(
 
     slugified_version = slugify(validator_version)
     validation = GTFSScheduleFeedValidation(
-        filename=f"validation_notices_{slugified_version}{JSONL_GZIP_EXTENSION}", # type: ignore
+        filename=f"validation_notices_{slugified_version}{JSONL_GZIP_EXTENSION}",  # type: ignore
         ts=extract.ts,
         extract_config=extract.config,
         system_errors=system_errors,
@@ -257,7 +257,7 @@ def download_and_validate_extract(
         fs=fs,
     )
 
-    return GTFSScheduleFeedExtractValidationOutcome( # type: ignore
+    return GTFSScheduleFeedExtractValidationOutcome(  # type: ignore
         success=True,
         extract=extract,
         validation=validation,
@@ -294,7 +294,7 @@ def get_schedule_files_in_hour(
     ), f"{period} is not exactly 1 hour exclusive of end"
     day = pendulum.instance(period.start).date()
     files: List[GTFSScheduleFeedExtract]
-    files, missing, invalid = fetch_all_in_partition( # type: ignore
+    files, missing, invalid = fetch_all_in_partition(  # type: ignore
         cls=cls,
         bucket=bucket,
         table=table,
@@ -342,7 +342,7 @@ def validate_hour(
     extracts: List[GTFSScheduleFeedExtract]
     extract_map = get_schedule_files_in_hour(
         cls=GTFSScheduleFeedExtract,
-        bucket=SCHEDULE_RAW_BUCKET, # type: ignore
+        bucket=SCHEDULE_RAW_BUCKET,  # type: ignore
         table=GTFSFeedType.schedule,
         period=period,
     )
@@ -411,7 +411,7 @@ def validate_hour(
 
                     exceptions.append(e)
                     outcomes.append(
-                        GTFSScheduleFeedExtractValidationOutcome( # type: ignore
+                        GTFSScheduleFeedExtractValidationOutcome(  # type: ignore
                             success=False,
                             extract=extract,
                             exception=e,
@@ -422,7 +422,7 @@ def validate_hour(
             del pbar
 
         result = ScheduleValidationJobResult(
-            filename="results.jsonl", # type: ignore
+            filename="results.jsonl",  # type: ignore
             ts=ts,
             outcomes=outcomes,
         )
