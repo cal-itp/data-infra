@@ -439,9 +439,14 @@
                     data: fetchGeoJSON(layer.url),
                     pickable: true,
                     autoHighlight: true,
-                    getPointRadius: 10,
+                    getPointRadius: 12,
+                    pointRadiusUnits: "pixels", // point radius is less zoom dependendent
+                    pointRadiusScale: 0.3, //slows growth of points when zooming out
+                    getLineWidth: 3,
+                    lineWidthUnits: "pixels",
                     ...layerProperties,
                     getFillColor: (feature) => getColor(feature, layer, 1, 200),
+                    getLineColor: (feature) => getColor(feature, layer, 1, 200),
                     highlightColor: ({ object, layer }) => getColor(object, layer, layerProperties.highlight_saturation_multiplier || 0.7),
                     onDataLoad: (data) => {
                       console.log("Finished loading", layer);
