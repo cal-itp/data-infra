@@ -115,10 +115,6 @@ models:
           dataset: gtfs_quality
         guidelines_checks:
           +materialized: table
-      ntd:
-        +labels:
-          domain: intermediate
-          dataset: ntd
       ntd_assets:
         +labels:
           domain: intermediate
