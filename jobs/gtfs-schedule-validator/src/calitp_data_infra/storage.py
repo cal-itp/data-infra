@@ -789,10 +789,10 @@ def download_feed(
         GTFSRTFeedExtract if config.feed_type.is_rt else GTFSScheduleFeedExtract
     )
     extract = extract_class(
-        filename=filename, # type: ignore
+        filename=filename,  # type: ignore
         config=config,
         response_code=resp.status_code,
-        response_headers=resp.headers, # type: ignore
+        response_headers=resp.headers,  # type: ignore
         ts=ts,
     )
 
