@@ -13,7 +13,7 @@ from calitp_data_infra.storage import (  # type: ignore
     get_fs,
     make_name_bq_safe,
 )
-from pydantic import HttpUrl, parse_obj_as
+from pydantic.v1 import HttpUrl, parse_obj_as
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
