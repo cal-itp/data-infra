@@ -83,6 +83,8 @@ rt_joins AS (
         tu.num_distinct_scheduled_stops
          + tu.num_distinct_canceled_stops
          + tu.num_distinct_added_stops AS tu_num_scheduled_canceled_added_stops,
+        tu.num_distinct_message_keys AS tu_num_distinct_message_keys,
+        tu.extract_duration_minutes AS tu_extract_duration_minutes,
 
         -- vehicle positions facts
         vp.trip_start_time AS vp_trip_start_time,
@@ -104,6 +106,9 @@ rt_joins AS (
         vp.num_distinct_updates AS vp_num_distinct_updates,
         vp.first_position AS vp_first_position,
         vp.last_position AS vp_last_position,
+        vp.num_distinct_message_keys AS vp_num_distinct_message_keys,
+        vp.extract_duration_minutes AS vp_extract_duration_minutes,
+
 
         -- keying
         tu.base64_url AS tu_base64_url,
