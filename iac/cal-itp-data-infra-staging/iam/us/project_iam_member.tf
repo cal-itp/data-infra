@@ -260,6 +260,7 @@ resource "google_project_iam_member" "github-actions-service-account" {
     "roles/run.admin",
     "roles/storage.objectAdmin",
     "roles/viewer",
+    "roles/secretmanager.secretAccessor",
     google_project_iam_custom_role.calitp-dds-analyst.id,
     google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-staging-002F-roles-002F-CustomGCSPublisher.id
   ])

@@ -14,7 +14,6 @@ class TestSODAHook:
     @pytest.mark.vcr()
     def test_page(self, hook: SODAHook):
         result = hook.page(resource="i4ua-cjx4", page=1, limit=1)
-        print(result)
         assert result == [
             {
                 "ntd_id": "00001",

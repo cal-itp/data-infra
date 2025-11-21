@@ -1,6 +1,7 @@
 """
 Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited JSON
 """
+
 import base64
 import copy
 import datetime

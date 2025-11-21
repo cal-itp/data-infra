@@ -7,11 +7,16 @@ Now, the pipeline aims to use bigquery's sqlalchemy client where possible.
 However, it's cumbersome to convert the http api style schema fields to SQL, so
 we provide a fallback for these old-style tasks.
 """
+
+import os
+
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
-from utils import CALITP_BQ_LOCATION, CALITP_PROJECT_NAME
 
 from airflow.models import BaseOperator
+
+CALITP_BQ_LOCATION = os.environ.get("CALITP_BQ_LOCATION", "us-west2")
+CALITP_PROJECT_NAME = os.environ.get("GOOGLE_CLOUD_PROJECT")
 
 
 def format_table_name(name, is_staging=False, full_name=False):
@@ -167,7 +172,7 @@ class ExternalTable(BaseOperator):
                 )
 
             field_strings = [
-                f'{entry["name"]} {entry["type"]}' for entry in self.schema_fields
+                f"{entry['name']} {entry['type']}" for entry in self.schema_fields
             ]
             fields_spec = ",\n".join(field_strings)
 

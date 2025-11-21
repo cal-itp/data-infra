@@ -72,6 +72,10 @@ def vcr_config():
             ("Authorization", "FILTERED"),
             ("apikey", "FILTERED"),
             ("X-CKAN-API-Key", "FILTERED"),
+            ("Granicus-Auth", "FILTERED"),
+        ],
+        "filter_query_parameters": [
+            ("api_key", "FILTERED"),
         ],
         "before_record_request": scrub_sensitive_data,
         "allow_playback_repeats": True,
