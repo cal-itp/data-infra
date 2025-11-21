@@ -1,5 +1,5 @@
 from airflow.hooks.base import BaseHook
-from airflow.hooks.http_hook import HttpHook
+from airflow.providers.http.hooks.http import HttpHook
 
 
 class KubaHook(BaseHook):
