@@ -50,6 +50,12 @@ pivoted AS (
         SUM(n_days_schedule_and_vp_only) AS n_days_schedule_and_vp_only,
         SUM(n_days_schedule_and_tu_only) AS n_days_schedule_and_tu_only,
 
+        CASE
+            WHEN GREATEST(n_days_schedule_only, n_days_schedule_and_rt, n_days_schedule_and_vp_only, n_days_schedule_and_tu_only) = n_days_schedule_only THEN "schedule_only"
+            WHEN GREATEST(n_days_schedule_only, n_days_schedule_and_rt, n_days_schedule_and_vp_only, n_days_schedule_and_tu_only) = n_days_schedule_and_rt THEN "schedule_and_rt"
+            WHEN GREATEST(n_days_schedule_only, n_days_schedule_and_rt, n_days_schedule_and_vp_only, n_days_schedule_and_tu_only) = n_days_schedule_and_vp_only THEN "schedule_and_vp_only"
+            WHEN GREATEST(n_days_schedule_only, n_days_schedule_and_rt, n_days_schedule_and_vp_only, n_days_schedule_and_tu_only) = n_days_schedule_and_tu_only THEN "schedule_and_tu_only"
+        END AS gtfs_availability
     FROM day_counts_by_availability
     GROUP BY 1, 2, 3
 ),
@@ -91,6 +97,12 @@ monthly_summary AS (
         ROUND(AVG(pct_tu_trips), 3) AS pct_tu_trips,
         ROUND(AVG(n_tu_routes), 1) AS n_tu_routes,
         ROUND(AVG(pct_tu_service_hours), 3) AS pct_tu_service_hours,
+
+        pivoted.n_days_schedule_only,
+        pivoted.n_days_schedule_and_rt,
+        pivoted.n_days_schedule_and_vp_only,
+        pivoted.n_days_schedule_and_tu_only,
+        pivoted.gtfs_availability
 
     FROM daily_summary2
     INNER JOIN pivoted
