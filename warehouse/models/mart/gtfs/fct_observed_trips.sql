@@ -83,7 +83,7 @@ rt_joins AS (
         tu.num_distinct_scheduled_stops
          + tu.num_distinct_canceled_stops
          + tu.num_distinct_added_stops AS tu_num_scheduled_canceled_added_stops,
-        tu.num_distinct_message_keys AS tu_num_distinct_message_keys,
+        --tu.num_distinct_message_keys AS tu_num_distinct_message_keys, -- this is equal to tu_num_distinct_extract_ts, so use that
         tu.extract_duration_minutes AS tu_extract_duration_minutes,
 
         -- vehicle positions facts
@@ -106,7 +106,7 @@ rt_joins AS (
         vp.num_distinct_updates AS vp_num_distinct_updates,
         vp.first_position AS vp_first_position,
         vp.last_position AS vp_last_position,
-        vp.num_distinct_message_keys AS vp_num_distinct_message_keys,
+        --vp.num_distinct_message_keys AS vp_num_distinct_message_keys,
         vp.extract_duration_minutes AS vp_extract_duration_minutes,
 
 
@@ -157,6 +157,7 @@ fct_observed_trips AS (
         tu_num_added_stops,
         tu_num_scheduled_stops,
         tu_num_scheduled_canceled_added_stops,
+        tu_extract_duration_minutes,
 
         -- vehicle positions facts
         vp_trip_start_time,
@@ -176,6 +177,7 @@ fct_observed_trips AS (
         vp_trip_direction_ids,
         vp_first_position,
         vp_last_position,
+        vp_extract_duration_minutes,
 
         -- keying
         tu_base64_url,
