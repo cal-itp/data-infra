@@ -4,14 +4,16 @@ image: 'ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:{{image_tag()}}'
 pool: schedule_validate_pool
 
 cmds:
-  - python3
+  - uv
 
 arguments:
-  - "-m"
-  - "gtfs_schedule_validator_hourly"
-  - "validate-hour"
+  - run
+  - python3
+  - -m
+  - gtfs_schedule_validator
+  - validate-hour
   - "{{ data_interval_start.strftime('%Y-%m-%dT%H') }}"
-  - "--verbose"
+  - --verbose
 
 is_delete_operator_pod: true
 get_logs: true
@@ -22,7 +24,6 @@ env_vars:
   CALITP_USER: "{{ env_var('CALITP_USER') }}"
   CALITP_BUCKET__GTFS_SCHEDULE_RAW: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_RAW') }}"
   CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY') }}"
-  GRAAS_SERVER_URL: "{{ env_var('GRAAS_SERVER_URL') }}"
 
 secrets:
   - deploy_type: volume

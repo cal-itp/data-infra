@@ -1,12 +1,13 @@
-FROM openjdk:11
+FROM eclipse-temurin:21
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
+LABEL org.opencontainers.image.source=https://github.com/cal-itp/data-infra
 
 RUN apt-get update -y \
-    && apt-get install -y python3 python3-pip python3-venv libunwind-dev liblz4-dev
-
-RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="/root/.local/bin:${PATH}"
+    && apt install -y software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && apt-get update -y \
+    && apt-get install -y python3.11
 
 # v2 from https://github.com/MobilityData/gtfs-validator/releases/download/v2.0.0/gtfs-validator-v2.0.0_cli.jar
 ENV V2_VALIDATOR_JAR=/gtfs-validator-v2.0.0_cli.jar
@@ -32,14 +33,14 @@ COPY ./gtfs-validator-4.2.0-cli.jar ${V4_2_VALIDATOR_JAR}
 ENV V5_VALIDATOR_JAR=/gtfs-validator-5.0.0-cli.jar
 COPY ./gtfs-validator-5.0.0-cli.jar ${V5_VALIDATOR_JAR}
 
-WORKDIR /app
+# v7.1 from https://github.com/MobilityData/gtfs-validator/releases/download/v7.1.0/gtfs-validator-7.1.0-cli.jar
+ENV V7_1_VALIDATOR_JAR=/gtfs-validator-7.1.0-cli.jar
+COPY ./gtfs-validator-7.1.0-cli.jar ${V7_1_VALIDATOR_JAR}
 
-COPY ./pyproject.toml /app/pyproject.toml
-COPY ./poetry.lock /app/poetry.lock
-RUN poetry export -f requirements.txt --without-hashes --output requirements.txt \
-    && pip install -r requirements.txt
-RUN pip install memray
+WORKDIR /app
 
 COPY . /app
 
-CMD ["python3", "-m", "gtfs_schedule_validator", "--help"]
+RUN uv sync --locked
+
+CMD ["uv", "run", "python3", "-m", "gtfs_schedule_validator", "--help"]
