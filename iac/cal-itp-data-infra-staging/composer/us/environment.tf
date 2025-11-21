@@ -51,6 +51,8 @@ resource "google_composer_environment" "calitp-staging-composer" {
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
         smtp-smtp_mail_from                        = "bot@calitp.org"
         smtp-smtp_starttls                         = true
+        smtp-smtp_host                             = "smtp.postmarkapp.com"
+        smtp-smtp_port                             = 587
         webserver-reload_on_plugin_change          = true
         webserver-show_trigger_form_if_no_params   = true
       }
