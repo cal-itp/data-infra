@@ -26,11 +26,10 @@ monthly_trips AS (
 
         {{ generate_day_type('service_date') }} AS day_type,
         time_of_day,
-        --route_id, # this might change over longer time periods
         direction_id,
         route_short_name,
         route_long_name,
-        CONCAT(COALESCE(trips.route_short_name, ""), ' ', COALESCE(trips.route_long_name, "")) AS route_name,
+        {{ get_combined_route_name('name', 'route_id', 'route_short_name', 'route_long_name') }} AS route_name,
         route_desc,
         route_color,
         route_text_color,
@@ -39,11 +38,16 @@ monthly_trips AS (
         shape_id,
         shape_array_key,
 
+        MIN(trip_first_departure_sec) AS trip_first_departure_sec,
+        MAX(is_gtfs_flex_trip) AS is_gtfs_flex_trip,
+
         AVG(service_hours) AS service_hours,
+        AVG(flex_service_hours) AS flex_service_hours,
+
         COUNT(DISTINCT trip_instance_key) as n_trips,
         COUNT(DISTINCT service_date) as n_days,
         COUNT(DISTINCT feed_key) AS n_feeds,
-        ARRAY_AGG(DISTINCT route_id IGNORE NULLS) AS route_id_array
+        ARRAY_AGG(DISTINCT {{ parse_route_id('name', 'route_id') }} IGNORE NULLS) AS route_id_array,
 
     FROM trips
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17

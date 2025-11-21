@@ -35,8 +35,6 @@ stops2 AS (
         stops.*,
         feeds.name,
 
-        EXTRACT(month FROM service_date) AS month,
-        EXTRACT(year FROM service_date) AS year,
         DATE_TRUNC(service_date, MONTH) AS month_first_day,
 
         {{ generate_day_type('service_date') }} AS day_type,
@@ -49,8 +47,6 @@ stops2 AS (
 monthly_stop_counts AS (
     SELECT
         name,
-        year,
-        month,
         month_first_day,
         day_type,
         stop_id,
@@ -69,11 +65,18 @@ monthly_stop_counts AS (
         SUM(route_type_12) AS route_type_12,
         SUM(missing_route_type) AS missing_route_type,
 
+        -- Ex: a stop for 30 days, with route_type_array = [0, 3] for rail and bus. Output here should get the same, not [0, 3, 0, 3, repeated]
+        -- unnest the arrays first then get distinct.
+        ARRAY_AGG(DISTINCT route_type ORDER BY route_type) AS route_type_array,
+        ARRAY_AGG(DISTINCT transit_mode ORDER BY transit_mode) AS transit_mode_array,
+
         COUNT(DISTINCT service_date) AS n_days,
         COUNT(DISTINCT feed_key) AS n_feeds,
 
     FROM stops2
-    GROUP BY name, year, month, month_first_day, day_type, stop_id
+    LEFT JOIN UNNEST(stops2.route_type_array) AS route_type
+    LEFT JOIN UNNEST(stops2.transit_mode_array) AS transit_mode
+    GROUP BY name, month_first_day, day_type, stop_id
 ),
 
 most_common_stop_key AS (
@@ -96,7 +99,13 @@ most_common_stop_key AS (
 
 fct_monthly_stops AS (
     SELECT
-        monthly_stop_counts.*,
+        monthly_stop_counts.name,
+        monthly_stop_counts.month_first_day,
+        EXTRACT(YEAR FROM monthly_stop_counts.month_first_day) AS year,
+        EXTRACT(MONTH FROM monthly_stop_counts.month_first_day) AS month,
+        monthly_stop_counts.* EXCEPT(name, month_first_day),
+        ARRAY_LENGTH(monthly_stop_counts.transit_mode_array) AS n_transit_modes,
+
         most_common_stop_key.stop_key,
 
         dim_stops.tts_stop_name,

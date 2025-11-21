@@ -17,6 +17,19 @@ x-common-fields:
     name: gtfs_dataset_name
     description: &gtfs_dataset_name_desc |
       Name from the associated GTFS dataset record.
+  - &rt_schedule_base64_url
+    name: schedule_base64_url
+    description: '{{ doc("column_rt_schedule_base64_url") }}'
+  - &gtfs_rt_schedule_dataset_key
+    name: schedule_gtfs_dataset_key
+    description: '{{ doc("column_rt_schedule_dataset_key") }}'
+  - &gtfs_rt_schedule_dataset_name
+    name: schedule_name
+    description: '{{ doc("column_rt_schedule_dataset_name") }}'
+  - &gtfs_rt_schedule_feed_key
+    name: schedule_feed_key
+    description: '{{ doc("column_rt_schedule_feed_key") }}'
+
   # GTFS schedule tables: dim_routes, dim_stops, dim_shapes, etc
   - &route_type_0
     name: route_type_0
@@ -72,6 +85,7 @@ x-common-fields:
     name: pt_array
     description: |
       Ordered array of WKT points that describe this shape.
+
   # time aggregation
   - &day_type
     name: day_type
@@ -109,6 +123,15 @@ x-common-fields:
   - &n_feeds
     name: n_feeds
     description: Count of distinct feed_keys in this month for this day_type.
+  - &route_name
+    name: route_name
+    description: |
+      Within a month, route_id, route_short_name, and route_long_name values can
+      change slightly while referring to the same physical route, so trips have been have been
+      aggregated based on a cleaned up, combined name.
+      route_ids that are updated when feeds change with suffixes are parsed and cleaned.
+      (LA Metro, 1-[suffix_for_feed1], 1-[suffix_for_feed2]).
+      route_short_name and route_long_name are combined and cleaned up for easier labeling.
 
 models:
   - name: fct_monthly_scheduled_trips
@@ -133,15 +156,14 @@ models:
           Service_date of 2025-09-15 would become 2025-09-01.
       - *day_type
       - *time_of_day
-      - name: direction_id
+      - &direction_id
+        name: direction_id
         description: '{{ doc("gtfs_trips__direction_id") }}'
       - name: route_short_name
         description: '{{ doc("gtfs_routes__route_short_name") }}'
       - name: route_long_name
         description: '{{ doc("gtfs_routes__route_long_name") }}'
-      - name: route_name
-        description: &route_name_desc |
-          Concatenated route_short_name and route_long_name.
+      - *route_name
       - name: route_desc
         description: '{{ doc("gtfs_routes__route_desc") }}'
       - name: route_color
@@ -170,13 +192,8 @@ models:
       - *year
       - *month
       - *month_first_day
-      - name: route_short_name
-        description: '{{ doc("gtfs_routes__route_short_name") }}'
-      - name: route_long_name
-        description: '{{ doc("gtfs_routes__route_long_name") }}'
-      - name: route_name
-        description: *route_name_desc
-      - name: direction_id
+      - *route_name
+      - *direction_id
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: shape_array_key
@@ -232,3 +249,347 @@ models:
         description: '{{ doc("gtfs_stops__location_type") }}'
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+
+  - name: fct_monthly_schedule_route_direction_summary
+    description: |
+      An aggregation of GTFS schedule trips to the month-day_type-route-direction grain.
+      This table adds columns to describe routes, such as
+      daily trips and frequency.
+      Within a month, route_id, route_short_name, and route_long_name values can
+      change slightly while referring to the same physical route, so trips have been have been
+      aggregated based on a cleaned up, combined name.
+    columns:
+      - name: name
+        description: *gtfs_dataset_name_desc
+      - *month_first_day
+      - *month
+      - *year
+      - *day_type
+      - *route_name
+      - *direction_id
+      - &route_type
+        name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
+      - name: route_color
+        description: '{{ doc("gtfs_routes__route_color") }}'
+      - &route_typology
+        name: route_typology
+        description: |
+          Route typologies derived from route_type, route_short_name,
+          or route_long_name.
+          Specifically, route_type = 3 (bus) can be further categorized as "rapid"
+          or "express" bus if the word "Rapid" or "Express" appears in
+          route_short_name or route_long_name, otherwise it maintains the category "bus".
+          route_type = 0, 1, 2 is categorized as "rail" and
+          route_type = 4 is categorized as "ferry".
+      - &daily_trips_all_day
+        name: daily_trips_all_day
+        description: |
+          Average daily trips all day for this month-day_type-route_name-direction_id.
+          This is the total number of trips divided by the number of days.
+          Average daily trips are used because weekdays have 5 days and Saturdays and Sundays
+          are 1 day each. This column normalizes the total number of trips
+          that occurred and allows for comparison across Weekday/Saturday/Sunday service.
+      - &daily_stop_arrivals_all_day
+        name: daily_stop_arrivals_all_day
+        description: |
+          Average daily stop arrivals (scheduled stop times)
+          all day for this month-day_type-route_name-direction_id.
+          This is the total number of stop arrivals divided by the number of days.
+          Average daily stop arrivals are used because weekdays have 5 days and Saturdays and Sundays
+          are 1 day each. This column normalizes the total number of stop arrivals
+          that occurred and allows for comparison across Weekday/Saturday/Sunday service.
+      - &daily_distinct_stops_all_day
+        name: daily_distinct_stops_all_day
+        description: |
+          Average distinct stop_ids (scheduled stops)
+          all day for this month-day_type-route_name-direction_id.
+          This is the total number of unique stops divided by the number of days.
+          Average daily distinct stops are used because weekdays have 5 days and Saturdays and Sundays
+          are 1 day each. This column normalizes the total number of stops
+          that are serviced and allows for comparison across Weekday/Saturday/Sunday service.
+      - &frequency_all_day
+        name: frequency_all_day
+        description: Number of trips per hour all day.
+      - &daily_service_hours
+        name: daily_service_hours
+        description: |
+          Total possible hours of service for all trips for this
+          month-day_type-route-direction_id
+          divided by the number of days with data.
+      - &daily_flex_service_hours
+        name: daily_flex_service_hours
+        description: |
+          Total possible hours of flexible service for all trips for this
+          month-day_type-route-direction_id
+          divided by the number of days with data.
+      - &daily_trips_owl
+        name: daily_trips_owl
+        description: |
+          Average number of trips per day in the Owl time period
+          (0-3 hours inclusive in a 24 hour period, 12 AM - 3:59 AM).
+      - &daily_trips_early_am
+        name: daily_trips_early_am
+        description: |
+          Average number of trips per day in the Early AM time period
+          (4-6 hours inclusive in a 24 hour period, 4 AM - 6:59 AM).
+      - &daily_trips_am_peak
+        name: daily_trips_am_peak
+        description: |
+          Average number of trips per day in the AM Peak time period
+          (7-9 hours inclusive in a 24 hour period, 7 AM - 9:59 AM).
+      - &daily_trips_midday
+        name: daily_trips_midday
+        description: |
+          Average number of trips per day in the Midday time period
+          (10-14 hours inclusive in a 24 hour period, 10 AM - 2:59 PM).
+      - &daily_trips_pm_peak
+        name: daily_trips_pm_peak
+        description: |
+          Average number of trips per day in the PM Peak time period
+          (15-19 hours inclusive in a 24 hour period, 3 PM - 7:59 PM).
+      - &daily_trips_evening
+        name: daily_trips_evening
+        description: |
+          Average number of trips per day in the Evening time period
+          (20-23 hours inclusive in a 24 hour period, 8 PM - 11:59 PM).
+      - &daily_trips_peak
+        name: daily_trips_peak
+        description: |
+          Average number of trips per day in the Peak time period
+          (AM Peak and PM peak).
+      - &daily_trips_offpeak
+        name: daily_trips_offpeak
+        description: |
+          Average number of trips per day in the Offpeak time period
+          (Owl, Early AM, Midday, Evening).
+      - &frequency_owl
+        name: frequency_owl
+        description: |
+          Average trips per hour in the Owl time period
+          (0-3 hours inclusive in a 24 hour period, 12 AM - 3:59 AM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
+      - &frequency_early_am
+        name: frequency_early_am
+        description: |
+          Average trips per hour in the Early AM time period
+          (7-9 hours inclusive in a 24 hour period, 7 AM - 9:59 AM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
+      - &frequency_am_peak
+        name: frequency_am_peak
+        description: |
+          Average trips per hour in the AM Peak time period
+          (7-9 hours inclusive in a 24 hour period, 7 AM - 9:59 AM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
+      - &frequency_midday
+        name: frequency_midday
+        description: |
+          Average trips per hour in the Midday time period
+          (10-14 hours inclusive in a 24 hour period, 10 AM - 2:59 PM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
+      - &frequency_pm_peak
+        name: frequency_pm_peak
+        description: |
+          Average trips per hour in the PM Peak time period
+          (15-19 hours inclusive in a 24 hour period, 3 PM - 7:59 PM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
+      - &frequency_evening
+        name: frequency_evening
+        description: |
+          Average trips per hour in the Evening time period
+          (20-23 hours inclusive in a 24 hour period, 8 PM - 11:59 PM).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
+      - &frequency_peak
+        name: frequency_peak
+        description: |
+          Average trips per hour in the Peak time period
+          (AM Peak and PM peak).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
+      - &frequency_offpeak
+        name: frequency_offpeak
+        description: |
+          Average trips per hour in the Offpeak time period
+          (Owl, Early AM, Midday, Evening).
+          To convert to headway, use: 60 / frequency.
+          Ex: frequency of 2 trips per hour; 60 / 2 = 30 minute headway.
+
+  - name: fct_monthly_rt_route_direction_summary
+    description: |
+      An aggregation of GTFS RT trips (fct_observed_trips) to the month-day_type-route-direction grain.
+      This table adds columns to describe routes, such as
+      daily trips and frequency.
+      Within a month, route_id, route_short_name, and route_long_name values can
+      change slightly while referring to the same physical route, so trips have been have been
+      aggregated based on a cleaned up, combined name.
+    columns:
+      - *month
+      - *year
+      - *month_first_day
+      - *day_type
+      - *rt_schedule_base64_url
+      - &tu_name
+        name: tu_name
+        description: |
+          Name from the trip updates GTFS dataset record associated
+          with this trip. If null, this trip did not appear in a trip updates feed.
+      - &vp_name
+        name: vp_name
+        description: |
+          Name from the vehicle positions GTFS dataset record associated
+          with this trip. If null, this trip did not appear in a vehicle
+          positions feed.
+      - name: schedule_name
+        description: |
+          Name from the schedule GTFS dataset record associated
+          with the RT feed(s) in which this trip appeared.
+      - <<: *base64_url
+        name: tu_base64_url
+      - <<: *base64_url
+        name: vp_base64_url
+      - *route_name
+      - *direction_id
+      - name: tu_num_distinct_updates
+        description: &rt_trip_num_distinct_updates_desc |
+          The number of distinct producer-produced timestamps for messages
+          containing this trip.
+          If trip update or vehicle timestamps are available, use the count of
+          distinct values of that timestamp. Otherwise use count of distinct
+          header timestamps for messages containing this trip.
+          This should generally reflect how many distinct data updates there were
+          for this trip in our data, though note that the producer timestamps
+          can increment without the actual data values changing.
+      - name: daily_tu_num_distinct_updates
+        description: &rt_trip_num_distinct_updates_per_day |
+          The average number of distinct producer-produced timestamps for messages
+          containing per day.
+          It is the total number of distinct producer-produced timestamps for
+          messages divided by the number of days we had data.
+      - name: daily_tu_num_skipped_stops
+        description: &tu_num_skipped_stops_per_day_desc |
+          Total count of stop_ids in messages where the stop time update
+          schedule_relationship was SKIPPED divided by the number of days we have data
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
+      - name: daily_tu_num_canceled_stops
+        description: &tu_num_canceled_stops_per_day_desc  |
+          Total count of stop_ids in messages where the stop time update
+          schedule_relationship was CANCELED divided by the number of days we have data
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
+      - name: daily_tu_num_added_stops
+        description: &tu_num_added_stops_per_day_desc |
+          Total count of stop_ids in messages where the stop time update
+          schedule_relationship was ADDED divided by the number of days we have data
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
+      - name: daily_tu_num_scheduled_stops
+        description: &tu_num_scheduled_stops_per_day_desc |
+          Total count of stop_ids in messages where the stop time update
+          schedule_relationship was SCHEDULED divided by the number of days we have data
+          (see: https://gtfs.org/realtime/reference/#message-stoptimeupdate;
+          this is different than the overall trip-level schedule relationship).
+      - &n_tu_trips
+        name: n_tu_trips
+        description: Total number of trips that appeared in the trip updates feed.
+      - &daily_tu_trips
+        name: daily_tu_trips
+        description: |
+          Total number of trips that appeared in the trip updates feed
+          divided by the number of days we have data.
+      - name: vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: daily_vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_per_day
+      - &n_vp_trips
+        name: n_vp_trips
+        description: Total number of trips that appeared in the vehicle positions feed.
+      - &daily_vp_trips
+        name: daily_vp_trips
+        description: |
+          Total number of trips that appeared in the vehicle positions feed
+          divided by the number of days we have data.
+      - *n_trip_instance_keys
+      - *n_days
+
+  - name: fct_monthly_schedule_rt_route_direction_summary
+    description: |
+      An aggregation of GTFS schedule and RT observed trips to the
+      month-day_type-route-direction grain.
+      Only operators that have RT (at least one of vehicle positions or trip updates)
+      data appear in this table.
+    columns:
+      - name: name
+        description: *gtfs_dataset_name_desc
+      - *month_first_day
+      - *month
+      - *year
+      - *day_type
+      - *route_name
+      - *direction_id
+      - *route_type
+      - name: route_color
+        description: '{{ doc("gtfs_routes__route_color") }}'
+      - *route_typology
+      - *daily_trips_all_day
+      - *daily_stop_arrivals_all_day
+      - *daily_distinct_stops_all_day
+      - *frequency_all_day
+      - *daily_service_hours
+      - *daily_flex_service_hours
+      - *daily_trips_owl
+      - *daily_trips_early_am
+      - *daily_trips_am_peak
+      - *daily_trips_midday
+      - *daily_trips_pm_peak
+      - *daily_trips_evening
+      - *daily_trips_peak
+      - *daily_trips_offpeak
+      - *frequency_owl
+      - *frequency_early_am
+      - *frequency_am_peak
+      - *frequency_midday
+      - *frequency_pm_peak
+      - *frequency_evening
+      - *frequency_peak
+      - *frequency_offpeak
+      - *rt_schedule_base64_url
+      - *tu_name
+      - *vp_name
+      - *gtfs_rt_schedule_dataset_name
+      - <<: *base64_url
+        name: tu_base64_url
+      - <<: *base64_url
+        name: vp_base64_url
+      - name: tu_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: daily_tu_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_per_day
+      - name: daily_tu_num_skipped_stops
+        description: *tu_num_skipped_stops_per_day_desc
+      - name: daily_tu_num_canceled_stops
+        description: *tu_num_canceled_stops_per_day_desc
+      - name: daily_tu_num_added_stops
+        description: *tu_num_added_stops_per_day_desc
+      - name: daily_tu_num_scheduled_stops
+        description: *tu_num_scheduled_stops_per_day_desc
+      - *n_tu_trips
+      - *daily_tu_trips
+      - name: vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: daily_vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_per_day
+      - *n_vp_trips
+      - *daily_vp_trips
+      - name: n_rt_trips
+        description: |
+          Number of trips that appeared in either vehicle positions or trip updates feed.
+      - name: n_rt_days
+        description: |
+          Number of days where trips appeared either vehicle positions or trip updates feed.

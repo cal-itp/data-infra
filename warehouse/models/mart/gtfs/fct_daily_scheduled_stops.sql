@@ -66,7 +66,7 @@ stops_by_day_by_route AS (
         ) AS contains_warning_duplicate_trip_primary_key,
         LOGICAL_OR(
             trips.contains_warning_missing_foreign_key_stop_id
-        ) AS contains_warning_missing_foreign_key_stop_id
+        ) AS contains_warning_missing_foreign_key_stop_id,
 
     FROM fct_scheduled_trips AS trips
     LEFT JOIN dim_stop_times AS stop_times
@@ -78,6 +78,20 @@ stops_by_day_by_route AS (
         AND stop_times.stop_id = freq.stop_id
     GROUP BY 1, 2, 3, 4, 5, 6
 
+),
+
+stops_by_day_by_route2 AS (
+    SELECT
+        *,
+        CASE
+            WHEN route_type IN (0, 1, 2) THEN "rail"
+            WHEN route_type = 3 THEN "bus"
+            WHEN route_type = 4 THEN "ferry"
+            WHEN route_type = 11 THEN "trolleybus"
+            WHEN route_type IN (5, 6, 7, 12) THEN "other_rail"
+            WHEN route_type = 1000 THEN "missing"
+        END AS transit_mode,
+    FROM stops_by_day_by_route
 ),
 
 stops_by_day AS (
@@ -103,9 +117,12 @@ stops_by_day AS (
         ) AS contains_warning_duplicate_trip_primary_key,
         LOGICAL_OR(
             contains_warning_missing_foreign_key_stop_id
-        ) AS contains_warning_missing_foreign_key_stop_id
+        ) AS contains_warning_missing_foreign_key_stop_id,
 
-    FROM stops_by_day_by_route
+        ARRAY_AGG(DISTINCT route_type) as route_type_array,
+        ARRAY_AGG(DISTINCT transit_mode) AS transit_mode_array
+
+    FROM stops_by_day_by_route2
     GROUP BY 1, 2, 3, 4
 ),
 
@@ -158,6 +175,9 @@ fct_daily_scheduled_stops AS (
 
         stops_by_day.contains_warning_duplicate_stop_times_primary_key,
         stops_by_day.contains_warning_duplicate_trip_primary_key,
+        stops_by_day.route_type_array,
+        stops_by_day.transit_mode_array,
+        ARRAY_LENGTH(stops_by_day.transit_mode_array) AS n_transit_modes,
 
         stops.warning_duplicate_gtfs_key AS contains_warning_duplicate_stop_primary_key,
 
@@ -170,7 +190,8 @@ fct_daily_scheduled_stops AS (
         stops.stop_desc,
         stops.location_type,
         stops.stop_timezone_coalesced,
-        stops.wheelchair_boarding
+        stops.wheelchair_boarding,
+
 
     FROM dim_stops AS stops
     INNER JOIN pivot_to_route_type AS pivoted
