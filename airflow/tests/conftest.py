@@ -161,3 +161,10 @@ def setup_module():
         host="test-data.technology.ca.gov",
         password=os.environ.get("CKAN_API_KEY"),
     )
+    clean_connections(session, "http_dot")
+    add_connection(
+        session,
+        conn_id="http_dot",
+        conn_type="https",
+        host="https://www.transit.dot.gov",
+    )
