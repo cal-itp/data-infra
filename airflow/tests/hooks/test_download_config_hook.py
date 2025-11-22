@@ -133,7 +133,6 @@ class TestDownloadConfigHook:
         self, query_authenticated_hook: DownloadConfigHook
     ):
         result = query_authenticated_hook.run()
-        print(result.headers["Content-Disposition"])
         assert result.headers["Content-Type"] == "application/zip"
         assert (
             result.headers["Content-Disposition"]

@@ -96,10 +96,13 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
         response = self.bigquery_hook().list_rows(
             dataset_id=self.dataset_name, table_id=self.table_name
         )
-        mapped_rows = {row["key"]: row for row in response}
+        active_rows = [
+            r for r in response if r["_is_current"] and r["deprecated_date"] is None
+        ]
+        mapped_rows = {row["key"]: row for row in active_rows}
         return [
             DownloadConfigRow(row).resolve(current_time, mapped_rows)
-            for row in response
+            for row in active_rows
         ]
 
     def execute(self, context: Context) -> str:
@@ -113,4 +116,4 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
             mime_type="application/jsonl",
             gzip=True,
         )
-        return self.destination_path
+        return [{"destination_path": self.destination_path}]

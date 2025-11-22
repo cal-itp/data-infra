@@ -70,22 +70,19 @@ class TestBigQueryToDownloadConfigOperator:
         task = test_dag.get_task("gtfs_dataset_to_download_config")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
-        assert xcom_value == os.path.join(
-            "gtfs_download_configs",
-            "dt=2025-06-02",
-            "ts=2025-06-02T00:00:00+00:00",
-            "download_config.jsonl.gz",
-        )
+        # Xcom can be removed
+        assert xcom_value == [{"destination_path": destination_path}]
 
         compressed_result = gcs_hook.download(
             bucket_name=os.environ.get("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG").replace(
                 "gs://", ""
             ),
-            object_name=xcom_value,
+            object_name=destination_path,
         )
         decompressed_result = gzip.decompress(compressed_result)
         result = [json.loads(x) for x in decompressed_result.splitlines()]
 
+        assert len(result) == 706  # Total of all current feeds
         assert result[0] == {
             "extracted_at": "2025-06-03T00:00:00+00:00",
             "auth_headers": {},
@@ -95,4 +92,14 @@ class TestBigQueryToDownloadConfigOperator:
             "name": "Santa Ynez Mecatran Schedule",
             "schedule_url_for_validation": None,
             "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+        }
+        assert result[1] == {
+            "extracted_at": "2025-06-03T00:00:00+00:00",
+            "auth_headers": {},
+            "auth_query_params": {},
+            "computed": False,
+            "feed_type": "trip_updates",
+            "name": "SLO Trip Updates",
+            "schedule_url_for_validation": None,
+            "url": "http://data.peaktransit.com/gtfsrt/1/TripUpdate.pb",
         }

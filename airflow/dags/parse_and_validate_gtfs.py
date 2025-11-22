@@ -4,14 +4,17 @@ from datetime import datetime
 from operators.bigquery_to_download_config_operator import (
     BigQueryToDownloadConfigOperator,
 )
-from operators.download_config_filter_operator import DownloadConfigFilterOperator
 from operators.download_config_to_gcs_operator import DownloadConfigToGCSOperator
+from operators.gcs_download_config_filter_operator import (
+    GCSDownloadConfigFilterOperator,
+)
 from operators.gtfs_csv_to_jsonl_operator import GTFSCSVToJSONLOperator
 from operators.unzip_gtfs_to_gcs_operator import UnzipGTFSToGCSOperator
 from operators.validate_gtfs_to_gcs_operator import ValidateGTFSToGCSOperator
 
 from airflow import DAG, XComArg
 from airflow.operators.latest_only import LatestOnlyOperator
+from airflow.utils.trigger_rule import TriggerRule
 
 GTFS_SCHEDULE_FILENAMES = {
     "agency": "agency.txt",
@@ -54,21 +57,24 @@ with DAG(
         task_id="bigquery_to_download_config",
         dataset_name="staging",
         table_name="int_transit_database__gtfs_datasets_dim",
-        destination_bucket="{{ env_var('CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG') }}",
+        destination_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
         destination_path="gtfs_download_configs/ds={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
     )
 
-    schedule_download_configs = DownloadConfigFilterOperator.partial(
+    schedule_download_configs = GCSDownloadConfigFilterOperator(
         task_id="download_config_filter",
         feed_type="schedule",
-        source_bucket="{{ env_var('CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG') }}",
-    ).expand(source_path=XComArg(download_config))
+        limit=1,
+        source_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
+        source_path="gtfs_download_configs/ds={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
+    )
 
     downloads = DownloadConfigToGCSOperator.partial(
         task_id="download_config_to_gcs",
-        destination_bucket="{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_RAW') }}",
+        destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
         destination_path="schedule/ds={{ ds }}/ts={{ ts }}",
         results_path="download_schedule_feed_results/ds={{ ds }}/ts={{ ts }}",
+        map_index_template="{{ task.download_config['name'] }}",
     ).expand(download_config=XComArg(schedule_download_configs))
 
     def create_validate_kwargs(download):
@@ -76,7 +82,7 @@ with DAG(
             "download_schedule_feed_results": download[
                 "download_schedule_feed_results"
             ],
-            "source_path": download["schedule_path"],
+            "source_path": download["schedule_feed_path"],
             "destination_path": os.path.join(
                 "validation_notices",
                 "ds={{ ds }}",
@@ -93,61 +99,69 @@ with DAG(
 
     ValidateGTFSToGCSOperator.partial(
         task_id="validate_gtfs_to_gcs",
-        destination_bucket="{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY') }}",
-        source_bucket="{{ env_var('CALITP_BUCKET__SCHEDULE_RAW') }}",
+        destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"),
+        source_bucket=os.getenv("CALITP_BUCKET__SCHEDULE_RAW"),
+        trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(XComArg(downloads).map(create_validate_kwargs))
 
-    def create_unzip_kwargs(download):
-        return {
-            "download_schedule_feed_results": download[
-                "download_schedule_feed_results"
-            ],
-            "source_path": download["schedule_path"],
-            "base64_url": download["base64_url"],
-            "destination_path": os.path.join(
-                "{{ schedule_filename }}",
-                "ds={{ ds }}",
-                "ts={{ ts }}",
-                f"base64_url={download['base64_url']}{{{{ schedule_filename }}}}",
-            ),
-            "results_path": os.path.join(
-                "unzipping_results",
-                "ds={{ ds }}",
-                "ts={{ ts }}",
-                f"{{ schedule_filename }}_{download['base64_url']}.jsonl",
-            ),
-        }
-
-    def create_parse_kwargs(unzip):
-        return {
-            "unzip_results": unzip["unzip_results"],
-            "filename": unzip["filename"],
-            "source_path": os.path.join(
-                "{{ schedule_file_type }}",
-                "ds={{ ds }}",
-                "ts={{ ts }}",
-                f"base64_url={unzip['base64_url']}" "{{ schedule_file_type }}.jsonl.gz",
-            ),
-            "results_path": os.path.join(
-                "{{ schedule_filename }}_parsing_results",
-                "ds={{ ds }}",
-                "ts={{ ts }}",
-                f"{{ schedule_filename }}_{unzip['base64_url']}.jsonl",
-            ),
-        }
-
     for schedule_file_type, schedule_filename in GTFS_SCHEDULE_FILENAMES.items():
+
+        def create_unzip_kwargs(download):
+            return {
+                "download_schedule_feed_results": download[
+                    "download_schedule_feed_results"
+                ],
+                "source_path": download["schedule_feed_path"],
+                "base64_url": download["base64_url"],
+                "destination_path": os.path.join(
+                    schedule_filename,
+                    "ds={{ ds }}",
+                    "ts={{ ts }}",
+                    f"base64_url={download['base64_url']}",
+                    schedule_filename,
+                ),
+                "results_path": os.path.join(
+                    "unzipping_results",
+                    "ds={{ ds }}",
+                    "ts={{ ts }}",
+                    f"{download['base64_url']}_{schedule_filename}.jsonl",
+                ),
+            }
+
         unzipped_file = UnzipGTFSToGCSOperator.partial(
-            task_id="unzip_gtfs_to_gcs",
+            task_id=f"unzip_{schedule_file_type}_to_gcs",
             filename=schedule_filename,
-            source_bucket="{{ env_var('CALITP_BUCKET__SCHEDULE_RAW') }}",
-            destination_bucket="{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY') }}",
-        ).expand_kwargs(XComArg(downloads).map(create_validate_kwargs))
+            source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
+            destination_bucket=os.getenv(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ),
+            trigger_rule=TriggerRule.ALL_DONE,
+        ).expand_kwargs(XComArg(downloads).map(create_unzip_kwargs))
+
+        def create_parse_kwargs(unzip):
+            return {
+                "unzip_results": unzip["unzip_results"],
+                "filename": unzip["filename"],
+                "source_path": os.path.join(
+                    schedule_file_type,
+                    "ds={{ ds }}",
+                    "ts={{ ts }}",
+                    f"base64_url={unzip['base64_url']}",
+                    f"{schedule_file_type}.jsonl.gz",
+                ),
+                "results_path": os.path.join(
+                    "{{ schedule_filename }}_parsing_results",
+                    "ds={{ ds }}",
+                    "ts={{ ts }}",
+                    f"{unzip['base64_url']}_{schedule_filename}.jsonl",
+                ),
+            }
 
         GTFSCSVToJSONLOperator.partial(
-            task_id="gtfs_csv_to_jsonl",
-            source_bucket="{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY') }}",
-            destination_bucket="{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY') }}",
-        ).expand_kwargs(XComArg(downloads).map(create_parse_kwargs))
+            task_id=f"convert_{schedule_file_type}_to_jsonl",
+            source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
+            destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"),
+            trigger_rule=TriggerRule.ALL_DONE,
+        ).expand_kwargs(XComArg(unzipped_file).map(create_parse_kwargs))
 
-    latest_only >> download_config
+    latest_only >> download_config >> schedule_download_configs

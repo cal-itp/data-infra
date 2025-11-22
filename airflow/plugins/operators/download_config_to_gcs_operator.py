@@ -99,11 +99,11 @@ class DownloadConfigToGCSOperator(BaseOperator):
         super().__init__(**kwargs)
 
         self._download: Download = None
-        self.download_config = download_config
-        self.destination_bucket = destination_bucket
-        self.destination_path = destination_path
-        self.results_path = results_path
-        self.gcp_conn_id = gcp_conn_id
+        self.download_config: dict = download_config
+        self.destination_bucket: str = destination_bucket
+        self.destination_path: str = destination_path
+        self.results_path: str = results_path
+        self.gcp_conn_id: str = gcp_conn_id
 
     def destination_name(self) -> str:
         return self.destination_bucket.replace("gs://", "")

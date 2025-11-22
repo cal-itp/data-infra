@@ -114,7 +114,7 @@ class TestGTFSCSVToJSONLOperator:
         unzip_results: dict,
     ) -> GTFSCSVToJSONLOperator:
         return GTFSCSVToJSONLOperator(
-            task_id="gtfs_csv_to_jsonl",
+            task_id="convert_agency_to_jsonl",
             gcp_conn_id="google_cloud_default",
             unzip_results=unzip_results,
             source_bucket=os.environ.get(
@@ -145,7 +145,7 @@ class TestGTFSCSVToJSONLOperator:
             ignore_first_depends_on_past=True,
         )
 
-        task = test_dag.get_task("gtfs_csv_to_jsonl")
+        task = test_dag.get_task("convert_agency_to_jsonl")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value["results_path"] == os.path.join(

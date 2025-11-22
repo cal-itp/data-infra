@@ -42,6 +42,7 @@ class TestGCSDownloadConfigFilterOperator:
     ) -> GCSDownloadConfigFilterOperator:
         return GCSDownloadConfigFilterOperator(
             task_id="gcs_download_config_filter",
+            limit=2,
             gcp_conn_id="google_cloud_default",
             feed_type="schedule",
             source_bucket=os.environ.get("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
@@ -67,6 +68,7 @@ class TestGCSDownloadConfigFilterOperator:
         task = test_dag.get_task("gcs_download_config_filter")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
+        assert len(xcom_value) == 2
         assert xcom_value[0] == {
             "extracted_at": "2025-06-03T00:00:00+00:00",
             "auth_headers": {},
@@ -76,4 +78,14 @@ class TestGCSDownloadConfigFilterOperator:
             "name": "Santa Ynez Mecatran Schedule",
             "schedule_url_for_validation": None,
             "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+        }
+        assert xcom_value[1] == {
+            "extracted_at": "2025-06-03T00:00:00+00:00",
+            "auth_headers": {},
+            "auth_query_params": {},
+            "computed": False,
+            "feed_type": "schedule",
+            "name": "SLO Peak Transit Schedule",
+            "schedule_url_for_validation": None,
+            "url": "http://data.peaktransit.com/staticgtfs/1/gtfs.zip",
         }
