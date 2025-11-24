@@ -63,6 +63,7 @@ scheduled_trips AS (
         trip_instance_key,
         route_id
     FROM {{ ref('fct_scheduled_trips') }}
+
 ),
 
 trip_join AS (
