@@ -61,7 +61,7 @@ summarize_service AS (
 fct_daily_feed_scheduled_service_summary AS (
 
     SELECT
-        feeds.date AS service_date,
+        DATE(feeds.date) AS service_date,
         feeds.feed_key,
         feeds.gtfs_dataset_key,
         COALESCE(service.ttl_service_hours, 0) AS ttl_service_hours,
