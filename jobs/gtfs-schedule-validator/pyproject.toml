@@ -7,7 +7,7 @@ requires-python = "==3.11.*"
 dependencies = [
     "backoff>=2.2.1",
     "gcsfs==2022.11.0",
-    "aiohttp==3.9.0",
+    "aiohttp==3.12.14",
     "humanize>=4.2.3",
     "pendulum==2.1.2",
     "pydantic>=1.9.1",
