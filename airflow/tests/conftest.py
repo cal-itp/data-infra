@@ -1,6 +1,8 @@
 import datetime
+import json
 import os
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -8,9 +10,16 @@ import pytest
 
 from airflow.models import DagBag, DagRun
 from airflow.models.connection import Connection
+from airflow.providers.google.cloud.hooks.secret_manager import SecretsManagerHook
 from airflow.settings import Session
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../plugins"))
+LITTLEPAY_BUCKET_HOST = re.compile(
+    "^littlepay-datafeed-prod-[a-z]+-[0-9a-f]{8}.s3.eu-west-1.amazonaws.com$"
+)
+LITTLEPAY_FIXTURE_PATH = os.path.join(
+    os.path.dirname(__file__), "fixtures/littlepay-stub.psv"
+)
 
 
 def pytest_sessionstart(session):
@@ -55,7 +64,7 @@ FILTER_BODY_STRINGS: list = [
 ]
 
 
-def scrub_sensitive_data(request):
+def scrub_request(request):
     for body_string, replacement in FILTER_BODY_STRINGS:
         if request.body and body_string and replacement:
             request.body = request.body.replace(
@@ -77,7 +86,7 @@ def vcr_config():
         "filter_query_parameters": [
             ("api_key", "FILTERED"),
         ],
-        "before_record_request": scrub_sensitive_data,
+        "before_record_request": scrub_request,
         "allow_playback_repeats": True,
         "ignore_hosts": [
             "run-actions-1-azure-eastus.actions.githubusercontent.com",
@@ -167,4 +176,14 @@ def setup_module():
         conn_id="http_dot",
         conn_type="https",
         host="https://www.transit.dot.gov",
+    )
+    clean_connections(session, "aws_atn")
+    secret_id = "LITTLEPAY_AWS_IAM_ATN_ACCESS_KEY_FEED_V3"
+    atn_secret = json.loads(SecretsManagerHook().get_secret(secret_id=secret_id))
+    add_connection(
+        session,
+        conn_id="aws_atn",
+        conn_type="aws",
+        login=atn_secret.get("AccessKey", {}).get("AccessKeyId"),
+        password=atn_secret.get("AccessKey", {}).get("SecretAccessKey"),
     )
