@@ -1,7 +1,7 @@
 from typing import Dict
 
 from airflow.hooks.base import BaseHook
-from airflow.hooks.http_hook import HttpHook
+from airflow.providers.http.hooks.http import HttpHook
 
 TRANSITLAND_FEED_FLAVORS: Dict[str, str] = {
     "gbfs_auto_discovery": "general_bikeshare_feed_specification",

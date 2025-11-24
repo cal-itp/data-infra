@@ -4,8 +4,10 @@ from datetime import datetime
 from operators.bigquery_to_download_config_operator import (
     BigQueryToDownloadConfigOperator,
 )
-from operators.download_config_filter_operator import DownloadConfigFilterOperator
 from operators.download_config_to_gcs_operator import DownloadConfigToGCSOperator
+from operators.gcs_download_config_filter_operator import (
+    GCSDownloadConfigFilterOperator,
+)
 from operators.gtfs_csv_to_jsonl_operator import GTFSCSVToJSONLOperator
 from operators.unzip_gtfs_to_gcs_operator import UnzipGTFSToGCSOperator
 from operators.validate_gtfs_to_gcs_operator import ValidateGTFSToGCSOperator
@@ -58,7 +60,7 @@ with DAG(
         destination_path="gtfs_download_configs/ds={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
     )
 
-    schedule_download_configs = DownloadConfigFilterOperator.partial(
+    schedule_download_configs = GCSDownloadConfigFilterOperator.partial(
         task_id="download_config_filter",
         feed_type="schedule",
         source_bucket="{{ env_var('CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG') }}",
@@ -138,14 +140,14 @@ with DAG(
 
     for schedule_file_type, schedule_filename in GTFS_SCHEDULE_FILENAMES.items():
         unzipped_file = UnzipGTFSToGCSOperator.partial(
-            task_id="unzip_gtfs_to_gcs",
+            task_id=f"unzip_gtfs_to_gcs_{schedule_file_type}",
             filename=schedule_filename,
             source_bucket="{{ env_var('CALITP_BUCKET__SCHEDULE_RAW') }}",
             destination_bucket="{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY') }}",
         ).expand_kwargs(XComArg(downloads).map(create_validate_kwargs))
 
         GTFSCSVToJSONLOperator.partial(
-            task_id="gtfs_csv_to_jsonl",
+            task_id=f"gtfs_csv_to_jsonl_{schedule_file_type}",
             source_bucket="{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY') }}",
             destination_bucket="{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY') }}",
         ).expand_kwargs(XComArg(downloads).map(create_parse_kwargs))

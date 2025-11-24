@@ -159,7 +159,7 @@ def parse_individual_file(
     )
 
 
-def parse_files(period: pendulum.Period, input_table_name: str, gtfs_filename: str):
+def parse_files(period: pendulum.Interval, input_table_name: str, gtfs_filename: str):
     fs = get_fs()
     extract_map = get_schedule_files_in_hour(
         cls=GTFSScheduleFeedFileHourly,

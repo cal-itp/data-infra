@@ -1,11 +1,11 @@
 import os
 from functools import wraps
 
-# FYI, one day we may need to add apache-airflow-providers-cncf-kubernetes==3.0.0 to requirements.txt if we self-host
-# But it's already installed in the Composer environment
-from airflow.contrib.operators.gcp_container_operator import GKEPodOperator
-from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
-from airflow.kubernetes.secret import Secret
+from airflow.providers.cncf.kubernetes.operators.pod import KubernetesPodOperator
+from airflow.providers.cncf.kubernetes.secret import Secret
+from airflow.providers.google.cloud.operators.kubernetes_engine import (
+    GKEStartPodOperator,
+)
 
 
 @wraps(KubernetesPodOperator)
@@ -24,7 +24,7 @@ def PodOperator(*args, **kwargs):
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
     namespace = os.environ.get("POD_SECRETS_NAMESPACE")
 
-    return GKEPodOperator(
+    return GKEStartPodOperator(
         *args,
         in_cluster=False,
         project_id=project_id,
