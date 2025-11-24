@@ -44,8 +44,8 @@ from google.cloud import storage  # type: ignore
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2  # type: ignore
-from pydantic import BaseModel, Field, validator
-from pydantic.tools import parse_obj_as
+from pydantic.v1 import BaseModel, Field, validator
+from pydantic.v1.tools import parse_obj_as
 
 JAR_DEFAULT = os.path.normpath(
     os.path.join(

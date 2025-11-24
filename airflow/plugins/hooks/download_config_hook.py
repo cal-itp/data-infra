@@ -5,7 +5,9 @@ from requests.exceptions import ConnectionError, HTTPError
 
 from airflow.exceptions import AirflowException
 from airflow.hooks.base import BaseHook
-from airflow.providers.google.cloud.hooks.secret_manager import SecretsManagerHook
+from airflow.providers.google.cloud.hooks.secret_manager import (
+    GoogleCloudSecretManagerHook,
+)
 
 
 class DownloadConfigHook(BaseHook):
@@ -17,18 +19,18 @@ class DownloadConfigHook(BaseHook):
         self.download_config: str = download_config
         self.method: str = method
 
-    def secret_hook(self) -> SecretsManagerHook:
-        return SecretsManagerHook()
+    def secret_hook(self) -> GoogleCloudSecretManagerHook:
+        return GoogleCloudSecretManagerHook()
 
     def data(self) -> dict[str, str]:
         return {
-            param: self.secret_hook().get_secret(secret_id=secret_id)
+            param: self.secret_hook().access_secret(secret_id=secret_id)
             for param, secret_id in self.download_config["auth_query_params"].items()
         }
 
     def headers(self) -> dict[str, str]:
         return {
-            param: self.secret_hook().get_secret(secret_id=secret_id)
+            param: self.secret_hook().access_secret(secret_id=secret_id)
             for param, secret_id in self.download_config["auth_headers"].items()
         }
 

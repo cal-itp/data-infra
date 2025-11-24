@@ -11,7 +11,7 @@ from calitp_data_infra.storage import (
     PartitionedGCSArtifact,
     fetch_all_in_partition,
 )
-from pydantic import validator
+from pydantic.v1 import validator
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
 SCHEDULE_UNZIPPED_BUCKET_HOURLY = os.environ[
@@ -61,11 +61,11 @@ def get_schedule_files_in_hour(
     cls: Type[Union[GTFSScheduleFeedExtract, GTFSScheduleFeedFileHourly]],
     bucket: str,
     table: str,
-    period: pendulum.Period,
+    period: pendulum.Interval,
 ) -> Dict[
     pendulum.DateTime, List[Union[GTFSScheduleFeedExtract, GTFSScheduleFeedFileHourly]]
 ]:
-    # __contains__ is defined as inclusive for pendulum.Period but we want to ignore the next hour
+    # __contains__ is defined as inclusive for pendulum.Interval but we want to ignore the next hour
     # see https://github.com/apache/airflow/issues/25383#issuecomment-1198975178 for data_interval_end clarification
     assert (
         period.start.replace(minute=0, second=0, microsecond=0)
