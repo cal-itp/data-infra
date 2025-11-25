@@ -12,6 +12,7 @@ import logging
 import os
 import re
 import subprocess
+import sys
 import tempfile
 import traceback
 from collections import defaultdict
@@ -20,11 +21,13 @@ from functools import lru_cache
 from itertools import islice
 from typing import Any, ClassVar, Dict, List, Optional, Tuple, Type
 
-import gcsfs  # type: ignore
-import pendulum
-import sentry_sdk
-import typer
-from calitp_data_infra.storage import (  # type: ignore
+sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), "..")))
+
+import gcsfs  # noqa: E402 type: ignore
+import pendulum  # noqa: E402
+import sentry_sdk  # noqa: E402
+import typer  # noqa: E402
+from calitp_data_infra.storage import (  # noqa: E402 type: ignore
     JSONL_GZIP_EXTENSION,
     PARTITIONED_ARTIFACT_METADATA_KEY,
     GTFSDownloadConfig,
@@ -40,12 +43,12 @@ from calitp_data_infra.storage import (  # type: ignore
     make_name_bq_safe,
     serialize_partitions,
 )
-from google.cloud import storage  # type: ignore
-from google.protobuf import json_format
-from google.protobuf.message import DecodeError
-from google.transit import gtfs_realtime_pb2  # type: ignore
-from pydantic import BaseModel, Field, validator
-from pydantic.tools import parse_obj_as
+from google.cloud import storage  # noqa: E402 type: ignore
+from google.protobuf import json_format  # noqa: E402
+from google.protobuf.message import DecodeError  # noqa: E402
+from google.transit import gtfs_realtime_pb2  # noqa: E402 type: ignore
+from pydantic.v1 import BaseModel, Field, validator  # noqa: E402
+from pydantic.v1.tools import parse_obj_as  # noqa: E402
 
 JAR_DEFAULT = os.path.normpath(
     os.path.join(

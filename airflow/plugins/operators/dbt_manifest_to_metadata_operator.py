@@ -2,7 +2,7 @@ import json
 from datetime import datetime, timedelta
 from typing import Literal, Optional, Sequence
 
-from pydantic import BaseModel, constr
+from pydantic.v1 import BaseModel, constr
 
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
