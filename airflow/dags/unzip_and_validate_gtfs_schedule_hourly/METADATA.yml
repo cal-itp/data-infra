@@ -7,8 +7,6 @@ default_args:
     depends_on_past: False
     start_date: "2024-01-01"
     catchup: False
-    email:
-      - "hello@calitp.org"
     email_on_failure: False
     email_on_retry: False
     max_active_dag_runs: 6

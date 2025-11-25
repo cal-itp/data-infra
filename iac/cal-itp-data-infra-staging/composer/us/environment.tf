@@ -45,11 +45,11 @@ resource "google_composer_environment" "calitp-staging-composer" {
         core-dags_are_paused_at_creation           = true
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
         email-email_conn_id                        = "smtp_postmark"
-        email-from_email                           = "bot@calitp.org"
+        email-from_email                           = "airflow-bot@calitp.org"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
-        smtp-smtp_mail_from                        = "bot@calitp.org"
+        smtp-smtp_mail_from                        = "airflow-bot@calitp.org"
         smtp-smtp_starttls                         = true
         smtp-smtp_host                             = "smtp.postmarkapp.com"
         smtp-smtp_port                             = 587

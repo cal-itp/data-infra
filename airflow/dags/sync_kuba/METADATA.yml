@@ -7,8 +7,6 @@ default_args:
     depends_on_past: False
     start_date: "2025-07-14"
     catchup: False
-    email:
-      - "hello@calitp.org"
     email_on_failure: True
     pool: default_pool
     concurrency: 50

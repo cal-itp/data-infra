@@ -7,9 +7,6 @@ default_args:
     depends_on_past: False
     start_date: "2025-06-01"
     catchup: False
-    email:
-      - "hunter.owens@dot.ca.gov"
-      - "evan.siroky@dot.ca.gov"
     email_on_failure: True
     email_on_retry: False
     retries: 1

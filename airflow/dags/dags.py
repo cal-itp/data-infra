@@ -8,6 +8,7 @@ import airflow  # noqa
 
 # pointed at #alerts-data-infra as of 2024-02-05
 CALITP_SLACK_URL = os.environ.get("CALITP_SLACK_URL")
+CALITP_NOTIFY_EMAIL = os.environ.get("CALITP_NOTIFY_EMAIL")
 
 # DAG Directories =============================================================
 
@@ -63,6 +64,7 @@ for dag_directory in dag_directories:
         },
         default_args={
             "on_failure_callback": log_failure_to_slack,
+            "email": CALITP_NOTIFY_EMAIL
             # "on_retry_callback": log_failure_to_slack,
         },
     )
