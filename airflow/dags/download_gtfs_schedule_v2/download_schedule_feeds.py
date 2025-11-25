@@ -164,13 +164,13 @@ def download_all(task_instance, execution_date, **kwargs):
                 str(f.exception) or str(type(f.exception)) for f in result.failures
             ),
         )
-        # Commenting out since it is used only for email_download_failures.py (temporarily disabled)
-        # task_instance.xcom_push(
-        #     key="download_failures",
-        #     value=[
-        #         json.loads(f.json()) for f in result.failures
-        #     ],  # use the Pydantic serializer
-        # )
+
+        task_instance.xcom_push(
+            key="download_failures",
+            value=[
+                json.loads(f.json()) for f in result.failures
+            ],  # use the Pydantic serializer
+        )
 
     success_rate = len(result.successes) / len(configs)
     if success_rate < GTFS_FEED_LIST_ERROR_THRESHOLD:

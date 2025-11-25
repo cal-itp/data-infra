@@ -11,6 +11,7 @@ default_args:
     email:
       - "christian.suyat@dot.ca.gov"
       - "katrina.kaiser@dot.ca.gov"
+      - "dds.app.notify@dot.ca.gov"
     email_on_failure: True
     pool: default_pool
     concurrency: 50

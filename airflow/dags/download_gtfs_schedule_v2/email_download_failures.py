@@ -32,6 +32,7 @@ def email_failures(task_instance: TaskInstance, execution_date, **kwargs):
     {html_report}
     """  # noqa: E231,E241
 
+    email_to = kwargs['dag_run'].conf.get('email', kwargs['dag'].default_args.get('email'))
     if os.environ["AIRFLOW_ENV"] == "development":
         print(
             f"Skipping since in development mode! Would have emailed {failures_df.shape[0]} failures."
@@ -39,9 +40,7 @@ def email_failures(task_instance: TaskInstance, execution_date, **kwargs):
         print(html_content)
     else:
         send_email(
-            to=[
-                "evan.siroky@dot.ca.gov",
-            ],
+            to=email_to,
             html_content=html_content,
             subject=(
                 f"Operator GTFS Errors for {datetime.datetime.now().strftime('%Y-%m-%d')}"

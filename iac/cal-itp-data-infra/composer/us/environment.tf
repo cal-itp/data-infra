@@ -45,11 +45,11 @@ resource "google_composer_environment" "calitp-composer" {
         core-dags_are_paused_at_creation           = true
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
         email-email_conn_id                        = "smtp_postmark"
-        email-from_email                           = "bot@calitp.org"
+        email-from_email                           = "airflow-bot@calitp.org"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
-        smtp-smtp_mail_from                        = "bot@calitp.org"
+        smtp-smtp_mail_from                        = "airflow-bot@calitp.org"
         smtp-smtp_starttls                         = true
         smtp-smtp_host                             = "smtp.postmarkapp.com"
         smtp-smtp_port                             = 587
@@ -98,6 +98,7 @@ resource "google_composer_environment" "calitp-composer" {
         "CALITP_BUCKET__SENTRY_EVENTS"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-sentry_name}",
         "CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-state-geoportal-scrape_name}",
         "CALITP_SLACK_URL"                                     = data.google_secret_manager_secret_version.slack-airflow-url.secret_data
+        "CALITP_NOTIFY_EMAIL"                                  = "dds.app.notify@dot.ca.gov"
       })
     }
   }
