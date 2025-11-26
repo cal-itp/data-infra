@@ -11,6 +11,6 @@ terraform {
 
   backend "gcs" {
     bucket = "calitp-staging-gcp-components-tfstate"
-    prefix = "cal-itp-data-infra-staging/airflow"
+    prefix = "cal-itp-data-infra-staging/gtfs-rt-archiver"
   }
 }

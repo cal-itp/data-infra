@@ -5,7 +5,7 @@ provider "google" {
 terraform {
   required_providers {
     google = {
-      version = "~> 6.41.0"
+      version = "~> 7.10.0"
     }
   }
 
@@ -13,7 +13,6 @@ terraform {
     bucket = "calitp-staging-gcp-components-tfstate"
     prefix = "cal-itp-data-infra-staging/sftp-enghouse"
   }
-
 }
 
 data "google_client_config" "default" {}
