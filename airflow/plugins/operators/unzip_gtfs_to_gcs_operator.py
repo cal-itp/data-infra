@@ -78,8 +78,10 @@ class UnzipGTFSToGCSOperator(BaseOperator):
                 zipfile_path=local_source_path,
                 download_schedule_feed_results=self.download_schedule_feed_results,
             )
+
             if validator_result.content() is None:
                 raise AirflowSkipException
+
             report = validator_result.results()
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
