@@ -55,6 +55,19 @@ class DownloadConfigRow:
         }
 
 
+class ActiveRowQuery:
+    def __init__(self, rows: list[dict], current_time: pendulum.DateTime):
+        self.rows = rows
+        self.current_time = current_time
+
+    def resolve(self) -> list[dict]:
+        resolved = []
+        for row in self.rows:
+            if row["_is_current"] and row["deprecated_date"] is None:
+                resolved.append(row)
+        return resolved
+
+
 class BigQueryToDownloadConfigOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "dataset_name",
@@ -96,9 +109,9 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
         response = self.bigquery_hook().list_rows(
             dataset_id=self.dataset_name, table_id=self.table_name
         )
-        active_rows = [
-            r for r in response if r["_is_current"] and r["deprecated_date"] is None
-        ]
+        active_rows = ActiveRowQuery(
+            rows=list(response), current_time=current_time
+        ).resolve()
         mapped_rows = {row["key"]: row for row in active_rows}
         return [
             DownloadConfigRow(row).resolve(current_time, mapped_rows)
