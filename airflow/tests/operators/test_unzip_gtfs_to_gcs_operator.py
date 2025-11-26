@@ -314,3 +314,142 @@ class TestUnzipGTFSToGCSOperator:
                 }
             ],
         }
+
+
+class TestUnzipGTFSToGCSOperatorEmptyContent:
+    @pytest.fixture
+    def execution_date(self) -> datetime:
+        return datetime.fromisoformat("2025-11-25").replace(tzinfo=timezone.utc)
+
+    @pytest.fixture
+    def gcs_hook(self) -> GCSHook:
+        return GCSHook()
+
+    @pytest.fixture
+    def base64_url(self) -> str:
+        return "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA=="
+
+    @pytest.fixture
+    def source_path(self) -> str:
+        return "schedule/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/gtfs.zip"
+
+    @pytest.fixture
+    def destination_path(self) -> str:
+        return "translations.txt/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/translations.txt"
+
+    @pytest.fixture
+    def results_path(self) -> str:
+        return "unzipping_results/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/translations.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl"
+
+    @pytest.fixture
+    def download_schedule_feed_results(self) -> dict:
+        return {
+            "backfilled": False,
+            "config": {
+                "authHeaders": {},
+                "authQueryParams": {},
+                "computed": False,
+                "extractedAt": "2025-11-25T00:00:00+00:00",
+                "feedType": "schedule",
+                "name": "Santa Ynez Mecatran Schedule",
+                "scheduleUrlForValidation": None,
+                "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+            },
+            "exception": None,
+            "extract": {
+                "filename": "gtfs.zip",
+                "ts": "2025-06-03T00:00:00+00:00",
+                "config": {
+                    "authHeaders": {},
+                    "authQueryParams": {},
+                    "computed": False,
+                    "extractedAt": "2025-11-25T00:00:00+00:00",
+                    "feedType": "schedule",
+                    "name": "Santa Ynez Mecatran Schedule",
+                    "scheduleUrlForValidation": None,
+                    "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=gtfs.zip",
+                },
+                "reconstructed": False,
+            },
+            "success": True,
+        }
+
+    @pytest.fixture
+    def test_dag(self, execution_date: datetime) -> DAG:
+        return DAG(
+            "test_dag",
+            default_args={
+                "owner": "airflow",
+                "start_date": execution_date,
+                "end_date": execution_date + timedelta(days=1),
+            },
+            schedule=timedelta(days=1),
+        )
+
+    @pytest.fixture
+    def operator(
+        self,
+        test_dag: DAG,
+        base64_url: str,
+        source_path: str,
+        destination_path: str,
+        results_path: str,
+        download_schedule_feed_results: dict,
+    ) -> UnzipGTFSToGCSOperator:
+        return UnzipGTFSToGCSOperator(
+            task_id="unzip_translations_to_gcs",
+            gcp_conn_id="google_cloud_default",
+            base64_url=base64_url,
+            download_schedule_feed_results=download_schedule_feed_results,
+            filename="translations.txt",
+            source_bucket=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
+            source_path=source_path,
+            destination_bucket=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ),
+            destination_path=destination_path,
+            results_path=results_path,
+            dag=test_dag,
+        )
+
+    @pytest.mark.vcr
+    def test_execute(
+        self,
+        test_dag: DAG,
+        operator: UnzipGTFSToGCSOperator,
+        execution_date: datetime,
+        destination_path: str,
+        results_path: str,
+        gcs_hook: GCSHook,
+    ):
+        operator.run(
+            start_date=execution_date,
+            end_date=execution_date + timedelta(days=1),
+            ignore_first_depends_on_past=True,
+        )
+
+        task = test_dag.get_task("unzip_translations_to_gcs")
+        task_instance = TaskInstance(task, execution_date=execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert xcom_value is None
+
+        file_content = gcs_hook.exists(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=destination_path,
+        )
+        assert not file_content
+
+        unparsed_results = gcs_hook.exists(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=results_path,
+        )
+        assert not unparsed_results

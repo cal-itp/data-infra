@@ -6,6 +6,7 @@ from typing import Sequence
 
 import pendulum
 
+from airflow.exceptions import AirflowSkipException
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
@@ -31,6 +32,9 @@ class GTFSCSVResults:
         return "\n".join(
             [json.dumps(line, separators=(",", ":")) for line in self.lines]
         )
+
+    def is_empty(self) -> bool:
+        return len(self.lines) == 0
 
     def success(self) -> bool:
         return self._exception is None
@@ -143,6 +147,10 @@ class GTFSCSVToJSONLOperator(BaseOperator):
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
         result = self.converter().convert()
+
+        if result.is_empty():
+            raise AirflowSkipException
+
         report = result.report(
             filename=os.path.basename(self.destination_path),
             filetype=self.destination_path.split("/")[0],
