@@ -60,20 +60,23 @@ class Download:
             .split("filename=")[1]
         )
 
+    def extract(self, current_time: pendulum.DateTime) -> dict:
+        return {
+            "reconstructed": False,
+            "ts": current_time.isoformat(),
+            "filename": self.filename(),
+            "config": self.hook.download_config,
+            "response_code": self.response_code(),
+            "response_headers": dict(self.response_headers()),
+        }
+
     def summary(self, current_time: pendulum.DateTime) -> dict:
         return {
             "backfilled": False,
             "success": self.success(),
             "exception": str(self.exception) if self.exception else None,
             "config": self.hook.download_config,
-            "extract": {
-                "reconstructed": False,
-                "ts": current_time.isoformat(),
-                "filename": self.filename(),
-                "config": self.hook.download_config,
-                "response_code": self.response_code(),
-                "response_headers": dict(self.response_headers()),
-            },
+            "extract": self.extract(current_time=current_time),
         }
 
 
@@ -99,11 +102,11 @@ class DownloadConfigToGCSOperator(BaseOperator):
         super().__init__(**kwargs)
 
         self._download: Download = None
-        self.download_config = download_config
-        self.destination_bucket = destination_bucket
-        self.destination_path = destination_path
-        self.results_path = results_path
-        self.gcp_conn_id = gcp_conn_id
+        self.download_config: dict = download_config
+        self.destination_bucket: str = destination_bucket
+        self.destination_path: str = destination_path
+        self.results_path: str = results_path
+        self.gcp_conn_id: str = gcp_conn_id
 
     def destination_name(self) -> str:
         return self.destination_bucket.replace("gs://", "")
@@ -128,14 +131,31 @@ class DownloadConfigToGCSOperator(BaseOperator):
                 object_name=schedule_feed_path,
                 data=self.download().content(),
                 mime_type=self.download().mime_type(),
+                metadata={
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        self.download().extract(current_time=dag_run.logical_date)
+                    ),
+                },
             )
-        download_schedule_feed_results = self.download().summary(dag_run.logical_date)
+        download_schedule_feed_results = self.download().summary(
+            current_time=dag_run.logical_date
+        )
         self.gcs_hook().upload(
             bucket_name=self.destination_name(),
             object_name=f"{self.results_path}/{self.download().base64_url()}.jsonl",
             data=json.dumps(download_schedule_feed_results, separators=(",", ":")),
             mime_type="application/jsonl",
             gzip=False,
+            metadata={
+                "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                    {
+                        "filename": f"{self.download().base64_url()}.jsonl",
+                        "ts": dag_run.logical_date.isoformat(),
+                        "end": dag_run.logical_date.isoformat(),
+                        "backfilled": False,
+                    }
+                )
+            },
         )
         if not self.download().success():
             raise self.download().exception

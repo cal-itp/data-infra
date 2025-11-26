@@ -52,15 +52,18 @@ class GTFSValidatorResult:
     def success(self) -> bool:
         return self._exception is None
 
+    def validation(self) -> dict:
+        return {
+            "filename": self.filename(),
+            "system_errors": self.system_errors,
+            "validator_version": f"v{self.version}",
+            "extract_config": self.download_schedule_feed_results["config"],
+            "ts": self.current_date.isoformat(),
+        }
+
     def results(self) -> dict:
         return {
-            "validation": {
-                "filename": self.filename(),
-                "system_errors": self.system_errors,
-                "validator_version": f"v{self.version}",
-                "extract_config": self.download_schedule_feed_results["config"],
-                "ts": self.current_date.isoformat(),
-            },
+            "validation": self.validation(),
             "extract": self.download_schedule_feed_results["extract"],
             "success": self.success(),
             "exception": self.exception(),

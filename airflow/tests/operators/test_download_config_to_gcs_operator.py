@@ -132,6 +132,20 @@ class TestDownloadConfigToGCSOperator:
             },
         }
 
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                "gs://", ""
+            ),
+            object_name=xcom_value["schedule_feed_path"],
+        )
+        parsed_metadata = json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"])
+        assert parsed_metadata == xcom_value["download_schedule_feed_results"][
+            "extract"
+        ] | {
+            "ts": "2025-06-03T00:00:00+00:00",
+            "response_headers": parsed_metadata["response_headers"],
+        }
+
         decompressed_result = gcs_hook.download(
             bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
                 "gs://", ""
@@ -173,5 +187,18 @@ class TestDownloadConfigToGCSOperator:
                 },
                 "reconstructed": False,
             },
+            "backfilled": False,
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                "gs://", ""
+            ),
+            object_name=f"{results_path}/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
+            "ts": "2025-06-03T00:00:00+00:00",
+            "end": "2025-06-03T00:00:00+00:00",
             "backfilled": False,
         }

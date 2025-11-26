@@ -9,6 +9,20 @@ from airflow.providers.google.cloud.hooks.secret_manager import (
     GoogleCloudSecretManagerHook,
 )
 
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1",
+    "sec-ch-ua": '"Not A;Brand"',
+    "sec-fetch-dest": "document",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-site": "none",
+    "sec-fetch-user": "?1",
+}
+
 
 class DownloadConfigHook(BaseHook):
     download_config: dict
@@ -29,7 +43,7 @@ class DownloadConfigHook(BaseHook):
         }
 
     def headers(self) -> dict[str, str]:
-        return {
+        return HEADERS | {
             param: self.secret_hook().access_secret(secret_id=secret_id).payload.data
             for param, secret_id in self.download_config["auth_headers"].items()
         }

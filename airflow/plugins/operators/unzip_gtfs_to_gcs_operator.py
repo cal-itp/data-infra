@@ -6,6 +6,7 @@ from typing import Sequence
 import pendulum
 from hooks.gtfs_unzip_hook import GTFSUnzipHook
 
+from airflow.exceptions import AirflowSkipException
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
@@ -77,19 +78,35 @@ class UnzipGTFSToGCSOperator(BaseOperator):
                 zipfile_path=local_source_path,
                 download_schedule_feed_results=self.download_schedule_feed_results,
             )
+            if validator_result.content() is None:
+                raise AirflowSkipException
+            report = validator_result.results()
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=self.destination_path,
                 data=validator_result.content(),
                 mime_type="text/csv",
                 gzip=False,
+                metadata={
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        validator_result.extracted_files()[0]
+                    )
+                },
             )
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=self.results_path,
-                data=json.dumps(validator_result.results(), separators=(",", ":")),
+                data=json.dumps(report, separators=(",", ":")),
                 mime_type="application/jsonl",
                 gzip=False,
+                metadata={
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        {
+                            "filename": "results.jsonl",
+                            "ts": dag_run.logical_date.isoformat(),
+                        }
+                    )
+                },
             )
         return {
             "base64_url": self.base64_url,
@@ -97,4 +114,5 @@ class UnzipGTFSToGCSOperator(BaseOperator):
                 self.destination_bucket, self.destination_path
             ),
             "results_path": os.path.join(self.destination_bucket, self.results_path),
+            "unzip_results": report,
         }

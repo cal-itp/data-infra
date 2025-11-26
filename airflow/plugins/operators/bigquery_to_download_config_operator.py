@@ -55,6 +55,19 @@ class DownloadConfigRow:
         }
 
 
+class ActiveRowQuery:
+    def __init__(self, rows: list[dict], current_time: pendulum.DateTime):
+        self.rows = rows
+        self.current_time = current_time
+
+    def resolve(self) -> list[dict]:
+        resolved = []
+        for row in self.rows:
+            if row["_is_current"] and row["deprecated_date"] is None:
+                resolved.append(row)
+        return resolved
+
+
 class BigQueryToDownloadConfigOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "dataset_name",
@@ -96,21 +109,35 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
         response = self.bigquery_hook().list_rows(
             dataset_id=self.dataset_name, table_id=self.table_name
         )
-        mapped_rows = {row["key"]: row for row in response}
+        active_rows = ActiveRowQuery(
+            rows=list(response), current_time=current_time
+        ).resolve()
+        mapped_rows = {row["key"]: row for row in active_rows}
         return [
             DownloadConfigRow(row).resolve(current_time, mapped_rows)
-            for row in response
+            for row in active_rows
         ]
+
+    def metadata(self, current_time: pendulum.DateTime) -> dict:
+        return {
+            "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                {
+                    "filename": "configs.jsonl.gz",
+                    "ts": current_time.isoformat(),
+                }
+            )
+        }
 
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
         logical_date: pendulum.DateTime = pendulum.instance(dag_run.logical_date)
-        rows = self.download_config_rows(logical_date)
+        rows = self.download_config_rows(current_time=logical_date)
         self.gcs_hook().upload(
             bucket_name=self.destination_name(),
             object_name=self.destination_path,
             data="\n".join([json.dumps(r, separators=(",", ":")) for r in rows]),
             mime_type="application/jsonl",
             gzip=True,
+            metadata=self.metadata(current_time=logical_date),
         )
-        return self.destination_path
+        return [{"destination_path": self.destination_path}]
