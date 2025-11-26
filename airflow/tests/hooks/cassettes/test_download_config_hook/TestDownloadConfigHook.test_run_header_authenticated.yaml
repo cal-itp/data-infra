@@ -3,15 +3,30 @@ interactions:
     body: null
     headers:
       Accept:
-      - '*/*'
+      - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
       Accept-Encoding:
-      - gzip, deflate
+      - gzip, deflate, br
+      Accept-Language:
+      - en-US,en;q=0.5
       Connection:
       - keep-alive
       Granicus-Auth:
       - FILTERED
+      Upgrade-Insecure-Requests:
+      - '1'
       User-Agent:
-      - python-requests/2.32.5
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/139.0.0.0 Safari/537.36
+      sec-ch-ua:
+      - '"Not A;Brand"'
+      sec-fetch-dest:
+      - document
+      sec-fetch-mode:
+      - navigate
+      sec-fetch-site:
+      - none
+      sec-fetch-user:
+      - ?1
     method: GET
     uri: https://glendaleca.gov/Home/ShowDocument?id=29549
   response:
@@ -25,7 +40,7 @@ interactions:
       Content-Type:
       - text/html; charset=UTF-8
       Date:
-      - Thu, 20 Nov 2025 23:09:51 GMT
+      - Tue, 25 Nov 2025 18:56:09 GMT
       Location:
       - http://www.glendaleca.gov/Home/ShowDocument?id=29549
       Server:
@@ -37,15 +52,30 @@ interactions:
     body: null
     headers:
       Accept:
-      - '*/*'
+      - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
       Accept-Encoding:
-      - gzip, deflate
+      - gzip, deflate, br
+      Accept-Language:
+      - en-US,en;q=0.5
       Connection:
       - keep-alive
       Granicus-Auth:
       - FILTERED
+      Upgrade-Insecure-Requests:
+      - '1'
       User-Agent:
-      - python-requests/2.32.5
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/139.0.0.0 Safari/537.36
+      sec-ch-ua:
+      - '"Not A;Brand"'
+      sec-fetch-dest:
+      - document
+      sec-fetch-mode:
+      - navigate
+      sec-fetch-site:
+      - none
+      sec-fetch-user:
+      - ?1
     method: GET
     uri: http://www.glendaleca.gov/Home/ShowDocument?id=29549
   response:
@@ -57,7 +87,7 @@ interactions:
       Content-Length:
       - '0'
       Date:
-      - Thu, 20 Nov 2025 23:09:51 GMT
+      - Tue, 25 Nov 2025 18:56:10 GMT
       Location:
       - https://www.glendaleca.gov/Home/ShowDocument?id=29549
       Server:
@@ -65,7 +95,7 @@ interactions:
       Server-Timing:
       - cdn-cache; desc=HIT
       - edge; dur=1
-      - ak_p; desc="1763680191528_1749923596_2454916085_11_8666_31_0_-";dur=1
+      - ak_p; desc="1764096970555_390287338_1116762033_9_9900_11_0_-";dur=1
     status:
       code: 301
       message: Moved Permanently
@@ -73,15 +103,30 @@ interactions:
     body: null
     headers:
       Accept:
-      - '*/*'
+      - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
       Accept-Encoding:
-      - gzip, deflate
+      - gzip, deflate, br
+      Accept-Language:
+      - en-US,en;q=0.5
       Connection:
       - keep-alive
       Granicus-Auth:
       - FILTERED
+      Upgrade-Insecure-Requests:
+      - '1'
       User-Agent:
-      - python-requests/2.32.5
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/139.0.0.0 Safari/537.36
+      sec-ch-ua:
+      - '"Not A;Brand"'
+      sec-fetch-dest:
+      - document
+      sec-fetch-mode:
+      - navigate
+      sec-fetch-site:
+      - none
+      sec-fetch-user:
+      - ?1
     method: GET
     uri: https://www.glendaleca.gov/Home/ShowDocument?id=29549
   response:
@@ -3310,7 +3355,7 @@ interactions:
       Content-Type:
       - application/x-zip-compressed
       Date:
-      - Thu, 20 Nov 2025 23:09:51 GMT
+      - Tue, 25 Nov 2025 18:56:11 GMT
       Edge-Cache-Tag:
       - EFC020D0.G,EFC020D0.CL3
       Expect-CT:
@@ -3323,14 +3368,14 @@ interactions:
       - Mon, 17 Nov 2025 11:16:34 GMT
       Server-Timing:
       - cdn-cache; desc=MISS
-      - edge; dur=64
-      - origin; dur=93
-      - ak_p; desc="1763680191631_1749923598_1596765361_15893_10086_24_42_-";dur=1
+      - edge; dur=112
+      - origin; dur=129
+      - ak_p; desc="1764096970609_390287338_1116762439_24046_9998_5_37_-";dur=1
       Set-Cookie:
-      - ASP.NET_SessionId=0ce0km3ttsp5kn4vtenpjxcz; path=/; secure; HttpOnly; SameSite=Lax
-      - BIGipServer~AUTO-VISION~visionlive~www.glendaleca.gov_443=!bUDT5y65rKUO0z6PQiKlh2cDgVLBdT/TJvGtpo8ZLQyFZ2c30sSsI6XZon/c33h0hYtgj8K/xrQSDbA=;
+      - ASP.NET_SessionId=0h4xqkbdtlkbrafn5zq4dpza; path=/; secure; HttpOnly; SameSite=Lax
+      - BIGipServer~AUTO-VISION~visionlive~www.glendaleca.gov_443=!378BCROBI04liXKPQiKlh2cDgVLBdTRh4B3Ng5zDmXW1Dj+XrtW9I0flREwmsCmbu8IYjUStliv7bxk=;
         path=/; Httponly; Secure
-      - TS01af151e=0106cf681b5e511d5828539324a71836cb5de9088f151ded263223d8b9208a20273bd52c2d9a18e0f8074ddbb91d34de27fcc9604cbb929a8c36a9e61ab4bf939dbbb81ffe72f7ec116495a4031e1c52cdae8b088d;
+      - TS01af151e=0106cf681ba03e973eb49e2f49d3fc6bef4da6ef75b075c882be3790baab9f94ceb1124eee4090e7cf365896728817624118cd4992b044217028a63a8e7788643d3bd530d243032a768d6dbd11719d920aa9b2879b;
         Path=/; Secure; HttpOnly
       Strict-Transport-Security:
       - max-age=31536000;

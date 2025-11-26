@@ -70,18 +70,25 @@ class TestBigQueryToDownloadConfigOperator:
         task = test_dag.get_task("gtfs_dataset_to_download_config")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
-        assert xcom_value == os.path.join(
-            "gtfs_download_configs",
-            "dt=2025-06-02",
-            "ts=2025-06-02T00:00:00+00:00",
-            "download_config.jsonl.gz",
+        assert xcom_value == [{"destination_path": destination_path}]
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG").replace(
+                "gs://", ""
+            ),
+            object_name=destination_path,
         )
+        assert metadata == {
+            "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                {"filename": "configs.jsonl.gz", "ts": "2025-06-03T00:00:00+00:00"}
+            )
+        }
 
         compressed_result = gcs_hook.download(
             bucket_name=os.environ.get("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG").replace(
                 "gs://", ""
             ),
-            object_name=xcom_value,
+            object_name=destination_path,
         )
         decompressed_result = gzip.decompress(compressed_result)
         result = [json.loads(x) for x in decompressed_result.splitlines()]

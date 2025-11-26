@@ -143,13 +143,6 @@ class GTFSCSVToJSONLOperator(BaseOperator):
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
         result = self.converter().convert()
-        self.gcs_hook().upload(
-            bucket_name=self.destination_name(),
-            object_name=self.destination_path,
-            data=result.jsonl(),
-            mime_type="application/jsonl",
-            gzip=True,
-        )
         report = result.report(
             filename=os.path.basename(self.destination_path),
             filetype=self.destination_path.split("/")[0],
@@ -158,10 +151,28 @@ class GTFSCSVToJSONLOperator(BaseOperator):
         )
         self.gcs_hook().upload(
             bucket_name=self.destination_name(),
+            object_name=self.destination_path,
+            data=result.jsonl(),
+            mime_type="application/jsonl",
+            gzip=True,
+            metadata={
+                "PARTITIONED_ARTIFACT_METADATA": json.dumps(report["parsed_file"])
+            },
+        )
+        self.gcs_hook().upload(
+            bucket_name=self.destination_name(),
             object_name=self.results_path,
             data=json.dumps(report, separators=(",", ":")),
             mime_type="application/jsonl",
             gzip=False,
+            metadata={
+                "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                    {
+                        "filename": "results.jsonl",
+                        "ts": dag_run.logical_date.isoformat(),
+                    }
+                )
+            },
         )
         return {
             "destination_path": os.path.join(

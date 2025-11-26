@@ -96,21 +96,35 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
         response = self.bigquery_hook().list_rows(
             dataset_id=self.dataset_name, table_id=self.table_name
         )
-        mapped_rows = {row["key"]: row for row in response}
+        active_rows = [
+            r for r in response if r["_is_current"] and r["deprecated_date"] is None
+        ]
+        mapped_rows = {row["key"]: row for row in active_rows}
         return [
             DownloadConfigRow(row).resolve(current_time, mapped_rows)
-            for row in response
+            for row in active_rows
         ]
+
+    def metadata(self, current_time: pendulum.DateTime) -> dict:
+        return {
+            "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                {
+                    "filename": "configs.jsonl.gz",
+                    "ts": current_time.isoformat(),
+                }
+            )
+        }
 
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
         logical_date: pendulum.DateTime = pendulum.instance(dag_run.logical_date)
-        rows = self.download_config_rows(logical_date)
+        rows = self.download_config_rows(current_time=logical_date)
         self.gcs_hook().upload(
             bucket_name=self.destination_name(),
             object_name=self.destination_path,
             data="\n".join([json.dumps(r, separators=(",", ":")) for r in rows]),
             mime_type="application/jsonl",
             gzip=True,
+            metadata=self.metadata(current_time=logical_date),
         )
-        return self.destination_path
+        return [{"destination_path": self.destination_path}]

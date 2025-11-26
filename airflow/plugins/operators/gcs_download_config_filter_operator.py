@@ -1,5 +1,6 @@
 import gzip
 import json
+from itertools import islice
 from typing import Sequence
 
 from airflow.models import BaseOperator
@@ -9,6 +10,7 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 class GCSDownloadConfigFilterOperator(BaseOperator):
     template_fields: Sequence[str] = (
+        "limit",
         "feed_type",
         "source_bucket",
         "source_path",
@@ -20,12 +22,14 @@ class GCSDownloadConfigFilterOperator(BaseOperator):
         feed_type: str,
         source_bucket: str,
         source_path: str,
+        limit: int | None = None,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
 
         self._gcs_hook = None
+        self.limit = limit
         self.feed_type = feed_type
         self.source_bucket = source_bucket
         self.source_path = source_path
@@ -41,5 +45,8 @@ class GCSDownloadConfigFilterOperator(BaseOperator):
         )
         return [json.loads(x) for x in gzip.decompress(data).splitlines()]
 
-    def execute(self, context: Context) -> str:
-        return [row for row in self.rows() if row["feed_type"] == self.feed_type]
+    def execute(self, context: Context) -> list[dict]:
+        results = [row for row in self.rows() if row["feed_type"] == self.feed_type]
+        if self.limit is not None:
+            results = list(islice(results, self.limit))
+        return results
