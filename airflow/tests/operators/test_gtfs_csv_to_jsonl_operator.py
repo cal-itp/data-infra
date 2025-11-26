@@ -114,7 +114,7 @@ class TestGTFSCSVToJSONLOperator:
         unzip_results: dict,
     ) -> GTFSCSVToJSONLOperator:
         return GTFSCSVToJSONLOperator(
-            task_id="gtfs_csv_to_jsonl",
+            task_id="convert_agency_to_jsonl",
             gcp_conn_id="google_cloud_default",
             unzip_results=unzip_results,
             source_bucket=os.environ.get(
@@ -145,7 +145,7 @@ class TestGTFSCSVToJSONLOperator:
             ignore_first_depends_on_past=True,
         )
 
-        task = test_dag.get_task("gtfs_csv_to_jsonl")
+        task = test_dag.get_task("convert_agency_to_jsonl")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value["results_path"] == os.path.join(
@@ -163,7 +163,6 @@ class TestGTFSCSVToJSONLOperator:
             "base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
             "agency.jsonl.gz",
         )
-
         compressed_result = gcs_hook.download(
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
@@ -183,6 +182,30 @@ class TestGTFSCSVToJSONLOperator:
             "agency_fare_url": "https://www.syvt.com/365/Fares",
             "agency_email": "",
             "agency_primary": "1",
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=destination_path,
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "agency.jsonl.gz",
+            "ts": "2025-06-03T00:00:00+00:00",
+            "extract_config": {
+                "extracted_at": "2025-06-01T00:00:00+00:00",
+                "name": "Santa Ynez Mecatran Schedule",
+                "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                "feed_type": "schedule",
+                "schedule_url_for_validation": None,
+                "auth_query_params": {},
+                "auth_headers": {},
+                "computed": False,
+            },
+            "gtfs_filename": "agency",
+            "csv_dialect": "excel",
+            "num_lines": 1,
         }
 
         unparsed_results = gcs_hook.download(
@@ -238,4 +261,15 @@ class TestGTFSCSVToJSONLOperator:
                 "csv_dialect": "excel",
                 "num_lines": 1,
             },
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=results_path,
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "results.jsonl",
+            "ts": "2025-06-03T00:00:00+00:00",
         }

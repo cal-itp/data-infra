@@ -6,7 +6,7 @@ WITH raw_unzip_outcomes AS (
 ),
 
 stg_gtfs_schedule__unzip_outcomes AS (
-    SELECT
+    SELECT DISTINCT
         dt,
         `extract`.config.name AS name,
         `extract`.config.url AS url,

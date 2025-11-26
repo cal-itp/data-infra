@@ -25,7 +25,7 @@ class TestValidateGTFSToGCSOperator:
         return "schedule/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/gtfs.zip"
 
     @pytest.fixture
-    def notices_path(self) -> str:
+    def destination_path(self) -> str:
         return "validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA=="
 
     @pytest.fixture
@@ -87,7 +87,7 @@ class TestValidateGTFSToGCSOperator:
         self,
         test_dag: DAG,
         source_path: str,
-        notices_path: str,
+        destination_path: str,
         results_path: str,
         download_schedule_feed_results: dict,
     ) -> ValidateGTFSToGCSOperator:
@@ -99,7 +99,7 @@ class TestValidateGTFSToGCSOperator:
             destination_bucket=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"
             ),
-            notices_path=notices_path,
+            destination_path=destination_path,
             results_path=results_path,
             download_schedule_feed_results=download_schedule_feed_results,
             dag=test_dag,
@@ -124,7 +124,7 @@ class TestValidateGTFSToGCSOperator:
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
-            "notices_path": os.path.join(
+            "destination_path": os.path.join(
                 os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"),
                 "validation_notices",
                 "dt=2025-06-02",
@@ -167,6 +167,29 @@ class TestValidateGTFSToGCSOperator:
             "severity": "INFO",
             "totalNotices": 1,
             "sampleNotices": [{"filename": "route_directions.txt"}],
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"
+            ).replace("gs://", ""),
+            object_name="validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/validation_notices_v5-0-0.jsonl.gz",
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "validation_notices_v5-0-0.jsonl.gz",
+            "ts": "2025-06-03T00:00:00+00:00",
+            "extract_config": {
+                "extracted_at": "2025-11-14T02:00:00+00:00",
+                "name": "Santa Ynez Mecatran Schedule",
+                "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                "feed_type": "schedule",
+                "schedule_url_for_validation": None,
+                "auth_query_params": {},
+                "auth_headers": {},
+                "computed": False,
+            },
+            "system_errors": {"notices": []},
+            "validator_version": "v5.0.0",
         }
 
         unparsed_results = gcs_hook.download(
@@ -215,4 +238,15 @@ class TestValidateGTFSToGCSOperator:
             },
             "success": True,
             "exception": None,
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"
+            ).replace("gs://", ""),
+            object_name="validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "results.jsonl",
+            "ts": "2025-06-03T00:00:00+00:00",
         }

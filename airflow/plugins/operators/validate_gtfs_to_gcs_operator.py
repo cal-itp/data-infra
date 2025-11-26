@@ -17,7 +17,7 @@ class ValidateGTFSToGCSOperator(BaseOperator):
         "source_bucket",
         "source_path",
         "destination_bucket",
-        "notices_path",
+        "destination_path",
         "results_path",
         "gcp_conn_id",
     )
@@ -28,7 +28,7 @@ class ValidateGTFSToGCSOperator(BaseOperator):
         source_bucket: str,
         source_path: str,
         destination_bucket: str,
-        notices_path: str,
+        destination_path: str,
         results_path: str,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
@@ -40,7 +40,7 @@ class ValidateGTFSToGCSOperator(BaseOperator):
         self.source_bucket = source_bucket
         self.source_path = source_path
         self.destination_bucket = destination_bucket
-        self.notices_path = notices_path
+        self.destination_path = destination_path
         self.results_path = results_path
         self.gcp_conn_id = gcp_conn_id
 
@@ -73,17 +73,12 @@ class ValidateGTFSToGCSOperator(BaseOperator):
                 filename=local_source_path,
                 download_schedule_feed_results=self.download_schedule_feed_results,
             )
-            self.gcs_hook().upload(
-                bucket_name=self.destination_name(),
-                object_name=self.results_path,
-                data=json.dumps(validator_result.results(), separators=(",", ":")),
-                mime_type="application/jsonl",
-                gzip=False,
+            full_destination_path = (
+                f"{self.destination_path}/{validator_result.filename()}"
             )
-            full_notices_path = f"{self.notices_path}/{validator_result.filename()}"
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
-                object_name=full_notices_path,
+                object_name=full_destination_path,
                 data="\n".join(
                     [
                         json.dumps(n, separators=(",", ":"))
@@ -92,8 +87,30 @@ class ValidateGTFSToGCSOperator(BaseOperator):
                 ),
                 mime_type="application/jsonl",
                 gzip=True,
+                metadata={
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        validator_result.validation()
+                    )
+                },
+            )
+            self.gcs_hook().upload(
+                bucket_name=self.destination_name(),
+                object_name=self.results_path,
+                data=json.dumps(validator_result.results(), separators=(",", ":")),
+                mime_type="application/jsonl",
+                gzip=False,
+                metadata={
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        {
+                            "filename": "results.jsonl",
+                            "ts": dag_run.logical_date.isoformat(),
+                        }
+                    )
+                },
             )
         return {
-            "notices_path": os.path.join(self.destination_bucket, full_notices_path),
+            "destination_path": os.path.join(
+                self.destination_bucket, full_destination_path
+            ),
             "results_path": os.path.join(self.destination_bucket, self.results_path),
         }
