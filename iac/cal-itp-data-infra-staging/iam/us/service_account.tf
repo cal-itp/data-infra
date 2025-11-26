@@ -50,11 +50,27 @@ resource "google_service_account" "cal-bc-service-account" {
   project      = "cal-itp-data-infra-staging"
 }
 
+resource "google_service_account" "metabase-service-account" {
+  account_id   = "metabase-service-account"
+  description  = "Service account for Metabase"
+  disabled     = "false"
+  display_name = "metabase"
+  project      = "cal-itp-data-infra-staging"
+}
+
 resource "google_service_account" "composer-service-account" {
   account_id   = "composer-service-account"
   description  = "Service account for Composer"
   disabled     = "false"
   display_name = "composer"
+  project      = "cal-itp-data-infra-staging"
+}
+
+resource "google_service_account" "workflow-service-account" {
+  account_id   = "workflow-service-account"
+  description  = "Service account for Workflow"
+  disabled     = "false"
+  display_name = "workflow"
   project      = "cal-itp-data-infra-staging"
 }
 
