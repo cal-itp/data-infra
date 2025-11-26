@@ -273,3 +273,159 @@ class TestGTFSCSVToJSONLOperator:
             "filename": "results.jsonl",
             "ts": "2025-06-03T00:00:00+00:00",
         }
+
+
+class TestGTFSCSVToJSONLOperatorEmptyContent:
+    @pytest.fixture
+    def execution_date(self) -> datetime:
+        return datetime.fromisoformat("2025-11-25").replace(tzinfo=timezone.utc)
+
+    @pytest.fixture
+    def gcs_hook(self) -> GCSHook:
+        return GCSHook()
+
+    @pytest.fixture
+    def source_path(self) -> str:
+        return "agency.txt/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL3N0YXRpY2d0ZnMvMS9ndGZzLnppcA==/agency.txt"
+
+    @pytest.fixture
+    def destination_path(self) -> str:
+        return "agency/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL3N0YXRpY2d0ZnMvMS9ndGZzLnppcA==/agency.jsonl.gz"
+
+    @pytest.fixture
+    def results_path(self) -> str:
+        return "agency.txt_parsing_results/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/agency.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl"
+
+    @pytest.fixture
+    def unzip_results(self) -> dict:
+        return {
+            "success": True,
+            "exception": None,
+            "extract": {
+                "filename": "gtfs.zip",
+                "ts": "2025-06-03T00:00:00+00:00",
+                "config": {
+                    "authHeaders": {},
+                    "authQueryParams": {},
+                    "computed": False,
+                    "extractedAt": "2025-11-25T00:00:00+00:00",
+                    "feedType": "schedule",
+                    "name": "SLO Peak Transit Schedule",
+                    "scheduleUrlForValidation": None,
+                    "url": "http://data.peaktransit.com/staticgtfs/1/gtfs.zip",
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=gtfs.zip",
+                },
+                "reconstructed": False,
+            },
+            "zipfile_extract_md5hash": "4f72c84bd3f053ddb929289fa2de7879",
+            "zipfile_files": [
+                "agency.txt",
+                "calendar.txt",
+                "calendar_dates.txt",
+                "fare_attributes.txt",
+                "feed_info.txt",
+                "route_directions.txt",
+                "routes.txt",
+                "shapes.txt",
+                "stop_times.txt",
+                "stops.txt",
+                "transfers.txt",
+                "trips.txt",
+            ],
+            "zipfile_dirs": [],
+            "extracted_files": [
+                {
+                    "filename": "agency.txt",
+                    "ts": "2025-06-03T00:00:00+00:00",
+                    "extract_config": {
+                        "authHeaders": {},
+                        "authQueryParams": {},
+                        "computed": False,
+                        "extractedAt": "2025-11-25T00:00:00+00:00",
+                        "feedType": "schedule",
+                        "name": "SLO Peak Transit Schedule",
+                        "scheduleUrlForValidation": None,
+                        "url": "http://data.peaktransit.com/staticgtfs/1/gtfs.zip",
+                    },
+                    "original_filename": "agency.txt",
+                }
+            ],
+        }
+
+    @pytest.fixture
+    def test_dag(self, execution_date: datetime) -> DAG:
+        return DAG(
+            "test_dag",
+            default_args={
+                "owner": "airflow",
+                "start_date": execution_date,
+                "end_date": execution_date + timedelta(days=1),
+            },
+            schedule=timedelta(days=1),
+        )
+
+    @pytest.fixture
+    def operator(
+        self,
+        test_dag: DAG,
+        source_path: str,
+        destination_path: str,
+        results_path: str,
+        unzip_results: dict,
+    ) -> GTFSCSVToJSONLOperator:
+        return GTFSCSVToJSONLOperator(
+            task_id="convert_agency_to_jsonl",
+            gcp_conn_id="google_cloud_default",
+            unzip_results=unzip_results,
+            source_bucket=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ),
+            source_path=source_path,
+            destination_bucket=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
+            ),
+            destination_path=destination_path,
+            results_path=results_path,
+            dag=test_dag,
+        )
+
+    @pytest.mark.vcr
+    def test_execute(
+        self,
+        test_dag: DAG,
+        operator: GTFSCSVToJSONLOperator,
+        execution_date: datetime,
+        destination_path: str,
+        results_path: str,
+        gcs_hook: GCSHook,
+    ):
+        operator.run(
+            start_date=execution_date,
+            end_date=execution_date + timedelta(days=1),
+            ignore_first_depends_on_past=True,
+        )
+
+        task = test_dag.get_task("convert_agency_to_jsonl")
+        task_instance = TaskInstance(task, execution_date=execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert xcom_value is None
+
+        compressed_result = gcs_hook.exists(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=destination_path,
+        )
+        assert not compressed_result
+
+        unparsed_results = gcs_hook.exists(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=results_path,
+        )
+        assert not unparsed_results

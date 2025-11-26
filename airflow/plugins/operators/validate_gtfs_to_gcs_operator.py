@@ -6,6 +6,7 @@ from typing import Sequence
 import pendulum
 from hooks.gtfs_validator_hook import GTFSValidatorHook
 
+from airflow.exceptions import AirflowSkipException
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
@@ -73,9 +74,14 @@ class ValidateGTFSToGCSOperator(BaseOperator):
                 filename=local_source_path,
                 download_schedule_feed_results=self.download_schedule_feed_results,
             )
+
+            if not validator_result.notices():
+                raise AirflowSkipException
+
             full_destination_path = (
                 f"{self.destination_path}/{validator_result.filename()}"
             )
+
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=full_destination_path,
