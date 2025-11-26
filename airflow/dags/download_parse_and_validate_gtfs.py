@@ -63,6 +63,7 @@ with DAG(
 
     schedule_download_configs = GCSDownloadConfigFilterOperator(
         task_id="download_config_filter",
+        # limit=500,
         feed_type="schedule",
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
         source_path="gtfs_download_configs/dt={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
@@ -100,6 +101,7 @@ with DAG(
         task_id="validate_gtfs_to_gcs",
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"),
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
+        map_index_template="{{ task.download_schedule_feed_results['config']['name'] }}",
         trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(XComArg(downloads).map(create_validate_kwargs))
 
@@ -134,6 +136,7 @@ with DAG(
             destination_bucket=os.getenv(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
             ),
+            map_index_template="{{ task.download_schedule_feed_results['config']['name'] }}",
             trigger_rule=TriggerRule.ALL_DONE,
         ).expand_kwargs(XComArg(downloads).map(create_unzip_kwargs))
 
@@ -166,6 +169,7 @@ with DAG(
             task_id=f"convert_{schedule_file_type}_to_jsonl",
             source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
             destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"),
+            map_index_template="{{ task.unzip_results['extract']['config']['name'] }}",
             trigger_rule=TriggerRule.ALL_DONE,
         ).expand_kwargs(XComArg(unzipped_files).map(create_parse_kwargs))
 

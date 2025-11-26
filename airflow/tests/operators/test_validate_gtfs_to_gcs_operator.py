@@ -250,3 +250,134 @@ class TestValidateGTFSToGCSOperator:
             "filename": "results.jsonl",
             "ts": "2025-06-03T00:00:00+00:00",
         }
+
+
+class TestValidateGTFSToGCSOperatorEmptyContent:
+    @pytest.fixture
+    def execution_date(self) -> datetime:
+        return datetime.fromisoformat("2025-11-25").replace(tzinfo=timezone.utc)
+
+    @pytest.fixture
+    def gcs_hook(self) -> GCSHook:
+        return GCSHook()
+
+    @pytest.fixture
+    def source_path(self) -> str:
+        return "schedule/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/schedule-27.zip"
+
+    @pytest.fixture
+    def destination_path(self) -> str:
+        return "validation_notices/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc="
+
+    @pytest.fixture
+    def results_path(self) -> str:
+        return "validation_job_results/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl"
+
+    @pytest.fixture
+    def download_schedule_feed_results(self) -> dict:
+        return {
+            "backfilled": False,
+            "config": {
+                "auth_headers": {},
+                "auth_query_params": {},
+                "computed": False,
+                "extracted_at": "2025-11-25T00:00:00+00:00",
+                "feed_type": "schedule",
+                "name": "Fric and Frac Schedule",
+                "schedule_url_for_validation": None,
+                "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+            },
+            "exception": None,
+            "extract": {
+                "filename": "schedule-27.zip",
+                "ts": "2025-06-03T00:00:00+00:00",
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-11-25T00:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "Fric and Frac Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=schedule-27.zip",
+                },
+                "reconstructed": False,
+            },
+            "success": True,
+        }
+
+    @pytest.fixture
+    def test_dag(self, execution_date: datetime) -> DAG:
+        return DAG(
+            "test_dag",
+            default_args={
+                "owner": "airflow",
+                "start_date": execution_date,
+                "end_date": execution_date + timedelta(days=1),
+            },
+            schedule=timedelta(days=1),
+        )
+
+    @pytest.fixture
+    def operator(
+        self,
+        test_dag: DAG,
+        source_path: str,
+        destination_path: str,
+        results_path: str,
+        download_schedule_feed_results: dict,
+    ) -> ValidateGTFSToGCSOperator:
+        return ValidateGTFSToGCSOperator(
+            task_id="validate_gtfs_to_gcs",
+            gcp_conn_id="google_cloud_default",
+            source_bucket=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
+            source_path=source_path,
+            destination_bucket=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"
+            ),
+            destination_path=destination_path,
+            results_path=results_path,
+            download_schedule_feed_results=download_schedule_feed_results,
+            dag=test_dag,
+        )
+
+    @pytest.mark.vcr
+    def test_execute(
+        self,
+        test_dag: DAG,
+        operator: ValidateGTFSToGCSOperator,
+        execution_date: datetime,
+        source_path: str,
+        gcs_hook: GCSHook,
+    ):
+        operator.run(
+            start_date=execution_date,
+            end_date=execution_date + timedelta(days=1),
+            ignore_first_depends_on_past=True,
+        )
+
+        task = test_dag.get_task("validate_gtfs_to_gcs")
+        task_instance = TaskInstance(task, execution_date=execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert xcom_value is None
+
+        compressed_notices = gcs_hook.exists(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"
+            ).replace("gs://", ""),
+            object_name="validation_notices/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/validation_notices_v5-0-0.jsonl.gz",
+        )
+        assert not compressed_notices
+
+        unparsed_results = gcs_hook.exists(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"
+            ).replace("gs://", ""),
+            object_name="validation_job_results/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl",
+        )
+        assert not unparsed_results
