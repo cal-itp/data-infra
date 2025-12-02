@@ -6,7 +6,6 @@ from typing import Sequence
 
 import pendulum
 
-from airflow.exceptions import AirflowSkipException
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
@@ -147,26 +146,25 @@ class GTFSCSVToJSONLOperator(BaseOperator):
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
         result = self.converter().convert()
-
-        if result.is_empty():
-            raise AirflowSkipException
-
         report = result.report(
             filename=os.path.basename(self.destination_path),
             filetype=self.destination_path.split("/")[0],
             unzip_results=self.unzip_results,
             current_date=dag_run.logical_date,
         )
-        self.gcs_hook().upload(
-            bucket_name=self.destination_name(),
-            object_name=self.destination_path,
-            data=result.jsonl(),
-            mime_type="application/jsonl",
-            gzip=True,
-            metadata={
-                "PARTITIONED_ARTIFACT_METADATA": json.dumps(report["parsed_file"])
-            },
-        )
+
+        if not result.is_empty():
+            self.gcs_hook().upload(
+                bucket_name=self.destination_name(),
+                object_name=self.destination_path,
+                data=result.jsonl(),
+                mime_type="application/jsonl",
+                gzip=True,
+                metadata={
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(report["parsed_file"])
+                },
+            )
+
         self.gcs_hook().upload(
             bucket_name=self.destination_name(),
             object_name=self.results_path,

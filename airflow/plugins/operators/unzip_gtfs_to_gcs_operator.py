@@ -6,7 +6,6 @@ from typing import Sequence
 import pendulum
 from hooks.gtfs_unzip_hook import GTFSUnzipHook
 
-from airflow.exceptions import AirflowSkipException
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
@@ -79,22 +78,21 @@ class UnzipGTFSToGCSOperator(BaseOperator):
                 download_schedule_feed_results=self.download_schedule_feed_results,
             )
 
-            if validator_result.content() is None:
-                raise AirflowSkipException
+            if validator_result.content():
+                self.gcs_hook().upload(
+                    bucket_name=self.destination_name(),
+                    object_name=self.destination_path,
+                    data=validator_result.content(),
+                    mime_type="text/csv",
+                    gzip=False,
+                    metadata={
+                        "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                            validator_result.extracted_files()[0]
+                        )
+                    },
+                )
 
             report = validator_result.results()
-            self.gcs_hook().upload(
-                bucket_name=self.destination_name(),
-                object_name=self.destination_path,
-                data=validator_result.content(),
-                mime_type="text/csv",
-                gzip=False,
-                metadata={
-                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                        validator_result.extracted_files()[0]
-                    )
-                },
-            )
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=self.results_path,
