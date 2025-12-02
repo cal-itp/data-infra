@@ -51,8 +51,8 @@ with DAG(
     start_date=datetime(2025, 11, 1),
     catchup=False,
     tags=["gtfs"],
+    user_defined_macros={"basename": os.path.basename},
 ):
-    user_defined_macros = {"basename": os.path.basename}
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
     download_config = BigQueryToDownloadConfigOperator(
@@ -65,7 +65,7 @@ with DAG(
 
     schedule_download_configs = GCSDownloadConfigFilterOperator(
         task_id="download_config_filter",
-        # limit=500,
+        limit=None,
         feed_type="schedule",
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
         source_path="gtfs_download_configs/dt={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
@@ -107,7 +107,7 @@ with DAG(
         trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(XComArg(downloads).map(create_validate_kwargs))
 
-    @task
+    @task(trigger_rule=TriggerRule.ALL_DONE)
     def create_unzip_kwargs(filename: str, download):
         return {
             "download_schedule_feed_results": download[
@@ -134,8 +134,12 @@ with DAG(
 
     @task(trigger_rule=TriggerRule.ALL_DONE)
     def create_parse_kwargs(unzipped_file):
+        if len(unzipped_file["unzip_results"]["extracted_files"]) == 0:
+            return None
+
         filename = os.path.basename(unzipped_file["destination_path"])
         file_type = GTFS_SCHEDULE_FILENAMES[filename]
+
         return {
             "unzip_results": unzipped_file["unzip_results"],
             "source_path": os.path.join(
