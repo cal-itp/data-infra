@@ -414,13 +414,50 @@ class TestGTFSCSVToJSONLOperatorEmptyContent:
         xcom_value = task_instance.xcom_pull()
         assert xcom_value is None
 
-        compressed_result = gcs_hook.exists(
+        compressed_result = gcs_hook.download(
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
             ).replace("gs://", ""),
             object_name=destination_path,
         )
-        assert not compressed_result
+        decompressed_result = gzip.decompress(compressed_result)
+        result = [json.loads(x) for x in decompressed_result.splitlines()]
+        assert list(result)[0] == {
+            "_line_number": 1,
+            "agency_id": "11214031",
+            "agency_name": "Santa Ynez Valley Transit",
+            "agency_url": "https://www.syvt.com/489/Santa-Ynez-Valley-Transit",
+            "agency_timezone": "America/Los_Angeles",
+            "agency_phone": "805-688-5452",
+            "agency_lang": "en",
+            "agency_fare_url": "https://www.syvt.com/365/Fares",
+            "agency_email": "",
+            "agency_primary": "1",
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=destination_path,
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "agency.jsonl.gz",
+            "ts": "2025-06-03T00:00:00+00:00",
+            "extract_config": {
+                "extracted_at": "2025-06-01T00:00:00+00:00",
+                "name": "Santa Ynez Mecatran Schedule",
+                "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                "feed_type": "schedule",
+                "schedule_url_for_validation": None,
+                "auth_query_params": {},
+                "auth_headers": {},
+                "computed": False,
+            },
+            "gtfs_filename": "agency",
+            "csv_dialect": "excel",
+            "num_lines": 0,
+        }
 
         unparsed_results = gcs_hook.exists(
             bucket_name=os.environ.get(
