@@ -107,8 +107,11 @@ with DAG(
         trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(XComArg(downloads).map(create_validate_kwargs))
 
-    @task(trigger_rule=TriggerRule.ALL_DONE)
-    def create_unzip_kwargs(filename: str, download):
+    @task(
+        trigger_rule=TriggerRule.ALL_DONE,
+        map_index_template="{{ task.op_kwargs['download']['download_schedule_feed_results']['config']['name'] }} {{ task.op_kwargs['filename'] }}",
+    )
+    def list_downloaded_files(filename: str, download):
         return {
             "download_schedule_feed_results": download[
                 "download_schedule_feed_results"
@@ -118,8 +121,9 @@ with DAG(
             "filename": filename,
         }
 
-    unzip_args = create_unzip_kwargs.expand(
-        download=downloads.output, filename=list(GTFS_SCHEDULE_FILENAMES.keys())
+    unzip_kwargs = list_downloaded_files.expand(
+        download=downloads.output,
+        filename=list(GTFS_SCHEDULE_FILENAMES.keys()),
     )
 
     unzipped_files = UnzipGTFSToGCSOperator.partial(
@@ -130,10 +134,13 @@ with DAG(
         results_path="unzipping_results/dt={{ ds }}/ts={{ ts }}/{{ task.base64_url }}_{{ task.filename }}.jsonl",
         map_index_template="{{ task.download_schedule_feed_results['config']['name'] }} {{ task.filename }}",
         trigger_rule=TriggerRule.ALL_DONE,
-    ).expand_kwargs(unzip_args.map(lambda a: dict(a)))
+    ).expand_kwargs(unzip_kwargs.map(lambda a: dict(a)))
 
-    @task(trigger_rule=TriggerRule.ALL_DONE)
-    def create_parse_kwargs(unzipped_file):
+    @task(
+        trigger_rule=TriggerRule.ALL_DONE,
+        map_index_template="{{ task.op_kwargs['unzipped_file']['unzip_results']['extract']['config']['name'] }} {{ basename(task.op_kwargs['unzipped_file']['destination_path']) }}",
+    )
+    def list_unzipped_files(unzipped_file):
         if len(unzipped_file["unzip_results"]["extracted_files"]) == 0:
             return None
 
@@ -164,7 +171,7 @@ with DAG(
             ),
         }
 
-    parse_kwargs = create_parse_kwargs.expand(unzipped_file=unzipped_files.output)
+    parse_kwargs = list_unzipped_files.expand(unzipped_file=unzipped_files.output)
 
     GTFSCSVToJSONLOperator.partial(
         task_id="convert_to_jsonl",
