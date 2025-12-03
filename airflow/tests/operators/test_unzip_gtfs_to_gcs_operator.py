@@ -553,3 +553,291 @@ class TestUnzipGTFSToGCSOperatorFileNotPresent:
             "zipfile_dirs": [],
             "extracted_files": [],
         }
+
+
+class TestUnzipGTFSToGCSOperatorEmptyFile:
+    @pytest.fixture
+    def execution_date(self) -> datetime:
+        return datetime.fromisoformat("2025-11-13").replace(tzinfo=timezone.utc)
+
+    @pytest.fixture
+    def gcs_hook(self) -> GCSHook:
+        return GCSHook()
+
+    @pytest.fixture
+    def base64_url(self) -> str:
+        return "aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc="
+
+    @pytest.fixture
+    def source_path(self) -> str:
+        return "schedule/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/schedule-27.zip"
+
+    @pytest.fixture
+    def destination_path(self) -> str:
+        return "calendar_dates.txt/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/calendar_dates.txt"
+
+    @pytest.fixture
+    def results_path(self) -> str:
+        return "unzipping_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/calendar_dates.txt_aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl"
+
+    @pytest.fixture
+    def download_schedule_feed_results(self) -> dict:
+        return {
+            "backfilled": False,
+            "config": {
+                "auth_headers": {},
+                "auth_query_params": {},
+                "computed": False,
+                "extracted_at": "2025-11-25T00:00:00+00:00",
+                "feed_type": "schedule",
+                "name": "Fric and Frac Schedule",
+                "schedule_url_for_validation": None,
+                "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+            },
+            "exception": None,
+            "extract": {
+                "filename": "gtfs.zip",
+                "ts": "2025-11-14T00:00:00+00:00",
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-11-25T00:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "Fric and Frac Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=schedule-27.zip",
+                },
+                "reconstructed": False,
+            },
+            "success": True,
+        }
+
+    @pytest.fixture
+    def test_dag(self, execution_date: datetime) -> DAG:
+        return DAG(
+            "test_dag",
+            default_args={
+                "owner": "airflow",
+                "start_date": execution_date,
+                "end_date": execution_date + timedelta(days=1),
+            },
+            schedule=timedelta(days=1),
+        )
+
+    @pytest.fixture
+    def operator(
+        self,
+        test_dag: DAG,
+        base64_url: str,
+        source_path: str,
+        destination_path: str,
+        results_path: str,
+        download_schedule_feed_results: dict,
+    ) -> UnzipGTFSToGCSOperator:
+        return UnzipGTFSToGCSOperator(
+            task_id="unzip_calendar_dates_to_gcs",
+            gcp_conn_id="google_cloud_default",
+            base64_url=base64_url,
+            download_schedule_feed_results=download_schedule_feed_results,
+            filename="calendar_dates.txt",
+            source_bucket=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
+            source_path=source_path,
+            destination_bucket=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ),
+            destination_path=destination_path,
+            results_path=results_path,
+            dag=test_dag,
+        )
+
+    @pytest.mark.vcr
+    def test_execute(
+        self,
+        test_dag: DAG,
+        operator: UnzipGTFSToGCSOperator,
+        execution_date: datetime,
+        destination_path: str,
+        results_path: str,
+        gcs_hook: GCSHook,
+    ):
+        operator.run(
+            start_date=execution_date,
+            end_date=execution_date + timedelta(days=1),
+            ignore_first_depends_on_past=True,
+        )
+
+        task = test_dag.get_task("unzip_calendar_dates_to_gcs")
+        task_instance = TaskInstance(task, execution_date=execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert xcom_value == {
+            "base64_url": "aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=",
+            "results_path": os.path.join(
+                os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
+                "unzipping_results",
+                "dt=2025-11-13",
+                "ts=2025-11-13T03:02:04.189504+00:00",
+                "calendar_dates.txt_aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl",
+            ),
+            "destination_path": os.path.join(
+                os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
+                "calendar_dates.txt",
+                "dt=2025-11-13",
+                "ts=2025-11-13T03:02:04.189504+00:00",
+                "base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=",
+                "calendar_dates.txt",
+            ),
+            "unzip_results": {
+                "exception": None,
+                "extract": {
+                    "config": {
+                        "auth_headers": {},
+                        "auth_query_params": {},
+                        "computed": False,
+                        "extracted_at": "2025-11-25T00:00:00+00:00",
+                        "feed_type": "schedule",
+                        "name": "Fric and Frac Schedule",
+                        "schedule_url_for_validation": None,
+                        "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+                    },
+                    "filename": "gtfs.zip",
+                    "reconstructed": False,
+                    "response_code": 200,
+                    "response_headers": {
+                        "Content-Disposition": "attachment; filename=schedule-27.zip",
+                        "Content-Type": "application/zip",
+                    },
+                    "ts": "2025-11-14T00:00:00+00:00",
+                },
+                "extracted_files": [
+                    {
+                        "extract_config": {
+                            "auth_headers": {},
+                            "auth_query_params": {},
+                            "computed": False,
+                            "extracted_at": "2025-11-25T00:00:00+00:00",
+                            "feed_type": "schedule",
+                            "name": "Fric and Frac Schedule",
+                            "schedule_url_for_validation": None,
+                            "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+                        },
+                        "filename": "calendar_dates.txt",
+                        "original_filename": "calendar_dates.txt",
+                        "ts": "2025-11-13T00:00:00+00:00",
+                    }
+                ],
+                "success": True,
+                "zipfile_dirs": [],
+                "zipfile_extract_md5hash": "833f5a292eed717823acf709b2548a2b",
+                "zipfile_files": [
+                    "agency.txt",
+                    "calendar.txt",
+                    "calendar_dates.txt",
+                    "feed_info.txt",
+                    "routes.txt",
+                    "shapes.txt",
+                    "stop_times.txt",
+                    "stops.txt",
+                    "trips.txt",
+                ],
+            },
+        }
+
+        file_content = gcs_hook.download(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=destination_path,
+        )
+        reader = DictReader(StringIO(file_content.decode()))
+        assert list(reader) == []
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=destination_path,
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "calendar_dates.txt",
+            "ts": "2025-11-14T00:00:00+00:00",
+            "extract_config": {
+                "auth_headers": {},
+                "auth_query_params": {},
+                "computed": False,
+                "extracted_at": "2025-11-25T00:00:00+00:00",
+                "feed_type": "schedule",
+                "name": "Fric and Frac Schedule",
+                "schedule_url_for_validation": None,
+                "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+            },
+            "original_filename": "calendar_dates.txt",
+        }
+
+        unparsed_results = gcs_hook.download(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=results_path,
+        )
+        results = json.loads(unparsed_results)
+        assert results == {
+            "success": True,
+            "exception": None,
+            "extract": {
+                "filename": "gtfs.zip",
+                "ts": "2025-11-14T00:00:00+00:00",
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-11-25T00:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "Fric and Frac Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+                },
+                "response_code": 200,
+                "response_headers": results["extract"]["response_headers"]
+                | {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=schedule-27.zip",
+                },
+                "reconstructed": False,
+            },
+            "zipfile_extract_md5hash": "833f5a292eed717823acf709b2548a2b",
+            "zipfile_files": [
+                "agency.txt",
+                "calendar.txt",
+                "calendar_dates.txt",
+                "feed_info.txt",
+                "routes.txt",
+                "shapes.txt",
+                "stop_times.txt",
+                "stops.txt",
+                "trips.txt",
+            ],
+            "zipfile_dirs": [],
+            "extracted_files": [
+                {
+                    "extract_config": {
+                        "auth_headers": {},
+                        "auth_query_params": {},
+                        "computed": False,
+                        "extracted_at": "2025-11-25T00:00:00+00:00",
+                        "feed_type": "schedule",
+                        "name": "Fric and Frac Schedule",
+                        "schedule_url_for_validation": None,
+                        "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+                    },
+                    "filename": "calendar_dates.txt",
+                    "original_filename": "calendar_dates.txt",
+                    "ts": "2025-11-14T00:00:00+00:00",
+                }
+            ],
+        }

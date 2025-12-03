@@ -12,7 +12,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/4f2c0d27-0d69-48cc-8083-2fdfa8136fe8
+        gccl-invocation-id/ecaa2e02-3ccc-4c91-8152-6eead1072967
       accept-encoding:
       - gzip
       content-type:
@@ -74,7 +74,7 @@ interactions:
       Content-Type:
       - application/octet-stream
       Date:
-      - Tue, 02 Dec 2025 23:59:15 GMT
+      - Wed, 03 Dec 2025 02:17:59 GMT
       ETag:
       - CImN3PSMoJEDEAE=
       Expires:
@@ -89,7 +89,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOHPTsjIajyr3gQdmzd2R0e7z5Qo--onPH9snNcTDVjt4B9J4ti86VmmiLoLLgdG8klF1_VB4g
+      - AOCedOHM0b8JhXT9zZYppTsYgiI0dxSgoduildQUs94-taq0oMRQ_5G-yGAWf8Xw-d80Qoby4AIlUK8qlNt1
       X-Goog-Generation:
       - '1764719628584585'
       X-Goog-Hash:
@@ -118,7 +118,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/04ca1339-881b-4b71-9bee-676e2c97f7ad
+        gccl-invocation-id/fdb7c58a-a99b-47df-8d30-b3fa2778e081
       accept-encoding:
       - gzip
       content-type:
@@ -180,7 +180,7 @@ interactions:
       Content-Type:
       - application/octet-stream
       Date:
-      - Tue, 02 Dec 2025 23:59:17 GMT
+      - Wed, 03 Dec 2025 02:18:01 GMT
       ETag:
       - CImN3PSMoJEDEAE=
       Expires:
@@ -195,7 +195,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOG_eBmpI5HYgli22pVwlwsbo88FKJf4kQLZTBeOUmXddUTJ3f_896QrAnA0-lUZqt-T
+      - AOCedOG5PoNEFEWr6dyodJ9WPtd5G9qgn3jiOgD16XcwYORy9nA6b69vhIi65DkX8CNTfdI
       X-Goog-Generation:
       - '1764719628584585'
       X-Goog-Hash:
@@ -226,7 +226,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/1e4e20ca-f826-4824-bfff-4a392ce0dbfe
+        gccl-invocation-id/a554ff52-1a70-4e7f-b0c8-41af183cd4e1
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
@@ -245,7 +245,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Tue, 02 Dec 2025 23:59:19 GMT
+      - Wed, 03 Dec 2025 02:18:03 GMT
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -256,7 +256,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOHCxZuVeteH8r20RC5rZL5c6NZDroHObGkSr432Lt7XAZtJLuyVFZ9P0jAsT0OPR64v_qDGng
+      - AOCedOHciE4hl9eYU_3FbGvHNkBSqtVdX6tgblrRSMoHmBxMhakLZ--q9A21iHopp9tbcBAF9It40VL2s_rR
     status:
       code: 404
       message: Not Found
@@ -275,7 +275,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/8b451539-8f61-405e-8b1b-f3ad9fa18c67
+        gccl-invocation-id/1ae287ae-8534-46c0-8449-ca05d46015fb
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
@@ -294,7 +294,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Tue, 02 Dec 2025 23:59:19 GMT
+      - Wed, 03 Dec 2025 02:18:04 GMT
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -305,7 +305,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOFQIQPkNAmzTNUlKG5PT6YvCczwT8GSjtD4S0B8KOQnYBUDXFAVtSCmen6iBWICCTQtpx_2hw
+      - AOCedOEfFBecfhIxmADeMz3xvmSfMfCgb_yCaZEs1Xef6T1gn4jjHiOoS2lM1iNpyjaNFQJptt3i8A
     status:
       code: 404
       message: Not Found
