@@ -14,14 +14,14 @@ WITH daily_schedule_service AS (
         num_stop_times,
         n_routes,
         n_shapes,
-        n_stops
+        n_stops,
 
-    FROM {{ ref('fct_daily_feed_scheduled_service_summary') }}
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_daily_feed_scheduled_service_summary`
 ),
 
 fct_observed_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_fct_observed_trips`--{{ ref('fct_observed_trips') }}
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_fct_observed_trips`
 ),
 
 observed_trips AS (
@@ -38,7 +38,7 @@ observed_trips AS (
 -- seems to be missing a couple of them
 dim_gtfs_datasets AS (
     SELECT *
-    FROM {{ ref('dim_gtfs_datasets') }}
+    FROM `cal-itp-data-infra.mart_transit_database.dim_gtfs_datasets`
     WHERE analysis_name IS NOT NULL
 ),
 
@@ -47,10 +47,11 @@ deduped_analysis_name AS (
         base64_url,
         name,
         analysis_name,
+        source_record_id,
 
     FROM dim_gtfs_datasets
     QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY base64_url, analysis_name
+        PARTITION BY source_record_id
         ORDER BY _valid_from DESC
     ) = 1
 ),
@@ -62,8 +63,8 @@ scheduled_trips AS (
         base64_url,
         trip_instance_key,
         route_id
-    FROM {{ ref('fct_scheduled_trips') }}
-
+    FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`
+    WHERE service_date >= "2025-01-01"
 ),
 
 trip_join AS (
@@ -106,8 +107,8 @@ summarize_service AS (
 
         MAX(n_trips) AS n_trips,
         MAX(ttl_service_hours) AS ttl_service_hours,
-        MAX(num_stop_times) AS num_stop_times,
         MAX(n_routes) AS n_routes,
+        MAX(num_stop_times) AS num_stop_times,
         MAX(n_shapes) AS n_shapes,
         MAX(n_stops) AS n_stops,
 

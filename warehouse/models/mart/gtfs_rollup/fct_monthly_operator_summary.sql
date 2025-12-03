@@ -7,7 +7,7 @@
 
 WITH daily_summary AS (
     SELECT *
-    FROM {{ ref('fct_daily_schedule_rt_operator_summary') }}
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_daily_schedule_rt_operator_summary`
 ),
 
 daily_summary2 AS (
@@ -76,6 +76,8 @@ monthly_summary AS (
         ROUND(SUM(n_trips) / COUNT(DISTINCT service_date), 1) AS daily_trips,
         ROUND(SUM(ttl_service_hours), 1) AS ttl_service_hours,
         AVG(n_routes) AS n_routes,
+        AVG(n_shapes) AS n_shapes,
+        AVG(n_stops) AS n_stops,
         COUNT(DISTINCT service_date) AS n_days,
 
         ROUND(AVG(vp_messages_per_minute), 1) AS vp_messages_per_minute,
