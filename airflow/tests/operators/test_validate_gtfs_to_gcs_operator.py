@@ -281,7 +281,7 @@ class TestValidateGTFSToGCSOperatorCalendarDatesEmpty:
                 "auth_headers": {},
                 "auth_query_params": {},
                 "computed": False,
-                "extracted_at": "2025-11-25T00:00:00+00:00",
+                "extracted_at": "2025-11-12T02:00:00+00:00",
                 "feed_type": "schedule",
                 "name": "Fric and Frac Schedule",
                 "schedule_url_for_validation": None,
