@@ -96,6 +96,10 @@ class TestGTFSUnzipHook:
     def hook(self, date: pendulum.DateTime) -> GTFSUnzipHook:
         return GTFSUnzipHook(filename="agency.txt", current_date=date)
 
+    @pytest.fixture
+    def areas_hook(self, date: pendulum.DateTime) -> GTFSUnzipHook:
+        return GTFSUnzipHook(filename="areas.txt", current_date=date)
+
     def test_run(
         self,
         hook: GTFSUnzipHook,
@@ -380,5 +384,57 @@ class TestGTFSUnzipHook:
             "zipfile_files": [
                 "agency.txt",
                 "nested/README.md",
+            ],
+        }
+
+    def test_no_txt_file(
+        self,
+        areas_hook: GTFSUnzipHook,
+        fixture_schedule_path: str,
+        download_schedule_feed_results: dict,
+    ):
+        result = areas_hook.run(
+            zipfile_path=fixture_schedule_path,
+            download_schedule_feed_results=download_schedule_feed_results,
+        )
+        assert result.results() == {
+            "success": True,
+            "exception": None,
+            "extract": {
+                "filename": "gtfs.zip",
+                "ts": "2025-06-03T00:00:00+00:00",
+                "config": {
+                    "extracted_at": "2025-06-01T00:00:00+00:00",
+                    "name": "Santa Ynez Mecatran Schedule",
+                    "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                    "feed_type": "schedule",
+                    "schedule_url_for_validation": None,
+                    "auth_query_params": {},
+                    "auth_headers": {},
+                    "computed": False,
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=gtfs.zip",
+                },
+                "reconstructed": False,
+            },
+            "extracted_files": [],
+            "zipfile_dirs": [],
+            "zipfile_extract_md5hash": "4f72c84bd3f053ddb929289fa2de7879",
+            "zipfile_files": [
+                "agency.txt",
+                "calendar.txt",
+                "calendar_dates.txt",
+                "fare_attributes.txt",
+                "feed_info.txt",
+                "route_directions.txt",
+                "routes.txt",
+                "shapes.txt",
+                "stop_times.txt",
+                "stops.txt",
+                "transfers.txt",
+                "trips.txt",
             ],
         }

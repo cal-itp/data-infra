@@ -4,6 +4,7 @@ import os
 from datetime import datetime, timedelta, timezone
 
 import pytest
+from google.api_core.exceptions import NotFound
 from operators.gtfs_csv_to_jsonl_operator import GTFSCSVToJSONLOperator
 
 from airflow.models.dag import DAG
@@ -275,10 +276,10 @@ class TestGTFSCSVToJSONLOperator:
         }
 
 
-class TestGTFSCSVToJSONLOperatorEmptyContent:
+class TestGTFSCSVToJSONLOperatorFileNotFound:
     @pytest.fixture
     def execution_date(self) -> datetime:
-        return datetime.fromisoformat("2025-11-25").replace(tzinfo=timezone.utc)
+        return datetime.fromisoformat("2025-06-02").replace(tzinfo=timezone.utc)
 
     @pytest.fixture
     def gcs_hook(self) -> GCSHook:
@@ -286,15 +287,15 @@ class TestGTFSCSVToJSONLOperatorEmptyContent:
 
     @pytest.fixture
     def source_path(self) -> str:
-        return "agency.txt/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL3N0YXRpY2d0ZnMvMS9ndGZzLnppcA==/agency.txt"
+        return "areas.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/areas.txt"
 
     @pytest.fixture
     def destination_path(self) -> str:
-        return "agency/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL3N0YXRpY2d0ZnMvMS9ndGZzLnppcA==/agency.jsonl.gz"
+        return "areas/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/areas.jsonl.gz"
 
     @pytest.fixture
     def results_path(self) -> str:
-        return "agency.txt_parsing_results/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/agency.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl"
+        return "areas.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/areas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl"
 
     @pytest.fixture
     def unzip_results(self) -> dict:
@@ -305,14 +306,14 @@ class TestGTFSCSVToJSONLOperatorEmptyContent:
                 "filename": "gtfs.zip",
                 "ts": "2025-06-03T00:00:00+00:00",
                 "config": {
-                    "authHeaders": {},
-                    "authQueryParams": {},
+                    "extracted_at": "2025-06-01T00:00:00+00:00",
+                    "name": "Santa Ynez Mecatran Schedule",
+                    "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                    "feed_type": "schedule",
+                    "schedule_url_for_validation": None,
+                    "auth_query_params": {},
+                    "auth_headers": {},
                     "computed": False,
-                    "extractedAt": "2025-11-25T00:00:00+00:00",
-                    "feedType": "schedule",
-                    "name": "SLO Peak Transit Schedule",
-                    "scheduleUrlForValidation": None,
-                    "url": "http://data.peaktransit.com/staticgtfs/1/gtfs.zip",
                 },
                 "response_code": 200,
                 "response_headers": {
@@ -337,23 +338,7 @@ class TestGTFSCSVToJSONLOperatorEmptyContent:
                 "trips.txt",
             ],
             "zipfile_dirs": [],
-            "extracted_files": [
-                {
-                    "filename": "agency.txt",
-                    "ts": "2025-06-03T00:00:00+00:00",
-                    "extract_config": {
-                        "authHeaders": {},
-                        "authQueryParams": {},
-                        "computed": False,
-                        "extractedAt": "2025-11-25T00:00:00+00:00",
-                        "feedType": "schedule",
-                        "name": "SLO Peak Transit Schedule",
-                        "scheduleUrlForValidation": None,
-                        "url": "http://data.peaktransit.com/staticgtfs/1/gtfs.zip",
-                    },
-                    "original_filename": "agency.txt",
-                }
-            ],
+            "extracted_files": [],
         }
 
     @pytest.fixture
@@ -378,7 +363,7 @@ class TestGTFSCSVToJSONLOperatorEmptyContent:
         unzip_results: dict,
     ) -> GTFSCSVToJSONLOperator:
         return GTFSCSVToJSONLOperator(
-            task_id="convert_agency_to_jsonl",
+            task_id="convert_areas_to_jsonl",
             gcp_conn_id="google_cloud_default",
             unzip_results=unzip_results,
             source_bucket=os.environ.get(
@@ -403,61 +388,25 @@ class TestGTFSCSVToJSONLOperatorEmptyContent:
         results_path: str,
         gcs_hook: GCSHook,
     ):
-        operator.run(
-            start_date=execution_date,
-            end_date=execution_date + timedelta(days=1),
-            ignore_first_depends_on_past=True,
+        with pytest.raises(NotFound) as exception:
+            operator.run(
+                start_date=execution_date,
+                end_date=execution_date + timedelta(days=1),
+                ignore_first_depends_on_past=True,
+            )
+
+        assert (
+            "No such object: calitp-staging-pytest/areas.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/areas.txt"
+            in str(exception.value)
         )
 
-        task = test_dag.get_task("convert_agency_to_jsonl")
-        task_instance = TaskInstance(task, execution_date=execution_date)
-        xcom_value = task_instance.xcom_pull()
-        assert xcom_value is None
-
-        compressed_result = gcs_hook.download(
+        compressed_result = gcs_hook.exists(
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
             ).replace("gs://", ""),
             object_name=destination_path,
         )
-        decompressed_result = gzip.decompress(compressed_result)
-        result = [json.loads(x) for x in decompressed_result.splitlines()]
-        assert list(result)[0] == {
-            "_line_number": 1,
-            "agency_id": "11214031",
-            "agency_name": "Santa Ynez Valley Transit",
-            "agency_url": "https://www.syvt.com/489/Santa-Ynez-Valley-Transit",
-            "agency_timezone": "America/Los_Angeles",
-            "agency_phone": "805-688-5452",
-            "agency_lang": "en",
-            "agency_fare_url": "https://www.syvt.com/365/Fares",
-            "agency_email": "",
-            "agency_primary": "1",
-        }
-
-        metadata = gcs_hook.get_metadata(
-            bucket_name=os.environ.get(
-                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
-            ).replace("gs://", ""),
-            object_name=destination_path,
-        )
-        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
-            "filename": "agency.jsonl.gz",
-            "ts": "2025-06-03T00:00:00+00:00",
-            "extract_config": {
-                "extracted_at": "2025-06-01T00:00:00+00:00",
-                "name": "Santa Ynez Mecatran Schedule",
-                "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
-                "feed_type": "schedule",
-                "schedule_url_for_validation": None,
-                "auth_query_params": {},
-                "auth_headers": {},
-                "computed": False,
-            },
-            "gtfs_filename": "agency",
-            "csv_dialect": "excel",
-            "num_lines": 0,
-        }
+        assert not compressed_result
 
         unparsed_results = gcs_hook.exists(
             bucket_name=os.environ.get(

@@ -252,10 +252,10 @@ class TestValidateGTFSToGCSOperator:
         }
 
 
-class TestValidateGTFSToGCSOperatorEmptyContent:
+class TestValidateGTFSToGCSOperatorCalendarDatesEmpty:
     @pytest.fixture
     def execution_date(self) -> datetime:
-        return datetime.fromisoformat("2025-11-25").replace(tzinfo=timezone.utc)
+        return datetime.fromisoformat("2025-11-13").replace(tzinfo=timezone.utc)
 
     @pytest.fixture
     def gcs_hook(self) -> GCSHook:
@@ -263,15 +263,15 @@ class TestValidateGTFSToGCSOperatorEmptyContent:
 
     @pytest.fixture
     def source_path(self) -> str:
-        return "schedule/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/schedule-27.zip"
+        return "schedule/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/schedule-27.zip"
 
     @pytest.fixture
     def destination_path(self) -> str:
-        return "validation_notices/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc="
+        return "validation_notices/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc="
 
     @pytest.fixture
     def results_path(self) -> str:
-        return "validation_job_results/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl"
+        return "validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl"
 
     @pytest.fixture
     def download_schedule_feed_results(self) -> dict:
@@ -290,12 +290,12 @@ class TestValidateGTFSToGCSOperatorEmptyContent:
             "exception": None,
             "extract": {
                 "filename": "schedule-27.zip",
-                "ts": "2025-06-03T00:00:00+00:00",
+                "ts": "2025-11-13T03:02:04.189504+00:00",
                 "config": {
                     "auth_headers": {},
                     "auth_query_params": {},
                     "computed": False,
-                    "extracted_at": "2025-11-25T00:00:00+00:00",
+                    "extracted_at": "2025-11-12T02:00:00+00:00",
                     "feed_type": "schedule",
                     "name": "Fric and Frac Schedule",
                     "schedule_url_for_validation": None,
@@ -370,7 +370,7 @@ class TestValidateGTFSToGCSOperatorEmptyContent:
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"
             ).replace("gs://", ""),
-            object_name="validation_notices/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/validation_notices_v5-0-0.jsonl.gz",
+            object_name="validation_notices/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/validation_notices_v5-0-0.jsonl.gz",
         )
         assert not compressed_notices
 
@@ -378,6 +378,6 @@ class TestValidateGTFSToGCSOperatorEmptyContent:
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"
             ).replace("gs://", ""),
-            object_name="validation_job_results/dt=2025-11-25/ts=2025-11-25T00:00:00+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl",
+            object_name="validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl",
         )
         assert not unparsed_results
