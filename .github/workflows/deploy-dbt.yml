@@ -246,8 +246,8 @@ jobs:
      
       - name: Run downstream models of changed files
         working-directory: warehouse
-        run: poetry run dbt run --select "${{ needs.dbt-changed.outputs.changed }}+" --target ${{ env.DBT_TARGET }} --exclude source:external_gtfs_rt+ source:gtfs_rt_external_tables+ 
-      
+        run: poetry run dbt run --select "${{ needs.dbt-changed.outputs.changed }}+" --target ${{ env.DBT_TARGET }} --exclude "${{ needs.dbt-changed.outputs.changed }}"
+       
       - name: Synchronize Metabase
         working-directory: warehouse
         run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --skip-sources --exclude-schemas=staging,payments,mart_payments --docs-url="${{ env.DBT_DOCS_URL }}" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
