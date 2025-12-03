@@ -1,0 +1,312 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/4f2c0d27-0d69-48cc-8083-2fdfa8136fe8
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/schedule%2Fdt%3D2025-11-13%2Fts%3D2025-11-13T03%3A02%3A04.189504%2B00%3A00%2Fbase64_url%3DaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc%3D%2Fschedule-27.zip?alt=media
+  response:
+    body:
+      string: !!binary |
+        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
+        LnR4dFBLBQYAAAAACQAJAAcCAADIBQAAAAA=
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '2021'
+      Content-Type:
+      - application/octet-stream
+      Date:
+      - Tue, 02 Dec 2025 23:59:15 GMT
+      ETag:
+      - CImN3PSMoJEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Tue, 02 Dec 2025 23:53:48 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AOCedOHPTsjIajyr3gQdmzd2R0e7z5Qo--onPH9snNcTDVjt4B9J4ti86VmmiLoLLgdG8klF1_VB4g
+      X-Goog-Generation:
+      - '1764719628584585'
+      X-Goog-Hash:
+      - crc32c=F3bKVw==,md5=6mIsSfEakt9Z1A6l2fy9Eg==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '2021'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/04ca1339-881b-4b71-9bee-676e2c97f7ad
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/schedule%2Fdt%3D2025-11-13%2Fts%3D2025-11-13T03%3A02%3A04.189504%2B00%3A00%2Fbase64_url%3DaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc%3D%2Fschedule-27.zip?alt=media
+  response:
+    body:
+      string: !!binary |
+        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
+        LnR4dFBLBQYAAAAACQAJAAcCAADIBQAAAAA=
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '2021'
+      Content-Type:
+      - application/octet-stream
+      Date:
+      - Tue, 02 Dec 2025 23:59:17 GMT
+      ETag:
+      - CImN3PSMoJEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Tue, 02 Dec 2025 23:53:48 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AOCedOG_eBmpI5HYgli22pVwlwsbo88FKJf4kQLZTBeOUmXddUTJ3f_896QrAnA0-lUZqt-T
+      X-Goog-Generation:
+      - '1764719628584585'
+      X-Goog-Hash:
+      - crc32c=F3bKVw==,md5=6mIsSfEakt9Z1A6l2fy9Eg==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '2021'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/1e4e20ca-f826-4824-bfff-4a392ce0dbfe
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt%3D2025-11-13%2Fts%3D2025-11-13T03%3A02%3A04.189504%2B00%3A00%2Fbase64_url%3DaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc%3D%2Fvalidation_notices_v5-0-0.jsonl.gz?fields=name&prettyPrint=false
+  response:
+    body:
+      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/validation_notices/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/validation_notices_v5-0-0.jsonl.gz","errors":[{"message":"No
+        such object: calitp-staging-pytest/validation_notices/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/validation_notices_v5-0-0.jsonl.gz","domain":"global","reason":"notFound"}]}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '525'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 02 Dec 2025 23:59:19 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AOCedOHCxZuVeteH8r20RC5rZL5c6NZDroHObGkSr432Lt7XAZtJLuyVFZ9P0jAsT0OPR64v_qDGng
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/8b451539-8f61-405e-8b1b-f3ad9fa18c67
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt%3D2025-11-13%2Fts%3D2025-11-13T03%3A02%3A04.189504%2B00%3A00%2FaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc%3D.jsonl?fields=name&prettyPrint=false
+  response:
+    body:
+      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl","errors":[{"message":"No
+        such object: calitp-staging-pytest/validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl","domain":"global","reason":"notFound"}]}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '453'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 02 Dec 2025 23:59:19 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AOCedOFQIQPkNAmzTNUlKG5PT6YvCczwT8GSjtD4S0B8KOQnYBUDXFAVtSCmen6iBWICCTQtpx_2hw
+    status:
+      code: 404
+      message: Not Found
+version: 1
