@@ -62,8 +62,18 @@ class ActiveRowQuery:
 
     def resolve(self) -> list[dict]:
         resolved = []
+        current_zero_time = self.current_time.replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
         for row in self.rows:
-            if row["_is_current"] and row["deprecated_date"] is None:
+            if (
+                (
+                    row["deprecated_date"] is None
+                    or row["deprecated_date"] > self.current_time.date()
+                )
+                and row["_valid_from"] <= current_zero_time
+                and row["_valid_to"] >= current_zero_time
+            ):
                 resolved.append(row)
         return resolved
 

@@ -61,6 +61,9 @@ class TestBigQueryToDownloadConfigOperator:
         destination_path: str,
         gcs_hook: GCSHook,
     ):
+        # If you need to re-run cassettes you would need have historical data first.
+        # Go to `warehouse` folder and run:
+        # > poetry run dbt run -s stg_transit_database__gtfs_datasets int_transit_database__gtfs_datasets_dim --target staging --vars 'GOOGLE_CLOUD_PROJECT: cal-itp-data-infra'
         operator.run(
             start_date=execution_date,
             end_date=execution_date + timedelta(days=1),
@@ -93,6 +96,7 @@ class TestBigQueryToDownloadConfigOperator:
         decompressed_result = gzip.decompress(compressed_result)
         result = [json.loads(x) for x in decompressed_result.splitlines()]
 
+        assert len(result) == 696
         assert result[0] == {
             "extracted_at": "2025-06-03T00:00:00+00:00",
             "auth_headers": {},
