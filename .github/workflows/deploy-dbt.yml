@@ -162,13 +162,10 @@ jobs:
         run: |
           echo "List changed files: $CHANGED_FILES"
 
-  models_and_metabase:
-    name: Sync Models and Metabase
+  models:
+    name: Run dbt Models
     runs-on: ubuntu-latest
-
-    needs:
-      - compile
-      - dbt-changed
+    needs: [compile, dbt-changed]
 
     if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
 
@@ -256,6 +253,80 @@ jobs:
       - name: Run downstream models
         working-directory: warehouse
         run: poetry run dbt run --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --exclude "${{ needs.dbt-changed.outputs.changed-models }}"
+
+  metabase:
+    name: Sync Metabase
+    runs-on: ubuntu-latest
+
+    needs: [models]
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dbt
+          path: warehouse/target
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache Poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        working-directory: warehouse
+        run: poetry install
+
+      - name: Cache dbt packages
+        uses: actions/cache@v3
+        with:
+          path: warehouse/dbt_packages
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
+
+      - name: Install dbt dependencies
+        working-directory: warehouse
+        run: poetry run dbt deps
+
+      - name: Print dbt environment
+        working-directory: warehouse
+        run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
 
       - name: Synchronize Metabase
         working-directory: warehouse
