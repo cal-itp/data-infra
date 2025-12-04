@@ -58,7 +58,7 @@ for dag_directory in dag_directories:
         latest_only=False,
         user_defined_macros={
             "image_tag": lambda: "development"
-            if os.environ["AIRFLOW_ENV"] == "cal-itp-data-infra-staging"
+            if os.environ["AIRFLOW_ENV"] == "development"
             else "latest",
             "env_var": os.environ.get,
         },
