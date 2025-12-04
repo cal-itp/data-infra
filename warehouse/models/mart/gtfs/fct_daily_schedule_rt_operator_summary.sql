@@ -16,12 +16,12 @@ WITH daily_schedule_service AS (
         n_shapes,
         n_stops,
 
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_daily_feed_scheduled_service_summary`
+    FROM {{ ref('fct_daily_feed_scheduled_service_summary') }}
 ),
 
 fct_observed_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_fct_observed_trips`
+    FROM {{ ref('fct_observed_trips' )}}
 ),
 
 observed_trips AS (
@@ -34,12 +34,10 @@ observed_trips AS (
     FROM fct_observed_trips
 ),
 
--- not sure if these deduped_analysis_name will capture all the rows,
--- seems to be missing a couple of them
+
 dim_gtfs_datasets AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_transit_database.dim_gtfs_datasets`
-    WHERE analysis_name IS NOT NULL
+    FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
 deduped_analysis_name AS (
@@ -63,8 +61,7 @@ scheduled_trips AS (
         base64_url,
         trip_instance_key,
         route_id
-    FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`
-    WHERE service_date >= "2025-01-01"
+    FROM {{ ref('fct_scheduled_trips') }}
 ),
 
 trip_join AS (

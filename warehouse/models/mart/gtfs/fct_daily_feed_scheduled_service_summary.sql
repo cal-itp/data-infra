@@ -21,7 +21,6 @@ fct_scheduled_stops AS (
         feed_key,
         stop_id,
     FROM {{ ref('fct_daily_scheduled_stops') }}
-
 ),
 
 -- service that is actually scheduled
