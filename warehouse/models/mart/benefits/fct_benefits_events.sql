@@ -194,8 +194,9 @@ fct_benefits_events AS (
     server_received_time,
     server_upload_time,
     session_id,
-    -- Fix bug in Docker build process resulting in incorrect version strings
+    -- Fix bugs in Docker build process resulting in incorrect version strings
     -- https://github.com/cal-itp/benefits/pull/2392
+    -- https://github.com/cal-itp/benefits/pull/3314
     CASE
       WHEN start_version = "2024.7.3.dev0+gcd3b083.d20240731"
         THEN "2024.7.2"
@@ -209,6 +210,12 @@ fct_benefits_events AS (
         THEN "2024.9.3"
       WHEN start_version = "2024.10.2.dev0+g158e1b0.d20241010"
         THEN "2024.10.1"
+      WHEN start_version = "2025.8.2.dev0+g6908fadc2.d20250825"
+        THEN "2025.8.1"
+      WHEN start_version = "2025.10.2.dev0+ge1598d1c5.d20251003"
+        THEN "2025.10.1"
+      WHEN start_version = "2025.11.2.dev0+gc6af905c7.d20251105"
+        THEN "2025.11.1"
       ELSE start_version
     END AS start_version,
     user_id,
@@ -249,8 +256,9 @@ fct_benefits_events AS (
     user_properties_transit_agency,
     user_properties_user_agent,
     uuid,
-    -- Fix bug in Docker build process resulting in incorrect version strings
+    -- Fix bugs in Docker build process resulting in incorrect version strings
     -- https://github.com/cal-itp/benefits/pull/2392
+    -- https://github.com/cal-itp/benefits/pull/3314
     CASE
       WHEN version_name = "2024.7.3.dev0+gcd3b083.d20240731"
         THEN "2024.7.2"
@@ -264,6 +272,12 @@ fct_benefits_events AS (
         THEN "2024.9.3"
       WHEN version_name = "2024.10.2.dev0+g158e1b0.d20241010"
         THEN "2024.10.1"
+      WHEN version_name = "2025.8.2.dev0+g6908fadc2.d20250825"
+        THEN "2025.8.1"
+      WHEN version_name = "2025.10.2.dev0+ge1598d1c5.d20251003"
+        THEN "2025.10.1"
+      WHEN version_name = "2025.11.2.dev0+gc6af905c7.d20251105"
+        THEN "2025.11.1"
       ELSE version_name
     END AS version_name
   FROM fct_benefits_events_raw
