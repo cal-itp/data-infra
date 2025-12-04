@@ -119,10 +119,11 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      has-changed: ${{ steps.changed.outputs.any_changed }}
-      changed: ${{ steps.changed.outputs.all_changed_files }}
+      has-changed: ${{ steps.changed-downstream.outputs.any_changed }}
       has-changed-seeds: ${{ steps.changed-seeds.outputs.any_changed }}
+      changed-models: ${{ steps.changed-models.outputs.all_changed_files }}
       changed-seeds: ${{ steps.changed-seeds.outputs.all_changed_files }}
+      changed-downstream: "${{ steps.changed-downstream.outputs.all_changed_files }}+"
 
     steps:
       - name: Checkout
@@ -130,8 +131,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: tj-actions/changed-files@v46
-        id: changed
+      - name: List changed models
+        uses: tj-actions/changed-files@v46
+        id: changed-models
+        with:
+          path: warehouse
+          files: models/**/*.sql
+
+      - name: List changed seeds
+        uses: tj-actions/changed-files@v46
+        id: changed-seeds
+        with:
+          path: warehouse
+          files: seeds/*.csv
+
+      - name: List changed models and seeds with plus sign
+        uses: tj-actions/changed-files@v46
+        id: changed-downstream
         with:
           path: warehouse
           separator: "+ "
@@ -139,29 +155,19 @@ jobs:
             models/**/*.sql
             seeds/*.csv
 
-      - uses: tj-actions/changed-files@v46
-        id: changed-seeds
-        with:
-          path: warehouse
-          separator: "+ "
-          files: seeds/*.csv
-
-      - name: List changed files
-        if: ${{ steps.changed.outputs.any_changed == 'true' }}
+      - name: Print changed files
+        if: ${{ steps.changed-downstream.outputs.any_changed == 'true' }}
         env:
-          CHANGED_MODELS: ${{ steps.changed.outputs.all_changed_files }}
+          CHANGED_FILES: "${{ steps.changed-downstream.outputs.all_changed_files }}+"
         run: |
-          echo "List changed files: $CHANGED_MODELS"
+          echo "List changed files: $CHANGED_FILES"
 
-  models_and_metabase:
-    name: Sync Models and Metabase
+  models:
+    name: Run dbt Models
     runs-on: ubuntu-latest
+    needs: [compile, dbt-changed]
 
-    needs:
-      - compile
-      - dbt-changed
-
-    if: ${{ needs.dbt-changed.outputs.has-changed == 'true' || needs.dbt-changed.outputs.has-changed-seeds == 'true' }}
+    if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
 
     permissions:
       contents: read
@@ -231,18 +237,96 @@ jobs:
         working-directory: warehouse
         run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
 
+      - name: List changed and downstream models
+        working-directory: warehouse
+        run: poetry run dbt list --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --resource-type=model
+
       - name: Run seeds
         if: ${{ needs.dbt-changed.outputs.has-changed-seeds == 'true' }}
         working-directory: warehouse
-        run: poetry run dbt seed --select "${{ needs.dbt-changed.outputs.changed-seeds }}+" --target ${{ env.DBT_TARGET }}
+        run: poetry run dbt seed --select "${{ needs.dbt-changed.outputs.changed-seeds }}" --target ${{ env.DBT_TARGET }}
 
-      - name: List changed models
+      - name: Full-Refresh changed models
         working-directory: warehouse
-        run: poetry run dbt list --select "${{ needs.dbt-changed.outputs.changed }}+" --target ${{ env.DBT_TARGET }} --resource-type=model
+        run: poetry run dbt run --select "${{ needs.dbt-changed.outputs.changed-models }}" --target ${{ env.DBT_TARGET }} --full-refresh
 
-      - name: Run dbt against changed files
+      - name: Run downstream models
         working-directory: warehouse
-        run: poetry run dbt run --select "${{ needs.dbt-changed.outputs.changed }}+" --target ${{ env.DBT_TARGET }} --exclude source:external_gtfs_rt+ source:gtfs_rt_external_tables+ --full-refresh
+        run: poetry run dbt run --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --exclude "${{ needs.dbt-changed.outputs.changed-models }}"
+
+  metabase:
+    name: Sync Metabase
+    runs-on: ubuntu-latest
+
+    needs: [models]
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dbt
+          path: warehouse/target
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache Poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        working-directory: warehouse
+        run: poetry install
+
+      - name: Cache dbt packages
+        uses: actions/cache@v3
+        with:
+          path: warehouse/dbt_packages
+          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
+
+      - name: Install dbt dependencies
+        working-directory: warehouse
+        run: poetry run dbt deps
+
+      - name: Print dbt environment
+        working-directory: warehouse
+        run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
 
       - name: Synchronize Metabase
         working-directory: warehouse
