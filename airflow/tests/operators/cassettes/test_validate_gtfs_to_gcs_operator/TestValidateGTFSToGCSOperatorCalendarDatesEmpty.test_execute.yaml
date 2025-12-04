@@ -12,7 +12,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/ecaa2e02-3ccc-4c91-8152-6eead1072967
+        gccl-invocation-id/7bc61ac4-f211-4ebb-ac3c-5dcf201c331c
       accept-encoding:
       - gzip
       content-type:
@@ -74,7 +74,7 @@ interactions:
       Content-Type:
       - application/octet-stream
       Date:
-      - Wed, 03 Dec 2025 02:17:59 GMT
+      - Thu, 04 Dec 2025 02:02:45 GMT
       ETag:
       - CImN3PSMoJEDEAE=
       Expires:
@@ -89,7 +89,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOHM0b8JhXT9zZYppTsYgiI0dxSgoduildQUs94-taq0oMRQ_5G-yGAWf8Xw-d80Qoby4AIlUK8qlNt1
+      - AOCedOFZqxz3OXAXBUxhBu_LaseMIA7ln3PawHc3L0eT0imSKSa64Fganap7CEwiM-voS6aJs-pC0g
       X-Goog-Generation:
       - '1764719628584585'
       X-Goog-Hash:
@@ -106,6 +106,83 @@ interactions:
       code: 200
       message: OK
 - request:
+    body: "--===============7933551281109335274==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl\",
+      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
+      \\\"ts\\\": \\\"2025-11-13T00:00:00+00:00\\\"}\"}}\r\n--===============7933551281109335274==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"validation\":{\"filename\":\"validation_notices_v5-0-0.jsonl.gz\",\"system_errors\":{\"notices\":[]},\"validator_version\":\"v5.0.0\",\"extract_config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2025-11-12T02:00:00+00:00\",\"feed_type\":\"schedule\",\"name\":\"Fric
+      and Frac Schedule\",\"schedule_url_for_validation\":null,\"url\":\"https://www.ips-systems.com/GTFS/Schedule/27\"},\"ts\":\"2025-11-13T00:00:00+00:00\"},\"extract\":{\"filename\":\"schedule-27.zip\",\"ts\":\"2025-11-13T03:02:04.189504+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2025-11-12T02:00:00+00:00\",\"feed_type\":\"schedule\",\"name\":\"Fric
+      and Frac Schedule\",\"schedule_url_for_validation\":null,\"url\":\"https://www.ips-systems.com/GTFS/Schedule/27\"},\"response_code\":200,\"response_headers\":{\"Content-Type\":\"application/zip\",\"Content-Disposition\":\"attachment;
+      filename=schedule-27.zip\"},\"reconstructed\":false},\"success\":true,\"exception\":null}\r\n--===============7933551281109335274==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1427'
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/1ffc91cd-97f6-4444-8c51-5754fbc8875f
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03OTMzNTUxMjgxMTA5
+        MzM1Mjc0PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl/1764813768454012\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-11-13%2Fts=2025-11-13T03:02:04.189504%2B00:00%2FaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-11-13%2Fts=2025-11-13T03:02:04.189504%2B00:00%2FaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl?generation=1764813768454012&alt=media\",\n
+        \ \"name\": \"validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1764813768454012\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"945\",\n  \"md5Hash\": \"bYP5Lpih87xLmLCnKD103A==\",\n
+        \ \"crc32c\": \"35qeqA==\",\n  \"etag\": \"CPzejc7ropEDEAE=\",\n  \"timeCreated\":
+        \"2025-12-04T02:02:48.464Z\",\n  \"updated\": \"2025-12-04T02:02:48.464Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-12-04T02:02:48.464Z\",\n  \"timeFinalized\":
+        \"2025-12-04T02:02:48.464Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2025-11-13T00:00:00+00:00\\\"}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1485'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 04 Dec 2025 02:02:48 GMT
+      ETag:
+      - CPzejc7ropEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AOCedOG4939EDKhyLh7eew7qycX451rWTQzg5SQd1WjJD_JpMOIJXG95Bdpojjcvm84QuPd1pvwcAsnQmga2
+    status:
+      code: 200
+      message: OK
+- request:
     body: null
     headers:
       Accept:
@@ -118,7 +195,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/fdb7c58a-a99b-47df-8d30-b3fa2778e081
+        gccl-invocation-id/f9ef3365-82fc-47bd-a675-4a4f02650eaa
       accept-encoding:
       - gzip
       content-type:
@@ -180,7 +257,7 @@ interactions:
       Content-Type:
       - application/octet-stream
       Date:
-      - Wed, 03 Dec 2025 02:18:01 GMT
+      - Thu, 04 Dec 2025 02:02:49 GMT
       ETag:
       - CImN3PSMoJEDEAE=
       Expires:
@@ -195,7 +272,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOG5PoNEFEWr6dyodJ9WPtd5G9qgn3jiOgD16XcwYORy9nA6b69vhIi65DkX8CNTfdI
+      - AOCedOFGvM9Two4aYSmo1M9I0DHwdP6jkiyBaIQXOKB1efARIQSgm31zH1b3ikalTEqV_zvtWgdQxA
       X-Goog-Generation:
       - '1764719628584585'
       X-Goog-Hash:
@@ -208,6 +285,83 @@ interactions:
       - identity
       X-Goog-Stored-Content-Length:
       - '2021'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============3437061753296095667==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl\",
+      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
+      \\\"ts\\\": \\\"2025-11-14T00:00:00+00:00\\\"}\"}}\r\n--===============3437061753296095667==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"validation\":{\"filename\":\"validation_notices_v5-0-0.jsonl.gz\",\"system_errors\":{\"notices\":[]},\"validator_version\":\"v5.0.0\",\"extract_config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2025-11-12T02:00:00+00:00\",\"feed_type\":\"schedule\",\"name\":\"Fric
+      and Frac Schedule\",\"schedule_url_for_validation\":null,\"url\":\"https://www.ips-systems.com/GTFS/Schedule/27\"},\"ts\":\"2025-11-14T00:00:00+00:00\"},\"extract\":{\"filename\":\"schedule-27.zip\",\"ts\":\"2025-11-13T03:02:04.189504+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2025-11-12T02:00:00+00:00\",\"feed_type\":\"schedule\",\"name\":\"Fric
+      and Frac Schedule\",\"schedule_url_for_validation\":null,\"url\":\"https://www.ips-systems.com/GTFS/Schedule/27\"},\"response_code\":200,\"response_headers\":{\"Content-Type\":\"application/zip\",\"Content-Disposition\":\"attachment;
+      filename=schedule-27.zip\"},\"reconstructed\":false},\"success\":true,\"exception\":null}\r\n--===============3437061753296095667==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1427'
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/e2b06f2a-0376-4ec0-b743-edd1895dbf04
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0zNDM3MDYxNzUzMjk2
+        MDk1NjY3PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl/1764813771611722\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-11-13%2Fts=2025-11-13T03:02:04.189504%2B00:00%2FaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-11-13%2Fts=2025-11-13T03:02:04.189504%2B00:00%2FaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl?generation=1764813771611722&alt=media\",\n
+        \ \"name\": \"validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1764813771611722\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"945\",\n  \"md5Hash\": \"26g06gkQOcYKcKNXF2hI2Q==\",\n
+        \ \"crc32c\": \"aDM82g==\",\n  \"etag\": \"CMq8zs/ropEDEAE=\",\n  \"timeCreated\":
+        \"2025-12-04T02:02:51.621Z\",\n  \"updated\": \"2025-12-04T02:02:51.621Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-12-04T02:02:51.621Z\",\n  \"timeFinalized\":
+        \"2025-12-04T02:02:51.621Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2025-11-14T00:00:00+00:00\\\"}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1485'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 04 Dec 2025 02:02:51 GMT
+      ETag:
+      - CMq8zs/ropEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AOCedOG-68aVHuquRdlHwBvixqdehpteLu1ssjw0HhCWN5V5YRoeyfU-Tx6ubPn2tu0szQk
     status:
       code: 200
       message: OK
@@ -226,7 +380,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/a554ff52-1a70-4e7f-b0c8-41af183cd4e1
+        gccl-invocation-id/ce38e909-d240-4a9b-a879-d58fbb88f0b2
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
@@ -245,7 +399,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 03 Dec 2025 02:18:03 GMT
+      - Thu, 04 Dec 2025 02:02:52 GMT
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -256,10 +410,83 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOHciE4hl9eYU_3FbGvHNkBSqtVdX6tgblrRSMoHmBxMhakLZ--q9A21iHopp9tbcBAF9It40VL2s_rR
+      - AOCedOE4Sfu26WYFllJ6W-X1hzUO2vF4BhXzp3WQ9yNPJ73ZG_Ox6MX8rJf8QahXdsHuMtuQme1yI-oPHIa2
     status:
       code: 404
       message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+        gccl-invocation-id/a77e1130-d567-4c9b-8a03-8fdc96287ac3
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt%3D2025-11-13%2Fts%3D2025-11-13T03%3A02%3A04.189504%2B00%3A00%2FaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc%3D.jsonl?alt=media
+  response:
+    body:
+      string: '{"validation":{"filename":"validation_notices_v5-0-0.jsonl.gz","system_errors":{"notices":[]},"validator_version":"v5.0.0","extract_config":{"auth_headers":{},"auth_query_params":{},"computed":false,"extracted_at":"2025-11-12T02:00:00+00:00","feed_type":"schedule","name":"Fric
+        and Frac Schedule","schedule_url_for_validation":null,"url":"https://www.ips-systems.com/GTFS/Schedule/27"},"ts":"2025-11-14T00:00:00+00:00"},"extract":{"filename":"schedule-27.zip","ts":"2025-11-13T03:02:04.189504+00:00","config":{"auth_headers":{},"auth_query_params":{},"computed":false,"extracted_at":"2025-11-12T02:00:00+00:00","feed_type":"schedule","name":"Fric
+        and Frac Schedule","schedule_url_for_validation":null,"url":"https://www.ips-systems.com/GTFS/Schedule/27"},"response_code":200,"response_headers":{"Content-Type":"application/zip","Content-Disposition":"attachment;
+        filename=schedule-27.zip"},"reconstructed":false},"success":true,"exception":null}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '945'
+      Content-Type:
+      - application/jsonl
+      Date:
+      - Thu, 04 Dec 2025 02:02:53 GMT
+      ETag:
+      - CMq8zs/ropEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Thu, 04 Dec 2025 02:02:51 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AOCedOEasnUL7QMi4OYXHXGoYUrchTuhSMIjjC1ikZF5k6cS_luMqBcbef8D5hh_8qq-fB4bQqg6OA
+      X-Goog-Generation:
+      - '1764813771611722'
+      X-Goog-Hash:
+      - crc32c=aDM82g==,md5=26g06gkQOcYKcKNXF2hI2Q==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '945'
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
@@ -275,38 +502,38 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/1ae287ae-8534-46c0-8449-ca05d46015fb
+        gccl-invocation-id/21e0989f-74a2-46cf-b815-5360110d5656
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
-    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt%3D2025-11-13%2Fts%3D2025-11-13T03%3A02%3A04.189504%2B00%3A00%2FaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc%3D.jsonl?fields=name&prettyPrint=false
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt%3D2025-11-13%2Fts%3D2025-11-13T03%3A02%3A04.189504%2B00%3A00%2FaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc%3D.jsonl?prettyPrint=false&projection=noAcl
   response:
     body:
-      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl","errors":[{"message":"No
-        such object: calitp-staging-pytest/validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl","domain":"global","reason":"notFound"}]}}'
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl/1764813771611722","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-11-13%2Fts=2025-11-13T03:02:04.189504%2B00:00%2FaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-11-13%2Fts=2025-11-13T03:02:04.189504%2B00:00%2FaHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl?generation=1764813771611722&alt=media","name":"validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl","bucket":"calitp-staging-pytest","generation":"1764813771611722","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"945","md5Hash":"26g06gkQOcYKcKNXF2hI2Q==","crc32c":"aDM82g==","etag":"CMq8zs/ropEDEAE=","timeCreated":"2025-12-04T02:02:51.621Z","updated":"2025-12-04T02:02:51.621Z","timeStorageClassUpdated":"2025-12-04T02:02:51.621Z","timeFinalized":"2025-12-04T02:02:51.621Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
+        \"results.jsonl\", \"ts\": \"2025-11-14T00:00:00+00:00\"}"}}'
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Cache-Control:
-      - no-cache, no-store, max-age=0, must-revalidate
+      - private, max-age=0, must-revalidate, no-transform
       Content-Length:
-      - '453'
+      - '1398'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 03 Dec 2025 02:18:04 GMT
+      - Thu, 04 Dec 2025 02:02:53 GMT
+      ETag:
+      - CMq8zs/ropEDEAE=
       Expires:
-      - Mon, 01 Jan 1990 00:00:00 GMT
-      Pragma:
-      - no-cache
+      - Thu, 04 Dec 2025 02:02:53 GMT
       Server:
       - UploadServer
       Vary:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOEfFBecfhIxmADeMz3xvmSfMfCgb_yCaZEs1Xef6T1gn4jjHiOoS2lM1iNpyjaNFQJptt3i8A
+      - AOCedOFUv4Er5AuhWBiXxnbxs4qUQkNg4QqkENvCL9lmnfErVuR45fXovsxqdoFf82mtnkoxRjHbNw
     status:
-      code: 404
-      message: Not Found
+      code: 200
+      message: OK
 version: 1
