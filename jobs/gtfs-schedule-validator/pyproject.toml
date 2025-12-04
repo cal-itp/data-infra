@@ -3,6 +3,7 @@ name = "gtfs-schedule-validator"
 version = "0.1.0"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.10"
