@@ -9,24 +9,24 @@
 -- scheduled stop times: aggregate stop arrivals by hour...but more interested in stop arrivals at stop by hour for HQTA
 WITH trips AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs_rollup.fct_monthly_scheduled_trips`--{{ ref('fct_monthly_scheduled_trips') }}
+    FROM {{ ref('fct_monthly_scheduled_trips') }}
     -- table; clustered by month_first_day, name
 ),
 
 dim_gtfs_datasets AS (
     SELECT *
     FROM {{ ref('dim_gtfs_datasets') }}
-    WHERE analysis_name IS NOT NULL
 ),
 
 deduped_analysis_name AS (
     SELECT
         name,
         analysis_name,
+        source_record_id,
 
     FROM dim_gtfs_datasets
     QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY name, analysis_name
+        PARTITION BY source_record_id
         ORDER BY _valid_from DESC
     ) = 1
 ),

@@ -7,7 +7,7 @@
 
 WITH daily_summary AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_daily_schedule_rt_operator_summary`
+    FROM {{ ref('fct_daily_schedule_rt_operator_summary') }}
 ),
 
 daily_summary2 AS (
