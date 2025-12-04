@@ -6,7 +6,6 @@ from typing import Sequence
 import pendulum
 from hooks.gtfs_validator_hook import GTFSValidatorHook
 
-from airflow.exceptions import AirflowSkipException
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
@@ -74,31 +73,29 @@ class ValidateGTFSToGCSOperator(BaseOperator):
                 filename=local_source_path,
                 download_schedule_feed_results=self.download_schedule_feed_results,
             )
-
-            if not validator_result.notices():
-                raise AirflowSkipException
-
             full_destination_path = (
                 f"{self.destination_path}/{validator_result.filename()}"
             )
 
-            self.gcs_hook().upload(
-                bucket_name=self.destination_name(),
-                object_name=full_destination_path,
-                data="\n".join(
-                    [
-                        json.dumps(n, separators=(",", ":"))
-                        for n in validator_result.notices()
-                    ]
-                ),
-                mime_type="application/jsonl",
-                gzip=True,
-                metadata={
-                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                        validator_result.validation()
-                    )
-                },
-            )
+            if validator_result.notices():
+                self.gcs_hook().upload(
+                    bucket_name=self.destination_name(),
+                    object_name=full_destination_path,
+                    data="\n".join(
+                        [
+                            json.dumps(n, separators=(",", ":"))
+                            for n in validator_result.notices()
+                        ]
+                    ),
+                    mime_type="application/jsonl",
+                    gzip=True,
+                    metadata={
+                        "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                            validator_result.validation()
+                        )
+                    },
+                )
+
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=self.results_path,
@@ -114,6 +111,7 @@ class ValidateGTFSToGCSOperator(BaseOperator):
                     )
                 },
             )
+
         return {
             "destination_path": os.path.join(
                 self.destination_bucket, full_destination_path

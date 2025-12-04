@@ -7,44 +7,6 @@ from hooks.gtfs_validator_hook import GTFSValidatorHook
 
 class TestGTFSValidatorHook:
     @pytest.fixture
-    def download_schedule_feed_results(self) -> dict:
-        return {
-            "backfilled": False,
-            "config": {
-                "auth_headers": {},
-                "auth_query_params": {},
-                "computed": False,
-                "extracted_at": "2025-11-14T02:00:00+00:00",
-                "feed_type": "schedule",
-                "name": "Santa Ynez Mecatran Schedule",
-                "schedule_url_for_validation": None,
-                "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
-            },
-            "exception": None,
-            "extract": {
-                "filename": "gtfs.zip",
-                "ts": "2025-06-03T00:00:00+00:00",
-                "config": {
-                    "auth_headers": {},
-                    "auth_query_params": {},
-                    "computed": False,
-                    "feed_type": "schedule",
-                    "name": "Santa Ynez Mecatran Schedule",
-                    "schedule_url_for_validation": None,
-                    "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
-                    "extracted_at": "2025-06-01T00:00:00+00:00",
-                },
-                "response_code": 200,
-                "response_headers": {
-                    "Content-Type": "application/zip",
-                    "Content-Disposition": "attachment; filename=gtfs.zip",
-                },
-                "reconstructed": False,
-            },
-            "success": True,
-        }
-
-    @pytest.fixture
     def date(self) -> pendulum.DateTime:
         return pendulum.datetime(2025, 11, 15)
 
@@ -58,14 +20,6 @@ class TestGTFSValidatorHook:
             os.path.join(
                 os.path.dirname(os.path.realpath(__file__)),
                 "../../plugins/gtfs_validator",
-            )
-        )
-
-    @pytest.fixture
-    def fixture_schedule_path(self) -> str:
-        return os.path.normpath(
-            os.path.join(
-                os.path.dirname(os.path.realpath(__file__)), "../fixtures/schedule.zip"
             )
         )
 
@@ -110,12 +64,51 @@ class TestGTFSValidatorHook:
             jar_path, "gtfs-validator-5.0.0-cli.jar"
         )
 
-    def test_run(
+    def test_run_with_unknown_file(
         self,
         hook: GTFSValidatorHook,
-        fixture_schedule_path: str,
-        download_schedule_feed_results: dict,
     ):
+        fixture_schedule_path = os.path.normpath(
+            os.path.join(
+                os.path.dirname(os.path.realpath(__file__)), "../fixtures/schedule.zip"
+            )
+        )
+        download_schedule_feed_results = {
+            "backfilled": False,
+            "config": {
+                "auth_headers": {},
+                "auth_query_params": {},
+                "computed": False,
+                "extracted_at": "2025-11-14T02:00:00+00:00",
+                "feed_type": "schedule",
+                "name": "Santa Ynez Mecatran Schedule",
+                "schedule_url_for_validation": None,
+                "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+            },
+            "exception": None,
+            "extract": {
+                "filename": "gtfs.zip",
+                "ts": "2025-06-03T00:00:00+00:00",
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "feed_type": "schedule",
+                    "name": "Santa Ynez Mecatran Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                    "extracted_at": "2025-06-01T00:00:00+00:00",
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=gtfs.zip",
+                },
+                "reconstructed": False,
+            },
+            "success": True,
+        }
+
         result = hook.run(
             filename=fixture_schedule_path,
             download_schedule_feed_results=download_schedule_feed_results,
@@ -175,6 +168,98 @@ class TestGTFSValidatorHook:
                     "auth_query_params": {},
                     "auth_headers": {},
                     "computed": False,
+                },
+                "system_errors": {"notices": []},
+                "validator_version": "v5.0.0",
+            },
+        }
+
+    def test_run_with_one_empty_file(
+        self,
+        hook: GTFSValidatorHook,
+    ):
+        fixture_schedule_path = os.path.normpath(
+            os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                "../fixtures/schedule-27.zip",
+            )
+        )
+        download_schedule_feed_results = {
+            "backfilled": False,
+            "config": {
+                "auth_headers": {},
+                "auth_query_params": {},
+                "computed": False,
+                "extracted_at": "2025-11-12T02:00:00+00:00",
+                "feed_type": "schedule",
+                "name": "Fric and Frac Schedule",
+                "schedule_url_for_validation": None,
+                "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+            },
+            "exception": None,
+            "extract": {
+                "filename": "schedule-27.zip",
+                "ts": "2025-11-13T03:02:04.189504+00:00",
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-11-12T02:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "Fric and Frac Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=schedule-27.zip",
+                },
+                "reconstructed": False,
+            },
+            "success": True,
+        }
+
+        result = hook.run(
+            filename=fixture_schedule_path,
+            download_schedule_feed_results=download_schedule_feed_results,
+        )
+        assert len(result.notices()) == 0
+        assert result.results() == {
+            "success": True,
+            "exception": None,
+            "extract": {
+                "filename": "schedule-27.zip",
+                "ts": "2025-11-13T03:02:04.189504+00:00",
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-11-12T02:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "Fric and Frac Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=schedule-27.zip",
+                },
+                "reconstructed": False,
+            },
+            "validation": {
+                "filename": "validation_notices_v5-0-0.jsonl.gz",
+                "ts": "2025-11-15T00:00:00+00:00",
+                "extract_config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-11-12T02:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "Fric and Frac Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "https://www.ips-systems.com/GTFS/Schedule/27",
                 },
                 "system_errors": {"notices": []},
                 "validator_version": "v5.0.0",

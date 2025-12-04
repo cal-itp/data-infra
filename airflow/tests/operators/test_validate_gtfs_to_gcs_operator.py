@@ -281,7 +281,7 @@ class TestValidateGTFSToGCSOperatorCalendarDatesEmpty:
                 "auth_headers": {},
                 "auth_query_params": {},
                 "computed": False,
-                "extracted_at": "2025-11-25T00:00:00+00:00",
+                "extracted_at": "2025-11-12T02:00:00+00:00",
                 "feed_type": "schedule",
                 "name": "Fric and Frac Schedule",
                 "schedule_url_for_validation": None,
@@ -364,7 +364,23 @@ class TestValidateGTFSToGCSOperatorCalendarDatesEmpty:
         task = test_dag.get_task("validate_gtfs_to_gcs")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
-        assert xcom_value is None
+        assert xcom_value == {
+            "destination_path": os.path.join(
+                os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"),
+                "validation_notices",
+                "dt=2025-11-13",
+                "ts=2025-11-13T03:02:04.189504+00:00",
+                "base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=",
+                "validation_notices_v5-0-0.jsonl.gz",
+            ),
+            "results_path": os.path.join(
+                os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"),
+                "validation_job_results",
+                "dt=2025-11-13",
+                "ts=2025-11-13T03:02:04.189504+00:00",
+                "aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl",
+            ),
+        }
 
         compressed_notices = gcs_hook.exists(
             bucket_name=os.environ.get(
@@ -374,10 +390,61 @@ class TestValidateGTFSToGCSOperatorCalendarDatesEmpty:
         )
         assert not compressed_notices
 
-        unparsed_results = gcs_hook.exists(
+        unparsed_results = gcs_hook.download(
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"
             ).replace("gs://", ""),
             object_name="validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl",
         )
-        assert not unparsed_results
+        results = json.loads(unparsed_results)
+        assert results == {
+            "validation": {
+                "filename": "validation_notices_v5-0-0.jsonl.gz",
+                "system_errors": {"notices": []},
+                "validator_version": "v5.0.0",
+                "extract_config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-11-12T02:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "Fric and Frac Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+                },
+                "ts": "2025-11-14T00:00:00+00:00",
+            },
+            "extract": {
+                "filename": "schedule-27.zip",
+                "ts": "2025-11-13T03:02:04.189504+00:00",
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-11-12T02:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "Fric and Frac Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "https://www.ips-systems.com/GTFS/Schedule/27",
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=schedule-27.zip",
+                },
+                "reconstructed": False,
+            },
+            "success": True,
+            "exception": None,
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"
+            ).replace("gs://", ""),
+            object_name="validation_job_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl",
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "results.jsonl",
+            "ts": "2025-11-14T00:00:00+00:00",
+        }
