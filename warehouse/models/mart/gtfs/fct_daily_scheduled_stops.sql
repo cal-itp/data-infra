@@ -2,6 +2,11 @@
     config(
         materialized='incremental',
         unique_key = 'key',
+        partition_by = {
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
         cluster_by='feed_key',
     )
 }}

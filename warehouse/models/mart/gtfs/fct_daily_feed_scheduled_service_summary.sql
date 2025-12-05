@@ -60,7 +60,7 @@ summarize_service AS (
 fct_daily_feed_scheduled_service_summary AS (
 
     SELECT
-        feeds.date AS service_date,
+        DATE(feeds.date) AS service_date,
         feeds.feed_key,
         feeds.gtfs_dataset_key,
         COALESCE(service.ttl_service_hours, 0) AS ttl_service_hours,
@@ -69,6 +69,7 @@ fct_daily_feed_scheduled_service_summary AS (
         service.last_arrival_sec,
         COALESCE(service.num_stop_times, 0) AS num_stop_times,
         COALESCE(service.n_routes, 0) AS n_routes,
+        COALESCE(service.n_shapes, 0) AS n_shapes,
         COALESCE(service.n_stops, 0) AS n_stops,
         service.contains_warning_duplicate_stop_times_primary_key,
         service.contains_warning_duplicate_trip_primary_key,
