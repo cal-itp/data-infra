@@ -1,9 +1,3 @@
-resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-dataEditorserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/bigquery.dataEditor"
-}
-
 resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-dataEditorserviceAccount-003A-github-actions-services-accoun-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
   member  = "serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com"
   project = "cal-itp-data-infra-staging"
@@ -26,12 +20,6 @@ resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-dataViewers
   member  = "serviceAccount:metabase@cal-itp-data-infra-staging.iam.gserviceaccount.com"
   project = "cal-itp-data-infra-staging"
   role    = "roles/bigquery.dataViewer"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-jobUserserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/bigquery.jobUser"
 }
 
 resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-jobUserserviceAccount-003A-calitp-py-ci-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
@@ -74,12 +62,6 @@ resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-readSession
   member  = "serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com"
   project = "cal-itp-data-infra-staging"
   role    = "roles/bigquery.readSessionUser"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-userserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/bigquery.user"
 }
 
 resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-userserviceAccount-003A-calitp-py-ci-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
@@ -136,22 +118,10 @@ resource "google_project_iam_member" "tfer--roles-002F-containerregistry-002E-Se
   role    = "roles/containerregistry.ServiceAgent"
 }
 
-resource "google_project_iam_member" "tfer--roles-002F-dataproc-002E-editorserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/dataproc.editor"
-}
-
 resource "google_project_iam_member" "tfer--roles-002F-dataproc-002E-serviceAgentserviceAccount-003A-service-473674835135-0040-dataproc-accounts-002E-iam-002E-gserviceaccount-002E-com" {
   member  = "serviceAccount:service-473674835135@dataproc-accounts.iam.gserviceaccount.com"
   project = "cal-itp-data-infra-staging"
   role    = "roles/dataproc.serviceAgent"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-dataproc-002E-workerserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/dataproc.worker"
 }
 
 resource "google_project_iam_member" "tfer--roles-002F-editorserviceAccount-003A-473674835135-0040-cloudservices-002E-gserviceaccount-002E-com" {
@@ -164,12 +134,6 @@ resource "google_project_iam_member" "tfer--roles-002F-editorserviceAccount-003A
   member  = "serviceAccount:473674835135-compute@developer.gserviceaccount.com"
   project = "cal-itp-data-infra-staging"
   role    = "roles/editor"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-iam-002E-serviceAccountUserserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/iam.serviceAccountUser"
 }
 
 resource "google_project_iam_member" "tfer--roles-002F-ownerserviceAccount-003A-amplitude-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com" {
@@ -194,12 +158,6 @@ resource "google_project_iam_member" "tfer--roles-002F-servicenetworking-002E-se
   member  = "serviceAccount:service-473674835135@gcp-sa-cloudasset.iam.gserviceaccount.com"
   project = "cal-itp-data-infra-staging"
   role    = "roles/servicenetworking.serviceAgent"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-storage-002E-objectAdminserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/storage.objectAdmin"
 }
 
 resource "google_project_iam_member" "tfer--roles-002F-storage-002E-objectAdminserviceAccount-003A-service-473674835135-0040-gcp-sa-cloudasset-002E-iam-002E-gserviceaccount-002E-com" {

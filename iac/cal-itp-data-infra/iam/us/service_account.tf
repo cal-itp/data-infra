@@ -180,14 +180,6 @@ resource "google_service_account" "tfer--113512472366715495471" {
   project      = "cal-itp-data-infra"
 }
 
-resource "google_service_account" "tfer--114731815246487683241" {
-  account_id   = "bq-transform-svcacct"
-  description  = "Grants Airflow pod operators access to GCS and bigquery"
-  disabled     = "false"
-  display_name = "airflow-jobs-service-user"
-  project      = "cal-itp-data-infra"
-}
-
 resource "google_service_account" "tfer--114755160399419974306" {
   account_id   = "metabase-payments-team"
   description  = "Service account for Payments Data Team to use via Metabase"

@@ -58,14 +58,6 @@ output "google_project_iam_member_tfer--roles-002F-artifactregistry-002E-service
   value = google_project_iam_member.tfer--roles-002F-artifactregistry-002E-serviceAgentserviceAccount-003A-service-1005246706141-0040-gcp-sa-artifactregistry-002E-iam-002E-gserviceaccount-002E-com.id
 }
 
-output "google_project_iam_member_tfer--roles-002F-bigquery-002E-adminserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
-  value = google_project_iam_member.tfer--roles-002F-bigquery-002E-adminserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com.id
-}
-
-output "google_project_iam_member_tfer--roles-002F-bigquery-002E-dataEditorserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
-  value = google_project_iam_member.tfer--roles-002F-bigquery-002E-dataEditorserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com.id
-}
-
 output "google_project_iam_member_tfer--roles-002F-bigquery-002E-dataEditorserviceAccount-003A-composer2-service-account-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
   value = google_project_iam_member.tfer--roles-002F-bigquery-002E-dataEditorserviceAccount-003A-composer2-service-account-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com.id
 }
@@ -154,10 +146,6 @@ output "google_project_iam_member_tfer--roles-002F-bigquery-002E-userserviceAcco
   value = google_project_iam_member.tfer--roles-002F-bigquery-002E-userserviceAccount-003A-473674835135-compute-0040-developer-002E-gserviceaccount-002E-com.id
 }
 
-output "google_project_iam_member_tfer--roles-002F-bigquery-002E-userserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
-  value = google_project_iam_member.tfer--roles-002F-bigquery-002E-userserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com.id
-}
-
 output "google_project_iam_member_tfer--roles-002F-bigquery-002E-userserviceAccount-003A-calitp-py-ci-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
   value = google_project_iam_member.tfer--roles-002F-bigquery-002E-userserviceAccount-003A-calitp-py-ci-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com.id
 }
@@ -234,16 +222,8 @@ output "google_project_iam_member_tfer--roles-002F-containerregistry-002E-Servic
   value = google_project_iam_member.tfer--roles-002F-containerregistry-002E-ServiceAgentserviceAccount-003A-service-1005246706141-0040-containerregistry-002E-iam-002E-gserviceaccount-002E-com.id
 }
 
-output "google_project_iam_member_tfer--roles-002F-dataproc-002E-editorserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
-  value = google_project_iam_member.tfer--roles-002F-dataproc-002E-editorserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com.id
-}
-
 output "google_project_iam_member_tfer--roles-002F-dataproc-002E-serviceAgentserviceAccount-003A-service-1005246706141-0040-dataproc-accounts-002E-iam-002E-gserviceaccount-002E-com_id" {
   value = google_project_iam_member.tfer--roles-002F-dataproc-002E-serviceAgentserviceAccount-003A-service-1005246706141-0040-dataproc-accounts-002E-iam-002E-gserviceaccount-002E-com.id
-}
-
-output "google_project_iam_member_tfer--roles-002F-dataproc-002E-workerserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
-  value = google_project_iam_member.tfer--roles-002F-dataproc-002E-workerserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com.id
 }
 
 output "google_project_iam_member_tfer--roles-002F-editorserviceAccount-003A-1005246706141-0040-cloudservices-002E-gserviceaccount-002E-com_id" {
@@ -264,10 +244,6 @@ output "google_project_iam_member_tfer--roles-002F-firebaserules-002E-systemserv
 
 output "google_project_iam_member_tfer--roles-002F-firestore-002E-serviceAgentserviceAccount-003A-service-1005246706141-0040-gcp-sa-firestore-002E-iam-002E-gserviceaccount-002E-com_id" {
   value = google_project_iam_member.tfer--roles-002F-firestore-002E-serviceAgentserviceAccount-003A-service-1005246706141-0040-gcp-sa-firestore-002E-iam-002E-gserviceaccount-002E-com.id
-}
-
-output "google_project_iam_member_tfer--roles-002F-iam-002E-serviceAccountUserserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
-  value = google_project_iam_member.tfer--roles-002F-iam-002E-serviceAccountUserserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com.id
 }
 
 output "google_project_iam_member_tfer--roles-002F-ownerserviceAccount-003A-cc-jarvus-airflow-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
@@ -328,10 +304,6 @@ output "google_project_iam_member_tfer--roles-002F-storage-002E-adminserviceAcco
 
 output "google_project_iam_member_tfer--roles-002F-storage-002E-objectAdminserviceAccount-003A-amplitude-export-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
   value = google_project_iam_member.tfer--roles-002F-storage-002E-objectAdminserviceAccount-003A-amplitude-export-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com.id
-}
-
-output "google_project_iam_member_tfer--roles-002F-storage-002E-objectAdminserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
-  value = google_project_iam_member.tfer--roles-002F-storage-002E-objectAdminserviceAccount-003A-bq-transform-svcacct-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com.id
 }
 
 output "google_project_iam_member_tfer--roles-002F-storage-002E-objectCreatorserviceAccount-003A-gtfs-rt-archiver-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
