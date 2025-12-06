@@ -94,11 +94,13 @@ class TestGTFSUnzipHook:
 
     @pytest.fixture
     def hook(self, date: pendulum.DateTime) -> GTFSUnzipHook:
-        return GTFSUnzipHook(filename="agency.txt", current_date=date)
+        return GTFSUnzipHook(
+            filenames=["agency.txt", "calendar.txt"], current_date=date
+        )
 
     @pytest.fixture
     def areas_hook(self, date: pendulum.DateTime) -> GTFSUnzipHook:
-        return GTFSUnzipHook(filename="areas.txt", current_date=date)
+        return GTFSUnzipHook(filenames=["areas.txt"], current_date=date)
 
     def test_run(
         self,
@@ -148,7 +150,22 @@ class TestGTFSUnzipHook:
                         "auth_headers": {},
                         "computed": False,
                     },
-                }
+                },
+                {
+                    "ts": "2025-11-15T00:00:00+00:00",
+                    "filename": "calendar.txt",
+                    "original_filename": "calendar.txt",
+                    "extract_config": {
+                        "extracted_at": "2025-06-01T00:00:00+00:00",
+                        "name": "Santa Ynez Mecatran Schedule",
+                        "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                        "feed_type": "schedule",
+                        "schedule_url_for_validation": None,
+                        "auth_query_params": {},
+                        "auth_headers": {},
+                        "computed": False,
+                    },
+                },
             ],
             "zipfile_dirs": [],
             "zipfile_extract_md5hash": "4f72c84bd3f053ddb929289fa2de7879",
@@ -216,7 +233,22 @@ class TestGTFSUnzipHook:
                         "auth_headers": {},
                         "computed": False,
                     },
-                }
+                },
+                {
+                    "ts": "2025-11-15T00:00:00+00:00",
+                    "filename": "calendar.txt",
+                    "original_filename": "calendar.txt",
+                    "extract_config": {
+                        "extracted_at": "2025-06-01T00:00:00+00:00",
+                        "name": "Santa Ynez Mecatran Schedule",
+                        "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                        "feed_type": "schedule",
+                        "schedule_url_for_validation": None,
+                        "auth_query_params": {},
+                        "auth_headers": {},
+                        "computed": False,
+                    },
+                },
             ],
             "zipfile_dirs": [],
             "zipfile_extract_md5hash": "1c528b720355ce5ae47bacbc2d7783b6",
@@ -281,7 +313,22 @@ class TestGTFSUnzipHook:
                         "auth_headers": {},
                         "computed": False,
                     },
-                }
+                },
+                {
+                    "ts": "2025-11-15T00:00:00+00:00",
+                    "filename": "calendar.txt",
+                    "original_filename": "HumboldtTransitAuthorityDialARideFlex/calendar.txt",
+                    "extract_config": {
+                        "extracted_at": "2025-06-01T00:00:00+00:00",
+                        "name": "Santa Ynez Mecatran Schedule",
+                        "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                        "feed_type": "schedule",
+                        "schedule_url_for_validation": None,
+                        "auth_query_params": {},
+                        "auth_headers": {},
+                        "computed": False,
+                    },
+                },
             ],
             "zipfile_dirs": ["HumboldtTransitAuthorityDialARideFlex/"],
             "zipfile_extract_md5hash": "3153abcb9b63490c5b712657e1860607",

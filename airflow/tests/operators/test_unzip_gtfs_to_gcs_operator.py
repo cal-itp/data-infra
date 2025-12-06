@@ -30,12 +30,12 @@ class TestUnzipGTFSToGCSOperator:
         return "schedule/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/gtfs.zip"
 
     @pytest.fixture
-    def destination_path(self) -> str:
-        return "agency.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.txt"
+    def destination_path_fragment(self) -> str:
+        return "dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA=="
 
     @pytest.fixture
     def results_path(self) -> str:
-        return "unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/agency.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl"
+        return "unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl"
 
     @pytest.fixture
     def download_schedule_feed_results(self) -> dict:
@@ -93,22 +93,22 @@ class TestUnzipGTFSToGCSOperator:
         test_dag: DAG,
         base64_url: str,
         source_path: str,
-        destination_path: str,
+        destination_path_fragment: str,
         results_path: str,
         download_schedule_feed_results: dict,
     ) -> UnzipGTFSToGCSOperator:
         return UnzipGTFSToGCSOperator(
-            task_id="unzip_agency_to_gcs",
+            task_id="unzip_gtfs_to_gcs",
             gcp_conn_id="google_cloud_default",
             base64_url=base64_url,
             download_schedule_feed_results=download_schedule_feed_results,
-            filename="agency.txt",
+            filenames=["agency.txt", "calendar.txt"],
             source_bucket=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
             source_path=source_path,
             destination_bucket=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
             ),
-            destination_path=destination_path,
+            destination_path_fragment=destination_path_fragment,
             results_path=results_path,
             dag=test_dag,
         )
@@ -119,7 +119,7 @@ class TestUnzipGTFSToGCSOperator:
         test_dag: DAG,
         operator: UnzipGTFSToGCSOperator,
         execution_date: datetime,
-        destination_path: str,
+        destination_path_fragment: str,
         results_path: str,
         gcs_hook: GCSHook,
     ):
@@ -129,26 +129,12 @@ class TestUnzipGTFSToGCSOperator:
             ignore_first_depends_on_past=True,
         )
 
-        task = test_dag.get_task("unzip_agency_to_gcs")
+        task = test_dag.get_task("unzip_gtfs_to_gcs")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
             "base64_url": "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
-            "results_path": os.path.join(
-                os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
-                "unzipping_results",
-                "dt=2025-06-02",
-                "ts=2025-06-02T00:00:00+00:00",
-                "agency.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
-            ),
-            "destination_path": os.path.join(
-                os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
-                "agency.txt",
-                "dt=2025-06-02",
-                "ts=2025-06-02T00:00:00+00:00",
-                "base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
-                "agency.txt",
-            ),
+            "results_path": "unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
             "unzip_results": {
                 "exception": None,
                 "extract": {
@@ -186,7 +172,22 @@ class TestUnzipGTFSToGCSOperator:
                         "filename": "agency.txt",
                         "original_filename": "agency.txt",
                         "ts": "2025-06-02T00:00:00+00:00",
-                    }
+                    },
+                    {
+                        "extract_config": {
+                            "auth_headers": {},
+                            "auth_query_params": {},
+                            "computed": False,
+                            "extracted_at": "2025-06-01T00:00:00+00:00",
+                            "feed_type": "schedule",
+                            "name": "Santa Ynez Mecatran Schedule",
+                            "schedule_url_for_validation": None,
+                            "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                        },
+                        "filename": "calendar.txt",
+                        "original_filename": "calendar.txt",
+                        "ts": "2025-06-02T00:00:00+00:00",
+                    },
                 ],
                 "success": True,
                 "zipfile_dirs": [],
@@ -212,7 +213,7 @@ class TestUnzipGTFSToGCSOperator:
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
             ).replace("gs://", ""),
-            object_name=destination_path,
+            object_name=f"agency.txt/{destination_path_fragment}/agency.txt",
         )
         reader = DictReader(StringIO(file_content.decode()))
         assert list(reader)[0] == {
@@ -231,7 +232,7 @@ class TestUnzipGTFSToGCSOperator:
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
             ).replace("gs://", ""),
-            object_name=destination_path,
+            object_name=f"agency.txt/{destination_path_fragment}/agency.txt",
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "agency.txt",
@@ -247,6 +248,49 @@ class TestUnzipGTFSToGCSOperator:
                 "computed": False,
             },
             "original_filename": "agency.txt",
+        }
+
+        file_content = gcs_hook.download(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=f"calendar.txt/{destination_path_fragment}/calendar.txt",
+        )
+        reader = DictReader(StringIO(file_content.decode()))
+        assert list(reader)[0] == {
+            "service_id": "11219341",
+            "service_name": "mon-sat_ends_50325",
+            "start_date": "20250401",
+            "end_date": "20250503",
+            "sunday": "0",
+            "monday": "1",
+            "tuesday": "1",
+            "wednesday": "1",
+            "thursday": "1",
+            "friday": "1",
+            "saturday": "1",
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=f"calendar.txt/{destination_path_fragment}/calendar.txt",
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "calendar.txt",
+            "ts": "2025-06-03T00:00:00+00:00",
+            "extract_config": {
+                "extracted_at": "2025-06-01T00:00:00+00:00",
+                "name": "Santa Ynez Mecatran Schedule",
+                "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                "feed_type": "schedule",
+                "schedule_url_for_validation": None,
+                "auth_query_params": {},
+                "auth_headers": {},
+                "computed": False,
+            },
+            "original_filename": "calendar.txt",
         }
 
         unparsed_results = gcs_hook.download(
@@ -311,147 +355,77 @@ class TestUnzipGTFSToGCSOperator:
                         "computed": False,
                     },
                     "original_filename": "agency.txt",
-                }
+                },
+                {
+                    "filename": "calendar.txt",
+                    "ts": "2025-06-03T00:00:00+00:00",
+                    "extract_config": {
+                        "extracted_at": "2025-06-01T00:00:00+00:00",
+                        "name": "Santa Ynez Mecatran Schedule",
+                        "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
+                        "feed_type": "schedule",
+                        "schedule_url_for_validation": None,
+                        "auth_query_params": {},
+                        "auth_headers": {},
+                        "computed": False,
+                    },
+                    "original_filename": "calendar.txt",
+                },
             ],
         }
 
-
-class TestUnzipGTFSToGCSOperatorFileNotPresent:
     @pytest.fixture
-    def execution_date(self) -> datetime:
-        return datetime.fromisoformat("2025-06-02").replace(tzinfo=timezone.utc)
-
-    @pytest.fixture
-    def gcs_hook(self) -> GCSHook:
-        return GCSHook()
-
-    @pytest.fixture
-    def base64_url(self) -> str:
-        return "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA=="
-
-    @pytest.fixture
-    def source_path(self) -> str:
-        return "schedule/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/gtfs.zip"
-
-    @pytest.fixture
-    def destination_path(self) -> str:
-        return "areas.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/areas.txt"
-
-    @pytest.fixture
-    def results_path(self) -> str:
-        return "unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/areas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl"
-
-    @pytest.fixture
-    def download_schedule_feed_results(self) -> dict:
-        return {
-            "backfilled": False,
-            "config": {
-                "auth_headers": {},
-                "auth_query_params": {},
-                "computed": False,
-                "extracted_at": "2025-11-14T02:00:00+00:00",
-                "feed_type": "schedule",
-                "name": "Santa Ynez Mecatran Schedule",
-                "schedule_url_for_validation": None,
-                "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
-            },
-            "exception": None,
-            "extract": {
-                "filename": "gtfs.zip",
-                "ts": "2025-06-03T00:00:00+00:00",
-                "config": {
-                    "auth_headers": {},
-                    "auth_query_params": {},
-                    "computed": False,
-                    "feed_type": "schedule",
-                    "name": "Santa Ynez Mecatran Schedule",
-                    "schedule_url_for_validation": None,
-                    "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
-                    "extracted_at": "2025-06-01T00:00:00+00:00",
-                },
-                "response_code": 200,
-                "response_headers": {
-                    "Content-Type": "application/zip",
-                    "Content-Disposition": "attachment; filename=gtfs.zip",
-                },
-                "reconstructed": False,
-            },
-            "success": True,
-        }
-
-    @pytest.fixture
-    def test_dag(self, execution_date: datetime) -> DAG:
-        return DAG(
-            "test_dag",
-            default_args={
-                "owner": "airflow",
-                "start_date": execution_date,
-                "end_date": execution_date + timedelta(days=1),
-            },
-            schedule=timedelta(days=1),
-        )
-
-    @pytest.fixture
-    def operator(
+    def nonexistent_operator(
         self,
         test_dag: DAG,
         base64_url: str,
         source_path: str,
-        destination_path: str,
+        destination_path_fragment: str,
         results_path: str,
         download_schedule_feed_results: dict,
     ) -> UnzipGTFSToGCSOperator:
         return UnzipGTFSToGCSOperator(
-            task_id="unzip_areas_to_gcs",
+            task_id="nonexistent_unzip_gtfs_to_gcs",
             gcp_conn_id="google_cloud_default",
             base64_url=base64_url,
             download_schedule_feed_results=download_schedule_feed_results,
-            filename="areas.txt",
+            filenames=["areas.txt"],
             source_bucket=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
             source_path=source_path,
             destination_bucket=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
             ),
-            destination_path=destination_path,
+            destination_path_fragment=destination_path_fragment,
             results_path=results_path,
             dag=test_dag,
         )
 
     @pytest.mark.vcr
-    def test_execute(
+    def test_nonexistent_execute(
         self,
         test_dag: DAG,
-        operator: UnzipGTFSToGCSOperator,
+        nonexistent_operator: UnzipGTFSToGCSOperator,
         execution_date: datetime,
-        destination_path: str,
+        destination_path_fragment: str,
         results_path: str,
         gcs_hook: GCSHook,
     ):
-        operator.run(
+        nonexistent_operator.run(
             start_date=execution_date,
             end_date=execution_date + timedelta(days=1),
             ignore_first_depends_on_past=True,
         )
 
-        task = test_dag.get_task("unzip_areas_to_gcs")
+        task = test_dag.get_task("nonexistent_unzip_gtfs_to_gcs")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
             "base64_url": "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
             "results_path": os.path.join(
-                os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
                 "unzipping_results",
                 "dt=2025-06-02",
                 "ts=2025-06-02T00:00:00+00:00",
-                "areas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
-            ),
-            "destination_path": os.path.join(
-                os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
-                "areas.txt",
-                "dt=2025-06-02",
-                "ts=2025-06-02T00:00:00+00:00",
-                "base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
-                "areas.txt",
+                "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
             ),
             "unzip_results": {
                 "exception": None,
@@ -500,7 +474,7 @@ class TestUnzipGTFSToGCSOperatorFileNotPresent:
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
             ).replace("gs://", ""),
-            object_name=destination_path,
+            object_name=f"areas.txt/{destination_path_fragment}/areas.txt",
         )
         assert not file_content
 
@@ -554,34 +528,28 @@ class TestUnzipGTFSToGCSOperatorFileNotPresent:
             "extracted_files": [],
         }
 
-
-class TestUnzipGTFSToGCSOperatorEmptyFile:
     @pytest.fixture
-    def execution_date(self) -> datetime:
+    def empty_execution_date(self) -> datetime:
         return datetime.fromisoformat("2025-11-13").replace(tzinfo=timezone.utc)
 
     @pytest.fixture
-    def gcs_hook(self) -> GCSHook:
-        return GCSHook()
-
-    @pytest.fixture
-    def base64_url(self) -> str:
+    def empty_base64_url(self) -> str:
         return "aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc="
 
     @pytest.fixture
-    def source_path(self) -> str:
+    def empty_source_path(self) -> str:
         return "schedule/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/schedule-27.zip"
 
     @pytest.fixture
-    def destination_path(self) -> str:
-        return "calendar_dates.txt/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=/calendar_dates.txt"
+    def empty_destination_path_fragment(self) -> str:
+        return "dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc="
 
     @pytest.fixture
-    def results_path(self) -> str:
-        return "unzipping_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/calendar_dates.txt_aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl"
+    def empty_results_path(self) -> str:
+        return "unzipping_results/dt=2025-11-13/ts=2025-11-13T03:02:04.189504+00:00/aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl"
 
     @pytest.fixture
-    def download_schedule_feed_results(self) -> dict:
+    def empty_download_schedule_feed_results(self) -> dict:
         return {
             "backfilled": False,
             "config": {
@@ -619,78 +587,69 @@ class TestUnzipGTFSToGCSOperatorEmptyFile:
         }
 
     @pytest.fixture
-    def test_dag(self, execution_date: datetime) -> DAG:
+    def empty_test_dag(self, empty_execution_date: datetime) -> DAG:
         return DAG(
             "test_dag",
             default_args={
                 "owner": "airflow",
-                "start_date": execution_date,
-                "end_date": execution_date + timedelta(days=1),
+                "start_date": empty_execution_date,
+                "end_date": empty_execution_date + timedelta(days=1),
             },
             schedule=timedelta(days=1),
         )
 
     @pytest.fixture
-    def operator(
+    def empty_operator(
         self,
-        test_dag: DAG,
-        base64_url: str,
-        source_path: str,
-        destination_path: str,
-        results_path: str,
-        download_schedule_feed_results: dict,
+        empty_test_dag: DAG,
+        empty_base64_url: str,
+        empty_source_path: str,
+        empty_destination_path_fragment: str,
+        empty_results_path: str,
+        empty_download_schedule_feed_results: dict,
     ) -> UnzipGTFSToGCSOperator:
         return UnzipGTFSToGCSOperator(
-            task_id="unzip_calendar_dates_to_gcs",
+            task_id="empty_unzip_gtfs_to_gcs",
             gcp_conn_id="google_cloud_default",
-            base64_url=base64_url,
-            download_schedule_feed_results=download_schedule_feed_results,
-            filename="calendar_dates.txt",
+            base64_url=empty_base64_url,
+            download_schedule_feed_results=empty_download_schedule_feed_results,
+            filenames=["calendar_dates.txt"],
             source_bucket=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
-            source_path=source_path,
+            source_path=empty_source_path,
             destination_bucket=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
             ),
-            destination_path=destination_path,
-            results_path=results_path,
-            dag=test_dag,
+            destination_path_fragment=empty_destination_path_fragment,
+            results_path=empty_results_path,
+            dag=empty_test_dag,
         )
 
     @pytest.mark.vcr
-    def test_execute(
+    def test_empty_execute(
         self,
-        test_dag: DAG,
-        operator: UnzipGTFSToGCSOperator,
-        execution_date: datetime,
-        destination_path: str,
-        results_path: str,
+        empty_test_dag: DAG,
+        empty_operator: UnzipGTFSToGCSOperator,
+        empty_execution_date: datetime,
+        empty_destination_path_fragment: str,
+        empty_results_path: str,
         gcs_hook: GCSHook,
     ):
-        operator.run(
-            start_date=execution_date,
-            end_date=execution_date + timedelta(days=1),
+        empty_operator.run(
+            start_date=empty_execution_date,
+            end_date=empty_execution_date + timedelta(days=1),
             ignore_first_depends_on_past=True,
         )
 
-        task = test_dag.get_task("unzip_calendar_dates_to_gcs")
-        task_instance = TaskInstance(task, execution_date=execution_date)
+        task = empty_test_dag.get_task("empty_unzip_gtfs_to_gcs")
+        task_instance = TaskInstance(task, execution_date=empty_execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
             "base64_url": "aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=",
             "results_path": os.path.join(
-                os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
                 "unzipping_results",
                 "dt=2025-11-13",
                 "ts=2025-11-13T03:02:04.189504+00:00",
-                "calendar_dates.txt_aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl",
-            ),
-            "destination_path": os.path.join(
-                os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
-                "calendar_dates.txt",
-                "dt=2025-11-13",
-                "ts=2025-11-13T03:02:04.189504+00:00",
-                "base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=",
-                "calendar_dates.txt",
+                "aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl",
             ),
             "unzip_results": {
                 "exception": None,
@@ -752,7 +711,11 @@ class TestUnzipGTFSToGCSOperatorEmptyFile:
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
             ).replace("gs://", ""),
-            object_name=destination_path,
+            object_name=os.path.join(
+                "calendar_dates.txt",
+                empty_destination_path_fragment,
+                "calendar_dates.txt",
+            ),
         )
         reader = DictReader(StringIO(file_content.decode()))
         assert list(reader) == []
@@ -761,7 +724,11 @@ class TestUnzipGTFSToGCSOperatorEmptyFile:
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
             ).replace("gs://", ""),
-            object_name=destination_path,
+            object_name=os.path.join(
+                "calendar_dates.txt",
+                empty_destination_path_fragment,
+                "calendar_dates.txt",
+            ),
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "calendar_dates.txt",
@@ -783,7 +750,7 @@ class TestUnzipGTFSToGCSOperatorEmptyFile:
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
             ).replace("gs://", ""),
-            object_name=results_path,
+            object_name=empty_results_path,
         )
         results = json.loads(unparsed_results)
         assert results == {
