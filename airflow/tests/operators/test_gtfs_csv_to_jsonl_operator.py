@@ -4,7 +4,6 @@ import os
 from datetime import datetime, timedelta, timezone
 
 import pytest
-from google.api_core.exceptions import NotFound
 from operators.gtfs_csv_to_jsonl_operator import GTFSCSVToJSONLOperator
 
 from airflow.models.dag import DAG
@@ -22,16 +21,16 @@ class TestGTFSCSVToJSONLOperator:
         return GCSHook()
 
     @pytest.fixture
-    def source_path(self) -> str:
-        return "agency.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.txt"
+    def source_path_fragment(self) -> str:
+        return "dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA=="
 
     @pytest.fixture
-    def destination_path(self) -> str:
-        return "agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.jsonl.gz"
+    def destination_path_fragment(self) -> str:
+        return "dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA=="
 
     @pytest.fixture
-    def results_path(self) -> str:
-        return "agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/agency.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl"
+    def results_path_fragment(self) -> str:
+        return "dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl"
 
     @pytest.fixture
     def unzip_results(self) -> dict:
@@ -109,9 +108,9 @@ class TestGTFSCSVToJSONLOperator:
     def operator(
         self,
         test_dag: DAG,
-        source_path: str,
-        destination_path: str,
-        results_path: str,
+        source_path_fragment: str,
+        destination_path_fragment: str,
+        results_path_fragment: str,
         unzip_results: dict,
     ) -> GTFSCSVToJSONLOperator:
         return GTFSCSVToJSONLOperator(
@@ -121,12 +120,12 @@ class TestGTFSCSVToJSONLOperator:
             source_bucket=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
             ),
-            source_path=source_path,
+            source_path_fragment=source_path_fragment,
             destination_bucket=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
             ),
-            destination_path=destination_path,
-            results_path=results_path,
+            destination_path_fragment=destination_path_fragment,
+            results_path_fragment=results_path_fragment,
             dag=test_dag,
         )
 
@@ -136,8 +135,8 @@ class TestGTFSCSVToJSONLOperator:
         test_dag: DAG,
         operator: GTFSCSVToJSONLOperator,
         execution_date: datetime,
-        destination_path: str,
-        results_path: str,
+        destination_path_fragment: str,
+        results_path_fragment: str,
         gcs_hook: GCSHook,
     ):
         operator.run(
@@ -149,26 +148,28 @@ class TestGTFSCSVToJSONLOperator:
         task = test_dag.get_task("convert_agency_to_jsonl")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
-        assert xcom_value["results_path"] == os.path.join(
-            os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"),
-            "agency.txt_parsing_results",
-            "dt=2025-06-02",
-            "ts=2025-06-02T00:00:00+00:00",
-            "agency.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
-        )
-        assert xcom_value["destination_path"] == os.path.join(
-            os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"),
-            "agency",
-            "dt=2025-06-02",
-            "ts=2025-06-02T00:00:00+00:00",
-            "base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
-            "agency.jsonl.gz",
-        )
+        assert xcom_value[0] == {
+            "results_path": os.path.join(
+                "agency.txt_parsing_results",
+                "dt=2025-06-02",
+                "ts=2025-06-02T00:00:00+00:00",
+                "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
+            ),
+            "destination_path": os.path.join(
+                "agency",
+                "dt=2025-06-02",
+                "ts=2025-06-02T00:00:00+00:00",
+                "base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
+                "agency.jsonl.gz",
+            ),
+        }
         compressed_result = gcs_hook.download(
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
             ).replace("gs://", ""),
-            object_name=destination_path,
+            object_name=os.path.join(
+                "agency", destination_path_fragment, "agency.jsonl.gz"
+            ),
         )
         decompressed_result = gzip.decompress(compressed_result)
         result = [json.loads(x) for x in decompressed_result.splitlines()]
@@ -189,7 +190,9 @@ class TestGTFSCSVToJSONLOperator:
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
             ).replace("gs://", ""),
-            object_name=destination_path,
+            object_name=os.path.join(
+                "agency", destination_path_fragment, "agency.jsonl.gz"
+            ),
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "agency.jsonl.gz",
@@ -213,7 +216,9 @@ class TestGTFSCSVToJSONLOperator:
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
             ).replace("gs://", ""),
-            object_name=results_path,
+            object_name=os.path.join(
+                "agency.txt_parsing_results", results_path_fragment
+            ),
         )
         results = json.loads(unparsed_results)
         assert results == {
@@ -268,150 +273,11 @@ class TestGTFSCSVToJSONLOperator:
             bucket_name=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
             ).replace("gs://", ""),
-            object_name=results_path,
+            object_name=os.path.join(
+                "agency.txt_parsing_results", results_path_fragment
+            ),
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "results.jsonl",
             "ts": "2025-06-03T00:00:00+00:00",
         }
-
-
-class TestGTFSCSVToJSONLOperatorFileNotFound:
-    @pytest.fixture
-    def execution_date(self) -> datetime:
-        return datetime.fromisoformat("2025-06-02").replace(tzinfo=timezone.utc)
-
-    @pytest.fixture
-    def gcs_hook(self) -> GCSHook:
-        return GCSHook()
-
-    @pytest.fixture
-    def source_path(self) -> str:
-        return "areas.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/areas.txt"
-
-    @pytest.fixture
-    def destination_path(self) -> str:
-        return "areas/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/areas.jsonl.gz"
-
-    @pytest.fixture
-    def results_path(self) -> str:
-        return "areas.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/areas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl"
-
-    @pytest.fixture
-    def unzip_results(self) -> dict:
-        return {
-            "success": True,
-            "exception": None,
-            "extract": {
-                "filename": "gtfs.zip",
-                "ts": "2025-06-03T00:00:00+00:00",
-                "config": {
-                    "extracted_at": "2025-06-01T00:00:00+00:00",
-                    "name": "Santa Ynez Mecatran Schedule",
-                    "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
-                    "feed_type": "schedule",
-                    "schedule_url_for_validation": None,
-                    "auth_query_params": {},
-                    "auth_headers": {},
-                    "computed": False,
-                },
-                "response_code": 200,
-                "response_headers": {
-                    "Content-Type": "application/zip",
-                    "Content-Disposition": "attachment; filename=gtfs.zip",
-                },
-                "reconstructed": False,
-            },
-            "zipfile_extract_md5hash": "4f72c84bd3f053ddb929289fa2de7879",
-            "zipfile_files": [
-                "agency.txt",
-                "calendar.txt",
-                "calendar_dates.txt",
-                "fare_attributes.txt",
-                "feed_info.txt",
-                "route_directions.txt",
-                "routes.txt",
-                "shapes.txt",
-                "stop_times.txt",
-                "stops.txt",
-                "transfers.txt",
-                "trips.txt",
-            ],
-            "zipfile_dirs": [],
-            "extracted_files": [],
-        }
-
-    @pytest.fixture
-    def test_dag(self, execution_date: datetime) -> DAG:
-        return DAG(
-            "test_dag",
-            default_args={
-                "owner": "airflow",
-                "start_date": execution_date,
-                "end_date": execution_date + timedelta(days=1),
-            },
-            schedule=timedelta(days=1),
-        )
-
-    @pytest.fixture
-    def operator(
-        self,
-        test_dag: DAG,
-        source_path: str,
-        destination_path: str,
-        results_path: str,
-        unzip_results: dict,
-    ) -> GTFSCSVToJSONLOperator:
-        return GTFSCSVToJSONLOperator(
-            task_id="convert_areas_to_jsonl",
-            gcp_conn_id="google_cloud_default",
-            unzip_results=unzip_results,
-            source_bucket=os.environ.get(
-                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
-            ),
-            source_path=source_path,
-            destination_bucket=os.environ.get(
-                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
-            ),
-            destination_path=destination_path,
-            results_path=results_path,
-            dag=test_dag,
-        )
-
-    @pytest.mark.vcr
-    def test_execute(
-        self,
-        test_dag: DAG,
-        operator: GTFSCSVToJSONLOperator,
-        execution_date: datetime,
-        destination_path: str,
-        results_path: str,
-        gcs_hook: GCSHook,
-    ):
-        with pytest.raises(NotFound) as exception:
-            operator.run(
-                start_date=execution_date,
-                end_date=execution_date + timedelta(days=1),
-                ignore_first_depends_on_past=True,
-            )
-
-        assert (
-            "No such object: calitp-staging-pytest/areas.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/areas.txt"
-            in str(exception.value)
-        )
-
-        compressed_result = gcs_hook.exists(
-            bucket_name=os.environ.get(
-                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
-            ).replace("gs://", ""),
-            object_name=destination_path,
-        )
-        assert not compressed_result
-
-        unparsed_results = gcs_hook.exists(
-            bucket_name=os.environ.get(
-                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
-            ).replace("gs://", ""),
-            object_name=results_path,
-        )
-        assert not unparsed_results

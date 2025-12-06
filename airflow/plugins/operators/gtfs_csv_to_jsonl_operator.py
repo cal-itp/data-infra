@@ -12,11 +12,24 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
 class GTFSCSVResults:
-    def __init__(self, fieldnames: list[str], dialect: str) -> None:
+    def __init__(
+        self,
+        current_date: pendulum.DateTime,
+        unzip_results: dict,
+        filename: str,
+        fieldnames: list[str],
+        dialect: str,
+    ) -> None:
+        self.current_date = current_date
+        self.filename = filename
         self.fieldnames = fieldnames
         self.dialect = dialect
+        self.unzip_results = unzip_results
         self.lines = []
         self._exception = None
+
+    def filetype(self) -> str:
+        return os.path.splitext(self.filename)[0]
 
     def set_exception(self, exception: Exception) -> None:
         self._exception = exception
@@ -32,38 +45,37 @@ class GTFSCSVResults:
             [json.dumps(line, separators=(",", ":")) for line in self.lines]
         )
 
-    def is_empty(self) -> bool:
-        return len(self.lines) == 0
+    def valid(self) -> bool:
+        return len(self.lines) > 0
 
     def success(self) -> bool:
         return self._exception is None
 
-    def report(
-        self,
-        filename: str,
-        filetype: str,
-        unzip_results: dict,
-        current_date: pendulum.DateTime,
-    ) -> dict:
+    def report(self) -> dict:
         return {
             "exception": self.exception(),
-            "feed_file": unzip_results.get("extracted_files")[0],
+            "feed_file": self.unzip_results.get("extracted_files")[0],
             "fields": self.fieldnames,
-            "parsed_file": {
-                "csv_dialect": self.dialect,
-                "extract_config": unzip_results.get("extract").get("config"),
-                "filename": filename,
-                "gtfs_filename": filetype,
-                "num_lines": len(self.lines),
-                "ts": current_date.isoformat(),
-            },
+            "parsed_file": self.metadata(),
             "success": self.success(),
+        }
+
+    def metadata(self) -> dict:
+        return {
+            "csv_dialect": self.dialect,
+            "extract_config": self.unzip_results.get("extract").get("config"),
+            "filename": f"{self.filetype()}.jsonl.gz",
+            "gtfs_filename": self.filetype(),
+            "num_lines": len(self.lines),
+            "ts": self.current_date.isoformat(),
         }
 
 
 class GTFSCSVConverter:
-    def __init__(self, csv_data: bytes) -> None:
+    def __init__(self, filename: str, csv_data: bytes, unzip_results: dict) -> None:
+        self.filename = filename
         self.csv_data = csv_data
+        self.unzip_results = unzip_results
 
     def reader(self) -> csv.DictReader:
         comma_reader = csv.DictReader(
@@ -78,9 +90,15 @@ class GTFSCSVConverter:
             return tab_reader
         return comma_reader
 
-    def convert(self) -> GTFSCSVResults:
+    def convert(self, current_date: pendulum.DateTime) -> GTFSCSVResults:
         reader = self.reader()
-        results = GTFSCSVResults(fieldnames=reader.fieldnames, dialect=reader.dialect)
+        results = GTFSCSVResults(
+            current_date=current_date,
+            filename=self.filename,
+            fieldnames=reader.fieldnames,
+            dialect=reader.dialect,
+            unzip_results=self.unzip_results,
+        )
         try:
             for row in reader:
                 results.append(row)
@@ -93,10 +111,10 @@ class GTFSCSVToJSONLOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "unzip_results",
         "source_bucket",
-        "source_path",
+        "source_path_fragment",
         "destination_bucket",
-        "results_path",
-        "destination_path",
+        "results_path_fragment",
+        "destination_path_fragment",
         "gcp_conn_id",
     )
 
@@ -104,10 +122,10 @@ class GTFSCSVToJSONLOperator(BaseOperator):
         self,
         unzip_results: dict,
         source_bucket: str,
-        source_path: str,
+        source_path_fragment: str,
         destination_bucket: str,
-        destination_path: str,
-        results_path: str,
+        destination_path_fragment: str,
+        results_path_fragment: str,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
@@ -116,10 +134,10 @@ class GTFSCSVToJSONLOperator(BaseOperator):
         self._gcs_hook = None
         self.unzip_results = unzip_results
         self.source_bucket = source_bucket
-        self.source_path = source_path
+        self.source_path_fragment = source_path_fragment
         self.destination_bucket = destination_bucket
-        self.results_path = results_path
-        self.destination_path = destination_path
+        self.results_path_fragment = results_path_fragment
+        self.destination_path_fragment = destination_path_fragment
         self.gcp_conn_id = gcp_conn_id
 
     def gcs_hook(self) -> GCSHook:
@@ -134,55 +152,77 @@ class GTFSCSVToJSONLOperator(BaseOperator):
     def source_filename(self) -> str:
         return os.path.basename(self.source_path)
 
-    def source(self) -> bytes:
-        return self.gcs_hook().download(
-            bucket_name=self.source_name(),
-            object_name=self.source_path,
-        )
-
-    def converter(self) -> GTFSCSVConverter:
-        return GTFSCSVConverter(csv_data=self.source().decode())
+    def converters(self) -> list[GTFSCSVConverter]:
+        output = []
+        for extracted_file in self.unzip_results["extracted_files"]:
+            source = self.gcs_hook().download(
+                bucket_name=self.source_name(),
+                object_name=os.path.join(
+                    extracted_file["filename"],
+                    self.source_path_fragment,
+                    extracted_file["filename"],
+                ),
+            )
+            output.append(
+                GTFSCSVConverter(
+                    filename=extracted_file["filename"],
+                    csv_data=source.decode(),
+                    unzip_results=self.unzip_results,
+                )
+            )
+        return output
 
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
-        result = self.converter().convert()
-        report = result.report(
-            filename=os.path.basename(self.destination_path),
-            filetype=self.destination_path.split("/")[0],
-            unzip_results=self.unzip_results,
-            current_date=dag_run.logical_date,
-        )
+        output = []
+        for converter in self.converters():
+            results = converter.convert(current_date=dag_run.logical_date)
+            if results.valid():
+                self.gcs_hook().upload(
+                    bucket_name=self.destination_name(),
+                    object_name=os.path.join(
+                        results.filetype(),
+                        self.destination_path_fragment,
+                        f"{results.filetype()}.jsonl.gz",
+                    ),
+                    data=results.jsonl(),
+                    mime_type="application/jsonl",
+                    gzip=True,
+                    metadata={
+                        "PARTITIONED_ARTIFACT_METADATA": json.dumps(results.metadata())
+                    },
+                )
 
-        if not result.is_empty():
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
-                object_name=self.destination_path,
-                data=result.jsonl(),
+                object_name=os.path.join(
+                    f"{results.filename}_parsing_results", self.results_path_fragment
+                ),
+                data=json.dumps(results.report(), separators=(",", ":")),
                 mime_type="application/jsonl",
-                gzip=True,
+                gzip=False,
                 metadata={
-                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(report["parsed_file"])
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        {
+                            "filename": "results.jsonl",
+                            "ts": dag_run.logical_date.isoformat(),
+                        }
+                    )
                 },
             )
 
-        self.gcs_hook().upload(
-            bucket_name=self.destination_name(),
-            object_name=self.results_path,
-            data=json.dumps(report, separators=(",", ":")),
-            mime_type="application/jsonl",
-            gzip=False,
-            metadata={
-                "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                    {
-                        "filename": "results.jsonl",
-                        "ts": dag_run.logical_date.isoformat(),
-                    }
-                )
-            },
-        )
-        return {
-            "destination_path": os.path.join(
-                self.destination_bucket, self.destination_path
-            ),
-            "results_path": os.path.join(self.destination_bucket, self.results_path),
-        }
+            output.append(
+                {
+                    "destination_path": os.path.join(
+                        results.filetype(),
+                        self.destination_path_fragment,
+                        f"{results.filetype()}.jsonl.gz",
+                    ),
+                    "results_path": os.path.join(
+                        f"{results.filename}_parsing_results",
+                        self.results_path_fragment,
+                    ),
+                }
+            )
+
+        return output
