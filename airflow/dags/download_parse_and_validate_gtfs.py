@@ -56,6 +56,7 @@ with DAG(
 
     download_config = BigQueryToDownloadConfigOperator(
         task_id="bigquery_to_download_config",
+        retries=1,
         dataset_name="staging",
         table_name="int_transit_database__gtfs_datasets_dim",
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
@@ -65,6 +66,7 @@ with DAG(
     schedule_download_configs = GCSDownloadConfigFilterOperator(
         task_id="download_config_filter",
         limit=None,
+        retries=1,
         feed_type="schedule",
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
         source_path="gtfs_download_configs/dt={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
@@ -72,6 +74,7 @@ with DAG(
 
     downloads = DownloadConfigToGCSOperator.partial(
         task_id="download_config_to_gcs",
+        retries=1,
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
         destination_path="schedule/dt={{ ds }}/ts={{ ts }}",
         results_path="download_schedule_feed_results/dt={{ ds }}/ts={{ ts }}",
@@ -100,6 +103,7 @@ with DAG(
 
     ValidateGTFSToGCSOperator.partial(
         task_id="validate_gtfs_to_gcs",
+        retries=1,
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"),
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
         map_index_template="{{ task.download_schedule_feed_results['config']['name'] }}",
@@ -117,6 +121,7 @@ with DAG(
 
     unzipped_files = UnzipGTFSToGCSOperator.partial(
         task_id="unzip_to_gcs",
+        retries=1,
         filenames=list(GTFS_SCHEDULE_FILENAMES.keys()),
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
@@ -148,6 +153,7 @@ with DAG(
 
     GTFSCSVToJSONLOperator.partial(
         task_id="convert_to_jsonl",
+        retries=1,
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"),
         map_index_template="{{ task.unzip_results['extract']['config']['name'] }}",
