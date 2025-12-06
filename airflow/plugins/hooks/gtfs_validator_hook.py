@@ -105,6 +105,11 @@ class GTSFValidatorVersion:
             "number": "5.0.0",
             "filename": "gtfs-validator-5.0.0-cli.jar",
         },
+        {
+            "date": pendulum.datetime(2025, 12, 14),
+            "number": "7.1.0",
+            "filename": "gtfs-validator-7.1.0-cli.jar",
+        },
     ]
 
     def __init__(self, date: pendulum.DateTime, number: str, filename: str) -> None:
