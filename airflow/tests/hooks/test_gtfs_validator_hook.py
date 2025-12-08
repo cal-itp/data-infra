@@ -265,3 +265,98 @@ class TestGTFSValidatorHook:
                 "validator_version": "v5.0.0",
             },
         }
+
+    def test_run_unsupported_file(
+        self,
+        hook: GTFSValidatorHook,
+    ):
+        fixture_schedule_path = os.path.normpath(
+            os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                "../fixtures/bad-gtfs.zip",
+            )
+        )
+
+        download_schedule_feed_results = {
+            "backfilled": False,
+            "config": {
+                "auth_headers": {},
+                "auth_query_params": {},
+                "computed": False,
+                "extracted_at": "2025-12-07T00:00:00+00:00",
+                "feed_type": "schedule",
+                "name": "San Joaquin Schedule",
+                "schedule_url_for_validation": None,
+                "url": "http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip",
+            },
+            "exception": None,
+            "extract": {
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-12-07T00:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "San Joaquin Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip",
+                },
+                "filename": "gtfs.zip",
+                "reconstructed": False,
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=gtfs.zip",
+                },
+                "ts": "2025-12-07T00:00:00+00:00",
+            },
+            "success": True,
+        }
+
+        result = hook.run(
+            filename=fixture_schedule_path,
+            download_schedule_feed_results=download_schedule_feed_results,
+        )
+        assert len(result.notices()) == 0
+        assert "returned non-zero exit status 255" in result.results()["exception"]
+
+        partial_results = {
+            "success": False,
+            "extract": {
+                "filename": "gtfs.zip",
+                "ts": "2025-12-07T00:00:00+00:00",
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-12-07T00:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "San Joaquin Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip",
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=gtfs.zip",
+                },
+                "reconstructed": False,
+            },
+            "validation": {
+                "filename": "validation_notices_v5-0-0.jsonl.gz",
+                "ts": "2025-11-15T00:00:00+00:00",
+                "extract_config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-12-07T00:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "San Joaquin Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip",
+                },
+                "system_errors": {},
+                "validator_version": "v5.0.0",
+            },
+        }
+        assert partial_results.items() <= result.results().items()
