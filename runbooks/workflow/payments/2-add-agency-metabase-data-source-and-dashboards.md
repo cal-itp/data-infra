@@ -14,7 +14,7 @@ As new agencies are introduced to the contactless payments program, we will need
 
 **Permissions needed**:
 
-- `Write` permissions to the (Cal-ITP `data-infra` repository)\[https://github.com/cal-itp/data-infra/tree/main\].
+- `Write` permissions to the [Cal-ITP `data-infra` repository](https://github.com/cal-itp/data-infra/tree/main).
 
 A new agency-specific service account needs to be created through the Terraform project in the `data-infra` repository. You can use [this previously-merged PR](https://github.com/cal-itp/data-infra/pull/4374/files) as a reference for the two files that need to be modified through this process: `iac/cal-itp-data-infra/iam/us/project_iam_member.tf`, and `iac/cal-itp-data-infra/iam/us/service_account.tf`.
 
