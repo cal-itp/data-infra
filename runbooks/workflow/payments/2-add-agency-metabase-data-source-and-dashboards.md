@@ -16,14 +16,14 @@ As new agencies are introduced to the contactless payments program, we will need
 
 - `Write` permissions to the (Cal-ITP `data-infra` repository)\[https://github.com/cal-itp/data-infra/tree/main\].
 
-A new agency-specific service account needs to be created through the Terraform project in the `data-infra` repository. You can use (this previously-merged PR)\[https://github.com/cal-itp/data-infra/pull/4374/files\] as a reference for the two files that need to be modified through this process: `iac/cal-itp-data-infra/iam/us/project_iam_member.tf`, and `iac/cal-itp-data-infra/iam/us/service_account.tf`.
+A new agency-specific service account needs to be created through the Terraform project in the `data-infra` repository. You can use [this previously-merged PR](https://github.com/cal-itp/data-infra/pull/4374/files) as a reference for the two files that need to be modified through this process: `iac/cal-itp-data-infra/iam/us/project_iam_member.tf`, and `iac/cal-itp-data-infra/iam/us/service_account.tf`.
 
 - To begin, create a new branch in the [cal-itp/data-infra Github repository](https://github.com/cal-itp/data-infra).
 - Navigate to the first file to be modified: `iac/cal-itp-data-infra/iam/us/project_iam_member.tf`
-  - Create a new entry in the file that mirrors the contents of the El Dorado service account configuration, (found here)\[https://github.com/cal-itp/data-infra/pull/4374/files#diff-225faaedb56a2d0c4b52f2a95e354a35444decb4cc6cff1717ce53b9d6e094fbR67-R71\].
+  - Create a new entry in the file that mirrors the contents of the El Dorado service account configuration, [found here](https://github.com/cal-itp/data-infra/pull/4374/files#diff-225faaedb56a2d0c4b52f2a95e354a35444decb4cc6cff1717ce53b9d6e094fbR67-R71).
   - Keep the majority of the contents of the El Dorado entry, subsituting only the `eldorado` text for a more appropriate naming convention based on the agency you are creating the service account for (this will be done in two places, lines 67 and 68 in the PR example above)
 - Navigate to the second file to be modified: `iac/cal-itp-data-infra/iam/us/service_account.tf`
-  - Create a new entry in the file that mirrors the contents of the El Dorado service account configuration, (found here)\[https://github.com/cal-itp/data-infra/pull/4374/files#diff-275fd84e89c5153d0616094b0a753a02143de7932dc96ca206a960a9bc6ef183R281-R285\].
+  - Create a new entry in the file that mirrors the contents of the El Dorado service account configuration, [found here](https://github.com/cal-itp/data-infra/pull/4374/files#diff-275fd84e89c5153d0616094b0a753a02143de7932dc96ca206a960a9bc6ef183R281-R285).
   - Keep the majority of the contents of the El Dorado entry, subsituting only the `eldorao` portion of the `eldorado-payments-user` text for a more appropriate naming convention based on the agency you are creating the service account for (this will be done in two places, lines 218 and 282 in the PR example above)
 - Once this has been completed, mark your PR as 'Ready for Review', and once approved by a reviewer, merge in your changes.
 - Upon merge, and once the Github actions finish running successfully, your new service account will be available in the Google Cloud Platform. Navigate to `IAM &Admin` --> `Service Accounts` to verify.
@@ -33,7 +33,7 @@ A new agency-specific service account needs to be created through the Terraform 
 **Permissions needed**:
 
 - Minimum Google Cloud Platform role `roles/iam.serviceAccountKeyAdmin` (more information can be found in the Google IAM documentation).
-- `Write` permissions to the (Cal-ITP `data-infra` repository)\[https://github.com/cal-itp/data-infra/tree/main\].
+- `Write` permissions to the [Cal-ITP `data-infra` repository](https://github.com/cal-itp/data-infra/tree/main).
 
 1. Download the service account key for the service account you've just created
 
@@ -42,15 +42,15 @@ A new agency-specific service account needs to be created through the Terraform 
 - Keep the default key type `JSON` and select `Create`
 - This will download a JSON copy of the service accout key to your local environment, which will be used in later steps within Metabase. Store this in a secure, local location.
 
-2. Open a new branch in the [cal-itp/data-infra Github repository](https://github.com/cal-itp/data-infra). You can use (this previously-merged PR)\[https://github.com/cal-itp/data-infra/pull/4376/files\] as a reference for the two dbt macros that need to be modified through this process in this file: `warehouse/macros/create_row_access_policy.sql`.
+2. Open a new branch in the [cal-itp/data-infra Github repository](https://github.com/cal-itp/data-infra). You can use [this previously-merged PR](https://github.com/cal-itp/data-infra/pull/4376/files) as a reference for the two dbt macros that need to be modified through this process in this file: `warehouse/macros/create_row_access_policy.sql`.
 
 - Modify the first macro in the file: `payments_littlepay_row_access_policy`
-  - Duplicate an existing entry. In the El Dorado example linked in the PR above, (this would be rows 89-93)\[https://github.com/cal-itp/data-infra/pull/4376/files#diff-e32013136795892ab542f0571294fd65e723bc4085e41b5a52ac75d29e3503e4R89-R93\].
+  - Duplicate an existing entry. In the El Dorado example linked in the PR above, [this would be rows 89-93](https://github.com/cal-itp/data-infra/pull/4376/files#diff-e32013136795892ab542f0571294fd65e723bc4085e41b5a52ac75d29e3503e4R89-R93).
   - Modify two fields:
     - Filter_value: substitute `'eldorado-transit'` with the **Littlepay participant_id** for the new agency.
     - Principals: Subsitute the address for the newly created service account after `['serviceAccount:`
 - Modify the second macro in the file: `payments_elavon_row_access_policy`
-  - Duplicate an existing entry. In the El Dorado example linked in the PR above, (this would be rows 184-188)\[https://github.com/cal-itp/data-infra/pull/4376/files#diff-e32013136795892ab542f0571294fd65e723bc4085e41b5a52ac75d29e3503e4R184-R188\].
+  - Duplicate an existing entry. In the El Dorado example linked in the PR above, [this would be rows 184-188](https://github.com/cal-itp/data-infra/pull/4376/files#diff-e32013136795892ab542f0571294fd65e723bc4085e41b5a52ac75d29e3503e4R184-R188).
   - Modify two fields:
     - Filter_value: substitute `'El Dorado County Transit Authority'` with the **Elavon organization_name** for the new agency.
     - Principals: Subsitute the address for the newly created service account after `['serviceAccount:`
