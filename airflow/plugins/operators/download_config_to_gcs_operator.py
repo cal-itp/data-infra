@@ -1,6 +1,7 @@
 import json
 import logging
 from base64 import urlsafe_b64encode
+from email.message import Message
 from typing import Sequence
 
 import pendulum
@@ -54,11 +55,13 @@ class Download:
         return self.response_headers().get("Content-Type", "application/octet-stream")
 
     def filename(self) -> str:
-        return (
-            self.response_headers()
-            .get("Content-Disposition", "filename=gtfs.zip")
-            .split("filename=")[1]
+        content_disposition = self.response_headers().get(
+            "Content-Disposition", "attachment"
         )
+        msg = Message()
+        msg["content-disposition"] = content_disposition
+        filename = msg.get_filename()
+        return filename if filename else "gtfs.zip"
 
     def extract(self, current_time: pendulum.DateTime) -> dict:
         return {
