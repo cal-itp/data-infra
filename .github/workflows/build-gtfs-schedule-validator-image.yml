@@ -1,16 +1,16 @@
-name: Build gtfs-schedule-validator image
+name: Build and push gtfs-schedule-validator image
 
 on:
   push:
     branches:
-      - main
+      - 'main'
     paths:
-      - .github/workflows/build-gtfs-schedule-validator-image.yml
-      - jobs/gtfs-schedule-validator/**
+      - '.github/workflows/build-gtfs-schedule-validator-image.yml'
+      - 'jobs/gtfs-schedule-validator/**'
   pull_request:
     paths:
-      - .github/workflows/build-gtfs-schedule-validator-image.yml
-      - jobs/gtfs-schedule-validator/**
+      - '.github/workflows/build-gtfs-schedule-validator-image.yml'
+      - 'jobs/gtfs-schedule-validator/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -21,84 +21,40 @@ jobs:
     name: Run static checkers
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
         with:
-          python-version-file: jobs/gtfs-schedule-validator/.python-version
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          version: 0.8.22
-          enable-cache: true
-
-      - name: Install the project
-        working-directory: jobs/gtfs-schedule-validator
-        run: uv sync --locked --all-extras --dev
-
-      - name: Run mypy
-        working-directory: jobs/gtfs-schedule-validator
-        run: uv run mypy .
+          python-version: '3.9'
+      - run: curl -sSL https://install.python-poetry.org | python -
+      - run: cd jobs/gtfs-schedule-validator && poetry install && poetry run mypy .
 
   test:
     name: Run pytest
     runs-on: ubuntu-latest
     env:
-      CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY: gs://calitp-staging-pytest
+      CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY: gs://some-test-bucket
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
         with:
-          python-version-file: jobs/gtfs-schedule-validator/.python-version
+          python-version: '3.9'
+      - run: curl -sSL https://install.python-poetry.org | python -
+      - run: cd jobs/gtfs-schedule-validator && poetry install && poetry run pytest
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          version: 0.8.22
-          enable-cache: true
-
-      - name: Install the project
-        working-directory: jobs/gtfs-schedule-validator
-        run: uv sync --locked --all-extras --dev
-
-      - name: Run pytest
-        working-directory: jobs/gtfs-schedule-validator
-        run: uv run pytest
-
-  docker:
-    name: Push docker image
+  build_push:
+    name: Package docker image
     runs-on: ubuntu-latest
     needs: [check, test]
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-      id-token: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to GitHub Repository
-        uses: docker/login-action@v3
+      - uses: actions/checkout@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and Push
-        uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v2
         with:
           context: jobs/gtfs-schedule-validator
-          push: true
-          tags: ghcr.io/${{ github.repository }}/gtfs-schedule-validator:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'latest' || 'development' }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/gtfs-schedule-validator:${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'latest' || 'development' }}
-          cache-to: type=inline
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          tags: ghcr.io/${{github.repository}}/gtfs-schedule-validator:latest
