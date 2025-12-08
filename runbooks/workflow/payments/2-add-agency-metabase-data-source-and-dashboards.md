@@ -8,48 +8,54 @@ This documentation is broken out into three sections:
 
 ## Add a New Agency Data Source to Metabase and Create Permissions
 
-As new agencies are introduced to the contactless payments program, we will need to access their data within Metabase for use in their payments dashboard and other analysis. Because we use a [row access policy](https://cloud.google.com/bigquery/docs/row-level-security-intro#how_row-level_security_works) ([configured here](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql)) in the warehouse code to limit access to data to authorized parties, this is a multi-step process.
+As new agencies are introduced to the contactless payments program, we will need to access their data within Metabase for use in their payments dashboard and other analyses. Because we use a [row access policy](https://cloud.google.com/bigquery/docs/row-level-security-intro#how_row-level_security_works) ([configured here](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql)) in the warehouse code to limit access to data to authorized parties, this is a multi-step process, and it begins with creating a new service account through our Terraform project.
 
-### Create a new service account and row access policy
+### Create a new service account
 
-**Permissions needed**: Minimum Google Cloud Platform role `roles/iam.serviceAccountCreator` ([more information can be found in the Google IAM documentation](https://cloud.google.com/iam/docs/understanding-roles#iam.serviceAccountCreator))
+**Permissions needed**:
 
-1. To begin, create a new service account for the agency within the Google Cloud Platform console, which will be used to allow Metabase read-access to the agency's payments data.
+- `Write` permissions to the (Cal-ITP `data-infra` repository)\[https://github.com/cal-itp/data-infra/tree/main\].
 
-- Navigate to: <https://console.cloud.google.com/iam-admin/serviceaccounts> in the `cal-itp-data-infra` project
-- Select `+ Create Service Account` in the top-center of the page
-- Populate the `Service account ID` field using the convention: `[agency-name]-payments-user`, then select `Create and Continue`
-- Within the `Grant this service account access to the project` section, assign the role `Agency Payments Service Reader`
-- Select `Done`
+A new agency-specific service account needs to be created through the Terraform project in the `data-infra` repository. You can use (this previously-merged PR)\[https://github.com/cal-itp/data-infra/pull/4374/files\] as a reference for the two files that need to be modified through this process: `iac/cal-itp-data-infra/iam/us/project_iam_member.tf`, and `iac/cal-itp-data-infra/iam/us/service_account.tf`.
 
-2. Download the service account key for the service account you've just created
+- To begin, create a new branch in the [cal-itp/data-infra Github repository](https://github.com/cal-itp/data-infra).
+- Navigate to the first file to be modified: `iac/cal-itp-data-infra/iam/us/project_iam_member.tf`
+  - Create a new entry in the file that mirrors the contents of the El Dorado service account configuration, (found here)\[https://github.com/cal-itp/data-infra/pull/4374/files#diff-225faaedb56a2d0c4b52f2a95e354a35444decb4cc6cff1717ce53b9d6e094fbR67-R71\].
+  - Keep the majority of the contents of the El Dorado entry, subsituting only the `eldorado` text for a more appropriate naming convention based on the agency you are creating the service account for (this will be done in two places, lines 67 and 68 in the PR example above)
+- Navigate to the second file to be modified: `iac/cal-itp-data-infra/iam/us/service_account.tf`
+  - Create a new entry in the file that mirrors the contents of the El Dorado service account configuration, (found here)\[https://github.com/cal-itp/data-infra/pull/4374/files#diff-275fd84e89c5153d0616094b0a753a02143de7932dc96ca206a960a9bc6ef183R281-R285\].
+  - Keep the majority of the contents of the El Dorado entry, subsituting only the `eldorao` portion of the `eldorado-payments-user` text for a more appropriate naming convention based on the agency you are creating the service account for (this will be done in two places, lines 218 and 282 in the PR example above)
+- Once this has been completed, mark your PR as 'Ready for Review', and once approved by a reviewer, merge in your changes.
+- Upon merge, and once the Github actions finish running successfully, your new service account will be available in the Google Cloud Platform. Navigate to `IAM &Admin` --> `Service Accounts` to verify.
 
-- After selecting `Done` in the previous section you'll be returned to the list of existing service accounts. Click into the service account that you just created.
+### Create a new row access policy using the above service account
+
+**Permissions needed**:
+
+- Minimum Google Cloud Platform role `roles/iam.serviceAccountKeyAdmin` (more information can be found in the Google IAM documentation).
+- `Write` permissions to the (Cal-ITP `data-infra` repository)\[https://github.com/cal-itp/data-infra/tree/main\].
+
+1. Download the service account key for the service account you've just created
+
+- After verifying that your new service account has been created in the list of existing service accounts, click into the service account that you just created.
 - Select `Keys` from the top-center of the page and then select the `Add Key` dropdown. Choose the `Create new key` selection within that.
 - Keep the default key type `JSON` and select `Create`
-- This will download a JSON copy of the service accout key to your local environment, which will be used in later steps within Metabase
+- This will download a JSON copy of the service accout key to your local environment, which will be used in later steps within Metabase. Store this in a secure, local location.
 
-3. Open a new branch in the [cal-itp/data-infra Github repository](https://github.com/cal-itp/data-infra) and edit the [create_row_access_policy macro](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/create_row_access_policy.sql)
-   **Permissions needed**: Member of the [cal-itp Github organization](https://github.com/cal-itp)
+2. Open a new branch in the [cal-itp/data-infra Github repository](https://github.com/cal-itp/data-infra). You can use (this previously-merged PR)\[https://github.com/cal-itp/data-infra/pull/4376/files\] as a reference for the two dbt macros that need to be modified through this process in this file: `warehouse/macros/create_row_access_policy.sql`.
 
-Duplicate an existing row access policy within the file and append to the bottom, before the `{% endmacro %}` text.
-
-The contents of the policy you're duplicating should look like this:
-
-```
-{{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = '[agency-name]',
-    principals = ['serviceAccount:`agency-name`-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }};
-```
-
-Substitute the following fields with the appropriate information for the agency that you are adding:
-
-- `filter_value` which is the Littlepay `participant_id` for the agency
-- `principals` which is the email address for the service account that was created in step #1. You can simply subsitute the agency name as used in that step as opposed to updating the whole string.
-
-Open a PR in Github to merge these changes. If you'd like access to the results of this policy before the next time the `transform_warehouse` DAG is run, you will need to run it manually. To do this, you should trigger the DAG with a selector [as described in the README for the DAG task](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse). Use selector: `{"dbt_select": "models/mart/payments"}`.
+- Modify the first macro in the file: `payments_littlepay_row_access_policy`
+  - Duplicate an existing entry. In the El Dorado example linked in the PR above, (this would be rows 89-93)\[https://github.com/cal-itp/data-infra/pull/4376/files#diff-e32013136795892ab542f0571294fd65e723bc4085e41b5a52ac75d29e3503e4R89-R93\].
+  - Modify two fields:
+    - Filter_value: substitute `'eldorado-transit'` with the **Littlepay participant_id** for the new agency.
+    - Principals: Subsitute the address for the newly created service account after `['serviceAccount:`
+- Modify the second macro in the file: `payments_elavon_row_access_policy`
+  - Duplicate an existing entry. In the El Dorado example linked in the PR above, (this would be rows 184-188)\[https://github.com/cal-itp/data-infra/pull/4376/files#diff-e32013136795892ab542f0571294fd65e723bc4085e41b5a52ac75d29e3503e4R184-R188\].
+  - Modify two fields:
+    - Filter_value: substitute `'El Dorado County Transit Authority'` with the **Elavon organization_name** for the new agency.
+    - Principals: Subsitute the address for the newly created service account after `['serviceAccount:`
+- Once this has been completed, mark your PR as 'Ready for Review', and once approved by a reviewer, merge in your changes.
+- Upon merge, and once the warehouse tables utilizing the row access polcies have been re-run, your new access policy will be in effect.
 
 ### Add a new `Database` in Metabase for the agency
 
