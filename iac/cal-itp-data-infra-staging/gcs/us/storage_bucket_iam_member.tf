@@ -64,3 +64,15 @@ resource "google_storage_bucket_iam_member" "calitp-staging" {
   member   = "projectViewer:cal-itp-data-infra-staging"
   role     = "roles/storage.legacyBucketReader"
 }
+
+resource "google_storage_bucket_iam_member" "calitp-reports-staging" {
+  bucket = google_storage_bucket.calitp-reports-staging.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
+
+resource "google_storage_bucket_iam_member" "calitp-reports-data-staging" {
+  bucket = google_storage_bucket.calitp-reports-data-staging.name
+  member = "projectEditor:cal-itp-data-infra-staging"
+  role   = "roles/storage.legacyBucketOwner"
+}
