@@ -151,16 +151,25 @@ next_status AS (
   FROM refunds_union
 ),
 
-to_drop AS (
+refused_then_approved AS (
   SELECT DISTINCT participant_id, refund_id
   FROM next_status
   WHERE approval_status = "REFUSED" AND next_approval_status = "APPROVED"
 ),
 
-int_payments__refunds AS (
+remove_refund_table_dups AS (
+    SELECT *
+    FROM refunds_union
+    LEFT JOIN refused_then_approved USING (participant_id, refund_id)
+    WHERE refused_then_approved.refund_id IS NULL
+    -- this dedupes on coalesced_id (which is comprised of retrieval_reference_number or aggregation_id if it is null) and refund_amount
+    -- because we observe some duplicate refunds by retrieval_reference_number/aggregation_id and refund_amount
+    -- add line number to sorting to make this deterministic
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY coalesced_id, refund_amount ORDER BY littlepay_export_ts DESC, _line_number DESC) = 1
+),
 
+int_payments__refunds_deduped AS (
     SELECT
-
         aggregation_id,
         micropayment_id,
         participant_id,
@@ -196,15 +205,7 @@ int_payments__refunds AS (
         _key,
         _payments_key,
         source_table
-
-    FROM refunds_union
-    LEFT JOIN to_drop USING (participant_id, refund_id)
-    WHERE to_drop.refund_id IS NULL
-    -- this dedupes on coalesced_id (which is comprised of retrieval_reference_number or aggregation_id if it is null) and refund_amount
-    -- because we observe some duplicate refunds by retrieval_reference_number/aggregation_id and refund_amount
-    -- add line number to sorting to make this deterministic
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY coalesced_id, refund_amount ORDER BY littlepay_export_ts DESC, _line_number DESC) = 1
-
+    FROM remove_refund_table_dups
 )
 
-SELECT * FROM int_payments__refunds
+SELECT * FROM int_payments__refunds_deduped
