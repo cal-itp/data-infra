@@ -2782,10 +2782,6 @@ output "google_storage_bucket_calitp-reports_name" {
   value = google_storage_bucket.calitp-reports.name
 }
 
-output "google_storage_bucket_test-calitp-reports_name" {
-  value = google_storage_bucket.test-calitp-reports.name
-}
-
 output "google_storage_bucket_calitp-analysis_name" {
   value = google_storage_bucket.calitp-analysis.name
 }
