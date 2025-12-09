@@ -145,7 +145,7 @@ models:
       - name: customer_id
         description: Identifies the customer that the micropayment belongs to.
       - name: refund_amount
-        description: The amount of the transaction remaining after the refund has been applied (transaction_amount - proposed_amount.)
+        description: The amount of the transaction to be refunded to the customer.
       - name: transaction_date
         description: Settlement transaction date (if micropayment was settled before refund)
       - name: settlement_id
@@ -161,7 +161,7 @@ models:
       - name: transaction_amount
         description: The amount of the original fare.
       - name: proposed_amount
-        description: The amount to be refunded to the customer.
+        description: The amount of the transaction after the refund is applied (transaction amount - refund amount.)
       - name: status
         description: |
           The status of the refund.

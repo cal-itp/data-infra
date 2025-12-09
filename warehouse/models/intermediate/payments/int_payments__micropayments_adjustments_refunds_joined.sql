@@ -62,9 +62,9 @@ int_payments__micropayments_adjustments_refunds_joined AS (
         -- in those cases, if there's only one micropayment in the aggregation, we can impute that the aggregation refund applies just to the one micropayment
         CASE
             WHEN micropayments_per_aggregation.aggregation_micropayment_ct = 1
-                AND individual_refunds.proposed_amount IS NULL
+                AND individual_refunds.refund_amount IS NULL
                     THEN aggregation_refunds.total_refund_activity_amount_dollars
-            ELSE individual_refunds.proposed_amount
+            ELSE individual_refunds.refund_amount
         END AS micropayment_refund_amount,
         aggregation_refunds.total_refund_activity_amount_dollars AS aggregation_refund_amount
     FROM debit_micropayments
