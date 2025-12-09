@@ -346,10 +346,6 @@ output "google_storage_bucket_acl_tfer--test-calitp-publish_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-publish.id
 }
 
-output "google_storage_bucket_acl_tfer--test-calitp-reports-data_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-reports-data.id
-}
-
 output "google_storage_bucket_acl_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-sentry.id
 }
@@ -744,10 +740,6 @@ output "google_storage_bucket_iam_binding_tfer--test-calitp-publish-data-analysi
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-publish_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-publish.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-reports-data_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-reports-data.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-sentry_id" {
@@ -1146,10 +1138,6 @@ output "google_storage_bucket_iam_member_tfer--test-calitp-publish_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-publish.id
 }
 
-output "google_storage_bucket_iam_member_tfer--test-calitp-reports-data_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-reports-data.id
-}
-
 output "google_storage_bucket_iam_member_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-sentry.id
 }
@@ -1544,10 +1532,6 @@ output "google_storage_bucket_iam_policy_tfer--test-calitp-publish-data-analysis
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-publish_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-publish.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-reports-data_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-reports-data.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-sentry_id" {
@@ -2310,14 +2294,6 @@ output "google_storage_bucket_tfer--test-calitp-publish_self_link" {
   value = google_storage_bucket.tfer--test-calitp-publish.self_link
 }
 
-output "google_storage_bucket_tfer--test-calitp-reports-data_name" {
-  value = google_storage_bucket.tfer--test-calitp-reports-data.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-reports-data_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-reports-data.self_link
-}
-
 output "google_storage_bucket_tfer--test-calitp-sentry_name" {
   value = google_storage_bucket.tfer--test-calitp-sentry.name
 }
@@ -2732,10 +2708,6 @@ output "google_storage_default_object_acl_tfer--test-calitp-publish-data-analysi
 
 output "google_storage_default_object_acl_tfer--test-calitp-publish_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-publish.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-reports-data_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-reports-data.id
 }
 
 output "google_storage_default_object_acl_tfer--test-calitp-sentry_id" {

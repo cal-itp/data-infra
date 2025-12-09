@@ -544,12 +544,6 @@ resource "google_storage_bucket_iam_member" "tfer--test-calitp-publish-data-anal
   role   = "roles/storage.legacyObjectReader"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-reports-data" {
-  bucket = "b/test-calitp-reports-data"
-  member = "projectViewer:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectReader"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--test-calitp-sentry" {
   bucket = "b/test-calitp-sentry"
   member = "projectEditor:cal-itp-data-infra"

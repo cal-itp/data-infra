@@ -1833,33 +1833,6 @@ resource "google_storage_bucket" "tfer--test-calitp-publish-data-analysis" {
   }
 }
 
-resource "google_storage_bucket" "tfer--test-calitp-reports-data" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-reports-data"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
 resource "google_storage_bucket" "tfer--test-calitp-sentry" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
