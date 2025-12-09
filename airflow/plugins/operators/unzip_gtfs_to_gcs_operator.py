@@ -6,7 +6,6 @@ from typing import Sequence
 import pendulum
 from hooks.gtfs_unzip_hook import GTFSUnzipHook
 
-from airflow.exceptions import AirflowSkipException
 from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
@@ -15,12 +14,12 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 class UnzipGTFSToGCSOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "download_schedule_feed_results",
-        "filename",
+        "filenames",
         "base64_url",
         "source_bucket",
         "source_path",
         "destination_bucket",
-        "destination_path",
+        "destination_path_fragment",
         "results_path",
         "gcp_conn_id",
     )
@@ -28,12 +27,12 @@ class UnzipGTFSToGCSOperator(BaseOperator):
     def __init__(
         self,
         download_schedule_feed_results: dict,
-        filename: str,
+        filenames: str,
         base64_url: str,
         source_bucket: str,
         source_path: str,
         destination_bucket: str,
-        destination_path: str,
+        destination_path_fragment: str,
         results_path: str,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
@@ -42,12 +41,12 @@ class UnzipGTFSToGCSOperator(BaseOperator):
 
         self._gcs_hook = None
         self.download_schedule_feed_results = download_schedule_feed_results
-        self.filename = filename
+        self.filenames = filenames
         self.base64_url = base64_url
         self.source_bucket = source_bucket
         self.source_path = source_path
         self.destination_bucket = destination_bucket
-        self.destination_path = destination_path
+        self.destination_path_fragment = destination_path_fragment
         self.results_path = results_path
         self.gcp_conn_id = gcp_conn_id
 
@@ -60,39 +59,49 @@ class UnzipGTFSToGCSOperator(BaseOperator):
     def source_name(self) -> str:
         return self.source_bucket.replace("gs://", "")
 
-    def unzip_hook(self, date: pendulum.DateTime) -> GTFSUnzipHook:
-        return GTFSUnzipHook(filename=self.filename, current_date=date)
+    def unzip_hook(
+        self, filenames: list[str], date: pendulum.DateTime
+    ) -> GTFSUnzipHook:
+        return GTFSUnzipHook(filenames=filenames, current_date=date)
 
     def source_filename(self) -> str:
         return os.path.basename(self.source_path)
 
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
+
         with tempfile.TemporaryDirectory() as tmp_dir:
             local_source_path = self.gcs_hook().download(
                 bucket_name=self.source_name(),
                 object_name=self.source_path,
                 filename=os.path.join(tmp_dir, self.source_filename()),
             )
-            validator_result = self.unzip_hook(date=dag_run.logical_date).run(
+
+            validator_result = self.unzip_hook(
+                filenames=self.filenames, date=dag_run.logical_date
+            ).run(
                 zipfile_path=local_source_path,
                 download_schedule_feed_results=self.download_schedule_feed_results,
             )
-            if validator_result.content() is None:
-                raise AirflowSkipException
+
+            for file in validator_result.extracted_files():
+                self.gcs_hook().upload(
+                    bucket_name=self.destination_name(),
+                    object_name=os.path.join(
+                        file.filename,
+                        self.destination_path_fragment,
+                        file.filename,
+                    ),
+                    data=file.content,
+                    mime_type="text/csv",
+                    gzip=False,
+                    metadata={
+                        "PARTITIONED_ARTIFACT_METADATA": json.dumps(file.metadata())
+                    },
+                )
+
             report = validator_result.results()
-            self.gcs_hook().upload(
-                bucket_name=self.destination_name(),
-                object_name=self.destination_path,
-                data=validator_result.content(),
-                mime_type="text/csv",
-                gzip=False,
-                metadata={
-                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                        validator_result.extracted_files()[0]
-                    )
-                },
-            )
+
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=self.results_path,
@@ -108,11 +117,9 @@ class UnzipGTFSToGCSOperator(BaseOperator):
                     )
                 },
             )
+
         return {
             "base64_url": self.base64_url,
-            "destination_path": os.path.join(
-                self.destination_bucket, self.destination_path
-            ),
-            "results_path": os.path.join(self.destination_bucket, self.results_path),
+            "results_path": self.results_path,
             "unzip_results": report,
         }

@@ -12,7 +12,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/f823b4ec-b9ab-43dc-b3fa-67980b01a193
+        gccl-invocation-id/00b2667c-3271-454f-9c5e-7d178a1f9713
       accept-encoding:
       - gzip
       content-type:
@@ -469,7 +469,7 @@ interactions:
       Content-Type:
       - application/zip
       Date:
-      - Fri, 05 Dec 2025 23:43:56 GMT
+      - Tue, 02 Dec 2025 23:48:01 GMT
       ETag:
       - COyv5eT6jZEDEAE=
       Expires:
@@ -484,7 +484,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxMmzomSPrsRcF8k5W4jBSMT9AB0wzk5IaEtiGEXCe6kkts-ZsRkcw1W4d0v6Z1fC1PBP0b9Jug
+      - AOCedOE9zzBFsLTHsSGqU-kV_HSNWeugA7GdKAVAj1A92KFzAM3c-M5eP22G58UQhHK1hoT10P7kjU0YMf67
       X-Goog-Generation:
       - '1764096288053228'
       X-Goog-Hash:
@@ -501,182 +501,13 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: "--===============2816657218653981886==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"agency.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.txt\",
-      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"agency.txt\\\",
-      \\\"original_filename\\\": \\\"agency.txt\\\", \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\",
-      \\\"extract_config\\\": {\\\"auth_headers\\\": {}, \\\"auth_query_params\\\":
-      {}, \\\"computed\\\": false, \\\"feed_type\\\": \\\"schedule\\\", \\\"name\\\":
-      \\\"Santa Ynez Mecatran Schedule\\\", \\\"schedule_url_for_validation\\\": null,
-      \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
-      \\\"extracted_at\\\": \\\"2025-06-01T00:00:00+00:00\\\"}}\"}}\r\n--===============2816657218653981886==\r\ncontent-type:
-      text/csv\r\n\r\nagency_id,agency_name,agency_url,agency_timezone,agency_phone,agency_lang,agency_fare_url,agency_email,agency_primary\r\n11214031,Santa
-      Ynez Valley Transit,https://www.syvt.com/489/Santa-Ynez-Valley-Transit,America/Los_Angeles,805-688-5452,en,https://www.syvt.com/365/Fares,,1\r\n\r\n--===============2816657218653981886==--"
-    headers:
-      Accept:
-      - application/json
-      Accept-Encoding:
-      - gzip, deflate
-      Authorization:
-      - FILTERED
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '1338'
-      User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-      X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/6e47c82f-ada1-41f7-a0e0-5772b4f6276a
-      content-type:
-      - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yODE2NjU3MjE4NjUz
-        OTgxODg2PT0i
-      x-goog-user-project:
-      - cal-itp-data-infra-staging
-      x-upload-content-type:
-      - text/csv
-    method: POST
-    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
-  response:
-    body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/agency.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.txt/1764978237813532\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.txt\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.txt?generation=1764978237813532&alt=media\",\n
-        \ \"name\": \"agency.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.txt\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1764978237813532\",\n
-        \ \"metageneration\": \"1\",\n  \"contentType\": \"text/csv\",\n  \"storageClass\":
-        \"STANDARD\",\n  \"size\": \"276\",\n  \"md5Hash\": \"aqpn1jk7QQDHHuToKpUZKA==\",\n
-        \ \"crc32c\": \"e6O0zg==\",\n  \"etag\": \"CJzmmqfQp5EDEAE=\",\n  \"timeCreated\":
-        \"2025-12-05T23:43:57.826Z\",\n  \"updated\": \"2025-12-05T23:43:57.826Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-12-05T23:43:57.826Z\",\n  \"timeFinalized\":
-        \"2025-12-05T23:43:57.826Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
-        \"{\\\"filename\\\": \\\"agency.txt\\\", \\\"original_filename\\\": \\\"agency.txt\\\",
-        \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\", \\\"extract_config\\\": {\\\"auth_headers\\\":
-        {}, \\\"auth_query_params\\\": {}, \\\"computed\\\": false, \\\"feed_type\\\":
-        \\\"schedule\\\", \\\"name\\\": \\\"Santa Ynez Mecatran Schedule\\\", \\\"schedule_url_for_validation\\\":
-        null, \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
-        \\\"extracted_at\\\": \\\"2025-06-01T00:00:00+00:00\\\"}}\"\n  }\n}\n"
-    headers:
-      Alt-Svc:
-      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      Cache-Control:
-      - no-cache, no-store, max-age=0, must-revalidate
-      Content-Length:
-      - '2480'
-      Content-Type:
-      - application/json; charset=UTF-8
-      Date:
-      - Fri, 05 Dec 2025 23:43:57 GMT
-      ETag:
-      - CJzmmqfQp5EDEAE=
-      Expires:
-      - Mon, 01 Jan 1990 00:00:00 GMT
-      Pragma:
-      - no-cache
-      Server:
-      - UploadServer
-      Vary:
-      - Origin
-      - X-Origin
-      X-GUploader-UploadID:
-      - AOCedOHyAGkXnJgxmR3Yxnh2edOnUy6-4pGghVe_ICje5UuYJmxEW4dHLyJoJgvoQm5Dii9KLr7oXG7KZ7_V
-    status:
-      code: 200
-      message: OK
-- request:
-    body: "--===============2602151138725968462==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"calendar.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/calendar.txt\",
-      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"calendar.txt\\\",
-      \\\"original_filename\\\": \\\"calendar.txt\\\", \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\",
-      \\\"extract_config\\\": {\\\"auth_headers\\\": {}, \\\"auth_query_params\\\":
-      {}, \\\"computed\\\": false, \\\"feed_type\\\": \\\"schedule\\\", \\\"name\\\":
-      \\\"Santa Ynez Mecatran Schedule\\\", \\\"schedule_url_for_validation\\\": null,
-      \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
-      \\\"extracted_at\\\": \\\"2025-06-01T00:00:00+00:00\\\"}}\"}}\r\n--===============2602151138725968462==\r\ncontent-type:
-      text/csv\r\n\r\nservice_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date,service_name\r\n11219341,1,1,1,1,1,1,0,20250401,20250503,mon-sat_ends_50325\r\n26003882,1,1,1,1,1,0,0,20250505,20260831,mon-sat_start_050525\r\n\r\n--===============2602151138725968462==--"
-    headers:
-      Accept:
-      - application/json
-      Accept-Encoding:
-      - gzip, deflate
-      Authorization:
-      - FILTERED
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '1296'
-      User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-      X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/216457aa-b340-4fd7-9e50-b98ef9c6ea74
-      content-type:
-      - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yNjAyMTUxMTM4NzI1
-        OTY4NDYyPT0i
-      x-goog-user-project:
-      - cal-itp-data-infra-staging
-      x-upload-content-type:
-      - text/csv
-    method: POST
-    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
-  response:
-    body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/calendar.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/calendar.txt/1764978239067567\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/calendar.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fcalendar.txt\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/calendar.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fcalendar.txt?generation=1764978239067567&alt=media\",\n
-        \ \"name\": \"calendar.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/calendar.txt\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1764978239067567\",\n
-        \ \"metageneration\": \"1\",\n  \"contentType\": \"text/csv\",\n  \"storageClass\":
-        \"STANDARD\",\n  \"size\": \"226\",\n  \"md5Hash\": \"vyr4Be4UsrwP2Iv7KT8r7Q==\",\n
-        \ \"crc32c\": \"/ynvUA==\",\n  \"etag\": \"CK+r56fQp5EDEAE=\",\n  \"timeCreated\":
-        \"2025-12-05T23:43:59.086Z\",\n  \"updated\": \"2025-12-05T23:43:59.086Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-12-05T23:43:59.086Z\",\n  \"timeFinalized\":
-        \"2025-12-05T23:43:59.086Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
-        \"{\\\"filename\\\": \\\"calendar.txt\\\", \\\"original_filename\\\": \\\"calendar.txt\\\",
-        \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\", \\\"extract_config\\\": {\\\"auth_headers\\\":
-        {}, \\\"auth_query_params\\\": {}, \\\"computed\\\": false, \\\"feed_type\\\":
-        \\\"schedule\\\", \\\"name\\\": \\\"Santa Ynez Mecatran Schedule\\\", \\\"schedule_url_for_validation\\\":
-        null, \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
-        \\\"extracted_at\\\": \\\"2025-06-01T00:00:00+00:00\\\"}}\"\n  }\n}\n"
-    headers:
-      Alt-Svc:
-      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      Cache-Control:
-      - no-cache, no-store, max-age=0, must-revalidate
-      Content-Length:
-      - '2500'
-      Content-Type:
-      - application/json; charset=UTF-8
-      Date:
-      - Fri, 05 Dec 2025 23:43:59 GMT
-      ETag:
-      - CK+r56fQp5EDEAE=
-      Expires:
-      - Mon, 01 Jan 1990 00:00:00 GMT
-      Pragma:
-      - no-cache
-      Server:
-      - UploadServer
-      Vary:
-      - Origin
-      - X-Origin
-      X-GUploader-UploadID:
-      - AOCedOElEYNmcQKFQPotkXa120_-Yt8uMBG5Vfp_rF-vr714fiPGgEg59Qzd70Yf6HFPZTBog0xEtrPhShQL
-    status:
-      code: 200
-      message: OK
-- request:
-    body: "--===============0561537191489272133==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",
+    body: "--===============0133798496668699802==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/areas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",
       \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
-      \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"}}\r\n--===============0561537191489272133==\r\ncontent-type:
+      \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"}}\r\n--===============0133798496668699802==\r\ncontent-type:
       application/jsonl\r\n\r\n{\"success\":true,\"exception\":null,\"extract\":{\"filename\":\"gtfs.zip\",\"ts\":\"2025-06-03T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"feed_type\":\"schedule\",\"name\":\"Santa
       Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"extracted_at\":\"2025-06-01T00:00:00+00:00\"},\"response_code\":200,\"response_headers\":{\"Content-Type\":\"application/zip\",\"Content-Disposition\":\"attachment;
-      filename=gtfs.zip\"},\"reconstructed\":false},\"zipfile_extract_md5hash\":\"4f72c84bd3f053ddb929289fa2de7879\",\"zipfile_files\":[\"agency.txt\",\"calendar.txt\",\"calendar_dates.txt\",\"fare_attributes.txt\",\"feed_info.txt\",\"route_directions.txt\",\"routes.txt\",\"shapes.txt\",\"stop_times.txt\",\"stops.txt\",\"transfers.txt\",\"trips.txt\"],\"zipfile_dirs\":[],\"extracted_files\":[{\"filename\":\"agency.txt\",\"original_filename\":\"agency.txt\",\"ts\":\"2025-06-02T00:00:00+00:00\",\"extract_config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"feed_type\":\"schedule\",\"name\":\"Santa
-      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"extracted_at\":\"2025-06-01T00:00:00+00:00\"}},{\"filename\":\"calendar.txt\",\"original_filename\":\"calendar.txt\",\"ts\":\"2025-06-02T00:00:00+00:00\",\"extract_config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"feed_type\":\"schedule\",\"name\":\"Santa
-      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"extracted_at\":\"2025-06-01T00:00:00+00:00\"}}]}\r\n--===============0561537191489272133==--"
+      filename=gtfs.zip\"},\"reconstructed\":false},\"zipfile_extract_md5hash\":\"4f72c84bd3f053ddb929289fa2de7879\",\"zipfile_files\":[\"agency.txt\",\"calendar.txt\",\"calendar_dates.txt\",\"fare_attributes.txt\",\"feed_info.txt\",\"route_directions.txt\",\"routes.txt\",\"shapes.txt\",\"stop_times.txt\",\"stops.txt\",\"transfers.txt\",\"trips.txt\"],\"zipfile_dirs\":[],\"extracted_files\":[]}\r\n--===============0133798496668699802==--"
     headers:
       Accept:
       - application/json
@@ -687,16 +518,16 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '2469'
+      - '1546'
       User-Agent:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/0652aecf-7864-4355-8671-176119916d11
+        gccl-invocation-id/45f81833-6088-4b48-85d7-050c1eea8c28
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0wNTYxNTM3MTkxNDg5
-        MjcyMTMzPT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0wMTMzNzk4NDk2NjY4
+        Njk5ODAyPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -705,17 +536,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1764978240022826\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/unzipping_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/unzipping_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1764978240022826&alt=media\",\n
-        \ \"name\": \"unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1764978240022826\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/areas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1764719282558273\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/unzipping_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fareas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/unzipping_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fareas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1764719282558273&alt=media\",\n
+        \ \"name\": \"unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/areas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1764719282558273\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1859\",\n  \"md5Hash\": \"WwOGREgaoUB+elIXXB/QlA==\",\n
-        \ \"crc32c\": \"+3iA5g==\",\n  \"etag\": \"CKrSoajQp5EDEAE=\",\n  \"timeCreated\":
-        \"2025-12-05T23:44:00.035Z\",\n  \"updated\": \"2025-12-05T23:44:00.035Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-12-05T23:44:00.035Z\",\n  \"timeFinalized\":
-        \"2025-12-05T23:44:00.035Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"926\",\n  \"md5Hash\": \"epN3uvch0pD/lZLwPG9k/w==\",\n
+        \ \"crc32c\": \"wlfVTw==\",\n  \"etag\": \"CMGq3M+LoJEDEAE=\",\n  \"timeCreated\":
+        \"2025-12-02T23:48:02.567Z\",\n  \"updated\": \"2025-12-02T23:48:02.567Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-12-02T23:48:02.567Z\",\n  \"timeFinalized\":
+        \"2025-12-02T23:48:02.567Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
         \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"\n
         \ }\n}\n"
     headers:
@@ -724,13 +555,13 @@ interactions:
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Content-Length:
-      - '1998'
+      - '2037'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 05 Dec 2025 23:44:00 GMT
+      - Tue, 02 Dec 2025 23:48:02 GMT
       ETag:
-      - CKrSoajQp5EDEAE=
+      - CMGq3M+LoJEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -741,7 +572,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOF5Oka0lZkb1ce7jTL5o_05KPAoRjlUoGxFxElvMK75TZ5WFpJ7qfIbtEq6EgHKhu-ZBhj_g3I
+      - AOCedOE2ZWD_72JuEU4B2ELVoZdSOtsNMwQhsDuACIQfPfdwkdWHZlIoMWKgiacZ8VAex5NoHXRlh2E4qwKp
     status:
       code: 200
       message: OK
@@ -758,7 +589,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/6aba49c0-40a3-446d-a825-23c5a9bd840d
+        gccl-invocation-id/7f00f8d1-20f3-456f-b973-880b7c9d20c8
       accept-encoding:
       - gzip
       content-type:
@@ -1215,7 +1046,7 @@ interactions:
       Content-Type:
       - application/zip
       Date:
-      - Fri, 05 Dec 2025 23:44:01 GMT
+      - Tue, 02 Dec 2025 23:48:03 GMT
       ETag:
       - COyv5eT6jZEDEAE=
       Expires:
@@ -1230,7 +1061,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxPU3w2i8oyeUAuWen6rbq273k-M4tebi4TlBcPUciH9G8TwE4Vq9kDt1p7mV_oES2Q1iITxCyQ
+      - AOCedOFjDPK-Xa822avSWH4hiua_qxXuyDrTvhlUH4Ow6nXDpo3IFcwkLythc1bKXWsAz6FP
       X-Goog-Generation:
       - '1764096288053228'
       X-Goog-Hash:
@@ -1247,182 +1078,13 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: "--===============7497019629131157772==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"agency.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.txt\",
-      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"agency.txt\\\",
-      \\\"original_filename\\\": \\\"agency.txt\\\", \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\",
-      \\\"extract_config\\\": {\\\"auth_headers\\\": {}, \\\"auth_query_params\\\":
-      {}, \\\"computed\\\": false, \\\"feed_type\\\": \\\"schedule\\\", \\\"name\\\":
-      \\\"Santa Ynez Mecatran Schedule\\\", \\\"schedule_url_for_validation\\\": null,
-      \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
-      \\\"extracted_at\\\": \\\"2025-06-01T00:00:00+00:00\\\"}}\"}}\r\n--===============7497019629131157772==\r\ncontent-type:
-      text/csv\r\n\r\nagency_id,agency_name,agency_url,agency_timezone,agency_phone,agency_lang,agency_fare_url,agency_email,agency_primary\r\n11214031,Santa
-      Ynez Valley Transit,https://www.syvt.com/489/Santa-Ynez-Valley-Transit,America/Los_Angeles,805-688-5452,en,https://www.syvt.com/365/Fares,,1\r\n\r\n--===============7497019629131157772==--"
-    headers:
-      Accept:
-      - application/json
-      Accept-Encoding:
-      - gzip, deflate
-      Authorization:
-      - FILTERED
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '1338'
-      User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-      X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/59f0dc9a-bd91-400f-a0b3-c8e04f469ce5
-      content-type:
-      - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03NDk3MDE5NjI5MTMx
-        MTU3NzcyPT0i
-      x-goog-user-project:
-      - cal-itp-data-infra-staging
-      x-upload-content-type:
-      - text/csv
-    method: POST
-    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
-  response:
-    body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/agency.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.txt/1764978242702727\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.txt\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.txt?generation=1764978242702727&alt=media\",\n
-        \ \"name\": \"agency.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.txt\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1764978242702727\",\n
-        \ \"metageneration\": \"1\",\n  \"contentType\": \"text/csv\",\n  \"storageClass\":
-        \"STANDARD\",\n  \"size\": \"276\",\n  \"md5Hash\": \"aqpn1jk7QQDHHuToKpUZKA==\",\n
-        \ \"crc32c\": \"e6O0zg==\",\n  \"etag\": \"CIebxanQp5EDEAE=\",\n  \"timeCreated\":
-        \"2025-12-05T23:44:02.713Z\",\n  \"updated\": \"2025-12-05T23:44:02.713Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-12-05T23:44:02.713Z\",\n  \"timeFinalized\":
-        \"2025-12-05T23:44:02.713Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
-        \"{\\\"filename\\\": \\\"agency.txt\\\", \\\"original_filename\\\": \\\"agency.txt\\\",
-        \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\", \\\"extract_config\\\": {\\\"auth_headers\\\":
-        {}, \\\"auth_query_params\\\": {}, \\\"computed\\\": false, \\\"feed_type\\\":
-        \\\"schedule\\\", \\\"name\\\": \\\"Santa Ynez Mecatran Schedule\\\", \\\"schedule_url_for_validation\\\":
-        null, \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
-        \\\"extracted_at\\\": \\\"2025-06-01T00:00:00+00:00\\\"}}\"\n  }\n}\n"
-    headers:
-      Alt-Svc:
-      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      Cache-Control:
-      - no-cache, no-store, max-age=0, must-revalidate
-      Content-Length:
-      - '2480'
-      Content-Type:
-      - application/json; charset=UTF-8
-      Date:
-      - Fri, 05 Dec 2025 23:44:02 GMT
-      ETag:
-      - CIebxanQp5EDEAE=
-      Expires:
-      - Mon, 01 Jan 1990 00:00:00 GMT
-      Pragma:
-      - no-cache
-      Server:
-      - UploadServer
-      Vary:
-      - Origin
-      - X-Origin
-      X-GUploader-UploadID:
-      - AHVrFxN-vxY0EcmY-DGqzxmI-ltn9iVcedA-sA2SZooyq2952JApCmiRopr0NTmM1jY_SrCMzxD5o3Q
-    status:
-      code: 200
-      message: OK
-- request:
-    body: "--===============8634087808817537674==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"calendar.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/calendar.txt\",
-      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"calendar.txt\\\",
-      \\\"original_filename\\\": \\\"calendar.txt\\\", \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\",
-      \\\"extract_config\\\": {\\\"auth_headers\\\": {}, \\\"auth_query_params\\\":
-      {}, \\\"computed\\\": false, \\\"feed_type\\\": \\\"schedule\\\", \\\"name\\\":
-      \\\"Santa Ynez Mecatran Schedule\\\", \\\"schedule_url_for_validation\\\": null,
-      \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
-      \\\"extracted_at\\\": \\\"2025-06-01T00:00:00+00:00\\\"}}\"}}\r\n--===============8634087808817537674==\r\ncontent-type:
-      text/csv\r\n\r\nservice_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date,service_name\r\n11219341,1,1,1,1,1,1,0,20250401,20250503,mon-sat_ends_50325\r\n26003882,1,1,1,1,1,0,0,20250505,20260831,mon-sat_start_050525\r\n\r\n--===============8634087808817537674==--"
-    headers:
-      Accept:
-      - application/json
-      Accept-Encoding:
-      - gzip, deflate
-      Authorization:
-      - FILTERED
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '1296'
-      User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-      X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/99b2a9da-a127-4c59-87e8-39bb05e3d736
-      content-type:
-      - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT04NjM0MDg3ODA4ODE3
-        NTM3Njc0PT0i
-      x-goog-user-project:
-      - cal-itp-data-infra-staging
-      x-upload-content-type:
-      - text/csv
-    method: POST
-    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
-  response:
-    body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/calendar.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/calendar.txt/1764978243867273\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/calendar.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fcalendar.txt\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/calendar.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fcalendar.txt?generation=1764978243867273&alt=media\",\n
-        \ \"name\": \"calendar.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/calendar.txt\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1764978243867273\",\n
-        \ \"metageneration\": \"1\",\n  \"contentType\": \"text/csv\",\n  \"storageClass\":
-        \"STANDARD\",\n  \"size\": \"226\",\n  \"md5Hash\": \"vyr4Be4UsrwP2Iv7KT8r7Q==\",\n
-        \ \"crc32c\": \"/ynvUA==\",\n  \"etag\": \"CImljKrQp5EDEAE=\",\n  \"timeCreated\":
-        \"2025-12-05T23:44:03.876Z\",\n  \"updated\": \"2025-12-05T23:44:03.876Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-12-05T23:44:03.876Z\",\n  \"timeFinalized\":
-        \"2025-12-05T23:44:03.876Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
-        \"{\\\"filename\\\": \\\"calendar.txt\\\", \\\"original_filename\\\": \\\"calendar.txt\\\",
-        \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\", \\\"extract_config\\\": {\\\"auth_headers\\\":
-        {}, \\\"auth_query_params\\\": {}, \\\"computed\\\": false, \\\"feed_type\\\":
-        \\\"schedule\\\", \\\"name\\\": \\\"Santa Ynez Mecatran Schedule\\\", \\\"schedule_url_for_validation\\\":
-        null, \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
-        \\\"extracted_at\\\": \\\"2025-06-01T00:00:00+00:00\\\"}}\"\n  }\n}\n"
-    headers:
-      Alt-Svc:
-      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      Cache-Control:
-      - no-cache, no-store, max-age=0, must-revalidate
-      Content-Length:
-      - '2500'
-      Content-Type:
-      - application/json; charset=UTF-8
-      Date:
-      - Fri, 05 Dec 2025 23:44:03 GMT
-      ETag:
-      - CImljKrQp5EDEAE=
-      Expires:
-      - Mon, 01 Jan 1990 00:00:00 GMT
-      Pragma:
-      - no-cache
-      Server:
-      - UploadServer
-      Vary:
-      - Origin
-      - X-Origin
-      X-GUploader-UploadID:
-      - AHVrFxOkgpgmLLH355U2S66QudG6Z6By57jgyVAd9pLlJH7kzmdVlFsyRrpFCn-cqsvQwugsjxXKqqA
-    status:
-      code: 200
-      message: OK
-- request:
-    body: "--===============7954757292869422075==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",
+    body: "--===============8062853517909164193==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/areas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",
       \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
-      \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"}}\r\n--===============7954757292869422075==\r\ncontent-type:
+      \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"}}\r\n--===============8062853517909164193==\r\ncontent-type:
       application/jsonl\r\n\r\n{\"success\":true,\"exception\":null,\"extract\":{\"filename\":\"gtfs.zip\",\"ts\":\"2025-06-03T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"feed_type\":\"schedule\",\"name\":\"Santa
       Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"extracted_at\":\"2025-06-01T00:00:00+00:00\"},\"response_code\":200,\"response_headers\":{\"Content-Type\":\"application/zip\",\"Content-Disposition\":\"attachment;
-      filename=gtfs.zip\"},\"reconstructed\":false},\"zipfile_extract_md5hash\":\"4f72c84bd3f053ddb929289fa2de7879\",\"zipfile_files\":[\"agency.txt\",\"calendar.txt\",\"calendar_dates.txt\",\"fare_attributes.txt\",\"feed_info.txt\",\"route_directions.txt\",\"routes.txt\",\"shapes.txt\",\"stop_times.txt\",\"stops.txt\",\"transfers.txt\",\"trips.txt\"],\"zipfile_dirs\":[],\"extracted_files\":[{\"filename\":\"agency.txt\",\"original_filename\":\"agency.txt\",\"ts\":\"2025-06-03T00:00:00+00:00\",\"extract_config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"feed_type\":\"schedule\",\"name\":\"Santa
-      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"extracted_at\":\"2025-06-01T00:00:00+00:00\"}},{\"filename\":\"calendar.txt\",\"original_filename\":\"calendar.txt\",\"ts\":\"2025-06-03T00:00:00+00:00\",\"extract_config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"feed_type\":\"schedule\",\"name\":\"Santa
-      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"extracted_at\":\"2025-06-01T00:00:00+00:00\"}}]}\r\n--===============7954757292869422075==--"
+      filename=gtfs.zip\"},\"reconstructed\":false},\"zipfile_extract_md5hash\":\"4f72c84bd3f053ddb929289fa2de7879\",\"zipfile_files\":[\"agency.txt\",\"calendar.txt\",\"calendar_dates.txt\",\"fare_attributes.txt\",\"feed_info.txt\",\"route_directions.txt\",\"routes.txt\",\"shapes.txt\",\"stop_times.txt\",\"stops.txt\",\"transfers.txt\",\"trips.txt\"],\"zipfile_dirs\":[],\"extracted_files\":[]}\r\n--===============8062853517909164193==--"
     headers:
       Accept:
       - application/json
@@ -1433,16 +1095,16 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '2469'
+      - '1546'
       User-Agent:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/f1a9c4d5-c22c-4280-9dd4-080ad3470923
+        gccl-invocation-id/9e8e12fd-e758-40b4-a64f-377b2449766b
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03OTU0NzU3MjkyODY5
-        NDIyMDc1PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT04MDYyODUzNTE3OTA5
+        MTY0MTkzPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -1451,17 +1113,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1764978245074481\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/unzipping_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/unzipping_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1764978245074481&alt=media\",\n
-        \ \"name\": \"unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1764978245074481\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/areas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1764719284526219\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/unzipping_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fareas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/unzipping_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fareas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1764719284526219&alt=media\",\n
+        \ \"name\": \"unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/areas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1764719284526219\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1859\",\n  \"md5Hash\": \"o3s4H1h3FNuTdshL3/EmWw==\",\n
-        \ \"crc32c\": \"nt3cSQ==\",\n  \"etag\": \"CLH81arQp5EDEAE=\",\n  \"timeCreated\":
-        \"2025-12-05T23:44:05.085Z\",\n  \"updated\": \"2025-12-05T23:44:05.085Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-12-05T23:44:05.085Z\",\n  \"timeFinalized\":
-        \"2025-12-05T23:44:05.085Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"926\",\n  \"md5Hash\": \"epN3uvch0pD/lZLwPG9k/w==\",\n
+        \ \"crc32c\": \"wlfVTw==\",\n  \"etag\": \"CIu51NCLoJEDEAE=\",\n  \"timeCreated\":
+        \"2025-12-02T23:48:04.536Z\",\n  \"updated\": \"2025-12-02T23:48:04.536Z\",\n
+        \ \"timeStorageClassUpdated\": \"2025-12-02T23:48:04.536Z\",\n  \"timeFinalized\":
+        \"2025-12-02T23:48:04.536Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
         \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"\n
         \ }\n}\n"
     headers:
@@ -1470,13 +1132,13 @@ interactions:
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Content-Length:
-      - '1998'
+      - '2037'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 05 Dec 2025 23:44:05 GMT
+      - Tue, 02 Dec 2025 23:48:04 GMT
       ETag:
-      - CLH81arQp5EDEAE=
+      - CIu51NCLoJEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -1487,78 +1149,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxMG2CpBPpKzwLaReNBlguCS2pV6o_lx9Grtb2qg8TGIXKaKTxUzF_vGoFLkhWqZRMNqzhEn5J4
-    status:
-      code: 200
-      message: OK
-- request:
-    body: null
-    headers:
-      Accept:
-      - application/json
-      Authorization:
-      - FILTERED
-      Connection:
-      - keep-alive
-      User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-      X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/cddb59cf-5ba3-403b-9d08-c9bd1c0b864f
-      accept-encoding:
-      - gzip
-      content-type:
-      - application/json; charset=UTF-8
-      x-goog-user-project:
-      - cal-itp-data-infra-staging
-      x-upload-content-type:
-      - application/json; charset=UTF-8
-    method: GET
-    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency.txt%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Fagency.txt?alt=media
-  response:
-    body:
-      string: "agency_id,agency_name,agency_url,agency_timezone,agency_phone,agency_lang,agency_fare_url,agency_email,agency_primary\r\n11214031,Santa
-        Ynez Valley Transit,https://www.syvt.com/489/Santa-Ynez-Valley-Transit,America/Los_Angeles,805-688-5452,en,https://www.syvt.com/365/Fares,,1\r\n"
-    headers:
-      Alt-Svc:
-      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      Cache-Control:
-      - no-cache, no-store, max-age=0, must-revalidate
-      Content-Disposition:
-      - attachment
-      Content-Length:
-      - '276'
-      Content-Type:
-      - text/csv
-      Date:
-      - Fri, 05 Dec 2025 23:44:06 GMT
-      ETag:
-      - CIebxanQp5EDEAE=
-      Expires:
-      - Mon, 01 Jan 1990 00:00:00 GMT
-      Last-Modified:
-      - Fri, 05 Dec 2025 23:44:02 GMT
-      Pragma:
-      - no-cache
-      Server:
-      - UploadServer
-      Vary:
-      - Origin
-      - X-Origin
-      X-GUploader-UploadID:
-      - AHVrFxM0B_dtphZtnToaSt5XzRdqKpcaSpkE0Rklbh_2CczJiVCzoFXICTDGr3A6qzDgwF0L
-      X-Goog-Generation:
-      - '1764978242702727'
-      X-Goog-Hash:
-      - crc32c=e6O0zg==,md5=aqpn1jk7QQDHHuToKpUZKA==
-      X-Goog-Metageneration:
-      - '1'
-      X-Goog-Storage-Class:
-      - STANDARD
-      X-Goog-Stored-Content-Encoding:
-      - identity
-      X-Goog-Stored-Content-Length:
-      - '276'
+      - AOCedOFQfK9C_5s6f_zxLlmV28sdo0JF4O3AMx4FH763wgYEM4qz7MW0ABG7yLzGBo-NcFepMoTBZzTei0eC
     status:
       code: 200
       message: OK
@@ -1577,90 +1168,28 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/e956b82c-847f-4c5d-ba6e-59e0abac0ef0
+        gccl-invocation-id/096a3787-03f6-4634-b3f0-718176a644e9
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
-    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency.txt%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Fagency.txt?prettyPrint=false&projection=noAcl
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/areas.txt%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Fareas.txt?fields=name&prettyPrint=false
   response:
     body:
-      string: '{"kind":"storage#object","id":"calitp-staging-pytest/agency.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.txt/1764978242702727","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.txt","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.txt?generation=1764978242702727&alt=media","name":"agency.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.txt","bucket":"calitp-staging-pytest","generation":"1764978242702727","metageneration":"1","contentType":"text/csv","storageClass":"STANDARD","size":"276","md5Hash":"aqpn1jk7QQDHHuToKpUZKA==","crc32c":"e6O0zg==","etag":"CIebxanQp5EDEAE=","timeCreated":"2025-12-05T23:44:02.713Z","updated":"2025-12-05T23:44:02.713Z","timeStorageClassUpdated":"2025-12-05T23:44:02.713Z","timeFinalized":"2025-12-05T23:44:02.713Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
-        \"agency.txt\", \"original_filename\": \"agency.txt\", \"ts\": \"2025-06-03T00:00:00+00:00\",
-        \"extract_config\": {\"auth_headers\": {}, \"auth_query_params\": {}, \"computed\":
-        false, \"feed_type\": \"schedule\", \"name\": \"Santa Ynez Mecatran Schedule\",
-        \"schedule_url_for_validation\": null, \"url\": \"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",
-        \"extracted_at\": \"2025-06-01T00:00:00+00:00\"}}"}}'
-    headers:
-      Alt-Svc:
-      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      Cache-Control:
-      - private, max-age=0, must-revalidate, no-transform
-      Content-Length:
-      - '2393'
-      Content-Type:
-      - application/json; charset=UTF-8
-      Date:
-      - Fri, 05 Dec 2025 23:44:06 GMT
-      ETag:
-      - CIebxanQp5EDEAE=
-      Expires:
-      - Fri, 05 Dec 2025 23:44:06 GMT
-      Server:
-      - UploadServer
-      Vary:
-      - Origin
-      - X-Origin
-      X-GUploader-UploadID:
-      - AHVrFxN9uKDMFLFWmkx6Tu2sQDw5jWiribKPuXurqP0h_LzUZ-14Qjhi9pt_IgDFw95rLRj4
-    status:
-      code: 200
-      message: OK
-- request:
-    body: null
-    headers:
-      Accept:
-      - application/json
-      Authorization:
-      - FILTERED
-      Connection:
-      - keep-alive
-      User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-      X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/6bc1cca8-ec4d-41b7-880a-25e80a8d9e13
-      accept-encoding:
-      - gzip
-      content-type:
-      - application/json; charset=UTF-8
-      x-goog-user-project:
-      - cal-itp-data-infra-staging
-      x-upload-content-type:
-      - application/json; charset=UTF-8
-    method: GET
-    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/calendar.txt%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Fcalendar.txt?alt=media
-  response:
-    body:
-      string: "service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date,service_name\r\n11219341,1,1,1,1,1,1,0,20250401,20250503,mon-sat_ends_50325\r\n26003882,1,1,1,1,1,0,0,20250505,20260831,mon-sat_start_050525\r\n"
+      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/areas.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/areas.txt","errors":[{"message":"No
+        such object: calitp-staging-pytest/areas.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/areas.txt","domain":"global","reason":"notFound"}]}}'
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
-      Content-Disposition:
-      - attachment
       Content-Length:
-      - '226'
+      - '723'
       Content-Type:
-      - text/csv
+      - application/json; charset=UTF-8
       Date:
-      - Fri, 05 Dec 2025 23:44:06 GMT
-      ETag:
-      - CImljKrQp5EDEAE=
+      - Tue, 02 Dec 2025 23:48:05 GMT
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
-      Last-Modified:
-      - Fri, 05 Dec 2025 23:44:03 GMT
       Pragma:
       - no-cache
       Server:
@@ -1669,75 +1198,10 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxNkpAGLezaN2umnTDqBfO4-gaOqJ0fdjZAjKpiTUrDRD-5x_0E2nmWvC948f9sdaPxjVehW1LU
-      X-Goog-Generation:
-      - '1764978243867273'
-      X-Goog-Hash:
-      - crc32c=/ynvUA==,md5=vyr4Be4UsrwP2Iv7KT8r7Q==
-      X-Goog-Metageneration:
-      - '1'
-      X-Goog-Storage-Class:
-      - STANDARD
-      X-Goog-Stored-Content-Encoding:
-      - identity
-      X-Goog-Stored-Content-Length:
-      - '226'
+      - AOCedOEpsMixyi0wW0ew36G7QLrNcDwt_eoxs4-igEMoh5k5Dx4RdfBoWjLuHUbBQsTeVk5xjxeF3g
     status:
-      code: 200
-      message: OK
-- request:
-    body: null
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip
-      Authorization:
-      - FILTERED
-      Connection:
-      - keep-alive
-      User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-      X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/849c6b5c-947e-4f5d-9ea0-844c536d680e
-      x-goog-user-project:
-      - cal-itp-data-infra-staging
-    method: GET
-    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/calendar.txt%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Fcalendar.txt?prettyPrint=false&projection=noAcl
-  response:
-    body:
-      string: '{"kind":"storage#object","id":"calitp-staging-pytest/calendar.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/calendar.txt/1764978243867273","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/calendar.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fcalendar.txt","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/calendar.txt%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fcalendar.txt?generation=1764978243867273&alt=media","name":"calendar.txt/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/calendar.txt","bucket":"calitp-staging-pytest","generation":"1764978243867273","metageneration":"1","contentType":"text/csv","storageClass":"STANDARD","size":"226","md5Hash":"vyr4Be4UsrwP2Iv7KT8r7Q==","crc32c":"/ynvUA==","etag":"CImljKrQp5EDEAE=","timeCreated":"2025-12-05T23:44:03.876Z","updated":"2025-12-05T23:44:03.876Z","timeStorageClassUpdated":"2025-12-05T23:44:03.876Z","timeFinalized":"2025-12-05T23:44:03.876Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
-        \"calendar.txt\", \"original_filename\": \"calendar.txt\", \"ts\": \"2025-06-03T00:00:00+00:00\",
-        \"extract_config\": {\"auth_headers\": {}, \"auth_query_params\": {}, \"computed\":
-        false, \"feed_type\": \"schedule\", \"name\": \"Santa Ynez Mecatran Schedule\",
-        \"schedule_url_for_validation\": null, \"url\": \"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",
-        \"extracted_at\": \"2025-06-01T00:00:00+00:00\"}}"}}'
-    headers:
-      Alt-Svc:
-      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      Cache-Control:
-      - private, max-age=0, must-revalidate, no-transform
-      Content-Length:
-      - '2413'
-      Content-Type:
-      - application/json; charset=UTF-8
-      Date:
-      - Fri, 05 Dec 2025 23:44:06 GMT
-      ETag:
-      - CImljKrQp5EDEAE=
-      Expires:
-      - Fri, 05 Dec 2025 23:44:06 GMT
-      Server:
-      - UploadServer
-      Vary:
-      - Origin
-      - X-Origin
-      X-GUploader-UploadID:
-      - AHVrFxND6bBh19VrzmHwZSoojduL7L3RbtEu2r_AYkBDMhTf-mc8xfG1_J8FyWPeBdm1Ab-A
-    status:
-      code: 200
-      message: OK
+      code: 404
+      message: Not Found
 - request:
     body: null
     headers:
@@ -1751,7 +1215,7 @@ interactions:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
       X-Goog-API-Client:
       - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/9a2d472e-625b-41c8-a1ea-d4e568f4d86b
+        gccl-invocation-id/41b2389d-21f7-4909-b11d-670123cdbe42
       accept-encoding:
       - gzip
       content-type:
@@ -1761,14 +1225,12 @@ interactions:
       x-upload-content-type:
       - application/json; charset=UTF-8
     method: GET
-    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/unzipping_results%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D.jsonl?alt=media
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/unzipping_results%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fareas.txt_aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D.jsonl?alt=media
   response:
     body:
       string: '{"success":true,"exception":null,"extract":{"filename":"gtfs.zip","ts":"2025-06-03T00:00:00+00:00","config":{"auth_headers":{},"auth_query_params":{},"computed":false,"feed_type":"schedule","name":"Santa
         Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","extracted_at":"2025-06-01T00:00:00+00:00"},"response_code":200,"response_headers":{"Content-Type":"application/zip","Content-Disposition":"attachment;
-        filename=gtfs.zip"},"reconstructed":false},"zipfile_extract_md5hash":"4f72c84bd3f053ddb929289fa2de7879","zipfile_files":["agency.txt","calendar.txt","calendar_dates.txt","fare_attributes.txt","feed_info.txt","route_directions.txt","routes.txt","shapes.txt","stop_times.txt","stops.txt","transfers.txt","trips.txt"],"zipfile_dirs":[],"extracted_files":[{"filename":"agency.txt","original_filename":"agency.txt","ts":"2025-06-03T00:00:00+00:00","extract_config":{"auth_headers":{},"auth_query_params":{},"computed":false,"feed_type":"schedule","name":"Santa
-        Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","extracted_at":"2025-06-01T00:00:00+00:00"}},{"filename":"calendar.txt","original_filename":"calendar.txt","ts":"2025-06-03T00:00:00+00:00","extract_config":{"auth_headers":{},"auth_query_params":{},"computed":false,"feed_type":"schedule","name":"Santa
-        Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","extracted_at":"2025-06-01T00:00:00+00:00"}}]}'
+        filename=gtfs.zip"},"reconstructed":false},"zipfile_extract_md5hash":"4f72c84bd3f053ddb929289fa2de7879","zipfile_files":["agency.txt","calendar.txt","calendar_dates.txt","fare_attributes.txt","feed_info.txt","route_directions.txt","routes.txt","shapes.txt","stop_times.txt","stops.txt","transfers.txt","trips.txt"],"zipfile_dirs":[],"extracted_files":[]}'
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -1777,17 +1239,17 @@ interactions:
       Content-Disposition:
       - attachment
       Content-Length:
-      - '1859'
+      - '926'
       Content-Type:
       - application/jsonl
       Date:
-      - Fri, 05 Dec 2025 23:44:07 GMT
+      - Tue, 02 Dec 2025 23:48:05 GMT
       ETag:
-      - CLH81arQp5EDEAE=
+      - CIu51NCLoJEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Fri, 05 Dec 2025 23:44:05 GMT
+      - Tue, 02 Dec 2025 23:48:04 GMT
       Pragma:
       - no-cache
       Server:
@@ -1796,11 +1258,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxOeO1toq97S7ZbqauvrmQEfdddWQIZpUu7AdotVPID4bFjd-FXJ8-iu5CJXBBHcVoVMPR7o-2g
+      - AOCedOFY5a41SBZeDQJoh_CdIDkdNu2q1A6_hZbo52YPqpyuO_JLoyZCOlqzevlxGTA4nrt7sScxKw
       X-Goog-Generation:
-      - '1764978245074481'
+      - '1764719284526219'
       X-Goog-Hash:
-      - crc32c=nt3cSQ==,md5=o3s4H1h3FNuTdshL3/EmWw==
+      - crc32c=wlfVTw==,md5=epN3uvch0pD/lZLwPG9k/w==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:
@@ -1808,7 +1270,7 @@ interactions:
       X-Goog-Stored-Content-Encoding:
       - identity
       X-Goog-Stored-Content-Length:
-      - '1859'
+      - '926'
     status:
       code: 200
       message: OK

@@ -41,7 +41,9 @@ class GTFSValidatorResult:
         }
 
     def notices(self) -> list:
-        return [{"metadata": self.metadata(), **n} for n in self.report.get("notices")]
+        return [
+            {"metadata": self.metadata(), **n} for n in self.report.get("notices", [])
+        ]
 
     def set_exception(self, exception: Exception) -> None:
         self._exception = exception
