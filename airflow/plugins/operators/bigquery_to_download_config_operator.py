@@ -63,7 +63,11 @@ class ActiveRowQuery:
     def resolve(self) -> list[dict]:
         resolved = []
         for row in self.rows:
-            if row["_is_current"] and row["deprecated_date"] is None:
+            if (
+                row["_is_current"]
+                and row["data_quality_pipeline"]
+                and row["deprecated_date"] is None
+            ):
                 resolved.append(row)
         return resolved
 
