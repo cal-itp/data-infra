@@ -23,15 +23,17 @@ The following libraries are available and recommended for use by Cal-ITP data an
 
 1. [shared utils](#shared-utils)
 2. [calitp-data-analysis](#calitp-data-analysis)
-3. [siuba](#siuba)
-   <br> - [Basic Query](#basic-query)
-   <br> - [Collect Query Results](#collect-query-results)
-   <br> - [Show Query SQL](#show-query-sql)
-   <br> - [More siuba Resources](#more-siuba-resources)
-4. [pandas](#pandas-resources)
-5. [Add New Packages](#add-new-packages)
-6. [Updating calitp-data-analysis](#updating-calitp-data-analysis)
-7. [Appendix: calitp-data-infra](#appendix)
+   <br> - [Query SQL](#query-sql)
+   <br> - [Accessing Geospatial Resources](#accessing-geospatial-resources)
+3. [Querying Data in BigQuery](#querying-data-in-bigquery)
+   <br> - [SQLAlchemy](#sqlalchemy)
+   <br> - [pandas](#pandas-resources)
+   <br> - [siuba](#siuba)
+   <br> - [Basic Queries](#basic-queries)
+   <br> - [Advanced Queries](#advanced-queries)
+4. [Add New Packages](#add-new-packages)
+5. [Updating calitp-data-analysis](#updating-calitp-data-analysis)
+6. [Appendix: calitp-data-infra](#appendix)
 
 (shared-utils)=
 
@@ -71,7 +73,7 @@ See [data-analyses/starter_kit](https://github.com/cal-itp/data-analyses/tree/ma
 
 __DEPRECATED:__ `tbls` will be removed after `calitp_data_analysis` version 2025.8.10. Instead of `AutoTable` or the `tbls`
 instance, use `query_sql()` from `calitp_data_analysis.sql` to connect to and query a SQL database. See the [`query_sql()`
-section](#calitp-data-analysis-query-sql) below.
+section](#query-sql) below.
 
 Most notably, you can include `import tbls` at the top of your notebook to import a table from the warehouse in the form of a `tbls`:
 
@@ -87,32 +89,35 @@ from calitp_data_analysis.tables import tbls
 tbls.mart_gtfs.dim_agency()
 ```
 
-(calitp-data-analysis-query-sql)=
+(query-sql)=
 
-### query_sql
+### Query SQL
 
-`query_sql()` is a useful function to connect to and query a SQL database. You can optionally pass `as_df=True`
-to turn a SQL query result into a pandas DataFrame.
+#### query_sql
+
+`query_sql()` is useful for simple queries against BigQuery datasets. You can optionally pass `as_df=True`
+to turn a SQL query result into a pandas DataFrame. If you need to construct a more detailed query or are implementing
+a query builder that has multiple usecases, you should probably use [SQLAlchemy query building](#advanced-queries) instead.
 
 As an example, in a notebook:
 
 ```{code-cell}
 from calitp_data_analysis.sql import query_sql
-```
 
-```{code-cell}
 df_dim_agency = query_sql("""
 SELECT
     *
-FROM `mart_gtfs.dim_agency`
+FROM cal-itp-data-infra-staging.mart_gtfs.dim_agency
 LIMIT 10""", as_df=True)
-```
 
-```{code-cell}
 df_dim_agency.head()
 ```
 
-### GCSGeoPandas
+(accessing-geospatial-resources)=
+
+### Accessing Geospatial Resources
+
+#### GCSGeoPandas
 
 The GCSGeoPandas class fetches the Google Cloud Storage (GCS) filesystem and surfaces functions to provide analysts a
 clear and consistent way of accessing geospatial resources.
@@ -158,9 +163,54 @@ geo_data_frame = gpd.GeoDataFrame(data, crs="EPSG:4326")
 gcs_geopandas().geo_data_frame_to_parquet(geo_data_frame, "gs://path/to/your/file.parquet")
 ```
 
+(querying-data-in-bigquery)=
+
+## Querying Data in BigQuery
+
+(sqlalchemy)=
+
+### SQLAlchemy
+
+For more detailed queries or where a query builder pattern is needed for multiple use cases of the same base query, you can use SQLAlchemy's ORM
+functionality. One of the biggest benefits of using an ORM like SQLAlchemy is its security features that mitigate risks common to writing raw SQL.
+Accidentally introducing [SQL injection vulnerabilities](https://owasp.org/www-community/attacks/SQL_Injection) is one of the most common issues
+that ORMs help prevent. Other benefits include more manageable and testable code and that ORM models provide an easy-to-reference resource
+collocated with your code.
+
+Steps to querying with the ORM
+
+- [Declare a model](https://docs.sqlalchemy.org/en/14/orm/quickstart.html). For each of the tables you need to query, you will need to define a model if there isn't one already.
+
+- [Construct a query](https://docs.sqlalchemy.org/en/14/orm/loading_objects.html). Full documentation on query construction here.
+
+- Establish a DB connection and send the query.
+
+  ```python
+  from calitp_data_analysis.sql import get_engine
+  from sqlalchemy.orm import sessionmaker
+
+  db_engine = get_engine(project="cal-itp-data-infra-staging")
+  DBSession = sessionmaker(db_engine)
+
+  ...
+
+  statement = select(YourModel).where(YourModel.service_date == "2025-12-01")
+
+  with DBSession() as session:
+      return pd.read_sql(statement, session.bind)
+  ```
+
+  See SQLAlchemy [Session Basics](https://docs.sqlalchemy.org/en/14/orm/session_basics.html) for more info.
+
+(pandas-resources)=
+
+### pandas
+
+The library pandas is very commonly used in data analysis. See this [Pandas Cheat Sheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf) for more inspiration.
+
 (siuba)=
 
-## siuba
+### siuba (DEPRECATED)
 
 __DEPRECATED:__ siuba will be removed from `calitp_data_analysis` after version 2025.8.10 and other shared code within the
 next few months. Use SQLAlchemy and Pandas or GeoPandas functions directly instead. siuba uses these under the hood.
@@ -172,25 +222,11 @@ It supports most [pandas Series methods](https://pandas.pydata.org/pandas-docs/s
 The examples below go through the basics of using siuba, collecting a database query to a local DataFrame,
 and showing SQL test queries that siuba code generates.
 
-(basic-query)=
+(basic-queries)=
 
-### Basic query
+### Basic Queries
 
-#### siuba
-
-```{code-cell}
-from calitp_data_analysis.tables import tbls
-from siuba import _, filter, count, collect, show_query
-
-# query agency information, then filter for a single gtfs feed,
-# and then count how often each feed key occurs
-(tbls.mart_gtfs.dim_agency()
-    >> filter(_.agency_id == 'BA', _.base64_url == 'aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1SRw==')
-    >> count(_.feed_key)
-)
-```
-
-#### Equivalent BigQuery SQL using `query_sql()`
+#### query_sql
 
 ```python
 from calitp_data_analysis.sql import query_sql
@@ -209,53 +245,48 @@ query_sql(
 )
 ```
 
-(collect-query-results)=
+#### siuba equivalent (DEPRECATED)
 
-### Collect query results
+__DEPRECATED:__ We are removing siuba from the codebase. This is only here for illustration. Please do not introduce new siuba code.
 
-Note that siuba by default prints out a preview of the SQL query results.
-In order to fetch the results of the query as a pandas DataFrame, run `collect()`.
+```python
+from calitp_data_analysis.tables import tbls
+from siuba import _, filter, count, collect, show_query
 
-#### siuba
-
-```{code-cell}
-tbl_agency_names = tbls.mart_gtfs.dim_agency() >> collect()
-
-# Use pandas `head()` method to show first 5 rows of data
-tbl_agency_names.head()
-
+# query agency information, then filter for a single gtfs feed,
+# and then count how often each feed key occurs
+(tbls.mart_gtfs.dim_agency()
+    >> filter(_.agency_id == 'BA', _.base64_url == 'aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1SRw==')
+    >> count(_.feed_key)
+)
 ```
 
-#### Equivalent BigQuery SQL using `query_sql()`
+### _filter & collect_
+
+#### query_sql
+
+Use SQL with `SELECT` and `WHERE` clauses for filtering
 
 ```python
 from calitp_data_analysis.sql import query_sql
 
-tbl_agency_names = query_sql('SELECT * FROM mart_gtfs.dim_agency', as_df=True)
-
-# Use pandas `head()` method to show first 5 rows of data
-tbl_agency_names.head()
-```
-
-(show-query-sql)=
-
-### Show query SQL
-
-While `collect()` fetches query results, `show_query()` prints out the SQL code that siuba generates.
-
-```{code-cell}
-(tbls.mart_gtfs.dim_agency()
-  >> filter(_.agency_name.str.contains("Metro"))
-  >> show_query(simplify=True)
+agencies = query_sql(
+    """
+    SELECT * 
+    FROM cal-itp-data-infra.mart_ntd.dim_annual_service_agencies
+    WHERE state = 'CA' AND report_year = 2023
+    """,
+    as_df=True
 )
 
+# Use pandas `head()` method to show first 5 rows of data
+agencies.head()
 ```
 
-Note that here the pandas Series method `str.contains` corresponds to `regexp_contains` in Google BigQuery.
+#### siuba equivalent (DEPRECATED)
 
-### filter() & collect()
-
-#### siuba
+Note that siuba by default prints out a preview of the SQL query results.
+In order to fetch the results of the query as a pandas DataFrame, run `collect()`.
 
 ```python
 from calitp_data_analysis.tables import tbls
@@ -268,35 +299,7 @@ annnual_service_agencies = (
 )
 ```
 
-#### Equivalent BigQuery SQL using `query_sql()`
-
-Use SQL with `SELECT` and `WHERE` clauses for filtering
-
-```python
-from calitp_data_analysis.sql import query_sql
-
-query_sql(
-    """
-    SELECT * 
-    FROM cal-itp-data-infra.mart_ntd.dim_annual_service_agencies
-    WHERE state = 'CA' AND report_year = 2023
-    """,
-    as_df=True
-)
-```
-
-### select()
-
-#### siuba
-
-```python
-import geopandas as gpd
-from siuba import _, select
-
-
-blocks = gpd.read_file('./tl_2020_06_tabblock20.zip')
-blocks = blocks >> select(_.GEOID20, _.POP20, _.HOUSING20, _.geometry)
-```
+### _select_
 
 #### pandas/geopandas
 
@@ -307,17 +310,18 @@ blocks = gpd.read_file('./tl_2020_06_tabblock20.zip')
 blocks = blocks[['GEOID20', 'POP20', 'HOUSING20', 'geometry']]
 ```
 
-### rename
-
-#### siuba
+#### siuba equivalent (DEPRECATED)
 
 ```python
 import geopandas as gpd
-from siuba import _, rename
+from siuba import _, select
+
 
 blocks = gpd.read_file('./tl_2020_06_tabblock20.zip')
-blocks = blocks >> rename(GEO_ID = _.GEOID20)
+blocks = blocks >> select(_.GEOID20, _.POP20, _.HOUSING20, _.geometry)
 ```
+
+### _rename_
 
 #### pandas/geopandas
 
@@ -328,14 +332,17 @@ blocks = gpd.read_file('./tl_2020_06_tabblock20.zip')
 blocks = blocks.rename(columns={'GEOID20': 'GEO_ID'})
 ```
 
-### inner_join
-
-#### siuba
+#### siuba equivalent (DEPRECATED)
 
 ```python
-# df and df2 are both DataFrame
-joined = df2 >> inner_join(_, df, on={'GEO_ID':'w_geocode'})
+import geopandas as gpd
+from siuba import _, rename
+
+blocks = gpd.read_file('./tl_2020_06_tabblock20.zip')
+blocks = blocks >> rename(GEO_ID = _.GEOID20)
 ```
+
+### _inner_join_
 
 #### pandas/geopandas
 
@@ -349,22 +356,111 @@ do a simpler merge using just the `on` parameter (no need then for `left_on` and
 joined = df2.merge(df, left_on='GEO_ID', right_on='w_geocode')
 ```
 
-#### siuba
+#### siuba equivalent (DEPRECATED)
 
-(more-siuba-resources)=
+```python
+# df and df2 are both DataFrame
+joined = df2 >> inner_join(_, df, on={'GEO_ID':'w_geocode'})
+```
 
-### More siuba Resources
+(advanced-queries)=
 
-- [siuba docs](https://siuba.readthedocs.io)
-- ['Tidy Tuesday' live analyses with siuba](https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf)
+### Advanced Queries
 
-(pandas-resources)=
+If you need to construct a more detailed query or are implementing a query builder that has multiple use cases, you should
+probably use SQLAlchemy ORM's query building features.
 
-## pandas
+#### Reusable base query
 
-The library pandas is very commonly used in data analysis, and the external resources below provide a brief overview of it's use.
+Here's an example adapted from `shared_utils.schedule_rt_utils.filter_dim_gtfs_datasets`
 
-- [Cheat Sheet - pandas](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
+```python
+# Simplied from shared_utils.schedule_rt_utils.filter_dim_gtfs_datasets
+
+def filter_dim_gtfs_datasets(
+    keep_cols: list[str] = ["key", "name", "type", "regional_feed_type", "uri", "base64_url"],
+    custom_filtering: dict = None,
+    get_df: bool = True,
+) -> Union[pd.DataFrame, sqlalchemy.sql.selectable.Select]:
+    """
+    Filter mart_transit_database.dim_gtfs_dataset table
+    and keep only the valid rows that passed data quality checks.
+    """
+    dim_gtfs_dataset_columns = []
+
+    for column in keep_cols:
+        new_column = getattr(DimGtfsDataset, column)
+        dim_gtfs_dataset_columns.append(new_column)
+
+    search_conditions = [DimGtfsDataset.data_quality_pipeline == True]
+
+    for k, v in (custom_filtering or {}).items():
+        search_conditions.append(getattr(DimGtfsDataset, k).in_(v))
+
+    statement = select(*dim_gtfs_dataset_columns).where(and_(*search_conditions))
+
+    if get_df:
+        with DBSession() as session:
+            return pd.read_sql(statement, session.bind)
+    else:
+        return statement
+```
+
+Use of this function for query building
+
+```python
+# Simplied from shared_utils.gtfs_utils_v2.schedule_daily_feed_to_gtfs_dataset_name
+
+dim_gtfs_datasets = schedule_rt_utils.filter_dim_gtfs_datasets(
+    keep_cols=["key", "name", "type", "regional_feed_type"],
+    custom_filtering={"type": ["schedule"]},
+    get_df=False, # return a SQLAlchemy statement so that you can continue to build the query
+)
+
+statement = (
+    dim_gtfs_datasets.with_only_columns(
+        DimGtfsDataset.regional_feed_type,
+        DimGtfsDataset.type,
+        FctDailyScheduleFeed.date,
+        FctDailyScheduleFeed.feed_key,
+        FctDailyScheduleFeed.gtfs_dataset_key,
+        FctDailyScheduleFeed.gtfs_dataset_name,
+    )
+    .join(
+        FctDailyScheduleFeed,
+        and_(
+            FctDailyScheduleFeed.gtfs_dataset_key == DimGtfsDataset.key,
+            FctDailyScheduleFeed.gtfs_dataset_name == DimGtfsDataset.name,
+        ),
+    )
+    .where(FctDailyScheduleFeed.date == selected_date)
+)
+
+with DBSession() as session:
+    return pd.read_sql(statement, session.bind)
+```
+
+#### Useful functions for query building
+
+- [`Select.add_columns`](https://docs.sqlalchemy.org/en/14/core/selectable.html#sqlalchemy.sql.expression.Select.add_columns) - Add columns to existing Select clause
+- [`Select.with_only_columns`](https://docs.sqlalchemy.org/en/14/core/selectable.html#sqlalchemy.sql.expression.Select.with_only_columns) - Replace columns in an existing Select clause
+- [`Column.label`](https://docs.sqlalchemy.org/en/14/core/metadata.html#sqlalchemy.schema.Column.label) - Provide an alias for a column you're selecting. Results in SQL like `<columnname> AS <name>`.
+- [`expression.func`](https://docs.sqlalchemy.org/en/14/core/sqlelement.html#sqlalchemy.sql.expression.func) - Generate SQL function expressions. This is useful for when you need to use a BigQuery-specific expression that is not generically supported in SQLAlchemy.
+  For example:
+  ```python
+  from sqlalchemy import String, select, func
+
+  ...
+
+  select(
+     # Produces column like {"caltrans_district": "07 - Los Angeles / Ventura"}  
+    func.concat(
+        func.lpad(cast(DimCountyGeography.caltrans_district, String), 2, "0"),
+        " - ",
+        DimCountyGeography.caltrans_district_name,
+    ).label("caltrans_district"),
+  ).where(...)
+  ```
 
 (add-new-packages)=
 
