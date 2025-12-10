@@ -24,64 +24,61 @@
 
   Runs [**BigQueryToDownloadConfigOperator**](airflow/plugins/operators/bigquery_to_download_config_operator.py) replacing code in [generate_gtfs_download_configs.py](airflow/dags/airtable_loader_v2/generate_gtfs_download_configs.py) and [storage.py](airflow/plugins/calitp_data_infra/storage.py).
 
-   a. Downloads datasets from bigquery table [staging.int_transit_database__gtfs_datasets_dim](https://dbt-docs.dds.dot.ca.gov/#!/model/model.calitp_warehouse.int_transit_database__gtfs_datasets_dim).
+   - Downloads datasets from bigquery table [staging.int_transit_database__gtfs_datasets_dim](https://dbt-docs.dds.dot.ca.gov/#!/model/model.calitp_warehouse.int_transit_database__gtfs_datasets_dim).
 
-      Data source lineage:
-         airtable.california_transit__gtfs_datasets
-            -> staging.stg_transit_database__gtfs_datasets
+         Data source lineage:
+            airtable.california_transit__gtfs_datasets
+               -> staging.stg_transit_database__gtfs_datasets
                   -> staging.int_transit_database__gtfs_datasets_dim
 
 
-   b. For each dataset:
+   - For each dataset:
+      * Selects records that are data quality pipeline (`data_quality_pipeline IS TRUE`), are current (`_is_current IS TRUE`), and are not deprecated (`deprecated_date IS NULL`)
+      * Builds query and header params if exists in the config
+      * Maps the URI for schedule validation through `schedule_to_use_for_rt_validation`
+      * Zips config results
 
-   * Selects records that are data quality pipeline (`data_quality_pipeline IS TRUE`), are current (`_is_current IS TRUE`), and are not deprecated (`deprecated_date IS NULL`)
-   * Builds query and header params if exists in the config
-   * Maps the URI for schedule validation through `schedule_to_use_for_rt_validation`
-   * Zips config results
 
+  - Uploads zipped config files to `gs://{CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG}/gtfs_download_configs/dt={DATE}/ts={UTC_TIMESTAMP}/configs.jsonl.gz`.
 
-  c. Uploads zipped config files to `gs://{CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG}/gtfs_download_configs/dt={DATE}/ts={UTC_TIMESTAMP}/configs.jsonl.gz`.
-     To visualize the raw data from these files, you can query **external_gtfs_schedule.download_configs** or **mart_gtfs_audit.dim_gtfs_download_config** in BigQuery.
+    To visualize the raw data from these files, you can query **external_gtfs_schedule.download_configs** or **mart_gtfs_audit.dim_gtfs_download_config** in BigQuery.
 
 
 ### 2. Downloads Dataset Zip Files
 
-   a. Runs [**GCSDownloadConfigFilterOperator**](airflow/plugins/operators/gcs_download_config_filter_operator.py) to filter for schedule datasets from the previous step.
+   - Runs [**GCSDownloadConfigFilterOperator**](airflow/plugins/operators/gcs_download_config_filter_operator.py) to filter for schedule datasets from the previous step.
 
-   b. Runs [**DownloadConfigToGCSOperator**](airflow/plugins/operators/download_config_to_gcs_operator.py) and [**DownloadConfigHook**](airflow/plugins/hooks/download_config_hook.py) replacing code in [download_schedule_feeds](airflow/dags/download_gtfs_schedule_v2/download_schedule_feeds.py).
-
-   - Tries to download a zip file for each schedule dataset.
-
-      * Adds default headers
-      * Replaces key params by specific secret values (old process sends all secrets to each dataset)
-      * Allows redirects
-      * Encodes url to base64 url
-      * Adds PARTITIONED_ARTIFACT_METADATA to files
-
-   - Uploads successfull zip files downloaded to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_RAW}/schedule/dt={DATE}/ts={UTC_TIMESTAMP}/base64_url={base64_url}/{file_name}.zip`.
-
-   - Uploads summary results for each dataset to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_RAW}/gtfs_download_configs/dt={DATE}/ts={UTC_TIMESTAMP}/{base64_url}.jsonl`.
-        The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
-        To visualize the raw data from these files, you can query **external_gtfs_schedule.download_outcomes** or **mart_gtfs_audit.dim_gtfs_schedule_download_outcomes** in BigQuery.
+   - Runs [**DownloadConfigToGCSOperator**](airflow/plugins/operators/download_config_to_gcs_operator.py) and [**DownloadConfigHook**](airflow/plugins/hooks/download_config_hook.py) replacing code in [download_schedule_feeds](airflow/dags/download_gtfs_schedule_v2/download_schedule_feeds.py).
+   
+      + Tries to download a zip file for each schedule dataset.
+         * Adds default headers
+         * Replaces key params by specific secret values (old process sends all secrets to each dataset)
+         * Allows redirects
+         * Encodes url to base64 url
+         * Adds PARTITIONED_ARTIFACT_METADATA to files
+   
+      + Uploads successfull zip files downloaded to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_RAW}/schedule/dt={DATE}/ts={UTC_TIMESTAMP}/base64_url={base64_url}/{file_name}.zip`.
+   
+      + Uploads summary results for each dataset to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_RAW}/gtfs_download_configs/dt={DATE}/ts={UTC_TIMESTAMP}/{base64_url}.jsonl`.
+           The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
+           To visualize the raw data from these files, you can query **external_gtfs_schedule.download_outcomes** or **mart_gtfs_audit.dim_gtfs_schedule_download_outcomes** in BigQuery.
 
 
 ### 3. Validates files
 
    Runs [**ValidateGTFSToGCSOperator**](airflow/plugins/operators/validate_gtfs_to_gcs_operator.py) and [**GTFSValidatorHook**](airflow/plugins/hooks/gtfs_validator_hook.py) replacing [validate_gtfs_schedule](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/unzip_gtfs_schedule.py).
 
-   a. Validates zip files downloaded on step 2.
+   - Validates zip files downloaded on step 2.
 
-   b. Uploads notices from the validator, if any, to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY}/validation_notices/t={DATE}/ts={UTC_TIMESTAMP}/base64_url={base64_url}/validation_notices_v{version}.jsonl.gz`.
+   - Uploads notices from the validator, if any, to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY}/validation_notices/t={DATE}/ts={UTC_TIMESTAMP}/base64_url={base64_url}/validation_notices_v{version}.jsonl.gz`.
+      * Adds PARTITIONED_ARTIFACT_METADATA to files
+   
+      To visualize the raw data from these files, you can query **external_gtfs_schedule.validation_notices**, **staging.stg_gtfs_schedule__validation_notices**, or **mart_gtfs_audit.dim_gtfs_schedule_validation_notices** in BigQuery.
+   
 
-   * Adds PARTITIONED_ARTIFACT_METADATA to files
-
-     To visualize the raw data from these files, you can query **external_gtfs_schedule.validation_notices**, **staging.stg_gtfs_schedule__validation_notices**, or **mart_gtfs_audit.dim_gtfs_schedule_validation_notices** in BigQuery.
-
-
-   c. Uploads summary results for each dataset to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_RAW}/validation_job_results/dt={DATE}/ts={UTC_TIMESTAMP}/{base64_url}.jsonl`.
-
-   * Adds PARTITIONED_ARTIFACT_METADATA to files
-
+   - Uploads summary results for each dataset to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_RAW}/validation_job_results/dt={DATE}/ts={UTC_TIMESTAMP}/{base64_url}.jsonl`.
+      * Adds PARTITIONED_ARTIFACT_METADATA to files
+   
      The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
      To visualize the raw data from these files, you can query **external_gtfs_schedule.validations_outcomes**, **staging.stg_gtfs_schedule__validation_outcomes**, or **mart_gtfs_audit.dim_gtfs_schedule_validation_outcomes** in BigQuery.
 
@@ -90,9 +87,9 @@
 
    Runs [**UnzipGTFSToGCSOperator**](airflow/plugins/operators/unzip_gtfs_to_gcs_operator.py) and [**GTFSUnzipHook**](airflow/plugins/hooks/gtfs_unzip_hook.py) replacing [unzip_gtfs_schedule](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/unzip_gtfs_schedule.py).
 
-   a. Unzips downloaded files on step 2.
+   - Unzips downloaded files on step 2.
 
-   b. Extracts allowed `txt` files to `csv`:
+   - Extracts allowed `txt` files to `csv`:
       * agency
       * areas
       * attributions
@@ -118,31 +115,35 @@
       * trips
 
 
-   c. Uploads each extracted file (csv format) to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY}/{filename}.txt/dt={DATE}/ts={UTC_TIMESTAMP}/base64_url={base64_url}/{filename}.txt`.
+   - Uploads each extracted file (csv format) to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY}/{filename}.txt/dt={DATE}/ts={UTC_TIMESTAMP}/base64_url={base64_url}/{filename}.txt`.
+      * Adds PARTITIONED_ARTIFACT_METADATA to files
+      
+      The v2 process uploads files in txt format.
 
-     The v2 process uploads files in txt format.
 
-
-   d. Uploads summary results for each dataset to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY}/unzipping_results/dt={DATE}/ts={UTC_TIMESTAMP}/{base64_url}.jsonl`.
-
-     The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
-     To visualize the raw data from these files, you can query **external_gtfs_schedule.unzip_outcomes**, **staging.stg_gtfs_schedule__unzip_outcomes**, or **mart_gtfs_audit.dim_gtfs_schedule_unzip_outcomes** in BigQuery.
+   - Uploads summary results for each dataset to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY}/unzipping_results/dt={DATE}/ts={UTC_TIMESTAMP}/{base64_url}.jsonl`.
+      * Adds PARTITIONED_ARTIFACT_METADATA to files
+        
+      The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
+      To visualize the raw data from these files, you can query **external_gtfs_schedule.unzip_outcomes**, **staging.stg_gtfs_schedule__unzip_outcomes**, or **mart_gtfs_audit.dim_gtfs_schedule_unzip_outcomes** in BigQuery.
 
 
 ### 5. Converts files to external tables format (jsonl)
 
    Runs [**GTFSCSVToJSONLOperator**](airflow/plugins/operators/gtfs_csv_to_jsonl_operator.py) replacing [parse_and_validate_rt  DAG](airflow/dags/parse_and_validate_rt.py).
 
-   a. Converts each csv file from each dataset to jsonl.
+   - Converts each csv file from each dataset to jsonl.
 
-   b. Uploads each jsonl file to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY}/{filename}/dt={DATE}/ts={UTC_TIMESTAMP}/base64_url={base64_url}/{filename}.jsonl.gz`.
+   - Uploads each jsonl file to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY}/{filename}/dt={DATE}/ts={UTC_TIMESTAMP}/base64_url={base64_url}/{filename}.jsonl.gz`.
+      * Adds PARTITIONED_ARTIFACT_METADATA to files
+       
+      To visualize the raw data from these files, you can query **external_gtfs_schedule.{filename}** or **staging.stg_gtfs_schedule__{filename}** in BigQuery.
 
-     To visualize the raw data from these files, you can query **external_gtfs_schedule.{filename}** or **staging.stg_gtfs_schedule__{filename}** in BigQuery.
-
-   c. Uploads summary results for each dataset to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY}/{filename}.txt_parsing_results/dt={DATE}/ts={UTC_TIMESTAMP}/{base64_url}.jsonl`.
-
-     The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
-     To visualize the raw data from these files, you can query **external_gtfs_schedule.{filename}\_txt_parse_outcomes** or **staging.stg_gtfs_schedule__file_parse_outcomes** in BigQuery.
+   - Uploads summary results for each dataset to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY}/{filename}.txt_parsing_results/dt={DATE}/ts={UTC_TIMESTAMP}/{base64_url}.jsonl`.
+      * Adds PARTITIONED_ARTIFACT_METADATA to files
+      
+      The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
+      To visualize the raw data from these files, you can query **external_gtfs_schedule.{filename}\_txt_parse_outcomes** or **staging.stg_gtfs_schedule__file_parse_outcomes** in BigQuery.
 
 
 ## airtable_loader_v2
