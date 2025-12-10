@@ -346,10 +346,6 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-publish-data-analysis" {
   bucket = "test-calitp-publish-data-analysis"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-reports-data" {
-  bucket = "test-calitp-reports-data"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-sentry" {
   bucket = "test-calitp-sentry"
 }

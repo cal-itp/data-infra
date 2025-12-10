@@ -353,10 +353,6 @@ resource "google_storage_default_object_acl" "tfer--test-calitp-publish-data-ana
   bucket = "test-calitp-publish-data-analysis"
 }
 
-resource "google_storage_default_object_acl" "tfer--test-calitp-reports-data" {
-  bucket = "test-calitp-reports-data"
-}
-
 resource "google_storage_default_object_acl" "tfer--test-calitp-sentry" {
   bucket = "test-calitp-sentry"
 }

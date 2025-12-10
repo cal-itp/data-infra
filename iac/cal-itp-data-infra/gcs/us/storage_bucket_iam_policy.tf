@@ -3466,49 +3466,6 @@ resource "google_storage_bucket_iam_policy" "tfer--test-calitp-publish-data-anal
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--test-calitp-reports-data" {
-  bucket = "b/test-calitp-reports-data"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
-    },
-    {
-      "members": [
-        "serviceAccount:calitp-py-ci@cal-itp-data-infra.iam.gserviceaccount.com"
-      ],
-      "role": "roles/storage.objectAdmin"
-    }
-  ]
-}
-POLICY
-}
-
 resource "google_storage_bucket_iam_policy" "tfer--test-calitp-sentry" {
   bucket = "b/test-calitp-sentry"
 
