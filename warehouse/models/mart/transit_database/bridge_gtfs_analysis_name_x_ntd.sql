@@ -8,15 +8,17 @@ WITH dim_gtfs_datasets AS (
         name,
         analysis_name,
         source_record_id,
-        --regional_feed_type,
+        regional_feed_type,
         _valid_from,
+        private_dataset,
+        data_quality_pipeline,
     FROM {{ ref('dim_gtfs_datasets') }}
     WHERE ( data_quality_pipeline IS TRUE
-          AND private_dataset IS NOT TRUE
-          --AND regional_feed_type != "Regional Precursor Feed"
-          AND analysis_name IS NOT NULL
-          AND name != "Bay Area 511 Regional Schedule"
-          AND type = "schedule")
+           AND private_dataset IS NOT TRUE
+           --AND regional_feed_type != "Regional Precursor Feed"
+           AND analysis_name IS NOT NULL
+           AND name != "Bay Area 511 Regional Schedule"
+           AND type = "schedule")
 ),
 
 deduped_analysis_name AS (
@@ -24,6 +26,7 @@ deduped_analysis_name AS (
         analysis_name,
         source_record_id,
         name,
+        regional_feed_type,
 
     FROM dim_gtfs_datasets
     QUALIFY ROW_NUMBER() OVER (
@@ -40,7 +43,7 @@ dim_provider_gtfs_data AS (
 
 deduped_provider AS (
     SELECT DISTINCT
-        organization_key,
+        organization_name,
         schedule_source_record_id,
 
     FROM dim_provider_gtfs_data
@@ -75,7 +78,6 @@ orgs_with_geog AS (
     SELECT DISTINCT
         dim_organizations.source_record_id AS organization_source_record_id,
         dim_organizations.name AS organization_name,
-        dim_organizations.key AS organization_key,
 
         dim_county_geography.name AS county_name,
         dim_county_geography.caltrans_district,
@@ -100,6 +102,7 @@ gtfs_to_orgs AS (
         deduped_provider.schedule_source_record_id,
         deduped_analysis_name.name AS schedule_gtfs_dataset_name,
         deduped_analysis_name.analysis_name,
+        deduped_analysis_name.regional_feed_type,
 
         orgs_with_geog.county_name,
         orgs_with_geog.caltrans_district,
@@ -114,7 +117,7 @@ gtfs_to_orgs AS (
     INNER JOIN deduped_analysis_name
         ON deduped_analysis_name.source_record_id = deduped_provider.schedule_source_record_id
     INNER JOIN orgs_with_geog
-        ON deduped_provider.organization_key = orgs_with_geog.organization_key
+        ON deduped_provider.organization_name = orgs_with_geog.organization_name
     ORDER BY schedule_gtfs_dataset_name
 )
 
