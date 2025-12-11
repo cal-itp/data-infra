@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from operators.bigquery_to_download_config_operator import (
     BigQueryToDownloadConfigOperator,
@@ -60,6 +60,7 @@ def download_gtfs():
     download_config = BigQueryToDownloadConfigOperator(
         task_id="bigquery_to_download_config",
         retries=1,
+        retry_delay=timedelta(seconds=10),
         dataset_name="staging",
         table_name="int_transit_database__gtfs_datasets_dim",
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
@@ -70,6 +71,7 @@ def download_gtfs():
         task_id="download_config_filter",
         limit=None,
         retries=1,
+        retry_delay=timedelta(seconds=10),
         feed_type="schedule",
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
         source_path="gtfs_download_configs/dt={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
@@ -78,6 +80,7 @@ def download_gtfs():
     downloads = DownloadConfigToGCSOperator.partial(
         task_id="download_config_to_gcs",
         retries=1,
+        retry_delay=timedelta(seconds=10),
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
         destination_path="schedule/dt={{ ds }}/ts={{ ts }}",
         results_path="download_schedule_feed_results/dt={{ ds }}/ts={{ ts }}",
@@ -88,6 +91,7 @@ def download_gtfs():
         task_id="trigger_parse_and_validate_gtfs",
         trigger_dag_id="parse_and_validate_gtfs",
         logical_date="{{ ts }}",
+        trigger_rule=TriggerRule.ALL_DONE,
     )
 
     (
@@ -143,6 +147,7 @@ def parse_and_validate_gtfs():
     validate = ValidateGTFSToGCSOperator.partial(
         task_id="validate_gtfs_to_gcs",
         retries=1,
+        retry_delay=timedelta(seconds=10),
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"),
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
         map_index_template="{{ task.download_schedule_feed_results['config']['name'] }}",
@@ -161,6 +166,7 @@ def parse_and_validate_gtfs():
     unzip = UnzipGTFSToGCSOperator.partial(
         task_id="unzip_to_gcs",
         retries=1,
+        retry_delay=timedelta(seconds=10),
         filenames=list(GTFS_SCHEDULE_FILENAMES.keys()),
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
@@ -193,6 +199,7 @@ def parse_and_validate_gtfs():
     convert = GTFSCSVToJSONLOperator.partial(
         task_id="convert_to_jsonl",
         retries=1,
+        retry_delay=timedelta(seconds=10),
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"),
         map_index_template="{{ task.unzip_results['extract']['config']['name'] }}",
