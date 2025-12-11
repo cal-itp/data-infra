@@ -1,4 +1,5 @@
 import json
+import os
 from typing import Sequence
 
 import pendulum
@@ -55,29 +56,13 @@ class DownloadConfigRow:
         }
 
 
-class ActiveRowQuery:
-    def __init__(self, rows: list[dict], current_time: pendulum.DateTime):
-        self.rows = rows
-        self.current_time = current_time
-
-    def resolve(self) -> list[dict]:
-        resolved = []
-        for row in self.rows:
-            if (
-                row["_is_current"]
-                and row["data_quality_pipeline"]
-                and row["deprecated_date"] is None
-            ):
-                resolved.append(row)
-        return resolved
-
-
 class BigQueryToDownloadConfigOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "dataset_name",
         "table_name",
         "destination_bucket",
         "destination_path",
+        "columns",
         "gcp_conn_id",
     )
 
@@ -87,6 +72,17 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
         table_name: str,
         destination_bucket: str,
         destination_path: str,
+        columns: list[str] = [
+            "authorization_url_parameter_name",
+            "authorization_header_parameter_name",
+            "schedule_to_use_for_rt_validation_gtfs_dataset_key",
+            "name",
+            "pipeline_url",
+            "type",
+            "key",
+            "url_secret_key_name",
+            "header_secret_key_name",
+        ],
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
@@ -98,6 +94,7 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
         self.table_name = table_name
         self.destination_bucket = destination_bucket
         self.destination_path = destination_path
+        self.columns = columns
         self.gcp_conn_id = gcp_conn_id
 
     def destination_name(self) -> str:
@@ -107,15 +104,24 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
         return GCSHook(gcp_conn_id=self.gcp_conn_id)
 
     def bigquery_hook(self) -> BigQueryHook:
-        return BigQueryHook(gcp_conn_id=self.gcp_conn_id)
+        return BigQueryHook(gcp_conn_id=self.gcp_conn_id, location=self.location())
+
+    def rows(self) -> list[list[str]]:
+        return self.bigquery_hook().get_records(
+            sql=f"""
+                SELECT {','.join(self.columns)}
+                FROM [{self.dataset_name}.{self.table_name}]
+                WHERE _is_current
+                  AND data_quality_pipeline
+                  AND deprecated_date IS NULL
+            """
+        )
+
+    def location(self) -> str:
+        return os.getenv("CALITP_BQ_LOCATION")
 
     def download_config_rows(self, current_time: pendulum.DateTime) -> list:
-        response = self.bigquery_hook().list_rows(
-            dataset_id=self.dataset_name, table_id=self.table_name
-        )
-        active_rows = ActiveRowQuery(
-            rows=list(response), current_time=current_time
-        ).resolve()
+        active_rows = [dict(zip(self.columns, row)) for row in self.rows()]
         mapped_rows = {row["key"]: row for row in active_rows}
         return [
             DownloadConfigRow(row).resolve(current_time, mapped_rows)
