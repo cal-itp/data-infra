@@ -1,12 +1,12 @@
 {{ config(materialized='table') }}
 
 WITH lagged_uri_table AS (
-  SELECT 
+  SELECT
       id AS source_record_id,
       name,
       uri,
       LAG (uri) OVER (
-        PARTITION BY id 
+        PARTITION BY id
         ORDER BY dt
       ) AS previous_uri,
       dt AS first_downloaded_dt ,
@@ -14,7 +14,7 @@ WITH lagged_uri_table AS (
   FROM {{ref('stg_transit_database__gtfs_datasets')}}
 ),
 int_transit_database__uri_changelog AS (
-    SELECT 
+    SELECT
         source_record_id,
         name,
         uri,
@@ -23,7 +23,7 @@ int_transit_database__uri_changelog AS (
             PARTITION BY source_record_id
             ORDER BY first_downloaded_dt
         ) - 1 AS last_downloaded_dt,
-    FROM lagged_uri_table 
+    FROM lagged_uri_table
     WHERE previous_uri != uri
 )
 SELECT * FROM int_transit_database__uri_changelog
