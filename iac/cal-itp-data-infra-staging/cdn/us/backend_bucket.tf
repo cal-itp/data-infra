@@ -1,8 +1,15 @@
 resource "google_compute_managed_ssl_certificate" "calitp-staging" {
-  name = "calitp-staging-certificate"
+  name = "calitp-staging-certificate-2"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   managed {
-    domains = ["dbt-docs-staging.dds.dot.ca.gov."]
+    domains = [
+      "dbt-docs-staging.dds.dot.ca.gov.",
+      "staging-reports.dds.dot.ca.gov."
+    ]
   }
 }
 
@@ -11,6 +18,20 @@ resource "google_compute_backend_bucket" "calitp-staging-dbt-docs" {
   bucket_name = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-dbt-docs_name
   enable_cdn  = true
 
+  cdn_policy {
+    cache_mode        = "CACHE_ALL_STATIC"
+    client_ttl        = 3600
+    default_ttl       = 3600
+    max_ttl           = 86400
+    negative_caching  = true
+    serve_while_stale = 86400
+  }
+}
+
+resource "google_compute_backend_bucket" "calitp-reports-staging" {
+  name        = "calitp-reports-staging-backend-bucket"
+  bucket_name = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-reports-staging_name
+  enable_cdn  = true
   cdn_policy {
     cache_mode        = "CACHE_ALL_STATIC"
     client_ttl        = 3600
@@ -30,6 +51,11 @@ resource "google_compute_url_map" "calitp-staging-https" {
     hosts        = ["dbt-docs-staging.dds.dot.ca.gov"]
   }
 
+  host_rule {
+    path_matcher = "staging-reports"
+    hosts        = ["staging-reports.dds.dot.ca.gov"]
+  }
+
   path_matcher {
     name            = "dbt-docs"
     default_service = google_compute_backend_bucket.calitp-staging-dbt-docs.id
@@ -37,6 +63,16 @@ resource "google_compute_url_map" "calitp-staging-https" {
     path_rule {
       paths   = ["/*"]
       service = google_compute_backend_bucket.calitp-staging-dbt-docs.id
+    }
+  }
+
+  path_matcher {
+    name            = "staging-reports"
+    default_service = google_compute_backend_bucket.calitp-reports-staging.id
+
+    path_rule {
+      paths   = ["/*"]
+      service = google_compute_backend_bucket.calitp-reports-staging.id
     }
   }
 }
