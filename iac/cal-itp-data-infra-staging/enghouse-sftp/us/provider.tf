@@ -16,6 +16,7 @@ terraform {
 }
 
 data "google_client_config" "default" {}
+
 provider "kubernetes" {
   host                   = "https://${data.terraform_remote_state.gke.outputs.google_container_cluster_sftp-endpoints_endpoint}"
   token                  = data.google_client_config.default.access_token

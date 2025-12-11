@@ -283,6 +283,9 @@ resource "google_project_iam_member" "metabase-service-account" {
   for_each = toset([
     "roles/cloudsql.client",
     "roles/secretmanager.secretAccessor",
+    "roles/bigquery.dataViewer",
+    "roles/bigquery.jobUser",
+    "roles/bigquery.metadataViewer"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.metabase-service-account.email}"
