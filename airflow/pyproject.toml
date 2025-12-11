@@ -18,7 +18,7 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.11.0,<3.12"
-apache-airflow = "2.9.3"
+apache-airflow = "2.10.5"
 apache-airflow-providers-cncf-kubernetes = "10.1.0"
 apache-airflow-providers-google = "15.1.0"
 astronomer-cosmos = "^1.9.0"
