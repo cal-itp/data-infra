@@ -163,9 +163,10 @@ remove_refund_table_dups AS (
     LEFT JOIN refused_then_approved USING (participant_id, refund_id)
     WHERE refused_then_approved.refund_id IS NULL
     -- this dedupes on coalesced_id (which is comprised of retrieval_reference_number or aggregation_id if it is null) and refund_amount
-    -- because we observe some duplicate refunds by retrieval_reference_number/aggregation_id and refund_amount
+    -- because we observe some duplicate refunds by retrieval_reference_number/aggregation_id and proposed_amount
     -- add line number to sorting to make this deterministic
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY coalesced_id, refund_amount ORDER BY littlepay_export_ts DESC, _line_number DESC) = 1
+    -- added micropayment ID because if present and distinct, should actually be distinct refunds
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY coalesced_id, COALESCE(micropayment_id, '0'), proposed_amount ORDER BY littlepay_export_ts DESC, _line_number DESC) = 1
 ),
 
 int_payments__refunds_deduped AS (
