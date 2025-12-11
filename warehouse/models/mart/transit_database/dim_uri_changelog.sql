@@ -12,6 +12,6 @@ dim_uri_changelog AS (
         first_downloaded_dt,
         last_downloaded_dt,
     FROM lagged_uri_table 
-    ORDER BY dt DESC
+    ORDER BY first_downloaded_dt DESC
 )
 SELECT * from dim_uri_changelog

@@ -11,17 +11,17 @@ WITH lagged_uri_table AS (
       ) AS previous_uri,
       dt AS first_downloaded_dt ,
 
-  FROM {{ref('dim_gtfs_datasets')}}
-)
+  FROM {{ref('stg_transit_database__gtfs_datasets')}}
+),
 int_transit_database__uri_changelog AS (
     SELECT 
-        id,
+        source_record_id,
         name,
         uri,
         first_downloaded_dt,
         LEAD (first_downloaded_dt) OVER (
-            PARTITION BY id
-            ORDER BY dt
+            PARTITION BY source_record_id
+            ORDER BY first_downloaded_dt
         ) - 1 AS last_downloaded_dt,
     FROM lagged_uri_table 
     WHERE previous_uri != uri
