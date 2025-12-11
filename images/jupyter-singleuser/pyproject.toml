@@ -1,6 +1,6 @@
 [project]
 name = "jupyter-singleuser"
-version = "2025.11.11a"
+version = "2025.12.10"
 description = "This is the notebook image that individual users are served via JupyterHub."
 requires-python = ">=3.11.0, <3.12.0"
 
@@ -18,6 +18,7 @@ dependencies = [
     "intake==0.6.4",
     "ipyleaflet==0.15.0",
     "isort==5.10.1",
+    "jupyterlab (>=4.5.0, <4.6.0)",
     "jupyter-resource-usage (>=1.1.1, <2.0.0)",
     "jupyter-server-proxy (>=4.1.1, <5.0.0)",
     "jupyterlab-code-formatter>=1.4.10",
