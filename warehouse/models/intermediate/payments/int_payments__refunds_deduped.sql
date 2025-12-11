@@ -23,12 +23,12 @@ format_micropayments_table_refunds AS (
         debit.micropayment_id,
         micropayments_refunds.participant_id,
         micropayments_refunds.customer_id,
-        ABS(micropayments_refunds.charge_amount) AS proposed_amount,
+        SAFE_CAST(NULL AS NUMERIC) AS proposed_amount,
         EXTRACT(DATE FROM micropayments_refunds.transaction_time) AS transaction_date,
         micropayments_refunds.aggregation_id AS coalesced_id,
 
         -- add columns that we want to preserve from refunds table after union as null strings
-        SAFE_CAST(NULL AS NUMERIC) AS refund_amount,
+        ABS(micropayments_refunds.charge_amount) AS refund_amount,
         SAFE_CAST(NULL AS STRING) AS refund_id,
         SAFE_CAST(NULL AS STRING) AS settlement_id,
         SAFE_CAST(NULL AS STRING) AS retrieval_reference_number,
