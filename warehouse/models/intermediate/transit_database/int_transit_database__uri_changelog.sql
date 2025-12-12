@@ -5,13 +5,13 @@ WITH lagged_uri_table AS (
       id AS source_record_id,
       name,
       uri,
-      LAG (uri) OVER (
+      LAG(uri) OVER (
         PARTITION BY id
         ORDER BY dt
       ) AS previous_uri,
       dt AS first_downloaded_dt ,
 
-  FROM {{ref('stg_transit_database__gtfs_datasets')}}
+  FROM {{ ref('stg_transit_database__gtfs_datasets') }}
 ),
 int_transit_database__uri_changelog AS (
     SELECT
@@ -19,7 +19,7 @@ int_transit_database__uri_changelog AS (
         name,
         uri,
         first_downloaded_dt,
-        LEAD (first_downloaded_dt) OVER (
+        LEAD(first_downloaded_dt) OVER (
             PARTITION BY source_record_id
             ORDER BY first_downloaded_dt
         ) - 1 AS last_downloaded_dt,
