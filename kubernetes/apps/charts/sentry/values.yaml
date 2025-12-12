@@ -109,7 +109,7 @@ sentry:
     enabled: true
     image:
       repository: bitnamilegacy/zookeeper
-      tag: 3.8.1-debian-11-r9
+      tag: 3.8.0-debian-11-r9
     persistence:
       size: 32Gi
     autopurge:
