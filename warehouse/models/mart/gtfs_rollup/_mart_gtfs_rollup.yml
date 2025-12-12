@@ -593,3 +593,35 @@ models:
       - name: n_rt_days
         description: |
           Number of days where trips appeared either vehicle positions or trip updates feed.
+
+  - name: fct_monthly_operator_summary
+    description: |
+      An aggregation of GTFS schedule and RT observed trips to the
+      month-day_type-schedule_gtfs_dataset_name
+    columns:
+      - name: schedule_gtfs_dataset_name
+        description: *gtfs_dataset_name_desc
+      - *month_first_day
+      - &analysis_name
+        name: analysis_name
+        description: |
+            Disambiguated name for GTFS-feed level analyses and dashboards.
+      - *day_type
+
+  - name: fct_operator_hourly_summary
+    description: |
+      An hourly aggregation of GTFS schedule monthly trips.
+    columns:
+      - name: schedule_gtfs_dataset_name
+        description: *gtfs_dataset_name_desc
+      - *month_first_day
+      - *analysis_name
+      - *day_type
+      - name: departure_hour
+        description: |
+            The departure hour for the trip
+      - *n_trip_instance_keys
+      - name: service_hours
+        description: '{{ doc("column_service_hours") }}'
+      - name: flex_service_hours
+        description: '{{ doc("column_flex_service_hours") }}'
