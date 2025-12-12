@@ -1,5 +1,5 @@
 description: "Scrape NTD endpoints from DOT API monthly"
-schedule_interval: "0 11 * * 3" # 11am UTC every Wednesday
+schedule_interval: "0 9 * * 3" # 9am UTC (2am PDT/1am PST) every Wednesday
 tags:
   - ntd
 default_args:

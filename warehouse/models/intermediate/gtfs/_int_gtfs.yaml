@@ -1,6 +1,20 @@
 version: 2
 
 models:
+  - name: int_gtfs_datasets
+    description: GTFS datasets extracted from airtable.california_transit__gtfs_datasets
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: source_record_id
+          gaps: required
+    columns:
+      - name: key
+        description: Synthetic primary key constructed from incoming record ID and `_valid_from`.
+        tests:
+          - unique
+          - not_null
   - name: int_gtfs_schedule__joined_feed_outcomes
     description: |
       Each row is an individual download attempt combined with the associated unzip and parse attempts for

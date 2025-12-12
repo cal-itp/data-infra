@@ -156,6 +156,11 @@ models:
           domain: mart
           dataset: gtfs
         schema: mart_gtfs
+      gtfs_audit:
+        +labels:
+          domain: mart
+          dataset: gtfs_audit
+        schema: mart_gtfs_audit
       gtfs_quality:
         +labels:
           domain: mart
