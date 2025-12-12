@@ -11,7 +11,7 @@ dependencies = [
     "csvkit==1.0.7",
     "dask (>=2024.5.0, <2024.6.0)",
     "dask-geopandas (>=0.2.0, <0.3.0)",
-    "folium>=0.12.1.post1",
+    "folium (>=0.20.0, <0.21.0)",
     "intake-dcat==0.4.0",
     "intake-geopandas>=0.3.0",
     "intake-parquet>=0.2.3",
