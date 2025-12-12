@@ -1,5 +1,5 @@
 resource "google_compute_managed_ssl_certificate" "calitp-staging" {
-  name = "calitp-staging-certificate-2"
+  name = "calitp-staging-certificate-3"
 
   lifecycle {
     create_before_destroy = true
@@ -8,7 +8,7 @@ resource "google_compute_managed_ssl_certificate" "calitp-staging" {
   managed {
     domains = [
       "dbt-docs-staging.dds.dot.ca.gov.",
-      "staging-reports.dds.dot.ca.gov."
+      "reports-staging.dds.dot.ca.gov."
     ]
   }
 }
@@ -52,8 +52,8 @@ resource "google_compute_url_map" "calitp-staging-https" {
   }
 
   host_rule {
-    path_matcher = "staging-reports"
-    hosts        = ["staging-reports.dds.dot.ca.gov"]
+    path_matcher = "reports-staging"
+    hosts        = ["reports-staging.dds.dot.ca.gov"]
   }
 
   path_matcher {
@@ -67,7 +67,7 @@ resource "google_compute_url_map" "calitp-staging-https" {
   }
 
   path_matcher {
-    name            = "staging-reports"
+    name            = "reports-staging"
     default_service = google_compute_backend_bucket.calitp-reports-staging.id
 
     path_rule {
