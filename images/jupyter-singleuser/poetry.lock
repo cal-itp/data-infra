@@ -648,18 +648,18 @@ crt = ["awscrt (==0.23.8)"]
 
 [[package]]
 name = "branca"
-version = "0.4.2"
+version = "0.8.2"
 description = "Generate complex HTML+JS pages with Python"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "branca-0.4.2-py3-none-any.whl", hash = "sha256:62c2e777f074fc1830cd40ba9e650beb941861075980babafead8d97856b1a4b"},
-    {file = "branca-0.4.2.tar.gz", hash = "sha256:c111453617b17ab2bda60a4cd71787d6f2b59c85cdf71ab160a737606ac66c31"},
+    {file = "branca-0.8.2-py3-none-any.whl", hash = "sha256:2ebaef3983e3312733c1ae2b793b0a8ba3e1c4edeb7598e10328505280cf2f7c"},
+    {file = "branca-0.8.2.tar.gz", hash = "sha256:e5040f4c286e973658c27de9225c1a5a7356dd0702a7c8d84c0f0dfbde388fe7"},
 ]
 
 [package.dependencies]
-jinja2 = "*"
+jinja2 = ">=3"
 
 [[package]]
 name = "cachetools"
@@ -8881,4 +8881,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11.0, <3.12.0"
-content-hash = "3bd2721d5a96f1b89a594be9d666b84e7c47c322a6bc75ae2812f44a18e46839"
+content-hash = "512643029e820d97c35f31163b266e71886da2a6302e07490d44c2e731ae11ca"
