@@ -97,7 +97,8 @@ resource "google_composer_environment" "calitp-staging-composer" {
         "CALITP_BUCKET__PUBLISH"                               = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-publish_name}",
         "CALITP_BUCKET__SENTRY_EVENTS"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-sentry_name}",
         "CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-state-geoportal-scrape_name}",
-        "CALITP_SLACK_URL"                                     = data.google_secret_manager_secret_version.slack-airflow-url.secret_data
+        "CALITP_SLACK_URL"                                     = data.google_secret_manager_secret_version.slack-airflow-url.secret_data,
+        "CALITP_NOTIFY_EMAIL"                                  = "dds.app.notify+staging@dot.ca.gov"
       })
     }
   }
