@@ -144,8 +144,9 @@ combine_micropayments_and_refunds AS (
         refunds.proposed_amount AS refund_proposed_amount,
         COALESCE(refunds.transaction_date, micropayments.transaction_date) AS transaction_date,
         COALESCE(refunds.coalesced_id, micropayments.coalesced_id) AS coalesced_id,
-        refunds.refund_amount AS refunds_refund_amount,
-        micropayments.refund_amount AS micropayment_refund_amount,
+        COALESCE(refunds.refund_amount, micropayments.refund_amount) AS refund_amount,
+        -- keep micropayments refund amount as a separate column to test that if both were present the values were the same
+        micropayments.refund_amount AS micropayments_refund_amount,
         refunds.refund_id,
         refunds.proposed_amount,
         refunds.settlement_id AS settlement_id,
@@ -193,8 +194,7 @@ combine_micropayments_and_refunds AS (
         END AS source_table
     FROM refunds_remove_refused_then_approved_and_remaining_dups AS refunds
     FULL OUTER JOIN micropayment_refund_id_lookup AS micropayments
-    ON refunds.aggregation_id = micropayments.aggregation_id
-    AND refunds.micropayment_id = micropayments.micropayment_id
+    ON refunds.micropayment_id = micropayments.micropayment_id
 ),
 
 int_payments__refunds_deduped AS (
@@ -206,8 +206,8 @@ int_payments__refunds_deduped AS (
         proposed_amount,
         transaction_date,
         coalesced_id,
-        refunds_refund_amount,
-        micropayment_refund_amount,
+        refund_amount,
+        micropayments_refund_amount,
         refund_id,
         settlement_id,
         retrieval_reference_number,
@@ -246,16 +246,6 @@ int_payments__refunds_deduped AS (
         micropayments_content_hash,
         micropayments_key,
         micropayments_payments_key,
-        {# _line_number,
-        currency_code,
-        instance,
-        extract_filename,
-        ts,
-        littlepay_export_ts,
-        littlepay_export_date,
-        _content_hash,
-        _key,
-        _payments_key, #}
         source_table
     FROM combine_micropayments_and_refunds
 )
