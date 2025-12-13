@@ -120,22 +120,27 @@ models:
         description: '{{ doc("lp_contains_adjusted_micropayment") }}'
   - name: int_payments__refunds_deduped
     description: |
-      This model is a union of refunds found both in `stg_littlepay__refunds` and `stg_littlepay__micropayments`.
-      It includes deduplication of refunds that appear multiple times with multiple statuses, to only take the most recent status,
+      This model is a combination of refunds found in Littlepay refunds and Littlepay micropayments tables.
+      Refunds usually appear in the refunds table but sometimes appear in the micropayments table in addition or instead (as "credit" micropayments.)
+      This model includes deduplication of refunds that appear multiple times with multiple statuses, to only take the most recent status,
       and also deduplicates based on `coalesced_id` which is `retrieval_reference_number` or `aggregation_id` if `retrieval_reference_number` is `NULL`.
 
-      Columns have the same meanings as in the upstream staging model.
+      Columns have the same meanings as in the upstream staging models.
 
       The most important test for this model is on the upstream staging model: to ensure that no
       `retrieval_reference_number` or `aggregation_id` values are fully dropped betweeen that model and this one (i.e., to ensure
       that all rows dropped do in fact have a duplicate and no refunds are lost.)
+    data_tests:
+      - dbt_utils.expression_is_true:
+          expression: "refund_amount = micropayments_refund_amount"
+          config:
+            where: "source_table='both_refunds_and_micropayments'"
     columns:
       - name: refund_id
-        description: The unique identifier for each requested refund.
+        description: The unique identifier for each requested refund. (Only present if refund was in refunds table.)
       - name: aggregation_id
         description: |
           The aggregation that contains the refund.
-
           A single aggregation can have multiple refunds.
       - name: micropayment_id
         description: |
@@ -145,7 +150,7 @@ models:
       - name: customer_id
         description: Identifies the customer that the micropayment belongs to.
       - name: refund_amount
-        description: The amount of the transaction remaining after the refund has been applied (transaction_amount - proposed_amount.)
+        description: The amount of the transaction to be refunded to the customer.
       - name: transaction_date
         description: Settlement transaction date (if micropayment was settled before refund)
       - name: settlement_id
@@ -161,7 +166,7 @@ models:
       - name: transaction_amount
         description: The amount of the original fare.
       - name: proposed_amount
-        description: The amount to be refunded to the customer.
+        description: The amount of the transaction after the refund is applied (transaction amount - refund amount.)
       - name: status
         description: |
           The status of the refund.
@@ -197,41 +202,63 @@ models:
         description: This field is not in use.
       - name: settlement_response_text
         description: This field is not in use.
-      - &lp_line_number
-        name: _line_number
+      - name: refunds_line_number
         description: |
-          Line number of this row in the source file.
+          Line number of this row in the source refunds file.
           Some line numbers may be missing because we drop extra copies of rows that are full duplicates of another row.
-      - name: currency_code
+      - name: refunds_currency_code
         description: ISO 4217 numeric currency code for the amount that was requested to be settled.
-      - name: instance
-      - name: extract_filename
-      - name: ts
-      - &lp_export_ts
-        name: littlepay_export_ts
+      - name: refunds_instance
+      - name: refunds_extract_filename
+      - name: refunds_ts
+      - name: refunds_littlepay_export_ts
         description: |
-          Timestamp of the source file from Littlepay. Timestamp is extracted from filenames, which generally have the
+          Timestamp of the source refunds file from Littlepay. Timestamp is extracted from filenames, which generally have the
           structure {timestamp}_{data_type}.{file extension}.
-      - &lp_export_date
-        name: littlepay_export_date
+      - name: refunds_littlepay_export_date
         description: |
-          Date of the source file from Littlepay. Date is extracted from filenames, which generally have the
+          Date of the source refunds file from Littlepay. Date is extracted from filenames, which generally have the
           structure {timestamp}_{data_type}.{file extension}.
-      - &_content_hash
-        name: _content_hash
+      - name: refunds_content_hash
         description: |
-          Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
+          Hash of all data columns from refunds table to uniquely identify row's content, mostly for debugging purposes.
           Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
-      - &payments_input_row_key
-        name: _key
+      - name: refunds_key
         description: |
-          Synthetic key composed of Littlepay file date and line number to uniquely identify a row within source data.
-      - name: _payments_key
+          Synthetic key composed of Littlepay file date and line number to uniquely identify a row within source refunds data.
+      - name: refunds_payments_key
         description: |
-          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+          Synthentic key composed of the elements that define a natural key within the source refunds data (primary key according to Littlepay schema.)
+      - name: micropayments_line_number
+        description: |
+          Line number of this row in the source micropayments file.
+          Some line numbers may be missing because we drop extra copies of rows that are full duplicates of another row.
+      - name: micropayments_currency_code
+        description: ISO 4217 numeric currency code for the amount that was requested to be settled.
+      - name: micropayments_instance
+      - name: micropayments_extract_filename
+      - name: micropayments_ts
+      - name: micropayments_littlepay_export_ts
+        description: |
+          Timestamp of the source micropayments file from Littlepay. Timestamp is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - name: micropayments_littlepay_export_date
+        description: |
+          Date of the source micropayments file from Littlepay. Date is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - name: micropayments_content_hash
+        description: |
+          Hash of all data columns from micropayments table to uniquely identify row's content, mostly for debugging purposes.
+          Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
+      - name: micropayments_key
+        description: |
+          Synthetic key composed of Littlepay file date and line number to uniquely identify a row within source micropayments data.
+      - name: micropayments_payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source micropayments data (primary key according to Littlepay schema.)
       - name: source_table
         description: |
-          The table the refund was initially present in (either `stg_littlepay__refunds` or `stg_littlepay__micropayments`)
+          The table the refund was initially present in (refunds, micropayments, or both)
 
   - name: int_payments__refunds_to_aggregations
     description: |
