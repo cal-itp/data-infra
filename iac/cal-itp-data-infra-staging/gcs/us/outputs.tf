@@ -261,3 +261,7 @@ output "google_storage_bucket_cal-itp-data-infra-enghouse-raw_name" {
 output "google_storage_bucket_calitp-reports-staging_name" {
   value = google_storage_bucket.calitp-reports-staging.name
 }
+
+output "google_storage_bucket_calitp-analysis-staging_name" {
+  value = google_storage_bucket.calitp-analysis-staging.name
+}
