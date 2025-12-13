@@ -9,3 +9,4 @@ source_objects:
 destination_project_dataset_table: "external_enghouse.ventura_pw"
 source_format: CSV
 use_bq_client: true
+field_delimiter: ";"
