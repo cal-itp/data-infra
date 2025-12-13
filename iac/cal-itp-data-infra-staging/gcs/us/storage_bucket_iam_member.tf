@@ -76,3 +76,9 @@ resource "google_storage_bucket_iam_member" "calitp-reports-data-staging" {
   member = "projectEditor:cal-itp-data-infra-staging"
   role   = "roles/storage.legacyBucketOwner"
 }
+
+resource "google_storage_bucket_iam_member" "calitp-analysis-staging" {
+  bucket = google_storage_bucket.calitp-analysis-staging.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
