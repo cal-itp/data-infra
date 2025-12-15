@@ -1,0 +1,10 @@
+apiVersion: v2
+name: postgresql
+description: Postgres for Kubernetes
+type: application
+version: 0.1.0
+appVersion: "1.4.2"
+dependencies:
+  - name: postgresql
+    version: 12.1.14
+    repository: https://charts.bitnami.com/bitnami
