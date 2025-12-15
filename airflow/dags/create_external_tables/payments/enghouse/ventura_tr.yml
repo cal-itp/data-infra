@@ -10,3 +10,38 @@ destination_project_dataset_table: "external_enghouse.ventura_tr"
 source_format: CSV
 use_bq_client: true
 field_delimiter: ";"
+schema_fields:
+  - name: ID
+    type: STRING
+  - name: Ticket_Id
+    type: STRING
+  - name: Station_Name
+    type: STRING
+  - name: Amount
+    type: NUMERIC
+  - name: Clearing_Id
+    type: STRING
+  - name: Operator_Id
+    type: INTEGER
+  - name: Reason
+    type: STRING
+  - name: Tap_Id
+    type: STRING
+  - name: Ticket_Type
+    type: STRING
+  - name: Created_Dttm
+    type: TIMESTAMP
+  - name: Line
+    type: STRING
+  - name: Start_Station
+    type: STRING
+  - name: End_Station
+    type: STRING
+  - name: Start_Dttm
+    type: TIMESTAMP
+  - name: End_Dttm
+    type: TIMESTAMP
+  - name: Ticket_Code
+    type: STRING
+  - name: Additional_Infos
+    type: STRING

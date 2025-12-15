@@ -10,3 +10,26 @@ destination_project_dataset_table: "external_enghouse.ventura_pw"
 source_format: CSV
 use_bq_client: true
 field_delimiter: ";"
+schema_fields:
+  - name: ID
+    type: STRING
+  - name: Token
+    type: STRING
+  - name: Amount_Settled
+    type: NUMERIC
+  - name: Amount_To_Settle
+    type: NUMERIC
+  - name: Debt_Settled
+    type: NUMERIC
+  - name: Stage
+    type: STRING
+  - name: Payment_reference
+    type: INTEGER
+  - name: Terminal_Id
+    type: INTEGER
+  - name: Open_Date
+    type: TIMESTAMP
+  - name: Close_Date
+    type: TIMESTAMP
+  - name: Operator_Id
+    type: INTEGER
