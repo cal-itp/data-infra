@@ -90,7 +90,7 @@ We use Terraform to manage the Composer environment. To tell Terraform to make t
 +    environment_size = "ENVIRONMENT_SIZE_LARGE"
 
      software_config {
-       image_version = "composer-2.15.2-airflow-2.9.3"
+       image_version = "composer-2.15.2-airflow-2.10.5"
 
        airflow_config_overrides = {
 -        celery-worker_concurrency                  = 4

@@ -1,5 +1,5 @@
 resource "google_compute_managed_ssl_certificate" "calitp-staging" {
-  name = "calitp-staging-certificate-2"
+  name = "calitp-staging-certificate-4"
 
   lifecycle {
     create_before_destroy = true
@@ -8,7 +8,8 @@ resource "google_compute_managed_ssl_certificate" "calitp-staging" {
   managed {
     domains = [
       "dbt-docs-staging.dds.dot.ca.gov.",
-      "staging-reports.dds.dot.ca.gov."
+      "reports-staging.dds.dot.ca.gov.",
+      "analysis-staging.dds.dot.ca.gov."
     ]
   }
 }
@@ -42,6 +43,20 @@ resource "google_compute_backend_bucket" "calitp-reports-staging" {
   }
 }
 
+resource "google_compute_backend_bucket" "calitp-analysis-staging" {
+  name        = "calitp-analysis-staging-backend-bucket"
+  bucket_name = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-analysis-staging_name
+  enable_cdn  = true
+  cdn_policy {
+    cache_mode        = "CACHE_ALL_STATIC"
+    client_ttl        = 3600
+    default_ttl       = 3600
+    max_ttl           = 86400
+    negative_caching  = true
+    serve_while_stale = 86400
+  }
+}
+
 resource "google_compute_url_map" "calitp-staging-https" {
   name            = "calitp-staging-https-load-balancer"
   default_service = google_compute_backend_bucket.calitp-staging-dbt-docs.id
@@ -52,8 +67,13 @@ resource "google_compute_url_map" "calitp-staging-https" {
   }
 
   host_rule {
-    path_matcher = "staging-reports"
-    hosts        = ["staging-reports.dds.dot.ca.gov"]
+    path_matcher = "reports-staging"
+    hosts        = ["reports-staging.dds.dot.ca.gov"]
+  }
+
+  host_rule {
+    path_matcher = "analysis-staging"
+    hosts        = ["analysis-staging.dds.dot.ca.gov"]
   }
 
   path_matcher {
@@ -67,12 +87,22 @@ resource "google_compute_url_map" "calitp-staging-https" {
   }
 
   path_matcher {
-    name            = "staging-reports"
+    name            = "reports-staging"
     default_service = google_compute_backend_bucket.calitp-reports-staging.id
 
     path_rule {
       paths   = ["/*"]
       service = google_compute_backend_bucket.calitp-reports-staging.id
+    }
+  }
+
+  path_matcher {
+    name            = "analysis-staging"
+    default_service = google_compute_backend_bucket.calitp-analysis-staging.id
+
+    path_rule {
+      paths   = ["/*"]
+      service = google_compute_backend_bucket.calitp-analysis-staging.id
     }
   }
 }

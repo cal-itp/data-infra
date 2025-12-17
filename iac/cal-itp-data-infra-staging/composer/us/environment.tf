@@ -36,7 +36,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
     environment_size = "ENVIRONMENT_SIZE_SMALL"
 
     software_config {
-      image_version = "composer-2.15.2-airflow-2.9.3"
+      image_version = "composer-2.15.2-airflow-2.10.5"
 
       airflow_config_overrides = {
         celery-worker_concurrency                  = 4
@@ -45,11 +45,11 @@ resource "google_composer_environment" "calitp-staging-composer" {
         core-dags_are_paused_at_creation           = true
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
         email-email_conn_id                        = "smtp_postmark"
-        email-from_email                           = "airflow-bot@calitp.org"
+        email-from_email                           = "bot+airflow@calitp.org"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
-        smtp-smtp_mail_from                        = "airflow-bot@calitp.org"
+        smtp-smtp_mail_from                        = "bot+airflow@calitp.org"
         smtp-smtp_starttls                         = true
         smtp-smtp_host                             = "smtp.postmarkapp.com"
         smtp-smtp_port                             = 587
@@ -97,7 +97,8 @@ resource "google_composer_environment" "calitp-staging-composer" {
         "CALITP_BUCKET__PUBLISH"                               = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-publish_name}",
         "CALITP_BUCKET__SENTRY_EVENTS"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-sentry_name}",
         "CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-state-geoportal-scrape_name}",
-        "CALITP_SLACK_URL"                                     = data.google_secret_manager_secret_version.slack-airflow-url.secret_data
+        "CALITP_SLACK_URL"                                     = data.google_secret_manager_secret_version.slack-airflow-url.secret_data,
+        "CALITP_NOTIFY_EMAIL"                                  = "dds.app.notify+staging@dot.ca.gov"
       })
     }
   }

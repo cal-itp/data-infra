@@ -36,7 +36,7 @@ resource "google_composer_environment" "calitp-composer" {
     environment_size = "ENVIRONMENT_SIZE_MEDIUM"
 
     software_config {
-      image_version = "composer-2.14.2-airflow-2.9.3"
+      image_version = "composer-2.15.2-airflow-2.9.3"
 
       airflow_config_overrides = {
         celery-worker_concurrency                  = 4
@@ -45,11 +45,11 @@ resource "google_composer_environment" "calitp-composer" {
         core-dags_are_paused_at_creation           = true
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
         email-email_conn_id                        = "smtp_postmark"
-        email-from_email                           = "airflow-bot@calitp.org"
+        email-from_email                           = "bot+airflow@calitp.org"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
-        smtp-smtp_mail_from                        = "airflow-bot@calitp.org"
+        smtp-smtp_mail_from                        = "bot+airflow@calitp.org"
         smtp-smtp_starttls                         = true
         smtp-smtp_host                             = "smtp.postmarkapp.com"
         smtp-smtp_port                             = 587
