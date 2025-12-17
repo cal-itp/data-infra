@@ -14,6 +14,7 @@ sources:
     database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_gtfs_schedule
     tables:
+      - name: download_configs
       - name: download_outcomes
       - name: unzip_outcomes
       - name: agency
