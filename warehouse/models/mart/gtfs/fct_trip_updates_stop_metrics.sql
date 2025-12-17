@@ -25,7 +25,7 @@ rt_feeds AS (
     SELECT DISTINCT
         base64_url,
         schedule_feed_key
-    FROM {{ ref('fct_daily_rt_feed_files') }}
+    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_rt_feed_files` --{{ ref('fct_daily_rt_feed_files') }}
 ),
 
 daily_scheduled_stops AS (
@@ -35,7 +35,7 @@ daily_scheduled_stops AS (
         service_date,
         stop_id,
         stop_key
-    FROM {{ ref('fct_daily_scheduled_stops') }} AS stops
+    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_scheduled_stops` AS stops--{{ ref('fct_daily_scheduled_stops') }} AS stops
     INNER JOIN rt_feeds
         ON rt_feeds.schedule_feed_key = stops.feed_key
     WHERE service_date >= '2025-06-01' AND service_date <= '2025-06-15'
@@ -74,6 +74,7 @@ stop_metrics AS (
 
         -- check how combining these arrays (stop_time to stop grain) works for error percentiles
         ARRAY_CONCAT_AGG(fct_stop_time_metrics.prediction_error_by_minute_array) AS prediction_error_by_minute_array,
+        ARRAY_CONCAT_AGG(fct_stop_time_metrics.scaled_prediction_error_by_minute_array) AS scaled_prediction_error_by_minute_array,
         ARRAY_CONCAT_AGG(fct_stop_time_metrics.minutes_until_arrival_array) AS minutes_until_arrival_array,
 
     FROM fct_stop_time_metrics
