@@ -13,7 +13,7 @@
 WITH stop_time_updates AS (
     SELECT *
     FROM {{ ref('fct_stop_time_updates') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }} AND dt >= "2025-06-01"
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }} AND dt >= "2025-12-01"
 ),
 
 prediction_arrays AS (
