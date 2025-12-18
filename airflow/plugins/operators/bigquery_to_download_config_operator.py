@@ -103,6 +103,9 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
     def gcs_hook(self) -> GCSHook:
         return GCSHook(gcp_conn_id=self.gcp_conn_id)
 
+    def location(self) -> str:
+        return os.getenv("CALITP_BQ_LOCATION")
+
     def bigquery_hook(self) -> BigQueryHook:
         return BigQueryHook(gcp_conn_id=self.gcp_conn_id, location=self.location())
 
@@ -116,9 +119,6 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
                   AND deprecated_date IS NULL
             """
         )
-
-    def location(self) -> str:
-        return os.getenv("CALITP_BQ_LOCATION")
 
     def download_config_rows(self, current_time: pendulum.DateTime) -> list:
         active_rows = [dict(zip(self.columns, row)) for row in self.rows()]
