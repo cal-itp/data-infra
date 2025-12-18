@@ -34,7 +34,7 @@ schema_fields:
   - name: Tx_status
     type: INTEGER
   - name: Payment_Reference
-    type: INTEGER
+    type: STRING
   - name: Operator_Id
     type: INTEGER
   - name: Terminal_SPDH_code
