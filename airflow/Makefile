@@ -13,13 +13,13 @@ WAREHOUSE_PATH := ../warehouse
 WAREHOUSE_TARGET := staging
 
 restart: sync
-	poetry run composer-dev restart
+	uv run composer-dev restart
 
 start: sync
-	poetry run composer-dev start
+	uv run composer-dev start
 
 stop:
-	poetry run composer-dev stop
+	uv run composer-dev stop
 
 sync: $(WAREHOUSE_PATH)/target/manifest.json $(COMPOSER_ENVIRONMENT_PATH)
 	rsync -ar plugins/ $(COMPOSER_ENVIRONMENT_PATH)/plugins/
@@ -40,7 +40,7 @@ $(COMPOSER_PATH):
 	mkdir $(COMPOSER_PATH)
 
 $(COMPOSER_ENVIRONMENT_PATH): $(COMPOSER_PATH)
-	poetry run composer-dev create \
+	uv run composer-dev create \
 		--project $(COMPOSER_PROJECT) \
 		--from-source-environment $(COMPOSER_ENVIRONMENT_SOURCE) \
 		--location $(COMPOSER_LOCATION) \
@@ -50,25 +50,25 @@ $(COMPOSER_ENVIRONMENT_PATH): $(COMPOSER_PATH)
 		$(COMPOSER_ENVIRONMENT_NAME)
 
 pools:
-	poetry run composer-dev run-airflow-cmd \
+	uv run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set airtable_pool 4 ""
-	poetry run composer-dev run-airflow-cmd \
+	uv run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set external_table_pool 4 ""
-	poetry run composer-dev run-airflow-cmd \
+	uv run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set rt_parse_pool 1 ""
-	poetry run composer-dev run-airflow-cmd \
+	uv run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set rt_validate_pool 1 ""
-	poetry run composer-dev run-airflow-cmd \
+	uv run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set schedule_parse_pool 4 ""
-	poetry run composer-dev run-airflow-cmd \
+	uv run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set schedule_unzip_pool 4 ""
-	poetry run composer-dev run-airflow-cmd \
+	uv run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set schedule_validate_pool 4 ""
 

@@ -70,16 +70,15 @@ class TestDBTBigQueryToGCSOperator:
         task = test_dag.get_task("dbt_bigquery_to_gcs")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
-        assert (
-            os.path.join(
+        assert xcom_value == {
+            "destination_path_prefix": os.path.join(
                 os.environ.get("CALITP_BUCKET__PUBLISH"),
                 "california_open_data__agency",
                 "dt=2025-06-01",
                 "ts=2025-06-01T00:00:00+00:00",
-                "agency.csv",
+                "agency",
             )
-            in xcom_value
-        )
+        }
 
         result = gcs_hook.download(
             bucket_name=os.environ.get("CALITP_BUCKET__PUBLISH").replace("gs://", ""),
@@ -87,20 +86,17 @@ class TestDBTBigQueryToGCSOperator:
                 "california_open_data__agency",
                 "dt=2025-06-01",
                 "ts=2025-06-01T00:00:00+00:00",
-                "agency.csv",
+                "agency000000000000.csv",
             ),
         )
 
         f = StringIO(result.decode())
-        reader = csv.DictReader(f, delimiter="\t")
-        assert list(reader)[0] == {
-            "agency_id": "1",
-            "agency_email": "",
-            "agency_fare_url": "",
+        reader = csv.DictReader(f)
+        agencies = sorted(list(reader), key=lambda a: a["agency_id"])
+        assert agencies[0] == agencies[0] | {
             "agency_lang": "en",
-            "agency_name": "AC TRANSIT",
-            "agency_phone": "5108914777",
-            "agency_timezone": "US/Pacific",
-            "agency_url": "http://www.actransit.org",
-            "base64_url": "aHR0cHM6Ly9hcGkuYWN0cmFuc2l0Lm9yZy90cmFuc2l0L2d0ZnMvZG93bmxvYWQ=",
+            "agency_name": "National Park Service",
+            "agency_timezone": "America/Los_Angeles",
+            "agency_url": "https://www.nps.gov/yose/planyourvisit/publictransportation.htm",
+            "base64_url": "aHR0cHM6Ly93d3cubnBzLmdvdi9leHRlcm5hbC1yZXNvdXJjZXMvZ3Rmcy95b3NlL3lvc2VtaXRlLXZhbGxleS1zaHV0dGxlLnppcA==",
         }

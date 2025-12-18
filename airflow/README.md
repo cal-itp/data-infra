@@ -24,11 +24,11 @@ $ poetry run dbt deps
 $ poetry run dbt compile --target staging
 ```
 
-Install poetry dependencies for airflow:
+Install dependencies for airflow:
 
 ```bash
 $ cd ../airflow
-$ poetry install
+$ uv sync
 ```
 
 Setup composer environment:
@@ -73,7 +73,7 @@ docker push ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:development
 
 ### Common Issues
 
-- If you want to clear out old local Airflow data, you'll need to delete the DAG using `poetry run composer-dev run-airflow-cmd calitp-development-composer dags delete <DAG_ID>` where, for example, the `<DAG_ID>` is `create_external_tables`
+- If you want to clear out old local Airflow data, you'll need to delete the DAG using `uv run composer-dev run-airflow-cmd calitp-development-composer dags delete <DAG_ID>` where, for example, the `<DAG_ID>` is `create_external_tables`
 
 - If you want to reset the Airflow database entirely, you'll need to delete the direcotry where the Postges container stores its data: `make clean-postgres`
 
@@ -124,8 +124,7 @@ Each DAG for this project should have a corresponding test in the `tests/dags` f
 
 1. `cp .env.example .env`
 2. Fill in requested credentials
-3. `poetry install`
-4. `poetry run pytest`
+3. `uv run pytest`
 
 
 You can specify which tests you want to run by adding them after the `pytest` command.
@@ -133,19 +132,19 @@ You can specify which tests you want to run by adding them after the `pytest` co
 To run all tests files from a specific path, add the path like this:
 
 ```bash
-$ poetry run pytest tests/scripts
+$ uv run pytest tests/scripts
 ```
 
 To run a specific test file, add the file like this:
 
 ```bash
-$ poetry run pytest tests/scripts/test_gtfs_rt_parser.py
+$ uv run pytest tests/scripts/test_gtfs_rt_parser.py
 ```
 
 To run a specific test within a test file, you can add like this:
 
 ```bash
-$ poetry run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date
+$ uv run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date
 ```
 
 We use [pytest-recording](https://github.com/kiwicom/pytest-recording) to record and replay HTTP traffic (the flow of data exchanged between a client and a web server).
@@ -162,13 +161,13 @@ To use VCR cassettes in your tests:
 2. Run `pytest` using `--record-mode=once`.
 
   ```bash
-  $ poetry run pytest tests/operators/test_airtable_to_gcs_operator.py::TestAirtableToGCSOperator --record-mode=once
+  $ uv run pytest tests/operators/test_airtable_to_gcs_operator.py::TestAirtableToGCSOperator --record-mode=once
   ```
 
 If you need to rewrite VCR cassettes, use `--record-mode=rewrite`:
 
 ```bash
-$ poetry run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date --record-mode=rewrite
+$ uv run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date --record-mode=rewrite
 ```
 
 

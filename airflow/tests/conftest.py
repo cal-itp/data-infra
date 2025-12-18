@@ -67,6 +67,8 @@ def scrub_sensitive_data(request):
 @pytest.fixture(scope="module")
 def vcr_config():
     return {
+        "allow_playback_repeats": True,
+        "before_record_request": scrub_sensitive_data,
         "filter_headers": [
             ("cookie", "FILTERED"),
             ("Authorization", "FILTERED"),
@@ -77,8 +79,6 @@ def vcr_config():
         "filter_query_parameters": [
             ("api_key", "FILTERED"),
         ],
-        "before_record_request": scrub_sensitive_data,
-        "allow_playback_repeats": True,
         "ignore_hosts": [
             "run-actions-1-azure-eastus.actions.githubusercontent.com",
             "run-actions-2-azure-eastus.actions.githubusercontent.com",

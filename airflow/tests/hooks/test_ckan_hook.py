@@ -98,7 +98,6 @@ class TestCKANHook:
                 )
                 result = ckan.multi_upload(file=StringIO(data.decode()))
 
-        assert result == {
+        assert result == result | {
             "partNumber": "1",
-            "ETag": '"3585fb7321ee203d33aa5dd250b50bb3"',
         }

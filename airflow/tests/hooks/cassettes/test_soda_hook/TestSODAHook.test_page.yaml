@@ -9,27 +9,26 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.5
     method: GET
     uri: https://data.transportation.gov/resource/i4ua-cjx4.json?%24limit=1&%24offset=0
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAAF1Ty47UMBC88xVRzrNSYjuvuaFFcACEBIs4IGT1JD2zlhzb8mOYLOLfsfMYZjbH
-        6qrq7nLn559c+YGLId/nRfzKfJePcOFwQtVPEfwo1Cl71EH5aZcNB9hnN0j2Gb3Vq6QXPgm+IXgv
-        cQWdB48R/fF2BbQ9gRIv4IVW3E8mFR9FMl8ttc0+6R5k9kGf0aoRlc++K+FT4R0asH6G9DF7sqCc
-        0dbPZqu/xYSg3bzfBymzryu4z74YtJGuTpG+UPmEYCORFISuHgF65L0ekr4taNtt+AtwBSP+3/Lh
-        4Ql6PcIuuy5orBjBTjPZaBPkMt0+pxVjRXkfMD/r0aXmpCliwYWR63lCbR3/HTmpWHZNXdOG0o3h
-        n+N+DiRYgTe0inaM0vq1ETcgBg4HFxvORFK1La2b+s7uNYkSRiKtXUlHGzNDfkCFR+Hndk3dkbql
-        5cpwaM9i0ZaMNi2hXbOJA0oOauAyHFJ4lNW0jTutZS/sMlfXdG1V3Y01xvOxAqTjLhgjxUxkTVWW
-        dbd1Dl5I4ZdSUxJWkc25BxdA+mlpLuCQiOlISRP3u5kALrO6i8m0m60Jtn8GhwP394cW5ayqSFVe
-        +4zC9SglKNRh3oQWjF6NLA6hjzbX08SLQeXmjttjee1BpglIW3esJvSaarz4mMEq5jCmv2SOv6AF
-        IQXL//568w+/NwDsxgMAAA==
+        H4sIAAAAAAAAAF1STW/UMBS88yuinLeS7cRJvDdUBAfgAkUcELLeJt6tJceO7OfSFPHfsfPRdpvj
+        zLyZN8779be0OEg9lMeSpI+Wh3KERwkXZfs5gZ+1vRS3LlqcD8VwgmPxCim+KvRuG+k15oHvChCN
+        2sCAgCqhP99vgPMXsPoJUDsrcZ4yeauz+WbpfPHF9WCKT+5BeTsqi8UPqzETH9QEHhfInYs7DzZM
+        zuNitvl7lRHld++P0Zji2wYmzcrLWYFPLCOs3gYj9Er2bshDHak6seNPIC2M6qXazc0d9G6EQ/Hc
+        avJ6BD8v4slN0awrHcuK1zWh168qH9wYcnjFWSJCHKWblAd0Psg/SZNJKmpCGto2uwLvU6kABrxW
+        r2SNIB2vuXhjJCfQg4RTSIGLkHUVF6IhV3ZvRVXXCM4Y3URnn361kidl1VnjEte2KYu07aYIyj/o
+        dZa2nNGaknofjspIsIM08ZQfr6Ksbjq+90Ht10hKG8bY1VpjuhmvwQQZ4jQZvQg5bVlHWbcpI2qj
+        caVExRpG92o9hAgG5zVcwykL82WylvGqqfcshMd18XT1rdjRKfr+HoIaJF6f17IqoU3F96BRh14Z
+        A1a5uFYhdVXvLDoEs9qLqklzL2+Wjjg13E5VwpgPP+9HKeNUEFL++/3uP0LTFuuZAwAA
     headers:
       Access-Control-Allow-Origin:
       - '*'
       Age:
-      - '2'
+      - '0'
       Connection:
       - keep-alive
       Content-Encoding:
@@ -37,11 +36,11 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Tue, 23 Sep 2025 00:39:32 GMT
+      - Mon, 05 Jan 2026 16:15:52 GMT
       ETag:
-      - '"anVsaWV0dC44NjU4XzlfMTMzQ01mcUxHYmxmMTluUzJYZXN1TGdld0s1ek53---gzipnKgXU1ump9acvHqPdPEz7-nJNvs--gzip--gzip"'
+      - '"anVsaWV0dC44NjU4XzlfMTM1Q01mcUxHYmxmMTluUzJYZXN1TGdld0s1ek53---gzip2WkKXDk2UE_d0rD1Tt47aeCQQ2w--gzip--gzip"'
       Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Fri, 17 Oct 2025 16:59:46 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -55,15 +54,15 @@ interactions:
       X-SODA2-Fields:
       - '["ntd_id","max_agency","max_city","max_state","max_organization_type","max_reporter_type","report_year","max_uace_code","max_uza_name","max_primary_uza_population","max_agency_voms","sum_operators_wages","sum_other_salaries_wages","sum_operator_paid_absences","sum_other_paid_absences","sum_fringe_benefits","sum_services","sum_fuel_and_lube","sum_tires","sum_other_materials_supplies","sum_utilities","sum_casualty_and_liability","sum_taxes","sum_purchased_transportation","sum_miscellaneous","sum_reduced_reporter_expenses","sum_total","sum_separate_report_amount"]'
       X-SODA2-Secondary-Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Fri, 17 Oct 2025 16:59:46 GMT
       X-SODA2-Truth-Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Fri, 17 Oct 2025 16:59:46 GMT
       X-SODA2-Types:
       - '["text","text","text","text","text","text","text","text","text","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number","number"]'
       X-Socrata-Region:
       - aws-us-east-1-fedramp-prod
       X-Socrata-RequestId:
-      - 70cc9b94d19c9f618ff4fb7ad6c831d9
+      - 8ee4ba3df16c4333b3ddb10e21cbd8d1
     status:
       code: 200
       message: OK

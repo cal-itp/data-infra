@@ -11,14 +11,15 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/fe1118a8-88d2-441a-a567-419b7ab74d1a
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/d58357ad-514a-455f-a975-d9cd5857aaf7
       x-goog-user-project:
-      - cal-itp-data-infra
+      - cal-itp-data-infra-staging
     method: GET
-    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?projection=noAcl&prefix=california_open_data__metadata%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fmetadata.csv&prettyPrint=false
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?prefix=california_open_data__metadata%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fmetadata.csv&prettyPrint=false&projection=noAcl
   response:
     body:
       string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/california_open_data__metadata/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/metadata.csv/1758926454475829","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/california_open_data__metadata%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fmetadata.csv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__metadata%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fmetadata.csv?generation=1758926454475829&alt=media","name":"california_open_data__metadata/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/metadata.csv","bucket":"calitp-staging-pytest","generation":"1758926454475829","metageneration":"1","contentType":"text/csv","storageClass":"STANDARD","size":"19173","md5Hash":"VA/1fzidaZ7QJyCOLrp2qA==","crc32c":"AmKYrw==","etag":"CLWYhdS/948DEAE=","timeCreated":"2025-09-26T22:40:54.492Z","updated":"2025-09-26T22:40:54.492Z","timeStorageClassUpdated":"2025-09-26T22:40:54.492Z","timeFinalized":"2025-09-26T22:40:54.492Z"}]}'
@@ -32,16 +33,16 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 07 Nov 2025 00:24:54 GMT
+      - Mon, 05 Jan 2026 16:17:05 GMT
       Expires:
-      - Fri, 07 Nov 2025 00:24:54 GMT
+      - Mon, 05 Jan 2026 16:17:05 GMT
       Server:
       - UploadServer
       Vary:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOEJc5y3aq1PH6weqEyPaATwHRhvjyaq5zN3X8pOQ0YFA698RERQfrn_Wfdeo2MQRLXrCIkuyQ
+      - AHVrFxMMMAEqzuOWpsHaOugoyqSmci1JGQWg93wMnTKiorad5yz3KtiutZeZ46ABeqDzotu3k78kXnkalXy4
     status:
       code: 200
       message: OK
@@ -69,71 +70,73 @@ interactions:
   response:
     body:
       string: !!binary |
-        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
+        H4sIAAAAAAAAA8ybW2/juBXHv4rgl76EDO8XA0W72Nm2C+wWg07Ql21hULzYxMiSl5QzzQz2uxeU
+        7NjJzOwqicfxUyKKNMlzfufPQ1H6NFv5ZjObV7NV32/y/Pq697kHzvQG9t6u2q7plnfQGrjsbq/N
+        Jl7Ta2P72LXXpeEir7oPf2nN2v95Y+x7s/RDyeyqmuWttT7n2bzq09ZfVbPk87bpZ/Pq08wMt37y
+        t74pXW+2dRNtaWSsTVvTvPUpdi7a2N+V+zElv9w2Jg1VnIulf9MsYhu6tDblqlQb7m77VZceXi38
+        2sTSUbttmqtqZmP/oI3tht/JN91RSW9sf99w5joLU+z9R9/81XX9zh7HVYsNSs03na3+NdYcbidv
+        +i4tttmnRXSlhjTUEKUdwE4EwLisga4xBoEJhlRAQou6NF36bmG7W5/M0u8HtkymLYbYGWYs6rab
+        /cXYQ22IUch6QJDggBFZA6NCDZTntXeM2WDpUDt3G1/MEEyTi4sa07rYLt8e9diYdrk9vo7Wt9nv
+        5tJ2fd54G0P07vhuH/tmaPLTWFC1XV89qLk2se1NbH06OOZQ9thla9+bwuRisKcf+iaIcIA0oOiG
+        0DnScy6gYEjgYW73LdadGzsdmwiAMED8Bos55nMqIcFEUl6a7F1oTQNivwHLPmQQ22UJiE3c+Ca2
+        foiM7Puhftf7wvfsxuc+tstqd68KXaq+N02fTJurN2/eVX+/+du76pjW0nq7XiSfu22yw68Qtivs
+        zbJc46tq1qWlaePHPa2fdv6VjuiaIARqHxRg3FmgPWbACSGw5sZKSh5NaBhLKbv3zPfHhXeboexB
+        f1fVzPlsU9zsg+V+TmvTmqXP1bpLvupXpq04ukIIVevY+Fx1oUw/hi610fwpV6u4XH0wd5VpXRWS
+        9+X/xrQ+X1Wb1N1G53MV294nUCK+SiY2VfbpNtqhik/r2B93xhCqRs0A2+wrE9OmS30efn+AzDTD
+        jVWXN7E3TbXyTRyqXA11PnTpfa4+xH5VNZ01TWWWvrXRZ3hwmzUpxTKXbV8NvcecY9eWuY1jLg43
+        VTbBX1V5mwu3pm781TCTZSqUDp35EKKNvu2r4YfLMAb7Vvku935d9V3l25VprT8y2n+2BGGdK2+7
+        tluPlmviraljE/u7q3HsOf6v2qS4NumujGmZzDrPq+986lqz7aPNV9U/dpa/edD1VfWzyfmzwofX
+        1dvGtG1sl1fVd24d25j7NN4og+lXvvrh123crMvM3o3Oqr73xYtw0JZ1WQy2qRnjDiuAEcAKEEQR
+        UlAKzZC0fdMtu8EucNMu7wVzH61YAaQApjeYz5mYEw61kEqjUbwWj8Jjt86YTXGQaRa5N/12CNCx
+        aBSeUjrAXpaxWz/7rcTZh6I5XVo+Jbo2Kd6OP7WXz+SbMvYHYT2IZorLVT9c/bOrks99isMaOgRf
+        Lk52Jt0tHrXKG9NH09xfPhp4iVu/3nTpUOU+uH+5+eHdzX8LUODHm7eD/oAfByWr3u6UrHpzULJ9
+        /B+J285z5d9bn/Jo4Z0aH8/vl08za+zKLxqT+8V243be26+1w73xx/ZFX5NwjOacQE00VnJQnzKa
+        vkt+sZvxvYsPd4blN7Z5YZpmkbztksuLLuxMuQixOWo26u+gZO/+XXpYmbwql5yhELgMVGkntPYO
+        EUmQ8sTXRgqjjpZW74zVngEWrAeMKAnqIBBASDDnTNBa23HZzP0fLD0ISi0kFk9brQgVRA9N4trv
+        /LZfJHcli9g+WFb3y8AxDdU7u/Ju2/jq513XA9K7HO5pacSmy3EXguiIjsXTLHbf7OGkcvxYrrAm
+        Qn85CHakTslfd3xfT5nZ9X5A11NmcO26D23TGXe93ZQ/u4HtJzPblf52VT09Xt6bdjF9krMvhBhG
+        AJEbhOaIzDGHUkot2TcJsUcZw+z3oo5R7YkzQWKLaiwUFUzWOpCAmFWutoeoo84riQIGjLEAmLUU
+        1JRxYCRWDuOAEB8kOS7bMuJdB3tZjnkxxJaLtl9sus222RnnkPZ+HqwcYAwIL0bjaE4opFxSin8v
+        WB810ZBQynbxfaJgLZpdvRkXD5PuZkOOGJex7Ia+eRxM8cKX4uDFqoI/V5WpRHxNVXy/OArPPQg7
+        sdlX+sKCa/L7z/YgGAMkK4SGFAVDghEbJfrCPPJgX5N3SA0DAu4eKWjz7SnF63MlwuoG4TmVZQUU
+        UlFGvqJEe688VYr27Q7Cc6w6B1VhkimsnQUuUAMYJwEoxhHwzCJLKK61lrMJ8oDnWEEmCeF/LA9I
+        3oygUAUllgo9cy3fmL4k9vkk8UX+cPn9ekR8c8aneOnA+N4u58QYQ8UJJfKVMNZlYUIYAUdYMac3
+        QHlGgDWKCaOtUixMxJhDhpEW6AkYI6gJU4I9D2NrGl/2PifBmF4yxlO89ECqB7ucE2MCFcNMsVfC
+        2HGkFUEWhMFAAnmgsSCAmIBZ7QQSUs0mJWucQ6SoFHo6xoxDTinh6nkYB5P8Im0bfxo9ZpcM8hQ/
+        HUA+WOacKFOoBcJYvRLKqmZBSmyBYHUAzLPyhN85YHnNRbBS10xMRFlCpPGTEguiIEdECfkyRS5b
+        phPhzC8Z5ym++lyXR+ucE2kNtRAS0VdCWloXlPUBOGdrwCyWQCmCgGTek0C0QWLqcy8BuUICs4lI
+        YzXHpYnQ+plb6eHp/t1JUBaXjPIUHx1QHq1yRoQZglIpRl5LlZEn0gZhgSJGAsYVBqomFgQTcO0N
+        FVrx31XlQ9KLIaWCYD31aRCeYwqJppq8JMEwfZ9ivT2VLMtLZnmKsx5lGQfznBNqAolglPBXgtor
+        HAJhAjCJPGCiNsDUBAHnMKESCcc0nrb5K+cRlAgunrD5E7C8s8DoC6Bu/PKEmbO6ZKan+OoR0/fW
+        OSfSFGrKmX6tjaB0igdOLTA1K2ZCBqgQHNC85rzWXEumpiGNFFTl3IhMR5oLSMt25iU6PZxnB59O
+        yLW+6LxjgsMecf3QROeEW0GCJR43VK8BN1cl+UWAMqcBcwQBLRkCHqPaKeK9JGTa1pByKAnX5AlP
+        OTiGmHKun6vXyf+6HV+UOc2xDrpoqid46ojqg23OSDNHsLyngNAr0SxqiYPnAlDmMWAhUFArigE3
+        tDaEcyWkm0YzY1AjwscDl4k0M4gUE/yZJygmeXMijvElczzFR0e7wmKVcxJMoVIc49ci2BqnBbEa
+        MK4NYJQpUBNegxLkNddWO19PTDY4VJIiPVmP5RxhSIVg7JnJxn7Ds3+R7OUgX/RB4BRXHYF8ZJyz
+        8azmCMEyGfVaDzm4pLWtawOcN6K8XK6BcXw4N+XCUoQxn3gYSAXEmij8hP0gUxBpziV+QfK89i6e
+        5l00fNHngVMc9ShpHkxzTpZxOUnYZZivwLKplUGcCBC4IYAZo4AKkgMma4EJt7XSZKI2ayi51JJP
+        12ZMIKJM0mdqc1O+bTmRKl/0ceAUJx04Hs1yToY15JhR/lp67Mqro3V5eslI+diHC2CC4CUFcx4r
+        rykW0xgmBArOlH4Cw0RCJCWS6HkM577bLE6YJl/0OeAURx04PpjmjCxjApVQGL/WGaAOwTDFJbCc
+        YsCcsEBzyUBNTdBKeoRqNPFFIw0JpvtEYRrLGErO6Pil1tNZHh44NeaEufJFHwVOcdWB5mPjnJFn
+        oqBmTL/a3o+RWgYnJOCWO8As4cAILQBjZTthFUKYT3xNQ0OpEOdP4JkKKAUjz31xbv8A9UQwX/RZ
+        4BQ/PYK5WObUJJ/kMwyCbgieU1Ye3VFMGUfn/dIJlaeFjAgiOUVB1U6Vd5Cpk1YaI8bXknaZixTI
+        UOkAUeUE1hkOTJAGIEIt8owEVftv+M0FnhMBMcWSs+mn7IxAjbnSzwyq4L0bPio/73cVUyx9tBXc
+        D3LP94ui//8AAAD//8ycS24bMQyGr9ILaEBRFEXlHN0GBvVqXRRIUCcFssjdC9lObSMuMvFD9cab
+        gQENf84HStTP9dcv7/0Vc9Uf5K9A/+VvUqDzGHBMUXieMjdKHj8xBODBHssmEVJgRXGtn24ExAgs
+        EANI2l692aZwDk4t97qlJEPWg1Gv1ShTR2ZF1XYN8uzOZd0UoosW55PH2Sn0N4Ezjr4efz2U5/y0
+        GkufOdG+jqsrHjGLzpR+LHbgjuxkEciGMYbTT0lykDs3jh6ZfCSMo+3dhRESReekJg+gKSX2aDXm
+        3HIqe+2gxAWDqvFCyRCTGM0ZjKYiXIpj0HRVo6m3E0TcWh1moidMgCTuxFP37gZcbPN0MHrmRHuX
+        5wcLvVjxg0cs63OzYDSF+v2NCAQypt92vjq3SCHfO7WO+vc/lkLiJVZNlZ1KBA2AIK1ZbiycsMT9
+        Jl5p4BsaVwMZEswm9h+fMSbNlFNtV6UQyRQjROHPFkDoT7Sd/Hp4u9c8Dj9zwrxL8M0KL8edI6b2
+        uboPr37ihBKE3aDO6Omy3CZwUCZh3vpqxwGHaymtsGpxIeXWtKGIg1pzdlocH5Y9rSUyIlUNteSM
+        1LV9pHZTpG/iwlV3XI4mYLbuo8szaGz4inBn6c72SilGCKc3t/5DufNRlA9bTBfEDR4vc+aoPho3
+        LkwdNn5cmXOiKrdIG97M0LIYZDhtqlC1rvjCxVoi8X1gUisBqG6aPFt7LHMja4MpimSoz77UJMmI
+        2uo8a9WIVz1ZJphAfIzuU7SxAAB4artmOZo2c6K83zVZXpI27j1t5qo++kSZYLLi4qBN1RmqHKPN
+        /foNv20H8ZXl6vGnviz2t/Z7DR0KBVwNJljb70861+cEcZ+rgkBcvdqDMahv/z4S1N8PWVOfQ/uy
+        EbeHf72W9TDa9Wru3+Yh9qby9+XjaqGrxeo5/aj56Z/PH3aPX1//AAAA//8DAF2ocQGbWAAA
     headers:
       CF-RAY:
-      - 99a8b0bb2b1afef4-PDX
+      - 9b9448ac7aba29a0-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -143,7 +146,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:24:54 GMT
+      - Mon, 05 Jan 2026 16:17:06 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -153,7 +156,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:24:54 GMT
+      - Mon, 05 Jan 2026 16:17:06 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -188,17 +191,17 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA4yRXW+bMBSG/wrydQ2GmE9pmiqmbovWJU3CSHaDjG2wNcAEm1RQ9b9PpM1Nr3p5
-        pHPe99FzXoDgTQ8SCwhjep04juHaQEYMsQ2nolONqiebErtWF4f00lk5hBqpOmc5LLRQz1870vIv
-        tFEj00YNpOaF7KSRxPCiHRsjezIYcGcBPVLKtQaJZYaR31lg4HpsDEisFyDZAhHv0z9Csur+dxbd
-        52zO/c1cRUWbTuW2z9VJnh9zsXraHH/t8jmSqfy23rKD+Ntiv99NaL829g9xzDxUB/FZ7siUzkEa
-        jth48+bfsfR5Jk5etFVZUF/CbJ4oWqfpvL2Up7P38HyqwBuUGgfKizekkjNCY44hriiH2ItCWFYB
-        gggFmDFSxXFMl7NFwrJPCeOtcm4p2vlMgENJA6XpYW0qDTUVnI0Nhy035PoKqi9Lx03rFcxDng9d
-        F6LQQijxcOL79sp3UYCvruV8xXGXQQ2ylh1pihtkShr487C1vh8e9tb+vc56/FA3aj68WwjJinhR
-        zKDLggpiPyxhXLourHCAUVShIA5K8Pr6HwAA//8DAM1VHtpPAgAA
+        H4sIAAAAAAAAA4yRXW+bMBSG/wrydR0McfiSqindmojQdWuD0u0KObYBpwYzfKBLqv73ibS56dUu
+        j3TO+z56ziuqpe5Q4qAaoLOJ64K0gAUDNgPJ69ZoUx1nnM0qM7qsU+7cZRyUad3psLC1efnSskZe
+        c20GYcH0rJKFahUoBrJoBg2qYz2gKwfZgXNpLUoc6Ad55aBe2kEDSpxXpMQEkRf28KKy2/p0Q57z
+        ZpOtFt+Wm+iOp+JQ7BYQxdVIwUK4vH3IxHYtx/H38PjnSFd/BVmuoH/u6OGpNZTO72/GvNZPxW5d
+        D1U5ppsy3XRyRZifPYAvqlr7v/LlvFbZo39sdqeG/rhL0TuUGXoui3ekvRSMx5JiWnKJqR+FeF8G
+        BBMSUCFYGccxn84mCdM+Z0I2xr2kWPd/AlzONFbQ4QpKiy2vpRi0xI0Edn4Ft+PUcdF6BvOJH2Di
+        YbJwvCDxwoSEMxKFxPfPrtXpjONNg+lVpVqmiwvkV6Zxmv901vlq62w/6pzvn+oGK/sPCyGbMz+K
+        BfZEUGK6CPc43nseLmlASVSSIA726O3tHwAAAP//AwAOy8r1TwIAAA==
     headers:
       CF-RAY:
-      - 99a8b0becc3b5913-PDX
+      - 9b9448b07fbbb586-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -208,7 +211,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:24:55 GMT
+      - Mon, 05 Jan 2026 16:17:07 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -218,7 +221,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:24:55 GMT
+      - Mon, 05 Jan 2026 16:17:07 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -238,16 +241,17 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/6f300093-f641-452f-ae92-406c63d8b938
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/482901c2-4fe8-4606-b602-a20d7f9f506d
       accept-encoding:
       - gzip
       content-type:
       - application/json; charset=UTF-8
       x-goog-user-project:
-      - cal-itp-data-infra
+      - cal-itp-data-infra-staging
       x-upload-content-type:
       - application/json; charset=UTF-8
     method: GET
@@ -435,7 +439,7 @@ interactions:
       Content-Type:
       - text/csv
       Date:
-      - Fri, 07 Nov 2025 00:24:56 GMT
+      - Mon, 05 Jan 2026 16:17:08 GMT
       ETag:
       - CLWYhdS/948DEAE=
       Expires:
@@ -450,7 +454,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOFDC1HO9Ao_OX1mFPZuMHkcpgzW5GoYpPzbWIiH3Eo6voO8gQIBCZa70t0jvxLwLTDAxmmSbg
+      - AHVrFxOoQpGPby2uuPqnkJ9LqmMPflrdFv03hh1Cv8W5nf9nUm82y5ATDo-18yevPifcO92bzZdDtxDHMPoW
       X-Goog-Generation:
       - '1758926454475829'
       X-Goog-Hash:
@@ -467,9 +471,9 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: "--6913138969452349d5813876ef289f86\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--6913138969452349d5813876ef289f86\r\nContent-Disposition:
-      form-data; name=\"uploadId\"\r\n\r\n9SCVhidfANU8AWdzW5Ozf8_mCybPpWoYiqMWh3QOXLRWz8iCiDJPdThZm45pRy0SJt.HhXU20g69qiRayCz6C7u4t2zOkXb5eUhY28PoU6gv7Uzyc0JCCzPvbYq2FwYf\r\n--6913138969452349d5813876ef289f86\r\nContent-Disposition:
-      form-data; name=\"partNumber\"\r\n\r\n1\r\n--6913138969452349d5813876ef289f86\r\nContent-Disposition:
+    body: "--078863a448cc597a53652e97be961153\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--078863a448cc597a53652e97be961153\r\nContent-Disposition:
+      form-data; name=\"uploadId\"\r\n\r\nT_sjwiKEhzB0kTmJKF5DAJ8LcIdj_V5t89gv4tst7AEQKdSGevvYuRqy4Fxd0AFtrkp4jWno443NBvThlW_VGhugfvIJfIJpeF0a2KQt2dghl2XTA3hiKR2ymVzm4OLI\r\n--078863a448cc597a53652e97be961153\r\nContent-Disposition:
+      form-data; name=\"partNumber\"\r\n\r\n1\r\n--078863a448cc597a53652e97be961153\r\nContent-Disposition:
       form-data; name=\"upload\"; filename=\"upload\"\r\n\r\nDATASET_NAME\tTAGS\tDESCRIPTION\tMETHODOLOGY\tTOPIC\tPUBLISHER_ORGANIZATION\tPLACE\tFREQUENCY\tNEXT_UPDATE\tCREATION_DATE\tLAST_UPDATE\tSTATUS\tTEMPORAL_COVERAGE_BEGIN\tTEMPORAL_COVERAGE_END\tDATA_DICTIONARY\tDATA_DICTIONARY_TYPE\tCONTACT_ORGANIZATION\tCONTACT_POSITION\tCONTACT_NAME\tCONTACT_EMAIL\tPUBLIC_ACCESS_LEVEL\tACCESS_CONSTRAINTS\tUSE_CONSTRAINTS\tDATA_LIFE_SPAN\tCALTRANS_LINK\tDATA_STANDARD\tNOTES\tGIS_THEME\tGIS_HORIZ_ACCURACY\tGIS_VERT_ACCURACY\tGIS_COORDINATE_SYSTEM_EPSG\tGIS_VERT_DATUM_EPSG\r\nagency\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
       row is a cleaned row from an agency.txt file. Definitions for the original GTFS
       fields are available at: https://gtfs.org/reference/static#agencytxt.\tCal-ITP
@@ -638,7 +642,7 @@ interactions:
       into a statewide table for analysis purposes only. Do not use for trip planner
       ingestion, rather is meant to be used for statewide analytics and other use
       cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
-      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--6913138969452349d5813876ef289f86--\r\n"
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--078863a448cc597a53652e97be961153--\r\n"
     headers:
       Accept:
       - '*/*'
@@ -651,7 +655,7 @@ interactions:
       Content-Length:
       - '19745'
       Content-Type:
-      - multipart/form-data; boundary=6913138969452349d5813876ef289f86
+      - multipart/form-data; boundary=078863a448cc597a53652e97be961153
       User-Agent:
       - ckanapi/1.0 (+https://dds.dot.ca.gov)
       X-CKAN-API-Key:
@@ -667,7 +671,7 @@ interactions:
         CfD7/QEAAP//AwDhFXOGyQAAAA==
     headers:
       CF-RAY:
-      - 99a8b0c9ab685913-PDX
+      - 9b9448b9d93fb586-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -677,7 +681,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:24:56 GMT
+      - Mon, 05 Jan 2026 16:17:08 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -687,7 +691,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:24:56 GMT
+      - Mon, 05 Jan 2026 16:17:08 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -698,7 +702,7 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: '{"id": "bedac9e4-4fce-4287-bf60-0064ddaf999c", "uploadId": "9SCVhidfANU8AWdzW5Ozf8_mCybPpWoYiqMWh3QOXLRWz8iCiDJPdThZm45pRy0SJt.HhXU20g69qiRayCz6C7u4t2zOkXb5eUhY28PoU6gv7Uzyc0JCCzPvbYq2FwYf",
+    body: '{"id": "bedac9e4-4fce-4287-bf60-0064ddaf999c", "uploadId": "T_sjwiKEhzB0kTmJKF5DAJ8LcIdj_V5t89gv4tst7AEQKdSGevvYuRqy4Fxd0AFtrkp4jWno443NBvThlW_VGhugfvIJfIJpeF0a2KQt2dghl2XTA3hiKR2ymVzm4OLI",
       "save_action": "go-metadata"}'
     headers:
       Accept:
@@ -727,7 +731,7 @@ interactions:
         Ji8OBussBtGdQFJrNt7+eF1fAAAA//8DAOnmTYqYAAAA
     headers:
       CF-RAY:
-      - 99a8b0cb7f2d5913-PDX
+      - 9b9448bc1dbeb586-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -737,7 +741,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:24:57 GMT
+      - Mon, 05 Jan 2026 16:17:09 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -747,7 +751,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:24:57 GMT
+      - Mon, 05 Jan 2026 16:17:09 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -783,20 +787,18 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA8xTTW/cIBD9Kxbnxcasv7BU9VCpVQ+VKmXVK5qFYY3CGsvgRGmU/17heLtpL93c
-        ekIzMDOP9948kwHdRPqMDDFOoS+KiCFSDRHyiGoYvfOnp1xBfvIPBUy22BegovVjkQplGPzjxxHO
-        +GHG4JdZoZwgqoHsMhIWpTAE0mdxXnCXkRnD4iLps2eiQA0oHYQol0lDRE36bFyc22Xb3TK7N6l7
-        GLfMLUDTdDXj1pZwxmvKBN2zA9/3Jetrngsuyq5ND1OLEP2MMn3sAa94rzfKjxHsGCQ4J2dUftZB
-        eiO3Lxvr3pQZP58hfZN8uvuRJgwQhhTWFTOmbs2+E7oRAjXjLWcdcjxC20CX3toV8RE1KIEVrYxC
-        WvGupUfTMMpYU2kNRgih1tenMcHbBhhwIQGwQSboUlsV5eSnxW1MbABX2s9eW2PfEFSWlLUHxnpe
-        9XWb80bwiqUhZ4yw9vtXiagb3pRriT1jfJrwquAlI+044nzNJ++sVIGjXw/fsy+Hz3fZnRpQLw6z
-        b9vo1NPP9mRHcO/wQbEqiLE4AoeOKaScNTWteHuk0Jkj7bA+oq4qZdS+uDi4uIX9QvvH0XnQxTKl
-        IyGcQN3DCeWm4Q0z1yofbFoo0mfsdUleTfU+J/wu+5P2gDHxdcleHBLszxSWgjcihRHiqsK2AbuM
-        RAj38u8dWvXOGOvLqq+qvKyrTqw79J9JosBRGyd6iibQsJmJXnycq/Cwgb7wQjYRX15+AQAA//8D
-        APR6XNIRBQAA
+        H4sIAAAAAAAAA5RSTYvbMBD9K0LnyJblTxlKD4WWHgqFhF7NRBrFpoplLDnLdtn/XuQ4m91T0+OM
+        5mnee/NeaI92oi2hfQiTb9M0oA9MQ4AkoOpHZ93pOVGQnNwlhWlI8xRUGNyYRmDne/f0eYQzfprR
+        u2VW2E0QVE93hPpFKfSetiTMC+4IndEvNtCWvFAFqsfOgg/dMmkIqGlLxsXaHdneltm+a824zVDB
+        Rcm4ZDk/iLzNeFuKRAqZNXXcGYn74GbsIssL3pffX5QbAwyj78DabkblZu07Z7qNvxnsO5hx8xki
+        Z/pl/ytu6MH3sSwLbkxZm7yRupISNRe14A0KPEJdQRNnh5XxETUoiQUrjEJWiKZmR1NxxnlVaA1G
+        Sqni9OrG2enBDG9SK8YzxstDVrVZ3fImaaq8zrM4fsYAUdQ/IDKphOR1uUKGM4bnCe/G3jrdMI44
+        3/vxpKtosOz74Sf5dvi6J3vVo14skh/b6vjnBOo3nLDbtIKAhitkglclK0R9ZNCYI2uwPKIuCmVU
+        vqKcH2KKaEv4NRlX8//PsTfYR1F++BOrTIpKxjJAWMVskdgReg3XQ5lfc4MhfURZeiOUPqIg1e5p
+        tA50qsCyIUzsFIxnfnOZ3Q6cKH/ZSN+E0mWKQPr6+hcAAP//AwAUuLvgwQMAAA==
     headers:
       CF-RAY:
-      - 99a8b0d048df5913-PDX
+      - 9b9448c12f84b586-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -806,7 +808,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:25:00 GMT
+      - Mon, 05 Jan 2026 16:17:11 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -816,7 +818,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:25:00 GMT
+      - Mon, 05 Jan 2026 16:17:11 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -838,14 +840,15 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/4ede2982-72d7-45d5-b15b-5565fcb11bcf
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/88c7ae28-f526-4810-9662-0fe22d63329a
       x-goog-user-project:
-      - cal-itp-data-infra
+      - cal-itp-data-infra-staging
     method: GET
-    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?projection=noAcl&prefix=california_open_data__metadata%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fmetadata.csv&prettyPrint=false
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?prefix=california_open_data__metadata%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fmetadata.csv&prettyPrint=false&projection=noAcl
   response:
     body:
       string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/california_open_data__metadata/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/metadata.csv/1758926454475829","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/california_open_data__metadata%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fmetadata.csv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__metadata%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fmetadata.csv?generation=1758926454475829&alt=media","name":"california_open_data__metadata/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/metadata.csv","bucket":"calitp-staging-pytest","generation":"1758926454475829","metageneration":"1","contentType":"text/csv","storageClass":"STANDARD","size":"19173","md5Hash":"VA/1fzidaZ7QJyCOLrp2qA==","crc32c":"AmKYrw==","etag":"CLWYhdS/948DEAE=","timeCreated":"2025-09-26T22:40:54.492Z","updated":"2025-09-26T22:40:54.492Z","timeStorageClassUpdated":"2025-09-26T22:40:54.492Z","timeFinalized":"2025-09-26T22:40:54.492Z"}]}'
@@ -859,16 +862,16 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 07 Nov 2025 00:25:01 GMT
+      - Mon, 05 Jan 2026 16:17:12 GMT
       Expires:
-      - Fri, 07 Nov 2025 00:25:01 GMT
+      - Mon, 05 Jan 2026 16:17:12 GMT
       Server:
       - UploadServer
       Vary:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOEViPNI9IVwWNp7owVKci1dpdvpyyOFl3cmWbm4HWTtFQCEsxOdCuvG9Zd7tskluGdoC1uJVw
+      - AHVrFxPo9Qc2qbBdUJvxGI6xVBjtWhVxW1y2wxbH9__SALdi8QMvllEc2cZeNL15EIjayDpDgeIiRkcrO6vR
     status:
       code: 200
       message: OK
@@ -896,72 +899,74 @@ interactions:
   response:
     body:
       string: !!binary |
-        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
-        nwAAAP//AwCQ3AJ/P1kAAA==
+        H4sIAAAAAAAAA8ybW4/buBXHv4rgl74MObxfDBTtYrNtF9gWQTPoy7YwKF5sYmXJS8qTzgb97gVl
+        eeyZJBvNxLH9ZkmkSZ7zO38eitSH2co3m9m8mq36fpPnt7e9zz1wpjew93bVdk23fIDWwGV3f2s2
+        8ZbeGtvHrr0tFRd51b3/U2vW/o8bY38xSz/cmd1Us7y11uc8m1d92vqbapZ83jb9bF59mJnh0U/+
+        3jel6c22bqItlYy1aWuatz7FzkUb+4fyPKbkl9vGpKGIc7G0b5pFbEOX1qZclWLD022/6tLTq4Vf
+        m1gaardNc1PNbOyf1LHd8D/5rju60xvbP1acuc7CFHv/m2/+7Lp+tMdx0WKDUvJNZ6t/7koOj5M3
+        fZcW2+zTIrpSQhpqiNIOYCcCYFzWQNcYg8AEQyogoUVdqi59t7DdvU9m6fcdWybTFkOMhtnd6rab
+        /cWuhdoQo5D1gCDBASOyBkaFGijPa+8Ys8HSoXTuNr6YIZgmFxc1pnWxXb49arEx7XJ7fB2tb7Mf
+        x9J2fd54G0P07vhpH/tmqPLT7kbVdn31pOTaxLY3sfXp4JjDvecuW/veFCYXgz390DZBhAOkAUV3
+        hM6RnnMBBUMCD2N7rLHu3K7RXRUBEAaI32Exx3KONBRYKcFKlb0LrWlA7Ddg2YcMYrssAbGJG9/E
+        1g+RkX0/lO96X/ie3fncx3ZZjc+q0KXqe9P0ybS5evPmXfXXu7+8q45pLbW360XyudsmO/wLYePN
+        3izLNb6pZl1amjb+tqf1w+hf6YiuCUKg9kEBxp0F2mMGnBACa26spOTZgIa+lHuPnvn++ObDZrj3
+        pL2bauZ8tilu9sHyOKa1ac3S52rdJV/1K9NWHN0ghKp1bHyuulCGH0OX2mj+kKtVXK7em4fKtK4K
+        yfvyuzGtzzfVJnX30flcxbb3CZSIr5KJTZV9uo92KOLTOvbHjTGEqp1mgG32lYlp06U+D/8/QGaa
+        4cGqy5vYm6Za+SYORW6GMu+79Euu3sd+VTWdNU1llr610Wd4cJs1KcUylm1fDa3HnGPXlrHt+lwc
+        bqpsgr+p8jYXbk3d+JthJMtUKB0a8yFEG33bV8Mfl24M9q3yQ+79uuq7yrcr01p/ZLR/bwnCOlfe
+        dm233lmuifemjk3sH252fc/xv9UmxbVJD6VPy2TWeV5951PXmm0fbb6p/jZa/u5J0zfV303OH918
+        el29bUzbxnZ5U33n1rGNuU+7B6Uz/cpXP/y6jZt1Gdm7nbOq733xIhy0ZV0mg21qdnGHFcAIYAUI
+        oggpKIVmSNq+6ZbdYBe4aZePgrmPVqwAUgDTO8znTMwJh1pIpdFOvBbPwmOcZ8ymOMg0i9ybfjsE
+        6O7WTnjK3QH2Mo3d+9n/Spy9L5rTpeVLomuT4v3ur/bymXxT+v4krAfRTHG56oerf3RV8rlPcZhD
+        h+DLxcnOpIfFs1p5Y/pomsfLZx0vcevXmy4dijwG9893P7y7+08BCvx493bQH/DjoGTV21HJqjcH
+        JdvH/5G4jZ4rP+99yjsLj2p8PL6fP8yssSu/aEzuF9uNG723n2uHZ7s/29/6nIRjNOcEaqKxkoP6
+        lN70XfKLccSPLj48Gabf2OaFaZpF8rZLLi+6MJpyEWJzVG2nv4OSvftXaWFl8qpccoZC4DJQpZ3Q
+        2jtEJEHKE18bKYw6mlq9M1Z7BliwHjCiJKiDQAAhwZwzQWttd9Nm7r8w9SioBJUUv2y2IhpJPlSJ
+        az/6bT9JjncWsX0yre6ngWMaqnd25d228dXfx6YHpMcc7mVpxKbLcQxBdETH4mUWe6z2dFA5/lau
+        sCZCfzoIRlKn5K8j37dTRna779DtlBHcuu5923TG3T7JHvJoZbB3MLT5fuz0fqCz7aZULEL08lj6
+        xbSL6QaYfSL8MAKI3CE0R2SOOZRSasm+Sfg9yyZmvxeRjGpPnAkSW1RjoahgstaBBMSscrU9RCR1
+        XkkUMGCMBcCspaCmjAMjsXIYB4T4INdx2ZYejw3sJTvmxRB3Ltp+sek222Y0ziEl/jiQOcAYEF6M
+        xtGcUEi5pL8fyM+qaEgoZVicMpCLnldvdhOLSQ+zIX+My1hWSt88RqZ44RAjI/GnUBz8seJMJeJz
+        iuP7xVF47kEYhWhf6BOTscm/fLQ+wRggWSE0pC8YEowY0WdRrZd55NOqVVoG7hGpU4vXx0qE1R3C
+        cyrnFEEhFWXkM0q098pLpWhf7yA8x6pzUBUmmcLaWeACNYBxEoBiHAHPLLKE4lprOZsgD3iOFWSS
+        EP5leUDybgcKVVBiqZB+nTxsTF+S/nyS+CJfnJo/HxHfnPEpXjowvrfLOTHGUHFCibwQxrpMTAgj
+        4Agr5vQGKM8IsEYxYbRVioWJGHPIMNICvQBjBDVh48uVl2NsTePLuugkGNNrxniKl55I9WCXc2JM
+        oGKYKXYhjB1HWhFkQRgMJJAHGgsCiAmY1U4gIdVsUrLGOUSKSqGnY8w45JQSrl6HcTDJL9K28afR
+        Y3bNIE/x0wHkg2XOiTKFWiCM1YVQVjULUmILBKsDYJ6Vt//OActrLoKVumZiIsoSIo1flFgQBTki
+        SsivU+SyZDoRzvyacZ7iq491eWedcyKtoRZCInohpKV1QVkfgHO2BsxiCZQiCEjmPQlEGyQmvRPj
+        cyogV0hgNhFprOa4VBFav3IpPbz5fzgJyuKaUZ7iowPKO6ucEWGGoFSKkUupMvJE2iAsUMRIwLjC
+        QNXEgmACrr2hQiv+u6p8SHoxpFQQrKe+DcJzTCHRVJOvSTBM36dYb08ly/KaWZ7irGdZxsE854Sa
+        QCIYJfxCUHuFQyBMACaRB0zUBpiaIOAcJlQi4ZjG0xZ/FEFJieDiBYs/Act5Bka/AurGL0+YOatr
+        ZnqKr54x/WidcyJNoaac6UstBKVTPHBqgalZMRMyQIXggOY157XmWjI1Demy/Vb2lMh0pLmAtCxn
+        vkanh73u4NMJudZXnXdMcNgzrp+a6JxwK0iwxLsF1SXg5qokvwhQ5jRgjiCgJUPAY1Q7RbyXhExb
+        GlIOJeGavOAtB8cQU871a/U6+V+3u0M0p9nWQVdN9QRPHVF9sM0ZaeYIljMMCF2IZlFLHDwXgDKP
+        AQuBglpRDLihtSGcKyHdNJoZgxoRvttwmUgzg0gxwV+5g2KSNyfiGF8zx1N8dLQqLFY5J8EUKsUx
+        vhTB1jgtiNWAcW0Ao0yBmvAalCCvubba+XpissGhkhTpyXos5whDKgRjr0w29gue/SGzrwf5qjcC
+        p7jqCOQj45yNZzVHCJbBqEu95OCS1rauDXDeiHLwXAPj+LBvyoWlCGM+cTOQCog1UfgF60GmINKc
+        S/wVyfPau3iac2r4qvcDpzjqWdI8mOacLOOykzBmmBdg2dTKIE4ECNwQwIxRQAXJAZO1wITbWmky
+        UZs1lFzq8VDlJG3GBCLKJH2lNjflu5cTqfJVbwdOcdKB451Zzsmwhhwzyi+lx64cK63L20tGyodA
+        XAATBC8pmPNYeU2xmMYwIVBwpvQLGCYSIimRRK9jOPfdZnHCNPmq9wGnOOrA8cE0Z2QZE6iEwvhS
+        e4A6BMMUl8ByigFzwgLNJQM1NUEr6RGq0cSDRhoSTPeJwjSWMZScUfrKc/HDC6fGnDBXvuqtwCmu
+        OtB8bJwz8kwU1Izpi639GKllcEICbrkDzBIOjNACMFaWE1YhhPnEYxoaSoU4fwHPVEApGHntwbn9
+        C9QTwXzVe4FT/PQM5mKZq/wMg6A7gueUlVd3FFPG0Xm/gkLlbSEjgkhOUVC1U+UMMnXSSmPE7ljS
+        mLlIgQyVDhBVdmCd4cAEaQAi1CLPSFC1/4bfXOA5ERBTLDmbvsvOCNSYK/3KoAreu+GD8/N+VzHF
+        0kdLwX0n93x/Mfr/DwAA///MnE1uGzEMha/SC2hAkZRE5RzdBgb117ookCBOCmSRuxeyndpuXGRi
+        x6o33gwMaEjOB0pPj+9+/fLWXzE3+4P8Fei+/CkKJIcBxzSF52XmSsnjJg8B/GD/ZZMIKXhFodZP
+        NwJiBC8QA0jaXr3ZlnAOpNb3vqUkw9aBUafVqOeOzIqq7RLk2Z3L0hQiRYvzyUN2Cv1N4Iyjr/uH
+        u/KUH1dj6TMn2pdxdcUjRtKZqR+LHbhhO1kEtmGMGfVDKTmonStHj0wuMsbR1u/iERJHIqnJAWhK
+        yTu0GnNuOZU9OSj5gkHVOOFk2LMYzRmMpiK+FPKg6aJGU2cniLi1OsxET5gAWejEU/fuBlxs63Qw
+        euZEe1fnBwv9tOYHj9jZ51bBaAr1+xsRGGSM3nZ+dq6RQq4rtcT9+x9LIXESq6bqSSWCBkCQ1qxv
+        XnzCEvdFvNLANTRUAxsWzCb2H5cxJs2cU20XpRDLFCNE8R9tgNCdaDt5uHu91zwOP3PCvCvwzQo/
+        jztHTO1z8z68+4kTShBPg5TR09NyncDBPgbGb32144DjaymteNVCIeXWtKEIQa05kxbyh21Pa4mN
+        SFXDLZGRuraP1G6KdE0oXHTHRTyB95beuzyDxoavCDeWb2zvlGKEcLq49R/anfeifCgxfSJu8Hib
+        Myfro3FDYeqwcePanBOzco208Zv5WhaDDKdNFa6Wiiu+WMssrg9TaiUA143Is7XHet/Y2mCKIhvu
+        czE1STKitpLzWjXiRU+WGSYQFyN9iDYWAABPlWuWo2kzJ8r7qsnyM2lDb2kzN+ujT5QZJisUB22q
+        zsjKMdrcrt/w23ZIX1mu7n/q82J/a78n6HAoQDWYYG2/P0nU5wT5PlcFgX11upE7//73kaD+usua
+        +oza501ye/jXa1kPql2v5vZ1VmIXlb8v71cLXS1WT+lHzY//fH63e/zy8hsAAP//AwDfEOjYt1gA
+        AA==
     headers:
       CF-RAY:
-      - 99a8b0ea2957cb73-PDX
+      - 9b9448d7781c9203-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -971,7 +976,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:25:02 GMT
+      - Mon, 05 Jan 2026 16:17:13 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -981,7 +986,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:25:01 GMT
+      - Mon, 05 Jan 2026 16:17:12 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -1016,17 +1021,17 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA4yRwW6jMBRFfwV5XYMBQwCpGqXNNC1VO7R0krQbZGwDrgATbCdKqv77iLTZdDXL
-        J71379F5H6Dh7QASCzRaDypxHM2VhoxoYmtOm162sj7YlNi13DlkEI7vEKqF7J3psFCN3P/qSccv
-        aSsNU1qOpOaF6IUWRPOiM60WAxk1uLCAMpRypUBi6dHwCwuMXJlWg8T6AIJNEF1VotW20+lb9/do
-        Dytbr+L502K9NVcLs0nTMHjOR2wyszikt/f3V12dP3W9Tzfj/LWZ72vkvVZ8uTDZ8U90g96vn/1+
-        /TtL2TbMIxfn+bK5e1/vqofueLiV7eMmSNkm3JfFGy6DbMj24AtKmpHy4gup5IzQmGOIK8oh9qIZ
-        LKsQQYRCzBip4jim09kkYdqnhPFOOucU5fxPgENJC4UeYK0rBRVtODMthx3X5PQKqnZTx1nrCcxD
-        XgBdF6KZhVDiBQny7MDDPsYn1+J4wnGnQY6iFj1pizPkNWnh3UtmLV9uciv/rrMeftQZxcdvCzPi
-        Ey+KGXRZWEEczEoYl64LKxxiFFUojMMSfH7+AwAA//8DAD69N7BPAgAA
+        H4sIAAAAAAAAA4yRy27bMBBFf0XgOrSeph5AERRG4rqJX/AryUagyJHElDJlkZJgB/n3Qk686arL
+        AWbuPTjzgUqQNUosVBpT68S2DWiDOTV0ZICVRyVVcR4xOipUZ9Na2L5NmRHqaA+HqS5Vf3+kFfxg
+        UrVcG9XQAlJxFEZQA2nVSiNq2hh0ZyHdMgZao8QyTQt3FmpAt9KgxPpAgg8QaedHl0m1OuzroFX9
+        utOb9vlM481br8Ls6b25hCezW1ZQ9lMCezmCzTTynnfd7rFeL7pXszzNiu5SlOKU/157f4rzVi5f
+        g/lL81POHxblO9lTvtrvhJr5h4OJJ6no57tfD8TN1dti/IS+oFTbMEi/kDLglMUQ4CBngAMvCnGW
+        Ewc7Dgk4p3kcx2w4GyQM+4xyqJR9S9H2/wTYjEosTI0Lk2usWQm8lYArMPT6Cqa7oeOm9QrmOR7B
+        joudseWSxA0T1x+FAYmc6OpaXK447jCoRhTiSGV6g5xQiWfblTXdPm6szXedNf+nrtXQfFsIqU+9
+        KObY5STHwTjMcJy5Ls4DEjhR7pCYZOjz8y8AAAD//wMAJS+j508CAAA=
     headers:
       CF-RAY:
-      - 99a8b0ecaf5bf3b4-PDX
+      - 9b9448d9fcfc3222-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -1036,7 +1041,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:25:02 GMT
+      - Mon, 05 Jan 2026 16:17:13 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -1046,7 +1051,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:25:02 GMT
+      - Mon, 05 Jan 2026 16:17:13 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -1066,16 +1071,17 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/3e873337-3cf6-4558-8214-3b896c465305
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/17d0ca92-4aba-43dc-aa15-e5f04636f2c0
       accept-encoding:
       - gzip
       content-type:
       - application/json; charset=UTF-8
       x-goog-user-project:
-      - cal-itp-data-infra
+      - cal-itp-data-infra-staging
       x-upload-content-type:
       - application/json; charset=UTF-8
     method: GET
@@ -1263,7 +1269,7 @@ interactions:
       Content-Type:
       - text/csv
       Date:
-      - Fri, 07 Nov 2025 00:25:04 GMT
+      - Mon, 05 Jan 2026 16:17:14 GMT
       ETag:
       - CLWYhdS/948DEAE=
       Expires:
@@ -1278,7 +1284,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOHtReAS8hQLA3xKWAUX2LnseCwReZzO1Ji9gPZGdfGBJF-XsDU5nZqQU1osQ-qj47kdqfUJKQ
+      - AHVrFxOzgUOgb2jq3lSuVVr7N7avEIy57RS6yTXNoUpex0Wk-8aS5A37_4Pba8IfPPLkx1syUSxw9ZXMCVby
       X-Goog-Generation:
       - '1758926454475829'
       X-Goog-Hash:
@@ -1295,9 +1301,9 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: "--274e4679c22f1ec9103045eeaa76eef0\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--274e4679c22f1ec9103045eeaa76eef0\r\nContent-Disposition:
-      form-data; name=\"uploadId\"\r\n\r\nmfb0VqmtJZmUz.pV.tV9AQDWquBDuXJJ65RSr4uPuDyJHKKBmgSQmn3cXrAYhAwg02YfeGDuPzO8F0jCR3nWEPJdq6S814SSGhIjWvfMmzyHolNX5JdX6wb_Z4b5PpPw\r\n--274e4679c22f1ec9103045eeaa76eef0\r\nContent-Disposition:
-      form-data; name=\"partNumber\"\r\n\r\n1\r\n--274e4679c22f1ec9103045eeaa76eef0\r\nContent-Disposition:
+    body: "--e5215b4be1aed7f21d97bbe32c0d19f9\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--e5215b4be1aed7f21d97bbe32c0d19f9\r\nContent-Disposition:
+      form-data; name=\"uploadId\"\r\n\r\n_v38zCmPWVp4uowQvsSuLya9SZwo7bKjrz7qtUOmehwG6eVl.eSG82LUvUFpQNvYtOqIgvzghiqfJQ2kgyTlOY4MXrAlMENhj6VadPVUioI3WWt9C_iwMUHE61foZN5K\r\n--e5215b4be1aed7f21d97bbe32c0d19f9\r\nContent-Disposition:
+      form-data; name=\"partNumber\"\r\n\r\n1\r\n--e5215b4be1aed7f21d97bbe32c0d19f9\r\nContent-Disposition:
       form-data; name=\"upload\"; filename=\"upload\"\r\n\r\nDATASET_NAME\tTAGS\tDESCRIPTION\tMETHODOLOGY\tTOPIC\tPUBLISHER_ORGANIZATION\tPLACE\tFREQUENCY\tNEXT_UPDATE\tCREATION_DATE\tLAST_UPDATE\tSTATUS\tTEMPORAL_COVERAGE_BEGIN\tTEMPORAL_COVERAGE_END\tDATA_DICTIONARY\tDATA_DICTIONARY_TYPE\tCONTACT_ORGANIZATION\tCONTACT_POSITION\tCONTACT_NAME\tCONTACT_EMAIL\tPUBLIC_ACCESS_LEVEL\tACCESS_CONSTRAINTS\tUSE_CONSTRAINTS\tDATA_LIFE_SPAN\tCALTRANS_LINK\tDATA_STANDARD\tNOTES\tGIS_THEME\tGIS_HORIZ_ACCURACY\tGIS_VERT_ACCURACY\tGIS_COORDINATE_SYSTEM_EPSG\tGIS_VERT_DATUM_EPSG\r\nagency\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
       row is a cleaned row from an agency.txt file. Definitions for the original GTFS
       fields are available at: https://gtfs.org/reference/static#agencytxt.\tCal-ITP
@@ -1466,7 +1472,7 @@ interactions:
       into a statewide table for analysis purposes only. Do not use for trip planner
       ingestion, rather is meant to be used for statewide analytics and other use
       cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
-      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--274e4679c22f1ec9103045eeaa76eef0--\r\n"
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--e5215b4be1aed7f21d97bbe32c0d19f9--\r\n"
     headers:
       Accept:
       - '*/*'
@@ -1479,7 +1485,7 @@ interactions:
       Content-Length:
       - '19745'
       Content-Type:
-      - multipart/form-data; boundary=274e4679c22f1ec9103045eeaa76eef0
+      - multipart/form-data; boundary=e5215b4be1aed7f21d97bbe32c0d19f9
       User-Agent:
       - ckanapi/1.0 (+https://dds.dot.ca.gov)
       X-CKAN-API-Key:
@@ -1495,7 +1501,7 @@ interactions:
         CfD7/QEAAP//AwDhFXOGyQAAAA==
     headers:
       CF-RAY:
-      - 99a8b0fabc0ef3b4-PDX
+      - 9b9448e2cde73222-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -1505,7 +1511,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:25:04 GMT
+      - Mon, 05 Jan 2026 16:17:14 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -1515,7 +1521,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:25:04 GMT
+      - Mon, 05 Jan 2026 16:17:14 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -1526,7 +1532,7 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: '{"id": "bedac9e4-4fce-4287-bf60-0064ddaf999c", "uploadId": "mfb0VqmtJZmUz.pV.tV9AQDWquBDuXJJ65RSr4uPuDyJHKKBmgSQmn3cXrAYhAwg02YfeGDuPzO8F0jCR3nWEPJdq6S814SSGhIjWvfMmzyHolNX5JdX6wb_Z4b5PpPw",
+    body: '{"id": "bedac9e4-4fce-4287-bf60-0064ddaf999c", "uploadId": "_v38zCmPWVp4uowQvsSuLya9SZwo7bKjrz7qtUOmehwG6eVl.eSG82LUvUFpQNvYtOqIgvzghiqfJQ2kgyTlOY4MXrAlMENhj6VadPVUioI3WWt9C_iwMUHE61foZN5K",
       "save_action": "go-metadata"}'
     headers:
       Accept:
@@ -1555,7 +1561,7 @@ interactions:
         Ji8OBussBtGdQFJrNt7+eF1fAAAA//8DAOnmTYqYAAAA
     headers:
       CF-RAY:
-      - 99a8b0fc8f8bf3b4-PDX
+      - 9b9448e519aa3222-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -1565,7 +1571,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:25:05 GMT
+      - Mon, 05 Jan 2026 16:17:15 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -1575,7 +1581,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:25:05 GMT
+      - Mon, 05 Jan 2026 16:17:15 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -1611,20 +1617,18 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA8xTTWvcMBD9K0bnlS1r/SVD6aHQ0kOhkKVXMSuN1iJay1hyQhry34scbzftoWxu
-        PYkZaWae3nvzTAZ0E+kzMsQ4hb4oIoZINUTII6ph9M6fnnIF+ck/FDDZYl+AitaPRSqUYfCPH0c4
-        44cZg19mhXKCqAayy0hYlMIQSJ/FecFdRmYMi4ukz56JAjWgdBCiXCYNETXps3Fxbpdtd8vs3qTu
-        YdwytwBN09WMW1vCGa8pE3TPDnzfl6yveS64KLs2PUwtQvQzyvSxB7zivd4oP0awY5DgnJxR+VkH
-        6Y3cvmyse1Nm/HyG9E3y6e5HmjBAGFJYV8yYujX7TuhGCNSMt5x1yPEIbQNdemtXxEfUoARWtDIK
-        acW7lh5NwyhjTaU1GCGEWl+fxgRvG2DAhQTABpmgS21VlJOfFrcxsQFcaT97bY19Q1BZUtYeGOt5
-        3bM652Xdtfs05IwR1n7/KKn6us1F3fCmXEvsGePThFcFLxlpxxHnaz55Z6UKHP16+J59OXy+y+7U
-        gHpxmH3bRqeefrYnO4J7hw+KVUGMxRE4dEwh5aypacXbI4XOHGmH9RF1VSmj9sXFwcUt7BfaP47O
-        gy6WKR0J4QTqHk4oNw1vmLlW+WDTQpE+Y69L8mqq9znhd9mftAeMia9L9uKQYH+msBS8ESmMEFcV
-        tg3YZSRCuJd/79Cqd8ZYX1Z9VeVlXXVi3aH/TBIFjto40VM0gYbNTPTi41yFhw30hReyifjy8gsA
-        AP//AwBXvWLsEQUAAA==
+        H4sIAAAAAAAAA5RSTYvbMBD9K0LnyJYVf8lQeii09FAoJPRqxtIoNlUsY8lZtsv+9yLH2exeSnqc
+        0TzNe2/eC+3RTrQhtA9h8k2aBvSBaQiQBFT96Kw7PScKkpO7pDAN6T4FFQY3phHY+t49fR7hjJ9m
+        9G6ZFbYTBNXTHaF+UQq9pw0J84I7Qmf0iw20IS9UgeqxteBDu0waAmrakHGxdke2t2W271ozbjNU
+        cFEwLtmeH8W+yXhTiEQKmdVV3BmJ++BmbCPLC96X31+UGwMMo2/B2nZG5WbtW2fajb8Z7DuYcfMZ
+        Imf65fArbujB97Escm5MUZl9LXUpJWouKsFrFNhBVUIdZ4eVcYcalMSc5UYhy0Vdsc6UnHFe5lqD
+        kVKqOL26cXZ6MMOb1JLxjPHimJVNVjVZkeT1virLOH7GAFHUvyFcJqWQvCpWyHDG8Dzh3dhbpx3G
+        Eed7P550FQ2WfT/+JN+OXw/koHrUi0XyY1sd/5xA/YYTtptWEFBzhUzwsmC5qDoGtelYjUWHOs+V
+        UfsV5fwQU0Qbwq/JuJr/f469wT6K8sOfWGVSlDKWAcIqZovEjtBruB7K/JobDOkjytIbofQRBal2
+        T6N1oFMFlg1hYqdgPPOby+x24ET5y0b6JpQuUwTS19e/AAAA//8DAFYlRanBAwAA
     headers:
       CF-RAY:
-      - 99a8b102bbbef3b4-PDX
+      - 9b9448ea9bad3222-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -1634,7 +1638,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Fri, 07 Nov 2025 00:25:07 GMT
+      - Mon, 05 Jan 2026 16:17:17 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -1644,7 +1648,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Fri, 07 Nov 2025 00:25:07 GMT
+      - Mon, 05 Jan 2026 16:17:17 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:

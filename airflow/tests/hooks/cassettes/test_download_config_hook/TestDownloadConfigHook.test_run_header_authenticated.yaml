@@ -40,7 +40,7 @@ interactions:
       Content-Type:
       - text/html; charset=UTF-8
       Date:
-      - Tue, 25 Nov 2025 18:56:09 GMT
+      - Mon, 05 Jan 2026 16:15:42 GMT
       Location:
       - http://www.glendaleca.gov/Home/ShowDocument?id=29549
       Server:
@@ -87,7 +87,7 @@ interactions:
       Content-Length:
       - '0'
       Date:
-      - Tue, 25 Nov 2025 18:56:10 GMT
+      - Mon, 05 Jan 2026 16:15:43 GMT
       Location:
       - https://www.glendaleca.gov/Home/ShowDocument?id=29549
       Server:
@@ -95,7 +95,7 @@ interactions:
       Server-Timing:
       - cdn-cache; desc=HIT
       - edge; dur=1
-      - ak_p; desc="1764096970555_390287338_1116762033_9_9900_11_0_-";dur=1
+      - ak_p; desc="1767629743371_399532111_121520344_10_7415_10_0_-";dur=1
     status:
       code: 301
       message: Moved Permanently
@@ -3355,27 +3355,27 @@ interactions:
       Content-Type:
       - application/x-zip-compressed
       Date:
-      - Tue, 25 Nov 2025 18:56:11 GMT
+      - Mon, 05 Jan 2026 16:15:43 GMT
       Edge-Cache-Tag:
       - EFC020D0.G,EFC020D0.CL3
       Expect-CT:
       - max-age=31536000
       GranicusServer:
-      - mse2p-viscmscb5
+      - mse2p-viscmscb4
       Last-Modified:
       - Mon, 17 Nov 2025 11:16:34 GMT
       Last-Published:
       - Mon, 17 Nov 2025 11:16:34 GMT
       Server-Timing:
       - cdn-cache; desc=MISS
-      - edge; dur=112
-      - origin; dur=129
-      - ak_p; desc="1764096970609_390287338_1116762439_24046_9998_5_37_-";dur=1
+      - edge; dur=88
+      - origin; dur=103
+      - ak_p; desc="1767629743464_399532112_144783881_19058_6632_8_13_-";dur=1
       Set-Cookie:
-      - ASP.NET_SessionId=0h4xqkbdtlkbrafn5zq4dpza; path=/; secure; HttpOnly; SameSite=Lax
-      - BIGipServer~AUTO-VISION~visionlive~www.glendaleca.gov_443=!378BCROBI04liXKPQiKlh2cDgVLBdTRh4B3Ng5zDmXW1Dj+XrtW9I0flREwmsCmbu8IYjUStliv7bxk=;
+      - ASP.NET_SessionId=ars544hx4qz0l3rse3smbbq2; path=/; secure; HttpOnly; SameSite=Lax
+      - BIGipServer~AUTO-VISION~visionlive~www.glendaleca.gov_443=!JOifTH8kXyJwNAxVP4iwlHrxKtkxxzbgvEISYpbvJnYzXhLIj/oXVqNsmmCFdTPA0fyPKxmloHhSW0A=;
         path=/; Httponly; Secure
-      - TS01af151e=0106cf681ba03e973eb49e2f49d3fc6bef4da6ef75b075c882be3790baab9f94ceb1124eee4090e7cf365896728817624118cd4992b044217028a63a8e7788643d3bd530d243032a768d6dbd11719d920aa9b2879b;
+      - TS01af151e=0106cf681b83f59b86570f7ccc3a67b7fb98c4757e23d757661d1ec610445c12cdccf29017039510c88d7bb5ad6057c58031e7e225ad165c3991d8946eaa698018ea80e6955aed685c7e3d615f587b2e0a41fc07c1;
         Path=/; Secure; HttpOnly
       Strict-Transport-Security:
       - max-age=31536000;
