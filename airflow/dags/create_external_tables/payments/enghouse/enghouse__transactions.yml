@@ -2,11 +2,11 @@ operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_RAW') }}"
 post_hook: |
   SELECT *
-  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.ventura_tx
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.transactions
   LIMIT 1;
 source_objects:
-  - "VENTURA_TX/*.csv"
-destination_project_dataset_table: "external_enghouse.ventura_tx"
+  - "tx/*.csv"
+destination_project_dataset_table: "external_enghouse.transactions"
 source_format: CSV
 use_bq_client: true
 field_delimiter: ";"

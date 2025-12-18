@@ -2,11 +2,11 @@ operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_RAW') }}"
 post_hook: |
   SELECT *
-  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.ventura_pw
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.pay_windows
   LIMIT 1;
 source_objects:
-  - "VENTURA_PW/*.csv"
-destination_project_dataset_table: "external_enghouse.ventura_pw"
+  - "pw/*.csv"
+destination_project_dataset_table: "external_enghouse.pay_windows"
 source_format: CSV
 use_bq_client: true
 field_delimiter: ";"
@@ -24,7 +24,7 @@ schema_fields:
   - name: Stage
     type: STRING
   - name: Payment_reference
-    type: INTEGER
+    type: STRING
   - name: Terminal_Id
     type: INTEGER
   - name: Open_Date
