@@ -2,11 +2,11 @@ operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_RAW') }}"
 post_hook: |
   SELECT *
-  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.ventura_tap
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.taps
   LIMIT 1;
 source_objects:
-  - "VENTURA_TAP/*.csv"
-destination_project_dataset_table: "external_enghouse.ventura_tap"
+  - "tap/*.csv"
+destination_project_dataset_table: "external_enghouse.taps"
 source_format: CSV
 use_bq_client: true
 field_delimiter: ";"
@@ -60,9 +60,9 @@ schema_fields:
   - name: ID
     type: STRING
   - name: Gps_Latitude
-    type: NUMERIC
+    type: FLOAT64
   - name: Gps_Altitude
-    type: NUMERIC
+    type: FLOAT64
   - name: Vehicle_Public_Number
     type: INTEGER
   - name: Vehicle_Name
