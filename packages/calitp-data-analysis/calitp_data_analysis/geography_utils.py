@@ -4,10 +4,14 @@ Some functions for dealing with census tract or other geographic unit dfs.
 """
 from typing import Literal, Union, cast
 
+import dask
 import dask.dataframe as dd
 import geopandas as gpd  # type: ignore
 import pandas as pd
 import shapely  # type: ignore
+
+#  This is required in order to tell dask not to convert string-like data to pyarrow strings https://github.com/dask/dask/issues/10139
+dask.config.set({"dataframe.convert-string": False})
 
 WGS84 = "EPSG:4326"
 CA_NAD83Albers_ft = "ESRI:102600"  # units are in feet
