@@ -6,10 +6,6 @@ destination_project_dataset_table: "external_enghouse.pay_windows"
 source_format: CSV
 field_delimiter: ";"
 use_bq_client: true
-hive_options:
-  mode: CUSTOM
-  require_partition_filter: false
-  source_uri_prefix: "pw/{instance:STRING}/"
 schema_fields:
   - name: ID
     type: STRING
