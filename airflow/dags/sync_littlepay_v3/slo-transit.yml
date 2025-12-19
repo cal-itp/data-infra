@@ -1,0 +1,4 @@
+operator: operators.LittlepayRawSyncV3
+instance: slo-transit
+src_bucket: littlepay-datafeed-prod-slo-transit-979e5390
+access_key_secret_name: LITTLEPAY_AWS_IAM_SLO_TRANSIT_ACCESS_KEY_FEED_V3
