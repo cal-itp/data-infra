@@ -1,13 +1,13 @@
 [project]
 name = "jupyter-singleuser"
-version = "2025.12.12"
+version = "2025.12.18"
 description = "This is the notebook image that individual users are served via JupyterHub."
 requires-python = ">=3.11.0, <3.12.0"
 
 dependencies = [
     "black==24.10.0",
     "branca (>=0.8.2, <0.9.0)",
-    "calitp-data-analysis==2025.8.10",
+    "calitp-data-analysis==2025.12.17",
     "csvkit==1.0.7",
     "dask (>=2024.5.0, <2024.6.0)",
     "dask-geopandas (>=0.2.0, <0.3.0)",
@@ -35,7 +35,6 @@ dependencies = [
     "python-dotenv==0.19.2",
     "rasterio (>=1.4.3, <2.0.0)",
     "seaborn (>=0.11.2, <0.12.0)",
-    "siuba>=0.4.0",
     "sqlalchemy-bigquery (>=1.4.4, <2.0.0)",
     "statsmodels==0.14.5",
     "voila (>=0.5.11,<0.6.0)",
