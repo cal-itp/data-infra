@@ -12,23 +12,24 @@
 
 WITH int_tu_trip_stop AS (
     SELECT *
-    FROM {{ ref('test_int_gtfs_rt__trip_updates_trip_stop_day_map_grouping') }}
-    WHERE dt >= "2025-06-02" AND dt <= "2025-06-03"
+    FROM `cal-itp-data-infra-staging.tiffany_staging.test_int_gtfs_rt__trip_updates_trip_stop_day_map_grouping`
+    WHERE dt = "2025-12-01"
+
 ),
 
 tu_trip_keys AS (
     SELECT
-        key AS trip_key,
-        dt,
-        service_date,
-        base64_url,
-        schedule_base64_url,
-        trip_id,
-        trip_start_time
+        *
+        --key AS trip_key,
+        --dt,
+        --service_date,
+        --base64_url,
+        --schedule_base64_url,
+        --trip_id,
+        --trip_start_time
 
-    --FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
-    FROM `cal-itp-data-infra.staging.int_gtfs_rt__trip_updates_trip_day_map_grouping`
-    WHERE dt >= "2025-06-01" AND dt <= "2025-06-03"
+    FROM `cal-itp-data-infra-staging.tiffany_staging.test_int_gtfs_rt__trip_updates_trip_day_map_grouping`
+    WHERE dt = "2025-12-01"
 ),
 
 unnested AS (
@@ -91,8 +92,16 @@ predictions_categorized AS (
         COALESCE(prediction_category="is_ontime", True) AS is_ontime,
         COALESCE(prediction_category="is_early", True) AS is_early,
         COALESCE(prediction_category="is_late", True) AS is_late,
+
+        -- arrival_time aggregation will be interval type, and we can't take max/min on it, convert to seconds instead
+        (EXTRACT(DAY FROM arrival_time) * 24 * 60 * 60
+         + EXTRACT(HOUR FROM arrival_time) * 60 * 60
+         + EXTRACT(MINUTE FROM arrival_time) * 60
+         + EXTRACT(SECOND FROM arrival_time)) AS arrival_time_seconds,
+
     FROM prediction_difference
-    WHERE minutes_until_arrival <= 30 AND minutes_until_arrival > 0 -- we do not want predictions after bus arrived, this will create error with ln on negative values
+    -- we do not want predictions after bus arrived, this will create error with ln on negative values
+    WHERE minutes_until_arrival <= 30 AND minutes_until_arrival > 0
 ),
 
 minute_bins AS (
@@ -102,10 +111,11 @@ minute_bins AS (
         extract_minute,
 
         -- wobble metric: https://github.com/cal-itp/data-analyses/blob/main/rt_predictions/03_prediction_inconsistency.ipynb
-        -- this returns an interval type
         -- Newmark paper does absolute value between observations, but notebook decided to find the max/min per minute and
-        -- set up calculation as max-min to make sure it's always positive.
-        MAX(arrival_time) - MIN(arrival_time) AS prediction_spread_seconds,
+        -- set up calculation as max-min to make sure it's always positive
+        -- we want to calculate the spread minute by minute though, so keep max_arrival to compare to lagged prior min_arrival
+        MIN(arrival_time_seconds) AS min_arrival,
+        MAX(arrival_time_seconds) AS max_arrival,
 
         -- prediction accuracy metric: https://github.com/cal-itp/data-analyses/blob/main/rt_predictions/04_reliable_prediction_accuracy.ipynb
         AVG(prediction_seconds_difference) AS prediction_error,
@@ -150,13 +160,16 @@ derive_metrics AS (
         END AS is_complete,
 
         -- 03_prediction_inconsistency.ipynb.ipynb
-        -- wobble: expected change means the prediction shortens with each passing minute?
-        -- can this be just the prediction spread, in minutes, averaged over all the minutes?
-        -- convert from prediction_spread_seconds (interval) to minutes
-        (EXTRACT(DAY FROM prediction_spread_seconds) * 24 * 60 * 60
-         + EXTRACT(HOUR FROM prediction_spread_seconds) * 60 * 60
-         + EXTRACT(MINUTE FROM prediction_spread_seconds) * 60
-         + EXTRACT(SECOND FROM prediction_spread_seconds)) / 60 AS prediction_spread_minutes,
+        -- wobble: the max spread is to compare this minute's max arrival with
+        -- prior minute's min arrival
+        -- prior minute: arrival is 9:00 AM, 9:02 AM, 9:01 AM
+        -- current minute: arrival is 9:02 AM, 9:02 AM, 9:01 AM
+        -- the max spread for these 2 minutes for the rider is 2 minutes (9:02 - 9:00)
+        max_arrival - LAG(min_arrival, 1) OVER (
+            PARTITION BY key
+            ORDER BY minutes_until_arrival DESC
+        ) AS prediction_spread_seconds,
+
     FROM minute_bins
 ),
 
@@ -192,7 +205,8 @@ stop_time_metrics AS (
         COUNT(*) AS n_tu_minutes_available,
 
         -- 03_prediction_inconsistency.ipynb
-        ROUND(SUM(prediction_spread_minutes), 2) AS sum_prediction_spread_minutes, -- wobble
+        -- convert from prediction_spread_seconds (interval) to minutes
+        COALESCE(SUM(prediction_spread_seconds), 0) AS sum_prediction_spread_seconds, -- wobble
         MAX(minutes_until_arrival) AS max_minutes_until_arrival, -- this is the denominator
 
         -- other derived metrics from this prediction window of 30 minutes prior
