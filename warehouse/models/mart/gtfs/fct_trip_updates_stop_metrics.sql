@@ -10,81 +10,62 @@
     )
 }}
 
+-- this goes into fct_observed_stops
 WITH fct_stop_time_metrics AS (
     SELECT *
     FROM {{ ref('fct_stop_time_metrics') }}
     WHERE {{ incremental_where(
         default_start_var='PROD_GTFS_RT_START',
         this_dt_column='service_date',
-        filter_dt_column='service_date',
-        dev_lookback_days = 250)
-    }} AND service_date >= '2025-06-01' AND service_date <= '2025-06-15'
-),
-
-rt_feeds AS (
-    SELECT DISTINCT
-        base64_url,
-        schedule_feed_key
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_rt_feed_files` --{{ ref('fct_daily_rt_feed_files') }}
-),
-
-daily_scheduled_stops AS (
-    SELECT
-        key,
-        feed_key,
-        service_date,
-        stop_id,
-        stop_key
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_scheduled_stops` AS stops--{{ ref('fct_daily_scheduled_stops') }} AS stops
-    INNER JOIN rt_feeds
-        ON rt_feeds.schedule_feed_key = stops.feed_key
-    WHERE service_date >= '2025-06-01' AND service_date <= '2025-06-15'
+        filter_dt_column='service_date')
+    }}
 ),
 
 stop_metrics AS (
     SELECT
-        -- this key is service_date and stop_key
-        daily_scheduled_stops.key,
-        -- this key is dim_stops, which is feed_key/line_number,
-        -- we need this to get stop pt_geom, etc
-        daily_scheduled_stops.stop_key,
+        base64_url,
+        schedule_base64_url,
+        service_date,
+        stop_id,
 
-        fct_stop_time_metrics.base64_url,
-        fct_stop_time_metrics.service_date,
-        fct_stop_time_metrics.stop_id,
-        rt_feeds.schedule_feed_key,
+        AVG(avg_prediction_error_sec) AS avg_prediction_error_sec,
 
-        AVG(fct_stop_time_metrics.avg_prediction_error_sec) AS avg_prediction_error_sec,
-
-        SUM(fct_stop_time_metrics.n_tu_accurate_minutes) AS n_tu_accurate_minutes,
-        SUM(fct_stop_time_metrics.n_tu_complete_minutes) AS n_tu_complete_minutes,
-        SUM(fct_stop_time_metrics.n_tu_minutes_available) AS n_tu_minutes_available,
+        SUM(n_tu_accurate_minutes) AS n_tu_accurate_minutes,
+        SUM(n_tu_complete_minutes) AS n_tu_complete_minutes,
+        SUM(n_tu_minutes_available) AS n_tu_minutes_available,
 
         -- safe_divide because there are some rows where denominator is 0
-        SAFE_DIVIDE(SUM(fct_stop_time_metrics.sum_prediction_spread_minutes),  SUM(fct_stop_time_metrics.max_minutes_until_arrival)) AS avg_prediction_spread_minutes,
+        ROUND(SAFE_DIVIDE(
+            SUM(sum_prediction_spread_seconds),
+            SUM(max_minutes_until_arrival)
+        ) / 60, 2) AS avg_prediction_spread_minutes,
 
-        SUM(fct_stop_time_metrics.n_predictions) AS n_predictions,
-        SUM(fct_stop_time_metrics.n_predictions_early) AS n_predictions_early,
-        SUM(fct_stop_time_metrics.n_predictions_ontime) AS n_predictions_ontime,
-        SUM(fct_stop_time_metrics.n_predictions_late) AS n_predictions_late,
+        SUM(n_predictions) AS n_predictions,
+        SUM(n_predictions_early) AS n_predictions_early,
+        SUM(n_predictions_ontime) AS n_predictions_ontime,
+        SUM(n_predictions_late) AS n_predictions_late,
 
         -- this key comes from intermediate and approximates trip_instance_key,
         -- which is available in fct_trip_updates_trip_summaries
-        COUNT(DISTINCT fct_stop_time_metrics.trip_key) AS n_tu_trips,
+        COUNT(DISTINCT trip_key) AS n_tu_trips,
 
         -- check how combining these arrays (stop_time to stop grain) works for error percentiles
-        ARRAY_CONCAT_AGG(fct_stop_time_metrics.prediction_error_by_minute_array) AS prediction_error_by_minute_array,
-        ARRAY_CONCAT_AGG(fct_stop_time_metrics.scaled_prediction_error_by_minute_array) AS scaled_prediction_error_by_minute_array,
-        ARRAY_CONCAT_AGG(fct_stop_time_metrics.minutes_until_arrival_array) AS minutes_until_arrival_array,
+        -- order by stop_time_key each time so arrays don't lose order when we combine
+        ARRAY_CONCAT_AGG(
+            prediction_error_by_minute_array
+            ORDER BY key
+        ) AS prediction_error_by_minute_array,
+        ARRAY_CONCAT_AGG(
+            scaled_prediction_error_by_minute_array
+            ORDER BY key
+        ) AS scaled_prediction_error_by_minute_array,
+        ARRAY_CONCAT_AGG(
+            minutes_until_arrival_array
+            ORDER BY key
+        ) AS minutes_until_arrival_array,
 
     FROM fct_stop_time_metrics
-    INNER JOIN rt_feeds
-        ON fct_stop_time_metrics.base64_url = rt_feeds.base64_url
-    INNER JOIN daily_scheduled_stops
-        ON fct_stop_time_metrics.service_date = daily_scheduled_stops.service_date
-        AND rt_feeds.schedule_feed_key = daily_scheduled_stops.feed_key
-        AND fct_stop_time_metrics.stop_id = daily_scheduled_stops.stop_id
-    GROUP BY 1, 2, 3, 4, 5, 6
+    GROUP BY 1, 2, 3, 4
     -- aggregate to service_date-stop grain (lose trip_id/tu_trip_key and stop_sequence)
 )
 
