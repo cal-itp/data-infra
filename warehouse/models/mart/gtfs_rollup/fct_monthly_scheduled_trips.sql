@@ -33,6 +33,7 @@ monthly_trips AS (
         route_desc,
         route_color,
         route_text_color,
+        route_type,
         trip_id,
         iteration_num,
         shape_id,
@@ -50,7 +51,7 @@ monthly_trips AS (
         ARRAY_AGG(DISTINCT {{ parse_route_id('name', 'route_id') }} IGNORE NULLS) AS route_id_array,
 
     FROM trips
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
 
 )
 
