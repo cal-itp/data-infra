@@ -17,7 +17,7 @@ WITH int_tu_trip_stop AS (
         default_start_var='PROD_GTFS_RT_START',
         this_dt_column="service_date",
         filter_dt_column="dt",
-    ) }} AND dt >= "2025-12-01"
+    ) }}
 ),
 
 tu_trip_keys AS (
@@ -36,7 +36,7 @@ tu_trip_keys AS (
         default_start_var='PROD_GTFS_RT_START',
         this_dt_column="service_date",
         filter_dt_column="dt"
-    ) }} AND dt >= "2025-12-01"
+    ) }}
 ),
 
 unnested AS (
