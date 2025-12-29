@@ -15,15 +15,14 @@ WITH int_tu_trip_stop AS (
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_stop_day_map_grouping') }}
     WHERE {{ incremental_where(
         default_start_var='PROD_GTFS_RT_START',
-        this_dt_column='dt',
-        filter_dt_column='dt', 
+        this_dt_column='dt', filter_dt_column='dt',
         dev_lookback_days = 30)
     }}
 ),
 
 tu_trip_keys AS (
     SELECT
-        
+
         key AS trip_key,
         dt,
         service_date,
@@ -32,11 +31,10 @@ tu_trip_keys AS (
         trip_id,
         trip_start_time
 
-    FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }} 
+    FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
     WHERE {{ incremental_where(
         default_start_var='PROD_GTFS_RT_START',
-        this_dt_column='dt',
-        filter_dt_column='dt', 
+        this_dt_column='dt', filter_dt_column='dt',
         dev_lookback_days = 30)
     }}
 ),
