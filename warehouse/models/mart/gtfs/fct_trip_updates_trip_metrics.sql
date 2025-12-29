@@ -17,7 +17,6 @@ WITH fct_stop_time_metrics AS (
         default_start_var='PROD_GTFS_RT_START',
         this_dt_column='service_date',
         filter_dt_column='service_date',
-        dev_lookback_days = 30
     ) }}
 ),
 
