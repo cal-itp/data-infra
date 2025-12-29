@@ -12,24 +12,33 @@
 
 WITH int_tu_trip_stop AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_staging.test_int_gtfs_rt__trip_updates_trip_stop_day_map_grouping`
-    WHERE dt = "2025-12-01"
-
+    FROM {{ ref('int_gtfs_rt__trip_updates_trip_stop_day_map_grouping') }}
+    WHERE {{ incremental_where(
+        default_start_var='PROD_GTFS_RT_START',
+        this_dt_column='dt',
+        filter_dt_column='dt', 
+        dev_lookback_days = 30)
+    }}
 ),
 
 tu_trip_keys AS (
     SELECT
-        *
-        --key AS trip_key,
-        --dt,
-        --service_date,
-        --base64_url,
-        --schedule_base64_url,
-        --trip_id,
-        --trip_start_time
+        
+        key AS trip_key,
+        dt,
+        service_date,
+        base64_url,
+        schedule_base64_url,
+        trip_id,
+        trip_start_time
 
-    FROM `cal-itp-data-infra-staging.tiffany_staging.test_int_gtfs_rt__trip_updates_trip_day_map_grouping`
-    WHERE dt = "2025-12-01"
+    FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }} 
+    WHERE {{ incremental_where(
+        default_start_var='PROD_GTFS_RT_START',
+        this_dt_column='dt',
+        filter_dt_column='dt', 
+        dev_lookback_days = 30)
+    }}
 ),
 
 unnested AS (
