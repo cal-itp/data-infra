@@ -13,11 +13,7 @@
 WITH int_tu_trip_stop AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_stop_day_map_grouping') }}
-    WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
-        this_dt_column='dt', filter_dt_column='dt',
-        dev_lookback_days = 30)
-    }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }} AND dt >= "2025-12-01"
 ),
 
 tu_trip_keys AS (
@@ -32,11 +28,7 @@ tu_trip_keys AS (
         trip_start_time
 
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
-    WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
-        this_dt_column='dt', filter_dt_column='dt',
-        dev_lookback_days = 30)
-    }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }} AND dt >= "2025-12-01"
 ),
 
 unnested AS (
