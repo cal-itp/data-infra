@@ -16,8 +16,8 @@ WITH int_tu_trip_stop AS (
     WHERE {{ incremental_where(
         default_start_var='PROD_GTFS_RT_START',
         this_dt_column="service_date",
-        filter_dt_column="dt",
-    ) }} 
+        filter_dt_column="dt"
+    ) }}
 ),
 
 tu_trip_keys AS (
