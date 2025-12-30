@@ -96,7 +96,6 @@ filter using (
     principals = [
         'serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
-        'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:github-actions-service-account@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com',
@@ -192,7 +191,6 @@ filter using (
     principals = [
         'serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
-        'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:github-actions-service-account@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com',
