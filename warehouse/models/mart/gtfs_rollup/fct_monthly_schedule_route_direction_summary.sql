@@ -52,7 +52,7 @@ pivoted_timeofday AS (
     PIVOT(
         MIN(daily_trips) AS daily_trips,
         MIN(daily_trips / n_hours) AS frequency
-        FOR time_of_day_cleaned IN
+        FOR time_of_day IN
         ("owl", "early_am", "am_peak", "midday", "pm_peak", "evening")
     )
 ),
