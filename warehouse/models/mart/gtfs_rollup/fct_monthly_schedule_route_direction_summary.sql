@@ -15,7 +15,6 @@ time_of_day_counts AS (
         DATE_TRUNC(service_date, MONTH) AS month_first_day,
         {{ generate_day_type('service_date') }} AS day_type,
         time_of_day,
-        LOWER(REPLACE(time_of_day, " ", "_")) AS time_of_day_cleaned,
         {{ get_combined_route_name('name', 'route_id', 'route_short_name', 'route_long_name') }} AS route_name,
         direction_id,
 
@@ -45,7 +44,7 @@ pivoted_timeofday AS (
             route_name,
             direction_id,
 
-            time_of_day_cleaned,
+            time_of_day,
             daily_trips,
             n_hours
         FROM time_of_day_counts

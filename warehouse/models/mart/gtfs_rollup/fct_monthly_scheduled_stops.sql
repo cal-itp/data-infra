@@ -46,7 +46,8 @@ monthly_stop_counts AS (
         day_type,
         stop_id,
 
-        SUM(stop_event_count) AS ttl_stop_event_count,
+        SUM(stop_event_count) AS total_stop_arrivals,
+        ROUND(SUM(stop_event_count) / COUNT(DISTINCT service_date), 1) AS daily_stop_arrivals,
 
         SUM(route_type_0) AS route_type_0,
         SUM(route_type_1) AS route_type_1,
