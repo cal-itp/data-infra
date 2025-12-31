@@ -30,7 +30,7 @@ time_of_day_counts AS (
         SUM(flex_service_hours) AS flex_service_hours,
 
     FROM trips
-    GROUP BY 1, 2, 3, 4, 5, 6, 7
+    GROUP BY 1, 2, 3, 4, 5, 6
 
 ),
 
