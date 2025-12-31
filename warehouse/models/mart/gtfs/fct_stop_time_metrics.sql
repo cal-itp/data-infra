@@ -17,7 +17,7 @@ WITH int_tu_trip_stop AS (
         default_start_var='PROD_GTFS_RT_START',
         this_dt_column="service_date",
         filter_dt_column="dt"
-    ) }}
+    ) }} AND dt >= "2025-12-01"
 ),
 
 tu_trip_keys AS (
@@ -36,7 +36,7 @@ tu_trip_keys AS (
         default_start_var='PROD_GTFS_RT_START',
         this_dt_column="service_date",
         filter_dt_column="dt"
-    ) }}
+    ) }} AND dt >= "2025-12-01"
 ),
 
 unnested AS (
@@ -45,12 +45,15 @@ unnested AS (
       * EXCEPT(_extract_ts_array, arrival_time_array, departure_time_array, offset0, offset1, offset2),
       EXTRACT(HOUR FROM _extract_ts) AS extract_hour,
       EXTRACT(MINUTE FROM _extract_ts) AS extract_minute,
+      DATETIME_DIFF(actual_arrival, _extract_ts, MINUTE) AS minutes_until_arrival,
+      DATETIME_DIFF(actual_arrival, arrival_time, SECOND) AS prediction_seconds_difference_from_arrival,
+      DATETIME_DIFF(actual_departure, arrival_time, SECOND) AS predictions_seconds_difference_from_departure,
 
     FROM int_tu_trip_stop
     LEFT JOIN UNNEST(_extract_ts_array) AS _extract_ts WITH OFFSET AS offset0
     LEFT JOIN UNNEST(arrival_time_array) AS arrival_time WITH OFFSET AS offset1
     LEFT JOIN UNNEST(departure_time_array) AS departure_time WITH OFFSET AS offset2
-    WHERE offset0 = offset1 AND offset1 = offset2
+    WHERE offset0 = offset1 AND offset1 = offset2 AND DATETIME_DIFF(actual_arrival, _extract_ts, MINUTE) <= 30 AND  DATETIME_DIFF(actual_arrival, _extract_ts, MINUTE) > 0
 ),
 
 prediction_difference AS (
@@ -66,49 +69,37 @@ prediction_difference AS (
         key,
         extract_hour,
         extract_minute,
+        minutes_until_arrival,
 
         arrival_time,
         actual_arrival,
         actual_departure,
-
-        DATETIME_DIFF(actual_arrival, arrival_time, SECOND) AS prediction_seconds_difference_from_arrival,
-        DATETIME_DIFF(actual_departure, arrival_time, SECOND) AS predictions_seconds_difference_from_departure,
-        DATETIME_DIFF(actual_arrival, _extract_ts, MINUTE) as minutes_until_arrival,
-
-     -- categorize whether prediction was early/on-time/late
-        CASE
-            WHEN (DATETIME_DIFF(actual_arrival, arrival_time, SECOND) > 0 AND DATETIME_DIFF(actual_departure, arrival_time, SECOND) > 0) THEN "is_early"
-            WHEN (DATETIME_DIFF(actual_arrival, arrival_time, SECOND) < 0 AND DATETIME_DIFF(actual_departure, arrival_time, SECOND) < 0) THEN "is_late"
-            WHEN (DATETIME_DIFF(actual_arrival, arrival_time, SECOND) = 0 OR DATETIME_DIFF(actual_departure, arrival_time, SECOND) = 0) THEN "is_ontime"
-            ELSE "uncategorized"
-        END AS prediction_category
-
-    FROM unnested
-),
-
-predictions_categorized AS (
-    SELECT
-        *,
-        -- Newmark overwrites some of these as 0 if is_ontime is True and the prediction is compared to actual arrival for early; actual departure for late
-        CASE
-            WHEN prediction_category = "is_ontime" THEN 0
-            WHEN prediction_category = "is_early" THEN prediction_seconds_difference_from_arrival
-            WHEN prediction_category = "is_late" THEN predictions_seconds_difference_from_departure
-        END AS prediction_seconds_difference,
-        -- save out boolean dummy variables
-        COALESCE(prediction_category="is_ontime", True) AS is_ontime,
-        COALESCE(prediction_category="is_early", True) AS is_early,
-        COALESCE(prediction_category="is_late", True) AS is_late,
 
         -- arrival_time aggregation will be interval type, and we can't take max/min on it, convert to seconds instead
         (EXTRACT(DAY FROM arrival_time) * 24 * 60 * 60
          + EXTRACT(HOUR FROM arrival_time) * 60 * 60
          + EXTRACT(MINUTE FROM arrival_time) * 60
          + EXTRACT(SECOND FROM arrival_time)) AS arrival_time_seconds,
-
-    FROM prediction_difference
-    -- we do not want predictions after bus arrived, this will create error with ln on negative values
-    WHERE minutes_until_arrival <= 30 AND minutes_until_arrival > 0
+         -- categorize whether prediction was early/on-time/late and create dummy boolean variables
+        CASE
+            WHEN (prediction_seconds_difference_from_arrival > 0 AND predictions_seconds_difference_from_departure > 0) THEN TRUE
+            ELSE FALSE
+        END AS is_early,
+        CASE
+            WHEN (prediction_seconds_difference_from_arrival < 0 AND predictions_seconds_difference_from_departure < 0) THEN TRUE
+            ELSE FALSE
+        END AS is_late,
+        CASE
+            WHEN (prediction_seconds_difference_from_arrival= 0 OR predictions_seconds_difference_from_departure = 0) THEN TRUE
+            ELSE FALSE
+        END AS is_ontime,
+    -- Newmark overwrites some of these as 0 if is_ontime is True and the prediction is compared to actual arrival for early; actual departure for late
+        CASE
+            WHEN (prediction_seconds_difference_from_arrival= 0 OR predictions_seconds_difference_from_departure = 0) THEN 0
+            WHEN (prediction_seconds_difference_from_arrival > 0 AND predictions_seconds_difference_from_departure > 0) THEN prediction_seconds_difference_from_arrival
+            WHEN (prediction_seconds_difference_from_arrival < 0 AND predictions_seconds_difference_from_departure < 0)  THEN predictions_seconds_difference_from_departure
+        END AS prediction_seconds_difference,
+    FROM unnested
 ),
 
 minute_bins AS (
@@ -135,7 +126,7 @@ minute_bins AS (
         -- stop time update completeness metric: https://github.com/cal-itp/data-analyses/blob/main/rt_predictions/01_update_completeness.ipynb
         COUNT(*) AS n_predictions_minute,
 
-    FROM predictions_categorized
+    FROM prediction_difference
     GROUP BY key, extract_hour, extract_minute
 ),
 
@@ -227,24 +218,24 @@ predictions_with_trip_keys AS (
     SELECT DISTINCT
         key,
         trip_key,
-        predictions_categorized.service_date,
-        predictions_categorized.base64_url,
-        predictions_categorized.schedule_base64_url,
-        predictions_categorized.trip_id,
-        predictions_categorized.trip_start_time,
+        prediction_difference.service_date,
+        prediction_difference.base64_url,
+        prediction_difference.schedule_base64_url,
+        prediction_difference.trip_id,
+        prediction_difference.trip_start_time,
         stop_id,
         stop_sequence,
         actual_arrival,
         actual_departure,
 
-    FROM predictions_categorized
+    FROM prediction_difference
     INNER JOIN tu_trip_keys
-      ON predictions_categorized.dt = tu_trip_keys.dt
-      AND predictions_categorized.service_date = tu_trip_keys.service_date
-      AND predictions_categorized.base64_url = tu_trip_keys.base64_url
-      AND predictions_categorized.schedule_base64_url = tu_trip_keys.schedule_base64_url
-      AND predictions_categorized.trip_id = tu_trip_keys.trip_id
-      AND COALESCE(predictions_categorized.trip_start_time, "") = COALESCE(tu_trip_keys.trip_start_time, "")
+      ON prediction_difference.dt = tu_trip_keys.dt
+      AND prediction_difference.service_date = tu_trip_keys.service_date
+      AND prediction_difference.base64_url = tu_trip_keys.base64_url
+      AND prediction_difference.schedule_base64_url = tu_trip_keys.schedule_base64_url
+      AND prediction_difference.trip_id = tu_trip_keys.trip_id
+      AND COALESCE(prediction_difference.trip_start_time, "") = COALESCE(tu_trip_keys.trip_start_time, "")
 ),
 
 fct_stop_time_metrics AS (
