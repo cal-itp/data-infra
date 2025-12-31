@@ -43,6 +43,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         core-dag_file_processor_timeout            = 1200
         core-dagbag_import_timeout                 = 600
         core-dags_are_paused_at_creation           = true
+        core-max_templated_field_length            = 25000
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
         email-email_conn_id                        = "smtp_postmark"
         email-from_email                           = "bot+airflow@calitp.org"
