@@ -1,9 +1,4 @@
-{{
-    config(
-        materialized='table',
-        cluster_by=['month_first_day', 'name']
-    )
-}}
+{{ config(materialized='table') }}
 
 WITH fct_scheduled_trips AS (
     SELECT * FROM {{ ref('fct_monthly_scheduled_trips') }}

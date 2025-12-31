@@ -1,11 +1,6 @@
-{{
-    config(
-        materialized='table',
-        cluster_by=['month_first_day', 'name']
-    )
-}}
+{{ config(materialized='table') }}
 
-WITH stops AS (
+    WITH stops AS (
     SELECT
         -- get these from dim_stops, since pt_geom can't be grouped or select distinct on
         * EXCEPT(tts_stop_name, pt_geom, parent_station, stop_code,

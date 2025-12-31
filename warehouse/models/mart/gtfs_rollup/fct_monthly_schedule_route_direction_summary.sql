@@ -1,9 +1,4 @@
-{{
-    config(
-        materialized='table',
-        cluster_by=['month_first_day', 'name']
-    )
-}}
+{{ config(materialized='table') }}
 
 WITH trips AS (
     SELECT *
