@@ -70,16 +70,15 @@ class TestDBTBigQueryToGCSOperator:
         task = test_dag.get_task("dbt_bigquery_to_gcs")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
-        assert (
-            os.path.join(
+        assert xcom_value == {
+            "destination_path_prefix": os.path.join(
                 os.environ.get("CALITP_BUCKET__PUBLISH"),
                 "california_open_data__agency",
                 "dt=2025-06-01",
                 "ts=2025-06-01T00:00:00+00:00",
-                "agency.csv",
+                "agency",
             )
-            in xcom_value
-        )
+        }
 
         result = gcs_hook.download(
             bucket_name=os.environ.get("CALITP_BUCKET__PUBLISH").replace("gs://", ""),
@@ -87,20 +86,20 @@ class TestDBTBigQueryToGCSOperator:
                 "california_open_data__agency",
                 "dt=2025-06-01",
                 "ts=2025-06-01T00:00:00+00:00",
-                "agency.csv",
+                "agency000000000000.csv",
             ),
         )
 
         f = StringIO(result.decode())
-        reader = csv.DictReader(f, delimiter="\t")
+        reader = csv.DictReader(f)
         assert list(reader)[0] == {
-            "agency_id": "1",
             "agency_email": "",
-            "agency_fare_url": "",
+            "agency_fare_url": "https://www.syvt.com/365/Fares",
+            "agency_id": "11214031",
             "agency_lang": "en",
-            "agency_name": "AC TRANSIT",
-            "agency_phone": "5108914777",
-            "agency_timezone": "US/Pacific",
-            "agency_url": "http://www.actransit.org",
-            "base64_url": "aHR0cHM6Ly9hcGkuYWN0cmFuc2l0Lm9yZy90cmFuc2l0L2d0ZnMvZG93bmxvYWQ=",
+            "agency_name": "Santa Ynez Valley Transit",
+            "agency_phone": "805-688-5452",
+            "agency_timezone": "America/Los_Angeles",
+            "agency_url": "https://www.syvt.com/489/Santa-Ynez-Valley-Transit",
+            "base64_url": "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
         }
