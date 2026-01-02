@@ -276,6 +276,12 @@ resource "google_service_account" "eldorado-payments-user" {
   project    = "cal-itp-data-infra"
 }
 
+resource "google_service_account" "slo-transit-payments-user" {
+  account_id = "slo-transit-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
 resource "google_service_account" "enghouse-sftp-service-account" {
   account_id   = "enghouse-sftp-service-account"
   description  = "Service account for enghouse sftp server"
