@@ -1,9 +1,4 @@
-{{
-    config(
-        materialized='table',
-        cluster_by=['month_first_day', 'schedule_name']
-    )
-}}
+{{ config(materialized='table') }}
 
 WITH daily_summary AS (
     SELECT *

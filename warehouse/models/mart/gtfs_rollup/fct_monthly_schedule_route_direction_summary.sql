@@ -1,9 +1,4 @@
-{{
-    config(
-        materialized='table',
-        cluster_by=['month_first_day', 'name']
-    )
-}}
+{{ config(materialized='table') }}
 
 WITH trips AS (
     SELECT *
@@ -20,7 +15,6 @@ time_of_day_counts AS (
         DATE_TRUNC(service_date, MONTH) AS month_first_day,
         {{ generate_day_type('service_date') }} AS day_type,
         time_of_day,
-        LOWER(REPLACE(time_of_day, " ", "_")) AS time_of_day_cleaned,
         {{ get_combined_route_name('name', 'route_id', 'route_short_name', 'route_long_name') }} AS route_name,
         direction_id,
 
@@ -36,7 +30,7 @@ time_of_day_counts AS (
         SUM(flex_service_hours) AS flex_service_hours,
 
     FROM trips
-    GROUP BY 1, 2, 3, 4, 5, 6, 7
+    GROUP BY 1, 2, 3, 4, 5, 6
 
 ),
 
@@ -50,7 +44,7 @@ pivoted_timeofday AS (
             route_name,
             direction_id,
 
-            time_of_day_cleaned,
+            time_of_day,
             daily_trips,
             n_hours
         FROM time_of_day_counts
@@ -58,7 +52,7 @@ pivoted_timeofday AS (
     PIVOT(
         MIN(daily_trips) AS daily_trips,
         MIN(daily_trips / n_hours) AS frequency
-        FOR time_of_day_cleaned IN
+        FOR time_of_day IN
         ("owl", "early_am", "am_peak", "midday", "pm_peak", "evening")
     )
 ),
@@ -78,8 +72,8 @@ all_day_counts AS (
 
         -- if service runs for 1 hr a day, for weekdays, it's 5 hours; for Sat, it's 1 hr
         -- to compare weekday/Sat/Sun service, we would normalize by day
-        SUM(service_hours) / AVG(n_days) AS daily_service_hours,
-        SUM(flex_service_hours) / AVG(n_days) AS daily_flex_service_hours,
+        ROUND(SUM(service_hours) / AVG(n_days), 2) AS daily_service_hours,
+        ROUND(SUM(flex_service_hours) / AVG(n_days), 2) AS daily_flex_service_hours,
 
     FROM time_of_day_counts
     GROUP BY 1, 2, 3, 4, 5
@@ -130,28 +124,28 @@ route_direction_aggregation AS (
         daily_service_hours,
         daily_flex_service_hours,
 
-        daily_trips_owl,
-        daily_trips_early_am,
-        daily_trips_am_peak,
-        daily_trips_midday,
-        daily_trips_pm_peak,
-        daily_trips_evening,
-        daily_trips_am_peak + daily_trips_pm_peak AS daily_trips_peak,
-        daily_trips_all_day - (daily_trips_am_peak + daily_trips_pm_peak) AS daily_trips_offpeak,
+        COALESCE(daily_trips_owl, 0) AS daily_trips_owl,
+        COALESCE(daily_trips_early_am, 0) AS daily_trips_early_am,
+        COALESCE(daily_trips_am_peak, 0) AS daily_trips_am_peak,
+        COALESCE(daily_trips_midday, 0) AS daily_trips_midday,
+        COALESCE(daily_trips_pm_peak, 0) AS daily_trips_pm_peak,
+        COALESCE(daily_trips_evening, 0) AS daily_trips_evening,
+        COALESCE(daily_trips_am_peak, 0) + COALESCE(daily_trips_pm_peak, 0) AS daily_trips_peak,
+        daily_trips_all_day - (COALESCE(daily_trips_am_peak, 0) + COALESCE(daily_trips_pm_peak, 0)) AS daily_trips_offpeak,
 
-        ROUND(frequency_owl, 2) AS frequency_owl,
-        ROUND(frequency_early_am, 2) AS frequency_early_am,
-        ROUND(frequency_am_peak, 2) AS frequency_am_peak,
-        ROUND(frequency_midday, 2) AS frequency_midday,
-        ROUND(frequency_pm_peak, 2) AS frequency_pm_peak,
-        ROUND(frequency_evening, 2) AS frequency_evening,
+        COALESCE(ROUND(frequency_owl, 2), 0) AS frequency_owl,
+        COALESCE(ROUND(frequency_early_am, 2), 0) AS frequency_early_am,
+        COALESCE(ROUND(frequency_am_peak, 2), 0) AS frequency_am_peak,
+        COALESCE(ROUND(frequency_midday, 2), 0) AS frequency_midday,
+        COALESCE(ROUND(frequency_pm_peak, 2), 0) AS frequency_pm_peak,
+        COALESCE(ROUND(frequency_evening, 2), 0) AS frequency_evening,
         -- calculate frequency for peak/offpeak this way by weighting the hours present in each category
         ROUND(
-          (frequency_am_peak * 3 + frequency_pm_peak * 5) / 8,
+          (COALESCE(frequency_am_peak, 0) * 3 + COALESCE(frequency_pm_peak, 0) * 5) / 8,
           2) AS frequency_peak,
         ROUND(
-          (frequency_owl * 4 + frequency_early_am * 3
-          + frequency_midday * 5 + frequency_evening * 4) / 16,
+          (COALESCE(frequency_owl, 0) * 4 + COALESCE(frequency_early_am, 0) * 3
+          + COALESCE(frequency_midday, 0) * 5 + COALESCE(frequency_evening, 0) * 4) / 16,
           2) AS frequency_offpeak,
 
     FROM all_day_counts

@@ -1,11 +1,6 @@
-{{
-    config(
-        materialized='table',
-        cluster_by=['month_first_day', 'name']
-    )
-}}
+{{ config(materialized='table') }}
 
-WITH stops AS (
+    WITH stops AS (
     SELECT
         -- get these from dim_stops, since pt_geom can't be grouped or select distinct on
         * EXCEPT(tts_stop_name, pt_geom, parent_station, stop_code,
@@ -51,7 +46,8 @@ monthly_stop_counts AS (
         day_type,
         stop_id,
 
-        SUM(stop_event_count) AS ttl_stop_event_count,
+        SUM(stop_event_count) AS total_stop_arrivals,
+        ROUND(SUM(stop_event_count) / COUNT(DISTINCT service_date), 1) AS daily_stop_arrivals,
 
         SUM(route_type_0) AS route_type_0,
         SUM(route_type_1) AS route_type_1,
