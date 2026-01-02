@@ -1,0 +1,31 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_RAW') }}"
+source_objects:
+  - "pw/*.csv"
+destination_project_dataset_table: "external_enghouse.pay_windows"
+source_format: CSV
+field_delimiter: ";"
+use_bq_client: true
+schema_fields:
+  - name: ID
+    type: STRING
+  - name: Token
+    type: STRING
+  - name: Amount_Settled
+    type: NUMERIC
+  - name: Amount_To_Settle
+    type: NUMERIC
+  - name: Debt_Settled
+    type: NUMERIC
+  - name: Stage
+    type: STRING
+  - name: Payment_reference
+    type: STRING
+  - name: Terminal_Id
+    type: INTEGER
+  - name: Open_Date
+    type: TIMESTAMP
+  - name: Close_Date
+    type: TIMESTAMP
+  - name: Operator_Id
+    type: INTEGER
