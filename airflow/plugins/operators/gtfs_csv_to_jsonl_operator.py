@@ -155,17 +155,19 @@ class GTFSCSVToJSONLOperator(BaseOperator):
     def converters(self) -> list[GTFSCSVConverter]:
         output = []
         for extracted_file in self.unzip_results["extracted_files"]:
+            extracted_filename = extracted_file["filename"]
+            print(f"Converting file: {extracted_filename}")
             source = self.gcs_hook().download(
                 bucket_name=self.source_name(),
                 object_name=os.path.join(
-                    extracted_file["filename"],
+                    extracted_filename,
                     self.source_path_fragment,
-                    extracted_file["filename"],
+                    extracted_filename,
                 ),
             )
             output.append(
                 GTFSCSVConverter(
-                    filename=extracted_file["filename"],
+                    filename=extracted_filename,
                     csv_data=source.decode(),
                     unzip_results=self.unzip_results,
                 )
@@ -177,6 +179,7 @@ class GTFSCSVToJSONLOperator(BaseOperator):
         output = []
         for converter in self.converters():
             results = converter.convert(current_date=dag_run.logical_date)
+            print(f"Generating results for file: {results.filetype()}")
             if results.valid():
                 self.gcs_hook().upload(
                     bucket_name=self.destination_name(),
@@ -225,4 +228,5 @@ class GTFSCSVToJSONLOperator(BaseOperator):
                 }
             )
 
+        print("End of conversion.")
         return output
