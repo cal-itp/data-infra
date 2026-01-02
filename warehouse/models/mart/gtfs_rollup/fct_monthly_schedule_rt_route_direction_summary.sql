@@ -1,21 +1,13 @@
-{{
-    config(
-        materialized='table',
-        cluster_by=['month_first_day', 'schedule_name']
-    )
-}}
-
+{{ config(materialized='table') }}
 WITH schedule_summary AS (
     SELECT *
     FROM {{ ref('fct_monthly_schedule_route_direction_summary') }}
-    -- table; clustered by month_first_day, name
 ),
 
 rt_summary AS (
     SELECT
         * EXCEPT(month, year)
     FROM {{ ref('fct_monthly_rt_route_direction_summary') }}
-    -- clustered by month_first_day, schedule_name
 ),
 
 route_direction_aggregation AS (

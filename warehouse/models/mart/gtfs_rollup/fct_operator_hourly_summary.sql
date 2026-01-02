@@ -1,16 +1,10 @@
-{{
-    config(
-        materialized='table',
-        cluster_by=['month_first_day', 'analysis_name', 'name']
-    )
-}}
+{{ config(materialized='table') }}
 
 -- scheduled trips: n_trips that started that hour for GTFS digest
--- scheduled stop times: aggregate stop arrivals by hour...but more interested in stop arrivals at stop by hour for HQTA
+-- scheduled stop times: aggregate stop arrivals by hour...but more interested in stop arrivals at stop by time-of-day for HQTA
 WITH trips AS (
     SELECT *
     FROM {{ ref('fct_monthly_scheduled_trips') }}
-    -- table; clustered by month_first_day, name
 ),
 
 dim_gtfs_datasets AS (
