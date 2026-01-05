@@ -226,6 +226,7 @@ dim_stop_arrivals AS (
 
 SELECT * FROM dim_stop_arrivals
 --Check feed_key: 4a493286fb081da9a931ea088b2198c6; stop_id = 3003 stop
+
 -- job ID (use 1 big left join in the front): 8efa598c-578a-4bf5-9267-d2442e34f38b
 -- more compact: elapsed time: 34.22 sec; 213.33 GB; 3 hr 44 min slot time
 
