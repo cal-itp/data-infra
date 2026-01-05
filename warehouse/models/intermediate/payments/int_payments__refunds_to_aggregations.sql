@@ -11,7 +11,7 @@ summarize_by_type AS (
         aggregation_id,
         retrieval_reference_number,
         approval_status,
-        SUM(proposed_amount) AS proposed_refund_amount,
+        SUM(refund_amount) AS proposed_refund_amount,
     FROM refunds
     GROUP BY 1, 2, 3, 4
 ),
