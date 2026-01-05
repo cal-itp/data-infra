@@ -7,7 +7,7 @@ sources:
     schema: external_enghouse
     tables:
       - name: taps
-      - name: tickets
+      - name: ticket_results
       - name: transactions
       - name: pay_windows
 
@@ -58,7 +58,7 @@ models:
       - name: Service_Name
       - name: Driver_ID
 
-  - name: stg_enghouse__tickets
+  - name: stg_enghouse__ticket_results
     description: Add description
     columns:
       - name: ID
