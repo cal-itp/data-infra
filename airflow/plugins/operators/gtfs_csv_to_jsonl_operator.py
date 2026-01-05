@@ -15,7 +15,8 @@ class GTFSCSVResults:
     def __init__(
         self,
         current_date: pendulum.DateTime,
-        unzip_results: dict,
+        extracted_file: dict,
+        extract_config: dict,
         filename: str,
         fieldnames: list[str],
         dialect: str,
@@ -24,7 +25,8 @@ class GTFSCSVResults:
         self.filename = filename
         self.fieldnames = fieldnames
         self.dialect = dialect
-        self.unzip_results = unzip_results
+        self.extracted_file = extracted_file
+        self.extract_config = extract_config
         self.lines = []
         self._exception = None
 
@@ -54,7 +56,7 @@ class GTFSCSVResults:
     def report(self) -> dict:
         return {
             "exception": self.exception(),
-            "feed_file": self.unzip_results.get("extracted_files")[0],
+            "feed_file": self.extracted_file,
             "fields": self.fieldnames,
             "parsed_file": self.metadata(),
             "success": self.success(),
@@ -63,7 +65,7 @@ class GTFSCSVResults:
     def metadata(self) -> dict:
         return {
             "csv_dialect": self.dialect,
-            "extract_config": self.unzip_results.get("extract").get("config"),
+            "extract_config": self.extract_config,
             "filename": f"{self.filetype()}.jsonl.gz",
             "gtfs_filename": self.filetype(),
             "num_lines": len(self.lines),
@@ -72,10 +74,17 @@ class GTFSCSVResults:
 
 
 class GTFSCSVConverter:
-    def __init__(self, filename: str, csv_data: bytes, unzip_results: dict) -> None:
+    def __init__(
+        self,
+        filename: str,
+        csv_data: bytes,
+        extracted_file: dict,
+        extract_config: dict,
+    ) -> None:
         self.filename = filename
         self.csv_data = csv_data
-        self.unzip_results = unzip_results
+        self.extracted_file = extracted_file
+        self.extract_config = extract_config
 
     def reader(self) -> csv.DictReader:
         comma_reader = csv.DictReader(
@@ -97,7 +106,8 @@ class GTFSCSVConverter:
             filename=self.filename,
             fieldnames=reader.fieldnames,
             dialect=reader.dialect,
-            unzip_results=self.unzip_results,
+            extracted_file=self.extracted_file,
+            extract_config=self.extract_config,
         )
         try:
             for row in reader:
@@ -154,6 +164,7 @@ class GTFSCSVToJSONLOperator(BaseOperator):
 
     def converters(self) -> list[GTFSCSVConverter]:
         output = []
+        extract_config = self.unzip_results.get("extract").get("config")
         for extracted_file in self.unzip_results["extracted_files"]:
             extracted_filename = extracted_file["filename"]
             print(f"Converting file: {extracted_filename}")
@@ -169,7 +180,8 @@ class GTFSCSVToJSONLOperator(BaseOperator):
                 GTFSCSVConverter(
                     filename=extracted_filename,
                     csv_data=source.decode(),
-                    unzip_results=self.unzip_results,
+                    extracted_file=extracted_file,
+                    extract_config=extract_config,
                 )
             )
         return output
