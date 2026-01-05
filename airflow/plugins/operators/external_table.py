@@ -38,12 +38,20 @@ def _bq_client_create_external_table(
     hive_options=None,
     bucket=None,
     post_hook=None,
+    field_delimiter=",",
 ):
     # TODO: must be fully qualified table name
     ext = bigquery.ExternalConfig(source_format)
     ext.source_uris = source_objects
     ext.autodetect = schema_fields is None
     ext.ignore_unknown_values = True
+
+    # Set field delimiter for CSV files
+    if source_format == "CSV":
+        csv_options = bigquery.CSVOptions()
+        csv_options.field_delimiter = field_delimiter
+        csv_options.skip_leading_rows = 1
+        ext.csv_options = csv_options
 
     if geojson:
         ext.json_extension = "GEOJSON"
@@ -163,6 +171,7 @@ class ExternalTable(BaseOperator):
                 self.hive_options,
                 self.bucket,
                 self.post_hook,
+                self.field_delimiter,
             )
 
         else:

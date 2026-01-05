@@ -1,0 +1,97 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_RAW') }}"
+post_hook: |
+  SELECT *
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.taps
+  LIMIT 1;
+source_objects:
+  - "tap/*.csv"
+destination_project_dataset_table: "external_enghouse.taps"
+source_format: CSV
+use_bq_client: true
+field_delimiter: ";"
+schema_fields:
+  - name: Tap_ID
+    type: STRING
+  - name: Mapping_Terminal_ID
+    type: STRING
+  - name: Mapping_Merchant_ID
+    type: STRING
+  - name: terminal
+    type: INTEGER
+  - name: Token
+    type: STRING
+  - name: Masked_Pan
+    type: STRING
+  - name: Expiry
+    type: INTEGER
+  - name: Server_date
+    type: TIMESTAMP
+  - name: Terminal_date
+    type: TIMESTAMP
+  - name: Tx_number
+    type: INTEGER
+  - name: Tx_status
+    type: INTEGER
+  - name: Payment_Reference
+    type: STRING
+  - name: Operator_Id
+    type: INTEGER
+  - name: Terminal_SPDH_code
+    type: INTEGER
+  - name: Denylist_version
+    type: STRING
+  - name: Transit_data
+    type: STRING
+  - name: Currency
+    type: INTEGER
+  - name: Par
+    type: STRING
+  - name: Fare_Mode
+    type: STRING
+  - name: Fare_Type
+    type: STRING
+  - name: Fare_Value
+    type: INTEGER
+  - name: Fare_Description
+    type: STRING
+  - name: Fare_Linked_Id
+    type: STRING
+  - name: ID
+    type: STRING
+  - name: Gps_Latitude
+    type: FLOAT64
+  - name: Gps_Altitude
+    type: FLOAT64
+  - name: Vehicle_Public_Number
+    type: INTEGER
+  - name: Vehicle_Name
+    type: STRING
+  - name: Stop_Id
+    type: INTEGER
+  - name: Stop_Name
+    type: STRING
+  - name: Platform_Id
+    type: STRING
+  - name: Platform_Name
+    type: STRING
+  - name: Zone_Id
+    type: INTEGER
+  - name: Zone_Name
+    type: STRING
+  - name: Line_Public_Number
+    type: INTEGER
+  - name: Line_Name
+    type: STRING
+  - name: Line_Direction
+    type: STRING
+  - name: Trip_Public_Number
+    type: STRING
+  - name: Trip_Name
+    type: STRING
+  - name: Service_Public_Number
+    type: STRING
+  - name: Service_Name
+    type: STRING
+  - name: Driver_ID
+    type: STRING

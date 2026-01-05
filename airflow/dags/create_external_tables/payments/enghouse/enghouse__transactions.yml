@@ -1,0 +1,51 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_RAW') }}"
+post_hook: |
+  SELECT *
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.transactions
+  LIMIT 1;
+source_objects:
+  - "tx/*.csv"
+destination_project_dataset_table: "external_enghouse.transactions"
+source_format: CSV
+use_bq_client: true
+field_delimiter: ";"
+schema_fields:
+  - name: ID
+    type: STRING
+  - name: Operation
+    type: STRING
+  - name: Terminal_ID
+    type: INTEGER
+  - name: Mapping_Terminal_ID
+    type: STRING
+  - name: Mapping_Merchant_ID
+    type: STRING
+  - name: Timestamp
+    type: TIMESTAMP
+  - name: Amount
+    type: NUMERIC
+  - name: Payment_Reference
+    type: STRING
+  - name: Spdh_Response
+    type: INTEGER
+  - name: Response_Type
+    type: STRING
+  - name: Response_Message
+    type: STRING
+  - name: token
+    type: STRING
+  - name: Issuer_Response
+    type: STRING
+  - name: Core_Response
+    type: INTEGER
+  - name: Rrn
+    type: INTEGER
+  - name: Authorization_Code
+    type: STRING
+  - name: Par
+    type: STRING
+  - name: Brand
+    type: STRING
+  - name: OperatorId
+    type: INTEGER
