@@ -5,9 +5,11 @@ models:
     description: GTFS Config Files (datasets)
   - name: dim_gtfs_schedule_download_outcomes
     description: Summary of each Download Dataset Zip File
+  - name: dim_gtfs_schedule_file_parse_outcomes
+    description: Summary of each Parsed File
   - name: dim_gtfs_schedule_validation_notices
-    description: Validation Notices from Dataset files
+    description: Validation Notices from Dataset Files
   - name: dim_gtfs_schedule_validation_outcomes
     description: Summary of each Dataset File Validation
   - name: dim_gtfs_schedule_unzip_outcomes
-    description: Summary extracted files for each dataset
+    description: Summary of each Extracted Files
