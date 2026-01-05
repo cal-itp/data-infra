@@ -8,17 +8,13 @@
 
 WITH dim_stop_times AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_dim_stop_times`
-    --FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.dim_stop_times` --{{ ref('dim_stop_times') }}
-    --WHERE feed_key IN ("4a493286fb081da9a931ea088b2198c6", "d2930eddaefba4a6ded295d4d0117d3c")
+    FROM {{ ref('dim_stop_times') }}
 ),
 
 int_gtfs_schedule__frequencies_stop_times AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_staging.test_int_gtfs_schedule__frequencies_stop_times`
-    --FROM `cal-itp-data-infra-staging.tiffany_staging.int_gtfs_schedule__frequencies_stop_times`--{{ ref('int_gtfs_schedule__frequencies_stop_times') }}
-    --WHERE feed_key IN ("4a493286fb081da9a931ea088b2198c6", "d2930eddaefba4a6ded295d4d0117d3c")
-    --WHERE stop_id IS NOT NULL
+    FROM {{ ref('int_gtfs_schedule__frequencies_stop_times') }}
+    WHERE stop_id IS NOT NULL
 ),
 
 dim_trips AS (
@@ -26,14 +22,15 @@ dim_trips AS (
         feed_key,
         trip_id,
         route_id
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_dim_trips` --{{ ref('dim_trips') }}
+    FROM {{ ref('dim_trips') }}
 ),
+
 dim_routes AS (
     SELECT DISTINCT
         feed_key,
         route_id,
         route_type
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_dim_routes` --{{ ref('dim_routes') }}
+    FROM {{ ref('dim_routes') }}
 ),
 
 -- without select distinct, this join creates dupe rows....why? which column is missing from join?
