@@ -1,11 +1,15 @@
 operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_RAW') }}"
+post_hook: |
+  SELECT *
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.pay_windows
+  LIMIT 1;
 source_objects:
   - "pw/*.csv"
 destination_project_dataset_table: "external_enghouse.pay_windows"
 source_format: CSV
-field_delimiter: ";"
 use_bq_client: true
+field_delimiter: ";"
 schema_fields:
   - name: ID
     type: STRING
