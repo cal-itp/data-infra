@@ -9,10 +9,11 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/e05c856c-8c4d-4e82-89dc-5a15635160ac
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/8173145c-5bd8-4180-988d-69ce59626d75
       accept-encoding:
       - gzip
       content-type:
@@ -27,9 +28,9 @@ interactions:
     body:
       string: '{"backfilled":false,"success":true,"exception":null,"config":{"auth_headers":{},"auth_query_params":{},"computed":false,"feed_type":"schedule","name":"Santa
         Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","extracted_at":"2025-06-01T00:00:00+00:00"},"extract":{"reconstructed":false,"ts":"2025-06-03T00:00:00+00:00","filename":"gtfs.zip","config":{"auth_headers":{},"auth_query_params":{},"computed":false,"feed_type":"schedule","name":"Santa
-        Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","extracted_at":"2025-06-01T00:00:00+00:00"},"response_code":200,"response_headers":{"Content-Type":"application/zip","Date":"Tue,
-        25 Nov 2025 18:44:46 GMT","Content-Disposition":"attachment; filename=gtfs.zip","Connection":"keep-alive","Server":"nginx/1.24.0
-        (Ubuntu)"}}}'
+        Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","extracted_at":"2025-06-01T00:00:00+00:00"},"response_code":200,"response_headers":{"Date":"Mon,
+        05 Jan 2026 16:17:00 GMT","Content-Type":"application/zip","Connection":"keep-alive","Server":"nginx/1.24.0
+        (Ubuntu)","Content-Disposition":"attachment; filename=gtfs.zip"}}}'
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -42,13 +43,13 @@ interactions:
       Content-Type:
       - application/jsonl
       Date:
-      - Thu, 11 Dec 2025 01:19:11 GMT
+      - Mon, 05 Jan 2026 16:17:18 GMT
       ETag:
-      - CKG6o+X6jZEDEAE=
+      - CLDLip3m9JEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Tue, 25 Nov 2025 18:44:49 GMT
+      - Mon, 05 Jan 2026 16:17:02 GMT
       Pragma:
       - no-cache
       Server:
@@ -57,11 +58,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxPXLARQF5eFh8AWNQ4eQLWBKp7t4qX5wDcgOGAldGeLIbIjdxeSJ1-th_l1-HUjgsqj
+      - AHVrFxNCJc-zFPUuhBopN5JAeFf3VXvsbOxptqpfzOmjgxnpKvsiBsC_xlR0mpN4LOWuP996tnphf30
       X-Goog-Generation:
-      - '1764096289070369'
+      - '1767629822010800'
       X-Goog-Hash:
-      - crc32c=8QWLYw==,md5=iscVW6rbvOggKVJLvQt2Xw==
+      - crc32c=WJjBhw==,md5=TyrtP9csLMV9J10SBYlAiQ==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:
@@ -83,10 +84,11 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/aac1f72a-85ff-4a94-a117-7b5e76f52d63
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/6724a854-63ec-449b-b9e1-da911c5b33ae
       accept-encoding:
       - gzip
       content-type:
@@ -101,9 +103,9 @@ interactions:
     body:
       string: '{"backfilled":false,"success":true,"exception":null,"config":{"auth_headers":{},"auth_query_params":{},"computed":false,"feed_type":"schedule","name":"Santa
         Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","extracted_at":"2025-06-01T00:00:00+00:00"},"extract":{"reconstructed":false,"ts":"2025-06-03T00:00:00+00:00","filename":"gtfs.zip","config":{"auth_headers":{},"auth_query_params":{},"computed":false,"feed_type":"schedule","name":"Santa
-        Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","extracted_at":"2025-06-01T00:00:00+00:00"},"response_code":200,"response_headers":{"Content-Type":"application/zip","Date":"Tue,
-        25 Nov 2025 18:44:46 GMT","Content-Disposition":"attachment; filename=gtfs.zip","Connection":"keep-alive","Server":"nginx/1.24.0
-        (Ubuntu)"}}}'
+        Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","extracted_at":"2025-06-01T00:00:00+00:00"},"response_code":200,"response_headers":{"Date":"Mon,
+        05 Jan 2026 16:17:00 GMT","Content-Type":"application/zip","Connection":"keep-alive","Server":"nginx/1.24.0
+        (Ubuntu)","Content-Disposition":"attachment; filename=gtfs.zip"}}}'
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -116,13 +118,13 @@ interactions:
       Content-Type:
       - application/jsonl
       Date:
-      - Thu, 11 Dec 2025 01:19:13 GMT
+      - Mon, 05 Jan 2026 16:17:20 GMT
       ETag:
-      - CKG6o+X6jZEDEAE=
+      - CLDLip3m9JEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Tue, 25 Nov 2025 18:44:49 GMT
+      - Mon, 05 Jan 2026 16:17:02 GMT
       Pragma:
       - no-cache
       Server:
@@ -131,11 +133,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxNOsaLko7BCUouG1Bkimw2ugH3hCiC0vsjDPbx61E9JMSchLajMbELqJUv3C4yEYSuT
+      - AHVrFxPBH5oe8dIyoXU3Pw9KQEntNffyOkblFe363IwhdVUosWlznh0-VXOZn7hLD_dwTBcdkdRNbws
       X-Goog-Generation:
-      - '1764096289070369'
+      - '1767629822010800'
       X-Goog-Hash:
-      - crc32c=8QWLYw==,md5=iscVW6rbvOggKVJLvQt2Xw==
+      - crc32c=WJjBhw==,md5=TyrtP9csLMV9J10SBYlAiQ==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:
