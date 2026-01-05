@@ -8,17 +8,13 @@
 
 WITH dim_stop_times AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_dim_stop_times`
-    --FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.dim_stop_times` --{{ ref('dim_stop_times') }}
-    --WHERE feed_key IN ("4a493286fb081da9a931ea088b2198c6", "d2930eddaefba4a6ded295d4d0117d3c")
+    FROM {{ ref('dim_stop_times') }}
 ),
 
 int_gtfs_schedule__frequencies_stop_times AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_staging.test_int_gtfs_schedule__frequencies_stop_times`
-    --FROM `cal-itp-data-infra-staging.tiffany_staging.int_gtfs_schedule__frequencies_stop_times`--{{ ref('int_gtfs_schedule__frequencies_stop_times') }}
-    --WHERE feed_key IN ("4a493286fb081da9a931ea088b2198c6", "d2930eddaefba4a6ded295d4d0117d3c")
-    --WHERE stop_id IS NOT NULL
+    FROM {{ ref('int_gtfs_schedule__frequencies_stop_times') }}
+    WHERE stop_id IS NOT NULL
 ),
 
 dim_trips AS (
@@ -26,14 +22,15 @@ dim_trips AS (
         feed_key,
         trip_id,
         route_id
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_dim_trips` --{{ ref('dim_trips') }}
+    FROM {{ ref('dim_trips') }}
 ),
+
 dim_routes AS (
     SELECT DISTINCT
         feed_key,
         route_id,
         route_type
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_dim_routes` --{{ ref('dim_routes') }}
+    FROM {{ ref('dim_routes') }}
 ),
 
 -- without select distinct, this join creates dupe rows....why? which column is missing from join?
@@ -47,6 +44,8 @@ stop_times_with_freq AS (
         stop_times.stop_sequence,
         stop_times.trip_id,
 
+        dim_routes.route_id,
+        COALESCE(CAST(dim_routes.route_type AS INT), 1000) AS route_type,
         -- this column must be populated, no missing allowed for our arrival_hour categorization
         COALESCE(
             arrival_sec, stop_times_arrival_sec,
@@ -60,12 +59,19 @@ stop_times_with_freq AS (
         AND stop_times.trip_id = freq.trip_id
         AND stop_times.stop_id = freq.stop_id
         AND stop_times.stop_sequence = freq.stop_sequence
+    LEFT JOIN dim_trips
+        ON stop_times.feed_key = dim_trips.feed_key
+        AND stop_times.trip_id = dim_trips.trip_id
+    LEFT JOIN dim_routes
+        ON dim_trips.feed_key = dim_routes.feed_key
+        AND dim_trips.route_id = dim_routes.route_id
 ),
 
 stop_counts_by_hour AS (
     SELECT
         feed_key,
         stop_id,
+        _feed_valid_from,
         CAST(
           TRUNC(arrival_sec_coalesced / 3600) AS INT
         ) AS arrival_hour,
@@ -73,7 +79,7 @@ stop_counts_by_hour AS (
         COUNT(*) AS arrivals,
 
     FROM stop_times_with_freq
-    GROUP BY feed_key, stop_id, arrival_hour
+    GROUP BY feed_key, stop_id, _feed_valid_from, arrival_hour
 ),
 
 -- get counts aggregated to time-of-day
@@ -94,7 +100,7 @@ stop_counts_by_time_of_day AS (
 
         SUM(arrivals) AS arrivals
     FROM stop_counts_by_hour2
-    GROUP BY feed_key, stop_id, time_of_day, n_hours
+    GROUP BY feed_key, stop_id, _feed_valid_from, time_of_day, n_hours
 ),
 
 pivot_to_time_of_day AS (
@@ -105,6 +111,7 @@ pivot_to_time_of_day AS (
 
             feed_key,
             stop_id,
+            _feed_valid_from,
             time_of_day,
             arrivals,
             n_hours
@@ -121,20 +128,14 @@ pivot_to_time_of_day AS (
 -- also get route_type, route_ids
 stop_counts_by_route_type AS (
     SELECT
-        stop_times_with_freq.feed_key,
+        feed_key,
         stop_id,
-
-        COALESCE(CAST(dim_routes.route_type AS INT), 1000) AS route_type,
+        _feed_valid_from,
+        route_type,
         COUNT(*) AS arrivals,
 
     FROM stop_times_with_freq
-    LEFT JOIN dim_trips
-        ON stop_times_with_freq.feed_key = dim_trips.feed_key
-        AND stop_times_with_freq.trip_id = dim_trips.trip_id
-    LEFT JOIN dim_routes
-        ON dim_trips.feed_key = dim_routes.feed_key
-        AND dim_trips.route_id = dim_routes.route_id
-    GROUP BY feed_key, stop_id, route_type
+    GROUP BY feed_key, stop_id, _feed_valid_from, route_type
 ),
 
 pivot_to_route_type AS (
@@ -145,6 +146,7 @@ pivot_to_route_type AS (
 
             feed_key,
             stop_id,
+            _feed_valid_from,
             route_type,
             arrivals,
 
@@ -158,21 +160,14 @@ pivot_to_route_type AS (
 
 stop_counts AS (
     SELECT
-        stop_times_with_freq.feed_key,
-        stop_times_with_freq.stop_id,
+        feed_key,
+        stop_id,
         _feed_valid_from,
-
-        COUNT(*) AS arrivals,
-        ARRAY_AGG(DISTINCT stop_counts_by_route_type.route_type) AS route_type_array,
-        ARRAY_AGG(DISTINCT dim_trips.route_id IGNORE NULLS) AS route_id_array,
-
+        COUNT(DISTINCT arrival_sec_coalesced) AS arrivals,
+        ARRAY_AGG(DISTINCT route_type) AS route_type_array,
+        -- how to add transit_mode_array?
+        ARRAY_AGG(DISTINCT route_id) AS route_id_array,
     FROM stop_times_with_freq
-    INNER JOIN dim_trips
-        ON stop_times_with_freq.feed_key = dim_trips.feed_key
-        AND stop_times_with_freq.trip_id = dim_trips.trip_id
-    INNER JOIN stop_counts_by_route_type
-        ON stop_times_with_freq.feed_key = stop_counts_by_route_type.feed_key
-        AND stop_times_with_freq.stop_id = stop_counts_by_route_type.stop_id
     GROUP BY feed_key, stop_id, _feed_valid_from
 ),
 
@@ -222,13 +217,14 @@ dim_stop_arrivals AS (
     INNER JOIN pivot_to_time_of_day AS p_time
         ON stop_counts.feed_key = p_time.feed_key
         AND stop_counts.stop_id = p_time.stop_id
+        AND stop_counts._feed_valid_from = p_time._feed_valid_from
     INNER JOIN pivot_to_route_type AS p_route
         ON stop_counts.feed_key = p_route.feed_key
         AND stop_counts.stop_id = p_route.stop_id
+        AND stop_counts._feed_valid_from = p_route._feed_valid_from
 )
 
 SELECT * FROM dim_stop_arrivals
---Check feed_key: 4a493286fb081da9a931ea088b2198c6; stop_id = 3003 stop
 
 -- job ID (use 1 big left join in the front): 8efa598c-578a-4bf5-9267-d2442e34f38b
 -- more compact: elapsed time: 34.22 sec; 213.33 GB; 3 hr 44 min slot time
