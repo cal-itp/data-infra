@@ -59,7 +59,7 @@ stg_enghouse__transactions AS (
         authorization_code,
         par,
         brand,
-        operator_id,
+        operator_id
         -- _line_number,
         -- `instance`,
         -- extract_filename,
