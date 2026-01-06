@@ -1,0 +1,118 @@
+version: 2
+
+sources:
+  - name: external_enghouse
+    description: External tables reading Enghouse payments data.
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    schema: external_enghouse
+    tables:
+      - name: taps
+      - name: ticket_results
+      - name: transactions
+      - name: pay_windows
+
+models:
+  - name: stg_enghouse__taps
+    description: Add description
+    columns:
+      - name: Tap_ID
+      - name: Mapping_Terminal_ID
+      - name: Mapping_Merchant_ID
+      - name: terminal
+      - name: Token
+      - name: Masked_Pan
+      - name: Expiry
+      - name: Server_date
+      - name: Terminal_date
+      - name: Tx_number
+      - name: Tx_status
+      - name: Payment_Reference
+      - name: Operator_Id
+      - name: Terminal_SPDH_code
+      - name: Denylist_version
+      - name: Transit_data
+      - name: Currency
+      - name: Par
+      - name: Fare_Mode
+      - name: Fare_Type
+      - name: Fare_Value
+      - name: Fare_Description
+      - name: Fare_Linked_Id
+      - name: ID
+      - name: Gps_Latitude
+      - name: Gps_Altitude
+      - name: Vehicle_Public_Number
+      - name: Vehicle_Name
+      - name: Stop_Id
+      - name: Stop_Name
+      - name: Platform_Id
+      - name: Platform_Name
+      - name: Zone_Id
+      - name: Zone_Name
+      - name: Line_Public_Number
+      - name: Line_Name
+      - name: Line_Direction
+      - name: Trip_Public_Number
+      - name: Trip_Name
+      - name: Service_Public_Number
+      - name: Service_Name
+      - name: Driver_ID
+
+  - name: stg_enghouse__ticket_results
+    description: Add description
+    columns:
+      - name: ID
+      - name: Ticket_Id
+      - name: Station_Name
+      - name: Amount
+      - name: Clearing_Id
+      - name: Operator_Id
+      - name: Reason
+      - name: Tap_Id
+      - name: Ticket_Type
+      - name: Created_Dttm
+      - name: Line
+      - name: Start_Station
+      - name: End_Station
+      - name: Start_Dttm
+      - name: End_Dttm
+      - name: Ticket_Code
+      - name: Additional_Infos
+
+  - name: stg_enghouse__transactions
+    description: Add description
+    columns:
+      - name: ID
+      - name: Operation
+      - name: Terminal_ID
+      - name: Mapping_Terminal_ID
+      - name: Mapping_Merchant_ID
+      - name: Timestamp
+      - name: Amount
+      - name: Payment_Reference
+      - name: Spdh_Response
+      - name: Response_Type
+      - name: Response_Message
+      - name: token
+      - name: Issuer_Response
+      - name: Core_Response
+      - name: Rrn
+      - name: Authorization_Code
+      - name: Par
+      - name: Brand
+      - name: OperatorId
+
+  - name: stg_enghouse__pay_windows
+    description: Add description
+    columns:
+      - name: ID
+      - name: Token
+      - name: Amount_Settled
+      - name: Amount_To_Settle
+      - name: Debt_Settled
+      - name: Stage
+      - name: Payment_reference
+      - name: Terminal_Id
+      - name: Open_Date
+      - name: Close_Date
+      - name: Operator_Id
