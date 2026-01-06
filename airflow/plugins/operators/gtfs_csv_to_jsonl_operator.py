@@ -1,5 +1,6 @@
 import csv
 import json
+import logging
 import os
 from io import StringIO
 from typing import Sequence
@@ -43,6 +44,7 @@ class GTFSCSVResults:
         self.lines.append({"_line_number": len(self.lines) + 1, **row})
 
     def jsonl(self) -> list[str]:
+        logging.info(f"Converting {len(self.lines)} lines to jsonl")
         return "\n".join(
             [json.dumps(line, separators=(",", ":")) for line in self.lines]
         )
@@ -114,6 +116,7 @@ class GTFSCSVConverter:
                 results.append(row)
         except Exception as exception:
             results.exception = exception
+            logging.warning(f"Error adding lines on file {self.filename}: {exception}")
         return results
 
 
@@ -167,7 +170,7 @@ class GTFSCSVToJSONLOperator(BaseOperator):
         extract_config = self.unzip_results.get("extract").get("config")
         for extracted_file in self.unzip_results["extracted_files"]:
             extracted_filename = extracted_file["filename"]
-            print(f"Converting file: {extracted_filename}")
+            logging.info(f"Adding extracted file {extracted_filename} to converters")
             source = self.gcs_hook().download(
                 bucket_name=self.source_name(),
                 object_name=os.path.join(
@@ -189,10 +192,12 @@ class GTFSCSVToJSONLOperator(BaseOperator):
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
         output = []
+        logging.info("Starting converter")
         for converter in self.converters():
+            logging.info(f"Converting file {converter.filename}")
             results = converter.convert(current_date=dag_run.logical_date)
-            print(f"Generating results for file: {results.filetype()}")
             if results.valid():
+                logging.info(f"Uploading jsonl for {results.filetype()}")
                 self.gcs_hook().upload(
                     bucket_name=self.destination_name(),
                     object_name=os.path.join(
@@ -208,6 +213,7 @@ class GTFSCSVToJSONLOperator(BaseOperator):
                     },
                 )
 
+            logging.info(f"Uploading parsing results for {results.filetype()}")
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=os.path.join(
@@ -240,5 +246,5 @@ class GTFSCSVToJSONLOperator(BaseOperator):
                 }
             )
 
-        print("End of conversion.")
+        logging.info("Conversion finished")
         return output
