@@ -72,6 +72,19 @@ class TestDownloadConfigHook:
         }
 
     @pytest.fixture
+    def connection_aborted_config(self) -> dict:
+        return {
+            "extracted_at": "2026-01-06T02:00:00+00:00",
+            "name": "North County Schedule",
+            "url": "https://lfportal.nctd.org/staticGTFS/google_transit.zip",
+            "feed_type": "schedule",
+            "schedule_url_for_validation": None,
+            "auth_query_params": {},
+            "auth_headers": {},
+            "computed": False,
+        }
+
+    @pytest.fixture
     def unauthenticated_hook(
         self, unauthenticated_download_config: dict
     ) -> DownloadConfigHook:
@@ -107,6 +120,14 @@ class TestDownloadConfigHook:
     ) -> DownloadConfigHook:
         return DownloadConfigHook(
             download_config=certificate_error_download_config, method="GET"
+        )
+
+    @pytest.fixture
+    def connection_aborted_hook(
+        self, connection_aborted_config: dict
+    ) -> DownloadConfigHook:
+        return DownloadConfigHook(
+            download_config=connection_aborted_config, method="GET"
         )
 
     @pytest.mark.vcr()
@@ -150,3 +171,8 @@ class TestDownloadConfigHook:
         with pytest.raises(SSLError) as exception:
             certificate_error_hook.run()
         assert "certificate has expired" in str(exception.value)
+
+    def test_run_connection_aborted(self, connection_aborted_hook: DownloadConfigHook):
+        result = connection_aborted_hook.run()
+        assert result.headers["Content-Type"] == "application/x-zip-compressed"
+        assert len(result.content) > 0

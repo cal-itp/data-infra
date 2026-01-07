@@ -25,7 +25,7 @@ class Download:
     def response(self):
         if not self._response and not self.exception:
             try:
-                self._response = self.hook.run()
+                self._response = self.hook.run(timeout=60)
             except Exception as e:
                 logging.error(e)
                 self.exception = e

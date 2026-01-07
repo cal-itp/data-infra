@@ -51,7 +51,7 @@ class DownloadConfigHook(BaseHook):
     def url(self) -> str:
         return self.download_config["url"]
 
-    def run(self) -> int:
+    def run(self, **options) -> int:
         session = Session()
 
         if self.method == "GET":
@@ -71,7 +71,7 @@ class DownloadConfigHook(BaseHook):
         prepped_request = session.prepare_request(req)
         self.log.debug("Sending '%s' to url: %s", self.method, self.url())
 
-        return self.run_and_check(session, prepped_request, {})
+        return self.run_and_check(session, prepped_request, extra_options=options)
 
     def check_response(self, response: Response) -> None:
         try:

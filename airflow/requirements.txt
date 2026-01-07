@@ -7,5 +7,6 @@ gusty==0.6.0
 openpyxl==3.1.5
 platformdirs>=2.5
 pyairtable==2.2.1
+requests[security]
 sentry-sdk>=2.44.0
 typer==0.4.1
