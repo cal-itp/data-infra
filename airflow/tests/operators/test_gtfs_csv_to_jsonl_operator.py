@@ -176,7 +176,7 @@ class TestGTFSCSVToJSONLOperator:
                 "dt=2025-06-02",
                 "ts=2025-06-02T00:00:00+00:00",
                 "base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
-                "agency.jsonl.gz",
+                "agency-001.jsonl.gz",
             ),
         }
 
@@ -192,7 +192,7 @@ class TestGTFSCSVToJSONLOperator:
                 "dt=2025-06-02",
                 "ts=2025-06-02T00:00:00+00:00",
                 "base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
-                "feed_info.jsonl.gz",
+                "feed_info-001.jsonl.gz",
             ),
         }
 
@@ -202,7 +202,7 @@ class TestGTFSCSVToJSONLOperator:
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
             ).replace("gs://", ""),
             object_name=os.path.join(
-                "agency", destination_path_fragment, "agency.jsonl.gz"
+                "agency", destination_path_fragment, "agency-001.jsonl.gz"
             ),
         )
         decompressed_result = gzip.decompress(compressed_result)
@@ -225,7 +225,7 @@ class TestGTFSCSVToJSONLOperator:
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
             ).replace("gs://", ""),
             object_name=os.path.join(
-                "agency", destination_path_fragment, "agency.jsonl.gz"
+                "agency", destination_path_fragment, "agency-001.jsonl.gz"
             ),
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
@@ -322,7 +322,7 @@ class TestGTFSCSVToJSONLOperator:
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
             ).replace("gs://", ""),
             object_name=os.path.join(
-                "feed_info", destination_path_fragment, "feed_info.jsonl.gz"
+                "feed_info", destination_path_fragment, "feed_info-001.jsonl.gz"
             ),
         )
         decompressed_result = gzip.decompress(compressed_result)
@@ -344,7 +344,7 @@ class TestGTFSCSVToJSONLOperator:
                 "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
             ).replace("gs://", ""),
             object_name=os.path.join(
-                "feed_info", destination_path_fragment, "feed_info.jsonl.gz"
+                "feed_info", destination_path_fragment, "feed_info-001.jsonl.gz"
             ),
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {

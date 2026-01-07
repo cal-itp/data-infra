@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import subprocess
 import tempfile
@@ -161,6 +162,7 @@ class GTSFValidatorVersion:
                 )
             except Exception as e:
                 result.set_exception(e)
+                logging.error(str(e))
 
             return result
 

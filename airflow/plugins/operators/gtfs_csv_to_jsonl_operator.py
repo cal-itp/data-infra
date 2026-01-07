@@ -3,7 +3,8 @@ import json
 import logging
 import os
 from io import StringIO
-from typing import Sequence
+from itertools import islice
+from typing import Generator, Sequence
 
 import pendulum
 
@@ -43,11 +44,16 @@ class GTFSCSVResults:
     def append(self, row) -> None:
         self.lines.append({"_line_number": len(self.lines) + 1, **row})
 
-    def jsonl(self) -> list[str]:
-        logging.info(f"Converting {len(self.lines)} lines to jsonl")
-        return "\n".join(
-            [json.dumps(line, separators=(",", ":")) for line in self.lines]
-        )
+    def chunks(self, size: int = 100_000) -> Generator[str, None, None]:
+        iterator = iter(self.lines)
+        for line in iterator:
+
+            def chunk():
+                yield json.dumps(line, separators=(",", ":"))
+                for more in islice(iterator, size - 1):
+                    yield json.dumps(more, separators=(",", ":"))
+
+            yield chunk()
 
     def valid(self) -> bool:
         return len(self.lines) > 0
@@ -139,6 +145,7 @@ class GTFSCSVToJSONLOperator(BaseOperator):
         destination_bucket: str,
         destination_path_fragment: str,
         results_path_fragment: str,
+        chunk_size: int = 100_000,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
@@ -151,6 +158,7 @@ class GTFSCSVToJSONLOperator(BaseOperator):
         self.destination_bucket = destination_bucket
         self.results_path_fragment = results_path_fragment
         self.destination_path_fragment = destination_path_fragment
+        self.chunk_size = chunk_size
         self.gcp_conn_id = gcp_conn_id
 
     def gcs_hook(self) -> GCSHook:
@@ -170,7 +178,6 @@ class GTFSCSVToJSONLOperator(BaseOperator):
         extract_config = self.unzip_results.get("extract").get("config")
         for extracted_file in self.unzip_results["extracted_files"]:
             extracted_filename = extracted_file["filename"]
-            logging.info(f"Adding extracted file {extracted_filename} to converters")
             source = self.gcs_hook().download(
                 bucket_name=self.source_name(),
                 object_name=os.path.join(
@@ -192,28 +199,42 @@ class GTFSCSVToJSONLOperator(BaseOperator):
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
         output = []
-        logging.info("Starting converter")
         for converter in self.converters():
-            logging.info(f"Converting file {converter.filename}")
+            logging.info(f"Converting {converter.filename}")
             results = converter.convert(current_date=dag_run.logical_date)
             if results.valid():
-                logging.info(f"Uploading jsonl for {results.filetype()}")
-                self.gcs_hook().upload(
-                    bucket_name=self.destination_name(),
-                    object_name=os.path.join(
-                        results.filetype(),
-                        self.destination_path_fragment,
-                        f"{results.filetype()}.jsonl.gz",
-                    ),
-                    data=results.jsonl(),
-                    mime_type="application/jsonl",
-                    gzip=True,
-                    metadata={
-                        "PARTITIONED_ARTIFACT_METADATA": json.dumps(results.metadata())
-                    },
-                )
+                for index, chunk in enumerate(results.chunks(size=self.chunk_size)):
+                    self.gcs_hook().upload(
+                        bucket_name=self.destination_name(),
+                        object_name=os.path.join(
+                            results.filetype(),
+                            self.destination_path_fragment,
+                            f"{results.filetype()}-{str(index + 1).zfill(3)}.jsonl.gz",
+                        ),
+                        data="\n".join(chunk),
+                        mime_type="application/jsonl",
+                        gzip=True,
+                        metadata={
+                            "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                                results.metadata()
+                            )
+                        },
+                    )
 
-            logging.info(f"Uploading parsing results for {results.filetype()}")
+                    output.append(
+                        {
+                            "destination_path": os.path.join(
+                                results.filetype(),
+                                self.destination_path_fragment,
+                                f"{results.filetype()}-{str(index + 1).zfill(3)}.jsonl.gz",
+                            ),
+                            "results_path": os.path.join(
+                                f"{results.filename}_parsing_results",
+                                self.results_path_fragment,
+                            ),
+                        }
+                    )
+
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=os.path.join(
@@ -232,19 +253,4 @@ class GTFSCSVToJSONLOperator(BaseOperator):
                 },
             )
 
-            output.append(
-                {
-                    "destination_path": os.path.join(
-                        results.filetype(),
-                        self.destination_path_fragment,
-                        f"{results.filetype()}.jsonl.gz",
-                    ),
-                    "results_path": os.path.join(
-                        f"{results.filename}_parsing_results",
-                        self.results_path_fragment,
-                    ),
-                }
-            )
-
-        logging.info("Conversion finished")
         return output
