@@ -9,14 +9,14 @@ WITH fct_daily_schedule_feeds AS (
     SELECT
         *,
         EXTRACT(DAYOFWEEK FROM date) AS day_num
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_schedule_feeds` AS t1
-    WHERE t1.date >= "2022-01-01"--{{ ref('fct_daily_schedule_feeds') }}
+    FROM {{ ref('fct_daily_schedule_feeds') }}
+
 ),
 
 fct_scheduled_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`--{{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= "2022-01-01"
+    FROM {{ ref('fct_scheduled_trips') }}
+    WHERE service_date < CURRENT_DATE()
 ),
 
 fct_scheduled_stops AS (
@@ -24,8 +24,8 @@ fct_scheduled_stops AS (
         service_date,
         feed_key,
         stop_id,
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_scheduled_stops`--{{ ref('fct_daily_scheduled_stops') }}
-    WHERE service_date >= "2022-01-01"
+    FROM {{ ref('fct_daily_scheduled_stops') }}
+    WHERE service_date < CURRENT_DATE()
 ),
 
 trip_summary AS (
@@ -50,7 +50,6 @@ trip_summary AS (
             contains_warning_missing_foreign_key_stop_id
         ) AS contains_warning_missing_foreign_key_stop_id
     FROM fct_scheduled_trips
-    WHERE service_date < CURRENT_DATE()
     GROUP BY service_date, feed_key, gtfs_dataset_key
 ),
 
@@ -63,17 +62,6 @@ stop_summary AS (
     GROUP BY service_date, feed_key
 ),
 
--- service that is actually scheduled
-summarize_service AS (
-    SELECT
-        trip_summary.*,
-        stop_summary.* EXCEPT(service_date, feed_key)
-    FROM trip_summary
-    INNER JOIN stop_summary
-        ON trip_summary.service_date = stop_summary.service_date
-        AND trip_summary.feed_key = stop_summary.feed_key
-),
-
 -- left join with feeds to include information about feeds with no service scheduled
 fct_daily_feed_scheduled_service_summary AS (
 
@@ -82,21 +70,24 @@ fct_daily_feed_scheduled_service_summary AS (
         feeds.feed_key,
         feeds.gtfs_dataset_key,
         feeds.gtfs_dataset_name,
-        COALESCE(service.ttl_service_hours, 0) AS ttl_service_hours,
-        COALESCE(service.n_trips, 0) AS n_trips,
-        service.first_departure_sec,
-        service.last_arrival_sec,
-        COALESCE(service.num_stop_times, 0) AS num_stop_times,
-        COALESCE(service.n_routes, 0) AS n_routes,
-        COALESCE(service.n_shapes, 0) AS n_shapes,
-        COALESCE(service.n_stops, 0) AS n_stops,
-        service.contains_warning_duplicate_stop_times_primary_key,
-        service.contains_warning_duplicate_trip_primary_key,
-        service.contains_warning_missing_foreign_key_stop_id
+        COALESCE(trips.ttl_service_hours, 0) AS ttl_service_hours,
+        COALESCE(trips.n_trips, 0) AS n_trips,
+        trips.first_departure_sec,
+        trips.last_arrival_sec,
+        COALESCE(trips.num_stop_times, 0) AS num_stop_times,
+        COALESCE(trips.n_routes, 0) AS n_routes,
+        COALESCE(trips.n_shapes, 0) AS n_shapes,
+        COALESCE(stops.n_stops, 0) AS n_stops,
+        trips.contains_warning_duplicate_stop_times_primary_key,
+        trips.contains_warning_duplicate_trip_primary_key,
+        trips.contains_warning_missing_foreign_key_stop_id
     FROM fct_daily_schedule_feeds AS feeds
-    LEFT JOIN summarize_service AS service
-        ON feeds.feed_key = service.feed_key
-        AND feeds.date = service.service_date
+    LEFT JOIN trip_summary AS trips
+        ON feeds.feed_key = trips.feed_key
+        AND feeds.date = trips.service_date
+    LEFT JOIN stop_summary AS stops
+        ON feeds.feed_key = stops.feed_key
+        AND feeds.date = stops.service_date
 )
 
 SELECT * FROM fct_daily_feed_scheduled_service_summary
