@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from base64 import urlsafe_b64encode
 from email.message import Message
 from typing import Sequence
@@ -61,6 +62,10 @@ class Download:
         msg = Message()
         msg["content-disposition"] = content_disposition
         filename = msg.get_filename()
+
+        if not filename and self.hook.url().endswith(".zip"):
+            filename = os.path.basename(self.hook.url())
+
         return filename if filename else "gtfs.zip"
 
     def extract(self, current_time: pendulum.DateTime) -> dict:

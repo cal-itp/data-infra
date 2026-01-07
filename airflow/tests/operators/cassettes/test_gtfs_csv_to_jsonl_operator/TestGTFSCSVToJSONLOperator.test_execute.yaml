@@ -9,11 +9,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/3f2e5b57-21c0-427a-acd9-0dfdc1826dc0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/fcca051b-a94d-4f69-9a29-87a3b026a725
       accept-encoding:
       - gzip
       content-type:
@@ -40,13 +38,13 @@ interactions:
       Content-Type:
       - text/csv
       Date:
-      - Mon, 05 Jan 2026 16:17:31 GMT
+      - Tue, 06 Jan 2026 23:30:02 GMT
       ETag:
-      - CM3itJ7zx5EDEAE=
+      - CKjvgcSP9ZEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Thu, 18 Dec 2025 19:45:26 GMT
+      - Mon, 05 Jan 2026 19:21:49 GMT
       Pragma:
       - no-cache
       Server:
@@ -55,9 +53,9 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxPOdPkYMlDV97R0vKzsKrR0sQI_vdlCS0lvBJE6wzMBLuwOr4NjK-jsXbEMpfvU5LgCQEHEwPc
+      - AHVrFxNIWhwo6u9LXnkWQUbXCDuRp5Xu5ARLtuIFVyu-QKV6e75cu8h1oNkSTNqLx4bkkY-xlyroHfRNiUH8
       X-Goog-Generation:
-      - '1766087126233421'
+      - '1767640909510568'
       X-Goog-Hash:
       - crc32c=e6O0zg==,md5=aqpn1jk7QQDHHuToKpUZKA==
       X-Goog-Metageneration:
@@ -72,31 +70,100 @@ interactions:
       code: 200
       message: OK
 - request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/101127c6-e2c8-4735-9cde-6d9bc11e0e3b
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/feed_info.txt%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Ffeed_info.txt?alt=media
+  response:
+    body:
+      string: "feed_publisher_name,feed_publisher_url,feed_contact_email,feed_contact_url,feed_lang,feed_start_date,feed_end_date,feed_version\r\nTransnnovation,http://www.mjcaction.com/,marcy@mjcaction.com,https://www.mecatran.com/,en,20250401,20260831,2025-04-26T14:04:39Z\r\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '259'
+      Content-Type:
+      - application/octet-stream
+      Date:
+      - Tue, 06 Jan 2026 23:30:03 GMT
+      ETag:
+      - CKa9yv2K9ZEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Mon, 05 Jan 2026 19:01:28 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AHVrFxON9p-ZUl-v5-O0UOUVLEPy8TjjUzo5iC0v4TG1CkHrY_lwrBAHapqsd_0x0rXVQzBuJbZl7byYQkG3
+      X-Goog-Generation:
+      - '1767639688060582'
+      X-Goog-Hash:
+      - crc32c=b8uIHQ==,md5=A+rIh+7GgjaSrvlqdzLtww==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '259'
+    status:
+      code: 200
+      message: OK
+- request:
     body: !!binary |
-      LS09PT09PT09PT09PT09PT0yNjM5NTYxNjEzNDY1NTMyODEzPT0NCmNvbnRlbnQtdHlwZTogYXBw
+      LS09PT09PT09PT09PT09PT03MjQ0MDg0OTE5MjAzOTQ0MDIxPT0NCmNvbnRlbnQtdHlwZTogYXBw
       bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAiYWdlbmN5L2R0PTIwMjUt
       MDYtMDIvdHM9MjAyNS0wNi0wMlQwMDowMDowMCswMDowMC9iYXNlNjRfdXJsPWFIUjBjRG92TDJG
       d2NDNXRaV05oZEhKaGJpNWpiMjB2ZFhKaUwzZHpMMlpsWldRdll6SnNNRnBVTVhwbFdGb3dUekpP
       YzJGWFZuVmtSREY2V2xkNGJVOHlWalJqUjJ4NVdsUXdOMlJJYkhkYVZERnVaRWRhZWs4eWRHeGxW
       REF3VFdwamQwNTZVVEJhVkZrMFRsUkJlazlVVFhsTlJFbDRUVVJrYWs1NlNUQk5SRkpyVFhwWmVV
-      NVVUVFJOZWtrd1dYcEpNQT09L2FnZW5jeS5qc29ubC5neiIsICJtZXRhZGF0YSI6IHsiUEFSVElU
-      SU9ORURfQVJUSUZBQ1RfTUVUQURBVEEiOiAie1wiY3N2X2RpYWxlY3RcIjogXCJleGNlbFwiLCBc
-      ImV4dHJhY3RfY29uZmlnXCI6IHtcImV4dHJhY3RlZF9hdFwiOiBcIjIwMjUtMDYtMDFUMDA6MDA6
-      MDArMDA6MDBcIiwgXCJuYW1lXCI6IFwiU2FudGEgWW5leiBNZWNhdHJhbiBTY2hlZHVsZVwiLCBc
-      InVybFwiOiBcImh0dHA6Ly9hcHAubWVjYXRyYW4uY29tL3VyYi93cy9mZWVkL2MybDBaVDF6ZVha
-      ME8yTnNhV1Z1ZEQxelpXeG1PMlY0Y0dseVpUMDdkSGx3WlQxbmRHWnpPMnRsZVQwME1qY3dOelEw
-      WlRZNE5UQXpPVE15TURJeE1EZGpOekkwTURSa016WXlOVE00TXpJMFl6STBcIiwgXCJmZWVkX3R5
-      cGVcIjogXCJzY2hlZHVsZVwiLCBcInNjaGVkdWxlX3VybF9mb3JfdmFsaWRhdGlvblwiOiBudWxs
-      LCBcImF1dGhfcXVlcnlfcGFyYW1zXCI6IHt9LCBcImF1dGhfaGVhZGVyc1wiOiB7fSwgXCJjb21w
-      dXRlZFwiOiBmYWxzZX0sIFwiZmlsZW5hbWVcIjogXCJhZ2VuY3kuanNvbmwuZ3pcIiwgXCJndGZz
-      X2ZpbGVuYW1lXCI6IFwiYWdlbmN5XCIsIFwibnVtX2xpbmVzXCI6IDEsIFwidHNcIjogXCIyMDI1
-      LTA2LTAyVDAwOjAwOjAwKzAwOjAwXCJ9In0sICJjcmMzMmMiOiAiYXB3SWVBPT0ifQ0KLS09PT09
-      PT09PT09PT09PT0yNjM5NTYxNjEzNDY1NTMyODEzPT0NCmNvbnRlbnQtdHlwZTogYXBwbGljYXRp
-      b24vanNvbmwNCg0KH4sIABzkW2kC/32QywrCMBBFf6VkbYzpQ2p3bly5UwRXZaxjG0imkqSWVvx3
-      WwUrCG7vPZw7zJ3lWhHm1JgTWpbJGYMSqehydWYZkzKU8SKS7BMTGByKHZCH4EjYBwfQGrtgb4Gc
-      8hPZWD2AlfdXlwnRtu3cdTc/L2oj4nQlXgY+GvjbwH8MXhnsaxr31gatKkBsa5evqUSNbuKu1RtK
-      FwlfpilP4iScWg1UDiXSFF3A4r/7omUiNgPztYEG1Mh/rVplwHbjl9jjCUjzBE1IAQAADQotLT09
-      PT09PT09PT09PT09PTI2Mzk1NjE2MTM0NjU1MzI4MTM9PS0t
+      NVVUVFJOZWtrd1dYcEpNQT09L2FnZW5jeS0wMDEuanNvbmwuZ3oiLCAibWV0YWRhdGEiOiB7IlBB
+      UlRJVElPTkVEX0FSVElGQUNUX01FVEFEQVRBIjogIntcImNzdl9kaWFsZWN0XCI6IFwiZXhjZWxc
+      IiwgXCJleHRyYWN0X2NvbmZpZ1wiOiB7XCJleHRyYWN0ZWRfYXRcIjogXCIyMDI1LTA2LTAxVDAw
+      OjAwOjAwKzAwOjAwXCIsIFwibmFtZVwiOiBcIlNhbnRhIFluZXogTWVjYXRyYW4gU2NoZWR1bGVc
+      IiwgXCJ1cmxcIjogXCJodHRwOi8vYXBwLm1lY2F0cmFuLmNvbS91cmIvd3MvZmVlZC9jMmwwWlQx
+      emVYWjBPMk5zYVdWdWREMXpaV3htTzJWNGNHbHlaVDA3ZEhsd1pUMW5kR1p6TzJ0bGVUMDBNamN3
+      TnpRMFpUWTROVEF6T1RNeU1ESXhNRGRqTnpJME1EUmtNell5TlRNNE16STBZekkwXCIsIFwiZmVl
+      ZF90eXBlXCI6IFwic2NoZWR1bGVcIiwgXCJzY2hlZHVsZV91cmxfZm9yX3ZhbGlkYXRpb25cIjog
+      bnVsbCwgXCJhdXRoX3F1ZXJ5X3BhcmFtc1wiOiB7fSwgXCJhdXRoX2hlYWRlcnNcIjoge30sIFwi
+      Y29tcHV0ZWRcIjogZmFsc2V9LCBcImZpbGVuYW1lXCI6IFwiYWdlbmN5Lmpzb25sLmd6XCIsIFwi
+      Z3Rmc19maWxlbmFtZVwiOiBcImFnZW5jeVwiLCBcIm51bV9saW5lc1wiOiAxLCBcInRzXCI6IFwi
+      MjAyNS0wNi0wMlQwMDowMDowMCswMDowMFwifSJ9LCAiY3JjMzJjIjogIlVrbnBLZz09In0NCi0t
+      PT09PT09PT09PT09PT09NzI0NDA4NDkxOTIwMzk0NDAyMT09DQpjb250ZW50LXR5cGU6IGFwcGxp
+      Y2F0aW9uL2pzb25sDQoNCh+LCAD8ml1pAv99kMsKwjAQRX+lZG2M6UNqd25cuVMEV2WsYxtIppKk
+      llb8d1sFKwhu7z2cO8yd5VoR5tSYE1qWyRmDEqnocnVmGZMylPEikuwTExgcih2Qh+BI2AcH0Bq7
+      YG+BnPIT2Vg9gJX3V5cJ0bbt3HU3Py9qI+J0JV4GPhr428B/DF4Z7Gsa99YGrSpAbGuXr6lEjW7i
+      rtUbShcJX6YpT+IknFoNVA4l0hRdwOK/+6JlIjYD87WBBtTIf61aZcB245fY4wlI8wRNSAEAAA0K
+      LS09PT09PT09PT09PT09PT03MjQ0MDg0OTE5MjAzOTQ0MDIxPT0tLQ==
     headers:
       Accept:
       - application/json
@@ -107,17 +174,15 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '1347'
+      - '1351'
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/ebb31977-ac7a-4e9a-ad0f-0f25f7a02a44
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/25791d0f-9776-485f-b89d-44d885d807ae
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yNjM5NTYxNjEzNDY1
-        NTMyODEzPT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03MjQ0MDg0OTE5MjAz
+        OTQ0MDIxPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -126,17 +191,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.jsonl.gz/1767629852512297\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.jsonl.gz\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.jsonl.gz?generation=1767629852512297&alt=media\",\n
-        \ \"name\": \"agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.jsonl.gz\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767629852512297\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency-001.jsonl.gz/1767742204884495\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency-001.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency-001.jsonl.gz?generation=1767742204884495&alt=media\",\n
+        \ \"name\": \"agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency-001.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767742204884495\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"210\",\n  \"md5Hash\": \"I0ZUaoDKsUfbvtzOlE1t+Q==\",\n
-        \ \"crc32c\": \"apwIeA==\",\n  \"etag\": \"CKmg0Kvm9JEDEAE=\",\n  \"timeCreated\":
-        \"2026-01-05T16:17:32.523Z\",\n  \"updated\": \"2026-01-05T16:17:32.523Z\",\n
-        \ \"timeStorageClassUpdated\": \"2026-01-05T16:17:32.523Z\",\n  \"timeFinalized\":
-        \"2026-01-05T16:17:32.523Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"210\",\n  \"md5Hash\": \"fcj7xNyHoFGW63uzeNAwHw==\",\n
+        \ \"crc32c\": \"UknpKg==\",\n  \"etag\": \"CI/stPGI+JEDEAE=\",\n  \"timeCreated\":
+        \"2026-01-06T23:30:04.903Z\",\n  \"updated\": \"2026-01-06T23:30:04.903Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-01-06T23:30:04.903Z\",\n  \"timeFinalized\":
+        \"2026-01-06T23:30:04.903Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
         \"{\\\"csv_dialect\\\": \\\"excel\\\", \\\"extract_config\\\": {\\\"extracted_at\\\":
         \\\"2025-06-01T00:00:00+00:00\\\", \\\"name\\\": \\\"Santa Ynez Mecatran Schedule\\\",
         \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
@@ -151,13 +216,13 @@ interactions:
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Content-Length:
-      - '2536'
+      - '2552'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:17:32 GMT
+      - Tue, 06 Jan 2026 23:30:04 GMT
       ETag:
-      - CKmg0Kvm9JEDEAE=
+      - CI/stPGI+JEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -168,18 +233,18 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxNo2eabU7udb6SbEf9bX50ZZPFNawU11PmmFEjXLe2GejUTk5nQ1yEuwQ_1oCErddeW7OB-Two
+      - AHVrFxOSJhjV8Pm3B-qRef_ZWzJfW3n6O3ZOx94cQ6PH9Bepd8MFQZzygdcwepJqPaMXMdff
     status:
       code: 200
       message: OK
 - request:
-    body: "--===============1503154504120304604==\r\ncontent-type: application/json;
+    body: "--===============0388904496643019960==\r\ncontent-type: application/json;
       charset=UTF-8\r\n\r\n{\"name\": \"agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",
       \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
-      \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"}, \"crc32c\": \"1Xjncw==\"}\r\n--===============1503154504120304604==\r\ncontent-type:
+      \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"}, \"crc32c\": \"1Xjncw==\"}\r\n--===============0388904496643019960==\r\ncontent-type:
       application/jsonl\r\n\r\n{\"exception\":null,\"feed_file\":{\"filename\":\"agency.txt\",\"ts\":\"2025-06-03T00:00:00+00:00\",\"extract_config\":{\"extracted_at\":\"2025-06-01T00:00:00+00:00\",\"name\":\"Santa
       Ynez Mecatran Schedule\",\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"original_filename\":\"agency.txt\"},\"fields\":[\"agency_id\",\"agency_name\",\"agency_url\",\"agency_timezone\",\"agency_phone\",\"agency_lang\",\"agency_fare_url\",\"agency_email\",\"agency_primary\"],\"parsed_file\":{\"csv_dialect\":\"excel\",\"extract_config\":{\"extracted_at\":\"2025-06-01T00:00:00+00:00\",\"name\":\"Santa
-      Ynez Mecatran Schedule\",\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"filename\":\"agency.jsonl.gz\",\"gtfs_filename\":\"agency\",\"num_lines\":1,\"ts\":\"2025-06-02T00:00:00+00:00\"},\"success\":true}\r\n--===============1503154504120304604==--"
+      Ynez Mecatran Schedule\",\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"filename\":\"agency.jsonl.gz\",\"gtfs_filename\":\"agency\",\"num_lines\":1,\"ts\":\"2025-06-02T00:00:00+00:00\"},\"success\":true}\r\n--===============0388904496643019960==--"
     headers:
       Accept:
       - application/json
@@ -192,15 +257,13 @@ interactions:
       Content-Length:
       - '1810'
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/04312285-d29c-4254-98a8-c5e44abc04e8
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/2aa21f6c-8586-4cec-82d9-1afddb1eecd1
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0xNTAzMTU0NTA0MTIw
-        MzA0NjA0PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0wMzg4OTA0NDk2NjQz
+        MDE5OTYwPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -209,17 +272,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767629853357736\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767742206091977\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767629853357736&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767742206091977&alt=media\",\n
         \ \"name\": \"agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767629853357736\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767742206091977\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
         \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1169\",\n  \"md5Hash\": \"ytvmM6rNPY1Lk8UWn68qsQ==\",\n
-        \ \"crc32c\": \"1Xjncw==\",\n  \"etag\": \"CKjtg6zm9JEDEAE=\",\n  \"timeCreated\":
-        \"2026-01-05T16:17:33.366Z\",\n  \"updated\": \"2026-01-05T16:17:33.366Z\",\n
-        \ \"timeStorageClassUpdated\": \"2026-01-05T16:17:33.366Z\",\n  \"timeFinalized\":
-        \"2026-01-05T16:17:33.366Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \ \"crc32c\": \"1Xjncw==\",\n  \"etag\": \"CMnF/vGI+JEDEAE=\",\n  \"timeCreated\":
+        \"2026-01-06T23:30:06.105Z\",\n  \"updated\": \"2026-01-06T23:30:06.105Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-01-06T23:30:06.105Z\",\n  \"timeFinalized\":
+        \"2026-01-06T23:30:06.105Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
         \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"\n
         \ }\n}\n"
     headers:
@@ -232,9 +295,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:17:33 GMT
+      - Tue, 06 Jan 2026 23:30:06 GMT
       ETag:
-      - CKjtg6zm9JEDEAE=
+      - CMnF/vGI+JEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -245,7 +308,181 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxNLSDe-Rp29WSuWBlFWuD9M0VlZ2pXa0I43iTbPLmiruWzMKvI7UXaIedzTWVEWXJvD0n7T2qo
+      - AHVrFxNS1URV4BGUdtdfxe0yb96esDBqr_5n0lA8U9NMhk-lYAJlzvYZJqxA_Xl4iQQTrtvmDLnucGY2f2wu
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!binary |
+      LS09PT09PT09PT09PT09PT0yNDYzNjkyOTk4NTY0NjYyMDM2PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAiZmVlZF9pbmZvL2R0PTIw
+      MjUtMDYtMDIvdHM9MjAyNS0wNi0wMlQwMDowMDowMCswMDowMC9iYXNlNjRfdXJsPWFIUjBjRG92
+      TDJGd2NDNXRaV05oZEhKaGJpNWpiMjB2ZFhKaUwzZHpMMlpsWldRdll6SnNNRnBVTVhwbFdGb3dU
+      ekpPYzJGWFZuVmtSREY2V2xkNGJVOHlWalJqUjJ4NVdsUXdOMlJJYkhkYVZERnVaRWRhZWs4eWRH
+      eGxWREF3VFdwamQwNTZVVEJhVkZrMFRsUkJlazlVVFhsTlJFbDRUVVJrYWs1NlNUQk5SRkpyVFhw
+      WmVVNVVUVFJOZWtrd1dYcEpNQT09L2ZlZWRfaW5mby0wMDEuanNvbmwuZ3oiLCAibWV0YWRhdGEi
+      OiB7IlBBUlRJVElPTkVEX0FSVElGQUNUX01FVEFEQVRBIjogIntcImNzdl9kaWFsZWN0XCI6IFwi
+      ZXhjZWxcIiwgXCJleHRyYWN0X2NvbmZpZ1wiOiB7XCJleHRyYWN0ZWRfYXRcIjogXCIyMDI1LTA2
+      LTAxVDAwOjAwOjAwKzAwOjAwXCIsIFwibmFtZVwiOiBcIlNhbnRhIFluZXogTWVjYXRyYW4gU2No
+      ZWR1bGVcIiwgXCJ1cmxcIjogXCJodHRwOi8vYXBwLm1lY2F0cmFuLmNvbS91cmIvd3MvZmVlZC9j
+      MmwwWlQxemVYWjBPMk5zYVdWdWREMXpaV3htTzJWNGNHbHlaVDA3ZEhsd1pUMW5kR1p6TzJ0bGVU
+      MDBNamN3TnpRMFpUWTROVEF6T1RNeU1ESXhNRGRqTnpJME1EUmtNell5TlRNNE16STBZekkwXCIs
+      IFwiZmVlZF90eXBlXCI6IFwic2NoZWR1bGVcIiwgXCJzY2hlZHVsZV91cmxfZm9yX3ZhbGlkYXRp
+      b25cIjogbnVsbCwgXCJhdXRoX3F1ZXJ5X3BhcmFtc1wiOiB7fSwgXCJhdXRoX2hlYWRlcnNcIjog
+      e30sIFwiY29tcHV0ZWRcIjogZmFsc2V9LCBcImZpbGVuYW1lXCI6IFwiZmVlZF9pbmZvLmpzb25s
+      Lmd6XCIsIFwiZ3Rmc19maWxlbmFtZVwiOiBcImZlZWRfaW5mb1wiLCBcIm51bV9saW5lc1wiOiAx
+      LCBcInRzXCI6IFwiMjAyNS0wNi0wMlQwMDowMDowMCswMDowMFwifSJ9LCAiY3JjMzJjIjogImpH
+      TzRVdz09In0NCi0tPT09PT09PT09PT09PT09MjQ2MzY5Mjk5ODU2NDY2MjAzNj09DQpjb250ZW50
+      LXR5cGU6IGFwcGxpY2F0aW9uL2pzb25sDQoNCh+LCAD+ml1pAv9lj8sOgjAQRf+la4HykGhXfgQr
+      N81QRsHQKWkLxBj/XYgBRbdzz7m582CybQgl9bpEy0S8YxfESnZ92TauRisJNDLBCgvkiMwAvjHE
+      /rDethNVe9+JKBrHMdQ3BWpmQ2V0tAjKkJ/OEjU0s6DBqvtpw/6in2a3VKMCP+3ZNLdA14nDdZvz
+      YL2swM/zE57secbjJUSqvqKcH9I1GtC6+cW3FPAsSPIizgTPRHo8s+cLlsLDSTMBAAANCi0tPT09
+      PT09PT09PT09PT09MjQ2MzY5Mjk5ODU2NDY2MjAzNj09LS0=
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1346'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/509bfc8c-3d2f-423b-afbe-6ceea3f461aa
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yNDYzNjkyOTk4NTY0
+        NjYyMDM2PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/feed_info/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/feed_info-001.jsonl.gz/1767742207667052\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/feed_info%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Ffeed_info-001.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/feed_info%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Ffeed_info-001.jsonl.gz?generation=1767742207667052&alt=media\",\n
+        \ \"name\": \"feed_info/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/feed_info-001.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767742207667052\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"193\",\n  \"md5Hash\": \"RJ829Wikcc+69v74iW/JyQ==\",\n
+        \ \"crc32c\": \"jGO4Uw==\",\n  \"etag\": \"COzW3vKI+JEDEAE=\",\n  \"timeCreated\":
+        \"2026-01-06T23:30:07.670Z\",\n  \"updated\": \"2026-01-06T23:30:07.670Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-01-06T23:30:07.670Z\",\n  \"timeFinalized\":
+        \"2026-01-06T23:30:07.670Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"csv_dialect\\\": \\\"excel\\\", \\\"extract_config\\\": {\\\"extracted_at\\\":
+        \\\"2025-06-01T00:00:00+00:00\\\", \\\"name\\\": \\\"Santa Ynez Mecatran Schedule\\\",
+        \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
+        \\\"feed_type\\\": \\\"schedule\\\", \\\"schedule_url_for_validation\\\":
+        null, \\\"auth_query_params\\\": {}, \\\"auth_headers\\\": {}, \\\"computed\\\":
+        false}, \\\"filename\\\": \\\"feed_info.jsonl.gz\\\", \\\"gtfs_filename\\\":
+        \\\"feed_info\\\", \\\"num_lines\\\": 1, \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '2582'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 06 Jan 2026 23:30:07 GMT
+      ETag:
+      - COzW3vKI+JEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AHVrFxM-xzV6llO1zyVUerCa3a7fx2Suew9MUb1e-vtdUiAOFx0H6GfiH2GeJh6goEK9ls0olyZFXKCg4p-a
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============8987834334170781149==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"feed_info.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",
+      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
+      \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"}, \"crc32c\": \"RUFkRw==\"}\r\n--===============8987834334170781149==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"exception\":null,\"feed_file\":{\"filename\":\"feed_info.txt\",\"ts\":\"2025-06-03T00:00:00+00:00\",\"extract_config\":{\"extracted_at\":\"2025-06-01T00:00:00+00:00\",\"name\":\"Santa
+      Ynez Mecatran Schedule\",\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"original_filename\":\"feed_info.txt\"},\"fields\":[\"feed_publisher_name\",\"feed_publisher_url\",\"feed_contact_email\",\"feed_contact_url\",\"feed_lang\",\"feed_start_date\",\"feed_end_date\",\"feed_version\"],\"parsed_file\":{\"csv_dialect\":\"excel\",\"extract_config\":{\"extracted_at\":\"2025-06-01T00:00:00+00:00\",\"name\":\"Santa
+      Ynez Mecatran Schedule\",\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"filename\":\"feed_info.jsonl.gz\",\"gtfs_filename\":\"feed_info\",\"num_lines\":1,\"ts\":\"2025-06-02T00:00:00+00:00\"},\"success\":true}\r\n--===============8987834334170781149==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1833'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/1b365236-d912-4287-bafa-20d4352edda4
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT04OTg3ODM0MzM0MTcw
+        NzgxMTQ5PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/feed_info.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767742208769444\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/feed_info.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/feed_info.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767742208769444&alt=media\",\n
+        \ \"name\": \"feed_info.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767742208769444\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1189\",\n  \"md5Hash\": \"lzFh+8pR+oINKM8HSJX8AQ==\",\n
+        \ \"crc32c\": \"RUFkRw==\",\n  \"etag\": \"CKT7ofOI+JEDEAE=\",\n  \"timeCreated\":
+        \"2026-01-06T23:30:08.779Z\",\n  \"updated\": \"2026-01-06T23:30:08.779Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-01-06T23:30:08.779Z\",\n  \"timeFinalized\":
+        \"2026-01-06T23:30:08.779Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '2046'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 06 Jan 2026 23:30:08 GMT
+      ETag:
+      - CKT7ofOI+JEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AHVrFxP7pz5smNPj2exh1R7TFbVAjtZJBpAt1ZWzAokQOuWcBVXmeaovknvImezqMgy3yxpcvyoecaadqueD
     status:
       code: 200
       message: OK
@@ -259,11 +496,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/5a38452e-eae3-4954-a6a9-bb86494be53b
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/36917330-bb8f-4703-96be-cf4dc9a58f42
       accept-encoding:
       - gzip
       content-type:
@@ -290,13 +525,13 @@ interactions:
       Content-Type:
       - text/csv
       Date:
-      - Mon, 05 Jan 2026 16:17:34 GMT
+      - Tue, 06 Jan 2026 23:30:09 GMT
       ETag:
-      - CM3itJ7zx5EDEAE=
+      - CKjvgcSP9ZEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Thu, 18 Dec 2025 19:45:26 GMT
+      - Mon, 05 Jan 2026 19:21:49 GMT
       Pragma:
       - no-cache
       Server:
@@ -305,9 +540,9 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxMYJkerxQPdMvEqsVMB8ayX8JeweTtUJmEuWQXgi7FLLek-V1C0NdNNsflqbkCIiK5w0OkEEIg
+      - AHVrFxPPDkwdowURjQBJKFkUL24cEwXUej2l_gp3s4GHA_ZRCuyaornbdXNNi8SED-dzUZGMmZ0sXlWAFemE
       X-Goog-Generation:
-      - '1766087126233421'
+      - '1767640909510568'
       X-Goog-Hash:
       - crc32c=e6O0zg==,md5=aqpn1jk7QQDHHuToKpUZKA==
       X-Goog-Metageneration:
@@ -322,31 +557,100 @@ interactions:
       code: 200
       message: OK
 - request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/eafef3f9-3930-4c0d-b121-21249d74460a
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/feed_info.txt%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Ffeed_info.txt?alt=media
+  response:
+    body:
+      string: "feed_publisher_name,feed_publisher_url,feed_contact_email,feed_contact_url,feed_lang,feed_start_date,feed_end_date,feed_version\r\nTransnnovation,http://www.mjcaction.com/,marcy@mjcaction.com,https://www.mecatran.com/,en,20250401,20260831,2025-04-26T14:04:39Z\r\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '259'
+      Content-Type:
+      - application/octet-stream
+      Date:
+      - Tue, 06 Jan 2026 23:30:11 GMT
+      ETag:
+      - CKa9yv2K9ZEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Mon, 05 Jan 2026 19:01:28 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AHVrFxO5CGF3fZJAxR_s1Ae6vlIZBE_DmgH8DmiIfZ9lpjtTUj3-cVcBgPbAlMaHFSgKMNxDITi3PlAXmyFq
+      X-Goog-Generation:
+      - '1767639688060582'
+      X-Goog-Hash:
+      - crc32c=b8uIHQ==,md5=A+rIh+7GgjaSrvlqdzLtww==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '259'
+    status:
+      code: 200
+      message: OK
+- request:
     body: !!binary |
-      LS09PT09PT09PT09PT09PT03NDIzNzYxMTk1Mzc1MDk0ODY5PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      LS09PT09PT09PT09PT09PT01MjgxNjk3OTIzMTUzMTQ4MjkzPT0NCmNvbnRlbnQtdHlwZTogYXBw
       bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAiYWdlbmN5L2R0PTIwMjUt
       MDYtMDIvdHM9MjAyNS0wNi0wMlQwMDowMDowMCswMDowMC9iYXNlNjRfdXJsPWFIUjBjRG92TDJG
       d2NDNXRaV05oZEhKaGJpNWpiMjB2ZFhKaUwzZHpMMlpsWldRdll6SnNNRnBVTVhwbFdGb3dUekpP
       YzJGWFZuVmtSREY2V2xkNGJVOHlWalJqUjJ4NVdsUXdOMlJJYkhkYVZERnVaRWRhZWs4eWRHeGxW
       REF3VFdwamQwNTZVVEJhVkZrMFRsUkJlazlVVFhsTlJFbDRUVVJrYWs1NlNUQk5SRkpyVFhwWmVV
-      NVVUVFJOZWtrd1dYcEpNQT09L2FnZW5jeS5qc29ubC5neiIsICJtZXRhZGF0YSI6IHsiUEFSVElU
-      SU9ORURfQVJUSUZBQ1RfTUVUQURBVEEiOiAie1wiY3N2X2RpYWxlY3RcIjogXCJleGNlbFwiLCBc
-      ImV4dHJhY3RfY29uZmlnXCI6IHtcImV4dHJhY3RlZF9hdFwiOiBcIjIwMjUtMDYtMDFUMDA6MDA6
-      MDArMDA6MDBcIiwgXCJuYW1lXCI6IFwiU2FudGEgWW5leiBNZWNhdHJhbiBTY2hlZHVsZVwiLCBc
-      InVybFwiOiBcImh0dHA6Ly9hcHAubWVjYXRyYW4uY29tL3VyYi93cy9mZWVkL2MybDBaVDF6ZVha
-      ME8yTnNhV1Z1ZEQxelpXeG1PMlY0Y0dseVpUMDdkSGx3WlQxbmRHWnpPMnRsZVQwME1qY3dOelEw
-      WlRZNE5UQXpPVE15TURJeE1EZGpOekkwTURSa016WXlOVE00TXpJMFl6STBcIiwgXCJmZWVkX3R5
-      cGVcIjogXCJzY2hlZHVsZVwiLCBcInNjaGVkdWxlX3VybF9mb3JfdmFsaWRhdGlvblwiOiBudWxs
-      LCBcImF1dGhfcXVlcnlfcGFyYW1zXCI6IHt9LCBcImF1dGhfaGVhZGVyc1wiOiB7fSwgXCJjb21w
-      dXRlZFwiOiBmYWxzZX0sIFwiZmlsZW5hbWVcIjogXCJhZ2VuY3kuanNvbmwuZ3pcIiwgXCJndGZz
-      X2ZpbGVuYW1lXCI6IFwiYWdlbmN5XCIsIFwibnVtX2xpbmVzXCI6IDEsIFwidHNcIjogXCIyMDI1
-      LTA2LTAzVDAwOjAwOjAwKzAwOjAwXCJ9In0sICJjcmMzMmMiOiAiMndFQnJBPT0ifQ0KLS09PT09
-      PT09PT09PT09PT03NDIzNzYxMTk1Mzc1MDk0ODY5PT0NCmNvbnRlbnQtdHlwZTogYXBwbGljYXRp
-      b24vanNvbmwNCg0KH4sIAB7kW2kC/32QywrCMBBFf6VkbYzpQ2p3bly5UwRXZaxjG0imkqSWVvx3
-      WwUrCG7vPZw7zJ3lWhHm1JgTWpbJGYMSqehydWYZkzKU8SKS7BMTGByKHZCH4EjYBwfQGrtgb4Gc
-      8hPZWD2AlfdXlwnRtu3cdTc/L2oj4nQlXgY+GvjbwH8MXhnsaxr31gatKkBsa5evqUSNbuKu1RtK
-      FwlfpilP4iScWg1UDiXSFF3A4r/7omUiNgPztYEG1Mh/rVplwHbjl9jjCUjzBE1IAQAADQotLT09
-      PT09PT09PT09PT09PTc0MjM3NjExOTUzNzUwOTQ4Njk9PS0t
+      NVVUVFJOZWtrd1dYcEpNQT09L2FnZW5jeS0wMDEuanNvbmwuZ3oiLCAibWV0YWRhdGEiOiB7IlBB
+      UlRJVElPTkVEX0FSVElGQUNUX01FVEFEQVRBIjogIntcImNzdl9kaWFsZWN0XCI6IFwiZXhjZWxc
+      IiwgXCJleHRyYWN0X2NvbmZpZ1wiOiB7XCJleHRyYWN0ZWRfYXRcIjogXCIyMDI1LTA2LTAxVDAw
+      OjAwOjAwKzAwOjAwXCIsIFwibmFtZVwiOiBcIlNhbnRhIFluZXogTWVjYXRyYW4gU2NoZWR1bGVc
+      IiwgXCJ1cmxcIjogXCJodHRwOi8vYXBwLm1lY2F0cmFuLmNvbS91cmIvd3MvZmVlZC9jMmwwWlQx
+      emVYWjBPMk5zYVdWdWREMXpaV3htTzJWNGNHbHlaVDA3ZEhsd1pUMW5kR1p6TzJ0bGVUMDBNamN3
+      TnpRMFpUWTROVEF6T1RNeU1ESXhNRGRqTnpJME1EUmtNell5TlRNNE16STBZekkwXCIsIFwiZmVl
+      ZF90eXBlXCI6IFwic2NoZWR1bGVcIiwgXCJzY2hlZHVsZV91cmxfZm9yX3ZhbGlkYXRpb25cIjog
+      bnVsbCwgXCJhdXRoX3F1ZXJ5X3BhcmFtc1wiOiB7fSwgXCJhdXRoX2hlYWRlcnNcIjoge30sIFwi
+      Y29tcHV0ZWRcIjogZmFsc2V9LCBcImZpbGVuYW1lXCI6IFwiYWdlbmN5Lmpzb25sLmd6XCIsIFwi
+      Z3Rmc19maWxlbmFtZVwiOiBcImFnZW5jeVwiLCBcIm51bV9saW5lc1wiOiAxLCBcInRzXCI6IFwi
+      MjAyNS0wNi0wM1QwMDowMDowMCswMDowMFwifSJ9LCAiY3JjMzJjIjogIjVKTEZRZz09In0NCi0t
+      PT09PT09PT09PT09PT09NTI4MTY5NzkyMzE1MzE0ODI5Mz09DQpjb250ZW50LXR5cGU6IGFwcGxp
+      Y2F0aW9uL2pzb25sDQoNCh+LCAADm11pAv99kMsKwjAQRX+lZG2M6UNqd25cuVMEV2WsYxtIppKk
+      llb8d1sFKwhu7z2cO8yd5VoR5tSYE1qWyRmDEqnocnVmGZMylPEikuwTExgcih2Qh+BI2AcH0Bq7
+      YG+BnPIT2Vg9gJX3V5cJ0bbt3HU3Py9qI+J0JV4GPhr428B/DF4Z7Gsa99YGrSpAbGuXr6lEjW7i
+      rtUbShcJX6YpT+IknFoNVA4l0hRdwOK/+6JlIjYD87WBBtTIf61aZcB245fY4wlI8wRNSAEAAA0K
+      LS09PT09PT09PT09PT09PT01MjgxNjk3OTIzMTUzMTQ4MjkzPT0tLQ==
     headers:
       Accept:
       - application/json
@@ -357,17 +661,15 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '1347'
+      - '1351'
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/e613d64d-4d97-4ad3-9c2c-7e8175370c8f
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/173be917-a701-42b8-ab11-2209939f877e
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03NDIzNzYxMTk1Mzc1
-        MDk0ODY5PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT01MjgxNjk3OTIzMTUz
+        MTQ4MjkzPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -376,17 +678,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.jsonl.gz/1767629855103018\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.jsonl.gz\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.jsonl.gz?generation=1767629855103018&alt=media\",\n
-        \ \"name\": \"agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.jsonl.gz\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767629855103018\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency-001.jsonl.gz/1767742212157520\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency-001.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency-001.jsonl.gz?generation=1767742212157520&alt=media\",\n
+        \ \"name\": \"agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency-001.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767742212157520\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"210\",\n  \"md5Hash\": \"cbXfTs07r2OvwExvktw7mg==\",\n
-        \ \"crc32c\": \"2wEBrA==\",\n  \"etag\": \"CKqw7qzm9JEDEAE=\",\n  \"timeCreated\":
-        \"2026-01-05T16:17:35.113Z\",\n  \"updated\": \"2026-01-05T16:17:35.113Z\",\n
-        \ \"timeStorageClassUpdated\": \"2026-01-05T16:17:35.113Z\",\n  \"timeFinalized\":
-        \"2026-01-05T16:17:35.113Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"210\",\n  \"md5Hash\": \"CUw/kcBRU89J1zTpDR9gLw==\",\n
+        \ \"crc32c\": \"5JLFQg==\",\n  \"etag\": \"CNDg8PSI+JEDEAE=\",\n  \"timeCreated\":
+        \"2026-01-06T23:30:12.166Z\",\n  \"updated\": \"2026-01-06T23:30:12.166Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-01-06T23:30:12.166Z\",\n  \"timeFinalized\":
+        \"2026-01-06T23:30:12.166Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
         \"{\\\"csv_dialect\\\": \\\"excel\\\", \\\"extract_config\\\": {\\\"extracted_at\\\":
         \\\"2025-06-01T00:00:00+00:00\\\", \\\"name\\\": \\\"Santa Ynez Mecatran Schedule\\\",
         \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
@@ -401,13 +703,13 @@ interactions:
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Content-Length:
-      - '2536'
+      - '2552'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:17:35 GMT
+      - Tue, 06 Jan 2026 23:30:12 GMT
       ETag:
-      - CKqw7qzm9JEDEAE=
+      - CNDg8PSI+JEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -418,18 +720,18 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxNxBk3kjchY-wVqPRsYCoBt0zhCo1PBBtCrf1mP0w1--VSwiOp1_q03ETzaKyijM9cWwTqS8zw
+      - AHVrFxNzo3Fm5FV5wrL59D03S_s1xExOv2FkcJ0qfZLdN93RFza5RgZGDN_XU7R7Qhw7ixKXxYpL_EWaJ6nV
     status:
       code: 200
       message: OK
 - request:
-    body: "--===============1183770527349915447==\r\ncontent-type: application/json;
+    body: "--===============8814094902286655853==\r\ncontent-type: application/json;
       charset=UTF-8\r\n\r\n{\"name\": \"agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",
       \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
-      \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"}, \"crc32c\": \"q4xsog==\"}\r\n--===============1183770527349915447==\r\ncontent-type:
+      \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"}, \"crc32c\": \"q4xsog==\"}\r\n--===============8814094902286655853==\r\ncontent-type:
       application/jsonl\r\n\r\n{\"exception\":null,\"feed_file\":{\"filename\":\"agency.txt\",\"ts\":\"2025-06-03T00:00:00+00:00\",\"extract_config\":{\"extracted_at\":\"2025-06-01T00:00:00+00:00\",\"name\":\"Santa
       Ynez Mecatran Schedule\",\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"original_filename\":\"agency.txt\"},\"fields\":[\"agency_id\",\"agency_name\",\"agency_url\",\"agency_timezone\",\"agency_phone\",\"agency_lang\",\"agency_fare_url\",\"agency_email\",\"agency_primary\"],\"parsed_file\":{\"csv_dialect\":\"excel\",\"extract_config\":{\"extracted_at\":\"2025-06-01T00:00:00+00:00\",\"name\":\"Santa
-      Ynez Mecatran Schedule\",\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"filename\":\"agency.jsonl.gz\",\"gtfs_filename\":\"agency\",\"num_lines\":1,\"ts\":\"2025-06-03T00:00:00+00:00\"},\"success\":true}\r\n--===============1183770527349915447==--"
+      Ynez Mecatran Schedule\",\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"filename\":\"agency.jsonl.gz\",\"gtfs_filename\":\"agency\",\"num_lines\":1,\"ts\":\"2025-06-03T00:00:00+00:00\"},\"success\":true}\r\n--===============8814094902286655853==--"
     headers:
       Accept:
       - application/json
@@ -442,15 +744,13 @@ interactions:
       Content-Length:
       - '1810'
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/9fe3e733-7fb3-491c-b97c-d0b052724664
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/8e5916ab-02a9-4779-a297-03c11a75c4b9
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0xMTgzNzcwNTI3MzQ5
-        OTE1NDQ3PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT04ODE0MDk0OTAyMjg2
+        NjU1ODUzPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -459,17 +759,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767629855949878\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767742213274563\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767629855949878&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767742213274563&alt=media\",\n
         \ \"name\": \"agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767629855949878\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767742213274563\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
         \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1169\",\n  \"md5Hash\": \"+gLkCiZqjvQnH0wy/Fb74w==\",\n
-        \ \"crc32c\": \"q4xsog==\",\n  \"etag\": \"CLaIoq3m9JEDEAE=\",\n  \"timeCreated\":
-        \"2026-01-05T16:17:35.958Z\",\n  \"updated\": \"2026-01-05T16:17:35.958Z\",\n
-        \ \"timeStorageClassUpdated\": \"2026-01-05T16:17:35.958Z\",\n  \"timeFinalized\":
-        \"2026-01-05T16:17:35.958Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \ \"crc32c\": \"q4xsog==\",\n  \"etag\": \"CMP3tPWI+JEDEAE=\",\n  \"timeCreated\":
+        \"2026-01-06T23:30:13.284Z\",\n  \"updated\": \"2026-01-06T23:30:13.284Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-01-06T23:30:13.284Z\",\n  \"timeFinalized\":
+        \"2026-01-06T23:30:13.284Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
         \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"\n
         \ }\n}\n"
     headers:
@@ -482,9 +782,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:17:35 GMT
+      - Tue, 06 Jan 2026 23:30:13 GMT
       ETag:
-      - CLaIoq3m9JEDEAE=
+      - CMP3tPWI+JEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -495,7 +795,181 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxPMdMQdqWdXUBpnyHMRHBmPeqOsjGOl93LScaMYP9lxlXazxbiB--A8Q8Xkgty-19kJ_jGJOgk
+      - AHVrFxOrX_nvfoXeAN7JJ3iZZjmCtPu3JRbk114oo1OBEoF4jvTMOiHIBhLjyRxAMfQay1TfiK6sf-RkKmSE
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!binary |
+      LS09PT09PT09PT09PT09PT0xNjk4NzY5MTI1NjQxMjYzNDk1PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAiZmVlZF9pbmZvL2R0PTIw
+      MjUtMDYtMDIvdHM9MjAyNS0wNi0wMlQwMDowMDowMCswMDowMC9iYXNlNjRfdXJsPWFIUjBjRG92
+      TDJGd2NDNXRaV05oZEhKaGJpNWpiMjB2ZFhKaUwzZHpMMlpsWldRdll6SnNNRnBVTVhwbFdGb3dU
+      ekpPYzJGWFZuVmtSREY2V2xkNGJVOHlWalJqUjJ4NVdsUXdOMlJJYkhkYVZERnVaRWRhZWs4eWRH
+      eGxWREF3VFdwamQwNTZVVEJhVkZrMFRsUkJlazlVVFhsTlJFbDRUVVJrYWs1NlNUQk5SRkpyVFhw
+      WmVVNVVUVFJOZWtrd1dYcEpNQT09L2ZlZWRfaW5mby0wMDEuanNvbmwuZ3oiLCAibWV0YWRhdGEi
+      OiB7IlBBUlRJVElPTkVEX0FSVElGQUNUX01FVEFEQVRBIjogIntcImNzdl9kaWFsZWN0XCI6IFwi
+      ZXhjZWxcIiwgXCJleHRyYWN0X2NvbmZpZ1wiOiB7XCJleHRyYWN0ZWRfYXRcIjogXCIyMDI1LTA2
+      LTAxVDAwOjAwOjAwKzAwOjAwXCIsIFwibmFtZVwiOiBcIlNhbnRhIFluZXogTWVjYXRyYW4gU2No
+      ZWR1bGVcIiwgXCJ1cmxcIjogXCJodHRwOi8vYXBwLm1lY2F0cmFuLmNvbS91cmIvd3MvZmVlZC9j
+      MmwwWlQxemVYWjBPMk5zYVdWdWREMXpaV3htTzJWNGNHbHlaVDA3ZEhsd1pUMW5kR1p6TzJ0bGVU
+      MDBNamN3TnpRMFpUWTROVEF6T1RNeU1ESXhNRGRqTnpJME1EUmtNell5TlRNNE16STBZekkwXCIs
+      IFwiZmVlZF90eXBlXCI6IFwic2NoZWR1bGVcIiwgXCJzY2hlZHVsZV91cmxfZm9yX3ZhbGlkYXRp
+      b25cIjogbnVsbCwgXCJhdXRoX3F1ZXJ5X3BhcmFtc1wiOiB7fSwgXCJhdXRoX2hlYWRlcnNcIjog
+      e30sIFwiY29tcHV0ZWRcIjogZmFsc2V9LCBcImZpbGVuYW1lXCI6IFwiZmVlZF9pbmZvLmpzb25s
+      Lmd6XCIsIFwiZ3Rmc19maWxlbmFtZVwiOiBcImZlZWRfaW5mb1wiLCBcIm51bV9saW5lc1wiOiAx
+      LCBcInRzXCI6IFwiMjAyNS0wNi0wM1QwMDowMDowMCswMDowMFwifSJ9LCAiY3JjMzJjIjogIjlN
+      OFk0Zz09In0NCi0tPT09PT09PT09PT09PT09MTY5ODc2OTEyNTY0MTI2MzQ5NT09DQpjb250ZW50
+      LXR5cGU6IGFwcGxpY2F0aW9uL2pzb25sDQoNCh+LCAAFm11pAv9lj8sOgjAQRf+la4HykGhXfgQr
+      N81QRsHQKWkLxBj/XYgBRbdzz7m582CybQgl9bpEy0S8YxfESnZ92TauRisJNDLBCgvkiMwAvjHE
+      /rDethNVe9+JKBrHMdQ3BWpmQ2V0tAjKkJ/OEjU0s6DBqvtpw/6in2a3VKMCP+3ZNLdA14nDdZvz
+      YL2swM/zE57secbjJUSqvqKcH9I1GtC6+cW3FPAsSPIizgTPRHo8s+cLlsLDSTMBAAANCi0tPT09
+      PT09PT09PT09PT09MTY5ODc2OTEyNTY0MTI2MzQ5NT09LS0=
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1346'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/4e19076c-6276-4c7f-9426-836e1aab6ecf
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0xNjk4NzY5MTI1NjQx
+        MjYzNDk1PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/feed_info/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/feed_info-001.jsonl.gz/1767742214610661\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/feed_info%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Ffeed_info-001.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/feed_info%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Ffeed_info-001.jsonl.gz?generation=1767742214610661&alt=media\",\n
+        \ \"name\": \"feed_info/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/feed_info-001.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767742214610661\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"193\",\n  \"md5Hash\": \"PBNFjFefMr7iYtqPiHQe1g==\",\n
+        \ \"crc32c\": \"9M8Y4g==\",\n  \"etag\": \"COW9hvaI+JEDEAE=\",\n  \"timeCreated\":
+        \"2026-01-06T23:30:14.619Z\",\n  \"updated\": \"2026-01-06T23:30:14.619Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-01-06T23:30:14.619Z\",\n  \"timeFinalized\":
+        \"2026-01-06T23:30:14.619Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"csv_dialect\\\": \\\"excel\\\", \\\"extract_config\\\": {\\\"extracted_at\\\":
+        \\\"2025-06-01T00:00:00+00:00\\\", \\\"name\\\": \\\"Santa Ynez Mecatran Schedule\\\",
+        \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\",
+        \\\"feed_type\\\": \\\"schedule\\\", \\\"schedule_url_for_validation\\\":
+        null, \\\"auth_query_params\\\": {}, \\\"auth_headers\\\": {}, \\\"computed\\\":
+        false}, \\\"filename\\\": \\\"feed_info.jsonl.gz\\\", \\\"gtfs_filename\\\":
+        \\\"feed_info\\\", \\\"num_lines\\\": 1, \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '2582'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 06 Jan 2026 23:30:14 GMT
+      ETag:
+      - COW9hvaI+JEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AHVrFxOa_9t_d7YE4081xDU8w7voK8ww_DxENFLTJYLAvBci8d4_mtwKTK4JQfVcEZTOdHWZS_g5BAaDybDw
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============2890606599766995922==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"feed_info.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",
+      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
+      \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"}, \"crc32c\": \"O7Xvlg==\"}\r\n--===============2890606599766995922==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"exception\":null,\"feed_file\":{\"filename\":\"feed_info.txt\",\"ts\":\"2025-06-03T00:00:00+00:00\",\"extract_config\":{\"extracted_at\":\"2025-06-01T00:00:00+00:00\",\"name\":\"Santa
+      Ynez Mecatran Schedule\",\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"original_filename\":\"feed_info.txt\"},\"fields\":[\"feed_publisher_name\",\"feed_publisher_url\",\"feed_contact_email\",\"feed_contact_url\",\"feed_lang\",\"feed_start_date\",\"feed_end_date\",\"feed_version\"],\"parsed_file\":{\"csv_dialect\":\"excel\",\"extract_config\":{\"extracted_at\":\"2025-06-01T00:00:00+00:00\",\"name\":\"Santa
+      Ynez Mecatran Schedule\",\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"filename\":\"feed_info.jsonl.gz\",\"gtfs_filename\":\"feed_info\",\"num_lines\":1,\"ts\":\"2025-06-03T00:00:00+00:00\"},\"success\":true}\r\n--===============2890606599766995922==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1833'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/b058ad6b-e4dd-474f-9b3c-e9c7db61f5aa
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yODkwNjA2NTk5NzY2
+        OTk1OTIyPT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/feed_info.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767742215751604\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/feed_info.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/feed_info.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767742215751604&alt=media\",\n
+        \ \"name\": \"feed_info.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767742215751604\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1189\",\n  \"md5Hash\": \"GON+i9Z4TG/Fe+tEoTuHoQ==\",\n
+        \ \"crc32c\": \"O7Xvlg==\",\n  \"etag\": \"CLSPzPaI+JEDEAE=\",\n  \"timeCreated\":
+        \"2026-01-06T23:30:15.759Z\",\n  \"updated\": \"2026-01-06T23:30:15.759Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-01-06T23:30:15.759Z\",\n  \"timeFinalized\":
+        \"2026-01-06T23:30:15.759Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '2046'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 06 Jan 2026 23:30:15 GMT
+      ETag:
+      - CLSPzPaI+JEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AHVrFxP2iXTXBSWZ8E-748Qlq8P2mg_SlxagLTEbu0xR197KqQnUsflWrKTvF_m-xtiWHpfDsUKusWvg5-_y
     status:
       code: 200
       message: OK
@@ -509,11 +983,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/d0aa27c4-c01e-452b-b4ac-cd642f67c2c5
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/9943df0e-f8f0-4bc9-9a28-d3dbf1dda7c6
       accept-encoding:
       - gzip
       content-type:
@@ -523,11 +995,11 @@ interactions:
       x-upload-content-type:
       - application/json; charset=UTF-8
     method: GET
-    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Fagency.jsonl.gz?alt=media
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Fagency-001.jsonl.gz?alt=media
   response:
     body:
       string: !!binary |
-        H4sIAB7kW2kC/32QywrCMBBFf6VkbYzpQ2p3bly5UwRXZaxjG0imkqSWVvx3WwUrCG7vPZw7zJ3l
+        H4sIAAObXWkC/32QywrCMBBFf6VkbYzpQ2p3bly5UwRXZaxjG0imkqSWVvx3WwUrCG7vPZw7zJ3l
         WhHm1JgTWpbJGYMSqehydWYZkzKU8SKS7BMTGByKHZCH4EjYBwfQGrtgb4Gc8hPZWD2AlfdXlwnR
         tu3cdTc/L2oj4nQlXgY+GvjbwH8MXhnsaxr31gatKkBsa5evqUSNbuKu1RtKFwlfpilP4iScWg1U
         DiXSFF3A4r/7omUiNgPztYEG1Mh/rVplwHbjl9jjCUjzBE1IAQAA
@@ -543,13 +1015,13 @@ interactions:
       Content-Type:
       - application/jsonl
       Date:
-      - Mon, 05 Jan 2026 16:17:36 GMT
+      - Tue, 06 Jan 2026 23:30:16 GMT
       ETag:
-      - CKqw7qzm9JEDEAE=
+      - CNDg8PSI+JEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Mon, 05 Jan 2026 16:17:35 GMT
+      - Tue, 06 Jan 2026 23:30:12 GMT
       Pragma:
       - no-cache
       Server:
@@ -558,11 +1030,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxOlCza_g1br-KjsMkxWTNJdmILRT_oma7yg3BclSkHe_wSiBrqPtAbAJxedDOdYJ2s0HTbcX6g
+      - AHVrFxNzvB1hvpVvCI8cBqH2k3v2weGY71OPU7XZLgtIrJz8N1qXRykHTFdlziQyO5gWo986Z9DAOeJG_7nq
       X-Goog-Generation:
-      - '1767629855103018'
+      - '1767742212157520'
       X-Goog-Hash:
-      - crc32c=2wEBrA==,md5=cbXfTs07r2OvwExvktw7mg==
+      - crc32c=5JLFQg==,md5=CUw/kcBRU89J1zTpDR9gLw==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:
@@ -586,18 +1058,16 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/ce7389ae-8c7d-4062-a699-7f562817708e
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/f9b60fe0-b2be-4d39-b19b-3d9e5209632a
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
-    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Fagency.jsonl.gz?prettyPrint=false&projection=noAcl
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Fagency-001.jsonl.gz?prettyPrint=false&projection=noAcl
   response:
     body:
-      string: '{"kind":"storage#object","id":"calitp-staging-pytest/agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.jsonl.gz/1767629855103018","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.jsonl.gz","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency.jsonl.gz?generation=1767629855103018&alt=media","name":"agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency.jsonl.gz","bucket":"calitp-staging-pytest","generation":"1767629855103018","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"210","md5Hash":"cbXfTs07r2OvwExvktw7mg==","crc32c":"2wEBrA==","etag":"CKqw7qzm9JEDEAE=","timeCreated":"2026-01-05T16:17:35.113Z","updated":"2026-01-05T16:17:35.113Z","timeStorageClassUpdated":"2026-01-05T16:17:35.113Z","timeFinalized":"2026-01-05T16:17:35.113Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"csv_dialect\":
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency-001.jsonl.gz/1767742212157520","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency-001.jsonl.gz","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fagency-001.jsonl.gz?generation=1767742212157520&alt=media","name":"agency/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/agency-001.jsonl.gz","bucket":"calitp-staging-pytest","generation":"1767742212157520","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"210","md5Hash":"CUw/kcBRU89J1zTpDR9gLw==","crc32c":"5JLFQg==","etag":"CNDg8PSI+JEDEAE=","timeCreated":"2026-01-06T23:30:12.166Z","updated":"2026-01-06T23:30:12.166Z","timeStorageClassUpdated":"2026-01-06T23:30:12.166Z","timeFinalized":"2026-01-06T23:30:12.166Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"csv_dialect\":
         \"excel\", \"extract_config\": {\"extracted_at\": \"2025-06-01T00:00:00+00:00\",
         \"name\": \"Santa Ynez Mecatran Schedule\", \"url\": \"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",
         \"feed_type\": \"schedule\", \"schedule_url_for_validation\": null, \"auth_query_params\":
@@ -609,22 +1079,22 @@ interactions:
       Cache-Control:
       - private, max-age=0, must-revalidate, no-transform
       Content-Length:
-      - '2449'
+      - '2465'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:17:36 GMT
+      - Tue, 06 Jan 2026 23:30:17 GMT
       ETag:
-      - CKqw7qzm9JEDEAE=
+      - CNDg8PSI+JEDEAE=
       Expires:
-      - Mon, 05 Jan 2026 16:17:36 GMT
+      - Tue, 06 Jan 2026 23:30:17 GMT
       Server:
       - UploadServer
       Vary:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxM2w_I6ba_GLhl9LLZjXEzSMDrZV7ESQece-3ZMRDTxMu9OmNLDP-Og7A_2XzPUFib1So59BF8
+      - AHVrFxP4wnm0BckuJlHzOw5Qtd20moGYg5TkWi4fRsBnMCpgF6KMKrFuiMY3wiejGGxVbA0Lkr2jlFhs6dCb
     status:
       code: 200
       message: OK
@@ -638,11 +1108,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/83f6b263-70c2-41ea-ba4c-3f2044663789
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/d0785222-c798-4394-b4f9-784654e47736
       accept-encoding:
       - gzip
       content-type:
@@ -670,13 +1138,13 @@ interactions:
       Content-Type:
       - application/jsonl
       Date:
-      - Mon, 05 Jan 2026 16:17:36 GMT
+      - Tue, 06 Jan 2026 23:30:17 GMT
       ETag:
-      - CLaIoq3m9JEDEAE=
+      - CMP3tPWI+JEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Mon, 05 Jan 2026 16:17:35 GMT
+      - Tue, 06 Jan 2026 23:30:13 GMT
       Pragma:
       - no-cache
       Server:
@@ -685,9 +1153,9 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxOEtxmzMweGM04QYZO4XYARbJydAyFaCuo8S9UgL3prI-rkZYOt19BKbowHY2ooBGW2TD0-U1Q
+      - AHVrFxMdp2mm8b4PRAY0OvfAr5iBWep0gDWyJE2snXtS4rQ4tvIg94PE43FnvWmGHhnZRtgLqeVL14eYYEEY
       X-Goog-Generation:
-      - '1767629855949878'
+      - '1767742213274563'
       X-Goog-Hash:
       - crc32c=q4xsog==,md5=+gLkCiZqjvQnH0wy/Fb74w==
       X-Goog-Metageneration:
@@ -713,18 +1181,16 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/5893e188-35cb-4f33-90d3-5a39ee061882
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/0bbf95d4-26c0-4212-ad2f-3625e1c6adad
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
     uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency.txt_parsing_results%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D.jsonl?prettyPrint=false&projection=noAcl
   response:
     body:
-      string: '{"kind":"storage#object","id":"calitp-staging-pytest/agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767629855949878","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767629855949878&alt=media","name":"agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl","bucket":"calitp-staging-pytest","generation":"1767629855949878","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"1169","md5Hash":"+gLkCiZqjvQnH0wy/Fb74w==","crc32c":"q4xsog==","etag":"CLaIoq3m9JEDEAE=","timeCreated":"2026-01-05T16:17:35.958Z","updated":"2026-01-05T16:17:35.958Z","timeStorageClassUpdated":"2026-01-05T16:17:35.958Z","timeFinalized":"2026-01-05T16:17:35.958Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767742213274563","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/agency.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/agency.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767742213274563&alt=media","name":"agency.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl","bucket":"calitp-staging-pytest","generation":"1767742213274563","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"1169","md5Hash":"+gLkCiZqjvQnH0wy/Fb74w==","crc32c":"q4xsog==","etag":"CMP3tPWI+JEDEAE=","timeCreated":"2026-01-06T23:30:13.284Z","updated":"2026-01-06T23:30:13.284Z","timeStorageClassUpdated":"2026-01-06T23:30:13.284Z","timeFinalized":"2026-01-06T23:30:13.284Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
         \"results.jsonl\", \"ts\": \"2025-06-03T00:00:00+00:00\"}"}}'
     headers:
       Alt-Svc:
@@ -736,18 +1202,262 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:17:36 GMT
+      - Tue, 06 Jan 2026 23:30:17 GMT
       ETag:
-      - CLaIoq3m9JEDEAE=
+      - CMP3tPWI+JEDEAE=
       Expires:
-      - Mon, 05 Jan 2026 16:17:36 GMT
+      - Tue, 06 Jan 2026 23:30:17 GMT
       Server:
       - UploadServer
       Vary:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxOR5EXmAnMgOnZAl4hknxSNKB2V_T221eiKwHMuimK9Mms1om9SBXfQtVTBxEE1RELLVep5LqQ
+      - AHVrFxPPAjk9jagBukkBWAg-ukGd7IlUUkHt25VBrlecVu9hTHjLozzB6zhh1qJxF7gDxagTexgnNcWIruAa
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/dac970a8-7019-4766-9304-b5e0a2ab9b13
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/feed_info%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Ffeed_info-001.jsonl.gz?alt=media
+  response:
+    body:
+      string: !!binary |
+        H4sIAAWbXWkC/2WPyw6CMBBF/6VrgfKQaFd+BCs3zVBGwdApaQvEGP9diAFFt3PPubnzYLJtCCX1
+        ukTLRLxjF8RKdn3ZNq5GKwk0MsEKC+SIzAC+McT+sN62E1V734koGscx1DcFamZDZXS0CMqQn84S
+        NTSzoMGq+2nD/qKfZrdUowI/7dk0t0DXicN1m/NgvazAz/MTnux5xuMlRKq+opwf0jUa0Lr5xbcU
+        8CxI8iLOBM9Eejyz5wuWwsNJMwEAAA==
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '193'
+      Content-Type:
+      - application/jsonl
+      Date:
+      - Tue, 06 Jan 2026 23:30:17 GMT
+      ETag:
+      - COW9hvaI+JEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Tue, 06 Jan 2026 23:30:14 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AHVrFxPqbgOwksFYtn0er_d9hcILaPfN4c4zPzN_u8a2qi1izQZI8s6fr6ljvEDhONa5GXEQ9_dAWGRQSIys
+      X-Goog-Generation:
+      - '1767742214610661'
+      X-Goog-Hash:
+      - crc32c=9M8Y4g==,md5=PBNFjFefMr7iYtqPiHQe1g==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '193'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/7c630793-daa3-493c-b514-b9d962b1d752
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/feed_info%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Ffeed_info-001.jsonl.gz?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/feed_info/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/feed_info-001.jsonl.gz/1767742214610661","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/feed_info%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Ffeed_info-001.jsonl.gz","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/feed_info%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Ffeed_info-001.jsonl.gz?generation=1767742214610661&alt=media","name":"feed_info/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/feed_info-001.jsonl.gz","bucket":"calitp-staging-pytest","generation":"1767742214610661","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"193","md5Hash":"PBNFjFefMr7iYtqPiHQe1g==","crc32c":"9M8Y4g==","etag":"COW9hvaI+JEDEAE=","timeCreated":"2026-01-06T23:30:14.619Z","updated":"2026-01-06T23:30:14.619Z","timeStorageClassUpdated":"2026-01-06T23:30:14.619Z","timeFinalized":"2026-01-06T23:30:14.619Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"csv_dialect\":
+        \"excel\", \"extract_config\": {\"extracted_at\": \"2025-06-01T00:00:00+00:00\",
+        \"name\": \"Santa Ynez Mecatran Schedule\", \"url\": \"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",
+        \"feed_type\": \"schedule\", \"schedule_url_for_validation\": null, \"auth_query_params\":
+        {}, \"auth_headers\": {}, \"computed\": false}, \"filename\": \"feed_info.jsonl.gz\",
+        \"gtfs_filename\": \"feed_info\", \"num_lines\": 1, \"ts\": \"2025-06-03T00:00:00+00:00\"}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '2495'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 06 Jan 2026 23:30:17 GMT
+      ETag:
+      - COW9hvaI+JEDEAE=
+      Expires:
+      - Tue, 06 Jan 2026 23:30:17 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AHVrFxOaLFULt5hYVzm3_JL5fu7kti6WynOedJ1YnCQfIW0YcLvsdc08MLzGSPjsqAlcyOBNX4CrJXP4xvHb
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/3c1084aa-b55e-44fe-9b24-a375731ee868
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/feed_info.txt_parsing_results%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D.jsonl?alt=media
+  response:
+    body:
+      string: '{"exception":null,"feed_file":{"filename":"feed_info.txt","ts":"2025-06-03T00:00:00+00:00","extract_config":{"extracted_at":"2025-06-01T00:00:00+00:00","name":"Santa
+        Ynez Mecatran Schedule","url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","feed_type":"schedule","schedule_url_for_validation":null,"auth_query_params":{},"auth_headers":{},"computed":false},"original_filename":"feed_info.txt"},"fields":["feed_publisher_name","feed_publisher_url","feed_contact_email","feed_contact_url","feed_lang","feed_start_date","feed_end_date","feed_version"],"parsed_file":{"csv_dialect":"excel","extract_config":{"extracted_at":"2025-06-01T00:00:00+00:00","name":"Santa
+        Ynez Mecatran Schedule","url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","feed_type":"schedule","schedule_url_for_validation":null,"auth_query_params":{},"auth_headers":{},"computed":false},"filename":"feed_info.jsonl.gz","gtfs_filename":"feed_info","num_lines":1,"ts":"2025-06-03T00:00:00+00:00"},"success":true}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '1189'
+      Content-Type:
+      - application/jsonl
+      Date:
+      - Tue, 06 Jan 2026 23:30:18 GMT
+      ETag:
+      - CLSPzPaI+JEDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Tue, 06 Jan 2026 23:30:15 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AHVrFxMwmi8avoqhNZrvPECeDJjKXR9TLEDew6gi-wRH_ax-jksEGvBnB4JQZq0dWjmpWvkPTQNh9BOIa8IJ
+      X-Goog-Generation:
+      - '1767742215751604'
+      X-Goog-Hash:
+      - crc32c=O7Xvlg==,md5=GON+i9Z4TG/Fe+tEoTuHoQ==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '1189'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/6d627cdd-9156-4a18-a6af-b8e83da0a2f6
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/feed_info.txt_parsing_results%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D.jsonl?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/feed_info.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767742215751604","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/feed_info.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/feed_info.txt_parsing_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767742215751604&alt=media","name":"feed_info.txt_parsing_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl","bucket":"calitp-staging-pytest","generation":"1767742215751604","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"1189","md5Hash":"GON+i9Z4TG/Fe+tEoTuHoQ==","crc32c":"O7Xvlg==","etag":"CLSPzPaI+JEDEAE=","timeCreated":"2026-01-06T23:30:15.759Z","updated":"2026-01-06T23:30:15.759Z","timeStorageClassUpdated":"2026-01-06T23:30:15.759Z","timeFinalized":"2026-01-06T23:30:15.759Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
+        \"results.jsonl\", \"ts\": \"2025-06-03T00:00:00+00:00\"}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1959'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 06 Jan 2026 23:30:18 GMT
+      ETag:
+      - CLSPzPaI+JEDEAE=
+      Expires:
+      - Tue, 06 Jan 2026 23:30:18 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AHVrFxPpR50l4rz0cNwnM1mEz21Ra5dAtH5q0A74FTiCwrObecoeZ8ptS-7yR2wJ_71oelFu1dfhGQj8jCLX
     status:
       code: 200
       message: OK

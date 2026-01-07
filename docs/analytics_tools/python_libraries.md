@@ -24,7 +24,7 @@ The following libraries are available and recommended for use by Cal-ITP data an
 1. [shared utils](#shared-utils)
 2. [calitp-data-analysis](#calitp-data-analysis)
    <br> - [Query SQL](#query-sql)
-   <br> - [Accessing Geospatial Resources](#accessing-geospatial-resources)
+   <br> - [Accessing Google Cloud Storage Data](#accessing-google-cloud-storage-data)
 3. [Querying Data in BigQuery](#querying-data-in-bigquery)
    <br> - [SQLAlchemy](#sqlalchemy)
    <br> - [pandas](#pandas-resources)
@@ -113,9 +113,62 @@ LIMIT 10""", as_df=True)
 df_dim_agency.head()
 ```
 
-(accessing-geospatial-resources)=
+(accessing-google-cloud-storage-data)=
 
-### Accessing Geospatial Resources
+### Accessing Google Cloud Storage Data
+
+#### GCSPandas
+
+The GCSPandas class fetches the Google Cloud Storage (GCS) filesystem and surfaces functions to provide analysts a
+clear and consistent way of accessing data on GCS.
+
+It's recommended to memoize initialization of the class so that the GCS filesystem is fetched and cached the first time
+you call it and subsequent calls can reuse that cached filesystem.
+
+```python
+from functools import cache
+
+from calitp_data_analysis.gcs_pandas import GCSPandas
+
+@cache
+def gcs_pandas():
+    return GCSPandas()
+```
+
+##### _read_parquet_
+
+Delegates to pandas.read_parquet, providing GCS Filesystem
+
+```python
+gcs_pandas().read_parquet("gs://path/to/your/file.parquet")
+```
+
+##### _read_csv_
+
+Delegates to pandas.read_csv with the file at the path specified in the GCS filesystem
+
+```python
+gcs_pandas().read_csv("gs://path/to/your/file.csv")
+```
+
+##### _read_excel_
+
+Delegates to pandas.read_excel with the file at the path specified in the GCS filesystem
+
+```python
+gcs_pandas().read_excel("gs://path/to/your/file.xlsx")
+```
+
+##### _data_frame_to_parquet_
+
+Delegates to DataFrame.to_parquet, providing the GCS filesystem
+
+```python
+import pandas as pd
+
+data_frame = pd.DataFrame({'col1': ['name1', 'name2']})
+gcs_pandas().data_frame_to_parquet(data_frame, "gs://path/to/your/file.parquet")
+```
 
 #### GCSGeoPandas
 
@@ -135,7 +188,7 @@ def gcs_geopandas():
     return GCSGeoPandas()
 ```
 
-#### read_parquet
+##### _read_parquet_
 
 Delegates to geopandas.read_parquet, providing GCS Filesystem
 
@@ -143,7 +196,7 @@ Delegates to geopandas.read_parquet, providing GCS Filesystem
 gcs_geopandas().read_parquet("gs://path/to/your/file.parquet")
 ```
 
-#### read_file
+##### _read_file_
 
 Delegates to geopandas.read_file with the file at the path specified in the GCS filesystem
 
@@ -151,7 +204,7 @@ Delegates to geopandas.read_file with the file at the path specified in the GCS 
 gcs_geopandas().read_file("gs://path/to/your/file.geojson")
 ```
 
-#### geo_data_frame_to_parquet
+##### _geo_data_frame_to_parquet_
 
 Delegates to GeoDataFrame.to_parquet, providing the GCS filesystem
 
