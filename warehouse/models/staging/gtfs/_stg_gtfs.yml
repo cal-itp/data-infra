@@ -1,6 +1,21 @@
 version: 2
 
 models:
+  - name: stg_gtfs_schedule__download_configs
+    description: GTFS datasets data
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: source_record_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from incoming record ID and `_valid_from`.
+        tests:
+          - unique
+          - not_null
   - name: stg_gtfs_schedule__download_outcomes
     description: Outcomes from download attempts of GTFS schedule data.
     tests:
