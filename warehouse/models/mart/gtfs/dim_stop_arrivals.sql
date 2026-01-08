@@ -1,21 +1,19 @@
 {{
     config(
-        materialized='incremental',
-        unique_key = 'key',
-        cluster_by='feed_key'
+        materialized='table'
     )
 }}
 
 WITH dim_stop_times AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.dim_stop_times` --{{ ref('dim_stop_times') }}
-    WHERE feed_key in ("c610af603aeb2ea8535ec689274945c1", "2a7ff43d04f970e6b29007f0917d0d2c", "813f4d12491c6ee407c669f62838229f")
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.dim_stop_times_testing`
+    WHERE feed_key = "0cee6f373c3570abb470e27dbe048b54"
 ),
 
 int_gtfs_schedule__frequencies_stop_times AS (
     SELECT *
-    FROM `cal-itp-data-infra.staging.int_gtfs_schedule__frequencies_stop_times` --{{ ref('int_gtfs_schedule__frequencies_stop_times') }}
-    WHERE feed_key in ("c610af603aeb2ea8535ec689274945c1", "2a7ff43d04f970e6b29007f0917d0d2c", "813f4d12491c6ee407c669f62838229f") AND stop_id IS NOT NULL
+    FROM `cal-itp-data-infra-staging.tiffany_staging.int_gtfs_schedule__frequencies_stop_times_testing`
+    WHERE feed_key = "0cee6f373c3570abb470e27dbe048b54" AND stop_id IS NOT NULL
 ),
 
 dim_trips AS (
@@ -23,8 +21,8 @@ dim_trips AS (
         feed_key,
         trip_id,
         route_id
-    FROM `cal-itp-data-infra.mart_gtfs.dim_trips` --{{ ref('dim_trips') }}
-    WHERE feed_key in ("c610af603aeb2ea8535ec689274945c1", "2a7ff43d04f970e6b29007f0917d0d2c", "813f4d12491c6ee407c669f62838229f")
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.dim_trips_testing`
+    WHERE feed_key = "0cee6f373c3570abb470e27dbe048b54"
 ),
 
 dim_routes AS (
@@ -32,8 +30,8 @@ dim_routes AS (
         feed_key,
         route_id,
         route_type
-    FROM `cal-itp-data-infra.mart_gtfs.dim_routes` --{{ ref('dim_routes') }}
-    WHERE feed_key in ("c610af603aeb2ea8535ec689274945c1", "2a7ff43d04f970e6b29007f0917d0d2c", "813f4d12491c6ee407c669f62838229f")
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.dim_routes_testing`
+    WHERE feed_key = "0cee6f373c3570abb470e27dbe048b54"
 ),
 
 -- without select distinct or groupby, this join creates dupe rows....why?
@@ -73,7 +71,6 @@ stop_times_with_freq AS (
     INNER JOIN dim_routes
         ON dim_trips.feed_key = dim_routes.feed_key
         AND dim_trips.route_id = dim_routes.route_id
-    WHERE (arrival_sec IS NOT NULL AND stop_times_arrival_sec IS NOT NULL AND departure_sec IS NOT NULL AND stop_times_departure_sec IS NOT NULL)
     GROUP BY feed_key, _feed_valid_from, trip_id, route_id, route_type, stop_id, stop_sequence
 ),
 
@@ -92,6 +89,7 @@ stop_counts AS (
         ARRAY_AGG(DISTINCT route_type) AS route_type_array,
         ARRAY_AGG(DISTINCT route_id IGNORE NULLS) AS route_id_array,
     FROM stop_times_with_freq
+    WHERE arrival_sec_coalesced IS NOT NULL
     GROUP BY feed_key, stop_id, _feed_valid_from
 ),
 
@@ -119,6 +117,7 @@ stop_counts_by_time_of_day AS (
         {{ generate_time_of_day_column('arrival_hour') }} AS time_of_day,
         SUM(arrivals) AS arrivals
     FROM stop_counts_by_hour
+    WHERE arrival_hour IS NOT NULL
     GROUP BY feed_key, stop_id, time_of_day
 ),
 
