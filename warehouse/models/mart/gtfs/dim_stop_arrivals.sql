@@ -6,14 +6,13 @@
 
 WITH dim_stop_times AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.dim_stop_times_testing`
-    WHERE feed_key = "0cee6f373c3570abb470e27dbe048b54"
+    FROM {{ ref('dim_stop_times') }}
 ),
 
 int_gtfs_schedule__frequencies_stop_times AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_staging.int_gtfs_schedule__frequencies_stop_times_testing`
-    WHERE feed_key = "0cee6f373c3570abb470e27dbe048b54" AND stop_id IS NOT NULL
+    FROM {{ ref('int_gtfs_schedule__frequencies_stop_times') }}
+    WHERE  stop_id IS NOT NULL
 ),
 
 dim_trips AS (
@@ -21,8 +20,7 @@ dim_trips AS (
         feed_key,
         trip_id,
         route_id
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.dim_trips_testing`
-    WHERE feed_key = "0cee6f373c3570abb470e27dbe048b54"
+    FROM {{ ref('dim_trips') }}
 ),
 
 dim_routes AS (
@@ -30,8 +28,7 @@ dim_routes AS (
         feed_key,
         route_id,
         route_type
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.dim_routes_testing`
-    WHERE feed_key = "0cee6f373c3570abb470e27dbe048b54"
+    FROM {{ ref('dim_routes') }}
 ),
 
 -- without select distinct or groupby, this join creates dupe rows....why?
