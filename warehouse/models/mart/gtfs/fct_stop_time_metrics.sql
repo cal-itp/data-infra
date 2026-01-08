@@ -17,37 +17,42 @@ WITH int_tu_trip_stop AS (
         default_start_var='PROD_GTFS_RT_START',
         this_dt_column="service_date",
         filter_dt_column="dt"
-    ) }} AND dt >= "2025-12-01"
+    ) }} AND dt >= "2026-01-01"
 ),
 
-tu_trip_keys AS (
+trip_stop_with_trip_keys AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key([
+            'service_date',
+            'base64_url',
+            'schedule_base64_url',
+            'trip_id',
+            'trip_start_time',
+        ]) }} AS trip_key,
+        key,
+        stop_id,
+        stop_sequence,
+        actual_arrival,
+        actual_departure,
 
-        key AS trip_key,
-        dt,
-        service_date,
-        base64_url,
-        schedule_base64_url,
-        trip_id,
-        trip_start_time
-
-    FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
-    WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
-        this_dt_column="service_date",
-        filter_dt_column="dt"
-    ) }} AND dt >= "2025-12-01"
+    FROM int_tu_trip_stop
+    GROUP BY service_date, base64_url, schedule_base64_url, trip_id, trip_start_time, stop_id, stop_sequence, actual_arrival, actual_departure
 ),
 
 unnested AS (
     SELECT
+        key,
+        actual_arrival,
+        actual_departure,
+        _extract_ts,
+        arrival_time,
+        departure_time,
 
-      * EXCEPT(_extract_ts_array, arrival_time_array, departure_time_array, offset0, offset1, offset2),
-      EXTRACT(HOUR FROM _extract_ts) AS extract_hour,
-      EXTRACT(MINUTE FROM _extract_ts) AS extract_minute,
-      DATETIME_DIFF(actual_arrival, _extract_ts, MINUTE) AS minutes_until_arrival,
-      DATETIME_DIFF(actual_arrival, arrival_time, SECOND) AS prediction_seconds_difference_from_arrival,
-      DATETIME_DIFF(actual_departure, arrival_time, SECOND) AS predictions_seconds_difference_from_departure,
+        EXTRACT(HOUR FROM _extract_ts) AS extract_hour,
+        EXTRACT(MINUTE FROM _extract_ts) AS extract_minute,
+        DATETIME_DIFF(actual_arrival, _extract_ts, MINUTE) AS minutes_until_arrival,
+        DATETIME_DIFF(actual_arrival, arrival_time, SECOND) AS prediction_seconds_difference_from_arrival,
+        DATETIME_DIFF(actual_departure, arrival_time, SECOND) AS predictions_seconds_difference_from_departure,
 
     FROM int_tu_trip_stop
     LEFT JOIN UNNEST(_extract_ts_array) AS _extract_ts WITH OFFSET AS offset0
@@ -58,14 +63,6 @@ unnested AS (
 
 prediction_difference AS (
     SELECT
-        dt,
-        service_date,
-        base64_url,
-        schedule_base64_url,
-        trip_id,
-        trip_start_time,
-        stop_id,
-        stop_sequence,
         key,
         extract_hour,
         extract_minute,
@@ -214,36 +211,12 @@ stop_time_metrics AS (
     GROUP BY key
 ),
 
-predictions_with_trip_keys AS (
-    SELECT DISTINCT
-        key,
-        trip_key,
-        prediction_difference.service_date,
-        prediction_difference.base64_url,
-        prediction_difference.schedule_base64_url,
-        prediction_difference.trip_id,
-        prediction_difference.trip_start_time,
-        stop_id,
-        stop_sequence,
-        actual_arrival,
-        actual_departure,
-
-    FROM prediction_difference
-    INNER JOIN tu_trip_keys
-      ON prediction_difference.dt = tu_trip_keys.dt
-      AND prediction_difference.service_date = tu_trip_keys.service_date
-      AND prediction_difference.base64_url = tu_trip_keys.base64_url
-      AND prediction_difference.schedule_base64_url = tu_trip_keys.schedule_base64_url
-      AND prediction_difference.trip_id = tu_trip_keys.trip_id
-      AND COALESCE(prediction_difference.trip_start_time, "") = COALESCE(tu_trip_keys.trip_start_time, "")
-),
-
 fct_stop_time_metrics AS (
     SELECT
-        predictions_with_trip_keys.*,
+        trip_stop_with_trip_keys.*,
         stop_time_metrics.* EXCEPT(key)
     FROM stop_time_metrics
-    INNER JOIN predictions_with_trip_keys
+    INNER JOIN trip_stop_with_trip_keys
         USING (key)
 )
 
