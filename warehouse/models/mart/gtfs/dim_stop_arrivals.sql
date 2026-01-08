@@ -42,21 +42,16 @@ stop_times_with_freq AS (
     SELECT
         stop_times.feed_key,
         stop_times.stop_id,
-        stop_times._feed_valid_from,
+        stop_times.feed_timezone,
         stop_times.stop_sequence,
         stop_times.trip_id,
+        MAX(stop_times._feed_valid_from) as _feed_valid_from,
 
         dim_routes.route_id,
         COALESCE(CAST(dim_routes.route_type AS INT), 1000) AS route_type,
 
         MIN(COALESCE(arrival_sec, stop_times_arrival_sec)) AS arrival_sec,
         MAX(COALESCE(departure_sec, stop_times_departure_sec)) AS departure_sec,
-
-        -- this column must be populated, no missing allowed for our arrival_hour categorization
-        MIN(COALESCE(
-            arrival_sec, stop_times_arrival_sec,
-            departure_sec, stop_times_departure_sec
-        )) AS arrival_sec_coalesced,
 
     FROM dim_stop_times AS stop_times
     LEFT JOIN int_gtfs_schedule__frequencies_stop_times AS freq
@@ -71,26 +66,28 @@ stop_times_with_freq AS (
     INNER JOIN dim_routes
         ON dim_trips.feed_key = dim_routes.feed_key
         AND dim_trips.route_id = dim_routes.route_id
-    GROUP BY feed_key, _feed_valid_from, trip_id, route_id, route_type, stop_id, stop_sequence
+    GROUP BY feed_key, feed_timezone, trip_id, route_id, route_type, stop_id, stop_sequence
 ),
 
 -- stop_time counts aggregated for the day
 stop_counts AS (
     SELECT
         feed_key,
+        feed_timezone,
         stop_id,
-        _feed_valid_from,
-        COUNT(DISTINCT arrival_sec_coalesced) AS arrivals,
+        MAX(_feed_valid_from) AS _feed_valid_from,
+
+        COUNT(DISTINCT arrival_sec) AS arrivals,
         COUNT(DISTINCT
-            CAST(TRUNC(arrival_sec_coalesced / 3600) AS INT
+            CAST(TRUNC(arrival_sec / 3600) AS INT
         )) AS n_hours_in_service,
         MIN(arrival_sec) AS min_arrival_sec,
         MAX(departure_sec) AS max_departure_sec,
         ARRAY_AGG(DISTINCT route_type) AS route_type_array,
         ARRAY_AGG(DISTINCT route_id IGNORE NULLS) AS route_id_array,
     FROM stop_times_with_freq
-    WHERE arrival_sec_coalesced IS NOT NULL
-    GROUP BY feed_key, stop_id, _feed_valid_from
+    WHERE arrival_sec IS NOT NULL
+    GROUP BY feed_key, feed_timezone, stop_id
 ),
 
 -- stop_time by arrival_hour, then aggregate up to time-of-day
@@ -99,7 +96,7 @@ stop_counts_by_hour AS (
         feed_key,
         stop_id,
         CAST(
-          TRUNC(arrival_sec_coalesced / 3600) AS INT
+          TRUNC(arrival_sec / 3600) AS INT
         ) AS arrival_hour,
 
         COUNT(*) AS arrivals,
@@ -189,6 +186,7 @@ dim_stop_arrivals AS (
         {{ dbt_utils.generate_surrogate_key(['stop_counts.feed_key', 'stop_counts.stop_id']) }} AS _gtfs_key,
         stop_counts.feed_key,
         stop_counts.stop_id,
+        stop_counts.feed_timezone,
         stop_counts._feed_valid_from,
         stop_counts.arrivals AS daily_arrivals,
         stop_counts.min_arrival_sec,
