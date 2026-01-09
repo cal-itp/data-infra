@@ -133,7 +133,22 @@ class DownloadConfigToGCSOperator(BaseOperator):
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
         schedule_feed_path = f"{self.destination_path}/base64_url={self.download().base64_url()}/{self.download().filename()}"
-        if self.download().success():
+        if self.gcs_hook().exists(
+            bucket_name=self.destination_name(),
+            object_name=schedule_feed_path,
+        ):
+            download_schedule_feed_results = self.gcs_hook().download(
+                bucket_name=self.destination_name(),
+                object_name=f"{self.results_path}/{self.download().base64_url()}.jsonl",
+            )
+            return {
+                "base64_url": self.download().base64_url(),
+                "schedule_feed_path": schedule_feed_path,
+                "download_schedule_feed_results": json.loads(
+                    download_schedule_feed_results
+                ),
+            }
+        elif self.download().success():
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=schedule_feed_path,
@@ -145,30 +160,30 @@ class DownloadConfigToGCSOperator(BaseOperator):
                     ),
                 },
             )
-        download_schedule_feed_results = self.download().summary(
-            current_time=dag_run.logical_date
-        )
-        self.gcs_hook().upload(
-            bucket_name=self.destination_name(),
-            object_name=f"{self.results_path}/{self.download().base64_url()}.jsonl",
-            data=json.dumps(download_schedule_feed_results, separators=(",", ":")),
-            mime_type="application/jsonl",
-            gzip=False,
-            metadata={
-                "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                    {
-                        "filename": f"{self.download().base64_url()}.jsonl",
-                        "ts": dag_run.logical_date.isoformat(),
-                        "end": dag_run.logical_date.isoformat(),
-                        "backfilled": False,
-                    }
-                )
-            },
-        )
-        if not self.download().success():
-            raise self.download().exception
-        return {
-            "base64_url": self.download().base64_url(),
-            "schedule_feed_path": schedule_feed_path,
-            "download_schedule_feed_results": download_schedule_feed_results,
-        }
+            download_schedule_feed_results = self.download().summary(
+                current_time=dag_run.logical_date
+            )
+            self.gcs_hook().upload(
+                bucket_name=self.destination_name(),
+                object_name=f"{self.results_path}/{self.download().base64_url()}.jsonl",
+                data=json.dumps(download_schedule_feed_results, separators=(",", ":")),
+                mime_type="application/jsonl",
+                gzip=False,
+                metadata={
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        {
+                            "filename": f"{self.download().base64_url()}.jsonl",
+                            "ts": dag_run.logical_date.isoformat(),
+                            "end": dag_run.logical_date.isoformat(),
+                            "backfilled": False,
+                        }
+                    )
+                },
+            )
+            if not self.download().success():
+                raise self.download().exception
+            return {
+                "base64_url": self.download().base64_url(),
+                "schedule_feed_path": schedule_feed_path,
+                "download_schedule_feed_results": download_schedule_feed_results,
+            }

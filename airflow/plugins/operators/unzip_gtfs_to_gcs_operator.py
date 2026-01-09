@@ -121,5 +121,6 @@ class UnzipGTFSToGCSOperator(BaseOperator):
         return {
             "base64_url": self.base64_url,
             "results_path": self.results_path,
+            "destination_path_fragment": self.destination_path_fragment,
             "unzip_results": report,
         }
