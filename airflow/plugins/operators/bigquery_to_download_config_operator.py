@@ -107,13 +107,15 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
         return os.getenv("CALITP_BQ_LOCATION")
 
     def bigquery_hook(self) -> BigQueryHook:
-        return BigQueryHook(gcp_conn_id=self.gcp_conn_id, location=self.location())
+        return BigQueryHook(
+            gcp_conn_id=self.gcp_conn_id, location=self.location(), use_legacy_sql=False
+        )
 
     def rows(self) -> list[list[str]]:
         return self.bigquery_hook().get_records(
             sql=f"""
                 SELECT {','.join(self.columns)}
-                FROM [{self.dataset_name}.{self.table_name}]
+                FROM `{self.dataset_name}.{self.table_name}`
                 WHERE _is_current
                   AND data_quality_pipeline
                   AND deprecated_date IS NULL
@@ -150,4 +152,4 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
             gzip=True,
             metadata=self.metadata(current_time=logical_date),
         )
-        return [{"destination_path": self.destination_path}]
+        return {"destination_path": self.destination_path}

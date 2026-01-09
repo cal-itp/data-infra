@@ -134,7 +134,17 @@ class TestUnzipGTFSToGCSOperator:
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
             "base64_url": "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
-            "results_path": "unzipping_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
+            "results_path": os.path.join(
+                "unzipping_results",
+                "dt=2025-06-02",
+                "ts=2025-06-02T00:00:00+00:00",
+                "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
+            ),
+            "destination_path_fragment": os.path.join(
+                "dt=2025-06-02",
+                "ts=2025-06-02T00:00:00+00:00",
+                "base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
+            ),
             "unzip_results": {
                 "exception": None,
                 "extract": {
@@ -427,6 +437,11 @@ class TestUnzipGTFSToGCSOperator:
                 "ts=2025-06-02T00:00:00+00:00",
                 "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl",
             ),
+            "destination_path_fragment": os.path.join(
+                "dt=2025-06-02",
+                "ts=2025-06-02T00:00:00+00:00",
+                "base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
+            ),
             "unzip_results": {
                 "exception": None,
                 "extract": {
@@ -650,6 +665,11 @@ class TestUnzipGTFSToGCSOperator:
                 "dt=2025-11-13",
                 "ts=2025-11-13T03:02:04.189504+00:00",
                 "aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=.jsonl",
+            ),
+            "destination_path_fragment": os.path.join(
+                "dt=2025-11-13",
+                "ts=2025-11-13T03:02:04.189504+00:00",
+                "base64_url=aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=",
             ),
             "unzip_results": {
                 "exception": None,
