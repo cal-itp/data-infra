@@ -18,33 +18,33 @@ schema_fields:
   - name: Mapping_Merchant_ID
     type: STRING
   - name: terminal
-    type: INTEGER
+    type: STRING
   - name: Token
     type: STRING
   - name: Masked_Pan
     type: STRING
   - name: Expiry
-    type: INTEGER
+    type: STRING
   - name: Server_date
-    type: TIMESTAMP
+    type: STRING
   - name: Terminal_date
-    type: TIMESTAMP
+    type: STRING
   - name: Tx_number
-    type: INTEGER
+    type: STRING
   - name: Tx_status
-    type: INTEGER
+    type: STRING
   - name: Payment_Reference
     type: STRING
   - name: Operator_Id
-    type: INTEGER
+    type: STRING
   - name: Terminal_SPDH_code
-    type: INTEGER
+    type: STRING
   - name: Denylist_version
     type: STRING
   - name: Transit_data
     type: STRING
   - name: Currency
-    type: INTEGER
+    type: STRING
   - name: Par
     type: STRING
   - name: Fare_Mode
@@ -52,7 +52,7 @@ schema_fields:
   - name: Fare_Type
     type: STRING
   - name: Fare_Value
-    type: INTEGER
+    type: STRING
   - name: Fare_Description
     type: STRING
   - name: Fare_Linked_Id
@@ -60,15 +60,15 @@ schema_fields:
   - name: ID
     type: STRING
   - name: Gps_Latitude
-    type: FLOAT64
+    type: STRING
   - name: Gps_Altitude
-    type: FLOAT64
+    type: STRING
   - name: Vehicle_Public_Number
-    type: INTEGER
+    type: STRING
   - name: Vehicle_Name
     type: STRING
   - name: Stop_Id
-    type: INTEGER
+    type: STRING
   - name: Stop_Name
     type: STRING
   - name: Platform_Id
@@ -76,11 +76,11 @@ schema_fields:
   - name: Platform_Name
     type: STRING
   - name: Zone_Id
-    type: INTEGER
+    type: STRING
   - name: Zone_Name
     type: STRING
   - name: Line_Public_Number
-    type: INTEGER
+    type: STRING
   - name: Line_Name
     type: STRING
   - name: Line_Direction
