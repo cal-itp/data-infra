@@ -205,7 +205,7 @@ filter using (
 {% macro payments_enghouse_row_access_policy() %}
 
 {{ create_row_access_policy(
-    filter_column = 'organization_id',
+    filter_column = 'operator_id',
     filter_value = '253',
     principals = ['serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
