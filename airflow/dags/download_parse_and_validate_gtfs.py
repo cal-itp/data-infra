@@ -130,6 +130,7 @@ def download_parse_and_validate_gtfs():
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
         map_index_template="{{ task.download_schedule_feed_results['config']['name'] }}",
         trigger_rule=TriggerRule.ALL_DONE,
+        pool="schedule_validate_pool",
     ).expand_kwargs(downloads.output.map(create_validate_kwargs))
 
     def unzip_files_kwargs(download):
@@ -152,6 +153,7 @@ def download_parse_and_validate_gtfs():
         results_path="unzipping_results/dt={{ ds }}/ts={{ ts }}/{{ task.base64_url }}.jsonl",
         map_index_template="{{ task.download_schedule_feed_results['config']['name'] }}",
         trigger_rule=TriggerRule.ALL_DONE,
+        pool="schedule_unzip_pool",
     ).expand_kwargs(downloads.output.map(unzip_files_kwargs))
 
     def list_unzipped_files(unzipped_file):
@@ -178,6 +180,7 @@ def download_parse_and_validate_gtfs():
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"),
         map_index_template="{{ task.unzip_results['extract']['config']['name'] }}",
         trigger_rule=TriggerRule.ALL_DONE,
+        pool="schedule_parse_pool",
     ).expand_kwargs(unzip.output.map(list_unzipped_files))
 
     (latest_only >> download_config_exists >> (download_config, skip_download_config))
