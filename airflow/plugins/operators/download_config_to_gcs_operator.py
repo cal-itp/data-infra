@@ -137,29 +137,64 @@ class DownloadConfigToGCSOperator(BaseOperator):
             bucket_name=self.destination_name(),
             object_name=schedule_feed_path,
         ):
-            download_schedule_feed_results = self.gcs_hook().download(
+            if self.gcs_hook().exists(
                 bucket_name=self.destination_name(),
                 object_name=f"{self.results_path}/{self.download().base64_url()}.jsonl",
-            )
-            return {
-                "base64_url": self.download().base64_url(),
-                "schedule_feed_path": schedule_feed_path,
-                "download_schedule_feed_results": json.loads(
-                    download_schedule_feed_results
-                ),
-            }
-        elif self.download().success():
-            self.gcs_hook().upload(
-                bucket_name=self.destination_name(),
-                object_name=schedule_feed_path,
-                data=self.download().content(),
-                mime_type=self.download().mime_type(),
-                metadata={
-                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                        self.download().extract(current_time=dag_run.logical_date)
+            ):
+                schedule_feed_results = self.gcs_hook().download(
+                    bucket_name=self.destination_name(),
+                    object_name=f"{self.results_path}/{self.download().base64_url()}.jsonl",
+                )
+                download_schedule_feed_results = json.loads(schedule_feed_results)
+            else:
+                schedule_feed_metadata = self.gcs_hook().get_metadata(
+                    bucket_name=self.destination_name(),
+                    object_name=schedule_feed_path,
+                )
+                summary = json.loads(
+                    schedule_feed_metadata["PARTITIONED_ARTIFACT_METADATA"]
+                )
+                current_time = summary.get("ts")
+                download_schedule_feed_results = {
+                    "backfilled": False,
+                    "success": True,
+                    "exception": None,
+                    "config": summary.get("config"),
+                    "extract": summary,
+                }
+
+                self.gcs_hook().upload(
+                    bucket_name=self.destination_name(),
+                    object_name=f"{self.results_path}/{self.download().base64_url()}.jsonl",
+                    data=json.dumps(
+                        download_schedule_feed_results, separators=(",", ":")
                     ),
-                },
-            )
+                    mime_type="application/jsonl",
+                    gzip=False,
+                    metadata={
+                        "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                            {
+                                "filename": f"{self.download().base64_url()}.jsonl",
+                                "ts": current_time,
+                                "end": current_time,
+                                "backfilled": False,
+                            }
+                        )
+                    },
+                )
+        else:
+            if self.download().success():
+                self.gcs_hook().upload(
+                    bucket_name=self.destination_name(),
+                    object_name=schedule_feed_path,
+                    data=self.download().content(),
+                    mime_type=self.download().mime_type(),
+                    metadata={
+                        "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                            self.download().extract(current_time=dag_run.logical_date)
+                        ),
+                    },
+                )
             download_schedule_feed_results = self.download().summary(
                 current_time=dag_run.logical_date
             )
@@ -182,8 +217,9 @@ class DownloadConfigToGCSOperator(BaseOperator):
             )
             if not self.download().success():
                 raise self.download().exception
-            return {
-                "base64_url": self.download().base64_url(),
-                "schedule_feed_path": schedule_feed_path,
-                "download_schedule_feed_results": download_schedule_feed_results,
-            }
+
+        return {
+            "base64_url": self.download().base64_url(),
+            "schedule_feed_path": schedule_feed_path,
+            "download_schedule_feed_results": download_schedule_feed_results,
+        }

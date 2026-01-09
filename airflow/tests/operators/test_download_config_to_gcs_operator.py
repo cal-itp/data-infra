@@ -551,3 +551,186 @@ class TestDownloadConfigToGCSOperator:
             "end": "2025-06-02T00:00:00+00:00",
             "backfilled": False,
         }
+
+    @pytest.fixture
+    def missing_results_destination_path(self) -> str:
+        return "schedule/dt=2025-06-02/ts=2025-06-02T03:01:37.693904+00:00"
+
+    @pytest.fixture
+    def missing_results_path(self) -> str:
+        return "download_schedule_feed_results/dt=2025-06-02/ts=2025-06-02T03:01:37.693904+00:00"
+
+    @pytest.fixture
+    def missing_results_download_config(self) -> dict:
+        return {
+            "auth_headers": {},
+            "auth_query_params": {},
+            "computed": False,
+            "feed_type": "schedule",
+            "name": "Merced GMV Schedule",
+            "schedule_url_for_validation": None,
+            "url": "https://thebuslive.com/gtfs",
+            "extracted_at": "2025-06-02T02:00:27.795513+00:00",
+        }
+
+    @pytest.fixture
+    def missing_results_operator(
+        self,
+        test_dag: DAG,
+        missing_results_download_config: dict,
+        missing_results_destination_path: str,
+        missing_results_path: str,
+    ) -> DownloadConfigToGCSOperator:
+        return DownloadConfigToGCSOperator(
+            task_id="gtfs_download_config_to_gcs_missing_results",
+            gcp_conn_id="google_cloud_default",
+            download_config=missing_results_download_config,
+            destination_bucket=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
+            destination_path=missing_results_destination_path,
+            results_path=missing_results_path,
+            dag=test_dag,
+        )
+
+    @pytest.mark.vcr
+    def test_execute_missing_results(
+        self,
+        test_dag: DAG,
+        missing_results_operator: DownloadConfigToGCSOperator,
+        execution_date: datetime,
+        missing_results_destination_path: str,
+        missing_results_path: str,
+        missing_results_download_config: dict,
+        gcs_hook: GCSHook,
+    ):
+        if gcs_hook.exists(
+            bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                "gs://", ""
+            ),
+            object_name=f"{missing_results_path}/aHR0cHM6Ly90aGVidXNsaXZlLmNvbS9ndGZz.jsonl",
+        ):
+            gcs_hook.delete(
+                bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                    "gs://", ""
+                ),
+                object_name=f"{missing_results_path}/aHR0cHM6Ly90aGVidXNsaXZlLmNvbS9ndGZz.jsonl",
+            )
+
+        missing_results_operator.run(
+            start_date=execution_date,
+            end_date=execution_date + timedelta(days=1),
+            ignore_first_depends_on_past=True,
+        )
+
+        task = test_dag.get_task("gtfs_download_config_to_gcs_missing_results")
+        task_instance = TaskInstance(task, execution_date=execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert xcom_value == {
+            "base64_url": "aHR0cHM6Ly90aGVidXNsaXZlLmNvbS9ndGZz",
+            "schedule_feed_path": os.path.join(
+                "schedule",
+                "dt=2025-06-02",
+                "ts=2025-06-02T03:01:37.693904+00:00",
+                "base64_url=aHR0cHM6Ly90aGVidXNsaXZlLmNvbS9ndGZz",
+                "gtfs.zip",
+            ),
+            "download_schedule_feed_results": {
+                "backfilled": False,
+                "config": missing_results_download_config,
+                "exception": None,
+                "extract": {
+                    "filename": "gtfs.zip",
+                    "ts": "2025-06-02T03:01:37.693904+00:00",
+                    "config": {
+                        "auth_headers": {},
+                        "auth_query_params": {},
+                        "computed": False,
+                        "feed_type": "schedule",
+                        "name": "Merced GMV Schedule",
+                        "schedule_url_for_validation": None,
+                        "url": "https://thebuslive.com/gtfs",
+                        "extracted_at": "2025-06-02T02:00:27.795513+00:00",
+                    },
+                    "response_code": 200,
+                    "response_headers": xcom_value["download_schedule_feed_results"][
+                        "extract"
+                    ]["response_headers"]
+                    | {
+                        "Content-Type": "application/zip",
+                        "Content-Disposition": "attachment; filename=gtfs.zip; filename*=UTF-8''gtfs.zip",
+                    },
+                    "reconstructed": False,
+                },
+                "success": True,
+            },
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                "gs://", ""
+            ),
+            object_name=xcom_value["schedule_feed_path"],
+        )
+        parsed_metadata = json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"])
+        assert parsed_metadata == xcom_value["download_schedule_feed_results"][
+            "extract"
+        ] | {
+            "ts": "2025-06-02T03:01:37.693904+00:00",
+            "response_headers": parsed_metadata["response_headers"],
+        }
+
+        decompressed_result = gcs_hook.download(
+            bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                "gs://", ""
+            ),
+            object_name=f"{missing_results_path}/aHR0cHM6Ly90aGVidXNsaXZlLmNvbS9ndGZz.jsonl",
+        )
+        result = json.loads(decompressed_result)
+        assert result == {
+            "success": True,
+            "exception": None,
+            "config": {
+                "auth_headers": {},
+                "auth_query_params": {},
+                "computed": False,
+                "feed_type": "schedule",
+                "name": "Merced GMV Schedule",
+                "schedule_url_for_validation": None,
+                "url": "https://thebuslive.com/gtfs",
+                "extracted_at": "2025-06-02T02:00:27.795513+00:00",
+            },
+            "extract": {
+                "filename": "gtfs.zip",
+                "ts": "2025-06-02T03:01:37.693904+00:00",
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "feed_type": "schedule",
+                    "name": "Merced GMV Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "https://thebuslive.com/gtfs",
+                    "extracted_at": "2025-06-02T02:00:27.795513+00:00",
+                },
+                "response_code": 200,
+                "response_headers": result["extract"]["response_headers"]
+                | {
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=gtfs.zip; filename*=UTF-8''gtfs.zip",
+                },
+                "reconstructed": False,
+            },
+            "backfilled": False,
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                "gs://", ""
+            ),
+            object_name=f"{missing_results_path}/aHR0cHM6Ly90aGVidXNsaXZlLmNvbS9ndGZz.jsonl",
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "aHR0cHM6Ly90aGVidXNsaXZlLmNvbS9ndGZz.jsonl",
+            "ts": "2025-06-02T03:01:37.693904+00:00",
+            "end": "2025-06-02T03:01:37.693904+00:00",
+            "backfilled": False,
+        }
