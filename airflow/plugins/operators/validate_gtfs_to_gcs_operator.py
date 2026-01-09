@@ -70,7 +70,7 @@ class ValidateGTFSToGCSOperator(BaseOperator):
             validator_result = self.validator_hook(
                 date=dag_run.logical_date,
             ).run(
-                filename=local_source_path,
+                input_zip=local_source_path,
                 download_schedule_feed_results=self.download_schedule_feed_results,
             )
             full_destination_path = (
