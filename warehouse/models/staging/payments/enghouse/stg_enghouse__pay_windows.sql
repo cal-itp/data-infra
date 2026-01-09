@@ -20,6 +20,16 @@ clean_columns AS (
     FROM source
 ),
 
+deduplicated AS (
+    SELECT * FROM (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY (SELECT NULL)) AS row_num
+        FROM clean_columns
+    )
+    WHERE row_num = 1
+),
+
 stg_enghouse__pay_windows AS (
     SELECT
         operator_id,
@@ -34,7 +44,7 @@ stg_enghouse__pay_windows AS (
         open_date,
         close_date,
         _content_hash,
-    FROM clean_columns
+    FROM deduplicated
 )
 
 SELECT * FROM stg_enghouse__pay_windows

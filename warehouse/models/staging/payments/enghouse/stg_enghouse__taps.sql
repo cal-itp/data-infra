@@ -38,7 +38,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('Platform_Name') }} AS platform_name,
         SAFE_CAST(Zone_Id AS INT64) AS zone_id,
         {{ trim_make_empty_string_null('Zone_Name') }} AS zone_name,
-        SAFE_CAST(Line_Public_Number AS INT64) AS line_public_number,
+        {{ trim_make_empty_string_null('Line_Public_Number') }} AS line_public_number,
         {{ trim_make_empty_string_null('Line_Name') }} AS line_name,
         {{ trim_make_empty_string_null('Line_Direction') }} AS line_direction,
         {{ trim_make_empty_string_null('Trip_Public_Number') }} AS trip_public_number,
@@ -53,6 +53,16 @@ clean_columns AS (
             'Stop_Id', 'Stop_Name', 'Platform_Id', 'Platform_Name', 'Zone_Id', 'Zone_Name', 'Line_Public_Number', 'Line_Name',
             'Line_Direction', 'Trip_Public_Number', 'Trip_Name', 'Service_Public_Number', 'Service_Name', 'Driver_ID']) }} AS _content_hash
     FROM source
+),
+
+deduplicated AS (
+    SELECT * FROM (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY (SELECT NULL)) AS row_num
+        FROM clean_columns
+    )
+    WHERE row_num = 1
 ),
 
 stg_enghouse__taps AS (
@@ -100,7 +110,9 @@ stg_enghouse__taps AS (
         service_name,
         driver_id,
         _content_hash
-    FROM clean_columns
+    FROM deduplicated
+    -- Filter out header rows (if external table columns are STRING, this will work)
+    WHERE operator_id IS NOT NULL
 )
 
 SELECT * FROM stg_enghouse__taps
