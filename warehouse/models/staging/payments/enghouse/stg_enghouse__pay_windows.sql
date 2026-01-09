@@ -4,7 +4,7 @@ WITH source AS (
 
 clean_columns AS (
     SELECT
-        SAFE_CAST(Operator_Id AS INT64) AS operator_id,
+        {{ trim_make_empty_string_null('Operator_Id') }} AS operator_id,
         {{ trim_make_empty_string_null('id') }} AS id,
         {{ trim_make_empty_string_null('token') }} AS token,
         SAFE_CAST(amount_settled AS NUMERIC) AS amount_settled,

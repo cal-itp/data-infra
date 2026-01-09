@@ -4,7 +4,7 @@ WITH source AS (
 
 clean_columns AS (
     SELECT
-        SAFE_CAST(Operator_Id AS INT64) AS operator_id,
+        CAST(Operator_Id AS STRING) AS operator_id,
         {{ trim_make_empty_string_null('tap_id') }} AS tap_id,
         {{ trim_make_empty_string_null('mapping_terminal_id') }} AS mapping_terminal_id,
         {{ trim_make_empty_string_null('mapping_merchant_id') }} AS mapping_merchant_id,
@@ -38,7 +38,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('Platform_Name') }} AS platform_name,
         SAFE_CAST(Zone_Id AS INT64) AS zone_id,
         {{ trim_make_empty_string_null('Zone_Name') }} AS zone_name,
-        {{ trim_make_empty_string_null('Line_Public_Number') }} AS line_public_number,
+        CAST(Line_Public_Number AS STRING) AS line_public_number,
         {{ trim_make_empty_string_null('Line_Name') }} AS line_name,
         {{ trim_make_empty_string_null('Line_Direction') }} AS line_direction,
         {{ trim_make_empty_string_null('Trip_Public_Number') }} AS trip_public_number,
