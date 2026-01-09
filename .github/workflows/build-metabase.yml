@@ -1,6 +1,13 @@
 name: Metabase Docker image
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build-metabase.yml'
+      - 'services/metabase/**'
+      - 'iac/cal-itp-data-infra-staging/metabase/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-metabase
