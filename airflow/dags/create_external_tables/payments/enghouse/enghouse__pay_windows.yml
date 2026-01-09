@@ -16,20 +16,20 @@ schema_fields:
   - name: Token
     type: STRING
   - name: Amount_Settled
-    type: NUMERIC
+    type: STRING
   - name: Amount_To_Settle
-    type: NUMERIC
+    type: STRING
   - name: Debt_Settled
-    type: NUMERIC
+    type: STRING
   - name: Stage
     type: STRING
   - name: Payment_reference
     type: STRING
   - name: Terminal_Id
-    type: INTEGER
+    type: STRING
   - name: Open_Date
-    type: TIMESTAMP
+    type: STRING
   - name: Close_Date
-    type: TIMESTAMP
+    type: STRING
   - name: Operator_Id
-    type: INTEGER
+    type: STRING

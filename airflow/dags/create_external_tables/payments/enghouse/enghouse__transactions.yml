@@ -16,19 +16,19 @@ schema_fields:
   - name: Operation
     type: STRING
   - name: Terminal_ID
-    type: INTEGER
+    type: STRING
   - name: Mapping_Terminal_ID
     type: STRING
   - name: Mapping_Merchant_ID
     type: STRING
-  - name: Timestamp
-    type: TIMESTAMP
+  - name: timestamp
+    type: STRING
   - name: Amount
-    type: NUMERIC
+    type: STRING
   - name: Payment_Reference
     type: STRING
   - name: Spdh_Response
-    type: INTEGER
+    type: STRING
   - name: Response_Type
     type: STRING
   - name: Response_Message
@@ -38,9 +38,9 @@ schema_fields:
   - name: Issuer_Response
     type: STRING
   - name: Core_Response
-    type: INTEGER
+    type: STRING
   - name: Rrn
-    type: INTEGER
+    type: STRING
   - name: Authorization_Code
     type: STRING
   - name: Par
@@ -48,4 +48,4 @@ schema_fields:
   - name: Brand
     type: STRING
   - name: OperatorId
-    type: INTEGER
+    type: STRING

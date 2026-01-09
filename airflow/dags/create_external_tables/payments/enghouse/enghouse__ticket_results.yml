@@ -18,11 +18,11 @@ schema_fields:
   - name: Station_Name
     type: STRING
   - name: Amount
-    type: NUMERIC
+    type: STRING
   - name: Clearing_Id
     type: STRING
   - name: Operator_Id
-    type: INTEGER
+    type: STRING
   - name: Reason
     type: STRING
   - name: Tap_Id
@@ -30,7 +30,7 @@ schema_fields:
   - name: Ticket_Type
     type: STRING
   - name: Created_Dttm
-    type: TIMESTAMP
+    type: STRING
   - name: Line
     type: STRING
   - name: Start_Station
@@ -38,9 +38,9 @@ schema_fields:
   - name: End_Station
     type: STRING
   - name: Start_Dttm
-    type: TIMESTAMP
+    type: STRING
   - name: End_Dttm
-    type: TIMESTAMP
+    type: STRING
   - name: Ticket_Code
     type: STRING
   - name: Additional_Infos
