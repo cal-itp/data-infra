@@ -13,7 +13,7 @@
     CASE
         WHEN {{ hour_column }} < 4 OR ( {{ hour_column }} >= 24 AND {{ hour_column }} < 28 ) THEN "owl"
         WHEN {{ hour_column }} < 7 OR ( {{ hour_column }} >= 28 AND {{ hour_column }} < 31 ) THEN "early_am"
-        WHEN {{ hour_column }} < 10 OR ( {{ hour_column }} >= 31 AND {{ hour_column }} < 34 )THEN "am_peak"
+        WHEN {{ hour_column }} < 10 OR ( {{ hour_column }} >= 31 AND {{ hour_column }} < 34 ) THEN "am_peak"
         WHEN {{ hour_column }} < 15 OR ( {{ hour_column }} >= 34 AND {{ hour_column }} < 39 ) THEN "midday"
         WHEN {{ hour_column }} < 20 OR ( {{ hour_column }} >= 39 AND {{ hour_column }} < 44 ) THEN "pm_peak"
         WHEN {{ hour_column }} < 24 OR ( {{ hour_column }} >= 44 AND {{ hour_column }} < 48 ) THEN "evening"
