@@ -110,7 +110,7 @@ class TestGTFSValidatorHook:
         }
 
         result = hook.run(
-            filename=fixture_schedule_path,
+            input_zip=fixture_schedule_path,
             download_schedule_feed_results=download_schedule_feed_results,
         )
         assert len(result.notices()) == 4
@@ -221,7 +221,7 @@ class TestGTFSValidatorHook:
         }
 
         result = hook.run(
-            filename=fixture_schedule_path,
+            input_zip=fixture_schedule_path,
             download_schedule_feed_results=download_schedule_feed_results,
         )
         assert len(result.notices()) == 0
@@ -314,7 +314,7 @@ class TestGTFSValidatorHook:
         }
 
         result = hook.run(
-            filename=fixture_schedule_path,
+            input_zip=fixture_schedule_path,
             download_schedule_feed_results=download_schedule_feed_results,
         )
         assert len(result.notices()) == 0
@@ -355,7 +355,21 @@ class TestGTFSValidatorHook:
                     "schedule_url_for_validation": None,
                     "url": "http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip",
                 },
-                "system_errors": {},
+                "system_errors": {
+                    "notices": [
+                        {
+                            "code": "i_o_error",
+                            "severity": "ERROR",
+                            "totalNotices": 1,
+                            "sampleNotices": [
+                                {
+                                    "exception": "java.util.zip.ZipException",
+                                    "message": "Archive is not a ZIP archive",
+                                }
+                            ],
+                        }
+                    ]
+                },
                 "validator_version": "v5.0.0",
             },
         }

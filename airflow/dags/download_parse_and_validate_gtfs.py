@@ -8,16 +8,15 @@ from operators.download_config_to_gcs_operator import DownloadConfigToGCSOperato
 from operators.gcs_download_config_filter_operator import (
     GCSDownloadConfigFilterOperator,
 )
-from operators.gcs_to_gtfs_download_operator import GCSToGTFSDownloadOperator
 from operators.gtfs_csv_to_jsonl_operator import GTFSCSVToJSONLOperator
 from operators.unzip_gtfs_to_gcs_operator import UnzipGTFSToGCSOperator
 from operators.validate_gtfs_to_gcs_operator import ValidateGTFSToGCSOperator
 
 from airflow import XComArg
-from airflow.decorators import dag
+from airflow.decorators import dag, task
+from airflow.operators.dummy import DummyOperator
 from airflow.operators.latest_only import LatestOnlyOperator
-from airflow.operators.trigger_dagrun import TriggerDagRunOperator
-from airflow.providers.google.cloud.operators.gcs import GCSListObjectsOperator
+from airflow.providers.google.cloud.hooks.gcs import GCSHook
 from airflow.utils.trigger_rule import TriggerRule
 
 GTFS_SCHEDULE_FILENAMES = {
@@ -47,22 +46,37 @@ GTFS_SCHEDULE_FILENAMES = {
 }
 
 
+@task.branch()
+def gcs_branch(bucket_name, object_name, present, missing):
+    exists = GCSHook().exists(bucket_name=bucket_name, object_name=object_name)
+    return present if exists else missing
+
+
 @dag(
     # Every day at midnight
     schedule="0 0 * * *",
-    start_date=datetime(2025, 12, 1),
+    start_date=datetime(2026, 1, 6),
     catchup=False,
     tags=["gtfs"],
 )
-def download_gtfs():
+def download_parse_and_validate_gtfs():
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
+
+    download_config_exists = gcs_branch.override(task_id="download_config_exists")(
+        bucket_name=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
+        object_name="gtfs_download_configs/dt={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
+        present="skip_bigquery_to_download_config",
+        missing="bigquery_to_download_config",
+    )
+
+    skip_download_config = DummyOperator(task_id="skip_bigquery_to_download_config")
 
     download_config = BigQueryToDownloadConfigOperator(
         task_id="bigquery_to_download_config",
         retries=1,
         retry_delay=timedelta(seconds=10),
         dataset_name="staging",
-        table_name="int_transit_database__gtfs_datasets_dim",
+        table_name="int_gtfs_datasets",
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
         destination_path="gtfs_download_configs/dt={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
     )
@@ -86,43 +100,6 @@ def download_gtfs():
         results_path="download_schedule_feed_results/dt={{ ds }}/ts={{ ts }}",
         map_index_template="{{ task.download_config['name'] }}",
     ).expand(download_config=XComArg(schedule_download_configs))
-
-    trigger_parse_and_validate_gtfs = TriggerDagRunOperator(
-        task_id="trigger_parse_and_validate_gtfs",
-        trigger_dag_id="parse_and_validate_gtfs",
-        logical_date="{{ ts }}",
-        trigger_rule=TriggerRule.ALL_DONE,
-    )
-
-    (
-        latest_only
-        >> download_config
-        >> schedule_download_configs
-        >> downloads
-        >> trigger_parse_and_validate_gtfs
-    )
-
-
-download_gtfs_instance = download_gtfs()
-
-
-@dag(
-    schedule=None,
-    catchup=False,
-    tags=["gtfs"],
-    user_defined_macros={"basename": os.path.basename},
-)
-def parse_and_validate_gtfs():
-    results_paths = GCSListObjectsOperator(
-        task_id="list_result_paths",
-        bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW").removeprefix("gs://"),
-        prefix="download_schedule_feed_results/dt={{ ds }}/ts={{ ts }}",
-    )
-
-    downloads = GCSToGTFSDownloadOperator.partial(
-        task_id="results_to_download",
-        source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
-    ).expand(source_path=results_paths.output)
 
     def create_validate_kwargs(download):
         return {
@@ -179,11 +156,7 @@ def parse_and_validate_gtfs():
     def list_unzipped_files(unzipped_file):
         return {
             "unzip_results": unzipped_file["unzip_results"],
-            "source_path_fragment": os.path.join(
-                "dt={{ ds }}",
-                "ts={{ ts }}",
-                f"base64_url={unzipped_file['base64_url']}",
-            ),
+            "source_path_fragment": unzipped_file["destination_path_fragment"],
             "results_path_fragment": os.path.join(
                 "dt={{ ds }}",
                 "ts={{ ts }}",
@@ -206,7 +179,14 @@ def parse_and_validate_gtfs():
         trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(unzip.output.map(list_unzipped_files))
 
-    results_paths >> downloads >> (validate, (unzip >> convert))
+    (
+        latest_only
+        >> download_config_exists
+        >> (download_config, skip_download_config)
+        >> schedule_download_configs
+    )
+
+    (schedule_download_configs >> downloads >> (validate, (unzip >> convert)))
 
 
-parse_and_validate_gtfs_instance = parse_and_validate_gtfs()
+download_parse_and_validate_gtfs_instance = download_parse_and_validate_gtfs()

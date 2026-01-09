@@ -70,7 +70,7 @@ class TestBigQueryToDownloadConfigOperator:
         task = test_dag.get_task("gtfs_dataset_to_download_config")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
-        assert xcom_value == [{"destination_path": destination_path}]
+        assert xcom_value == {"destination_path": destination_path}
 
         metadata = gcs_hook.get_metadata(
             bucket_name=os.environ.get("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG").replace(
