@@ -13,11 +13,8 @@
 WITH int_tu_trip_stop AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_stop_day_map_grouping') }}
-    WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
-        this_dt_column="service_date",
-        filter_dt_column="dt"
-    ) }} AND dt >= "2026-01-01"
+    WHERE dt >= "2025-12-01" AND dt <= "2025-12-02"
+
 ),
 
 trip_stop_with_trip_keys AS (
@@ -29,14 +26,22 @@ trip_stop_with_trip_keys AS (
             'trip_id',
             'trip_start_time',
         ]) }} AS trip_key,
+        service_date,
+        base64_url,
+        schedule_base64_url,
+        trip_id,
+        trip_start_time,
+
         key,
         stop_id,
         stop_sequence,
         actual_arrival,
         actual_departure,
+        actual_arrival_pacific,
+        actual_departure_pacific,
 
     FROM int_tu_trip_stop
-    GROUP BY service_date, base64_url, schedule_base64_url, trip_id, trip_start_time, stop_id, stop_sequence, actual_arrival, actual_departure
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 ),
 
 unnested AS (
@@ -124,7 +129,7 @@ minute_bins AS (
         COUNT(*) AS n_predictions_minute,
 
     FROM prediction_difference
-    GROUP BY key, extract_hour, extract_minute
+    GROUP BY 1, 2, 3
 ),
 
 derive_metrics AS (
@@ -168,9 +173,22 @@ derive_metrics AS (
     FROM minute_bins
 ),
 
-stop_time_metrics AS (
+fct_stop_time_metrics AS (
     SELECT
-        key,
+        trip_stop_with_trip_keys.trip_key,
+        trip_stop_with_trip_keys.service_date,
+        trip_stop_with_trip_keys.base64_url,
+        trip_stop_with_trip_keys.schedule_base64_url,
+        trip_stop_with_trip_keys.trip_id,
+        trip_stop_with_trip_keys.trip_start_time,
+
+        trip_stop_with_trip_keys.key,
+        trip_stop_with_trip_keys.stop_id,
+        trip_stop_with_trip_keys.stop_sequence,
+        trip_stop_with_trip_keys.actual_arrival,
+        trip_stop_with_trip_keys.actual_departure,
+        trip_stop_with_trip_keys.actual_arrival_pacific,
+        trip_stop_with_trip_keys.actual_departure_pacific,
 
         -- 04_reliable_prediction_accuracy
         ROUND(AVG(prediction_error), 2) AS avg_prediction_error_sec,
@@ -208,16 +226,8 @@ stop_time_metrics AS (
         SUM(n_predictions_minute) AS n_predictions,
 
     FROM derive_metrics
-    GROUP BY key
-),
-
-fct_stop_time_metrics AS (
-    SELECT
-        trip_stop_with_trip_keys.*,
-        stop_time_metrics.* EXCEPT(key)
-    FROM stop_time_metrics
-    INNER JOIN trip_stop_with_trip_keys
-        USING (key)
+    INNER JOIN trip_stop_with_trip_keys USING (key)
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 )
 
 SELECT * FROM fct_stop_time_metrics
