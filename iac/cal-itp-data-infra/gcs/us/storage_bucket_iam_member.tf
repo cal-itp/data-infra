@@ -623,7 +623,7 @@ resource "google_storage_bucket_iam_member" "calitp-analysis" {
 }
 
 resource "google_storage_bucket_iam_member" "enghouse-raw-sftp-service-account" {
-  bucket = google_storage_bucket.cal-itp-data-infra-enghouse-raw.name
+  bucket = google_storage_bucket.calitp-enghouse-raw.name
   role   = "roles/storage.objectAdmin"
   member = "serviceAccount:${data.terraform_remote_state.iam.outputs.google_service_account_enghouse-sftp-service-account_email}"
 }

@@ -2894,8 +2894,8 @@ output "google_storage_bucket_cal-itp-data-infra-cf-source_name" {
   value = google_storage_bucket.cal-itp-data-infra-cf-source-tf.name
 }
 
-output "google_storage_bucket_cal-itp-data-infra-enghouse-raw_name" {
-  value = google_storage_bucket.cal-itp-data-infra-enghouse-raw.name
+output "google_storage_bucket_calitp-enghouse-raw_name" {
+  value = google_storage_bucket.calitp-enghouse-raw.name
 }
 
 output "google_storage_bucket_calitp-enghouse-raw_name" {
