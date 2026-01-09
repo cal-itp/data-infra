@@ -156,13 +156,17 @@ class GTSFValidatorVersion:
 
             try:
                 subprocess.run(args, capture_output=True, check=True)
-                result.read_report(os.path.join(output_dir, "report.json"))
-                result.read_system_errors(
-                    os.path.join(output_dir, "system_errors.json")
-                )
             except Exception as e:
                 result.set_exception(e)
                 logging.error(str(e))
+
+            if os.path.isfile(os.path.join(output_dir, "report.json")):
+                result.read_report(os.path.join(output_dir, "report.json"))
+
+            if os.path.isfile(os.path.join(output_dir, "system_errors.json")):
+                result.read_system_errors(
+                    os.path.join(output_dir, "system_errors.json")
+                )
 
             return result
 
@@ -178,10 +182,10 @@ class GTFSValidatorHook(BaseHook):
         return GTSFValidatorVersion.find(self.date)
 
     def run(
-        self, filename: str, download_schedule_feed_results: dict
+        self, input_zip: str, download_schedule_feed_results: dict
     ) -> GTFSValidatorResult:
         return self.version().run(
             current_date=self.date,
             download_schedule_feed_results=download_schedule_feed_results,
-            input_zip=filename,
+            input_zip=input_zip,
         )
