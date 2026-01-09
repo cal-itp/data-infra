@@ -89,6 +89,7 @@ def download_parse_and_validate_gtfs():
         feed_type="schedule",
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
         source_path="gtfs_download_configs/dt={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
+        trigger_rule=TriggerRule.NONE_FAILED,
     )
 
     downloads = DownloadConfigToGCSOperator.partial(
@@ -179,12 +180,9 @@ def download_parse_and_validate_gtfs():
         trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(unzip.output.map(list_unzipped_files))
 
-    (
-        latest_only
-        >> download_config_exists
-        >> (download_config, skip_download_config)
-        >> schedule_download_configs
-    )
+    (latest_only >> download_config_exists >> (download_config, skip_download_config))
+
+    ((download_config, skip_download_config) >> schedule_download_configs)
 
     (schedule_download_configs >> downloads >> (validate, (unzip >> convert)))
 
