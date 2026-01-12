@@ -6,7 +6,7 @@
 jupyterhub:
   singleuser:
     defaultUrl: "/lab"
-    startTimeout: 300
+    startTimeout: 600
     image:
       name: ghcr.io/cal-itp/data-infra/jupyter-singleuser
       tag: 2026.1.12
