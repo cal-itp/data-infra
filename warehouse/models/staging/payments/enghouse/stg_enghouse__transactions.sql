@@ -4,7 +4,7 @@ WITH source AS (
 
 clean_columns AS (
     SELECT
-        SAFE_CAST(OperatorId AS INT64) AS operator_id,
+        {{ trim_make_empty_string_null('OperatorId') }} AS operator_id,
         {{ trim_make_empty_string_null('id') }} AS id,
         {{ trim_make_empty_string_null('operation') }} AS operation,
         SAFE_CAST(terminal_id AS INT64) AS terminal_id,
@@ -29,6 +29,16 @@ clean_columns AS (
     FROM source
 ),
 
+deduplicated AS (
+    SELECT * FROM (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY (SELECT NULL)) AS row_num
+        FROM clean_columns
+    )
+    WHERE row_num = 1
+),
+
 stg_enghouse__transactions AS (
     SELECT
         operator_id,
@@ -51,7 +61,7 @@ stg_enghouse__transactions AS (
         par,
         brand,
         _content_hash
-    FROM clean_columns
+    FROM deduplicated
 )
 
 SELECT * FROM stg_enghouse__transactions

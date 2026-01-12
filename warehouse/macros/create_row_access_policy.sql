@@ -201,3 +201,26 @@ filter using (
 ) }};
 -- TODO: In the last policy of the macro call above, see if we can get the prod warehouse service account out of context
 {% endmacro %}
+
+{% macro payments_enghouse_row_access_policy() %}
+
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '253',
+    principals = ['serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    principals = [
+        'serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
+        'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
+        'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
+        'serviceAccount:github-actions-service-account@cal-itp-data-infra.iam.gserviceaccount.com',
+        'serviceAccount:github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com',
+        'serviceAccount:composer-service-account@cal-itp-data-infra.iam.gserviceaccount.com',
+        'principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Cloud_Admins',
+        'principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DOT_DDS_Data_Pipeline_and_Warehouse_Users'
+    ]
+) }};
+-- TODO: In the last policy of the macro call above, see if we can get the prod warehouse service account out of context
+{% endmacro %}

@@ -4,7 +4,7 @@ WITH source AS (
 
 clean_columns AS (
     SELECT
-        SAFE_CAST(Operator_Id AS INT64) AS operator_id,
+        {{ trim_make_empty_string_null('Operator_Id') }} AS operator_id,
         {{ trim_make_empty_string_null('id') }} AS id,
         {{ trim_make_empty_string_null('token') }} AS token,
         SAFE_CAST(amount_settled AS NUMERIC) AS amount_settled,
@@ -18,6 +18,16 @@ clean_columns AS (
         {{ dbt_utils.generate_surrogate_key(['Operator_Id', 'id', 'token', 'amount_settled', 'amount_to_settle',
             'debt_settled', 'stage', 'Payment_reference', 'terminal_id', 'open_date', 'close_date']) }} AS _content_hash,
     FROM source
+),
+
+deduplicated AS (
+    SELECT * FROM (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY (SELECT NULL)) AS row_num
+        FROM clean_columns
+    )
+    WHERE row_num = 1
 ),
 
 stg_enghouse__pay_windows AS (
@@ -34,7 +44,7 @@ stg_enghouse__pay_windows AS (
         open_date,
         close_date,
         _content_hash,
-    FROM clean_columns
+    FROM deduplicated
 )
 
 SELECT * FROM stg_enghouse__pay_windows
