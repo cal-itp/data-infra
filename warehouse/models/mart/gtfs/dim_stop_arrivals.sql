@@ -14,7 +14,7 @@ WITH dim_stop_times AS (
 int_gtfs_schedule__frequencies_stop_times AS (
     SELECT *
     FROM {{ ref('int_gtfs_schedule__frequencies_stop_times') }}
-    WHERE  stop_id IS NOT NULL
+    WHERE stop_id IS NOT NULL
 ),
 
 dim_trips AS (
@@ -68,7 +68,7 @@ stop_times_with_freq AS (
 -- if we do aggregation now, we will be overcounting because we'll count trips that aren't actually in service
 stop_times_with_hour AS (
     SELECT
-        -- if this is a unique key, will incremental table update by adding new stop_time entries??
+        -- if this is a unique key, will incremental table update by adding new stop_time entries?
         {{ dbt_utils.generate_surrogate_key(['feed_key', 'feed_timezone', 'trip_id', 'route_id', 'stop_id', 'stop_sequence']) }} AS key,
         *,
         CAST(
