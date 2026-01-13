@@ -18,7 +18,7 @@
    Runs specific dbt models as needed. It needs to be triggered manually.
 
 
-## download_gtfs
+## download_parse_and_validate_gtfs
 
 ### 1. Generates GTFS Config Files (datasets)
 
@@ -64,14 +64,8 @@
            To visualize the raw data from these files, you can query **external_gtfs_schedule.download_outcomes** or **mart_gtfs_audit.dim_gtfs_schedule_download_outcomes** in BigQuery.
 
 
-### 3. Triggers parse_and_validate_gtfs DAG
 
-   Once the step 2 is completed this DAG will trigger the unzip, convert and validate process through `parse_and_validate_gtfs` DAG.
-
-
-## parse_and_validate_gtfs
-
-### Validates files
+### 3. Validates files
 
    Runs [**ValidateGTFSToGCSOperator**](airflow/plugins/operators/validate_gtfs_to_gcs_operator.py) and [**GTFSValidatorHook**](airflow/plugins/hooks/gtfs_validator_hook.py) replacing [unzip_and_validate_gtfs_schedule_hourly.validate_gtfs_schedule](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/validate_gtfs_schedule.yml).
 
@@ -90,9 +84,9 @@
      To visualize the raw data from these files, you can query **external_gtfs_schedule.validations_outcomes**, **staging.stg_gtfs_schedule__validation_outcomes**, or **mart_gtfs_audit.dim_gtfs_schedule_validation_outcomes** in BigQuery.
 
 
-### Unzips and Convert Dataset Files
+### 4. Unzips and Convert Dataset Files
 
-#### 1. Unzips Dataset Files
+#### 4.1. Unzips Dataset Files
 
    Runs [**UnzipGTFSToGCSOperator**](airflow/plugins/operators/unzip_gtfs_to_gcs_operator.py) and [**GTFSUnzipHook**](airflow/plugins/hooks/gtfs_unzip_hook.py) replacing [unzip_and_validate_gtfs_schedule_hourly.unzip_gtfs_schedule](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/unzip_gtfs_schedule.py).
 
@@ -136,7 +130,7 @@
       The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
       To visualize the raw data from these files, you can query **external_gtfs_schedule.unzip_outcomes**, **staging.stg_gtfs_schedule__unzip_outcomes**, or **mart_gtfs_audit.dim_gtfs_schedule_unzip_outcomes** in BigQuery.
 
-#### 2. Converts files to external tables format (jsonl)
+#### 4.2. Converts files to external tables format (jsonl)
 
    Runs [**GTFSCSVToJSONLOperator**](airflow/plugins/operators/gtfs_csv_to_jsonl_operator.py) replacing [unzip_and_validate_gtfs_schedule_hourly.convert_to_json](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/convert_to_json).
 
