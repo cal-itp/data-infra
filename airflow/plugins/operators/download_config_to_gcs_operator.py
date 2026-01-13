@@ -13,7 +13,7 @@ from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
-class Download:
+class RemoteFile:
     hook: DownloadConfigHook
     exception: Exception
 
@@ -45,9 +45,6 @@ class Download:
 
     def success(self) -> bool:
         return self.response() is not None
-
-    def base64_url(self) -> str:
-        return urlsafe_b64encode(self.hook.url().encode()).decode()
 
     def content(self) -> str:
         return self.response().content
@@ -88,53 +85,51 @@ class Download:
         }
 
 
-class DownloadConfigToGCSOperator(BaseOperator):
-    _download: Download
-    template_fields: Sequence[str] = (
-        "download_config",
-        "destination_bucket",
-        "destination_path",
-        "results_path",
-        "gcp_conn_id",
-    )
+class BaseDownloadHandler:
+    def __init__(self, download_config: dict) -> None:
+        self.download_config = download_config
 
-    def __init__(
-        self,
-        download_config: dict,
-        destination_bucket: str,
-        destination_path: str,
-        results_path: str,
-        gcp_conn_id: str = "google_cloud_default",
-        **kwargs,
-    ) -> None:
-        super().__init__(**kwargs)
+    def base64_url(self) -> str:
+        return urlsafe_b64encode(self.download_config.get("url")).decode()
 
-        self._download: Download = None
-        self.download_config: dict = download_config
-        self.destination_bucket: str = destination_bucket
-        self.destination_path: str = destination_path
-        self.results_path: str = results_path
-        self.gcp_conn_id: str = gcp_conn_id
+    def valid(self) -> bool:
+        return True
 
-    def destination_name(self) -> str:
-        return self.destination_bucket.replace("gs://", "")
+    def downloadable(self) -> bool:
+        return False
 
-    def gcs_hook(self) -> GCSHook:
-        return GCSHook(gcp_conn_id=self.gcp_conn_id)
+    def reportable(self) -> bool:
+        return False
 
+    def content(self) -> bytes:
+        return b""
+
+    def mime_type(self) -> str:
+        return "application/octet-stream"
+
+class DropboxDownloadHandler(BaseDownloadHandler):
+
+class DownloadUrlHandler(BaseDownloadHandler):
     def download_config_hook(self) -> DownloadConfigHook:
         return DownloadConfigHook(download_config=self.download_config)
 
-    def download(self) -> dict:
-        if not self._download:
-            self._download = Download(self.download_config_hook())
-        return self._download
+    def remote_file(self) -> str:
+        if not self._remote_file
+            self._remote_file = RemoteFile(hook=self.download_config_hook())
+        return self._remote_file
 
-    def schedule_feed_path(self) -> str:
-        return f"{self.destination_path}/base64_url={self.download().base64_url()}/{self.download().filename()}"
+    def path(self) -> str:
+        return f"base64_url={self.base64_url()}/{self.remote_file().filename()}"
 
-    def execute(self, context: Context) -> str:
-        dag_run: DagRun = context["dag_run"]
+    def downloadable(self) -> bool:
+        return True
+
+    def content(self) -> bytes:
+        return self.remote_file().content()
+
+    def mime_type(self) -> str:
+        return self.remote_file().mime_type()
+
 
         if self.gcs_hook().exists(
             bucket_name=self.destination_name(),
@@ -214,3 +209,89 @@ class DownloadConfigToGCSOperator(BaseOperator):
                 download_schedule_feed_results
             ),
         }
+
+
+class DownloadConfigToGCSOperator(BaseOperator):
+    _download: Download
+    template_fields: Sequence[str] = (
+        "download_config",
+        "destination_bucket",
+        "destination_path",
+        "results_path",
+        "gcp_conn_id",
+    )
+
+    def __init__(
+        self,
+        download_config: dict,
+        destination_bucket: str,
+        destination_path: str,
+        results_path: str,
+        gcp_conn_id: str = "google_cloud_default",
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+
+        self._download: Download = None
+        self.download_config: dict = download_config
+        self.destination_bucket: str = destination_bucket
+        self.destination_path: str = destination_path
+        self.results_path: str = results_path
+        self.gcp_conn_id: str = gcp_conn_id
+
+    def destination_name(self) -> str:
+        return self.destination_bucket.replace("gs://", "")
+
+    def gcs_hook(self) -> GCSHook:
+        return GCSHook(gcp_conn_id=self.gcp_conn_id)
+
+    def strategy(self) -> DownloadHandler:
+        if not self._strategy:
+            self._strategy = filter([
+                SkipDownloadHandler(download_config=self.download_config),
+                DownloadDropboxHandler(download_config=self.download_config),
+                DownloadHandler(download_config=self.download_config)
+            ], lambda s: s.valid())
+        return self._strategy
+
+    def execute(self, context: Context) -> str:
+        dag_run: DagRun = context["dag_run"]
+
+        if self.strategy().downloadable():
+            self.gcs_hook().upload(
+                bucket_name=self.destination_name(),
+                object_name=f"{self.destination_path}/{self.strategy().path()}",
+                data=self.strategy().content(),
+                mime_type=self.strategy().mime_type(),
+                metadata={
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        self.strategy().extract(current_time=dag_run.logical_date)
+                    ),
+                },
+            )
+
+        if self.strategy().reportable():
+            self.gcs_hook().upload(
+                bucket_name=self.destination_name(),
+                object_name=f"{self.results_path}/{self.strategy().base64_url()}.jsonl",
+                data=json.dumps(self.strategy().results(), separators=(",", ":")),
+                mime_type="application/jsonl",
+                gzip=False,
+                metadata={
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        {
+                            "filename": f"{self.strategy().base64_url()}.jsonl",
+                            "ts": dag_run.logical_date.isoformat(),
+                            "end": dag_run.logical_date.isoformat(),
+                            "backfilled": False,
+                        }
+                    )
+                },
+            )
+
+        return {
+            "base64_url": self.strategy().base64_url(),
+            "schedule_feed_path": self.strategy().path(),
+            "download_schedule_feed_results": self.strategy().results()
+        }
+
