@@ -725,3 +725,54 @@ models:
         description: |
           Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
           Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
+
+  - name: fct_payments_rides_enghouse
+    description: |
+      Enghouse taps.
+    columns:
+      - name: operator_id
+      - name: tap_id
+      - name: mapping_terminal_id
+      - name: mapping_merchant_id
+      - name: terminal
+      - name: token
+      - name: masked_pan
+      - name: expiry
+      - name: server_date
+      - name: terminal_date
+      - name: tx_number
+      - name: tx_status
+      - name: payment_reference
+      - name: terminal_spdh_code
+      - name: denylist_version
+      - name: transit_data
+      - name: currency
+      - name: par
+      - name: fare_mode
+      - name: fare_type
+      - name: fare_value
+      - name: fare_description
+      - name: fare_linked_id
+      - name: id
+      - name: gps_latitude
+      - name: gps_altitude
+      - name: vehicle_public_number
+      - name: vehicle_name
+      - name: stop_id
+      - name: stop_name
+      - name: platform_id
+      - name: platform_name
+      - name: zone_id
+      - name: zone_name
+      - name: line_public_number
+      - name: line_name
+      - name: line_direction
+      - name: trip_public_number
+      - name: trip_name
+      - name: service_public_number
+      - name: service_name
+      - name: driver_id
+      - name: route_long_name
+      - name: route_short_name
+      - name: agency_id
+      - name: agency_name
