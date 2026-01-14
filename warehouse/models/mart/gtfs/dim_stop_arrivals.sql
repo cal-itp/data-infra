@@ -21,7 +21,8 @@ dim_trips AS (
     SELECT DISTINCT
         feed_key,
         trip_id,
-        route_id
+        route_id,
+        direction_id
     FROM {{ ref('dim_trips') }}
 ),
 
@@ -43,6 +44,7 @@ stop_times_with_freq AS (
         MAX(stop_times._feed_valid_from) as _feed_valid_from,
 
         dim_routes.route_id,
+        dim_trips.direction_id,
         COALESCE(CAST(dim_routes.route_type AS INT), 1000) AS route_type,
 
         MIN(COALESCE(arrival_sec, stop_times_arrival_sec)) AS arrival_sec,
@@ -61,7 +63,7 @@ stop_times_with_freq AS (
     INNER JOIN dim_routes
         ON dim_trips.feed_key = dim_routes.feed_key
         AND dim_trips.route_id = dim_routes.route_id
-    GROUP BY feed_key, feed_timezone, trip_id, route_id, route_type, stop_id, stop_sequence
+    GROUP BY 1, 2, 3, 4, 5, 7, 8, 9
 ),
 
 -- service_id for a particular service_date matters
@@ -69,7 +71,7 @@ stop_times_with_freq AS (
 stop_times_with_hour AS (
     SELECT
         -- if this is a unique key, will incremental table update by adding new stop_time entries?
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'feed_timezone', 'trip_id', 'route_id', 'stop_id', 'stop_sequence']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'feed_timezone', 'trip_id', 'direction_id', 'route_id', 'stop_id', 'stop_sequence']) }} AS key,
         *,
         CAST(
             TRUNC(arrival_sec / 3600) AS INT
