@@ -38,7 +38,6 @@ with DAG(
                 "models/mart/gtfs/fct_stop_time_metrics.sql",
                 "models/mart/gtfs/fct_trip_updates_stop_metrics.sql",
                 "models/mart/gtfs/fct_trip_updates_trip_metrics.sql",
-                "models/mart/gtfs/dim_stop_arrivals.sql",
             ],
             test_behavior=TestBehavior.AFTER_ALL,
         ),
