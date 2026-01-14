@@ -1,7 +1,12 @@
 {{
     config(
         materialized='incremental',
-        unique_key = 'key',
+        incremental_strategy='insert_overwrite',
+        partition_by={
+            'field': '_feed_valid_from',
+            'data_type': 'timestamp',
+            'granularity': 'month',
+        },
         cluster_by='feed_key'
     )
 }}
