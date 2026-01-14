@@ -158,7 +158,8 @@ resource "google_storage_bucket_iam_policy" "calitp-staging-pytest" {
     {
       "members": [
         "projectViewer:cal-itp-data-infra-staging",
-        "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
+        "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com",
+        "serviceAccount:project-473674835135@storage-transfer-service.iam.gserviceaccount.com"
       ],
       "role": "roles/storage.legacyBucketReader"
     },
@@ -177,7 +178,8 @@ resource "google_storage_bucket_iam_policy" "calitp-staging-pytest" {
     },
     {
       "members": [
-        "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
+        "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com",
+        "serviceAccount:project-473674835135@storage-transfer-service.iam.gserviceaccount.com"
       ],
       "role": "roles/storage.objectAdmin"
     }
