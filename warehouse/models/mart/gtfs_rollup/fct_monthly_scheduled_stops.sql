@@ -19,10 +19,11 @@ dim_stops AS (
 
 
 feeds AS (
-    SELECT DISTINCT
+    SELECT
         feed_key,
         gtfs_dataset_name AS name,
     FROM {{ ref('fct_daily_schedule_feeds') }}
+    GROUP BY feed_key, name
 ),
 
 stops2 AS (
@@ -46,8 +47,23 @@ monthly_stop_counts AS (
         day_type,
         stop_id,
 
-        SUM(stop_event_count) AS total_stop_arrivals,
-        ROUND(SUM(stop_event_count) / COUNT(DISTINCT service_date), 1) AS daily_stop_arrivals,
+        SUM(daily_arrivals) AS total_stop_arrivals,
+        ROUND(SUM(daily_arrivals) / COUNT(DISTINCT service_date), 1) AS daily_stop_arrivals,
+        ROUND(AVG(n_hours_in_service), 0) AS n_hours_in_service,
+
+        AVG(arrivals_per_hour_owl) AS arrivals_per_hour_owl,
+        AVG(arrivals_per_hour_early_am) AS arrivals_per_hour_early_am,
+        AVG(arrivals_per_hour_am_peak) AS arrivals_per_hour_am_peak,
+        AVG(arrivals_per_hour_midday) AS arrivals_per_hour_midday,
+        AVG(arrivals_per_hour_pm_peak) AS arrivals_per_hour_pm_peak,
+        AVG(arrivals_per_hour_evening) AS arrivals_per_hour_evening,
+
+        SUM(arrivals_owl) AS arrivals_owl,
+        SUM(arrivals_early_am) AS arrivals_early_am,
+        SUM(arrivals_am_peak) AS arrivals_am_peak,
+        SUM(arrivals_midday) AS arrivals_midday,
+        SUM(arrivals_pm_peak) AS arrivals_pm_peak,
+        SUM(arrivals_evening) AS arrivals_evening,
 
         SUM(route_type_0) AS route_type_0,
         SUM(route_type_1) AS route_type_1,
@@ -63,15 +79,23 @@ monthly_stop_counts AS (
 
         -- Ex: a stop for 30 days, with route_type_array = [0, 3] for rail and bus. Output here should get the same, not [0, 3, 0, 3, repeated]
         -- unnest the arrays first then get distinct.
-        ARRAY_AGG(DISTINCT route_type ORDER BY route_type) AS route_type_array,
-        ARRAY_AGG(DISTINCT transit_mode ORDER BY transit_mode) AS transit_mode_array,
-
+        ARRAY_AGG(DISTINCT route_type ) AS route_type_array,
+        ARRAY_AGG(DISTINCT {{ parse_route_id('name', 'route_id') }}) AS route_id_array,
+        ARRAY_AGG(DISTINCT
+          CASE
+            WHEN route_type IN (0, 1, 2) THEN "rail"
+            WHEN route_type = 3 THEN "bus"
+            WHEN route_type = 4 THEN "ferry"
+            WHEN route_type IN (5, 6, 7, 12) THEN "other_rail"
+            WHEN route_type = 11 THEN "trolleybus"
+          END
+        ) AS transit_mode_array,
         COUNT(DISTINCT service_date) AS n_days,
         COUNT(DISTINCT feed_key) AS n_feeds,
 
     FROM stops2
     LEFT JOIN UNNEST(stops2.route_type_array) AS route_type
-    LEFT JOIN UNNEST(stops2.transit_mode_array) AS transit_mode
+    LEFT JOIN UNNEST(stops2.route_id_array) AS route_id
     GROUP BY name, month_first_day, day_type, stop_id
 ),
 
@@ -81,16 +105,16 @@ most_common_stop_key AS (
         month_first_day,
         day_type,
         stop_key,
-        SUM(stop_event_count) AS max_stop_events
+        SUM(daily_arrivals) AS max_stop_arrivals
 
     FROM stops2
     GROUP BY name, month_first_day, day_type, stop_id, stop_key
-    -- dedupe and keep the stop_key with the most stop_events
+    -- dedupe and keep the stop_key with the most arrivals
     -- if multiple stop_keys are found for a gtfs_dataset_name-month_first_day_stop_id
     -- combination (different feed_keys or gtfs_dataset_keys)
     QUALIFY ROW_NUMBER() OVER (PARTITION BY
                                name, month_first_day, day_type, stop_id
-                               ORDER BY max_stop_events DESC) = 1
+                               ORDER BY max_stop_arrivals DESC) = 1
 ),
 
 fct_monthly_stops AS (
@@ -100,7 +124,7 @@ fct_monthly_stops AS (
         EXTRACT(YEAR FROM monthly_stop_counts.month_first_day) AS year,
         EXTRACT(MONTH FROM monthly_stop_counts.month_first_day) AS month,
         monthly_stop_counts.* EXCEPT(name, month_first_day),
-        ARRAY_LENGTH(monthly_stop_counts.transit_mode_array) AS n_transit_modes,
+        ARRAY_LENGTH(monthly_stop_counts.route_type_array) AS n_route_types,
 
         most_common_stop_key.stop_key,
 
