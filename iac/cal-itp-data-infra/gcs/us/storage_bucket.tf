@@ -2123,6 +2123,19 @@ resource "google_storage_bucket" "calitp-analysis" {
   }
 }
 
+resource "google_storage_bucket" "calitp-enghouse-raw" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-enghouse-raw"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+# TODO: Delete once is totally replaced by calitp-enghouse-raw
 resource "google_storage_bucket" "cal-itp-data-infra-enghouse-raw" {
   default_event_based_hold    = "false"
   force_destroy               = "true"
