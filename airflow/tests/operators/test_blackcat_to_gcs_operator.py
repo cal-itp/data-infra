@@ -90,3 +90,62 @@ class TestBlackCatToGCSOperator:
         decompressed_result = gzip.decompress(compressed_result)
         result = [json.loads(x) for x in decompressed_result.splitlines()]
         assert "ntdassetandresourceinfo" in result[0]
+
+    @pytest.fixture
+    def empty_year_execution_date(self) -> datetime:
+        return datetime.fromisoformat("2026-01-10").replace(tzinfo=timezone.utc)
+
+    @pytest.fixture
+    def test_empty_year_dag(self, empty_year_execution_date: datetime) -> DAG:
+        return DAG(
+            "test_empty_year_dag",
+            default_args={
+                "owner": "airflow",
+                "start_date": empty_year_execution_date,
+                "end_date": empty_year_execution_date + relativedelta(months=+1),
+            },
+            schedule=relativedelta(months=+1),
+        )
+
+    @pytest.fixture
+    def empty_year_operator(self, test_empty_year_dag: DAG) -> BlackCatToGCSOperator:
+        return BlackCatToGCSOperator(
+            task_id="empty_year_blackcat_to_gcs",
+            http_conn_id="http_blackcat",
+            gcp_conn_id="google_cloud_default",
+            file_name="all_ntdreports",
+            api_name="all_NTDReporting",
+            bucket=os.environ.get("CALITP_BUCKET__NTD_REPORT_VALIDATION"),
+            endpoint="/api/APIModules/GetNTDReportsByYear/BCG_CA/2026",
+            dag=test_empty_year_dag,
+        )
+
+    @pytest.mark.vcr
+    def test_empty_year_execute(
+        self,
+        test_empty_year_dag: DAG,
+        empty_year_operator: BlackCatToGCSOperator,
+        empty_year_execution_date: datetime,
+        object_path: BlackCatObjectPath,
+        gcs_hook: GCSHook,
+    ):
+        empty_year_operator.run(
+            start_date=empty_year_execution_date,
+            end_date=empty_year_execution_date
+            + relativedelta(months=+1)
+            - relativedelta(seconds=-1),
+            ignore_first_depends_on_past=True,
+        )
+
+        task = test_empty_year_dag.get_task("empty_year_blackcat_to_gcs")
+        task_instance = TaskInstance(task, execution_date=empty_year_execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert xcom_value is None
+
+        compressed_result = gcs_hook.exists(
+            bucket_name=os.environ.get("CALITP_BUCKET__NTD_REPORT_VALIDATION").replace(
+                "gs://", ""
+            ),
+            object_name=object_path.resolve(empty_year_execution_date),
+        )
+        assert not compressed_result

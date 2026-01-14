@@ -75,13 +75,15 @@ class BlackCatToGCSOperator(BaseOperator):
         ]
 
     def execute(self, context: Context) -> str:
-        dag_run: DagRun = context["dag_run"]
-        object_name: str = self.object_path().resolve(dag_run.logical_date)
-        self.gcs_hook().upload(
-            bucket_name=self.bucket_name(),
-            object_name=object_name,
-            data="\n".join(self.cleaned_rows()),
-            mime_type="application/jsonl",
-            gzip=True,
-        )
-        return os.path.join(self.bucket, object_name)
+        result = self.cleaned_rows()
+        if result:
+            dag_run: DagRun = context["dag_run"]
+            object_name: str = self.object_path().resolve(dag_run.logical_date)
+            self.gcs_hook().upload(
+                bucket_name=self.bucket_name(),
+                object_name=object_name,
+                data="\n".join(result),
+                mime_type="application/jsonl",
+                gzip=True,
+            )
+            return os.path.join(self.bucket, object_name)
