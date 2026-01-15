@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-    WITH stops AS (
+WITH stops AS (
     SELECT
         -- get these from dim_stops, since pt_geom can't be grouped or select distinct on
         * EXCEPT(tts_stop_name, pt_geom, parent_station, stop_code,
@@ -51,31 +51,34 @@ monthly_stop_counts AS (
         ROUND(SUM(daily_arrivals) / COUNT(DISTINCT service_date), 1) AS daily_stop_arrivals,
         ROUND(AVG(n_hours_in_service), 0) AS n_hours_in_service,
 
-        AVG(arrivals_per_hour_owl) AS arrivals_per_hour_owl,
-        AVG(arrivals_per_hour_early_am) AS arrivals_per_hour_early_am,
-        AVG(arrivals_per_hour_am_peak) AS arrivals_per_hour_am_peak,
-        AVG(arrivals_per_hour_midday) AS arrivals_per_hour_midday,
-        AVG(arrivals_per_hour_pm_peak) AS arrivals_per_hour_pm_peak,
-        AVG(arrivals_per_hour_evening) AS arrivals_per_hour_evening,
+        ROUND(AVG(arrivals_per_hour_owl), 1) AS arrivals_per_hour_owl,
+        ROUND(AVG(arrivals_per_hour_early_am), 1) AS arrivals_per_hour_early_am,
+        ROUND(AVG(arrivals_per_hour_am_peak), 1) AS arrivals_per_hour_am_peak,
+        ROUND(AVG(arrivals_per_hour_midday), 1) AS arrivals_per_hour_midday,
+        ROUND(AVG(arrivals_per_hour_pm_peak), 1) AS arrivals_per_hour_pm_peak,
+        ROUND(AVG(arrivals_per_hour_evening), 1) AS arrivals_per_hour_evening,
 
-        SUM(arrivals_owl) AS arrivals_owl,
-        SUM(arrivals_early_am) AS arrivals_early_am,
-        SUM(arrivals_am_peak) AS arrivals_am_peak,
-        SUM(arrivals_midday) AS arrivals_midday,
-        SUM(arrivals_pm_peak) AS arrivals_pm_peak,
-        SUM(arrivals_evening) AS arrivals_evening,
+        -- would sum or averages make more sense?
+        -- we can always use sum() / n_dates to get average
+        -- start with averages, because we want typical metrics over the month
+        ROUND(AVG(arrivals_owl), 1) AS arrivals_owl,
+        ROUND(AVG(arrivals_early_am), 1) AS arrivals_early_am,
+        ROUND(AVG(arrivals_am_peak), 1) AS arrivals_am_peak,
+        ROUND(AVG(arrivals_midday), 1) AS arrivals_midday,
+        ROUND(AVG(arrivals_pm_peak), 1) AS arrivals_pm_peak,
+        ROUND(AVG(arrivals_evening), 1) AS arrivals_evening,
 
-        SUM(route_type_0) AS route_type_0,
-        SUM(route_type_1) AS route_type_1,
-        SUM(route_type_2) AS route_type_2,
-        SUM(route_type_3) AS route_type_3,
-        SUM(route_type_4) AS route_type_4,
-        SUM(route_type_5) AS route_type_5,
-        SUM(route_type_6) AS route_type_6,
-        SUM(route_type_7) AS route_type_7,
-        SUM(route_type_11) AS route_type_11,
-        SUM(route_type_12) AS route_type_12,
-        SUM(missing_route_type) AS missing_route_type,
+        ROUND(AVG(route_type_0), 1) AS route_type_0,
+        ROUND(AVG(route_type_1), 1) AS route_type_1,
+        ROUND(AVG(route_type_2), 1) AS route_type_2,
+        ROUND(AVG(route_type_3), 1) AS route_type_3,
+        ROUND(AVG(route_type_4), 1) AS route_type_4,
+        ROUND(AVG(route_type_5), 1) AS route_type_5,
+        ROUND(AVG(route_type_6), 1) AS route_type_6,
+        ROUND(AVG(route_type_7), 1) AS route_type_7,
+        ROUND(AVG(route_type_11), 1) AS route_type_11,
+        ROUND(AVG(route_type_12), 1) AS route_type_12,
+        ROUND(AVG(missing_route_type), 1) AS missing_route_type,
 
         -- Ex: a stop for 30 days, with route_type_array = [0, 3] for rail and bus. Output here should get the same, not [0, 3, 0, 3, repeated]
         -- unnest the arrays first then get distinct.
