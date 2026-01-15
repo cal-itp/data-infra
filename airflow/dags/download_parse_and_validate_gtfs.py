@@ -53,8 +53,8 @@ def gcs_branch(bucket_name, object_name, present, missing):
 
 
 @dag(
-    # Every day at midnight
-    schedule="0 0 * * *",
+    # 3am UTC (8am PDT/7am PST) every day - should run after 'airtable_loader_v2'
+    schedule="0 3 * * *",
     start_date=datetime(2026, 1, 6),
     catchup=False,
     tags=["gtfs"],
