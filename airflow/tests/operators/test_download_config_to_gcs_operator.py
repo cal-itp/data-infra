@@ -404,6 +404,193 @@ class TestDownloadConfigToGCSOperator:
         }
 
     @pytest.fixture
+    def download_config_file_as_response_basename(self) -> dict:
+        return {
+            "auth_headers": {},
+            "auth_query_params": {},
+            "computed": False,
+            "feed_type": "schedule",
+            "name": "Anteater Express Schedule",
+            "schedule_url_for_validation": None,
+            "url": "https://api.transloc.com/gtfs/uci.zip",
+            "extracted_at": "2025-06-01T00:00:00+00:00",
+        }
+
+    @pytest.fixture
+    def test_dag_file_as_response_basename(self, execution_date: datetime) -> DAG:
+        return DAG(
+            "test_dag_file_as_response_basename",
+            default_args={
+                "owner": "airflow",
+                "start_date": execution_date,
+                "end_date": execution_date + timedelta(days=1),
+            },
+            schedule=timedelta(days=1),
+        )
+
+    @pytest.fixture
+    def operator_file_as_response_basename(
+        self,
+        test_dag_file_as_response_basename: DAG,
+        download_config_file_as_response_basename: dict,
+        destination_path: str,
+        results_path: str,
+    ) -> DownloadConfigToGCSOperator:
+        return DownloadConfigToGCSOperator(
+            task_id="gtfs_download_config_to_gcs_basename",
+            gcp_conn_id="google_cloud_default",
+            download_config=download_config_file_as_response_basename,
+            destination_bucket=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
+            destination_path=destination_path,
+            results_path=results_path,
+            dag=test_dag_file_as_response_basename,
+        )
+
+    @pytest.mark.vcr
+    def test_execute_file_as_response_basename(
+        self,
+        test_dag_file_as_response_basename: DAG,
+        operator_file_as_response_basename: DownloadConfigToGCSOperator,
+        execution_date: datetime,
+        destination_path: str,
+        results_path: str,
+        download_config_file_as_response_basename: dict,
+        gcs_hook: GCSHook,
+    ):
+        for object_name in gcs_hook.list(
+            bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                "gs://", ""
+            ),
+            prefix=destination_path,
+        ):
+            gcs_hook.delete(
+                bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                    "gs://", ""
+                ),
+                object_name=object_name,
+            )
+
+        operator_file_as_response_basename.run(
+            start_date=execution_date,
+            end_date=execution_date + timedelta(days=1),
+            ignore_first_depends_on_past=True,
+        )
+
+        task = test_dag_file_as_response_basename.get_task(
+            "gtfs_download_config_to_gcs_basename"
+        )
+        task_instance = TaskInstance(task, execution_date=execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert xcom_value == {
+            "base64_url": "aHR0cHM6Ly9hcGkudHJhbnNsb2MuY29tL2d0ZnMvdWNpLnppcA==",
+            "schedule_feed_path": os.path.join(
+                "schedule",
+                "dt=2025-06-02",
+                "ts=2025-06-02T00:00:00+00:00",
+                "base64_url=aHR0cHM6Ly9hcGkudHJhbnNsb2MuY29tL2d0ZnMvdWNpLnppcA==",
+                "export-2024-03-21T05-16-52.zip",
+            ),
+            "download_schedule_feed_results": {
+                "backfilled": False,
+                "config": download_config_file_as_response_basename,
+                "exception": None,
+                "extract": {
+                    "filename": "export-2024-03-21T05-16-52.zip",
+                    "ts": "2025-06-02T00:00:00+00:00",
+                    "config": {
+                        "auth_headers": {},
+                        "auth_query_params": {},
+                        "computed": False,
+                        "feed_type": "schedule",
+                        "name": "Anteater Express Schedule",
+                        "schedule_url_for_validation": None,
+                        "url": "https://api.transloc.com/gtfs/uci.zip",
+                        "extracted_at": "2025-06-01T00:00:00+00:00",
+                    },
+                    "response_code": 200,
+                    "response_headers": xcom_value["download_schedule_feed_results"][
+                        "extract"
+                    ]["response_headers"]
+                    | {
+                        "Content-Type": "binary/octet-stream",
+                    },
+                    "reconstructed": False,
+                },
+                "success": True,
+            },
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                "gs://", ""
+            ),
+            object_name=xcom_value["schedule_feed_path"],
+        )
+        parsed_metadata = json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"])
+        assert parsed_metadata == xcom_value["download_schedule_feed_results"][
+            "extract"
+        ] | {
+            "ts": "2025-06-02T00:00:00+00:00",
+            "response_headers": parsed_metadata["response_headers"],
+        }
+
+        decompressed_result = gcs_hook.download(
+            bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                "gs://", ""
+            ),
+            object_name=f"{results_path}/aHR0cHM6Ly9hcGkudHJhbnNsb2MuY29tL2d0ZnMvdWNpLnppcA==.jsonl",
+        )
+        result = json.loads(decompressed_result)
+        assert result == {
+            "success": True,
+            "exception": None,
+            "config": {
+                "auth_headers": {},
+                "auth_query_params": {},
+                "computed": False,
+                "feed_type": "schedule",
+                "name": "Anteater Express Schedule",
+                "schedule_url_for_validation": None,
+                "url": "https://api.transloc.com/gtfs/uci.zip",
+                "extracted_at": "2025-06-01T00:00:00+00:00",
+            },
+            "extract": {
+                "filename": "export-2024-03-21T05-16-52.zip",
+                "ts": "2025-06-02T00:00:00+00:00",
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "feed_type": "schedule",
+                    "name": "Anteater Express Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "https://api.transloc.com/gtfs/uci.zip",
+                    "extracted_at": "2025-06-01T00:00:00+00:00",
+                },
+                "response_code": 200,
+                "response_headers": result["extract"]["response_headers"]
+                | {
+                    "Content-Type": "binary/octet-stream",
+                },
+                "reconstructed": False,
+            },
+            "backfilled": False,
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
+                "gs://", ""
+            ),
+            object_name=f"{results_path}/aHR0cHM6Ly9hcGkudHJhbnNsb2MuY29tL2d0ZnMvdWNpLnppcA==.jsonl",
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "aHR0cHM6Ly9hcGkudHJhbnNsb2MuY29tL2d0ZnMvdWNpLnppcA==.jsonl",
+            "ts": "2025-06-02T00:00:00+00:00",
+            "end": "2025-06-02T00:00:00+00:00",
+            "backfilled": False,
+        }
+
+    @pytest.fixture
     def existing_operator(
         self,
         test_dag: DAG,
