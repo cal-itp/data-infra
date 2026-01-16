@@ -10,7 +10,7 @@ are already configured/installed.
 
 - Libraries such as gdal and graphviz
 - The `gcloud` CLI
-- `poetry`
+- `uv`
 
 > You may have already authenticated gcloud and the GitHub CLI (gh) if you followed the
 > [JupyterHub setup docs](https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html). If not, follow those instructions before proceeding.
@@ -27,7 +27,7 @@ are already configured/installed.
 
    1. You will need to `cd` to it via `cd <git-repos-path>/data-infra/warehouse/` or similar; for example, if you had created your directory with `mkdir git`, you will navigate to the warehouse directory with `cd git/data-infra/warehouse/`.
 
-3. Execute `poetry install` to create a virtual environment and install requirements.
+3. Execute `uv sync` to create a virtual environment and install requirements.
 
 > [!NOTE]
 > If you run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
@@ -35,10 +35,10 @@ are already configured/installed.
 > ```bash
 > export CFLAGS="-I $(brew --prefix graphviz)/include"
 > export LDFLAGS="-L $(brew --prefix graphviz)/lib"
-> poetry install
+> uv sync
 > ```
 
-4. Execute `poetry run dbt deps` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`).
+4. Execute `uv run dbt deps` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`).
 
 5. Set up your DBT profiles directory:
 
@@ -48,10 +48,10 @@ are already configured/installed.
 
    You can check with `echo $DBT_PROFILES_DIR` to make sure it's set correctly.
 
-6. Execute `poetry run dbt init` to create the `$DBT_PROFILES_DIR` directory and a pre-built `profiles.yml` file; you will be prompted to enter a personal `schema` which is used as a prefix for your personal development environment schemas. The output should look similar to the following:
+6. Execute `uv run dbt init` to create the `$DBT_PROFILES_DIR` directory and a pre-built `profiles.yml` file; you will be prompted to enter a personal `schema` which is used as a prefix for your personal development environment schemas. The output should look similar to the following:
 
    ```text
-   ➜ poetry run dbt init
+   ➜ uv run dbt init
    19:14:32  Running with dbt=1.4.5
    19:14:32  Setting up your profile.
    schema (usually your name; will be added as a prefix to schemas e.g. <schema>_mart_gtfs): andrew
@@ -102,39 +102,46 @@ are already configured/installed.
      target: dev
    ```
 
-8. Finally, test your connection to our staging BigQuery project with `poetry run dbt debug`. You should see output similar to the following.
+8. Finally, test your connection to our staging BigQuery project with `uv run dbt debug`. You should see output similar to the following.
 
    ```bash
-   ➜  warehouse git:(jupyterhub-dbt) ✗ poetry run dbt debug
-   16:50:15  Running with dbt=1.4.5
-   dbt version: 1.4.5
-   python version: 3.9.16
-   python path: /Users/andrewvaccaro/Library/Caches/pypoetry/virtualenvs/calitp-warehouse-YI2euBZD-py3.9/bin/python
-   os info: macOS-12.3.1-x86_64-i386-64bit
-   Using profiles.yml file at /Users/andrewvaccaro/.dbt/profiles.yml
-   Using dbt_project.yml file at /Users/andrewvaccaro/go/src/github.com/cal-itp/data-infra/warehouse/dbt_project.yml
-
+   ➜  warehouse git:(jupyterhub-dbt) ✗ uv run dbt debug
+   Running with dbt=1.10.1
+   dbt version: 1.10.1
+   python version: 3.11.13
+   python path: /Users/Username/Documents/workspace/data-infra/warehouse/.venv/bin/python3
+   os info: macOS-26.2-arm64-arm-64bit
+   Using profiles.yml file at /Users/Username/.dbt/profiles.yml
+   Using dbt_project.yml file at /Users/Username/go/src/github.com/cal-itp/data-infra/warehouse/dbt_project.yml
+   adapter type: bigquery
+   adapter version: 1.10.0
    Configuration:
      profiles.yml file [OK found and valid]
      dbt_project.yml file [OK found and valid]
-
    Required dependencies:
     - git [OK found]
 
    Connection:
      method: oauth
      database: cal-itp-data-infra-staging
-     schema: andrew
+     execution_project: cal-itp-data-infra-staging
+     schema: <yourname>
      location: us-west2
      priority: interactive
-     timeout_seconds: 3000
-     maximum_bytes_billed: None
-     execution_project: cal-itp-data-infra-staging
+     maximum_bytes_billed: 2000000000000
+     impersonate_service_account: None
      job_retry_deadline_seconds: None
      job_retries: 1
      job_creation_timeout_seconds: None
      job_execution_timeout_seconds: 3000
+     timeout_seconds: 3000
+     client_id: None
+     token_uri: None
+     compute_region: us-west2
+     dataproc_cluster_name: None
      gcs_bucket: test-calitp-dbt-python-models
+     dataproc_batch: {'runtime_config': {'container_image': 'gcr.io/cal-itp-data-infra/dbt-spark:2023.3.28', 'properties': {'spark.dynamicAllocation.maxExecutors': '16', 'spark.executor.cores': '4', 'spark.executor.instances': '4', 'spark.executor.memory': '4g'}}}
+     Registered adapter: bigquery=1.10.0
      Connection test: [OK connection ok]
 
    All checks passed!
@@ -146,17 +153,17 @@ are already configured/installed.
 Once you have performed the setup above, you are good to go run
 [dbt commands](https://docs.getdbt.com/reference/dbt-commands) locally! Run the following commands in order.
 
-1. `poetry run dbt seed`
+1. `uv run dbt seed`
 
    This command creates tables in your personally-named schema from the CSV files present in [./seeds](./seeds), which can then be referenced by dbt models.
    You will need to re-run seeds if new seeds are added, or existing ones are changed.
 
-2. `poetry run dbt compile`
+2. `uv run dbt compile`
 
    This command generates executable SQL from the source model, but will not execute anything in the warehouse. It is useful for visualizing what dbt will actually execute.
    You can find these compiled SQL files in the `target/` directory.
 
-3. `poetry run dbt run`
+3. `uv run dbt run`
 
    This command executes compiled SQL model files in the warehouse. The default target is `dev` that points to `cal-itp-data-infra-staging` project.
 
@@ -171,21 +178,21 @@ Once you have performed the setup above, you are good to go run
 > 1. Ensure that you have the appropriate permissions to query our production Google Cloud environment `cal-itp-data-infra`. If you don't have the adequate permissions, or are unsure, contact an administrator of our Google Cloud project.
 > 2. Add the appropriate flag and variable to your command: `--vars 'GOOGLE_CLOUD_PROJECT: cal-itp-data-infra'`
 >
->   ex. `poetry run dbt run -s schema.table --vars 'GOOGLE_CLOUD_PROJECT: cal-itp-data-infra'`
+>   ex. `uv run dbt run -s schema.table --vars 'GOOGLE_CLOUD_PROJECT: cal-itp-data-infra'`
 
 Some additional helpful commands:
 
-- `poetry run dbt test`
+- `uv run dbt test`
 
    This command runs data tests defined on models, sources, seeds, and unit tests defined on SQL models.
 
    You can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) (via the `-s` or `--select` flags) to test only a specific model.
 
    ```bash
-   $ poetry run dbt test -s <<model_name>>
+   $ uv run dbt test -s <<model_name>>
    ```
 
-- `poetry run dbt docs generate`
+- `uv run dbt docs generate`
 
    This command generates the dbt documentation website by:
    * Copying the website `index.html` file into the `target/` directory.
@@ -193,11 +200,11 @@ Some additional helpful commands:
    * Running queries against database metadata to produce the `catalog.json` file, which contains metadata about the tables and views produced by the models in the project.
 
 
-- `poetry run dbt docs serve`
+- `uv run dbt docs serve`
 
    This command starts a webserver on `http://localhost:8080` to "serve" your dbt documentation locally so you can access it in your default browser.
 
-   Be sure to run `poetry run dbt docs generate` first.
+   Be sure to run `uv run dbt docs generate` first.
 
 
 ### Incremental model considerations
@@ -217,7 +224,7 @@ We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/inc
    1. Compile the model with the date you need.
 
       ```bash
-      $ poetry run dbt compile -s <<incremental_model_name>> --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
+      $ uv run dbt compile -s <<incremental_model_name>> --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
       ```
 
    2. Inspect the code generated by the command to confirm if the date was replaced.
@@ -232,7 +239,7 @@ We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/inc
    3. Run the model in the warehouse.
 
       ```bash
-      $ poetry run dbt run -s <<incremental_model_name>> --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
+      $ uv run dbt run -s <<incremental_model_name>> --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
       ```
 
 - If you need to rebuild specific date ranges:
@@ -251,7 +258,7 @@ We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/inc
    2. Compile your model to make sure it has the expected date range.
 
       ```bash
-      $ poetry run dbt compile -s <<incremental_model_name>> --vars '{DBT_START_DATE: 2025-01-02, DBT_END_DATE: 2025-01-31}'
+      $ uv run dbt compile -s <<incremental_model_name>> --vars '{DBT_START_DATE: 2025-01-02, DBT_END_DATE: 2025-01-31}'
       ```
 
       It should return a SQL code like this:
@@ -267,13 +274,13 @@ We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/inc
    3. Run your model.
 
       ```bash
-      $ poetry run dbt run -s <<incremental_model_name>> --vars '{DBT_START_DATE: 2025-01-02, DBT_END_DATE: 2025-01-31}'
+      $ uv run dbt run -s <<incremental_model_name>> --vars '{DBT_START_DATE: 2025-01-02, DBT_END_DATE: 2025-01-31}'
       ```
 
 - If you need to compile or run models in Staging instead of in your personally-named schema, you need to include the configuration in your `~/.dbt/profiles.yml` and add the `--target staging` flag in your command.
 
    ```bash
-   $ poetry run dbt compile -s <<incremental_model_name>> --target staging --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
+   $ uv run dbt compile -s <<incremental_model_name>> --target staging --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
    ```
 
 
@@ -287,7 +294,7 @@ To change models in Production, you need to include the configuration in your `~
 You also need to specify the source of your external tables. So when compiling or running models in production use `GOOGLE_CLOUD_PROJECT: cal-itp-data-infra` or you may get less or no data as result.
 
 ```bash
-$ poetry run dbt compile -s <<incremental_model_name>> --target prod --vars '{GOOGLE_CLOUD_PROJECT: cal-itp-data-infra, INCREMENTAL_MAX_DT: 2025-07-02}'
+$ uv run dbt compile -s <<incremental_model_name>> --target prod --vars '{GOOGLE_CLOUD_PROJECT: cal-itp-data-infra, INCREMENTAL_MAX_DT: 2025-07-02}'
 ```
 
 
@@ -360,47 +367,30 @@ You can enable [displaying hidden folders/files in macOS Finder](https://www.mac
 5. If `bq ls` shows output, you are good to go.
 
 
-### Install poetry
+### Install uv
 
-1. Install [poetry](https://python-poetry.org/docs/#installing-with-the-official-installer) (used for package/dependency management).
-2. Restart your terminal and confirm `poetry --version` works.
+> [!NOTE]
+> Use uv instead of Poetry
+> `pip install uv`
+
+1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/) (used for package/dependency management).
+2. Restart your terminal and confirm `uv --version` works.
 3. Follow the [warehouse setup instructions](#clone-and-install-the-warehouse-project)
-4. If this doesn't work because of an error with Python version, you may need to install Python 3.9
-   1. `brew install python@3.9`
-   2. `brew link python@3.9`
-   3. After restarting the terminal, confirm with `python3 --version` and retry `poetry install`
 
 
-#### Upgrading Poetry from legacy installer
+#### Poetry vs uv commands
 
-If you installed Poetry using their legacy `get-poetry.py` script, you may run into issues upgrading to versions past [1.2.0](https://python-poetry.org/blog/announcing-poetry-1.2.0/). Here is a workflow that has worked:
+To install packages and dependences use `uv sync` instead of `poetry install`.
 
-1. Remove the legacy directory that Poetry used (see the ["Uninstall Poetry" step in their docs](https://python-poetry.org/docs/#installing-with-the-official-installer)),
+For other common commands you can just replace `poetry` by `uv`, for example:
 
-   ```bash
-   rm -rf "${POETRY_HOME:-~/.poetry}"
-   ```
+* `poetry run dbt deps` -> `uv run dbt deps`
+* `poetry run dbt compile` -> `uv run dbt compile`
 
-2. Remove `~/.poetry/bin` declaration from your shell configuration file (e.g. `.zshrc`, `.bashrc`). The line you're looking for may look like this,
 
-   ```text
-   export PATH="$HOME/.poetry/bin:$PATH"
-   ```
+### Install Python
 
-3. Now, you may [install poetry](#install-poetry) as described in the above section.
-
-4. Run `poetry --version` to confirm the installation has succeeded. If you get a warning about the location of your TOML configuration files, here's what to do next,
-
-   ```bash
-   # Run these two commands to move the Poetry config TOML file from the legacy location to the new location.
-   mkdir <directory listed in "consider moving files to" section of warning>
-   mv <directory listed in "configuration exists at" section of warning>/config.toml ~/Library/Preferences/pypoetry/
-
-   # Example usage may look like:
-
-   # mkdir ~/Library/Preferences/pypoetry/
-   # mv ~/Library/Application\ Support/pypoetry/config.toml ~/Library/Preferences/pypoetry/
-   ```
+If you need to install any specific Python version [follow this instructions](https://docs.astral.sh/uv/concepts/python-versions/#managed-and-system-python-installations).
 
 
 ### Dataproc configuration
