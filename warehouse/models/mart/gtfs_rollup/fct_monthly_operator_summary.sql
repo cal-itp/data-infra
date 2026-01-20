@@ -64,8 +64,6 @@ monthly_summary AS (
         tu_base64_url,
 
         daily_summary2.day_type,
-        -- hopefully if there are nulls on specific days, we can capture it still
-        MAX(analysis_name) AS analysis_name,
 
         SUM(n_trips) AS n_trips,
         ROUND(SUM(n_trips) / COUNT(DISTINCT service_date), 1) AS daily_trips,
@@ -79,18 +77,16 @@ monthly_summary AS (
         SUM(n_vp_trips) AS n_vp_trips,
         ROUND(SUM(n_vp_trips) / COUNT(DISTINCT service_date), 1) AS daily_vp_trips,
         ROUND(AVG(pct_vp_trips), 3) AS pct_vp_trips,
-        ROUND(AVG(n_vp_routes), 1) AS n_vp_routes,
         ROUND(AVG(pct_vp_service_hours), 3) AS pct_vp_service_hours,
 
         ROUND(AVG(tu_messages_per_minute), 1) AS tu_messages_per_minute,
         SUM(n_tu_trips) AS n_tu_trips,
         ROUND(SUM(n_tu_trips) / COUNT(DISTINCT service_date), 1) AS daily_tu_trips,
         ROUND(AVG(pct_tu_trips), 3) AS pct_tu_trips,
-        ROUND(AVG(n_tu_routes), 1) AS n_tu_routes,
         ROUND(AVG(pct_tu_service_hours), 3) AS pct_tu_service_hours,
 
     FROM daily_summary2
-    INNER JOIN pivoted
+    LEFT JOIN pivoted
         ON daily_summary2.month_first_day = pivoted.month_first_day
         AND daily_summary2.schedule_name = pivoted.schedule_name
         AND daily_summary2.day_type = pivoted.day_type
