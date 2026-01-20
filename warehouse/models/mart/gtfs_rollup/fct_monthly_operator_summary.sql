@@ -77,14 +77,12 @@ monthly_summary AS (
         SUM(n_vp_trips) AS n_vp_trips,
         ROUND(SUM(n_vp_trips) / COUNT(DISTINCT service_date), 1) AS daily_vp_trips,
         ROUND(AVG(pct_vp_trips), 3) AS pct_vp_trips,
-        ROUND(AVG(n_vp_routes), 1) AS n_vp_routes,
         ROUND(AVG(pct_vp_service_hours), 3) AS pct_vp_service_hours,
 
         ROUND(AVG(tu_messages_per_minute), 1) AS tu_messages_per_minute,
         SUM(n_tu_trips) AS n_tu_trips,
         ROUND(SUM(n_tu_trips) / COUNT(DISTINCT service_date), 1) AS daily_tu_trips,
         ROUND(AVG(pct_tu_trips), 3) AS pct_tu_trips,
-        ROUND(AVG(n_tu_routes), 1) AS n_tu_routes,
         ROUND(AVG(pct_tu_service_hours), 3) AS pct_tu_service_hours,
 
     FROM daily_summary2
