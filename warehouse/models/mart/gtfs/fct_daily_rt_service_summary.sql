@@ -7,8 +7,7 @@
 
 WITH fct_observed_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_observed_trips`
-    WHERE service_date >= "2025-09-01"--{{ ref('fct_observed_trips' )}}
+    FROM {{ ref('fct_observed_trips' )}}
 ),
 
 observed_trips AS (

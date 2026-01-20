@@ -107,7 +107,7 @@ gtfs_to_orgs AS (
         orgs_with_geog.county_name,
         orgs_with_geog.caltrans_district,
         orgs_with_geog.caltrans_district_name,
-
+        CONCAT(CAST(caltrans_district AS STRING FORMAT '00'), " - ", caltrans_district_name) AS caltrans_district_full,
         orgs_with_geog.ntd_id,
         orgs_with_geog.ntd_id_2022,
         orgs_with_geog.rtpa_name,

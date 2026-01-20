@@ -29,17 +29,12 @@ WITH fct_scheduled_trips AS (
 
 dim_stops AS (
     SELECT *
-    FROM {{ ref('dim_stops') }}
+    FROM `cal-itp-data-infra.mart_gtfs.dim_stops`--{{ ref('dim_stops') }}
 ),
 
--- dim_stop_arrivals is partitioned by month, and we need
--- to grab enough of the past to make sure all the feed_keys active
--- can be used to join against fct_scheduled_trips
--- follow fct_trip_updates_trip_summaries or int_gtfs_quality__scheduled_trip_version_summary
 dim_stop_arrivals AS (
     SELECT *
     FROM {{ ref('dim_stop_arrivals') }}
-    WHERE DATE(_feed_valid_from) >= DATE_SUB(CURRENT_DATE("America/Los_Angeles"), INTERVAL 6 MONTH)
 ),
 
 stops_on_day_by_route_and_hour AS (
