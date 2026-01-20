@@ -7,13 +7,12 @@
 
 WITH daily_schedule AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_feed_scheduled_service_summary` --{{ ref('fct_daily_feed_scheduled_service_summary') }}
-    WHERE service_date >= "2025-09-01"
+    FROM {{ ref('fct_daily_feed_scheduled_service_summary') }}
 ),
 
 daily_rt AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.test_fct_daily_rt_service_summary`
+    FROM {{ ref('fct_daily_rt_service_summary') }}
 ),
 
 daily_summary AS (

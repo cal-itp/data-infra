@@ -29,7 +29,7 @@ WITH fct_scheduled_trips AS (
 
 dim_stops AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.dim_stops`--{{ ref('dim_stops') }}
+    FROM {{ ref('dim_stops') }}
 ),
 
 dim_stop_arrivals AS (
