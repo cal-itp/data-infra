@@ -451,9 +451,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - component_key
-            - product_key
+          arguments:
+            combination_of_columns:
+              - component_key
+              - product_key
     columns:
       - name: component_key
         tests:
@@ -618,9 +619,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - component_key
-            - property_feature_key
+          arguments:
+            combination_of_columns:
+              - component_key
+              - property_feature_key
     columns:
       - name: component_key
         tests:
@@ -643,9 +645,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - data_schema_key
-            - product_key
+          arguments:
+            combination_of_columns:
+              - data_schema_key
+              - product_key
     columns:
       - name: data_schema_key
         tests:
@@ -668,9 +671,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - data_schema_key
-            - product_key
+          arguments:
+            combination_of_columns:
+              - data_schema_key
+              - product_key
     columns:
       - name: data_schema_key
         tests:
@@ -691,9 +695,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - organization_key
-            - service_key
+          arguments:
+            combination_of_columns:
+              - organization_key
+              - service_key
     columns:
       - name: organization_key
         tests:
@@ -713,9 +718,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - organization_key
-            - parent_organization_key
+          arguments:
+            combination_of_columns:
+              - organization_key
+              - parent_organization_key
     columns:
       - name: organization_key
         tests:
@@ -736,9 +742,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - service_key
-            - paratransit_for_service_key
+          arguments:
+            combination_of_columns:
+              - service_key
+              - paratransit_for_service_key
     columns:
       - name: service_key
         tests:
@@ -760,9 +767,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - organization_key
-            - gtfs_dataset_key
+          arguments:
+            combination_of_columns:
+              - organization_key
+              - gtfs_dataset_key
     columns:
       - name: organization_key
         tests:
@@ -787,9 +795,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - organization_key
-            - funding_program_key
+          arguments:
+            combination_of_columns:
+              - organization_key
+              - funding_program_key
     columns:
       - name: organization_key
         tests:
@@ -815,9 +824,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - fare_system_key
-            - service_key
+          arguments:
+            combination_of_columns:
+              - fare_system_key
+              - service_key
     columns:
       - name: fare_system_key
         tests:
@@ -837,9 +847,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - contract_key
-            - component_key
+          arguments:
+            combination_of_columns:
+              - contract_key
+              - component_key
     columns:
       - name: contract_key
         tests:
@@ -859,9 +870,10 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - contract_key
-            - service_key
+          arguments:
+            combination_of_columns:
+              - contract_key
+              - service_key
     columns:
       - name: contract_key
         tests:
@@ -883,9 +895,10 @@ models:
       Thus, joins via this table can result in fanout if they don't limit to validity on a specific date.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - gtfs_dataset_key
-            - schedule_to_use_for_rt_validation_gtfs_dataset_key
+          arguments:
+            combination_of_columns:
+              - gtfs_dataset_key
+              - schedule_to_use_for_rt_validation_gtfs_dataset_key
     columns:
       - name: gtfs_dataset_key
         tests:
@@ -907,9 +920,10 @@ models:
       Joins via this table can result in fanout because of versioning.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - service_key
-            - mode_key
+          arguments:
+            combination_of_columns:
+              - service_key
+              - mode_key
     columns:
       - name: service_key
         tests:

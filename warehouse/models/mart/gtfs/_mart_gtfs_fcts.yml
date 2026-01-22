@@ -844,9 +844,10 @@ models:
       the summary columns.)
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - service_date
-            - feed_key
+          arguments:
+            combination_of_columns:
+              - service_date
+              - feed_key
       - dbt_utils.expression_is_true:
           expression: "ttl_service_hours >= 0"
     columns:

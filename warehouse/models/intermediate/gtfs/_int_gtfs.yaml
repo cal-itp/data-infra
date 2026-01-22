@@ -21,9 +21,10 @@ models:
       a given feed on a given date.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
+          arguments:
+            combination_of_columns:
+              - base64_url
+              - ts
     columns:
       - name: ts
       - name: base64_url
@@ -45,9 +46,10 @@ models:
       parseable on a pure file-format level (i.e., the file was not corrupt.)
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
+          arguments:
+            combination_of_columns:
+              - base64_url
+              - ts
     columns:
       - name: base64_url
       - name: ts
@@ -133,10 +135,11 @@ models:
       overlaps with service date) but where service was not scheduled.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - feed_key
-            - service_date
-            - service_id
+          arguments:
+            combination_of_columns:
+              - feed_key
+              - service_date
+              - service_id
     columns:
       - *feed_key
       - name: calendar_key
@@ -235,10 +238,11 @@ models:
       Stop times grouped by trip_id with trip aggregation calculations.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - feed_key
-            - trip_id
-            - iteration_num
+          arguments:
+            combination_of_columns:
+              - feed_key
+              - trip_id
+              - iteration_num
       - dbt_utils.expression_is_true:
           expression: "num_regularly_scheduled_pickup_stop_times + num_no_pickup_stop_times + num_phone_call_required_for_pickup_stop_times + num_coordinate_pickup_with_driver_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
@@ -371,9 +375,10 @@ models:
       This allows us to reconstruct what URLs were in our configuration list for each date.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - dt
-            - _config_extract_ts
+          arguments:
+            combination_of_columns:
+              - dt
+              - _config_extract_ts
     columns:
       - name: dt
         description: Date that RT data was extracted.
@@ -384,9 +389,10 @@ models:
       All RT URLs that were present at least once for each given day.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - dt
-            - base64_url
+          arguments:
+            combination_of_columns:
+              - dt
+              - base64_url
     columns:
       - name: dt
         description: |
@@ -640,13 +646,14 @@ models:
       See downstream `fct_service_alerts_trip_summaries` table for further documentation.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
-            - service_date
-            - trip_schedule_relationship
-            - schedule_base64_url
-          where: '__rt_sampled__'
+          arguments:
+            combination_of_columns:
+              - key
+              - dt
+              - service_date
+              - trip_schedule_relationship
+              - schedule_base64_url
+            where: '__rt_sampled__'
   - name: int_gtfs_rt__trip_updates_trip_day_map_grouping
     description: |
       This table groups trip updates messages by `dt` (UTC) and `service_date` (usually Pacific)
@@ -656,17 +663,18 @@ models:
       See downstream `fct_trip_updates_trip_summaries` table for further documentation.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
-            - service_date
-            - trip_schedule_relationship
-            - trip_route_id
-            - trip_direction_id
-            - schedule_base64_url
-          # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
-          # even then the number of failures is very small
-          where: '__rt_sampled__'
+          arguments:
+            combination_of_columns:
+              - key
+              - dt
+              - service_date
+              - trip_schedule_relationship
+              - trip_route_id
+              - trip_direction_id
+              - schedule_base64_url
+            # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
+            # even then the number of failures is very small
+            where: '__rt_sampled__'
   - name: int_gtfs_rt__trip_updates_trip_stop_day_map_grouping
     description: |
       This table groups trip updates (stop_time_updates) messages by `dt` (UTC) and `service_date` (usually Pacific)
@@ -684,17 +692,18 @@ models:
       See downstream `fct_vehicle_positions_summaries` table for further documentation.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
-            - service_date
-            - trip_schedule_relationship
-            - trip_route_id
-            - trip_direction_id
-            - schedule_base64_url
-          # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
-          # even then the number of failures is very small
-          where: '__rt_sampled__'
+          arguments:
+            combination_of_columns:
+              - key
+              - dt
+              - service_date
+              - trip_schedule_relationship
+              - trip_route_id
+              - trip_direction_id
+              - schedule_base64_url
+            # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
+            # even then the number of failures is very small
+            where: '__rt_sampled__'
   - name: int_gtfs_rt__vehicle_positions_trip_stop_day_map_grouping
     description: |
       This table groups vehicle positions messages by `dt` (UTC) and `service_date` (usually Pacific)

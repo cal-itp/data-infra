@@ -10,13 +10,15 @@ models:
       instances, using `name` (Airtable primary field) to join.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - tdqi_key
-            - tdqi_date
+          arguments:
+            combination_of_columns:
+              - tdqi_key
+              - tdqi_date
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ct_key
-            - ct_date
+          arguments:
+            combination_of_columns:
+              - ct_key
+              - ct_date
   - name: base_tdqi_services_ct_services_map
     description: |
       Mapping between two instances of synced `services` table in Airtable;
@@ -26,13 +28,15 @@ models:
       instances, using `name` (Airtable primary field) to join.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - tdqi_key
-            - tdqi_date
+          arguments:
+            combination_of_columns:
+              - tdqi_key
+              - tdqi_date
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ct_key
-            - ct_date
+          arguments:
+            combination_of_columns:
+              - ct_key
+              - ct_date
   - name: base_tts_services_ct_services_map
     description: |
       Mapping between two instances of synced `services` table in Airtable;
@@ -42,13 +46,15 @@ models:
       instances, using `name` (Airtable primary field) to join.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - tts_key
-            - tts_date
+          arguments:
+            combination_of_columns:
+              - tts_key
+              - tts_date
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ct_key
-            - ct_date
+          arguments:
+            combination_of_columns:
+              - ct_key
+              - ct_date
   - name: base_tts_organizations_ct_organizations_map
     description: |
       Mapping between two instances of synced `organization` table in Airtable;
@@ -58,10 +64,12 @@ models:
       instances, using `name` (Airtable primary field) to join.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - tts_key
-            - tts_date
+          arguments:
+            combination_of_columns:
+              - tts_key
+              - tts_date
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ct_key
-            - ct_date
+          arguments:
+            combination_of_columns:
+              - ct_key
+              - ct_date

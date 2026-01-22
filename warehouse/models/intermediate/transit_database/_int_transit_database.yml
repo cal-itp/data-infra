@@ -8,12 +8,13 @@ models:
       service, product, and component keys unnested.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - id
-            - service_key
-            - product_key
-            - component_key
-            - dt
+          arguments:
+            combination_of_columns:
+              - id
+              - service_key
+              - product_key
+              - component_key
+              - dt
       - dbt_utils.unique_combination_of_columns:
           severity: warn
           combination_of_columns:
