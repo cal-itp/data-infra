@@ -7,13 +7,15 @@ models:
       GTFS guideline checks.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - check
-            - feature
+          arguments:
+            combination_of_columns:
+              - check
+              - feature
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - reports_order
-            - feature
+          arguments:
+            combination_of_columns:
+              - reports_order
+              - feature
           where: 'reports_order IS NOT null'
     columns:
       - name: check
@@ -122,9 +124,10 @@ models:
       output written to GCS.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - extract_ts
+          arguments:
+            combination_of_columns:
+              - base64_url
+              - extract_ts
     columns:
       - name: dt
       - name: name
@@ -141,11 +144,12 @@ models:
   - name: stg_gtfs_quality__scraped_urls
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - dt
-            - ts
-            - aggregator
-            - key
+          arguments:
+            combination_of_columns:
+              - dt
+              - ts
+              - aggregator
+              - key
     columns:
       - name: dt
       - name: ts

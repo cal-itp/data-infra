@@ -265,18 +265,19 @@ models:
       each applicable product but only one will be applied.)
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - micropayment_id
-            - adjustment_id
-            - participant_id
-            - customer_id
-            - product_id
-            - type
-            - description
-            - amount
-            - time_period_type
-            - applied
-            - zone_ids_used
+          arguments:
+            combination_of_columns:
+              - micropayment_id
+              - adjustment_id
+              - participant_id
+              - customer_id
+              - product_id
+              - type
+              - description
+              - amount
+              - time_period_type
+              - applied
+              - zone_ids_used
     columns:
       - name: adjustment_id
         description: '{{ doc("lp_adjustment_id") }}'
@@ -332,11 +333,12 @@ models:
     tests:
       - &littlepay_uniqueness
         dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - instance
-            - extract_filename
-            - ts
-            - _line_number
+          arguments:
+            combination_of_columns:
+              - instance
+              - extract_filename
+              - ts
+              - _line_number
     description: This model makes the assumption that, in the case of duplicated micropayment_id values, the one with the latest transaction_time in the latest export file takes precedence.
     columns:
       - name: micropayment_id

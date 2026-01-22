@@ -6,9 +6,10 @@ models:
     tests:
       - &schedule_outcome_uniqueness
         dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
+          arguments:
+            combination_of_columns:
+              - base64_url
+              - ts
     columns:
       - name: dt
       - name: name
@@ -46,10 +47,11 @@ models:
     description: Outcomes from parse (.txt --> .jsonl conversion) attempts on files within GTFS feeds.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - filename
+          arguments:
+            combination_of_columns:
+              - base64_url
+              - ts
+              - filename
     columns:
       - name: parse_success
         description: '{{ doc("column_schedule_parse_success") }}'

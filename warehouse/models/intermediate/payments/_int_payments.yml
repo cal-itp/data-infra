@@ -13,16 +13,18 @@ models:
       - name: request_type
         tests:
           - accepted_values:
-              values: ['AUTHORISATION', 'DEBT_RECOVERY_AUTHCHECK', 'DEBT_RECOVERY_REVERSAL', 'CARD_CHECK']
+              arguments:
+                values: ['AUTHORISATION', 'DEBT_RECOVERY_AUTHCHECK', 'DEBT_RECOVERY_REVERSAL', 'CARD_CHECK']
       - name: aggregation_id
         tests:
           - relationships:
-              to: ref('int_payments__latest_authorisations_by_aggregation')
-              field: aggregation_id
-              config:
-                # there is a single update from 2021 where there's only one update with a null status
-                # we're comfortable letting this row get dropped
-                where: "_key != '60e1a87f2cafe52c08589cb13fb39707'"
+              arguments:
+                to: ref('int_payments__latest_authorisations_by_aggregation')
+                field: aggregation_id
+                config:
+                  # there is a single update from 2021 where there's only one update with a null status
+                  # we're comfortable letting this row get dropped
+                  where: "_key != '60e1a87f2cafe52c08589cb13fb39707'"
   - name: int_payments__latest_authorisations_by_aggregation
     description: |
       This model contains only the most recent authorisations data per `aggregation_id`.
@@ -53,9 +55,10 @@ models:
       This model contains Littlepay settlements aggregated to the `aggregation_id + retrieval_reference_number` level.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - aggregation_id
-            - retrieval_reference_number
+          arguments:
+            combination_of_columns:
+              - aggregation_id
+              - retrieval_reference_number
       - dbt_utils.expression_is_true:
           expression: "debit_amount + credit_amount = net_settled_amount_dollars"
       - dbt_utils.expression_is_true:
@@ -427,9 +430,10 @@ models:
       of the associated micropayment to assist in later modeling.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - micropayment_id
-            - littlepay_transaction_id
+          arguments:
+            combination_of_columns:
+              - micropayment_id
+              - littlepay_transaction_id
     columns:
       - name: micropayment_id
         description: '{{ doc("lp_micropayment_id") }}'
@@ -509,9 +513,10 @@ models:
           gaps: not_allowed
           zero_length_range_allowed: true
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - participant_id
-            - funding_source_id
+          arguments:
+            combination_of_columns:
+              - participant_id
+              - funding_source_id
     columns:
       - name: funding_source_id
         tests:
@@ -546,9 +551,10 @@ models:
       table is unique at the customer_id + participant_id level.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - participant_id
-            - customer_id
+          arguments:
+            combination_of_columns:
+              - participant_id
+              - customer_id
     columns:
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'

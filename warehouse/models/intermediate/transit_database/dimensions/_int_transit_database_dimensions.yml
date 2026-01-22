@@ -88,11 +88,12 @@ models:
       Service components data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - service_key
-            - product_key
-            - component_key
-            - product_vendor_organization_key
+          arguments:
+            combination_of_columns:
+              - service_key
+              - product_key
+              - component_key
+              - product_vendor_organization_key
     columns:
       - *key
   - name: int_transit_database__ntd_agency_info_dim

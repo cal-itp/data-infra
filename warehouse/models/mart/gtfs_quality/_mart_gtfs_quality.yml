@@ -150,9 +150,10 @@ models:
       the "intended checks" to verify checks are actually implemented.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - check
-            - feature
+          arguments:
+            combination_of_columns:
+              - check
+              - feature
       - dbt_utils.equal_rowcount:
           compare_model: ref('stg_gtfs_quality__intended_checks')
       - dbt_utils.expression_is_true:
@@ -565,9 +566,10 @@ models:
       - `avg` refers to the mean.
     tests: &message_age_summary_tests
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - dt
-            - base64_url
+          arguments:
+            combination_of_columns:
+              - dt
+              - base64_url
     columns: &message_age_summary_cols
       - name: dt
         tests:
@@ -588,9 +590,10 @@ models:
       - `avg` refers to the mean.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - dt
-            - organization_name
+          arguments:
+            combination_of_columns:
+              - dt
+              - organization_name
     columns:
       - name: dt
         tests:
