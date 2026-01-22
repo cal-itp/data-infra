@@ -8,7 +8,7 @@ use_bq_client: true
 hive_options:
   mode: CUSTOM
   require_partition_filter: false
-  source_uri_prefix: "fare_media.txt_parsing_results/{dt:DATE}/"
+  source_uri_prefix: "fare_media.txt_parsing_results/{dt:DATE}/{ts:TIMESTAMP}/"
 schema_fields:
   - name: success
     type: BOOLEAN
