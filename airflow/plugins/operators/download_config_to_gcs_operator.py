@@ -63,7 +63,7 @@ class Download:
         msg["content-disposition"] = content_disposition
         filename = msg.get_filename()
 
-        if not filename and self.response().url.endswith(".zip"):
+        if not filename and self.response() and self.response().url.endswith(".zip"):
             filename = os.path.basename(self.response().url)
 
         return filename if filename else "gtfs.zip"

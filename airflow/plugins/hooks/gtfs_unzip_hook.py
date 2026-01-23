@@ -1,4 +1,5 @@
 import hashlib
+import logging
 import os
 import zipfile
 
@@ -172,5 +173,6 @@ class GTFSUnzipHook(BaseHook):
 
         except Exception as e:
             result.add_exception(e)
+            logging.error(str(e))
 
         return result
