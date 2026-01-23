@@ -83,7 +83,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: ${{ matrix.path }}
-          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') || github.ref == 'refs/heads/main' }}
 
   production:
     name: Production
@@ -120,3 +120,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: ${{ matrix.path }}
+          auto_approve: ${{ github.ref == 'refs/heads/main' }}

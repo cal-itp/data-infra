@@ -99,7 +99,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra-staging/airflow/us
-          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') || github.ref == 'refs/heads/main' }}
 
   composer-staging:
     name: Staging Composer
@@ -128,7 +128,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra-staging/composer/us
-          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') || github.ref == 'refs/heads/main' }}
 
   airflow-production:
     name: Production Airflow
@@ -157,6 +157,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra/airflow/us
+          auto_approve: ${{ github.ref == 'refs/heads/main' }}
 
   composer-production:
     name: Production Composer
@@ -185,3 +186,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra/composer/us
+          auto_approve: ${{ github.ref == 'refs/heads/main' }}
