@@ -18,11 +18,8 @@ resource "google_container_cluster" "data-infra-apps-staging" {
 
   location = "us-west1"
 
-  logging_config {
-    enable_components = ["SYSTEM_COMPONENTS", "WORKLOADS"]
-  }
-
-  logging_service = "logging.googleapis.com/kubernetes"
+  logging_service   = "logging.googleapis.com/kubernetes"
+  monitoring_service = "monitoring.googleapis.com/kubernetes"
 
   maintenance_policy {
     recurring_window {
@@ -38,11 +35,6 @@ resource "google_container_cluster" "data-infra-apps-staging" {
     }
   }
 
-  monitoring_config {
-    enable_components = ["SYSTEM_COMPONENTS"]
-  }
-
-  monitoring_service = "monitoring.googleapis.com/kubernetes"
   name               = "data-infra-apps-staging"
   network            = "projects/cal-itp-data-infra-staging/global/networks/default"
 
