@@ -17,6 +17,8 @@ RUN apt update \
     && apt install -y gh
 RUN apt-get install -y gdal-bin libgdal-dev # for rasterio
 
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 RUN apt-get update && apt-get -y install chromium-browser
 
 # create these ahead of time, then chown to the notebook user
