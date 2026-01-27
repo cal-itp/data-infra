@@ -30,7 +30,7 @@ deduped_analysis_name AS (
 
     FROM dim_gtfs_datasets
     QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY source_record_id
+        PARTITION BY source_record_id, name
         ORDER BY _valid_from DESC
     ) = 1
 ),
@@ -75,24 +75,27 @@ bridge_org_county AS (
 ),
 
 orgs_with_geog AS (
-    SELECT DISTINCT
+    SELECT
         dim_organizations.source_record_id AS organization_source_record_id,
-        dim_organizations.name AS organization_name,
+        MAX(dim_organizations.name) AS organization_name,
 
-        dim_county_geography.name AS county_name,
-        dim_county_geography.caltrans_district,
-        dim_county_geography.caltrans_district_name,
+        MAX(dim_county_geography.name) AS county_name,
+        MAX(dim_county_geography.caltrans_district) AS caltrans_district,
+        MAX(dim_county_geography.caltrans_district_name) AS caltrans_district_name,
 
-        dim_organizations.ntd_id,
-        dim_organizations.ntd_id_2022,
-        dim_organizations.rtpa_name,
-        dim_organizations.mpo_name,
+        MAX(dim_organizations.ntd_id) AS ntd_id,
+        MAX(dim_organizations.ntd_id_2022) AS ntd_id_2022,
+        MAX(dim_organizations.rtpa_name) AS rtpa_name,
+        MAX(dim_organizations.mpo_name) AS mpo_name,
 
     FROM dim_organizations
     INNER JOIN bridge_org_county
+        -- join on organization_key will result in some values with the same
+        -- organization_source_record_id not having ntd_id or rtpa filled in
         ON dim_organizations.key = bridge_org_county.organization_key
     INNER JOIN dim_county_geography
         ON bridge_org_county.county_geography_key = dim_county_geography.key
+    GROUP BY organization_source_record_id
 ),
 
 gtfs_to_orgs AS (
