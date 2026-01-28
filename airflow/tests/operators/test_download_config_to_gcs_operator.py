@@ -3,6 +3,7 @@ import os
 from datetime import datetime, timedelta, timezone
 
 import pytest
+from freezegun import freeze_time
 from operators.download_config_to_gcs_operator import DownloadConfigToGCSOperator
 
 from airflow.models.dag import DAG
@@ -96,11 +97,12 @@ class TestDownloadConfigToGCSOperator:
                 object_name=object_name,
             )
 
-        operator.run(
-            start_date=execution_date,
-            end_date=execution_date + timedelta(days=1),
-            ignore_first_depends_on_past=True,
-        )
+        with freeze_time("2025-06-02"):
+            operator.run(
+                start_date=execution_date,
+                end_date=execution_date + timedelta(days=1),
+                ignore_first_depends_on_past=True,
+            )
 
         task = test_dag.get_task("gtfs_download_config_to_gcs")
         task_instance = TaskInstance(task, execution_date=execution_date)
@@ -283,11 +285,12 @@ class TestDownloadConfigToGCSOperator:
                 object_name=object_name,
             )
 
-        operator_file_as_basename.run(
-            start_date=execution_date,
-            end_date=execution_date + timedelta(days=1),
-            ignore_first_depends_on_past=True,
-        )
+        with freeze_time("2025-06-02"):
+            operator_file_as_basename.run(
+                start_date=execution_date,
+                end_date=execution_date + timedelta(days=1),
+                ignore_first_depends_on_past=True,
+            )
 
         task = test_dag_file_as_basename.get_task(
             "gtfs_download_config_to_gcs_basename"
@@ -470,11 +473,12 @@ class TestDownloadConfigToGCSOperator:
                 object_name=object_name,
             )
 
-        operator_file_as_response_basename.run(
-            start_date=execution_date,
-            end_date=execution_date + timedelta(days=1),
-            ignore_first_depends_on_past=True,
-        )
+        with freeze_time("2025-06-02"):
+            operator_file_as_response_basename.run(
+                start_date=execution_date,
+                end_date=execution_date + timedelta(days=1),
+                ignore_first_depends_on_past=True,
+            )
 
         task = test_dag_file_as_response_basename.get_task(
             "gtfs_download_config_to_gcs_basename"
@@ -619,11 +623,12 @@ class TestDownloadConfigToGCSOperator:
         download_config: dict,
         gcs_hook: GCSHook,
     ):
-        existing_operator.run(
-            start_date=execution_date,
-            end_date=execution_date + timedelta(days=1),
-            ignore_first_depends_on_past=True,
-        )
+        with freeze_time("2025-06-02"):
+            existing_operator.run(
+                start_date=execution_date,
+                end_date=execution_date + timedelta(days=1),
+                ignore_first_depends_on_past=True,
+            )
 
         task = test_dag.get_task("gtfs_download_config_to_gcs_existing")
         task_instance = TaskInstance(task, execution_date=execution_date)

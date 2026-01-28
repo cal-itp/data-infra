@@ -8,7 +8,8 @@ from typing import Sequence
 import pendulum
 from hooks.download_config_hook import DownloadConfigHook
 
-from airflow.models import BaseOperator, DagRun
+from airflow.exceptions import AirflowSkipException
+from airflow.models import BaseOperator, DagRun, TaskInstance
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
@@ -132,6 +133,7 @@ class DownloadConfigToGCSOperator(BaseOperator):
 
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
+        task_instance: TaskInstance = context["ti"]
         schedule_feed_path = f"{self.destination_path}/base64_url={self.download().base64_url()}/{self.download().filename()}"
         if self.gcs_hook().exists(
             bucket_name=self.destination_name(),
@@ -182,7 +184,10 @@ class DownloadConfigToGCSOperator(BaseOperator):
                         )
                     },
                 )
-        else:
+        elif (
+            task_instance.start_date >= dag_run.data_interval_start
+            and task_instance.start_date < dag_run.data_interval_end
+        ):
             if self.download().success():
                 self.gcs_hook().upload(
                     bucket_name=self.destination_name(),
@@ -217,6 +222,8 @@ class DownloadConfigToGCSOperator(BaseOperator):
             )
             if not self.download().success():
                 raise self.download().exception
+        else:
+            raise AirflowSkipException(f"Skipped {schedule_feed_path}")
 
         return {
             "base64_url": self.download().base64_url(),

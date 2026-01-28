@@ -25,6 +25,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "freezegun>=1.5.5",
     "ipdb>=0.13.13",
     "pytest>=9.0.2",
     "pytest-dotenv>=0.5.2",
