@@ -19,6 +19,11 @@ with DAG(
     schedule="0 0 1 * *",
     start_date=datetime(2025, 10, 1),
     catchup=False,
+    default_args={
+        "email": os.getenv("CALITP_NOTIFY_EMAIL"),
+        "email_on_failure": True,
+        "email_on_retry": False,
+    },
 ):
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 

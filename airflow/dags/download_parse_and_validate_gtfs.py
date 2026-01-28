@@ -58,13 +58,18 @@ def gcs_branch(bucket_name, object_name, present, missing):
     start_date=datetime(2026, 1, 6),
     catchup=False,
     tags=["gtfs"],
+    default_args={
+        "email": os.getenv("CALITP_NOTIFY_EMAIL"),
+        "email_on_failure": True,
+        "email_on_retry": False,
+    },
 )
 def download_parse_and_validate_gtfs():
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
     download_config_exists = gcs_branch.override(task_id="download_config_exists")(
         bucket_name=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
-        object_name="gtfs_download_configs/dt={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
+        object_name="gtfs_download_configs/dt={{ data_interval_end | ds }}/ts={{ data_interval_end | ts }}/configs.jsonl.gz",
         present="skip_bigquery_to_download_config",
         missing="bigquery_to_download_config",
     )
@@ -78,7 +83,7 @@ def download_parse_and_validate_gtfs():
         dataset_name="staging",
         table_name="int_gtfs_datasets",
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
-        destination_path="gtfs_download_configs/dt={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
+        destination_path="gtfs_download_configs/dt={{ data_interval_end | ds }}/ts={{ data_interval_end | ts }}/configs.jsonl.gz",
     )
 
     schedule_download_configs = GCSDownloadConfigFilterOperator(
@@ -88,7 +93,7 @@ def download_parse_and_validate_gtfs():
         retry_delay=timedelta(seconds=10),
         feed_type="schedule",
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
-        source_path="gtfs_download_configs/dt={{ ds }}/ts={{ ts }}/configs.jsonl.gz",
+        source_path="gtfs_download_configs/dt={{ data_interval_end | ds }}/ts={{ data_interval_end | ts }}/configs.jsonl.gz",
         trigger_rule=TriggerRule.NONE_FAILED,
     )
 
@@ -97,8 +102,8 @@ def download_parse_and_validate_gtfs():
         retries=1,
         retry_delay=timedelta(seconds=10),
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
-        destination_path="schedule/dt={{ ds }}/ts={{ ts }}",
-        results_path="download_schedule_feed_results/dt={{ ds }}/ts={{ ts }}",
+        destination_path="schedule/dt={{ data_interval_end | ds }}/ts={{ data_interval_end | ts }}",
+        results_path="download_schedule_feed_results/dt={{ data_interval_end | ds }}/ts={{ data_interval_end | ts }}",
         map_index_template="{{ task.download_config['name'] }}",
     ).expand(download_config=XComArg(schedule_download_configs))
 
@@ -110,14 +115,14 @@ def download_parse_and_validate_gtfs():
             "source_path": download["schedule_feed_path"],
             "destination_path": os.path.join(
                 "validation_notices",
-                "dt={{ ds }}",
-                "ts={{ ts }}",
+                "dt={{ data_interval_end | ds }}",
+                "ts={{ data_interval_end | ts }}",
                 f"base64_url={download['base64_url']}",
             ),
             "results_path": os.path.join(
                 "validation_job_results",
-                "dt={{ ds }}",
-                "ts={{ ts }}",
+                "dt={{ data_interval_end | ds }}",
+                "ts={{ data_interval_end | ts }}",
                 f"{download['base64_url']}.jsonl",
             ),
         }
@@ -149,8 +154,8 @@ def download_parse_and_validate_gtfs():
         filenames=list(GTFS_SCHEDULE_FILENAMES.keys()),
         source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"),
-        destination_path_fragment="dt={{ ds }}/ts={{ ts }}/base64_url={{ task.base64_url }}",
-        results_path="unzipping_results/dt={{ ds }}/ts={{ ts }}/{{ task.base64_url }}.jsonl",
+        destination_path_fragment="dt={{ data_interval_end | ds }}/ts={{ data_interval_end | ts }}/base64_url={{ task.base64_url }}",
+        results_path="unzipping_results/dt={{ data_interval_end | ds }}/ts={{ data_interval_end | ts }}/{{ task.base64_url }}.jsonl",
         map_index_template="{{ task.download_schedule_feed_results['config']['name'] }}",
         trigger_rule=TriggerRule.ALL_DONE,
         pool="schedule_unzip_pool",
@@ -161,13 +166,13 @@ def download_parse_and_validate_gtfs():
             "unzip_results": unzipped_file["unzip_results"],
             "source_path_fragment": unzipped_file["destination_path_fragment"],
             "results_path_fragment": os.path.join(
-                "dt={{ ds }}",
-                "ts={{ ts }}",
+                "dt={{ data_interval_end | ds }}",
+                "ts={{ data_interval_end | ts }}",
                 f"{unzipped_file['base64_url']}.jsonl",
             ),
             "destination_path_fragment": os.path.join(
-                "dt={{ ds }}",
-                "ts={{ ts }}",
+                "dt={{ data_interval_end | ds }}",
+                "ts={{ data_interval_end | ts }}",
                 f"base64_url={unzipped_file['base64_url']}",
             ),
         }
