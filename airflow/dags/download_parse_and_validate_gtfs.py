@@ -58,6 +58,11 @@ def gcs_branch(bucket_name, object_name, present, missing):
     start_date=datetime(2026, 1, 6),
     catchup=False,
     tags=["gtfs"],
+    default_args={
+        "email": os.getenv("CALITP_NOTIFY_EMAIL"),
+        "email_on_failure": True,
+        "email_on_retry": False,
+    },
 )
 def download_parse_and_validate_gtfs():
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
