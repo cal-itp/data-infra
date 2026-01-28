@@ -26,10 +26,6 @@ calitp_warehouse:
             spark.executor.instances: "4" # dbt defaults to 2
             spark.executor.memory: 4g
             spark.dynamicAllocation.maxExecutors: "16"
-    prod_service_account:
-      <<: *prod
-      method: service-account
-      keyfile: "{{ env_var('BIGQUERY_KEYFILE_LOCATION', '/secrets/jobs-data/service-account.json') }}"
     staging:
       &staging
       <<: *prod
@@ -37,7 +33,3 @@ calitp_warehouse:
       database: cal-itp-data-infra-staging
       schema: staging
       gcs_bucket: test-calitp-dbt-python-models
-    staging_service_account:
-      <<: *staging
-      method: service-account
-      keyfile: "{{ env_var('BIGQUERY_KEYFILE_LOCATION', '/secrets/jobs-data/service-account.json') }}"
