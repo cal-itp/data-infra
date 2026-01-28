@@ -701,6 +701,27 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/88/ac/9e43c3b495dcbfae583be13b15552fafd53c8f2345fbf0a413950721bb87/dask-2024.5.2-py3-none-any.whl", hash = "sha256:acc2cfe41d9e0151c216ac40396dbe34df13bc3d8c51dfece190349e4f2243af", size = 1232422, upload-time = "2024-05-31T21:13:10.659Z" },
 ]
 
+[package.optional-dependencies]
+dataframe = [
+    { name = "dask-expr" },
+    { name = "numpy" },
+    { name = "pandas" },
+]
+
+[[package]]
+name = "dask-expr"
+version = "1.1.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dask" },
+    { name = "pandas" },
+    { name = "pyarrow" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c2/b7/da1deafb2ba44c6e66dd45854405400f40d3f692aa4a26429391bbfee978/dask_expr-1.1.2.tar.gz", hash = "sha256:ce2e3803b638cdc67bc75326e1b0d36ea9d231fdddf086e727145a5a2769bed4", size = 188659, upload-time = "2024-05-31T21:13:18.036Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/05/6e/e057efb05b9be2970334dbea09ef8fd18f585d24206b4cb15a07aca18375/dask_expr-1.1.2-py3-none-any.whl", hash = "sha256:3be69fb2d449b5edf4404e953b7f6e688426872c6eb10f239539ead716a06f7a", size = 205494, upload-time = "2024-05-31T21:13:13.018Z" },
+]
+
 [[package]]
 name = "dask-geopandas"
 version = "0.2.0"
@@ -1918,7 +1939,7 @@ dependencies = [
     { name = "branca" },
     { name = "calitp-data-analysis" },
     { name = "csvkit" },
-    { name = "dask" },
+    { name = "dask", extra = ["dataframe"] },
     { name = "dask-geopandas" },
     { name = "folium" },
     { name = "intake" },
@@ -1978,7 +1999,7 @@ requires-dist = [
     { name = "branca", specifier = ">=0.8.2,<0.9.0" },
     { name = "calitp-data-analysis", specifier = "==2026.1.5" },
     { name = "csvkit", specifier = "==1.0.7" },
-    { name = "dask", specifier = ">=2024.5.0,<2024.6.0" },
+    { name = "dask", extras = ["dataframe"], specifier = ">=2024.5.0,<2024.6.0" },
     { name = "dask-geopandas", specifier = ">=0.2.0,<0.3.0" },
     { name = "folium", specifier = ">=0.20.0,<0.21.0" },
     { name = "intake", specifier = "==0.6.4" },
