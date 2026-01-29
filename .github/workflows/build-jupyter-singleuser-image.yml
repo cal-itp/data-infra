@@ -43,6 +43,11 @@ jobs:
           PROJECT_VERSION=$(uv version --short)
           echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
 
+      - name: Confirm lockfile is consistent with pyproject.toml
+        run: |
+          cd images/jupyter-singleuser
+          uv lock --check
+
       - name: Build and push docker image
         uses: docker/build-push-action@v6
         with:
