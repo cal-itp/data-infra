@@ -15,6 +15,29 @@ daily_rt AS (
     FROM {{ ref('fct_daily_rt_service_summary') }}
 ),
 
+daily_route AS (
+    SELECT *
+    FROM {{ ref('fct_daily_schedule_rt_route_summary') }}
+),
+
+daily_route_summary AS (
+    SELECT
+        service_date,
+        schedule_gtfs_dataset_name,
+        vp_name,
+        tu_name,
+
+        -- vehicle positions
+        SAFE_DIVIDE(SUM(vp_num_distinct_updates), SUM(vp_extract_duration_minutes)) AS vp_messages_per_minute,
+        COUNTIF(appeared_in_vp IS TRUE) AS n_vp_routes,
+
+        -- trip updates
+        SAFE_DIVIDE(SUM(tu_num_distinct_updates), SUM(tu_extract_duration_minutes)) AS tu_messages_per_minute,
+        COUNTIF(appeared_in_tu IS TRUE) AS n_tu_routes,
+    FROM daily_route
+    GROUP BY service_date, schedule_gtfs_dataset_name, vp_name, tu_name
+),
+
 daily_summary AS (
     SELECT
         daily_schedule.service_date,
@@ -74,6 +97,13 @@ daily_summary AS (
         -- how should we handle moving across quartets?
         -- joining on name will cause fanout (ex:)
         -- if we add analysis_name here, there will be cases that are confusing, nulls (ex):
+    LEFT JOIN daily_route_summary
+        ON daily_schedule.service_date = daily_route_summary.service_date
+        AND daily_schedule.gtfs_dataset_name = daily_route_summary.schedule_gtfs_dataset_name
+        -- adding this here will be restrictive, what if vp_name or tu_name is null?
+        AND daily_schedule.vp_name = daily_route_summary.vp_name
+        AND daily_schedule.tu_name = daily_route_summary.tu_name
+
 )
 
 SELECT * FROM daily_summary
