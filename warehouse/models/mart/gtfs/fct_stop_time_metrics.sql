@@ -29,13 +29,12 @@ trip_stop_with_trip_keys AS (
             'trip_id',
             'trip_start_time',
         ]) }} AS trip_key,
+        key,
         service_date,
         base64_url,
         schedule_base64_url,
         trip_id,
         trip_start_time,
-
-        key,
         stop_id,
         stop_sequence,
         actual_arrival,
@@ -179,13 +178,13 @@ derive_metrics AS (
 fct_stop_time_metrics AS (
     SELECT
         trip_stop_with_trip_keys.trip_key,
+        trip_stop_with_trip_keys.key,
         trip_stop_with_trip_keys.service_date,
         trip_stop_with_trip_keys.base64_url,
         trip_stop_with_trip_keys.schedule_base64_url,
         trip_stop_with_trip_keys.trip_id,
         trip_stop_with_trip_keys.trip_start_time,
 
-        trip_stop_with_trip_keys.key,
         trip_stop_with_trip_keys.stop_id,
         trip_stop_with_trip_keys.stop_sequence,
         trip_stop_with_trip_keys.actual_arrival,
@@ -232,5 +231,6 @@ fct_stop_time_metrics AS (
     INNER JOIN trip_stop_with_trip_keys USING (key)
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 )
+
 
 SELECT * FROM fct_stop_time_metrics
