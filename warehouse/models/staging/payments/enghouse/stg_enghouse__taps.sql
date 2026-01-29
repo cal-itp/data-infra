@@ -111,8 +111,6 @@ stg_enghouse__taps AS (
         driver_id,
         _content_hash
     FROM deduplicated
-    -- Filter out header rows (if external table columns are STRING, this will work)
-    WHERE operator_id IS NOT NULL
 )
 
 SELECT * FROM stg_enghouse__taps
