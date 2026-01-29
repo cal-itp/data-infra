@@ -7,13 +7,14 @@
 
 WITH schedule_trips AS (
     SELECT *
-    FROM {{ ref('fct_scheduled_trips') }}
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_scheduled_trips_testing`--{{ ref('fct_scheduled_trips') }}
 ),
 
 observed_trips AS (
     SELECT *
-    FROM {{ ref('fct_observed_trips') }}
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_observed_trips_testing`--{{ ref('fct_observed_trips') }}
 ),
+
 
 gtfs_join AS (
     SELECT
@@ -46,27 +47,10 @@ route_direction_aggregation AS (
         schedule_gtfs_dataset_name,
         schedule_gtfs_dataset_key,
 
-        -- when we group, is this right way to fill missing values in for
-        -- schedule trips that don't find a matching RT trip?
-        -- there are still some rows that should be aggregated, but something in the quartet is missing
-        -- yes schedule/yes vp/no tu is separate row from yes schedule/yes vp/yes tu
-        MAX(vp_gtfs_dataset_key) AS vp_gtfs_dataset_key,
-        MAX(vp_name) AS vp_name,
-        vp_base64_url,
-        MAX(tu_gtfs_dataset_key) AS tu_gtfs_dataset_key,
-        MAX(tu_name) AS tu_name,
-        tu_base64_url,
-        -- slightly different than fct_observed_trips
-        CASE
-            WHEN COUNTIF(vp_name IS NOT NULL) > 0 THEN TRUE
-            ELSE FALSE
-        END AS appeared_in_vp,
-        CASE
-            WHEN COUNTIF(tu_name IS NOT NULL) > 0 THEN TRUE
-            ELSE FALSE
-        END AS appeared_in_tu,
-
         feed_key,
+        vp_base64_url,
+        tu_base64_url,
+
         COUNT(DISTINCT trip_instance_key) AS n_trips,
         route_id,
         {{ parse_route_id('schedule_gtfs_dataset_name', 'route_id') }} AS route_id_cleaned,
@@ -77,18 +61,29 @@ route_direction_aggregation AS (
         direction_id,
         COUNT(DISTINCT route_id) AS n_routes,
 
+        -- slightly different than fct_observed_trips
+        CASE
+            WHEN COUNTIF(vp_base64_url IS NOT NULL) > 0 THEN TRUE
+            ELSE FALSE
+        END AS appeared_in_vp,
+        CASE
+            WHEN COUNTIF(tu_base64_url IS NOT NULL) > 0 THEN TRUE
+            ELSE FALSE
+        END AS appeared_in_tu,
+
         -- vehicle positions
         COALESCE(SUM(vp_num_distinct_extract_ts), 0) AS vp_num_distinct_updates,
-        COALESCE(COUNTIF(vp_name IS NOT NULL), 0) AS n_vp_trips,
+        COALESCE(COUNTIF(vp_base64_url IS NOT NULL), 0) AS n_vp_trips,
         COALESCE(SUM(vp_extract_duration_minutes), 0) AS vp_extract_duration_minutes,
         COALESCE(ROUND(
             SAFE_DIVIDE(SUM(vp_num_distinct_extract_ts),
             SUM(vp_extract_duration_minutes)
         ), 2), 0) AS vp_messages_per_minute,
 
+
         -- trip updates
         COALESCE(SUM(tu_num_distinct_extract_ts), 0) AS tu_num_distinct_updates,
-        COALESCE(COUNTIF(tu_name IS NOT NULL), 0) AS n_tu_trips,
+        COALESCE(COUNTIF(tu_base64_url IS NOT NULL), 0) AS n_tu_trips,
         COALESCE(SUM(tu_extract_duration_minutes), 0) AS tu_extract_duration_minutes,
         COALESCE(ROUND(
             SAFE_DIVIDE(SUM(tu_num_distinct_extract_ts),
@@ -97,6 +92,27 @@ route_direction_aggregation AS (
 
     FROM gtfs_join
     GROUP BY service_date, schedule_base64_url, schedule_gtfs_dataset_name, schedule_gtfs_dataset_key, feed_key, vp_base64_url, tu_base64_url, route_id, route_id_cleaned, route_name, direction_id
+),
+
+daily_schedule_route_direction_aggregation AS (
+    SELECT
+        route_direction_aggregation.*,
+        -- when we group, is this right way to fill missing values in for
+        -- schedule trips that don't find a matching RT trip?
+        -- there are still some rows that should be aggregated, but something in the quartet is missing
+        -- yes schedule/yes vp/no tu is separate row from yes schedule/yes vp/yes tu
+        --vp_datasets.gtfs_dataset_key AS vp_gtfs_dataset_key,
+        --vp_datasets.gtfs_dataset_name AS vp_name,
+        --tu_datasets.gtfs_dataset_key AS tu_gtfs_dataset_key,
+        --tu_datasets.gtfs_dataset_name AS tu_name,
+
+    FROM route_direction_aggregation
+    --LEFT JOIN urls_to_datasets AS vp_datasets
+    --    ON route_direction_aggregation.vp_base64_url = vp_datasets.base64_url
+    --    AND route_direction_aggregation.service_date BETWEEN CAST(DATETIME(vp_datasets._valid_from, "America/Los_Angeles") AS DATE) AND CAST(DATETIME(vp_datasets._valid_to, "America/Los_Angeles") AS DATE)
+    --LEFT JOIN urls_to_datasets AS tu_datasets
+    --    ON route_direction_aggregation.tu_base64_url = tu_datasets.base64_url
+    --    AND route_direction_aggregation.service_date BETWEEN DATETIME(tu_datasets._valid_from, "America/Los_Angeles") AND DATETIME(tu_datasets._valid_to, "America/Los_Angeles")
 )
 
-SELECT * FROM route_direction_aggregation
+SELECT * FROM daily_schedule_route_direction_aggregation
