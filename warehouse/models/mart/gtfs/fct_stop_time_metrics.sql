@@ -84,19 +84,12 @@ prediction_difference AS (
          + EXTRACT(HOUR FROM arrival_time) * 60 * 60
          + EXTRACT(MINUTE FROM arrival_time) * 60
          + EXTRACT(SECOND FROM arrival_time)) AS arrival_time_seconds,
-         -- categorize whether prediction was early/on-time/late and create dummy boolean variables
-        CASE
-            WHEN (prediction_seconds_difference_from_arrival > 0 AND predictions_seconds_difference_from_departure > 0) THEN TRUE
-            ELSE FALSE
-        END AS is_early,
-        CASE
-            WHEN (prediction_seconds_difference_from_arrival < 0 AND predictions_seconds_difference_from_departure < 0) THEN TRUE
-            ELSE FALSE
-        END AS is_late,
-        CASE
-            WHEN (prediction_seconds_difference_from_arrival= 0 OR predictions_seconds_difference_from_departure = 0) THEN TRUE
-            ELSE FALSE
-        END AS is_ontime,
+
+        -- categorize whether prediction was early/on-time/late and create dummy boolean variables
+        IF(prediction_seconds_difference_from_arrival > 0 AND predictions_seconds_difference_from_departure > 0, TRUE, FALSE) AS is_early,
+        IF(prediction_seconds_difference_from_arrival < 0 AND predictions_seconds_difference_from_departure < 0, TRUE, FALSE) AS is_late,
+        IF(prediction_seconds_difference_from_arrival= 0 OR predictions_seconds_difference_from_departure = 0, TRUE, FALSE) AS is_ontime,
+
     -- Newmark overwrites some of these as 0 if is_ontime is True and the prediction is compared to actual arrival for early; actual departure for late
         CASE
             WHEN (prediction_seconds_difference_from_arrival= 0 OR predictions_seconds_difference_from_departure = 0) THEN 0
@@ -141,11 +134,8 @@ derive_metrics AS (
         -- 04_reliable_prediction_accuracy.ipynb
         prediction_error,
         minutes_until_arrival,
-        CASE
-          WHEN (prediction_error >= -60 * LN(minutes_until_arrival +1.3)
-                AND prediction_error <= 60* LN(minutes_until_arrival +1.5)) THEN 1
-          ELSE 0
-        END AS is_accurate,
+        IF(prediction_error >= -60 * LN(minutes_until_arrival +1.3)
+                AND prediction_error <= 60* LN(minutes_until_arrival +1.5), 1, 0) AS is_accurate,
         -- scaled prediction error = prediction_error_sec / seconds_to_arrival
         ROUND(SAFE_DIVIDE(prediction_error, (minutes_until_arrival * 60)), 3) AS scaled_prediction_error,
 
@@ -156,10 +146,7 @@ derive_metrics AS (
         -- 01_update_completeness.ipynb
         -- double check this, it's supposed to be fresh update, using header/vehicle_timestamp
         n_predictions_minute,
-        CASE
-          WHEN n_predictions_minute >= 2 THEN 1
-          ELSE 0
-        END AS is_complete,
+        IF(n_predictions_minute >=2, 1, 0) AS is_complete,
 
         -- 03_prediction_inconsistency.ipynb.ipynb
         -- wobble: the max spread is to compare this minute's max arrival with
