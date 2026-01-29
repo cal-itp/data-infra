@@ -76,7 +76,7 @@ fct_payments_rides_enghouse AS (
         taps.fare_value,
         taps.fare_description,
         taps.fare_linked_id,
-        taps.id,
+        taps.gps_longitude,
         taps.gps_latitude,
         taps.gps_altitude,
         taps.vehicle_public_number,
