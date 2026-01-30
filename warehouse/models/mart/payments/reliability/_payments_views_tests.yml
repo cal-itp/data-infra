@@ -73,3 +73,22 @@ models:
         description: The percentage of unlabeled rides compared to the total number of rides for the given month
       - name: recency_rank
         description: Used to identify a month's recency (for help with filtering)
+  - name: v2_payments_reliability_weekly_unlabeled_routes_enghouse
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "n_all_rides >= total_unlabeled_rides"
+    columns:
+      - name: operator_id
+        description: Enghouse-assigned Operator ID
+      - name: week_start
+        description: The first day of the week for which the count aggregation is being caclulated
+      - name: n_null_rides
+        description: The total number of rides labeled as `Null` for the given month
+      - name: total_unlabeled_rides
+        description: The total number of rides labeled as either empty strings or `Null` for the given month
+      - name: n_all_rides
+        description: The total number of rides for the given month
+      - name: pct_unlabeled_rides_to_total_rides
+        description: The percentage of unlabeled rides compared to the total number of rides for the given month
+      - name: recency_rank
+        description: Used to identify a month's recency (for help with filtering)
