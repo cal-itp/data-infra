@@ -125,10 +125,10 @@ fct_payments_rides_enghouse AS (
     LEFT JOIN taps
         ON ticket_results.tap_id = taps.tap_id
     LEFT JOIN participants_to_routes_and_agency AS routes
-        ON routes.enghouse_operator_id = taps.operator_id
-            AND EXTRACT(DATE FROM TIMESTAMP(taps.terminal_date)) = routes.date
+        ON routes.enghouse_operator_id = ticket_results.operator_id
+            AND EXTRACT(DATE FROM TIMESTAMP(ticket_results.start_dttm)) = routes.date
             AND routes.route_id = taps.line_public_number
-            AND CAST(taps.terminal_date AS TIMESTAMP)
+            AND CAST(ticket_results.start_dttm AS TIMESTAMP)
                 BETWEEN CAST(routes._in_use_from AS TIMESTAMP)
                 AND CAST(routes._in_use_until AS TIMESTAMP)
 
