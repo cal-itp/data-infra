@@ -38,7 +38,7 @@ models:
       - name: Fare_Value
       - name: Fare_Description
       - name: Fare_Linked_Id
-      - name: ID
+      - name: gps_longitude
       - name: Gps_Latitude
       - name: Gps_Altitude
       - name: Vehicle_Public_Number
