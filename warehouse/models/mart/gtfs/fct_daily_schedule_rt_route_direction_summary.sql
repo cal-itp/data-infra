@@ -156,21 +156,12 @@ route_direction_aggregation AS (
         vp.n_vp_trips,
         vp.vp_extract_duration_minutes,
         vp.vp_messages_per_minute,
-        ROUND(
-            SAFE_DIVIDE(vp_extract_duration_minutes,
-            (service_hours + flex_service_hours) * 60),
-        3) AS pct_vp_service_hours,
 
         -- trip updates
         tu.tu_num_distinct_updates,
         tu.n_tu_trips,
         tu.tu_extract_duration_minutes,
         tu.tu_messages_per_minute,
-        ROUND(
-            SAFE_DIVIDE(
-                tu_extract_duration_minutes,
-                (service_hours + flex_service_hours) * 60),
-        3) AS pct_tu_service_hours,
 
     FROM schedule_aggregation AS schedule
     LEFT JOIN tu_aggregation AS tu
