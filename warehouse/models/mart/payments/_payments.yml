@@ -728,10 +728,25 @@ models:
 
   - name: fct_payments_rides_enghouse
     description: |
-      Enghouse taps.
+      Enghouse rides.
     columns:
       - name: operator_id
+      - name: id
+      - name: ticket_id
+      - name: station_name
+      - name: amount
+      - name: clearing_id
+      - name: reason
       - name: tap_id
+      - name: ticket_type
+      - name: created_dttm
+      - name: line
+      - name: start_station
+      - name: end_station
+      - name: start_dttm
+      - name: end_dttm
+      - name: ticket_code
+      - name: additional_infos
       - name: mapping_terminal_id
       - name: mapping_merchant_id
       - name: terminal
@@ -745,7 +760,6 @@ models:
       - name: payment_reference
       - name: terminal_spdh_code
       - name: denylist_version
-      - name: transit_data
       - name: currency
       - name: par
       - name: fare_mode
@@ -753,7 +767,7 @@ models:
       - name: fare_value
       - name: fare_description
       - name: fare_linked_id
-      - name: id
+      - name: gps_longitude
       - name: gps_latitude
       - name: gps_altitude
       - name: vehicle_public_number

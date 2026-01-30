@@ -23,6 +23,10 @@ payments_entity_mapping AS (
     SELECT * FROM {{ ref('payments_entity_mapping_enghouse') }}
 ),
 
+ticket_results AS (
+    SELECT * FROM {{ ref('stg_enghouse__ticket_results') }}
+),
+
 taps AS (
     SELECT * FROM {{ ref('stg_enghouse__taps') }}
 ),
@@ -53,8 +57,24 @@ participants_to_routes_and_agency AS (
 fct_payments_rides_enghouse AS (
     SELECT
 
-        taps.operator_id,
-        taps.tap_id,
+        ticket_results.operator_id,
+        ticket_results.id,
+        ticket_results.ticket_id,
+        ticket_results.station_name,
+        ticket_results.amount,
+        ticket_results.clearing_id,
+        ticket_results.reason,
+        ticket_results.tap_id,
+        ticket_results.ticket_type,
+        ticket_results.created_dttm,
+        ticket_results.line,
+        ticket_results.start_station,
+        ticket_results.end_station,
+        ticket_results.start_dttm,
+        ticket_results.end_dttm,
+        ticket_results.ticket_code,
+        ticket_results.additional_infos,
+
         taps.mapping_terminal_id,
         taps.mapping_merchant_id,
         taps.terminal,
@@ -68,7 +88,6 @@ fct_payments_rides_enghouse AS (
         taps.payment_reference,
         taps.terminal_spdh_code,
         taps.denylist_version,
-        taps.transit_data,
         taps.currency,
         taps.par,
         taps.fare_mode,
@@ -76,7 +95,7 @@ fct_payments_rides_enghouse AS (
         taps.fare_value,
         taps.fare_description,
         taps.fare_linked_id,
-        taps.id,
+        taps.gps_longitude,
         taps.gps_latitude,
         taps.gps_altitude,
         taps.vehicle_public_number,
@@ -102,11 +121,11 @@ fct_payments_rides_enghouse AS (
         routes.agency_id,
         routes.agency_name
 
-    FROM taps
+    FROM ticket_results
+    LEFT JOIN taps
+        ON ticket_results.tap_id = taps.tap_id
     LEFT JOIN participants_to_routes_and_agency AS routes
         ON routes.enghouse_operator_id = taps.operator_id
-            -- here, can just use t1 because transaction date will be populated
-            -- (don't have to handle unkowns the way we do with route_id)
             AND EXTRACT(DATE FROM TIMESTAMP(taps.terminal_date)) = routes.date
             AND routes.route_id = taps.line_public_number
             AND CAST(taps.terminal_date AS TIMESTAMP)

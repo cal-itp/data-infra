@@ -27,7 +27,7 @@ clean_columns AS (
         SAFE_CAST(Fare_Value AS INT64) AS fare_value,
         {{ trim_make_empty_string_null('Fare_Description') }} AS fare_description,
         {{ trim_make_empty_string_null('Fare_Linked_Id') }} AS fare_linked_id,
-        {{ trim_make_empty_string_null('ID') }} AS id,
+        {{ trim_make_empty_string_null('ID') }} AS gps_longitude,
         SAFE_CAST(Gps_Latitude AS NUMERIC) AS gps_latitude,
         SAFE_CAST(Gps_Altitude AS NUMERIC) AS gps_altitude,
         SAFE_CAST(Vehicle_Public_Number AS INT64) AS vehicle_public_number,
@@ -90,7 +90,7 @@ stg_enghouse__taps AS (
         fare_value,
         fare_description,
         fare_linked_id,
-        id,
+        gps_longitude,
         gps_latitude,
         gps_altitude,
         vehicle_public_number,
@@ -111,8 +111,6 @@ stg_enghouse__taps AS (
         driver_id,
         _content_hash
     FROM deduplicated
-    -- Filter out header rows (if external table columns are STRING, this will work)
-    WHERE operator_id IS NOT NULL
 )
 
 SELECT * FROM stg_enghouse__taps
