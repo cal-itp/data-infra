@@ -66,3 +66,86 @@ jobs:
           issue-number: ${{ github.event.number }}
           body-file: "ci/diff.md"
           edit-mode: replace
+
+  validate-container-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract and validate JupyterHub images
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+
+          VALUES_FILE="kubernetes/apps/charts/jupyterhub/values.yaml"
+          IMAGES=()
+          MISSING=()
+
+          # Extract default image (name + tag format)
+          DEFAULT_NAME=$(yq '.jupyterhub.singleuser.image.name' "$VALUES_FILE")
+          DEFAULT_TAG=$(yq '.jupyterhub.singleuser.image.tag' "$VALUES_FILE")
+          if [[ "$DEFAULT_NAME" != "null" && "$DEFAULT_TAG" != "null" ]]; then
+            IMAGES+=("${DEFAULT_NAME}:${DEFAULT_TAG}")
+          fi
+
+          # Extract profileList images (full image:tag format)
+          PROFILE_IMAGES=$(yq eval '.jupyterhub.singleuser.profileList[].kubespawner_override.image' "$VALUES_FILE" 2>/dev/null | grep -v '^null$' | sort -u)
+          while IFS= read -r img; do
+            if [[ -n "$img" ]]; then
+              IMAGES+=("$img")
+            fi
+          done <<< "$PROFILE_IMAGES"
+
+          # Deduplicate
+          readarray -t UNIQUE_IMAGES < <(printf '%s\n' "${IMAGES[@]}" | sort -u)
+
+          echo "Found ${#UNIQUE_IMAGES[@]} unique images to validate:"
+          printf '  - %s\n' "${UNIQUE_IMAGES[@]}"
+          echo ""
+
+          # Validate each image
+          for image in "${UNIQUE_IMAGES[@]}"; do
+            if [[ "$image" =~ ^ghcr\.io/([^/]+)/(.+):(.+)$ ]]; then
+              ORG="${BASH_REMATCH[1]}"
+              PACKAGE="${BASH_REMATCH[2]}"
+              TAG="${BASH_REMATCH[3]}"
+              PACKAGE_ENCODED="${PACKAGE//\//%2F}"
+
+              echo "Checking: $image"
+
+              # Query GitHub API for package versions
+              if ! API_RESPONSE=$(gh api \
+                -H "Accept: application/vnd.github+json" \
+                "/orgs/${ORG}/packages/container/${PACKAGE_ENCODED}/versions" \
+                --paginate 2>&1); then
+                echo "  ✗ API error: $API_RESPONSE"
+                MISSING+=("$image (API error)")
+              else
+                TAG_COUNT=$(echo "$API_RESPONSE" | jq -r "[.[].metadata.container.tags[] | select(. == \"$TAG\")] | length")
+                if [[ "$TAG_COUNT" -gt 0 ]]; then
+                  echo "  ✓ Image exists"
+                else
+                  echo "  ✗ Tag '$TAG' not found"
+                  MISSING+=("$image")
+                fi
+              fi
+            else
+              echo "Skipping non-ghcr.io image: $image"
+            fi
+          done
+
+          echo ""
+          if [[ ${#MISSING[@]} -gt 0 ]]; then
+            echo "========================================"
+            echo "ERROR: The following images are missing:"
+            echo "========================================"
+            printf '  - %s\n' "${MISSING[@]}"
+            echo ""
+            echo "Ensure images are built and pushed before merging."
+            exit 1
+          else
+            echo "========================================"
+            echo "SUCCESS: All images validated"
+            echo "========================================"
+          fi
