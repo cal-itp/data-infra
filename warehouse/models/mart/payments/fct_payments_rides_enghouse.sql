@@ -126,8 +126,6 @@ fct_payments_rides_enghouse AS (
         ON ticket_results.tap_id = taps.tap_id
     LEFT JOIN participants_to_routes_and_agency AS routes
         ON routes.enghouse_operator_id = taps.operator_id
-            -- here, can just use t1 because transaction date will be populated
-            -- (don't have to handle unkowns the way we do with route_id)
             AND EXTRACT(DATE FROM TIMESTAMP(taps.terminal_date)) = routes.date
             AND routes.route_id = taps.line_public_number
             AND CAST(taps.terminal_date AS TIMESTAMP)
