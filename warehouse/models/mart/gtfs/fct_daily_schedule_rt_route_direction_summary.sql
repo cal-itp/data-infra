@@ -54,6 +54,11 @@ schedule_aggregation AS (
 
         COUNT(DISTINCT trip_instance_key) AS n_trips,
         COUNT(DISTINCT route_id) AS n_routes,
+        COUNT(DISTINCT shape_id) AS n_shapes,
+        ROUND(AVG(num_distinct_stops_served), 1) AS avg_stops_served,
+        SUM(num_stop_times) AS num_stop_times,
+        COALESCE(ROUND(SUM(service_hours), 2), 0) AS service_hours,
+        COALESCE(ROUND(SUM(flex_service_hours), 2), 0) AS flex_service_hours,
 
     FROM gtfs_join
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
@@ -75,7 +80,7 @@ tu_aggregation AS (
 
         -- trip updates
         COALESCE(SUM(tu_num_distinct_extract_ts), 0) AS tu_num_distinct_updates,
-        COUNT(*) AS n_tu_trips, --COALESCE(COUNTIF(tu_base64_url IS NOT NULL), 0) AS n_tu_trips,
+        COUNT(*) AS n_tu_trips,
         COALESCE(SUM(tu_extract_duration_minutes), 0) AS tu_extract_duration_minutes,
         COALESCE(ROUND(
             SAFE_DIVIDE(SUM(tu_num_distinct_extract_ts),
@@ -102,7 +107,7 @@ vp_aggregation AS (
 
         -- vehicle positions
         COALESCE(SUM(vp_num_distinct_extract_ts), 0) AS vp_num_distinct_updates,
-        COUNT(*) AS n_vp_trips, --COALESCE(COUNTIF(vp_base64_url IS NOT NULL), 0) AS n_vp_trips,
+        COUNT(*) AS n_vp_trips,
         COALESCE(SUM(vp_extract_duration_minutes), 0) AS vp_extract_duration_minutes,
         COALESCE(ROUND(
             SAFE_DIVIDE(SUM(vp_num_distinct_extract_ts),
@@ -112,6 +117,7 @@ vp_aggregation AS (
     WHERE vp_base64_url IS NOT NULL
     GROUP BY 1, 2, 3, 4, 5, 6, 7
 ),
+
 
 route_direction_aggregation AS (
     SELECT
@@ -133,9 +139,38 @@ route_direction_aggregation AS (
         vp.vp_name,
         vp.vp_base64_url,
 
+        schedule.n_trips,
+        schedule.n_routes,
+        schedule.n_shapes,
+        schedule.avg_stops_served,
+        schedule.num_stop_times,
+        schedule.service_hours,
+        schedule.flex_service_hours,
+
         -- follow pattern in fct_observed_trips
-       tu_base64_url IS NOT NULL AS appeared_in_tu,
-       vp_base64_url IS NOT NULL AS appeared_in_vp,
+        tu_base64_url IS NOT NULL AS appeared_in_tu,
+        vp_base64_url IS NOT NULL AS appeared_in_vp,
+
+        -- vehicle positions
+        vp.vp_num_distinct_updates,
+        vp.n_vp_trips,
+        vp.vp_extract_duration_minutes,
+        vp.vp_messages_per_minute,
+        ROUND(
+            SAFE_DIVIDE(vp_extract_duration_minutes,
+            (service_hours + flex_service_hours) * 60),
+        3) AS pct_vp_service_hours,
+
+        -- trip updates
+        tu.tu_num_distinct_updates,
+        tu.n_tu_trips,
+        tu.tu_extract_duration_minutes,
+        tu.tu_messages_per_minute,
+        ROUND(
+            SAFE_DIVIDE(
+                tu_extract_duration_minutes,
+                (service_hours + flex_service_hours) * 60),
+        3) AS pct_tu_service_hours,
 
     FROM schedule_aggregation AS schedule
     LEFT JOIN tu_aggregation AS tu

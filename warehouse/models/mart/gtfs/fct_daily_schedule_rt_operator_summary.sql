@@ -17,7 +17,7 @@ daily_rt AS (
 
 daily_route AS (
     SELECT *
-    FROM {{ ref('fct_daily_schedule_rt_route_summary') }}
+    FROM {{ ref('fct_daily_schedule_rt_route_direction_summary') }}
 ),
 
 daily_route_summary AS (
