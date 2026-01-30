@@ -8,7 +8,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('id') }} AS id,
         {{ trim_make_empty_string_null('ticket_id') }} AS ticket_id,
         {{ trim_make_empty_string_null('station_name') }} AS station_name,
-        SAFE_CAST(amount AS NUMERIC) AS amount,
+        ROUND(SAFE_CAST(amount AS NUMERIC) / 100.0, 2) AS amount,
         {{ trim_make_empty_string_null('clearing_id') }} AS clearing_id,
         {{ trim_make_empty_string_null('reason') }} AS reason,
         {{ trim_make_empty_string_null('tap_id') }} AS tap_id,

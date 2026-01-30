@@ -90,7 +90,7 @@ stg_enghouse__taps AS (
         fare_value,
         fare_description,
         fare_linked_id,
-        id,
+        gps_longitude,
         gps_latitude,
         gps_altitude,
         vehicle_public_number,
