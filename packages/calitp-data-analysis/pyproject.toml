@@ -1,6 +1,6 @@
 [project]
 name = "calitp-data-analysis"
-version = "2026.1.5"
+version = "2026.1.30"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
 requires-python = ">=3.11.0, <3.12.0"
 
