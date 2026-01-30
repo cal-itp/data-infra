@@ -12,7 +12,7 @@ class TestGTFSValidatorHook:
 
     @pytest.fixture
     def hook(self, date: pendulum.DateTime) -> GTFSValidatorHook:
-        return GTFSValidatorHook(date=date)
+        return GTFSValidatorHook(date=date.isoformat())
 
     @pytest.fixture
     def jar_path(self) -> str:
@@ -25,37 +25,49 @@ class TestGTFSValidatorHook:
 
     def test_validator_5_0_0(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2025, 11, 15)).version().number
+            GTFSValidatorHook(date=pendulum.datetime(2025, 11, 15).isoformat())
+            .version()
+            .number
             == "5.0.0"
         )
 
     def test_validator_4_2_0(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2024, 3, 26)).version().number
+            GTFSValidatorHook(date=pendulum.datetime(2024, 3, 26).isoformat())
+            .version()
+            .number
             == "4.2.0"
         )
 
     def test_validator_4_1_0(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2024, 1, 19)).version().number
+            GTFSValidatorHook(date=pendulum.datetime(2024, 1, 19).isoformat())
+            .version()
+            .number
             == "4.1.0"
         )
 
     def test_validator_4_0_0(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2023, 8, 30)).version().number
+            GTFSValidatorHook(date=pendulum.datetime(2023, 8, 30).isoformat())
+            .version()
+            .number
             == "4.0.0"
         )
 
     def test_validator_3_1_1(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2022, 11, 15)).version().number
+            GTFSValidatorHook(date=pendulum.datetime(2022, 11, 15).isoformat())
+            .version()
+            .number
             == "3.1.1"
         )
 
     def test_validator_2_0_0(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2022, 9, 14)).version().number
+            GTFSValidatorHook(date=pendulum.datetime(2022, 9, 14).isoformat())
+            .version()
+            .number
             == "2.0.0"
         )
 

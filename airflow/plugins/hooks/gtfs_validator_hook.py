@@ -14,7 +14,7 @@ class GTFSValidatorResult:
     def __init__(
         self,
         version: str,
-        current_date: pendulum.DateTime,
+        current_date: str,
         download_schedule_feed_results: dict,
     ) -> None:
         self.version = version
@@ -61,7 +61,7 @@ class GTFSValidatorResult:
             "system_errors": self.system_errors,
             "validator_version": f"v{self.version}",
             "extract_config": self.download_schedule_feed_results["config"],
-            "ts": self.current_date.isoformat(),
+            "ts": self.current_date,
         }
 
     def results(self) -> dict:
@@ -110,7 +110,7 @@ class GTSFValidatorVersion:
         },
     ]
 
-    def __init__(self, date: pendulum.DateTime, number: str, filename: str) -> None:
+    def __init__(self, date: str, number: str, filename: str) -> None:
         self.date = date
         self.number = number
         self.filename = filename
@@ -120,8 +120,9 @@ class GTSFValidatorVersion:
         return [__class__(**v) for v in __class__.VERSIONS]
 
     @staticmethod
-    def find(current_date: pendulum.DateTime) -> Self:
-        return [v for v in __class__.all() if v.date < current_date][-1]
+    def find(current_date: str) -> Self:
+        parsed_date = pendulum.parse(current_date)
+        return [v for v in __class__.all() if v.date < parsed_date][-1]
 
     def __str__(self) -> str:
         return self.number
@@ -131,7 +132,7 @@ class GTSFValidatorVersion:
 
     def run(
         self,
-        current_date: pendulum.DateTime,
+        current_date: str,
         input_zip: str,
         download_schedule_feed_results: dict,
     ) -> None:
@@ -172,9 +173,9 @@ class GTSFValidatorVersion:
 
 
 class GTFSValidatorHook(BaseHook):
-    date: pendulum.DateTime
+    date: str
 
-    def __init__(self, date: pendulum.DateTime):
+    def __init__(self, date: str):
         super().__init__()
         self.date = date
 

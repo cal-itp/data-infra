@@ -3,10 +3,9 @@ import os
 import tempfile
 from typing import Sequence
 
-import pendulum
 from hooks.gtfs_unzip_hook import GTFSUnzipHook
 
-from airflow.models import BaseOperator, DagRun
+from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
@@ -59,17 +58,13 @@ class UnzipGTFSToGCSOperator(BaseOperator):
     def source_name(self) -> str:
         return self.source_bucket.replace("gs://", "")
 
-    def unzip_hook(
-        self, filenames: list[str], date: pendulum.DateTime
-    ) -> GTFSUnzipHook:
+    def unzip_hook(self, filenames: list[str], date: str) -> GTFSUnzipHook:
         return GTFSUnzipHook(filenames=filenames, current_date=date)
 
     def source_filename(self) -> str:
         return os.path.basename(self.source_path)
 
     def execute(self, context: Context) -> str:
-        dag_run: DagRun = context["dag_run"]
-
         with tempfile.TemporaryDirectory() as tmp_dir:
             local_source_path = self.gcs_hook().download(
                 bucket_name=self.source_name(),
@@ -78,7 +73,7 @@ class UnzipGTFSToGCSOperator(BaseOperator):
             )
 
             validator_result = self.unzip_hook(
-                filenames=self.filenames, date=dag_run.logical_date
+                filenames=self.filenames, date=self.ts
             ).run(
                 zipfile_path=local_source_path,
                 download_schedule_feed_results=self.download_schedule_feed_results,
@@ -112,7 +107,7 @@ class UnzipGTFSToGCSOperator(BaseOperator):
                     "PARTITIONED_ARTIFACT_METADATA": json.dumps(
                         {
                             "filename": "results.jsonl",
-                            "ts": dag_run.logical_date.isoformat(),
+                            "ts": self.ts,
                         }
                     )
                 },
