@@ -409,7 +409,7 @@ wheels = [
 
 [[package]]
 name = "calitp-data-analysis"
-version = "2026.1.5"
+version = "2026.1.30"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "altair" },
@@ -429,9 +429,9 @@ dependencies = [
     { name = "sqlalchemy" },
     { name = "sqlalchemy-bigquery" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/42/8b/f7a8818375fdd5c4120f277faea5c804f7faa6de1f0d14cb733830594399/calitp_data_analysis-2026.1.5.tar.gz", hash = "sha256:b991d8a6a5088792b22177be9ebdf6e001311065e518a4d765dd0c55d74e62b7", size = 10874, upload-time = "2026-01-06T21:02:44.296Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/40/76/666d69d2f55b0aedd7eb8c6e9ade4b843d7a40dc4e5d2bfbb20aa1932a85/calitp_data_analysis-2026.1.30.tar.gz", hash = "sha256:389d48454b3675a436f4cac16f07c5c4e2b00b6f67c5d9eaf0759411a895e52c", size = 10927, upload-time = "2026-01-30T23:54:43.582Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0c/af/71e7eb013c850001728d4bbb7167d28268d72cf55b0796fea9cc642e75b0/calitp_data_analysis-2026.1.5-py3-none-any.whl", hash = "sha256:b7629a38d0187e1ea0e3fd3c99672117ac004054550f896c6b0a6113d22ec98f", size = 13816, upload-time = "2026-01-06T21:02:43.419Z" },
+    { url = "https://files.pythonhosted.org/packages/a1/0c/9056de328aa10a979bc984a58bcd6c43a0b740a5cf56453fbc72d6349ac9/calitp_data_analysis-2026.1.30-py3-none-any.whl", hash = "sha256:08dc5f8635069c4cdd0564ed2b7195c880721dea1fb37b2237ed8a2f83e03588", size = 13821, upload-time = "2026-01-30T23:54:44.682Z" },
 ]
 
 [[package]]
@@ -684,7 +684,7 @@ wheels = [
 
 [[package]]
 name = "dask"
-version = "2024.5.2"
+version = "2025.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -696,30 +696,16 @@ dependencies = [
     { name = "pyyaml" },
     { name = "toolz" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d8/04/70c71535c48ac4f36949f2573ecf13a3f076a8396402c0b875b65e2d3d85/dask-2024.5.2.tar.gz", hash = "sha256:5c9722c44d0195e78b6e54197aa3302e6fcaaac2310fd3014560bcb86253dcb3", size = 9397888, upload-time = "2024-05-31T21:13:23.581Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/cb/69/c68e59bdfd0b8bffdb53f48faa0d780f23c109f723106354643a0e5d1ca6/dask-2025.3.1.tar.gz", hash = "sha256:d27dc5c1947e27215d3c626a5df5c9675f3fce9f1c39e216678851d783e177e0", size = 10927360, upload-time = "2026-01-29T15:38:27.62Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/88/ac/9e43c3b495dcbfae583be13b15552fafd53c8f2345fbf0a413950721bb87/dask-2024.5.2-py3-none-any.whl", hash = "sha256:acc2cfe41d9e0151c216ac40396dbe34df13bc3d8c51dfece190349e4f2243af", size = 1232422, upload-time = "2024-05-31T21:13:10.659Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/1c/58b952680cef2bc46d7bf579f575cf0213617fb789b168cef895bc758393/dask-2025.3.1-py3-none-any.whl", hash = "sha256:2fd69804687d3f9199ffc720f3cc82e1a41acc87c1893dbb598d13bad84df8c5", size = 1437134, upload-time = "2026-01-29T15:38:19.966Z" },
 ]
 
 [package.optional-dependencies]
 dataframe = [
-    { name = "dask-expr" },
     { name = "numpy" },
     { name = "pandas" },
-]
-
-[[package]]
-name = "dask-expr"
-version = "1.1.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "dask" },
-    { name = "pandas" },
     { name = "pyarrow" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/c2/b7/da1deafb2ba44c6e66dd45854405400f40d3f692aa4a26429391bbfee978/dask_expr-1.1.2.tar.gz", hash = "sha256:ce2e3803b638cdc67bc75326e1b0d36ea9d231fdddf086e727145a5a2769bed4", size = 188659, upload-time = "2024-05-31T21:13:18.036Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/05/6e/e057efb05b9be2970334dbea09ef8fd18f585d24206b4cb15a07aca18375/dask_expr-1.1.2-py3-none-any.whl", hash = "sha256:3be69fb2d449b5edf4404e953b7f6e688426872c6eb10f239539ead716a06f7a", size = 205494, upload-time = "2024-05-31T21:13:13.018Z" },
 ]
 
 [[package]]
@@ -804,7 +790,7 @@ wheels = [
 
 [[package]]
 name = "distributed"
-version = "2024.5.2"
+version = "2025.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -823,9 +809,9 @@ dependencies = [
     { name = "urllib3" },
     { name = "zict" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/23/77/46c5fc457a194d47855ce357a9993ed97a3b26a4a11fb16fef30008507e4/distributed-2024.5.2.tar.gz", hash = "sha256:4cee41093e98340d04d9254012c7d521065f64b3f33546dd0b02b00becb41e21", size = 1103322, upload-time = "2024-05-31T21:13:18.331Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/20/02/fb3a2e19f351cd354a376b3dd12c9a510b266c8ac8c850d460a4c6b1993d/distributed-2025.3.1.tar.gz", hash = "sha256:d1710de4157e7c0b6e7b0d86a9fd0e261215e036b2543ed7823e32fa85a259a3", size = 1110698, upload-time = "2026-01-29T15:39:03.759Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/60/552bd866e23c22666a5fe105d623a36b6c85b7323bf151cafdbf004b3cc2/distributed-2024.5.2-py3-none-any.whl", hash = "sha256:c0fd59d5c34179d9c9b5dc5acb42a00a06d163107b79f66c2dc73e9479a92286", size = 1010527, upload-time = "2024-05-31T21:13:12.148Z" },
+    { url = "https://files.pythonhosted.org/packages/ce/79/8cbac5786877831953da82ee98c34a1605c367cf7b31a4bc5188aa46d277/distributed-2025.3.1-py3-none-any.whl", hash = "sha256:5944e8c7298d35c69a943c876dcbc3bdbb2b35def366ce135d3a609c76472be9", size = 1018825, upload-time = "2026-01-29T15:39:01.32Z" },
 ]
 
 [[package]]
@@ -1942,6 +1928,7 @@ dependencies = [
     { name = "dask", extra = ["dataframe"] },
     { name = "dask-geopandas" },
     { name = "folium" },
+    { name = "httpcore" },
     { name = "intake" },
     { name = "intake-dcat" },
     { name = "intake-geopandas" },
@@ -1997,11 +1984,12 @@ shared-utils = [
 requires-dist = [
     { name = "black", specifier = "==24.10.0" },
     { name = "branca", specifier = ">=0.8.2,<0.9.0" },
-    { name = "calitp-data-analysis", specifier = "==2026.1.5" },
+    { name = "calitp-data-analysis", specifier = "==2026.1.30" },
     { name = "csvkit", specifier = "==1.0.7" },
-    { name = "dask", extras = ["dataframe"], specifier = ">=2024.5.0,<2024.6.0" },
+    { name = "dask", extras = ["dataframe"], specifier = ">=2024.10.0,<2025.4.0" },
     { name = "dask-geopandas", specifier = ">=0.2.0,<0.3.0" },
     { name = "folium", specifier = ">=0.20.0,<0.21.0" },
+    { name = "httpcore", specifier = "==1.0.9" },
     { name = "intake", specifier = "==0.6.4" },
     { name = "intake-dcat", specifier = "==0.4.0" },
     { name = "intake-geopandas", specifier = ">=0.3.0" },

@@ -10,11 +10,12 @@ classifiers = [
 dependencies = [
     "black==24.10.0",
     "branca (>=0.8.2, <0.9.0)",
-    "calitp-data-analysis==2026.1.5",
+    "calitp-data-analysis==2026.1.30",
     "csvkit==1.0.7",
-    "dask[dataframe]>=2024.5.0,<2024.6.0",
+    "dask[dataframe]>=2024.10.0,<2025.4.0",  # breaking changes introduced with 2025.4.0 https://docs.dask.org/en/stable/changelog.html#v2025-4-0
     "dask-geopandas (>=0.2.0, <0.3.0)",
     "folium (>=0.20.0, <0.21.0)",
+    "httpcore==1.0.9", # pinning this because otherwise uv installs 1.0.6 in container and that results in a conflict with h11
     "intake-dcat==0.4.0",
     "intake-geopandas>=0.3.0",
     "intake-parquet>=0.2.3",
