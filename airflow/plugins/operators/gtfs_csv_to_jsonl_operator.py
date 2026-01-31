@@ -223,6 +223,8 @@ class GTFSCSVToJSONLOperator(BaseOperator):
 
                     output.append(
                         {
+                            "dt": self.dt,
+                            "ts": self.ts,
                             "destination_path": os.path.join(
                                 results.filetype(),
                                 self.destination_path_fragment,
