@@ -39,7 +39,7 @@ class TestGTFSCSVToJSONLOperator:
             "exception": None,
             "extract": {
                 "filename": "gtfs.zip",
-                "ts": "2025-06-03T00:00:00+00:00",
+                "ts": "2025-06-02T00:00:00+00:00",
                 "config": {
                     "extracted_at": "2025-06-01T00:00:00+00:00",
                     "name": "Santa Ynez Mecatran Schedule",
@@ -76,7 +76,7 @@ class TestGTFSCSVToJSONLOperator:
             "extracted_files": [
                 {
                     "filename": "agency.txt",
-                    "ts": "2025-06-03T00:00:00+00:00",
+                    "ts": "2025-06-02T00:00:00+00:00",
                     "extract_config": {
                         "extracted_at": "2025-06-01T00:00:00+00:00",
                         "name": "Santa Ynez Mecatran Schedule",
@@ -91,7 +91,7 @@ class TestGTFSCSVToJSONLOperator:
                 },
                 {
                     "filename": "feed_info.txt",
-                    "ts": "2025-06-03T00:00:00+00:00",
+                    "ts": "2025-06-02T00:00:00+00:00",
                     "extract_config": {
                         "extracted_at": "2025-06-01T00:00:00+00:00",
                         "name": "Santa Ynez Mecatran Schedule",
@@ -123,6 +123,7 @@ class TestGTFSCSVToJSONLOperator:
     def operator(
         self,
         test_dag: DAG,
+        execution_date: datetime,
         source_path_fragment: str,
         destination_path_fragment: str,
         results_path_fragment: str,
@@ -131,6 +132,8 @@ class TestGTFSCSVToJSONLOperator:
         return GTFSCSVToJSONLOperator(
             task_id="convert_to_jsonl",
             gcp_conn_id="google_cloud_default",
+            dt=execution_date.strftime("%Y-%m-%d"),
+            ts=execution_date.isoformat(),
             unzip_results=unzip_results,
             source_bucket=os.environ.get(
                 "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
@@ -165,6 +168,8 @@ class TestGTFSCSVToJSONLOperator:
         xcom_value = task_instance.xcom_pull()
         assert len(xcom_value) == 2  # Converted two extracted files
         assert xcom_value[0] == {
+            "dt": "2025-06-02",
+            "ts": "2025-06-02T00:00:00+00:00",
             "results_path": os.path.join(
                 "agency.txt_parsing_results",
                 "dt=2025-06-02",
@@ -181,6 +186,8 @@ class TestGTFSCSVToJSONLOperator:
         }
 
         assert xcom_value[1] == {
+            "dt": "2025-06-02",
+            "ts": "2025-06-02T00:00:00+00:00",
             "results_path": os.path.join(
                 "feed_info.txt_parsing_results",
                 "dt=2025-06-02",
@@ -230,7 +237,7 @@ class TestGTFSCSVToJSONLOperator:
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "agency.jsonl.gz",
-            "ts": "2025-06-03T00:00:00+00:00",
+            "ts": "2025-06-02T00:00:00+00:00",
             "extract_config": {
                 "extracted_at": "2025-06-01T00:00:00+00:00",
                 "name": "Santa Ynez Mecatran Schedule",
@@ -260,7 +267,7 @@ class TestGTFSCSVToJSONLOperator:
             "exception": None,
             "feed_file": {
                 "filename": "agency.txt",
-                "ts": "2025-06-03T00:00:00+00:00",
+                "ts": "2025-06-02T00:00:00+00:00",
                 "extract_config": {
                     "extracted_at": "2025-06-01T00:00:00+00:00",
                     "name": "Santa Ynez Mecatran Schedule",
@@ -286,7 +293,7 @@ class TestGTFSCSVToJSONLOperator:
             ],
             "parsed_file": {
                 "filename": "agency.jsonl.gz",
-                "ts": "2025-06-03T00:00:00+00:00",
+                "ts": "2025-06-02T00:00:00+00:00",
                 "extract_config": {
                     "extracted_at": "2025-06-01T00:00:00+00:00",
                     "name": "Santa Ynez Mecatran Schedule",
@@ -313,7 +320,7 @@ class TestGTFSCSVToJSONLOperator:
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "results.jsonl",
-            "ts": "2025-06-03T00:00:00+00:00",
+            "ts": "2025-06-02T00:00:00+00:00",
         }
 
         # Validate the second converted file feed_info.txt
@@ -349,7 +356,7 @@ class TestGTFSCSVToJSONLOperator:
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "feed_info.jsonl.gz",
-            "ts": "2025-06-03T00:00:00+00:00",
+            "ts": "2025-06-02T00:00:00+00:00",
             "extract_config": {
                 "extracted_at": "2025-06-01T00:00:00+00:00",
                 "name": "Santa Ynez Mecatran Schedule",
@@ -379,7 +386,7 @@ class TestGTFSCSVToJSONLOperator:
             "exception": None,
             "feed_file": {
                 "filename": "feed_info.txt",
-                "ts": "2025-06-03T00:00:00+00:00",
+                "ts": "2025-06-02T00:00:00+00:00",
                 "extract_config": {
                     "extracted_at": "2025-06-01T00:00:00+00:00",
                     "name": "Santa Ynez Mecatran Schedule",
@@ -404,7 +411,7 @@ class TestGTFSCSVToJSONLOperator:
             ],
             "parsed_file": {
                 "filename": "feed_info.jsonl.gz",
-                "ts": "2025-06-03T00:00:00+00:00",
+                "ts": "2025-06-02T00:00:00+00:00",
                 "extract_config": {
                     "extracted_at": "2025-06-01T00:00:00+00:00",
                     "name": "Santa Ynez Mecatran Schedule",
@@ -431,5 +438,5 @@ class TestGTFSCSVToJSONLOperator:
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "results.jsonl",
-            "ts": "2025-06-03T00:00:00+00:00",
+            "ts": "2025-06-02T00:00:00+00:00",
         }

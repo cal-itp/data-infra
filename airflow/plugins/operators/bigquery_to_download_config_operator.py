@@ -2,10 +2,9 @@ import json
 import os
 from typing import Sequence
 
-import pendulum
 from google.cloud.bigquery.table import Row
 
-from airflow.models import BaseOperator, DagRun
+from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
@@ -13,9 +12,11 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 class DownloadConfigRow:
     row: dict
+    current_time: str
 
-    def __init__(self, row: Row):
+    def __init__(self, row: Row, current_time: str):
         self.row = dict(row)
+        self.current_time = current_time
 
     def query(self):
         result = {}
@@ -33,9 +34,7 @@ class DownloadConfigRow:
             ]
         return result
 
-    def resolve(
-        self, current_time: pendulum.DateTime, mapped_rows: dict[str, Row]
-    ) -> dict:
+    def resolve(self, mapped_rows: dict[str, Row]) -> dict:
         schedule_url_for_validation = None
         if (
             self.row["schedule_to_use_for_rt_validation_gtfs_dataset_key"]
@@ -45,7 +44,7 @@ class DownloadConfigRow:
                 self.row["schedule_to_use_for_rt_validation_gtfs_dataset_key"]
             ]["uri"]
         return {
-            "extracted_at": current_time.isoformat(),
+            "extracted_at": self.current_time,
             "name": self.row["name"],
             "url": self.row["pipeline_url"],
             "feed_type": self.row["type"],
@@ -58,6 +57,7 @@ class DownloadConfigRow:
 
 class BigQueryToDownloadConfigOperator(BaseOperator):
     template_fields: Sequence[str] = (
+        "ts",
         "dataset_name",
         "table_name",
         "destination_bucket",
@@ -70,6 +70,7 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
         self,
         dataset_name: str,
         table_name: str,
+        ts: str,
         destination_bucket: str,
         destination_path: str,
         columns: list[str] = [
@@ -90,6 +91,7 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
 
         self._gcs_hook = None
         self._big_query_hook = None
+        self.ts: str = ts
         self.dataset_name = dataset_name
         self.table_name = table_name
         self.destination_bucket = destination_bucket
@@ -122,34 +124,34 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
             """
         )
 
-    def download_config_rows(self, current_time: pendulum.DateTime) -> list:
+    def download_config_rows(self) -> list:
         active_rows = [dict(zip(self.columns, row)) for row in self.rows()]
         mapped_rows = {row["key"]: row for row in active_rows}
         return [
-            DownloadConfigRow(row).resolve(current_time, mapped_rows)
+            DownloadConfigRow(row=row, current_time=self.ts).resolve(
+                mapped_rows=mapped_rows
+            )
             for row in active_rows
         ]
 
-    def metadata(self, current_time: pendulum.DateTime) -> dict:
+    def metadata(self) -> dict:
         return {
             "PARTITIONED_ARTIFACT_METADATA": json.dumps(
                 {
                     "filename": "configs.jsonl.gz",
-                    "ts": current_time.isoformat(),
+                    "ts": self.ts,
                 }
             )
         }
 
     def execute(self, context: Context) -> str:
-        dag_run: DagRun = context["dag_run"]
-        logical_date: pendulum.DateTime = pendulum.instance(dag_run.logical_date)
-        rows = self.download_config_rows(current_time=logical_date)
+        rows = self.download_config_rows()
         self.gcs_hook().upload(
             bucket_name=self.destination_name(),
             object_name=self.destination_path,
             data="\n".join([json.dumps(r, separators=(",", ":")) for r in rows]),
             mime_type="application/jsonl",
             gzip=True,
-            metadata=self.metadata(current_time=logical_date),
+            metadata=self.metadata(),
         )
         return {"destination_path": self.destination_path}
