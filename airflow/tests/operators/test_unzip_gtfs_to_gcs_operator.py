@@ -54,7 +54,7 @@ class TestUnzipGTFSToGCSOperator:
             "exception": None,
             "extract": {
                 "filename": "gtfs.zip",
-                "ts": "2025-06-03T00:00:00+00:00",
+                "ts": "2025-06-02T00:00:00+00:00",
                 "config": {
                     "auth_headers": {},
                     "auth_query_params": {},
@@ -91,6 +91,7 @@ class TestUnzipGTFSToGCSOperator:
     def operator(
         self,
         test_dag: DAG,
+        execution_date: datetime,
         base64_url: str,
         source_path: str,
         destination_path_fragment: str,
@@ -100,6 +101,8 @@ class TestUnzipGTFSToGCSOperator:
         return UnzipGTFSToGCSOperator(
             task_id="unzip_gtfs_to_gcs",
             gcp_conn_id="google_cloud_default",
+            dt=execution_date.strftime("%Y-%m-%d"),
+            ts=execution_date.isoformat(),
             base64_url=base64_url,
             download_schedule_feed_results=download_schedule_feed_results,
             filenames=["agency.txt", "calendar.txt"],
@@ -133,6 +136,8 @@ class TestUnzipGTFSToGCSOperator:
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
+            "dt": "2025-06-02",
+            "ts": "2025-06-02T00:00:00+00:00",
             "base64_url": "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
             "results_path": os.path.join(
                 "unzipping_results",
@@ -165,7 +170,7 @@ class TestUnzipGTFSToGCSOperator:
                         "Content-Disposition": "attachment; filename=gtfs.zip",
                         "Content-Type": "application/zip",
                     },
-                    "ts": "2025-06-03T00:00:00+00:00",
+                    "ts": "2025-06-02T00:00:00+00:00",
                 },
                 "extracted_files": [
                     {
@@ -246,7 +251,7 @@ class TestUnzipGTFSToGCSOperator:
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "agency.txt",
-            "ts": "2025-06-03T00:00:00+00:00",
+            "ts": "2025-06-02T00:00:00+00:00",
             "extract_config": {
                 "extracted_at": "2025-06-01T00:00:00+00:00",
                 "name": "Santa Ynez Mecatran Schedule",
@@ -289,7 +294,7 @@ class TestUnzipGTFSToGCSOperator:
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "calendar.txt",
-            "ts": "2025-06-03T00:00:00+00:00",
+            "ts": "2025-06-02T00:00:00+00:00",
             "extract_config": {
                 "extracted_at": "2025-06-01T00:00:00+00:00",
                 "name": "Santa Ynez Mecatran Schedule",
@@ -315,7 +320,7 @@ class TestUnzipGTFSToGCSOperator:
             "exception": None,
             "extract": {
                 "filename": "gtfs.zip",
-                "ts": "2025-06-03T00:00:00+00:00",
+                "ts": "2025-06-02T00:00:00+00:00",
                 "config": {
                     "extracted_at": "2025-06-01T00:00:00+00:00",
                     "name": "Santa Ynez Mecatran Schedule",
@@ -353,7 +358,7 @@ class TestUnzipGTFSToGCSOperator:
             "extracted_files": [
                 {
                     "filename": "agency.txt",
-                    "ts": "2025-06-03T00:00:00+00:00",
+                    "ts": "2025-06-02T00:00:00+00:00",
                     "extract_config": {
                         "extracted_at": "2025-06-01T00:00:00+00:00",
                         "name": "Santa Ynez Mecatran Schedule",
@@ -368,7 +373,7 @@ class TestUnzipGTFSToGCSOperator:
                 },
                 {
                     "filename": "calendar.txt",
-                    "ts": "2025-06-03T00:00:00+00:00",
+                    "ts": "2025-06-02T00:00:00+00:00",
                     "extract_config": {
                         "extracted_at": "2025-06-01T00:00:00+00:00",
                         "name": "Santa Ynez Mecatran Schedule",
@@ -388,6 +393,7 @@ class TestUnzipGTFSToGCSOperator:
     def nonexistent_operator(
         self,
         test_dag: DAG,
+        execution_date: datetime,
         base64_url: str,
         source_path: str,
         destination_path_fragment: str,
@@ -397,6 +403,8 @@ class TestUnzipGTFSToGCSOperator:
         return UnzipGTFSToGCSOperator(
             task_id="nonexistent_unzip_gtfs_to_gcs",
             gcp_conn_id="google_cloud_default",
+            dt=execution_date.strftime("%Y-%m-%d"),
+            ts=execution_date.isoformat(),
             base64_url=base64_url,
             download_schedule_feed_results=download_schedule_feed_results,
             filenames=["areas.txt"],
@@ -430,6 +438,8 @@ class TestUnzipGTFSToGCSOperator:
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
+            "dt": "2025-06-02",
+            "ts": "2025-06-02T00:00:00+00:00",
             "base64_url": "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
             "results_path": os.path.join(
                 "unzipping_results",
@@ -462,7 +472,7 @@ class TestUnzipGTFSToGCSOperator:
                         "Content-Disposition": "attachment; filename=gtfs.zip",
                         "Content-Type": "application/zip",
                     },
-                    "ts": "2025-06-03T00:00:00+00:00",
+                    "ts": "2025-06-02T00:00:00+00:00",
                 },
                 "extracted_files": [],
                 "success": True,
@@ -505,7 +515,7 @@ class TestUnzipGTFSToGCSOperator:
             "exception": None,
             "extract": {
                 "filename": "gtfs.zip",
-                "ts": "2025-06-03T00:00:00+00:00",
+                "ts": "2025-06-02T00:00:00+00:00",
                 "config": {
                     "extracted_at": "2025-06-01T00:00:00+00:00",
                     "name": "Santa Ynez Mecatran Schedule",
@@ -580,7 +590,7 @@ class TestUnzipGTFSToGCSOperator:
             "exception": None,
             "extract": {
                 "filename": "gtfs.zip",
-                "ts": "2025-11-14T00:00:00+00:00",
+                "ts": "2025-11-13T00:00:00+00:00",
                 "config": {
                     "auth_headers": {},
                     "auth_query_params": {},
@@ -617,6 +627,7 @@ class TestUnzipGTFSToGCSOperator:
     def empty_operator(
         self,
         empty_test_dag: DAG,
+        empty_execution_date: datetime,
         empty_base64_url: str,
         empty_source_path: str,
         empty_destination_path_fragment: str,
@@ -626,6 +637,8 @@ class TestUnzipGTFSToGCSOperator:
         return UnzipGTFSToGCSOperator(
             task_id="empty_unzip_gtfs_to_gcs",
             gcp_conn_id="google_cloud_default",
+            dt=empty_execution_date.strftime("%Y-%m-%d"),
+            ts=empty_execution_date.isoformat(),
             base64_url=empty_base64_url,
             download_schedule_feed_results=empty_download_schedule_feed_results,
             filenames=["calendar_dates.txt"],
@@ -659,6 +672,8 @@ class TestUnzipGTFSToGCSOperator:
         task_instance = TaskInstance(task, execution_date=empty_execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
+            "dt": "2025-11-13",
+            "ts": "2025-11-13T00:00:00+00:00",
             "base64_url": "aHR0cHM6Ly93d3cuaXBzLXN5c3RlbXMuY29tL0dURlMvU2NoZWR1bGUvMjc=",
             "results_path": os.path.join(
                 "unzipping_results",
@@ -691,7 +706,7 @@ class TestUnzipGTFSToGCSOperator:
                         "Content-Disposition": "attachment; filename=schedule-27.zip",
                         "Content-Type": "application/zip",
                     },
-                    "ts": "2025-11-14T00:00:00+00:00",
+                    "ts": "2025-11-13T00:00:00+00:00",
                 },
                 "extracted_files": [
                     {
@@ -752,7 +767,7 @@ class TestUnzipGTFSToGCSOperator:
         )
         assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "calendar_dates.txt",
-            "ts": "2025-11-14T00:00:00+00:00",
+            "ts": "2025-11-13T00:00:00+00:00",
             "extract_config": {
                 "auth_headers": {},
                 "auth_query_params": {},
@@ -778,7 +793,7 @@ class TestUnzipGTFSToGCSOperator:
             "exception": None,
             "extract": {
                 "filename": "gtfs.zip",
-                "ts": "2025-11-14T00:00:00+00:00",
+                "ts": "2025-11-13T00:00:00+00:00",
                 "config": {
                     "auth_headers": {},
                     "auth_query_params": {},
@@ -824,7 +839,7 @@ class TestUnzipGTFSToGCSOperator:
                     },
                     "filename": "calendar_dates.txt",
                     "original_filename": "calendar_dates.txt",
-                    "ts": "2025-11-14T00:00:00+00:00",
+                    "ts": "2025-11-13T00:00:00+00:00",
                 }
             ],
         }

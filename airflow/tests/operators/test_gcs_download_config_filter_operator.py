@@ -70,7 +70,7 @@ class TestGCSDownloadConfigFilterOperator:
         xcom_value = task_instance.xcom_pull()
         assert len(xcom_value) == 2
         assert xcom_value[0] == {
-            "extracted_at": "2025-06-03T00:00:00+00:00",
+            "extracted_at": "2025-06-02T00:00:00+00:00",
             "auth_headers": {},
             "auth_query_params": {},
             "computed": False,
@@ -80,7 +80,7 @@ class TestGCSDownloadConfigFilterOperator:
             "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
         }
         assert xcom_value[1] == {
-            "extracted_at": "2025-06-03T00:00:00+00:00",
+            "extracted_at": "2025-06-02T00:00:00+00:00",
             "auth_headers": {},
             "auth_query_params": {},
             "computed": False,
