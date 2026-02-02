@@ -790,3 +790,31 @@ models:
       - name: route_short_name
       - name: agency_id
       - name: agency_name
+
+  - name: fct_payments_settlements_enghouse
+    description: Enghouse settlements (completed transactions.)
+    columns:
+      - name: organization_name
+      - name: organization_source_record_id
+      - name: operator_id
+      - name: id
+      - name: operation
+      - name: terminal_id
+      - name: mapping_terminal_id
+      - name: mapping_merchant_id
+      - name: timestamp
+      - name: amount
+      - name: payment_reference
+      - name: spdh_response
+      - name: response_type
+      - name: response_message
+      - name: token
+      - name: issuer_response
+      - name: core_response
+      - name: rrn
+      - name: authorization_code
+      - name: par
+      - name: brand
+      - name: end_of_month_date_pacific
+      - name: end_of_month_date_utc
+      - name: _content_hash
