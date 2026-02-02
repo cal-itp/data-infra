@@ -2,11 +2,11 @@
 
 {% set min_week_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_enghouse'), column='start_dttm', where='start_dttm IS NOT NULL', order_by = 'start_dttm', max_records = 1) %}
 
-{% set min_week = min_week_list[0] if min_week_list[0] else modules.datetime.date.today() - modules.datetime.timedelta(days=7) %}
+{% set min_week = min_week_list[0].strftime('%Y-%m-%d') if min_week_list and min_week_list[0] else (modules.datetime.date.today() - modules.datetime.timedelta(days=7)).isoformat() %}
 
 {% set max_week_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_enghouse'), column='start_dttm', where='start_dttm IS NOT NULL', order_by = 'start_dttm DESC', max_records = 1) %}
 
-{% set max_week = max_week_list[0] if max_week_list[0] else modules.datetime.date.today() %}
+{% set max_week = max_week_list[0].strftime('%Y-%m-%d') if max_week_list and max_week_list[0] else modules.datetime.date.today().isoformat() %}
 
 WITH payments_rides AS (
     SELECT * FROM {{ ref('fct_payments_rides_enghouse') }}
@@ -26,7 +26,7 @@ create_week_range AS (
     }}
 ),
 
-payments_tests_weekly_date_spine AS (
+payments_tests_weekly_date_spine_enghouse AS (
     SELECT
         operator_id,
         date_week AS week_start,
@@ -35,4 +35,4 @@ payments_tests_weekly_date_spine AS (
     CROSS JOIN create_week_range
 )
 
-SELECT * FROM payments_tests_weekly_date_spine
+SELECT * FROM payments_tests_weekly_date_spine_enghouse

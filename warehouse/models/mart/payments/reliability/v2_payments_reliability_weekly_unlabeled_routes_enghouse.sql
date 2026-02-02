@@ -14,13 +14,13 @@ count_rides AS (
 
         spine.operator_id,
         spine.week_start,
-        COUNTIF(route_id IS NULL) AS n_null_rides,
-        COUNTIF(route_id = '') AS n_empty_string_rides,
+        COUNTIF(line_public_number IS NULL) AS n_null_rides,
+        COUNTIF(line_public_number = '') AS n_empty_string_rides,
         COUNT(*) AS n_all_rides
 
     FROM payments_tests_weekly_date_spine AS spine
     INNER JOIN payments_rides
-        ON (spine.operator_id = payments_rides.operator_id) AND transaction_date_pacific >= week_start AND transaction_date_pacific <= week_end
+        ON (spine.operator_id = payments_rides.operator_id) AND DATE(start_dttm) >= week_start AND DATE(start_dttm) <= week_end
     GROUP BY week_start, operator_id
 ),
 
@@ -42,7 +42,7 @@ aggregations_and_date_spine AS (
         USING (operator_id, week_start)
 ),
 
-v2_payments_reliability_weekly_unlabeled_routes AS (
+v2_payments_reliability_weekly_unlabeled_routes_enghouse AS (
     SELECT
 
         operator_id,
@@ -57,4 +57,4 @@ v2_payments_reliability_weekly_unlabeled_routes AS (
     FROM aggregations_and_date_spine
 )
 
-SELECT * FROM v2_payments_reliability_weekly_unlabeled_routes
+SELECT * FROM v2_payments_reliability_weekly_unlabeled_routes_enghouse
