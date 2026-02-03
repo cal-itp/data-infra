@@ -11,7 +11,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('mapping_terminal_id') }} AS mapping_terminal_id,
         {{ trim_make_empty_string_null('mapping_merchant_id') }} AS mapping_merchant_id,
         SAFE_CAST(timestamp AS TIMESTAMP) AS timestamp,
-        SAFE_CAST(amount AS NUMERIC) AS amount,
+        ROUND(SAFE_CAST(amount AS NUMERIC) / 100.0, 2) AS amount,
         {{ trim_make_empty_string_null('payment_reference') }} AS payment_reference,
         SAFE_CAST(spdh_response AS INT64) AS spdh_response,
         {{ trim_make_empty_string_null('response_type') }} AS response_type,
