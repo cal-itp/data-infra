@@ -217,10 +217,6 @@ int_payments__refunds_deduped AS (
         issuer_comment,
         created_time,
         approved_time,
-        settlement_status,
-        settlement_status_time,
-        settlement_reason_code,
-        settlement_response_text,
 
         refunds_line_number,
         refunds_currency_code,

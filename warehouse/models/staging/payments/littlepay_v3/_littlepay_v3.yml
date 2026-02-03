@@ -588,11 +588,9 @@ models:
         description: The time the approval was processed.
       - name: status
         description: |
-          The status of the refund.
-
-          Possible values are `SENT_FOR_SETTLEMENT` or `SETTLED`.
+          Null in v3.
       - name: settlement_status_time
-        description: The time the refund was settled.
+        description: Null in v3.
       - name: settlement_reason_code
         description: This field is not in use.
       - name: settlement_response_text

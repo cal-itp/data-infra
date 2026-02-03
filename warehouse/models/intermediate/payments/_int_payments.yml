@@ -191,17 +191,6 @@ models:
         description: The time the request was created.
       - name: approved_time
         description: The time the approval was processed.
-      - name: settlement_status
-        description: |
-          The status of the refund.
-
-          Possible values are `Sent for Settlement` or `Settled`.
-      - name: settlement_status_time
-        description: The time the refund was settled.
-      - name: settlement_reason_code
-        description: This field is not in use.
-      - name: settlement_response_text
-        description: This field is not in use.
       - name: refunds_line_number
         description: |
           Line number of this row in the source refunds file.
