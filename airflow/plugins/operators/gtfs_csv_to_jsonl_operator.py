@@ -42,7 +42,7 @@ class GTFSCSVResults:
     def append(self, row) -> None:
         self.lines.append({"_line_number": len(self.lines) + 1, **row})
 
-    def chunks(self, size: int = 100_000) -> Generator[str, None, None]:
+    def chunks(self, size: int = 50_000) -> Generator[str, None, None]:
         iterator = iter(self.lines)
         for line in iterator:
 
@@ -147,7 +147,7 @@ class GTFSCSVToJSONLOperator(BaseOperator):
         destination_bucket: str,
         destination_path_fragment: str,
         results_path_fragment: str,
-        chunk_size: int = 100_000,
+        chunk_size: int = 50_000,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
