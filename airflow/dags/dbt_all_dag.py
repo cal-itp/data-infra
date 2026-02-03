@@ -12,7 +12,7 @@ DBT_TARGET = os.environ.get("DBT_TARGET")
 with DAG(
     dag_id="dbt_all",
     tags=["dbt", "all"],
-    # Monday, Thursday at 7am PDT/8am PST (2pm UTC)
+    # Monday, Thursday at 6am PDT/7am PST (2pm UTC)
     schedule="0 14 * * 1,4",
     start_date=datetime(2025, 7, 6),
     catchup=False,
