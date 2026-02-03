@@ -126,4 +126,5 @@ with DAG(
         default_args=default_args,
     )
 
-    latest_only >> [dbt_audit, dbt_benefits, dbt_gtfs, dbt_kuba, dbt_payments]
+    latest_only >> [dbt_audit, dbt_benefits, dbt_kuba]
+    latest_only >> dbt_gtfs >> dbt_payments
