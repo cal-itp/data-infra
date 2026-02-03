@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH dim AS (
     SELECT *
     FROM {{ ref('int_transit_database__uri_changelog') }}

@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH lagged_uri_table AS (
   SELECT
       id AS source_record_id,
