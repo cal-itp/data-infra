@@ -30,8 +30,8 @@ default_args = {
 with DAG(
     dag_id="dbt_daily",
     tags=["dbt", "daily"],
-    # Sunday, Tuesday, Wednesday, Friday, Saturday at 4am PDT/5am PST (12pm UTC)
-    schedule="0 12 * * 0,2,3,5,6",
+    #  Sunday, Tuesday, Wednesday, Friday, Saturday at 6am PDT/7am PST (2pm UTC)
+    schedule="0 14 * * 0,2,3,5,6",
     start_date=datetime(2025, 8, 19),
     catchup=False,
     default_args={
@@ -126,4 +126,5 @@ with DAG(
         default_args=default_args,
     )
 
-    latest_only >> [dbt_audit, dbt_benefits, dbt_gtfs, dbt_kuba, dbt_payments]
+    latest_only >> [dbt_audit, dbt_benefits, dbt_kuba]
+    latest_only >> dbt_gtfs >> dbt_payments
