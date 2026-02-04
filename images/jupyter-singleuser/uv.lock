@@ -1932,7 +1932,7 @@ wheels = [
 
 [[package]]
 name = "jupyter-singleuser"
-version = "2026.1.28"
+version = "2026.2.3"
 source = { virtual = "." }
 dependencies = [
     { name = "black" },
