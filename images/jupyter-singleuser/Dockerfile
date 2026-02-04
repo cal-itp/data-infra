@@ -43,8 +43,7 @@ ENV PATH="$GCLOUD_HOME/google-cloud-sdk/bin:$PATH"
 COPY ./pyproject.toml /reqs/pyproject.toml
 COPY ./uv.lock /reqs/uv.lock
 
-ENV UV_NO_DEV=1
-RUN cd /reqs && uv sync
+RUN cd /reqs && uv pip install --system --requirements pyproject.toml
 RUN cd /reqs && uv tree # print out the package versions and dependencies for documentation
 ENV DBT_PROFILES_DIR=/home/jovyan/.dbt/
 COPY ./overrides.json /opt/conda/share/jupyter/lab/settings/overrides.json
