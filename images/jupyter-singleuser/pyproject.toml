@@ -1,6 +1,6 @@
 [project]
 name = "jupyter-singleuser"
-version = "2026.2.3"
+version = "2026.2.4"
 description = "This is the notebook image that individual users are served via JupyterHub."
 requires-python = ">=3.11.0, <3.12.0"
 classifiers = [
