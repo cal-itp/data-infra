@@ -13,7 +13,6 @@ models:
   - name: int_littlepay__unioned_settlements
     description: >
       Settlements records from v3 and prior data feed versions unioned together into a single table.
-      Records are also deduplicated so that each `_payments_key` (`settlement_id`) appears only once.
     columns:
       - name: settlement_id
         description: '{{ doc("lp_settlement_id") }}'

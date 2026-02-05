@@ -7,7 +7,7 @@ WITH auth AS (
 
 settlement_rrns AS (
     SELECT DISTINCT retrieval_reference_number
-    FROM {{ ref('int_littlepay__unioned_settlements') }}
+    FROM {{ ref('int_payments__settlements_deduped') }}
 ),
 
 -- as of 10/10/23, we have two aggregation_id/authorisation_date_time_utc pairs that are duplicates
