@@ -50,29 +50,11 @@ dev = [
     "llvmlite>=0.44.0,<0.45",
     "pytest>=7.2.0,<8",
 ]
-shared_utils = [
-    "cpi>=1.0.17,<2",
-    "loguru>=0.6.0,<0.7",
-    "mapclassify>=2.8.0,<3",
-    "xmltodict>=0.13.0,<0.14",
-]
-portfolio = [
-    "humanize>=4.6.0,<5",
-    "jupyter-book>=1.0.0",
-    "nbformat>=5.8.0,<6",
-    "papermill>=2.4.0,<3",
-    "pyaml>=21.10.1,<22",
-    "pydantic>=2.0",
-    "python-slugify>=6.1.1,<7",
-    "typer>=0.9.0,<0.10",
-]
 
 [tool.uv]
 package = false
 default-groups = [
     "dev",
-    "shared_utils",
-    "portfolio",
 ]
 
 [build-system]
