@@ -3,9 +3,10 @@ import os
 import tempfile
 from typing import Sequence
 
+import pendulum
 from hooks.gtfs_validator_hook import GTFSValidatorHook
 
-from airflow.models import BaseOperator
+from airflow.models import BaseOperator, DagRun
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
@@ -58,20 +59,24 @@ class ValidateGTFSToGCSOperator(BaseOperator):
     def source_name(self) -> str:
         return self.source_bucket.replace("gs://", "")
 
-    def validator_hook(self) -> GTFSValidatorHook:
-        return GTFSValidatorHook(current_date=self.ts)
+    def validator_hook(self, current_date: pendulum.DateTime) -> GTFSValidatorHook:
+        return GTFSValidatorHook(current_date=current_date)
 
     def source_filename(self) -> str:
         return os.path.basename(self.source_path)
 
     def execute(self, context: Context) -> str:
+        dag_run: DagRun = context["dag_run"]
+
         with tempfile.TemporaryDirectory() as tmp_dir:
             local_source_path = self.gcs_hook().download(
                 bucket_name=self.source_name(),
                 object_name=self.source_path,
                 filename=os.path.join(tmp_dir, self.source_filename()),
             )
-            validator_result = self.validator_hook().run(
+            validator_result = self.validator_hook(
+                current_date=dag_run.logical_date
+            ).run(
                 input_zip=local_source_path,
                 download_schedule_feed_results=self.download_schedule_feed_results,
             )
