@@ -6,9 +6,7 @@ from io import StringIO
 from itertools import islice
 from typing import Generator, Sequence
 
-import pendulum
-
-from airflow.models import BaseOperator, DagRun
+from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
@@ -16,7 +14,7 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 class GTFSCSVResults:
     def __init__(
         self,
-        current_date: pendulum.DateTime,
+        current_date: str,
         extracted_file: dict,
         extract_config: dict,
         filename: str,
@@ -44,7 +42,7 @@ class GTFSCSVResults:
     def append(self, row) -> None:
         self.lines.append({"_line_number": len(self.lines) + 1, **row})
 
-    def chunks(self, size: int = 100_000) -> Generator[str, None, None]:
+    def chunks(self, size: int = 50_000) -> Generator[str, None, None]:
         iterator = iter(self.lines)
         for line in iterator:
 
@@ -77,7 +75,7 @@ class GTFSCSVResults:
             "filename": f"{self.filetype()}.jsonl.gz",
             "gtfs_filename": self.filetype(),
             "num_lines": len(self.lines),
-            "ts": self.current_date.isoformat(),
+            "ts": self.current_date,
         }
 
 
@@ -107,7 +105,7 @@ class GTFSCSVConverter:
             return tab_reader
         return comma_reader
 
-    def convert(self, current_date: pendulum.DateTime) -> GTFSCSVResults:
+    def convert(self, current_date: str) -> GTFSCSVResults:
         reader = self.reader()
         results = GTFSCSVResults(
             current_date=current_date,
@@ -128,6 +126,8 @@ class GTFSCSVConverter:
 
 class GTFSCSVToJSONLOperator(BaseOperator):
     template_fields: Sequence[str] = (
+        "dt",
+        "ts",
         "unzip_results",
         "source_bucket",
         "source_path_fragment",
@@ -139,19 +139,23 @@ class GTFSCSVToJSONLOperator(BaseOperator):
 
     def __init__(
         self,
+        dt: str,
+        ts: str,
         unzip_results: dict,
         source_bucket: str,
         source_path_fragment: str,
         destination_bucket: str,
         destination_path_fragment: str,
         results_path_fragment: str,
-        chunk_size: int = 100_000,
+        chunk_size: int = 50_000,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
 
         self._gcs_hook = None
+        self.dt: str = dt
+        self.ts: str = ts
         self.unzip_results = unzip_results
         self.source_bucket = source_bucket
         self.source_path_fragment = source_path_fragment
@@ -197,11 +201,10 @@ class GTFSCSVToJSONLOperator(BaseOperator):
         return output
 
     def execute(self, context: Context) -> str:
-        dag_run: DagRun = context["dag_run"]
         output = []
         for converter in self.converters():
             logging.info(f"Converting {converter.filename}")
-            results = converter.convert(current_date=dag_run.logical_date)
+            results = converter.convert(current_date=self.ts)
             if results.valid():
                 for index, chunk in enumerate(results.chunks(size=self.chunk_size)):
                     self.gcs_hook().upload(
@@ -223,6 +226,8 @@ class GTFSCSVToJSONLOperator(BaseOperator):
 
                     output.append(
                         {
+                            "dt": self.dt,
+                            "ts": self.ts,
                             "destination_path": os.path.join(
                                 results.filetype(),
                                 self.destination_path_fragment,
@@ -247,7 +252,7 @@ class GTFSCSVToJSONLOperator(BaseOperator):
                     "PARTITIONED_ARTIFACT_METADATA": json.dumps(
                         {
                             "filename": "results.jsonl",
-                            "ts": dag_run.logical_date.isoformat(),
+                            "ts": self.ts,
                         }
                     )
                 },
