@@ -3,7 +3,7 @@
 
 WITH settlements AS (
     SELECT *
-    FROM {{ ref('int_littlepay__unioned_settlements') }}
+    FROM {{ ref('int_payments__settlements_deduped') }}
 ),
 
 payments_entity_mapping AS (
