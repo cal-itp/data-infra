@@ -141,7 +141,23 @@ class DownloadConfigToGCSOperator(BaseOperator):
 
     def execute(self, context: Context) -> dict:
         ti = context["task_instance"]
-        last_retry = ti.try_number == ti.max_tries - ti.task.retries + 2
+        last_retry = ti.try_number - 1 == ti.max_tries
+        # ti.try_number - 1 == ti.max_tries
+        #  (1 - 1 = 0) != 1
+        #  (2 - 1 = 1) == 1
+        # Manual retry max_tries changes to 3
+        #  (3 - 1 = 2) != 3
+        #  (4 - 1 = 3) == 3
+        # Manual retry max_tries changes to 5
+        #  (5 - 1 = 4) != 5
+        #  (6 - 1 = 5) == 5
+        # If zero?
+        # ti.try_number - 1 == ti.max_tries
+        #  (1 - 1 = 0) == 0
+        # ti.task.retries never changes, it is what we set up, here always = 1
+        logging.info(
+            f"Max tries: {ti.max_tries}, Try number: {ti.try_number}, Last retry: {last_retry}"
+        )
         schedule_feed_path = f"{self.destination_path}/base64_url={self.download().base64_url()}/{self.download().filename()}"
 
         if self.download().success():
