@@ -95,6 +95,7 @@ jupyterhub:
       Spawner:
         args:
           - '--NotebookApp.tornado_settings={"headers":{"Content-Security-Policy": "frame-ancestors *"}}'
+          - '--ContentsManager.allow_hidden=True'
     # holds github OAuth creds
     existingSecret: jupyterhub-github-config
   ingress:
