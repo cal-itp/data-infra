@@ -549,10 +549,7 @@ models:
 
           Possible values are `Approved` or `Pending Approval`.
       - name: settlement_status
-        description: |
-          The status of the refund.
-
-          Possible values are `Sent for Settlement` or `Settled`.
+        description: Deprecated in v3, not present for refunds. Look up via settlements.
       - name: retrieval_reference_number
         description: |
           Uniquely identifies a card transaction, based on the ISO 8583 standard. The value is generated during authorisation.
@@ -587,10 +584,9 @@ models:
       - name: approved_time
         description: The time the approval was processed.
       - name: status
-        description: |
-          Null in v3.
+        description: Deprecated in v3, not present for refunds. Look up via settlements.
       - name: settlement_status_time
-        description: Null in v3.
+        description: Deprecated in v3, not present for refunds. Look up via settlements.
       - name: settlement_reason_code
         description: This field is not in use.
       - name: settlement_response_text
