@@ -1,29 +1,7 @@
 {{ config(materialized = 'table',
     post_hook="{{ payments_enghouse_row_access_policy() }}") }}
 
-WITH
-
-fct_daily_schedule_feeds AS (
-    SELECT * FROM {{ ref('fct_daily_schedule_feeds') }}
-),
-
-dim_routes AS (
-    SELECT * FROM {{ ref('dim_routes') }}
-),
-
-dim_agency AS (
-    SELECT * FROM {{ ref('dim_agency') }}
-),
-
-dim_gtfs_datasets AS (
-    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
-),
-
-payments_entity_mapping AS (
-    SELECT * FROM {{ ref('payments_entity_mapping_enghouse') }}
-),
-
-ticket_results AS (
+WITH ticket_results AS (
     SELECT * FROM {{ ref('stg_enghouse__ticket_results') }}
 ),
 
@@ -31,9 +9,36 @@ taps AS (
     SELECT * FROM {{ ref('stg_enghouse__taps') }}
 ),
 
+payments_entity_mapping AS (
+    SELECT
+        * EXCEPT(enghouse_operator_id),
+        enghouse_operator_id AS operator_id
+    FROM {{ ref('payments_entity_mapping_enghouse') }}
+),
+
+fct_daily_schedule_feeds AS (
+    SELECT * FROM {{ ref('fct_daily_schedule_feeds') }}
+),
+
+dim_gtfs_datasets AS (
+    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
+),
+
+dim_orgs AS (
+    SELECT * FROM {{ ref('dim_organizations') }}
+),
+
+dim_agency AS (
+    SELECT * FROM {{ ref('dim_agency') }}
+),
+
+dim_routes AS (
+    SELECT * FROM {{ ref('dim_routes') }}
+),
+
 participants_to_routes_and_agency AS (
     SELECT
-        map.enghouse_operator_id,
+        map.operator_id,
         map._in_use_from,
         map._in_use_until,
         feeds.date,
@@ -125,12 +130,15 @@ fct_payments_rides_enghouse AS (
     LEFT JOIN taps
         ON ticket_results.tap_id = taps.tap_id
     LEFT JOIN participants_to_routes_and_agency AS routes
-        ON routes.enghouse_operator_id = ticket_results.operator_id
+        ON routes.operator_id = ticket_results.operator_id
             AND EXTRACT(DATE FROM TIMESTAMP(ticket_results.start_dttm)) = routes.date
             AND routes.route_id = taps.line_public_number
             AND CAST(ticket_results.start_dttm AS TIMESTAMP)
                 BETWEEN CAST(routes._in_use_from AS TIMESTAMP)
                 AND CAST(routes._in_use_until AS TIMESTAMP)
+    LEFT JOIN dim_orgs
+        ON routes.organization_source_record_id = dim_orgs.source_record_id
+        AND CAST(transactions.timestamp AS TIMESTAMP) BETWEEN dim_orgs._valid_from AND dim_orgs._valid_to
 
 )
 
