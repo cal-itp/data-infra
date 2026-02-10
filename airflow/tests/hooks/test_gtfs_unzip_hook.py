@@ -1,6 +1,6 @@
 import os
+from datetime import datetime, timezone
 
-import pendulum
 import pytest
 from hooks.gtfs_unzip_hook import GTFSUnzipHook
 
@@ -45,8 +45,8 @@ class TestGTFSUnzipHook:
         }
 
     @pytest.fixture
-    def date(self) -> pendulum.DateTime:
-        return pendulum.datetime(2025, 11, 15)
+    def date(self) -> datetime:
+        return datetime.fromisoformat("2025-11-15").replace(tzinfo=timezone.utc)
 
     @pytest.fixture
     def fixture_schedule_path(self) -> str:
@@ -102,14 +102,10 @@ class TestGTFSUnzipHook:
         )
 
     @pytest.fixture
-    def hook(self, date: pendulum.DateTime) -> GTFSUnzipHook:
+    def hook(self, date: datetime) -> GTFSUnzipHook:
         return GTFSUnzipHook(
-            filenames=["agency.txt", "calendar.txt"], current_date=date
+            filenames=["agency.txt", "calendar.txt"], current_date=date.isoformat()
         )
-
-    @pytest.fixture
-    def areas_hook(self, date: pendulum.DateTime) -> GTFSUnzipHook:
-        return GTFSUnzipHook(filenames=["areas.txt"], current_date=date)
 
     def test_run(
         self,
@@ -442,6 +438,10 @@ class TestGTFSUnzipHook:
                 "nested/README.md",
             ],
         }
+
+    @pytest.fixture
+    def areas_hook(self, date: datetime) -> GTFSUnzipHook:
+        return GTFSUnzipHook(filenames=["areas.txt"], current_date=date.isoformat())
 
     def test_no_txt_file(
         self,

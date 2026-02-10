@@ -9,11 +9,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/7a65a34b-90be-41be-a197-35021ca9a660
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/dc45c7f1-10e4-4291-a234-3829ffbc717f
       accept-encoding:
       - gzip
       content-type:
@@ -470,13 +468,13 @@ interactions:
       Content-Type:
       - application/zip
       Date:
-      - Mon, 05 Jan 2026 16:18:16 GMT
+      - Fri, 06 Feb 2026 02:27:57 GMT
       ETag:
-      - CJro1pzm9JEDEAE=
+      - CP++pqH7u5IDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Mon, 05 Jan 2026 16:17:01 GMT
+      - Mon, 02 Feb 2026 23:30:09 GMT
       Pragma:
       - no-cache
       Server:
@@ -485,9 +483,9 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxNpBVuCJBmbcF-l3B0u4MuzgWdqkpX-3hZmYiX25wm5GLDIJ1n2wmgl72af8yQLUOA2ZrzTm8J6VYoN
+      - AJRbA5XhZaI2rtYEFXFIfGzcJ7Ole8qJqYglCmTA7rrO0hD0ujascuGDXVoznuc6efGJiZLVnFmjABU
       X-Goog-Generation:
-      - '1767629821162522'
+      - '1770075009425279'
       X-Goog-Hash:
       - crc32c=lxCKqA==,md5=zsRgt7THKTNwu3SMKXUNQQ==
       X-Goog-Metageneration:
@@ -503,7 +501,7 @@ interactions:
       message: OK
 - request:
     body: !!binary |
-      LS09PT09PT09PT09PT09PT0wNjY1MDY5NDI5ODE4NjE5NzYyPT0NCmNvbnRlbnQtdHlwZTogYXBw
+      LS09PT09PT09PT09PT09PT00Nzg3ODEzMTQ3Nzc4MzYzMjE2PT0NCmNvbnRlbnQtdHlwZTogYXBw
       bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAidmFsaWRhdGlvbl9ub3Rp
       Y2VzL2R0PTIwMjUtMDYtMDIvdHM9MjAyNS0wNi0wMlQwMDowMDowMCswMDowMC9iYXNlNjRfdXJs
       PWFIUjBjRG92TDJGd2NDNXRaV05oZEhKaGJpNWpiMjB2ZFhKaUwzZHpMMlpsWldRdll6SnNNRnBV
@@ -515,47 +513,47 @@ interactions:
       InN5c3RlbV9lcnJvcnNcIjoge1wibm90aWNlc1wiOiBbXX0sIFwidmFsaWRhdG9yX3ZlcnNpb25c
       IjogXCJ2NS4wLjBcIiwgXCJleHRyYWN0X2NvbmZpZ1wiOiB7XCJhdXRoX2hlYWRlcnNcIjoge30s
       IFwiYXV0aF9xdWVyeV9wYXJhbXNcIjoge30sIFwiY29tcHV0ZWRcIjogZmFsc2UsIFwiZXh0cmFj
-      dGVkX2F0XCI6IFwiMjAyNS0xMS0xNFQwMjowMDowMCswMDowMFwiLCBcImZlZWRfdHlwZVwiOiBc
-      InNjaGVkdWxlXCIsIFwibmFtZVwiOiBcIlNhbnRhIFluZXogTWVjYXRyYW4gU2NoZWR1bGVcIiwg
-      XCJzY2hlZHVsZV91cmxfZm9yX3ZhbGlkYXRpb25cIjogbnVsbCwgXCJ1cmxcIjogXCJodHRwOi8v
-      YXBwLm1lY2F0cmFuLmNvbS91cmIvd3MvZmVlZC9jMmwwWlQxemVYWjBPMk5zYVdWdWREMXpaV3ht
-      TzJWNGNHbHlaVDA3ZEhsd1pUMW5kR1p6TzJ0bGVUMDBNamN3TnpRMFpUWTROVEF6T1RNeU1ESXhN
-      RGRqTnpJME1EUmtNell5TlRNNE16STBZekkwXCJ9LCBcInRzXCI6IFwiMjAyNS0wNi0wMlQwMDow
-      MDowMCswMDowMFwifSJ9LCAiY3JjMzJjIjogImdnSmQ0Zz09In0NCi0tPT09PT09PT09PT09PT09
-      MDY2NTA2OTQyOTgxODYxOTc2Mj09DQpjb250ZW50LXR5cGU6IGFwcGxpY2F0aW9uL2pzb25sDQoN
-      Ch+LCABK5FtpAv/tmltv20YQhd/7KwK91qH3ftFbWrepHyS3tpo0LgqCEWlbCUWpFOUr/N87lBNH
-      lM8q60IvAQIkAUJyDz8OZ+fMLnXXmxZNlmdN1uvf9c6bs0V6mZUTOjCr08uiXkxmVa/fu9QJS1hv
-      r1dcN3U2btLxrDqbnLdjsmVzkV4UWU4X0//v9x6O/Lss6pt0ntXZ9NPh8Ww6XzZF3uufZeWieNQq
-      8jRr6B6CCf2S85dcjZjoM0Z/flz9S7c9K+iq5mZe0HWL8UWRL8uCDlfZtD1yklVN9uJdVdy+GBTj
-      jFSrFydfrvo8IF3WZXrWPtfDE64erVqW5V6PzpDORdPM+/v72XyeTD/pJES9v6zf718t9luI/bEo
-      2emI3xZ/nbIjMVxkb98s8wN+e/r2enok3qjx6/LmdMRs/lt5RddV+evT2yPRlMWIscGH8dXw9g8a
-      /04NR69uj0aDm8HB4fXgIP8wvD1kg4Pjj4PbdzfD0UAN6P/v6G/vfhW6vH3O4t9lVqaLi2xepPlk
-      0WTVuEgXFAN6HbM6n1RZUyzaBy7ozU2aGxry9tXx8HD4mg42syYrh7NmMqZr+krRZdl0XhaPh/6+
-      662kD+kN9Y6P/hz98lOf08Dx4vJ4djVcTt8Xda9v9h6uOqD7j+rssijbNyqNSLz1yopPp39vToi2
-      IEC6115vXheXP3d09MPBk+1aj5es68n7vShULiErl9wkhisBYTlHtFwEcTtykJezWGCLgY11iXVa
-      QV4NeU2Yd00N46pIXIHjKzSjWqGFtRbwChhfEY5vRw4Ci9j4SgeBtZUiEcwLGGBpELC0QeCOHE5g
-      HQms8GzzjELipBbGoekG55sKT7iOHARWsVNOeQwslaA5ItTjlOyoWwjswsDrchjYRALrQI1g2vvE
-      GyW5AcQaJrHeUiQ6ehBZx2axwUnBhWQqkdbQewTIBmaFCWdFVw8im9i08AIjW6kdTRUnmALIniFk
-      z8PIHT2I7HwscqAWOyZMopTycO55WI39lmrc0YPIPrYec65wQebM+sRIwZ2BjieghXQm1zZF7CKc
-      x2ILnNBCeq2o8nvmUdWg6Y+dOpzSXUWMLeK7C4axlbEssd4waNfCYWofpl4XDEBbAP2qL4ADYgtU
-      2iTcOC2j+zfpwg64rhbdwSFcxbCfKCdZIpmVsIUTcBIqFjaUjh7uMVQsMse1TkvFE82p8ULEMCkU
-      D5e6dTkMHJsSSuA8NkrpxBipjInuihQPp3FHL74twsg4i60QItFeOv+MvkiE87ijF98YQWSJa7M1
-      klYPZLIM1TgNHVDJcGXu6GFkH42Mo+yUsgmjmCiUyhpHeUu/3NHDrVF0lBVG9kpTS66ZgvUNt0ZK
-      hZE7evGtEUR2HDcabTtO9xAWzj8f6JlZuNPoCOJOw0Bo+XTlZ/WObERYtWsbAbje7MxGhNe7txGE
-      7HdlI8K7ndvIU2B67J3ZiGRm9zYCkLnemY1IrnZvIwBZ8J3ZiBRs9zYCkCVuiJykrtY7bwVKZQNX
-      2FKGO6KOHq7JLBo5tO/SLh8ctx7tbBmNkbdtvKzpYeTYeiEDW0Wc0XInEUpIh5bYFjNv2SzqCkJo
-      Gw1tfcD7nNV0D2U5moGcObwl57aY37piYJcWlzr1dOWnAnsDwtmE1kXKwPWqhAs/tWVvYF0vsPCL
-      RTZ4EkoleaKYEY8bd1/3E27Ck7Cj9xxDAchWBgzFUO9Fq3+JckN6iGzFFkNZ08OG4qKRcWJYMtjE
-      Ky8NKnUKJ4YNJ0ZHD1dnnBhgF8PpwAcdnVBgjPSxnRx3assnnS9qz+jkwCcHhherisKVaGe4QlWO
-      46Tw4cVqRw9PPReLHPgMpWmWJEwwCf1Pwj05seU7VEcPB5nHIkvcZRjPVWI9NQU6ussQMtxldPSe
-      02UAZM1DG/mGJ2SxgnHkf5hZs207+WuC2LSjoU3oC6Wi9ovcauV0T6Adzg2z7RvluiDeGI9ODhNw
-      P0UrTGrAOM4OZzD0FvvrCGJoff/P/Q9333/D8A39huF6PqkpEOOsLKo8q+N+rsDRrxU28rIVqi/p
-      7Cp/ORfc0+q29z1DvrEMWVYfq9lVRcEvl9Oqmx+Hw1+PniaHQdlxNqEEe4hcdk7l4iZprps2yJOi
-      zIfrJ9J5PZlm9Q2dnFR5cU0Ls7YWrgnUM3qlCyDQNIt0dTJdXMzqJl1d/yijni9TzqrzDRUTq5LT
-      xBq375ttKHD5bAm+KbH5LE09mSMFSve0PQcDYp4h8r6cjT+mkzz8VraNPq8neWfwkxiER4+LeRuC
-      rPyfj5818/Rh3JfxemP8opnB8WPK86+FPjQ2q4tsc2zsfR9ffDdoJnJ4+9idgfYZA5dUt1fH+JqA
-      2xD47BdA41PZ33x0/r3yf6OVv33tMXX/K2X/oaI+ZvZD+lFS/AdvXZSK9CoAAA0KLS09PT09PT09
-      PT09PT09PT0wNjY1MDY5NDI5ODE4NjE5NzYyPT0tLQ==
+      dGVkX2F0XCI6IFwiMjAyNS0wNi0wMlQwMjowMDoyNy43OTU1MTMrMDA6MDBcIiwgXCJmZWVkX3R5
+      cGVcIjogXCJzY2hlZHVsZVwiLCBcIm5hbWVcIjogXCJTYW50YSBZbmV6IE1lY2F0cmFuIFNjaGVk
+      dWxlXCIsIFwic2NoZWR1bGVfdXJsX2Zvcl92YWxpZGF0aW9uXCI6IG51bGwsIFwidXJsXCI6IFwi
+      aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVk
+      RDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9U
+      TXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMFwifSwgXCJ0c1wiOiBcIjIwMjUtMDYt
+      MDFUMDA6MDA6MDArMDA6MDBcIn0ifSwgImNyYzMyYyI6ICIrZHd0T3c9PSJ9DQotLT09PT09PT09
+      PT09PT09PTQ3ODc4MTMxNDc3NzgzNjMyMTY9PQ0KY29udGVudC10eXBlOiBhcHBsaWNhdGlvbi9q
+      c29ubA0KDQofiwgAr1GFaQL/7ZpdU9tGFIbv+ysyvi0R+/3hu7S0KRc2LbhJodPRKJYAJ7LsyjKf
+      w3/vERBimXedpeObzOSCCyTtq0dHZ897duXb3rRosjxrsl7/tnfWnC7Si6yc0IFZnV4U9WIyq3r9
+      3oVOWMJ6O73iqqmzcZOOZ9Xp5Kwdky2b8/S8yHK6mP6/23k48u+yqK/TeVZn08fD49l0vmyKvNc/
+      zcpF8aRV5GnW0D0EE/o1M6+ZGDHRZ6wvbGK91lz+SP+w9u6nBV3cXM8LunwxPi/yZVnQ4SqbtkeO
+      sqrJXh1Xxc2rQTHOSLx6dfTlqs8D0mVdpqft4z086P0TVsuy3OnRGdI5b5p5f3c3m8+T6aNOQvC7
+      y/rD7uVit4XYHYuSnYz4TfHXCTsQw0X2/t0y3+M3J++vpgfinRq/La9PRszmv5WXdF2Vvz25ORBN
+      WYwYG3wcXw5v/qDxx2o4enNzMBpcD/b2rwZ7+cfhzT4b7B1+GtwcXw9HAzWg/4/pr3d3H8G8fc7i
+      32VWpovzbF6k+WTRZNW4SBcUA3orszqfVFlTLNoHLugFTpprGvL+zeFwf/iWDjazJiuHs2Yypmv6
+      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
     headers:
       Accept:
       - application/json
@@ -566,17 +564,15 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '2995'
+      - '3007'
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/e38c84bf-2f77-43cc-86e3-716cedbebe0e
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/9d88f968-4afa-4507-87d5-bccf7e3b6936
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0wNjY1MDY5NDI5ODE4
-        NjE5NzYyPT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT00Nzg3ODEzMTQ3Nzc4
+        MzYzMjE2PT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -585,37 +581,37 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/validation_notices_v5-0-0.jsonl.gz/1767629899235334\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/validation_notices_v5-0-0.jsonl.gz/1770344880122135\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fvalidation_notices_v5-0-0.jsonl.gz\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fvalidation_notices_v5-0-0.jsonl.gz?generation=1767629899235334&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fvalidation_notices_v5-0-0.jsonl.gz?generation=1770344880122135&alt=media\",\n
         \ \"name\": \"validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/validation_notices_v5-0-0.jsonl.gz\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767629899235334\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1770344880122135\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1812\",\n  \"md5Hash\": \"M7q/K5MnJW0Zbhz+FYugkg==\",\n
-        \ \"crc32c\": \"ggJd4g==\",\n  \"etag\": \"CIaA9MHm9JEDEAE=\",\n  \"timeCreated\":
-        \"2026-01-05T16:18:19.243Z\",\n  \"updated\": \"2026-01-05T16:18:19.243Z\",\n
-        \ \"timeStorageClassUpdated\": \"2026-01-05T16:18:19.243Z\",\n  \"timeFinalized\":
-        \"2026-01-05T16:18:19.243Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1817\",\n  \"md5Hash\": \"M2Xh5XXkAbsWKXZSsmOGDg==\",\n
+        \ \"crc32c\": \"+dwtOw==\",\n  \"etag\": \"CJfS1s3ow5IDEAE=\",\n  \"timeCreated\":
+        \"2026-02-06T02:28:00.132Z\",\n  \"updated\": \"2026-02-06T02:28:00.132Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-02-06T02:28:00.132Z\",\n  \"timeFinalized\":
+        \"2026-02-06T02:28:00.132Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
         \"{\\\"filename\\\": \\\"validation_notices_v5-0-0.jsonl.gz\\\", \\\"system_errors\\\":
         {\\\"notices\\\": []}, \\\"validator_version\\\": \\\"v5.0.0\\\", \\\"extract_config\\\":
         {\\\"auth_headers\\\": {}, \\\"auth_query_params\\\": {}, \\\"computed\\\":
-        false, \\\"extracted_at\\\": \\\"2025-11-14T02:00:00+00:00\\\", \\\"feed_type\\\":
+        false, \\\"extracted_at\\\": \\\"2025-06-02T02:00:27.795513+00:00\\\", \\\"feed_type\\\":
         \\\"schedule\\\", \\\"name\\\": \\\"Santa Ynez Mecatran Schedule\\\", \\\"schedule_url_for_validation\\\":
         null, \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\"},
-        \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"\n  }\n}\n"
+        \\\"ts\\\": \\\"2025-06-01T00:00:00+00:00\\\"}\"\n  }\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Content-Length:
-      - '2676'
+      - '2683'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:18:19 GMT
+      - Fri, 06 Feb 2026 02:28:00 GMT
       ETag:
-      - CIaA9MHm9JEDEAE=
+      - CJfS1s3ow5IDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -626,19 +622,19 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxMVEZc9saVvyZ7T9Dh1sTnuxVzKP7cDTkzaxPXPWYvyhQR7VaEi3NknL533joB2W6PNywGlCmo
+      - AJRbA5UCJhEIpic8PLKxduxXf24TJjSW-sgEgXmPLaXHSLsIujnUBQBcuFZ2lHSorC9bQH1UKSv-inI
     status:
       code: 200
       message: OK
 - request:
-    body: "--===============5445424595050624876==\r\ncontent-type: application/json;
+    body: "--===============8024469463663091262==\r\ncontent-type: application/json;
       charset=UTF-8\r\n\r\n{\"name\": \"validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",
       \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
-      \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"}, \"crc32c\": \"pZmCSQ==\"}\r\n--===============5445424595050624876==\r\ncontent-type:
-      application/jsonl\r\n\r\n{\"validation\":{\"filename\":\"validation_notices_v5-0-0.jsonl.gz\",\"system_errors\":{\"notices\":[]},\"validator_version\":\"v5.0.0\",\"extract_config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2025-11-14T02:00:00+00:00\",\"feed_type\":\"schedule\",\"name\":\"Santa
-      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\"},\"ts\":\"2025-06-02T00:00:00+00:00\"},\"extract\":{\"filename\":\"gtfs.zip\",\"ts\":\"2025-06-03T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"feed_type\":\"schedule\",\"name\":\"Santa
-      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"extracted_at\":\"2025-06-01T00:00:00+00:00\"},\"response_code\":200,\"response_headers\":{\"Content-Type\":\"application/zip\",\"Content-Disposition\":\"attachment;
-      filename=gtfs.zip\"},\"reconstructed\":false},\"success\":true,\"exception\":null}\r\n--===============5445424595050624876==--"
+      \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"}, \"crc32c\": \"aBXWeQ==\"}\r\n--===============8024469463663091262==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"validation\":{\"filename\":\"validation_notices_v5-0-0.jsonl.gz\",\"system_errors\":{\"notices\":[]},\"validator_version\":\"v5.0.0\",\"extract_config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2025-06-02T02:00:27.795513+00:00\",\"feed_type\":\"schedule\",\"name\":\"Santa
+      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\"},\"ts\":\"2025-06-01T00:00:00+00:00\"},\"extract\":{\"filename\":\"gtfs.zip\",\"ts\":\"2025-06-02T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"feed_type\":\"schedule\",\"name\":\"Santa
+      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"extracted_at\":\"2025-06-02T02:00:27.795513+00:00\"},\"response_code\":200,\"response_headers\":{\"Content-Type\":\"application/zip\",\"Content-Disposition\":\"attachment;
+      filename=gtfs.zip\"},\"reconstructed\":false},\"success\":true,\"exception\":null}\r\n--===============8024469463663091262==--"
     headers:
       Accept:
       - application/json
@@ -649,17 +645,15 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '1781'
+      - '1795'
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/8fc26b98-a715-4de6-af4c-c5bae564b9f1
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/5626f64b-04f2-4bc1-a73b-95beba333f04
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT01NDQ1NDI0NTk1MDUw
-        NjI0ODc2PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT04MDI0NDY5NDYzNjYz
+        MDkxMjYyPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -668,17 +662,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767629900075270\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1770344881368571\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767629900075270&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1770344881368571&alt=media\",\n
         \ \"name\": \"validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767629900075270\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1770344881368571\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1144\",\n  \"md5Hash\": \"+4rkbn8gOJfoeSE8G+c3fA==\",\n
-        \ \"crc32c\": \"pZmCSQ==\",\n  \"etag\": \"CIaip8Lm9JEDEAE=\",\n  \"timeCreated\":
-        \"2026-01-05T16:18:20.085Z\",\n  \"updated\": \"2026-01-05T16:18:20.085Z\",\n
-        \ \"timeStorageClassUpdated\": \"2026-01-05T16:18:20.085Z\",\n  \"timeFinalized\":
-        \"2026-01-05T16:18:20.085Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1158\",\n  \"md5Hash\": \"61eEcNoOPpXu2biGFebdrw==\",\n
+        \ \"crc32c\": \"aBXWeQ==\",\n  \"etag\": \"CPvbos7ow5IDEAE=\",\n  \"timeCreated\":
+        \"2026-02-06T02:28:01.378Z\",\n  \"updated\": \"2026-02-06T02:28:01.378Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-02-06T02:28:01.378Z\",\n  \"timeFinalized\":
+        \"2026-02-06T02:28:01.378Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
         \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"\n
         \ }\n}\n"
     headers:
@@ -691,9 +685,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:18:20 GMT
+      - Fri, 06 Feb 2026 02:28:01 GMT
       ETag:
-      - CIaip8Lm9JEDEAE=
+      - CPvbos7ow5IDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -704,7 +698,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxPkO9QEK16kzVhKX0SfZ8_lUEQfYI9Dp-46qYyJnwqt9aFORwb5pneTc7o0WqaYEdrrZoAV698
+      - AJRbA5UbetoEs6A6evQzbOYBtsuMtg1OTzHbmGxfLlDhjkTrFCF05F_Rnt9O557u9Y_gAqiovPqES54
     status:
       code: 200
       message: OK
@@ -718,11 +712,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/32eab3a9-3748-482e-9a04-ed87c329e5f0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/65f1eb93-fe2e-409c-b1db-3921913708a0
       accept-encoding:
       - gzip
       content-type:
@@ -1179,13 +1171,13 @@ interactions:
       Content-Type:
       - application/zip
       Date:
-      - Mon, 05 Jan 2026 16:18:20 GMT
+      - Fri, 06 Feb 2026 02:28:02 GMT
       ETag:
-      - CJro1pzm9JEDEAE=
+      - CP++pqH7u5IDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Mon, 05 Jan 2026 16:17:01 GMT
+      - Mon, 02 Feb 2026 23:30:09 GMT
       Pragma:
       - no-cache
       Server:
@@ -1194,9 +1186,9 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxNFsGjjBHd9qbRzUBK0zyD-hWgoQUhO80PEqnepCcBn8sfYElvxYClIk85-X8fgPWmkvvaFGZwQZS_5
+      - AJRbA5Uud26dzY9RchIFjCYAf-jX4WswtFfY15VFwsdfUNWqirSJPvk93ZiqnZTpbD_aT9uMFwxhK4E
       X-Goog-Generation:
-      - '1767629821162522'
+      - '1770075009425279'
       X-Goog-Hash:
       - crc32c=lxCKqA==,md5=zsRgt7THKTNwu3SMKXUNQQ==
       X-Goog-Metageneration:
@@ -1212,7 +1204,7 @@ interactions:
       message: OK
 - request:
     body: !!binary |
-      LS09PT09PT09PT09PT09PT03OTYwMDA3MTIyODk3NjI0MzQ0PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      LS09PT09PT09PT09PT09PT03Mzg0NzA4MTkzMTk1ODk5NTY2PT0NCmNvbnRlbnQtdHlwZTogYXBw
       bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAidmFsaWRhdGlvbl9ub3Rp
       Y2VzL2R0PTIwMjUtMDYtMDIvdHM9MjAyNS0wNi0wMlQwMDowMDowMCswMDowMC9iYXNlNjRfdXJs
       PWFIUjBjRG92TDJGd2NDNXRaV05oZEhKaGJpNWpiMjB2ZFhKaUwzZHpMMlpsWldRdll6SnNNRnBV
@@ -1224,47 +1216,47 @@ interactions:
       InN5c3RlbV9lcnJvcnNcIjoge1wibm90aWNlc1wiOiBbXX0sIFwidmFsaWRhdG9yX3ZlcnNpb25c
       IjogXCJ2NS4wLjBcIiwgXCJleHRyYWN0X2NvbmZpZ1wiOiB7XCJhdXRoX2hlYWRlcnNcIjoge30s
       IFwiYXV0aF9xdWVyeV9wYXJhbXNcIjoge30sIFwiY29tcHV0ZWRcIjogZmFsc2UsIFwiZXh0cmFj
-      dGVkX2F0XCI6IFwiMjAyNS0xMS0xNFQwMjowMDowMCswMDowMFwiLCBcImZlZWRfdHlwZVwiOiBc
-      InNjaGVkdWxlXCIsIFwibmFtZVwiOiBcIlNhbnRhIFluZXogTWVjYXRyYW4gU2NoZWR1bGVcIiwg
-      XCJzY2hlZHVsZV91cmxfZm9yX3ZhbGlkYXRpb25cIjogbnVsbCwgXCJ1cmxcIjogXCJodHRwOi8v
-      YXBwLm1lY2F0cmFuLmNvbS91cmIvd3MvZmVlZC9jMmwwWlQxemVYWjBPMk5zYVdWdWREMXpaV3ht
-      TzJWNGNHbHlaVDA3ZEhsd1pUMW5kR1p6TzJ0bGVUMDBNamN3TnpRMFpUWTROVEF6T1RNeU1ESXhN
-      RGRqTnpJME1EUmtNell5TlRNNE16STBZekkwXCJ9LCBcInRzXCI6IFwiMjAyNS0wNi0wM1QwMDow
-      MDowMCswMDowMFwifSJ9LCAiY3JjMzJjIjogInFnTGhGQT09In0NCi0tPT09PT09PT09PT09PT09
-      Nzk2MDAwNzEyMjg5NzYyNDM0ND09DQpjb250ZW50LXR5cGU6IGFwcGxpY2F0aW9uL2pzb25sDQoN
-      Ch+LCABO5FtpAv/tmltv20YQhd/7KwK91qH3ftFbWrepHyS3tpo0LgqCEWlbCUWpFOUr/N87lBNH
-      lM8q60IvAQIkAUJyDz8OZ+fMLnXXmxZNlmdN1uvf9c6bs0V6mZUTOjCr08uiXkxmVa/fu9QJS1hv
-      r1dcN3U2btLxrDqbnLdjsmVzkV4UWU4X0//v9x6O/Lss6pt0ntXZ9NPh8Ww6XzZF3uufZeWieNQq
-      8jRr6B6CCf2S85dcjZjoM0Z/flz9S7c9K+iq5mZe0HWL8UWRL8uCDlfZtD1yklVN9uJdVdy+GBTj
-      jFSrFydfrvo8IF3WZXrWPtfDE64erVqW5V6PzpDORdPM+/v72XyeTD/pJES9v6zf718t9luI/bEo
-      2emI3xZ/nbIjMVxkb98s8wN+e/r2enok3qjx6/LmdMRs/lt5RddV+evT2yPRlMWIscGH8dXw9g8a
-      /04NR69uj0aDm8HB4fXgIP8wvD1kg4Pjj4PbdzfD0UAN6P/v6G/vfhW6vH3O4t9lVqaLi2xepPlk
-      0WTVuEgXFAN6HbM6n1RZUyzaBy7ozU2aGxry9tXx8HD4mg42syYrh7NmMqZr+krRZdl0XhaPh/6+
-      662kD+kN9Y6P/hz98lOf08Dx4vJ4djVcTt8Xda9v9h6uOqD7j+rssijbNyqNSLz1yopPp39vToi2
-      IEC6115vXheXP3d09MPBk+1aj5es68n7vShULiErl9wkhisBYTlHtFwEcTtykJezWGCLgY11iXVa
-      QV4NeU2Yd00N46pIXIHjKzSjWqGFtRbwChhfEY5vRw4Ci9j4SgeBtZUiEcwLGGBpELC0QeCOHE5g
-      HQms8GzzjELipBbGoekG55sKT7iOHARWsVNOeQwslaA5ItTjlOyoWwjswsDrchjYRALrQI1g2vvE
-      GyW5AcQaJrHeUiQ6ehBZx2axwUnBhWQqkdbQewTIBmaFCWdFVw8im9i08AIjW6kdTRUnmALIniFk
-      z8PIHT2I7HwscqAWOyZMopTycO55WI39lmrc0YPIPrYec65wQebM+sRIwZ2BjieghXQm1zZF7CKc
-      x2ILnNBCeq2o8nvmUdWg6Y+dOpzSXUWMLeK7C4axlbEssd4waNfCYWofpl4XDEBbAP2qL4ADYgtU
-      2iTcOC2j+zfpwg64rhbdwSFcxbCfKCdZIpmVsIUTcBIqFjaUjh7uMVQsMse1TkvFE82p8ULEMCkU
-      D5e6dTkMHJsSSuA8NkrpxBipjInuihQPp3FHL74twsg4i60QItFeOv+MvkiE87ijF98YQWSJa7M1
-      klYPZLIM1TgNHVDJcGXu6GFkH42Mo+yUsgmjmCiUyhpHeUu/3NHDrVF0lBVG9kpTS66ZgvUNt0ZK
-      hZE7evGtEUR2HDcabTtO9xAWzj8f6JlZuNPoCOJOw0Bo+XTlZ/WObERYtWsbAbje7MxGhNe7txGE
-      7HdlI8K7ndvIU2B67J3ZiGRm9zYCkLnemY1IrnZvIwBZ8J3ZiBRs9zYCkCVuiJykrtY7bwVKZQNX
-      2FKGO6KOHq7JLBo5tO/SLh8ctx7tbBmNkbdtvKzpYeTYeiEDW0Wc0XInEUpIh5bYFjNv2SzqCkJo
-      Gw1tfcD7nNV0D2U5moGcObwl57aY37piYJcWlzr1dOWnAnsDwtmE1kXKwPWqhAs/tWVvYF0vsPCL
-      RTZ4EkoleaKYEY8bd1/3E27Ck7Cj9xxDAchWBgzFUO9Fq3+JckN6iGzFFkNZ08OG4qKRcWJYMtjE
-      Ky8NKnUKJ4YNJ0ZHD1dnnBhgF8PpwAcdnVBgjPSxnRx3assnnS9qz+jkwCcHhherisKVaGe4QlWO
-      46Tw4cVqRw9PPReLHPgMpWmWJEwwCf1Pwj05seU7VEcPB5nHIkvcZRjPVWI9NQU6ussQMtxldPSe
-      02UAZM1DG/mGJ2SxgnHkf5hZs207+WuC2LSjoU3oC6Wi9ovcauV0T6Adzg2z7RvluiDeGI9ODhNw
-      P0UrTGrAOM4OZzD0FvvrCGJoff/P/Q9333/D8A39huF6PqkpEOOsLKo8q+N+rsDRrxU28rIVqi/p
-      7Cp/ORfc0+q29z1DvrEMWVYfq9lVRcEvl9Oqmx+Hw1+PniaHQdlxNqEEe4hcdk7l4iZprps2yJOi
-      zIfrJ9J5PZlm9Q2dnFR5cU0Ls7YWrgnUM3qlCyDQNIt0dTJdXMzqJl1d/yijni9TzqrzDRUTq5LT
-      xBq375ttKHD5bAm+KbH5LE09mSMFSve0PQcDYp4h8r6cjT+mkzz8VraNPq8neWfwkxiER4+LeRuC
-      rPyfj5818/Rh3JfxemP8opnB8WPK86+FPjQ2q4tsc2zsfR9ffDdoJnJ4+9idgfYZA5dUt1fH+JqA
-      2xD47BdA41PZ33x0/r3yf6OVv33tMXX/K2X/oaI+ZvZD+lFS/AdvXZSK9CoAAA0KLS09PT09PT09
-      PT09PT09PT03OTYwMDA3MTIyODk3NjI0MzQ0PT0tLQ==
+      dGVkX2F0XCI6IFwiMjAyNS0wNi0wMlQwMjowMDoyNy43OTU1MTMrMDA6MDBcIiwgXCJmZWVkX3R5
+      cGVcIjogXCJzY2hlZHVsZVwiLCBcIm5hbWVcIjogXCJTYW50YSBZbmV6IE1lY2F0cmFuIFNjaGVk
+      dWxlXCIsIFwic2NoZWR1bGVfdXJsX2Zvcl92YWxpZGF0aW9uXCI6IG51bGwsIFwidXJsXCI6IFwi
+      aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVk
+      RDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9U
+      TXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMFwifSwgXCJ0c1wiOiBcIjIwMjUtMDYt
+      MDJUMDA6MDA6MDArMDA6MDBcIn0ifSwgImNyYzMyYyI6ICJBS2F2S0E9PSJ9DQotLT09PT09PT09
+      PT09PT09PTczODQ3MDgxOTMxOTU4OTk1NjY9PQ0KY29udGVudC10eXBlOiBhcHBsaWNhdGlvbi9q
+      c29ubA0KDQofiwgAtFGFaQL/7ZpdU9tGFIbv+ysyvi0R+/3hu7S0KRc2LbhJodPRKJYAJ7LsyjKf
+      w3/vERBimXedpeObzOSCCyTtq0dHZ897duXb3rRosjxrsl7/tnfWnC7Si6yc0IFZnV4U9WIyq3r9
+      3oVOWMJ6O73iqqmzcZOOZ9Xp5Kwdky2b8/S8yHK6mP6/23k48u+yqK/TeVZn08fD49l0vmyKvNc/
+      zcpF8aRV5GnW0D0EE/o1M6+ZGDHRZ6wvbGK91lz+SP+w9u6nBV3cXM8LunwxPi/yZVnQ4SqbtkeO
+      sqrJXh1Xxc2rQTHOSLx6dfTlqs8D0mVdpqft4z086P0TVsuy3OnRGdI5b5p5f3c3m8+T6aNOQvC7
+      y/rD7uVit4XYHYuSnYz4TfHXCTsQw0X2/t0y3+M3J++vpgfinRq/La9PRszmv5WXdF2Vvz25ORBN
+      WYwYG3wcXw5v/qDxx2o4enNzMBpcD/b2rwZ7+cfhzT4b7B1+GtwcXw9HAzWg/4/pr3d3H8G8fc7i
+      32VWpovzbF6k+WTRZNW4SBcUA3orszqfVFlTLNoHLugFTpprGvL+zeFwf/iWDjazJiuHs2Yypmv6
+      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
     headers:
       Accept:
       - application/json
@@ -1275,17 +1267,15 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '2995'
+      - '3007'
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/7d4053fe-1a5a-4c87-bd91-7b4f5dcada2f
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/a4f64f6a-d55e-4205-be3f-8efc049fbd94
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03OTYwMDA3MTIyODk3
-        NjI0MzQ0PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03Mzg0NzA4MTkzMTk1
+        ODk5NTY2PT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -1294,37 +1284,37 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/validation_notices_v5-0-0.jsonl.gz/1767629903242008\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/validation_notices_v5-0-0.jsonl.gz/1770344885116514\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fvalidation_notices_v5-0-0.jsonl.gz\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fvalidation_notices_v5-0-0.jsonl.gz?generation=1767629903242008&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fvalidation_notices_v5-0-0.jsonl.gz?generation=1770344885116514&alt=media\",\n
         \ \"name\": \"validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/validation_notices_v5-0-0.jsonl.gz\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767629903242008\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1770344885116514\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1812\",\n  \"md5Hash\": \"3jFK2xR2N+RrYzHwQNYEfw==\",\n
-        \ \"crc32c\": \"qgLhFA==\",\n  \"etag\": \"CJjG6MPm9JEDEAE=\",\n  \"timeCreated\":
-        \"2026-01-05T16:18:23.252Z\",\n  \"updated\": \"2026-01-05T16:18:23.252Z\",\n
-        \ \"timeStorageClassUpdated\": \"2026-01-05T16:18:23.252Z\",\n  \"timeFinalized\":
-        \"2026-01-05T16:18:23.252Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1817\",\n  \"md5Hash\": \"1mjfucm9aGTCzvU9n7dLPw==\",\n
+        \ \"crc32c\": \"AKavKA==\",\n  \"etag\": \"COK8h9Dow5IDEAE=\",\n  \"timeCreated\":
+        \"2026-02-06T02:28:05.125Z\",\n  \"updated\": \"2026-02-06T02:28:05.125Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-02-06T02:28:05.125Z\",\n  \"timeFinalized\":
+        \"2026-02-06T02:28:05.125Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
         \"{\\\"filename\\\": \\\"validation_notices_v5-0-0.jsonl.gz\\\", \\\"system_errors\\\":
         {\\\"notices\\\": []}, \\\"validator_version\\\": \\\"v5.0.0\\\", \\\"extract_config\\\":
         {\\\"auth_headers\\\": {}, \\\"auth_query_params\\\": {}, \\\"computed\\\":
-        false, \\\"extracted_at\\\": \\\"2025-11-14T02:00:00+00:00\\\", \\\"feed_type\\\":
+        false, \\\"extracted_at\\\": \\\"2025-06-02T02:00:27.795513+00:00\\\", \\\"feed_type\\\":
         \\\"schedule\\\", \\\"name\\\": \\\"Santa Ynez Mecatran Schedule\\\", \\\"schedule_url_for_validation\\\":
         null, \\\"url\\\": \\\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\\\"},
-        \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"\n  }\n}\n"
+        \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"\n  }\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
       Content-Length:
-      - '2676'
+      - '2683'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:18:23 GMT
+      - Fri, 06 Feb 2026 02:28:05 GMT
       ETag:
-      - CJjG6MPm9JEDEAE=
+      - COK8h9Dow5IDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -1335,19 +1325,19 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxM0GRaE3qUguJq6Myfqw8yjy1RY7W1QvWDt0Mt9GND2H4wpnbLOcrnfTFDXqIlbDWSAh0NqEeE
+      - AJRbA5WWR5vTmAKj6J6VSBVesPIunp7w4WFc7vmdbRmqEQJN0B8kzR87TMkotMT7KpYYn_w1Eha5Pyk
     status:
       code: 200
       message: OK
 - request:
-    body: "--===============3985506060156325848==\r\ncontent-type: application/json;
+    body: "--===============4268140915884474642==\r\ncontent-type: application/json;
       charset=UTF-8\r\n\r\n{\"name\": \"validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",
       \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
-      \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"}, \"crc32c\": \"9tz06A==\"}\r\n--===============3985506060156325848==\r\ncontent-type:
-      application/jsonl\r\n\r\n{\"validation\":{\"filename\":\"validation_notices_v5-0-0.jsonl.gz\",\"system_errors\":{\"notices\":[]},\"validator_version\":\"v5.0.0\",\"extract_config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2025-11-14T02:00:00+00:00\",\"feed_type\":\"schedule\",\"name\":\"Santa
-      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\"},\"ts\":\"2025-06-03T00:00:00+00:00\"},\"extract\":{\"filename\":\"gtfs.zip\",\"ts\":\"2025-06-03T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"feed_type\":\"schedule\",\"name\":\"Santa
-      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"extracted_at\":\"2025-06-01T00:00:00+00:00\"},\"response_code\":200,\"response_headers\":{\"Content-Type\":\"application/zip\",\"Content-Disposition\":\"attachment;
-      filename=gtfs.zip\"},\"reconstructed\":false},\"success\":true,\"exception\":null}\r\n--===============3985506060156325848==--"
+      \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"}, \"crc32c\": \"v+5vPQ==\"}\r\n--===============4268140915884474642==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"validation\":{\"filename\":\"validation_notices_v5-0-0.jsonl.gz\",\"system_errors\":{\"notices\":[]},\"validator_version\":\"v5.0.0\",\"extract_config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2025-06-02T02:00:27.795513+00:00\",\"feed_type\":\"schedule\",\"name\":\"Santa
+      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\"},\"ts\":\"2025-06-02T00:00:00+00:00\"},\"extract\":{\"filename\":\"gtfs.zip\",\"ts\":\"2025-06-02T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"feed_type\":\"schedule\",\"name\":\"Santa
+      Ynez Mecatran Schedule\",\"schedule_url_for_validation\":null,\"url\":\"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\",\"extracted_at\":\"2025-06-02T02:00:27.795513+00:00\"},\"response_code\":200,\"response_headers\":{\"Content-Type\":\"application/zip\",\"Content-Disposition\":\"attachment;
+      filename=gtfs.zip\"},\"reconstructed\":false},\"success\":true,\"exception\":null}\r\n--===============4268140915884474642==--"
     headers:
       Accept:
       - application/json
@@ -1358,17 +1348,15 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '1781'
+      - '1795'
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/a83cf17d-7e4e-45c2-9e8a-12ba6f67e0ec
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/9c4bb5d5-0b1e-446c-89dd-123373206555
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0zOTg1NTA2MDYwMTU2
-        MzI1ODQ4PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT00MjY4MTQwOTE1ODg0
+        NDc0NjQyPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -1377,18 +1365,18 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767629904083699\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1770344886379773\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767629904083699&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1770344886379773&alt=media\",\n
         \ \"name\": \"validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767629904083699\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1770344886379773\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1144\",\n  \"md5Hash\": \"yGGdPvzq9NT41IIhtuXVSg==\",\n
-        \ \"crc32c\": \"9tz06A==\",\n  \"etag\": \"CPP1m8Tm9JEDEAE=\",\n  \"timeCreated\":
-        \"2026-01-05T16:18:24.092Z\",\n  \"updated\": \"2026-01-05T16:18:24.092Z\",\n
-        \ \"timeStorageClassUpdated\": \"2026-01-05T16:18:24.092Z\",\n  \"timeFinalized\":
-        \"2026-01-05T16:18:24.092Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
-        \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2025-06-03T00:00:00+00:00\\\"}\"\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1158\",\n  \"md5Hash\": \"cSPaN2CzLV6ylqQX99xHng==\",\n
+        \ \"crc32c\": \"v+5vPQ==\",\n  \"etag\": \"CP3J1NDow5IDEAE=\",\n  \"timeCreated\":
+        \"2026-02-06T02:28:06.389Z\",\n  \"updated\": \"2026-02-06T02:28:06.389Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-02-06T02:28:06.389Z\",\n  \"timeFinalized\":
+        \"2026-02-06T02:28:06.389Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2025-06-02T00:00:00+00:00\\\"}\"\n
         \ }\n}\n"
     headers:
       Alt-Svc:
@@ -1400,9 +1388,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:18:24 GMT
+      - Fri, 06 Feb 2026 02:28:06 GMT
       ETag:
-      - CPP1m8Tm9JEDEAE=
+      - CP3J1NDow5IDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -1413,7 +1401,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxMW6CqlMVGcIQmvb5W4jAiRP_VjQWlG_j21CJvEyYw8krT2CdPt53Z4-AkSlYwPTZbNCOm9FpM
+      - AJRbA5Wrpo7PerPnv0G9hujPRrSNB4U8onDTpxhymVVQrA6zAVYWxLwIsol29UnO6e6wRqS580tLrYbikgzs
     status:
       code: 200
       message: OK
@@ -1427,11 +1415,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/5789403b-4145-4c8e-b9af-498d538ce45d
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/5c5b9075-6bc9-4c17-8c85-8f0488be34e7
       accept-encoding:
       - gzip
       content-type:
@@ -1445,38 +1431,38 @@ interactions:
   response:
     body:
       string: !!binary |
-        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
+        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
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -1485,17 +1471,17 @@ interactions:
       Content-Disposition:
       - attachment
       Content-Length:
-      - '1812'
+      - '1817'
       Content-Type:
       - application/jsonl
       Date:
-      - Mon, 05 Jan 2026 16:18:24 GMT
+      - Fri, 06 Feb 2026 02:28:07 GMT
       ETag:
-      - CJjG6MPm9JEDEAE=
+      - COK8h9Dow5IDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Mon, 05 Jan 2026 16:18:23 GMT
+      - Fri, 06 Feb 2026 02:28:05 GMT
       Pragma:
       - no-cache
       Server:
@@ -1504,11 +1490,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxOT9EY1jaQoqxImadC-yHoSnT92j38VxyHcf5nxPsYqH6lz_s-mvy7_X84btWz2y3sxHyzcl8E
+      - AJRbA5XN0smZyvceQKMtmg_pOwmMWx_Mz25_ceFvW2jljY5EJ2A0A6eIeqrrN5jckW3l7N8GP6bbupMCKxRH
       X-Goog-Generation:
-      - '1767629903242008'
+      - '1770344885116514'
       X-Goog-Hash:
-      - crc32c=qgLhFA==,md5=3jFK2xR2N+RrYzHwQNYEfw==
+      - crc32c=AKavKA==,md5=1mjfucm9aGTCzvU9n7dLPw==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:
@@ -1516,7 +1502,7 @@ interactions:
       X-Goog-Stored-Content-Encoding:
       - identity
       X-Goog-Stored-Content-Length:
-      - '1812'
+      - '1817'
     status:
       code: 200
       message: OK
@@ -1532,46 +1518,44 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/994ed6b9-bac2-40eb-8caa-29549de70753
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/56b2d7ad-7671-4d2c-bfe6-63e5da56c912
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
     uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D%2Fvalidation_notices_v5-0-0.jsonl.gz?prettyPrint=false&projection=noAcl
   response:
     body:
-      string: '{"kind":"storage#object","id":"calitp-staging-pytest/validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/validation_notices_v5-0-0.jsonl.gz/1767629903242008","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fvalidation_notices_v5-0-0.jsonl.gz","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fvalidation_notices_v5-0-0.jsonl.gz?generation=1767629903242008&alt=media","name":"validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/validation_notices_v5-0-0.jsonl.gz","bucket":"calitp-staging-pytest","generation":"1767629903242008","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"1812","md5Hash":"3jFK2xR2N+RrYzHwQNYEfw==","crc32c":"qgLhFA==","etag":"CJjG6MPm9JEDEAE=","timeCreated":"2026-01-05T16:18:23.252Z","updated":"2026-01-05T16:18:23.252Z","timeStorageClassUpdated":"2026-01-05T16:18:23.252Z","timeFinalized":"2026-01-05T16:18:23.252Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/validation_notices_v5-0-0.jsonl.gz/1770344885116514","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fvalidation_notices_v5-0-0.jsonl.gz","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_notices%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==%2Fvalidation_notices_v5-0-0.jsonl.gz?generation=1770344885116514&alt=media","name":"validation_notices/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==/validation_notices_v5-0-0.jsonl.gz","bucket":"calitp-staging-pytest","generation":"1770344885116514","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"1817","md5Hash":"1mjfucm9aGTCzvU9n7dLPw==","crc32c":"AKavKA==","etag":"COK8h9Dow5IDEAE=","timeCreated":"2026-02-06T02:28:05.125Z","updated":"2026-02-06T02:28:05.125Z","timeStorageClassUpdated":"2026-02-06T02:28:05.125Z","timeFinalized":"2026-02-06T02:28:05.125Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
         \"validation_notices_v5-0-0.jsonl.gz\", \"system_errors\": {\"notices\": []},
         \"validator_version\": \"v5.0.0\", \"extract_config\": {\"auth_headers\":
-        {}, \"auth_query_params\": {}, \"computed\": false, \"extracted_at\": \"2025-11-14T02:00:00+00:00\",
+        {}, \"auth_query_params\": {}, \"computed\": false, \"extracted_at\": \"2025-06-02T02:00:27.795513+00:00\",
         \"feed_type\": \"schedule\", \"name\": \"Santa Ynez Mecatran Schedule\", \"schedule_url_for_validation\":
         null, \"url\": \"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0\"},
-        \"ts\": \"2025-06-03T00:00:00+00:00\"}"}}'
+        \"ts\": \"2025-06-02T00:00:00+00:00\"}"}}'
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Cache-Control:
       - private, max-age=0, must-revalidate, no-transform
       Content-Length:
-      - '2589'
+      - '2596'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:18:24 GMT
+      - Fri, 06 Feb 2026 02:28:07 GMT
       ETag:
-      - CJjG6MPm9JEDEAE=
+      - COK8h9Dow5IDEAE=
       Expires:
-      - Mon, 05 Jan 2026 16:18:24 GMT
+      - Fri, 06 Feb 2026 02:28:07 GMT
       Server:
       - UploadServer
       Vary:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxOQ0t6ZK_Ijg4oiKmKpIoTWlyvENp4RRlSUuzsJjARwrtnvoHZIKoZ81LaX2dFiyX8Rnq0Lvp0
+      - AJRbA5XLu96y6wTOLiRaRAj3lHoAXDJJOT4uuft5Ou0cSSZJ5vMzpD-gsGLEqJUO8Ffc3Wbpi_TwpCK1uxwI
     status:
       code: 200
       message: OK
@@ -1585,11 +1569,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/c5d7d67a-28cd-4306-8bdd-1a0bc9b2ef52
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/501c10f8-2a36-4426-90e5-7f92ab2f2125
       accept-encoding:
       - gzip
       content-type:
@@ -1602,9 +1584,9 @@ interactions:
     uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D.jsonl?alt=media
   response:
     body:
-      string: '{"validation":{"filename":"validation_notices_v5-0-0.jsonl.gz","system_errors":{"notices":[]},"validator_version":"v5.0.0","extract_config":{"auth_headers":{},"auth_query_params":{},"computed":false,"extracted_at":"2025-11-14T02:00:00+00:00","feed_type":"schedule","name":"Santa
-        Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0"},"ts":"2025-06-03T00:00:00+00:00"},"extract":{"filename":"gtfs.zip","ts":"2025-06-03T00:00:00+00:00","config":{"auth_headers":{},"auth_query_params":{},"computed":false,"feed_type":"schedule","name":"Santa
-        Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","extracted_at":"2025-06-01T00:00:00+00:00"},"response_code":200,"response_headers":{"Content-Type":"application/zip","Content-Disposition":"attachment;
+      string: '{"validation":{"filename":"validation_notices_v5-0-0.jsonl.gz","system_errors":{"notices":[]},"validator_version":"v5.0.0","extract_config":{"auth_headers":{},"auth_query_params":{},"computed":false,"extracted_at":"2025-06-02T02:00:27.795513+00:00","feed_type":"schedule","name":"Santa
+        Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0"},"ts":"2025-06-02T00:00:00+00:00"},"extract":{"filename":"gtfs.zip","ts":"2025-06-02T00:00:00+00:00","config":{"auth_headers":{},"auth_query_params":{},"computed":false,"feed_type":"schedule","name":"Santa
+        Ynez Mecatran Schedule","schedule_url_for_validation":null,"url":"http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0","extracted_at":"2025-06-02T02:00:27.795513+00:00"},"response_code":200,"response_headers":{"Content-Type":"application/zip","Content-Disposition":"attachment;
         filename=gtfs.zip"},"reconstructed":false},"success":true,"exception":null}'
     headers:
       Alt-Svc:
@@ -1614,17 +1596,17 @@ interactions:
       Content-Disposition:
       - attachment
       Content-Length:
-      - '1144'
+      - '1158'
       Content-Type:
       - application/jsonl
       Date:
-      - Mon, 05 Jan 2026 16:18:25 GMT
+      - Fri, 06 Feb 2026 02:28:08 GMT
       ETag:
-      - CPP1m8Tm9JEDEAE=
+      - CP3J1NDow5IDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Mon, 05 Jan 2026 16:18:24 GMT
+      - Fri, 06 Feb 2026 02:28:06 GMT
       Pragma:
       - no-cache
       Server:
@@ -1633,11 +1615,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxNcZMyRFTPkntQWUdtAPRJ5741_dJdBFb4nwkVsIMghoQy9TnVTlawvs4_b2OI_5quKsk2lcKk
+      - AJRbA5UxqNVCl9a2Ajv8kRDGNuf1b3O-9o6CKDfhqk4roVbRWyTREXhyAWkSvKSPflaFQRSCUZtEMVqggHup
       X-Goog-Generation:
-      - '1767629904083699'
+      - '1770344886379773'
       X-Goog-Hash:
-      - crc32c=9tz06A==,md5=yGGdPvzq9NT41IIhtuXVSg==
+      - crc32c=v+5vPQ==,md5=cSPaN2CzLV6ylqQX99xHng==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:
@@ -1645,7 +1627,7 @@ interactions:
       X-Goog-Stored-Content-Encoding:
       - identity
       X-Goog-Stored-Content-Length:
-      - '1144'
+      - '1158'
     status:
       code: 200
       message: OK
@@ -1661,19 +1643,17 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/5097979a-0e34-47b7-a978-5c239881313e
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/bdc8f5ec-9f48-4459-9937-b3f3873ee83b
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
     uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA%3D%3D.jsonl?prettyPrint=false&projection=noAcl
   response:
     body:
-      string: '{"kind":"storage#object","id":"calitp-staging-pytest/validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1767629904083699","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1767629904083699&alt=media","name":"validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl","bucket":"calitp-staging-pytest","generation":"1767629904083699","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"1144","md5Hash":"yGGdPvzq9NT41IIhtuXVSg==","crc32c":"9tz06A==","etag":"CPP1m8Tm9JEDEAE=","timeCreated":"2026-01-05T16:18:24.092Z","updated":"2026-01-05T16:18:24.092Z","timeStorageClassUpdated":"2026-01-05T16:18:24.092Z","timeFinalized":"2026-01-05T16:18:24.092Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
-        \"results.jsonl\", \"ts\": \"2025-06-03T00:00:00+00:00\"}"}}'
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl/1770344886379773","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/validation_job_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FaHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl?generation=1770344886379773&alt=media","name":"validation_job_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==.jsonl","bucket":"calitp-staging-pytest","generation":"1770344886379773","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"1158","md5Hash":"cSPaN2CzLV6ylqQX99xHng==","crc32c":"v+5vPQ==","etag":"CP3J1NDow5IDEAE=","timeCreated":"2026-02-06T02:28:06.389Z","updated":"2026-02-06T02:28:06.389Z","timeStorageClassUpdated":"2026-02-06T02:28:06.389Z","timeFinalized":"2026-02-06T02:28:06.389Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
+        \"results.jsonl\", \"ts\": \"2025-06-02T00:00:00+00:00\"}"}}'
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -1684,18 +1664,18 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 05 Jan 2026 16:18:25 GMT
+      - Fri, 06 Feb 2026 02:28:08 GMT
       ETag:
-      - CPP1m8Tm9JEDEAE=
+      - CP3J1NDow5IDEAE=
       Expires:
-      - Mon, 05 Jan 2026 16:18:25 GMT
+      - Fri, 06 Feb 2026 02:28:08 GMT
       Server:
       - UploadServer
       Vary:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AHVrFxN7y76AVIHxnROBDh7TVFfwUSYEE6qe3TRddgy6nfyeGUoHOVj-lbYwCt659oOjgacAE0x4rss
+      - AJRbA5VZdJanU6Xs9QPTg3pwtIYnPne3XUn_Q0Oj-7B88MGX0jgD9lNzNCgzQfnVSRw69B2MW1QVCbIavlrk
     status:
       code: 200
       message: OK
