@@ -27,39 +27,19 @@ Practical guides for accomplishing specific tasks. Use these when you need to ge
 - [Rotate Littlepay AWS Keys](how-to/rotate-littlepay-keys.md)
 - [Troubleshoot Data Sync Issues](how-to/troubleshoot-sync-issues.md)
 - [Update Row Access Policies](how-to/update-row-access-policies.md)
-- [Monitor Pipeline Health](how-to/monitor-pipeline-health.md)
 
-### 📖 [Reference](reference/) - Information-Oriented
-Technical descriptions and specifications. Consult these for detailed information.
+### 📖 Reference - Information-Oriented
+*Coming soon: Technical descriptions and specifications for the payments ecosystem.*
 
-- [Payments Data Pipeline Architecture](reference/architecture.md)
-- [Littlepay Data Schema](reference/littlepay-schema.md)
-- [Enghouse Data Schema](reference/enghouse-schema.md)
-- [Elavon Data Schema](reference/elavon-schema.md)
-- [dbt Models Reference](reference/dbt-models.md)
-- [Airflow DAGs Reference](reference/airflow-dags.md)
-- [Service Accounts & Permissions](reference/service-accounts.md)
-- [GCS Buckets & Storage](reference/gcs-buckets.md)
-- [Metabase Configuration](reference/metabase-config.md)
-- [API Endpoints & Integrations](reference/api-endpoints.md)
-
-### 💡 [Explanation](explanation/) - Understanding-Oriented
-Conceptual discussions to deepen your understanding. Read these to understand the "why" behind the system.
-
-- [Payments Ecosystem Overview](explanation/ecosystem-overview.md)
-- [Why Diátaxis for Documentation](explanation/why-diataxis.md)
-- [Data Security & Row-Level Access](explanation/data-security.md)
-- [Vendor Integration Patterns](explanation/vendor-integration.md)
-- [Fare Types & Calculations](explanation/fare-types.md)
-- [Settlement & Reconciliation](explanation/settlement-reconciliation.md)
-- [Design Decisions & Trade-offs](explanation/design-decisions.md)
+### 💡 Explanation - Understanding-Oriented
+*Coming soon: Conceptual discussions to deepen your understanding of the payments system.*
 
 ## Quick Links
 
 ### For New Team Members
 1. Start with [Getting Started Tutorial](tutorials/01-getting-started.md)
-2. Read [Payments Ecosystem Overview](explanation/ecosystem-overview.md)
-3. Review [Data Pipeline Architecture](reference/architecture.md)
+2. Review [Understanding the Data Flow](tutorials/02-understanding-data-flow.md)
+3. Explore the [How-To Guides](how-to/) for specific tasks
 
 ### For Onboarding a New Agency
 1. Review [Understanding the Data Flow](tutorials/02-understanding-data-flow.md)
@@ -71,8 +51,8 @@ Conceptual discussions to deepen your understanding. Read these to understand th
 
 ### For Troubleshooting
 1. Check [Troubleshoot Data Sync Issues](how-to/troubleshoot-sync-issues.md)
-2. Review [Monitor Pipeline Health](how-to/monitor-pipeline-health.md)
-3. Consult [Airflow DAGs Reference](reference/airflow-dags.md)
+2. Review the [Airflow DAGs Overview](../../airflow/dags/README.md)
+3. Consult the [Warehouse Models](../../../warehouse/models/mart/payments/)
 
 ## System Components
 
