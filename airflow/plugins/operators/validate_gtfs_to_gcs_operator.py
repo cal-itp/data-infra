@@ -13,6 +13,8 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 class ValidateGTFSToGCSOperator(BaseOperator):
     template_fields: Sequence[str] = (
+        "dt",
+        "ts",
         "download_schedule_feed_results",
         "source_bucket",
         "source_path",
@@ -24,6 +26,8 @@ class ValidateGTFSToGCSOperator(BaseOperator):
 
     def __init__(
         self,
+        dt: str,
+        ts: str,
         download_schedule_feed_results: dict,
         source_bucket: str,
         source_path: str,
@@ -36,6 +40,8 @@ class ValidateGTFSToGCSOperator(BaseOperator):
         super().__init__(**kwargs)
 
         self._gcs_hook = None
+        self.dt: str = dt
+        self.ts: str = ts
         self.download_schedule_feed_results = download_schedule_feed_results
         self.source_bucket = source_bucket
         self.source_path = source_path
@@ -53,14 +59,15 @@ class ValidateGTFSToGCSOperator(BaseOperator):
     def source_name(self) -> str:
         return self.source_bucket.replace("gs://", "")
 
-    def validator_hook(self, date: pendulum.DateTime) -> GTFSValidatorHook:
-        return GTFSValidatorHook(date=date)
+    def validator_hook(self, current_date: pendulum.DateTime) -> GTFSValidatorHook:
+        return GTFSValidatorHook(current_date=current_date)
 
     def source_filename(self) -> str:
         return os.path.basename(self.source_path)
 
     def execute(self, context: Context) -> str:
         dag_run: DagRun = context["dag_run"]
+
         with tempfile.TemporaryDirectory() as tmp_dir:
             local_source_path = self.gcs_hook().download(
                 bucket_name=self.source_name(),
@@ -68,7 +75,7 @@ class ValidateGTFSToGCSOperator(BaseOperator):
                 filename=os.path.join(tmp_dir, self.source_filename()),
             )
             validator_result = self.validator_hook(
-                date=dag_run.logical_date,
+                current_date=dag_run.logical_date
             ).run(
                 input_zip=local_source_path,
                 download_schedule_feed_results=self.download_schedule_feed_results,
@@ -106,13 +113,15 @@ class ValidateGTFSToGCSOperator(BaseOperator):
                     "PARTITIONED_ARTIFACT_METADATA": json.dumps(
                         {
                             "filename": "results.jsonl",
-                            "ts": dag_run.logical_date.isoformat(),
+                            "ts": self.ts,
                         }
                     )
                 },
             )
 
         return {
+            "dt": self.dt,
+            "ts": self.ts,
             "destination_path": os.path.join(
                 self.destination_bucket, full_destination_path
             ),

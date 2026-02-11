@@ -3,15 +3,13 @@ import logging
 import os
 import zipfile
 
-import pendulum
-
 from airflow.hooks.base import BaseHook
 
 
 class GTFSExtractedFile:
     def __init__(
         self,
-        current_date: pendulum.DateTime,
+        current_date: str,
         config: dict[str, str],
         filename: str,
         original_filename: str,
@@ -27,7 +25,7 @@ class GTFSExtractedFile:
         return {
             "filename": self.filename,
             "original_filename": self.original_filename,
-            "ts": self.current_date.isoformat(),
+            "ts": self.current_date,
             "extract_config": self.config,
         }
 
@@ -36,7 +34,7 @@ class GTFSUnzipResult:
     def __init__(
         self,
         download_schedule_feed_results: dict,
-        current_date: pendulum.DateTime,
+        current_date: str,
     ) -> None:
         self.download_schedule_feed_results = download_schedule_feed_results
         self.current_date = current_date
@@ -147,9 +145,9 @@ class GTFSZip:
 
 class GTFSUnzipHook(BaseHook):
     filenames: list[str]
-    current_date: pendulum.DateTime
+    current_date: str
 
-    def __init__(self, filenames: list[str], current_date: pendulum.DateTime):
+    def __init__(self, filenames: list[str], current_date: str):
         super().__init__()
         self.filenames = filenames
         self.current_date = current_date

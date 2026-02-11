@@ -40,12 +40,13 @@ class TestBigQueryToDownloadConfigOperator:
 
     @pytest.fixture
     def operator(
-        self, test_dag: DAG, destination_path: str
+        self, test_dag: DAG, destination_path: str, execution_date: datetime
     ) -> BigQueryToDownloadConfigOperator:
         return BigQueryToDownloadConfigOperator(
             task_id="gtfs_dataset_to_download_config",
             gcp_conn_id="google_cloud_default",
             dataset_name="staging",
+            ts=execution_date.isoformat(),
             table_name="int_transit_database__gtfs_datasets_dim",
             destination_bucket=os.environ.get("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"),
             destination_path=destination_path,
@@ -80,7 +81,7 @@ class TestBigQueryToDownloadConfigOperator:
         )
         assert metadata == {
             "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                {"filename": "configs.jsonl.gz", "ts": "2025-06-03T00:00:00+00:00"}
+                {"filename": "configs.jsonl.gz", "ts": "2025-06-02T00:00:00+00:00"}
             )
         }
 
@@ -94,7 +95,7 @@ class TestBigQueryToDownloadConfigOperator:
         result = [json.loads(x) for x in decompressed_result.splitlines()]
 
         assert result[0] == {
-            "extracted_at": "2025-06-03T00:00:00+00:00",
+            "extracted_at": "2025-06-02T00:00:00+00:00",
             "auth_headers": {},
             "auth_query_params": {},
             "computed": False,

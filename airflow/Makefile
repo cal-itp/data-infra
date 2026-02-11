@@ -71,6 +71,9 @@ pools:
 	uv run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set schedule_validate_pool 4 ""
+	uv run composer-dev run-airflow-cmd \
+		$(COMPOSER_ENVIRONMENT_NAME) \
+		pools set schedule_download_pool 4 ""
 
 setup: $(COMPOSER_ENVIRONMENT_PATH)
 
