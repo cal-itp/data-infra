@@ -42,7 +42,11 @@ class TestNTDXLSXToJSONLOperator:
 
     @pytest.fixture
     def operator(
-        self, test_dag: DAG, destination_path: str, source_path: str
+        self,
+        test_dag: DAG,
+        execution_date: datetime,
+        destination_path: str,
+        source_path: str,
     ) -> NTDXLSXToJSONLOperator:
         return NTDXLSXToJSONLOperator(
             task_id="ntd_xlsx_to_jsonl",

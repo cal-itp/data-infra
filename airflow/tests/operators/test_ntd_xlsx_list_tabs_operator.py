@@ -35,10 +35,16 @@ class TestNTDXLSXListTabsOperator:
         )
 
     @pytest.fixture
-    def operator(self, test_dag: DAG, source_path: str) -> NTDXLSXListTabsOperator:
+    def operator(
+        self, test_dag: DAG, execution_date: datetime, source_path: str
+    ) -> NTDXLSXListTabsOperator:
         return NTDXLSXListTabsOperator(
             task_id="ntd_xlsx_list_tabs",
             gcp_conn_id="google_cloud_default",
+            dt=execution_date.strftime("%Y-%m-%d"),
+            execution_ts=execution_date.isoformat(),
+            type="annual_database_agency_information",
+            year="2022",
             source_bucket=os.environ.get("CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"),
             source_path=source_path,
             dag=test_dag,
@@ -63,7 +69,12 @@ class TestNTDXLSXListTabsOperator:
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == [
             {
-                "tab": "2022 Agency Information",
+                "type": "annual_database_agency_information",
+                "year": "2022",
+                "dt": "2025-06-02",
+                "execution_ts": "2025-06-02T00:00:00+00:00",
+                "tab_name": "2022 Agency Information",
+                "tab_path": "_2022_agency_information",
                 "source_path": os.path.join(
                     "annual_database_agency_information_raw",
                     "2022",

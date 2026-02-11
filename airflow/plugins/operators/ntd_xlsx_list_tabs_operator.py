@@ -1,4 +1,5 @@
 import io
+import re
 from typing import Sequence
 
 import openpyxl
@@ -10,6 +11,10 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 class NTDXLSXListTabsOperator(BaseOperator):
     template_fields: Sequence[str] = (
+        "dt",
+        "execution_ts",
+        "type",
+        "year",
         "source_bucket",
         "source_path",
         "gcp_conn_id",
@@ -17,6 +22,10 @@ class NTDXLSXListTabsOperator(BaseOperator):
 
     def __init__(
         self,
+        dt: str,
+        execution_ts: str,
+        type: str,
+        year: str,
         source_bucket: str,
         source_path: str,
         gcp_conn_id: str = "google_cloud_default",
@@ -24,6 +33,10 @@ class NTDXLSXListTabsOperator(BaseOperator):
     ) -> None:
         super().__init__(**kwargs)
 
+        self.dt: str = dt
+        self.execution_ts: str = execution_ts
+        self.type: str = type
+        self.year: str = year
         self.source_bucket = source_bucket
         self.source_path = source_path
         self.gcp_conn_id = gcp_conn_id
@@ -46,5 +59,20 @@ class NTDXLSXListTabsOperator(BaseOperator):
     def execute(self, context: Context) -> str:
         workbook = self.workbook()
         return [
-            {"tab": s, "source_path": self.source_path} for s in workbook.sheetnames
+            {
+                "tab_name": s,
+                "tab_path": re.sub(string=s, pattern="^([0-9])", repl="_\\1")
+                .lower()
+                .replace(" ", "_")
+                .replace("(", "_")
+                .replace(")", "_")
+                .replace(":", "_")
+                .replace("-", "_"),
+                "source_path": self.source_path,
+                "type": self.type,
+                "year": self.year,
+                "dt": self.dt,
+                "execution_ts": self.execution_ts,
+            }
+            for s in workbook.sheetnames
         ]

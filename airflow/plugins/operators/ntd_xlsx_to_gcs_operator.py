@@ -10,6 +10,10 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 class NTDXLSXToGCSOperator(BaseOperator):
     template_fields: Sequence[str] = (
+        "dt",
+        "execution_ts",
+        "type",
+        "year",
         "source_url",
         "destination_bucket",
         "destination_path",
@@ -19,6 +23,10 @@ class NTDXLSXToGCSOperator(BaseOperator):
 
     def __init__(
         self,
+        dt: str,
+        execution_ts: str,
+        type: str,
+        year: str,
         source_url: str,
         destination_bucket: str,
         destination_path: str,
@@ -28,6 +36,10 @@ class NTDXLSXToGCSOperator(BaseOperator):
     ) -> None:
         super().__init__(**kwargs)
 
+        self.dt: str = dt
+        self.execution_ts: str = execution_ts
+        self.type: str = type
+        self.year: str = year
         self.source_url = source_url
         self.destination_bucket = destination_bucket
         self.destination_path = destination_path
@@ -55,4 +67,10 @@ class NTDXLSXToGCSOperator(BaseOperator):
             mime_type=response.headers.get("Content-Type"),
             gzip=False,
         )
-        return {"destination_path": self.destination_path}
+        return {
+            "destination_path": self.destination_path,
+            "type": self.type,
+            "year": self.year,
+            "dt": self.dt,
+            "execution_ts": self.execution_ts,
+        }
