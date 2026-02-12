@@ -12,12 +12,8 @@
 
 WITH fct_stop_time_metrics AS (
     SELECT *
-    FROM {{ ref('fct_stop_time_metrics') }}
-    WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
-        this_dt_column='service_date',
-        filter_dt_column='service_date',
-    ) }}
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_stop_time_metrics`--{{ ref('fct_stop_time_metrics') }}
+
 ),
 
 trip_metrics AS (
@@ -43,7 +39,20 @@ trip_metrics AS (
         SUM(n_predictions_ontime) AS n_predictions_ontime,
         SUM(n_predictions_late) AS n_predictions_late,
 
-        COUNT(DISTINCT key) AS n_stops,
+        COUNT(DISTINCT key) AS n_tu_stops,
+
+        ARRAY_CONCAT_AGG(
+            prediction_error_by_minute_array
+            ORDER BY key
+        ) AS prediction_error_by_minute_array,
+        ARRAY_CONCAT_AGG(
+            scaled_prediction_error_by_minute_array
+            ORDER BY key
+        ) AS scaled_prediction_error_by_minute_array,
+        ARRAY_CONCAT_AGG(
+            minutes_until_arrival_array
+            ORDER BY key
+        ) AS minutes_until_arrival_array,
 
     FROM fct_stop_time_metrics
     GROUP BY 1, 2, 3
