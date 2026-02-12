@@ -87,7 +87,7 @@ join_orgs AS (
         AND CAST(transactions.timestamp AS TIMESTAMP) BETWEEN dim_orgs._valid_from AND dim_orgs._valid_to
 ),
 
-fct_payments_settlements AS (
+fct_payments_settlements_enghouse AS (
     SELECT
         organization_name,
         organization_source_record_id,
@@ -120,4 +120,4 @@ fct_payments_settlements AS (
     FROM join_orgs
 )
 
-SELECT * FROM fct_payments_settlements
+SELECT * FROM fct_payments_settlements_enghouse
