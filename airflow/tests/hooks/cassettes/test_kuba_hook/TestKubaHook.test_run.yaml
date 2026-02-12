@@ -16,38 +16,38 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.5
     method: POST
     uri: https://proxima-demo.pptexcellence.com/monitoring/authenticate/v1
   response:
     body:
-      string: '{"Error":null,"UserId":"monitoringAPI","FirstName":"device","LastName":"monitoringAPI","SessionId":"f259ea7f-14ab-4f7b-8e51-04793b4f5120"}'
+      string: '{"Error":null,"UserId":"monitoringAPI","FirstName":"device","LastName":"monitoringAPI","SessionId":"882c23ba-df8a-47d6-a628-0f6b1875f3f1"}'
     headers:
       Content-Length:
       - '138'
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Fri, 11 Jul 2025 15:45:52 GMT
+      - Mon, 05 Jan 2026 16:15:33 GMT
       Server:
       - Microsoft-IIS/8.5
       Set-Cookie:
-      - session-id=03e113a3-9ece-47e8-a379-c2e1aba66d33; expires=Fri, 11 Jul 2025
-        20:45:52 GMT; domain=proxima-demo.pptexcellence.com; path=/
-      - session-id=03e113a3-9ece-47e8-a379-c2e1aba66d33; expires=Fri, 11 Jul 2025
-        20:45:52 GMT; domain=localhost; path=/
-      - session-id=03e113a3-9ece-47e8-a379-c2e1aba66d33; expires=Fri, 11 Jul 2025
-        20:45:52 GMT; domain=proxima-demo.pptexcellence.com; path=/
-      - session-id=03e113a3-9ece-47e8-a379-c2e1aba66d33; expires=Fri, 11 Jul 2025
-        20:45:52 GMT; domain=proxima-eu.pptexcellence.com; path=/
-      - session-id=03e113a3-9ece-47e8-a379-c2e1aba66d33; expires=Fri, 11 Jul 2025
-        20:45:52 GMT; domain=proxima-gapte.pptexcellence.com; path=/
-      - session-id=03e113a3-9ece-47e8-a379-c2e1aba66d33; expires=Fri, 11 Jul 2025
-        20:45:52 GMT; domain=proxima-denmark.pptexcellence.com; path=/
-      - session-id=03e113a3-9ece-47e8-a379-c2e1aba66d33; expires=Fri, 11 Jul 2025
-        20:45:52 GMT; domain=pptexcellence.com; path=/
-      - session-id=03e113a3-9ece-47e8-a379-c2e1aba66d33; expires=Fri, 11 Jul 2025
-        20:45:52 GMT; domain=; path=/
+      - session-id=882c23ba-df8a-47d6-a628-0f6b1875f3f1; expires=Mon, 05 Jan 2026
+        21:15:33 GMT; domain=proxima-demo.pptexcellence.com; path=/
+      - session-id=882c23ba-df8a-47d6-a628-0f6b1875f3f1; expires=Mon, 05 Jan 2026
+        21:15:33 GMT; domain=localhost; path=/
+      - session-id=882c23ba-df8a-47d6-a628-0f6b1875f3f1; expires=Mon, 05 Jan 2026
+        21:15:33 GMT; domain=proxima-demo.pptexcellence.com; path=/
+      - session-id=882c23ba-df8a-47d6-a628-0f6b1875f3f1; expires=Mon, 05 Jan 2026
+        21:15:33 GMT; domain=proxima-eu.pptexcellence.com; path=/
+      - session-id=882c23ba-df8a-47d6-a628-0f6b1875f3f1; expires=Mon, 05 Jan 2026
+        21:15:33 GMT; domain=proxima-gapte.pptexcellence.com; path=/
+      - session-id=882c23ba-df8a-47d6-a628-0f6b1875f3f1; expires=Mon, 05 Jan 2026
+        21:15:33 GMT; domain=proxima-denmark.pptexcellence.com; path=/
+      - session-id=882c23ba-df8a-47d6-a628-0f6b1875f3f1; expires=Mon, 05 Jan 2026
+        21:15:33 GMT; domain=pptexcellence.com; path=/
+      - session-id=882c23ba-df8a-47d6-a628-0f6b1875f3f1; expires=Mon, 05 Jan 2026
+        21:15:33 GMT; domain=; path=/
       X-Powered-By:
       - ASP.NET
     status:
@@ -67,14 +67,15 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.5
       cookie:
       - FILTERED
     method: GET
     uri: https://proxima-demo.pptexcellence.com/monitoring/deviceproperties/v1/ForLocations/all?location_type=1
   response:
     body:
-      string: '{"Response_date_time":"2025-07-15T22:44:08.7724383Z","List":[{"Device":{"Fo_device_logical_id":"66001","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"604","Fo_device_location":"604","Fo_device_last_connection":"2025-03-20T13:46:52.4000000Z"},"Device_replicator_info":{"Software_version":"1.2.3.4","Software_last_connection":null,"Cd_version":"7","Cd_last_connection":"2025-03-20T12:55:50.3500000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":"2025-03-20T13:46:52.4000000Z"},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+      string: '{"Response_date_time":"2026-01-05T16:15:34.5685274Z","List":[{"Device":{"Fo_device_logical_id":"66001","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":"device
+        66001","Fo_device_location_id":"604","Fo_device_location":"604","Fo_device_last_connection":"2025-03-20T13:46:52.4000000Z"},"Device_replicator_info":{"Software_version":"1.2.3.4","Software_last_connection":null,"Cd_version":"7","Cd_last_connection":"2025-03-20T12:55:50.3500000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":"2025-03-20T13:46:52.4000000Z"},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
         31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
         10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
         false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
@@ -89,7 +90,8 @@ interactions:
         \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
         \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
         \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
-        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66002","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"635","Fo_device_location":"635","Fo_device_last_connection":"2025-03-20T13:47:31.7230000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:41:28.0370000Z","Cd_version":"333","Cd_last_connection":"2025-03-20T12:19:23.2300000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":"2025-03-20T13:47:31.7230000Z"},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66002","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":"device
+        66002","Fo_device_location_id":"635","Fo_device_location":"635","Fo_device_last_connection":"2025-03-20T13:47:31.7230000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:41:28.0370000Z","Cd_version":"333","Cd_last_connection":"2025-03-20T12:19:23.2300000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":"2025-03-20T13:47:31.7230000Z"},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
         31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
         10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
         false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
@@ -104,7 +106,8 @@ interactions:
         \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
         \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
         \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
-        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66003","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"636","Fo_device_location":"636","Fo_device_last_connection":"2025-03-20T12:41:10.1870000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:41:10.1870000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66003","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":"device
+        66003","Fo_device_location_id":"636","Fo_device_location":"636","Fo_device_last_connection":"2025-03-20T12:41:10.1870000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:41:10.1870000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
         31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
         10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
         false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
@@ -119,7 +122,8 @@ interactions:
         \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
         \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
         \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
-        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66004","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"637","Fo_device_location":"637","Fo_device_last_connection":"2025-03-20T12:40:57.4470000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:40:57.4470000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66004","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":"device
+        66004","Fo_device_location_id":"637","Fo_device_location":"637","Fo_device_last_connection":"2025-03-20T12:40:57.4470000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:40:57.4470000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
         31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
         10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
         false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
@@ -134,7 +138,8 @@ interactions:
         \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
         \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
         \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
-        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66005","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"638","Fo_device_location":"638","Fo_device_last_connection":"2025-03-20T12:40:39.0870000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:40:39.0870000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66005","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":"device
+        66005","Fo_device_location_id":"638","Fo_device_location":"638","Fo_device_last_connection":"2025-03-20T12:40:39.0870000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:40:39.0870000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
         31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
         10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
         false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
@@ -149,7 +154,8 @@ interactions:
         \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
         \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
         \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
-        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66006","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"639","Fo_device_location":"639","Fo_device_last_connection":"2025-03-20T12:40:23.9370000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:40:23.9370000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66006","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":"device
+        66006","Fo_device_location_id":"639","Fo_device_location":"639","Fo_device_last_connection":"2025-03-20T12:40:23.9370000Z"},"Device_replicator_info":{"Software_version":"5.12.70.5349","Software_last_connection":"2025-03-20T12:40:23.9370000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"true","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
         31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
         10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
         false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
@@ -164,7 +170,8 @@ interactions:
         \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
         \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
         \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
-        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66007","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"639","Fo_device_location":"639","Fo_device_last_connection":"2025-03-20T12:53:42.7270000Z"},"Device_replicator_info":{"Software_version":"5.16.48.6283","Software_last_connection":"2025-03-20T12:39:40.6170000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":"2025-03-20T12:53:42.7270000Z","Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66007","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":"device
+        66007","Fo_device_location_id":"639","Fo_device_location":"639","Fo_device_last_connection":"2025-03-20T12:53:42.7270000Z"},"Device_replicator_info":{"Software_version":"5.16.48.6283","Software_last_connection":"2025-03-20T12:39:40.6170000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":"2025-03-20T12:53:42.7270000Z","Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
         31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
         10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
         false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
@@ -179,7 +186,8 @@ interactions:
         \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
         \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
         \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
-        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66008","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"640","Fo_device_location":"640","Fo_device_last_connection":"2025-03-20T12:51:25.5330000Z"},"Device_replicator_info":{"Software_version":"5.16.48.6283","Software_last_connection":"2025-03-20T12:39:30.4730000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":"2025-03-20T12:51:25.5300000Z","Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66008","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":"device
+        66008","Fo_device_location_id":"640","Fo_device_location":"640","Fo_device_last_connection":"2025-03-20T12:51:25.5330000Z"},"Device_replicator_info":{"Software_version":"5.16.48.6283","Software_last_connection":"2025-03-20T12:39:30.4730000Z","Cd_version":"333","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":"2025-03-20T12:51:25.5300000Z","Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
         31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
         10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
         false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
@@ -194,7 +202,8 @@ interactions:
         \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
         \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
         \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
-        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66009","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"641","Fo_device_location":"641","Fo_device_last_connection":"2025-03-20T12:50:58.2230000Z"},"Device_replicator_info":{"Software_version":"5.16.48.6283","Software_last_connection":"2025-03-20T12:39:18.0100000Z","Cd_version":"333","Cd_last_connection":"2025-03-20T12:20:09.8670000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":"2025-03-20T12:50:58.2230000Z","Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66009","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":"device
+        66009","Fo_device_location_id":"641","Fo_device_location":"641","Fo_device_last_connection":"2025-03-20T12:50:58.2230000Z"},"Device_replicator_info":{"Software_version":"5.16.48.6283","Software_last_connection":"2025-03-20T12:39:18.0100000Z","Cd_version":"333","Cd_last_connection":"2025-03-20T12:20:09.8670000Z","Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":"2025-03-20T12:50:58.2230000Z","Ud_last_transaction_time":null},"Device_monitor_info":{"application::isdisabled":"false","application::isinservice":"false","application::servicestatus":"{\"Rows\":[]}","gps::position":"{\\n    \"altitude\":
         31,\\n    \"dateTime\": \"\",\\n    \"direction\": 0,\\n    \"gpsFix\": 0,\\n    \"groundSpeed\":
         10,\\n    \"hasAltitude\": true,\\n    \"hasDateTime\": false,\\n    \"hasDirection\":
         false,\\n    \"hasGpsFix\": true,\\n    \"hasGroundSpeed\": true,\\n    \"hasLatitude\":
@@ -209,14 +218,15 @@ interactions:
         \"status\": 1 }","ngwifi::gps::position":"{ \"altitude\": 129, \"fix\": 10,
         \"heading\": 0, \"latitude\": 35.371917667, \"longitude\": -119.008193167,
         \"speed\": 0.013, \"success\": true, \"timestamp\": 1721886667 }","os::uptime":"0
-        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66010","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":null,"Fo_device_location_id":"642","Fo_device_location":"642","Fo_device_last_connection":null},"Device_replicator_info":{"Software_version":"0","Software_last_connection":null,"Cd_version":"0","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{}}]}'
+        00:48:33.000","smartmedium::emv3000::batterylevel":"3118"}},{"Device":{"Fo_device_logical_id":"66010","Fo_device_type":"Validator","Fo_device_type_model":"ABT3000","Fo_device_serial_number":"108008231118180362","Fo_device_description":"device
+        66010","Fo_device_location_id":"642","Fo_device_location":"642","Fo_device_last_connection":null},"Device_replicator_info":{"Software_version":"0","Software_last_connection":null,"Cd_version":"0","Cd_last_connection":null,"Dataset_version":"0","Dataset_last_connection":null,"Denylist_version":null,"Denylist_last_connection":null,"Acceptlist_version":"0","Acceptlist_last_connection":"2025-03-18T09:14:45.4070000Z","Binlist_version":"4589","Binlist_last_connection":"2025-03-20T08:30:45.4070000Z","Asset_last_connection":null,"Monitoring_last_connection":null,"Ud_last_transaction_time":null},"Device_monitor_info":{}}]}'
     headers:
       Content-Length:
-      - '23814'
+      - '23914'
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Tue, 15 Jul 2025 22:44:08 GMT
+      - Mon, 05 Jan 2026 16:15:33 GMT
       Server:
       - Microsoft-IIS/8.5
       X-Powered-By:

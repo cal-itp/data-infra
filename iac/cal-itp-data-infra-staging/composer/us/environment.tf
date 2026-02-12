@@ -43,6 +43,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         core-dag_file_processor_timeout            = 1200
         core-dagbag_import_timeout                 = 600
         core-dags_are_paused_at_creation           = true
+        core-max_templated_field_length            = 25000
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
         email-email_conn_id                        = "smtp_postmark"
         email-from_email                           = "bot+airflow@calitp.org"
@@ -90,6 +91,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         "CALITP_BUCKET__LITTLEPAY_PARSED_V3"                   = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-parsed-v3_name}",
         "CALITP_BUCKET__LITTLEPAY_RAW"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-raw_name}",
         "CALITP_BUCKET__LITTLEPAY_RAW_V3"                      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-raw-v3_name}",
+        "CALITP_BUCKET__ENGHOUSE_RAW"                          = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_cal-itp-data-infra-enghouse-raw_name}",
         "CALITP_BUCKET__NTD_API_DATA_PRODUCTS"                 = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-ntd-api-products_name}",
         "CALITP_BUCKET__NTD_REPORT_VALIDATION"                 = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-ntd-report-validation_name}",
         "CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-ntd-xlsx-products-clean_name}",

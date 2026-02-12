@@ -1,51 +1,40 @@
 [project]
-name = "cal-itp-data-infra-airflow"
+name = "data-infra-airflow"
 version = "0.1.0"
 description = "Airflow DAGs and plugins for cal-itp-data-infra"
-authors = [
-    {name = "Cal-ITP Data Engineering",email = "hello@calitp.org"}
-]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11.6"
+dependencies = [
+    "apache-airflow==2.10.5",
+    "apache-airflow-providers-cncf-kubernetes==10.1.0",
+    "apache-airflow-providers-google==15.1.0",
+    "astronomer-cosmos==1.9.0",
+    "beautifulsoup4==4.12.3",
+    "boto3==1.41.2",
+    "ckanapi>=4.8",
+    "composer-dev",
+    "gtfs-realtime-bindings>=1.0.0",
+    "gusty==0.6.0",
+    "humanize==4.14.0",
+    "openpyxl==3.1.5",
+    "pyairtable==2.2.1",
+    "sentry-sdk>=2.44.0",
+    "typer==0.4.1",
+    "urllib3<2.0.0",
+]
 
+[dependency-groups]
+dev = [
+    "ipdb>=0.13.13",
+    "pytest>=9.0.2",
+    "pytest-dotenv>=0.5.2",
+    "pytest-recording>=0.13.4",
+    "vcrpy>=8.0.0",
+]
 
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
-package-mode = false
-
-[tool.poetry.dependencies]
-python = ">=3.11.0,<3.12"
-apache-airflow = "2.10.5"
-apache-airflow-providers-cncf-kubernetes = "10.1.0"
-apache-airflow-providers-google = "15.1.0"
-astronomer-cosmos = "^1.9.0"
-beautifulsoup4 = "4.12.3"
-boto3 = "1.41.2"
-ckanapi = "^4.8"
-connexion = "2.14.2"
-flask = "2.2.5"
-flask-session = "0.5.0"
-google-cloud-bigquery = "3.20.1"
-gtfs-realtime-bindings = "^1.0.0"
-gusty = "0.6.0"
-humanize = ">=4.6.0,<5.0.0"
-kubernetes = "29.0.0"
-pandas = "2.1.4"
-paramiko = "3.4.0"
-pyairtable = "2.2.1"
-sentry-sdk = "2.44.0"
-typer = "0.4.1"
-pendulum = "^3.0.0"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.5"
-pytest-dotenv = "^0.5.2"
-ipdb = "^0.13.13"
-pytest-recording = "^0.13.4"
-composer-dev = {git = "https://github.com/GoogleCloudPlatform/composer-local-dev.git", tag="0.10.2"}
+[tool.uv.sources]
+composer-dev = { git = "https://github.com/GoogleCloudPlatform/composer-local-dev.git", tag = "0.10.2" }
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = "tests"
+env_files = [".test.env", ".env"]

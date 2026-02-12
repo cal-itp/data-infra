@@ -1,5 +1,4 @@
 import json
-import logging
 import os
 from typing import Sequence
 
@@ -48,7 +47,6 @@ class DBTBigQueryToGCSOperator(BaseOperator):
         return BigQueryHook(
             gcp_conn_id=self.gcp_conn_id,
             location=self.location,
-            use_legacy_sql=False,
         )
 
     def manifest(self) -> dict[str, str | dict | list]:
@@ -86,7 +84,7 @@ class DBTBigQueryToGCSOperator(BaseOperator):
     def table_id(self) -> str:
         return self.node()["name"]
 
-    def column_select(self) -> list[str]:
+    def columns(self) -> list[str]:
         def round_name(name, precision):
             return f"ROUND({name}, {precision}) AS {name}" if precision else name
 
@@ -96,34 +94,34 @@ class DBTBigQueryToGCSOperator(BaseOperator):
             if column.get("meta", {}).get("publish.include", False)
         ]
 
-    def run_query(self):
-        client = self.bigquery_hook().get_client()
+    def destination(self) -> str:
+        return os.path.join(
+            self.destination_bucket_name,
+            self.destination_object_name.replace(".csv", "*.csv"),
+        )
 
-        query = f"SELECT {','.join(self.column_select())} FROM {self.dataset_id()}.{self.table_id()}"
-
-        gcs_export = f"""
+    def query(self) -> str:
+        return f"""
             BEGIN
-                CREATE TEMP TABLE _SESSION.tmpExport{self.table_id()} AS (
-                    {query}
+                CREATE TEMP TABLE _SESSION.tmp_{self.table_id()} AS (
+                    SELECT {', '.join(self.columns())}
+                    FROM {self.dataset_id()}.{self.table_id()}
                 );
                 EXPORT DATA OPTIONS(
-                    uri='{self.destination_bucket_name}/{self.destination_object_name.replace(".csv", "")}*.csv',
+                    uri='{self.destination()}',
                     format='CSV',
                     overwrite=true,
                     header=true
                 ) AS
-                SELECT * FROM _SESSION.tmpExport{self.table_id()};
+                SELECT * FROM _SESSION.tmp_{self.table_id()};
             END;
-            """
-        logging.info(gcs_export)
-
-        query_job = client.query(gcs_export)
-        return query_job.result()
+        """
 
     def execute(self, context: Context) -> str:
-        logging.info(
-            f"Exporting {self.destination_bucket_name}/{self.destination_object_name}..."
-        )
-        result = self.run_query()  # Wait for the job to complete
-        logging.info(f"Query job id: {result.job_id}")
-        return os.path.join(self.destination_bucket_name, self.destination_object_name)
+        self.bigquery_hook().get_client().query_and_wait(query=self.query())
+        return {
+            "destination_path_prefix": os.path.join(
+                self.destination_bucket_name,
+                self.destination_object_name.replace(".csv", ""),
+            ),
+        }

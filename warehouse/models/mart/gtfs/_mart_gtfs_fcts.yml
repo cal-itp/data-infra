@@ -1313,7 +1313,7 @@ models:
       - *feed_timezone_no_tests
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
-      - name: stop_event_count
+      - name: daily_arrivals
         description: |
           The number of stop events associated with this stop on the given date.
       - &route_type_0
@@ -1391,7 +1391,7 @@ models:
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`stop_event_count`, `route_type_0_count`, `route_type_1_count`, `route_type_2_count`, `route_type_3_count`,
+          stop times data (`daily_arrivals`, `route_type_0_count`, `route_type_1_count`, `route_type_2_count`, `route_type_3_count`,
           `route_type_4_count`, `route_type_5_count`, `route_type_6_count`, `route_type_7_count`, `route_type_11_count`,
           `route_type_12_count`) contain at least one row that had a duplicate primary key in the source stop times data.
 

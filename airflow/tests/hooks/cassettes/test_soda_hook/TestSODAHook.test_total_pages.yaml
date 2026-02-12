@@ -9,18 +9,18 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.5
     method: GET
     uri: https://data.transportation.gov/resource/i4ua-cjx4.json?%24select=count%28%2A%29
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAAIuuVkrOL80rUbJSMjExNFCqjeUCAAemZ9wTAAAA
+        H4sIAAAAAAAAAIuuVkrOL80rUbJSMjMzNVCqjeUCAEXyTJITAAAA
     headers:
       Access-Control-Allow-Origin:
       - '*'
       Age:
-      - '6'
+      - '0'
       Connection:
       - keep-alive
       Content-Encoding:
@@ -28,11 +28,11 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Tue, 23 Sep 2025 04:36:40 GMT
+      - Mon, 05 Jan 2026 16:15:51 GMT
       ETag:
-      - '"anVsaWV0dC44NjU4XzlfMTMzVEtxWFVabkFIbEFlSmlNRmw1TVE3dUFYRWNN--gziqxMz_uEceBQREd1EqnnHpg6DxW_---gzip"'
+      - '"anVsaWV0dC44NjU4XzlfMTM1VEtxWFVabkFIbEFlSmlNRmw1TVE3dUFYRWNN--gzimxPlx2lJ_g8DotBTNv5hCiAarFi---gzip"'
       Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Fri, 17 Oct 2025 16:59:46 GMT
       Server:
       - nginx
       Strict-Transport-Security:
@@ -46,15 +46,15 @@ interactions:
       X-SODA2-Fields:
       - '["count"]'
       X-SODA2-Secondary-Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Fri, 17 Oct 2025 16:59:46 GMT
       X-SODA2-Truth-Last-Modified:
-      - Mon, 16 Dec 2024 19:34:47 GMT
+      - Fri, 17 Oct 2025 16:59:46 GMT
       X-SODA2-Types:
       - '["number"]'
       X-Socrata-Region:
       - aws-us-east-1-fedramp-prod
       X-Socrata-RequestId:
-      - 64b6a16b6125c781d61f1c21c3501bc0
+      - af90c849ca91c1f36dbcef8663e59d2f
     status:
       code: 200
       message: OK

@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import subprocess
 import tempfile
@@ -78,39 +79,41 @@ class GTSFValidatorVersion:
     )
     VERSIONS = [
         {
-            "date": pendulum.datetime(2000, 1, 1),
+            "version_date": pendulum.datetime(2000, 1, 1),
             "number": "2.0.0",
             "filename": "gtfs-validator-2.0.0-cli.jar",
         },
         {
-            "date": pendulum.datetime(2022, 9, 15),
+            "version_date": pendulum.datetime(2022, 9, 15),
             "number": "3.1.1",
             "filename": "gtfs-validator-3.1.1-cli.jar",
         },
         {
-            "date": pendulum.datetime(2022, 11, 16),
+            "version_date": pendulum.datetime(2022, 11, 16),
             "number": "4.0.0",
             "filename": "gtfs-validator-4.0.0-cli.jar",
         },
         {
-            "date": pendulum.datetime(2023, 9, 1),
+            "version_date": pendulum.datetime(2023, 9, 1),
             "number": "4.1.0",
             "filename": "gtfs-validator-4.1.0-cli.jar",
         },
         {
-            "date": pendulum.datetime(2024, 1, 20),
+            "version_date": pendulum.datetime(2024, 1, 20),
             "number": "4.2.0",
             "filename": "gtfs-validator-4.2.0-cli.jar",
         },
         {
-            "date": pendulum.datetime(2024, 3, 27),
+            "version_date": pendulum.datetime(2024, 3, 27),
             "number": "5.0.0",
             "filename": "gtfs-validator-5.0.0-cli.jar",
         },
     ]
 
-    def __init__(self, date: pendulum.DateTime, number: str, filename: str) -> None:
-        self.date = date
+    def __init__(
+        self, version_date: pendulum.DateTime, number: str, filename: str
+    ) -> None:
+        self.version_date = version_date
         self.number = number
         self.filename = filename
 
@@ -120,7 +123,7 @@ class GTSFValidatorVersion:
 
     @staticmethod
     def find(current_date: pendulum.DateTime) -> Self:
-        return [v for v in __class__.all() if v.date < current_date][-1]
+        return [v for v in __class__.all() if v.version_date < current_date][-1]
 
     def __str__(self) -> str:
         return self.number
@@ -155,31 +158,36 @@ class GTSFValidatorVersion:
 
             try:
                 subprocess.run(args, capture_output=True, check=True)
+            except Exception as e:
+                result.set_exception(e)
+                logging.error(str(e))
+
+            if os.path.isfile(os.path.join(output_dir, "report.json")):
                 result.read_report(os.path.join(output_dir, "report.json"))
+
+            if os.path.isfile(os.path.join(output_dir, "system_errors.json")):
                 result.read_system_errors(
                     os.path.join(output_dir, "system_errors.json")
                 )
-            except Exception as e:
-                result.set_exception(e)
 
             return result
 
 
 class GTFSValidatorHook(BaseHook):
-    date: pendulum.DateTime
+    current_date: pendulum.DateTime
 
-    def __init__(self, date: pendulum.DateTime):
+    def __init__(self, current_date: pendulum.DateTime):
         super().__init__()
-        self.date = date
+        self.current_date = current_date
 
     def version(self) -> str:
-        return GTSFValidatorVersion.find(self.date)
+        return GTSFValidatorVersion.find(current_date=self.current_date)
 
     def run(
-        self, filename: str, download_schedule_feed_results: dict
+        self, input_zip: str, download_schedule_feed_results: dict
     ) -> GTFSValidatorResult:
         return self.version().run(
-            current_date=self.date,
+            current_date=self.current_date,
             download_schedule_feed_results=download_schedule_feed_results,
-            input_zip=filename,
+            input_zip=input_zip,
         )

@@ -1,4 +1,3 @@
-version: '3.9'
 # from https://github.com/mikebirdgeneau/jupyterlab-docker/blob/master/docker-compose.yml
 services:
   jupyterlab:

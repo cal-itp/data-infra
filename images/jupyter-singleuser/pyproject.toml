@@ -1,17 +1,21 @@
 [project]
 name = "jupyter-singleuser"
-version = "2025.12.18"
+version = "2026.2.6"
 description = "This is the notebook image that individual users are served via JupyterHub."
 requires-python = ">=3.11.0, <3.12.0"
-
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+]
 dependencies = [
     "black==24.10.0",
     "branca (>=0.8.2, <0.9.0)",
-    "calitp-data-analysis==2025.12.17",
+    "calitp-data-analysis==2026.1.30",
     "csvkit==1.0.7",
-    "dask (>=2024.5.0, <2024.6.0)",
+    "dask[dataframe]>=2024.10.0,<2025.4.0",  # breaking changes introduced with 2025.4.0 https://docs.dask.org/en/stable/changelog.html#v2025-4-0
     "dask-geopandas (>=0.2.0, <0.3.0)",
     "folium (>=0.20.0, <0.21.0)",
+    "httpcore==1.0.9", # pinning this because otherwise uv installs 1.0.6 in container and that results in a conflict with h11
     "intake-dcat==0.4.0",
     "intake-geopandas>=0.3.0",
     "intake-parquet>=0.2.3",
@@ -38,32 +42,21 @@ dependencies = [
     "sqlalchemy-bigquery (>=1.4.4, <2.0.0)",
     "statsmodels==0.14.5",
     "voila (>=0.5.11,<0.6.0)",
-    "ydata-profiling[notebook] (>=4.9.0, <5.0.0)"
+    "ydata-profiling[notebook] (>=4.9.0, <5.0.0)",
 ]
 
-[tool.poetry]
-package-mode = false
+[dependency-groups]
+dev = [
+    "llvmlite>=0.44.0,<0.45",
+    "pytest>=7.2.0,<8",
+]
 
-[tool.poetry.group.dev.dependencies]
-llvmlite= "^0.44.0"
-pytest = "^7.2.0"
-
-[tool.poetry.group.shared_utils.dependencies]
-cpi = "^1.0.17"
-loguru = "^0.6.0"
-mapclassify = "^2.8.0"
-xmltodict = "^0.13.0"
-
-[tool.poetry.group.portfolio.dependencies]
-humanize = "^4.6.0"
-jupyter-book = ">=1.0.0"
-nbformat = "^5.8.0"
-papermill = "^2.4.0"
-pyaml = "^21.10.1"
-pydantic = ">=2.0"
-python-slugify = "^6.1.1"
-typer = "^0.9.0"
+[tool.uv]
+package = false
+default-groups = [
+    "dev",
+]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.9.21,<0.10.0"]
+build-backend = "uv_build"

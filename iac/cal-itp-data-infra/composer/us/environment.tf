@@ -36,7 +36,7 @@ resource "google_composer_environment" "calitp-composer" {
     environment_size = "ENVIRONMENT_SIZE_MEDIUM"
 
     software_config {
-      image_version = "composer-2.15.2-airflow-2.9.3"
+      image_version = "composer-2.15.2-airflow-2.10.5"
 
       airflow_config_overrides = {
         celery-worker_concurrency                  = 4
@@ -90,6 +90,7 @@ resource "google_composer_environment" "calitp-composer" {
         "CALITP_BUCKET__LITTLEPAY_PARSED_V3"                   = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-payments-littlepay-parsed-v3_name}",
         "CALITP_BUCKET__LITTLEPAY_RAW"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-payments-littlepay-raw_name}",
         "CALITP_BUCKET__LITTLEPAY_RAW_V3"                      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-payments-littlepay-raw-v3_name}",
+        "CALITP_BUCKET__ENGHOUSE_RAW"                          = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_cal-itp-data-infra-enghouse-raw_name}",
         "CALITP_BUCKET__NTD_API_DATA_PRODUCTS"                 = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-ntd-api-products_name}",
         "CALITP_BUCKET__NTD_REPORT_VALIDATION"                 = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-ntd-report-validation_name}",
         "CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-ntd-xlsx-products-clean_name}",

@@ -131,7 +131,10 @@ sentry:
     clickhouse:
       persistentVolumeClaim:
         dataPersistentVolume:
-          storage: "120Gi"
+          # NOTE: volumeClaimTemplates in StatefulSets are immutable.
+          # The actual PVCs have been manually expanded to 200Gi,
+          # but this value must match the original StatefulSet template.
+          storage: "50Gi"
 
   hooks:
     activeDeadlineSeconds: 1200

@@ -33,8 +33,7 @@ WITH dim_gtfs_schedule_unzip_outcomes AS (
            TO_JSON_STRING(`extract`.config.auth_query_params) AS extract_config_auth_query_params,
            TO_JSON_STRING(`extract`.config.auth_headers) AS extract_config_auth_headers
       FROM {{ source('external_gtfs_schedule', 'unzip_outcomes') }} AS unzip_outcomes
-     CROSS JOIN UNNEST(extracted_files) AS unnest_extracted_files
-     WHERE unnest_extracted_files IS NOT NULL
+      LEFT JOIN UNNEST(extracted_files) AS unnest_extracted_files
 )
 
 SELECT * FROM dim_gtfs_schedule_unzip_outcomes

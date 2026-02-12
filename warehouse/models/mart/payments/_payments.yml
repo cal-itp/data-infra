@@ -725,3 +725,96 @@ models:
         description: |
           Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
           Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
+
+  - name: fct_payments_rides_enghouse
+    description: |
+      Enghouse rides.
+    columns:
+      - name: operator_id
+      - name: id
+      - name: ticket_id
+      - name: station_name
+      - name: amount
+      - name: clearing_id
+      - name: reason
+      - name: tap_id
+      - name: ticket_type
+      - name: created_dttm
+      - name: line
+      - name: start_station
+      - name: end_station
+      - name: start_dttm
+      - name: end_dttm
+      - name: ticket_code
+      - name: additional_infos
+      - name: mapping_terminal_id
+      - name: mapping_merchant_id
+      - name: terminal
+      - name: token
+      - name: masked_pan
+      - name: expiry
+      - name: server_date
+      - name: terminal_date
+      - name: tx_number
+      - name: tx_status
+      - name: payment_reference
+      - name: terminal_spdh_code
+      - name: denylist_version
+      - name: currency
+      - name: par
+      - name: fare_mode
+      - name: fare_type
+      - name: fare_value
+      - name: fare_description
+      - name: fare_linked_id
+      - name: gps_longitude
+      - name: gps_latitude
+      - name: gps_altitude
+      - name: vehicle_public_number
+      - name: vehicle_name
+      - name: stop_id
+      - name: stop_name
+      - name: platform_id
+      - name: platform_name
+      - name: zone_id
+      - name: zone_name
+      - name: line_public_number
+      - name: line_name
+      - name: line_direction
+      - name: trip_public_number
+      - name: trip_name
+      - name: service_public_number
+      - name: service_name
+      - name: driver_id
+      - name: route_long_name
+      - name: route_short_name
+      - name: agency_id
+      - name: agency_name
+
+  - name: fct_payments_settlements_enghouse
+    description: Enghouse settlements (completed transactions.)
+    columns:
+      - name: organization_name
+      - name: organization_source_record_id
+      - name: operator_id
+      - name: id
+      - name: operation
+      - name: terminal_id
+      - name: mapping_terminal_id
+      - name: mapping_merchant_id
+      - name: timestamp
+      - name: amount
+      - name: payment_reference
+      - name: spdh_response
+      - name: response_type
+      - name: response_message
+      - name: token
+      - name: issuer_response
+      - name: core_response
+      - name: rrn
+      - name: authorization_code
+      - name: par
+      - name: brand
+      - name: end_of_month_date_pacific
+      - name: end_of_month_date_utc
+      - name: _content_hash

@@ -88,12 +88,12 @@ class TestGCSToGTFSDownloadOperator:
                     "filename": "gtfs.zip",
                     "reconstructed": False,
                     "response_code": 200,
-                    "response_headers": {
-                        "Connection": "keep-alive",
+                    "response_headers": xcom_value["download_schedule_feed_results"][
+                        "extract"
+                    ]["response_headers"]
+                    | {
                         "Content-Disposition": "attachment; filename=gtfs.zip",
                         "Content-Type": "application/zip",
-                        "Date": "Tue, 25 Nov 2025 18:44:46 GMT",
-                        "Server": "nginx/1.24.0 (Ubuntu)",
                     },
                     "ts": "2025-06-03T00:00:00+00:00",
                 },

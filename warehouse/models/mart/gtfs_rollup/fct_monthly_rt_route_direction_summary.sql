@@ -23,8 +23,8 @@ scheduled_trips AS (
         {{ get_combined_route_name('name', 'route_id', 'route_short_name', 'route_long_name') }} AS route_name,
         direction_id,
 
-    FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips` -- {{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= "2025-01-01" AND service_date <= LAST_DAY(
+    FROM {{ ref('fct_scheduled_trips') }}
+    WHERE service_date <= LAST_DAY(
         DATE_SUB(CURRENT_DATE("America/Los_Angeles"), INTERVAL 1 MONTH)
     )
     -- table; clustered by service_date'
@@ -51,7 +51,7 @@ route_direction_aggregation AS (
 
         -- metrics from trip updates
         SUM(observed_trips.tu_num_distinct_updates) AS tu_num_distinct_updates,
-        SUM(observed_trips.tu_num_distinct_updates) / COUNT(DISTINCT observed_trips.service_date) AS daily_tu_num_distinct_updates, -- check column naming pattern for daily avg
+        ROUND(SUM(observed_trips.tu_num_distinct_updates) / COUNT(DISTINCT observed_trips.service_date), 2) AS daily_tu_num_distinct_updates, -- check column naming pattern for daily avg
         SUM(observed_trips.tu_num_skipped_stops) / COUNT(DISTINCT observed_trips.service_date) AS daily_tu_num_skipped_stops,
         SUM(observed_trips.tu_num_canceled_stops) / COUNT(DISTINCT observed_trips.service_date) AS daily_tu_num_canceled_stops,
         SUM(observed_trips.tu_num_added_stops) / COUNT(DISTINCT observed_trips.service_date) AS daily_tu_num_added_stops,
@@ -61,7 +61,7 @@ route_direction_aggregation AS (
 
         -- metrics from vehicle positions
         SUM(observed_trips.vp_num_distinct_updates) AS vp_num_distinct_updates,
-        SUM(observed_trips.vp_num_distinct_updates) / COUNT(DISTINCT observed_trips.service_date) AS daily_vp_num_distinct_updates,
+        ROUND(SUM(observed_trips.vp_num_distinct_updates) / COUNT(DISTINCT observed_trips.service_date), 2) AS daily_vp_num_distinct_updates,
         COUNTIF(appeared_in_vp IS TRUE) AS n_vp_trips,
         COUNTIF(appeared_in_vp IS TRUE) / COUNT(DISTINCT observed_trips.service_date) AS daily_vp_trips,
 

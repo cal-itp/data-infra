@@ -13,6 +13,11 @@ with DAG(
     schedule="15 * * * *",
     start_date=datetime(2025, 9, 2),
     catchup=True,
+    default_args={
+        "email": os.getenv("CALITP_NOTIFY_EMAIL"),
+        "email_on_failure": True,
+        "email_on_retry": False,
+    },
 ):
     for process in ["parse", "validate"]:
         for feed in ["service_alerts", "trip_updates", "vehicle_positions"]:

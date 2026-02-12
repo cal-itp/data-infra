@@ -11,37 +11,36 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/93d75ec4-efa1-4f84-806c-ac2f8fa9f131
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/2a83486b-7837-48e6-afff-9d516e9f37bd
       x-goog-user-project:
-      - cal-itp-data-infra
+      - cal-itp-data-infra-staging
     method: GET
-    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?projection=noAcl&prefix=california_open_data__agency%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fagency&prettyPrint=false
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?prefix=california_open_data__agency%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fagency&prettyPrint=false&projection=noAcl
   response:
     body:
-      string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/california_open_data__agency/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/agency000000000000.csv/1761167543966642","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/california_open_data__agency%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fagency000000000000.csv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__agency%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fagency000000000000.csv?generation=1761167543966642&alt=media","name":"california_open_data__agency/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/agency000000000000.csv","bucket":"calitp-staging-pytest","generation":"1761167543966642","metageneration":"1","contentType":"application/octet-stream","storageClass":"STANDARD","size":"33927","md5Hash":"NYX7cyHuID0zql3SULULsw==","crc32c":"UJY59g==","etag":"CLK35K7cuJADEAE=","timeCreated":"2025-10-22T21:12:23.975Z","updated":"2025-10-22T21:12:23.975Z","timeStorageClassUpdated":"2025-10-22T21:12:23.975Z","timeFinalized":"2025-10-22T21:12:23.975Z"}]}'
+      string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/california_open_data__agency/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/agency000000000000.csv/1766025459139394","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/california_open_data__agency%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fagency000000000000.csv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__agency%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Fagency000000000000.csv?generation=1766025459139394&alt=media","name":"california_open_data__agency/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/agency000000000000.csv","bucket":"calitp-staging-pytest","generation":"1766025459139394","metageneration":"1","contentType":"application/octet-stream","storageClass":"STANDARD","size":"3068","md5Hash":"3DYOit/HdZqTsB5gfr8kHQ==","crc32c":"zI6EDQ==","etag":"CMKGoMGNxpEDEAE=","timeCreated":"2025-12-18T02:37:39.148Z","updated":"2025-12-18T02:37:39.148Z","timeStorageClassUpdated":"2025-12-18T02:37:39.148Z","timeFinalized":"2025-12-18T02:37:39.148Z"}]}'
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Cache-Control:
       - private, max-age=0, must-revalidate, no-transform
       Content-Length:
-      - '1144'
+      - '1143'
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 10 Nov 2025 18:21:53 GMT
+      - Mon, 05 Jan 2026 16:15:35 GMT
       Expires:
-      - Mon, 10 Nov 2025 18:21:53 GMT
+      - Mon, 05 Jan 2026 16:15:35 GMT
       Server:
       - UploadServer
       Vary:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOH3CjZqvbprQzmEBN8B25Hc67Ras9c4rTapue9fSrH7_4I4hPr1f7QmAcHvvGYR7WD4sxLELA
+      - AHVrFxOPFPg3KxV8Nxkp0iCBll9negqHdDsvJafUdYkClGQCBfHda4V5-nj2SGNgKzeHrOIM
     status:
       code: 200
       message: OK
@@ -70,17 +69,17 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA4yQwW6jMBCGXwX5XAN2gADSarWtUpK2SVdtuk17QWYw4JZggodkSdV3X5Eqh972
-        ONL833zzf5BK1i2JLVIhtiZ2HJQGaS5Q2CihanSty8EGYZd674hWORNHACrdOGMwNZU+/GzEVv6A
-        Wve5Qd2JUqaqUagEynTb16ha0SG5sIjpAaQxJLaw6+WFRTpp+hpJbH0QlZ8k7u2bx78D//UCZSQ4
-        1JvVUF2x9Hn20O8PgcnWZXaQ+11tVwkkT+Fxju1ut77MRJOoAZcNX75BsjiqBI9zDIbXzaVeycOE
-        X29uFg9/Hnf2ir2Xz/6r+b2+RbzHaDZrmHcnFnfz5Tveki8p3Xcg0y+lKeRFCLKgeQ4Z9YBNaRhy
-        l049KXnBI+EGMMbGEsZ9ELncaudMMc7/ABxRygYGG8x+ZJ3rOwlwl/uUMcpci4UxZ7E/scPAZX50
-        6lQdT2fZOOhOlaoRdXqW+Y7tjezOX4mJ4GGUU5YHBfX8aUajjDFaeIHnhoUbREFGPj//AQAA//8D
-        AOl03WcfAgAA
+        H4sIAAAAAAAAA4yQXW+bMBSG/wrydQ2YDxOQpilT01A1a9NsWbbdIOMPcAeYYhuaVP3vE6ly0bte
+        Hum8z3nO+wpq3vQgc0BtTK8zzzNcG8iIIa7htO5Uo6qjS4lbqdEjvfRCj1AjVefNwULXavrakZZ/
+        oY2yTBs1kIoXspNGEsOL1jZG9mQw4MoB2lLKtQaZYwbLrxwwcG0bAzLnFUg2Szyuxx7XtN0+4Xp3
+        L5rT97Ff+Tf85e8234brMv1dRw/kz255u8H34qAO9M7f3LywgxrRM13Vj9NEN3fjc97G3CbrfbLf
+        /qAPrlgVp/2EfupIT08Myfjft19qmVfHaxZdB8vcijzc75C9Be9Syg6UF+9KCWViQbmAjNESRhQl
+        cLEIfJhEnAciSImP6RybS5j3KWG8Vd6For3PADxS8Y4eXarHmXWp7ywQ+AGGPoJ+7CCcoTgLYzdK
+        URAm507l6XwWzYMaZCU70hQXmY9Yq/lw+YqEJFikDCKGBYzipIRpiRAUEY78hfBxikvw9vYfAAD/
+        /wMAN1DN/x8CAAA=
     headers:
       CF-RAY:
-      - 99c792774e39ff1a-PDX
+      - 9b9446755e45fac2-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -90,7 +89,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Mon, 10 Nov 2025 18:21:53 GMT
+      - Mon, 05 Jan 2026 16:15:35 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -100,7 +99,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Mon, 10 Nov 2025 18:21:53 GMT
+      - Mon, 05 Jan 2026 16:15:35 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -120,196 +119,58 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/95e434b4-6120-44c3-aa5e-812be928f01e
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/4f27626a-1b5e-4fe5-ad29-35729bd2a101
       accept-encoding:
       - gzip
       content-type:
       - application/json; charset=UTF-8
       x-goog-user-project:
-      - cal-itp-data-infra
+      - cal-itp-data-infra-staging
       x-upload-content-type:
       - application/json; charset=UTF-8
     method: GET
     uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__agency%2Fdt%3D2025-06-01%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2Fagency000000000000.csv?alt=media
   response:
     body:
-      string: "base64_url\tagency_id\tagency_name\tagency_url\tagency_timezone\tagency_lang\tagency_phone\tagency_fare_url\tagency_email\naHR0cHM6Ly9hcGkuYWN0cmFuc2l0Lm9yZy90cmFuc2l0L2d0ZnMvZG93bmxvYWQ=\t1\tAC
-        TRANSIT\thttp://www.actransit.org\tUS/Pacific\ten\t5108914777\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1BQw==\tAC\tAC
-        TRANSIT\thttp://www.actransit.org\tUS/Pacific\ten\t5108914777\t\t\naHR0cHM6Ly9hY2VzaHV0dGxlcy50cmFuc2xvYy5jb20vU2VjdXJlL0FkbWluL1JlcG9ydHMvR1RGU0Rvd25sb2FkLmFzcHg=\t1116\tACE
-        Parking\thttp://www.ridesystems.net\tAmerica/Los_Angeles\ten\t(888) 281-2681\t\t\naHR0cHM6Ly93d3cuYXZ0YS5jb20vdXNlcmZpbGVzL2ZpbGVzL0FWVEFfR1RGUy56aXA=\t0\tAVTA\thttp://www.avta.com\tAmerica/Los_Angeles\ten\t661-945-9445\thttps://www.avta.com/fares-special-services.php\tsupport@availtec.com\naHR0cHM6Ly93d3cuYWxoYW1icmFjYS5nb3YvRG9jdW1lbnRDZW50ZXIvVmlldy82NzQzL0FsaGFtYnJhLUFDVC1CdXMtR1RGUw==\t1669\tAlhambra
-        Community Transit\thttps://www.cityofalhambra.org/resources/public-transportation\tAmerica/Los_Angeles\ten\t626-289-1220\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1DRQ==\tCE\tAltamont
-        Corridor Express\thttps://acerail.com/\tAmerica/Los_Angeles\ten\t(209) 649-4676\thttps://acerail.com\tGTFS@sjrrc.com\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9hbWFkb3ItY2EtdXMvYW1hZG9yLWNhLXVzLnppcA==\t80\tAmador
-        Transit\thttp://amadortransit.com/schedules/\tAmerica/Los_Angeles\ten\t(209)
-        267-9395\thttp://amadortransit.com/fares/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvQXJ0ZXNpYUdURlMuemlw\t4892\tArtesia
-        Transit\thttps://www.cityofartesia.us/189/Transportation\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvQXJ2aW5HVEZTLnppcA==\t1659\tArvin
-        Transit\thttps://www.arvin.org/202/Routes-Schedules-Fares\tAmerica/Los_Angeles\ten\t661-854-3139\t\t\naHR0cHM6Ly9wbGFubXlyaWRlLmJsaW5ldHJhbnNpdC5jb20vZ3Rmc3JlYWx0aW1lL2dvb2dsZV90cmFuc2l0LnppcA==\t97aff62a-ed6d-4bd2-a9c8-d63f8e98a358\tB-Line\thttp://blinetransit.com\tAmerica/Los_Angeles\ten\t530-342-0221\thttp://blinetransit.com/Rider-Tools/Fares--Purchasing-Loactions\tinfo@bcag.org\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1CQQ==\tBA\tBay
-        Area Rapid Transit\thttps://www.bart.gov/\tAmerica/Los_Angeles\ten\t510-464-6000\t\t\naHR0cHM6Ly93d3cuYmFydC5nb3YvZGV2L3NjaGVkdWxlcy9nb29nbGVfdHJhbnNpdC56aXA=\tBART\tBay
-        Area Rapid Transit\thttps://www.bart.gov/\tAmerica/Los_Angeles\t\t510-464-6000\t\t\naHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnM=\t203\tBeach
-        Cities Transit\thttps://www.redondo.org/departments/community_services/transit/bus_schedules/index.php\tAmerica/Los_Angeles\ten-US\t310-937-6660\thttps://www.redondo.org/departments/community_services/transit/fares_and_passes/index.php\tBCT@redondo.org\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9iZWF1bW9udC1jYS11cy9iZWF1bW9udC1jYS11cy56aXA=\t73\tBeaumont
-        Transit\thttps://www.beaumontca.gov/index.aspx?NID=90\tAmerica/Los_Angeles\ten\t(951)
-        769-8530\thttps://www.beaumontca.gov/DocumentCenter/View/31274/Fare-Schedule\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvQmVsbGZsb3dlckdURlMuemlw\t1673\tBellflower
-        Bus\thttps://www.bellflower.org/community/transportation/bus_routes___schedules.php\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9ndGZzLmJpZ2JsdWVidXMuY29tL2N1cnJlbnRfc3dpZnRseS56aXA=\t6216179\tBig
-        Blue Bus\thttp://www.bigbluebus.com\tAmerica/Los_Angeles\ten\t310-451-5444\t\t\naHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vZ3Rmcy9jdXJyZW50LnppcA==\t6216179\tBig
-        Blue Bus\thttps://www.bigbluebus.com\tAmerica/Los_Angeles\ten\t310-451-5444\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvQ2FtYXJpbGxvR1RGUy56aXA=\t1656\tCamarillo
-        Area Transit\thttps://www.cityofcamarillo.org/residents/public_transportation/camarillo_area_transit.php\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9jaXR5Y29tbWJ1cy5jb20vZ3Rmcw==\t71\tCity
-        Of Commerce Transit\thttps://www.ci.commerce.ca.us/city-hall/transportation\tAmerica/Los_Angeles\ten-US\t(323)
-        887-4419\t\t\naHR0cHM6Ly9kb3duZXkucmlkZXJhbGVydHMuY29tL2luZm9wb2ludC9ndGZzLXppcC5hc2h4\t0\tCity
-        of Downey\thttps://www.downeyca.org/our-city/departments/parks-recreation/transit/downeylink-transit-system\tAmerica/Los_Angeles\ten\t562-529-5465\thttps://www.downeyca.org/our-city/departments/parks-recreation/transit/mta-tap-transit-access-pass\tsupport@availtec.com\naHR0cHM6Ly9hcHAubWVjYXRyYW4uY29tL3VyYi93cy9mZWVkL2MybDBaVDF6Ykc5MGNtRnVjMmwwTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDB6WlRNd016TTFPVFJpTVRFMk56QTBOMkl4TmpRd05qQTBaalF3TUdNek16ZGlNMkUxTVRRMA==\tSLOT\tCity
-        of San Luis Obispo Transit\thttps://www.slocity.org/government/department-directory/public-works/slo-transit-bus\tAmerica/Los_Angeles\ten\t(805)
-        541-2877\thttps://www.tokentransit.com/agency/slotransit\tslotransit@slocity.org\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvV2FzY29EaWFsYVJpZGVGbGV4LnppcA==\twasco\tCity
-        of Wasco\thttps://www.cityofwasco.org/196/Dial-A-Ride\tUS/Pacific\ten\t\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9jbG92aXN0cmFuc2l0LWNhLXVzL2Nsb3Zpc3RyYW5zaXQtY2EtdXMuemlw\t971\tClovis
-        Transit\thttps://cityofclovis.com/general-services/transit/\tAmerica/Los_Angeles\ten\t559-324-2770\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9jb21tdXRlLWNhLXVzL2NvbW11dGUtY2EtdXMuemlw\t4963\tCommute.org
-        Shuttles\thttp://www.commute.org\tAmerica/Los_Angeles\ten\t(650) 588-1600\t\t\naHR0cDovL2NjY3RhLm9yZy9HVEZTL2dvb2dsZV90cmFuc2l0LnppcA==\t2\tCounty
-        Connection\thttp://www.countyconnection.com/\tAmerica/Los_Angeles\tEN\t925-676-7500\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1DQw==\tCC\tCounty
-        Connection\thttp://www.countyconnection.com/\tAmerica/Los_Angeles\ten\t925-676-7500\t\t\naHR0cHM6Ly93d3cuY3VsdmVyY2l0eS5vcmcvZmlsZXMvYXNzZXRzL3B1YmxpYy92LzkvZG9jdW1lbnRzL2luZm9ybWF0aW9uLXRlY2hub2xvZ3kvbWFwcy9ndGZzZXhwb3J0LnppcA==\t1\tCulver
-        CityBus\thttps://www.culvercity.org/how-do-i/find/culver-city-bus\tAmerica/Los_Angeles\ten\t(310)253-6500\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1ERQ==\tDE\tDumbarton
-        Express Consortium\thttps://dumbartonexpress.com\tAmerica/Los_Angeles\ten\t(510)891-4777\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvRWFzdGVyblNpZXJyYUJpc2hvcExvbmVQaW5lRmxleC56aXA=\t78\tEastern
-        Sierra Transit Authority\thttp://www.estransit.com/CMS\tAmerica/Los_Angeles\ten\t(800)
-        922-1930\t\t\naHR0cHM6Ly9lbWVyeWdvcm91bmQudHJpcHNob3QuY29tL3YxL2d0ZnMuemlwP3JlZ2lvbklkPUNBNTU4RERDLUQ3RjItNEI0OC05Q0FDLURFRUExMTM0RjgyMA==\t05f0da90-7acf-491d-936c-5ee848a0e941\tEmery
-        Go-Round\thttps://emerygoround.com/\tAmerica/Los_Angeles\ten\t(510) 451-3862\t\ttransit-info@emerygoround.com\naHR0cHM6Ly9naXM0dS5mcmVzbm8uZ292L2Rvd25sb2Fkcy96aXAvZmF4X2d0ZnMuemlw\t01\tFresno
-        Area Express\thttps://www.fresno.gov/transportation/fax/\tAmerica/Los_Angeles\ten\t621-7433\thttps://www.fresno.gov/transportation\t\naHR0cHM6Ly9yaWRlZ3RyYW5zLmNvbS9ndGZzLnppcA==\t1\tGTrans\thttps://ridegtrans.com/\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9nbGVuZGFsZWNhLmdvdi9Ib21lL1Nob3dEb2N1bWVudD9pZD0yOTU0OQ==\t1\tGlendale
-        Beeline\thttp://glendalebeeline.com/\tAmerica/Los_Angeles\ten\t(818)548-3960\thttps://www.glendaletransit.com/tools/cash-fares-passes\t\naHR0cHM6Ly93d3cuZ2N0ZC5vcmcvZ3Rmcy8=\tGCT\tGold
-        Coast Transit\thttps://www.gctd.org/\tAmerica/Vancouver\ten\t805-487-4222\thttps://www.gctd.org/fares-rider-guide/fares/\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1HRg==\tGF\tGolden
-        Gate Ferry\thttp://www.goldengate.org\tAmerica/Los_Angeles\ten\t(415) 455-2000\thttps://www.goldengate.org/bus/bus-fares-payment/\t\naHR0cHM6Ly9yZWFsdGltZS5nb2xkZW5nYXRlLm9yZy9ndGZzc3RhdGljL0dURlNUcmFuc2l0RGF0YS56aXA=\t90016\tGolden
-        Gate Transit\thttp://www.goldengate.org\tAmerica/Los_Angeles\ten\t(415) 455-2000\thttps://www.goldengate.org/bus/bus-fares-payment/\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1HRw==\tGG\tGolden
-        Gate Transit\thttp://www.goldengate.org\tAmerica/Los_Angeles\ten\t(415) 455-2000\thttps://www.goldengate.org/bus/bus-fares-payment/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvSGF2YXN1TGFuZGluZ0ZlcnJ5R1RGUy56aXA=\t\tHavasu
-        Landing Resort & Casino Ferry\thttps://www.havasulandingcasino.com/ferry-schedule\tAmerica/Phoenix\ten\t(760)
-        858-4593\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvSHVtYm9sZHRUcmFuc2l0QXV0aG9yaXR5RGlhbEFSaWRlRmxleC56aXA=\t1\tHumboldt
-        Transit Authority\thttp://www.redwoodtransit.org/?referrer=gtfs\tAmerica/Los_Angeles\ten\t(707)
-        443-0826\t\t\naHR0cHM6Ly93d3cuY2l0eW9maW5nbGV3b29kLm9yZy9kb2N1bWVudGNlbnRlci92aWV3LzIxMTc3\t4664\tI-Line
-        Shuttle\thttps://www.cityofinglewood.org/796/Transportation\tAmerica/Los_Angeles\ten\t310-412-4378\t\t\naHR0cHM6Ly9zY2hlZHVsZS5pdnRyYW5zaXQuY29tL2d0ZnMvZGF0YS56aXA=\tIVT\tImperial
-        Valley Transit\thttp://www.ivtransit.com/\tAmerica/Los_Angeles\ten\t1 760
-        482-2900\thttp://www.ivtransit.com/fares\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9rZXJuY291bnR5LWNhLXVzL2tlcm5jb3VudHktY2EtdXMuemlw\t194\tKern
-        Transit\thttp://kerntransit.org/?referrer=gtfs\tAmerica/Los_Angeles\ten\t(661)
-        862-5032\thttp://kerntransit.org/fares/?referrer=gtfs\t\naHR0cHM6Ly9rYXJ0LmNvbm5leGlvbnoubmV0L3J0dC9wdWJsaWMvdXRpbGl0eS9ndGZzLmFzcHg=\t1\tKings
-        Area Rural Transit\thttp://mykartbus.com/\tAmerica/Los_Angeles\ten\t800-675-8881\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9kcHdsYWNvdW50eS1jYS11cy9kcHdsYWNvdW50eS1jYS11cy56aXA=\t1466\tLA
-        Go Bus\thttps://dpw.lacounty.gov/transit/\tAmerica/Los_Angeles\ten\t1 (626)
-        458-3999\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9sYWd1bmFiZWFjaC1jYS11cy9sYWd1bmFiZWFjaC1jYS11cy56aXA=\t126\tLaguna
-        Beach Transit\thttp://www.lagunabeachcity.net/cityhall/transit_and_trolleys/\tAmerica/Los_Angeles\ten\t(949)
-        497-3311\thttp://www.lagunabeachcity.net/cityhall/pw/transit/fares.asp\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvTGFndW5hQmVhY2hUcmFuc2l0TG9jYWxGbGV4LnppcA==\t126\tLaguna
-        Beach Transit\thttp://www.lagunabeachcity.net/cityhall/transit_and_trolleys/\tAmerica/Los_Angeles\ten\t(949)
-        497-3311\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9sYWtldHJhbnNpdC1jYS11cy9sYWtldHJhbnNpdC1jYS11cy56aXA=\t7\tLake
-        Transit\thttp://www.laketransit.org/\tAmerica/Los_Angeles\ten\t707-263-3334\thttps://laketransit.org/cash-fares/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvTGFzc2VuUnVyYWxCdXNhbmREaWFsQVJpZGVGbGV4LnppcA==\t81\tLassen
-        Rural Bus\thttp://www.lassentransportation.com/a/Lassen-Rural-Bus-LRB.php?referrer=gtfs\tAmerica/Los_Angeles\ten\t(530)252-7433\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9sYXNzZW4tY2EtdXMvbGFzc2VuLWNhLXVzLnppcA==\t81\tLassen
-        Rural Bus\thttps://www.lassentransportation.com/\tAmerica/Los_Angeles\ten\t(530)252-7433\t\t\naHR0cHM6Ly9sYXh0cmFuc3BvcnRhdGlvbi5yaWRlc3lzdGVtcy5uZXQvU2VjdXJlL0FkbWluL1JlcG9ydHMvR1RGU0Rvd25sb2FkLmFzcHg=\t1042\tLax
-        Transportation\thttp://www.ridesystems.net\tAmerica/Los_Angeles\ten\t(888)
-        281-2681\t\t\naHR0cDovL3dlYndhdGNoLmxhdnRhLm9yZy9UTUdURlNSZWFsVGltZVdlYlNlcnZpY2UvR1RGUy1TdGF0aWMvZ29vZ2xlX3RyYW5zaXQuemlw\tlavta-ca-us\tLivermore
-        Amador Valley Transit Authority\thttps://wheelsbus.com/\tAmerica/Los_Angeles\ten\t925-455-7500\thttps://www.wheelsbus.com/fares/\t\naHR0cHM6Ly9kcml2ZS5nb29nbGUuY29tL3VjP2V4cG9ydD1kb3dubG9hZCZpZD0xODY5RVZhMXo2bV9pRDZRbXZSWHlUSHRZaWFTVUJST2w=\t90023\tLong
-        Beach Transit\thttp://www.ridelbt.com\tAmerica/Los_Angeles\ten\t(562) 591-2301\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvTU9WRVN0YW5pc2xhdXNWZXRzdmFuRmxleC56aXA=\t1002\tMOVE
-        Stanislaus\thttp://www.movestanislaus.org\tAmerica/Los_Angeles\ten\t209-522-2300\t\t\naHR0cHM6Ly93d3cuc2RtdHMuY29tL2dvb2dsZV90cmFuc2l0X2ZpbGVzL2dvb2dsZV90cmFuc2l0LnppcA==\tMTS\tMTS\thttp://www.sdmts.com\tAmerica/Los_Angeles\ten\t619-233-3004\t\tcustomerfeedback@sdmts.com\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1NVg==\tMV\tMVgo\thttps://mvgo.org/\tAmerica/Los_Angeles\ten\t650-933-2518\t\tinfo@mvgo.org\naHR0cHM6Ly9ndGZzLm12Z28ub3JnL2d0ZnMuemlw\t533\tMVgo\thttps://mvgo.org/\tAmerica/Los_Angeles\ten\t650-933-2518\t\tinfo@mvgo.org\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9tYWRlcmFjdGMtY2EtdXMvbWFkZXJhY3RjLWNhLXVzLnppcA==\t111\tMadera
-        County Connection\thttps://mcctransit.com/\tAmerica/Los_Angeles\ten\t(559)
-        263-8080\thttps://mcctransit.com/fares-and-passes/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9jaXR5b2ZtYWRlcmEtY2EtdXMvY2l0eW9mbWFkZXJhLWNhLXVzLnppcA==\t960\tMadera
-        Metro\thttps://www.madera.gov/home/departments/transit/#tr-madera-metro-fixed-route-1509901\tAmerica/Los_Angeles\ten\t(559)
-        661-RIDE (7433)\thttps://www.madera.gov/home/departments/transit/fares/\t\naHR0cHM6Ly9tYXJpbnRyYW5zaXQub3JnL2RhdGEvZ29vZ2xlX3RyYW5zaXQuemlw\t33\tMarin
-        Transit\thttps://marintransit.org\tAmerica/Los_Angeles\ten\t415-455-2000\thttps://marintransit.org/fares\tinfo@marintransit.org\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvTWF5d29vZEdURlMuemlw\t4890\tMaywood
-        Express Shuttle\thttps://www.cityofmaywood.com/200/Transportation-Services\tAmerica/Los_Angeles\ten\t(323)
-        562-5700\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9tZW5kb2Npbm8tY2EtdXMvbWVuZG9jaW5vLWNhLXVzLnppcA==\t42\tMendocino
-        Transit Authority\thttps://mendocinotransit.org/\tAmerica/Los_Angeles\ten\t707-462-1422\thttps://mendocinotransit.org/fares/\t\naHR0cHM6Ly9naXRsYWIuY29tL0xBQ01UQS9ndGZzX2J1cy9yYXcvbWFzdGVyL2d0ZnNfYnVzLnppcA==\tLACMTA\tMetro
-        - Los Angeles\thttps://www.metro.net\tAmerica/Los_Angeles\ten\t(323)466-3876\t\t\naHR0cHM6Ly93d3cubWV0cm9saW5rdHJhaW5zLmNvbS9nbG9iYWxhc3NldHMvYWJvdXQvZ3Rmcy9ndGZzLnppcA==\tMetrolink\tMetrolink
-        Trains\thttp://www.metrolinktrains.com\tAmerica/Los_Angeles\ten\t(800) 371-LINK\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1NQg==\tMB\tMission
-        Bay TMA\thttp://missionbaytma.org/\tAmerica/Los_Angeles\ten\t800-428-5588\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9taXNzaW9uYmF5dG1hLWNhLXVzL21pc3Npb25iYXl0bWEtY2EtdXMuemlw\t671\tMission
-        Bay TMA\thttp://missionbaytma.org/\tAmerica/Los_Angeles\ten\t800-428-5588\t\t\naHR0cHM6Ly9tdnNodXR0bGUucmlkZXN5c3RlbXMubmV0L1NlY3VyZS9BZG1pbi9SZXBvcnRzL0dURlNEb3dubG9hZC5hc3B4\t911\tMission
-        Viejo\thttp://www.ridesystems.net\tAmerica/Los_Angeles\ten\t(888) 281-2681\t\t\naHR0cHM6Ly9tYmwucmlkZXJhbGVydHMuY29tL2luZm9wb2ludC9ndGZzLXppcC5hc2h4\t0\tMontebello
-        Bus Lines\thttp://www.ridembl.com/\tAmerica/Los_Angeles\ten\t323-558-1625\thttp://www.ridembl.com/Fares\tridembl@cityofmontebello.com\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9tb29ycGFya2NpdHl0cmFuc2l0LWNhLXVzL21vb3JwYXJrY2l0eXRyYW5zaXQtY2EtdXMuemlw\t877\tMoorpark
-        City Transit\thttps://www.moorparkca.gov/227/Bus-Ride-Guide\tAmerica/Los_Angeles\ten\t805-517-6257\thttps://www.moorparkca.gov/230/Fares-Regulations-Passes\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9tb3JvbmdvYmFzaW4tY2EtdXMvbW9yb25nb2Jhc2luLWNhLXVzLnppcA==\t74\tMorongo
-        Basin Transit Authority\thttp://www.mbtabus.com/\tAmerica/Los_Angeles\ten\t(760)
-        366-2395\thttps://basin-transit.com/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9iaWdiZWFyLWNhLXVzL2JpZ2JlYXItY2EtdXMuemlw\t44\tMountain
-        Transit\thttp://www.mountaintransit.org/?referrer=gtfs\tAmerica/Los_Angeles\ten\t909-878-5200\thttps://www.mountaintransit.org/fare-rates/\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1NQw==\tMC\tMountain
-        View Community Shuttle\thttps://mvcommunityshuttle.com/\tAmerica/Los_Angeles\ten\t855-730-7433\t\tinfo@mvcommunnityshuttle.com\naHR0cHM6Ly9ndGZzLm12Y29tbXVuaXR5c2h1dHRsZS5jb20vZ3Rmcy56aXA=\tMC\tMountain
-        View Community Shuttle\thttps://mvcommunityshuttle.com/\tAmerica/Los_Angeles\ten\t855-730-7433\t\tinfo@mvcommunnityshuttle.com\naHR0cHM6Ly9uYXBhLnN5bmNyb21hdGljcy5jb20vZ3Rmcw==\t223\tNAPA\thttps://vinetransit.com/\tAmerica/Los_Angeles\ten-US\t707-251-2800\thttps://vinetransit.com/fares/\tinfo@nvta.ca.gov\naHR0cHM6Ly93d3cubnBzLmdvdi9leHRlcm5hbC1yZXNvdXJjZXMvZ3Rmcy95b3NlL3lvc2VtaXRlLXZhbGxleS1zaHV0dGxlLnppcA==\tNPS\tNational
-        Park Service\thttps://www.nps.gov/yose/planyourvisit/publictransportation.htm\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly93d3cubnBzLmdvdi9leHRlcm5hbC1yZXNvdXJjZXMvZ3Rmcy95b3NlL21hcmlwb3NhLWdyb3ZlLXNodXR0bGUtc2VydmljZS56aXA=\tNPS\tNational
-        Park Service\thttps://www.nps.gov/yose/planyourvisit/publictransportation.htm\tAmerica/Los_Angeles\ten\t209-372-0200\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9uZWVkbGVzLWNhLXVzL25lZWRsZXMtY2EtdXMuemlw\t38\tNeedles
-        Area Transit\thttps://cityofneedles.com/transit/\tAmerica/Los_Angeles\ten\t(760)
-        326-2113\thttps://cityofneedles.com/transit/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9nb2xkY291bnRyeXN0YWdlLWNhLXVzL2dvbGRjb3VudHJ5c3RhZ2UtY2EtdXMuemlw\t1523\tNevada
-        County Connects\thttps://www.nevadacountyca.gov/3456/Transit-Services\tAmerica/Los_Angeles\ten\t530-477-0103\thttp://www.mynevadacounty.com/nc/cda/pw/transit/Pages/GC-Stage-Passenger-Information.aspx\t\naHR0cHM6Ly93d3cub21uaXRyYW5zLm9yZy9nb29nbGUvZ29vZ2xlX3RyYW5zaXQuemlw\t9029\tOMNITRANS\thttps://www.omnitrans.org\tAmerica/Los_Angeles\ten\t800-9-OMNIBUS\thttps://omnitrans.org/buy-a-pass/fares\t\naHR0cHM6Ly9vY3RhLm5ldC9jdXJyZW50L2dvb2dsZV90cmFuc2l0LnppcA==\t1\tOrange
-        County Transportation Authority\thttp://www.octa.net/Bus-Transit/Overview\tAmerica/Los_Angeles\ten\t714-636-7433\thttp://www.octa.net/Bus-Transit/Fares-and-Passes/Overview\t\naHR0cHM6Ly9vcmVnb24tZ3Rmcy50cmlsbGl1bXRyYW5zaXQuY29tL2d0ZnNfZGF0YS9wb2ludC1vci11cy9wb2ludC1vci11cy56aXA=\t45\tOregon
-        POINT\thttp://oregon-point.com\tAmerica/Los_Angeles\ten\t1-888-846-4183\thttps://www.oregon-point.com/ticketing-info/?route=southwest\t\naHR0cHM6Ly9wZXRhbHVtYXRyYW5zaXQuY29tL2d0ZnM=\t244\tPETALUMA\t\tAmerica/Los_Angeles\ten-US\t\t\t\naHR0cHM6Ly9yaWRlcHZ2dGEuY29tL2d0ZnM=\t235\tPVVTA\thttps://pvvta.com/\tAmerica/Los_Angeles\ten-US\t\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9wdnB0YS1jYS11cy9wdnB0YS1jYS11cy56aXA=\t134\tPalos
-        Verdes Peninsula Transit Authority\thttp://www.palosverdes.com/pvtransit/\tAmerica/Los_Angeles\ten\t(310)
-        544-7108\thttp://www.palosverdes.com/pvtransit/index.cfm?pg=passes\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvUGxhY2VyQ291bnR5RGlhbEFSaWRlRmxleC56aXA=\t874\tPlacer
-        County Transit\thttp://www.placer.ca.gov/Departments/Works/Transit/PCT\tUS/Pacific\ten\t530-745-7560\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9wbGFjZXJjb3VudHktY2EtdXMvcGxhY2VyY291bnR5LWNhLXVzLnppcA==\t874\tPlacer
-        County Transit\thttp://www.placer.ca.gov/Departments/Works/Transit/PCT\tUS/Pacific\ten\t530-745-7560\thttps://www.placer.ca.gov/1799/Fares\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9wbHVtYXMtY2EtdXMvcGx1bWFzLWNhLXVzLnppcA==\t20\tPlumas
-        Transit\thttp://www.plumastransit.com\tAmerica/Los_Angeles\ten\t530-283-2538\thttps://www.plumastransit.com/fares.html\t\naHR0cHM6Ly9wcmVzaWRpb2J1cy5jb20vZ3Rmcw==\t18\tPresidio
-        Go\thttps://www.presidio.gov/shuttle\tAmerica/Los_Angeles\ten-US\t\t\t\naHR0cHM6Ly9yYWJhZ3Rmcy56NS53ZWIuY29yZS53aW5kb3dzLm5ldC9yYWJhZ3Rmc19mbGV4LnppcA==\t25\tRedding
-        Area Bus Authority\thttp://www.rabaride.com/\tAmerica/Los_Angeles\ten\t530-241-2877\t\t\naHR0cHM6Ly9yYWJhZ3Rmcy56NS53ZWIuY29yZS53aW5kb3dzLm5ldC9yYWJhZ3Rmcy56aXA=\t25\tRedding
-        Area Bus Authority\thttp://www.rabaride.com/\tAmerica/Los_Angeles\ten\t530-241-2877\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9kZWxub3J0ZS1jYS11cy9kZWxub3J0ZS1jYS11cy56aXA=\t19\tRedwood
-        Coast Transit\thttp://www.redwoodcoasttransit.org/\tAmerica/Los_Angeles\ten\t707-464-6400\thttp://redwoodcoasttransit.org/fares/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvUmVkd29vZENvYXN0RGVsTm9ydGVGbGV4LnppcA==\t19\tRedwood
-        Coast Transit\thttp://www.redwoodcoasttransit.org/\tAmerica/Los_Angeles\ten\t707-464-6400\t\t\naHR0cHM6Ly93d3cucml2ZXJzaWRldHJhbnNpdC5jb20vZ29vZ2xlX3RyYW5zaXQuemlw\t1\tRiverside
-        Transit Agency\thttp://www.riversidetransit.com\tAmerica/Los_Angeles\ten\t(951)
-        565-5002\t\t\naHR0cHM6Ly9pcG9ydGFsLnNhY3J0LmNvbS9ndGZzL1Jvc2V2aWxsZS9nb29nbGVfdHJhbnNpdC56aXA=\tRoseville\tRoseville
-        Transit\thttp://www.roseville.ca.us/transit\tAmerica/Los_Angeles\ten\t916-745-7560\t\t\naHR0cHM6Ly9zYW50YXJvc2Euc3luY3JvbWF0aWNzLmNvbS9ndGZz\t242\tSANTAROSA\thttps://srcitybus.org/\tAmerica/Los_Angeles\ten-US\t707-543-3333\thttps://srcitybus.org/fares-and-passes/\ttellus@srcity.org\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TUg==\tSR\tSANTAROSA\thttps://srcitybus.org/\tAmerica/Los_Angeles\ten\t707-543-3333\thttps://srcitybus.org/fares-and-passes/\ttellus@srcity.org\naHR0cHM6Ly9zYm10ZC5nb3YvZ29vZ2xlX3RyYW5zaXQvZmVlZC56aXA=\t1\tSBMTD\thttps://sbmtd.gov\tAmerica/Los_Angeles\ten\t805-963-3364\thttps://sbmtd.gov/fares-passes/\tinfo@sbmtd.gov\naHR0cHM6Ly9pcG9ydGFsLnNhY3J0LmNvbS9ndGZzL2VnL2dvb2dsZV90cmFuc2l0LnppcA==\te-tran\tSacRT
-        (Elk Grove)\thttp://sacrt.com/schedules\tAmerica/Los_Angeles\ten\t916-321-2877\t\t\naHR0cHM6Ly9pcG9ydGFsLnNhY3J0LmNvbS9ndGZzL3NydGQvZ29vZ2xlX3RyYW5zaXQuemlw\tSRTD\tSacramento
-        Regional Transit\thttp://www.sacrt.com\tAmerica/Los_Angeles\ten\t916-321-BUSS\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9zYWdlc3RhZ2UtY2EtdXMvc2FnZXN0YWdlLWNhLXVzLnppcA==\t678\tSage
-        Stage\thttp://www.sagestage.com\tAmerica/Los_Angeles\ten\t(530) 233-6410\thttp://www.sagestage.com/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9jb21tdXRlLWNhLXVzL2NvbW11dGUtY2EtdXMuemlw\t4968\tSamTrans\thttps://www.samtrans.com/Home.html\tAmerica/Los_Angeles\ten\t1-800-660-4287\thttps://www.samtrans.com/fares/?agency=samtrans\t\naHR0cHM6Ly93d3cuc2FtdHJhbnMuY29tL0Fzc2V0cy9HVEZTL3NhbXRyYW5zL1NULUdURlMuemlwP3Y9MTExNA==\tsamtrans-ca-us\tSamTrans\thttp://www.samtrans.com\tAmerica/Los_Angeles\ten\t800-660-4287\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9zYW5iZW5pdG9jb3VudHktY2EtdXMvc2FuYmVuaXRvY291bnR5LWNhLXVzLnppcA==\t123\tSan
-        Benito County Express\thttp://www.SanBenitoCountyExpress.org/\tAmerica/Los_Angeles\ten\t(831)
-        636-4161\thttp://www.sanbenitocountyexpress.org/fares.html\t\naHR0cHM6Ly93d3cuc2RtdHMuY29tL2dvb2dsZV90cmFuc2l0X2ZpbGVzL2dvb2dsZV90cmFuc2l0LnppcA==\tSAN\tSan
-        Diego International Airport\thttp://www.san.org\tAmerica/Los_Angeles\ten\t619-694-7427\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TQg==\tSB\tSan
-        Francisco Bay Ferry\thttps://sanfranciscobayferry.com/\tAmerica/Los_Angeles\ten\t4157058291\thttps://sanfranciscobayferry.com/fares-tickets\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9zZmJheWZlcnJ5LWNhLXVzL3NmYmF5ZmVycnktY2EtdXMuemlw\t873\tSan
-        Francisco Bay Ferry\thttps://sanfranciscobayferry.com/\tAmerica/Los_Angeles\ten\t4157058291\thttps://sanfranciscobayferry.com/fares-tickets\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TRg==\tSF\tSan
-        Francisco Municipal Transportation Agency\thttp://www.sfmta.com\tAmerica/Los_Angeles\ten\t311\thttps://SFMTA.com/Fares\tmunifeedback@sfmta.com\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvU2FuSm9hcXVpblJURERpYWxBUmlkZWFuZFZhbkdvRmxleC56aXA=\t1003\tSan
-        Joaquin RTD\thttp://sjrtd.com/\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9kMzR0aXc2NG41ejRvaC5jbG91ZGZyb250Lm5ldC93cC1jb250ZW50L3VwbG9hZHMvU0pKUEFfMDMxODIwMjUtMS56aXA=\tSJRRC\tSan
-        Joaquin Regional Rail Commission\thttps://acerail.com/\tAmerica/Los_Angeles\ten\t1-800-411-7245\thttps://acerail.com/schedules/\t\naHR0cDovL3NhbmpvYXF1aW5ydGQuY29tL1JURC1HVEZTL1JURC1HVEZTLnppcA==\t90012\tSan
-        Joaquin Regional Transit District (RTD)\thttp://sanjoaquinrtd.com\tAmerica/Los_Angeles\ten\t1-209-943-1111\thttps://sanjoaquinrtd.com/fares/\t\naHR0cHM6Ly9hcHBzLnNhbnRhY2xhcml0YXRyYW5zaXQuY29tL3J0dC9wdWJsaWMvdXRpbGl0eS9ndGZzLmFzcHg=\t1\tSanta
-        Clarita Transit\thttps://santaclaritatransit.com\tAmerica/Los_Angeles\ten\t(661)
-        294-1287\t\t\naHR0cHM6Ly9kZXZlbG9wZXIuc2NtZXRyby5vcmcvZ3Rmcy56aXA=\t1\tSanta
-        Cruz METRO\thttps://scmetro.org\tAmerica/Los_Angeles\ten\t(831)425-8600\thttps://scmetro.org/fares\t\naHR0cHM6Ly9zbXJ0LnRyaXBzaG90LmNvbS92MS9ndGZzLnppcD9yZWdpb25JZD1DQTU1OEREQy1EN0YyLTRCNDgtOUNBQy1ERUVBMTEzNEY4MjA=\t427f436c-699f-40bf-ac6f-363f94014484\tSanta
-        Maria Regional Transit (Home)\thttps://smrt.tripshot.com/\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9zb2x0cmFucy5jb25uZXhpb256Lm5ldC9ydHQvcHVibGljL3Jlc291cmNlL2d0ZnMuemlw\t1\tSolTrans\thttps://soltrans.org/\tAmerica/Los_Angeles\ten\t(707)
-        648-4666\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TVA==\tST\tSolTrans\thttps://soltrans.org/\tAmerica/Los_Angeles\ten\t(707)
-        648-4666\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9zb25vbWFjb3VudHktY2EtdXMvc29ub21hY291bnR5LWNhLXVzLnppcA==\t175\tSonoma
-        County Transit\thttp://www.sctransit.com/?referrer=gtfs\tAmerica/Los_Angeles\ten\t(707)
-        576-7433\thttp://sctransit.com/fares/?referrer=gtfs\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TTw==\tSO\tSonoma
-        County Transit\thttp://www.sctransit.com/?referrer=gtfs\tAmerica/Los_Angeles\ten\t(707)
-        576-7433\thttp://sctransit.com/fares/?referrer=gtfs\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9zbWFydC1jYS11cy9zbWFydC1jYS11cy56aXA=\t1535\tSonoma
-        Marin Area Rail Transit\thttp://www.SonomaMarinTrain.org\tAmerica/Los_Angeles\ten\t(707)794-3330\thttp://www.sonomamarintrain.org/fares\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TQQ==\tSA\tSonoma
-        Marin Area Rail Transit\thttp://www.SonomaMarinTrain.org\tAmerica/Los_Angeles\ten\t(707)794-3330\thttp://www.sonomamarintrain.org/fares\t\naHR0cHM6Ly90cmFuc3BvcnRhdGlvbi1mb3Jtcy5zdGFuZm9yZC5lZHUvZ29vZ2xlL2dvb2dsZV90cmFuc2l0LnppcA==\t10747950\tStanford
-        Marguerite Shuttle\thttps://transportation.stanford.edu/marguerite\tAmerica/Los_Angeles\ten\t650-723-9362\t\tmarguerite@stanford.edu\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvU3RhblJUQU1vZGVzdG9OZXdtYW5PYWtkYWxlUGF0dGVyc29tYW5kUml2ZXJiYW5rRmxleC56aXA=\t1698\tStanislaus
-        Regional Transit Authority\thttps://stanrta.org/\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy90ZWhhbWEtY2EtdXMvdGVoYW1hLWNhLXVzLnppcA==\t62\tSusanville
-        Indian Rancheria Public Transportation Program\thttp://www.transitunlimited.org/Susanville_Indian_Rancheria_Public_Transportation_Program\tAmerica/Los_Angeles\ten\t530-257-1128\t\t\naHR0cHM6Ly90cmFuc2l0LnRvcnJhbmNlY2EuZ292L2hvbWUvc2hvd3B1Ymxpc2hlZGRvY3VtZW50LzE2NjczLzYzODcyMzYwMzcwMDgzMDAwMA==\t1\tTORRANCE
-        TRANSIT SYSTEM\thttp://Transit.TorranceCA.gov\tAmerica/Los_Angeles\ten\t310-618-6266\thttps://transit.torranceca.gov/fares\tTransit@TorranceCA.Gov\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVHJhY3lUUkFDRVJQbHVzYW5kUGFyYXRyYW5zaXRGbGV4LnppcA==\t1490\tTRACER\thttps://ci.tracy.ca.us/?navId=193\tAmerica/Los_Angeles\ten\t209-831-4287\t\t\naHR0cDovL3MzLmFtYXpvbmF3cy5jb20vZXRhdHJhbnNpdC5ndGZzL3RyYWNlci5ldGFzcG90Lm5ldC9ndGZzLnppcA==\t1\tTRACER
-        Bus Service\thttps://www.cityoftracy.org/our-city/departments/mobility-an\tAmerica/Los_Angeles\ten\t209-831-4287\t\t\naHR0cHM6Ly90YWhvZS5zeW5jcm9tYXRpY3MuY29tL2d0ZnM=\t215\tTahoe
-        Transportation District\thttps://www.tahoetransportation.org/\tAmerica/Los_Angeles\ten-US\t(775)
-        589-5500\thttps://www.tahoetransportation.org/fares\tinfo@tahoetransportation.org\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVGFob2VUcnVja2VlUmVnaW9uYWxUcmFuc3BvcnRhdGlvblRBUlRDb25uZWN0RGlhbEFSaWRlUGxhY2VyVEFSVFBhcmF0cmFuc2l0RmxleC56aXA=\t904\tTahoe
-        Truckee Area Regional Transit\thttp://www.placer.ca.gov/Departments/Works/Transit/TART.aspx\tAmerica/Los_Angeles\ten\t(530)
-        550-1212\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy90ZWhhbWEtY2EtdXMvdGVoYW1hLWNhLXVzLnppcA==\t21\tTehama
-        Rural Area Express\thttp://www.taketrax.com/\tAmerica/Los_Angeles\ten\t530-385-2877\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVGhvdXNhbmRPYWtzRGlhbEFSaWRlUGFyYXRyYW5zaXRhbmRDb25uZWN0RmxleC56aXA=\t526\tThousand
-        Oaks Transit\thttps://www.toaks.org/departments/public-works/transit\tAmerica/Los_Angeles\ten\t\thttps://www.toaks.org/departments/public-works/transit/fares-prepaid-passes\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy90aG91c2FuZG9ha3MtY2EtdXMvdGhvdXNhbmRvYWtzLWNhLXVzLnppcA==\t526\tThousand
-        Oaks Transit\thttps://www.toaks.org/departments/public-works/transit\tAmerica/Los_Angeles\ten\t\thttps://www.toaks.org/departments/public-works/transit/fares-prepaid-passes\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy93ZWF2ZXJ2aWxsZS1jYS11cy93ZWF2ZXJ2aWxsZS1jYS11cy56aXA=\t34\tTrinity
-        Transit\thttp://www.trinitytransit.org/?referrer=gtfs\tAmerica/Los_Angeles\ten\t530-623-5438\thttps://trinitytransit.org/fares/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVHVsYXJlQ291bnR5QXJlYVRyYW5zaXRhbmREaWFsQVJpZGVGbGV4LnppcA==\t937\tTulare
-        County Area Transit\thttp://tularecounty.ca.gov/rma/index.cfm/public-works/tulare-county-area-transit-tcat/\tAmerica/Los_Angeles\ten\t877-404-6473\thttp://www.tularecounty.ca.gov/rma/index.cfm/public-works/tulare-county-area-transit-tcat/tcat-systemwide-area-map/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy90Y3J0YS1jYS11cy90Y3J0YS1jYS11cy56aXA=\t4895\tTulare
-        County Regional Transit Agency\thttps://tcrta.wpenginepowered.com/\tAmerica/Los_Angeles\ten\t(559)
-        372-2290\thttps://tularecog.org/tcag/tcrta/tcrta-transport-faq-fares/\t\naHR0cHM6Ly9ndGZzLnJlbWl4LmNvbS90dW9sdW1uZV9jYV91cy56aXA=\tTCT\tTuolumne
-        County Transit\thttps://www.tuolumnecountytransit.com/\tAmerica/Los_Angeles\ten\t209.532.0404\thttps://www.tuolumnecountytransit.com/fares\ttgillespie@co.tuolumne.ca.us\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVHVybG9ja1RyYW5zaXREaWFsQVJpZGVGbGV4LnppcA==\t1642\tTurlock
-        Transit\thttp://www.turlocktransit.com/\tAmerica/Los_Angeles\ten\t(209) 668-5600\thttp://www.turlocktransit.com/fares.html?lang=en\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy90dXJsb2NrLWNhLXVzL3R1cmxvY2stY2EtdXMuemlw\t1642\tTurlock
-        Transit\thttp://www.turlocktransit.com/\tAmerica/Los_Angeles\ten\t(209) 668-5600\thttp://www.turlocktransit.com/fares.html?lang=en\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVW5pb25DaXR5UGFyYXRyYW5zaXRGbGV4LnppcA==\t1642\tTurlock
-        Transit\thttp://www.turlocktransit.com/\tAmerica/Los_Angeles\ten\t(209) 668-5600\thttp://www.turlocktransit.com/fares.html?lang=en\t\naHR0cHM6Ly9jYXR0cmFja3MucmlkZXN5c3RlbXMubmV0L1NlY3VyZS9BZG1pbi9SZXBvcnRzL0dURlNEb3dubG9hZC5hc3B4\t883\tUC
-        Merced\thttp://www.ridesystems.net\tAmerica/Los_Angeles\ten\t(888) 281-2681\t\t\naHR0cHM6Ly9waW5wb2ludGF2bC5jb20vVEFQUy1HVEZTLnppcA==\tTAPS\tUCSC
-        Transportation and Parking Services\thttps://transportation.ucsc.edu/buses-shuttles/campus-shuttles/\tAmerica/Los_Angeles\ten\t831-459-4543\t\ttaps@ucsc.edu\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy92aW5ldHJhbnNpdC1jYS11cy92aW5ldHJhbnNpdC1jYS11cy56aXA=\t1480\tVINE
-        Transit\thttps://vinetransit.com/\tAmerica/Los_Angeles\ten\t707-251-2800\thttps://vinetransit.com/fares/\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1WTg==\tVN\tVINE
-        Transit\thttps://vinetransit.com/\tAmerica/Los_Angeles\ten\t707-251-2800\thttps://vinetransit.com/fares/\t\naHR0cHM6Ly9ndGZzLnZ0YS5vcmcvZ3Rmc192dGEuemlw\tVTA\tVTA\thttps://www.vta.org\tAmerica/Los_Angeles\tEN\t408-321-2300\thttps://www.vta.org/go/fares\tcustomer.service@vta.org\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TQw==\tSC\tVTA\thttps://www.vta.org\tAmerica/Los_Angeles\ten\t408-321-2300\thttps://www.vta.org/go/fares\tcustomer.service@vta.org\naHR0cHM6Ly9teXJpZGUuY2l0eWNvYWNoLmNvbS9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==\td5239cb6-3af0-45d2-9a73-c6097acbfcf9\tVacaville
-        City Coach\thttps://citycoach.com/\tAmerica/Los_Angeles\ten\t707-449-6000\thttps://citycoach.com/fares/\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1WQw==\tVC\tVacaville
-        City Coach\thttps://citycoach.com/\tAmerica/Los_Angeles\ten\t707-449-6000\thttps://citycoach.com/fares/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVmFsbGV5RXhwcmVzc0RpYWxBUmlkZUZsZXguemlw\t871\tValley
-        Express\thttp://www.valleyexpressbus.org/\tAmerica/Los_Angeles\ten\t(805)
-        933-2267\thttp://www.valleyexpressbus.org/fare-information-english/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy92Y3RjLWNhLXVzL3ZjdGMtY2EtdXMuemlw\t607\tVentura
-        County Transportation Commission\thttp://www.goventura.org/\tAmerica/Los_Angeles\ten\t800-438-1112\thttps://www.goventura.org/vctc-transit/fares-passes/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy93ZXN0Y2F0LWNhLXVzL3dlc3RjYXQtY2EtdXMuemlw\t392\tWestCat
-        (Western Contra Costa)\thttp://www.westcat.org/\tAmerica/Los_Angeles\ten\t510-724-7993\thttps://www.westcat.org/home/FaresAll\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvV2VzdENBVFNlbmlvckRpYWxBUmlkZWFuZFBhcmF0cmFuc2l0RmxleC56aXA=\t392\tWestCat
-        (Western Contra Costa)\thttp://www.westcat.org/\tAmerica/Los_Angeles\ten\t510-724-7993\thttps://www.westcat.org/home/FaresAll\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1XQw==\tWC\tWestCat
-        (Western Contra Costa)\thttp://www.westcat.org/\tAmerica/Los_Angeles\ten\t510-724-7993\thttps://www.westcat.org/home/FaresAll\t\naHR0cHM6Ly93d3cueW9sb2J1cy5jb20vR1RGUy9nb29nbGVfdHJhbnNpdC56aXA=\td139e461-175c-4156-beb0-e6a23b64d978\tYolo
-        County Transportation District\thttp://avl.yctd.org/\tAmerica/Los_Angeles\ten\t530-666-2877\thttps://yolobus.com/yolobus-fares/\tcustserv@yctd.org\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvWXVyb2tHVEZTLnppcA==\t\tYurok
-        Tribe Transportation Department\thttps://www.yuroktribe.org/transportation\tAmerica/Los_Angeles\ten\t707-482-0731\t\t\naHR0cHM6Ly9ndGZzLnJlbWl4LmNvbS9lc2NhbG9uX2NhLnppcA==\t52\teTrans\thttp://escalon.hosted.civiclive.com/government/departments/transit_service\tAmerica/Los_Angeles\ten\t209-541-6645\thttp://escalonetrans.org\ttransit@cityofescalon.org\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t3\tArcata
-        & Mad River Transit System\thttps://hta.org/agencies/arcata-and-mad-river/\tAmerica/Los_Angeles\ten\t(707)
-        822-3775\thttps://hta.org/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t972\tBlue
-        Lake Rancheria Transit System\thttps://hta.org/agencies/blue-lake-rancheria/\tAmerica/Los_Angeles\ten\t\thttps://hta.org/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t2\tEureka
-        Transit Service\thttps://hta.org/agencies/eureka-transit-service/\tAmerica/Los_Angeles\ten\t(707)
-        443-0826\thttps://hta.org/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t2314\tRedwood
-        Transit System\thttps://hta.org/agencies/redwood-transit-system/\tAmerica/Los_Angeles\ten\t(707)
-        443-0826\thttps://hta.org/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t1\tRedwood
-        Transit System\thttps://hta.org/agencies/redwood-transit-system/\tAmerica/Los_Angeles\ten\t(707)
-        443-0826\thttps://hta.org/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t1716\tSamoa
-        Transit System\thttps://hta.org/samoa-transit-system/\tAmerica/Los_Angeles\ten\t\thttps://hta.org/fares/\t\naHR0cHM6Ly9ydC5wYXNhZGVuYXRyYW5zaXQubmV0L3J0dC9wdWJsaWMvdXRpbGl0eS9ndGZzLmFzcHg=\t1\tPasadena
-        Transit\thttps://www.cityofpasadena.net/pasadena-transit/\tAmerica/Los_Angeles\ten\t(626)
-        744-4094\thttps://www.cityofpasadena.net/pasadena-transit/fares/\t\n"
+      string: 'base64_url,agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url,agency_email
+
+        aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==,11214031,Santa
+        Ynez Valley Transit,https://www.syvt.com/489/Santa-Ynez-Valley-Transit,America/Los_Angeles,en,805-688-5452,https://www.syvt.com/365/Fares,
+
+        aHR0cHM6Ly93d3cuY2l0eW9mY3VkYWh5Y2EuZ292L0RvY3VtZW50Q2VudGVyL1ZpZXcvMjQ1OQ==,1685,Cudahy
+        Area Rapid Transit,https://www.cityofcudahy.com/475/Transportation,America/Los_Angeles,en,(323)773-5143,https://www.cityofcudahyca.gov/494/Cudahy-Area-Rapid-Transit-CART#:~:text=The%20Cudahy%20Area%20Rapid%20Transit%20(CART)%20offers%20free%20transportation%20services%20for%20Cudahy%20residents.%20CART%20services%20within%20Cudahy%20city%20limits%20Monday%20to%20Sunday%20from%207%3A00am%20to%206%3A00pm.%20It%20passes%20at%20each%20stop%20location%20hourly.%20For%20more%20information%2C%20please%20contact%20City%20Hall%20at%20(323)%20773%2D5143.%C2%A0,
+
+        aHR0cHM6Ly93d3cuY2Vycml0b3MuZ292L21lZGlhL3dqZGZpMDFoL2dvb2dsZV90cmFuc2l0LTIwMjQwOTI0LnppcA==,cow,Cerritos
+        on Wheels,https://www.cerritos.gov/streets-parking-transit/buses-and-transit/,America/Los_Angeles,en,(562)
+        928-4269,,
+
+        aHR0cHM6Ly93d3cubnBzLmdvdi9leHRlcm5hbC1yZXNvdXJjZXMvZ3Rmcy95b3NlL21hcmlwb3NhLWdyb3ZlLXNodXR0bGUtc2VydmljZS56aXA=,NPS,National
+        Park Service,https://www.nps.gov/yose/planyourvisit/publictransportation.htm,America/Los_Angeles,en,209-372-0200,,
+
+        aHR0cHM6Ly93d3cuaHBjYS5nb3YvRG9jdW1lbnRDZW50ZXIvVmlldy8xMTcwMg==,1668,Huntington
+        Park Express,https://www.hpca.gov/DocumentCenter/View/5466/HP-Express-Brochure-2016sc?bidId=,America/Los_Angeles,en,323-476-7766,,
+
+        aHR0cHM6Ly93d3cubnBzLmdvdi9leHRlcm5hbC1yZXNvdXJjZXMvZ3Rmcy95b3NlL3lvc2VtaXRlLXZhbGxleS1zaHV0dGxlLnppcA==,NPS,National
+        Park Service,https://www.nps.gov/yose/planyourvisit/publictransportation.htm,America/Los_Angeles,en,,,
+
+        aHR0cDovL2d0ZnMuZ2lzLmZsaXgudGVjaC9ndGZzX2dlbmVyaWNfdXMuemlw,GREYHOUND-us,Greyhound-us,https://www.greyhound.com,UTC,en,,https://shop.greyhound.com,
+
+        aHR0cDovL2d0ZnMuZ2lzLmZsaXgudGVjaC9ndGZzX2dlbmVyaWNfdXMuemlw,FLIXBUS-us,FlixBus-us,https://www.flixbus.com,UTC,en,,https://shop.flixbus.com,
+
+        aHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL3N0YXRpY2d0ZnMvMTIwL2d0ZnMuemlw,120,Tulare
+        County Regional Transit Agency,https://gotcrta.org/,America/Los_Angeles,en,(559)
+        372-2290,https://tularecog.org/tcag/tcrta/tcrta-transport-faq-fares/,info@gotcrta.org
+
+        aHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL3N0YXRpY2d0ZnMvMS9ndGZzLnppcA==,1,SLO
+        Transit,https://www.slocity.org/government/department-directory/public-works/slo-transit,America/Los_Angeles,en,(805)
+        541-2877,,slotransit@slocity.org
+
+        aHR0cHM6Ly90cml0b250cmFuc2l0LnJpZGVzeXN0ZW1zLm5ldC9TZWN1cmUvQWRtaW4vUmVwb3J0cy9HVEZTRG93bmxvYWQuYXNweA==,Triton
+        Transit,UC San Diego Transportation Services - Triton Transit,https://transportation.ucsd.edu/campus/shuttles/index.html,America/Los_Angeles,,858-534-7422,,tritontransit@ucsd.edu
+
+        '
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -318,17 +179,17 @@ interactions:
       Content-Disposition:
       - attachment
       Content-Length:
-      - '33927'
+      - '3068'
       Content-Type:
       - application/octet-stream
       Date:
-      - Mon, 10 Nov 2025 18:21:54 GMT
+      - Mon, 05 Jan 2026 16:15:35 GMT
       ETag:
-      - CLK35K7cuJADEAE=
+      - CMKGoMGNxpEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Wed, 22 Oct 2025 21:12:23 GMT
+      - Thu, 18 Dec 2025 02:37:39 GMT
       Pragma:
       - no-cache
       Server:
@@ -337,11 +198,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOGAAZb9fSSzHbkJx5kaB61GFXs1K_fwWtrdEHSnuCpRp0nnQ_aKXSfCRSMQEcXt0nxl43ZAcA
+      - AHVrFxPOlE4P0fAIJVzsdH0ysiMJmMJvRjC-_oIDvwe2hddviCIsvOeYzV8EWZLD7gJsI72d
       X-Goog-Generation:
-      - '1761167543966642'
+      - '1766025459139394'
       X-Goog-Hash:
-      - crc32c=UJY59g==,md5=NYX7cyHuID0zql3SULULsw==
+      - crc32c=zI6EDQ==,md5=3DYOit/HdZqTsB5gfr8kHQ==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:
@@ -349,184 +210,27 @@ interactions:
       X-Goog-Stored-Content-Encoding:
       - identity
       X-Goog-Stored-Content-Length:
-      - '33927'
+      - '3068'
     status:
       code: 200
       message: OK
 - request:
-    body: "--eaaa3ea40b4a6f2acd97d820d13b3348\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\n7cdf8cef-ddcb-4c17-8820-74ee2f29a06c\r\n--eaaa3ea40b4a6f2acd97d820d13b3348\r\nContent-Disposition:
-      form-data; name=\"uploadId\"\r\n\r\nhO.JSxy2AYcg9a2clXNyhC1_WERuvw6sbTgbwevql.hGcGU8zHtpqqTBbanGiytMn2MjcGIziGtzHt6yZXBoNew32FXJIRVSq.N1kgW5ZsPTKttOt9EEn14LaILHMktK\r\n--eaaa3ea40b4a6f2acd97d820d13b3348\r\nContent-Disposition:
-      form-data; name=\"partNumber\"\r\n\r\n1\r\n--eaaa3ea40b4a6f2acd97d820d13b3348\r\nContent-Disposition:
-      form-data; name=\"upload\"; filename=\"upload\"\r\n\r\nbase64_url\tagency_id\tagency_name\tagency_url\tagency_timezone\tagency_lang\tagency_phone\tagency_fare_url\tagency_email\naHR0cHM6Ly9hcGkuYWN0cmFuc2l0Lm9yZy90cmFuc2l0L2d0ZnMvZG93bmxvYWQ=\t1\tAC
-      TRANSIT\thttp://www.actransit.org\tUS/Pacific\ten\t5108914777\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1BQw==\tAC\tAC
-      TRANSIT\thttp://www.actransit.org\tUS/Pacific\ten\t5108914777\t\t\naHR0cHM6Ly9hY2VzaHV0dGxlcy50cmFuc2xvYy5jb20vU2VjdXJlL0FkbWluL1JlcG9ydHMvR1RGU0Rvd25sb2FkLmFzcHg=\t1116\tACE
-      Parking\thttp://www.ridesystems.net\tAmerica/Los_Angeles\ten\t(888) 281-2681\t\t\naHR0cHM6Ly93d3cuYXZ0YS5jb20vdXNlcmZpbGVzL2ZpbGVzL0FWVEFfR1RGUy56aXA=\t0\tAVTA\thttp://www.avta.com\tAmerica/Los_Angeles\ten\t661-945-9445\thttps://www.avta.com/fares-special-services.php\tsupport@availtec.com\naHR0cHM6Ly93d3cuYWxoYW1icmFjYS5nb3YvRG9jdW1lbnRDZW50ZXIvVmlldy82NzQzL0FsaGFtYnJhLUFDVC1CdXMtR1RGUw==\t1669\tAlhambra
-      Community Transit\thttps://www.cityofalhambra.org/resources/public-transportation\tAmerica/Los_Angeles\ten\t626-289-1220\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1DRQ==\tCE\tAltamont
-      Corridor Express\thttps://acerail.com/\tAmerica/Los_Angeles\ten\t(209) 649-4676\thttps://acerail.com\tGTFS@sjrrc.com\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9hbWFkb3ItY2EtdXMvYW1hZG9yLWNhLXVzLnppcA==\t80\tAmador
-      Transit\thttp://amadortransit.com/schedules/\tAmerica/Los_Angeles\ten\t(209)
-      267-9395\thttp://amadortransit.com/fares/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvQXJ0ZXNpYUdURlMuemlw\t4892\tArtesia
-      Transit\thttps://www.cityofartesia.us/189/Transportation\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvQXJ2aW5HVEZTLnppcA==\t1659\tArvin
-      Transit\thttps://www.arvin.org/202/Routes-Schedules-Fares\tAmerica/Los_Angeles\ten\t661-854-3139\t\t\naHR0cHM6Ly9wbGFubXlyaWRlLmJsaW5ldHJhbnNpdC5jb20vZ3Rmc3JlYWx0aW1lL2dvb2dsZV90cmFuc2l0LnppcA==\t97aff62a-ed6d-4bd2-a9c8-d63f8e98a358\tB-Line\thttp://blinetransit.com\tAmerica/Los_Angeles\ten\t530-342-0221\thttp://blinetransit.com/Rider-Tools/Fares--Purchasing-Loactions\tinfo@bcag.org\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1CQQ==\tBA\tBay
-      Area Rapid Transit\thttps://www.bart.gov/\tAmerica/Los_Angeles\ten\t510-464-6000\t\t\naHR0cHM6Ly93d3cuYmFydC5nb3YvZGV2L3NjaGVkdWxlcy9nb29nbGVfdHJhbnNpdC56aXA=\tBART\tBay
-      Area Rapid Transit\thttps://www.bart.gov/\tAmerica/Los_Angeles\t\t510-464-6000\t\t\naHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnM=\t203\tBeach
-      Cities Transit\thttps://www.redondo.org/departments/community_services/transit/bus_schedules/index.php\tAmerica/Los_Angeles\ten-US\t310-937-6660\thttps://www.redondo.org/departments/community_services/transit/fares_and_passes/index.php\tBCT@redondo.org\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9iZWF1bW9udC1jYS11cy9iZWF1bW9udC1jYS11cy56aXA=\t73\tBeaumont
-      Transit\thttps://www.beaumontca.gov/index.aspx?NID=90\tAmerica/Los_Angeles\ten\t(951)
-      769-8530\thttps://www.beaumontca.gov/DocumentCenter/View/31274/Fare-Schedule\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvQmVsbGZsb3dlckdURlMuemlw\t1673\tBellflower
-      Bus\thttps://www.bellflower.org/community/transportation/bus_routes___schedules.php\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9ndGZzLmJpZ2JsdWVidXMuY29tL2N1cnJlbnRfc3dpZnRseS56aXA=\t6216179\tBig
-      Blue Bus\thttp://www.bigbluebus.com\tAmerica/Los_Angeles\ten\t310-451-5444\t\t\naHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vZ3Rmcy9jdXJyZW50LnppcA==\t6216179\tBig
-      Blue Bus\thttps://www.bigbluebus.com\tAmerica/Los_Angeles\ten\t310-451-5444\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvQ2FtYXJpbGxvR1RGUy56aXA=\t1656\tCamarillo
-      Area Transit\thttps://www.cityofcamarillo.org/residents/public_transportation/camarillo_area_transit.php\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9jaXR5Y29tbWJ1cy5jb20vZ3Rmcw==\t71\tCity
-      Of Commerce Transit\thttps://www.ci.commerce.ca.us/city-hall/transportation\tAmerica/Los_Angeles\ten-US\t(323)
-      887-4419\t\t\naHR0cHM6Ly9kb3duZXkucmlkZXJhbGVydHMuY29tL2luZm9wb2ludC9ndGZzLXppcC5hc2h4\t0\tCity
-      of Downey\thttps://www.downeyca.org/our-city/departments/parks-recreation/transit/downeylink-transit-system\tAmerica/Los_Angeles\ten\t562-529-5465\thttps://www.downeyca.org/our-city/departments/parks-recreation/transit/mta-tap-transit-access-pass\tsupport@availtec.com\naHR0cHM6Ly9hcHAubWVjYXRyYW4uY29tL3VyYi93cy9mZWVkL2MybDBaVDF6Ykc5MGNtRnVjMmwwTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDB6WlRNd016TTFPVFJpTVRFMk56QTBOMkl4TmpRd05qQTBaalF3TUdNek16ZGlNMkUxTVRRMA==\tSLOT\tCity
-      of San Luis Obispo Transit\thttps://www.slocity.org/government/department-directory/public-works/slo-transit-bus\tAmerica/Los_Angeles\ten\t(805)
-      541-2877\thttps://www.tokentransit.com/agency/slotransit\tslotransit@slocity.org\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvV2FzY29EaWFsYVJpZGVGbGV4LnppcA==\twasco\tCity
-      of Wasco\thttps://www.cityofwasco.org/196/Dial-A-Ride\tUS/Pacific\ten\t\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9jbG92aXN0cmFuc2l0LWNhLXVzL2Nsb3Zpc3RyYW5zaXQtY2EtdXMuemlw\t971\tClovis
-      Transit\thttps://cityofclovis.com/general-services/transit/\tAmerica/Los_Angeles\ten\t559-324-2770\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9jb21tdXRlLWNhLXVzL2NvbW11dGUtY2EtdXMuemlw\t4963\tCommute.org
-      Shuttles\thttp://www.commute.org\tAmerica/Los_Angeles\ten\t(650) 588-1600\t\t\naHR0cDovL2NjY3RhLm9yZy9HVEZTL2dvb2dsZV90cmFuc2l0LnppcA==\t2\tCounty
-      Connection\thttp://www.countyconnection.com/\tAmerica/Los_Angeles\tEN\t925-676-7500\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1DQw==\tCC\tCounty
-      Connection\thttp://www.countyconnection.com/\tAmerica/Los_Angeles\ten\t925-676-7500\t\t\naHR0cHM6Ly93d3cuY3VsdmVyY2l0eS5vcmcvZmlsZXMvYXNzZXRzL3B1YmxpYy92LzkvZG9jdW1lbnRzL2luZm9ybWF0aW9uLXRlY2hub2xvZ3kvbWFwcy9ndGZzZXhwb3J0LnppcA==\t1\tCulver
-      CityBus\thttps://www.culvercity.org/how-do-i/find/culver-city-bus\tAmerica/Los_Angeles\ten\t(310)253-6500\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1ERQ==\tDE\tDumbarton
-      Express Consortium\thttps://dumbartonexpress.com\tAmerica/Los_Angeles\ten\t(510)891-4777\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvRWFzdGVyblNpZXJyYUJpc2hvcExvbmVQaW5lRmxleC56aXA=\t78\tEastern
-      Sierra Transit Authority\thttp://www.estransit.com/CMS\tAmerica/Los_Angeles\ten\t(800)
-      922-1930\t\t\naHR0cHM6Ly9lbWVyeWdvcm91bmQudHJpcHNob3QuY29tL3YxL2d0ZnMuemlwP3JlZ2lvbklkPUNBNTU4RERDLUQ3RjItNEI0OC05Q0FDLURFRUExMTM0RjgyMA==\t05f0da90-7acf-491d-936c-5ee848a0e941\tEmery
-      Go-Round\thttps://emerygoround.com/\tAmerica/Los_Angeles\ten\t(510) 451-3862\t\ttransit-info@emerygoround.com\naHR0cHM6Ly9naXM0dS5mcmVzbm8uZ292L2Rvd25sb2Fkcy96aXAvZmF4X2d0ZnMuemlw\t01\tFresno
-      Area Express\thttps://www.fresno.gov/transportation/fax/\tAmerica/Los_Angeles\ten\t621-7433\thttps://www.fresno.gov/transportation\t\naHR0cHM6Ly9yaWRlZ3RyYW5zLmNvbS9ndGZzLnppcA==\t1\tGTrans\thttps://ridegtrans.com/\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9nbGVuZGFsZWNhLmdvdi9Ib21lL1Nob3dEb2N1bWVudD9pZD0yOTU0OQ==\t1\tGlendale
-      Beeline\thttp://glendalebeeline.com/\tAmerica/Los_Angeles\ten\t(818)548-3960\thttps://www.glendaletransit.com/tools/cash-fares-passes\t\naHR0cHM6Ly93d3cuZ2N0ZC5vcmcvZ3Rmcy8=\tGCT\tGold
-      Coast Transit\thttps://www.gctd.org/\tAmerica/Vancouver\ten\t805-487-4222\thttps://www.gctd.org/fares-rider-guide/fares/\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1HRg==\tGF\tGolden
-      Gate Ferry\thttp://www.goldengate.org\tAmerica/Los_Angeles\ten\t(415) 455-2000\thttps://www.goldengate.org/bus/bus-fares-payment/\t\naHR0cHM6Ly9yZWFsdGltZS5nb2xkZW5nYXRlLm9yZy9ndGZzc3RhdGljL0dURlNUcmFuc2l0RGF0YS56aXA=\t90016\tGolden
-      Gate Transit\thttp://www.goldengate.org\tAmerica/Los_Angeles\ten\t(415) 455-2000\thttps://www.goldengate.org/bus/bus-fares-payment/\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1HRw==\tGG\tGolden
-      Gate Transit\thttp://www.goldengate.org\tAmerica/Los_Angeles\ten\t(415) 455-2000\thttps://www.goldengate.org/bus/bus-fares-payment/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvSGF2YXN1TGFuZGluZ0ZlcnJ5R1RGUy56aXA=\t\tHavasu
-      Landing Resort & Casino Ferry\thttps://www.havasulandingcasino.com/ferry-schedule\tAmerica/Phoenix\ten\t(760)
-      858-4593\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvSHVtYm9sZHRUcmFuc2l0QXV0aG9yaXR5RGlhbEFSaWRlRmxleC56aXA=\t1\tHumboldt
-      Transit Authority\thttp://www.redwoodtransit.org/?referrer=gtfs\tAmerica/Los_Angeles\ten\t(707)
-      443-0826\t\t\naHR0cHM6Ly93d3cuY2l0eW9maW5nbGV3b29kLm9yZy9kb2N1bWVudGNlbnRlci92aWV3LzIxMTc3\t4664\tI-Line
-      Shuttle\thttps://www.cityofinglewood.org/796/Transportation\tAmerica/Los_Angeles\ten\t310-412-4378\t\t\naHR0cHM6Ly9zY2hlZHVsZS5pdnRyYW5zaXQuY29tL2d0ZnMvZGF0YS56aXA=\tIVT\tImperial
-      Valley Transit\thttp://www.ivtransit.com/\tAmerica/Los_Angeles\ten\t1 760 482-2900\thttp://www.ivtransit.com/fares\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9rZXJuY291bnR5LWNhLXVzL2tlcm5jb3VudHktY2EtdXMuemlw\t194\tKern
-      Transit\thttp://kerntransit.org/?referrer=gtfs\tAmerica/Los_Angeles\ten\t(661)
-      862-5032\thttp://kerntransit.org/fares/?referrer=gtfs\t\naHR0cHM6Ly9rYXJ0LmNvbm5leGlvbnoubmV0L3J0dC9wdWJsaWMvdXRpbGl0eS9ndGZzLmFzcHg=\t1\tKings
-      Area Rural Transit\thttp://mykartbus.com/\tAmerica/Los_Angeles\ten\t800-675-8881\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9kcHdsYWNvdW50eS1jYS11cy9kcHdsYWNvdW50eS1jYS11cy56aXA=\t1466\tLA
-      Go Bus\thttps://dpw.lacounty.gov/transit/\tAmerica/Los_Angeles\ten\t1 (626)
-      458-3999\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9sYWd1bmFiZWFjaC1jYS11cy9sYWd1bmFiZWFjaC1jYS11cy56aXA=\t126\tLaguna
-      Beach Transit\thttp://www.lagunabeachcity.net/cityhall/transit_and_trolleys/\tAmerica/Los_Angeles\ten\t(949)
-      497-3311\thttp://www.lagunabeachcity.net/cityhall/pw/transit/fares.asp\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvTGFndW5hQmVhY2hUcmFuc2l0TG9jYWxGbGV4LnppcA==\t126\tLaguna
-      Beach Transit\thttp://www.lagunabeachcity.net/cityhall/transit_and_trolleys/\tAmerica/Los_Angeles\ten\t(949)
-      497-3311\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9sYWtldHJhbnNpdC1jYS11cy9sYWtldHJhbnNpdC1jYS11cy56aXA=\t7\tLake
-      Transit\thttp://www.laketransit.org/\tAmerica/Los_Angeles\ten\t707-263-3334\thttps://laketransit.org/cash-fares/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvTGFzc2VuUnVyYWxCdXNhbmREaWFsQVJpZGVGbGV4LnppcA==\t81\tLassen
-      Rural Bus\thttp://www.lassentransportation.com/a/Lassen-Rural-Bus-LRB.php?referrer=gtfs\tAmerica/Los_Angeles\ten\t(530)252-7433\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9sYXNzZW4tY2EtdXMvbGFzc2VuLWNhLXVzLnppcA==\t81\tLassen
-      Rural Bus\thttps://www.lassentransportation.com/\tAmerica/Los_Angeles\ten\t(530)252-7433\t\t\naHR0cHM6Ly9sYXh0cmFuc3BvcnRhdGlvbi5yaWRlc3lzdGVtcy5uZXQvU2VjdXJlL0FkbWluL1JlcG9ydHMvR1RGU0Rvd25sb2FkLmFzcHg=\t1042\tLax
-      Transportation\thttp://www.ridesystems.net\tAmerica/Los_Angeles\ten\t(888) 281-2681\t\t\naHR0cDovL3dlYndhdGNoLmxhdnRhLm9yZy9UTUdURlNSZWFsVGltZVdlYlNlcnZpY2UvR1RGUy1TdGF0aWMvZ29vZ2xlX3RyYW5zaXQuemlw\tlavta-ca-us\tLivermore
-      Amador Valley Transit Authority\thttps://wheelsbus.com/\tAmerica/Los_Angeles\ten\t925-455-7500\thttps://www.wheelsbus.com/fares/\t\naHR0cHM6Ly9kcml2ZS5nb29nbGUuY29tL3VjP2V4cG9ydD1kb3dubG9hZCZpZD0xODY5RVZhMXo2bV9pRDZRbXZSWHlUSHRZaWFTVUJST2w=\t90023\tLong
-      Beach Transit\thttp://www.ridelbt.com\tAmerica/Los_Angeles\ten\t(562) 591-2301\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvTU9WRVN0YW5pc2xhdXNWZXRzdmFuRmxleC56aXA=\t1002\tMOVE
-      Stanislaus\thttp://www.movestanislaus.org\tAmerica/Los_Angeles\ten\t209-522-2300\t\t\naHR0cHM6Ly93d3cuc2RtdHMuY29tL2dvb2dsZV90cmFuc2l0X2ZpbGVzL2dvb2dsZV90cmFuc2l0LnppcA==\tMTS\tMTS\thttp://www.sdmts.com\tAmerica/Los_Angeles\ten\t619-233-3004\t\tcustomerfeedback@sdmts.com\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1NVg==\tMV\tMVgo\thttps://mvgo.org/\tAmerica/Los_Angeles\ten\t650-933-2518\t\tinfo@mvgo.org\naHR0cHM6Ly9ndGZzLm12Z28ub3JnL2d0ZnMuemlw\t533\tMVgo\thttps://mvgo.org/\tAmerica/Los_Angeles\ten\t650-933-2518\t\tinfo@mvgo.org\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9tYWRlcmFjdGMtY2EtdXMvbWFkZXJhY3RjLWNhLXVzLnppcA==\t111\tMadera
-      County Connection\thttps://mcctransit.com/\tAmerica/Los_Angeles\ten\t(559) 263-8080\thttps://mcctransit.com/fares-and-passes/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9jaXR5b2ZtYWRlcmEtY2EtdXMvY2l0eW9mbWFkZXJhLWNhLXVzLnppcA==\t960\tMadera
-      Metro\thttps://www.madera.gov/home/departments/transit/#tr-madera-metro-fixed-route-1509901\tAmerica/Los_Angeles\ten\t(559)
-      661-RIDE (7433)\thttps://www.madera.gov/home/departments/transit/fares/\t\naHR0cHM6Ly9tYXJpbnRyYW5zaXQub3JnL2RhdGEvZ29vZ2xlX3RyYW5zaXQuemlw\t33\tMarin
-      Transit\thttps://marintransit.org\tAmerica/Los_Angeles\ten\t415-455-2000\thttps://marintransit.org/fares\tinfo@marintransit.org\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvTWF5d29vZEdURlMuemlw\t4890\tMaywood
-      Express Shuttle\thttps://www.cityofmaywood.com/200/Transportation-Services\tAmerica/Los_Angeles\ten\t(323)
-      562-5700\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9tZW5kb2Npbm8tY2EtdXMvbWVuZG9jaW5vLWNhLXVzLnppcA==\t42\tMendocino
-      Transit Authority\thttps://mendocinotransit.org/\tAmerica/Los_Angeles\ten\t707-462-1422\thttps://mendocinotransit.org/fares/\t\naHR0cHM6Ly9naXRsYWIuY29tL0xBQ01UQS9ndGZzX2J1cy9yYXcvbWFzdGVyL2d0ZnNfYnVzLnppcA==\tLACMTA\tMetro
-      - Los Angeles\thttps://www.metro.net\tAmerica/Los_Angeles\ten\t(323)466-3876\t\t\naHR0cHM6Ly93d3cubWV0cm9saW5rdHJhaW5zLmNvbS9nbG9iYWxhc3NldHMvYWJvdXQvZ3Rmcy9ndGZzLnppcA==\tMetrolink\tMetrolink
-      Trains\thttp://www.metrolinktrains.com\tAmerica/Los_Angeles\ten\t(800) 371-LINK\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1NQg==\tMB\tMission
-      Bay TMA\thttp://missionbaytma.org/\tAmerica/Los_Angeles\ten\t800-428-5588\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9taXNzaW9uYmF5dG1hLWNhLXVzL21pc3Npb25iYXl0bWEtY2EtdXMuemlw\t671\tMission
-      Bay TMA\thttp://missionbaytma.org/\tAmerica/Los_Angeles\ten\t800-428-5588\t\t\naHR0cHM6Ly9tdnNodXR0bGUucmlkZXN5c3RlbXMubmV0L1NlY3VyZS9BZG1pbi9SZXBvcnRzL0dURlNEb3dubG9hZC5hc3B4\t911\tMission
-      Viejo\thttp://www.ridesystems.net\tAmerica/Los_Angeles\ten\t(888) 281-2681\t\t\naHR0cHM6Ly9tYmwucmlkZXJhbGVydHMuY29tL2luZm9wb2ludC9ndGZzLXppcC5hc2h4\t0\tMontebello
-      Bus Lines\thttp://www.ridembl.com/\tAmerica/Los_Angeles\ten\t323-558-1625\thttp://www.ridembl.com/Fares\tridembl@cityofmontebello.com\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9tb29ycGFya2NpdHl0cmFuc2l0LWNhLXVzL21vb3JwYXJrY2l0eXRyYW5zaXQtY2EtdXMuemlw\t877\tMoorpark
-      City Transit\thttps://www.moorparkca.gov/227/Bus-Ride-Guide\tAmerica/Los_Angeles\ten\t805-517-6257\thttps://www.moorparkca.gov/230/Fares-Regulations-Passes\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9tb3JvbmdvYmFzaW4tY2EtdXMvbW9yb25nb2Jhc2luLWNhLXVzLnppcA==\t74\tMorongo
-      Basin Transit Authority\thttp://www.mbtabus.com/\tAmerica/Los_Angeles\ten\t(760)
-      366-2395\thttps://basin-transit.com/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9iaWdiZWFyLWNhLXVzL2JpZ2JlYXItY2EtdXMuemlw\t44\tMountain
-      Transit\thttp://www.mountaintransit.org/?referrer=gtfs\tAmerica/Los_Angeles\ten\t909-878-5200\thttps://www.mountaintransit.org/fare-rates/\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1NQw==\tMC\tMountain
-      View Community Shuttle\thttps://mvcommunityshuttle.com/\tAmerica/Los_Angeles\ten\t855-730-7433\t\tinfo@mvcommunnityshuttle.com\naHR0cHM6Ly9ndGZzLm12Y29tbXVuaXR5c2h1dHRsZS5jb20vZ3Rmcy56aXA=\tMC\tMountain
-      View Community Shuttle\thttps://mvcommunityshuttle.com/\tAmerica/Los_Angeles\ten\t855-730-7433\t\tinfo@mvcommunnityshuttle.com\naHR0cHM6Ly9uYXBhLnN5bmNyb21hdGljcy5jb20vZ3Rmcw==\t223\tNAPA\thttps://vinetransit.com/\tAmerica/Los_Angeles\ten-US\t707-251-2800\thttps://vinetransit.com/fares/\tinfo@nvta.ca.gov\naHR0cHM6Ly93d3cubnBzLmdvdi9leHRlcm5hbC1yZXNvdXJjZXMvZ3Rmcy95b3NlL3lvc2VtaXRlLXZhbGxleS1zaHV0dGxlLnppcA==\tNPS\tNational
-      Park Service\thttps://www.nps.gov/yose/planyourvisit/publictransportation.htm\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly93d3cubnBzLmdvdi9leHRlcm5hbC1yZXNvdXJjZXMvZ3Rmcy95b3NlL21hcmlwb3NhLWdyb3ZlLXNodXR0bGUtc2VydmljZS56aXA=\tNPS\tNational
-      Park Service\thttps://www.nps.gov/yose/planyourvisit/publictransportation.htm\tAmerica/Los_Angeles\ten\t209-372-0200\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9uZWVkbGVzLWNhLXVzL25lZWRsZXMtY2EtdXMuemlw\t38\tNeedles
-      Area Transit\thttps://cityofneedles.com/transit/\tAmerica/Los_Angeles\ten\t(760)
-      326-2113\thttps://cityofneedles.com/transit/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9nb2xkY291bnRyeXN0YWdlLWNhLXVzL2dvbGRjb3VudHJ5c3RhZ2UtY2EtdXMuemlw\t1523\tNevada
-      County Connects\thttps://www.nevadacountyca.gov/3456/Transit-Services\tAmerica/Los_Angeles\ten\t530-477-0103\thttp://www.mynevadacounty.com/nc/cda/pw/transit/Pages/GC-Stage-Passenger-Information.aspx\t\naHR0cHM6Ly93d3cub21uaXRyYW5zLm9yZy9nb29nbGUvZ29vZ2xlX3RyYW5zaXQuemlw\t9029\tOMNITRANS\thttps://www.omnitrans.org\tAmerica/Los_Angeles\ten\t800-9-OMNIBUS\thttps://omnitrans.org/buy-a-pass/fares\t\naHR0cHM6Ly9vY3RhLm5ldC9jdXJyZW50L2dvb2dsZV90cmFuc2l0LnppcA==\t1\tOrange
-      County Transportation Authority\thttp://www.octa.net/Bus-Transit/Overview\tAmerica/Los_Angeles\ten\t714-636-7433\thttp://www.octa.net/Bus-Transit/Fares-and-Passes/Overview\t\naHR0cHM6Ly9vcmVnb24tZ3Rmcy50cmlsbGl1bXRyYW5zaXQuY29tL2d0ZnNfZGF0YS9wb2ludC1vci11cy9wb2ludC1vci11cy56aXA=\t45\tOregon
-      POINT\thttp://oregon-point.com\tAmerica/Los_Angeles\ten\t1-888-846-4183\thttps://www.oregon-point.com/ticketing-info/?route=southwest\t\naHR0cHM6Ly9wZXRhbHVtYXRyYW5zaXQuY29tL2d0ZnM=\t244\tPETALUMA\t\tAmerica/Los_Angeles\ten-US\t\t\t\naHR0cHM6Ly9yaWRlcHZ2dGEuY29tL2d0ZnM=\t235\tPVVTA\thttps://pvvta.com/\tAmerica/Los_Angeles\ten-US\t\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9wdnB0YS1jYS11cy9wdnB0YS1jYS11cy56aXA=\t134\tPalos
-      Verdes Peninsula Transit Authority\thttp://www.palosverdes.com/pvtransit/\tAmerica/Los_Angeles\ten\t(310)
-      544-7108\thttp://www.palosverdes.com/pvtransit/index.cfm?pg=passes\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvUGxhY2VyQ291bnR5RGlhbEFSaWRlRmxleC56aXA=\t874\tPlacer
-      County Transit\thttp://www.placer.ca.gov/Departments/Works/Transit/PCT\tUS/Pacific\ten\t530-745-7560\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9wbGFjZXJjb3VudHktY2EtdXMvcGxhY2VyY291bnR5LWNhLXVzLnppcA==\t874\tPlacer
-      County Transit\thttp://www.placer.ca.gov/Departments/Works/Transit/PCT\tUS/Pacific\ten\t530-745-7560\thttps://www.placer.ca.gov/1799/Fares\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9wbHVtYXMtY2EtdXMvcGx1bWFzLWNhLXVzLnppcA==\t20\tPlumas
-      Transit\thttp://www.plumastransit.com\tAmerica/Los_Angeles\ten\t530-283-2538\thttps://www.plumastransit.com/fares.html\t\naHR0cHM6Ly9wcmVzaWRpb2J1cy5jb20vZ3Rmcw==\t18\tPresidio
-      Go\thttps://www.presidio.gov/shuttle\tAmerica/Los_Angeles\ten-US\t\t\t\naHR0cHM6Ly9yYWJhZ3Rmcy56NS53ZWIuY29yZS53aW5kb3dzLm5ldC9yYWJhZ3Rmc19mbGV4LnppcA==\t25\tRedding
-      Area Bus Authority\thttp://www.rabaride.com/\tAmerica/Los_Angeles\ten\t530-241-2877\t\t\naHR0cHM6Ly9yYWJhZ3Rmcy56NS53ZWIuY29yZS53aW5kb3dzLm5ldC9yYWJhZ3Rmcy56aXA=\t25\tRedding
-      Area Bus Authority\thttp://www.rabaride.com/\tAmerica/Los_Angeles\ten\t530-241-2877\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9kZWxub3J0ZS1jYS11cy9kZWxub3J0ZS1jYS11cy56aXA=\t19\tRedwood
-      Coast Transit\thttp://www.redwoodcoasttransit.org/\tAmerica/Los_Angeles\ten\t707-464-6400\thttp://redwoodcoasttransit.org/fares/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvUmVkd29vZENvYXN0RGVsTm9ydGVGbGV4LnppcA==\t19\tRedwood
-      Coast Transit\thttp://www.redwoodcoasttransit.org/\tAmerica/Los_Angeles\ten\t707-464-6400\t\t\naHR0cHM6Ly93d3cucml2ZXJzaWRldHJhbnNpdC5jb20vZ29vZ2xlX3RyYW5zaXQuemlw\t1\tRiverside
-      Transit Agency\thttp://www.riversidetransit.com\tAmerica/Los_Angeles\ten\t(951)
-      565-5002\t\t\naHR0cHM6Ly9pcG9ydGFsLnNhY3J0LmNvbS9ndGZzL1Jvc2V2aWxsZS9nb29nbGVfdHJhbnNpdC56aXA=\tRoseville\tRoseville
-      Transit\thttp://www.roseville.ca.us/transit\tAmerica/Los_Angeles\ten\t916-745-7560\t\t\naHR0cHM6Ly9zYW50YXJvc2Euc3luY3JvbWF0aWNzLmNvbS9ndGZz\t242\tSANTAROSA\thttps://srcitybus.org/\tAmerica/Los_Angeles\ten-US\t707-543-3333\thttps://srcitybus.org/fares-and-passes/\ttellus@srcity.org\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TUg==\tSR\tSANTAROSA\thttps://srcitybus.org/\tAmerica/Los_Angeles\ten\t707-543-3333\thttps://srcitybus.org/fares-and-passes/\ttellus@srcity.org\naHR0cHM6Ly9zYm10ZC5nb3YvZ29vZ2xlX3RyYW5zaXQvZmVlZC56aXA=\t1\tSBMTD\thttps://sbmtd.gov\tAmerica/Los_Angeles\ten\t805-963-3364\thttps://sbmtd.gov/fares-passes/\tinfo@sbmtd.gov\naHR0cHM6Ly9pcG9ydGFsLnNhY3J0LmNvbS9ndGZzL2VnL2dvb2dsZV90cmFuc2l0LnppcA==\te-tran\tSacRT
-      (Elk Grove)\thttp://sacrt.com/schedules\tAmerica/Los_Angeles\ten\t916-321-2877\t\t\naHR0cHM6Ly9pcG9ydGFsLnNhY3J0LmNvbS9ndGZzL3NydGQvZ29vZ2xlX3RyYW5zaXQuemlw\tSRTD\tSacramento
-      Regional Transit\thttp://www.sacrt.com\tAmerica/Los_Angeles\ten\t916-321-BUSS\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9zYWdlc3RhZ2UtY2EtdXMvc2FnZXN0YWdlLWNhLXVzLnppcA==\t678\tSage
-      Stage\thttp://www.sagestage.com\tAmerica/Los_Angeles\ten\t(530) 233-6410\thttp://www.sagestage.com/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9jb21tdXRlLWNhLXVzL2NvbW11dGUtY2EtdXMuemlw\t4968\tSamTrans\thttps://www.samtrans.com/Home.html\tAmerica/Los_Angeles\ten\t1-800-660-4287\thttps://www.samtrans.com/fares/?agency=samtrans\t\naHR0cHM6Ly93d3cuc2FtdHJhbnMuY29tL0Fzc2V0cy9HVEZTL3NhbXRyYW5zL1NULUdURlMuemlwP3Y9MTExNA==\tsamtrans-ca-us\tSamTrans\thttp://www.samtrans.com\tAmerica/Los_Angeles\ten\t800-660-4287\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9zYW5iZW5pdG9jb3VudHktY2EtdXMvc2FuYmVuaXRvY291bnR5LWNhLXVzLnppcA==\t123\tSan
-      Benito County Express\thttp://www.SanBenitoCountyExpress.org/\tAmerica/Los_Angeles\ten\t(831)
-      636-4161\thttp://www.sanbenitocountyexpress.org/fares.html\t\naHR0cHM6Ly93d3cuc2RtdHMuY29tL2dvb2dsZV90cmFuc2l0X2ZpbGVzL2dvb2dsZV90cmFuc2l0LnppcA==\tSAN\tSan
-      Diego International Airport\thttp://www.san.org\tAmerica/Los_Angeles\ten\t619-694-7427\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TQg==\tSB\tSan
-      Francisco Bay Ferry\thttps://sanfranciscobayferry.com/\tAmerica/Los_Angeles\ten\t4157058291\thttps://sanfranciscobayferry.com/fares-tickets\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9zZmJheWZlcnJ5LWNhLXVzL3NmYmF5ZmVycnktY2EtdXMuemlw\t873\tSan
-      Francisco Bay Ferry\thttps://sanfranciscobayferry.com/\tAmerica/Los_Angeles\ten\t4157058291\thttps://sanfranciscobayferry.com/fares-tickets\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TRg==\tSF\tSan
-      Francisco Municipal Transportation Agency\thttp://www.sfmta.com\tAmerica/Los_Angeles\ten\t311\thttps://SFMTA.com/Fares\tmunifeedback@sfmta.com\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvU2FuSm9hcXVpblJURERpYWxBUmlkZWFuZFZhbkdvRmxleC56aXA=\t1003\tSan
-      Joaquin RTD\thttp://sjrtd.com/\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9kMzR0aXc2NG41ejRvaC5jbG91ZGZyb250Lm5ldC93cC1jb250ZW50L3VwbG9hZHMvU0pKUEFfMDMxODIwMjUtMS56aXA=\tSJRRC\tSan
-      Joaquin Regional Rail Commission\thttps://acerail.com/\tAmerica/Los_Angeles\ten\t1-800-411-7245\thttps://acerail.com/schedules/\t\naHR0cDovL3NhbmpvYXF1aW5ydGQuY29tL1JURC1HVEZTL1JURC1HVEZTLnppcA==\t90012\tSan
-      Joaquin Regional Transit District (RTD)\thttp://sanjoaquinrtd.com\tAmerica/Los_Angeles\ten\t1-209-943-1111\thttps://sanjoaquinrtd.com/fares/\t\naHR0cHM6Ly9hcHBzLnNhbnRhY2xhcml0YXRyYW5zaXQuY29tL3J0dC9wdWJsaWMvdXRpbGl0eS9ndGZzLmFzcHg=\t1\tSanta
-      Clarita Transit\thttps://santaclaritatransit.com\tAmerica/Los_Angeles\ten\t(661)
-      294-1287\t\t\naHR0cHM6Ly9kZXZlbG9wZXIuc2NtZXRyby5vcmcvZ3Rmcy56aXA=\t1\tSanta
-      Cruz METRO\thttps://scmetro.org\tAmerica/Los_Angeles\ten\t(831)425-8600\thttps://scmetro.org/fares\t\naHR0cHM6Ly9zbXJ0LnRyaXBzaG90LmNvbS92MS9ndGZzLnppcD9yZWdpb25JZD1DQTU1OEREQy1EN0YyLTRCNDgtOUNBQy1ERUVBMTEzNEY4MjA=\t427f436c-699f-40bf-ac6f-363f94014484\tSanta
-      Maria Regional Transit (Home)\thttps://smrt.tripshot.com/\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9zb2x0cmFucy5jb25uZXhpb256Lm5ldC9ydHQvcHVibGljL3Jlc291cmNlL2d0ZnMuemlw\t1\tSolTrans\thttps://soltrans.org/\tAmerica/Los_Angeles\ten\t(707)
-      648-4666\t\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TVA==\tST\tSolTrans\thttps://soltrans.org/\tAmerica/Los_Angeles\ten\t(707)
-      648-4666\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9zb25vbWFjb3VudHktY2EtdXMvc29ub21hY291bnR5LWNhLXVzLnppcA==\t175\tSonoma
-      County Transit\thttp://www.sctransit.com/?referrer=gtfs\tAmerica/Los_Angeles\ten\t(707)
-      576-7433\thttp://sctransit.com/fares/?referrer=gtfs\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TTw==\tSO\tSonoma
-      County Transit\thttp://www.sctransit.com/?referrer=gtfs\tAmerica/Los_Angeles\ten\t(707)
-      576-7433\thttp://sctransit.com/fares/?referrer=gtfs\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9zbWFydC1jYS11cy9zbWFydC1jYS11cy56aXA=\t1535\tSonoma
-      Marin Area Rail Transit\thttp://www.SonomaMarinTrain.org\tAmerica/Los_Angeles\ten\t(707)794-3330\thttp://www.sonomamarintrain.org/fares\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TQQ==\tSA\tSonoma
-      Marin Area Rail Transit\thttp://www.SonomaMarinTrain.org\tAmerica/Los_Angeles\ten\t(707)794-3330\thttp://www.sonomamarintrain.org/fares\t\naHR0cHM6Ly90cmFuc3BvcnRhdGlvbi1mb3Jtcy5zdGFuZm9yZC5lZHUvZ29vZ2xlL2dvb2dsZV90cmFuc2l0LnppcA==\t10747950\tStanford
-      Marguerite Shuttle\thttps://transportation.stanford.edu/marguerite\tAmerica/Los_Angeles\ten\t650-723-9362\t\tmarguerite@stanford.edu\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvU3RhblJUQU1vZGVzdG9OZXdtYW5PYWtkYWxlUGF0dGVyc29tYW5kUml2ZXJiYW5rRmxleC56aXA=\t1698\tStanislaus
-      Regional Transit Authority\thttps://stanrta.org/\tAmerica/Los_Angeles\ten\t\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy90ZWhhbWEtY2EtdXMvdGVoYW1hLWNhLXVzLnppcA==\t62\tSusanville
-      Indian Rancheria Public Transportation Program\thttp://www.transitunlimited.org/Susanville_Indian_Rancheria_Public_Transportation_Program\tAmerica/Los_Angeles\ten\t530-257-1128\t\t\naHR0cHM6Ly90cmFuc2l0LnRvcnJhbmNlY2EuZ292L2hvbWUvc2hvd3B1Ymxpc2hlZGRvY3VtZW50LzE2NjczLzYzODcyMzYwMzcwMDgzMDAwMA==\t1\tTORRANCE
-      TRANSIT SYSTEM\thttp://Transit.TorranceCA.gov\tAmerica/Los_Angeles\ten\t310-618-6266\thttps://transit.torranceca.gov/fares\tTransit@TorranceCA.Gov\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVHJhY3lUUkFDRVJQbHVzYW5kUGFyYXRyYW5zaXRGbGV4LnppcA==\t1490\tTRACER\thttps://ci.tracy.ca.us/?navId=193\tAmerica/Los_Angeles\ten\t209-831-4287\t\t\naHR0cDovL3MzLmFtYXpvbmF3cy5jb20vZXRhdHJhbnNpdC5ndGZzL3RyYWNlci5ldGFzcG90Lm5ldC9ndGZzLnppcA==\t1\tTRACER
-      Bus Service\thttps://www.cityoftracy.org/our-city/departments/mobility-an\tAmerica/Los_Angeles\ten\t209-831-4287\t\t\naHR0cHM6Ly90YWhvZS5zeW5jcm9tYXRpY3MuY29tL2d0ZnM=\t215\tTahoe
-      Transportation District\thttps://www.tahoetransportation.org/\tAmerica/Los_Angeles\ten-US\t(775)
-      589-5500\thttps://www.tahoetransportation.org/fares\tinfo@tahoetransportation.org\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVGFob2VUcnVja2VlUmVnaW9uYWxUcmFuc3BvcnRhdGlvblRBUlRDb25uZWN0RGlhbEFSaWRlUGxhY2VyVEFSVFBhcmF0cmFuc2l0RmxleC56aXA=\t904\tTahoe
-      Truckee Area Regional Transit\thttp://www.placer.ca.gov/Departments/Works/Transit/TART.aspx\tAmerica/Los_Angeles\ten\t(530)
-      550-1212\t\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy90ZWhhbWEtY2EtdXMvdGVoYW1hLWNhLXVzLnppcA==\t21\tTehama
-      Rural Area Express\thttp://www.taketrax.com/\tAmerica/Los_Angeles\ten\t530-385-2877\t\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVGhvdXNhbmRPYWtzRGlhbEFSaWRlUGFyYXRyYW5zaXRhbmRDb25uZWN0RmxleC56aXA=\t526\tThousand
-      Oaks Transit\thttps://www.toaks.org/departments/public-works/transit\tAmerica/Los_Angeles\ten\t\thttps://www.toaks.org/departments/public-works/transit/fares-prepaid-passes\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy90aG91c2FuZG9ha3MtY2EtdXMvdGhvdXNhbmRvYWtzLWNhLXVzLnppcA==\t526\tThousand
-      Oaks Transit\thttps://www.toaks.org/departments/public-works/transit\tAmerica/Los_Angeles\ten\t\thttps://www.toaks.org/departments/public-works/transit/fares-prepaid-passes\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy93ZWF2ZXJ2aWxsZS1jYS11cy93ZWF2ZXJ2aWxsZS1jYS11cy56aXA=\t34\tTrinity
-      Transit\thttp://www.trinitytransit.org/?referrer=gtfs\tAmerica/Los_Angeles\ten\t530-623-5438\thttps://trinitytransit.org/fares/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVHVsYXJlQ291bnR5QXJlYVRyYW5zaXRhbmREaWFsQVJpZGVGbGV4LnppcA==\t937\tTulare
-      County Area Transit\thttp://tularecounty.ca.gov/rma/index.cfm/public-works/tulare-county-area-transit-tcat/\tAmerica/Los_Angeles\ten\t877-404-6473\thttp://www.tularecounty.ca.gov/rma/index.cfm/public-works/tulare-county-area-transit-tcat/tcat-systemwide-area-map/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy90Y3J0YS1jYS11cy90Y3J0YS1jYS11cy56aXA=\t4895\tTulare
-      County Regional Transit Agency\thttps://tcrta.wpenginepowered.com/\tAmerica/Los_Angeles\ten\t(559)
-      372-2290\thttps://tularecog.org/tcag/tcrta/tcrta-transport-faq-fares/\t\naHR0cHM6Ly9ndGZzLnJlbWl4LmNvbS90dW9sdW1uZV9jYV91cy56aXA=\tTCT\tTuolumne
-      County Transit\thttps://www.tuolumnecountytransit.com/\tAmerica/Los_Angeles\ten\t209.532.0404\thttps://www.tuolumnecountytransit.com/fares\ttgillespie@co.tuolumne.ca.us\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVHVybG9ja1RyYW5zaXREaWFsQVJpZGVGbGV4LnppcA==\t1642\tTurlock
-      Transit\thttp://www.turlocktransit.com/\tAmerica/Los_Angeles\ten\t(209) 668-5600\thttp://www.turlocktransit.com/fares.html?lang=en\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy90dXJsb2NrLWNhLXVzL3R1cmxvY2stY2EtdXMuemlw\t1642\tTurlock
-      Transit\thttp://www.turlocktransit.com/\tAmerica/Los_Angeles\ten\t(209) 668-5600\thttp://www.turlocktransit.com/fares.html?lang=en\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVW5pb25DaXR5UGFyYXRyYW5zaXRGbGV4LnppcA==\t1642\tTurlock
-      Transit\thttp://www.turlocktransit.com/\tAmerica/Los_Angeles\ten\t(209) 668-5600\thttp://www.turlocktransit.com/fares.html?lang=en\t\naHR0cHM6Ly9jYXR0cmFja3MucmlkZXN5c3RlbXMubmV0L1NlY3VyZS9BZG1pbi9SZXBvcnRzL0dURlNEb3dubG9hZC5hc3B4\t883\tUC
-      Merced\thttp://www.ridesystems.net\tAmerica/Los_Angeles\ten\t(888) 281-2681\t\t\naHR0cHM6Ly9waW5wb2ludGF2bC5jb20vVEFQUy1HVEZTLnppcA==\tTAPS\tUCSC
-      Transportation and Parking Services\thttps://transportation.ucsc.edu/buses-shuttles/campus-shuttles/\tAmerica/Los_Angeles\ten\t831-459-4543\t\ttaps@ucsc.edu\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy92aW5ldHJhbnNpdC1jYS11cy92aW5ldHJhbnNpdC1jYS11cy56aXA=\t1480\tVINE
-      Transit\thttps://vinetransit.com/\tAmerica/Los_Angeles\ten\t707-251-2800\thttps://vinetransit.com/fares/\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1WTg==\tVN\tVINE
-      Transit\thttps://vinetransit.com/\tAmerica/Los_Angeles\ten\t707-251-2800\thttps://vinetransit.com/fares/\t\naHR0cHM6Ly9ndGZzLnZ0YS5vcmcvZ3Rmc192dGEuemlw\tVTA\tVTA\thttps://www.vta.org\tAmerica/Los_Angeles\tEN\t408-321-2300\thttps://www.vta.org/go/fares\tcustomer.service@vta.org\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1TQw==\tSC\tVTA\thttps://www.vta.org\tAmerica/Los_Angeles\ten\t408-321-2300\thttps://www.vta.org/go/fares\tcustomer.service@vta.org\naHR0cHM6Ly9teXJpZGUuY2l0eWNvYWNoLmNvbS9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==\td5239cb6-3af0-45d2-9a73-c6097acbfcf9\tVacaville
-      City Coach\thttps://citycoach.com/\tAmerica/Los_Angeles\ten\t707-449-6000\thttps://citycoach.com/fares/\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1WQw==\tVC\tVacaville
-      City Coach\thttps://citycoach.com/\tAmerica/Los_Angeles\ten\t707-449-6000\thttps://citycoach.com/fares/\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvVmFsbGV5RXhwcmVzc0RpYWxBUmlkZUZsZXguemlw\t871\tValley
-      Express\thttp://www.valleyexpressbus.org/\tAmerica/Los_Angeles\ten\t(805) 933-2267\thttp://www.valleyexpressbus.org/fare-information-english/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy92Y3RjLWNhLXVzL3ZjdGMtY2EtdXMuemlw\t607\tVentura
-      County Transportation Commission\thttp://www.goventura.org/\tAmerica/Los_Angeles\ten\t800-438-1112\thttps://www.goventura.org/vctc-transit/fares-passes/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy93ZXN0Y2F0LWNhLXVzL3dlc3RjYXQtY2EtdXMuemlw\t392\tWestCat
-      (Western Contra Costa)\thttp://www.westcat.org/\tAmerica/Los_Angeles\ten\t510-724-7993\thttps://www.westcat.org/home/FaresAll\t\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvV2VzdENBVFNlbmlvckRpYWxBUmlkZWFuZFBhcmF0cmFuc2l0RmxleC56aXA=\t392\tWestCat
-      (Western Contra Costa)\thttp://www.westcat.org/\tAmerica/Los_Angeles\ten\t510-724-7993\thttps://www.westcat.org/home/FaresAll\t\naHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1XQw==\tWC\tWestCat
-      (Western Contra Costa)\thttp://www.westcat.org/\tAmerica/Los_Angeles\ten\t510-724-7993\thttps://www.westcat.org/home/FaresAll\t\naHR0cHM6Ly93d3cueW9sb2J1cy5jb20vR1RGUy9nb29nbGVfdHJhbnNpdC56aXA=\td139e461-175c-4156-beb0-e6a23b64d978\tYolo
-      County Transportation District\thttp://avl.yctd.org/\tAmerica/Los_Angeles\ten\t530-666-2877\thttps://yolobus.com/yolobus-fares/\tcustserv@yctd.org\naHR0cHM6Ly9ndGZzLmRkcy5kb3QuY2EuZ292L2d0ZnNfZmlsZXMvWXVyb2tHVEZTLnppcA==\t\tYurok
-      Tribe Transportation Department\thttps://www.yuroktribe.org/transportation\tAmerica/Los_Angeles\ten\t707-482-0731\t\t\naHR0cHM6Ly9ndGZzLnJlbWl4LmNvbS9lc2NhbG9uX2NhLnppcA==\t52\teTrans\thttp://escalon.hosted.civiclive.com/government/departments/transit_service\tAmerica/Los_Angeles\ten\t209-541-6645\thttp://escalonetrans.org\ttransit@cityofescalon.org\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t3\tArcata
-      & Mad River Transit System\thttps://hta.org/agencies/arcata-and-mad-river/\tAmerica/Los_Angeles\ten\t(707)
-      822-3775\thttps://hta.org/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t972\tBlue
-      Lake Rancheria Transit System\thttps://hta.org/agencies/blue-lake-rancheria/\tAmerica/Los_Angeles\ten\t\thttps://hta.org/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t2\tEureka
-      Transit Service\thttps://hta.org/agencies/eureka-transit-service/\tAmerica/Los_Angeles\ten\t(707)
-      443-0826\thttps://hta.org/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t2314\tRedwood
-      Transit System\thttps://hta.org/agencies/redwood-transit-system/\tAmerica/Los_Angeles\ten\t(707)
-      443-0826\thttps://hta.org/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t1\tRedwood
-      Transit System\thttps://hta.org/agencies/redwood-transit-system/\tAmerica/Los_Angeles\ten\t(707)
-      443-0826\thttps://hta.org/fares/\t\naHR0cHM6Ly9kYXRhLnRyaWxsaXVtdHJhbnNpdC5jb20vZ3Rmcy9odW1ib2xkdGNvdW50eS1jYS11cy9odW1ib2xkdGNvdW50eS1jYS11cy56aXA=\t1716\tSamoa
-      Transit System\thttps://hta.org/samoa-transit-system/\tAmerica/Los_Angeles\ten\t\thttps://hta.org/fares/\t\naHR0cHM6Ly9ydC5wYXNhZGVuYXRyYW5zaXQubmV0L3J0dC9wdWJsaWMvdXRpbGl0eS9ndGZzLmFzcHg=\t1\tPasadena
-      Transit\thttps://www.cityofpasadena.net/pasadena-transit/\tAmerica/Los_Angeles\ten\t(626)
-      744-4094\thttps://www.cityofpasadena.net/pasadena-transit/fares/\t\n\r\n--eaaa3ea40b4a6f2acd97d820d13b3348--\r\n"
+    body: "--b385901b13e82d1afb10c56ede03b458\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\n7cdf8cef-ddcb-4c17-8820-74ee2f29a06c\r\n--b385901b13e82d1afb10c56ede03b458\r\nContent-Disposition:
+      form-data; name=\"uploadId\"\r\n\r\nQGvp6hcmPj6hRNflzMvpE0FexZPHP3Gb9Xh4OaYRAIL6NfWoWcK0LFxdWov1qcEhQwwcLKvqHm5eu7GU7UPScO.fE_zUw1Ts4swjd1i5kBVoAHgyDd4D2AHufH3UR1uI\r\n--b385901b13e82d1afb10c56ede03b458\r\nContent-Disposition:
+      form-data; name=\"partNumber\"\r\n\r\n1\r\n--b385901b13e82d1afb10c56ede03b458\r\nContent-Disposition:
+      form-data; name=\"upload\"; filename=\"upload\"\r\n\r\nbase64_url,agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url,agency_email\naHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==,11214031,Santa
+      Ynez Valley Transit,https://www.syvt.com/489/Santa-Ynez-Valley-Transit,America/Los_Angeles,en,805-688-5452,https://www.syvt.com/365/Fares,\naHR0cHM6Ly93d3cuY2l0eW9mY3VkYWh5Y2EuZ292L0RvY3VtZW50Q2VudGVyL1ZpZXcvMjQ1OQ==,1685,Cudahy
+      Area Rapid Transit,https://www.cityofcudahy.com/475/Transportation,America/Los_Angeles,en,(323)773-5143,https://www.cityofcudahyca.gov/494/Cudahy-Area-Rapid-Transit-CART#:~:text=The%20Cudahy%20Area%20Rapid%20Transit%20(CART)%20offers%20free%20transportation%20services%20for%20Cudahy%20residents.%20CART%20services%20within%20Cudahy%20city%20limits%20Monday%20to%20Sunday%20from%207%3A00am%20to%206%3A00pm.%20It%20passes%20at%20each%20stop%20location%20hourly.%20For%20more%20information%2C%20please%20contact%20City%20Hall%20at%20(323)%20773%2D5143.%C2%A0,\naHR0cHM6Ly93d3cuY2Vycml0b3MuZ292L21lZGlhL3dqZGZpMDFoL2dvb2dsZV90cmFuc2l0LTIwMjQwOTI0LnppcA==,cow,Cerritos
+      on Wheels,https://www.cerritos.gov/streets-parking-transit/buses-and-transit/,America/Los_Angeles,en,(562)
+      928-4269,,\naHR0cHM6Ly93d3cubnBzLmdvdi9leHRlcm5hbC1yZXNvdXJjZXMvZ3Rmcy95b3NlL21hcmlwb3NhLWdyb3ZlLXNodXR0bGUtc2VydmljZS56aXA=,NPS,National
+      Park Service,https://www.nps.gov/yose/planyourvisit/publictransportation.htm,America/Los_Angeles,en,209-372-0200,,\naHR0cHM6Ly93d3cuaHBjYS5nb3YvRG9jdW1lbnRDZW50ZXIvVmlldy8xMTcwMg==,1668,Huntington
+      Park Express,https://www.hpca.gov/DocumentCenter/View/5466/HP-Express-Brochure-2016sc?bidId=,America/Los_Angeles,en,323-476-7766,,\naHR0cHM6Ly93d3cubnBzLmdvdi9leHRlcm5hbC1yZXNvdXJjZXMvZ3Rmcy95b3NlL3lvc2VtaXRlLXZhbGxleS1zaHV0dGxlLnppcA==,NPS,National
+      Park Service,https://www.nps.gov/yose/planyourvisit/publictransportation.htm,America/Los_Angeles,en,,,\naHR0cDovL2d0ZnMuZ2lzLmZsaXgudGVjaC9ndGZzX2dlbmVyaWNfdXMuemlw,GREYHOUND-us,Greyhound-us,https://www.greyhound.com,UTC,en,,https://shop.greyhound.com,\naHR0cDovL2d0ZnMuZ2lzLmZsaXgudGVjaC9ndGZzX2dlbmVyaWNfdXMuemlw,FLIXBUS-us,FlixBus-us,https://www.flixbus.com,UTC,en,,https://shop.flixbus.com,\naHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL3N0YXRpY2d0ZnMvMTIwL2d0ZnMuemlw,120,Tulare
+      County Regional Transit Agency,https://gotcrta.org/,America/Los_Angeles,en,(559)
+      372-2290,https://tularecog.org/tcag/tcrta/tcrta-transport-faq-fares/,info@gotcrta.org\naHR0cDovL2RhdGEucGVha3RyYW5zaXQuY29tL3N0YXRpY2d0ZnMvMS9ndGZzLnppcA==,1,SLO
+      Transit,https://www.slocity.org/government/department-directory/public-works/slo-transit,America/Los_Angeles,en,(805)
+      541-2877,,slotransit@slocity.org\naHR0cHM6Ly90cml0b250cmFuc2l0LnJpZGVzeXN0ZW1zLm5ldC9TZWN1cmUvQWRtaW4vUmVwb3J0cy9HVEZTRG93bmxvYWQuYXNweA==,Triton
+      Transit,UC San Diego Transportation Services - Triton Transit,https://transportation.ucsd.edu/campus/shuttles/index.html,America/Los_Angeles,,858-534-7422,,tritontransit@ucsd.edu\n\r\n--b385901b13e82d1afb10c56ede03b458--\r\n"
     headers:
       Accept:
       - '*/*'
@@ -537,9 +241,9 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '34499'
+      - '3640'
       Content-Type:
-      - multipart/form-data; boundary=eaaa3ea40b4a6f2acd97d820d13b3348
+      - multipart/form-data; boundary=b385901b13e82d1afb10c56ede03b458
       User-Agent:
       - ckanapi/1.0 (+https://dds.dot.ca.gov)
       X-CKAN-API-Key:
@@ -549,13 +253,13 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAAxSOQQrCMBAAvxL2rE1tCEpBPHn15FEom2RtC2kTko0ipX+XHAdmYDaYyEfoBUzM
-        MfdSMmU+OmRsmOy0Bh/GX2OxGcNHYpylkmh5Dqus4ZCn8L2tuNDV+lBc5pBwpKFEH9ANS/E8R0wM
-        BwG5WEs5Qy84FToISJSLZ+jFBtV5lMVQqiunqt+fOFZ4gdIX/TZn1Z2IulY5pRC1c51ujW6NUS+A
-        ff8DAAD//wMA3Daub8kAAAA=
+        H4sIAAAAAAAAAxSOQQrCMBAAvxL2XJvWqrUF8eTVk0ehbJNtU0ibkGwUEf8uOQ7MwHzBkPXQCzDM
+        PvZSMkXeaWQsmZTZnHXzp1RYzu4l0S+ykah4cZvM4RCNe183XOmirEs6sgs405C8daiHNVlePAaG
+        QkBMSlGM0AsOiQoBgWKyDL34QnbuaR0p5JU667cHzhmeoFVzquiMelJte+ywa8aqplPV0jjtD7V+
+        Avx+fwAAAP//AwCQTzf7yQAAAA==
     headers:
       CF-RAY:
-      - 99c7927e584fff1a-PDX
+      - 9b9446781827fac2-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -565,7 +269,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Mon, 10 Nov 2025 18:21:54 GMT
+      - Mon, 05 Jan 2026 16:15:36 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -575,7 +279,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Mon, 10 Nov 2025 18:21:54 GMT
+      - Mon, 05 Jan 2026 16:15:36 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -586,7 +290,7 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: '{"id": "7cdf8cef-ddcb-4c17-8820-74ee2f29a06c", "uploadId": "hO.JSxy2AYcg9a2clXNyhC1_WERuvw6sbTgbwevql.hGcGU8zHtpqqTBbanGiytMn2MjcGIziGtzHt6yZXBoNew32FXJIRVSq.N1kgW5ZsPTKttOt9EEn14LaILHMktK",
+    body: '{"id": "7cdf8cef-ddcb-4c17-8820-74ee2f29a06c", "uploadId": "QGvp6hcmPj6hRNflzMvpE0FexZPHP3Gb9Xh4OaYRAIL6NfWoWcK0LFxdWov1qcEhQwwcLKvqHm5eu7GU7UPScO.fE_zUw1Ts4swjd1i5kBVoAHgyDd4D2AHufH3UR1uI",
       "save_action": "go-metadata"}'
     headers:
       Accept:
@@ -615,7 +319,7 @@ interactions:
         Ji8OBussBtGdQFJrNt7+eF1fAAAA//8DAOnmTYqYAAAA
     headers:
       CF-RAY:
-      - 99c792815f65ff1a-PDX
+      - 9b94467ada10fac2-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -625,7 +329,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Mon, 10 Nov 2025 18:21:55 GMT
+      - Mon, 05 Jan 2026 16:15:36 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -635,7 +339,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Mon, 10 Nov 2025 18:21:55 GMT
+      - Mon, 05 Jan 2026 16:15:36 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:
@@ -670,17 +374,17 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA4ySTY7jIBCFr2KxDgY78R/SaC6RPaoU5RgNMRbgtDKtvvuIOFGnpVlkZ4p6ru/V
-        45NN5BamCjaltEQlRKKYuIEEZSKcZu/8+VYilGd/FbBYsReAyfpZZKGOk//4PcOFfgWKfg1IeoGE
-        E9sVLK6IFCNTRQor7QoWKK4uMVV8MgScSDuISa+LgUSGqWJendsVj7s1uJdSoEcPq2Xd8Eryqj/K
-        Su07tR/KoW07uc8zM3hMPpDOlFdiqhjBRfpxhX5OYOeowTkdCH0wUftRPwyM1r3qRh8ukKlZHjBB
-        nJ7f9g7UoRl7pJEbgyd+wKrjfV9L3h2I6rEeQLaYu+9mL97Y0b46qXglj1Wv6ko1TVn3w9A0uf1C
-        CTLyfyWyO0qpql5Vbdn07TC0d4m9ULot9L23Z0XbeabwXc+J5f/BmWa8Ze0C+AfOpDdPJ6ihl0i8
-        lm3DD3V34tCPJ95TcyJzOOCI93UvPtr8GJgq2i3gbYU/KaL9+3pKkLbhW0K7gm1Zv/UE7ylSEu8Q
-        iiePeCcjYfzH7DwYsW2lxHh9wD39sHXJDezr6x8AAAD//wMAPb2+tjgDAAA=
+        H4sIAAAAAAAAA4ySQY7jIBBFr2KxDgYcGztIrblE9qgC5RgNMRbgtDKtvvuIOJlOz6p3pqjver8+
+        H2RCvxBVkSnnJSnGMqZMLWSoM5ppDj6cb7WB+hyuDBbH9gxMdmFmRajTFN5/zXDBt4gprNGgXiCb
+        iewqklZjMCWiqhxX3FUkYlp9Jqr6IAbMhNpDynpdLGS0RFXz6v2uetyt0b+UIj56SMObjgpOxXDk
+        Qu17tT/UByl7vi8zC3jKIaIulFckqhrBJ/x2ZcKcwc1Jg/c6ognRJh1G/TAwOv+qG0O8QKEmZcAE
+        aXp+uztQb+w4GBypteZEWyN6OgwNp32L2IzNAbg0pftu9hKsG90/J5JyQXl3FFKJTu1l3Q1cira0
+        XzBDQf5f0lEhKO+PnCsxKFEk8nCQd4m7YL4t+LW3Z0W7ecb4VS+Jlf/BGWdzK9oFzG84o948naCB
+        gRukDZcdbZv+RGEYT3TA7oS2bc1o7uteQnLlMRBVyS3gbYXfKZL783rKkLfhW0K7imxZ/+gJ3lPE
+        zH5CyJ487CcZMRveZx/Asm0rtUnXB9zTD1mX0kA+P/8CAAD//wMA/Nt+QTgDAAA=
     headers:
       CF-RAY:
-      - 99c79286fdd3ff1a-PDX
+      - 9b94467f9d19fac2-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -690,7 +394,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Mon, 10 Nov 2025 18:22:01 GMT
+      - Mon, 05 Jan 2026 16:15:40 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -700,7 +404,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Mon, 10 Nov 2025 18:22:01 GMT
+      - Mon, 05 Jan 2026 16:15:40 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:

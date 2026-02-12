@@ -217,10 +217,6 @@ models:
         description: Foreign key to the `dim_stops` table.
       - name: tts_stop_name
         description: '{{ doc("gtfs_stops__tts_stop_name") }}'
-      - name: ttl_stop_event_count
-        description: |
-            Total stop event count (stop time arrivals) at the stop
-            by gtfs_dataset_name-year-month-day_type.
       - *n_days
       - *n_feeds
       - *route_type_0

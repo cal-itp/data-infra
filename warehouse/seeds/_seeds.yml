@@ -61,6 +61,36 @@ seeds:
         tests:
           - not_null
 
+  - name: payments_entity_mapping_enghouse
+    config:
+      labels:
+        domain: seeds
+        dataset: payments
+      column_types:
+        enghouse_operator_id: string
+    columns:
+      - name: gtfs_dataset_source_record_id
+        description: Unversioned key to dim_gtfs_datasets natural key from Airtable.
+      - name: organization_source_record_id
+        description: To-do.
+      - name: enghouse_operator_id
+        description: Enghouse-assigned operator ID.
+        tests:
+          - unique
+      - name: elavon_customer_name
+        description: Elavon-assigned Customer Name.
+        tests:
+          - not_null
+          - unique
+      - name: _in_use_from
+        description: Start date from which this mapping is valid (inclusive). Used to handle cases where the same enghouse_operator_id maps to different elavon customer_name and customer_id over time.
+        tests:
+          - not_null
+      - name: _in_use_until
+        description: End date until which this mapping is valid (inclusive). Used to handle cases where the same enghouse_operator_id maps to different elavon customer_name and customer_id over time.
+        tests:
+          - not_null
+
   - name: gtfs_rt_validation_code_descriptions
     description: |
       A list of validation codes output by the GTFS RT validator, and their severities.

@@ -1,6 +1,6 @@
 import os
+from datetime import datetime, timezone
 
-import pendulum
 import pytest
 from hooks.gtfs_unzip_hook import GTFSUnzipHook
 
@@ -45,8 +45,8 @@ class TestGTFSUnzipHook:
         }
 
     @pytest.fixture
-    def date(self) -> pendulum.DateTime:
-        return pendulum.datetime(2025, 11, 15)
+    def date(self) -> datetime:
+        return datetime.fromisoformat("2025-11-15").replace(tzinfo=timezone.utc)
 
     @pytest.fixture
     def fixture_schedule_path(self) -> str:
@@ -93,14 +93,19 @@ class TestGTFSUnzipHook:
         )
 
     @pytest.fixture
-    def hook(self, date: pendulum.DateTime) -> GTFSUnzipHook:
-        return GTFSUnzipHook(
-            filenames=["agency.txt", "calendar.txt"], current_date=date
+    def fixture_corrupted_zip_path(self) -> str:
+        return os.path.normpath(
+            os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                "../fixtures/corrupted_RTD_GTFS.zip",
+            )
         )
 
     @pytest.fixture
-    def areas_hook(self, date: pendulum.DateTime) -> GTFSUnzipHook:
-        return GTFSUnzipHook(filenames=["areas.txt"], current_date=date)
+    def hook(self, date: datetime) -> GTFSUnzipHook:
+        return GTFSUnzipHook(
+            filenames=["agency.txt", "calendar.txt"], current_date=date.isoformat()
+        )
 
     def test_run(
         self,
@@ -434,6 +439,10 @@ class TestGTFSUnzipHook:
             ],
         }
 
+    @pytest.fixture
+    def areas_hook(self, date: datetime) -> GTFSUnzipHook:
+        return GTFSUnzipHook(filenames=["areas.txt"], current_date=date.isoformat())
+
     def test_no_txt_file(
         self,
         areas_hook: GTFSUnzipHook,
@@ -484,4 +493,74 @@ class TestGTFSUnzipHook:
                 "transfers.txt",
                 "trips.txt",
             ],
+        }
+
+    def test_corrupted_zip_file(
+        self,
+        hook: GTFSUnzipHook,
+        fixture_corrupted_zip_path: str,
+    ):
+        result = hook.run(
+            zipfile_path=fixture_corrupted_zip_path,
+            download_schedule_feed_results={
+                "success": False,
+                "backfilled": False,
+                "config": {
+                    "auth_headers": {},
+                    "auth_query_params": {},
+                    "computed": False,
+                    "extracted_at": "2025-11-14T02:00:00+00:00",
+                    "feed_type": "schedule",
+                    "name": "San Joaquin Schedule",
+                    "schedule_url_for_validation": None,
+                    "url": "http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip",
+                },
+                "exception": "File is not a zip file",
+                "extract": {
+                    "filename": "RTD-GTFS.zip",
+                    "ts": "2025-06-03T00:00:00+00:00",
+                    "config": {
+                        "auth_headers": {},
+                        "auth_query_params": {},
+                        "computed": False,
+                        "feed_type": "schedule",
+                        "name": "San Joaquin Schedule",
+                        "schedule_url_for_validation": None,
+                        "url": "http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip",
+                        "extracted_at": "2025-06-01T00:00:00+00:00",
+                    },
+                    "response_code": 200,
+                    "response_headers": {
+                        "Content-Type": "application/zip",
+                    },
+                    "reconstructed": False,
+                },
+            },
+        )
+        assert result.results() == {
+            "success": False,
+            "exception": "File is not a zip file",
+            "extract": {
+                "filename": "RTD-GTFS.zip",
+                "ts": "2025-06-03T00:00:00+00:00",
+                "config": {
+                    "extracted_at": "2025-06-01T00:00:00+00:00",
+                    "name": "San Joaquin Schedule",
+                    "url": "http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip",
+                    "feed_type": "schedule",
+                    "schedule_url_for_validation": None,
+                    "auth_query_params": {},
+                    "auth_headers": {},
+                    "computed": False,
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "Content-Type": "application/zip",
+                },
+                "reconstructed": False,
+            },
+            "extracted_files": [],
+            "zipfile_dirs": [],
+            "zipfile_extract_md5hash": "d41d8cd98f00b204e9800998ecf8427e",
+            "zipfile_files": [],
         }

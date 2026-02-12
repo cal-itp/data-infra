@@ -1,12 +1,12 @@
 import csv
 import json
+import logging
 import os
 from io import StringIO
-from typing import Sequence
+from itertools import islice
+from typing import Generator, Sequence
 
-import pendulum
-
-from airflow.models import BaseOperator, DagRun
+from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
@@ -14,8 +14,9 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 class GTFSCSVResults:
     def __init__(
         self,
-        current_date: pendulum.DateTime,
-        unzip_results: dict,
+        current_date: str,
+        extracted_file: dict,
+        extract_config: dict,
         filename: str,
         fieldnames: list[str],
         dialect: str,
@@ -24,7 +25,8 @@ class GTFSCSVResults:
         self.filename = filename
         self.fieldnames = fieldnames
         self.dialect = dialect
-        self.unzip_results = unzip_results
+        self.extracted_file = extracted_file
+        self.extract_config = extract_config
         self.lines = []
         self._exception = None
 
@@ -40,10 +42,16 @@ class GTFSCSVResults:
     def append(self, row) -> None:
         self.lines.append({"_line_number": len(self.lines) + 1, **row})
 
-    def jsonl(self) -> list[str]:
-        return "\n".join(
-            [json.dumps(line, separators=(",", ":")) for line in self.lines]
-        )
+    def chunks(self, size: int = 50_000) -> Generator[str, None, None]:
+        iterator = iter(self.lines)
+        for line in iterator:
+
+            def chunk():
+                yield json.dumps(line, separators=(",", ":"))
+                for more in islice(iterator, size - 1):
+                    yield json.dumps(more, separators=(",", ":"))
+
+            yield chunk()
 
     def valid(self) -> bool:
         return len(self.lines) > 0
@@ -54,7 +62,7 @@ class GTFSCSVResults:
     def report(self) -> dict:
         return {
             "exception": self.exception(),
-            "feed_file": self.unzip_results.get("extracted_files")[0],
+            "feed_file": self.extracted_file,
             "fields": self.fieldnames,
             "parsed_file": self.metadata(),
             "success": self.success(),
@@ -63,19 +71,26 @@ class GTFSCSVResults:
     def metadata(self) -> dict:
         return {
             "csv_dialect": self.dialect,
-            "extract_config": self.unzip_results.get("extract").get("config"),
+            "extract_config": self.extract_config,
             "filename": f"{self.filetype()}.jsonl.gz",
             "gtfs_filename": self.filetype(),
             "num_lines": len(self.lines),
-            "ts": self.current_date.isoformat(),
+            "ts": self.current_date,
         }
 
 
 class GTFSCSVConverter:
-    def __init__(self, filename: str, csv_data: bytes, unzip_results: dict) -> None:
+    def __init__(
+        self,
+        filename: str,
+        csv_data: bytes,
+        extracted_file: dict,
+        extract_config: dict,
+    ) -> None:
         self.filename = filename
         self.csv_data = csv_data
-        self.unzip_results = unzip_results
+        self.extracted_file = extracted_file
+        self.extract_config = extract_config
 
     def reader(self) -> csv.DictReader:
         comma_reader = csv.DictReader(
@@ -90,25 +105,29 @@ class GTFSCSVConverter:
             return tab_reader
         return comma_reader
 
-    def convert(self, current_date: pendulum.DateTime) -> GTFSCSVResults:
+    def convert(self, current_date: str) -> GTFSCSVResults:
         reader = self.reader()
         results = GTFSCSVResults(
             current_date=current_date,
             filename=self.filename,
             fieldnames=reader.fieldnames,
             dialect=reader.dialect,
-            unzip_results=self.unzip_results,
+            extracted_file=self.extracted_file,
+            extract_config=self.extract_config,
         )
         try:
             for row in reader:
                 results.append(row)
         except Exception as exception:
             results.exception = exception
+            logging.warning(f"Error adding lines on file {self.filename}: {exception}")
         return results
 
 
 class GTFSCSVToJSONLOperator(BaseOperator):
     template_fields: Sequence[str] = (
+        "dt",
+        "ts",
         "unzip_results",
         "source_bucket",
         "source_path_fragment",
@@ -120,24 +139,30 @@ class GTFSCSVToJSONLOperator(BaseOperator):
 
     def __init__(
         self,
+        dt: str,
+        ts: str,
         unzip_results: dict,
         source_bucket: str,
         source_path_fragment: str,
         destination_bucket: str,
         destination_path_fragment: str,
         results_path_fragment: str,
+        chunk_size: int = 50_000,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
 
         self._gcs_hook = None
+        self.dt: str = dt
+        self.ts: str = ts
         self.unzip_results = unzip_results
         self.source_bucket = source_bucket
         self.source_path_fragment = source_path_fragment
         self.destination_bucket = destination_bucket
         self.results_path_fragment = results_path_fragment
         self.destination_path_fragment = destination_path_fragment
+        self.chunk_size = chunk_size
         self.gcp_conn_id = gcp_conn_id
 
     def gcs_hook(self) -> GCSHook:
@@ -154,44 +179,66 @@ class GTFSCSVToJSONLOperator(BaseOperator):
 
     def converters(self) -> list[GTFSCSVConverter]:
         output = []
+        extract_config = self.unzip_results.get("extract").get("config")
         for extracted_file in self.unzip_results["extracted_files"]:
+            extracted_filename = extracted_file["filename"]
             source = self.gcs_hook().download(
                 bucket_name=self.source_name(),
                 object_name=os.path.join(
-                    extracted_file["filename"],
+                    extracted_filename,
                     self.source_path_fragment,
-                    extracted_file["filename"],
+                    extracted_filename,
                 ),
             )
             output.append(
                 GTFSCSVConverter(
-                    filename=extracted_file["filename"],
+                    filename=extracted_filename,
                     csv_data=source.decode(),
-                    unzip_results=self.unzip_results,
+                    extracted_file=extracted_file,
+                    extract_config=extract_config,
                 )
             )
         return output
 
     def execute(self, context: Context) -> str:
-        dag_run: DagRun = context["dag_run"]
         output = []
         for converter in self.converters():
-            results = converter.convert(current_date=dag_run.logical_date)
+            logging.info(f"Converting {converter.filename}")
+            results = converter.convert(current_date=self.ts)
             if results.valid():
-                self.gcs_hook().upload(
-                    bucket_name=self.destination_name(),
-                    object_name=os.path.join(
-                        results.filetype(),
-                        self.destination_path_fragment,
-                        f"{results.filetype()}.jsonl.gz",
-                    ),
-                    data=results.jsonl(),
-                    mime_type="application/jsonl",
-                    gzip=True,
-                    metadata={
-                        "PARTITIONED_ARTIFACT_METADATA": json.dumps(results.metadata())
-                    },
-                )
+                for index, chunk in enumerate(results.chunks(size=self.chunk_size)):
+                    self.gcs_hook().upload(
+                        bucket_name=self.destination_name(),
+                        object_name=os.path.join(
+                            results.filetype(),
+                            self.destination_path_fragment,
+                            f"{results.filetype()}-{str(index + 1).zfill(3)}.jsonl.gz",
+                        ),
+                        data="\n".join(chunk),
+                        mime_type="application/jsonl",
+                        gzip=True,
+                        metadata={
+                            "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                                results.metadata()
+                            )
+                        },
+                    )
+
+                    output.append(
+                        {
+                            "dt": self.dt,
+                            "ts": self.ts,
+                            "destination_path": os.path.join(
+                                results.filetype(),
+                                self.destination_path_fragment,
+                                f"{results.filetype()}-{str(index + 1).zfill(3)}.jsonl.gz",
+                            ),
+                            "results_path": os.path.join(
+                                f"{results.filename}_parsing_results",
+                                self.results_path_fragment,
+                            ),
+                        }
+                    )
 
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
@@ -205,24 +252,10 @@ class GTFSCSVToJSONLOperator(BaseOperator):
                     "PARTITIONED_ARTIFACT_METADATA": json.dumps(
                         {
                             "filename": "results.jsonl",
-                            "ts": dag_run.logical_date.isoformat(),
+                            "ts": self.ts,
                         }
                     )
                 },
-            )
-
-            output.append(
-                {
-                    "destination_path": os.path.join(
-                        results.filetype(),
-                        self.destination_path_fragment,
-                        f"{results.filetype()}.jsonl.gz",
-                    ),
-                    "results_path": os.path.join(
-                        f"{results.filename}_parsing_results",
-                        self.results_path_fragment,
-                    ),
-                }
             )
 
         return output

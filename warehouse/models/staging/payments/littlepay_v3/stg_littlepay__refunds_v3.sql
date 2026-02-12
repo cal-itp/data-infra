@@ -2,14 +2,6 @@ WITH source AS (
     SELECT * FROM {{ source('external_littlepay_v3', 'refunds') }}
 ),
 
--- settlement status is no longer included in the refunds table in feed v3, bringing this in for the join below
-settlements AS (
-    SELECT
-        refund_id,
-        settlement_status
-    FROM {{ ref('stg_littlepay__settlements_v3') }}
-),
-
 clean_columns AS (
     SELECT
         {{ trim_make_empty_string_null('refund_id') }} AS refund_id,
@@ -59,16 +51,6 @@ clean_columns AS (
     FROM source
 ),
 
--- this was removed from refunds table in v3, so it is now enriched from the settlements table here
-enrich_settlement_status AS (
-
-    SELECT
-        clean_columns.*,
-        settlements.settlement_status
-    FROM clean_columns
-    LEFT JOIN settlements USING (refund_id)
-),
-
 stg_littlepay__refunds_v3 AS (
     SELECT
         refund_id,
@@ -91,8 +73,8 @@ stg_littlepay__refunds_v3 AS (
         created_time,
         approved_time,
 
-        -- this was removed from refunds table in v3, so it is now enriched from the settlements table in the CTE above
-        settlement_status,
+        -- this was removed from refunds table in v3
+        CAST(null AS STRING) AS settlement_status,
 
         -- this field is no longer available in feed v3, and looking back historically it looks like it never
         -- provided useful information in earlier feeds and was not used, but either way, is now defunct.
@@ -115,7 +97,7 @@ stg_littlepay__refunds_v3 AS (
         {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
         -- we have multiple rows for some refunds as the refund moves through different statuses; we should handle this later
         {{ dbt_utils.generate_surrogate_key(['refund_id', 'approval_status']) }} AS _payments_key
-    FROM enrich_settlement_status
+    FROM clean_columns
 )
 
 SELECT * FROM stg_littlepay__refunds_v3

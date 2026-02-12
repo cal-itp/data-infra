@@ -23,16 +23,14 @@ RUN apt-get update && apt-get -y install google-chrome-stable
 
 # create these ahead of time, then chown to the notebook user
 ENV GCLOUD_HOME=/gcloud
-ENV POETRY_HOME="/poetry"
-RUN mkdir $POETRY_HOME \
-    && chown $NB_USER $POETRY_HOME \
-    && mkdir $GCLOUD_HOME \
-    && chown $NB_USER $GCLOUD_HOME
+RUN mkdir $GCLOUD_HOME && chown $NB_USER $GCLOUD_HOME
+RUN mkdir /reqs && chown $NB_USER /reqs
 
 USER $NB_UID
 
-RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="$POETRY_HOME/bin:$PATH"
+RUN curl -LsSf https://astral.sh/uv/0.9.26/install.sh | sh
+ENV PATH="$HOME/.local/bin:$PATH"
+
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 RUN npm install -g --unsafe-perm=true --allow-root sql-language-server
 # gcloud CLI https://cloud.google.com/sdk/docs/install#deb
@@ -43,12 +41,10 @@ RUN cd $GCLOUD_HOME \
 ENV PATH="$GCLOUD_HOME/google-cloud-sdk/bin:$PATH"
 
 COPY ./pyproject.toml /reqs/pyproject.toml
-COPY ./poetry.lock /reqs/poetry.lock
-RUN poetry config virtualenvs.create false
-# RUN gdalinfo --version # for debugging, use this to figure out which rasterio to support
-RUN cd /reqs && poetry install --with=shared_utils --with=portfolio
-RUN cd /reqs && poetry show # print out the package versions for documentation
-RUN poetry config virtualenvs.create true
+COPY ./uv.lock /reqs/uv.lock
+
+RUN cd /reqs && uv pip install --system --requirements pyproject.toml
+RUN cd /reqs && uv tree # print out the package versions and dependencies for documentation
 ENV DBT_PROFILES_DIR=/home/jovyan/.dbt/
 COPY ./overrides.json /opt/conda/share/jupyter/lab/settings/overrides.json
 COPY ./dask_config.yml /opt/conda/etc/dask/dask_config.yml

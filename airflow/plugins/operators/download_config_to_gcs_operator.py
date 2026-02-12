@@ -1,13 +1,13 @@
 import json
 import logging
+import os
 from base64 import urlsafe_b64encode
 from email.message import Message
 from typing import Sequence
 
-import pendulum
 from hooks.download_config_hook import DownloadConfigHook
 
-from airflow.models import BaseOperator, DagRun
+from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
@@ -15,10 +15,12 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 class Download:
     hook: DownloadConfigHook
     exception: Exception
+    current_time: str
 
-    def __init__(self, hook: DownloadConfigHook) -> None:
+    def __init__(self, hook: DownloadConfigHook, current_time: str) -> None:
         self.hook = hook
         self.exception = None
+        self.current_time = current_time
         self._response = None
 
     def response(self):
@@ -61,31 +63,37 @@ class Download:
         msg = Message()
         msg["content-disposition"] = content_disposition
         filename = msg.get_filename()
+
+        if not filename and self.response() and self.response().url.endswith(".zip"):
+            filename = os.path.basename(self.response().url)
+
         return filename if filename else "gtfs.zip"
 
-    def extract(self, current_time: pendulum.DateTime) -> dict:
+    def extract(self) -> dict:
         return {
             "reconstructed": False,
-            "ts": current_time.isoformat(),
+            "ts": self.current_time,
             "filename": self.filename(),
             "config": self.hook.download_config,
             "response_code": self.response_code(),
             "response_headers": dict(self.response_headers()),
         }
 
-    def summary(self, current_time: pendulum.DateTime) -> dict:
+    def summary(self) -> dict:
         return {
             "backfilled": False,
             "success": self.success(),
             "exception": str(self.exception) if self.exception else None,
             "config": self.hook.download_config,
-            "extract": self.extract(current_time=current_time),
+            "extract": self.extract(),
         }
 
 
 class DownloadConfigToGCSOperator(BaseOperator):
     _download: Download
     template_fields: Sequence[str] = (
+        "dt",
+        "ts",
         "download_config",
         "destination_bucket",
         "destination_path",
@@ -95,6 +103,8 @@ class DownloadConfigToGCSOperator(BaseOperator):
 
     def __init__(
         self,
+        dt: str,
+        ts: str,
         download_config: dict,
         destination_bucket: str,
         destination_path: str,
@@ -105,6 +115,8 @@ class DownloadConfigToGCSOperator(BaseOperator):
         super().__init__(**kwargs)
 
         self._download: Download = None
+        self.dt: str = dt
+        self.ts: str = ts
         self.download_config: dict = download_config
         self.destination_bucket: str = destination_bucket
         self.destination_path: str = destination_path
@@ -122,12 +134,19 @@ class DownloadConfigToGCSOperator(BaseOperator):
 
     def download(self) -> dict:
         if not self._download:
-            self._download = Download(self.download_config_hook())
+            self._download = Download(
+                hook=self.download_config_hook(), current_time=self.ts
+            )
         return self._download
 
-    def execute(self, context: Context) -> str:
-        dag_run: DagRun = context["dag_run"]
+    def execute(self, context: Context) -> dict:
+        ti = context["task_instance"]
+        last_retry = ti.try_number - 1 == ti.max_tries
+        logging.info(
+            f"Max tries: {ti.max_tries}, Try number: {ti.try_number}, Last retry: {last_retry}"
+        )
         schedule_feed_path = f"{self.destination_path}/base64_url={self.download().base64_url()}/{self.download().filename()}"
+
         if self.download().success():
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
@@ -136,13 +155,16 @@ class DownloadConfigToGCSOperator(BaseOperator):
                 mime_type=self.download().mime_type(),
                 metadata={
                     "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                        self.download().extract(current_time=dag_run.logical_date)
+                        self.download().extract()
                     ),
                 },
             )
-        download_schedule_feed_results = self.download().summary(
-            current_time=dag_run.logical_date
-        )
+
+        if not self.download().success() and not last_retry:
+            raise self.download().exception
+
+        download_schedule_feed_results = self.download().summary()
+
         self.gcs_hook().upload(
             bucket_name=self.destination_name(),
             object_name=f"{self.results_path}/{self.download().base64_url()}.jsonl",
@@ -153,16 +175,20 @@ class DownloadConfigToGCSOperator(BaseOperator):
                 "PARTITIONED_ARTIFACT_METADATA": json.dumps(
                     {
                         "filename": f"{self.download().base64_url()}.jsonl",
-                        "ts": dag_run.logical_date.isoformat(),
-                        "end": dag_run.logical_date.isoformat(),
+                        "ts": self.ts,
+                        "end": self.ts,
                         "backfilled": False,
                     }
                 )
             },
         )
+
         if not self.download().success():
             raise self.download().exception
+
         return {
+            "dt": self.dt,
+            "ts": self.ts,
             "base64_url": self.download().base64_url(),
             "schedule_feed_path": schedule_feed_path,
             "download_schedule_feed_results": download_schedule_feed_results,

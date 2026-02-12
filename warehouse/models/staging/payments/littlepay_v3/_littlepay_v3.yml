@@ -549,10 +549,7 @@ models:
 
           Possible values are `Approved` or `Pending Approval`.
       - name: settlement_status
-        description: |
-          The status of the refund.
-
-          Possible values are `Sent for Settlement` or `Settled`.
+        description: Deprecated in v3, not present for refunds. Look up via settlements.
       - name: retrieval_reference_number
         description: |
           Uniquely identifies a card transaction, based on the ISO 8583 standard. The value is generated during authorisation.
@@ -587,12 +584,9 @@ models:
       - name: approved_time
         description: The time the approval was processed.
       - name: status
-        description: |
-          The status of the refund.
-
-          Possible values are `SENT_FOR_SETTLEMENT` or `SETTLED`.
+        description: Deprecated in v3, not present for refunds. Look up via settlements.
       - name: settlement_status_time
-        description: The time the refund was settled.
+        description: Deprecated in v3, not present for refunds. Look up via settlements.
       - name: settlement_reason_code
         description: This field is not in use.
       - name: settlement_response_text
@@ -641,6 +635,14 @@ models:
         description: '{{ doc("lp_response_created_timestamp_utc") }}'
       - name: refund_id
         description: '{{ doc("lp_refund_id") }}'
+      - name: feed_version
+        description: '{{ doc("lp_feed_version") }}'
+      - name: instance
+        description: '{{ doc("lp_instance") }}'
+      - name: extract_filename
+        description: '{{ doc("lp_extract_filename") }}'
+      - name: ts
+        description: '{{ doc("lp_ts") }}'
       - *lp_export_date
       - *lp_export_ts
       - *lp_line_number

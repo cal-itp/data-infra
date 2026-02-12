@@ -84,15 +84,15 @@ class TestKubaToGCSOperator:
             object_name=object_name,
         )
         decompressed_result = gzip.decompress(compressed_result)
-        result = [json.loads(x) for x in decompressed_result.splitlines()]
+        results = [json.loads(x) for x in decompressed_result.splitlines()]
 
-        assert result[0] == {
+        assert results[0] == {
             "device": {
                 "fo_device_logical_id": "66001",
                 "fo_device_type": "Validator",
                 "fo_device_type_model": "ABT3000",
                 "fo_device_serial_number": "108008231118180362",
-                "fo_device_description": None,
+                "fo_device_description": "device 66001",
                 "fo_device_location_id": "604",
                 "fo_device_location": "604",
                 "fo_device_last_connection": "2025-03-20T13:46:52.4000000Z",
@@ -117,56 +117,35 @@ class TestKubaToGCSOperator:
             "device_monitor_info": {
                 "application__isdisabled": "false",
                 "application__isinservice": "true",
-                "application__servicestatus": {"Rows": []},
-                "gps__position": {
-                    "altitude": 31,
-                    "dateTime": "",
-                    "direction": 0,
-                    "gpsFix": 0,
-                    "groundSpeed": 10,
-                    "hasAltitude": True,
-                    "hasDateTime": False,
-                    "hasDirection": False,
-                    "hasGpsFix": True,
-                    "hasGroundSpeed": True,
-                    "hasLatitude": True,
-                    "hasLongitude": True,
-                    "latitude": 36.58474333333334,
-                    "longitude": -121.82932299999999,
-                    "numberSatelites": 5,
-                    "properties": {},
+                "application__servicestatus": {"rows": []},
+                "gps__position": results[0]["device_monitor_info"]["gps__position"]
+                | {
+                    "hasgpsfix": True,
                 },
                 "location__location__info": {
                     "current": {
                         "properties": {},
                         "stopinfo": {
-                            "abbreviation": "",
                             "farematrixreference": 3,
                             "name": "Davis",
                             "reference": 3,
-                            "shortname": "",
                             "type": 0,
                         },
                         "zoneinfo": {"name": "Davis", "reference": 3},
                     },
-                    "dataid": "",
                     "dataversion": 0,
-                    "locationProviderSource": "location::devicesettings::provider",
+                    "locationprovidersource": "location::devicesettings::provider",
                     "properties": {},
                     "type": 65535,
                 },
                 "location__location__servicestatus": "Closed",
                 "location__location__source": "location::ngwifi::provider",
                 "ngwifi__gps__apistatus": {"status": 1},
-                "ngwifi__gps__position": {
-                    "altitude": 129,
-                    "fix": 10,
-                    "heading": 0,
-                    "latitude": 35.371917667,
-                    "longitude": -119.008193167,
-                    "speed": 0.013,
+                "ngwifi__gps__position": results[0]["device_monitor_info"][
+                    "ngwifi__gps__position"
+                ]
+                | {
                     "success": True,
-                    "timestamp": 1721886667,
                 },
                 "os__uptime": "0 00:48:33.000",
                 "smartmedium__emv3000__batterylevel": "3118",

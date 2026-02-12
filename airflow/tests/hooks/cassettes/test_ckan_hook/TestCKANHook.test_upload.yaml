@@ -9,16 +9,15 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.9 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/1705ea6b-67e9-4ced-ae07-a8cb5aedbec8
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/d8c6fb3e-1d55-4ea6-bceb-70b966c79683
       accept-encoding:
       - gzip
       content-type:
       - application/json; charset=UTF-8
       x-goog-user-project:
-      - cal-itp-data-infra
+      - cal-itp-data-infra-staging
       x-upload-content-type:
       - application/json; charset=UTF-8
     method: GET
@@ -206,7 +205,7 @@ interactions:
       Content-Type:
       - text/csv
       Date:
-      - Thu, 06 Nov 2025 18:33:33 GMT
+      - Mon, 05 Jan 2026 16:15:30 GMT
       ETag:
       - CLWYhdS/948DEAE=
       Expires:
@@ -221,7 +220,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AOCedOFiRSfh9M9BJzekt8X3MKXucQ00Qg0Fymp5FnFUTF9nGsHwbqKjbmS9gJZGt9mvUPXgURx8MA
+      - AHVrFxPeJL298lpG2rehzCdp6YsG2VvbXcCkd_AROrFS0avDa2bQu72XVXCK5tcsK34_2n8u
       X-Goog-Generation:
       - '1758926454475829'
       X-Goog-Hash:
@@ -238,7 +237,7 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: "--b07bb109ae9fecae9a69b540e0329cff\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--b07bb109ae9fecae9a69b540e0329cff\r\nContent-Disposition:
+    body: "--384a2e4d1066573b1c9706088d426856\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\nbedac9e4-4fce-4287-bf60-0064ddaf999c\r\n--384a2e4d1066573b1c9706088d426856\r\nContent-Disposition:
       form-data; name=\"upload\"; filename=\"upload\"\r\n\r\nDATASET_NAME\tTAGS\tDESCRIPTION\tMETHODOLOGY\tTOPIC\tPUBLISHER_ORGANIZATION\tPLACE\tFREQUENCY\tNEXT_UPDATE\tCREATION_DATE\tLAST_UPDATE\tSTATUS\tTEMPORAL_COVERAGE_BEGIN\tTEMPORAL_COVERAGE_END\tDATA_DICTIONARY\tDATA_DICTIONARY_TYPE\tCONTACT_ORGANIZATION\tCONTACT_POSITION\tCONTACT_NAME\tCONTACT_EMAIL\tPUBLIC_ACCESS_LEVEL\tACCESS_CONSTRAINTS\tUSE_CONSTRAINTS\tDATA_LIFE_SPAN\tCALTRANS_LINK\tDATA_STANDARD\tNOTES\tGIS_THEME\tGIS_HORIZ_ACCURACY\tGIS_VERT_ACCURACY\tGIS_COORDINATE_SYSTEM_EPSG\tGIS_VERT_DATUM_EPSG\r\nagency\ttransit,gtfs,gtfs-schedule,bus,rail,ferry,mobility\tEach
       row is a cleaned row from an agency.txt file. Definitions for the original GTFS
       fields are available at: https://gtfs.org/reference/static#agencytxt.\tCal-ITP
@@ -407,7 +406,7 @@ interactions:
       into a statewide table for analysis purposes only. Do not use for trip planner
       ingestion, rather is meant to be used for statewide analytics and other use
       cases. Note: These data may or may or may not have passed GTFS-Validation.\tTransportation\tCaltrans\tCA\tMonthly\t2025-07-01T00:00:00+00:00\t2025-06-01T00:00:00+00:00\t\tComplete\t\t\t\tcsv\tCaltrans\tCal-ITP\tHunter
-      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--b07bb109ae9fecae9a69b540e0329cff--\r\n"
+      Owens\thunter.owens@dot.ca.gov\tPublic\t\tCreative Commons 4.0 Attribution\t\t\thttps://gtfs.org/schedule/\t\t\t4m\t4m\t4326\t\r\n\r\n--384a2e4d1066573b1c9706088d426856--\r\n"
     headers:
       Accept:
       - '*/*'
@@ -420,7 +419,7 @@ interactions:
       Content-Length:
       - '19436'
       Content-Type:
-      - multipart/form-data; boundary=b07bb109ae9fecae9a69b540e0329cff
+      - multipart/form-data; boundary=384a2e4d1066573b1c9706088d426856
       User-Agent:
       - ckanapi/1.0 (+https://dds.dot.ca.gov)
       X-CKAN-API-Key:
@@ -430,18 +429,18 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA4xSwYrbMBD9FaFzFMuS7ciG0kOhpYdCIaFXM5bGsahiGUneZbvsvxclXrI9NScz
-        o3me9968VzqhW2hH6JTSEruiSBgTM5Bgn1BPs3f+/LLXsD/7pwIWW8gCdLJ+LjKwj5N//jzDBT8F
-        jH4NGvt1MZCQ7giNq9YYI+1ICivuCA0YV5doR16pBj1h7yCmDWBoR+bVuR3Z3tbgPrQCbjNUcFEz
-        3jLJT0J2Je9qsW9FW6pD3pmZx+QD9pnmE96X31+0nxPYOfbgXB9Q+2Bi78d+EzBal2EjuJhxow8X
-        yKTpl+OvvGKCOOUSQNWyRAFK1pWBw1gN6mAaJXUjmlLLPGuvlAc0oFusWDVqZJVQBzaMDWecN5Ux
-        MLZtq/P01Y6LN3a0H7SWJePNqVSdlJ2s9lzUUog8fsEEWdX/IaqWUl0h9oLpZcG7s++d3s4zhns/
-        H/UqGhz7fvpJvp2+HslRT2hWh+THtjr/cwH9G87Yb1pBgOIameBNzSpxGBiocWAK6wFNVenx5szi
-        o805oh3ht2jc3P+XXbR/clW2omlzmXK0sve34+4IvcXkofheE4CpeIRi8U6oeOR4hfHPs/NginXJ
-        n43Yuxi6dd/e/gIAAP//AwCxJ7X6cAMAAA==
+        H4sIAAAAAAAAA4xSTYvbMBD9K0LnKJblTxnKHhZaeigUEno1Y2kUm8qWseRdtsv+9yLHadpTcxLz
+        8TTvzbx32qOdaUNoH8LsmyQJ6APTEOAYUPWTs+7ydlRwvLiXBOYhyRJQYXBTEoGt793r0wQjflrQ
+        u3VR2K6zhoD0QKhflULvaUPCsuKB0AX9agNtyDtVoHpsLfiwAzRtyLRaeyB7bV3sX6kF9x4quCgY
+        lyzjZ5E1KW8KcZRCpnUVZ0bmPrgF20jzBe/D7xXlpgDD5Fuwtl1QuUX71pl2F2AGG2EGrI8445YR
+        Imn6fPoRR/Tg+xgWOTemqExWS11KiZqLSvAaBXZQlVDH3mGj3KEGJTFnuVHIclFXrDMlZ5yXudZg
+        pJQqdm/rGJ0ezPBHa8l4ynhxTssmLZqMHytZVmkZ20cMEFX9F1LLtKw3PuMwYnib8b7ZW6YdpgmX
+        ez4edRMNln09fydfzp9P5KR61KtF8m0fHf+cQf2EC7a7VhBQc4VM8LJguag6BrXpWI1FhzrPlVHZ
+        hnJ+iD6iDeFXa1y3/y87P/yKUSpFKWMYorUaQvfjHgi92uQh+24OwJA8QjG5EUoeOV6i3etkHehk
+        neOzE7uJoXv24+M3AAAA//8DAKX7O8xwAwAA
     headers:
       CF-RAY:
-      - 99a6ae108c0cac0d-PDX
+      - 9b944656cd67138a-SJC
       Cache-Control:
       - max-age=0
       Connection:
@@ -451,7 +450,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Thu, 06 Nov 2025 18:33:37 GMT
+      - Mon, 05 Jan 2026 16:15:34 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -461,7 +460,7 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       expires:
-      - Thu, 06 Nov 2025 18:33:37 GMT
+      - Mon, 05 Jan 2026 16:15:34 GMT
       strict-transport-security:
       - max-age=31536000; includeSubdomains
       x-content-type-options:

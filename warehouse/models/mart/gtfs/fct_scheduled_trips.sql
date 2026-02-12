@@ -237,12 +237,12 @@ fct_scheduled_trips AS (
         DATETIME(trip_first_start_pickup_drop_off_window_ts, trip_start_timezone) AS trip_first_start_pickup_drop_off_window_datetime_local_tz,
         DATETIME(trip_last_end_pickup_drop_off_window_ts, trip_end_timezone) AS trip_last_end_pickup_drop_off_window_datetime_local_tz,
         CASE
-            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 4 THEN "Owl"
-            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 7 THEN "Early AM"
-            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 10 THEN "AM Peak"
-            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 15 THEN "Midday"
-            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 20 THEN "PM Peak"
-            ELSE "Evening"
+            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 4 THEN "owl"
+            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 7 THEN "early_am"
+            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 10 THEN "am_peak"
+            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 15 THEN "midday"
+            WHEN EXTRACT(hour FROM DATETIME(trip_first_departure_ts, "America/Los_Angeles")) < 20 THEN "pm_peak"
+            ELSE "evening"
         END AS time_of_day,
     FROM gtfs_joins
     LEFT JOIN fct_daily_schedule_feeds AS daily_feeds

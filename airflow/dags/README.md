@@ -1,16 +1,31 @@
 # DAGs
 
+| Time_in_UTC | Time_in_PST          | Time_in_PDT          | DAG                                                                                                                              | Schedule   |
+|   :---:     | :---:                | :---:                |:---                                                                                                                              | :---:      |
+|  0:00 AM    | 4 PM<br>previous day | 5 PM<br>previous day | [publish_gtfs](#publish_gtfs)                                                                                                    | Mondays    |
+|  0:00 AM    | 4 PM<br>previous day | 5 PM<br>previous day | [sync_elavon](./sync_elavon)(<br>[sync_kuba](./sync_kuba)<br>[scrape_feed_aggregators](./scrape_feed_aggregators)<br>[copy_production_to_staging](./copy_production_to_staging) | Every day  |
+|  2:00 AM    | 6 PM<br>previous day | 7 PM<br>previous day | [airtable_loader_v2](./airtable_loader_v2)<br>[parse_elavon](./parse_elavon)                                                     | Every Day  |
+|  3:00 AM    | 7 PM<br>previous day | 8 PM<br>previous day | [download_gtfs_schedule_v2](./download_gtfs_schedule_v2)                                                                         | Every Day  |
+|  4:00 AM    | 8 PM<br>previous day | 9 PM<br>previous day | [scrape_state_geoportal](./scrape_state_geoportal)<br>[download_parse_and_validate_gtfs](#download_parse_and_validate_gtfs)      | 1st Day of the month |
+|  9:00 AM    | 1:00 AM              | 2:00 AM              | [sync_ntd_data_api](./sync_ntd_data_api)                                                                                         | Wednesdays |
+| 10:00 AM    | 2:00 AM              | 3:00 AM              | [ntd_report_from_blackcat](./ntd_report_from_blackcat)<br>[sync_ntd_data_xlsx](./sync_ntd_data_xlsx)                             | Mondays    |
+| 11:00 AM    | 3:00 AM              | 4:00 AM              | [create_external_tables](./create_external_tables)                                                                               | Every Day  |
+|             | Every Hour           |                      | [sync_littlepay_v3](./sync_littlepay_v3)<br>[unzip_and_validate_gtfs_schedule_hourly](./unzip_and_validate_gtfs_schedule_hourly) | Every Day  |
+|             | Every<br>Hour:30 min                       || [parse_littlepay_v3](./parse_littlepay_v3)                                                                                       | Every Day  |
+|             | Every<br>Hour:15 min                       || [parse_and_validate_rt](#parse_and_validate_rt)                                                                                  | Every Day  |
+|  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_all](#dbt_all)                                                                                                              | Monday and Thursday |
+|  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_daily](#dbt_daily)                                                                                                          | Sunday, Tuesday, Wednesday, Friday, and Saturday |
+|  -          | -                    | -                    | [dbt_manual](#dbt_manual)                                                                                                        | Runs Only Manually |
+
+
 ## dbt_all
 
-   Runs all dbt models on **Mondays** and **Thursdays** at 7am PDT/8am PST (2pm UTC).
+   Runs all dbt models on **Mondays** and **Thursdays**.
 
 
 ## dbt_daily
 
- > [!NOTE]
- > Mondays and Thursdays are covered by **dbt_all**.
-
-   Runs specific dbt models on **Sundays**, **Tuesdays**, **Wednesdays**, **Fridays**, and **Saturdays** at 7am PDT/8am PST (2pm UTC).
+   Runs specific dbt models on the days that are not covered by `dbt_all` (**Sundays**, **Tuesdays**, **Wednesdays**, **Fridays**, and **Saturdays**).
 
 
 ## dbt_manual
@@ -18,7 +33,7 @@
    Runs specific dbt models as needed. It needs to be triggered manually.
 
 
-## download_gtfs
+## download_parse_and_validate_gtfs
 
 ### 1. Generates GTFS Config Files (datasets)
 
@@ -64,14 +79,8 @@
            To visualize the raw data from these files, you can query **external_gtfs_schedule.download_outcomes** or **mart_gtfs_audit.dim_gtfs_schedule_download_outcomes** in BigQuery.
 
 
-### 3. Triggers parse_and_validate_gtfs DAG
 
-   Once the step 2 is completed this DAG will trigger the unzip, convert and validate process through `parse_and_validate_gtfs` DAG.
-
-
-## parse_and_validate_gtfs
-
-### Validates files
+### 3. Validates files
 
    Runs [**ValidateGTFSToGCSOperator**](airflow/plugins/operators/validate_gtfs_to_gcs_operator.py) and [**GTFSValidatorHook**](airflow/plugins/hooks/gtfs_validator_hook.py) replacing [unzip_and_validate_gtfs_schedule_hourly.validate_gtfs_schedule](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/validate_gtfs_schedule.yml).
 
@@ -90,9 +99,9 @@
      To visualize the raw data from these files, you can query **external_gtfs_schedule.validations_outcomes**, **staging.stg_gtfs_schedule__validation_outcomes**, or **mart_gtfs_audit.dim_gtfs_schedule_validation_outcomes** in BigQuery.
 
 
-### Unzips and Convert Dataset Files
+### 4. Unzips and Convert Dataset Files
 
-#### 1. Unzips Dataset Files
+#### 4.1. Unzips Dataset Files
 
    Runs [**UnzipGTFSToGCSOperator**](airflow/plugins/operators/unzip_gtfs_to_gcs_operator.py) and [**GTFSUnzipHook**](airflow/plugins/hooks/gtfs_unzip_hook.py) replacing [unzip_and_validate_gtfs_schedule_hourly.unzip_gtfs_schedule](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/unzip_gtfs_schedule.py).
 
@@ -136,7 +145,7 @@
       The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
       To visualize the raw data from these files, you can query **external_gtfs_schedule.unzip_outcomes**, **staging.stg_gtfs_schedule__unzip_outcomes**, or **mart_gtfs_audit.dim_gtfs_schedule_unzip_outcomes** in BigQuery.
 
-#### 2. Converts files to external tables format (jsonl)
+#### 4.2. Converts files to external tables format (jsonl)
 
    Runs [**GTFSCSVToJSONLOperator**](airflow/plugins/operators/gtfs_csv_to_jsonl_operator.py) replacing [unzip_and_validate_gtfs_schedule_hourly.convert_to_json](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/convert_to_json).
 
@@ -154,18 +163,11 @@
       To visualize the raw data from these files, you can query **external_gtfs_schedule.{filename}\_txt_parse_outcomes** or **staging.stg_gtfs_schedule__file_parse_outcomes** in BigQuery.
 
 
-## airtable_loader_v2
-## copy_production_to_staging
-## create_external_tables
-## ntd_report_from_blackcat
 ## parse_and_validate_rt
-## parse_elavon
-## parse_littlepay_v3
+
+   This DAG orchestrates the parsing and validation of GTFS RT data downloaded by the [archiver](../../services/gtfs-rt-archiver-v3/README.md).
+
+
 ## publish_gtfs
-## scrape_feed_aggregators
-## scrape_state_geoportal
-## sync_elavon
-## sync_kuba
-## sync_littlepay_v3
-## sync_ntd_data_api
-## sync_ntd_data_xlsx
+
+   This DAG orchestrates the publishing of data from the Cal-ITP data warehouse to the California Open Data Portal. Failures in this job may require coordination with the central data portal team if there is an issue with CKAN itself.

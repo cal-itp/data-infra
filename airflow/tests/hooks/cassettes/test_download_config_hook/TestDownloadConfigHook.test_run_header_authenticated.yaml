@@ -5,7 +5,7 @@ interactions:
       Accept:
       - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
       Accept-Encoding:
-      - gzip, deflate, br
+      - gzip, deflate
       Accept-Language:
       - en-US,en;q=0.5
       Connection:
@@ -15,8 +15,8 @@ interactions:
       Upgrade-Insecure-Requests:
       - '1'
       User-Agent:
-      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML,
-        like Gecko) Chrome/139.0.0.0 Safari/537.36
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/143.0.0.0 Safari/537.36
       sec-ch-ua:
       - '"Not A;Brand"'
       sec-fetch-dest:
@@ -40,7 +40,7 @@ interactions:
       Content-Type:
       - text/html; charset=UTF-8
       Date:
-      - Tue, 25 Nov 2025 18:56:09 GMT
+      - Mon, 02 Feb 2026 18:50:02 GMT
       Location:
       - http://www.glendaleca.gov/Home/ShowDocument?id=29549
       Server:
@@ -54,7 +54,7 @@ interactions:
       Accept:
       - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
       Accept-Encoding:
-      - gzip, deflate, br
+      - gzip, deflate
       Accept-Language:
       - en-US,en;q=0.5
       Connection:
@@ -64,8 +64,8 @@ interactions:
       Upgrade-Insecure-Requests:
       - '1'
       User-Agent:
-      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML,
-        like Gecko) Chrome/139.0.0.0 Safari/537.36
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/143.0.0.0 Safari/537.36
       sec-ch-ua:
       - '"Not A;Brand"'
       sec-fetch-dest:
@@ -87,7 +87,7 @@ interactions:
       Content-Length:
       - '0'
       Date:
-      - Tue, 25 Nov 2025 18:56:10 GMT
+      - Mon, 02 Feb 2026 18:50:03 GMT
       Location:
       - https://www.glendaleca.gov/Home/ShowDocument?id=29549
       Server:
@@ -95,7 +95,7 @@ interactions:
       Server-Timing:
       - cdn-cache; desc=HIT
       - edge; dur=1
-      - ak_p; desc="1764096970555_390287338_1116762033_9_9900_11_0_-";dur=1
+      - ak_p; desc="1770058203134_399532111_105770563_11_6529_67_0_-";dur=1
     status:
       code: 301
       message: Moved Permanently
@@ -105,7 +105,7 @@ interactions:
       Accept:
       - text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
       Accept-Encoding:
-      - gzip, deflate, br
+      - gzip, deflate
       Accept-Language:
       - en-US,en;q=0.5
       Connection:
@@ -115,8 +115,8 @@ interactions:
       Upgrade-Insecure-Requests:
       - '1'
       User-Agent:
-      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML,
-        like Gecko) Chrome/139.0.0.0 Safari/537.36
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/143.0.0.0 Safari/537.36
       sec-ch-ua:
       - '"Not A;Brand"'
       sec-fetch-dest:
@@ -3355,7 +3355,7 @@ interactions:
       Content-Type:
       - application/x-zip-compressed
       Date:
-      - Tue, 25 Nov 2025 18:56:11 GMT
+      - Mon, 02 Feb 2026 18:50:03 GMT
       Edge-Cache-Tag:
       - EFC020D0.G,EFC020D0.CL3
       Expect-CT:
@@ -3368,14 +3368,14 @@ interactions:
       - Mon, 17 Nov 2025 11:16:34 GMT
       Server-Timing:
       - cdn-cache; desc=MISS
-      - edge; dur=112
-      - origin; dur=129
-      - ak_p; desc="1764096970609_390287338_1116762439_24046_9998_5_37_-";dur=1
+      - edge; dur=72
+      - origin; dur=100
+      - ak_p; desc="1770058203192_399532111_105771075_17185_6441_21_15_-";dur=1
       Set-Cookie:
-      - ASP.NET_SessionId=0h4xqkbdtlkbrafn5zq4dpza; path=/; secure; HttpOnly; SameSite=Lax
-      - BIGipServer~AUTO-VISION~visionlive~www.glendaleca.gov_443=!378BCROBI04liXKPQiKlh2cDgVLBdTRh4B3Ng5zDmXW1Dj+XrtW9I0flREwmsCmbu8IYjUStliv7bxk=;
+      - ASP.NET_SessionId=nm02zh1ikx3ex4srtiq1saqz; path=/; secure; HttpOnly; SameSite=Lax
+      - BIGipServer~AUTO-VISION~visionlive~www.glendaleca.gov_443=!v75veq58EnacS7JVP4iwlHrxKtkxxy9rzFb+RckW0fTh4E3A+91tiv7Vj5Bds7KL4hy4369GQtOtuQs=;
         path=/; Httponly; Secure
-      - TS01af151e=0106cf681ba03e973eb49e2f49d3fc6bef4da6ef75b075c882be3790baab9f94ceb1124eee4090e7cf365896728817624118cd4992b044217028a63a8e7788643d3bd530d243032a768d6dbd11719d920aa9b2879b;
+      - TS01af151e=0106cf681b221aff8f860f0095e1c635fa2b73e080d66e6f0955a5bb2d655a5133ca73073a83e5fd128c7f591a61a6c1a1788a9ce324a20af55f5141af2d53de8f8923a57a0d6ffe7a3e79b40a116122e57526d494;
         Path=/; Secure; HttpOnly
       Strict-Transport-Security:
       - max-age=31536000;

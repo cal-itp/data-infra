@@ -7,6 +7,7 @@ WITH unioned_outcomes AS (
         "calendar_dates_txt_parse_outcomes",
         "fare_attributes_txt_parse_outcomes",
         "fare_leg_rules_txt_parse_outcomes",
+        "fare_media_txt_parse_outcomes",
         "fare_products_txt_parse_outcomes",
         "fare_rules_txt_parse_outcomes",
         "fare_transfer_rules_txt_parse_outcomes",

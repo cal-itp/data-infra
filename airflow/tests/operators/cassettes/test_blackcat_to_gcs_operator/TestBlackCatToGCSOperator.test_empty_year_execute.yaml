@@ -1,0 +1,97 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.5
+    method: GET
+    uri: https://services.blackcattransit.com/api/APIModules/GetNTDReportsByYear/BCG_CA/2026
+  response:
+    body:
+      string: '[]'
+    headers:
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 14 Jan 2026 23:00:49 GMT
+      Expires:
+      - '-1'
+      Pragma:
+      - no-cache
+      Server:
+      - Microsoft-IIS/10.0
+      Set-Cookie:
+      - AWSALB=S0bvgXpY32AylQTvpe33TXZ1977opZ1thyeSFxyzjsFfJu69i6T0TpXXxl8Fzp4Yu0AIY4iDD5BjdDG9e/v2+QiU+kgH2UMz+ESGDbNknBY/qhol7RCldhvKAWqp;
+        Expires=Wed, 21 Jan 2026 23:00:49 GMT; Path=/
+      - AWSALBCORS=S0bvgXpY32AylQTvpe33TXZ1977opZ1thyeSFxyzjsFfJu69i6T0TpXXxl8Fzp4Yu0AIY4iDD5BjdDG9e/v2+QiU+kgH2UMz+ESGDbNknBY/qhol7RCldhvKAWqp;
+        Expires=Wed, 21 Jan 2026 23:00:49 GMT; Path=/; SameSite=None; Secure
+      X-AspNet-Version:
+      - 4.0.30319
+      X-Frame-Options:
+      - AllowAll
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/3ef4be40-e730-4645-80d6-1ccc026a02fa
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/all_NTDReporting%2Fyear%3D2026%2Fdt%3D2026-01-10%2Fts%3D2026-01-10T00%3A00%3A00%2B00%3A00%2Fall_ntdreports.jsonl.gz?fields=name&prettyPrint=false
+  response:
+    body:
+      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/all_NTDReporting/year=2026/dt=2026-01-10/ts=2026-01-10T00:00:00+00:00/all_ntdreports.jsonl.gz","errors":[{"message":"No
+        such object: calitp-staging-pytest/all_NTDReporting/year=2026/dt=2026-01-10/ts=2026-01-10T00:00:00+00:00/all_ntdreports.jsonl.gz","domain":"global","reason":"notFound"}]}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '361'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 14 Jan 2026 23:00:50 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AJRbA5UncibB2fbhBJOHGMmFntZkTTfb4VzyX2yrC40rLmu_Mcy-SMx5OFvKAGo15VHtUc8S
+    status:
+      code: 404
+      message: Not Found
+version: 1

@@ -1,8 +1,9 @@
 interactions:
 - request:
-    body: "--===============7267434585525975681==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv\"}\r\n--===============7267434585525975681==\r\ncontent-type:
-      text/csv\r\n\r\ntesting_date\r\n2025-06-01\r\n\r\n--===============7267434585525975681==--"
+    body: "--===============5953646368473391407==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv\",
+      \"crc32c\": \"aCkoQQ==\"}\r\n--===============5953646368473391407==\r\ncontent-type:
+      text/csv\r\n\r\ntesting_date\r\n2025-06-01\r\n\r\n--===============5953646368473391407==--"
     headers:
       Accept:
       - application/json
@@ -13,16 +14,17 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '321'
+      - '343'
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/a426e2c6-2e4d-433a-a233-912107732224
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/906ff536-9a58-4ade-be00-34764b4261f6
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT03MjY3NDM0NTg1NTI1
-        OTc1NjgxPT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT01OTUzNjQ2MzY4NDcz
+        MzkxNDA3PT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -31,17 +33,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv/1759364461170224\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv/1767629857838731\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/california_open_data__testing%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Ftesting.csv\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__testing%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Ftesting.csv?generation=1759364461170224&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__testing%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Ftesting.csv?generation=1767629857838731&alt=media\",\n
         \ \"name\": \"california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1759364461170224\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767629857838731\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"text/csv\",\n  \"storageClass\":
         \"STANDARD\",\n  \"size\": \"26\",\n  \"md5Hash\": \"KKs5MusYBmeUcUR+KTkjIQ==\",\n
-        \ \"crc32c\": \"aCkoQQ==\",\n  \"etag\": \"CLCc9K2fhJADEAE=\",\n  \"timeCreated\":
-        \"2025-10-02T00:21:01.175Z\",\n  \"updated\": \"2025-10-02T00:21:01.175Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-10-02T00:21:01.175Z\",\n  \"timeFinalized\":
-        \"2025-10-02T00:21:01.175Z\"\n}\n"
+        \ \"crc32c\": \"aCkoQQ==\",\n  \"etag\": \"CIutla7m9JEDEAE=\",\n  \"timeCreated\":
+        \"2026-01-05T16:17:37.848Z\",\n  \"updated\": \"2026-01-05T16:17:37.848Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-01-05T16:17:37.848Z\",\n  \"timeFinalized\":
+        \"2026-01-05T16:17:37.848Z\"\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -52,9 +54,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Thu, 02 Oct 2025 00:21:01 GMT
+      - Mon, 05 Jan 2026 16:17:37 GMT
       ETag:
-      - CLCc9K2fhJADEAE=
+      - CIutla7m9JEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -65,14 +67,15 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AAwnv3LJHRxi5R8ge_ZyT5HaxiOlIWZRccSnnLJzYrfCxOpXhAxMHZk2zJJLGwJggaGhm9asgOhyxoc
+      - AHVrFxMLqu3H20DW4oIh2Lu7yNKMb6fqxPkrRnu-uQ7iizsTT6We14Cu4ssL0rzTsvrXtVVKf51EEaI
     status:
       code: 200
       message: OK
 - request:
-    body: "--===============4114164849333912953==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv\"}\r\n--===============4114164849333912953==\r\ncontent-type:
-      text/csv\r\n\r\ntesting_date\r\n2025-06-01\r\n\r\n--===============4114164849333912953==--"
+    body: "--===============4943544878929507841==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv\",
+      \"crc32c\": \"aCkoQQ==\"}\r\n--===============4943544878929507841==\r\ncontent-type:
+      text/csv\r\n\r\ntesting_date\r\n2025-06-01\r\n\r\n--===============4943544878929507841==--"
     headers:
       Accept:
       - application/json
@@ -83,16 +86,17 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '321'
+      - '343'
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/56c1a413-26c1-450e-9cbf-ab70e3411c47
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/3b28aff6-d4b0-4f74-8741-43c0192cb65e
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT00MTE0MTY0ODQ5MzMz
-        OTEyOTUzPT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT00OTQzNTQ0ODc4OTI5
+        NTA3ODQxPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -101,17 +105,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv/1759364461907910\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv/1767629858705919\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/california_open_data__testing%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Ftesting.csv\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__testing%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Ftesting.csv?generation=1759364461907910&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/california_open_data__testing%2Fdt=2025-06-01%2Fts=2025-06-01T00:00:00%2B00:00%2Ftesting.csv?generation=1767629858705919&alt=media\",\n
         \ \"name\": \"california_open_data__testing/dt=2025-06-01/ts=2025-06-01T00:00:00+00:00/testing.csv\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1759364461907910\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1767629858705919\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"text/csv\",\n  \"storageClass\":
         \"STANDARD\",\n  \"size\": \"26\",\n  \"md5Hash\": \"KKs5MusYBmeUcUR+KTkjIQ==\",\n
-        \ \"crc32c\": \"aCkoQQ==\",\n  \"etag\": \"CMafoa6fhJADEAE=\",\n  \"timeCreated\":
-        \"2025-10-02T00:21:01.941Z\",\n  \"updated\": \"2025-10-02T00:21:01.941Z\",\n
-        \ \"timeStorageClassUpdated\": \"2025-10-02T00:21:01.941Z\",\n  \"timeFinalized\":
-        \"2025-10-02T00:21:01.941Z\"\n}\n"
+        \ \"crc32c\": \"aCkoQQ==\",\n  \"etag\": \"CP+jyq7m9JEDEAE=\",\n  \"timeCreated\":
+        \"2026-01-05T16:17:38.714Z\",\n  \"updated\": \"2026-01-05T16:17:38.714Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-01-05T16:17:38.714Z\",\n  \"timeFinalized\":
+        \"2026-01-05T16:17:38.714Z\"\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -122,9 +126,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Thu, 02 Oct 2025 00:21:01 GMT
+      - Mon, 05 Jan 2026 16:17:38 GMT
       ETag:
-      - CMafoa6fhJADEAE=
+      - CP+jyq7m9JEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -135,7 +139,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AAwnv3KTz35PJ8jD5x8dWfzdMhBh0ksHfAbupdp94XoG1zYa3GR2dTuwwKVQL849thMG255Lvt0xekc
+      - AHVrFxPrOlpU9ph9LOybixHciSpGd35WYcAg38JgzPooHf6HSIOnXjlt-L5MdYhhwKlo5n2WPackrDo
     status:
       code: 200
       message: OK
@@ -149,10 +153,11 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/2.19.0  gl-python/3.11.11 grpc/1.75.1 gax/2.25.1 gccl/2.19.0
-        gccl-invocation-id/329b64ee-3bfb-4341-a2d1-adfc02079dc9
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/b679152f-74b1-4958-bf48-c6599a9c25de
       accept-encoding:
       - gzip
       content-type:
@@ -178,13 +183,13 @@ interactions:
       Content-Type:
       - text/csv
       Date:
-      - Thu, 02 Oct 2025 00:21:02 GMT
+      - Mon, 05 Jan 2026 16:17:39 GMT
       ETag:
-      - CMafoa6fhJADEAE=
+      - CP+jyq7m9JEDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Thu, 02 Oct 2025 00:21:01 GMT
+      - Mon, 05 Jan 2026 16:17:38 GMT
       Pragma:
       - no-cache
       Server:
@@ -193,9 +198,9 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AAwnv3LZq6NOqndGO78CPFgm85N38rWCLw5RNceqBxESdkc9VDyTVDqIZ11Soaw9xrtMg-bGYETC2eg
+      - AHVrFxOxOnFrLTTRCXneD4DZKZvE34ibTVSdqa1_66JcUNkY1bPge9tTsli7atZkjTlBQ3Pt-LzWPIs
       X-Goog-Generation:
-      - '1759364461907910'
+      - '1767629858705919'
       X-Goog-Hash:
       - crc32c=aCkoQQ==,md5=KKs5MusYBmeUcUR+KTkjIQ==
       X-Goog-Metageneration:

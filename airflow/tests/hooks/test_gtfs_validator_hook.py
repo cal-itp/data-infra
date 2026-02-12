@@ -7,12 +7,12 @@ from hooks.gtfs_validator_hook import GTFSValidatorHook
 
 class TestGTFSValidatorHook:
     @pytest.fixture
-    def date(self) -> pendulum.DateTime:
+    def execution_date(self) -> pendulum.DateTime:
         return pendulum.datetime(2025, 11, 15)
 
     @pytest.fixture
-    def hook(self, date: pendulum.DateTime) -> GTFSValidatorHook:
-        return GTFSValidatorHook(date=date)
+    def hook(self, execution_date: pendulum.DateTime) -> GTFSValidatorHook:
+        return GTFSValidatorHook(current_date=execution_date)
 
     @pytest.fixture
     def jar_path(self) -> str:
@@ -25,37 +25,49 @@ class TestGTFSValidatorHook:
 
     def test_validator_5_0_0(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2025, 11, 15)).version().number
+            GTFSValidatorHook(current_date=pendulum.datetime(2025, 11, 15))
+            .version()
+            .number
             == "5.0.0"
         )
 
     def test_validator_4_2_0(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2024, 3, 26)).version().number
+            GTFSValidatorHook(current_date=pendulum.datetime(2024, 3, 26))
+            .version()
+            .number
             == "4.2.0"
         )
 
     def test_validator_4_1_0(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2024, 1, 19)).version().number
+            GTFSValidatorHook(current_date=pendulum.datetime(2024, 1, 19))
+            .version()
+            .number
             == "4.1.0"
         )
 
     def test_validator_4_0_0(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2023, 8, 30)).version().number
+            GTFSValidatorHook(current_date=pendulum.datetime(2023, 8, 30))
+            .version()
+            .number
             == "4.0.0"
         )
 
     def test_validator_3_1_1(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2022, 11, 15)).version().number
+            GTFSValidatorHook(current_date=pendulum.datetime(2022, 11, 15))
+            .version()
+            .number
             == "3.1.1"
         )
 
     def test_validator_2_0_0(self):
         assert (
-            GTFSValidatorHook(date=pendulum.datetime(2022, 9, 14)).version().number
+            GTFSValidatorHook(current_date=pendulum.datetime(2022, 9, 14))
+            .version()
+            .number
             == "2.0.0"
         )
 
@@ -110,7 +122,7 @@ class TestGTFSValidatorHook:
         }
 
         result = hook.run(
-            filename=fixture_schedule_path,
+            input_zip=fixture_schedule_path,
             download_schedule_feed_results=download_schedule_feed_results,
         )
         assert len(result.notices()) == 4
@@ -221,7 +233,7 @@ class TestGTFSValidatorHook:
         }
 
         result = hook.run(
-            filename=fixture_schedule_path,
+            input_zip=fixture_schedule_path,
             download_schedule_feed_results=download_schedule_feed_results,
         )
         assert len(result.notices()) == 0
@@ -314,7 +326,7 @@ class TestGTFSValidatorHook:
         }
 
         result = hook.run(
-            filename=fixture_schedule_path,
+            input_zip=fixture_schedule_path,
             download_schedule_feed_results=download_schedule_feed_results,
         )
         assert len(result.notices()) == 0
@@ -355,7 +367,21 @@ class TestGTFSValidatorHook:
                     "schedule_url_for_validation": None,
                     "url": "http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip",
                 },
-                "system_errors": {},
+                "system_errors": {
+                    "notices": [
+                        {
+                            "code": "i_o_error",
+                            "severity": "ERROR",
+                            "totalNotices": 1,
+                            "sampleNotices": [
+                                {
+                                    "exception": "java.util.zip.ZipException",
+                                    "message": "Archive is not a ZIP archive",
+                                }
+                            ],
+                        }
+                    ]
+                },
                 "validator_version": "v5.0.0",
             },
         }
