@@ -559,7 +559,7 @@ resource "google_project_iam_member" "composer-service-account" {
     "roles/cloudbuild.builds.viewer",
     "roles/composer.worker",
     "roles/secretmanager.secretAccessor",
-    "roles/secretmanager.viewer"
+    "roles/secretmanager.viewer",
     "roles/run.invoker"
   ])
   role    = each.key
