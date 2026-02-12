@@ -2,12 +2,7 @@
     post_hook="{{ payments_enghouse_row_access_policy() }}") }}
 
 WITH transactions AS (
-    SELECT *
-    FROM {{ ref('stg_enghouse__transactions') }}
-),
-
-ticket_results AS (
-    SELECT * FROM {{ ref('stg_enghouse__ticket_results') }}
+    SELECT * FROM {{ ref('stg_enghouse__transactions') }}
 ),
 
 taps AS (
@@ -44,6 +39,7 @@ dim_routes AS (
 participants_to_routes_and_agency AS (
     SELECT
         map.operator_id,
+        map.organization_source_record_id,
         map._in_use_from,
         map._in_use_until,
         feeds.date,
@@ -67,21 +63,21 @@ participants_to_routes_and_agency AS (
 join_orgs AS (
     SELECT
         transactions.*,
+
         dim_orgs.name AS organization_name,
         dim_orgs.source_record_id AS organization_source_record_id,
+
         -- Common transaction info
         routes.route_long_name,
         routes.route_short_name,
         routes.agency_id,
         routes.agency_name
     FROM transactions
-    LEFT JOIN ticket_results
-        ON transactions.ID = ticket_results.ID
     LEFT JOIN taps
-        ON ticket_results.tap_id = taps.tap_id
+        ON transactions.payment_reference = taps.payment_reference
     LEFT JOIN participants_to_routes_and_agency AS routes
         ON transactions.operator_id = routes.operator_id
-            AND EXTRACT(DATE FROM TIMESTAMP(ticket_results.start_dttm)) = routes.date
+            AND EXTRACT(DATE FROM TIMESTAMP(transactions.timestamp)) = routes.date
             AND routes.route_id = taps.line_public_number
             AND CAST(transactions.timestamp AS TIMESTAMP)
                 BETWEEN CAST(routes._in_use_from AS TIMESTAMP)

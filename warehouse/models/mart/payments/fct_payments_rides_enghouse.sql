@@ -39,6 +39,7 @@ dim_routes AS (
 participants_to_routes_and_agency AS (
     SELECT
         map.operator_id,
+        map.organization_source_record_id,
         map._in_use_from,
         map._in_use_until,
         feeds.date,
@@ -59,7 +60,7 @@ participants_to_routes_and_agency AS (
             AND routes.feed_key = agency.feed_key
 ),
 
-fct_payments_rides_enghouse AS (
+join_orgs AS (
     SELECT
 
         ticket_results.operator_id,
@@ -120,6 +121,9 @@ fct_payments_rides_enghouse AS (
         taps.service_name,
         taps.driver_id,
 
+        dim_orgs.name AS organization_name,
+        dim_orgs.source_record_id AS organization_source_record_id,
+
         -- Common transaction info
         routes.route_long_name,
         routes.route_short_name,
@@ -138,8 +142,74 @@ fct_payments_rides_enghouse AS (
                 AND CAST(routes._in_use_until AS TIMESTAMP)
     LEFT JOIN dim_orgs
         ON routes.organization_source_record_id = dim_orgs.source_record_id
-        AND CAST(transactions.timestamp AS TIMESTAMP) BETWEEN dim_orgs._valid_from AND dim_orgs._valid_to
+        AND CAST(ticket_results.start_dttm AS TIMESTAMP) BETWEEN dim_orgs._valid_from AND dim_orgs._valid_to
+),
 
+fct_payments_rides_enghouse AS (
+    SELECT
+        operator_id,
+        id,
+        ticket_id,
+        station_name,
+        amount,
+        clearing_id,
+        reason,
+        tap_id,
+        ticket_type,
+        created_dttm,
+        line,
+        start_station,
+        end_station,
+        start_dttm,
+        end_dttm,
+        ticket_code,
+        additional_infos,
+        mapping_terminal_id,
+        mapping_merchant_id,
+        terminal,
+        token,
+        masked_pan,
+        expiry,
+        server_date,
+        terminal_date,
+        tx_number,
+        tx_status,
+        payment_reference,
+        terminal_spdh_code,
+        denylist_version,
+        currency,
+        par,
+        fare_mode,
+        fare_type,
+        fare_value,
+        fare_description,
+        fare_linked_id,
+        gps_longitude,
+        gps_latitude,
+        gps_altitude,
+        vehicle_public_number,
+        vehicle_name,
+        stop_id,
+        stop_name,
+        platform_id,
+        platform_name,
+        zone_id,
+        zone_name,
+        line_public_number,
+        line_name,
+        line_direction,
+        trip_public_number,
+        trip_name,
+        service_public_number,
+        service_name,
+        driver_id,
+        organization_name,
+        organization_source_record_id,
+        route_long_name,
+        route_short_name,
+        agency_id,
+        agency_name
+    FROM join_orgs
 )
 
 SELECT * FROM fct_payments_rides_enghouse
