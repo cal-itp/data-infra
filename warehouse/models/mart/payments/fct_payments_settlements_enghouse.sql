@@ -62,7 +62,26 @@ participants_to_routes_and_agency AS (
 
 join_orgs AS (
     SELECT
-        transactions.*,
+        transactions.operator_id,
+        transactions.id,
+        transactions.operation,
+        transactions.terminal_id,
+        transactions.mapping_terminal_id,
+        transactions.mapping_merchant_id,
+        transactions.timestamp,
+        transactions.amount,
+        transactions.payment_reference,
+        transactions.spdh_response,
+        transactions.response_type,
+        transactions.response_message,
+        transactions.token,
+        transactions.issuer_response,
+        transactions.core_response,
+        transactions.rrn,
+        transactions.authorization_code,
+        transactions.par,
+        transactions.brand,
+        transactions._content_hash,
 
         dim_orgs.name AS organization_name,
         dim_orgs.source_record_id AS organization_source_record_id,
@@ -89,8 +108,6 @@ join_orgs AS (
 
 fct_payments_settlements_enghouse AS (
     SELECT
-        organization_name,
-        organization_source_record_id,
         operator_id,
         id,
         operation,
@@ -110,6 +127,8 @@ fct_payments_settlements_enghouse AS (
         authorization_code,
         par,
         brand,
+        organization_name,
+        organization_source_record_id,
         route_long_name,
         route_short_name,
         agency_id,
