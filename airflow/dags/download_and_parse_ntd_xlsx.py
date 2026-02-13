@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from dags import log_failure_to_slack
 from operators.ntd_xlsx_list_tabs_operator import NTDXLSXListTabsOperator
@@ -9,6 +9,7 @@ from operators.ntd_xlsx_to_jsonl_operator import NTDXLSXToJSONLOperator
 from airflow import DAG
 from airflow.decorators import task
 from airflow.operators.latest_only import LatestOnlyOperator
+from airflow.utils.trigger_rule import TriggerRule
 
 NTD_PRODUCTS = [
     {
@@ -98,6 +99,8 @@ with DAG(
 
     download_xlsx = NTDXLSXToGCSOperator.partial(
         task_id="download_to_gcs",
+        retries=1,
+        retry_delay=timedelta(seconds=10),
         dt="{{ dag_run.start_date | ds }}",
         execution_ts="{{ dag_run.start_date | ts }}",
         destination_bucket=os.environ.get("CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"),
@@ -114,7 +117,10 @@ with DAG(
 
     xlsx_tabs = NTDXLSXListTabsOperator.partial(
         task_id="ntd_xlsx_list_tabs",
+        retries=1,
+        retry_delay=timedelta(seconds=10),
         source_bucket=os.environ.get("CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"),
+        trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(download_xlsx.output.map(create_xlsx_tabs_kwargs))
 
     def create_parse_kwargs(tab) -> dict:
@@ -133,10 +139,13 @@ with DAG(
 
     parse_xlsx = NTDXLSXToJSONLOperator.partial(
         task_id="xlsx_to_jsonl",
+        retries=1,
+        retry_delay=timedelta(seconds=10),
         source_bucket=os.environ.get("CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"),
         destination_bucket=os.environ.get(
             "CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"
         ),
+        trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(xlsx_tabs.output.map(create_parse_kwargs))
 
     latest_only >> download_kwargs >> xlsx_tabs >> parse_xlsx
