@@ -137,15 +137,17 @@ Shortly after, the `parse_littlepay_v3` DAG runs:
 3. Writes to calitp-littlepay-parsed
 ```
 
-### 2.4 External Tables Update
+### 2.4 External Tables (One-Time Setup)
 
-The `create_external_tables` DAG runs:
+BigQuery external tables have already been created and point to the GCS buckets:
 
 ```
-1. Creates/updates BigQuery external tables
-2. Points them to the parsed JSONL files in GCS
-3. Makes data queryable in BigQuery
+- External tables are defined once and don't need to be recreated
+- They automatically reflect new files added to GCS
+- The create_external_tables DAG only runs when schema changes
 ```
+
+**Note:** New data appears in external tables automatically as soon as files land in GCS - no DAG run needed!
 
 ### 2.5 dbt Transformations Run
 

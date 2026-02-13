@@ -150,19 +150,30 @@ Start here to quickly identify where the problem is:
 
 ### No Enghouse Sync DAG
 
-**Note:** Enghouse data may be delivered directly to GCS rather than synced via Airflow.
+**Current Implementation:** Enghouse delivers data directly to GCS via SFTP on a daily basis. There is no Airflow sync DAG for Enghouse (unlike Littlepay).
 
-**Diagnostic steps:**
+**Expected Behavior:**
+
+- Data appears in `gs://calitp-enghouse-raw/` daily
+- No sync DAG runs are needed
+- External tables read directly from raw GCS files
+
+**Future Consideration:** A parse DAG similar to Littlepay's may be added in the future to standardize data processing.
+
+**Diagnostic steps if data is missing:**
 
 1. Check GCS bucket for new files:
 
    ```bash
    gsutil ls -l gs://calitp-enghouse-raw/tap/ | tail -10
+   gsutil ls -l gs://calitp-enghouse-raw/tx/ | tail -10
    ```
 
-2. Verify data delivery mechanism with team
+2. Verify file timestamps are recent (within last 24 hours)
 
-3. Check if manual upload process is needed
+3. Contact Enghouse if no new files are appearing
+
+4. Check with team if SFTP delivery configuration changed
 
 ### Enghouse Data Missing
 
@@ -455,12 +466,6 @@ If you can't resolve:
 - Check table name spelling
 - Verify dataset exists
 - Confirm dbt models ran
-
-### "Deadline exceeded"
-
-- Query timeout - optimize query
-- Check for large data volumes
-- Consider materialized views
 
 ## Related Documentation
 

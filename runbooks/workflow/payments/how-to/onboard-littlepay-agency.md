@@ -19,7 +19,7 @@ Collect the following before starting:
 - [ ] Littlepay AWS access key (JSON format)
 - [ ] Merchant ID / participant ID (e.g., `mst`, `sbmtd`)
 - [ ] S3 bucket name (usually `littlepay-<merchant_id>`)
-- [ ] Agency's GTFS dataset identifier in Cal-ITP system
+- [ ] Agency's GTFS dataset `source_record_id` from `dim_gtfs_datasets` (where `_is_current` is TRUE)
 - [ ] Agency contact information for dashboard access
 
 ### Required Access
@@ -243,21 +243,38 @@ Edit `warehouse/seeds/payments_entity_mapping.csv`:
 Add a new row:
 
 ```csv
-<littlepay-participant-id>,<gtfs-dataset-key>,<Display Name>,<Elavon Organization Name>
+<gtfs-dataset-source-record-id>,<organization-source-record-id>,<littlepay-participant-id>,<elavon-customer-name>,<_in_use_from>,<_in_use_until>
 ```
 
-**Example:**
+**Example (from actual file):**
 
 ```csv
-mst,mst_gtfs,Monterey-Salinas Transit,Monterey-Salinas Transit
+recysP9m9kjCJwHZe,receZJ9sEnP9vy3g0,mst,MST TAP TO RIDE,2000-01-01,2099-12-31
 ```
 
 **Column Definitions:**
 
-1. **Littlepay participant_id** - The merchant_id/participant_id from Littlepay
-2. **GTFS dataset key** - Cal-ITP's internal identifier for the agency's GTFS data
-3. **Display name** - Human-readable agency name
-4. **Elavon organization name** - Agency name as it appears in Elavon data (if applicable)
+1. **gtfs_dataset_source_record_id** - The `source_record_id` from `dim_gtfs_datasets` where `_is_current` is TRUE
+2. **organization_source_record_id** - The `source_record_id` from `dim_organizations` for the agency
+3. **littlepay_participant_id** - The merchant_id/participant_id from Littlepay
+4. **elavon_customer_name** - Agency name as it appears in Elavon data (if applicable)
+5. **\_in_use_from** - Start date (typically `2000-01-01`)
+6. **\_in_use_until** - End date (typically `2099-12-31`)
+
+**To find the source_record_ids:**
+
+```sql
+-- Find GTFS dataset source_record_id
+SELECT source_record_id, name
+FROM `cal-itp-data-infra.mart_transit_database.dim_gtfs_datasets`
+WHERE name LIKE '%<Agency Name>%'
+  AND _is_current = TRUE
+
+-- Find organization source_record_id
+SELECT source_record_id, name
+FROM `cal-itp-data-infra.mart_transit_database.dim_organizations`
+WHERE name LIKE '%<Agency Name>%'
+```
 
 ### 3.4 Commit Configuration Files
 

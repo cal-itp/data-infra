@@ -8,7 +8,10 @@
 
 This guide walks you through creating Metabase dashboards for an agency that has been onboarded to the payments ecosystem. You'll configure database connections, permissions, and duplicate/customize dashboards.
 
-> **Note:** This is an enhanced version of the original documentation. Complete the [Littlepay onboarding](onboard-littlepay-agency.md) before starting this guide.
+> **Note:** Complete the appropriate onboarding before starting this guide:
+>
+> - For fare collection: [Onboard a Littlepay Agency](onboard-littlepay-agency.md) OR [Onboard an Enghouse Agency](onboard-enghouse-agency.md)
+> - For payment processing: [Onboard an Elavon Agency](onboard-elavon-agency.md)
 
 ## Before You Start
 
@@ -16,9 +19,9 @@ This guide walks you through creating Metabase dashboards for an agency that has
 
 Verify the following are complete:
 
-- [ ] Agency's Littlepay data sync is configured and running
-- [ ] Data appears in `mart_payments.fct_payments_rides_v2` for the agency
-- [ ] Service account created (e.g., `<merchant-id>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com`)
+- [ ] Agency's fare collection data sync is configured and running (Littlepay or Enghouse)
+- [ ] Data appears in `mart_payments.fct_payments_rides_v2` (Littlepay) or `mart_payments.fct_payments_rides_enghouse` (Enghouse) for the agency
+- [ ] Service account created (e.g., `<agency-name>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com`)
 - [ ] Service account key JSON file downloaded
 - [ ] Row access policies configured for the agency
 - [ ] You have Metabase administrator access
@@ -69,6 +72,8 @@ Fill in the following fields:
 
 ## Step 2: Create Metabase Group
 
+> **Why do this now?** We create the group before duplicating the dashboard to ensure proper permissions are in place from the start. This prevents unauthorized users from seeing agency data during the setup process.
+
 Groups control which users can access which collections and dashboards.
 
 ### 2.1 Navigate to Groups
@@ -108,6 +113,8 @@ Groups control which users can access which collections and dashboards.
 6. User will receive invitation email
 
 ## Step 3: Create Metabase Collection
+
+> **Why do this now?** We create the collection before duplicating the dashboard so there's a designated place to save the duplicated content. Without this, the dashboard would go to a default location and we'd have to move it later.
 
 Collections are folders that organize dashboards and questions.
 

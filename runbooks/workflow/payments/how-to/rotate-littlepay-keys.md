@@ -101,7 +101,17 @@ aws iam create-access-key \
 
 ### 1.3 Format as JSON
 
-Create a JSON file with the new credentials:
+**Recommended Approach:** Work directly in Secret Manager to avoid saving credentials locally:
+
+1. Navigate to [Secret Manager](https://console.cloud.google.com/security/secret-manager?project=cal-itp-data-infra)
+2. Find an existing Littlepay secret (e.g., `LITTLEPAY_AWS_IAM_MST_ACCESS_KEY`)
+3. Click to view the current version
+4. Copy the JSON content
+5. Paste into a text editor
+6. Replace the old `AccessKeyId` and `SecretAccessKey` with the new values from Step 1.2
+7. Keep the `UserName` the same (unless it changed)
+
+**Example format:**
 
 ```json
 {
@@ -111,7 +121,7 @@ Create a JSON file with the new credentials:
 }
 ```
 
-Save this as `<merchant-id>-new-key.json`.
+**Alternative (if working locally):** Save as `<merchant-id>-new-key.json`, but delete immediately after uploading to Secret Manager.
 
 ## Step 2: Store New Key in Secret Manager
 
@@ -353,12 +363,21 @@ If rotating keys for multiple agencies:
 
 ### Tracking Rotations
 
-Create a spreadsheet to track:
+**Recommendation:** Create a central tracking spreadsheet (e.g., in SharePoint or Google Sheets) to track key rotations across all agencies.
 
-| Agency | Merchant ID | Last Rotation | Next Due   | Status         |
-| ------ | ----------- | ------------- | ---------- | -------------- |
-| MST    | mst         | 2024-01-15    | 2024-04-15 | ✅ Complete    |
-| SBMTD  | sbmtd       | 2024-01-20    | 2024-04-20 | 🔄 In Progress |
+**Suggested columns:**
+
+| Agency | Merchant ID | Last Rotation | Next Due   | Status         | Rotated By |
+| ------ | ----------- | ------------- | ---------- | -------------- | ---------- |
+| MST    | mst         | 2024-01-15    | 2024-04-15 | ✅ Complete    | Jane Doe   |
+| SBMTD  | sbmtd       | 2024-01-20    | 2024-04-20 | 🔄 In Progress | John Smith |
+
+**Benefits of central tracking:**
+
+- Team visibility into rotation status
+- Prevents duplicate work
+- Easy to identify overdue rotations
+- Historical record for auditing
 
 ### Automation Considerations
 

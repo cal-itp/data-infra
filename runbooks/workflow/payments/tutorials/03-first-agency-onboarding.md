@@ -1,495 +1,289 @@
 # Your First Agency Onboarding
 
-**Tutorial Duration:** ~2 hours\
-**Prerequisites:** [Understanding the Data Flow](02-understanding-data-flow.md), access to GCP with appropriate permissions\
-**What You'll Learn:** How to onboard a new agency to the payments ecosystem through a guided walkthrough
+**Tutorial Duration:** ~30 minutes (reading) + 2 hours (hands-on)\
+**Prerequisites:** [Understanding the Data Flow](02-understanding-data-flow.md), GCP access with appropriate permissions\
+**What You'll Learn:** The complete agency onboarding process through a guided walkthrough
 
 ## Introduction
 
-This tutorial walks you through onboarding a fictional agency called "Demo Transit" to the payments ecosystem. You'll learn the complete process from receiving vendor credentials to verifying data in Metabase dashboards.
+This tutorial guides you through onboarding a new agency to the payments ecosystem. Rather than repeating detailed instructions (which are in the how-to guides), this tutorial focuses on:
 
-**Note:** This is a learning tutorial. For production onboarding, use the detailed how-to guides:
+- **Understanding the overall process** and how steps connect
+- **Learning checkpoints** to verify your progress
+- **Common decision points** and why they matter
+- **The "why" behind each step**
+
+**For detailed step-by-step instructions**, refer to:
 
 - [Onboard a New Littlepay Agency](../how-to/onboard-littlepay-agency.md)
+- [Onboard a New Enghouse Agency](../how-to/onboard-enghouse-agency.md)
+- [Onboard a New Elavon Agency](../how-to/onboard-elavon-agency.md)
 - [Create Agency Metabase Dashboards](../how-to/create-metabase-dashboards.md)
 
-## Scenario
+## Learning Scenario
 
-Demo Transit is a small transit agency that has just deployed contactless payment validators on their buses. They're using:
+You're onboarding **Demo Transit**, a small agency using:
 
-- **Littlepay** for fare collection (instance: `demo-transit`)
+- **Littlepay** for fare collection (participant_id: `demo-transit`)
 - **Elavon** for payment processing (organization: `Demo Transit Authority`)
 
-Your task: Set up the complete data pipeline so Demo Transit can view their payments dashboard.
+## The Onboarding Journey
 
-## Phase 1: Gather Prerequisites
+### Phase 1: Gather Information (15 minutes)
 
-### What You Need
+**What you're doing:** Collecting all necessary information before starting technical work.
 
-Before starting, collect:
+**Key learning:** Onboarding requires coordination with multiple parties (vendor, agency, internal team). Missing information causes delays.
 
-1. **From Littlepay:**
+**Follow:** [Onboard Littlepay Agency - Before You Start](../how-to/onboard-littlepay-agency.md#before-you-start)
 
-   - AWS access key (JSON format)
-   - Merchant ID / participant ID
-   - S3 bucket name
-   - Confirmation of which tables are available
+**Learning checkpoint:**
 
-2. **From Elavon:**
+- [ ] Do you have AWS credentials from Littlepay?
+- [ ] Do you know the participant_id/merchant_id?
+- [ ] Do you have the agency's GTFS dataset identifier?
+- [ ] Do you have Elavon organization name?
 
-   - Organization name (as it appears in their data files)
-   - Confirmation they're in the shared SFTP feed
+**Reflection:** Why do we need the GTFS dataset identifier? (Answer: To link payments data with routes/stops for geographic analysis)
 
-3. **From Demo Transit:**
+______________________________________________________________________
 
-   - GTFS dataset identifier (for linking payments to routes/stops)
-   - Contact information for dashboard access
+### Phase 2: Store Credentials Securely (10 minutes)
 
-4. **Your Access:**
+**What you're doing:** Storing vendor credentials in GCP Secret Manager.
 
-   - GCP project permissions (IAM, Secret Manager, BigQuery)
-   - GitHub write access to data-infra repository
-   - Terraform permissions (for service account creation)
-   - Metabase admin access
+**Key learning:** We use Secret Manager (not environment variables or config files) because:
 
-### Verify Prerequisites
+- Credentials are encrypted at rest
+- Access is audited
+- Rotation is easier
+- Airflow can access them securely
 
-Let's check you have everything:
+**Follow:** [Onboard Littlepay Agency - Step 1](../how-to/onboard-littlepay-agency.md#step-1-store-aws-credentials)
 
-```bash
-# Check GCP access
-gcloud projects list | grep cal-itp-data-infra
+**Learning checkpoint:**
 
-# Check GitHub access
-gh repo view cal-itp/data-infra
+- [ ] Secret created with correct naming convention
+- [ ] Can retrieve secret value
+- [ ] Tested AWS access locally
 
-# Check you can access Secret Manager
-gcloud secrets list --project=cal-itp-data-infra --limit=5
-```
+**Reflection:** What happens if the secret name doesn't match the sync config? (Answer: Sync DAG will fail with authentication error)
 
-## Phase 2: Set Up AWS Access
+______________________________________________________________________
 
-### Step 1: Store Littlepay AWS Credentials
+### Phase 3: Create Service Account (20 minutes)
 
-You received this JSON from Littlepay:
+**What you're doing:** Creating a dedicated service account for the agency via Terraform.
 
-```json
-{
-  "AccessKeyId": "AKIAIOSFODNN7EXAMPLE",
-  "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-  "UserName": "demo-transit-default"
-}
-```
+**Key learning:** We use Terraform (not manual GCP Console) because:
 
-Create a secret in Secret Manager:
+- Changes are version controlled
+- Infrastructure is reproducible
+- Changes are reviewed via PR
+- Prevents configuration drift
 
-```bash
-# Create the secret
-gcloud secrets create LITTLEPAY_AWS_IAM_DEMO_TRANSIT_ACCESS_KEY \
-  --project=cal-itp-data-infra \
-  --replication-policy="automatic"
+**Follow:** [Onboard Littlepay Agency - Step 2](../how-to/onboard-littlepay-agency.md#step-2-create-service-account)
 
-# Add the secret value
-echo '{
-  "AccessKeyId": "AKIAIOSFODNN7EXAMPLE",
-  "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-  "UserName": "demo-transit-default"
-}' | gcloud secrets versions add LITTLEPAY_AWS_IAM_DEMO_TRANSIT_ACCESS_KEY \
-  --project=cal-itp-data-infra \
-  --data-file=-
-```
+**Learning checkpoint:**
 
-**Naming Convention:**
+- [ ] Service account created via Terraform
+- [ ] BigQuery user role granted
+- [ ] Service account key downloaded
+- [ ] Key stored securely for later Metabase setup
 
-- Format: `LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY`
-- Use uppercase
-- Replace hyphens with underscores in merchant_id
+**Reflection:** Why does each agency need their own service account? (Answer: Row-level security - ensures agencies only see their own data)
 
-### Step 2: Test AWS Access Locally
+______________________________________________________________________
 
-Configure AWS CLI profile:
+### Phase 4: Configure Data Pipeline (30 minutes)
 
-```bash
-# Configure profile
-aws configure --profile demo-transit
-# Enter the AccessKeyId when prompted
-# Enter the SecretAccessKey when prompted
-# Region: us-west-2
-# Output format: json
+**What you're doing:** Setting up sync, parse, and entity mapping configurations.
 
-# Test access
-aws s3 ls s3://littlepay-demo-transit/ --profile demo-transit
-```
+**Key learning:** The pipeline has three configuration points:
 
-You should see directories like:
+1. **Sync config** - How to get data from vendor
+2. **Parse config** - How to convert data format
+3. **Entity mapping** - How to link payments to GTFS/organization
 
-```
-PRE device_transactions/
-PRE micropayments/
-PRE aggregations/
-```
+**Follow:** [Onboard Littlepay Agency - Step 3](../how-to/onboard-littlepay-agency.md#step-3-configure-data-sync)
 
-## Phase 3: Create Service Accounts
+**Learning checkpoint:**
 
-### Step 1: Create Payments Service Account via Terraform
+- [ ] Sync YAML created with correct secret name
+- [ ] Parse YAML created with matching tables
+- [ ] Entity mapping row added with correct source_record_ids
+- [ ] All changes committed and PR created
 
-Create a new branch:
+**Reflection:** Why do we need entity mapping? (Answer: Links Littlepay participant_id to GTFS datasets and Elavon organization name for cross-vendor reconciliation)
 
-```bash
-cd /path/to/data-infra
-git checkout -b onboard-demo-transit
-```
+______________________________________________________________________
 
-Edit `iac/cal-itp-data-infra/iam/us/service_account.tf`:
+### Phase 5: Configure Row-Level Security (20 minutes)
 
-```hcl
-# Add this block
-resource "google_service_account" "demo_transit_payments_user" {
-  account_id   = "demo-transit-payments-user"
-  display_name = "Demo Transit Payments User"
-  description  = "Service account for Demo Transit payments data access"
-  project      = var.project_id
-}
-```
+**What you're doing:** Adding row access policies so the agency can only see their own data.
 
-Edit `iac/cal-itp-data-infra/iam/us/project_iam_member.tf`:
+**Key learning:** Row-level security is applied at the BigQuery table level via dbt post-hooks. The policies filter based on:
 
-```hcl
-# Add this block
-resource "google_project_iam_member" "demo_transit_payments_user_bigquery_user" {
-  project = var.project_id
-  role    = "roles/bigquery.user"
-  member  = "serviceAccount:${google_service_account.demo_transit_payments_user.email}"
-}
-```
+- `participant_id` for Littlepay
+- `operator_id` for Enghouse
+- `organization_name` for Elavon
 
-Commit and push:
+**Follow:** [Onboard Littlepay Agency - Step 4](../how-to/onboard-littlepay-agency.md#step-4-configure-row-level-security)
 
-```bash
-git add iac/
-git commit -m "Add Demo Transit payments service account"
-git push origin onboard-demo-transit
-```
+**Learning checkpoint:**
 
-Create a pull request and get it reviewed and merged.
+- [ ] Added to Littlepay policy macro
+- [ ] Added to Elavon policy macro (if applicable)
+- [ ] Service account email matches exactly
+- [ ] Filter values match data exactly (case-sensitive!)
 
-### Step 2: Download Service Account Key
+**Reflection:** What happens if you misspell the participant_id in the policy? (Answer: Agency won't see any data - the filter won't match)
 
-After the PR is merged and Terraform runs:
+______________________________________________________________________
 
-```bash
-# Create and download key
-gcloud iam service-accounts keys create demo-transit-key.json \
-  --iam-account=demo-transit-payments-user@cal-itp-data-infra.iam.gserviceaccount.com \
-  --project=cal-itp-data-infra
-```
+### Phase 6: Verify Data Flow (45 minutes)
 
-**Important:** Store this key securely - you'll need it for Metabase later.
+**What you're doing:** Confirming data flows through each stage of the pipeline.
 
-## Phase 4: Configure Data Sync
+**Key learning:** Data flows through multiple stages:
 
-### Step 1: Create Littlepay Sync Configuration
+1. Raw (GCS) → 2. Parsed (GCS) → 3. External tables (BigQuery) → 4. Staging (dbt) → 5. Mart (dbt)
 
-Create `airflow/dags/sync_littlepay_v3/demo_transit.yml`:
+Each stage must complete before the next can succeed.
 
-```yaml
-operator: operators.LittlepayRawSyncV3
-instance: demo-transit
-src_bucket: littlepay-datafeed-prod-demo-transit-XXXXXXXX
-access_key_secret_name: LITTLEPAY_AWS_IAM_DEMO_TRANSIT_ACCESS_KEY_FEED_V3
-```
+**Follow:** [Onboard Littlepay Agency - Step 5](../how-to/onboard-littlepay-agency.md#step-5-verify-data-pipeline)
 
-**Note:** Replace `XXXXXXXX` with the actual bucket suffix from Littlepay.
+**Learning checkpoint:**
 
-### Step 2: Create Littlepay Parse Configuration
+- [ ] Raw files appear in GCS after sync DAG
+- [ ] Parsed files appear in GCS after parse DAG
+- [ ] External tables return data
+- [ ] Staging tables have data after dbt runs
+- [ ] Mart tables have data after dbt runs
+- [ ] Row-level security works (tested with service account)
 
-Create `airflow/dags/parse_littlepay_v3/demo_transit.yml`:
+**Reflection:** Why do we have both external tables AND dbt staging models? (Answer: External tables make raw data queryable; staging models add light transformations and standardization)
 
-```yaml
-operator: operators.LittlepayParsedV3
-instance: demo-transit
-```
+______________________________________________________________________
 
-### Step 3: Add Entity Mapping
+### Phase 7: Set Up Metabase Dashboard (30 minutes)
 
-Edit `warehouse/seeds/payments_entity_mapping.csv`:
+**What you're doing:** Creating a dashboard for the agency to view their data.
 
-```csv
-# Add this line
-demo-transit,demo_transit_gtfs_dataset_key,Demo Transit,Demo Transit Authority
-```
+**Key learning:** Metabase setup involves:
 
-Columns are:
+1. Database connection (using service account)
+2. Group (for user management)
+3. Collection (for organizing dashboards)
+4. Permissions (who can see what)
+5. Dashboard (duplicated and reconfigured)
 
-1. Littlepay participant_id
-2. Cal-ITP GTFS dataset key
-3. Display name
-4. Elavon organization name
+**Follow:** [Create Agency Metabase Dashboards](../how-to/create-metabase-dashboards.md)
 
-### Step 4: Commit and Deploy
+**Learning checkpoint:**
 
-```bash
-git add airflow/dags/sync_littlepay_v3/demo_transit.yml
-git add airflow/dags/parse_littlepay_v3/demo_transit.yml
-git add warehouse/seeds/payments_entity_mapping.csv
-git commit -m "Add Demo Transit sync and parse configurations"
-git push origin onboard-demo-transit
-```
+- [ ] Database connection created with service account
+- [ ] Group created for agency users
+- [ ] Collection created for agency dashboards
+- [ ] Permissions set correctly
+- [ ] Dashboard duplicated and reconfigured
+- [ ] Agency users can access dashboard
 
-Create PR, get reviewed, and merge.
+**Reflection:** Why do we duplicate dashboards instead of sharing one? (Answer: Each agency needs their own database connection with row-level security; shared dashboards would require complex filtering)
 
-## Phase 5: Configure Row-Level Security
-
-### Step 1: Add Row Access Policies
-
-Edit `warehouse/macros/create_row_access_policy.sql`:
-
-Find the `payments_littlepay_row_access_policy` macro and add:
-
-```sql
--- Add after existing entries
-UNION ALL
-SELECT
-  'demo-transit' AS filter_value,
-  ['serviceAccount:demo-transit-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
-```
-
-Find the `payments_elavon_row_access_policy` macro and add:
-
-```sql
--- Add after existing entries
-UNION ALL
-SELECT
-  'Demo Transit Authority' AS filter_value,
-  ['serviceAccount:demo-transit-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
-```
-
-Commit and push:
-
-```bash
-git add warehouse/macros/create_row_access_policy.sql
-git commit -m "Add Demo Transit row access policies"
-git push origin onboard-demo-transit
-```
-
-Create PR, get reviewed, and merge.
-
-## Phase 6: Verify Data Pipeline
-
-### Step 1: Trigger Sync DAG
-
-After your PRs are merged:
-
-1. Go to Airflow UI
-2. Find `sync_littlepay_v3` DAG
-3. Trigger it manually (or wait for hourly run)
-4. Monitor the logs - look for "demo-transit" tasks
-
-### Step 2: Check Raw Data in GCS
-
-```bash
-# List raw files
-gsutil ls gs://calitp-payments-littlepay-raw-v3/device-transactions/instance=demo-transit/
-```
-
-You should see files partitioned by filename and timestamp.
-
-### Step 3: Verify Parse DAG
-
-1. Wait for `parse_littlepay_v3` to run
-2. Check parsed data:
-
-```bash
-# List parsed files
-gsutil ls gs://calitp-payments-littlepay-parsed-v3/device-transactions/instance=demo-transit/
-```
-
-You should see JSONL.gz files.
-
-### Step 4: Check External Tables
-
-After `create_external_tables` runs:
-
-```sql
--- In BigQuery
-SELECT COUNT(*) as row_count
-FROM `cal-itp-data-infra.external_littlepay.device_transactions`
-WHERE participant_id = 'demo-transit';
-```
-
-You should see rows!
-
-### Step 5: Wait for dbt Run
-
-After the daily `dbt_daily` DAG runs:
-
-```sql
--- Check staging
-SELECT COUNT(*) 
-FROM `cal-itp-data-infra.staging.stg_littlepay__device_transactions_v3`
-WHERE participant_id = 'demo-transit';
-
--- Check mart (the final table)
-SELECT COUNT(*) 
-FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`
-WHERE participant_id = 'demo-transit';
-```
-
-## Phase 7: Set Up Metabase
-
-### Step 1: Create Metabase Database Connection
-
-1. Log into Metabase as admin
-2. Go to Settings → Admin Settings → Databases
-3. Click "Add database"
-4. Configure:
-   - **Database type:** BigQuery
-   - **Display name:** `Payments - Demo Transit`
-   - **Service account JSON file:** Upload `demo-transit-key.json`
-   - **Datasets:** Only these...
-   - **Dataset names:** `mart_payments`
-5. Click "Save"
-
-### Step 2: Create Metabase Group
-
-1. Go to Settings → Admin Settings → People → Groups
-2. Click "Create a group"
-3. Name: `Payments Group - Demo Transit`
-4. Add Demo Transit team members
-
-### Step 3: Create Metabase Collection
-
-1. Exit admin settings
-2. Click "+ New" → Collection
-3. Name: `Payments Collection - Demo Transit`
-4. Save in "Our Analytics"
-
-### Step 4: Set Collection Permissions
-
-1. Go to Settings → Admin Settings → Permissions → Collections
-2. Find "Payments Collection - Demo Transit"
-3. Set permissions:
-   - **Payments Group - Demo Transit:** View
-   - **Payments Team:** Curate
-
-### Step 5: Duplicate Dashboard
-
-1. Navigate to an existing agency's collection (e.g., MST)
-2. Find "Contactless Payments Metrics Dashboard"
-3. Click menu → Duplicate
-4. Name: `Contactless Payments Metrics Dashboard (Demo Transit)`
-5. Save to: `Payments Collection - Demo Transit`
-6. **Uncheck** "Only duplicate the dashboard"
-
-### Step 6: Reconfigure Dashboard Questions
-
-For each question in the duplicated dashboard:
-
-1. Open the question
-2. Change the database to "Payments - Demo Transit"
-3. Verify the table is still `fct_payments_rides_v2`
-4. Save (replace original)
-
-This is tedious but necessary! See the [detailed how-to guide](../how-to/create-metabase-dashboards.md) for specifics.
-
-## Phase 8: Verify End-to-End
-
-### Final Checks
-
-1. **Data Freshness:**
-
-```sql
-SELECT 
-  MAX(transaction_time) as latest_transaction,
-  COUNT(*) as total_transactions
-FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`
-WHERE participant_id = 'demo-transit';
-```
-
-2. **Dashboard Access:**
-
-   - Log in as Demo Transit user
-   - Navigate to their collection
-   - Open the dashboard
-   - Verify data displays correctly
-
-3. **Row-Level Security:**
-
-```sql
--- This should return 0 when queried with Demo Transit service account
-SELECT COUNT(*)
-FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`
-WHERE participant_id != 'demo-transit';
-```
+______________________________________________________________________
 
 ## What You've Learned
 
-Congratulations! You've completed a full agency onboarding. You now understand:
+By completing this tutorial, you now understand:
 
-- ✅ How to securely store vendor credentials
-- ✅ How to create and configure service accounts
-- ✅ How to set up data sync and parse configurations
-- ✅ How to configure row-level security
-- ✅ How to verify data flows through the pipeline
-- ✅ How to set up Metabase dashboards
-- ✅ How to verify end-to-end functionality
+- ✅ **The complete onboarding workflow** from credentials to dashboard
+- ✅ **Why each step matters** and how they connect
+- ✅ **Common decision points** (naming conventions, configuration formats)
+- ✅ **How to verify** each stage works before proceeding
+- ✅ **The role of different tools** (Terraform, Airflow, dbt, Metabase)
+
+## Key Takeaways
+
+**1. Onboarding is a multi-stage process**
+
+- Each stage depends on the previous one
+- Verify each stage before proceeding
+- Don't skip verification steps!
+
+**2. Configuration consistency is critical**
+
+- Secret names must match sync configs
+- Participant IDs must match across all configs
+- Service account emails must match exactly in policies
+
+**3. Security is built-in, not added later**
+
+- Service accounts created via Terraform
+- Credentials stored in Secret Manager
+- Row-level security applied via dbt
+- Metabase uses service accounts, not user credentials
+
+**4. Documentation is your friend**
+
+- How-to guides have the detailed steps
+- Tutorials explain the "why"
+- Reference docs explain the "what"
+
+## Common Pitfalls to Avoid
+
+**❌ Wrong secret name format**
+
+- Use: `LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY`
+- Not: `littlepay-aws-demo-transit`
+
+**❌ Forgetting entity mapping**
+
+- Without it, payments won't link to GTFS routes/stops
+
+**❌ Not waiting for dbt to run**
+
+- Mart tables won't have data until dbt runs (daily schedule)
+
+**❌ Typos in row access policies**
+
+- Filter values are case-sensitive and must match data exactly
+
+**❌ Not testing row-level security**
+
+- Always verify with the service account before considering it done
 
 ## Next Steps
 
-Now that you've completed the tutorial:
+Now that you understand the onboarding process:
 
-1. **Review production guides:** Use [Onboard a New Littlepay Agency](../how-to/onboard-littlepay-agency.md) for real onboarding
+1. **Practice with a real agency:** Use the how-to guides for production onboarding
 2. **Learn troubleshooting:** Read [Troubleshoot Data Sync Issues](../how-to/troubleshoot-sync-issues.md)
-3. **Understand the architecture:** Study [Payments Ecosystem Overview](../explanation/ecosystem-overview.md)
+3. **Understand maintenance:** Review [Rotate Littlepay AWS Keys](../how-to/rotate-littlepay-keys.md)
 
-## Common Pitfalls
+## Quick Reference: Onboarding Checklist
 
-**Pitfall 1: Wrong secret name format**
+Use this for real onboarding:
 
-- ❌ `littlepay-aws-demo-transit`
-- ✅ `LITTLEPAY_AWS_IAM_DEMO_TRANSIT_ACCESS_KEY`
-
-**Pitfall 2: Forgetting to add entity mapping**
-
-- Without it, payments data won't link to GTFS routes/stops
-
-**Pitfall 3: Not waiting for dbt to run**
-
-- Data won't appear in mart tables until dbt runs (daily)
-
-**Pitfall 4: Metabase database pointing to wrong dataset**
-
-- Must point to `mart_payments`, not `staging`
-
-**Pitfall 5: Not reconfiguring all dashboard questions**
-
-- Every question must be updated to use the new database
-
-## Troubleshooting
-
-**Problem:** Sync DAG fails with "Access Denied"
-
-- Check AWS credentials in Secret Manager
-- Verify secret name matches config file
-- Test AWS access locally with `aws s3 ls`
-
-**Problem:** No data in external tables
-
-- Check parse DAG ran successfully
-- Verify JSONL files exist in GCS parsed bucket
-- Check external table definition points to correct GCS path
-
-**Problem:** No data in mart tables
-
-- Wait for dbt to run (daily schedule)
-- Check dbt logs in Airflow
-- Verify row access policy was applied
-
-**Problem:** Metabase shows "No results"
-
-- Verify dashboard is using correct database
-- Check row-level security grants access
-- Confirm data exists in BigQuery
+- [ ] Gather all prerequisites
+- [ ] Store credentials in Secret Manager
+- [ ] Create service account via Terraform
+- [ ] Download service account key
+- [ ] Create sync configuration
+- [ ] Create parse configuration
+- [ ] Add entity mapping
+- [ ] Add row access policies
+- [ ] Verify sync DAG runs
+- [ ] Verify parse DAG runs
+- [ ] Verify external tables have data
+- [ ] Verify dbt models run
+- [ ] Test row-level security
+- [ ] Create Metabase database connection
+- [ ] Create Metabase group
+- [ ] Create Metabase collection
+- [ ] Set permissions
+- [ ] Duplicate and reconfigure dashboard
+- [ ] Verify agency users can access dashboard
 
 ______________________________________________________________________
 
