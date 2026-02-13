@@ -96,7 +96,7 @@ with DAG(
 
     download_kwargs = create_download_kwargs.expand(ntd_product=NTD_PRODUCTS)
 
-    download_xlsx = NTDXLSXToGCSOperator(
+    download_xlsx = NTDXLSXToGCSOperator.partial(
         task_id="download_to_gcs",
         dt="{{ dag_run.start_date | ds }}",
         execution_ts="{{ dag_run.start_date | ts }}",
@@ -112,7 +112,7 @@ with DAG(
             "source_path": download["destination_path"],
         }
 
-    xlsx_tabs = NTDXLSXListTabsOperator(
+    xlsx_tabs = NTDXLSXListTabsOperator.partial(
         task_id="ntd_xlsx_list_tabs",
         source_bucket=os.environ.get("CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"),
     ).expand_kwargs(download_xlsx.output.map(create_xlsx_tabs_kwargs))
