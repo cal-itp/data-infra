@@ -30,7 +30,7 @@ class NTDXLSXToGCSOperator(BaseOperator):
         source_url: str,
         destination_bucket: str,
         destination_path: str,
-        http_conn_id: str = "http_ntd",
+        http_conn_id: str = "http_dot",
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
