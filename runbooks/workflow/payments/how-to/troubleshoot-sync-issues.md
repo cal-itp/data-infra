@@ -391,6 +391,162 @@ HAVING COUNT(*) > 1;
 3. Look for sync DAG running multiple times
 4. Check partition logic
 
+## When to Rerun Failed Jobs
+
+### Understanding Sync Behavior
+
+Both Littlepay and Elavon sync DAGs are **"now" type DAGs** - they sync whatever is currently available in the source, not based on time windows.
+
+**Littlepay sync:**
+
+- Lists ALL files in the agency's S3 bucket
+- Compares each file against what's already in GCS (by LastModified date and ETag)
+- Only copies files that are new or have been updated
+- **Result:** Missing a sync run doesn't lose data - the next run will catch up
+
+**Elavon sync:**
+
+- Mirrors the entire contents of the SFTP `/data` directory
+- Creates a timestamped snapshot of everything available
+- **Result:** Missing a sync run doesn't lose data - the next run gets everything
+
+**Parse DAGs:**
+
+- Process whatever is in the raw GCS buckets
+- Idempotent - can be safely rerun without creating duplicates
+
+### When to Rerun Immediately
+
+**Rerun if:**
+
+- ✅ First-time agency onboarding (need data ASAP for dashboard setup)
+- ✅ Agency reports missing recent transactions and needs them urgently
+- ✅ Critical reporting deadline (month-end, settlement reconciliation)
+- ✅ Multiple consecutive failures (indicates a persistent problem)
+- ✅ Failure was due to configuration/credential error that you've now fixed
+
+### When It's Safe to Wait
+
+**Wait for next scheduled run if:**
+
+- ✅ Single transient failure (network timeout, temporary AWS/SFTP issue)
+- ✅ Failure occurred late at night, next run is in a few hours
+- ✅ No urgent agency requests or reporting deadlines
+- ✅ Only one agency affected (others succeeded)
+- ✅ Failure was "no new files" (vendor hasn't uploaded yet)
+
+**Why waiting is usually fine:**
+
+- Littlepay sync runs **hourly** - next run will sync all available files
+- Elavon sync runs **daily** - next run mirrors entire directory
+- Vendors batch data daily - missing one sync doesn't lose data
+- Parse runs automatically after successful sync
+- dbt runs daily - will include all data once synced
+
+### Example Scenarios
+
+**Scenario 1: Littlepay hourly sync fails at 2 PM**
+
+```
+2:00 PM - Sync fails (AWS timeout)
+3:00 PM - Next sync runs, lists all S3 files, copies any not yet in GCS
+3:30 PM - Parse runs, processes all raw files
+Next day - dbt runs, data appears in mart tables
+Result: No data loss, just a few hours delay
+```
+
+**Scenario 2: Elavon daily sync fails**
+
+```
+12:00 AM - Sync fails (SFTP connection timeout)
+12:00 AM next day - Sync runs, mirrors entire SFTP directory
+2:00 AM - Parse runs, processes all files
+Next dbt run - Data appears in mart tables
+Result: No data loss, just one day delay
+```
+
+**Scenario 3: Configuration error (requires rerun)**
+
+```
+10:00 AM - Sync fails (wrong secret name in config)
+10:30 AM - You fix the config and merge PR
+11:00 AM - Trigger manual rerun (don't wait for next scheduled run)
+11:30 AM - Parse runs automatically
+Result: Data flows immediately after fix
+```
+
+### How to Rerun a Failed Job
+
+**Option 1: Clear Task in Airflow UI**
+
+1. Navigate to the DAG run with the failed task
+2. Click on the failed task
+3. Click "Clear" button
+4. Task will rerun on next schedule OR
+5. Click "Trigger DAG" to run immediately
+
+**Option 2: Trigger New DAG Run**
+
+1. Go to the DAG page (e.g., `sync_littlepay_v3`)
+2. Click "Trigger DAG" button
+3. New run will sync all available files
+
+**Both approaches are safe** - the sync logic prevents duplicates by checking what's already in GCS.
+
+### Decision Matrix
+
+| Situation                      | Action              | Reason                            |
+| ------------------------------ | ------------------- | --------------------------------- |
+| Single transient failure       | Wait for next run   | Next run catches up automatically |
+| Multiple consecutive failures  | Investigate & rerun | Indicates persistent problem      |
+| New agency onboarding          | Rerun immediately   | Need data ASAP for dashboard      |
+| Agency reports missing data    | Verify & rerun      | Ensure data flows quickly         |
+| Configuration/credential error | Fix, then rerun     | Won't succeed until fixed         |
+| "No new files" error           | Wait                | Vendor hasn't uploaded yet        |
+| Month-end/critical deadline    | Rerun immediately   | Time-sensitive                    |
+
+### What Happens During a Rerun
+
+**Littlepay sync rerun:**
+
+1. Lists all files in S3 bucket (same as normal run)
+2. Compares against GCS (checks LastModified and ETag)
+3. Only copies files that are new or updated
+4. Skips files already in GCS with same metadata
+5. **No duplicates created**
+
+**Elavon sync rerun:**
+
+1. Mirrors entire SFTP directory (same as normal run)
+2. Creates new timestamped partition in GCS
+3. Parse DAG processes the new partition
+4. **No duplicates in final tables** (dbt handles deduplication)
+
+**Parse rerun:**
+
+1. Processes raw files from GCS
+2. Writes to new timestamped partition in parsed bucket
+3. External tables read from all partitions
+4. **dbt models handle deduplication** in downstream transformations
+
+### Common Misconceptions
+
+**❌ "If I rerun, I'll get duplicate data"**
+
+- ✅ False - sync logic checks for existing files, parse creates new partitions, dbt deduplicates
+
+**❌ "If a sync fails, that data is lost forever"**
+
+- ✅ False - next run will sync all available files from the source
+
+**❌ "I need to manually backfill missed hours/days"**
+
+- ✅ False - "now" type DAGs sync whatever is currently available, not time-based windows
+
+**❌ "Parse must run immediately after sync"**
+
+- ✅ False - parse can run anytime after sync; it processes whatever is in raw GCS
+
 ## Monitoring and Prevention
 
 ### Set Up Alerts
