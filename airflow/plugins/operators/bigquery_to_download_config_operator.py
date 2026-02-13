@@ -42,7 +42,7 @@ class DownloadConfigRow:
         ):
             schedule_url_for_validation = mapped_rows[
                 self.row["schedule_to_use_for_rt_validation_gtfs_dataset_key"]
-            ]["uri"]
+            ]["pipeline_url"]
         return {
             "extracted_at": self.current_time,
             "name": self.row["name"],
@@ -83,6 +83,7 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
             "key",
             "url_secret_key_name",
             "header_secret_key_name",
+            "source_record_id",
         ],
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
@@ -126,7 +127,7 @@ class BigQueryToDownloadConfigOperator(BaseOperator):
 
     def download_config_rows(self) -> list:
         active_rows = [dict(zip(self.columns, row)) for row in self.rows()]
-        mapped_rows = {row["key"]: row for row in active_rows}
+        mapped_rows = {row["source_record_id"]: row for row in active_rows}
         return [
             DownloadConfigRow(row=row, current_time=self.ts).resolve(
                 mapped_rows=mapped_rows

@@ -104,3 +104,21 @@ class TestBigQueryToDownloadConfigOperator:
             "schedule_url_for_validation": None,
             "url": "http://app.mecatran.com/urb/ws/feed/c2l0ZT1zeXZ0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT00MjcwNzQ0ZTY4NTAzOTMyMDIxMDdjNzI0MDRkMzYyNTM4MzI0YzI0",
         }
+        assert result[1] == {
+            "extracted_at": "2025-06-02T00:00:00+00:00",
+            "auth_headers": {},
+            "auth_query_params": {},
+            "computed": False,
+            "feed_type": "trip_updates",
+            "name": "SLO Trip Updates",
+            "schedule_url_for_validation": "http://data.peaktransit.com/staticgtfs/1/gtfs.zip",
+            "url": "http://data.peaktransit.com/gtfsrt/1/TripUpdate.pb",
+        }
+
+        for row in result:
+            if row["feed_type"] == "schedule":
+                # Schedule feed does not have schedule_url_for_validation
+                assert row["schedule_url_for_validation"] is None
+            else:
+                # Other feeds Should have schedule_url_for_validation
+                assert len(row["schedule_url_for_validation"]) > 1
