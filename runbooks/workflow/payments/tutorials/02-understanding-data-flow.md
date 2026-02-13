@@ -297,33 +297,36 @@ JSONL Output (gzipped):
    - Gzips output
    - Uploads to `gs://calitp-elavon-parsed/`
 
-## Part 4: External Tables - Making Data Queryable
+## Part 4: External Tables - Making Data Queryable\*
 
 **DAG:** `create_external_tables`\
 **Schedule:** Hourly\
 **Code:** `airflow/dags/create_external_tables/`
 
+**\*Note:** This DAG only needs to run when table schemas change or new tables are added. It doesn't need to run for new data to appear - external tables automatically reflect new files in GCS.
+
 ### What Happens:
 
-1. **Scan GCS Buckets**
+1. **Define Table Schema**
 
-   - Identifies parsed JSONL files (Littlepay, Elavon)
-   - Identifies CSV files (Enghouse)
-   - Groups by table name and agency
+   - Defines BigQuery external table schemas
+   - Points to GCS file locations using patterns
+   - Specifies column names and types
+   - Sets up partitioning
+   - Uses appropriate format (JSONL for Littlepay/Elavon, CSV for Enghouse)
 
 2. **Create/Update External Tables**
 
-   - Creates BigQuery external table definitions
-   - Points to GCS file locations
-   - Defines schema (column names and types)
-   - Sets up partitioning
-   - Uses appropriate format (JSONL for Littlepay/Elavon, CSV for Enghouse)
+   - Creates or updates BigQuery external table definitions
+   - **Does not scan or process the actual data**
+   - Just defines how BigQuery should read files from GCS
 
 3. **Result**
 
    - Data is queryable in BigQuery
-   - No data is copied (external tables read from GCS)
-   - Tables appear in `external_littlepay`, `external_elavon`, and `external_enghouse` datasets
+   - No data is copied (external tables read directly from GCS)
+   - New files automatically appear in queries without re-running this DAG
+   - Tables appear in `external_littlepay_v3`, `external_elavon`, and `external_enghouse` datasets
 
 ## Part 5: dbt Transformations - Business Logic
 
@@ -364,6 +367,19 @@ WHERE participant_id != 'test-account'
 - Joins micropayments with adjustments and refunds
 - Combines related payment data
 - Prepares data for final mart models
+
+**Special Note: Littlepay Feed Version Union Tables**
+
+A unique aspect of the Littlepay pipeline is handling the migration from older feed versions to v3. Some agencies started on Littlepay's older feed versions (v1/v2) and migrated to v3, while newer agencies started directly on v3. Feed v1 has been deprecated and is no longer provided. All agencies now use feed v3.
+
+The intermediate layer includes union tables that combine historical v1 data with current v3 data:
+
+- `int_littlepay__unioned_micropayments` - Unions v1 and v3 micropayments
+- `int_littlepay__unioned_device_transactions` - Unions v1 and v3 device transactions
+- `int_littlepay__unioned_settlements` - Unions v1 and v3 settlements
+- And similar for other Littlepay tables
+
+These union tables handle the cutover date logic (May 2025), using v1 data before migration and v3 data after, providing a seamless view of historical and current data for agencies that migrated.
 
 ### Mart Layer
 
