@@ -19,7 +19,15 @@ Row access policies control which service accounts can access which agencies' da
 **Where they're defined:**
 
 - File: `warehouse/macros/create_row_access_policy.sql`
-- Applied to: Mart tables in `mart_payments` dataset
+- Applied to: Mart tables in `mart_payments` dataset via dbt post-hooks
+
+**How they're applied:**
+
+The macros are called as post-hooks in dbt model configurations. For example, see:
+
+- [`fct_payments_rides_v2.sql`](../../../warehouse/models/mart/payments/fct_payments_rides_v2.sql) - Littlepay policy
+- [`fct_payments_rides_enghouse.sql`](../../../warehouse/models/mart/payments/fct_payments_rides_enghouse.sql) - Enghouse policy
+- [`fct_elavon__transactions.sql`](../../../warehouse/models/mart/payments/fct_elavon__transactions.sql) - Elavon policy
 
 **Three separate policies:**
 
@@ -242,20 +250,22 @@ SELECT
 
 ## Granting Cal-ITP Team Access
 
-To grant Cal-ITP team members access to all data:
+Cal-ITP team members already have access to all payments data through the workforce pool group that's included in each policy macro:
 
 ```sql
--- Add to the end of each policy macro
-UNION ALL
-SELECT
-  '*' AS filter_value,  -- Wildcard matches all
-  [
-    'serviceAccount:calitp-metabase@cal-itp-data-infra.iam.gserviceaccount.com',
-    'user:analyst@calitp.org'
-  ] AS principals
+{{ create_row_access_policy(
+    principals = [
+        'serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
+        'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
+        'serviceAccount:github-actions-service-account@cal-itp-data-infra.iam.gserviceaccount.com',
+        'serviceAccount:composer-service-account@cal-itp-data-infra.iam.gserviceaccount.com',
+        'principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Cloud_Admins',
+        'principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DOT_DDS_Data_Pipeline_and_Warehouse_Users'
+    ]
+) }};
 ```
 
-**Note:** Use wildcards carefully - they grant access to ALL data.
+**Note:** Cal-ITP team members should be added to the `DOT_DDS_Data_Pipeline_and_Warehouse_Users` GCP workforce pool group to access all payments data.
 
 ## Troubleshooting
 
@@ -350,4 +360,4 @@ FROM (
 
 ______________________________________________________________________
 
-**See Also:** [Data Security & Row-Level Access](../explanation/data-security.md) (to be created) for conceptual understanding
+**See Also:** For conceptual understanding of row-level security, see the [BigQuery Row-Level Security documentation](https://cloud.google.com/bigquery/docs/row-level-security-intro)

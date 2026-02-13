@@ -48,17 +48,22 @@ Verify you have:
 
 ## Step 1: Understand Data Access Method
 
-**Note:** Enghouse data access may differ from Littlepay's S3-based approach. Verify the current data delivery method:
+**Enghouse Data Delivery:**
 
-1. Check existing Enghouse configurations in `airflow/dags/`
-2. Review GCS bucket structure: `gs://calitp-enghouse-raw/`
-3. Confirm data delivery mechanism with Enghouse or existing documentation
+Enghouse delivers data daily via SFTP server directly to our GCS bucket. This differs from Littlepay's S3-based approach.
 
-**Current Implementation:**
+**Implementation Details:**
 
-- Data appears to be stored directly in GCS bucket
+- Data is delivered directly to `gs://calitp-enghouse-raw/` via SFTP
+- No sync DAG is needed (data arrives directly in GCS)
 - External tables read from `gs://calitp-enghouse-raw/`
-- No sync DAG visible (data may be delivered directly to GCS)
+- Data refresh: Daily
+
+**For New Agency Onboarding:**
+
+1. Coordinate with Enghouse to set up SFTP delivery for the new agency
+2. Verify data appears in `gs://calitp-enghouse-raw/` after delivery is configured
+3. Confirm the agency's `operator_id` in the delivered data
 
 ## Step 2: Create Service Account
 
@@ -134,25 +139,38 @@ Edit `warehouse/seeds/payments_entity_mapping_enghouse.csv`:
 Add a new row:
 
 ```csv
-<gtfs-dataset-id>,<organization-id>,'<enghouse-operator-id>',<Elavon Organization Name>,2000-01-01,2099-12-31
+<gtfs-dataset-source-record-id>,<organization-source-record-id>,<enghouse-operator-id>,<elavon-customer-name>,<_in_use_from>,<_in_use_until>
 ```
 
-**Example:**
+**Example (from actual file):**
 
 ```csv
-recrAG7e0oOiR6FiP,rec7EN71rsZxDFxZd,'253',Ventura County Transportation Commission,2000-01-01,2099-12-31
+recrAG7e0oOiR6FiP,rec7EN71rsZxDFxZd,253,Ventura County Transportation Commission,2000-01-01,2099-12-31
 ```
 
 **Column Definitions:**
 
-1. **gtfs_dataset_source_record_id** - Cal-ITP's Airtable record ID for GTFS dataset
-2. **organization_source_record_id** - Cal-ITP's Airtable record ID for organization
-3. **enghouse_operator_id** - Operator ID from Enghouse (note: quoted string)
+1. **gtfs_dataset_source_record_id** - The `source_record_id` from `dim_gtfs_datasets` where `_is_current` is TRUE
+2. **organization_source_record_id** - The `source_record_id` from `dim_organizations` for the agency
+3. **enghouse_operator_id** - Operator ID from Enghouse (numeric, no quotes in CSV)
 4. **elavon_customer_name** - Agency name as it appears in Elavon data (if applicable)
-5. **\_in_use_from** - Start date (typically 2000-01-01)
-6. **\_in_use_until** - End date (typically 2099-12-31)
+5. **\_in_use_from** - Start date (typically `2000-01-01`)
+6. **\_in_use_until** - End date (typically `2099-12-31`)
 
-**Important:** The `enghouse_operator_id` should be quoted as a string (e.g., `'253'`).
+**To find the source_record_ids:**
+
+```sql
+-- Find GTFS dataset source_record_id
+SELECT source_record_id, name
+FROM `cal-itp-data-infra.mart_transit_database.dim_gtfs_datasets`
+WHERE name LIKE '%<Agency Name>%'
+  AND _is_current = TRUE
+
+-- Find organization source_record_id
+SELECT source_record_id, name
+FROM `cal-itp-data-infra.mart_transit_database.dim_organizations`
+WHERE name LIKE '%<Agency Name>%'
+```
 
 ### 3.2 Commit Entity Mapping
 
@@ -175,32 +193,45 @@ Edit `warehouse/macros/create_row_access_policy.sql`:
 Find the `payments_enghouse_row_access_policy` macro and add a new entry:
 
 ```sql
-UNION ALL
-SELECT
-  '<enghouse-operator-id>' AS filter_value,
-  ['serviceAccount:<agency-slug>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '<enghouse-operator-id>',
+    principals = ['serviceAccount:<agency-slug>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
 ```
 
 **Example:**
 
 ```sql
-UNION ALL
-SELECT
-  '253' AS filter_value,
-  ['serviceAccount:ventura-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '253',
+    principals = ['serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
 ```
 
-**Note:** The operator_id should match exactly what appears in the Enghouse data (without quotes in the macro).
+**Note:** The `filter_value` should match exactly what appears in the Enghouse data. In the example above, `'253'` matches the operator_id in the data.
 
 ### 4.2 Add Elavon Row Access Policy (if applicable)
 
 If the agency also uses Elavon, find the `payments_elavon_row_access_policy` macro and add:
 
 ```sql
-UNION ALL
-SELECT
-  '<Elavon Organization Name>' AS filter_value,
-  ['serviceAccount:<agency-slug>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = '<Elavon Organization Name>',
+    principals = ['serviceAccount:<agency-slug>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+```
+
+**Example (from actual macro):**
+
+```sql
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Ventura County Transportation Commission',
+    principals = ['serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
 ```
 
 ### 4.3 Commit Row Access Policies
@@ -355,8 +386,9 @@ Follow the [Create Agency Metabase Dashboards](create-metabase-dashboards.md) gu
 | Aspect             | Littlepay                                              | Enghouse                                        |
 | ------------------ | ------------------------------------------------------ | ----------------------------------------------- |
 | **Identifier**     | `participant_id` / `merchant_id`                       | `operator_id`                                   |
-| **Data Access**    | AWS S3 with IAM keys                                   | Direct GCS delivery (verify)                    |
-| **Sync DAG**       | `sync_littlepay_v3`                                    | None visible (direct delivery?)                 |
+| **Data Access**    | AWS S3 with IAM keys                                   | SFTP to GCS bucket                              |
+| **Sync DAG**       | `sync_littlepay_v3`                                    | None (data delivered directly to GCS)           |
+| **Data Refresh**   | Hourly                                                 | Daily                                           |
 | **Entity Mapping** | `payments_entity_mapping.csv`                          | `payments_entity_mapping_enghouse.csv`          |
 | **Mart Table**     | `fct_payments_rides_v2`                                | `fct_payments_rides_enghouse`                   |
 | **Tables**         | device_transactions, micropayments, aggregations, etc. | taps, transactions, ticket_results, pay_windows |
@@ -368,19 +400,6 @@ Follow the [Create Agency Metabase Dashboards](create-metabase-dashboards.md) gu
 - [Update Row Access Policies](update-row-access-policies.md)
 - [Data Security & Row-Level Access](../explanation/data-security.md)
 - [Enghouse Data Schema](../reference/enghouse-schema.md) (to be created)
-
-## Notes for Future Documentation
-
-**Areas needing clarification:**
-
-- [ ] Exact data delivery mechanism from Enghouse
-- [ ] Whether a sync DAG is needed or data is delivered directly
-- [ ] Credential management (if any)
-- [ ] Data refresh frequency
-- [ ] Complete Enghouse schema documentation
-- [ ] Enghouse-specific dashboard requirements
-
-**Recommendation:** Document the Enghouse data delivery process in detail once confirmed with the team.
 
 ______________________________________________________________________
 
