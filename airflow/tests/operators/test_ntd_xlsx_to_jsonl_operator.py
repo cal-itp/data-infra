@@ -51,7 +51,9 @@ class TestNTDXLSXToJSONLOperator:
         return NTDXLSXToJSONLOperator(
             task_id="ntd_xlsx_to_jsonl",
             gcp_conn_id="google_cloud_default",
-            tab="2022 Agency Information",
+            type="annual_database_agency_information",
+            year="2022",
+            tab_name="2022 Agency Information",
             source_bucket=os.environ.get("CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"),
             source_path=source_path,
             destination_bucket=os.environ.get(
@@ -79,6 +81,8 @@ class TestNTDXLSXToJSONLOperator:
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
+            "type": "annual_database_agency_information",
+            "year": "2022",
             "destination_path": os.path.join(
                 "annual_database_agency_information",
                 "2022",

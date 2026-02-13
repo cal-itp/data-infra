@@ -104,6 +104,7 @@ with DAG(
         dt="{{ dag_run.start_date | ds }}",
         execution_ts="{{ dag_run.start_date | ts }}",
         destination_bucket=os.environ.get("CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"),
+        map_index_template="{{ task.year }}-{{ task.type }}",
     ).expand_kwargs(download_kwargs)
 
     def create_xlsx_tabs_kwargs(download) -> dict:
@@ -120,12 +121,15 @@ with DAG(
         retries=1,
         retry_delay=timedelta(seconds=10),
         source_bucket=os.environ.get("CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"),
+        map_index_template="{{ task.year }}-{{ task.type }}",
         trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(download_xlsx.output.map(create_xlsx_tabs_kwargs))
 
     def create_parse_kwargs(tab) -> dict:
         return {
-            "tab": tab["tab_name"],
+            "type": tab["type"],
+            "year": tab["year"],
+            "tab_name": tab["tab_name"],
             "source_path": tab["source_path"],
             "destination_path": os.path.join(
                 tab["type"],
@@ -145,6 +149,7 @@ with DAG(
         destination_bucket=os.environ.get(
             "CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"
         ),
+        map_index_template="{{ task.year }}-{{ task.type }}-{{ task.tab_name }}",
         trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(xlsx_tabs.output.map(create_parse_kwargs))
 
