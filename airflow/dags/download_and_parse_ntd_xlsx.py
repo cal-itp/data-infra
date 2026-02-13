@@ -125,7 +125,8 @@ with DAG(
         trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(download_xlsx.output.map(create_xlsx_tabs_kwargs))
 
-    def create_parse_kwargs(tab) -> dict:
+    @task
+    def create_parse_kwargs(tab):
         return {
             "type": tab["type"],
             "year": tab["year"],
@@ -141,6 +142,8 @@ with DAG(
             ),
         }
 
+    tabs_kwargs = create_parse_kwargs.expand(tab=xlsx_tabs)
+
     parse_xlsx = NTDXLSXToJSONLOperator.partial(
         task_id="xlsx_to_jsonl",
         retries=1,
@@ -151,6 +154,6 @@ with DAG(
         ),
         map_index_template="{{ task.year }}-{{ task.type }}-{{ task.tab_name }}",
         trigger_rule=TriggerRule.ALL_DONE,
-    ).expand_kwargs(xlsx_tabs.output.map(create_parse_kwargs))
+    ).expand_kwargs(tabs_kwargs)
 
     latest_only >> download_kwargs >> xlsx_tabs >> parse_xlsx
