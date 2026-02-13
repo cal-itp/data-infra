@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+from dags import log_failure_to_slack
 from operators.ntd_xlsx_list_tabs_operator import NTDXLSXListTabsOperator
 from operators.ntd_xlsx_to_gcs_operator import NTDXLSXToGCSOperator
 from operators.ntd_xlsx_to_jsonl_operator import NTDXLSXToJSONLOperator
@@ -69,6 +70,12 @@ with DAG(
     start_date=datetime(2025, 11, 1),
     catchup=False,
     tags=["ntd"],
+    default_args={
+        "email": os.getenv("CALITP_NOTIFY_EMAIL"),
+        "email_on_failure": True,
+        "email_on_retry": False,
+        "on_failure_callback": log_failure_to_slack,
+    },
 ):
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
@@ -112,8 +119,6 @@ with DAG(
 
     def create_parse_kwargs(tab) -> dict:
         return {
-            "dt": tab["dt"],
-            "execution_ts": tab["execution_ts"],
             "tab": tab["tab_name"],
             "source_path": tab["source_path"],
             "destination_path": os.path.join(
