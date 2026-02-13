@@ -12,7 +12,9 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 class NTDXLSXToJSONLOperator(BaseOperator):
     template_fields: Sequence[str] = (
-        "tab",
+        "type",
+        "year",
+        "tab_name",
         "source_bucket",
         "source_path",
         "destination_bucket",
@@ -22,7 +24,9 @@ class NTDXLSXToJSONLOperator(BaseOperator):
 
     def __init__(
         self,
-        tab: str,
+        type: str,
+        year: str,
+        tab_name: str,
         source_bucket: str,
         source_path: str,
         destination_bucket: str,
@@ -33,7 +37,9 @@ class NTDXLSXToJSONLOperator(BaseOperator):
         super().__init__(**kwargs)
 
         self._gcs_hook = None
-        self.tab = tab
+        self.type: str = type
+        self.year: str = year
+        self.tab_name = tab_name
         self.source_bucket = source_bucket
         self.source_path = source_path
         self.destination_bucket = destination_bucket
@@ -59,7 +65,7 @@ class NTDXLSXToJSONLOperator(BaseOperator):
         workbook = openpyxl.load_workbook(filename=io.BytesIO(self.source()))
         csv_file = io.StringIO()
         writer = csv.writer(csv_file)
-        for row in workbook[self.tab].rows:
+        for row in workbook[self.tab_name].rows:
             writer.writerow([cell.value for cell in row])
         csv_file.seek(0)
         return csv.DictReader(csv_file)
@@ -72,4 +78,8 @@ class NTDXLSXToJSONLOperator(BaseOperator):
             mime_type="application/jsonl",
             gzip=True,
         )
-        return {"destination_path": self.destination_path}
+        return {
+            "type": self.type,
+            "year": self.year,
+            "destination_path": self.destination_path,
+        }
