@@ -786,6 +786,8 @@ models:
       - name: service_public_number
       - name: service_name
       - name: driver_id
+      - name: organization_name
+      - name: organization_source_record_id
       - name: route_long_name
       - name: route_short_name
       - name: agency_id
@@ -815,6 +817,10 @@ models:
       - name: authorization_code
       - name: par
       - name: brand
+      - name: route_long_name
+      - name: route_short_name
+      - name: agency_id
+      - name: agency_name
       - name: end_of_month_date_pacific
       - name: end_of_month_date_utc
       - name: _content_hash

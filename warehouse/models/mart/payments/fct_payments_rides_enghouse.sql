@@ -1,29 +1,7 @@
 {{ config(materialized = 'table',
     post_hook="{{ payments_enghouse_row_access_policy() }}") }}
 
-WITH
-
-fct_daily_schedule_feeds AS (
-    SELECT * FROM {{ ref('fct_daily_schedule_feeds') }}
-),
-
-dim_routes AS (
-    SELECT * FROM {{ ref('dim_routes') }}
-),
-
-dim_agency AS (
-    SELECT * FROM {{ ref('dim_agency') }}
-),
-
-dim_gtfs_datasets AS (
-    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
-),
-
-payments_entity_mapping AS (
-    SELECT * FROM {{ ref('payments_entity_mapping_enghouse') }}
-),
-
-ticket_results AS (
+WITH ticket_results AS (
     SELECT * FROM {{ ref('stg_enghouse__ticket_results') }}
 ),
 
@@ -31,9 +9,37 @@ taps AS (
     SELECT * FROM {{ ref('stg_enghouse__taps') }}
 ),
 
+payments_entity_mapping AS (
+    SELECT
+        * EXCEPT(enghouse_operator_id),
+        enghouse_operator_id AS operator_id
+    FROM {{ ref('payments_entity_mapping_enghouse') }}
+),
+
+fct_daily_schedule_feeds AS (
+    SELECT * FROM {{ ref('fct_daily_schedule_feeds') }}
+),
+
+dim_gtfs_datasets AS (
+    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
+),
+
+dim_orgs AS (
+    SELECT * FROM {{ ref('dim_organizations') }}
+),
+
+dim_agency AS (
+    SELECT * FROM {{ ref('dim_agency') }}
+),
+
+dim_routes AS (
+    SELECT * FROM {{ ref('dim_routes') }}
+),
+
 participants_to_routes_and_agency AS (
     SELECT
-        map.enghouse_operator_id,
+        map.operator_id,
+        map.organization_source_record_id,
         map._in_use_from,
         map._in_use_until,
         feeds.date,
@@ -54,7 +60,7 @@ participants_to_routes_and_agency AS (
             AND routes.feed_key = agency.feed_key
 ),
 
-fct_payments_rides_enghouse AS (
+join_orgs AS (
     SELECT
 
         ticket_results.operator_id,
@@ -115,6 +121,9 @@ fct_payments_rides_enghouse AS (
         taps.service_name,
         taps.driver_id,
 
+        dim_orgs.name AS organization_name,
+        dim_orgs.source_record_id AS organization_source_record_id,
+
         -- Common transaction info
         routes.route_long_name,
         routes.route_short_name,
@@ -125,13 +134,82 @@ fct_payments_rides_enghouse AS (
     LEFT JOIN taps
         ON ticket_results.tap_id = taps.tap_id
     LEFT JOIN participants_to_routes_and_agency AS routes
-        ON routes.enghouse_operator_id = ticket_results.operator_id
+        ON routes.operator_id = ticket_results.operator_id
             AND EXTRACT(DATE FROM TIMESTAMP(ticket_results.start_dttm)) = routes.date
             AND routes.route_id = taps.line_public_number
             AND CAST(ticket_results.start_dttm AS TIMESTAMP)
                 BETWEEN CAST(routes._in_use_from AS TIMESTAMP)
                 AND CAST(routes._in_use_until AS TIMESTAMP)
+    LEFT JOIN dim_orgs
+        ON routes.organization_source_record_id = dim_orgs.source_record_id
+        AND CAST(ticket_results.start_dttm AS TIMESTAMP) BETWEEN dim_orgs._valid_from AND dim_orgs._valid_to
+),
 
+fct_payments_rides_enghouse AS (
+    SELECT
+        operator_id,
+        id,
+        ticket_id,
+        station_name,
+        amount,
+        clearing_id,
+        reason,
+        tap_id,
+        ticket_type,
+        created_dttm,
+        line,
+        start_station,
+        end_station,
+        start_dttm,
+        end_dttm,
+        ticket_code,
+        additional_infos,
+        mapping_terminal_id,
+        mapping_merchant_id,
+        terminal,
+        token,
+        masked_pan,
+        expiry,
+        server_date,
+        terminal_date,
+        tx_number,
+        tx_status,
+        payment_reference,
+        terminal_spdh_code,
+        denylist_version,
+        currency,
+        par,
+        fare_mode,
+        fare_type,
+        fare_value,
+        fare_description,
+        fare_linked_id,
+        gps_longitude,
+        gps_latitude,
+        gps_altitude,
+        vehicle_public_number,
+        vehicle_name,
+        stop_id,
+        stop_name,
+        platform_id,
+        platform_name,
+        zone_id,
+        zone_name,
+        line_public_number,
+        line_name,
+        line_direction,
+        trip_public_number,
+        trip_name,
+        service_public_number,
+        service_name,
+        driver_id,
+        organization_name,
+        organization_source_record_id,
+        route_long_name,
+        route_short_name,
+        agency_id,
+        agency_name
+    FROM join_orgs
 )
 
 SELECT * FROM fct_payments_rides_enghouse
