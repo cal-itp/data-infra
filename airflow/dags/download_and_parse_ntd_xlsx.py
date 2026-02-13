@@ -80,8 +80,10 @@ with DAG(
 ):
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
-    @task
-    def create_download_kwargs(ntd_product):
+    @task(
+        map_index_template="{{ task.op_kwargs['ntd_product']['year'] }}-{{ task.op_kwargs['ntd_product']['type'] }}"
+    )
+    def create_download_kwargs(ntd_product: dict):
         return {
             "type": ntd_product["type"],
             "year": ntd_product["year"],
@@ -125,24 +127,33 @@ with DAG(
         trigger_rule=TriggerRule.ALL_DONE,
     ).expand_kwargs(download_xlsx.output.map(create_xlsx_tabs_kwargs))
 
-    def create_parse_kwargs(tab) -> dict:
-        return {
-            "type": tab["type"],
-            "year": tab["year"],
-            "tab_name": tab["tab_name"],
-            "source_path": tab["source_path"],
-            "destination_path": os.path.join(
-                tab["type"],
-                tab["year"],
-                tab["tab_path"],
-                f"dt={tab['dt']}",
-                f"execution_ts={tab['execution_ts']}",
-                f"{tab['year']}__{tab['type']}__{tab['tab_path']}.jsonl.gz",
-            ),
-        }
+    @task
+    def create_parse_kwargs(files: list[list[dict]]) -> list[dict]:
+        args = []
+        for file in files:
+            for tab in file:
+                args.append(
+                    {
+                        "type": tab["type"],
+                        "year": tab["year"],
+                        "tab_name": tab["tab_name"],
+                        "source_path": tab["source_path"],
+                        "destination_path": os.path.join(
+                            tab["type"],
+                            tab["year"],
+                            tab["tab_path"],
+                            f"dt={tab['dt']}",
+                            f"execution_ts={tab['execution_ts']}",
+                            f"{tab['year']}__{tab['type']}__{tab['tab_path']}.jsonl.gz",
+                        ),
+                    }
+                )
+        return args
+
+    flattened_xlsx_tabs = create_parse_kwargs(files=xlsx_tabs.output)
 
     parse_xlsx = NTDXLSXToJSONLOperator.partial(
-        task_id="xlsx_to_jsonl",
+        task_id="convert_xlsx_to_jsonl",
         retries=1,
         retry_delay=timedelta(seconds=10),
         source_bucket=os.environ.get("CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"),
@@ -151,6 +162,6 @@ with DAG(
         ),
         map_index_template="{{ task.year }}-{{ task.type }}-{{ task.tab_name }}",
         trigger_rule=TriggerRule.ALL_DONE,
-    ).expand_kwargs(xlsx_tabs.output.map(create_parse_kwargs))
+    ).expand_kwargs(flattened_xlsx_tabs)
 
     latest_only >> download_kwargs >> xlsx_tabs >> parse_xlsx
