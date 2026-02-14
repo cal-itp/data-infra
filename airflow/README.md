@@ -208,11 +208,13 @@ We have a [GitHub Action](../.github/workflows/deploy-airflow.yml) that runs whe
 Airflow operators have dependencies on the following secrets, which are required to be set:
 
 - `airflow-connections-airtable_default` is a password formatted according to Airflow connection conventions (e.g. `airflow://login:abc123@airflow`), see <https://cloud.google.com/composer/docs/composer-2/configure-secret-manager>
+- `airflow-connections-http_blackcat`
+- `airflow-connections-http_ckan`
+- `airflow-connections-http_dot`
 - `airflow-connections-http_kuba`
-- `airflow-connections-http_transitland`
 - `airflow-connections-http_mobility_database`
 - `airflow-connections-http_ntd`
-- `airflow-connections-http_blackcat`
+- `airflow-connections-http_transitland`
 - `CALITP__ELAVON_SFTP_PASSWORD`
 
 The following are provided by Littlepay to DDS:
