@@ -4,10 +4,24 @@ import json
 from typing import Sequence
 
 import openpyxl
+from src.bigquery_cleaner import BigQueryCleaner
 
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
+
+
+class JsonlFormatter:
+    def __init__(self, json) -> None:
+        self.json = json
+
+    def cleaner(self) -> BigQueryCleaner:
+        return BigQueryCleaner(self.json)
+
+    def format(self) -> str:
+        return "\n".join(
+            [json.dumps(x, separators=(",", ":")) for x in self.cleaner().clean()]
+        )
 
 
 class NTDXLSXToJSONLOperator(BaseOperator):
@@ -74,7 +88,7 @@ class NTDXLSXToJSONLOperator(BaseOperator):
         self.gcs_hook().upload(
             bucket_name=self.destination_name(),
             object_name=self.destination_path,
-            data="\n".join([json.dumps(r, separators=(",", ":")) for r in self.rows()]),
+            data=JsonlFormatter(self.rows()).format(),
             mime_type="application/jsonl",
             gzip=True,
         )
