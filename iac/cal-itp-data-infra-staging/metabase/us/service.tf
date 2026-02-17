@@ -25,7 +25,7 @@ resource "google_cloud_run_v2_service" "metabase-staging" {
     }
 
     containers {
-      image = "us-west2-docker.pkg.dev/cal-itp-data-infra-staging/ghcr/cal-itp/data-infra/metabase:latest"
+      image = "us-west2-docker.pkg.dev/cal-itp-data-infra-staging/ghcr/cal-itp/data-infra/metabase:staging"
 
       resources {
         limits = {

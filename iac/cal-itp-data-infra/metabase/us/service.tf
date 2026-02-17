@@ -25,12 +25,12 @@ resource "google_cloud_run_v2_service" "metabase" {
     }
 
     containers {
-      image = "us-west2-docker.pkg.dev/cal-itp-data-infra/ghcr/cal-itp/data-infra/metabase:latest"
+      image = "us-west2-docker.pkg.dev/cal-itp-data-infra/ghcr/cal-itp/data-infra/metabase:production"
 
       resources {
         limits = {
-          cpu    = "1"
-          memory = "2048Mi"
+          cpu    = "2"
+          memory = "4096Mi"
         }
       }
 
