@@ -497,3 +497,15 @@ output "google_service_account_enghouse-sftp-service-account_email" {
 output "google_service_account_enghouse-sftp-service-account_id" {
   value = google_service_account.enghouse-sftp-service-account.id
 }
+
+output "google_service_account_metabase-service-account_id" {
+  value = google_service_account.metabase-service-account.id
+}
+
+output "google_service_account_metabase-service-account_email" {
+  value = google_service_account.metabase-service-account.email
+}
+
+output "google_service_account_metabase-service-account_name" {
+  value = google_service_account.metabase-service-account.name
+}

@@ -264,6 +264,14 @@ resource "google_service_account" "composer-service-account" {
   project      = "cal-itp-data-infra"
 }
 
+resource "google_service_account" "metabase-service-account" {
+  account_id   = "metabase-service-account"
+  description  = "Service account for Metabase"
+  disabled     = "false"
+  display_name = "metabase"
+  project      = "cal-itp-data-infra"
+}
+
 resource "google_service_account" "vctc-payments-user" {
   account_id = "vctc-payments-user"
   disabled   = "false"

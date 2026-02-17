@@ -602,3 +602,16 @@ resource "google_project_iam_member" "staging-github-actions-service-account" {
   member  = "serviceAccount:github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com"
   project = "cal-itp-data-infra"
 }
+
+resource "google_project_iam_member" "metabase-service-account" {
+  for_each = toset([
+    "roles/cloudsql.client",
+    "roles/secretmanager.secretAccessor",
+    "roles/bigquery.dataViewer",
+    "roles/bigquery.jobUser",
+    "roles/bigquery.metadataViewer"
+  ])
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.metabase-service-account.email}"
+  project = "cal-itp-data-infra"
+}
