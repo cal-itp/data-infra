@@ -88,7 +88,11 @@ def close_expired_issues(**kwargs):
     sql = load_query()
 
     # Query BigQuery
-    df = bigquery.Client(project=project_id).query(sql).to_dataframe()
+    df = (
+        bigquery.Client(project=project_id)
+        .query(sql)
+        .to_dataframe(create_bqstorage_client=False)
+    )
 
     if df.empty:
         print("No expired issues to close.")
