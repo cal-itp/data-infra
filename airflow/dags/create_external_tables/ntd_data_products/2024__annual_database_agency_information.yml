@@ -13,3 +13,96 @@ hive_options:
   mode: AUTO
   require_partition_filter: false
   source_uri_prefix: "annual_database_agency_information/2024/agency_information/"
+schema_fields:
+  - name: dt
+    type: DATE
+  - name: execution_ts
+    type: TIMESTAMP
+  - name: address_line_1
+    type: STRING
+  - name: address_line_2
+    type: STRING
+  - name: agency_name
+    type: STRING
+  - name: city
+    type: STRING
+  - name: density
+    type: FLOAT
+  - name: division_department
+    type: STRING
+  - name: doing_business_as
+    type: STRING
+  - name: fta_recipient_id
+    type: NUMERIC
+  - name: fy_end_date
+    type: STRING
+  - name: legacy_ntd_id
+    type: STRING
+  - name: ntd_id
+    type: STRING
+  - name: number_of_counties_with_service
+    type: NUMERIC
+  - name: number_of_state_counties
+    type: NUMERIC
+  - name: organization_type
+    type: STRING
+  - name: original_due_date
+    type: STRING
+  - name: p_o__box
+    type: STRING
+  - name: personal_vehicles
+    type: NUMERIC
+  - name: population
+    type: NUMERIC
+  - name: primary_uza_uace_code
+    type: NUMERIC
+  - name: public_sponsor
+    type: STRING
+  - name: region
+    type: INTEGER
+  - name: reported_by_name
+    type: STRING
+  - name: reported_by_ntd_id
+    type: STRING
+  - name: reporter_acronym
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: reporting_module
+    type: STRING
+  - name: service_area_pop
+    type: NUMERIC
+  - name: service_area_sq_miles
+    type: NUMERIC
+  - name: sq_miles
+    type: FLOAT
+  - name: state
+    type: STRING
+  - name: state_admin_funds_expended
+    type: NUMERIC
+  - name: state_parent_ntd_id
+    type: STRING
+  - name: subrecipient_type
+    type: STRING
+  - name: tam_tier
+    type: STRING
+  - name: total_voms
+    type: NUMERIC
+  - name: tribal_area_name
+    type: STRING
+  - name: ueid
+    type: STRING
+  - name: url
+    type: STRING
+  - name: uza_name
+    type: STRING
+  - name: volunteer_drivers
+    type: NUMERIC
+  - name: voms_do
+    type: NUMERIC
+  - name: voms_pt
+    type: NUMERIC
+  - name: zip_code
+    type: NUMERIC
+  - name: zip_code_ext
+    type: NUMERIC
