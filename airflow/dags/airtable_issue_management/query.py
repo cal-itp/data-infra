@@ -1,3 +1,4 @@
+QUERY = """
 WITH filtered_issues AS (
   SELECT
     source_record_id AS issue_source_record_id,
@@ -82,3 +83,4 @@ SELECT
     gtfs_dataset_name,
     new_end_date
 FROM final_filtered_issues;
+"""
