@@ -1,0 +1,16 @@
+description: "Automate Airtable issue management workflows (TDQ)"
+schedule_interval: "0 5 * * 5"
+tags:
+  - airtable
+  - tdq
+  - automation
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: "2026-01-01"
+    catchup: False
+    email_on_failure: True
+    pool: default_pool
+    concurrency: 5
+wait_for_defaults:
+    timeout: 3600
