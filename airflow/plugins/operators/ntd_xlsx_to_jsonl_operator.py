@@ -79,8 +79,16 @@ class NTDXLSXToJSONLOperator(BaseOperator):
         workbook = openpyxl.load_workbook(filename=io.BytesIO(self.source()))
         csv_file = io.StringIO()
         writer = csv.writer(csv_file)
-        for row in workbook[self.tab_name].rows:
-            writer.writerow([cell.value for cell in row])
+        for index, row in enumerate(workbook[self.tab_name].rows):
+            if index == 0:
+                writer.writerow(
+                    [
+                        cell.value if cell.value is not None else f"Unnamed: {column}"
+                        for column, cell in enumerate(row)
+                    ]
+                )
+            else:
+                writer.writerow([cell.value for cell in row])
         csv_file.seek(0)
         return csv.DictReader(csv_file)
 
