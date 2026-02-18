@@ -7,13 +7,14 @@ import smtplib
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from pathlib import Path
 
 import google.auth
 import numpy as np
 import pytz
 from google.cloud import bigquery, secretmanager
 from pyairtable import Api
+
+from .query import QUERY
 
 
 def access_secret(project_id: str, secret_id: str, version: str = "latest") -> str:
@@ -58,8 +59,7 @@ def close_expired_issues(**kwargs):
         )
 
     # Load SQL (same folder)
-    dag_dir = Path(__file__).parent
-    sql = (dag_dir / "query.sql").read_text()
+    sql = QUERY
 
     # Query BigQuery
     df = bigquery.Client(project=project_id).query(sql).to_dataframe()
