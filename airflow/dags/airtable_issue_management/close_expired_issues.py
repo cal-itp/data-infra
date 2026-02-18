@@ -15,7 +15,7 @@ import pytz
 from google.cloud import bigquery
 from pyairtable import Api
 
-from airflow.providers.google.cloud.hooks.secret_manager import SecretManagerHook
+from airflow.providers.google.cloud.hooks.secret_manager import SecretsManagerHook
 
 
 def send_email_smtp(to_emails, subject, html_content, sender_email, email_password):
@@ -41,7 +41,7 @@ def close_expired_issues(**kwargs):
     # Detect project_id from ADC (staging vs prod)
     _, project_id = google.auth.default()
 
-    hook = SecretManagerHook()
+    hook = SecretsManagerHook()
 
     # Secrets
     sender_email = hook.get_secret(secret_id="F_SENDER_EMAIL", project_id=project_id)
