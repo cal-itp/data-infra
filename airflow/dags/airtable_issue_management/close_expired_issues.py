@@ -14,7 +14,7 @@ import pytz
 from google.cloud import bigquery, secretmanager
 from pyairtable import Api
 
-from .query import QUERY
+from airflow.dags.airtable_issue_management.query import QUERY
 
 
 def access_secret(project_id: str, secret_id: str, version: str = "latest") -> str:
