@@ -13,3 +13,110 @@ hive_options:
   mode: AUTO
   require_partition_filter: false
   source_uri_prefix: "asset_inventory_time_series/historical/avg_standing_capacity/"
+schema_fields:
+  - name: dt
+    type: DATE
+  - name: execution_ts
+    type: TIMESTAMP
+  - name: _1992
+    type: NUMERIC
+  - name: _1993
+    type: NUMERIC
+  - name: _1994
+    type: NUMERIC
+  - name: _1995
+    type: NUMERIC
+  - name: _1996
+    type: NUMERIC
+  - name: _1997
+    type: NUMERIC
+  - name: _1998
+    type: NUMERIC
+  - name: _1999
+    type: NUMERIC
+  - name: _2000
+    type: NUMERIC
+  - name: _2001
+    type: NUMERIC
+  - name: _2002
+    type: NUMERIC
+  - name: _2003
+    type: NUMERIC
+  - name: _2004
+    type: NUMERIC
+  - name: _2005
+    type: NUMERIC
+  - name: _2006
+    type: NUMERIC
+  - name: _2007
+    type: NUMERIC
+  - name: _2008
+    type: NUMERIC
+  - name: _2009
+    type: NUMERIC
+  - name: _2010
+    type: NUMERIC
+  - name: _2011
+    type: NUMERIC
+  - name: _2012
+    type: NUMERIC
+  - name: _2013
+    type: NUMERIC
+  - name: _2014
+    type: NUMERIC
+  - name: _2015
+    type: NUMERIC
+  - name: _2016
+    type: NUMERIC
+  - name: _2017
+    type: NUMERIC
+  - name: _2018
+    type: NUMERIC
+  - name: _2019
+    type: NUMERIC
+  - name: _2020
+    type: NUMERIC
+  - name: _2021
+    type: NUMERIC
+  - name: _2022
+    type: NUMERIC
+  - name: _2023
+    type: NUMERIC
+  - name: _2024
+    type: NUMERIC
+  - name: _2024_mode_status
+    type: STRING
+  - name: agency_status
+    type: STRING
+  - name: census_year
+    type: NUMERIC
+  - name: city
+    type: STRING
+  - name: last_report_year
+    type: INTEGER
+  - name: legacy_ntd_id
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: mode_status
+    type: STRING
+  - name: reporting_module
+    type: STRING
+  - name: service
+    type: STRING
+  - name: state
+    type: STRING
+  - name: uace_code
+    type: NUMERIC
+  - name: uza_area_sq_miles
+    type: NUMERIC
+  - name: uza_name
+    type: STRING
+  - name: uza_population
+    type: NUMERIC
+  - name: reporter_type
+    type: STRING
+  - name: agency_name
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
