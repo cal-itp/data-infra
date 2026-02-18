@@ -13,3 +13,102 @@ hive_options:
   mode: AUTO
   require_partition_filter: false
   source_uri_prefix: "capital_expenditures_time_series/historical/other/"
+schema_fields:
+  - name: dt
+    type: DATE
+  - name: execution_ts
+    type: TIMESTAMP
+  - name: _1992
+    type: FLOAT
+  - name: _1993
+    type: FLOAT
+  - name: _1994
+    type: FLOAT
+  - name: _1995
+    type: FLOAT
+  - name: _1996
+    type: FLOAT
+  - name: _1997
+    type: FLOAT
+  - name: _1998
+    type: FLOAT
+  - name: _1999
+    type: FLOAT
+  - name: _2000
+    type: FLOAT
+  - name: _2001
+    type: FLOAT
+  - name: _2002
+    type: FLOAT
+  - name: _2003
+    type: FLOAT
+  - name: _2004
+    type: FLOAT
+  - name: _2005
+    type: FLOAT
+  - name: _2006
+    type: FLOAT
+  - name: _2007
+    type: FLOAT
+  - name: _2008
+    type: FLOAT
+  - name: _2009
+    type: FLOAT
+  - name: _2010
+    type: FLOAT
+  - name: _2011
+    type: FLOAT
+  - name: _2012
+    type: FLOAT
+  - name: _2013
+    type: FLOAT
+  - name: _2014
+    type: FLOAT
+  - name: _2015
+    type: FLOAT
+  - name: _2016
+    type: FLOAT
+  - name: _2018
+    type: FLOAT
+  - name: _2019
+    type: FLOAT
+  - name: _2020
+    type: FLOAT
+  - name: _2021
+    type: FLOAT
+  - name: _2022
+    type: FLOAT
+  - name: _2024
+    type: FLOAT
+  - name: _2024_mode_status
+    type: STRING
+  - name: agency_name
+    type: STRING
+  - name: agency_status
+    type: STRING
+  - name: census_year
+    type: INTEGER
+  - name: city
+    type: STRING
+  - name: last_report_year
+    type: INTEGER
+  - name: legacy_ntd_id
+    type: STRING
+  - name: mode
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
+  - name: reporter_type
+    type: STRING
+  - name: reporting_module
+    type: STRING
+  - name: state
+    type: STRING
+  - name: uace_code
+    type: INTEGER
+  - name: uza_area_sq_miles
+    type: FLOAT
+  - name: uza_name
+    type: STRING
+  - name: uza_population
+    type: INTEGER
