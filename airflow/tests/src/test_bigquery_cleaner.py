@@ -5,7 +5,7 @@ class TestBigQueryCleaner:
     def test_cleaning_a_standard_row(self):
         rows = [{"id": "abc123", "fields": ""}]
         cleaner = BigQueryCleaner(rows)
-        assert cleaner.clean() == [{"id": "abc123", "fields": ""}]
+        assert cleaner.clean() == [{"id": "abc123"}]
 
     def test_fixing_column_names(self):
         rows = [{"2010": "abc123"}, {" fields ": "green", "@super": "happy"}]
@@ -18,7 +18,7 @@ class TestBigQueryCleaner:
     def test_cleaning_a_none_value(self):
         rows = [{"id": "abc123", "fields": None}]
         cleaner = BigQueryCleaner(rows)
-        assert cleaner.clean() == [{"id": "abc123", "fields": None}]
+        assert cleaner.clean() == [{"id": "abc123"}]
 
     def test_cleaning_numeric_values(self):
         rows = [{"id": 0, "score": -2, "amount": 123.000555555555, "total": 0.5}]
