@@ -3,10 +3,12 @@
 # provide_context: true
 # ---
 
+import importlib.util
 import smtplib
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from pathlib import Path
 
 import google.auth
 import numpy as np
@@ -14,7 +16,31 @@ import pytz
 from google.cloud import bigquery, secretmanager
 from pyairtable import Api
 
-from airflow.dags.airtable_issue_management.query import QUERY
+
+def load_query() -> str:
+    """
+    Load QUERY from query.py (same folder) without relying on Python package imports.
+
+    This avoids Composer DAG parsing issues where relative imports fail and repo paths
+    are not on PYTHONPATH.
+    """
+    query_path = Path(__file__).with_name("query.py")
+    if not query_path.exists():
+        raise FileNotFoundError(f"query.py not found at {query_path}")
+
+    spec = importlib.util.spec_from_file_location(
+        "airtable_issue_management_query", query_path
+    )
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Could not load module spec for {query_path}")
+
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    if not hasattr(module, "QUERY"):
+        raise AttributeError("query.py must define a variable named QUERY")
+
+    return module.QUERY
 
 
 def access_secret(project_id: str, secret_id: str, version: str = "latest") -> str:
@@ -58,8 +84,8 @@ def close_expired_issues(**kwargs):
             f"Missing required secrets in Secret Manager for project_id={project_id}."
         )
 
-    # Load SQL (same folder)
-    sql = QUERY
+    # Load SQL from query.py (same folder)
+    sql = load_query()
 
     # Query BigQuery
     df = bigquery.Client(project=project_id).query(sql).to_dataframe()
@@ -95,11 +121,11 @@ def close_expired_issues(**kwargs):
 
     updated_records = []
     failed_batches = []
-    BATCH_SIZE = 10
+    batch_size = 10
 
-    for i in range(0, len(updates), BATCH_SIZE):
-        batch = updates[i : i + BATCH_SIZE]  # noqa: E203
-        batch_num = i // BATCH_SIZE + 1
+    for i in range(0, len(updates), batch_size):
+        batch = updates[i : i + batch_size]  # noqa: E203
+        batch_num = i // batch_size + 1
         try:
             table.batch_update(batch)
             updated_records.extend(batch)
@@ -145,6 +171,8 @@ def close_expired_issues(**kwargs):
 
         recipients = [
             "farhad.salemi@dot.ca.gov",
+            "evan.siroky@dot.ca.gov",
+            "md.islam@dot.ca.gov",
         ]
 
         try:
