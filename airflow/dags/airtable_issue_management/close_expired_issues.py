@@ -12,10 +12,16 @@ from pathlib import Path
 import google.auth
 import numpy as np
 import pytz
-from google.cloud import bigquery
+from google.cloud import bigquery, secretmanager
 from pyairtable import Api
 
-from airflow.providers.google.cloud.hooks.secret_manager import SecretsManagerHook
+
+def access_secret(project_id: str, secret_id: str, version: str = "latest") -> str:
+    """Read a Secret Manager secret value as a string."""
+    client = secretmanager.SecretManagerServiceClient()
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version}"
+    resp = client.access_secret_version(request={"name": name})
+    return resp.payload.data.decode("utf-8")
 
 
 def send_email_smtp(to_emails, subject, html_content, sender_email, email_password):
@@ -41,14 +47,10 @@ def close_expired_issues(**kwargs):
     # Detect project_id from ADC (staging vs prod)
     _, project_id = google.auth.default()
 
-    hook = SecretsManagerHook()
-
     # Secrets
-    sender_email = hook.get_secret(secret_id="F_SENDER_EMAIL", project_id=project_id)
-    email_password = hook.get_secret(secret_id="F_EMAIL_WORD", project_id=project_id)
-    airtable_token = hook.get_secret(
-        secret_id="F_AIRTABLE_TOKEN", project_id=project_id
-    )
+    sender_email = access_secret(project_id, "F_SENDER_EMAIL")
+    email_password = access_secret(project_id, "F_EMAIL_WORD")
+    airtable_token = access_secret(project_id, "F_AIRTABLE_TOKEN")
 
     if not all([sender_email, email_password, airtable_token]):
         raise ValueError(
