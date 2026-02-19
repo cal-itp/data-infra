@@ -19,25 +19,25 @@ schema_fields:
   - name: execution_ts
     type: TIMESTAMP
   - name: _2015
-    type: FLOAT
+    type: BIGNUMERIC
   - name: _2016
-    type: FLOAT
+    type: BIGNUMERIC
   - name: _2017
-    type: FLOAT
+    type: BIGNUMERIC
   - name: _2018
-    type: FLOAT
+    type: BIGNUMERIC
   - name: _2019
-    type: FLOAT
+    type: BIGNUMERIC
   - name: _2020
-    type: FLOAT
+    type: BIGNUMERIC
   - name: _2021
-    type: FLOAT
+    type: BIGNUMERIC
   - name: _2022
-    type: FLOAT
+    type: BIGNUMERIC
   - name: _2023
-    type: FLOAT
+    type: BIGNUMERIC
   - name: _2024
-    type: FLOAT
+    type: BIGNUMERIC
   - name: agency_name
     type: STRING
   - name: agency_status
@@ -67,6 +67,6 @@ schema_fields:
   - name: uace_code
     type: NUMERIC
   - name: uza_area_sq_miles
-    type: FLOAT
+    type: NUMERIC
   - name: uza_population
     type: INTEGER

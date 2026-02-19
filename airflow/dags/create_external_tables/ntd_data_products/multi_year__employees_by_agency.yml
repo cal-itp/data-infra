@@ -14,7 +14,7 @@ schema_fields:
   - name: max_agency_1
     type: STRING
   - name: avgwagerate
-    type: FLOAT
+    type: BIGNUMERIC
   - name: count_capital_labor_count_q
     type: NUMERIC
   - name: count_capital_labor_hours_q

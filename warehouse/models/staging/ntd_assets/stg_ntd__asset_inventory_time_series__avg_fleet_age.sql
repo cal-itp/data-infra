@@ -62,7 +62,7 @@ stg_ntd__asset_inventory_time_series__avg_fleet_age AS (
         SAFE_CAST(_2021 AS NUMERIC) AS _2021,
         SAFE_CAST(_2022 AS NUMERIC) AS _2022,
         SAFE_CAST(_2023 AS NUMERIC) AS _2023,
-        SAFE_CAST(_2023 AS NUMERIC) AS _2024,
+        SAFE_CAST(_2024 AS NUMERIC) AS _2024,
         dt,
         execution_ts
     FROM get_latest_extract

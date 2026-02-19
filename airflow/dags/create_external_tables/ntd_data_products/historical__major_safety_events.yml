@@ -80,7 +80,7 @@ schema_fields:
         type: STRING
       - name: coordinates
         mode: REPEATED
-        type: FLOAT
+        type: BIGNUMERIC
   - name: evacuation
     type: BOOLEAN
   - name: life_safety_y_n
