@@ -80,6 +80,8 @@ schema_fields:
     type: BIGNUMERIC
   - name: _2022
     type: BIGNUMERIC
+  - name: _2023
+    type: BIGNUMERIC
   - name: _2024
     type: BIGNUMERIC
   - name: _2024_mode_status
