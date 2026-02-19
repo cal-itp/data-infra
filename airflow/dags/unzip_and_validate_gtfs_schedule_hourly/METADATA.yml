@@ -1,5 +1,5 @@
 description: "Unzips and validates GTFS Schedule data"
-schedule_interval: "0 * * * *"
+schedule_interval: null
 tags:
   - gtfs
 default_args:
@@ -10,8 +10,7 @@ default_args:
     email_on_failure: False
     email_on_retry: False
     max_active_dag_runs: 6
-    retries: 1
-    retry_delay: !timedelta 'minutes: 2'
+    retries: 0
     concurrency: 50
     pool: schedule_unzip_pool
 latest_only: False
