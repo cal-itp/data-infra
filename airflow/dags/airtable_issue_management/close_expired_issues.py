@@ -149,6 +149,7 @@ def close_expired_issues(**kwargs):
                 f"<tr><td>{r['issue_number']}</td>"
                 f"<td>{r['gtfs_dataset_name']}</td>"
                 f"<td>{r['status']}</td></tr>"
+                f"<td>{r['new_end_date']}</td></tr>"
             )
 
         failed_html = (
@@ -157,15 +158,16 @@ def close_expired_issues(**kwargs):
             else "None"
         )
 
-        subject = "[Airflow] Airtable Issue Management - Close Expired Issues"
+        subject = "[Airflow] Airtable Issue Management"
         body = f"""
         <b>✅ Successfully updated {len(updated_ids)} Airtable records.</b><br><br>
-        <b>Closed Issues:</b><br>
+        <b>Closed About to Expire Issues:</b><br>
         <table border="1" cellspacing="0" cellpadding="5">
             <tr>
                 <th>Issue Number</th>
                 <th>GTFS Dataset Name</th>
                 <th>Status</th>
+                <th>New End Date</th>
             </tr>
             {table_rows}
         </table><br><br>
@@ -175,8 +177,6 @@ def close_expired_issues(**kwargs):
 
         recipients = [
             "farhad.salemi@dot.ca.gov",
-            "evan.siroky@dot.ca.gov",
-            "md.islam@dot.ca.gov",
         ]
 
         try:
