@@ -27,7 +27,7 @@ schema_fields:
   - name: city
     type: STRING
   - name: density
-    type: FLOAT
+    type: BIGNUMERIC
   - name: division_department
     type: STRING
   - name: doing_business_as
@@ -75,7 +75,7 @@ schema_fields:
   - name: service_area_sq_miles
     type: NUMERIC
   - name: sq_miles
-    type: FLOAT
+    type: NUMERIC
   - name: state
     type: STRING
   - name: state_admin_funds_expended

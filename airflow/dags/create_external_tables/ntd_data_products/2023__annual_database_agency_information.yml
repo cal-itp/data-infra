@@ -27,7 +27,7 @@ schema_fields:
   - name: city
     type: STRING
   - name: density
-    type: NUMERIC
+    type: BIGNUMERIC
   - name: division_department
     type: STRING
   - name: doing_business_as
