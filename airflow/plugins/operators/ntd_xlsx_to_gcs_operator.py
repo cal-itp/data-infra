@@ -40,11 +40,11 @@ class NTDXLSXToGCSOperator(BaseOperator):
         self.execution_ts: str = execution_ts
         self.type: str = type
         self.year: str = year
-        self.source_url = source_url
-        self.destination_bucket = destination_bucket
-        self.destination_path = destination_path
-        self.http_conn_id = http_conn_id
-        self.gcp_conn_id = gcp_conn_id
+        self.source_url: str = source_url
+        self.destination_bucket: str = destination_bucket
+        self.destination_path: str = destination_path
+        self.http_conn_id: str = http_conn_id
+        self.gcp_conn_id: str = gcp_conn_id
 
     def destination_name(self) -> str:
         return self.destination_bucket.replace("gs://", "")

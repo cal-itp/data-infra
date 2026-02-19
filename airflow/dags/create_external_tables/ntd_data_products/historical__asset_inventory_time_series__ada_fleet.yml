@@ -24,6 +24,8 @@ schema_fields:
     type: NUMERIC
   - name: _1994
     type: NUMERIC
+  - name: _1995
+    type: NUMERIC
   - name: _1996
     type: NUMERIC
   - name: _1997
@@ -62,6 +64,8 @@ schema_fields:
     type: NUMERIC
   - name: _2014
     type: NUMERIC
+  - name: _2015
+    type: NUMERIC
   - name: _2016
     type: NUMERIC
   - name: _2017
@@ -72,7 +76,11 @@ schema_fields:
     type: NUMERIC
   - name: _2020
     type: NUMERIC
+  - name: _2021
+    type: NUMERIC
   - name: _2022
+    type: NUMERIC
+  - name: _2023
     type: NUMERIC
   - name: _2024
     type: NUMERIC

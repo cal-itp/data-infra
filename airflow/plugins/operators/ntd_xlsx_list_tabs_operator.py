@@ -37,9 +37,9 @@ class NTDXLSXListTabsOperator(BaseOperator):
         self.execution_ts: str = execution_ts
         self.type: str = type
         self.year: str = year
-        self.source_bucket = source_bucket
-        self.source_path = source_path
-        self.gcp_conn_id = gcp_conn_id
+        self.source_bucket: str = source_bucket
+        self.source_path: str = source_path
+        self.gcp_conn_id: str = gcp_conn_id
 
     def gcs_hook(self) -> GCSHook:
         return GCSHook(gcp_conn_id=self.gcp_conn_id)

@@ -68,6 +68,8 @@ schema_fields:
     type: BIGNUMERIC
   - name: _2016
     type: BIGNUMERIC
+  - name: _2017
+    type: BIGNUMERIC
   - name: _2018
     type: BIGNUMERIC
   - name: _2019
@@ -77,6 +79,8 @@ schema_fields:
   - name: _2021
     type: BIGNUMERIC
   - name: _2022
+    type: BIGNUMERIC
+  - name: _2023
     type: BIGNUMERIC
   - name: _2024
     type: BIGNUMERIC
