@@ -8,16 +8,55 @@ on:
       - '.github/workflows/build-metabase.yml'
       - 'services/metabase/**'
       - 'iac/cal-itp-data-infra-staging/metabase/**'
+      - 'iac/cal-itp-data-infra/metabase/**'
+  pull_request:
+    paths:
+      - '.github/workflows/build-metabase.yml'
+      - 'services/metabase/**'
+      - 'iac/cal-itp-data-infra-staging/metabase/**'
+      - 'iac/cal-itp-data-infra/metabase/**'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-metabase
+  group: ${{ github.workflow }}-${{ github.ref }}-metabase-staging
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  build:
-    name: Build image
+  changes:
+    name: Detect changes
 
     runs-on: ubuntu-latest
+
+    outputs:
+      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
+      production: ${{ steps.production-changes.outputs.all_changed_files }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Staging Changes
+        uses: tj-actions/changed-files@v46
+        id: staging-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'services/metabase/Dockerfile.staging'
+
+      - name: Production Changes
+        uses: tj-actions/changed-files@v46
+        id: production-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'services/metabase/Dockerfile.production'
+
+  staging:
+    name: Build staging image
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: ${{ needs.changes.outputs.staging != '[]' || needs.changes.outputs.staging != '' }}
 
     permissions:
       contents: read
@@ -40,7 +79,41 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: services/metabase
+          file: services/metabase/Dockerfile.staging
           push: true
-          tags: ghcr.io/${{ github.repository }}/metabase:latest
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/metabase:latest
+          tags: ghcr.io/${{ github.repository }}/metabase:staging
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/metabase:staging
+          cache-to: type=inline
+
+  production:
+    name: Build production image
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: ${{ needs.changes.outputs.production != '[]' || needs.changes.outputs.production != '' }}
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Repository
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v6
+        with:
+          context: services/metabase
+          file: services/metabase/Dockerfile.production
+          push: true
+          tags: ghcr.io/${{ github.repository }}/metabase:production
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/metabase:production
           cache-to: type=inline

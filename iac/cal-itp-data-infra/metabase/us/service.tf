@@ -1,5 +1,5 @@
-resource "google_cloud_run_v2_service" "metabase-staging" {
-  name                 = "metabase-staging"
+resource "google_cloud_run_v2_service" "metabase" {
+  name                 = "metabase"
   location             = "us-west2"
   deletion_protection  = false
   ingress              = "INGRESS_TRAFFIC_ALL"
@@ -20,17 +20,17 @@ resource "google_cloud_run_v2_service" "metabase-staging" {
     volumes {
       name = "cloudsql"
       cloud_sql_instance {
-        instances = [google_sql_database_instance.metabase-staging.connection_name]
+        instances = [google_sql_database_instance.metabase.connection_name]
       }
     }
 
     containers {
-      image = "us-west2-docker.pkg.dev/cal-itp-data-infra-staging/ghcr/cal-itp/data-infra/metabase:staging"
+      image = "us-west2-docker.pkg.dev/cal-itp-data-infra/ghcr/cal-itp/data-infra/metabase:production"
 
       resources {
         limits = {
-          cpu    = "1"
-          memory = "2048Mi"
+          cpu    = "2"
+          memory = "4096Mi"
         }
       }
 
@@ -69,7 +69,7 @@ resource "google_cloud_run_v2_service" "metabase-staging" {
 
       env {
         name  = "MB_DB_DBNAME"
-        value = google_sql_database.metabase-staging.name
+        value = google_sql_database.metabase.name
       }
 
       env {
@@ -79,14 +79,14 @@ resource "google_cloud_run_v2_service" "metabase-staging" {
 
       env {
         name  = "MB_DB_USER"
-        value = google_sql_user.metabase-staging.name
+        value = google_sql_user.metabase.name
       }
 
       env {
         name = "MB_DB_PASS"
         value_source {
           secret_key_ref {
-            secret  = google_secret_manager_secret.metabase-staging-password.secret_id
+            secret  = google_secret_manager_secret.metabase-password.secret_id
             version = "latest"
           }
         }
@@ -100,19 +100,19 @@ resource "google_cloud_run_v2_service" "metabase-staging" {
   }
 }
 
-resource "google_cloud_run_service_iam_binding" "metabase-staging" {
-  location = google_cloud_run_v2_service.metabase-staging.location
-  service  = google_cloud_run_v2_service.metabase-staging.name
+resource "google_cloud_run_service_iam_binding" "metabase" {
+  location = google_cloud_run_v2_service.metabase.location
+  service  = google_cloud_run_v2_service.metabase.name
   role     = "roles/run.invoker"
   members  = ["allUsers"]
 }
 
-resource "google_compute_region_network_endpoint_group" "metabase-staging" {
-  name                  = "metabase-staging"
+resource "google_compute_region_network_endpoint_group" "metabase" {
+  name                  = "metabase"
   network_endpoint_type = "SERVERLESS"
-  region                = google_cloud_run_v2_service.metabase-staging.location
+  region                = google_cloud_run_v2_service.metabase.location
   cloud_run {
-    service = google_cloud_run_v2_service.metabase-staging.name
+    service = google_cloud_run_v2_service.metabase.name
   }
 }
 
@@ -120,14 +120,14 @@ module "lb-http" {
   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version = "~> 14.0"
 
-  name    = "metabase-staging"
-  project = "cal-itp-data-infra-staging"
+  name    = "metabase"
+  project = "cal-itp-data-infra"
 
   ssl                             = true
   managed_ssl_certificate_domains = [local.domain]
   https_redirect                  = true
 
-  address        = google_compute_global_address.metabase-staging.address
+  address        = google_compute_global_address.metabase.address
   create_address = false
 
   backends = {
@@ -138,7 +138,7 @@ module "lb-http" {
           "region" : "us-west2",
           "type" : "cloud-run",
           "service" : {
-            "name" : google_cloud_run_v2_service.metabase-staging.name
+            "name" : google_cloud_run_v2_service.metabase.name
           }
         }
       ]
