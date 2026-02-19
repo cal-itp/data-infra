@@ -26,7 +26,7 @@ resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
       query = <<-EOT
         fetch gcs_bucket
         | metric 'storage.googleapis.com/api/request_count'
-        | filter (resource.bucket_name == 'calitp-gtfs-rt-raw-v2')
+        | filter (resource.bucket_name == '${local.gtfs_rt_raw_v2_bucket_name}')
         | filter (metric.method =~ '.*Write.*|.*Upload.*')
         | align delta(15m)
         | every 15m
