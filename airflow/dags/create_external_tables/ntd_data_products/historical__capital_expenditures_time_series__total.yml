@@ -68,6 +68,8 @@ schema_fields:
     type: BIGNUMERIC
   - name: _2016
     type: BIGNUMERIC
+  - name: _2017
+    type: BIGNUMERIC
   - name: _2018
     type: BIGNUMERIC
   - name: _2019
