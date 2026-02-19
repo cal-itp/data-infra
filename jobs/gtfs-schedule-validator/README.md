@@ -1,3 +1,5 @@
+# DEPRECATED in favor of `download_parse_and_validate_gtfs.py` DAG task (no longer run with PodOperator)
+
 # Wrapper for the MobilityData GTFS Schedule validator
 
 This image exists to faciliate a pod operator executing a Java JAR which validates
