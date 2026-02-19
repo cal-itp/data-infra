@@ -1,5 +1,5 @@
 description: "Download GTFS Schedule feeds as specified in Airtable"
-schedule_interval: "0 3 * * *"
+schedule_interval: null
 tags:
   - gtfs
   - airtable
@@ -10,8 +10,6 @@ default_args:
     catchup: False
     email_on_failure: True
     email_on_retry: False
-    retries: 1
-    retry_delay: !timedelta 'minutes: 2'
+    retries: 0
     concurrency: 50
-    #sla: !timedelta 'hours: 2'
 latest_only: True
