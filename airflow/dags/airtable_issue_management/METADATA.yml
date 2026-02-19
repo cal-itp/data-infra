@@ -1,5 +1,5 @@
 description: "Automate Airtable issue management workflows (TDQ)"
-schedule_interval: "0 5 * * 5"
+schedule_interval: "0 6 * * 5"
 tags:
   - airtable
   - tdq
