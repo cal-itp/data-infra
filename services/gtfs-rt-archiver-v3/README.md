@@ -9,7 +9,7 @@ This is the third iteration of our [GTFS Realtime (RT)](https://gtfs.org/realtim
 The full archiver application is composed of three pieces:
 
 1. A ticker pod that creates fetch tasks every 20 seconds, based on the latest download configurations
-   - Configurations are fetched from GCS and cached for 5 minutes; they are generated upstream by [generate_gtfs_download_configs](../../airflow/dags/airtable_loader_v2/generate_gtfs_download_configs.py)
+   - Configurations are fetched from GCS and cached for 5 minutes; they are generated upstream by [download_parse_and_validate_gtfs](../../airflow/dags/download_parse_and_validate_gtfs.py)
    - Fetches are enqueued as Huey tasks
 2. A Redis instance holding the Huey queue
    - We deploy a single instance per environment namespace
