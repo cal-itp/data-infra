@@ -53,12 +53,12 @@ class NTDXLSXToJSONLOperator(BaseOperator):
         self._gcs_hook = None
         self.type: str = type
         self.year: str = year
-        self.tab_name = tab_name
-        self.source_bucket = source_bucket
-        self.source_path = source_path
-        self.destination_bucket = destination_bucket
-        self.destination_path = destination_path
-        self.gcp_conn_id = gcp_conn_id
+        self.tab_name: str = tab_name
+        self.source_bucket: str = source_bucket
+        self.source_path: str = source_path
+        self.destination_bucket: str = destination_bucket
+        self.destination_path: str = destination_path
+        self.gcp_conn_id: str = gcp_conn_id
 
     def gcs_hook(self) -> GCSHook:
         return GCSHook(gcp_conn_id=self.gcp_conn_id)
