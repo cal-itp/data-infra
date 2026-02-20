@@ -83,8 +83,4 @@ SELECT
   gtfs_dataset_name,
   new_end_date
 FROM final_filtered_issues;
-utreach_status,
-  gtfs_dataset_name,
-  new_end_date
-FROM final_filtered_issues;
 """
