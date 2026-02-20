@@ -66,8 +66,8 @@ NTD_PRODUCTS = [
 
 with DAG(
     dag_id="download_and_parse_ntd_xlsx",
-    # Every day at midnight
-    schedule="0 0 * * *",
+    # 10am UTC every Monday
+    schedule="0 10 * * 1",
     start_date=datetime(2025, 11, 1),
     catchup=False,
     tags=["ntd"],
