@@ -109,7 +109,7 @@ class GTSFValidatorVersion:
             "filename": "gtfs-validator-5.0.0-cli.jar",
         },
         {
-            "version_date": pendulum.datetime(2026, 2, 17),
+            "version_date": pendulum.datetime(2026, 2, 23),
             "number": "7.1.0",
             "filename": "gtfs-validator-7.1.0-cli.jar",
         },
