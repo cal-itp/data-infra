@@ -13,3 +13,106 @@ hive_options:
   mode: AUTO
   require_partition_filter: false
   source_uri_prefix: "operating_and_capital_funding_time_series/historical/operating_state/"
+schema_fields:
+  - name: dt
+    type: DATE
+  - name: execution_ts
+    type: TIMESTAMP
+  - name: _1991
+    type: BIGNUMERIC
+  - name: _1992
+    type: BIGNUMERIC
+  - name: _1993
+    type: BIGNUMERIC
+  - name: _1994
+    type: BIGNUMERIC
+  - name: _1995
+    type: BIGNUMERIC
+  - name: _1996
+    type: BIGNUMERIC
+  - name: _1997
+    type: BIGNUMERIC
+  - name: _1998
+    type: BIGNUMERIC
+  - name: _1999
+    type: BIGNUMERIC
+  - name: _2000
+    type: BIGNUMERIC
+  - name: _2001
+    type: BIGNUMERIC
+  - name: _2002
+    type: BIGNUMERIC
+  - name: _2003
+    type: BIGNUMERIC
+  - name: _2004
+    type: BIGNUMERIC
+  - name: _2005
+    type: BIGNUMERIC
+  - name: _2006
+    type: BIGNUMERIC
+  - name: _2007
+    type: BIGNUMERIC
+  - name: _2008
+    type: BIGNUMERIC
+  - name: _2009
+    type: BIGNUMERIC
+  - name: _2010
+    type: BIGNUMERIC
+  - name: _2011
+    type: BIGNUMERIC
+  - name: _2012
+    type: BIGNUMERIC
+  - name: _2013
+    type: BIGNUMERIC
+  - name: _2014
+    type: BIGNUMERIC
+  - name: _2015
+    type: BIGNUMERIC
+  - name: _2016
+    type: BIGNUMERIC
+  - name: _2017
+    type: BIGNUMERIC
+  - name: _2018
+    type: BIGNUMERIC
+  - name: _2019
+    type: BIGNUMERIC
+  - name: _2020
+    type: BIGNUMERIC
+  - name: _2021
+    type: BIGNUMERIC
+  - name: _2022
+    type: BIGNUMERIC
+  - name: _2023
+    type: BIGNUMERIC
+  - name: _2024
+    type: BIGNUMERIC
+  - name: _2024_status
+    type: STRING
+  - name: agency_name
+    type: STRING
+  - name: agency_status
+    type: STRING
+  - name: census_year
+    type: INTEGER
+  - name: city
+    type: STRING
+  - name: last_report_year
+    type: INTEGER
+  - name: legacy_ntd_id
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
+  - name: primary_uza_name
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: reporting_module
+    type: STRING
+  - name: state
+    type: STRING
+  - name: uace_code
+    type: NUMERIC
+  - name: uza_area_sq_miles
+    type: NUMERIC
+  - name: uza_population
+    type: NUMERIC

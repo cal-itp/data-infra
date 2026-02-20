@@ -65,9 +65,10 @@ class BigQueryRowCleaner:
     def clean(self) -> dict:
         columns = {}
         for key, value in self.row.items():
-            columns[BigQueryKeyCleaner(key).clean()] = BigQueryValueCleaner(
-                value
-            ).clean()
+            if value is not None and value != "":
+                columns[BigQueryKeyCleaner(key).clean()] = BigQueryValueCleaner(
+                    value
+                ).clean()
         return columns
 
 
