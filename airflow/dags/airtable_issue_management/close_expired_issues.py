@@ -148,7 +148,7 @@ def close_expired_issues(**kwargs):
             table_rows += (
                 f"<tr><td>{r['issue_number']}</td>"
                 f"<td>{r['gtfs_dataset_name']}</td>"
-                f"<td>{r['status']}</td></tr>"
+                f"<td>{r['status']}</td>"
                 f"<td>{r['new_end_date']}</td></tr>"
             )
 
@@ -176,7 +176,7 @@ def close_expired_issues(**kwargs):
         """
 
         recipients = [
-            "farhad.salemi@dot.ca.gov",
+            "airtable-issue-alerts@dot.ca.gov",
         ]
 
         try:
