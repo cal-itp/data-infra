@@ -1,4 +1,4 @@
-description: "Automate Airtable issue management workflows (TDQ)"
+description: "Automate Airtable issue management workflows (TDQ) "
 schedule_interval: "0 6 * * 5"
 tags:
   - airtable
