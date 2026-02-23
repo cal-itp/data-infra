@@ -17,7 +17,7 @@ Secrets must be tagged with `gtfs_schedule: true` to be loaded and are reference
 
 ## Running from the command line
 
-To download the GTFS schedule data manually you can also run from the command line using `poetry run python download_schedule_feeds.py`.
+To download the GTFS schedule data manually you can also run from the command line using `uv run python download_schedule_feeds.py`.
 
 > [!IMPORTANT]
 > This command should be executed after the scheduled DAG runs but before noon Pacific Time to be a part of the regular GTFS Feed.
@@ -47,14 +47,14 @@ To execute the command, follow these steps:
     To run on Staging, the full command should looks like this:
 
     ```bash
-    $ GOOGLE_CLOUD_PROJECT=cal-itp-data-infra-staging CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG="gs://calitp-staging-gtfs-download-config" CALITP_BUCKET__GTFS_SCHEDULE_RAW="gs://calitp-staging-gtfs-schedule-raw-v2" poetry run python download_schedule_feeds.py
+    $ GOOGLE_CLOUD_PROJECT=cal-itp-data-infra-staging CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG="gs://calitp-staging-gtfs-download-config" CALITP_BUCKET__GTFS_SCHEDULE_RAW="gs://calitp-staging-gtfs-schedule-raw-v2" uv run python download_schedule_feeds.py
     ```
 
 
     To run on Production, the full command should looks like this:
 
     ```bash
-    $ GOOGLE_CLOUD_PROJECT=cal-itp-data-infra CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG="gs://calitp-gtfs-download-config" CALITP_BUCKET__GTFS_SCHEDULE_RAW="gs://calitp-gtfs-schedule-raw-v2" poetry run python download_schedule_feeds.py
+    $ GOOGLE_CLOUD_PROJECT=cal-itp-data-infra CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG="gs://calitp-gtfs-download-config" CALITP_BUCKET__GTFS_SCHEDULE_RAW="gs://calitp-gtfs-schedule-raw-v2" uv run python download_schedule_feeds.py
     ```
 
 4. Check the timestamp of the result files.
