@@ -17,11 +17,11 @@ By the end of this tutorial, you'll understand:
 
 ## What is the Payments Data Ecosystem?
 
-The Cal-ITP payments data ecosystem processes contactless payment data for transit agencies across California. When a rider taps their credit card, phone, or smartwatch on a validator:
+The Cal-ITP payments data ecosystem ingests, processes, and utilizes contactless payment data for transit agencies across California. When a rider taps their credit card, phone, or smartwatch on a validator:
 
 1. The validator sends the tap to the fare collection processor (Littlepay or Enghouse, depending on who the agency has contracted)
 2. Littlepay or Enghouse calculates the fare and processes the payment through a payment processor (Elavon)
-3. Both vendors provide data files to Cal-ITP
+3. These relevant vendors provide data files to Cal-ITP, depending on who the agency has contracted
 4. Our data pipeline ingests, transforms, reconciles, and presents this data to agencies
 
 ## Step 1: Explore the System Components
@@ -42,7 +42,7 @@ Let's walk through each component:
 - Receives tap events from validators
 - Calculates fares (flat fare or variable fare based on distance/zones)
 - Manages fare capping, different fare products, benefits, and customer accounts
-- Provides data durectly to our GCS buckets
+- Provides data directly to our GCS buckets via SFTP server
 
 **Elavon** - A payment processor (currently used by all agencies)
 
@@ -77,8 +77,8 @@ Navigate to the GCP Composer/ Airflow UI (link in your onboarding docs) and find
 
 Open the GCP Console and explore these buckets:
 
-- `calitp-littlepay-raw` - Raw Littlepay data files
-- `calitp-littlepay-parsed` - Parsed Littlepay JSONL files
+- `calitp-payments-littlepay-raw-v3` - Raw Littlepay data files
+- `calitp-payments-littlepay-parsed-v3` - Parsed Littlepay JSONL files
 - `calitp-enghouse-raw` - Raw Enghouse data files
 - `calitp-elavon-raw` - Raw Elavon data files
 - `calitp-elavon-parsed` - Parsed Elavon JSONL files
@@ -109,8 +109,7 @@ Let's trace how a single tap becomes a dashboard metric. This example follows a 
 A rider taps their card on an MST bus. Within minutes:
 
 - Littlepay receives the tap event
-- Littlepay publishes data in daily batches to their S3 bucket
-- The tap data is written to MST's S3 bucket across multiple table types (device_transactions, micropayments, settlements, etc.)
+- Littlepay publishes data in daily batches to their S3 bucket, written across multiple table types (device_transactions, micropayments, settlements, etc.)
 
 ### 2.2 Sync DAG Runs
 
@@ -118,7 +117,7 @@ Every hour, the `sync_littlepay_v3` DAG runs:
 
 ```
 1. Connects to Littlepay's S3 using agency-specific AWS credentials
-2. Downloads new files to our GCS bucket calitp-littlepay-raw
+2. Downloads new files to our GCS bucket `calitp-payments-littlepay-raw-v3`
 3. Partitions by timestamp and agency
 ```
 
@@ -132,9 +131,9 @@ Check the DAG in Airflow:
 Shortly after, the `parse_littlepay_v3` DAG runs:
 
 ```
-1. Reads raw files from calitp-littlepay-raw
+1. Reads raw files from `calitp-payments-littlepay-raw-v3`
 2. Converts to gzipped JSONL format
-3. Writes to calitp-littlepay-parsed
+3. Writes to `calitp-payments-littlepay-parsed-v3`
 ```
 
 ### 2.4 External Tables (One-Time Setup)
@@ -168,7 +167,7 @@ Agencies view their dashboard:
 ```
 1. Metabase connects using agency-specific service account
 2. Row-level security ensures they only see their data
-3. Dashboard queries fct_payments_rides_v2 or other mart table as appropriate
+3. Dashboard queries `fct_payments_rides_v2` or other mart table as appropriate
 4. Metrics update with the new transaction
 ```
 
@@ -195,10 +194,10 @@ SELECT
   DATETIME_DIFF(CURRENT_DATETIME(), MAX(transaction_date_time_pacific), HOUR) as hours_since_latest
 FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`
 GROUP BY participant_id
-ORDER BY latest_transaction DESC;
+ORDER BY latest_transaction DESC
 ```
 
-You should see recent transactions (within the last 24 hours) for active agencies.
+You should see recent transactions for active agencies. Smaller agencies may not have frequent transactions, so delayed transactions may not necessarily represent data quality issues.
 
 ### 3.3 Check Metabase Dashboards
 
@@ -255,7 +254,7 @@ Now that you understand the basics:
 
 1. **Learn the data flow in detail**: Continue to [Understanding the Data Flow](02-understanding-data-flow.md)
 2. **Try onboarding an agency**: Work through [Your First Agency Onboarding](03-first-agency-onboarding.md)
-3. **Understand the architecture**: Read [Payments Data Ecosystem Overview](../explanation/ecosystem-overview.md)
+3. **Explore the how-to guides**: Check out the [How-To Guides](../how-to/) for specific tasks
 
 ## Common Questions
 
