@@ -47,11 +47,12 @@ Practical guides for accomplishing specific tasks. Use these when you need to ge
    - [Onboard a New Littlepay Agency](how-to/onboard-littlepay-agency.md)
    - [Onboard a New Enghouse Agency](how-to/onboard-enghouse-agency.md)
    - [Onboard a New Elavon Agency](how-to/onboard-elavon-agency.md)
-3. Follow [Create Agency Metabase Dashboards](how-to/create-metabase-dashboards.md)
+3. [Update Row Access Policies](update-row-access-policies.md)
+4. Follow [Create Agency Metabase Dashboards](how-to/create-metabase-dashboards.md)
 
 ### For Troubleshooting
 1. Check [Troubleshoot Data Sync Issues](how-to/troubleshoot-sync-issues.md)
-2. Review the [Airflow DAGs Overview](../../airflow/dags/README.md)
+2. Review the [Airflow DAGs Overview](../../../airflow/dags/README.md)
 3. Consult the [Warehouse Models](../../../warehouse/models/mart/payments/)
 
 ## System Components
