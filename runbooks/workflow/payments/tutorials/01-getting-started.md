@@ -259,13 +259,13 @@ Now that you understand the basics:
 ## Common Questions
 
 **Q: How often does data update?**\
-A: Sync DAGs run hourly for Littlepay, Enghouse data is delivered directly to GCS, and dbt transformations run daily (with some running more frequently).
+A: Sync DAGs run hourly for Littlepay, Enghouse data is delivered directly to GCS daily, Elavon data syncs daily, and dbt transformations run daily.
 
 **Q: Why do we have both fare collection data (Littlepay/Enghouse) and payment processor data (Elavon)?**\
 A: Fare collection vendors handle tap events and fare calculation; Elavon handles actual payment processing. We need both for complete visibility into the payments data ecosystem.
 
 **Q: What's the difference between Littlepay and Enghouse?**\
-A: Both are fare collection processors, but agencies contract with one or the other. They have different data schemas and delivery mechanisms (Littlepay uses S3, Enghouse uses GCS).
+A: Both are fare collection processors, but agencies contract with one or the other. They have different data schemas and delivery mechanisms (Littlepay uses S3, Enghouse uses SFTP, Elavon uses SFTP).
 
 **Q: Can I query the data directly?**\
 A: Yes! Use BigQuery to query `mart_payments` tables. Be aware of row-level security - you may need to be added to the `DOT_DDS_Data_Pipeline_and_Warehouse_Users` GCP group.
