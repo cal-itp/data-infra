@@ -16,20 +16,20 @@ graph TB
     A --> B2[Enghouse Validator]
     B --> C[Littlepay S3 Bucket]
     B2 --> C2[Enghouse Direct to GCS]
-    D[Payment Processed] --> E[Elavon SFTP Server]
+    D[Payment Processed\ (Received from Littlepay or Elavon)] --> E[Elavon SFTP Server]
     
     C --> F[sync_littlepay_v3 DAG]
     C2 --> H2[GCS: calitp-enghouse-raw]
     E --> G[sync_elavon DAG]
     
-    F --> H[GCS: calitp-littlepay-raw]
+    F --> H[GCS: calitp-payments-littlepay-raw-v3]
     G --> I[GCS: calitp-elavon-raw]
     
     H --> J[parse_littlepay_v3 DAG]
     H2 --> J2[No parse needed]
     I --> K[parse_elavon DAG]
     
-    J --> L[GCS: calitp-littlepay-parsed]
+    J --> L[GCS: calitp-payments-littlepay-parsed-v3]
     J2 --> L2[Data already in GCS]
     K --> M[GCS: calitp-elavon-parsed]
     
@@ -48,18 +48,21 @@ graph TB
 
 ### Littlepay Data Structure
 
-Littlepay provides data through their AWS S3 buckets, with one bucket per agency (called an "instance" in our configs, or "participant" in the data).
+Littlepay provides data through their AWS S3 buckets, with one bucket per agency (called an `instance` or `participant_id` in the configs and data).
 
 **Key Tables Provided:**
 
-- `device_transactions` - Every tap event (tap on, tap off)
-- `micropayments` - Calculated fares for each trip
-- `micropayment_adjustments` - Fare caps and discounts applied
-- `aggregations` - Grouped micropayments ready for settlement
-- `settlements` - Actual money transfers
-- `customer_funding_source` - Payment methods (cards, phones)
+- `authorisations` - Authorisations represent the communication with the acquirer that is not a settlement
+- `customer-funding-sources` - Customer funding sources are cards (physical or digital) which are stored for payment processing
+- `device-transactions` - Device transactions represent a 'tap' of a customer identifier, such as a credit card or phone, on a physical device
+- `device-transaction-purchases` - Device transaction purchases represent purchase data related to the tap completed by the customer's purchase
+- `micropayments` - A micropayment represents a debit or credit that is made against the customer's funding source for a trip
+- `micropayment-adjustments` - A micropayment adjustment represents a micropayment that is either eligible or has qualified to be adjusted by a product
+- `micropayment-device-transactions` - Micropayment device transactions is the link between micropayments and device-transactions which can be one or multiple
 - `products` - Fare products (day passes, fare caps, etc.)
-- `terminal_device_transactions` - Terminal-specific transaction data
+- `refunds` - Refunds may be requested by a merchant customer for a given debit micropayment; for example, providing a refund for a trip
+- `settlements` - A settlement represents the amount of money to be cleared by the acquirer from the customers funding source
+- `terminal-device-transactions` - Terminal device transactions represent the information received from the devices, each row of data represents a communication with the device
 
 **File Format (Littlepay S3):**
 
@@ -95,9 +98,9 @@ Enghouse provides data directly to our GCS buckets via SFTP server (no intermedi
 
 **Key Tables Provided:**
 
-- `taps` - Tap events (similar to Littlepay's device_transactions)
-- `transactions` - Transaction/fare data (similar to Littlepay's micropayments)
-- `pay_windows` - Payment window data
+- `taps` - These are individual “transactions” made by the passenger, meaning each tap of a card on the terminal. Each token (card) can have one or more taps on a given day. (Similar to Littlepay's device-transactions)
+- `transactions` - These are authorization operations that are to the Acquirer in connection with each card (similar to Littlepay's micropayments)
+- `pay_windows` - payment windows that open with the first tap and close at midnight, one payment window can contain multiple taps, each token (card) has only one payment window per day
 - `ticket_results` - Ticket/fare product results
 
 **File Format (Enghouse GCS Raw):**
@@ -115,9 +118,9 @@ Elavon provides data through an SFTP server with a single shared directory for a
 **Data Provided:**
 
 - Single file containing all transaction types, differentiated by `batch_type`:
+  - 'A' = Adjustment transactions
   - 'B' = Billing transactions
   - 'C' = Chargeback transactions
-  - 'A' = Adjustment transactions
   - 'D' = Deposit transactions
 
 **File Format (Elavon Raw):**
@@ -168,7 +171,7 @@ Files are pipe-separated text files inside zip archives, with all agencies' data
 
 4. **Partitioning**
 
-   - Partitions by instance, filename, and sync timestamp
+   - Partitions by instance, filename, and sync timestamp (structurally efficient)
    - Allows tracking when data was synced
    - Enables historical replay if needed
 
@@ -206,6 +209,7 @@ gs://calitp-payments-littlepay-raw-v3/device-transactions/
    - Each run creates a complete snapshot
    - Allows point-in-time recovery
    - Files remain zipped at this stage
+   - We should explore making this more efficient (not downloading entire history) in future
 
 **Example File Path:**
 
@@ -236,7 +240,7 @@ Parsing converts vendor formats to BigQuery-compatible formats with minimal tran
 
 1. **Read Raw CSV**
 
-   - Reads CSV from `calitp-littlepay-raw`
+   - Reads CSV from `calitp-payments-littlepay-raw-v3`
    - Uses pandas for parsing
 
 2. **Minimal Transformations**
@@ -251,15 +255,15 @@ Parsing converts vendor formats to BigQuery-compatible formats with minimal tran
    - Convert each row to JSON object
    - Write one JSON object per line
    - Gzip the output
-   - Upload to `gs://calitp-littlepay-parsed/`
+   - Upload to `gs://calitp-payments-littlepay-parsed-v3/`
 
 **Example Transformation:**
 
 CSV Input:
 
-```csv
-littlepay_transaction_id,transaction_time,participant_id,charge_amount
-abc123,2024-01-15 10:30:00,mst,2.50
+```psv
+littlepay_transaction_id|transaction_time|participant_id|charge_amount
+abc123|2024-01-15 10:30:00|mst,2.50
 ```
 
 JSONL Output (gzipped):
@@ -288,7 +292,7 @@ JSONL Output (gzipped):
 
 3. **Filter by Agency**
 
-   - Identifies agency using organization name field
+   - Identifies agency using `customer_name` field
    - Separates mixed data into agency-specific files
 
 4. **Write JSONL**
@@ -331,35 +335,34 @@ JSONL Output (gzipped):
 ## Part 5: dbt Transformations - Business Logic
 
 **DAG:** `dbt_daily`\
-**Schedule:** Daily (some models run more frequently)\
+**Schedule:** Daily\
 **Code:** `warehouse/models/`
 
 ### Staging Layer
 
-**Location:** `warehouse/models/staging/`\
+**Location:** `warehouse/models/staging/payments/`\
 **Purpose:** Light cleaning and standardization
 
-**Example: `stg_littlepay__device_transactions`**
+**Example: `stg_littlepay__device_transactions_v3`**
 
 - Casts data types correctly
 - Renames columns to standard naming conventions
 - Adds surrogate keys
-- Filters out test data
+- Filters out test data, duplicates
 - **Still one row per source row**
 
 ```sql
 SELECT
   littlepay_transaction_id,
-  CAST(transaction_time AS TIMESTAMP) AS transaction_time,
+  transaction_date_time_pacific,
   participant_id,
   -- ... more columns
-FROM {{ source('external_littlepay', 'device_transactions') }}
-WHERE participant_id != 'test-account'
+FROM `cal-itp-data-infra.staging.stg_littlepay__device_transactions_v3`
 ```
 
 ### Intermediate Layer
 
-**Location:** `warehouse/models/intermediate/`\
+**Location:** `warehouse/models/intermediate/payments/`\
 **Purpose:** Joins, enrichments, complex logic
 
 **Example: `int_payments__micropayments_adjustments_refunds_joined`**
@@ -370,7 +373,7 @@ WHERE participant_id != 'test-account'
 
 **Special Note: Littlepay Feed Version Union Tables**
 
-A unique aspect of the Littlepay pipeline is handling the migration from older feed versions to v3. Some agencies started on Littlepay's older feed versions (v1/v2) and migrated to v3, while newer agencies started directly on v3. Feed v1 has been deprecated and is no longer provided. All agencies now use feed v3.
+A unique aspect of the Littlepay pipeline is handling the migration from older feed versions to v3. Some agencies started on Littlepay's older feed versions (v1/v2) and migrated to v3, while newer agencies started directly on v3. Feeds v1/v2 have been deprecated and are no longer provided. All agencies now use feed v3, with prior data from prior feed versions unioned (as relevant).
 
 The intermediate layer includes union tables that combine historical v1 data with current v3 data:
 
@@ -379,7 +382,7 @@ The intermediate layer includes union tables that combine historical v1 data wit
 - `int_littlepay__unioned_settlements` - Unions v1 and v3 settlements
 - And similar for other Littlepay tables
 
-These union tables handle the cutover date logic (May 2025), using v1 data before migration and v3 data after, providing a seamless view of historical and current data for agencies that migrated.
+These union tables handle the cutover date logic (May 2025), using v1/v2 data before migration and v3 data after, providing a seamless view of historical and current data for agencies that migrated.
 
 ### Mart Layer
 
@@ -421,7 +424,7 @@ Applied in mart models via post-hook:
     post_hook="{{ payments_littlepay_row_access_policy() }}") }}
 ```
 
-This ensures agencies only see their own data when querying through their service account.
+This ensures agencies only see their own data when querying through their service account. You can find the dbt macros that power these policies in `warehouse/macros/create_row_access_policy.sql`.
 
 ## Part 6: Metabase Visualization
 
@@ -434,7 +437,7 @@ Each agency has:
 - Row-level security grants access based on:
   - `participant_id` for Littlepay agencies
   - `operator_id` for Enghouse agencies
-  - Organization name for Elavon data
+  - `organization_name` for Elavon data
 
 ### Dashboard Queries
 
@@ -442,10 +445,10 @@ The questions that comprise the dashboards query various tables in `mart_payment
 
 - `fct_payments_rides_v2` (Littlepay rides)
 - `fct_payments_rides_enghouse` (Enghouse rides)
-- `fct_payments_aggregations` (settlement data)
-- `fct_elavon__transactions` (payment processor data)
+- `fct_payments_settlements` (settlement data)
+- More
 
-Row-level security automatically filters to only the agency's data.
+Row-level security automatically filters queries to these tables to only the agency's data.
 
 ## Part 7: Hands-On Exercise
 
@@ -459,12 +462,12 @@ In BigQuery, run:
 SELECT 
   littlepay_transaction_id,
   participant_id,
-  transaction_time,
+  transaction_date_time_pacific,
   charge_amount
 FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`
 WHERE participant_id = 'mst'
-ORDER BY transaction_time DESC
-LIMIT 1;
+ORDER BY transaction_date_time_pacific DESC
+LIMIT 1
 ```
 
 Note the `littlepay_transaction_id` (e.g., `abc123xyz`).
@@ -474,7 +477,7 @@ Note the `littlepay_transaction_id` (e.g., `abc123xyz`).
 ```sql
 SELECT *
 FROM `cal-itp-data-infra.staging.stg_littlepay__device_transactions_v3`
-WHERE littlepay_transaction_id = 'abc123xyz';
+WHERE littlepay_transaction_id = 'abc123xyz'
 ```
 
 Compare columns - notice the staging model has more raw fields.
@@ -483,8 +486,8 @@ Compare columns - notice the staging model has more raw fields.
 
 ```sql
 SELECT *
-FROM `cal-itp-data-infra.external_littlepay.device_transactions`
-WHERE littlepay_transaction_id = 'abc123xyz';
+FROM `cal-itp-data-infra.external_littlepay_v3.device_transactions`
+WHERE littlepay_transaction_id = 'abc123xyz'
 ```
 
 This queries the JSONL file directly from GCS.
@@ -493,7 +496,7 @@ This queries the JSONL file directly from GCS.
 
 In GCS Console:
 
-1. Navigate to `calitp-littlepay-parsed`
+1. Navigate to `calitp-payments-littlepay-parsed-v3`
 2. Browse to `mst/device_transactions/`
 3. Find the date partition matching your transaction
 4. Download and examine the JSONL.gz file
@@ -522,8 +525,8 @@ You now understand:
 ## Next Steps
 
 1. **Practice onboarding**: Try [Your First Agency Onboarding](03-first-agency-onboarding.md)
-2. **Deep dive on security**: Read [Data Security & Row-Level Access](../explanation/data-security.md)
-3. **Explore the code**: Review [dbt Models Reference](../reference/dbt-models.md)
+2. **Learn about security**: See [Update Row Access Policies](../how-to/update-row-access-policies.md) for how row-level security is implemented
+3. **Explore the code**: Check out the dbt models in `warehouse/models/mart/payments/` in the GitHub repository
 
 ## Common Questions
 
@@ -534,7 +537,7 @@ A: External tables preserve the raw data in GCS, allowing us to replay transform
 A: Sync preserves the exact vendor format. Parse converts to BigQuery-compatible format. This separation allows us to re-parse without re-syncing.
 
 **Q: How long does data take to appear in dashboards?**\
-A: Typically 2-3 hours: sync (hourly) → parse (hourly) → external tables (hourly) → dbt (daily, but some models run hourly).
+A: Data for all vendors should appear within 24 hours. Exact timing depends on when the data was published by a vendor, and the particular schedules for the sync/parse/and transform tasks.
 
 **Q: What if a file is corrupted?**\
 A: We can re-run the parse DAG for that specific partition without re-syncing from the vendor.
