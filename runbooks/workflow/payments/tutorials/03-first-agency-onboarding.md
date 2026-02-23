@@ -18,6 +18,8 @@ This tutorial guides you through onboarding a new agency to the payments ecosyst
 - [Onboard a New Littlepay Agency](../how-to/onboard-littlepay-agency.md)
 - [Onboard a New Enghouse Agency](../how-to/onboard-enghouse-agency.md)
 - [Onboard a New Elavon Agency](../how-to/onboard-elavon-agency.md)
+- [Onboard a New Elavon Agency](../how-to/onboard-elavon-agency.md)
+- [Update Row Access Policies](../how-to/update-row-access-policies.md)
 - [Create Agency Metabase Dashboards](../how-to/create-metabase-dashboards.md)
 
 ## Learning Scenario
@@ -25,7 +27,7 @@ This tutorial guides you through onboarding a new agency to the payments ecosyst
 You're onboarding **Demo Transit**, a small agency using:
 
 - **Littlepay** for fare collection (participant_id: `demo-transit`)
-- **Elavon** for payment processing (organization: `Demo Transit Authority`)
+- **Elavon** for payment processing (organization_name: `Demo Transit Authority`)
 
 ## The Onboarding Journey
 
@@ -40,11 +42,13 @@ You're onboarding **Demo Transit**, a small agency using:
 **Learning checkpoint:**
 
 - [ ] Do you have AWS credentials from Littlepay?
-- [ ] Do you know the participant_id/merchant_id?
+- [ ] Do you know the Littlepay participant_id?
 - [ ] Do you have the agency's GTFS dataset identifier?
-- [ ] Do you have Elavon organization name?
+- [ ] Do you have the agency's Organization identifier?
+- [ ] Do you have Elavon organization_name?
 
 **Reflection:** Why do we need the GTFS dataset identifier? (Answer: To link payments data with routes/stops for geographic analysis)
+**Reflection:** Why do we need the Organization identifier?? (Answer: To enrich payments data with information related to the specific entity)
 
 ______________________________________________________________________
 
@@ -63,7 +67,7 @@ ______________________________________________________________________
 
 **Learning checkpoint:**
 
-- [ ] Secret created with correct naming convention
+- [ ] Secret created with correct naming convention, strucuture, and values – based on what we received from Littlepay
 - [ ] Can retrieve secret value
 - [ ] Tested AWS access locally
 
@@ -81,15 +85,16 @@ ______________________________________________________________________
 - Infrastructure is reproducible
 - Changes are reviewed via PR
 - Prevents configuration drift
+- Changes are applied automatically upon merge via Github Actions
 
 **Follow:** [Onboard Littlepay Agency - Step 2](../how-to/onboard-littlepay-agency.md#step-2-create-service-account)
 
 **Learning checkpoint:**
 
-- [ ] Service account created via Terraform
+- [ ] Service account created via Terraform (Github Action was successful, service account visible in GCP)
 - [ ] BigQuery user role granted
-- [ ] Service account key downloaded
-- [ ] Key stored securely for later Metabase setup
+- [ ] A service account key json file is generated and available in GCP in `IAM & Admin/Service Accounts/`
+- [ ] Key json can be downloaded, stored securely, and added to Metabase for later Database Connection setup
 
 **Reflection:** Why does each agency need their own service account? (Answer: Row-level security - ensures agencies only see their own data)
 
@@ -109,12 +114,12 @@ ______________________________________________________________________
 
 **Learning checkpoint:**
 
-- [ ] Sync YAML created with correct secret name
-- [ ] Parse YAML created with matching tables
-- [ ] Entity mapping row added with correct source_record_ids
+- [ ] Sync YAML created with correct instance, source bucket, and secret name
+- [ ] Parse YAML created with correct instance value
+- [ ] Entity mapping row added with correct GTFS Dataset and Organization source record IDs
 - [ ] All changes committed and PR created
 
-**Reflection:** Why do we need entity mapping? (Answer: Links Littlepay participant_id to GTFS datasets and Elavon organization name for cross-vendor reconciliation)
+**Reflection:** Why do we need entity mapping? (Answer: Links Littlepay participant_id to the correct GTFS dataset, Organization information enrichment, and Elavon organization name for cross-vendor reconciliation and data enrichment)
 
 ______________________________________________________________________
 
@@ -133,7 +138,7 @@ ______________________________________________________________________
 **Learning checkpoint:**
 
 - [ ] Added to Littlepay policy macro
-- [ ] Added to Elavon policy macro (if applicable)
+- [ ] Added to Elavon policy macro
 - [ ] Service account email matches exactly
 - [ ] Filter values match data exactly (case-sensitive!)
 
@@ -147,7 +152,7 @@ ______________________________________________________________________
 
 **Key learning:** Data flows through multiple stages:
 
-1. Raw (GCS) → 2. Parsed (GCS) → 3. External tables (BigQuery) → 4. Staging (dbt) → 5. Mart (dbt)
+1. Raw (GCS) → 2. Parsed (GCS) → 3. External tables (BigQuery) → 4. Staging (dbt) → 5. Intermediate (dbt, if needed) → 6. Mart (dbt)
 
 Each stage must complete before the next can succeed.
 
@@ -162,7 +167,7 @@ Each stage must complete before the next can succeed.
 - [ ] Mart tables have data after dbt runs
 - [ ] Row-level security works (tested with service account)
 
-**Reflection:** Why do we have both external tables AND dbt staging models? (Answer: External tables make raw data queryable; staging models add light transformations and standardization)
+**Reflection:** Why do we have both external tables AND dbt staging models? (Answer: External tables make raw data queryable; staging models add cleaning, light transformations, and standardization)
 
 ______________________________________________________________________
 
@@ -173,21 +178,23 @@ ______________________________________________________________________
 **Key learning:** Metabase setup involves:
 
 1. Database connection (using service account)
-2. Group (for user management)
+2. User Group (for user management)
 3. Collection (for organizing dashboards)
-4. Permissions (who can see what)
-5. Dashboard (duplicated and reconfigured)
+4. Permissions (who can see what - applied to user groups and downstream databases and collections)
+5. Dashboard (duplicated and reconfigured - Littlepay agency dashboards are duplicated for Littlepay agencies, Enghouse agency dashboards are duplicated for Enghouse agencies)
+
+To test that row-level security is working in Metabase, work with a Metabase admin to configure a test user for yourself (this can be your usual email adress, with `+test` added before the `@`), and add that test user to user group you are testing. When you log in as this user, you should only be able to see what the agency should see.
 
 **Follow:** [Create Agency Metabase Dashboards](../how-to/create-metabase-dashboards.md)
 
 **Learning checkpoint:**
 
-- [ ] Database connection created with service account
+- [ ] Database connection created with service account json file
 - [ ] Group created for agency users
 - [ ] Collection created for agency dashboards
 - [ ] Permissions set correctly
 - [ ] Dashboard duplicated and reconfigured
-- [ ] Agency users can access dashboard
+- [ ] Agency users and members of the internal payment team can access dashboard
 
 **Reflection:** Why do we duplicate dashboards instead of sharing one? (Answer: Each agency needs their own database connection with row-level security; shared dashboards would require complex filtering)
 
@@ -219,27 +226,21 @@ By completing this tutorial, you now understand:
 
 **3. Security is built-in, not added later**
 
-- Service accounts created via Terraform
+- Service accounts created via Terraform upon PR merge
 - Credentials stored in Secret Manager
 - Row-level security applied via dbt
-- Metabase uses service accounts, not user credentials
-
-**4. Documentation is your friend**
-
-- How-to guides have the detailed steps
-- Tutorials explain the "why"
-- Reference docs explain the "what"
+- Metabase uses service accounts to ensure security
 
 ## Common Pitfalls to Avoid
 
 **❌ Wrong secret name format**
 
-- Use: `LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY`
+- Use: `LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY_FEED_V3`
 - Not: `littlepay-aws-demo-transit`
 
 **❌ Forgetting entity mapping**
 
-- Without it, payments won't link to GTFS routes/stops
+- Without it, payments won't link to GTFS routes/stops and organization information
 
 **❌ Not waiting for dbt to run**
 
@@ -268,7 +269,7 @@ Use this for real onboarding:
 - [ ] Gather all prerequisites
 - [ ] Store credentials in Secret Manager
 - [ ] Create service account via Terraform
-- [ ] Download service account key
+- [ ] Generate service account key json file to add to Metabase database connection
 - [ ] Create sync configuration
 - [ ] Create parse configuration
 - [ ] Add entity mapping
