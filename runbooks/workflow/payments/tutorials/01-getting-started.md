@@ -222,7 +222,10 @@ Bookmark these resources:
 
 - [data-infra GitHub](https://github.com/cal-itp/data-infra)
 - Airflow DAGs: `airflow/dags/sync_littlepay_v3/`, `airflow/dags/parse_littlepay_v3/`, etc.
-- dbt models: `warehouse/models/mart/payments/`
+- dbt models:
+  - `warehouse/models/staging/payments/`
+  - `warehouse/models/intermediate/payments/`
+  - `warehouse/models/mart/payments/`
 
 ### GCP Resources
 
@@ -259,7 +262,7 @@ Now that you understand the basics:
 ## Common Questions
 
 **Q: How often does data update?**\
-A: Sync DAGs run hourly for Littlepay, Enghouse data is delivered directly to GCS daily, Elavon data syncs daily, and dbt transformations run daily.
+A: Sync DAGs run hourly for Littlepay, Enghouse data is delivered directly to GCS daily, Elavon data syncs daily, and dbt transformations run daily. For dats feeds that also have parse tasks (currently Littlepay and Elavon), data will not update until they also run.
 
 **Q: Why do we have both fare collection data (Littlepay/Enghouse) and payment processor data (Elavon)?**\
 A: Fare collection vendors handle tap events and fare calculation; Elavon handles actual payment processing. We need both for complete visibility into the payments data ecosystem.
