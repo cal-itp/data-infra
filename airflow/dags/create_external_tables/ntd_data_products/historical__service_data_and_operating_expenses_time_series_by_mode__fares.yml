@@ -13,3 +13,60 @@ hive_options:
   mode: AUTO
   require_partition_filter: false
   source_uri_prefix: "service_data_and_operating_expenses_time_series_by_mode/historical/fares/"
+schema_fields:
+  - name: dt
+    type: DATE
+  - name: execution_ts
+    type: TIMESTAMP
+  - name: _2015
+    type: BIGNUMERIC
+  - name: _2016
+    type: BIGNUMERIC
+  - name: _2017
+    type: BIGNUMERIC
+  - name: _2018
+    type: BIGNUMERIC
+  - name: _2019
+    type: BIGNUMERIC
+  - name: _2020
+    type: BIGNUMERIC
+  - name: _2021
+    type: BIGNUMERIC
+  - name: _2022
+    type: BIGNUMERIC
+  - name: _2023
+    type: BIGNUMERIC
+  - name: _2024
+    type: BIGNUMERIC
+  - name: agency_name
+    type: STRING
+  - name: agency_status
+    type: STRING
+  - name: census_year
+    type: STRING
+  - name: city
+    type: STRING
+  - name: last_report_year
+    type: INTEGER
+  - name: mode
+    type: STRING
+  - name: mode_status
+    type: STRING
+  - name: ntd_id
+    type: NUMERIC
+  - name: primary_uza_name
+    type: STRING
+  - name: reporter_type
+    type: STRING
+  - name: reporting_module
+    type: STRING
+  - name: state
+    type: STRING
+  - name: type_of_service
+    type: STRING
+  - name: uace_code
+    type: NUMERIC
+  - name: uza_area_sq_miles
+    type: NUMERIC
+  - name: uza_population
+    type: INTEGER

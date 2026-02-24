@@ -13,3 +13,40 @@ hive_options:
   mode: AUTO
   require_partition_filter: false
   source_uri_prefix: "operating_and_capital_funding_time_series/historical/summary_total/"
+schema_fields:
+  - name: dt
+    type: DATE
+  - name: execution_ts
+    type: TIMESTAMP
+  - name: federal
+    type: STRING
+  - name: local
+    type: STRING
+  - name: national_total
+    type: STRING
+  - name: other
+    type: STRING
+  - name: state
+    type: STRING
+  - name: unnamed__0
+    type: STRING
+  - name: unnamed__11
+    type: STRING
+  - name: unnamed__12
+    type: STRING
+  - name: unnamed__14
+    type: STRING
+  - name: unnamed__15
+    type: STRING
+  - name: unnamed__2
+    type: STRING
+  - name: unnamed__3
+    type: STRING
+  - name: unnamed__5
+    type: STRING
+  - name: unnamed__6
+    type: STRING
+  - name: unnamed__8
+    type: STRING
+  - name: unnamed__9
+    type: STRING

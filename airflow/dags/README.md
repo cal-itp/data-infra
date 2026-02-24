@@ -8,7 +8,7 @@
 |  3:00 AM    | 7 PM<br>previous day | 8 PM<br>previous day | [download_parse_and_validate_gtfs](#download_parse_and_validate_gtfs)                                                            | Every Day  |
 |  4:00 AM    | 8 PM<br>previous day | 9 PM<br>previous day | [scrape_state_geoportal](./scrape_state_geoportal)                                                                               | 1st Day of the month |
 |  9:00 AM    | 1:00 AM              | 2:00 AM              | [sync_ntd_data_api](./sync_ntd_data_api)                                                                                         | Wednesdays |
-| 10:00 AM    | 2:00 AM              | 3:00 AM              | [ntd_report_from_blackcat](./ntd_report_from_blackcat)<br>[sync_ntd_data_xlsx](./sync_ntd_data_xlsx)                             | Mondays    |
+| 10:00 AM    | 2:00 AM              | 3:00 AM              | [ntd_report_from_blackcat](./ntd_report_from_blackcat)<br>[download_and_parse_ntd_xlsx](#download_and_parse_ntd_xlsx)<br>[sync_ntd_data_xlsx](./sync_ntd_data_xlsx)| Mondays    |
 | 11:00 AM    | 3:00 AM              | 4:00 AM              | [create_external_tables](./create_external_tables)                                                                               | Every Day  |
 |             | Every Hour           |                      | [sync_littlepay_v3](./sync_littlepay_v3)                                                                                         | Every Day  |
 |             | Every<br>Hour:30 min                       || [parse_littlepay_v3](./parse_littlepay_v3)                                                                                       | Every Day  |
@@ -31,6 +31,16 @@
 ## dbt_manual
 
    Runs specific dbt models as needed. It needs to be triggered manually.
+
+
+## download_and_parse_ntd_xlsx
+
+> [!NOTE]
+> This DAG replaces [sync_ntd_data_xlsx](./sync_ntd_data_xlsx)
+
+   This DAG downloads NTD excel files (xslx) from `Federal Transit Administration` website and converts into BigQuery-readable gzipped JSONL files.
+
+   The `create_external_tables` DAG reads these jsonl files and creates external tables in the Cal-ITP data warehouse (BigQuery) and `dbt_all` and `dbt_manual` DAGs updates all downstream models.
 
 
 ## download_parse_and_validate_gtfs
@@ -77,7 +87,6 @@
       + Uploads summary results for each dataset to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_RAW}/gtfs_download_configs/dt={DATE}/ts={UTC_TIMESTAMP}/{base64_url}.jsonl`.
            The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
            To visualize the raw data from these files, you can query **external_gtfs_schedule.download_outcomes** or **mart_gtfs_audit.dim_gtfs_schedule_download_outcomes** in BigQuery.
-
 
 
 ### 3. Validates files
@@ -171,3 +180,12 @@
 ## publish_gtfs
 
    This DAG orchestrates the publishing of data from the Cal-ITP data warehouse to the California Open Data Portal. Failures in this job may require coordination with the central data portal team if there is an issue with CKAN itself.
+
+
+## Testing DAGs
+
+   To run and test DAGs use [Airflow Staging](https://23aa69a214bb410fba28ad96dd552748-dot-us-west2.composer.byoid.googleusercontent.com/home) or [composer-local-dev](https://github.com/cal-itp/data-infra/tree/main/airflow#local-development) to run locally.
+
+### Automated Tests
+
+   Each operator and hook file have pytest under `airflow/tests/` folder. Go to [running-automated-tests](https://github.com/cal-itp/data-infra/tree/main/airflow#running-automated-tests) for more information.
