@@ -107,6 +107,8 @@ git push origin <your-branch>
 
 Create a pull request, get it reviewed, and merge.
 
+**Example PR:** <!-- TODO: Add link to example PR for Elavon row access policy -->
+
 ## Step 3: Verify Data Access
 
 After the PR is merged and dbt models are rebuilt, verify the agency can access their Elavon data.
