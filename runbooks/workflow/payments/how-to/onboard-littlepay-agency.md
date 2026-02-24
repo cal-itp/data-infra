@@ -8,8 +8,6 @@
 
 This guide walks you through onboarding a new transit agency that uses Littlepay for contactless fare collection. You'll configure data syncing, parsing, and access controls.
 
-> **Note:** This is adapted from the original documentation with enhancements. Some content is taken from [Littlepay's documentation](https://docs.littlepay.io/data/faq/) (credentials in Vaultwarden).
-
 ## Before You Start
 
 ### Information Needed
@@ -439,7 +437,7 @@ After completing Littlepay onboarding:
 
 1. **Set up Metabase dashboards:** Follow [Create Agency Metabase Dashboards](create-metabase-dashboards.md)
 2. **Onboard Elavon (if applicable):** Follow [Onboard a New Elavon Agency](onboard-elavon-agency.md)
-3. **Set up monitoring:** Follow [Monitor Pipeline Health](monitor-pipeline-health.md)
+3. **Monitor the pipeline:** Use [Troubleshoot Data Sync Issues](troubleshoot-sync-issues.md) for ongoing monitoring
 
 ## Troubleshooting
 
@@ -492,8 +490,7 @@ After completing Littlepay onboarding:
 - [Create Agency Metabase Dashboards](create-metabase-dashboards.md)
 - [Rotate Littlepay AWS Keys](rotate-littlepay-keys.md)
 - [Troubleshoot Data Sync Issues](troubleshoot-sync-issues.md)
-- [Data Security & Row-Level Access](../explanation/data-security.md)
-- [Littlepay Data Schema](../reference/littlepay-schema.md)
+- [Update Row Access Policies](update-row-access-policies.md) - For understanding row-level security implementation
 
 ______________________________________________________________________
 

@@ -18,7 +18,6 @@ This tutorial guides you through onboarding a new agency to the payments ecosyst
 - [Onboard a New Littlepay Agency](../how-to/onboard-littlepay-agency.md)
 - [Onboard a New Enghouse Agency](../how-to/onboard-enghouse-agency.md)
 - [Onboard a New Elavon Agency](../how-to/onboard-elavon-agency.md)
-- [Onboard a New Elavon Agency](../how-to/onboard-elavon-agency.md)
 - [Update Row Access Policies](../how-to/update-row-access-policies.md)
 - [Create Agency Metabase Dashboards](../how-to/create-metabase-dashboards.md)
 
