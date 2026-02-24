@@ -116,6 +116,8 @@ git push origin onboard-<agency-name>-payments
 
 Create a pull request, get it reviewed, and merge.
 
+**Example PR:** <!-- TODO: Add link to example PR for Enghouse service account creation -->
+
 ### 2.3 Download Service Account Key
 
 After the PR is merged and Terraform runs:
@@ -182,6 +184,8 @@ git push origin onboard-<agency-name>-payments
 
 Update your PR or create a new one.
 
+**Example PR:** <!-- TODO: Add link to example PR for Enghouse entity mapping -->
+
 ## Step 4: Configure Row-Level Security
 
 Row access policies ensure agencies only see their own data.
@@ -243,6 +247,8 @@ git push origin onboard-<agency-name>-payments
 ```
 
 Update your PR, get it reviewed, and merge.
+
+**Example PR:** <!-- TODO: Add link to example PR for Enghouse row access policies -->
 
 ## Step 5: Verify Data Pipeline
 
@@ -397,9 +403,8 @@ Follow the [Create Agency Metabase Dashboards](create-metabase-dashboards.md) gu
 
 - [Create Agency Metabase Dashboards](create-metabase-dashboards.md)
 - [Onboard a New Littlepay Agency](onboard-littlepay-agency.md) (for comparison)
-- [Update Row Access Policies](update-row-access-policies.md)
-- [Data Security & Row-Level Access](../explanation/data-security.md)
-- [Enghouse Data Schema](../reference/enghouse-schema.md) (to be created)
+- [Update Row Access Policies](update-row-access-policies.md) - For understanding row-level security implementation
+- [Troubleshoot Data Sync Issues](troubleshoot-sync-issues.md)
 
 ______________________________________________________________________
 
