@@ -298,7 +298,8 @@ models:
         description: '{{ doc("lp_customer_id") }}'
       - name: funding_source_id
         description: '{{ doc("lp_funding_source_id") }}'
-      - name: settlement_type
+      - &settlement_type
+        name: settlement_type
         description: |
           Type of settlement that occurred. Possible values are `DEBIT` or `CREDIT`.
           If refunding a micropayment that has already been settled, the value will be `CREDIT`.
@@ -322,7 +323,8 @@ models:
         description: '{{ doc("lp_acquirer") }}'
       - name: acquirer_response_rrn
         description: '{{ doc("lp_acquirer_response_rrn") }}'
-      - name: settlement_status
+      - &settlement_status
+        name: settlement_status
         description: '{{ doc("lp_settlement_status") }}'
       - name: request_created_timestamp_utc
         description: '{{ doc("lp_request_created_timestamp_utc") }}'
@@ -824,3 +826,30 @@ models:
       - name: end_of_month_date_pacific
       - name: end_of_month_date_utc
       - name: _content_hash
+  - name: fct_payments_settlements_reconciliation_littlepay
+    description: >
+      Elavon and Littlepay data joined at the settlement_requested_date + retrieval_reference_number level.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          severity: warn
+          combination_of_columns:
+            - rrn
+            - requested_for_settlement_date
+    columns:
+      - *participant_id
+      - name: rrn
+        description: Littlepay retrieval_reference_number
+      - name: requested_for_settlement_date
+        description: Date (in America/Los_Angeles time zone) that settlement was requested on Littlepay side.
+      - *settlement_type
+      - *settlement_status
+      - name: requested_for_settlement_amount
+        description: Total amount requested in Littlepay settlements on this date for this RRN.
+      - name: elavon_purch_id
+        description: purch_id from Elavon.
+      - name: elavon_amount
+        description: Amount in Elavon transaction.
+      - name: elavon_settlement_date
+        description: Settlement date from Elavon.
+      - name: elavon_payment_date
+        description: Payment date from Elavon.
