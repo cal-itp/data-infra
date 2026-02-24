@@ -3,7 +3,7 @@ resource "google_sql_database_instance" "metabase" {
   database_version = "POSTGRES_18"
   region           = "us-west2"
   settings {
-    tier = "db-g1-small"
+    tier = "db-f1-micro"
   }
   deletion_protection = true
 }
