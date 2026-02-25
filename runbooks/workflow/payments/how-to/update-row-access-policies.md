@@ -178,54 +178,15 @@ After merging, the row access policies are applied when dbt models rebuild:
 
 ## Step 5: Verify Policy Works
 
-### 5.1 Test with Service Account
+### 5.1 Test in Metabase
 
-```bash
-# Authenticate as the agency's service account
-gcloud auth activate-service-account \
-  --key-file=<agency-slug>-payments-key.json
+1. Log into Metabase as a test user
 
-# For Littlepay agencies
-bq query --use_legacy_sql=false \
-  "SELECT participant_id, COUNT(*) 
-   FROM \`cal-itp-data-infra.mart_payments.fct_payments_rides_v2\` 
-   GROUP BY participant_id"
+- For more information on creating a test user account, see section `7.2 Test as Agency User` in [Create Agency Metabase Dashboards](create-metabase-dashboards.md))
 
-# For Enghouse agencies
-bq query --use_legacy_sql=false \
-  "SELECT enghouse_operator_id, COUNT(*) 
-   FROM \`cal-itp-data-infra.mart_payments.fct_payments_rides_enghouse\` 
-   GROUP BY enghouse_operator_id"
-
-# For Elavon data
-bq query --use_legacy_sql=false \
-  "SELECT organization_name, COUNT(*) 
-   FROM \`cal-itp-data-infra.mart_payments.fct_elavon__transactions\` 
-   GROUP BY organization_name"
-```
-
-**Expected result:** Only the agency's own data should be returned.
-
-### 5.2 Test in Metabase
-
-1. Log into Metabase as agency user
-2. Try to create a new question
-3. Query the payments tables
-4. Verify only agency's data is visible
-
-## Granting Access to Multiple Service Accounts
-
-If multiple service accounts need access to the same data:
-
-```sql
-SELECT
-  'mst' AS filter_value,
-  [
-    'serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com',
-    'serviceAccount:mst-analytics-user@cal-itp-data-infra.iam.gserviceaccount.com',
-    'serviceAccount:calitp-metabase@cal-itp-data-infra.iam.gserviceaccount.com'
-  ] AS principals
-```
+2. Log in as your agency test user
+3. Navigate to the agency's database, and open a mart table
+4. You should only see data rows for that agency
 
 ## Granting Cal-ITP Team Access
 
@@ -304,30 +265,7 @@ Cal-ITP team members already have access to all payments data through the workfo
 
 ## Policy Reference
 
-### Current Policy Structure
-
-```sql
--- Littlepay policy
-{% macro payments_littlepay_row_access_policy() %}
-SELECT filter_value, principals
-FROM (
-  SELECT '<participant-id>' AS filter_value, ['serviceAccount:...'] AS principals
-  UNION ALL
-  SELECT '<participant-id>' AS filter_value, ['serviceAccount:...'] AS principals
-  -- ... more entries
-)
-{% endmacro %}
-
--- Enghouse policy
-{% macro payments_enghouse_row_access_policy() %}
--- Similar structure with operator_id
-{% endmacro %}
-
--- Elavon policy
-{% macro payments_elavon_row_access_policy() %}
--- Similar structure with organization_name
-{% endmacro %}
-```
+...
 
 ### Tables with Row Access Policies
 
