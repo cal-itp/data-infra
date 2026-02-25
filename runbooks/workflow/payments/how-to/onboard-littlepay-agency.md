@@ -415,6 +415,16 @@ After completing Littlepay onboarding:
 - Check dbt models were rebuilt after policy change
 - Confirm service account email matches exactly in policy
 
+### Data Schema Differences
+
+**Symptoms:** Queries fail or return unexpected results
+
+**Solutions:**
+
+- Review Littlepay schema documentation
+- Compare with Enghouse schema to understand differences
+- Consult `warehouse/models/mart/payments/littlepay/` and other upstream models for transformations etc.
+
 ## Key Differences: Enghouse vs. Littlepay
 
 | Aspect             | Littlepay                                              | Enghouse                                        |
