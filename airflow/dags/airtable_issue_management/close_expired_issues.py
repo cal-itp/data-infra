@@ -18,18 +18,13 @@ from pyairtable import Api
 
 
 def load_query() -> str:
-    """
-    Load QUERY from query.py (same folder) without relying on Python package imports.
+    query_path = Path(__file__).parent / "queries" / "close_expired_issues_query.py"
 
-    This avoids Composer DAG parsing issues where relative imports fail and repo paths
-    are not on PYTHONPATH.
-    """
-    query_path = Path(__file__).with_name("query.py")
     if not query_path.exists():
-        raise FileNotFoundError(f"query.py not found at {query_path}")
+        raise FileNotFoundError(f"Query file not found at {query_path}")
 
     spec = importlib.util.spec_from_file_location(
-        "airtable_issue_management_query", query_path
+        "close_expired_issues_query", query_path
     )
     if spec is None or spec.loader is None:
         raise ImportError(f"Could not load module spec for {query_path}")
@@ -37,10 +32,12 @@ def load_query() -> str:
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
 
-    if not hasattr(module, "QUERY"):
-        raise AttributeError("query.py must define a variable named QUERY")
+    if not hasattr(module, "CLOSE_EXPIRED_ISSUES_SQL"):
+        raise AttributeError(
+            "close_expired_issues_query.py must define CLOSE_EXPIRED_ISSUES_SQL"
+        )
 
-    return module.QUERY
+    return module.CLOSE_EXPIRED_ISSUES_SQL
 
 
 def access_secret(project_id: str, secret_id: str, version: str = "latest") -> str:
