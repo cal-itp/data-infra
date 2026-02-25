@@ -15,9 +15,10 @@ This guide walks you through onboarding a new transit agency that uses Littlepay
 Collect the following before starting:
 
 - [ ] Littlepay AWS access key (JSON format)
-- [ ] Merchant ID / participant ID (e.g., `mst`, `sbmtd`)
-- [ ] S3 bucket name (usually `littlepay-<merchant_id>`)
+- [ ] Participant ID (e.g., `mst`, `sbmtd`)
+- [ ] S3 bucket name from Littlepay
 - [ ] Agency's GTFS dataset `source_record_id` from `dim_gtfs_datasets` (where `_is_current` is TRUE)
+- [ ] Agency's Organization `source_record_id` from `dim_organizations`
 - [ ] Agency contact information for dashboard access
 
 ### Required Access
@@ -27,95 +28,68 @@ Verify you have:
 - [ ] GCP project `cal-itp-data-infra` access
 - [ ] Secret Manager admin permissions
 - [ ] GitHub write access to `cal-itp/data-infra`
-- [ ] Terraform apply permissions (for service account creation)
-- [ ] AWS CLI installed locally
+- [ ] AWS CLI installed locally (to view data in Littlepay's buckets, as necessary)
 
 ## Step 1: Store AWS Credentials
 
 ### 1.1 Receive Credentials from Littlepay
 
-Contact `support@littlepay.com` to request access to the agency's data feed. You'll receive an email with:
+Littlepay should reach out to their Cal-ITP contacts when an agency's credentials are available. The credentials should inclide:
 
-- Support ticket reference
-- AWS access key (JSON format)
-- Username (may differ from merchant_id)
+- UserName (different from participant_id)
+- AccessKeyId
+- SecretAccessKey
 
 Example credentials:
 
 ```json
 {
-  "AccessKeyId": "AKIAIOSFODNN7EXAMPLE",
-  "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-  "UserName": "agency-name-default"
+    "AccessKey": {
+        "UserName": "agency-automated",
+        "AccessKeyId": "AAA111BBBB222CCC333",
+        "Status": "Active",
+        "SecretAccessKey": "ghuq24jrbehgRG35Gerwg432DSFG",
+        "CreateDate": "manual"
+    }
 }
 ```
 
+You can use the above example when creating a new JSON key in Secret Manager, or use an existing key as the base template.
+
 ### 1.2 Create Secret in Secret Manager
 
-**Naming Convention:** `LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY`
+**Naming Convention:** `LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY_FEED_V3`
 
 - Use UPPERCASE
 - Replace hyphens with underscores in merchant_id
-- Example: `mst` → `LITTLEPAY_AWS_IAM_MST_ACCESS_KEY`
+- Example: `mst` → `LITTLEPAY_AWS_IAM_MST_ACCESS_KEY_FEED_V3`
 
 **Via GCP Console:**
 
 1. Navigate to [Secret Manager](https://console.cloud.google.com/security/secret-manager?project=cal-itp-data-infra)
 2. Click "Create Secret"
-3. Name: `LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY`
+3. Name: `LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY_FEED_V3`
 4. Secret value: Paste the entire JSON
 5. Click "Create Secret"
-
-**Via gcloud CLI:**
-
-```bash
-# Create the secret
-gcloud secrets create LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY \
-  --project=cal-itp-data-infra \
-  --replication-policy="automatic"
-
-# Add the secret value (replace with actual JSON)
-echo '{
-  "AccessKeyId": "...",
-  "SecretAccessKey": "...",
-  "UserName": "..."
-}' | gcloud secrets versions add LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY \
-  --project=cal-itp-data-infra \
-  --data-file=-
-```
 
 ### 1.3 Verify AWS Access
 
 Test the credentials locally:
 
 ```bash
-# Configure AWS CLI profile
-aws configure --profile <merchant_id>
+# Configure AWS CLI profile, UserName should be the same as in the AccessKey credentials above (different from participant_id!)
+aws configure --profile <Littlepay UserName>
 # Enter AccessKeyId when prompted
 # Enter SecretAccessKey when prompted
 # Region: us-west-2
 # Output format: json
 
-# Test access
-aws iam list-access-keys --user-name <username> --profile <merchant_id>
-
-# List S3 bucket contents
-aws s3 ls s3://littlepay-<merchant_id>/ --profile <merchant_id>
+# Test listing S3 bucket contents
+aws s3 ls s3://<littlepay-bucketname> --profile <Littlepay UserName>
 ```
 
 **Expected output:**
-
-```
-PRE device_transactions/
-PRE micropayments/
-PRE micropayment_adjustments/
-PRE aggregations/
-PRE settlements/
-PRE customer_funding_source/
-PRE products/
-```
-
-**Note:** The username may differ from merchant_id. Check error messages for the actual username if the command fails.
+You should see the contents of the bucket, a list of files and dates.
 
 ## Step 2: Create Service Account
 
