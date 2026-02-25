@@ -82,67 +82,75 @@ code warehouse/macros/create_row_access_policy.sql
 
 ### 2.2 Add Littlepay Policy Entry
 
-Find the `payments_littlepay_row_access_policy` macro and add:
+Find the `payments_littlepay_row_access_policy` macro and add a new entry, using previous entries as a template:
 
 ```sql
-UNION ALL
-SELECT
-  '<participant-id>' AS filter_value,
-  ['serviceAccount:<agency-slug>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
+{{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = '<participant-id>',
+    principals = ['serviceAccount:<agency>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
 ```
 
 **Example:**
 
 ```sql
-UNION ALL
-SELECT
-  'mst' AS filter_value,
-  ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
+{{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'mst',
+    principals = ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
 ```
 
 ### 2.3 Add Enghouse Policy Entry
 
-Find the `payments_enghouse_row_access_policy` macro and add:
+Find the `payments_enghouse_row_access_policy` macro and add a new entry, using previous entries as a template:
 
 ```sql
-UNION ALL
-SELECT
-  '<operator-id>' AS filter_value,
-  ['serviceAccount:<agency-slug>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '<operator-id>',
+    principals = ['serviceAccount:<agency>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
 ```
 
 **Example:**
 
 ```sql
-UNION ALL
-SELECT
-  '253' AS filter_value,
-  ['serviceAccount:ventura-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '253',
+    principals = ['serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
 ```
 
-**Note:** Operator ID should NOT have quotes in the macro (even though it's quoted in the CSV).
+**Note:** The `filter_value` should match exactly what appears in the Enghouse data.
 
 ### 2.4 Add Elavon Policy Entry
 
-Find the `payments_elavon_row_access_policy` macro and add:
+Find the `payments_elavon_row_access_policy` macro and add a new entry, using previous entries as a template:
 
 ```sql
-UNION ALL
-SELECT
-  '<Elavon Organization Name>' AS filter_value,
-  ['serviceAccount:<agency-slug>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = '<elavon-organization-name>',
+    principals = ['serviceAccount:<agency>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
 ```
 
 **Example:**
 
 ```sql
-UNION ALL
-SELECT
-  'Monterey-Salinas Transit' AS filter_value,
-  ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Monterey-Salinas Transit',
+    principals = ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
 ```
 
 **Critical:** Organization name must match EXACTLY (case-sensitive) as it appears in Elavon data.
+
+**Note:** By using `organization_name` here, as opposed to Elavon `customer_name`, we make the organization's Elavon transaction history available, as opposed to just the history for a single `customer_name` for those agencies who have changed customer names over time.
 
 ## Step 3: Verify Syntax
 
