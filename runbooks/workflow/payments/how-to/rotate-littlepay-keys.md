@@ -439,8 +439,6 @@ Consider creating a script to:
 
 - [Onboard a New Littlepay Agency](onboard-littlepay-agency.md)
 - [Troubleshoot Data Sync Issues](troubleshoot-sync-issues.md)
-- [Service Accounts & Permissions Reference](../reference/service-accounts.md)
-- [Data Security & Row-Level Access](../explanation/data-security.md)
 
 ## Key Rotation Checklist
 

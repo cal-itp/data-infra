@@ -163,40 +163,11 @@ Find the `payments_elavon_row_access_policy` macro and add a new entry, using pr
 - [ ] Square brackets around principals array
 - [ ] No trailing commas
 
-### 3.2 Example of Complete Entry
-
-```sql
-{% macro payments_littlepay_row_access_policy() %}
-SELECT
-  'mst' AS filter_value,
-  ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
-UNION ALL
-SELECT
-  'sbmtd' AS filter_value,
-  ['serviceAccount:sbmtd-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
-UNION ALL
-SELECT
-  'new-agency' AS filter_value,
-  ['serviceAccount:new-agency-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
-{% endmacro %}
-```
-
 ## Step 4: Commit and Deploy
 
-### 4.1 Commit Changes
+### 4.1 Merge Changes
 
-```bash
-git add warehouse/macros/create_row_access_policy.sql
-git commit -m "Add row access policy for <Agency Name>"
-git push origin update-row-access-<agency-name>
-```
-
-### 4.2 Create Pull Request
-
-1. Create PR in GitHub
-2. Request review from team member
-3. Wait for approval
-4. Merge to main
+Commit changes, create a pull request, got a review, and merge your PR.
 
 ### 4.3 Wait for dbt Rebuild
 
