@@ -264,6 +264,30 @@ seeds:
         tests:
           - not_null
 
+  - name: gtfs_schedule_validator_rule_details_v7_1_0
+    description: |
+      A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
+      This data was manually parsed from the contents of the RULES.md file in the v7.1.0 release of the validator,
+      sourced from: https://github.com/MobilityData/gtfs-validator/releases/tag/v7.1.0
+    config:
+      labels:
+        domain: seeds
+        dataset: gtfs_quality
+    columns:
+      - name: code
+        tests:
+          - not_null
+          - unique
+      - name: human_readable_description
+        tests:
+          - not_null
+      - name: version
+        tests:
+          - not_null
+      - name: severity
+        tests:
+          - not_null
+
   - name: _deprecated__ntd_agency_to_organization
     description: |
       *Deprecated May 2023 in favor of the `organizations.raw_ntd_id` column entered directly in Airtable.*
