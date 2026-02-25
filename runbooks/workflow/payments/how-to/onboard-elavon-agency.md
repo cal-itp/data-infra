@@ -6,7 +6,7 @@
 
 ## Overview
 
-All Cal-ITP partner agencies use Elavon as their payment processor. Elavon handles the actual credit/debit card transactions and settlements. This guide walks you through adding Elavon data access for a newly onboarded agency.
+All Cal-ITP partner agencies currently use Elavon as their payment processor. Elavon handles the actual credit/debit card transactions and settlements. This guide walks you through adding Elavon data access for a newly onboarded agency.
 
 **Important:** Elavon onboarding is typically done alongside Littlepay or Enghouse onboarding, as agencies need both fare collection AND payment processing data.
 
@@ -15,7 +15,7 @@ All Cal-ITP partner agencies use Elavon as their payment processor. Elavon handl
 ### Prerequisites
 
 - [ ] Agency has been onboarded to Littlepay OR Enghouse
-- [ ] Service account created (e.g., `<agency-slug>-payments-user`)
+- [ ] Service account created
 - [ ] Elavon organization name confirmed
 - [ ] Agency appears in Elavon's shared data feed
 
@@ -24,181 +24,165 @@ All Cal-ITP partner agencies use Elavon as their payment processor. Elavon handl
 **Key Characteristics:**
 
 - **Shared Data Feed:** All agencies' data comes through a single SFTP server
-- **Organization-Based Filtering:** Data is filtered by organization name
-- **No Per-Agency Credentials:** Unlike Littlepay, there are no agency-specific access keys
-- **Sync Method:** Data is synced via `sync_elavon` DAG to GCS
+- **Organization-Based Filtering:** Data is filtered by `cutomer_name` in raw data, and either `customer_name` or `organization_name` in enriched mart tables downstream
+- **No Per-Agency Credentials:** Unlike Littlepay, there are no agency-specific access credentials needed
+- **Sync Method:** Data is synced via `sync_elavon` DAG to Elavon raw data bucket in GCS
+- **Parse Method:** Data is parsed via `parse_elavon` DAG from raw data bucket to parsed data bucket
 
-**Elavon Data Tables:**
+**Elavon Raw Data Tables:**
 
-- Transactions
-- Settlements
-- Deposits
-- Chargebacks
-- Billing
+- `external_elavon.transactions`
+  - One table for all batch types (Adjustments, Billing, Chargebacks, Deposits)
+
+**Elavon Staging Data Table:**
+
+- `stg_elavon__transactions`
+  - One table for all batch types (Adjustments, Billing, Chargebacks, Deposits)
+
+**Elavon Intermediate Data Tables:**
+These tables break out the batch types into individual tables
+
+- `int_elavon__adjustment_transactions`
+- `int_elavon__billing_transactions`
+- `int_elavon__chargeback_transactions`
+- `int_elavon__deposit_transactions`
+
+**Elavon Mart Data Tables:**
+This table only contains Billing and Deposit batch types
+
+- `fct_elavon__transactions`
+
+**Revenue and Settlement Questions in Metabase**:
+
+Elavon data is used for:
+
+- Total Revenue
+- Settlement tracking
+- Refund monitoring
+- Merchant service charge tracking
 
 ## Step 1: Verify Agency in Elavon Data
 
-First, confirm the agency's organization name appears in Elavon data.
+First, confirm the agency's `customer_name` appears in raw Elavon data.
 
 ### 1.1 Check Elavon Data
 
 ```sql
--- In BigQuery, check for the agency's organization name
-SELECT DISTINCT organization_name
+-- In BigQuery, check for the agency's customer name
+SELECT DISTINCT customer_name
 FROM `cal-itp-data-infra.external_elavon.transactions`
-WHERE organization_name LIKE '%<Agency Name>%'
-LIMIT 10;
 ```
 
-**Note the exact organization name** - it must match exactly for row-level security to work.
+**Note the exact customer name** - it must match exactly for entity mapping to work.
 
-### 1.2 Verify in Entity Mapping
+### 1.2 Verify in Entity Mapping, or Add if not Yet Populated
 
 The agency should already be in the entity mapping from Littlepay/Enghouse onboarding:
 
-```bash
-# Check the entity mapping file
-cat warehouse/seeds/payments_entity_mapping.csv | grep -i "<agency-name>"
-```
+`warehouse/seeds/payments_entity_mapping.csv` for Littlepay agencies, or `warehouse/seeds/payments_entity_mapping_enghouse.csv` for Enghouse agencies
 
-Or for Enghouse agencies:
+The Elavon `customer_name` should be in the 4th column. Add it if it is not already there.
 
-```bash
-cat warehouse/seeds/payments_entity_mapping_enghouse.csv | grep -i "<agency-name>"
-```
+## Step 2: Configure Row-Level Security
 
-The Elavon organization name should be in the 4th column.
-
-## Step 2: Update Row Access Policy
-
-Add the agency to the Elavon row access policy so their service account can access their data.
+Row access policies ensure agencies only see their own data when querying through their service account. These policies are applied via post-hook in the tables in the **mart** layer.
 
 ### 2.1 Edit Row Access Policy
 
 Edit `warehouse/macros/create_row_access_policy.sql`:
 
-Find the `payments_elavon_row_access_policy` macro and add a new entry:
-
-```sql
-UNION ALL
-SELECT
-  '<Elavon Organization Name>' AS filter_value,
-  ['serviceAccount:<agency-slug>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
-```
+Find the `payments_elavon_row_access_policy` macro and add a new entry, using previous entries as a template:
 
 **Example:**
 
 ```sql
-UNION ALL
-SELECT
-  'Monterey-Salinas Transit' AS filter_value,
-  ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'] AS principals
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = '<organization_name>',
+    principals = ['serviceAccount:agency-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
 ```
 
-**Critical:** The organization name must match EXACTLY as it appears in Elavon data (case-sensitive).
+**Critical:**
+
+- The entity mapping uses the agency `organization_name` to filter in the row access policy (not `customer_name`) which becomes available in the data via enrichment in the mart tables, which is powered by the entity mapping seed file.
+  - By using `organization_name` we are able to see the entire transaction history for agencies that have used different Elavon customer names over time.
+- The organization name must match EXACTLY as it appears in the mart table data (case-sensitive).
+- The service account name within `principals` must exactly match the name of the service account created during the Littlepay/Enghouse onboarding.
 
 ### 2.2 Commit Changes
 
-```bash
-git add warehouse/macros/create_row_access_policy.sql
-git commit -m "Add <Agency Name> Elavon row access policy"
-git push origin <your-branch>
-```
-
 Create a pull request, get it reviewed, and merge.
 
-**Example PR:** <!-- TODO: Add link to example PR for Elavon row access policy -->
+**Example PR:** \[#4696)(https://github.com/cal-itp/data-infra/pull/4696)\]
 
 ## Step 3: Verify Data Access
 
-After the PR is merged and dbt models are rebuilt, verify the agency can access their Elavon data.
+After all PRs are merged, actions have succeeded, and relevant DAGs have run, verify data flows through the pipeline.
 
-### 3.1 Check Elavon External Tables
+### 3.1 Verify Sync DAG
+
+After the data is expected to be made available from Elavon, and once the time of the next scheduled DAG run has passed:
+
+1. Navigate to the Airflow UI
+2. Find `sync_elavon` DAG, click into it
+3. Ensure that the most recent run shows as a green 'success'.
+
+### 3.2 Check Raw Data in GCS
+
+1. Navigate to Google Cloud Storage
+2. Select the bucket `calitp-elavon-raw`
+3. You should see at least one zip file within that directory, ex: `gs://calitp-elavon-raw/ts=2023-07-28T00:00:09.900973+00:00/010PR001618FUND20230131.zip`
+
+### 3.3 Verify Parse DAG
+
+Once the time of the next scheduled sync DAG run has passed, and the time of the next scheduled parse DAG run has passed:
+
+1. Navigate to the Airflow UI
+2. Find `parse_elavon` DAG, click into it
+3. Ensure that the most recent run shows as a green 'success'.
+
+### 3.4 Check Parsed Data in GCS
+
+1. Navigate to Google Cloud Storage
+2. Select the bucket `calitp-elavon-parsed`
+3. Select the directory `transactions/`
+4. Select the directory of the agency whose sync task you are verifying, ex: `instance=mst/`
+5. You should see recent date directories and zip files, ex: `calitp-elavon-parsed/transactions/dt=2023-07-29/execution_ts=2023-07-29T02:00:15.074963+00:00/transactions.jsonl.gz`
+
+### 3.5 Verify External Tables
+
+In BigQuery, query:
 
 ```sql
--- Verify data exists for the agency
-SELECT 
-  organization_name,
-  COUNT(*) as transaction_count,
-  MIN(transaction_date) as earliest,
-  MAX(transaction_date) as latest
+SELECT COUNT(*) as row_count
 FROM `cal-itp-data-infra.external_elavon.transactions`
-WHERE organization_name = '<Elavon Organization Name>'
-GROUP BY organization_name;
+WHERE customer_name = '<elavon-customer-name>'
 ```
 
-### 3.2 Check Staging Tables
+### 3.6 Verify dbt Transformations
+
+After the next scheduled run of the transform_warehouse DAG:
 
 ```sql
--- Check staging layer
+-- Check staging table
 SELECT COUNT(*) 
-FROM `cal-itp-data-infra.staging_elavon.transactions`
-WHERE organization_name = '<Elavon Organization Name>';
-```
+FROM `cal-itp-data-infra.staging.stg_elavon__transactions`
+WHERE customer_name = '<elavon-customer-name>'
 
-### 3.3 Check Mart Tables
-
-Elavon data appears in several mart tables:
-
-```sql
--- Check Elavon-specific mart table
-SELECT COUNT(*) 
+-- Check mart table
+SELECT 
+  COUNT(*) as total_transactions,
 FROM `cal-itp-data-infra.mart_payments.fct_elavon__transactions`
-WHERE organization_name = '<Elavon Organization Name>';
-
--- Check reconciliation table (joins Littlepay/Enghouse with Elavon)
-SELECT COUNT(*)
-FROM `cal-itp-data-infra.mart_payments.elavon_littlepay__transaction_reconciliation`
-WHERE elavon_organization_name = '<Elavon Organization Name>';
+WHERE customer_name = '<elavon-customer-name>'
 ```
 
-### 3.4 Verify Row-Level Security
+## Step 4: Next Steps
 
-Test that the service account can only access the agency's data.
+After completing Littlepay onboarding:
 
-**Note:** You should have generated a service account key JSON file during the Littlepay or Enghouse onboarding process. If you need to generate a new key:
-
-1. Navigate to [IAM & Admin/ Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts?project=cal-itp-data-infra)
-2. Click into the service account
-3. Navigate into the `Keys` section of the top menu
-4. Select `Add Key` --> `Create New Key` from the dropdown menu and select `JSON` as the format
-5. Download the key to a secure location locally
-
-Then test access:
-
-```bash
-# Authenticate as the service account
-gcloud auth activate-service-account \
-  --key-file=<agency-slug>-payments-key.json
-
-# Query should return only this agency's data
-bq query --use_legacy_sql=false \
-  "SELECT organization_name, COUNT(*) as count 
-   FROM \`cal-itp-data-infra.mart_payments.fct_elavon__transactions\` 
-   GROUP BY organization_name"
-
-# Should only show one organization_name (the agency's)
-```
-
-## Step 4: Update Metabase Dashboards
-
-If the agency has Metabase dashboards, they may include Elavon data for financial reconciliation.
-
-### 4.1 Revenue and Settlement Questions
-
-Elavon data is used for:
-
-- Total Revenue (from settlements)
-- Settlement tracking
-- Refund monitoring
-- Merchant service charge tracking
-
-### 4.2 Verify Dashboard Access
-
-1. Log into Metabase as the agency user
-2. Navigate to their payments dashboard
-3. Check that settlement and revenue metrics display correctly
-4. Verify no "permission denied" errors
+1. **Set up Metabase dashboards:** Follow [Create Agency Metabase Dashboards](create-metabase-dashboards.md)
+2. **Monitor the pipeline:** Use [Troubleshoot Data Sync Issues](troubleshoot-sync-issues.md) for ongoing monitoring
 
 ## Troubleshooting
 
@@ -208,11 +192,9 @@ Elavon data is used for:
 
 **Solutions:**
 
-- Verify organization name matches exactly (case-sensitive)
 - Check that agency is actually in Elavon's data feed
 - Confirm `sync_elavon` DAG is running successfully
 - Check that `parse_elavon` DAG completed
-- Verify external tables are pointing to correct GCS paths
 
 ### Row-Level Security Not Working
 
@@ -221,25 +203,9 @@ Elavon data is used for:
 **Solutions:**
 
 - Verify row access policy was added to macro
-- Check organization name matches exactly in policy
-- Confirm service account email matches exactly in policy
+- Verify row access policy post-hook exists at the top of the table SQL that you're trying to protect
 - Check dbt models were rebuilt after policy change
-- Test with correct service account credentials
-
-### Organization Name Mismatch
-
-**Symptoms:** Data exists but row access policy doesn't work
-
-**Solutions:**
-
-- Query Elavon data to get exact organization name:
-  ```sql
-  SELECT DISTINCT organization_name 
-  FROM `cal-itp-data-infra.external_elavon.transactions`
-  ORDER BY organization_name;
-  ```
-- Update row access policy with exact name
-- Update entity mapping if needed
+- Confirm service account email and `organization_name` filter match exactly in policy
 
 ### Data Reconciliation Issues
 
@@ -249,8 +215,7 @@ Elavon data is used for:
 
 - Check `elavon_littlepay__transaction_reconciliation` table
 - Verify entity mapping links correct organizations
-- Review settlement timing differences
-- Check for refunds or chargebacks
+- Review pipeline schedule timing for mismatches (this could happen if a DAG schedule was modified)
 
 ## Understanding Elavon Data Flow
 
@@ -271,13 +236,13 @@ graph LR
 
 ## Key Differences: Elavon vs. Littlepay/Enghouse
 
-| Aspect             | Littlepay/Enghouse            | Elavon                                         |
-| ------------------ | ----------------------------- | ---------------------------------------------- |
-| **Data Source**    | Per-agency S3 buckets or GCS  | Shared SFTP server                             |
-| **Identifier**     | participant_id / operator_id  | organization_name                              |
-| **Credentials**    | Per-agency AWS keys           | Shared SFTP credentials                        |
-| **Sync Frequency** | Hourly                        | Daily                                          |
-| **Data Type**      | Fare collection (taps, trips) | Payment processing (transactions, settlements) |
+| Aspect             | Littlepay/Enghouse                  | Elavon                                         |
+| ------------------ | ----------------------------------- | ---------------------------------------------- |
+| **Data Source**    | Per-agency S3 buckets or GCS        | Shared SFTP server                             |
+| **Identifier**     | participant_id / operator_id        | customer_name or organization_name             |
+| **Credentials**    | Per-agency AWS keys, no credentials | Shared SFTP credentials                        |
+| **Sync Frequency** | Hourly                              | Daily                                          |
+| **Data Type**      | Fare collection (taps, trips)       | Payment processing (transactions, settlements) |
 
 ## Related Documentation
 
@@ -286,18 +251,6 @@ graph LR
 - [Update Row Access Policies](update-row-access-policies.md)
 - [Create Agency Metabase Dashboards](create-metabase-dashboards.md)
 
-## Notes
-
-**Elavon Onboarding Checklist:**
-
-- [ ] Verify agency in Elavon data feed
-- [ ] Confirm exact organization name
-- [ ] Add to row access policy
-- [ ] Commit and merge changes
-- [ ] Wait for dbt rebuild
-- [ ] Verify data access in BigQuery
-- [ ] Test row-level security
-- [ ] Verify Metabase dashboard access
-- [ ] Document any issues
-
 ______________________________________________________________________
+
+**See Also:** [Tutorial: Your First Agency Onboarding](../tutorials/03-first-agency-onboarding.md) for general onboarding concepts

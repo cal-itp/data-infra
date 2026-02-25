@@ -188,7 +188,7 @@ Update your existing PR or create a new one. Get it reviewed and merged.
 
 ## Step 4: Configure Row-Level Security
 
-Row access policies ensure agencies only see their own data when querying through their service account.
+Row access policies ensure agencies only see their own data when querying through their service account. These policies are applied via post-hook in the tables in the **mart** layer.
 
 **Example PR:** In [#4658](https://github.com/cal-itp/data-infra/pull/4658/changes#diff-e32013136795892ab542f0571294fd65e723bc4085e41b5a52ac75d29e3503e4R207)
 
@@ -211,7 +211,7 @@ Find the `payments_enghouse_row_access_policy` macro and add a new entry, using 
 **Note:**
 
 - The Enghouse `operator_id` above must match what appears in the data, although you must add quotes around the ID to handle it as a string
-- The service account name within `principals` must match the name of the service account created in step 2.
+- The service account name within `principals` must exactly match the name of the service account created in step 2.
 
 ### 4.2 Add Elavon Row Access Policy
 
@@ -236,14 +236,13 @@ Update your PR, get it reviewed, and merge.
 
 ## Step 5: Verify Data Pipeline
 
-After all PRs are merged, verify data flows through the pipeline.
+After all PRs are merged, actions have succeeded, and relevant DAGs have run, verify data flows through the pipeline.
 
 ### 5.1 Verify External Tables
 
 In BigQuery, query:
 
 ```sql
--- In BigQuery
 SELECT COUNT(*) as row_count
 FROM `cal-itp-data-infra.external_enghouse.taps`
 WHERE operator_id = '<enghouse-operator-id>'
@@ -257,13 +256,13 @@ After the next scheduled run of the transform_warehouse DAG:
 -- Check staging table
 SELECT COUNT(*) 
 FROM `cal-itp-data-infra.staging.stg_enghouse__taps`
-WHERE operator_id = '<enghouse-operator-id>';
+WHERE operator_id = '<enghouse-operator-id>'
 
 -- Check mart table
 SELECT 
   COUNT(*) as total_transactions,
 FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_enghouse`
-WHERE operator_id = '<enghouse-operator-id>';
+WHERE operator_id = '<enghouse-operator-id>'
 ```
 
 ## Step 6: Next Steps
@@ -305,7 +304,7 @@ After completing Littlepay onboarding:
 
 - Verify row access policy was added to macro
 - Check operator_id is not quoted in entity mapping CSV (e.g., `'253'`), but is quoted in row access policy macro
-- Confirm service account email matches exactly in policy
+- Confirm service account email, filters match exactly in policy
 - Check dbt models were rebuilt after policy change
 
 ### Data Schema Differences

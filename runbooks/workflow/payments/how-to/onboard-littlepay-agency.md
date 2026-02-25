@@ -248,7 +248,7 @@ Update your existing PR or create a new one. Get it reviewed and merged.
 
 ## Step 5: Configure Row-Level Security
 
-Row access policies ensure agencies only see their own data when querying through their service account.
+Row access policies ensure agencies only see their own data when querying through their service account. These policies are applied via post-hook in the tables in the **mart** layer.
 
 **Example PR:** [#4376](https://github.com/cal-itp/data-infra/pull/4376)
 
@@ -271,7 +271,7 @@ Find the `payments_littlepay_row_access_policy` macro and add a new entry, using
 **Notes:**
 
 - The Littlepay `participant_id` above must match exactly what appears in the data
-- The service account name within `principals` must match the name of the service account created in step 2.
+- The service account name within `principals` must exactly match the name of the service account created in step 2.
 
 **Reference PR:** [#4376](https://github.com/cal-itp/data-infra/pull/4376)
 
@@ -300,7 +300,7 @@ Update your PR, get it reviewed, and merge.
 
 ## Step 6: Verify Data Pipeline
 
-After all PRs are merged, verify data flows through the pipeline.
+After all PRs are merged, actions have succeeded, and relevant DAGs have run, verify data flows through the pipeline.
 
 ### 6.1 Verify Sync DAG
 
@@ -339,7 +339,6 @@ Once the PR that contains your new sync task has been merged, the time of the ne
 In BigQuery, query:
 
 ```sql
--- In BigQuery
 SELECT COUNT(*) as row_count
 FROM `cal-itp-data-infra.external_littlepay_v3.device_transactions`
 WHERE participant_id = '<littlepay-participant-id>'
@@ -353,13 +352,13 @@ After the next scheduled run of the transform_warehouse DAG:
 -- Check staging table
 SELECT COUNT(*) 
 FROM `cal-itp-data-infra.staging.stg_littlepay__micropayments_v3`
-WHERE participant_id = '<littlepay-participant-id>';
+WHERE participant_id = '<littlepay-participant-id>'
 
 -- Check mart table
 SELECT 
   COUNT(*) as total_transactions,
 FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`
-WHERE participant_id = '<littlepay-participant-id>';
+WHERE participant_id = '<littlepay-participant-id>'
 ```
 
 ## Step 7: Next Steps
@@ -413,7 +412,7 @@ After completing Littlepay onboarding:
 - Verify row access policy was added to macro
 - Verify row access policy post-hook exists at the top of the table SQL that you're trying to protect
 - Check dbt models were rebuilt after policy change
-- Confirm service account email matches exactly in policy
+- Confirm service account email, filters match exactly in policy
 
 ### Data Schema Differences
 
