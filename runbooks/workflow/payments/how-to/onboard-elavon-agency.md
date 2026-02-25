@@ -154,7 +154,17 @@ WHERE elavon_organization_name = '<Elavon Organization Name>';
 
 ### 3.4 Verify Row-Level Security
 
-Test that the service account can only access the agency's data:
+Test that the service account can only access the agency's data.
+
+**Note:** You should have generated a service account key JSON file during the Littlepay or Enghouse onboarding process. If you need to generate a new key:
+
+1. Navigate to [IAM & Admin/ Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts?project=cal-itp-data-infra)
+2. Click into the service account
+3. Navigate into the `Keys` section of the top menu
+4. Select `Add Key` --> `Create New Key` from the dropdown menu and select `JSON` as the format
+5. Download the key to a secure location locally
+
+Then test access:
 
 ```bash
 # Authenticate as the service account
