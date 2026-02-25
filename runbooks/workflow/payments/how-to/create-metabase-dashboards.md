@@ -8,6 +8,13 @@
 
 This guide walks you through creating Metabase dashboards for an agency that has been onboarded to the payments ecosystem. You'll configure database connections, permissions, and duplicate/customize dashboards.
 
+Relevant Metabase Concepts:
+
+- Question - Individual visualizations
+- Dashboard - Made up of Question and text tiles
+- Collection - An agency-specific 'folder' within Metabase where agency Dashboards and Questions live.
+- Permissions Group - A layer of security created for each agency
+
 > **Note:** Complete the appropriate onboarding before starting this guide:
 >
 > - For fare collection: [Onboard a Littlepay Agency](onboard-littlepay-agency.md) OR [Onboard an Enghouse Agency](onboard-enghouse-agency.md)
