@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "gtfs-rt-archiver"
+name = "gtfs-rt-archiver-v3"
 version = "2024.3.27"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
@@ -24,14 +24,12 @@ backoff = "^2.1.2"
 sentry-sdk = "^1.9.8"
 calitp-data-infra = "2024.2.12.post1"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^5.2"
 black = "^24.3.0"
 snakeviz = "^2.1.1"
 types-requests = "^2.28.11"
 types-cachetools = "^5.2.1"
-
-[tool.poetry.group.dev.dependencies]
 mypy = "^1.0.1"
 
 [build-system]
