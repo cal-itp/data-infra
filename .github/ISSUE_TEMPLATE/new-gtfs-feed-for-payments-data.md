@@ -3,8 +3,8 @@ name: New GTFS Feed for Payments Data Agency
 about: Use this template to inform the data engineering team when an open-loop payments
   agency changes their GTFS feed
 title: New GTFS Feed - Payments Agency
-labels: ''
-assignees: ''
+labels: project-payments
+assignees: [charlie-costanzo, mrtopsyt]
 ---
 
 ## GTFS Feed Change Request
@@ -14,6 +14,8 @@ assignees: ''
 **NEW GTFS Feed Name**:
 
 ### Acceptance Criteria
+
+- The agency's new GTFS feed `source_record_id` from the `dim_gtfs_feeds` table has been substituted for the old `gtfs_dataset_source_record_id` in either `warehouse/seeds/payments_entity_mapping.csv` or `warehouse/seeds/payments_entity_mapping_enghouse.csv` (depending on which provider the agency uses)
 
 ### Notes
 
