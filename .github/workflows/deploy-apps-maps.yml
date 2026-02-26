@@ -16,6 +16,11 @@ on:
 jobs:
   build-apps-maps:
     runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+      issues: write
+
     steps:
     - uses: actions/checkout@v2
       with:
@@ -51,7 +56,6 @@ jobs:
       id: fc
       with:
         issue-number: ${{ github.event.number }}
-        comment-author: 'github-actions[bot]'
         body-includes: --embeddable-maps-calitp-org.netlify.app
 
     - uses: peter-evans/create-or-update-comment@v5
