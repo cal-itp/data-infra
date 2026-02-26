@@ -6,6 +6,7 @@ WITH filtered_issues AS (
     gtfs_dataset_source_record_id,
     gtfs_dataset_name,
     outreach_status,
+    service_name,
     issue__ AS issue_number
   FROM {{ ref('fct_transit_data_quality_issues') }}
   WHERE is_open = TRUE
@@ -82,5 +83,6 @@ SELECT
   issue_source_record_id,
   outreach_status,
   gtfs_dataset_name,
+  service_name,
   new_end_date
 FROM fct_close_expired_issues
