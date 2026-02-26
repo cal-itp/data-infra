@@ -19,7 +19,9 @@ assignees: [charlie-costanzo, mrtopsyt]
 
 ### Acceptance Criteria
 
-- The agency's new GTFS feed `source_record_id` from the `dim_gtfs_feeds` table has been substituted for the old `gtfs_dataset_source_record_id` in either `warehouse/seeds/payments_entity_mapping.csv` or `warehouse/seeds/payments_entity_mapping_enghouse.csv` (depending on which provider the agency uses)
+- The agency's new GTFS feed `source_record_id` from the `dim_gtfs_feeds` table has been substituted for the old `gtfs_dataset_source_record_id` in either of the following locations, depending on what vendor the agency uses:
+  - Littlepay agency: `warehouse/seeds/payments_entity_mapping.csv`, or
+  - Enghouse agency: `warehouse/seeds/payments_entity_mapping_enghouse.csv`
 
 ### Notes
 
