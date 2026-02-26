@@ -82,6 +82,7 @@ with DAG(
             select=[
                 "models/mart/gtfs_audit",
                 "+fct_schedule_feed_downloads",
+                "+fct_schedule_feed_files",
             ],
             test_behavior=None,
         ),
