@@ -943,6 +943,16 @@ models:
       are current-only this represents relationships between versioned service
       records and unversioned operating county geography records.
       Joins via this table can result in fanout.
+  - name: dim_transit_centers
+    description: TODO
+    columns:
+      - name: id
+      - name: agency_name
+      - name: facility_id
+      - name: facility_name
+      - name: facility_type
+      - name: ntd_id
+      - name: geometry
   - name: fct_transit_data_quality_issues
     description: TODO
     columns:
@@ -997,13 +1007,10 @@ models:
       - name: waiting_since
       - name: outreach_status
       - name: should_wait_until
-  - name: dim_transit_centers
-    description: TODO
+  - name: fct_close_expired_issues
     columns:
-      - name: id
-      - name: agency_name
-      - name: facility_id
-      - name: facility_name
-      - name: facility_type
-      - name: ntd_id
-      - name: geometry
+      - name: issue_number
+      - name: issue_source_record_id
+      - name: outreach_status
+      - name: gtfs_dataset_name
+      - name: new_end_date
