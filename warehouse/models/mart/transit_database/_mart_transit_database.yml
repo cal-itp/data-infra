@@ -1007,3 +1007,10 @@ models:
       - name: waiting_since
       - name: outreach_status
       - name: should_wait_until
+  - name: fct_close_expired_issues
+    columns:
+      - name: issue_number
+      - name: issue_source_record_id
+      - name: outreach_status
+      - name: gtfs_dataset_name
+      - name: new_end_date
