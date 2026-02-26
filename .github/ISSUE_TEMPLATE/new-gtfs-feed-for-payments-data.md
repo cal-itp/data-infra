@@ -13,7 +13,7 @@ assignees: [charlie-costanzo, mrtopsyt]
 
 - \[add agency name\]
 
-**NEW GTFS Feed Name**:
+**NEW GTFS Feed Name / Identifier**:
 
 - \[add feed name\]
 
