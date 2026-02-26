@@ -11,7 +11,11 @@ assignees: [charlie-costanzo, mrtopsyt]
 
 **Agency Name**:
 
+- \[add agency name\]
+
 **NEW GTFS Feed Name**:
+
+- \[add feed name\]
 
 ### Acceptance Criteria
 
