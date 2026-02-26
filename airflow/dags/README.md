@@ -47,7 +47,7 @@
 
 ### 1. Generates GTFS Config Files (datasets)
 
-  Runs [**BigQueryToDownloadConfigOperator**](airflow/plugins/operators/bigquery_to_download_config_operator.py) replacing [generate_gtfs_download_configs.py](airflow/dags/airtable_loader_v2/generate_gtfs_download_configs.py) and [storage.py](airflow/plugins/calitp_data_infra/storage.py).
+  Runs [**BigQueryToDownloadConfigOperator**](airflow/plugins/operators/bigquery_to_download_config_operator.py).
 
    - Downloads datasets from bigquery table `staging.int_gtfs_datasets`.
 
