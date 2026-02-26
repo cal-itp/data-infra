@@ -33,16 +33,17 @@ The macros are called as post-hooks in dbt model configurations. For example, se
 
 1. `payments_littlepay_row_access_policy` - For Littlepay agencies
 2. `payments_enghouse_row_access_policy` - For Enghouse agencies
-3. `payments_elavon_row_access_policy` - For Elavon data (all agencies)
+3. `payments_elavon_row_access_policy` - For Elavon data
 
 ## When to Update Policies
 
 Update row access policies when:
 
 - ✅ Onboarding a new agency
-- ✅ Creating a new service account for an existing agency
-- ✅ Changing an agency's identifier (participant_id, operator_id, organization_name)
-- ✅ Granting additional access to Cal-ITP team members
+- Infrequent:
+  - Creating a new service account for an existing agency
+  - Changing an agency's identifier (participant_id, operator_id, organization_name)
+  - Granting additional access to Cal-ITP team members
 
 ## Step 1: Identify the Correct Policy
 
@@ -64,25 +65,19 @@ Determine which policy (or policies) to update:
 
 - **Policy:** `payments_elavon_row_access_policy`
 - **Filter field:** `organization_name`
-- **Example value:** `'Monterey-Salinas Transit'`, `'SANTA BARBARA MTD'`
+- **Example value:** `'Monterey-Salinas Transit'`, `'Ventura County Transportation Commission'`
 
 ## Step 2: Add Entry to Policy
 
 ### 2.1 Open the Macro File
 
-```bash
-cd /path/to/data-infra
-git checkout main
-git pull
-git checkout -b update-row-access-<agency-name>
-
-# Open the file
-code warehouse/macros/create_row_access_policy.sql
-```
+Navigate to `warehouse/macros/create_row_access_policy.sql` and open the file.
 
 ### 2.2 Add Littlepay Policy Entry
 
 Find the `payments_littlepay_row_access_policy` macro and add a new entry, using previous entries as a template:
+
+**Example:**
 
 ```sql
 {{ create_row_access_policy(
@@ -92,19 +87,13 @@ Find the `payments_littlepay_row_access_policy` macro and add a new entry, using
 ) }};
 ```
 
-**Example:**
-
-```sql
-{{ create_row_access_policy(
-    filter_column = 'participant_id',
-    filter_value = 'mst',
-    principals = ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }};
-```
+**Note:** The `filter_value` should match exactly what appears in the Littlepay data.
 
 ### 2.3 Add Enghouse Policy Entry
 
 Find the `payments_enghouse_row_access_policy` macro and add a new entry, using previous entries as a template:
+
+**Example:**
 
 ```sql
 {{ create_row_access_policy(
@@ -114,21 +103,13 @@ Find the `payments_enghouse_row_access_policy` macro and add a new entry, using 
 ) }};
 ```
 
-**Example:**
-
-```sql
-{{ create_row_access_policy(
-    filter_column = 'operator_id',
-    filter_value = '253',
-    principals = ['serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }};
-```
-
 **Note:** The `filter_value` should match exactly what appears in the Enghouse data.
 
 ### 2.4 Add Elavon Policy Entry
 
 Find the `payments_elavon_row_access_policy` macro and add a new entry, using previous entries as a template:
+
+**Example:**
 
 ```sql
 {{ create_row_access_policy(
@@ -138,19 +119,7 @@ Find the `payments_elavon_row_access_policy` macro and add a new entry, using pr
 ) }};
 ```
 
-**Example:**
-
-```sql
-{{ create_row_access_policy(
-    filter_column = 'organization_name',
-    filter_value = 'Monterey-Salinas Transit',
-    principals = ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }};
-```
-
-**Critical:** Organization name must match EXACTLY (case-sensitive) as it appears in Elavon data.
-
-**Note:** By using `organization_name` here, as opposed to Elavon `customer_name`, we make the organization's Elavon transaction history available, as opposed to just the history for a single `customer_name` for those agencies who have changed customer names over time.
+**Note:** By using `organization_name` here, as opposed to Elavon `customer_name`, we make the organization's Elavon transaction history available, as opposed to just the history for a single `customer_name` for those agencies who have changed customer names over time. The `filter_value` should match exactly what appears in the Enghouse data.
 
 ## Step 3: Verify Syntax
 
@@ -158,10 +127,8 @@ Find the `payments_elavon_row_access_policy` macro and add a new entry, using pr
 
 - [ ] Service account email is correct
 - [ ] Filter value matches data exactly (case-sensitive)
-- [ ] UNION ALL is on its own line
-- [ ] Commas are in the right places
+- [ ] Commas, semicolons, brackets are in the right places
 - [ ] Square brackets around principals array
-- [ ] No trailing commas
 
 ## Step 4: Commit and Deploy
 
@@ -173,7 +140,7 @@ Commit changes, create a pull request, got a review, and merge your PR.
 
 After merging, the row access policies are applied when dbt models rebuild:
 
-- **Automatic:** Daily dbt run via `transform_warehouse` DAG
+- **Automatic:** Daily dbt run via DAG
 - **Manual:** Trigger dbt run in Airflow if needed
 
 ## Step 5: Verify Policy Works
@@ -184,13 +151,12 @@ After merging, the row access policies are applied when dbt models rebuild:
 
 - For more information on creating a test user account, see section `7.2 Test as Agency User` in [Create Agency Metabase Dashboards](create-metabase-dashboards.md))
 
-2. Log in as your agency test user
-3. Navigate to the agency's database, and open a mart table
-4. You should only see data rows for that agency
+2. Navigate to the agency's database, and open a mart table
+3. You should only see data rows for that agency
 
 ## Granting Cal-ITP Team Access
 
-Cal-ITP team members already have access to all payments data through the workforce pool group that's included in each policy macro:
+Cal-ITP team members who are added to the `DOT_DDS_Data_Pipeline_and_Warehouse_Users` workforce pool group have access to all payments data via the inclusion of the pool in the macros here:
 
 ```sql
 {{ create_row_access_policy(
@@ -229,8 +195,8 @@ Cal-ITP team members already have access to all payments data through the workfo
 
 - Verify service account has BigQuery user role
 - Check service account is listed in row access policy
-- Confirm policy was applied (check dbt logs)
-- Verify querying the correct table
+- Confirm correct policy was applied (check dbt logs)
+- Ensure the user is added to the user group pool (for internal users - if relevant)
 
 ### Filter Value Mismatch
 
@@ -238,23 +204,23 @@ Cal-ITP team members already have access to all payments data through the workfo
 
 **Solutions:**
 
-- Query the table to see actual values:
-  ```sql
-  SELECT DISTINCT participant_id 
-  FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`;
-  ```
+Query the table to see actual values:
+
+```sql
+SELECT DISTINCT participant_id 
+FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`;
+```
+
 - Update policy with exact value
 - Check for leading/trailing spaces
 - Verify case sensitivity
 
 ## Best Practices
 
-1. **Always test policies** before considering them complete
-2. **Use exact values** from the data (query first, then add policy)
-3. **Document changes** in commit messages
-4. **Review carefully** - security implications
-5. **Keep policies organized** - alphabetical order helps
-6. **Test with service account** - don't assume it works
+1. **Review carefully** - There are security implications here!
+2. **Always test policies** before considering them complete
+3. **Use exact values** from the data (query first, then add policy)
+4. **Document changes** in commit messages
 
 ## Related Documentation
 
@@ -262,18 +228,6 @@ Cal-ITP team members already have access to all payments data through the workfo
 - [Onboard a New Enghouse Agency](onboard-enghouse-agency.md)
 - [Onboard a New Elavon Agency](onboard-elavon-agency.md)
 - [Create Agency Metabase Dashboards](create-metabase-dashboards.md)
-
-## Policy Reference
-
-...
-
-### Tables with Row Access Policies
-
-- `mart_payments.fct_payments_rides_v2` (Littlepay)
-- `mart_payments.fct_payments_rides_enghouse` (Enghouse)
-- `mart_payments.fct_elavon__transactions` (Elavon)
-- `mart_payments.elavon_littlepay__transaction_reconciliation` (Both)
-- Other mart_payments tables as configured
 
 ______________________________________________________________________
 
