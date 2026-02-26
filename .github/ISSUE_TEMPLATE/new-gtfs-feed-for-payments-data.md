@@ -1,7 +1,7 @@
 ---
 name: New GTFS Feed for Payments Data Agency
-about: Use this template to inform the data engineering team when an open-loop payments
-  agency changes their GTFS feed
+about: Use this template to inform the data engineering team when an open-loop
+  payments agency changes their GTFS feed
 title: New GTFS Feed - Payments Agency
 labels: project-payments
 assignees: [charlie-costanzo, mrtopsyt]
