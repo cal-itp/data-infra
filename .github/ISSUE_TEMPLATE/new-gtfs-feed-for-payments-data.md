@@ -17,6 +17,11 @@ assignees: [charlie-costanzo, mrtopsyt]
 
 - \[add feed name\]
 
+**Contact for more information / when ticket is complete**:
+
+- \[add contact name\]
+- \[add contact email or other contact method\]
+
 ### Acceptance Criteria
 
 - The agency's new GTFS feed `source_record_id` from the `dim_gtfs_feeds` table has been substituted for the old `gtfs_dataset_source_record_id` in either of the following locations, depending on what vendor the agency uses:
