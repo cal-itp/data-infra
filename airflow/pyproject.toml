@@ -5,7 +5,7 @@ description = "Airflow DAGs and plugins for cal-itp-data-infra"
 readme = "README.md"
 requires-python = ">=3.11.6"
 dependencies = [
-    "apache-airflow==2.10.5",
+    "apache-airflow==3.1.7",
     "apache-airflow-providers-cncf-kubernetes==10.1.0",
     "apache-airflow-providers-google==15.1.0",
     "astronomer-cosmos==1.9.0",
