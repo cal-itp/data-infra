@@ -5,12 +5,12 @@ on:
     branches:
       - 'main'
     paths:
-      - '.github/workflows/build-gtfs-rt-archiver-v3-image.yml'
       - 'services/gtfs-rt-archiver-v3/**'
+      - '!services/gtfs-rt-archiver-v3/README.md'
   pull_request:
     paths:
-      - '.github/workflows/build-gtfs-rt-archiver-v3-image.yml'
       - 'services/gtfs-rt-archiver-v3/**'
+      - '!services/gtfs-rt-archiver-v3/README.md'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
