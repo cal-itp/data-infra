@@ -11,15 +11,28 @@
     )
 }}
 
+{% set get_feed_keys_sql_statement %}
+    SELECT ARRAY_AGG(distinct key) FROM {{ ref('dim_schedule_feeds') }} WHERE _valid_from >= (SELECT MAX(_feed_valid_from) FROM {{ this }})
+{% endset %}
+
+{%- set new_feed_keys = dbt_utils.get_single_value(get_feed_keys_sql_statement) -%}
+
 WITH dim_stop_times AS (
     SELECT *
     FROM {{ ref('dim_stop_times') }}
+    {{ log("Incremental: " ~ is_incremental(), true) }}
+    {% if is_incremental() %}
+    WHERE feed_key IN UNNEST({{ new_feed_keys }})
+    {% endif %}
 ),
 
 int_gtfs_schedule__frequencies_stop_times AS (
     SELECT *
     FROM {{ ref('int_gtfs_schedule__frequencies_stop_times') }}
     WHERE stop_id IS NOT NULL
+    {% if is_incremental() %}
+    AND feed_key IN UNNEST({{ new_feed_keys }})
+    {% endif %}
 ),
 
 dim_trips AS (
@@ -29,6 +42,9 @@ dim_trips AS (
         route_id,
         direction_id
     FROM {{ ref('dim_trips') }}
+    {% if is_incremental() %}
+    WHERE feed_key IN UNNEST({{ new_feed_keys }})
+    {% endif %}
 ),
 
 dim_routes AS (
@@ -37,6 +53,9 @@ dim_routes AS (
         route_id,
         route_type
     FROM {{ ref('dim_routes') }}
+    {% if is_incremental() %}
+    WHERE feed_key IN UNNEST({{ new_feed_keys }})
+    {% endif %}
 ),
 
 stop_times_with_freq AS (
