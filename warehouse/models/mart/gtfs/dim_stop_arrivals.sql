@@ -1,11 +1,14 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='insert_overwrite',
+        incremental_strategy='microbatch',
+        event_time = '_feed_valid_from',
+        batch_size = 'day',
+        begin='2022-10-01',
         partition_by={
             'field': '_feed_valid_from',
             'data_type': 'timestamp',
-            'granularity': 'month',
+            'granularity': 'day',
         },
         cluster_by='feed_key'
     )
