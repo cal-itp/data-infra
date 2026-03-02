@@ -15,7 +15,7 @@ tu_stop_metrics AS (
     FROM {{ ref('fct_trip_updates_stop_metrics') }}
 ),
 
-tu_stop_metrics2 AS (
+tu_stop_metrics2 AS ( -- noqa: L045
     SELECT
         *,
         DATE_TRUNC(service_date, MONTH) AS month_first_day,
