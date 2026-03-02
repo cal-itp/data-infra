@@ -12,7 +12,7 @@
 
 WITH fct_stop_time_metrics AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_stop_time_metrics_testing`--{{ ref('fct_stop_time_metrics') }}
+    FROM {{ ref('fct_stop_time_metrics') }}
     WHERE service_date >= "2025-12-01"
 ),
 

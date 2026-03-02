@@ -12,7 +12,7 @@ tu_stop_metrics AS (
         schedule_base64_url,
         prediction_error_by_minute_array,
         scaled_prediction_error_by_minute_array,
-    FROM `cal-itp-data-infra.mart_gtfs.fct_trip_updates_stop_metrics`
+    FROM {{ ref('fct_trip_updates_stop_metrics') }}
 ),
 
 tu_stop_metrics2 AS (

@@ -7,22 +7,19 @@
 
 WITH daily_schedule AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_feed_scheduled_service_summary` --{{ ref('fct_daily_feed_scheduled_service_summary') }}
-    WHERE service_date >= "2025-12-01"
+    FROM {{ ref('fct_daily_feed_scheduled_service_summary') }}
 ),
 
 daily_rt AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_rt_service_summary` --{{ ref('fct_daily_rt_service_summary') }}
-    WHERE service_date >= "2025-12-01"
+    FROM {{ ref('fct_daily_rt_service_summary') }}
 ),
 
 -- these will not be present for each date,
 -- so use left join when bringing it in with daily schedule / daily RT
 daily_tu_stop_metrics AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_trip_updates_stop_metrics`
-    WHERE service_date >= "2025-12-01"
+    FROM {{ ref('fct_trip_updates_stop_metrics') }}
 ),
 
 tu_operator_aggregation AS (
