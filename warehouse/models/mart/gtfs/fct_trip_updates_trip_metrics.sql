@@ -12,8 +12,8 @@
 
 WITH fct_stop_time_metrics AS (
     SELECT *
-    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_stop_time_metrics`--{{ ref('fct_stop_time_metrics') }}
-
+    FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_stop_time_metrics_testing`--{{ ref('fct_stop_time_metrics') }}
+    WHERE service_date >= "2025-12-01"
 ),
 
 trip_metrics AS (
@@ -41,6 +41,8 @@ trip_metrics AS (
 
         COUNT(DISTINCT key) AS n_tu_stops,
 
+        -- check how combining these arrays (stop_time to stop grain) works for error percentiles
+        -- order by stop_time_key each time so arrays don't lose order when we combine
         ARRAY_CONCAT_AGG(
             prediction_error_by_minute_array
             ORDER BY key
