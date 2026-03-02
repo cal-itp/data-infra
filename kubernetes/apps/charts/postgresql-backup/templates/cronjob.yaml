@@ -50,12 +50,12 @@ spec:
 
                   # snapshot current database
                   echo "Snapshotting Database"
-                  pg_dumpall --clean \
+                  pg_dump --clean --if-exists --no-owner --no-privileges \
                     | gzip --rsyncable \
                     | restic backup \
                       --host {{ .Release.Namespace }}:{{ .Release.Name }} \
                       --stdin \
-                      --stdin-filename pg_dumpall.sql.gz
+                      --stdin-filename pg_dump.sql.gz
 
                   sql_snapshot_status=$?
 
