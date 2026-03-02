@@ -28,13 +28,18 @@ resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
         | metric 'storage.googleapis.com/api/request_count'
         | filter (resource.bucket_name == '${local.gtfs_rt_raw_v2_bucket_name}')
         | filter (metric.method =~ '.*Write.*|.*Upload.*')
-        | align delta(15m)
-        | every 15m
+        | align delta(5m)
+        | time_shift 5m
+        | every 5m
         | group_by [], [value_request_count_sum: sum(val())]
-        | condition val() < 1500
+        | condition val() < 5000
       EOT
+      # time_shift due to the metrics data delay
+      # effectively, every 5 mins, checking the total writes between 5 mins ago and 10 mins ago.
 
-      duration = "0s" # Alert immediately when the 15m window falls below 1500
+      evaluation_missing_data = "EVALUATION_MISSING_DATA_NO_OP"
+
+      duration = "120s" # Alert after the count remains low for 2 minutes.
 
       trigger {
         count = 1
