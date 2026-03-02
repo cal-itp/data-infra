@@ -5,6 +5,42 @@ WITH daily_summary AS (
     FROM {{ ref('fct_daily_schedule_rt_operator_summary') }}
 ),
 
+tu_stop_metrics AS (
+    SELECT
+        service_date,
+        base64_url,
+        schedule_base64_url,
+        prediction_error_by_minute_array,
+        scaled_prediction_error_by_minute_array,
+    FROM `cal-itp-data-infra.mart_gtfs.fct_trip_updates_stop_metrics`
+),
+
+tu_stop_metrics2 AS (
+    SELECT
+        *,
+        DATE_TRUNC(service_date, MONTH) AS month_first_day,
+        {{ generate_day_type('service_date') }} AS day_type,
+    FROM tu_stop_metrics
+),
+
+prediction_error_by_operator AS (
+    {{ get_percentiles_by_group(
+        'tu_stop_metrics2',
+        ('month_first_day', 'day_type', 'base64_url', 'schedule_base64_url'),
+        array_col='prediction_error_by_minute_array',
+        decimals=1)
+    }}
+),
+
+scaled_prediction_error_by_operator AS (
+    {{ get_percentiles_by_group(
+        'tu_stop_metrics2',
+        ('month_first_day', 'day_type', 'base64_url', 'schedule_base64_url'),
+        array_col='scaled_prediction_error_by_minute_array',
+        decimals=3)
+    }}
+),
+
 daily_summary2 AS (
     SELECT
         *,
@@ -99,12 +135,35 @@ monthly_summary AS (
         MAX(pct_tu_routes) AS pct_tu_routes, -- should the max be used for coverage?
         SUM(tu_extract_duration_minutes) / COUNT(DISTINCT service_date) AS daily_tu_extract_duration_minutes,
 
+        ROUND(AVG(pct_tu_complete_minutes), 3) AS pct_tu_complete_minutes,
+        ROUND(AVG(pct_tu_accurate_minutes), 3) AS pct_tu_accurate_minutes,
+        ROUND(AVG(avg_prediction_spread_minutes), 1) AS avg_prediction_spread_minutes,
+        SUM(n_predictions) AS n_predictions,
+        ROUND(AVG(pct_predictions_early), 3) AS pct_predictions_early,
+        ROUND(AVG(pct_predictions_ontime), 3) AS pct_predictions_ontime,
+        ROUND(AVG(pct_predictions_late), 3) AS pct_predictions_late,
+
+        ARRAY_CONCAT_AGG(pe.value_array) AS prediction_error_sec_array,
+        ARRAY_CONCAT_AGG(pe.value_percentile_array) AS prediction_error_sec_percentile_array,
+        ARRAY_CONCAT_AGG(spe.value_array) AS scaled_prediction_error_sec_array,
+        ARRAY_CONCAT_AGG(spe.value_percentile_array) AS scaled_prediction_error_sec_percentile_array,
+
         MAX(pivoted.n_days_schedule_only) AS n_days_schedule_only,
         MAX(pivoted.n_days_schedule_and_rt) AS n_days_schedule_and_rt,
         MAX(pivoted.n_days_schedule_and_vp_only) AS n_days_schedule_and_vp_only,
         MAX(pivoted.n_days_schedule_and_tu_only) AS n_days_schedule_and_tu_only,
 
     FROM daily_summary2
+    LEFT JOIN prediction_error_by_operator AS pe
+        ON daily_summary2.month_first_day = pe.month_first_day
+        AND daily_summary2.day_type = pe.day_type
+        AND daily_summary2.tu_base64_url = pe.base64_url
+        AND daily_summary2.schedule_base64_url = pe.schedule_base64_url
+    LEFT JOIN scaled_prediction_error_by_operator AS spe
+        ON daily_summary2.month_first_day = spe.month_first_day
+        AND daily_summary2.day_type = spe.day_type
+        AND daily_summary2.tu_base64_url = spe.base64_url
+        AND daily_summary2.schedule_base64_url = spe.schedule_base64_url
     LEFT JOIN pivoted
         ON daily_summary2.month_first_day = pivoted.month_first_day
         AND daily_summary2.schedule_name = pivoted.schedule_name
