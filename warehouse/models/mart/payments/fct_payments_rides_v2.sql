@@ -160,6 +160,7 @@ fct_payments_rides_v2 AS (
     LEFT JOIN int_littlepay__unioned_product_data AS products
         ON micropayments.participant_id = products.participant_id
             AND micropayments.product_id = products.product_id
+            AND micropayments.feed_version = products.feed_version
     LEFT JOIN participants_to_routes_and_agency AS routes
         ON routes.littlepay_participant_id = micropayments.participant_id
             -- here, can just use t1 because transaction date will be populated

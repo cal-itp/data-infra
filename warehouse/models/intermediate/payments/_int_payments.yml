@@ -327,6 +327,8 @@ models:
         description: '{{ doc("lp_micropayment_refund_amount") }}'
       - name: aggregation_refund_amount
         description: '{{ doc("lp_aggregation_refund_amount") }}'
+      - name: feed_version
+        description: '{{ doc("lp_feed_version") }}'
   - name: int_payments__matched_device_transactions
     description: |
       This model matches up pairs of device transactions that are associated with the same micropayment for variable
