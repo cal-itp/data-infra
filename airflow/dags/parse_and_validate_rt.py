@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+from dags import log_failure_to_slack
 from operators.gcs_to_gtfs_rt_command_operator import GCSToGTFSRTCommandOperator
 
 from airflow import DAG, XComArg
@@ -17,6 +18,7 @@ with DAG(
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
         "email_on_failure": True,
         "email_on_retry": False,
+        "on_failure_callback": log_failure_to_slack,
     },
 ):
     for process in ["parse", "validate"]:
