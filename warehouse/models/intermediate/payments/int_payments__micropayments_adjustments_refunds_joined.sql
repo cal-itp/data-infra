@@ -11,7 +11,8 @@ valid_micropayment_ids AS (
 ),
 
 adjustments AS (
-    SELECT * FROM {{ ref('int_littlepay__unioned_micropayment_adjustments') }}
+    SELECT *
+    FROM {{ ref('int_littlepay__unioned_micropayment_adjustments') }}
     -- we only want adjustments that were actually applied
     WHERE applied
 ),
@@ -66,11 +67,15 @@ int_payments__micropayments_adjustments_refunds_joined AS (
                     THEN aggregation_refunds.total_refund_activity_amount_dollars
             ELSE individual_refunds.refund_amount
         END AS micropayment_refund_amount,
-        aggregation_refunds.total_refund_activity_amount_dollars AS aggregation_refund_amount
+        aggregation_refunds.total_refund_activity_amount_dollars AS aggregation_refund_amount,
+        debit_micropayments.feed_version
     FROM debit_micropayments
     INNER JOIN valid_micropayment_ids USING (micropayment_id)
-    LEFT JOIN adjustments USING (participant_id, micropayment_id)
-    LEFT JOIN products USING (participant_id, product_id)
+    LEFT JOIN adjustments USING (participant_id, micropayment_id, feed_version)
+    -- there are products with the same product_id across feed_version
+    -- so include feed_version in this join to only get the same feed_version as the micropayment
+    -- (and include feed_version in the adjustments join above so we can still use "using" for this)
+    LEFT JOIN products USING (participant_id, product_id, feed_version)
     LEFT JOIN individual_refunds USING (participant_id, micropayment_id, aggregation_id)
     LEFT JOIN aggregation_refunds USING (participant_id, aggregation_id)
     LEFT JOIN micropayments_per_aggregation USING (participant_id, aggregation_id)
