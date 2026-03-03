@@ -11,6 +11,7 @@ locals {
     "calitp-staging-gtfs-rt-parsed",
     "calitp-staging-gtfs-rt-raw-v2",
     "calitp-staging-gtfs-rt-validation",
+    "calitp-staging-gtfs-schedule-manual",
     "calitp-staging-gtfs-schedule-parsed",
     "calitp-staging-gtfs-schedule-parsed-hourly",
     "calitp-staging-gtfs-schedule-raw-v2",
