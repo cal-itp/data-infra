@@ -1,4 +1,5 @@
 import os
+from base64 import urlsafe_b64encode
 from datetime import datetime, timedelta
 
 from operators.bigquery_to_download_config_operator import (
@@ -60,6 +61,7 @@ def gcs_branch(bucket_name, object_name, present, missing):
     start_date=datetime(2026, 1, 6),
     catchup=False,
     tags=["gtfs"],
+    user_defined_macros={"urlsafe_b64encode": urlsafe_b64encode},
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
         "email_on_failure": True,
@@ -106,10 +108,14 @@ def download_parse_and_validate_gtfs():
         retry_delay=timedelta(seconds=10),
         dt="{{ dag_run.start_date | ds }}",
         ts="{{ dag_run.start_date | ts }}",
+        base64_url="{{ urlsafe_b64encode(task.download_config['url'].encode()).decode() }}",
+        source_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_MANUAL"),
+        source_path="manual/base64_url={{ task.base64_url }}/gtfs.zip",
         destination_bucket=os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
-        destination_path="schedule/dt={{ dag_run.start_date | ds }}/ts={{ dag_run.start_date | ts }}",
-        results_path="download_schedule_feed_results/dt={{ dag_run.start_date | ds }}/ts={{ dag_run.start_date | ts }}",
+        destination_path="schedule/dt={{ dag_run.start_date | ds }}/ts={{ dag_run.start_date | ts }}/base64_url={{ task.base64_url }}",
+        results_path="download_schedule_feed_results/dt={{ dag_run.start_date | ds }}/ts={{ dag_run.start_date | ts }}/{{ task.base64_url }}.jsonl",
         map_index_template="{{ task.download_config['name'] }}",
+        trigger_rule=TriggerRule.ALL_DONE,
         pool="schedule_download_pool",
     ).expand(download_config=XComArg(schedule_download_configs))
 
