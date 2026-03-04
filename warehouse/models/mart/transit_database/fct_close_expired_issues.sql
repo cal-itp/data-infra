@@ -83,6 +83,6 @@ SELECT
   issue_source_record_id,
   outreach_status,
   gtfs_dataset_name,
-  service_name,
+  service_name, -- Was requested by Associate Transportation Planner
   new_end_date
 FROM fct_close_expired_issues
