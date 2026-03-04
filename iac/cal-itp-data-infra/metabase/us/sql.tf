@@ -1,12 +1,23 @@
 resource "google_sql_database_instance" "metabase" {
-  name             = "metabase"
-  database_version = "POSTGRES_18"
-  region           = "us-west2"
+  name                = "metabase"
+  database_version    = "POSTGRES_18"
+  region              = "us-west2"
+  deletion_protection = true
+
   settings {
     edition = "ENTERPRISE"
     tier    = "db-g1-small"
+
+    backup_configuration {
+      location = "us-west2"
+      enabled  = true
+
+      backup_retention_settings {
+        retained_backups = 7
+        retention_unit   = "COUNT"
+      }
+    }
   }
-  deletion_protection = true
 }
 
 resource "google_sql_database" "metabase" {

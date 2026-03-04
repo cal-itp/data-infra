@@ -12,6 +12,7 @@ resource "google_cloud_run_v2_service" "metabase" {
 
   scaling {
     min_instance_count = 1
+    max_instance_count = 100
   }
 
   template {

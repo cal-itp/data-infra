@@ -6,6 +6,14 @@ data "terraform_remote_state" "iam" {
     prefix = "cal-itp-data-infra/iam"
   }
 }
+data "terraform_remote_state" "gcs" {
+  backend = "gcs"
+
+  config = {
+    bucket = "calitp-prod-gcp-components-tfstate"
+    prefix = "cal-itp-data-infra/gcs"
+  }
+}
 
 resource "random_password" "metabase-secret-key" {
   special = false
